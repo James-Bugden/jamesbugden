@@ -3,6 +3,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { ArrowRight, CheckCircle, Linkedin, MessageCircle } from "lucide-react";
 import jamesPhoto from "@/assets/james-bugden.jpg";
+import phoneMockup from "@/assets/phone-mockup.png";
 import LanguageToggle from "@/components/LanguageToggle";
 
 const IndexZhTw = () => {
@@ -40,35 +41,72 @@ const IndexZhTw = () => {
 
       {/* Hero Section with Newsletter */}
       <section id="newsletter" className="pt-24 pb-16 px-6 bg-secondary">
-        <div className="container mx-auto max-w-3xl text-center">
-          <h1 className="text-4xl md:text-5xl lg:text-6xl font-serif font-bold leading-tight mb-12">
+        <div className="container mx-auto max-w-6xl">
+          <h1 className="text-4xl md:text-5xl lg:text-6xl font-serif font-bold leading-tight mb-12 text-center">
             5分鐘
             <br />
             可能改變你的職涯
           </h1>
           
-          <p className="text-xl md:text-2xl mb-6">
-            <span className="text-accent font-bold">12,847+ 專業人士</span>已經提升了他們的職涯。下一個會是你嗎？
-          </p>
-          <p className="text-muted-foreground text-lg mb-8">
-            每週二直接收到與數千名有抱負的專業人士分享的職涯策略。
-          </p>
-          <form onSubmit={handleSubmit} className="flex flex-col sm:flex-row gap-3 mb-4 max-w-xl mx-auto">
-            <Input
-              type="email"
-              placeholder="您的電子郵件地址"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              className="flex-1 bg-background"
-              required
-            />
-            <Button type="submit" className="bg-primary hover:bg-primary/90 text-primary-foreground font-semibold px-8">
-              立即訂閱
-            </Button>
-          </form>
-          <p className="text-sm text-muted-foreground italic">
-            您的資訊受到保護，我絕不會發送垃圾郵件。
-          </p>
+          <div className="grid lg:grid-cols-2 gap-12 items-center">
+            {/* Phone Mockups */}
+            <div className="flex justify-center gap-4 -rotate-3">
+              {/* Phone 1 */}
+              <div className="relative w-40 md:w-48">
+                <img src={phoneMockup} alt="" className="w-full" />
+                <div className="absolute inset-[8%] top-[3%] bottom-[3%] bg-background rounded-[20px] overflow-hidden p-3 text-left">
+                  <p className="text-xs font-bold mb-2">你的下一個突破</p>
+                  <p className="text-[8px] text-muted-foreground mb-2">BY JAMES BUGDEN</p>
+                  <p className="text-[7px] italic text-muted-foreground mb-2">"每週五分鐘，可能改變你的職涯。"</p>
+                  <p className="text-[7px] font-bold mb-1">本週思考</p>
+                  <p className="text-[6px] text-muted-foreground leading-relaxed">
+                    如果你不選擇如何使用你的時間，別人會替你選擇。如果你不選擇什麼對你重要，別人會替你選擇。
+                  </p>
+                </div>
+              </div>
+              
+              {/* Phone 2 */}
+              <div className="relative w-40 md:w-48 rotate-6 mt-8">
+                <img src={phoneMockup} alt="" className="w-full" />
+                <div className="absolute inset-[8%] top-[3%] bottom-[3%] bg-background rounded-[20px] overflow-hidden p-3 text-left">
+                  <p className="text-xs font-bold mb-2">本週嘗試一件事</p>
+                  <p className="text-[6px] text-muted-foreground leading-relaxed mb-3">
+                    奪回你的職涯主導權。找出生活中佔據你太多時間的事情，然後拿回一些時間。
+                  </p>
+                  <p className="text-[7px] font-bold mb-1">上週的突破</p>
+                  <p className="text-[6px] italic text-muted-foreground leading-relaxed">
+                    「我按照 James 的建議談判，多拿了 100 萬台幣。這是我讀過最棒的郵件。」
+                  </p>
+                </div>
+              </div>
+            </div>
+            
+            {/* Newsletter Form */}
+            <div className="text-center lg:text-left">
+              <p className="text-xl md:text-2xl mb-6">
+                <span className="text-accent font-bold">12,847+ 專業人士</span>已經提升了他們的職涯。下一個會是你嗎？
+              </p>
+              <p className="text-muted-foreground text-lg mb-8">
+                每週二直接收到與數千名有抱負的專業人士分享的職涯策略。
+              </p>
+              <form onSubmit={handleSubmit} className="flex flex-col sm:flex-row gap-3 mb-4">
+                <Input
+                  type="email"
+                  placeholder="您的電子郵件地址"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  className="flex-1 bg-background"
+                  required
+                />
+                <Button type="submit" className="bg-primary hover:bg-primary/90 text-primary-foreground font-semibold px-8">
+                  立即訂閱
+                </Button>
+              </form>
+              <p className="text-sm text-muted-foreground italic">
+                您的資訊受到保護，我絕不會發送垃圾郵件。
+              </p>
+            </div>
+          </div>
         </div>
       </section>
 

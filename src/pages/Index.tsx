@@ -3,6 +3,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { ArrowRight, CheckCircle, Linkedin, MessageCircle } from "lucide-react";
 import jamesPhoto from "@/assets/james-bugden.jpg";
+import phoneMockup from "@/assets/phone-mockup.png";
 import LanguageToggle from "@/components/LanguageToggle";
 
 const Index = () => {
@@ -40,35 +41,72 @@ const Index = () => {
 
       {/* Hero Section with Newsletter */}
       <section id="newsletter" className="pt-24 pb-16 px-6 bg-secondary">
-        <div className="container mx-auto max-w-3xl text-center">
-          <h1 className="text-4xl md:text-5xl lg:text-6xl font-serif font-bold leading-tight mb-12">
+        <div className="container mx-auto max-w-6xl">
+          <h1 className="text-4xl md:text-5xl lg:text-6xl font-serif font-bold leading-tight mb-12 text-center">
             5 Minutes That Might
             <br />
             Change Your Career
           </h1>
           
-          <p className="text-xl md:text-2xl mb-6">
-            <span className="text-accent font-bold">12,847+ professionals</span> have leveled up their careers so far. Will the next one be you?
-          </p>
-          <p className="text-muted-foreground text-lg mb-8">
-            Receive career strategies shared with thousands of ambitious professionals directly to your inbox every Tuesday.
-          </p>
-          <form onSubmit={handleSubmit} className="flex flex-col sm:flex-row gap-3 mb-4 max-w-xl mx-auto">
-            <Input
-              type="email"
-              placeholder="Your Email Address"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              className="flex-1 bg-background"
-              required
-            />
-            <Button type="submit" className="bg-primary hover:bg-primary/90 text-primary-foreground font-semibold px-8">
-              SIGN UP
-            </Button>
-          </form>
-          <p className="text-sm text-muted-foreground italic">
-            Your information is protected and I never spam, ever.
-          </p>
+          <div className="grid lg:grid-cols-2 gap-12 items-center">
+            {/* Phone Mockups */}
+            <div className="flex justify-center gap-4 -rotate-3">
+              {/* Phone 1 */}
+              <div className="relative w-40 md:w-48">
+                <img src={phoneMockup} alt="" className="w-full" />
+                <div className="absolute inset-[8%] top-[3%] bottom-[3%] bg-background rounded-[20px] overflow-hidden p-3 text-left">
+                  <p className="text-xs font-bold mb-2">Your Next Breakthrough</p>
+                  <p className="text-[8px] text-muted-foreground mb-2">BY JAMES BUGDEN</p>
+                  <p className="text-[7px] italic text-muted-foreground mb-2">"Five Minutes Each Week That Might Change Your Career."</p>
+                  <p className="text-[7px] font-bold mb-1">ONE THING TO THINK ABOUT</p>
+                  <p className="text-[6px] text-muted-foreground leading-relaxed">
+                    If you don't choose how to use your time, others will choose for you. If you don't choose what matters to you, others will choose for you.
+                  </p>
+                </div>
+              </div>
+              
+              {/* Phone 2 */}
+              <div className="relative w-40 md:w-48 rotate-6 mt-8">
+                <img src={phoneMockup} alt="" className="w-full" />
+                <div className="absolute inset-[8%] top-[3%] bottom-[3%] bg-background rounded-[20px] overflow-hidden p-3 text-left">
+                  <p className="text-xs font-bold mb-2">ONE THING TO TRY THIS WEEK</p>
+                  <p className="text-[6px] text-muted-foreground leading-relaxed mb-3">
+                    Take your career back. Find something in your life that has been dictating too much of your time, and take some of it back.
+                  </p>
+                  <p className="text-[7px] font-bold mb-1">LAST WEEK'S BREAKTHROUGHS</p>
+                  <p className="text-[6px] italic text-muted-foreground leading-relaxed">
+                    "I followed James's advice and negotiated $35K more. Best email I ever read."
+                  </p>
+                </div>
+              </div>
+            </div>
+            
+            {/* Newsletter Form */}
+            <div className="text-center lg:text-left">
+              <p className="text-xl md:text-2xl mb-6">
+                <span className="text-accent font-bold">12,847+ professionals</span> have leveled up their careers so far. Will the next one be you?
+              </p>
+              <p className="text-muted-foreground text-lg mb-8">
+                Receive career strategies shared with thousands of ambitious professionals directly to your inbox every Tuesday.
+              </p>
+              <form onSubmit={handleSubmit} className="flex flex-col sm:flex-row gap-3 mb-4">
+                <Input
+                  type="email"
+                  placeholder="Your Email Address"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  className="flex-1 bg-background"
+                  required
+                />
+                <Button type="submit" className="bg-primary hover:bg-primary/90 text-primary-foreground font-semibold px-8">
+                  SIGN UP
+                </Button>
+              </form>
+              <p className="text-sm text-muted-foreground italic">
+                Your information is protected and I never spam, ever.
+              </p>
+            </div>
+          </div>
         </div>
       </section>
 
