@@ -5,7 +5,7 @@ import { ArrowRight, CheckCircle, Linkedin, MessageCircle } from "lucide-react";
 import jamesPhoto from "@/assets/james-bugden.jpg";
 import LanguageToggle from "@/components/LanguageToggle";
 
-const Index = () => {
+const IndexZhTw = () => {
   const [email, setEmail] = useState("");
 
   const handleSubmit = (e: React.FormEvent) => {
@@ -21,10 +21,10 @@ const Index = () => {
         <div className="container mx-auto px-6 py-4 flex items-center justify-between">
           <span className="text-xl font-bold tracking-wide">JAMES BUGDEN</span>
           <div className="hidden md:flex items-center gap-8">
-            <a href="#services" className="text-sm font-medium hover:text-accent transition-colors">Services</a>
-            <a href="#about" className="text-sm font-medium hover:text-accent transition-colors">About</a>
-            <a href="#results" className="text-sm font-medium hover:text-accent transition-colors">Results</a>
-            <a href="#newsletter" className="text-sm font-medium hover:text-accent transition-colors">Newsletter</a>
+            <a href="#services" className="text-sm font-medium hover:text-accent transition-colors">服務項目</a>
+            <a href="#about" className="text-sm font-medium hover:text-accent transition-colors">關於我</a>
+            <a href="#results" className="text-sm font-medium hover:text-accent transition-colors">成果</a>
+            <a href="#newsletter" className="text-sm font-medium hover:text-accent transition-colors">電子報</a>
           </div>
           <div className="flex items-center gap-4">
             <LanguageToggle />
@@ -42,32 +42,32 @@ const Index = () => {
       <section id="newsletter" className="pt-24 pb-16 px-6 bg-secondary">
         <div className="container mx-auto max-w-3xl text-center">
           <h1 className="text-4xl md:text-5xl lg:text-6xl font-serif font-bold leading-tight mb-12">
-            5 Minutes That Might
+            5分鐘
             <br />
-            Change Your Career
+            可能改變你的職涯
           </h1>
           
           <p className="text-xl md:text-2xl mb-6">
-            <span className="text-accent font-bold">12,847+ professionals</span> have leveled up their careers so far. Will the next one be you?
+            <span className="text-accent font-bold">12,847+ 專業人士</span>已經提升了他們的職涯。下一個會是你嗎？
           </p>
           <p className="text-muted-foreground text-lg mb-8">
-            Receive career strategies shared with thousands of ambitious professionals directly to your inbox every Tuesday.
+            每週二直接收到與數千名有抱負的專業人士分享的職涯策略。
           </p>
           <form onSubmit={handleSubmit} className="flex flex-col sm:flex-row gap-3 mb-4 max-w-xl mx-auto">
             <Input
               type="email"
-              placeholder="Your Email Address"
+              placeholder="您的電子郵件地址"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               className="flex-1 bg-background"
               required
             />
             <Button type="submit" className="bg-primary hover:bg-primary/90 text-primary-foreground font-semibold px-8">
-              SIGN UP
+              立即訂閱
             </Button>
           </form>
           <p className="text-sm text-muted-foreground italic">
-            Your information is protected and I never spam, ever.
+            您的資訊受到保護，我絕不會發送垃圾郵件。
           </p>
         </div>
       </section>
@@ -76,20 +76,19 @@ const Index = () => {
       <section id="about" className="py-20 px-6">
         <div className="container mx-auto max-w-5xl">
           <h2 className="text-4xl md:text-5xl lg:text-6xl font-serif font-bold text-center mb-16">
-            Hi, I'm James
+            嗨，我是 James
           </h2>
           
           <div className="grid md:grid-cols-[1fr,auto] gap-12 items-start">
             {/* Text - left side on desktop, below photo on mobile */}
             <div className="order-2 md:order-1">
               <p className="text-lg md:text-xl text-muted-foreground leading-relaxed mb-6">
-                I've helped 500+ professionals negotiate <strong className="text-foreground">$12M+ in additional compensation</strong>. 
-                I've been on both sides of the hiring table at Fortune 500 companies, and I know exactly what gets candidates 
-                rejected—and what makes them irresistible.
+                我已經幫助超過 500 位專業人士談判了<strong className="text-foreground">超過 1200 萬美元的額外薪酬</strong>。
+                我曾在財富 500 強公司擔任面試官和求職者兩種角色，我清楚知道什麼會讓候選人被淘汰——以及什麼會讓他們無法抗拒。
               </p>
               <p className="text-lg md:text-xl text-muted-foreground leading-relaxed mb-8">
-                My clients land roles at Google, Amazon, Meta, Goldman Sachs, McKinsey, 
-                and every major tech company you can think of. I don't teach theory. I teach what actually works.
+                我的客戶在 Google、Amazon、Meta、Goldman Sachs、McKinsey 
+                以及你能想到的每一家大型科技公司都獲得了職位。我不教理論，我教的是真正有效的方法。
               </p>
               <div className="flex flex-wrap gap-4 justify-center md:justify-start">
                 <a href="https://www.linkedin.com/in/jamesbugden" target="_blank" rel="noopener noreferrer">
@@ -111,7 +110,7 @@ const Index = () => {
                 <div className="absolute inset-0 bg-gradient-radial from-accent/20 to-transparent rounded-full scale-125 blur-xl"></div>
                 <img
                   src={jamesPhoto}
-                  alt="James Bugden - Career Coach"
+                  alt="James Bugden - 職涯教練"
                   className="relative w-56 h-56 md:w-72 md:h-72 rounded-full object-cover border-4 border-background shadow-xl"
                 />
               </div>
@@ -125,10 +124,10 @@ const Index = () => {
         <div className="container mx-auto max-w-6xl">
           <div className="text-center mb-16">
             <h2 className="text-3xl md:text-4xl font-serif font-bold mb-4">
-              How I Help You Win
+              我如何幫助你成功
             </h2>
             <p className="text-muted-foreground text-lg max-w-2xl mx-auto">
-              Three ways to 10x your career trajectory. Pick your path.
+              三種方式讓你的職涯軌跡提升 10 倍。選擇你的道路。
             </p>
           </div>
 
@@ -138,23 +137,23 @@ const Index = () => {
               <div className="w-12 h-12 bg-accent/10 rounded-lg flex items-center justify-center mb-6">
                 <span className="text-2xl">📄</span>
               </div>
-              <h3 className="text-xl font-bold mb-3">Resume That Opens Doors</h3>
+              <h3 className="text-xl font-bold mb-3">打開大門的履歷</h3>
               <p className="text-muted-foreground mb-6">
-                Your resume has 6 seconds to impress. Most resumes fail in 2. I'll rebuild yours to pass ATS systems 
-                AND make recruiters reach out same day.
+                你的履歷只有 6 秒鐘來打動人心。大多數履歷在 2 秒內就失敗了。我會重建你的履歷，讓它通過 ATS 系統，
+                並讓招聘人員當天就聯繫你。
               </p>
               <ul className="space-y-2 text-sm">
                 <li className="flex items-start gap-2">
                   <CheckCircle className="w-4 h-4 text-accent mt-0.5 flex-shrink-0" />
-                  <span>ATS-optimized formatting</span>
+                  <span>ATS 優化格式</span>
                 </li>
                 <li className="flex items-start gap-2">
                   <CheckCircle className="w-4 h-4 text-accent mt-0.5 flex-shrink-0" />
-                  <span>Achievement-focused bullets</span>
+                  <span>以成就為導向的重點</span>
                 </li>
                 <li className="flex items-start gap-2">
                   <CheckCircle className="w-4 h-4 text-accent mt-0.5 flex-shrink-0" />
-                  <span>Tailored for FAANG & MNCs</span>
+                  <span>專為 FAANG 和跨國公司量身定制</span>
                 </li>
               </ul>
             </div>
@@ -162,28 +161,27 @@ const Index = () => {
             {/* Interview */}
             <div className="bg-background border border-border rounded-xl p-8 hover:shadow-xl transition-shadow relative">
               <div className="absolute -top-3 right-6 bg-accent text-accent-foreground text-xs font-bold px-3 py-1 rounded-full">
-                MOST POPULAR
+                最受歡迎
               </div>
               <div className="w-12 h-12 bg-accent/10 rounded-lg flex items-center justify-center mb-6">
                 <span className="text-2xl">🎯</span>
               </div>
-              <h3 className="text-xl font-bold mb-3">Interview Mastery</h3>
+              <h3 className="text-xl font-bold mb-3">面試精通</h3>
               <p className="text-muted-foreground mb-6">
-                Stop "hoping" you'll get the job. I'll show you exactly what to say, how to say it, and how to 
-                handle any curveball they throw at you.
+                別再「祈禱」能得到這份工作。我會告訴你該說什麼、怎麼說，以及如何應對他們拋給你的任何難題。
               </p>
               <ul className="space-y-2 text-sm">
                 <li className="flex items-start gap-2">
                   <CheckCircle className="w-4 h-4 text-accent mt-0.5 flex-shrink-0" />
-                  <span>Mock interviews with feedback</span>
+                  <span>帶有反饋的模擬面試</span>
                 </li>
                 <li className="flex items-start gap-2">
                   <CheckCircle className="w-4 h-4 text-accent mt-0.5 flex-shrink-0" />
-                  <span>STAR method frameworks</span>
+                  <span>STAR 方法框架</span>
                 </li>
                 <li className="flex items-start gap-2">
                   <CheckCircle className="w-4 h-4 text-accent mt-0.5 flex-shrink-0" />
-                  <span>Company-specific strategies</span>
+                  <span>針對特定公司的策略</span>
                 </li>
               </ul>
             </div>
@@ -193,23 +191,22 @@ const Index = () => {
               <div className="w-12 h-12 bg-accent/10 rounded-lg flex items-center justify-center mb-6">
                 <span className="text-2xl">💰</span>
               </div>
-              <h3 className="text-xl font-bold mb-3">Salary Negotiation</h3>
+              <h3 className="text-xl font-bold mb-3">薪資談判</h3>
               <p className="text-muted-foreground mb-6">
-                The average person leaves $50K+ on the table. Don't be average. I'll coach you to negotiate 
-                like a pro and get what you're actually worth.
+                一般人會損失超過 5 萬美元。別做一般人。我會教你像專業人士一樣談判，獲得你真正應得的報酬。
               </p>
               <ul className="space-y-2 text-sm">
                 <li className="flex items-start gap-2">
                   <CheckCircle className="w-4 h-4 text-accent mt-0.5 flex-shrink-0" />
-                  <span>Exact scripts & tactics</span>
+                  <span>精確的話術和策略</span>
                 </li>
                 <li className="flex items-start gap-2">
                   <CheckCircle className="w-4 h-4 text-accent mt-0.5 flex-shrink-0" />
-                  <span>Counter-offer strategies</span>
+                  <span>反報價策略</span>
                 </li>
                 <li className="flex items-start gap-2">
                   <CheckCircle className="w-4 h-4 text-accent mt-0.5 flex-shrink-0" />
-                  <span>Total comp optimization</span>
+                  <span>總薪酬優化</span>
                 </li>
               </ul>
             </div>
@@ -222,29 +219,29 @@ const Index = () => {
         <div className="container mx-auto max-w-6xl">
           <div className="text-center mb-16">
             <h2 className="text-3xl md:text-4xl font-serif font-bold mb-4">
-              Results That Speak
+              成果說明一切
             </h2>
             <p className="text-primary-foreground/70 text-lg">
-              Real numbers. Real people. Real transformations.
+              真實的數據。真實的人。真實的轉變。
             </p>
           </div>
 
           <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-8 text-center">
             <div>
               <p className="text-4xl md:text-5xl font-bold text-accent mb-2">$12M+</p>
-              <p className="text-primary-foreground/70">Additional Comp Negotiated</p>
+              <p className="text-primary-foreground/70">談判獲得的額外薪酬</p>
             </div>
             <div>
               <p className="text-4xl md:text-5xl font-bold text-accent mb-2">500+</p>
-              <p className="text-primary-foreground/70">Clients Placed</p>
+              <p className="text-primary-foreground/70">成功輔導的客戶</p>
             </div>
             <div>
               <p className="text-4xl md:text-5xl font-bold text-accent mb-2">94%</p>
-              <p className="text-primary-foreground/70">Interview Success Rate</p>
+              <p className="text-primary-foreground/70">面試成功率</p>
             </div>
             <div>
               <p className="text-4xl md:text-5xl font-bold text-accent mb-2">47%</p>
-              <p className="text-primary-foreground/70">Avg Salary Increase</p>
+              <p className="text-primary-foreground/70">平均薪資增幅</p>
             </div>
           </div>
         </div>
@@ -254,7 +251,7 @@ const Index = () => {
       <section className="py-16 px-6 bg-muted">
         <div className="container mx-auto max-w-4xl text-center">
           <p className="text-sm font-semibold text-muted-foreground mb-8 tracking-wide">
-            WHERE MY CLIENTS LAND OFFERS
+            我的客戶獲得 OFFER 的公司
           </p>
           <div className="flex flex-wrap justify-center items-center gap-8 md:gap-12 text-2xl md:text-3xl font-bold text-muted-foreground/50">
             <span>Google</span>
@@ -271,19 +268,18 @@ const Index = () => {
       <section className="py-20 px-6">
         <div className="container mx-auto max-w-3xl text-center">
           <h2 className="text-3xl md:text-4xl font-serif font-bold mb-6">
-            Your Dream Job Won't Apply For Itself
+            你夢想的工作不會自己來申請你
           </h2>
           <p className="text-lg text-muted-foreground mb-8">
-            Every week you wait is money you're leaving on the table and opportunities passing you by. 
-            Let's fix that.
+            你等待的每一週都是你留在桌上的錢，以及錯過的機會。讓我們來解決這個問題。
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <Button size="lg" className="bg-accent hover:bg-accent/90 text-accent-foreground font-semibold text-lg px-8">
-              Work With Me <ArrowRight className="ml-2" />
+              與我合作 <ArrowRight className="ml-2" />
             </Button>
             <a href="#newsletter">
               <Button size="lg" variant="outline" className="font-semibold text-lg px-8">
-                Get Free Weekly Tips
+                獲取免費每週建議
               </Button>
             </a>
           </div>
@@ -297,7 +293,7 @@ const Index = () => {
             <div>
               <span className="text-lg font-bold">JAMES BUGDEN</span>
               <p className="text-sm text-muted-foreground mt-1">
-                Career strategist for ambitious professionals
+                為有抱負的專業人士提供職涯策略
               </p>
             </div>
             <div className="flex items-center gap-6">
@@ -310,7 +306,7 @@ const Index = () => {
             </div>
           </div>
           <div className="mt-8 pt-8 border-t border-border text-center text-sm text-muted-foreground">
-            © {new Date().getFullYear()} James Bugden. All rights reserved.
+            © {new Date().getFullYear()} James Bugden. 版權所有。
           </div>
         </div>
       </footer>
@@ -318,4 +314,4 @@ const Index = () => {
   );
 };
 
-export default Index;
+export default IndexZhTw;
