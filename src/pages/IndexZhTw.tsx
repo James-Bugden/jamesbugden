@@ -52,30 +52,30 @@ const IndexZhTw = () => {
             {/* Phone Mockups */}
             <div className="flex justify-center gap-4 -rotate-3">
               {/* Phone 1 */}
-              <div className="relative w-40 md:w-48">
-                <img src={phoneMockup} alt="" className="w-full" />
-                <div className="absolute inset-[8%] top-[3%] bottom-[3%] bg-background rounded-[20px] overflow-hidden p-3 text-left">
-                  <p className="text-xs font-bold mb-2">你的下一個突破</p>
-                  <p className="text-[8px] text-muted-foreground mb-2">BY JAMES BUGDEN</p>
-                  <p className="text-[7px] italic text-muted-foreground mb-2">"每週五分鐘，可能改變你的職涯。"</p>
-                  <p className="text-[7px] font-bold mb-1">本週思考</p>
-                  <p className="text-[6px] text-muted-foreground leading-relaxed">
-                    如果你不選擇如何使用你的時間，別人會替你選擇。如果你不選擇什麼對你重要，別人會替你選擇。
+              <div className="relative w-36 md:w-44">
+                <img src={phoneMockup} alt="" className="w-full relative z-10" />
+                <div className="absolute left-[6%] right-[6%] top-[2%] bottom-[2%] bg-background rounded-[24px] overflow-hidden p-2 text-left">
+                  <p className="text-[10px] font-bold mb-1">你的下一個突破</p>
+                  <p className="text-[6px] text-muted-foreground mb-1">BY JAMES BUGDEN</p>
+                  <p className="text-[6px] italic text-muted-foreground mb-1 line-clamp-2">"每週五分鐘，可能改變你的職涯。"</p>
+                  <p className="text-[6px] font-bold mb-0.5">本週思考</p>
+                  <p className="text-[5px] text-muted-foreground leading-tight line-clamp-4">
+                    如果你不選擇如何使用你的時間，別人會替你選擇。
                   </p>
                 </div>
               </div>
               
               {/* Phone 2 */}
-              <div className="relative w-40 md:w-48 rotate-6 mt-8">
-                <img src={phoneMockup} alt="" className="w-full" />
-                <div className="absolute inset-[8%] top-[3%] bottom-[3%] bg-background rounded-[20px] overflow-hidden p-3 text-left">
-                  <p className="text-xs font-bold mb-2">本週嘗試一件事</p>
-                  <p className="text-[6px] text-muted-foreground leading-relaxed mb-3">
-                    奪回你的職涯主導權。找出生活中佔據你太多時間的事情，然後拿回一些時間。
+              <div className="relative w-36 md:w-44 rotate-6 mt-8">
+                <img src={phoneMockup} alt="" className="w-full relative z-10" />
+                <div className="absolute left-[6%] right-[6%] top-[2%] bottom-[2%] bg-background rounded-[24px] overflow-hidden p-2 text-left">
+                  <p className="text-[10px] font-bold mb-1">本週嘗試一件事</p>
+                  <p className="text-[5px] text-muted-foreground leading-tight mb-2 line-clamp-3">
+                    奪回你的職涯主導權。找出佔據太多時間的事情。
                   </p>
-                  <p className="text-[7px] font-bold mb-1">上週的突破</p>
-                  <p className="text-[6px] italic text-muted-foreground leading-relaxed">
-                    「我按照 James 的建議談判，多拿了 100 萬台幣。這是我讀過最棒的郵件。」
+                  <p className="text-[6px] font-bold mb-0.5">上週的突破</p>
+                  <p className="text-[5px] italic text-muted-foreground leading-tight line-clamp-3">
+                    「我多談了100萬。最棒的郵件。」
                   </p>
                 </div>
               </div>

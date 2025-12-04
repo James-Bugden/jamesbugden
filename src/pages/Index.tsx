@@ -52,30 +52,30 @@ const Index = () => {
             {/* Phone Mockups */}
             <div className="flex justify-center gap-4 -rotate-3">
               {/* Phone 1 */}
-              <div className="relative w-40 md:w-48">
-                <img src={phoneMockup} alt="" className="w-full" />
-                <div className="absolute inset-[8%] top-[3%] bottom-[3%] bg-background rounded-[20px] overflow-hidden p-3 text-left">
-                  <p className="text-xs font-bold mb-2">Your Next Breakthrough</p>
-                  <p className="text-[8px] text-muted-foreground mb-2">BY JAMES BUGDEN</p>
-                  <p className="text-[7px] italic text-muted-foreground mb-2">"Five Minutes Each Week That Might Change Your Career."</p>
-                  <p className="text-[7px] font-bold mb-1">ONE THING TO THINK ABOUT</p>
-                  <p className="text-[6px] text-muted-foreground leading-relaxed">
-                    If you don't choose how to use your time, others will choose for you. If you don't choose what matters to you, others will choose for you.
+              <div className="relative w-36 md:w-44">
+                <img src={phoneMockup} alt="" className="w-full relative z-10" />
+                <div className="absolute left-[6%] right-[6%] top-[2%] bottom-[2%] bg-background rounded-[24px] overflow-hidden p-2 text-left">
+                  <p className="text-[10px] font-bold mb-1">Your Next Breakthrough</p>
+                  <p className="text-[6px] text-muted-foreground mb-1">BY JAMES BUGDEN</p>
+                  <p className="text-[6px] italic text-muted-foreground mb-1 line-clamp-2">"Five Minutes Each Week That Might Change Your Career."</p>
+                  <p className="text-[6px] font-bold mb-0.5">ONE THING TO THINK ABOUT</p>
+                  <p className="text-[5px] text-muted-foreground leading-tight line-clamp-4">
+                    If you don't choose how to use your time, others will choose for you.
                   </p>
                 </div>
               </div>
               
               {/* Phone 2 */}
-              <div className="relative w-40 md:w-48 rotate-6 mt-8">
-                <img src={phoneMockup} alt="" className="w-full" />
-                <div className="absolute inset-[8%] top-[3%] bottom-[3%] bg-background rounded-[20px] overflow-hidden p-3 text-left">
-                  <p className="text-xs font-bold mb-2">ONE THING TO TRY THIS WEEK</p>
-                  <p className="text-[6px] text-muted-foreground leading-relaxed mb-3">
-                    Take your career back. Find something in your life that has been dictating too much of your time, and take some of it back.
+              <div className="relative w-36 md:w-44 rotate-6 mt-8">
+                <img src={phoneMockup} alt="" className="w-full relative z-10" />
+                <div className="absolute left-[6%] right-[6%] top-[2%] bottom-[2%] bg-background rounded-[24px] overflow-hidden p-2 text-left">
+                  <p className="text-[10px] font-bold mb-1">ONE THING TO TRY</p>
+                  <p className="text-[5px] text-muted-foreground leading-tight mb-2 line-clamp-3">
+                    Take your career back. Find something dictating too much of your time.
                   </p>
-                  <p className="text-[7px] font-bold mb-1">LAST WEEK'S BREAKTHROUGHS</p>
-                  <p className="text-[6px] italic text-muted-foreground leading-relaxed">
-                    "I followed James's advice and negotiated $35K more. Best email I ever read."
+                  <p className="text-[6px] font-bold mb-0.5">BREAKTHROUGHS</p>
+                  <p className="text-[5px] italic text-muted-foreground leading-tight line-clamp-3">
+                    "I negotiated $35K more. Best email I ever read."
                   </p>
                 </div>
               </div>
