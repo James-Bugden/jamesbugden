@@ -40,28 +40,28 @@ const Index = () => {
       {/* Hero Section with Newsletter */}
       <section id="newsletter" className="pt-24 pb-16 px-6 bg-secondary">
         <div className="container mx-auto max-w-6xl">
-          <h1 className="text-4xl md:text-5xl lg:text-6xl font-serif font-bold leading-tight text-center mb-12">
+          <h1 className="text-4xl md:text-5xl lg:text-6xl font-serif font-bold leading-tight text-center mb-16">
             5 Minutes That Might
             <br />
             Change Your Career
           </h1>
           
-          <div className="grid lg:grid-cols-2 gap-12 items-center">
-            {/* Phone mockup */}
-            <div className="flex justify-center lg:justify-end order-2 lg:order-1">
+          <div className="grid lg:grid-cols-2 gap-12 items-start">
+            {/* Phone mockup - left side */}
+            <div className="flex justify-center lg:justify-start">
               <img
                 src={newsletterPhones}
                 alt="Career newsletter preview on phone"
-                className="w-full max-w-sm"
+                className="w-full max-w-md"
               />
             </div>
             
-            {/* Newsletter signup */}
-            <div className="order-1 lg:order-2">
-              <p className="text-lg md:text-xl mb-6">
+            {/* Newsletter signup - right side */}
+            <div className="lg:pt-8">
+              <p className="text-xl md:text-2xl mb-6">
                 <span className="text-accent font-bold">12,847+ professionals</span> have leveled up their careers so far. Will the next one be you?
               </p>
-              <p className="text-muted-foreground mb-8">
+              <p className="text-muted-foreground text-lg mb-8">
                 Receive career strategies shared with thousands of ambitious professionals directly to your inbox every Tuesday.
               </p>
               <form onSubmit={handleSubmit} className="flex flex-col sm:flex-row gap-3 mb-4">
@@ -87,19 +87,20 @@ const Index = () => {
 
       {/* About Section */}
       <section id="about" className="py-20 px-6">
-        <div className="container mx-auto max-w-4xl">
-          <h2 className="text-4xl md:text-5xl font-serif font-bold text-center mb-12">
+        <div className="container mx-auto max-w-5xl">
+          <h2 className="text-4xl md:text-5xl lg:text-6xl font-serif font-bold text-center mb-16">
             Hi, I'm James
           </h2>
           
-          <div className="grid md:grid-cols-2 gap-12 items-center">
+          <div className="grid md:grid-cols-[1fr,auto] gap-12 items-start">
+            {/* Text - left side */}
             <div>
-              <p className="text-lg text-muted-foreground leading-relaxed mb-6">
+              <p className="text-lg md:text-xl text-muted-foreground leading-relaxed mb-6">
                 I've helped 500+ professionals negotiate <strong className="text-foreground">$12M+ in additional compensation</strong>. 
                 I've been on both sides of the hiring table at Fortune 500 companies, and I know exactly what gets candidates 
                 rejected—and what makes them irresistible.
               </p>
-              <p className="text-lg text-muted-foreground leading-relaxed mb-8">
+              <p className="text-lg md:text-xl text-muted-foreground leading-relaxed mb-8">
                 My clients land roles at Google, Amazon, Meta, Goldman Sachs, McKinsey, 
                 and every major tech company you can think of. I don't teach theory. I teach what actually works.
               </p>
@@ -117,11 +118,12 @@ const Index = () => {
               </div>
             </div>
             
+            {/* Photo - right side */}
             <div className="flex justify-center md:justify-end">
               <img
                 src={jamesPhoto}
                 alt="James Bugden - Career Coach"
-                className="w-64 h-64 md:w-72 md:h-72 rounded-full object-cover border-4 border-border shadow-xl"
+                className="w-56 h-56 md:w-72 md:h-72 rounded-full object-cover bg-accent/20"
               />
             </div>
           </div>
