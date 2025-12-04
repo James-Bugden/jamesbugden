@@ -1,7 +1,8 @@
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { ArrowRight, CheckCircle, Linkedin, MessageCircle } from "lucide-react";
+import { ArrowRight, CheckCircle, Linkedin } from "lucide-react";
+import { InstagramIcon, ThreadsIcon } from "@/components/SocialIcons";
 import jamesPhoto from "@/assets/james-bugden.jpg";
 import LanguageToggle from "@/components/LanguageToggle";
 
@@ -28,11 +29,14 @@ const Index = () => {
           </div>
           <div className="flex items-center gap-4">
             <LanguageToggle />
-            <a href="https://www.linkedin.com/in/jamesbugden" target="_blank" rel="noopener noreferrer" className="hover:text-accent transition-colors">
+            <a href="https://www.linkedin.com/in/james-bugden/" target="_blank" rel="noopener noreferrer" className="hover:text-accent transition-colors">
               <Linkedin className="w-5 h-5" />
             </a>
-            <a href="https://threads.net/@james.careers" target="_blank" rel="noopener noreferrer" className="hover:text-accent transition-colors">
-              <MessageCircle className="w-5 h-5" />
+            <a href="https://www.instagram.com/james.careers/" target="_blank" rel="noopener noreferrer" className="hover:text-accent transition-colors">
+              <InstagramIcon className="w-5 h-5" />
+            </a>
+            <a href="https://www.threads.com/@james.careers" target="_blank" rel="noopener noreferrer" className="hover:text-accent transition-colors">
+              <ThreadsIcon className="w-5 h-5" />
             </a>
           </div>
         </div>
@@ -92,14 +96,19 @@ const Index = () => {
                 and every major tech company you can think of. I don't teach theory. I teach what actually works.
               </p>
               <div className="flex flex-wrap gap-4 justify-center md:justify-start">
-                <a href="https://www.linkedin.com/in/jamesbugden" target="_blank" rel="noopener noreferrer">
+                <a href="https://www.linkedin.com/in/james-bugden/" target="_blank" rel="noopener noreferrer">
                   <Button variant="outline" className="gap-2">
                     <Linkedin className="w-4 h-4" /> LinkedIn
                   </Button>
                 </a>
-                <a href="https://threads.net/@james.careers" target="_blank" rel="noopener noreferrer">
+                <a href="https://www.instagram.com/james.careers/" target="_blank" rel="noopener noreferrer">
                   <Button variant="outline" className="gap-2">
-                    <MessageCircle className="w-4 h-4" /> Threads
+                    <InstagramIcon className="w-4 h-4" /> Instagram
+                  </Button>
+                </a>
+                <a href="https://www.threads.com/@james.careers" target="_blank" rel="noopener noreferrer">
+                  <Button variant="outline" className="gap-2">
+                    <ThreadsIcon className="w-4 h-4" /> Threads
                   </Button>
                 </a>
               </div>
@@ -365,11 +374,14 @@ const Index = () => {
               </p>
             </div>
             <div className="flex items-center gap-6">
-              <a href="https://www.linkedin.com/in/jamesbugden" target="_blank" rel="noopener noreferrer" className="text-muted-foreground hover:text-accent transition-colors">
+              <a href="https://www.linkedin.com/in/james-bugden/" target="_blank" rel="noopener noreferrer" className="text-muted-foreground hover:text-accent transition-colors">
                 <Linkedin className="w-5 h-5" />
               </a>
-              <a href="https://threads.net/@james.careers" target="_blank" rel="noopener noreferrer" className="text-muted-foreground hover:text-accent transition-colors">
-                <MessageCircle className="w-5 h-5" />
+              <a href="https://www.instagram.com/james.careers/" target="_blank" rel="noopener noreferrer" className="text-muted-foreground hover:text-accent transition-colors">
+                <InstagramIcon className="w-5 h-5" />
+              </a>
+              <a href="https://www.threads.com/@james.careers" target="_blank" rel="noopener noreferrer" className="text-muted-foreground hover:text-accent transition-colors">
+                <ThreadsIcon className="w-5 h-5" />
               </a>
             </div>
           </div>
