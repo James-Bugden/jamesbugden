@@ -250,6 +250,70 @@ const Index = () => {
         </div>
       </section>
 
+      {/* Testimonials Section */}
+      <section className="py-20 px-6">
+        <div className="container mx-auto max-w-6xl">
+          <div className="text-center mb-16">
+            <h2 className="text-3xl md:text-4xl font-serif font-bold mb-4">
+              Don't Take My Word For It
+            </h2>
+            <p className="text-muted-foreground text-lg">
+              Real stories from real people who transformed their careers.
+            </p>
+          </div>
+
+          <div className="grid md:grid-cols-3 gap-8">
+            <div className="bg-card border border-border rounded-xl p-8">
+              <div className="flex gap-1 mb-4">
+                {[...Array(5)].map((_, i) => (
+                  <span key={i} className="text-accent">★</span>
+                ))}
+              </div>
+              <p className="text-muted-foreground mb-6 italic">
+                "I was stuck at $85K for 3 years. James helped me negotiate $142K at Google. 
+                That's a 67% increase. The ROI on his coaching was literally 100x."
+              </p>
+              <div>
+                <p className="font-bold">Sarah M.</p>
+                <p className="text-sm text-muted-foreground">Software Engineer → Google</p>
+              </div>
+            </div>
+
+            <div className="bg-card border border-border rounded-xl p-8">
+              <div className="flex gap-1 mb-4">
+                {[...Array(5)].map((_, i) => (
+                  <span key={i} className="text-accent">★</span>
+                ))}
+              </div>
+              <p className="text-muted-foreground mb-6 italic">
+                "Failed 12 interviews before James. After his coaching, got offers from Meta AND Amazon. 
+                Took Meta. Still pinching myself."
+              </p>
+              <div>
+                <p className="font-bold">Michael T.</p>
+                <p className="text-sm text-muted-foreground">Product Manager → Meta</p>
+              </div>
+            </div>
+
+            <div className="bg-card border border-border rounded-xl p-8">
+              <div className="flex gap-1 mb-4">
+                {[...Array(5)].map((_, i) => (
+                  <span key={i} className="text-accent">★</span>
+                ))}
+              </div>
+              <p className="text-muted-foreground mb-6 italic">
+                "I almost accepted their first offer. James coached me to counter and I got $45K more 
+                in total comp. Best investment I ever made."
+              </p>
+              <div>
+                <p className="font-bold">Jennifer L.</p>
+                <p className="text-sm text-muted-foreground">Data Scientist → Goldman Sachs</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
       {/* Companies Section */}
       <section className="py-16 px-6 bg-muted">
         <div className="container mx-auto max-w-4xl text-center">
