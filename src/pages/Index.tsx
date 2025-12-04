@@ -3,7 +3,6 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { ArrowRight, CheckCircle, Linkedin, MessageCircle } from "lucide-react";
 import jamesPhoto from "@/assets/james-bugden.jpg";
-import newsletterPhones from "@/assets/newsletter-phones.png";
 
 const Index = () => {
   const [email, setEmail] = useState("");
@@ -39,49 +38,35 @@ const Index = () => {
 
       {/* Hero Section with Newsletter */}
       <section id="newsletter" className="pt-24 pb-16 px-6 bg-secondary">
-        <div className="container mx-auto max-w-6xl">
-          <h1 className="text-4xl md:text-5xl lg:text-6xl font-serif font-bold leading-tight text-center mb-16">
+        <div className="container mx-auto max-w-3xl text-center">
+          <h1 className="text-4xl md:text-5xl lg:text-6xl font-serif font-bold leading-tight mb-12">
             5 Minutes That Might
             <br />
             Change Your Career
           </h1>
           
-          <div className="grid lg:grid-cols-2 gap-12 items-start">
-            {/* Phone mockup - left side */}
-            <div className="flex justify-center lg:justify-start">
-              <img
-                src={newsletterPhones}
-                alt="Career newsletter preview on phone"
-                className="w-full max-w-md"
-              />
-            </div>
-            
-            {/* Newsletter signup - right side */}
-            <div className="lg:pt-8">
-              <p className="text-xl md:text-2xl mb-6">
-                <span className="text-accent font-bold">12,847+ professionals</span> have leveled up their careers so far. Will the next one be you?
-              </p>
-              <p className="text-muted-foreground text-lg mb-8">
-                Receive career strategies shared with thousands of ambitious professionals directly to your inbox every Tuesday.
-              </p>
-              <form onSubmit={handleSubmit} className="flex flex-col sm:flex-row gap-3 mb-4">
-                <Input
-                  type="email"
-                  placeholder="Your Email Address"
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                  className="flex-1 bg-background"
-                  required
-                />
-                <Button type="submit" className="bg-primary hover:bg-primary/90 text-primary-foreground font-semibold px-8">
-                  SIGN UP
-                </Button>
-              </form>
-              <p className="text-sm text-muted-foreground italic">
-                Your information is protected and I never spam, ever.
-              </p>
-            </div>
-          </div>
+          <p className="text-xl md:text-2xl mb-6">
+            <span className="text-accent font-bold">12,847+ professionals</span> have leveled up their careers so far. Will the next one be you?
+          </p>
+          <p className="text-muted-foreground text-lg mb-8">
+            Receive career strategies shared with thousands of ambitious professionals directly to your inbox every Tuesday.
+          </p>
+          <form onSubmit={handleSubmit} className="flex flex-col sm:flex-row gap-3 mb-4 max-w-xl mx-auto">
+            <Input
+              type="email"
+              placeholder="Your Email Address"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              className="flex-1 bg-background"
+              required
+            />
+            <Button type="submit" className="bg-primary hover:bg-primary/90 text-primary-foreground font-semibold px-8">
+              SIGN UP
+            </Button>
+          </form>
+          <p className="text-sm text-muted-foreground italic">
+            Your information is protected and I never spam, ever.
+          </p>
         </div>
       </section>
 
@@ -118,13 +103,16 @@ const Index = () => {
               </div>
             </div>
             
-            {/* Photo - right side */}
+            {/* Photo - right side with glow effect */}
             <div className="flex justify-center md:justify-end">
-              <img
-                src={jamesPhoto}
-                alt="James Bugden - Career Coach"
-                className="w-56 h-56 md:w-72 md:h-72 rounded-full object-cover bg-accent/20"
-              />
+              <div className="relative">
+                <div className="absolute inset-0 bg-gradient-radial from-accent/20 to-transparent rounded-full scale-125 blur-xl"></div>
+                <img
+                  src={jamesPhoto}
+                  alt="James Bugden - Career Coach"
+                  className="relative w-56 h-56 md:w-72 md:h-72 rounded-full object-cover border-4 border-background shadow-xl"
+                />
+              </div>
             </div>
           </div>
         </div>
