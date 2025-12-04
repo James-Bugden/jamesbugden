@@ -247,6 +247,70 @@ const IndexZhTw = () => {
         </div>
       </section>
 
+      {/* Testimonials Section */}
+      <section className="py-20 px-6">
+        <div className="container mx-auto max-w-6xl">
+          <div className="text-center mb-16">
+            <h2 className="text-3xl md:text-4xl font-serif font-bold mb-4">
+              別只聽我說
+            </h2>
+            <p className="text-muted-foreground text-lg">
+              來自真正改變職涯的真實故事。
+            </p>
+          </div>
+
+          <div className="grid md:grid-cols-3 gap-8">
+            <div className="bg-card border border-border rounded-xl p-8">
+              <div className="flex gap-1 mb-4">
+                {[...Array(5)].map((_, i) => (
+                  <span key={i} className="text-accent">★</span>
+                ))}
+              </div>
+              <p className="text-muted-foreground mb-6 italic">
+                「我在 85K 美元卡了 3 年。James 幫我在 Google 談到了 142K 美元。
+                這是 67% 的增長。他的教練服務投資回報率真的是 100 倍。」
+              </p>
+              <div>
+                <p className="font-bold">Sarah M.</p>
+                <p className="text-sm text-muted-foreground">軟體工程師 → Google</p>
+              </div>
+            </div>
+
+            <div className="bg-card border border-border rounded-xl p-8">
+              <div className="flex gap-1 mb-4">
+                {[...Array(5)].map((_, i) => (
+                  <span key={i} className="text-accent">★</span>
+                ))}
+              </div>
+              <p className="text-muted-foreground mb-6 italic">
+                「在找 James 之前我面試失敗了 12 次。經過他的輔導後，同時拿到了 Meta 和 Amazon 的 offer。
+                選擇了 Meta。到現在還不敢相信。」
+              </p>
+              <div>
+                <p className="font-bold">Michael T.</p>
+                <p className="text-sm text-muted-foreground">產品經理 → Meta</p>
+              </div>
+            </div>
+
+            <div className="bg-card border border-border rounded-xl p-8">
+              <div className="flex gap-1 mb-4">
+                {[...Array(5)].map((_, i) => (
+                  <span key={i} className="text-accent">★</span>
+                ))}
+              </div>
+              <p className="text-muted-foreground mb-6 italic">
+                「我差點就接受了他們的第一個報價。James 教我如何還價，結果我的總薪酬多了 45K 美元。
+                這是我做過最好的投資。」
+              </p>
+              <div>
+                <p className="font-bold">Jennifer L.</p>
+                <p className="text-sm text-muted-foreground">數據科學家 → Goldman Sachs</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
       {/* Companies Section */}
       <section className="py-16 px-6 bg-muted">
         <div className="container mx-auto max-w-4xl text-center">
