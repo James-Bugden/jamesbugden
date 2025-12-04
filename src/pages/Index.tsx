@@ -78,8 +78,8 @@ const Index = () => {
           </h2>
           
           <div className="grid md:grid-cols-[1fr,auto] gap-12 items-start">
-            {/* Text - left side */}
-            <div>
+            {/* Text - left side on desktop, below photo on mobile */}
+            <div className="order-2 md:order-1">
               <p className="text-lg md:text-xl text-muted-foreground leading-relaxed mb-6">
                 I've helped 500+ professionals negotiate <strong className="text-foreground">$12M+ in additional compensation</strong>. 
                 I've been on both sides of the hiring table at Fortune 500 companies, and I know exactly what gets candidates 
@@ -89,7 +89,7 @@ const Index = () => {
                 My clients land roles at Google, Amazon, Meta, Goldman Sachs, McKinsey, 
                 and every major tech company you can think of. I don't teach theory. I teach what actually works.
               </p>
-              <div className="flex flex-wrap gap-4">
+              <div className="flex flex-wrap gap-4 justify-center md:justify-start">
                 <a href="https://www.linkedin.com/in/jamesbugden" target="_blank" rel="noopener noreferrer">
                   <Button variant="outline" className="gap-2">
                     <Linkedin className="w-4 h-4" /> LinkedIn
@@ -103,8 +103,8 @@ const Index = () => {
               </div>
             </div>
             
-            {/* Photo - right side with glow effect */}
-            <div className="flex justify-center md:justify-end">
+            {/* Photo - right side on desktop, first on mobile */}
+            <div className="flex justify-center md:justify-end order-1 md:order-2">
               <div className="relative">
                 <div className="absolute inset-0 bg-gradient-radial from-accent/20 to-transparent rounded-full scale-125 blur-xl"></div>
                 <img
