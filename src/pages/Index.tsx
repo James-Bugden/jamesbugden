@@ -290,7 +290,7 @@ const Index = () => {
             Every week you wait is money left on the table. Let's change that.
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <Button size="lg" className="h-14 px-10 bg-gold hover:bg-gold/90 text-white font-medium text-base uppercase tracking-wider">
+            <Button size="lg" className="h-14 px-10 bg-gold hover:bg-gold/90 text-white font-medium text-base uppercase tracking-wider border-2 border-gold">
               Work With Me
             </Button>
             <Button size="lg" className="h-14 px-10 bg-transparent border-2 border-white/40 text-white hover:bg-white/10 font-medium text-base uppercase tracking-wider">
