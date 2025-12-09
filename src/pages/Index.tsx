@@ -66,7 +66,7 @@ const Index = () => {
               className="h-12 bg-card border-border rounded-lg text-base px-4 flex-1"
               required
             />
-            <Button type="submit" className="h-12 px-8 rounded-lg bg-foreground hover:bg-foreground/90 text-cream font-medium uppercase tracking-wider text-sm">
+            <Button type="submit" className="h-12 px-8 rounded-lg bg-foreground hover:bg-foreground/90 text-white font-medium uppercase tracking-wider text-sm border-2 border-foreground">
               Sign Up
             </Button>
           </form>
@@ -92,17 +92,17 @@ const Index = () => {
               </p>
               <div className="flex flex-wrap gap-3">
                 <a href="https://www.linkedin.com/in/james-bugden/" target="_blank" rel="noopener noreferrer">
-                  <Button variant="outline" size="sm" className="rounded-lg gap-2 border-foreground/20 hover:bg-secondary">
+                  <Button variant="outline" size="sm" className="gap-2 border-2 border-foreground/20 hover:bg-secondary hover:border-foreground/40">
                     <Linkedin className="w-4 h-4" /> LinkedIn
                   </Button>
                 </a>
                 <a href="https://www.instagram.com/james.careers/" target="_blank" rel="noopener noreferrer">
-                  <Button variant="outline" size="sm" className="rounded-lg gap-2 border-foreground/20 hover:bg-secondary">
+                  <Button variant="outline" size="sm" className="gap-2 border-2 border-foreground/20 hover:bg-secondary hover:border-foreground/40">
                     <InstagramIcon className="w-4 h-4" /> Instagram
                   </Button>
                 </a>
                 <a href="https://www.threads.com/@james.careers" target="_blank" rel="noopener noreferrer">
-                  <Button variant="outline" size="sm" className="rounded-lg gap-2 border-foreground/20 hover:bg-secondary">
+                  <Button variant="outline" size="sm" className="gap-2 border-2 border-foreground/20 hover:bg-secondary hover:border-foreground/40">
                     <ThreadsIcon className="w-4 h-4" /> Threads
                   </Button>
                 </a>
@@ -248,7 +248,7 @@ const Index = () => {
                 role: "Data Scientist → Goldman Sachs"
               }
             ].map((testimonial, i) => (
-              <div key={i} className="bg-card rounded-2xl p-8 border border-border">
+              <div key={i} className="bg-card p-8 border-t-2 border-t-gold shadow-sm">
                 <div className="flex gap-1 mb-4 text-gold">★★★★★</div>
                 <p className="text-foreground mb-6 leading-relaxed">
                   "{testimonial.quote}"
