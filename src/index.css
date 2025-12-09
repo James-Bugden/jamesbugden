@@ -83,12 +83,24 @@
     color: hsl(40 30% 95%);
   }
   
+  .text-cream-90 {
+    color: hsl(40 30% 95% / 0.9);
+  }
+  
+  .text-cream-70 {
+    color: hsl(40 30% 95% / 0.7);
+  }
+  
   .text-gold {
     color: hsl(42 70% 50%);
   }
   
   .bg-cream {
     background-color: hsl(40 30% 95%);
+  }
+  
+  .hero-photo-shadow {
+    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.15);
   }
   
   .hero-photo-shadow {
