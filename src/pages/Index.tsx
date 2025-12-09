@@ -200,25 +200,25 @@ const Index = () => {
           <h2 className="font-heading text-4xl md:text-5xl text-cream mb-4">
             Results That Speak
           </h2>
-          <p className="text-cream/70 text-lg mb-16">
+          <p className="text-cream/90 text-lg mb-16">
             Real numbers. Real people. Real transformations.
           </p>
           <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
             <div>
               <p className="font-heading text-4xl md:text-5xl text-gold mb-2">$12M+</p>
-              <p className="text-sm text-cream/70">Additional Comp Negotiated</p>
+              <p className="text-sm text-cream/90">Additional Comp Negotiated</p>
             </div>
             <div>
               <p className="font-heading text-4xl md:text-5xl text-gold mb-2">500+</p>
-              <p className="text-sm text-cream/70">Clients Placed</p>
+              <p className="text-sm text-cream/90">Clients Placed</p>
             </div>
             <div>
               <p className="font-heading text-4xl md:text-5xl text-gold mb-2">94%</p>
-              <p className="text-sm text-cream/70">Interview Success Rate</p>
+              <p className="text-sm text-cream/90">Interview Success Rate</p>
             </div>
             <div>
               <p className="font-heading text-4xl md:text-5xl text-gold mb-2">47%</p>
-              <p className="text-sm text-cream/70">Avg Salary Increase</p>
+              <p className="text-sm text-cream/90">Avg Salary Increase</p>
             </div>
           </div>
         </div>
@@ -286,7 +286,7 @@ const Index = () => {
           <h2 className="font-heading text-4xl md:text-5xl text-cream mb-6">
             Ready to Level Up?
           </h2>
-          <p className="text-cream/70 text-lg mb-10 max-w-xl mx-auto">
+          <p className="text-cream/90 text-lg mb-10 max-w-xl mx-auto">
             Every week you wait is money left on the table. Let's change that.
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
