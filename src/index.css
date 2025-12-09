@@ -7,13 +7,13 @@
     /* Marshall Goldsmith Colors - Readable Version */
     /* Cream/off-white backgrounds with dark green and gold accents */
     --background: 40 20% 96%;
-    --foreground: 150 25% 15%;
+    --foreground: 0 0% 15%;
 
     --card: 40 30% 98%;
-    --card-foreground: 150 25% 15%;
+    --card-foreground: 0 0% 15%;
 
     --popover: 40 30% 98%;
-    --popover-foreground: 150 25% 15%;
+    --popover-foreground: 0 0% 15%;
 
     --primary: 150 25% 15%;
     --primary-foreground: 40 30% 95%;
