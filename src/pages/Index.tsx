@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { ArrowRight, CheckCircle, Linkedin } from "lucide-react";
+import { ArrowRight, Linkedin } from "lucide-react";
 import { InstagramIcon, ThreadsIcon } from "@/components/SocialIcons";
 import jamesPhoto from "@/assets/james-bugden.jpg";
 import LanguageToggle from "@/components/LanguageToggle";
@@ -16,320 +16,238 @@ const Index = () => {
   };
 
   return (
-    <div className="min-h-screen bg-background font-sans">
-      {/* Navigation */}
-      <nav className="fixed top-0 left-0 right-0 z-50 bg-background/80 backdrop-blur-md border-b border-border">
-        <div className="container mx-auto px-6 py-4 flex items-center justify-between">
-          <span className="text-xl font-bold tracking-wide">JAMES BUGDEN</span>
+    <div className="min-h-screen bg-background">
+      {/* Navigation - Apple style frosted glass */}
+      <nav className="fixed top-0 left-0 right-0 z-50 bg-background/80 apple-blur border-b border-border/50">
+        <div className="container mx-auto px-6 py-3 flex items-center justify-between">
+          <span className="text-base font-semibold tracking-tight">James Bugden</span>
           <div className="hidden md:flex items-center gap-8">
-            <a href="#services" className="text-sm font-medium hover:text-accent transition-colors">Services</a>
-            <a href="#about" className="text-sm font-medium hover:text-accent transition-colors">About</a>
-            <a href="#results" className="text-sm font-medium hover:text-accent transition-colors">Results</a>
-            <a href="#newsletter" className="text-sm font-medium hover:text-accent transition-colors">Newsletter</a>
+            <a href="#services" className="text-sm text-muted-foreground hover:text-foreground transition-colors">Services</a>
+            <a href="#about" className="text-sm text-muted-foreground hover:text-foreground transition-colors">About</a>
+            <a href="#results" className="text-sm text-muted-foreground hover:text-foreground transition-colors">Results</a>
           </div>
           <div className="flex items-center gap-4">
             <LanguageToggle />
-            <a href="https://www.linkedin.com/in/james-bugden/" target="_blank" rel="noopener noreferrer" className="hover:text-accent transition-colors">
-              <Linkedin className="w-5 h-5" />
+            <a href="https://www.linkedin.com/in/james-bugden/" target="_blank" rel="noopener noreferrer" className="text-muted-foreground hover:text-foreground transition-colors">
+              <Linkedin className="w-4 h-4" />
             </a>
-            <a href="https://www.instagram.com/james.careers/" target="_blank" rel="noopener noreferrer" className="hover:text-accent transition-colors">
-              <InstagramIcon className="w-5 h-5" />
+            <a href="https://www.instagram.com/james.careers/" target="_blank" rel="noopener noreferrer" className="text-muted-foreground hover:text-foreground transition-colors">
+              <InstagramIcon className="w-4 h-4" />
             </a>
-            <a href="https://www.threads.com/@james.careers" target="_blank" rel="noopener noreferrer" className="hover:text-accent transition-colors">
-              <ThreadsIcon className="w-5 h-5" />
+            <a href="https://www.threads.com/@james.careers" target="_blank" rel="noopener noreferrer" className="text-muted-foreground hover:text-foreground transition-colors">
+              <ThreadsIcon className="w-4 h-4" />
             </a>
           </div>
         </div>
       </nav>
 
-      {/* Hero Section with Newsletter */}
-      <section id="newsletter" className="pt-24 pb-16 px-6 bg-secondary">
-        <div className="container mx-auto max-w-3xl text-center">
-          <h1 className="text-4xl md:text-5xl lg:text-6xl font-serif font-bold leading-tight mb-12">
-            5 Minutes That Might
-            <br />
-            Change Your Career
+      {/* Hero Section - Apple massive typography */}
+      <section className="pt-32 pb-24 px-6">
+        <div className="container mx-auto max-w-4xl text-center">
+          <h1 className="text-5xl md:text-7xl lg:text-8xl font-semibold tracking-tight leading-[1.05] mb-8">
+            Transform your career.
           </h1>
-          
-          <p className="text-xl md:text-2xl mb-6">
-            <span className="text-accent font-bold">12,847+ professionals</span> have leveled up their careers so far. Will the next one be you?
+          <p className="text-xl md:text-2xl text-muted-foreground max-w-2xl mx-auto mb-10 leading-relaxed">
+            Career strategies for ambitious professionals. 
+            Get the job you deserve, at the salary you're worth.
           </p>
-          <p className="text-muted-foreground text-lg mb-8">
-            Receive career strategies shared with thousands of ambitious professionals directly to your inbox every Tuesday.
-          </p>
-          <form onSubmit={handleSubmit} className="flex flex-col sm:flex-row gap-3 mb-4 max-w-xl mx-auto">
+          <form onSubmit={handleSubmit} className="flex flex-col sm:flex-row gap-3 max-w-md mx-auto">
             <Input
               type="email"
-              placeholder="Your Email Address"
+              placeholder="Enter your email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
-              className="flex-1 bg-background"
+              className="h-12 bg-secondary border-0 rounded-xl text-base"
               required
             />
-            <Button type="submit" className="bg-primary hover:bg-primary/90 text-primary-foreground font-semibold px-8">
-              SIGN UP
+            <Button type="submit" className="h-12 px-8 rounded-xl bg-accent hover:bg-accent/90 text-accent-foreground font-medium">
+              Get Started
             </Button>
           </form>
-          <p className="text-sm text-muted-foreground italic">
-            Your information is protected and I never spam, ever.
+          <p className="text-sm text-muted-foreground mt-4">
+            Join 12,847+ professionals. Free weekly insights.
           </p>
+        </div>
+      </section>
+
+      {/* Stats Banner */}
+      <section className="py-16 px-6 border-y border-border">
+        <div className="container mx-auto max-w-5xl">
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-8 text-center">
+            <div>
+              <p className="text-4xl md:text-5xl font-semibold tracking-tight">$12M+</p>
+              <p className="text-sm text-muted-foreground mt-2">Compensation Negotiated</p>
+            </div>
+            <div>
+              <p className="text-4xl md:text-5xl font-semibold tracking-tight">500+</p>
+              <p className="text-sm text-muted-foreground mt-2">Clients Placed</p>
+            </div>
+            <div>
+              <p className="text-4xl md:text-5xl font-semibold tracking-tight">94%</p>
+              <p className="text-sm text-muted-foreground mt-2">Success Rate</p>
+            </div>
+            <div>
+              <p className="text-4xl md:text-5xl font-semibold tracking-tight">47%</p>
+              <p className="text-sm text-muted-foreground mt-2">Avg Salary Increase</p>
+            </div>
+          </div>
         </div>
       </section>
 
       {/* About Section */}
-      <section id="about" className="py-20 px-6">
+      <section id="about" className="py-24 px-6">
         <div className="container mx-auto max-w-5xl">
-          <h2 className="text-4xl md:text-5xl lg:text-6xl font-serif font-bold text-center mb-16">
-            Hi, I'm James
-          </h2>
-          
-          <div className="grid md:grid-cols-[1fr,auto] gap-12 items-start">
-            {/* Text - left side on desktop, below photo on mobile */}
+          <div className="grid md:grid-cols-2 gap-16 items-center">
             <div className="order-2 md:order-1">
-              <p className="text-lg md:text-xl text-muted-foreground leading-relaxed mb-6">
-                I've helped 500+ professionals negotiate <strong className="text-foreground">$12M+ in additional compensation</strong>. 
-                I've been on both sides of the hiring table at Fortune 500 companies, and I know exactly what gets candidates 
-                rejected—and what makes them irresistible.
+              <p className="text-accent text-sm font-medium mb-4">About</p>
+              <h2 className="text-4xl md:text-5xl font-semibold tracking-tight mb-6">
+                Hi, I'm James.
+              </h2>
+              <p className="text-lg text-muted-foreground leading-relaxed mb-6">
+                I've helped 500+ professionals negotiate over $12M in additional compensation. 
+                I've been on both sides of the hiring table at Fortune 500 companies.
               </p>
-              <p className="text-lg md:text-xl text-muted-foreground leading-relaxed mb-8">
-                My clients land roles at Google, Amazon, Meta, Goldman Sachs, McKinsey, 
-                and every major tech company you can think of. I don't teach theory. I teach what actually works.
+              <p className="text-lg text-muted-foreground leading-relaxed mb-8">
+                My clients land roles at Google, Amazon, Meta, Goldman Sachs, and McKinsey. 
+                I don't teach theory. I teach what actually works.
               </p>
-              <div className="flex flex-wrap gap-4 justify-center md:justify-start">
+              <div className="flex gap-3">
                 <a href="https://www.linkedin.com/in/james-bugden/" target="_blank" rel="noopener noreferrer">
-                  <Button variant="outline" className="gap-2">
+                  <Button variant="outline" size="sm" className="rounded-full gap-2">
                     <Linkedin className="w-4 h-4" /> LinkedIn
                   </Button>
                 </a>
                 <a href="https://www.instagram.com/james.careers/" target="_blank" rel="noopener noreferrer">
-                  <Button variant="outline" className="gap-2">
+                  <Button variant="outline" size="sm" className="rounded-full gap-2">
                     <InstagramIcon className="w-4 h-4" /> Instagram
                   </Button>
                 </a>
-                <a href="https://www.threads.com/@james.careers" target="_blank" rel="noopener noreferrer">
-                  <Button variant="outline" className="gap-2">
-                    <ThreadsIcon className="w-4 h-4" /> Threads
-                  </Button>
-                </a>
               </div>
             </div>
-            
-            {/* Photo - right side on desktop, first on mobile */}
-            <div className="flex justify-center md:justify-end order-1 md:order-2">
-              <div className="relative">
-                <div className="absolute inset-0 bg-gradient-radial from-accent/20 to-transparent rounded-full scale-125 blur-xl"></div>
-                <img
-                  src={jamesPhoto}
-                  alt="James Bugden - Career Coach"
-                  className="relative w-56 h-56 md:w-72 md:h-72 rounded-full object-cover border-4 border-background shadow-xl"
-                />
-              </div>
+            <div className="order-1 md:order-2 flex justify-center">
+              <img
+                src={jamesPhoto}
+                alt="James Bugden"
+                className="w-72 h-72 md:w-80 md:h-80 rounded-3xl object-cover"
+              />
             </div>
           </div>
         </div>
       </section>
 
-      {/* Services Section */}
-      <section id="services" className="py-20 px-6 bg-card">
-        <div className="container mx-auto max-w-6xl">
+      {/* Services Section - Apple card style */}
+      <section id="services" className="py-24 px-6 bg-secondary">
+        <div className="container mx-auto max-w-5xl">
           <div className="text-center mb-16">
-            <h2 className="text-3xl md:text-4xl font-serif font-bold mb-4">
-              How I Help You Win
+            <p className="text-accent text-sm font-medium mb-4">Services</p>
+            <h2 className="text-4xl md:text-5xl font-semibold tracking-tight">
+              How I help you win.
             </h2>
-            <p className="text-muted-foreground text-lg max-w-2xl mx-auto">
-              Three ways to 10x your career trajectory. Pick your path.
-            </p>
           </div>
 
-          <div className="grid md:grid-cols-3 gap-8">
-            {/* Resume */}
-            <div className="bg-background border border-border rounded-xl p-8 hover:shadow-xl transition-shadow">
-              <div className="w-12 h-12 bg-accent/10 rounded-lg flex items-center justify-center mb-6">
-                <span className="text-2xl">📄</span>
+          <div className="grid md:grid-cols-3 gap-6">
+            <div className="bg-background rounded-2xl p-8 hover:shadow-lg transition-shadow">
+              <div className="w-12 h-12 bg-secondary rounded-2xl flex items-center justify-center mb-6 text-2xl">
+                📄
               </div>
-              <h3 className="text-xl font-bold mb-3">Resume That Opens Doors</h3>
-              <p className="text-muted-foreground mb-6">
-                Your resume has 6 seconds to impress. Most resumes fail in 2. I'll rebuild yours to pass ATS systems 
-                AND make recruiters reach out same day.
+              <h3 className="text-xl font-semibold mb-3">Resume</h3>
+              <p className="text-muted-foreground leading-relaxed">
+                Your resume has 6 seconds to impress. I'll rebuild yours to pass ATS systems and make recruiters reach out.
               </p>
-              <ul className="space-y-2 text-sm">
-                <li className="flex items-start gap-2">
-                  <CheckCircle className="w-4 h-4 text-accent mt-0.5 flex-shrink-0" />
-                  <span>ATS-optimized formatting</span>
-                </li>
-                <li className="flex items-start gap-2">
-                  <CheckCircle className="w-4 h-4 text-accent mt-0.5 flex-shrink-0" />
-                  <span>Achievement-focused bullets</span>
-                </li>
-                <li className="flex items-start gap-2">
-                  <CheckCircle className="w-4 h-4 text-accent mt-0.5 flex-shrink-0" />
-                  <span>Tailored for FAANG & MNCs</span>
-                </li>
-              </ul>
             </div>
 
-            {/* Interview */}
-            <div className="bg-background border border-border rounded-xl p-8 hover:shadow-xl transition-shadow relative">
-              <div className="absolute -top-3 right-6 bg-accent text-accent-foreground text-xs font-bold px-3 py-1 rounded-full">
-                MOST POPULAR
+            <div className="bg-background rounded-2xl p-8 hover:shadow-lg transition-shadow relative">
+              <div className="absolute -top-3 right-6 bg-foreground text-background text-xs font-medium px-3 py-1 rounded-full">
+                Popular
               </div>
-              <div className="w-12 h-12 bg-accent/10 rounded-lg flex items-center justify-center mb-6">
-                <span className="text-2xl">🎯</span>
+              <div className="w-12 h-12 bg-secondary rounded-2xl flex items-center justify-center mb-6 text-2xl">
+                🎯
               </div>
-              <h3 className="text-xl font-bold mb-3">Interview Mastery</h3>
-              <p className="text-muted-foreground mb-6">
-                Stop "hoping" you'll get the job. I'll show you exactly what to say, how to say it, and how to 
-                handle any curveball they throw at you.
+              <h3 className="text-xl font-semibold mb-3">Interviews</h3>
+              <p className="text-muted-foreground leading-relaxed">
+                Stop hoping. I'll show you exactly what to say, how to say it, and how to handle any curveball.
               </p>
-              <ul className="space-y-2 text-sm">
-                <li className="flex items-start gap-2">
-                  <CheckCircle className="w-4 h-4 text-accent mt-0.5 flex-shrink-0" />
-                  <span>Mock interviews with feedback</span>
-                </li>
-                <li className="flex items-start gap-2">
-                  <CheckCircle className="w-4 h-4 text-accent mt-0.5 flex-shrink-0" />
-                  <span>STAR method frameworks</span>
-                </li>
-                <li className="flex items-start gap-2">
-                  <CheckCircle className="w-4 h-4 text-accent mt-0.5 flex-shrink-0" />
-                  <span>Company-specific strategies</span>
-                </li>
-              </ul>
             </div>
 
-            {/* Salary Negotiation */}
-            <div className="bg-background border border-border rounded-xl p-8 hover:shadow-xl transition-shadow">
-              <div className="w-12 h-12 bg-accent/10 rounded-lg flex items-center justify-center mb-6">
-                <span className="text-2xl">💰</span>
+            <div className="bg-background rounded-2xl p-8 hover:shadow-lg transition-shadow">
+              <div className="w-12 h-12 bg-secondary rounded-2xl flex items-center justify-center mb-6 text-2xl">
+                💰
               </div>
-              <h3 className="text-xl font-bold mb-3">Salary Negotiation</h3>
-              <p className="text-muted-foreground mb-6">
-                The average person leaves $50K+ on the table. Don't be average. I'll coach you to negotiate 
-                like a pro and get what you're actually worth.
+              <h3 className="text-xl font-semibold mb-3">Negotiation</h3>
+              <p className="text-muted-foreground leading-relaxed">
+                The average person leaves $50K+ on the table. I'll coach you to negotiate what you're actually worth.
               </p>
-              <ul className="space-y-2 text-sm">
-                <li className="flex items-start gap-2">
-                  <CheckCircle className="w-4 h-4 text-accent mt-0.5 flex-shrink-0" />
-                  <span>Exact scripts & tactics</span>
-                </li>
-                <li className="flex items-start gap-2">
-                  <CheckCircle className="w-4 h-4 text-accent mt-0.5 flex-shrink-0" />
-                  <span>Counter-offer strategies</span>
-                </li>
-                <li className="flex items-start gap-2">
-                  <CheckCircle className="w-4 h-4 text-accent mt-0.5 flex-shrink-0" />
-                  <span>Total comp optimization</span>
-                </li>
-              </ul>
             </div>
           </div>
         </div>
       </section>
 
-      {/* Results Section */}
-      <section id="results" className="py-20 px-6 bg-primary text-primary-foreground">
-        <div className="container mx-auto max-w-6xl">
+      {/* Results Section - Dark inverse */}
+      <section id="results" className="py-24 px-6 bg-foreground text-background">
+        <div className="container mx-auto max-w-5xl">
           <div className="text-center mb-16">
-            <h2 className="text-3xl md:text-4xl font-serif font-bold mb-4">
-              Results That Speak
+            <p className="text-accent text-sm font-medium mb-4">Testimonials</p>
+            <h2 className="text-4xl md:text-5xl font-semibold tracking-tight">
+              Real results.
             </h2>
-            <p className="text-primary-foreground/70 text-lg">
-              Real numbers. Real people. Real transformations.
-            </p>
           </div>
 
-          <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-8 text-center">
-            <div>
-              <p className="text-4xl md:text-5xl font-bold text-accent mb-2">$12M+</p>
-              <p className="text-primary-foreground/70">Additional Comp Negotiated</p>
-            </div>
-            <div>
-              <p className="text-4xl md:text-5xl font-bold text-accent mb-2">500+</p>
-              <p className="text-primary-foreground/70">Clients Placed</p>
-            </div>
-            <div>
-              <p className="text-4xl md:text-5xl font-bold text-accent mb-2">94%</p>
-              <p className="text-primary-foreground/70">Interview Success Rate</p>
-            </div>
-            <div>
-              <p className="text-4xl md:text-5xl font-bold text-accent mb-2">47%</p>
-              <p className="text-primary-foreground/70">Avg Salary Increase</p>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* Testimonials Section */}
-      <section className="py-20 px-6">
-        <div className="container mx-auto max-w-6xl">
-          <div className="text-center mb-16">
-            <h2 className="text-3xl md:text-4xl font-serif font-bold mb-4">
-              Don't Take My Word For It
-            </h2>
-            <p className="text-muted-foreground text-lg">
-              Real stories from real people who transformed their careers.
-            </p>
-          </div>
-
-          <div className="grid md:grid-cols-3 gap-8">
-            <div className="bg-card border border-border rounded-xl p-8">
-              <div className="flex gap-1 mb-4">
-                {[...Array(5)].map((_, i) => (
-                  <span key={i} className="text-accent">★</span>
+          <div className="grid md:grid-cols-3 gap-6">
+            <div className="bg-background/5 rounded-2xl p-8 border border-background/10">
+              <div className="flex gap-1 mb-4 text-accent">
+                {"★★★★★".split("").map((star, i) => (
+                  <span key={i}>{star}</span>
                 ))}
               </div>
-              <p className="text-muted-foreground mb-6 italic">
-                "I was stuck at $85K for 3 years. James helped me negotiate $142K at Google. 
-                That's a 67% increase. The ROI on his coaching was literally 100x."
+              <p className="text-background/80 mb-6 leading-relaxed">
+                "I was stuck at $85K for 3 years. James helped me negotiate $142K at Google. That's a 67% increase."
               </p>
               <div>
-                <p className="font-bold">Sarah M.</p>
-                <p className="text-sm text-muted-foreground">Software Engineer → Google</p>
+                <p className="font-medium">Sarah M.</p>
+                <p className="text-sm text-background/60">Software Engineer → Google</p>
               </div>
             </div>
 
-            <div className="bg-card border border-border rounded-xl p-8">
-              <div className="flex gap-1 mb-4">
-                {[...Array(5)].map((_, i) => (
-                  <span key={i} className="text-accent">★</span>
+            <div className="bg-background/5 rounded-2xl p-8 border border-background/10">
+              <div className="flex gap-1 mb-4 text-accent">
+                {"★★★★★".split("").map((star, i) => (
+                  <span key={i}>{star}</span>
                 ))}
               </div>
-              <p className="text-muted-foreground mb-6 italic">
-                "Failed 12 interviews before James. After his coaching, got offers from Meta AND Amazon. 
-                Took Meta. Still pinching myself."
+              <p className="text-background/80 mb-6 leading-relaxed">
+                "Failed 12 interviews before James. After his coaching, got offers from Meta AND Amazon."
               </p>
               <div>
-                <p className="font-bold">Michael T.</p>
-                <p className="text-sm text-muted-foreground">Product Manager → Meta</p>
+                <p className="font-medium">Michael T.</p>
+                <p className="text-sm text-background/60">Product Manager → Meta</p>
               </div>
             </div>
 
-            <div className="bg-card border border-border rounded-xl p-8">
-              <div className="flex gap-1 mb-4">
-                {[...Array(5)].map((_, i) => (
-                  <span key={i} className="text-accent">★</span>
+            <div className="bg-background/5 rounded-2xl p-8 border border-background/10">
+              <div className="flex gap-1 mb-4 text-accent">
+                {"★★★★★".split("").map((star, i) => (
+                  <span key={i}>{star}</span>
                 ))}
               </div>
-              <p className="text-muted-foreground mb-6 italic">
-                "I almost accepted their first offer. James coached me to counter and I got $45K more 
-                in total comp. Best investment I ever made."
+              <p className="text-background/80 mb-6 leading-relaxed">
+                "I almost accepted their first offer. James coached me to counter and I got $45K more."
               </p>
               <div>
-                <p className="font-bold">Jennifer L.</p>
-                <p className="text-sm text-muted-foreground">Data Scientist → Goldman Sachs</p>
+                <p className="font-medium">Jennifer L.</p>
+                <p className="text-sm text-background/60">Data Scientist → Goldman Sachs</p>
               </div>
             </div>
           </div>
         </div>
       </section>
 
-      {/* Companies Section */}
-      <section className="py-16 px-6 bg-muted">
+      {/* Companies */}
+      <section className="py-16 px-6 border-b border-border">
         <div className="container mx-auto max-w-4xl text-center">
-          <p className="text-sm font-semibold text-muted-foreground mb-8 tracking-wide">
-            WHERE MY CLIENTS LAND OFFERS
+          <p className="text-xs font-medium text-muted-foreground tracking-widest mb-8">
+            WHERE MY CLIENTS WORK
           </p>
-          <div className="flex flex-wrap justify-center items-center gap-8 md:gap-12 text-2xl md:text-3xl font-bold text-muted-foreground/50">
+          <div className="flex flex-wrap justify-center items-center gap-8 md:gap-12 text-xl md:text-2xl font-medium text-muted-foreground/40">
             <span>Google</span>
             <span>Meta</span>
             <span>Amazon</span>
@@ -341,22 +259,21 @@ const Index = () => {
       </section>
 
       {/* CTA Section */}
-      <section className="py-20 px-6">
+      <section className="py-24 px-6">
         <div className="container mx-auto max-w-3xl text-center">
-          <h2 className="text-3xl md:text-4xl font-serif font-bold mb-6">
-            Your Dream Job Won't Apply For Itself
+          <h2 className="text-4xl md:text-5xl font-semibold tracking-tight mb-6">
+            Ready to level up?
           </h2>
-          <p className="text-lg text-muted-foreground mb-8">
-            Every week you wait is money you're leaving on the table and opportunities passing you by. 
-            Let's fix that.
+          <p className="text-lg text-muted-foreground mb-10 max-w-xl mx-auto">
+            Every week you wait is money left on the table. Let's change that.
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <Button size="lg" className="bg-accent hover:bg-accent/90 text-accent-foreground font-semibold text-lg px-8">
-              Work With Me <ArrowRight className="ml-2" />
+            <Button size="lg" className="h-14 px-10 rounded-full bg-accent hover:bg-accent/90 text-accent-foreground font-medium text-base">
+              Work With Me <ArrowRight className="ml-2 w-4 h-4" />
             </Button>
             <a href="#newsletter">
-              <Button size="lg" variant="outline" className="font-semibold text-lg px-8">
-                Get Free Weekly Tips
+              <Button size="lg" variant="outline" className="h-14 px-10 rounded-full font-medium text-base">
+                Get Free Tips
               </Button>
             </a>
           </div>
@@ -364,29 +281,23 @@ const Index = () => {
       </section>
 
       {/* Footer */}
-      <footer className="py-12 px-6 border-t border-border">
-        <div className="container mx-auto max-w-6xl">
-          <div className="flex flex-col md:flex-row justify-between items-center gap-6">
-            <div>
-              <span className="text-lg font-bold">JAMES BUGDEN</span>
-              <p className="text-sm text-muted-foreground mt-1">
-                Career strategist for ambitious professionals
-              </p>
-            </div>
+      <footer className="py-8 px-6 border-t border-border">
+        <div className="container mx-auto max-w-5xl">
+          <div className="flex flex-col md:flex-row justify-between items-center gap-4">
+            <span className="text-sm text-muted-foreground">
+              © 2024 James Bugden. All rights reserved.
+            </span>
             <div className="flex items-center gap-6">
-              <a href="https://www.linkedin.com/in/james-bugden/" target="_blank" rel="noopener noreferrer" className="text-muted-foreground hover:text-accent transition-colors">
-                <Linkedin className="w-5 h-5" />
+              <a href="https://www.linkedin.com/in/james-bugden/" target="_blank" rel="noopener noreferrer" className="text-muted-foreground hover:text-foreground transition-colors">
+                <Linkedin className="w-4 h-4" />
               </a>
-              <a href="https://www.instagram.com/james.careers/" target="_blank" rel="noopener noreferrer" className="text-muted-foreground hover:text-accent transition-colors">
-                <InstagramIcon className="w-5 h-5" />
+              <a href="https://www.instagram.com/james.careers/" target="_blank" rel="noopener noreferrer" className="text-muted-foreground hover:text-foreground transition-colors">
+                <InstagramIcon className="w-4 h-4" />
               </a>
-              <a href="https://www.threads.com/@james.careers" target="_blank" rel="noopener noreferrer" className="text-muted-foreground hover:text-accent transition-colors">
-                <ThreadsIcon className="w-5 h-5" />
+              <a href="https://www.threads.com/@james.careers" target="_blank" rel="noopener noreferrer" className="text-muted-foreground hover:text-foreground transition-colors">
+                <ThreadsIcon className="w-4 h-4" />
               </a>
             </div>
-          </div>
-          <div className="mt-8 pt-8 border-t border-border text-center text-sm text-muted-foreground">
-            © {new Date().getFullYear()} James Bugden. All rights reserved.
           </div>
         </div>
       </footer>
