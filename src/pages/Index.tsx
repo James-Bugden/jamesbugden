@@ -125,10 +125,8 @@ const Index = () => {
       <section id="services" className="py-24 px-6 bg-background">
         <div className="container mx-auto max-w-6xl">
           <div className="grid md:grid-cols-3 gap-8">
-            <div className="bg-card rounded-2xl p-8 card-hover border border-border">
-              <div className="w-12 h-12 bg-gold/10 rounded-xl flex items-center justify-center mb-6 text-2xl">
-                📄
-              </div>
+            <div className="bg-card rounded-none p-10 card-hover border-t-2 border-t-gold border-x-0 border-b-0 shadow-sm">
+              <span className="text-gold font-heading text-sm tracking-widest mb-6 block">01</span>
               <h3 className="font-heading text-2xl text-foreground mb-4">Resume That Opens Doors</h3>
               <p className="text-muted-foreground leading-relaxed mb-6">
                 Your resume has 6 seconds to impress. Most resumes fail in 2. I'll rebuild yours to pass ATS systems AND make recruiters reach out same day.
@@ -149,10 +147,8 @@ const Index = () => {
               </ul>
             </div>
 
-            <div className="bg-card rounded-2xl p-8 card-hover border border-border">
-              <div className="w-12 h-12 bg-gold/10 rounded-xl flex items-center justify-center mb-6 text-2xl">
-                🎯
-              </div>
+            <div className="bg-card rounded-none p-10 card-hover border-t-2 border-t-gold border-x-0 border-b-0 shadow-sm">
+              <span className="text-gold font-heading text-sm tracking-widest mb-6 block">02</span>
               <h3 className="font-heading text-2xl text-foreground mb-4">Interview Mastery</h3>
               <p className="text-muted-foreground leading-relaxed mb-6">
                 Stop "hoping" you'll get the job. I'll show you exactly what to say, how to say it, and how to handle any curveball they throw at you.
@@ -173,10 +169,8 @@ const Index = () => {
               </ul>
             </div>
 
-            <div className="bg-card rounded-2xl p-8 card-hover border border-border">
-              <div className="w-12 h-12 bg-gold/10 rounded-xl flex items-center justify-center mb-6 text-2xl">
-                💰
-              </div>
+            <div className="bg-card rounded-none p-10 card-hover border-t-2 border-t-gold border-x-0 border-b-0 shadow-sm">
+              <span className="text-gold font-heading text-sm tracking-widest mb-6 block">03</span>
               <h3 className="font-heading text-2xl text-foreground mb-4">Salary Negotiation</h3>
               <p className="text-muted-foreground leading-relaxed mb-6">
                 The average person leaves $50K+ on the table. Don't be average. I'll coach you to negotiate like a pro and get what you're actually worth.
