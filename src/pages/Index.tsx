@@ -22,20 +22,20 @@ const Index = () => {
         <div className="container mx-auto px-6 py-4 flex items-center justify-between">
           <span className="font-heading text-xl font-medium text-cream tracking-tight">JAMES BUGDEN</span>
           <div className="hidden md:flex items-center gap-8">
-            <a href="#services" className="text-sm text-cream/70 hover:text-cream transition-colors">Services</a>
-            <a href="#about" className="text-sm text-cream/70 hover:text-cream transition-colors">About</a>
-            <a href="#results" className="text-sm text-cream/70 hover:text-cream transition-colors">Results</a>
-            <a href="#newsletter" className="text-sm text-cream/70 hover:text-cream transition-colors">Newsletter</a>
+            <a href="#services" className="text-sm text-cream-70 hover:text-cream transition-colors">Services</a>
+            <a href="#about" className="text-sm text-cream-70 hover:text-cream transition-colors">About</a>
+            <a href="#results" className="text-sm text-cream-70 hover:text-cream transition-colors">Results</a>
+            <a href="#newsletter" className="text-sm text-cream-70 hover:text-cream transition-colors">Newsletter</a>
           </div>
           <div className="flex items-center gap-4">
             <LanguageToggle />
-            <a href="https://www.linkedin.com/in/james-bugden/" target="_blank" rel="noopener noreferrer" className="text-cream/70 hover:text-cream transition-colors">
+            <a href="https://www.linkedin.com/in/james-bugden/" target="_blank" rel="noopener noreferrer" className="text-cream-70 hover:text-cream transition-colors">
               <Linkedin className="w-5 h-5" />
             </a>
-            <a href="https://www.instagram.com/james.careers/" target="_blank" rel="noopener noreferrer" className="text-cream/70 hover:text-cream transition-colors">
+            <a href="https://www.instagram.com/james.careers/" target="_blank" rel="noopener noreferrer" className="text-cream-70 hover:text-cream transition-colors">
               <InstagramIcon className="w-5 h-5" />
             </a>
-            <a href="https://www.threads.com/@james.careers" target="_blank" rel="noopener noreferrer" className="text-cream/70 hover:text-cream transition-colors">
+            <a href="https://www.threads.com/@james.careers" target="_blank" rel="noopener noreferrer" className="text-cream-70 hover:text-cream transition-colors">
               <ThreadsIcon className="w-5 h-5" />
             </a>
           </div>
@@ -200,25 +200,25 @@ const Index = () => {
           <h2 className="font-heading text-4xl md:text-5xl text-cream mb-4">
             Results That Speak
           </h2>
-          <p className="text-cream/90 text-lg mb-16">
+          <p className="text-cream-90 text-lg mb-16">
             Real numbers. Real people. Real transformations.
           </p>
           <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
             <div>
               <p className="font-heading text-4xl md:text-5xl text-gold mb-2">$12M+</p>
-              <p className="text-sm text-cream/90">Additional Comp Negotiated</p>
+              <p className="text-sm text-cream-90">Additional Comp Negotiated</p>
             </div>
             <div>
               <p className="font-heading text-4xl md:text-5xl text-gold mb-2">500+</p>
-              <p className="text-sm text-cream/90">Clients Placed</p>
+              <p className="text-sm text-cream-90">Clients Placed</p>
             </div>
             <div>
               <p className="font-heading text-4xl md:text-5xl text-gold mb-2">94%</p>
-              <p className="text-sm text-cream/90">Interview Success Rate</p>
+              <p className="text-sm text-cream-90">Interview Success Rate</p>
             </div>
             <div>
               <p className="font-heading text-4xl md:text-5xl text-gold mb-2">47%</p>
-              <p className="text-sm text-cream/90">Avg Salary Increase</p>
+              <p className="text-sm text-cream-90">Avg Salary Increase</p>
             </div>
           </div>
         </div>
@@ -286,14 +286,14 @@ const Index = () => {
           <h2 className="font-heading text-4xl md:text-5xl text-cream mb-6">
             Ready to Level Up?
           </h2>
-          <p className="text-cream/90 text-lg mb-10 max-w-xl mx-auto">
+          <p className="text-cream-90 text-lg mb-10 max-w-xl mx-auto">
             Every week you wait is money left on the table. Let's change that.
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <Button size="lg" className="h-14 px-10 bg-gold hover:bg-gold/90 text-foreground font-medium text-base uppercase tracking-wider">
               Work With Me
             </Button>
-            <Button size="lg" variant="outline" className="h-14 px-10 border-cream/30 text-cream hover:bg-cream/10 font-medium text-base uppercase tracking-wider">
+            <Button size="lg" variant="outline" className="h-14 px-10 border-cream/30 text-cream hover:bg-white/10 font-medium text-base uppercase tracking-wider">
               Get Free Tips
             </Button>
           </div>
