@@ -62,6 +62,7 @@ export default {
         },
       },
       fontFamily: {
+        heading: ['Playfair Display', 'Times New Roman', 'Georgia', 'serif'],
         sans: ["-apple-system", "BlinkMacSystemFont", "SF Pro Text", "Segoe UI", "Roboto", "sans-serif"],
         display: ["-apple-system", "BlinkMacSystemFont", "SF Pro Display", "Segoe UI", "Roboto", "sans-serif"],
       },

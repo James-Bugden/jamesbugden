@@ -4,48 +4,51 @@
 
 @layer base {
   :root {
-    /* Premium Dark Theme - Default */
-    --background: 0 0% 3%;
-    --foreground: 0 0% 98%;
+    /* Marshall Goldsmith Inspired - Executive Dark Theme */
+    --background: 0 0% 0%;
+    --foreground: 45 30% 90%;
 
-    --card: 0 0% 6%;
-    --card-foreground: 0 0% 98%;
+    --card: 0 0% 5%;
+    --card-foreground: 45 30% 90%;
 
-    --popover: 0 0% 6%;
-    --popover-foreground: 0 0% 98%;
+    --popover: 0 0% 5%;
+    --popover-foreground: 45 30% 90%;
 
-    --primary: 0 0% 98%;
-    --primary-foreground: 0 0% 3%;
+    --primary: 45 40% 85%;
+    --primary-foreground: 0 0% 0%;
 
-    --secondary: 0 0% 10%;
-    --secondary-foreground: 0 0% 98%;
+    --secondary: 150 30% 12%;
+    --secondary-foreground: 45 30% 90%;
 
-    --muted: 0 0% 12%;
-    --muted-foreground: 0 0% 55%;
+    --muted: 0 0% 15%;
+    --muted-foreground: 45 15% 55%;
 
-    --accent: 38 100% 50%;
-    --accent-foreground: 0 0% 3%;
+    --accent: 45 50% 70%;
+    --accent-foreground: 0 0% 0%;
 
     --destructive: 0 62% 30%;
     --destructive-foreground: 0 0% 100%;
 
-    --border: 0 0% 14%;
-    --input: 0 0% 14%;
-    --ring: 38 100% 50%;
+    --border: 0 0% 18%;
+    --input: 0 0% 18%;
+    --ring: 45 50% 70%;
 
-    --radius: 1rem;
+    --radius: 0.5rem;
 
-    --font-heading: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Segoe UI', Roboto, sans-serif;
+    /* Executive green for nav */
+    --nav-bg: 150 25% 15%;
+
+    --font-heading: 'Playfair Display', 'Times New Roman', Georgia, serif;
     --font-body: -apple-system, BlinkMacSystemFont, 'SF Pro Text', 'Segoe UI', Roboto, sans-serif;
 
-    --sidebar-background: 0 0% 5%;
-    --sidebar-foreground: 0 0% 98%;
-    --sidebar-primary: 38 100% 50%;
-    --sidebar-primary-foreground: 0 0% 3%;
-    --sidebar-accent: 0 0% 10%;
-    --sidebar-accent-foreground: 0 0% 98%;
-    --sidebar-border: 0 0% 14%;
-    --sidebar-ring: 38 100% 50%;
+    --sidebar-background: 0 0% 3%;
+    --sidebar-foreground: 45 30% 90%;
+    --sidebar-primary: 45 50% 70%;
+    --sidebar-primary-foreground: 0 0% 0%;
+    --sidebar-accent: 150 30% 12%;
+    --sidebar-accent-foreground: 45 30% 90%;
+    --sidebar-border: 0 0% 18%;
+    --sidebar-ring: 45 50% 70%;
   }
 }
 
@@ -63,57 +66,65 @@
 
   h1, h2, h3, h4, h5, h6 {
     font-family: var(--font-heading);
-    letter-spacing: -0.03em;
+    letter-spacing: 0.01em;
   }
 }
 
 @layer utilities {
-  .text-gradient {
-    @apply bg-clip-text text-transparent;
-    background-image: linear-gradient(135deg, hsl(38 100% 50%) 0%, hsl(45 100% 60%) 50%, hsl(38 100% 50%) 100%);
+  .text-cream {
+    color: hsl(45 40% 85%);
   }
   
-  .text-gradient-silver {
-    @apply bg-clip-text text-transparent;
-    background-image: linear-gradient(135deg, hsl(0 0% 70%) 0%, hsl(0 0% 100%) 50%, hsl(0 0% 70%) 100%);
+  .text-gold {
+    color: hsl(45 50% 70%);
   }
   
-  .apple-blur {
-    backdrop-filter: saturate(180%) blur(20px);
-    -webkit-backdrop-filter: saturate(180%) blur(20px);
+  .bg-executive-green {
+    background-color: hsl(150 25% 15%);
   }
   
-  .premium-glow {
-    box-shadow: 0 0 80px -20px hsl(38 100% 50% / 0.3);
+  .hero-gradient {
+    background: linear-gradient(180deg, hsl(150 25% 15%) 0%, hsl(0 0% 0%) 15%);
   }
   
-  .premium-card {
-    background: linear-gradient(135deg, hsl(0 0% 8%) 0%, hsl(0 0% 5%) 100%);
-    border: 1px solid hsl(0 0% 15%);
+  .name-shadow {
+    text-shadow: 2px 4px 20px rgba(0, 0, 0, 0.8);
   }
   
-  .shimmer {
-    background: linear-gradient(
-      110deg,
-      transparent 25%,
-      hsl(0 0% 100% / 0.05) 50%,
-      transparent 75%
-    );
-    background-size: 200% 100%;
-    animation: shimmer 3s infinite;
+  .photo-glow {
+    box-shadow: 0 0 100px 20px rgba(0, 0, 0, 0.5);
   }
   
-  @keyframes shimmer {
-    0% { background-position: 200% 0; }
-    100% { background-position: -200% 0; }
+  .section-gradient {
+    background: linear-gradient(180deg, hsl(0 0% 0%) 0%, hsl(0 0% 3%) 50%, hsl(0 0% 0%) 100%);
   }
   
-  @keyframes float {
-    0%, 100% { transform: translateY(0px); }
-    50% { transform: translateY(-10px); }
+  .border-subtle {
+    border-color: hsl(0 0% 20%);
   }
   
-  .animate-float {
-    animation: float 6s ease-in-out infinite;
+  @keyframes fade-up {
+    0% {
+      opacity: 0;
+      transform: translateY(30px);
+    }
+    100% {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+  
+  .animate-fade-up {
+    animation: fade-up 1s ease-out forwards;
+  }
+  
+  .animate-fade-up-delay {
+    animation: fade-up 1s ease-out 0.3s forwards;
+    opacity: 0;
+  }
+  
+  .animate-fade-up-delay-2 {
+    animation: fade-up 1s ease-out 0.6s forwards;
+    opacity: 0;
   }
 }
