@@ -28,7 +28,7 @@ const Index = () => {
             <a href="#newsletter" className="text-sm text-cream-70 hover:text-cream transition-colors">Newsletter</a>
           </div>
           <div className="flex items-center gap-4">
-            <LanguageToggle />
+            <LanguageToggle variant="nav" />
             <a href="https://www.linkedin.com/in/james-bugden/" target="_blank" rel="noopener noreferrer" className="text-cream-70 hover:text-cream transition-colors">
               <Linkedin className="w-5 h-5" />
             </a>
@@ -290,10 +290,10 @@ const Index = () => {
             Every week you wait is money left on the table. Let's change that.
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <Button size="lg" className="h-14 px-10 bg-gold hover:bg-gold/90 text-foreground font-medium text-base uppercase tracking-wider">
+            <Button size="lg" className="h-14 px-10 bg-gold hover:bg-gold/90 text-primary font-medium text-base uppercase tracking-wider">
               Work With Me
             </Button>
-            <Button size="lg" variant="outline" className="h-14 px-10 border-cream/30 text-cream hover:bg-white/10 font-medium text-base uppercase tracking-wider">
+            <Button size="lg" className="h-14 px-10 bg-transparent border-2 border-white/40 text-white hover:bg-white/10 font-medium text-base uppercase tracking-wider">
               Get Free Tips
             </Button>
           </div>

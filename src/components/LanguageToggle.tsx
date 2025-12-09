@@ -1,7 +1,11 @@
 import { useNavigate, useLocation } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 
-const LanguageToggle = () => {
+interface LanguageToggleProps {
+  variant?: "nav" | "default";
+}
+
+const LanguageToggle = ({ variant = "default" }: LanguageToggleProps) => {
   const navigate = useNavigate();
   const location = useLocation();
   
@@ -14,6 +18,17 @@ const LanguageToggle = () => {
       navigate("/zh-tw");
     }
   };
+
+  if (variant === "nav") {
+    return (
+      <button 
+        onClick={toggleLanguage}
+        className="text-sm font-medium text-cream-70 hover:text-cream transition-colors"
+      >
+        {isZhTw ? "EN" : "中文"}
+      </button>
+    );
+  }
 
   return (
     <Button 
