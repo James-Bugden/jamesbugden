@@ -17,25 +17,25 @@ const Index = () => {
 
   return (
     <div className="min-h-screen bg-background overflow-x-hidden">
-      {/* Navigation */}
-      <nav className="fixed top-0 left-0 right-0 z-50 bg-card/80 backdrop-blur-md border-b border-border">
+      {/* Navigation - Executive Green */}
+      <nav className="fixed top-0 left-0 right-0 z-50 bg-executive-green">
         <div className="container mx-auto px-6 py-4 flex items-center justify-between">
-          <span className="font-heading text-xl font-semibold text-foreground tracking-tight">JAMES BUGDEN</span>
+          <span className="font-heading text-xl font-medium text-cream tracking-tight">JAMES BUGDEN</span>
           <div className="hidden md:flex items-center gap-8">
-            <a href="#services" className="text-sm text-muted-foreground hover:text-foreground transition-colors">Services</a>
-            <a href="#about" className="text-sm text-muted-foreground hover:text-foreground transition-colors">About</a>
-            <a href="#results" className="text-sm text-muted-foreground hover:text-foreground transition-colors">Results</a>
-            <a href="#newsletter" className="text-sm text-muted-foreground hover:text-foreground transition-colors">Newsletter</a>
+            <a href="#services" className="text-sm text-cream/70 hover:text-cream transition-colors">Services</a>
+            <a href="#about" className="text-sm text-cream/70 hover:text-cream transition-colors">About</a>
+            <a href="#results" className="text-sm text-cream/70 hover:text-cream transition-colors">Results</a>
+            <a href="#newsletter" className="text-sm text-cream/70 hover:text-cream transition-colors">Newsletter</a>
           </div>
           <div className="flex items-center gap-4">
             <LanguageToggle />
-            <a href="https://www.linkedin.com/in/james-bugden/" target="_blank" rel="noopener noreferrer" className="text-foreground hover:text-accent transition-colors">
+            <a href="https://www.linkedin.com/in/james-bugden/" target="_blank" rel="noopener noreferrer" className="text-cream/70 hover:text-cream transition-colors">
               <Linkedin className="w-5 h-5" />
             </a>
-            <a href="https://www.instagram.com/james.careers/" target="_blank" rel="noopener noreferrer" className="text-foreground hover:text-accent transition-colors">
+            <a href="https://www.instagram.com/james.careers/" target="_blank" rel="noopener noreferrer" className="text-cream/70 hover:text-cream transition-colors">
               <InstagramIcon className="w-5 h-5" />
             </a>
-            <a href="https://www.threads.com/@james.careers" target="_blank" rel="noopener noreferrer" className="text-foreground hover:text-accent transition-colors">
+            <a href="https://www.threads.com/@james.careers" target="_blank" rel="noopener noreferrer" className="text-cream/70 hover:text-cream transition-colors">
               <ThreadsIcon className="w-5 h-5" />
             </a>
           </div>
@@ -49,7 +49,7 @@ const Index = () => {
             5 Minutes That Might<br />Change Your Career
           </h1>
           <p className="text-lg md:text-xl text-foreground mb-2 animate-fade-up-delay">
-            <span className="text-accent font-semibold">12,847+ professionals</span> have leveled up their careers so far.
+            <span className="text-gold font-semibold">12,847+ professionals</span> have leveled up their careers so far.
           </p>
           <p className="text-lg md:text-xl text-foreground mb-8 animate-fade-up-delay">
             Will the next one be you?
@@ -66,7 +66,7 @@ const Index = () => {
               className="h-12 bg-card border-border rounded-lg text-base px-4 flex-1"
               required
             />
-            <Button type="submit" className="h-12 px-8 rounded-lg bg-foreground hover:bg-foreground/90 text-background font-medium uppercase tracking-wider text-sm">
+            <Button type="submit" className="h-12 px-8 rounded-lg bg-foreground hover:bg-foreground/90 text-cream font-medium uppercase tracking-wider text-sm">
               Sign Up
             </Button>
           </form>
@@ -85,7 +85,7 @@ const Index = () => {
           <div className="grid md:grid-cols-2 gap-12 items-center">
             <div>
               <p className="text-lg text-foreground leading-relaxed mb-6">
-                I've helped <span className="font-bold">500+ professionals</span> negotiate <span className="text-accent font-bold">$12M+ in additional compensation</span>. I've been on both sides of the hiring table at Fortune 500 companies, and I know exactly what gets candidates rejected—and what makes them irresistible.
+                I've helped <span className="font-bold">500+ professionals</span> negotiate <span className="text-gold font-bold">$12M+ in additional compensation</span>. I've been on both sides of the hiring table at Fortune 500 companies, and I know exactly what gets candidates rejected—and what makes them irresistible.
               </p>
               <p className="text-lg text-foreground leading-relaxed mb-8">
                 My clients land roles at Google, Amazon, Meta, Goldman Sachs, McKinsey, and every major tech company you can think of. I don't teach theory. I teach what actually works.
@@ -126,7 +126,7 @@ const Index = () => {
         <div className="container mx-auto max-w-6xl">
           <div className="grid md:grid-cols-3 gap-8">
             <div className="bg-card rounded-2xl p-8 card-hover border border-border">
-              <div className="w-12 h-12 bg-accent/10 rounded-xl flex items-center justify-center mb-6 text-2xl">
+              <div className="w-12 h-12 bg-gold/10 rounded-xl flex items-center justify-center mb-6 text-2xl">
                 📄
               </div>
               <h3 className="font-heading text-2xl text-foreground mb-4">Resume That Opens Doors</h3>
@@ -135,22 +135,22 @@ const Index = () => {
               </p>
               <ul className="space-y-3">
                 <li className="flex items-center gap-3 text-sm text-foreground">
-                  <Check className="w-4 h-4 text-accent" />
+                  <Check className="w-4 h-4 text-gold" />
                   ATS-optimized formatting
                 </li>
                 <li className="flex items-center gap-3 text-sm text-foreground">
-                  <Check className="w-4 h-4 text-accent" />
+                  <Check className="w-4 h-4 text-gold" />
                   Achievement-focused bullets
                 </li>
                 <li className="flex items-center gap-3 text-sm text-foreground">
-                  <Check className="w-4 h-4 text-accent" />
+                  <Check className="w-4 h-4 text-gold" />
                   Tailored for FAANG & MNCs
                 </li>
               </ul>
             </div>
 
             <div className="bg-card rounded-2xl p-8 card-hover border border-border">
-              <div className="w-12 h-12 bg-accent/10 rounded-xl flex items-center justify-center mb-6 text-2xl">
+              <div className="w-12 h-12 bg-gold/10 rounded-xl flex items-center justify-center mb-6 text-2xl">
                 🎯
               </div>
               <h3 className="font-heading text-2xl text-foreground mb-4">Interview Mastery</h3>
@@ -159,22 +159,22 @@ const Index = () => {
               </p>
               <ul className="space-y-3">
                 <li className="flex items-center gap-3 text-sm text-foreground">
-                  <Check className="w-4 h-4 text-accent" />
+                  <Check className="w-4 h-4 text-gold" />
                   Mock interviews with feedback
                 </li>
                 <li className="flex items-center gap-3 text-sm text-foreground">
-                  <Check className="w-4 h-4 text-accent" />
+                  <Check className="w-4 h-4 text-gold" />
                   STAR method frameworks
                 </li>
                 <li className="flex items-center gap-3 text-sm text-foreground">
-                  <Check className="w-4 h-4 text-accent" />
+                  <Check className="w-4 h-4 text-gold" />
                   Company-specific strategies
                 </li>
               </ul>
             </div>
 
             <div className="bg-card rounded-2xl p-8 card-hover border border-border">
-              <div className="w-12 h-12 bg-accent/10 rounded-xl flex items-center justify-center mb-6 text-2xl">
+              <div className="w-12 h-12 bg-gold/10 rounded-xl flex items-center justify-center mb-6 text-2xl">
                 💰
               </div>
               <h3 className="font-heading text-2xl text-foreground mb-4">Salary Negotiation</h3>
@@ -183,15 +183,15 @@ const Index = () => {
               </p>
               <ul className="space-y-3">
                 <li className="flex items-center gap-3 text-sm text-foreground">
-                  <Check className="w-4 h-4 text-accent" />
+                  <Check className="w-4 h-4 text-gold" />
                   Exact scripts & tactics
                 </li>
                 <li className="flex items-center gap-3 text-sm text-foreground">
-                  <Check className="w-4 h-4 text-accent" />
+                  <Check className="w-4 h-4 text-gold" />
                   Counter-offer strategies
                 </li>
                 <li className="flex items-center gap-3 text-sm text-foreground">
-                  <Check className="w-4 h-4 text-accent" />
+                  <Check className="w-4 h-4 text-gold" />
                   Total comp optimization
                 </li>
               </ul>
@@ -200,31 +200,31 @@ const Index = () => {
         </div>
       </section>
 
-      {/* Results Section - Dark Background */}
-      <section id="results" className="py-24 px-6 bg-dark-section">
+      {/* Results Section - Executive Green Background */}
+      <section id="results" className="py-24 px-6 bg-executive-green">
         <div className="container mx-auto max-w-5xl text-center">
-          <h2 className="font-heading text-4xl md:text-5xl text-dark-section-foreground mb-4">
+          <h2 className="font-heading text-4xl md:text-5xl text-cream mb-4">
             Results That Speak
           </h2>
-          <p className="text-dark-section-foreground/70 text-lg mb-16">
+          <p className="text-cream/70 text-lg mb-16">
             Real numbers. Real people. Real transformations.
           </p>
           <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
             <div>
-              <p className="font-heading text-4xl md:text-5xl text-accent mb-2">$12M+</p>
-              <p className="text-sm text-dark-section-foreground/70">Additional Comp Negotiated</p>
+              <p className="font-heading text-4xl md:text-5xl text-gold mb-2">$12M+</p>
+              <p className="text-sm text-cream/70">Additional Comp Negotiated</p>
             </div>
             <div>
-              <p className="font-heading text-4xl md:text-5xl text-accent mb-2">500+</p>
-              <p className="text-sm text-dark-section-foreground/70">Clients Placed</p>
+              <p className="font-heading text-4xl md:text-5xl text-gold mb-2">500+</p>
+              <p className="text-sm text-cream/70">Clients Placed</p>
             </div>
             <div>
-              <p className="font-heading text-4xl md:text-5xl text-accent mb-2">94%</p>
-              <p className="text-sm text-dark-section-foreground/70">Interview Success Rate</p>
+              <p className="font-heading text-4xl md:text-5xl text-gold mb-2">94%</p>
+              <p className="text-sm text-cream/70">Interview Success Rate</p>
             </div>
             <div>
-              <p className="font-heading text-4xl md:text-5xl text-accent mb-2">47%</p>
-              <p className="text-sm text-dark-section-foreground/70">Avg Salary Increase</p>
+              <p className="font-heading text-4xl md:text-5xl text-gold mb-2">47%</p>
+              <p className="text-sm text-cream/70">Avg Salary Increase</p>
             </div>
           </div>
         </div>
@@ -255,7 +255,7 @@ const Index = () => {
               }
             ].map((testimonial, i) => (
               <div key={i} className="bg-card rounded-2xl p-8 border border-border">
-                <div className="flex gap-1 mb-4 text-accent">★★★★★</div>
+                <div className="flex gap-1 mb-4 text-gold">★★★★★</div>
                 <p className="text-foreground mb-6 leading-relaxed">
                   "{testimonial.quote}"
                 </p>
@@ -287,19 +287,19 @@ const Index = () => {
       </section>
 
       {/* CTA Section */}
-      <section id="newsletter" className="py-24 px-6 bg-dark-section">
+      <section id="newsletter" className="py-24 px-6 bg-executive-green">
         <div className="container mx-auto max-w-3xl text-center">
-          <h2 className="font-heading text-4xl md:text-5xl text-dark-section-foreground mb-6">
+          <h2 className="font-heading text-4xl md:text-5xl text-cream mb-6">
             Ready to Level Up?
           </h2>
-          <p className="text-dark-section-foreground/70 text-lg mb-10 max-w-xl mx-auto">
+          <p className="text-cream/70 text-lg mb-10 max-w-xl mx-auto">
             Every week you wait is money left on the table. Let's change that.
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <Button size="lg" className="h-14 px-10 bg-accent hover:bg-accent/90 text-accent-foreground font-medium text-base uppercase tracking-wider">
+            <Button size="lg" className="h-14 px-10 bg-gold hover:bg-gold/90 text-foreground font-medium text-base uppercase tracking-wider">
               Work With Me
             </Button>
-            <Button size="lg" variant="outline" className="h-14 px-10 border-dark-section-foreground/30 text-dark-section-foreground hover:bg-dark-section-foreground/10 font-medium text-base uppercase tracking-wider">
+            <Button size="lg" variant="outline" className="h-14 px-10 border-cream/30 text-cream hover:bg-cream/10 font-medium text-base uppercase tracking-wider">
               Get Free Tips
             </Button>
           </div>
