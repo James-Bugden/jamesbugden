@@ -293,7 +293,7 @@ const Index = () => {
             <Button size="lg" className="h-14 px-10 bg-gold hover:bg-gold/90 text-white font-medium text-base uppercase tracking-wider border-2 border-gold">
               Work With Me
             </Button>
-            <Button size="lg" className="h-14 px-10 bg-transparent border-2 border-white/40 text-white hover:bg-white/10 font-medium text-base uppercase tracking-wider">
+            <Button size="lg" className="h-14 px-10 bg-transparent border-2 border-gold text-white hover:bg-gold/10 font-medium text-base uppercase tracking-wider">
               Get Free Tips
             </Button>
           </div>
