@@ -4,55 +4,59 @@
 
 @layer base {
   :root {
-    /* Marshall Goldsmith Colors - Readable Version */
-    /* Cream/off-white backgrounds with dark green and gold accents */
-    --background: 40 20% 96%;
-    --foreground: 0 0% 15%;
+    /* Premium Career Coaching Colors */
+    /* Warm cream with yellow undertones */
+    --background: 39 47% 96%;
+    --foreground: 0 0% 17%;
 
-    --card: 40 30% 98%;
-    --card-foreground: 0 0% 15%;
+    --card: 39 47% 98%;
+    --card-foreground: 0 0% 17%;
 
-    --popover: 40 30% 98%;
-    --popover-foreground: 0 0% 15%;
+    --popover: 39 47% 98%;
+    --popover-foreground: 0 0% 17%;
 
-    --primary: 150 25% 15%;
-    --primary-foreground: 40 30% 95%;
+    /* Richer forest green */
+    --primary: 153 38% 17%;
+    --primary-foreground: 39 47% 96%;
 
-    --secondary: 40 15% 92%;
-    --secondary-foreground: 150 25% 15%;
+    --secondary: 39 30% 93%;
+    --secondary-foreground: 153 38% 17%;
 
-    --muted: 40 10% 88%;
-    --muted-foreground: 150 15% 40%;
+    --muted: 39 20% 90%;
+    --muted-foreground: 153 20% 40%;
 
-    --accent: 42 70% 50%;
-    --accent-foreground: 150 25% 10%;
+    /* Luxe gold accent */
+    --accent: 42 52% 56%;
+    --accent-foreground: 153 38% 10%;
 
     --destructive: 0 62% 30%;
     --destructive-foreground: 0 0% 100%;
 
-    --border: 40 15% 85%;
-    --input: 40 15% 90%;
-    --ring: 42 70% 50%;
+    --border: 39 20% 88%;
+    --input: 39 20% 92%;
+    --ring: 42 52% 56%;
 
     --radius: 0.75rem;
 
-    /* Executive green for nav and dark sections */
-    --executive-green: 150 25% 15%;
-    --executive-green-light: 150 20% 20%;
-    --cream: 40 30% 95%;
-    --gold: 42 70% 50%;
+    /* Executive colors */
+    --executive-green: 153 38% 17%;
+    --executive-green-light: 153 30% 23%;
+    --cream: 39 47% 96%;
+    --cream-light: 39 47% 98%;
+    --gold: 42 52% 56%;
+    --gold-dark: 42 48% 47%;
 
     --font-heading: 'Playfair Display', 'Times New Roman', Georgia, serif;
     --font-body: -apple-system, BlinkMacSystemFont, 'SF Pro Text', 'Segoe UI', Roboto, sans-serif;
 
-    --sidebar-background: 150 25% 15%;
-    --sidebar-foreground: 40 30% 95%;
-    --sidebar-primary: 42 70% 50%;
-    --sidebar-primary-foreground: 150 25% 10%;
-    --sidebar-accent: 150 20% 20%;
-    --sidebar-accent-foreground: 40 30% 95%;
-    --sidebar-border: 150 20% 25%;
-    --sidebar-ring: 42 70% 50%;
+    --sidebar-background: 153 38% 17%;
+    --sidebar-foreground: 39 47% 96%;
+    --sidebar-primary: 42 52% 56%;
+    --sidebar-primary-foreground: 153 38% 10%;
+    --sidebar-accent: 153 30% 23%;
+    --sidebar-accent-foreground: 39 47% 96%;
+    --sidebar-border: 153 25% 25%;
+    --sidebar-ring: 42 52% 56%;
   }
 }
 
@@ -66,54 +70,195 @@
     font-family: var(--font-body);
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
+    line-height: 1.7;
   }
 
   h1, h2, h3, h4, h5, h6 {
     font-family: var(--font-heading);
     letter-spacing: -0.01em;
+    font-weight: 400;
   }
 }
 
 @layer utilities {
+  /* Executive Green Background with Gradient */
   .bg-executive-green {
-    background-color: hsl(150 25% 15%);
+    background: linear-gradient(135deg, hsl(153 38% 17%) 0%, hsl(153 30% 23%) 100%);
+    position: relative;
+  }
+
+  .bg-executive-green::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(circle at 20% 50%, hsla(42, 52%, 56%, 0.1) 0%, transparent 50%);
+    pointer-events: none;
+  }
+
+  .bg-executive-green::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background-image: radial-gradient(hsla(39, 47%, 96%, 0.03) 1px, transparent 1px);
+    background-size: 20px 20px;
+    pointer-events: none;
   }
   
   .text-cream {
-    color: hsl(40 30% 95%);
+    color: hsl(39 47% 96%);
   }
   
   .text-cream-90 {
-    color: hsl(40 30% 95% / 0.9);
+    color: hsl(39 47% 96% / 0.9);
   }
   
   .text-cream-70 {
-    color: hsl(40 30% 95% / 0.7);
+    color: hsl(39 47% 96% / 0.7);
   }
   
   .text-gold {
-    color: hsl(42 70% 50%);
+    color: hsl(42 52% 56%);
   }
   
   .bg-cream {
-    background-color: hsl(40 30% 95%);
+    background-color: hsl(39 47% 96%);
+  }
+
+  /* Premium Gold Gradient Text */
+  .text-gold-gradient {
+    background: linear-gradient(135deg, hsl(42 52% 56%) 0%, hsl(42 60% 70%) 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  /* Gold Checkmark Badge */
+  .gold-badge {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 20px;
+    height: 20px;
+    background: linear-gradient(135deg, hsl(42 52% 56%) 0%, hsl(42 48% 47%) 100%);
+    border-radius: 50%;
+    box-shadow: 0 2px 4px hsla(42, 52%, 56%, 0.3);
+    flex-shrink: 0;
+  }
+
+  .gold-badge svg {
+    width: 12px;
+    height: 12px;
+    color: white;
   }
   
   .hero-photo-shadow {
-    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.15);
+    box-shadow: 0 25px 50px -12px rgba(27, 58, 47, 0.2);
   }
   
-  .hero-photo-shadow {
-    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.15);
+  /* Premium Card Styling */
+  .card-premium {
+    background-color: hsl(var(--card));
+    box-shadow: 0 8px 24px hsla(153, 38%, 17%, 0.08);
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    position: relative;
+    overflow: hidden;
   }
-  
-  .card-hover {
+
+  .card-premium::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 2px;
+    background: linear-gradient(90deg, transparent, hsl(42 52% 56%), transparent);
+    opacity: 0;
+    transition: opacity 0.3s ease;
+  }
+
+  .card-premium:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 16px 40px hsla(153, 38%, 17%, 0.12);
+  }
+
+  .card-premium:hover::before {
+    opacity: 1;
+  }
+
+  @media (hover: none) {
+    .card-premium:hover {
+      transform: none;
+    }
+  }
+
+  /* CTA Button Gold Gradient */
+  .btn-gold {
+    background: linear-gradient(135deg, hsl(42 52% 56%) 0%, hsl(42 48% 47%) 100%);
+    color: white;
+    font-weight: 500;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 12px hsla(42, 52%, 56%, 0.3);
+  }
+
+  .btn-gold:hover {
+    box-shadow: 0 6px 20px hsla(42, 52%, 56%, 0.4);
+    transform: translateY(-2px);
+  }
+
+  @media (hover: none) {
+    .btn-gold:hover {
+      transform: none;
+    }
+  }
+
+  /* Secondary Button with Blur */
+  .btn-secondary-blur {
+    background: hsla(39, 47%, 96%, 0.1);
+    backdrop-filter: blur(8px);
+    border: 2px solid hsl(42 52% 56%);
+    color: white;
     transition: all 0.3s ease;
   }
-  
-  .card-hover:hover {
+
+  .btn-secondary-blur:hover {
+    background: hsla(42, 52%, 56%, 0.15);
+  }
+
+  /* Testimonial Card */
+  .testimonial-card {
+    background-color: hsl(var(--card));
+    box-shadow: 0 8px 24px hsla(153, 38%, 17%, 0.08);
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    position: relative;
+    border-top: 2px solid transparent;
+  }
+
+  .testimonial-card::before {
+    content: '';
+    position: absolute;
+    top: -2px;
+    left: 0;
+    right: 0;
+    height: 2px;
+    background: linear-gradient(90deg, hsl(42 52% 56%), hsl(42 60% 70%));
+    opacity: 0;
+    transition: opacity 0.3s ease;
+  }
+
+  .testimonial-card:hover {
     transform: translateY(-4px);
-    box-shadow: 0 20px 40px -15px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 16px 40px hsla(153, 38%, 17%, 0.12);
+    border-top-color: hsl(42 52% 56%);
+  }
+
+  .testimonial-card:hover::before {
+    opacity: 1;
+  }
+
+  @media (hover: none) {
+    .testimonial-card:hover {
+      transform: none;
+    }
   }
   
   @keyframes fade-up {
@@ -139,5 +284,32 @@
   .animate-fade-up-delay-2 {
     animation: fade-up 0.8s ease-out 0.4s forwards;
     opacity: 0;
+  }
+
+  /* Mobile Menu Animation */
+  @keyframes slide-in {
+    0% {
+      transform: translateX(100%);
+    }
+    100% {
+      transform: translateX(0);
+    }
+  }
+
+  @keyframes slide-out {
+    0% {
+      transform: translateX(0);
+    }
+    100% {
+      transform: translateX(100%);
+    }
+  }
+
+  .animate-slide-in {
+    animation: slide-in 0.3s ease-out forwards;
+  }
+
+  .animate-slide-out {
+    animation: slide-out 0.3s ease-out forwards;
   }
 }

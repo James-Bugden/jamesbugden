@@ -15,6 +15,8 @@ export default {
     extend: {
       backgroundImage: {
         'gradient-radial': 'radial-gradient(var(--tw-gradient-stops))',
+        'gradient-gold': 'linear-gradient(135deg, hsl(42 52% 56%) 0%, hsl(42 48% 47%) 100%)',
+        'gradient-gold-light': 'linear-gradient(135deg, hsl(42 52% 56%) 0%, hsl(42 60% 70%) 100%)',
       },
       colors: {
         border: "hsl(var(--border))",
@@ -60,6 +62,19 @@ export default {
           border: "hsl(var(--sidebar-border))",
           ring: "hsl(var(--sidebar-ring))",
         },
+        gold: {
+          DEFAULT: "hsl(42 52% 56%)",
+          dark: "hsl(42 48% 47%)",
+          light: "hsl(42 60% 70%)",
+        },
+        cream: {
+          DEFAULT: "hsl(39 47% 96%)",
+          light: "hsl(39 47% 98%)",
+        },
+        executive: {
+          DEFAULT: "hsl(153 38% 17%)",
+          light: "hsl(153 30% 23%)",
+        },
       },
       fontFamily: {
         heading: ['Playfair Display', 'Times New Roman', 'Georgia', 'serif'],
@@ -70,6 +85,12 @@ export default {
         lg: "var(--radius)",
         md: "calc(var(--radius) - 2px)",
         sm: "calc(var(--radius) - 4px)",
+      },
+      boxShadow: {
+        'premium': '0 8px 24px hsla(153, 38%, 17%, 0.08)',
+        'premium-hover': '0 16px 40px hsla(153, 38%, 17%, 0.12)',
+        'gold': '0 4px 12px hsla(42, 52%, 56%, 0.3)',
+        'gold-hover': '0 6px 20px hsla(42, 52%, 56%, 0.4)',
       },
       keyframes: {
         "accordion-down": {
