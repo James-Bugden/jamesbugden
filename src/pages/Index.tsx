@@ -7,6 +7,7 @@ import jamesPhoto from "@/assets/james-bugden.jpg";
 import LanguageToggle from "@/components/LanguageToggle";
 import MobileMenu from "@/components/MobileMenu";
 import GoldCheckBadge from "@/components/GoldCheckBadge";
+import TestimonialsSection from "@/components/TestimonialsSection";
 
 const Index = () => {
   const [email, setEmail] = useState("");
@@ -56,71 +57,8 @@ const Index = () => {
         </div>
       </nav>
 
-      {/* Hero Section - Waitlist Lead Magnet */}
-      <section className="pt-28 md:pt-32 pb-16 md:pb-20 px-5 md:px-6 bg-background">
-        <div className="container mx-auto max-w-3xl text-center">
-          <h1 className="font-heading text-4xl md:text-5xl lg:text-6xl text-foreground mb-4 animate-fade-up leading-tight">
-            Join The Waitlist: Free Resume Review
-          </h1>
-          <p className="text-gold font-semibold text-lg md:text-xl mb-6 animate-fade-up-delay">
-            (Worth $200 - Limited Spots)
-          </p>
-          <p className="text-base md:text-lg text-foreground mb-2 animate-fade-up-delay">
-            I've reviewed <span className="font-bold">20,000+ resumes</span> as an Uber recruiter.
-          </p>
-          <p className="text-base md:text-lg text-foreground mb-8 animate-fade-up-delay">
-            Right now I'm fully booked, but join the waitlist and I'll let you know when spots open up.
-          </p>
-          
-          <div className="bg-card border border-border rounded-lg p-6 md:p-8 mb-8 text-left max-w-xl mx-auto animate-fade-up-delay-2">
-            <p className="text-foreground mb-4 font-medium">Here's the deal: I'm swamped.</p>
-            <p className="text-muted-foreground mb-4 text-sm md:text-base leading-relaxed">
-              I work full-time at Uber. I'm also building this business. I can't review every resume.
-            </p>
-            <p className="text-muted-foreground mb-6 text-sm md:text-base leading-relaxed">
-              But I know how it feels. You send 50 applications. You hear nothing back.
-            </p>
-            <p className="text-muted-foreground mb-6 text-sm md:text-base leading-relaxed">
-              So here's what I'm doing: Join the waitlist for a free resume review. When I have time, I'll reach out. First come, first served.
-            </p>
-            <p className="text-foreground font-medium mb-3">What you'll get:</p>
-            <ul className="space-y-2 mb-0">
-              <li className="flex items-start gap-3 text-sm md:text-base text-foreground">
-                <GoldCheckBadge />
-                <span>The exact changes that make recruiters reach out</span>
-              </li>
-              <li className="flex items-start gap-3 text-sm md:text-base text-foreground">
-                <GoldCheckBadge />
-                <span>Tips from someone who reviews resumes every day at Uber</span>
-              </li>
-              <li className="flex items-start gap-3 text-sm md:text-base text-foreground">
-                <GoldCheckBadge />
-                <span>Real feedback from an active Fortune 500 recruiter</span>
-              </li>
-            </ul>
-          </div>
-
-          <form onSubmit={handleSubmit} className="flex flex-col sm:flex-row gap-3 max-w-md mx-auto animate-fade-up-delay-2">
-            <Input
-              type="email"
-              placeholder="Your Email Address"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              className="h-12 md:h-12 bg-card border-border rounded-lg text-base px-4 flex-1"
-              required
-            />
-            <Button type="submit" className="h-12 md:h-12 px-8 rounded-lg btn-gold font-medium uppercase tracking-wider text-sm w-full sm:w-auto">
-              Join Waitlist
-            </Button>
-          </form>
-          <p className="text-sm text-muted-foreground mt-4 animate-fade-up-delay-2">
-            Your info stays private. I don't spam. Ever.
-          </p>
-        </div>
-      </section>
-
-      {/* Bio Section */}
-      <section id="about" className="py-16 md:py-20 px-5 md:px-6 bg-card border-y border-border">
+      {/* Bio Section - Now first after nav */}
+      <section id="about" className="pt-28 md:pt-32 pb-16 md:pb-20 px-5 md:px-6 bg-card border-b border-border">
         <div className="container mx-auto max-w-5xl">
           <h2 className="font-heading text-3xl md:text-5xl text-foreground text-center mb-12 md:mb-16">
             Hi, I'm James
@@ -174,59 +112,73 @@ const Index = () => {
       </section>
 
       {/* Testimonials Section */}
-      <section id="testimonials" className="py-16 md:py-24 px-5 md:px-6 bg-background">
-        <div className="container mx-auto max-w-6xl">
-          <h2 className="font-heading text-3xl md:text-5xl text-foreground text-center mb-12 md:mb-16">
-            What Clients Say
-          </h2>
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8">
-            {[
-              {
-                quote: "The feedback was super practical and useful. I'm applying now and learning so much from the guide. Thank you!",
-                name: "Julie"
-              },
-              {
-                quote: "James's feedback was direct and hit every point. He helped me find blind spots I missed. I used AI tools to fix my resume based on his review. The results were amazing.",
-                name: "Cynthia"
-              },
-              {
-                quote: "The review was super clear. Each section had an explanation, good examples, and bad examples. After seeing both versions of my resume, the difference was huge. Way more professional.",
-                name: "Lichen"
-              },
-              {
-                quote: "James reviewed my resume from a recruiter's view. He showed me what hiring managers actually care about. He didn't just tell me WHAT was wrong. He showed me HOW to fix it and WHY it mattered. Even after fixing my resume 10+ times, I still learned so much.",
-                name: "Monica"
-              },
-              {
-                quote: "I was shocked by how thorough James was. Even my HR friends couldn't give me this level of feedback. He's super professional and detailed.",
-                name: "David"
-              },
-              {
-                quote: "Thank you for the detailed review. You helped me find several blind spots I didn't know about. Your tips on the header format, making the opening stronger, and showing a clear job title were super helpful.",
-                name: "Sunny"
-              }
-            ].map((testimonial, i) => (
-              <div key={i} className="testimonial-card p-6 md:p-8 border-t-2 border-t-accent">
-                <div className="flex gap-1 mb-4">
-                  {[...Array(5)].map((_, j) => (
-                    <GoldCheckBadge key={j} />
-                  ))}
-                </div>
-                <p className="text-foreground mb-6 leading-relaxed text-sm md:text-base">
-                  "{testimonial.quote}"
-                </p>
-                <div>
-                  <p className="font-medium text-foreground">— {testimonial.name}</p>
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
+      <TestimonialsSection />
 
+      {/* Hero Section - Waitlist Lead Magnet (Now after testimonials) */}
+      <section className="py-16 md:py-20 px-5 md:px-6 bg-card border-y border-border">
+        <div className="container mx-auto max-w-3xl text-center">
+          <h2 className="font-heading text-3xl md:text-4xl lg:text-5xl text-foreground mb-4 animate-fade-up leading-tight">
+            Join The Waitlist: Free Resume Review
+          </h2>
+          <p className="text-gold font-semibold text-lg md:text-xl mb-6 animate-fade-up-delay">
+            (Worth $200 - Limited Spots)
+          </p>
+          <p className="text-base md:text-lg text-foreground mb-2 animate-fade-up-delay">
+            I've reviewed <span className="font-bold">20,000+ resumes</span> as an Uber recruiter.
+          </p>
+          <p className="text-base md:text-lg text-foreground mb-8 animate-fade-up-delay">
+            Right now I'm fully booked, but join the waitlist and I'll let you know when spots open up.
+          </p>
+          
+          <div className="bg-background border border-border rounded-lg p-6 md:p-8 mb-8 text-left max-w-xl mx-auto animate-fade-up-delay-2">
+            <p className="text-foreground mb-4 font-medium">Here's the deal: I'm swamped.</p>
+            <p className="text-muted-foreground mb-4 text-sm md:text-base leading-relaxed">
+              I work full-time at Uber. I'm also building this business. I can't review every resume.
+            </p>
+            <p className="text-muted-foreground mb-6 text-sm md:text-base leading-relaxed">
+              But I know how it feels. You send 50 applications. You hear nothing back.
+            </p>
+            <p className="text-muted-foreground mb-6 text-sm md:text-base leading-relaxed">
+              So here's what I'm doing: Join the waitlist for a free resume review. When I have time, I'll reach out. First come, first served.
+            </p>
+            <p className="text-foreground font-medium mb-3">What you'll get:</p>
+            <ul className="space-y-2 mb-0">
+              <li className="flex items-start gap-3 text-sm md:text-base text-foreground">
+                <GoldCheckBadge />
+                <span>The exact changes that make recruiters reach out</span>
+              </li>
+              <li className="flex items-start gap-3 text-sm md:text-base text-foreground">
+                <GoldCheckBadge />
+                <span>Tips from someone who reviews resumes every day at Uber</span>
+              </li>
+              <li className="flex items-start gap-3 text-sm md:text-base text-foreground">
+                <GoldCheckBadge />
+                <span>Real feedback from an active Fortune 500 recruiter</span>
+              </li>
+            </ul>
+          </div>
+
+          <form onSubmit={handleSubmit} className="flex flex-col sm:flex-row gap-3 max-w-md mx-auto animate-fade-up-delay-2">
+            <Input
+              type="email"
+              placeholder="Your Email Address"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              className="h-12 md:h-12 bg-background border-border rounded-lg text-base px-4 flex-1"
+              required
+            />
+            <Button type="submit" className="h-12 md:h-12 px-8 rounded-lg btn-gold font-medium uppercase tracking-wider text-sm w-full sm:w-auto">
+              Join Waitlist
+            </Button>
+          </form>
+          <p className="text-sm text-muted-foreground mt-4 animate-fade-up-delay-2">
+            Your info stays private. I don't spam. Ever.
+          </p>
+        </div>
       </section>
 
       {/* Results Section - Updated Stats */}
-      <section id="results" className="py-16 md:py-24 px-5 md:px-6 bg-card border-y border-border">
+      <section id="results" className="py-16 md:py-24 px-5 md:px-6 bg-background">
         <div className="container mx-auto max-w-5xl text-center">
           <h2 className="font-heading text-3xl md:text-5xl text-foreground mb-12 md:mb-16">
             The Numbers

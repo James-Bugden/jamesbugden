@@ -7,6 +7,7 @@ import jamesPhoto from "@/assets/james-bugden.jpg";
 import LanguageToggle from "@/components/LanguageToggle";
 import MobileMenu from "@/components/MobileMenu";
 import GoldCheckBadge from "@/components/GoldCheckBadge";
+import TestimonialsSectionZhTw from "@/components/TestimonialsSectionZhTw";
 
 const IndexZhTw = () => {
   const [email, setEmail] = useState("");
@@ -56,71 +57,8 @@ const IndexZhTw = () => {
         </div>
       </nav>
 
-      {/* Hero Section - Waitlist Lead Magnet */}
-      <section className="pt-28 md:pt-32 pb-16 md:pb-20 px-5 md:px-6 bg-background">
-        <div className="container mx-auto max-w-3xl text-center">
-          <h1 className="font-heading text-4xl md:text-5xl lg:text-6xl text-foreground mb-4 animate-fade-up leading-tight">
-            加入等候名單：免費履歷健檢
-          </h1>
-          <p className="text-gold font-semibold text-lg md:text-xl mb-6 animate-fade-up-delay">
-            （價值 $200 美元 - 名額有限）
-          </p>
-          <p className="text-base md:text-lg text-foreground mb-2 animate-fade-up-delay">
-            我在 Uber 擔任招募人員，已經審閱過<span className="font-bold">超過 20,000 份履歷</span>。
-          </p>
-          <p className="text-base md:text-lg text-foreground mb-8 animate-fade-up-delay">
-            目前我的預約已滿，但你可以加入等候名單，一有空位我就會通知你。
-          </p>
-          
-          <div className="bg-card border border-border rounded-lg p-6 md:p-8 mb-8 text-left max-w-xl mx-auto animate-fade-up-delay-2">
-            <p className="text-foreground mb-4 font-medium">說實話：我真的很忙。</p>
-            <p className="text-muted-foreground mb-4 text-sm md:text-base leading-relaxed">
-              我在 Uber 有全職工作，同時也在經營這個事業。我沒辦法審閱每一份履歷。
-            </p>
-            <p className="text-muted-foreground mb-6 text-sm md:text-base leading-relaxed">
-              但我知道那種感覺。你投了 50 份履歷，卻石沉大海。
-            </p>
-            <p className="text-muted-foreground mb-6 text-sm md:text-base leading-relaxed">
-              所以我決定這樣做：加入免費履歷健檢的等候名單。當我有時間時，我會主動聯繫你。先到先得。
-            </p>
-            <p className="text-foreground font-medium mb-3">你會獲得：</p>
-            <ul className="space-y-2 mb-0">
-              <li className="flex items-start gap-3 text-sm md:text-base text-foreground">
-                <GoldCheckBadge />
-                <span>讓招募人員主動聯繫你的精準修改建議</span>
-              </li>
-              <li className="flex items-start gap-3 text-sm md:text-base text-foreground">
-                <GoldCheckBadge />
-                <span>來自每天在 Uber 審閱履歷的人的實用技巧</span>
-              </li>
-              <li className="flex items-start gap-3 text-sm md:text-base text-foreground">
-                <GoldCheckBadge />
-                <span>來自財富 500 強公司現役招募人員的真實回饋</span>
-              </li>
-            </ul>
-          </div>
-
-          <form onSubmit={handleSubmit} className="flex flex-col sm:flex-row gap-3 max-w-md mx-auto animate-fade-up-delay-2">
-            <Input
-              type="email"
-              placeholder="您的電子郵件地址"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              className="h-12 md:h-12 bg-card border-border rounded-lg text-base px-4 flex-1"
-              required
-            />
-            <Button type="submit" className="h-12 md:h-12 px-8 rounded-lg btn-gold font-medium uppercase tracking-wider text-sm w-full sm:w-auto">
-              加入等候名單
-            </Button>
-          </form>
-          <p className="text-sm text-muted-foreground mt-4 animate-fade-up-delay-2">
-            你的資訊絕對保密。我不會發垃圾郵件。絕對不會。
-          </p>
-        </div>
-      </section>
-
-      {/* Bio Section */}
-      <section id="about" className="py-16 md:py-20 px-5 md:px-6 bg-card border-y border-border">
+      {/* Bio Section - Now first after nav */}
+      <section id="about" className="pt-28 md:pt-32 pb-16 md:pb-20 px-5 md:px-6 bg-card border-b border-border">
         <div className="container mx-auto max-w-5xl">
           <h2 className="font-heading text-3xl md:text-5xl text-foreground text-center mb-12 md:mb-16">
             嗨，我是 James
@@ -174,59 +112,73 @@ const IndexZhTw = () => {
       </section>
 
       {/* Testimonials Section */}
-      <section id="testimonials" className="py-16 md:py-24 px-5 md:px-6 bg-background">
-        <div className="container mx-auto max-w-6xl">
-          <h2 className="font-heading text-3xl md:text-5xl text-foreground text-center mb-12 md:mb-16">
-            客戶怎麼說
-          </h2>
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8">
-            {[
-              {
-                quote: "回饋非常實用又有幫助。我現在正在投遞履歷，從指南中學到超多。謝謝！",
-                name: "Julie"
-              },
-              {
-                quote: "James 的回饋直接又切中要點。他幫我找到了我自己看不到的盲點。我根據他的建議用 AI 工具修改履歷，效果非常驚人。",
-                name: "Cynthia"
-              },
-              {
-                quote: "這份健檢報告超級清楚。每個部分都有說明、好的範例和不好的範例。看到履歷修改前後的對比，差異太大了。專業很多。",
-                name: "Lichen"
-              },
-              {
-                quote: "James 從招募人員的角度審閱我的履歷。他讓我知道用人主管真正在乎什麼。他不只告訴我哪裡有問題，還示範怎麼改、為什麼要這樣改。即使我已經改過履歷 10 幾次，還是學到超多。",
-                name: "Monica"
-              },
-              {
-                quote: "我很驚訝 James 的報告有多詳細。連我 HR 的朋友都給不了這麼深入的回饋。他真的非常專業又細心。",
-                name: "David"
-              },
-              {
-                quote: "謝謝這麼詳細的健檢報告。你幫我找到好幾個我不知道的盲點。你對於標題格式、加強開頭、還有清楚呈現職稱的建議都超有幫助。",
-                name: "Sunny"
-              }
-            ].map((testimonial, i) => (
-              <div key={i} className="testimonial-card p-6 md:p-8 border-t-2 border-t-accent">
-                <div className="flex gap-1 mb-4">
-                  {[...Array(5)].map((_, j) => (
-                    <GoldCheckBadge key={j} />
-                  ))}
-                </div>
-                <p className="text-foreground mb-6 leading-relaxed text-sm md:text-base">
-                  「{testimonial.quote}」
-                </p>
-                <div>
-                  <p className="font-medium text-foreground">— {testimonial.name}</p>
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
+      <TestimonialsSectionZhTw />
 
+      {/* Hero Section - Waitlist Lead Magnet (Now after testimonials) */}
+      <section className="py-16 md:py-20 px-5 md:px-6 bg-card border-y border-border">
+        <div className="container mx-auto max-w-3xl text-center">
+          <h2 className="font-heading text-3xl md:text-4xl lg:text-5xl text-foreground mb-4 animate-fade-up leading-tight">
+            加入等候名單：免費履歷健檢
+          </h2>
+          <p className="text-gold font-semibold text-lg md:text-xl mb-6 animate-fade-up-delay">
+            （價值 $200 美元 - 名額有限）
+          </p>
+          <p className="text-base md:text-lg text-foreground mb-2 animate-fade-up-delay">
+            我在 Uber 擔任招募人員，已經審閱過<span className="font-bold">超過 20,000 份履歷</span>。
+          </p>
+          <p className="text-base md:text-lg text-foreground mb-8 animate-fade-up-delay">
+            目前我的預約已滿，但你可以加入等候名單，一有空位我就會通知你。
+          </p>
+          
+          <div className="bg-background border border-border rounded-lg p-6 md:p-8 mb-8 text-left max-w-xl mx-auto animate-fade-up-delay-2">
+            <p className="text-foreground mb-4 font-medium">說實話：我真的很忙。</p>
+            <p className="text-muted-foreground mb-4 text-sm md:text-base leading-relaxed">
+              我在 Uber 有全職工作，同時也在經營這個事業。我沒辦法審閱每一份履歷。
+            </p>
+            <p className="text-muted-foreground mb-6 text-sm md:text-base leading-relaxed">
+              但我知道那種感覺。你投了 50 份履歷，卻石沉大海。
+            </p>
+            <p className="text-muted-foreground mb-6 text-sm md:text-base leading-relaxed">
+              所以我決定這樣做：加入免費履歷健檢的等候名單。當我有時間時，我會主動聯繫你。先到先得。
+            </p>
+            <p className="text-foreground font-medium mb-3">你會獲得：</p>
+            <ul className="space-y-2 mb-0">
+              <li className="flex items-start gap-3 text-sm md:text-base text-foreground">
+                <GoldCheckBadge />
+                <span>讓招募人員主動聯繫你的精準修改建議</span>
+              </li>
+              <li className="flex items-start gap-3 text-sm md:text-base text-foreground">
+                <GoldCheckBadge />
+                <span>來自每天在 Uber 審閱履歷的人的實用技巧</span>
+              </li>
+              <li className="flex items-start gap-3 text-sm md:text-base text-foreground">
+                <GoldCheckBadge />
+                <span>來自財富 500 強公司現役招募人員的真實回饋</span>
+              </li>
+            </ul>
+          </div>
+
+          <form onSubmit={handleSubmit} className="flex flex-col sm:flex-row gap-3 max-w-md mx-auto animate-fade-up-delay-2">
+            <Input
+              type="email"
+              placeholder="您的電子郵件地址"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              className="h-12 md:h-12 bg-background border-border rounded-lg text-base px-4 flex-1"
+              required
+            />
+            <Button type="submit" className="h-12 md:h-12 px-8 rounded-lg btn-gold font-medium uppercase tracking-wider text-sm w-full sm:w-auto">
+              加入等候名單
+            </Button>
+          </form>
+          <p className="text-sm text-muted-foreground mt-4 animate-fade-up-delay-2">
+            你的資訊絕對保密。我不會發垃圾郵件。絕對不會。
+          </p>
+        </div>
       </section>
 
       {/* Results Section - Updated Stats */}
-      <section id="results" className="py-16 md:py-24 px-5 md:px-6 bg-card border-y border-border">
+      <section id="results" className="py-16 md:py-24 px-5 md:px-6 bg-background">
         <div className="container mx-auto max-w-5xl text-center">
           <h2 className="font-heading text-3xl md:text-5xl text-foreground mb-12 md:mb-16">
             數據說話
