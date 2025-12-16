@@ -140,7 +140,7 @@ const IndexZhTw = () => {
                 我不教理論。我教的是真正有效的方法。
               </p>
               <p className="text-base md:text-lg text-muted-foreground leading-relaxed mb-8">
-                我在台灣當了好幾年英文老師，後來轉入科技業招募領域。現在我正在打造一個事業，幫助人們拿到他們以為不可能的工作機會。
+                我在台灣當了好幾年英文老師，後來轉入科技業招募領域。我希望能幫助更多人透過找到理想工作來實現他們的目標。
               </p>
               <div className="flex flex-wrap gap-3">
                 <a href="https://www.linkedin.com/in/james-bugden/" target="_blank" rel="noopener noreferrer">
@@ -223,40 +223,26 @@ const IndexZhTw = () => {
           </div>
         </div>
 
-        {/* Companies - Moved inside testimonials section */}
-        <div className="container mx-auto max-w-5xl text-center mt-16 md:mt-20">
-          <p className="text-xs font-medium text-muted-foreground tracking-[0.2em] uppercase mb-6 md:mb-8">
-            我的客戶獲得 OFFER 的公司
-          </p>
-          <div className="flex flex-wrap justify-center items-center gap-4 md:gap-12 text-lg md:text-2xl font-medium text-muted-foreground/50">
-            <span className="hover:text-foreground transition-colors">Google</span>
-            <span className="hover:text-foreground transition-colors">Meta</span>
-            <span className="hover:text-foreground transition-colors">Amazon</span>
-            <span className="hover:text-foreground transition-colors">Apple</span>
-            <span className="hover:text-foreground transition-colors">Microsoft</span>
-            <span className="hover:text-foreground transition-colors">Goldman Sachs</span>
-          </div>
-        </div>
       </section>
 
       {/* Results Section - Updated Stats */}
-      <section id="results" className="py-16 md:py-24 px-5 md:px-6 bg-executive-green relative">
-        <div className="container mx-auto max-w-5xl text-center relative z-10">
-          <h2 className="font-heading text-3xl md:text-5xl text-cream mb-12 md:mb-16">
+      <section id="results" className="py-16 md:py-24 px-5 md:px-6 bg-card border-y border-border">
+        <div className="container mx-auto max-w-5xl text-center">
+          <h2 className="font-heading text-3xl md:text-5xl text-foreground mb-12 md:mb-16">
             數據說話
           </h2>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8 md:gap-12">
             <div>
               <p className="font-heading text-4xl md:text-5xl text-gold-gradient mb-2">20,000+</p>
-              <p className="text-sm md:text-base text-cream-90">審閱過的履歷</p>
+              <p className="text-sm md:text-base text-muted-foreground">審閱過的履歷</p>
             </div>
             <div>
               <p className="font-heading text-4xl md:text-5xl text-gold-gradient mb-2">500+</p>
-              <p className="text-sm md:text-base text-cream-90">成功錄用人數</p>
+              <p className="text-sm md:text-base text-muted-foreground">成功錄用人數</p>
             </div>
             <div>
               <p className="font-heading text-4xl md:text-5xl text-gold-gradient mb-2">22K+</p>
-              <p className="text-sm md:text-base text-cream-90">LinkedIn + Threads 社群</p>
+              <p className="text-sm md:text-base text-muted-foreground">LinkedIn + Threads 社群</p>
             </div>
           </div>
         </div>
