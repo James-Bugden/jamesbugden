@@ -148,7 +148,7 @@ const IndexZhTw = () => {
             </ul>
           </div>
 
-          <div className="ml-embedded max-w-[500px] mx-auto animate-fade-up-delay-2" data-form="sMiX80"></div>
+          <div className="ml-embedded max-w-[500px] mx-auto animate-fade-up-delay-2" data-form="sM1X80"></div>
           <p className="text-sm text-muted-foreground mt-4 animate-fade-up-delay-2">
             你的資訊絕對保密。我不會發垃圾郵件。絕對不會。
           </p>
