@@ -17,7 +17,7 @@ const IndexZhTw = () => {
   return (
     <div className="min-h-screen bg-background overflow-x-hidden">
       {/* Navigation - Executive Green */}
-      <nav className="fixed top-0 left-0 right-0 z-50 bg-executive-green">
+      <nav className="fixed top-0 left-0 right-0 z-50 bg-nav-green">
         <div className="container mx-auto px-5 md:px-6 py-4 flex items-center justify-between">
           <span className="font-heading text-lg md:text-xl font-medium text-cream tracking-tight">JAMES BUGDEN</span>
           <div className="hidden md:flex items-center gap-8">
