@@ -140,7 +140,7 @@ const Index = () => {
                 I don't teach theory. I teach what actually works.
               </p>
               <p className="text-base md:text-lg text-muted-foreground leading-relaxed mb-8">
-                I spent years as an English teacher in Taiwan. Then I moved into tech recruiting. Now I'm building a business to help people land jobs they didn't think were possible.
+                I spent years as an English teacher in Taiwan. Then I moved into tech recruiting. I want to help others achieve their goals through finding their dream job.
               </p>
               <div className="flex flex-wrap gap-3">
                 <a href="https://www.linkedin.com/in/james-bugden/" target="_blank" rel="noopener noreferrer">
@@ -223,40 +223,26 @@ const Index = () => {
           </div>
         </div>
 
-        {/* Companies - Moved inside testimonials section */}
-        <div className="container mx-auto max-w-5xl text-center mt-16 md:mt-20">
-          <p className="text-xs font-medium text-muted-foreground tracking-[0.2em] uppercase mb-6 md:mb-8">
-            Where My Clients Work
-          </p>
-          <div className="flex flex-wrap justify-center items-center gap-4 md:gap-12 text-lg md:text-2xl font-medium text-muted-foreground/50">
-            <span className="hover:text-foreground transition-colors">Google</span>
-            <span className="hover:text-foreground transition-colors">Meta</span>
-            <span className="hover:text-foreground transition-colors">Amazon</span>
-            <span className="hover:text-foreground transition-colors">Apple</span>
-            <span className="hover:text-foreground transition-colors">Microsoft</span>
-            <span className="hover:text-foreground transition-colors">Goldman Sachs</span>
-          </div>
-        </div>
       </section>
 
       {/* Results Section - Updated Stats */}
-      <section id="results" className="py-16 md:py-24 px-5 md:px-6 bg-executive-green relative">
-        <div className="container mx-auto max-w-5xl text-center relative z-10">
-          <h2 className="font-heading text-3xl md:text-5xl text-cream mb-12 md:mb-16">
+      <section id="results" className="py-16 md:py-24 px-5 md:px-6 bg-card border-y border-border">
+        <div className="container mx-auto max-w-5xl text-center">
+          <h2 className="font-heading text-3xl md:text-5xl text-foreground mb-12 md:mb-16">
             The Numbers
           </h2>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8 md:gap-12">
             <div>
               <p className="font-heading text-4xl md:text-5xl text-gold-gradient mb-2">20,000+</p>
-              <p className="text-sm md:text-base text-cream-90">Resumes Reviewed</p>
+              <p className="text-sm md:text-base text-muted-foreground">Resumes Reviewed</p>
             </div>
             <div>
               <p className="font-heading text-4xl md:text-5xl text-gold-gradient mb-2">500+</p>
-              <p className="text-sm md:text-base text-cream-90">People Hired</p>
+              <p className="text-sm md:text-base text-muted-foreground">People Hired</p>
             </div>
             <div>
               <p className="font-heading text-4xl md:text-5xl text-gold-gradient mb-2">22K+</p>
-              <p className="text-sm md:text-base text-cream-90">LinkedIn + Threads Community</p>
+              <p className="text-sm md:text-base text-muted-foreground">LinkedIn + Threads Community</p>
             </div>
           </div>
         </div>
