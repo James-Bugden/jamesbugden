@@ -1,6 +1,4 @@
-import { useState } from "react";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
 import { Linkedin } from "lucide-react";
 import { InstagramIcon, ThreadsIcon } from "@/components/SocialIcons";
 import jamesPhoto from "@/assets/james-bugden.jpg";
@@ -10,14 +8,6 @@ import GoldCheckBadge from "@/components/GoldCheckBadge";
 import TestimonialsSection from "@/components/TestimonialsSection";
 
 const Index = () => {
-  const [email, setEmail] = useState("");
-
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    console.log("Waitlist signup:", email);
-    setEmail("");
-  };
-
   const navLinks = [
     { href: "#about", label: "About" },
     { href: "#testimonials", label: "Testimonials" },
@@ -132,13 +122,13 @@ const Index = () => {
           
           <div className="bg-background border border-border rounded-lg p-6 md:p-8 mb-8 text-left max-w-xl mx-auto animate-fade-up-delay-2">
             <p className="text-foreground mb-4 font-medium">Here's the deal: I'm swamped.</p>
-            <p className="text-muted-foreground mb-4 text-sm md:text-base leading-relaxed">
+            <p className="text-foreground mb-4 text-sm md:text-base leading-relaxed">
               I work full-time at Uber but I want to help people. I can't review every resume.
             </p>
-            <p className="text-muted-foreground mb-6 text-sm md:text-base leading-relaxed">
+            <p className="text-foreground mb-6 text-sm md:text-base leading-relaxed">
               But I know how it feels. You send 50 applications. You hear nothing back.
             </p>
-            <p className="text-muted-foreground mb-6 text-sm md:text-base leading-relaxed">
+            <p className="text-foreground mb-6 text-sm md:text-base leading-relaxed">
               So here's what I'm doing: Join the waitlist for a free resume review. When I have time, I'll reach out.
             </p>
             <p className="text-foreground font-medium mb-3">What you'll get:</p>
@@ -158,19 +148,7 @@ const Index = () => {
             </ul>
           </div>
 
-          <form onSubmit={handleSubmit} className="flex flex-col sm:flex-row gap-3 max-w-md mx-auto animate-fade-up-delay-2">
-            <Input
-              type="email"
-              placeholder="Your Email Address"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              className="h-12 md:h-12 bg-background border-border rounded-lg text-base px-4 flex-1"
-              required
-            />
-            <Button type="submit" className="h-12 md:h-12 px-8 rounded-lg btn-gold font-medium uppercase tracking-wider text-sm w-full sm:w-auto">
-              Join Waitlist
-            </Button>
-          </form>
+          <div className="ml-embedded max-w-[500px] mx-auto animate-fade-up-delay-2" data-form="sMiX80"></div>
           <p className="text-sm text-muted-foreground mt-4 animate-fade-up-delay-2">
             Your info stays private. I don't spam. Ever.
           </p>

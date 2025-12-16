@@ -1,6 +1,4 @@
-import { useState } from "react";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
 import { Linkedin } from "lucide-react";
 import { InstagramIcon, ThreadsIcon } from "@/components/SocialIcons";
 import jamesPhoto from "@/assets/james-bugden.jpg";
@@ -10,14 +8,6 @@ import GoldCheckBadge from "@/components/GoldCheckBadge";
 import TestimonialsSectionZhTw from "@/components/TestimonialsSectionZhTw";
 
 const IndexZhTw = () => {
-  const [email, setEmail] = useState("");
-
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    console.log("Waitlist signup:", email);
-    setEmail("");
-  };
-
   const navLinks = [
     { href: "#about", label: "關於我" },
     { href: "#testimonials", label: "客戶評價" },
@@ -132,13 +122,13 @@ const IndexZhTw = () => {
           
           <div className="bg-background border border-border rounded-lg p-6 md:p-8 mb-8 text-left max-w-xl mx-auto animate-fade-up-delay-2">
             <p className="text-foreground mb-4 font-medium">說實話：我真的很忙。</p>
-            <p className="text-muted-foreground mb-4 text-sm md:text-base leading-relaxed">
+            <p className="text-foreground mb-4 text-sm md:text-base leading-relaxed">
               我在 Uber 有全職工作，但我想幫助更多人。我沒辦法審閱每一份履歷。
             </p>
-            <p className="text-muted-foreground mb-6 text-sm md:text-base leading-relaxed">
+            <p className="text-foreground mb-6 text-sm md:text-base leading-relaxed">
               但我知道那種感覺。你投了 50 份履歷，卻石沉大海。
             </p>
-            <p className="text-muted-foreground mb-6 text-sm md:text-base leading-relaxed">
+            <p className="text-foreground mb-6 text-sm md:text-base leading-relaxed">
               所以我決定這樣做：加入免費履歷健檢的等候名單。當我有時間時，我會主動聯繫你。
             </p>
             <p className="text-foreground font-medium mb-3">你會獲得：</p>
@@ -158,19 +148,7 @@ const IndexZhTw = () => {
             </ul>
           </div>
 
-          <form onSubmit={handleSubmit} className="flex flex-col sm:flex-row gap-3 max-w-md mx-auto animate-fade-up-delay-2">
-            <Input
-              type="email"
-              placeholder="您的電子郵件地址"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              className="h-12 md:h-12 bg-background border-border rounded-lg text-base px-4 flex-1"
-              required
-            />
-            <Button type="submit" className="h-12 md:h-12 px-8 rounded-lg btn-gold font-medium uppercase tracking-wider text-sm w-full sm:w-auto">
-              加入等候名單
-            </Button>
-          </form>
+          <div className="ml-embedded max-w-[500px] mx-auto animate-fade-up-delay-2" data-form="sMiX80"></div>
           <p className="text-sm text-muted-foreground mt-4 animate-fade-up-delay-2">
             你的資訊絕對保密。我不會發垃圾郵件。絕對不會。
           </p>
