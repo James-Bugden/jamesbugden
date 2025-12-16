@@ -77,7 +77,7 @@ const IndexZhTw = () => {
               <p className="text-base md:text-lg text-foreground leading-relaxed mb-6">
                 我不教理論。我教的是真正有效的方法。
               </p>
-              <p className="text-base md:text-lg text-muted-foreground leading-relaxed mb-8">
+              <p className="text-base md:text-lg text-foreground leading-relaxed mb-8">
                 我在台灣當了好幾年英文老師，後來轉入科技業招募領域。我希望能幫助更多人透過找到理想工作來實現他們的目標。
               </p>
               <div className="flex flex-wrap gap-3">
@@ -133,13 +133,13 @@ const IndexZhTw = () => {
           <div className="bg-background border border-border rounded-lg p-6 md:p-8 mb-8 text-left max-w-xl mx-auto animate-fade-up-delay-2">
             <p className="text-foreground mb-4 font-medium">說實話：我真的很忙。</p>
             <p className="text-muted-foreground mb-4 text-sm md:text-base leading-relaxed">
-              我在 Uber 有全職工作，同時也在經營這個事業。我沒辦法審閱每一份履歷。
+              我在 Uber 有全職工作，但我想幫助更多人。我沒辦法審閱每一份履歷。
             </p>
             <p className="text-muted-foreground mb-6 text-sm md:text-base leading-relaxed">
               但我知道那種感覺。你投了 50 份履歷，卻石沉大海。
             </p>
             <p className="text-muted-foreground mb-6 text-sm md:text-base leading-relaxed">
-              所以我決定這樣做：加入免費履歷健檢的等候名單。當我有時間時，我會主動聯繫你。先到先得。
+              所以我決定這樣做：加入免費履歷健檢的等候名單。當我有時間時，我會主動聯繫你。
             </p>
             <p className="text-foreground font-medium mb-3">你會獲得：</p>
             <ul className="space-y-2 mb-0">

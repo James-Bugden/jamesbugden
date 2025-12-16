@@ -7,7 +7,6 @@ interface Testimonial {
   quote: string;
   pullQuote?: string;
   name: string;
-  role: string;
   photo?: string;
   initial?: string;
   initialBg?: string;
@@ -17,34 +16,29 @@ const testimonials: Testimonial[] = [
   {
     quote: "The feedback was super practical and useful. I'm applying now and learning so much from the guide. Thank you!",
     name: "Julie",
-    role: "Marketing Manager",
     photo: juliePhoto
   },
   {
     quote: "James's feedback was direct and hit every point. He helped me find blind spots I missed. I used AI tools to fix my resume based on his review. The results were amazing.",
     name: "Cynthia",
-    role: "Product Designer",
     photo: cynthiaPhoto
+  },
+  {
+    quote: "Thank you for the detailed and insightful review. You helped me identify several important blind spots I didn't know about. Your guidance on the header format, strengthening the opening, and presenting a clear professional title was extremely helpful.",
+    name: "Sunny",
+    photo: sunnyPhoto
   },
   {
     quote: "The review was super clear. Each section had an explanation, good examples, and bad examples. After seeing both versions of my resume, the difference was huge. Way more professional.",
     name: "Lichen",
-    role: "Data Analyst",
     initial: "L",
     initialBg: "bg-purple-100"
   },
   {
     quote: "I was shocked by how thorough James was. Even my HR friends and headhunters couldn't give me this level of feedback. He's super professional and detailed.",
     name: "David",
-    role: "Operations Lead",
     initial: "D",
     initialBg: "bg-amber-50"
-  },
-  {
-    quote: "Thank you for the detailed and insightful review. You helped me identify several important blind spots I didn't know about. Your guidance on the header format, strengthening the opening, and presenting a clear professional title was extremely helpful.",
-    name: "Sunny",
-    role: "Business Analyst",
-    photo: sunnyPhoto
   }
 ];
 
@@ -52,7 +46,6 @@ const featuredTestimonial: Testimonial = {
   quote: "James reviewed my resume from a recruiter's view. He showed me what hiring managers actually care about.",
   pullQuote: "He didn't just tell me WHAT was wrong. He showed me HOW to fix it and WHY it mattered.",
   name: "Monica",
-  role: "Software Engineer",
   photo: monicaPhoto
 };
 
@@ -103,7 +96,6 @@ const TestimonialsSection = ({ title = "What Clients Say" }: TestimonialsSection
               {/* Attribution */}
               <div className="text-center">
                 <p className="font-bold text-foreground text-lg">— {featuredTestimonial.name}</p>
-                <p className="text-muted-foreground text-sm">{featuredTestimonial.role}</p>
               </div>
             </div>
           </div>
@@ -139,7 +131,6 @@ const TestimonialsSection = ({ title = "What Clients Say" }: TestimonialsSection
                   {/* Attribution */}
                   <div className="text-center">
                     <p className="font-bold text-foreground">— {testimonial.name}</p>
-                    <p className="text-muted-foreground text-xs">{testimonial.role}</p>
                   </div>
                 </div>
               ))}
@@ -163,7 +154,6 @@ const TestimonialsSection = ({ title = "What Clients Say" }: TestimonialsSection
                 {/* Attribution */}
                 <div className="text-center">
                   <p className="font-bold text-foreground">— {testimonials[4].name}</p>
-                  <p className="text-muted-foreground text-xs">{testimonials[4].role}</p>
                 </div>
               </div>
             </div>
