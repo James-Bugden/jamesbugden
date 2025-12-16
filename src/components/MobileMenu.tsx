@@ -45,7 +45,7 @@ const MobileMenu = ({ links }: MobileMenuProps) => {
 
       {/* Slide-in Menu */}
       <div
-        className={`fixed top-0 right-0 h-full w-72 bg-executive-green z-50 transform transition-transform duration-300 ease-out ${
+        className={`fixed top-0 right-0 h-full w-72 bg-nav-green z-50 transform transition-transform duration-300 ease-out ${
           isOpen ? "translate-x-0" : "translate-x-full"
         }`}
       >
