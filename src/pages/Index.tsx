@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Linkedin, Check } from "lucide-react";
+import { Linkedin } from "lucide-react";
 import { InstagramIcon, ThreadsIcon } from "@/components/SocialIcons";
 import jamesPhoto from "@/assets/james-bugden.jpg";
 import LanguageToggle from "@/components/LanguageToggle";
@@ -13,15 +13,14 @@ const Index = () => {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    console.log("Newsletter signup:", email);
+    console.log("Waitlist signup:", email);
     setEmail("");
   };
 
   const navLinks = [
-    { href: "#services", label: "Services" },
     { href: "#about", label: "About" },
+    { href: "#testimonials", label: "Testimonials" },
     { href: "#results", label: "Results" },
-    { href: "#newsletter", label: "Newsletter" },
   ];
 
   return (
@@ -57,21 +56,50 @@ const Index = () => {
         </div>
       </nav>
 
-      {/* Hero Section - Email Signup First */}
+      {/* Hero Section - Waitlist Lead Magnet */}
       <section className="pt-28 md:pt-32 pb-16 md:pb-20 px-5 md:px-6 bg-background">
         <div className="container mx-auto max-w-3xl text-center">
-          <h1 className="font-heading text-4xl md:text-5xl lg:text-6xl text-foreground mb-6 animate-fade-up leading-tight">
-            5 Minutes That Might<br />Change Your Career
+          <h1 className="font-heading text-4xl md:text-5xl lg:text-6xl text-foreground mb-4 animate-fade-up leading-tight">
+            Join The Waitlist: Free Resume Review
           </h1>
-          <p className="text-base md:text-xl text-foreground mb-2 animate-fade-up-delay">
-            <span className="text-gold font-semibold">12,847+ professionals</span> have leveled up their careers so far.
+          <p className="text-gold font-semibold text-lg md:text-xl mb-6 animate-fade-up-delay">
+            (Worth $200 - Limited Spots)
           </p>
-          <p className="text-base md:text-xl text-foreground mb-6 md:mb-8 animate-fade-up-delay">
-            Will the next one be you?
+          <p className="text-base md:text-lg text-foreground mb-2 animate-fade-up-delay">
+            I've reviewed <span className="font-bold">20,000+ resumes</span> as an Uber recruiter.
           </p>
-          <p className="text-muted-foreground mb-6 md:mb-8 animate-fade-up-delay-2 text-sm md:text-base">
-            Receive career strategies shared with thousands of ambitious professionals directly to your inbox every Tuesday.
+          <p className="text-base md:text-lg text-foreground mb-8 animate-fade-up-delay">
+            Right now I'm fully booked, but join the waitlist and I'll let you know when spots open up.
           </p>
+          
+          <div className="bg-card border border-border rounded-lg p-6 md:p-8 mb-8 text-left max-w-xl mx-auto animate-fade-up-delay-2">
+            <p className="text-foreground mb-4 font-medium">Here's the deal: I'm swamped.</p>
+            <p className="text-muted-foreground mb-4 text-sm md:text-base leading-relaxed">
+              I work full-time at Uber. I'm also building this business. I can't review every resume.
+            </p>
+            <p className="text-muted-foreground mb-6 text-sm md:text-base leading-relaxed">
+              But I know how it feels. You send 50 applications. You hear nothing back.
+            </p>
+            <p className="text-muted-foreground mb-6 text-sm md:text-base leading-relaxed">
+              So here's what I'm doing: Join the waitlist for a free resume review. When I have time, I'll reach out. First come, first served.
+            </p>
+            <p className="text-foreground font-medium mb-3">What you'll get:</p>
+            <ul className="space-y-2 mb-0">
+              <li className="flex items-start gap-3 text-sm md:text-base text-foreground">
+                <GoldCheckBadge />
+                <span>The exact changes that make recruiters reach out</span>
+              </li>
+              <li className="flex items-start gap-3 text-sm md:text-base text-foreground">
+                <GoldCheckBadge />
+                <span>Tips from someone who reviews resumes every day at Uber</span>
+              </li>
+              <li className="flex items-start gap-3 text-sm md:text-base text-foreground">
+                <GoldCheckBadge />
+                <span>Real feedback from an active Fortune 500 recruiter</span>
+              </li>
+            </ul>
+          </div>
+
           <form onSubmit={handleSubmit} className="flex flex-col sm:flex-row gap-3 max-w-md mx-auto animate-fade-up-delay-2">
             <Input
               type="email"
@@ -82,16 +110,16 @@ const Index = () => {
               required
             />
             <Button type="submit" className="h-12 md:h-12 px-8 rounded-lg btn-gold font-medium uppercase tracking-wider text-sm w-full sm:w-auto">
-              Sign Up
+              Join Waitlist
             </Button>
           </form>
-          <p className="text-sm text-muted-foreground mt-4 italic animate-fade-up-delay-2">
-            Your information is protected and I never spam, ever.
+          <p className="text-sm text-muted-foreground mt-4 animate-fade-up-delay-2">
+            Your info stays private. I don't spam. Ever.
           </p>
         </div>
       </section>
 
-      {/* About Section with Photo */}
+      {/* Bio Section */}
       <section id="about" className="py-16 md:py-20 px-5 md:px-6 bg-card border-y border-border">
         <div className="container mx-auto max-w-5xl">
           <h2 className="font-heading text-3xl md:text-5xl text-foreground text-center mb-12 md:mb-16">
@@ -100,10 +128,19 @@ const Index = () => {
           <div className="grid md:grid-cols-2 gap-10 md:gap-12 items-center">
             <div className="order-2 md:order-1">
               <p className="text-base md:text-lg text-foreground leading-relaxed mb-6">
-                I've helped <span className="font-bold">500+ professionals</span> negotiate <span className="text-gold font-bold">$12M+ in additional compensation</span>. I've been on both sides of the hiring table at Fortune 500 companies, and I know exactly what gets candidates rejected—and what makes them irresistible.
+                I'm a <span className="font-bold">Senior Recruiter at Uber</span> in Taiwan.
               </p>
-              <p className="text-base md:text-lg text-foreground leading-relaxed mb-8">
-                My clients land roles at Google, Amazon, Meta, Goldman Sachs, McKinsey, and every major tech company you can think of. I don't teach theory. I teach what actually works.
+              <p className="text-base md:text-lg text-foreground leading-relaxed mb-6">
+                I've hired <span className="font-bold">500+ people</span> and reviewed over <span className="text-gold font-bold">20,000 resumes</span>.
+              </p>
+              <p className="text-base md:text-lg text-foreground leading-relaxed mb-6">
+                I know exactly what gets people rejected. And what makes them stand out.
+              </p>
+              <p className="text-base md:text-lg text-foreground leading-relaxed mb-6">
+                I don't teach theory. I teach what actually works.
+              </p>
+              <p className="text-base md:text-lg text-muted-foreground leading-relaxed mb-8">
+                I spent years as an English teacher in Taiwan. Then I moved into tech recruiting. Now I'm building a business to help people land jobs they didn't think were possible.
               </p>
               <div className="flex flex-wrap gap-3">
                 <a href="https://www.linkedin.com/in/james-bugden/" target="_blank" rel="noopener noreferrer">
@@ -136,131 +173,37 @@ const Index = () => {
         </div>
       </section>
 
-      {/* Services Section */}
-      <section id="services" className="py-16 md:py-24 px-5 md:px-6 bg-background">
+      {/* Testimonials Section */}
+      <section id="testimonials" className="py-16 md:py-24 px-5 md:px-6 bg-background">
         <div className="container mx-auto max-w-6xl">
-          <div className="grid md:grid-cols-3 gap-6 md:gap-8">
-            <div className="card-premium rounded-none p-8 md:p-10 border-t-2 border-t-accent">
-              <span className="text-gold font-heading text-sm tracking-widest mb-6 block">01</span>
-              <h3 className="font-heading text-xl md:text-2xl text-foreground mb-4">Resume That Opens Doors</h3>
-              <p className="text-muted-foreground leading-relaxed mb-6 text-sm md:text-base">
-                Your resume has 6 seconds to impress. Most resumes fail in 2. I'll rebuild yours to pass ATS systems AND make recruiters reach out same day.
-              </p>
-              <ul className="space-y-3">
-                <li className="flex items-center gap-3 text-sm text-foreground">
-                  <GoldCheckBadge />
-                  ATS-optimized formatting
-                </li>
-                <li className="flex items-center gap-3 text-sm text-foreground">
-                  <GoldCheckBadge />
-                  Achievement-focused bullets
-                </li>
-                <li className="flex items-center gap-3 text-sm text-foreground">
-                  <GoldCheckBadge />
-                  Tailored for FAANG & MNCs
-                </li>
-              </ul>
-            </div>
-
-            <div className="card-premium rounded-none p-8 md:p-10 border-t-2 border-t-accent">
-              <span className="text-gold font-heading text-sm tracking-widest mb-6 block">02</span>
-              <h3 className="font-heading text-xl md:text-2xl text-foreground mb-4">Interview Mastery</h3>
-              <p className="text-muted-foreground leading-relaxed mb-6 text-sm md:text-base">
-                Stop "hoping" you'll get the job. I'll show you exactly what to say, how to say it, and how to handle any curveball they throw at you.
-              </p>
-              <ul className="space-y-3">
-                <li className="flex items-center gap-3 text-sm text-foreground">
-                  <GoldCheckBadge />
-                  Mock interviews with feedback
-                </li>
-                <li className="flex items-center gap-3 text-sm text-foreground">
-                  <GoldCheckBadge />
-                  STAR method frameworks
-                </li>
-                <li className="flex items-center gap-3 text-sm text-foreground">
-                  <GoldCheckBadge />
-                  Company-specific strategies
-                </li>
-              </ul>
-            </div>
-
-            <div className="card-premium rounded-none p-8 md:p-10 border-t-2 border-t-accent">
-              <span className="text-gold font-heading text-sm tracking-widest mb-6 block">03</span>
-              <h3 className="font-heading text-xl md:text-2xl text-foreground mb-4">Salary Negotiation</h3>
-              <p className="text-muted-foreground leading-relaxed mb-6 text-sm md:text-base">
-                The average person leaves $50K+ on the table. Don't be average. I'll coach you to negotiate like a pro and get what you're actually worth.
-              </p>
-              <ul className="space-y-3">
-                <li className="flex items-center gap-3 text-sm text-foreground">
-                  <GoldCheckBadge />
-                  Exact scripts & tactics
-                </li>
-                <li className="flex items-center gap-3 text-sm text-foreground">
-                  <GoldCheckBadge />
-                  Counter-offer strategies
-                </li>
-                <li className="flex items-center gap-3 text-sm text-foreground">
-                  <GoldCheckBadge />
-                  Total comp optimization
-                </li>
-              </ul>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* Results Section - Executive Green Background */}
-      <section id="results" className="py-16 md:py-24 px-5 md:px-6 bg-executive-green relative">
-        <div className="container mx-auto max-w-5xl text-center relative z-10">
-          <h2 className="font-heading text-3xl md:text-5xl text-cream mb-4">
-            Results That Speak
-          </h2>
-          <p className="text-cream-90 text-base md:text-lg mb-12 md:mb-16">
-            Real numbers. Real people. Real transformations.
-          </p>
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-6 md:gap-8">
-            <div>
-              <p className="font-heading text-3xl md:text-5xl text-gold-gradient mb-2">$12M+</p>
-              <p className="text-xs md:text-sm text-cream-90">Additional Comp Negotiated</p>
-            </div>
-            <div>
-              <p className="font-heading text-3xl md:text-5xl text-gold-gradient mb-2">500+</p>
-              <p className="text-xs md:text-sm text-cream-90">Clients Placed</p>
-            </div>
-            <div>
-              <p className="font-heading text-3xl md:text-5xl text-gold-gradient mb-2">94%</p>
-              <p className="text-xs md:text-sm text-cream-90">Interview Success Rate</p>
-            </div>
-            <div>
-              <p className="font-heading text-3xl md:text-5xl text-gold-gradient mb-2">47%</p>
-              <p className="text-xs md:text-sm text-cream-90">Avg Salary Increase</p>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* Testimonials */}
-      <section className="py-16 md:py-24 px-5 md:px-6 bg-background">
-        <div className="container mx-auto max-w-5xl">
           <h2 className="font-heading text-3xl md:text-5xl text-foreground text-center mb-12 md:mb-16">
             What Clients Say
           </h2>
-          <div className="grid md:grid-cols-3 gap-6 md:gap-8">
+          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8">
             {[
               {
-                quote: "I was stuck at $85K for 3 years. James helped me negotiate $142K at Google. That's a 67% increase.",
-                name: "Sarah M.",
-                role: "Software Engineer → Google"
+                quote: "The feedback was super practical and useful. I'm applying now and learning so much from the guide. Thank you!",
+                name: "Julie"
               },
               {
-                quote: "Failed 12 interviews before James. After his coaching, got offers from Meta AND Amazon.",
-                name: "Michael T.",
-                role: "Product Manager → Meta"
+                quote: "James's feedback was direct and hit every point. He helped me find blind spots I missed. I used AI tools to fix my resume based on his review. The results were amazing.",
+                name: "Cynthia"
               },
               {
-                quote: "I almost accepted their first offer. James coached me to counter and I got $45K more.",
-                name: "Jennifer L.",
-                role: "Data Scientist → Goldman Sachs"
+                quote: "The review was super clear. Each section had an explanation, good examples, and bad examples. After seeing both versions of my resume, the difference was huge. Way more professional.",
+                name: "Lichen"
+              },
+              {
+                quote: "James reviewed my resume from a recruiter's view. He showed me what hiring managers actually care about. He didn't just tell me WHAT was wrong. He showed me HOW to fix it and WHY it mattered. Even after fixing my resume 10+ times, I still learned so much.",
+                name: "Monica"
+              },
+              {
+                quote: "I was shocked by how thorough James was. Even my HR friends couldn't give me this level of feedback. He's super professional and detailed.",
+                name: "David"
+              },
+              {
+                quote: "Thank you for the detailed review. You helped me find several blind spots I didn't know about. Your tips on the header format, making the opening stronger, and showing a clear job title were super helpful.",
+                name: "Sunny"
               }
             ].map((testimonial, i) => (
               <div key={i} className="testimonial-card p-6 md:p-8 border-t-2 border-t-accent">
@@ -273,18 +216,15 @@ const Index = () => {
                   "{testimonial.quote}"
                 </p>
                 <div>
-                  <p className="font-medium text-foreground">{testimonial.name}</p>
-                  <p className="text-sm text-muted-foreground">{testimonial.role}</p>
+                  <p className="font-medium text-foreground">— {testimonial.name}</p>
                 </div>
               </div>
             ))}
           </div>
         </div>
-      </section>
 
-      {/* Companies */}
-      <section className="py-12 md:py-16 px-5 md:px-6 border-y border-border bg-card">
-        <div className="container mx-auto max-w-5xl text-center">
+        {/* Companies - Moved inside testimonials section */}
+        <div className="container mx-auto max-w-5xl text-center mt-16 md:mt-20">
           <p className="text-xs font-medium text-muted-foreground tracking-[0.2em] uppercase mb-6 md:mb-8">
             Where My Clients Work
           </p>
@@ -299,8 +239,31 @@ const Index = () => {
         </div>
       </section>
 
-      {/* CTA Section */}
-      <section id="newsletter" className="py-16 md:py-24 px-5 md:px-6 bg-executive-green relative">
+      {/* Results Section - Updated Stats */}
+      <section id="results" className="py-16 md:py-24 px-5 md:px-6 bg-executive-green relative">
+        <div className="container mx-auto max-w-5xl text-center relative z-10">
+          <h2 className="font-heading text-3xl md:text-5xl text-cream mb-12 md:mb-16">
+            The Numbers
+          </h2>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 md:gap-12">
+            <div>
+              <p className="font-heading text-4xl md:text-5xl text-gold-gradient mb-2">20,000+</p>
+              <p className="text-sm md:text-base text-cream-90">Resumes Reviewed</p>
+            </div>
+            <div>
+              <p className="font-heading text-4xl md:text-5xl text-gold-gradient mb-2">500+</p>
+              <p className="text-sm md:text-base text-cream-90">People Hired</p>
+            </div>
+            <div>
+              <p className="font-heading text-4xl md:text-5xl text-gold-gradient mb-2">22K+</p>
+              <p className="text-sm md:text-base text-cream-90">LinkedIn + Threads Community</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Final CTA Section */}
+      <section className="py-16 md:py-24 px-5 md:px-6 bg-executive-green relative border-t border-cream/10">
         <div className="container mx-auto max-w-3xl text-center relative z-10">
           <h2 className="font-heading text-3xl md:text-5xl text-cream mb-6">
             Ready to Level Up?

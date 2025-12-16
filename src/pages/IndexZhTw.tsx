@@ -13,15 +13,14 @@ const IndexZhTw = () => {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    console.log("Newsletter signup:", email);
+    console.log("Waitlist signup:", email);
     setEmail("");
   };
 
   const navLinks = [
-    { href: "#services", label: "服務項目" },
     { href: "#about", label: "關於我" },
+    { href: "#testimonials", label: "客戶評價" },
     { href: "#results", label: "成果" },
-    { href: "#newsletter", label: "電子報" },
   ];
 
   return (
@@ -57,21 +56,50 @@ const IndexZhTw = () => {
         </div>
       </nav>
 
-      {/* Hero Section - Email Signup First */}
+      {/* Hero Section - Waitlist Lead Magnet */}
       <section className="pt-28 md:pt-32 pb-16 md:pb-20 px-5 md:px-6 bg-background">
         <div className="container mx-auto max-w-3xl text-center">
-          <h1 className="font-heading text-4xl md:text-5xl lg:text-6xl text-foreground mb-6 animate-fade-up leading-tight">
-            5分鐘<br />可能改變你的職涯
+          <h1 className="font-heading text-4xl md:text-5xl lg:text-6xl text-foreground mb-4 animate-fade-up leading-tight">
+            加入等候名單：免費履歷健檢
           </h1>
-          <p className="text-base md:text-xl text-foreground mb-2 animate-fade-up-delay">
-            <span className="text-gold font-semibold">12,847+ 專業人士</span>已經提升了他們的職涯。
+          <p className="text-gold font-semibold text-lg md:text-xl mb-6 animate-fade-up-delay">
+            （價值 $200 美元 - 名額有限）
           </p>
-          <p className="text-base md:text-xl text-foreground mb-6 md:mb-8 animate-fade-up-delay">
-            下一個會是你嗎？
+          <p className="text-base md:text-lg text-foreground mb-2 animate-fade-up-delay">
+            我在 Uber 擔任招募人員，已經審閱過<span className="font-bold">超過 20,000 份履歷</span>。
           </p>
-          <p className="text-muted-foreground mb-6 md:mb-8 animate-fade-up-delay-2 text-sm md:text-base">
-            每週二直接收到與數千名有抱負的專業人士分享的職涯策略。
+          <p className="text-base md:text-lg text-foreground mb-8 animate-fade-up-delay">
+            目前我的預約已滿，但你可以加入等候名單，一有空位我就會通知你。
           </p>
+          
+          <div className="bg-card border border-border rounded-lg p-6 md:p-8 mb-8 text-left max-w-xl mx-auto animate-fade-up-delay-2">
+            <p className="text-foreground mb-4 font-medium">說實話：我真的很忙。</p>
+            <p className="text-muted-foreground mb-4 text-sm md:text-base leading-relaxed">
+              我在 Uber 有全職工作，同時也在經營這個事業。我沒辦法審閱每一份履歷。
+            </p>
+            <p className="text-muted-foreground mb-6 text-sm md:text-base leading-relaxed">
+              但我知道那種感覺。你投了 50 份履歷，卻石沉大海。
+            </p>
+            <p className="text-muted-foreground mb-6 text-sm md:text-base leading-relaxed">
+              所以我決定這樣做：加入免費履歷健檢的等候名單。當我有時間時，我會主動聯繫你。先到先得。
+            </p>
+            <p className="text-foreground font-medium mb-3">你會獲得：</p>
+            <ul className="space-y-2 mb-0">
+              <li className="flex items-start gap-3 text-sm md:text-base text-foreground">
+                <GoldCheckBadge />
+                <span>讓招募人員主動聯繫你的精準修改建議</span>
+              </li>
+              <li className="flex items-start gap-3 text-sm md:text-base text-foreground">
+                <GoldCheckBadge />
+                <span>來自每天在 Uber 審閱履歷的人的實用技巧</span>
+              </li>
+              <li className="flex items-start gap-3 text-sm md:text-base text-foreground">
+                <GoldCheckBadge />
+                <span>來自財富 500 強公司現役招募人員的真實回饋</span>
+              </li>
+            </ul>
+          </div>
+
           <form onSubmit={handleSubmit} className="flex flex-col sm:flex-row gap-3 max-w-md mx-auto animate-fade-up-delay-2">
             <Input
               type="email"
@@ -82,16 +110,16 @@ const IndexZhTw = () => {
               required
             />
             <Button type="submit" className="h-12 md:h-12 px-8 rounded-lg btn-gold font-medium uppercase tracking-wider text-sm w-full sm:w-auto">
-              立即訂閱
+              加入等候名單
             </Button>
           </form>
-          <p className="text-sm text-muted-foreground mt-4 italic animate-fade-up-delay-2">
-            您的資訊受到保護，我絕不會發送垃圾郵件。
+          <p className="text-sm text-muted-foreground mt-4 animate-fade-up-delay-2">
+            你的資訊絕對保密。我不會發垃圾郵件。絕對不會。
           </p>
         </div>
       </section>
 
-      {/* About Section with Photo */}
+      {/* Bio Section */}
       <section id="about" className="py-16 md:py-20 px-5 md:px-6 bg-card border-y border-border">
         <div className="container mx-auto max-w-5xl">
           <h2 className="font-heading text-3xl md:text-5xl text-foreground text-center mb-12 md:mb-16">
@@ -100,10 +128,19 @@ const IndexZhTw = () => {
           <div className="grid md:grid-cols-2 gap-10 md:gap-12 items-center">
             <div className="order-2 md:order-1">
               <p className="text-base md:text-lg text-foreground leading-relaxed mb-6">
-                我已經幫助超過 <span className="font-bold">500 位專業人士</span>談判了<span className="text-gold font-bold">超過 1200 萬美元的額外薪酬</span>。我曾在財富 500 強公司擔任面試官和求職者兩種角色，我清楚知道什麼會讓候選人被淘汰——以及什麼會讓他們無法抗拒。
+                我是台灣 <span className="font-bold">Uber 的資深招募人員</span>。
               </p>
-              <p className="text-base md:text-lg text-foreground leading-relaxed mb-8">
-                我的客戶在 Google、Amazon、Meta、Goldman Sachs、McKinsey 以及你能想到的每一家大型科技公司都獲得了職位。我不教理論，我教的是真正有效的方法。
+              <p className="text-base md:text-lg text-foreground leading-relaxed mb-6">
+                我已經錄用超過 <span className="font-bold">500 人</span>，審閱過超過 <span className="text-gold font-bold">20,000 份履歷</span>。
+              </p>
+              <p className="text-base md:text-lg text-foreground leading-relaxed mb-6">
+                我清楚知道什麼會讓人被刷掉，什麼會讓人脫穎而出。
+              </p>
+              <p className="text-base md:text-lg text-foreground leading-relaxed mb-6">
+                我不教理論。我教的是真正有效的方法。
+              </p>
+              <p className="text-base md:text-lg text-muted-foreground leading-relaxed mb-8">
+                我在台灣當了好幾年英文老師，後來轉入科技業招募領域。現在我正在打造一個事業，幫助人們拿到他們以為不可能的工作機會。
               </p>
               <div className="flex flex-wrap gap-3">
                 <a href="https://www.linkedin.com/in/james-bugden/" target="_blank" rel="noopener noreferrer">
@@ -136,131 +173,37 @@ const IndexZhTw = () => {
         </div>
       </section>
 
-      {/* Services Section */}
-      <section id="services" className="py-16 md:py-24 px-5 md:px-6 bg-background">
+      {/* Testimonials Section */}
+      <section id="testimonials" className="py-16 md:py-24 px-5 md:px-6 bg-background">
         <div className="container mx-auto max-w-6xl">
-          <div className="grid md:grid-cols-3 gap-6 md:gap-8">
-            <div className="card-premium rounded-none p-8 md:p-10 border-t-2 border-t-accent">
-              <span className="text-gold font-heading text-sm tracking-widest mb-6 block">01</span>
-              <h3 className="font-heading text-xl md:text-2xl text-foreground mb-4">打開大門的履歷</h3>
-              <p className="text-muted-foreground leading-relaxed mb-6 text-sm md:text-base">
-                你的履歷只有 6 秒鐘來打動人心。大多數履歷在 2 秒內就失敗了。我會重建你的履歷，讓它通過 ATS 系統，並讓招聘人員當天就聯繫你。
-              </p>
-              <ul className="space-y-3">
-                <li className="flex items-center gap-3 text-sm text-foreground">
-                  <GoldCheckBadge />
-                  ATS 優化格式
-                </li>
-                <li className="flex items-center gap-3 text-sm text-foreground">
-                  <GoldCheckBadge />
-                  以成就為導向的重點
-                </li>
-                <li className="flex items-center gap-3 text-sm text-foreground">
-                  <GoldCheckBadge />
-                  專為 FAANG 和跨國公司量身定制
-                </li>
-              </ul>
-            </div>
-
-            <div className="card-premium rounded-none p-8 md:p-10 border-t-2 border-t-accent">
-              <span className="text-gold font-heading text-sm tracking-widest mb-6 block">02</span>
-              <h3 className="font-heading text-xl md:text-2xl text-foreground mb-4">面試精通</h3>
-              <p className="text-muted-foreground leading-relaxed mb-6 text-sm md:text-base">
-                別再「祈禱」能得到這份工作。我會告訴你該說什麼、怎麼說，以及如何應對他們拋給你的任何難題。
-              </p>
-              <ul className="space-y-3">
-                <li className="flex items-center gap-3 text-sm text-foreground">
-                  <GoldCheckBadge />
-                  帶有反饋的模擬面試
-                </li>
-                <li className="flex items-center gap-3 text-sm text-foreground">
-                  <GoldCheckBadge />
-                  STAR 方法框架
-                </li>
-                <li className="flex items-center gap-3 text-sm text-foreground">
-                  <GoldCheckBadge />
-                  針對特定公司的策略
-                </li>
-              </ul>
-            </div>
-
-            <div className="card-premium rounded-none p-8 md:p-10 border-t-2 border-t-accent">
-              <span className="text-gold font-heading text-sm tracking-widest mb-6 block">03</span>
-              <h3 className="font-heading text-xl md:text-2xl text-foreground mb-4">薪資談判</h3>
-              <p className="text-muted-foreground leading-relaxed mb-6 text-sm md:text-base">
-                一般人會損失超過 5 萬美元。別做一般人。我會教你像專業人士一樣談判，獲得你真正應得的報酬。
-              </p>
-              <ul className="space-y-3">
-                <li className="flex items-center gap-3 text-sm text-foreground">
-                  <GoldCheckBadge />
-                  精確的話術和策略
-                </li>
-                <li className="flex items-center gap-3 text-sm text-foreground">
-                  <GoldCheckBadge />
-                  反報價策略
-                </li>
-                <li className="flex items-center gap-3 text-sm text-foreground">
-                  <GoldCheckBadge />
-                  總薪酬優化
-                </li>
-              </ul>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* Results Section - Executive Green Background */}
-      <section id="results" className="py-16 md:py-24 px-5 md:px-6 bg-executive-green relative">
-        <div className="container mx-auto max-w-5xl text-center relative z-10">
-          <h2 className="font-heading text-3xl md:text-5xl text-cream mb-4">
-            成果說明一切
-          </h2>
-          <p className="text-cream-90 text-base md:text-lg mb-12 md:mb-16">
-            真實的數據。真實的人。真實的轉變。
-          </p>
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-6 md:gap-8">
-            <div>
-              <p className="font-heading text-3xl md:text-5xl text-gold-gradient mb-2">$12M+</p>
-              <p className="text-xs md:text-sm text-cream-90">談判獲得的額外薪酬</p>
-            </div>
-            <div>
-              <p className="font-heading text-3xl md:text-5xl text-gold-gradient mb-2">500+</p>
-              <p className="text-xs md:text-sm text-cream-90">成功輔導的客戶</p>
-            </div>
-            <div>
-              <p className="font-heading text-3xl md:text-5xl text-gold-gradient mb-2">94%</p>
-              <p className="text-xs md:text-sm text-cream-90">面試成功率</p>
-            </div>
-            <div>
-              <p className="font-heading text-3xl md:text-5xl text-gold-gradient mb-2">47%</p>
-              <p className="text-xs md:text-sm text-cream-90">平均薪資增幅</p>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* Testimonials */}
-      <section className="py-16 md:py-24 px-5 md:px-6 bg-background">
-        <div className="container mx-auto max-w-5xl">
           <h2 className="font-heading text-3xl md:text-5xl text-foreground text-center mb-12 md:mb-16">
             客戶怎麼說
           </h2>
-          <div className="grid md:grid-cols-3 gap-6 md:gap-8">
+          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8">
             {[
               {
-                quote: "我在 85K 美元卡了 3 年。James 幫我在 Google 談到了 142K 美元。這是 67% 的增長。",
-                name: "Sarah M.",
-                role: "軟體工程師 → Google"
+                quote: "回饋非常實用又有幫助。我現在正在投遞履歷，從指南中學到超多。謝謝！",
+                name: "Julie"
               },
               {
-                quote: "在找 James 之前我面試失敗了 12 次。經過他的輔導後，同時拿到了 Meta 和 Amazon 的 offer。",
-                name: "Michael T.",
-                role: "產品經理 → Meta"
+                quote: "James 的回饋直接又切中要點。他幫我找到了我自己看不到的盲點。我根據他的建議用 AI 工具修改履歷，效果非常驚人。",
+                name: "Cynthia"
               },
               {
-                quote: "我差點就接受了他們的第一個報價。James 教我如何還價，結果我的總薪酬多了 45K 美元。",
-                name: "Jennifer L.",
-                role: "數據科學家 → Goldman Sachs"
+                quote: "這份健檢報告超級清楚。每個部分都有說明、好的範例和不好的範例。看到履歷修改前後的對比，差異太大了。專業很多。",
+                name: "Lichen"
+              },
+              {
+                quote: "James 從招募人員的角度審閱我的履歷。他讓我知道用人主管真正在乎什麼。他不只告訴我哪裡有問題，還示範怎麼改、為什麼要這樣改。即使我已經改過履歷 10 幾次，還是學到超多。",
+                name: "Monica"
+              },
+              {
+                quote: "我很驚訝 James 的報告有多詳細。連我 HR 的朋友都給不了這麼深入的回饋。他真的非常專業又細心。",
+                name: "David"
+              },
+              {
+                quote: "謝謝這麼詳細的健檢報告。你幫我找到好幾個我不知道的盲點。你對於標題格式、加強開頭、還有清楚呈現職稱的建議都超有幫助。",
+                name: "Sunny"
               }
             ].map((testimonial, i) => (
               <div key={i} className="testimonial-card p-6 md:p-8 border-t-2 border-t-accent">
@@ -273,18 +216,15 @@ const IndexZhTw = () => {
                   「{testimonial.quote}」
                 </p>
                 <div>
-                  <p className="font-medium text-foreground">{testimonial.name}</p>
-                  <p className="text-sm text-muted-foreground">{testimonial.role}</p>
+                  <p className="font-medium text-foreground">— {testimonial.name}</p>
                 </div>
               </div>
             ))}
           </div>
         </div>
-      </section>
 
-      {/* Companies */}
-      <section className="py-12 md:py-16 px-5 md:px-6 border-y border-border bg-card">
-        <div className="container mx-auto max-w-5xl text-center">
+        {/* Companies - Moved inside testimonials section */}
+        <div className="container mx-auto max-w-5xl text-center mt-16 md:mt-20">
           <p className="text-xs font-medium text-muted-foreground tracking-[0.2em] uppercase mb-6 md:mb-8">
             我的客戶獲得 OFFER 的公司
           </p>
@@ -299,8 +239,31 @@ const IndexZhTw = () => {
         </div>
       </section>
 
-      {/* CTA Section */}
-      <section id="newsletter" className="py-16 md:py-24 px-5 md:px-6 bg-executive-green relative">
+      {/* Results Section - Updated Stats */}
+      <section id="results" className="py-16 md:py-24 px-5 md:px-6 bg-executive-green relative">
+        <div className="container mx-auto max-w-5xl text-center relative z-10">
+          <h2 className="font-heading text-3xl md:text-5xl text-cream mb-12 md:mb-16">
+            數據說話
+          </h2>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 md:gap-12">
+            <div>
+              <p className="font-heading text-4xl md:text-5xl text-gold-gradient mb-2">20,000+</p>
+              <p className="text-sm md:text-base text-cream-90">審閱過的履歷</p>
+            </div>
+            <div>
+              <p className="font-heading text-4xl md:text-5xl text-gold-gradient mb-2">500+</p>
+              <p className="text-sm md:text-base text-cream-90">成功錄用人數</p>
+            </div>
+            <div>
+              <p className="font-heading text-4xl md:text-5xl text-gold-gradient mb-2">22K+</p>
+              <p className="text-sm md:text-base text-cream-90">LinkedIn + Threads 社群</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Final CTA Section */}
+      <section className="py-16 md:py-24 px-5 md:px-6 bg-executive-green relative border-t border-cream/10">
         <div className="container mx-auto max-w-3xl text-center relative z-10">
           <h2 className="font-heading text-3xl md:text-5xl text-cream mb-6">
             準備好提升了嗎？
