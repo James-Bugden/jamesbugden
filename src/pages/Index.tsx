@@ -77,7 +77,7 @@ const Index = () => {
               <p className="text-base md:text-lg text-foreground leading-relaxed mb-6">
                 I don't teach theory. I teach what actually works.
               </p>
-              <p className="text-base md:text-lg text-muted-foreground leading-relaxed mb-8">
+              <p className="text-base md:text-lg text-foreground leading-relaxed mb-8">
                 I spent years as an English teacher in Taiwan. Then I moved into tech recruiting. I want to help others achieve their goals through finding their dream job.
               </p>
               <div className="flex flex-wrap gap-3">
@@ -133,13 +133,13 @@ const Index = () => {
           <div className="bg-background border border-border rounded-lg p-6 md:p-8 mb-8 text-left max-w-xl mx-auto animate-fade-up-delay-2">
             <p className="text-foreground mb-4 font-medium">Here's the deal: I'm swamped.</p>
             <p className="text-muted-foreground mb-4 text-sm md:text-base leading-relaxed">
-              I work full-time at Uber. I'm also building this business. I can't review every resume.
+              I work full-time at Uber but I want to help people. I can't review every resume.
             </p>
             <p className="text-muted-foreground mb-6 text-sm md:text-base leading-relaxed">
               But I know how it feels. You send 50 applications. You hear nothing back.
             </p>
             <p className="text-muted-foreground mb-6 text-sm md:text-base leading-relaxed">
-              So here's what I'm doing: Join the waitlist for a free resume review. When I have time, I'll reach out. First come, first served.
+              So here's what I'm doing: Join the waitlist for a free resume review. When I have time, I'll reach out.
             </p>
             <p className="text-foreground font-medium mb-3">What you'll get:</p>
             <ul className="space-y-2 mb-0">

@@ -7,7 +7,6 @@ interface Testimonial {
   quote: string;
   pullQuote?: string;
   name: string;
-  role: string;
   photo?: string;
   initial?: string;
   initialBg?: string;
@@ -17,34 +16,29 @@ const testimonials: Testimonial[] = [
   {
     quote: "回饋非常實用又有幫助。我現在正在投遞履歷，從指南中學到超多。謝謝！",
     name: "Julie",
-    role: "行銷經理",
     photo: juliePhoto
   },
   {
     quote: "James 的回饋直接又切中要點。他幫我找到了我自己看不到的盲點。我根據他的建議用 AI 工具修改履歷，效果非常驚人。",
     name: "Cynthia",
-    role: "產品設計師",
     photo: cynthiaPhoto
+  },
+  {
+    quote: "謝謝這麼詳細又有洞見的健檢報告。你幫我找到好幾個我不知道的重要盲點。你對於標題格式、加強開頭、還有清楚呈現職稱的建議都超有幫助。",
+    name: "Sunny",
+    photo: sunnyPhoto
   },
   {
     quote: "這份健檢報告超級清楚。每個部分都有說明、好的範例和不好的範例。看到履歷修改前後的對比，差異太大了。專業很多。",
     name: "Lichen",
-    role: "數據分析師",
     initial: "L",
     initialBg: "bg-purple-100"
   },
   {
     quote: "我很驚訝 James 的報告有多詳細。連我 HR 的朋友和獵頭都給不了這麼深入的回饋。他真的非常專業又細心。",
     name: "David",
-    role: "營運主管",
     initial: "D",
     initialBg: "bg-amber-50"
-  },
-  {
-    quote: "謝謝這麼詳細又有洞見的健檢報告。你幫我找到好幾個我不知道的重要盲點。你對於標題格式、加強開頭、還有清楚呈現職稱的建議都超有幫助。",
-    name: "Sunny",
-    role: "商業分析師",
-    photo: sunnyPhoto
   }
 ];
 
@@ -52,7 +46,6 @@ const featuredTestimonial: Testimonial = {
   quote: "James 從招募人員的角度審閱我的履歷。他讓我知道用人主管真正在乎什麼。",
   pullQuote: "他不只告訴我哪裡有問題，還示範怎麼改、為什麼要這樣改。",
   name: "Monica",
-  role: "軟體工程師",
   photo: monicaPhoto
 };
 
@@ -99,7 +92,6 @@ const TestimonialsSectionZhTw = () => {
               {/* Attribution */}
               <div className="text-center">
                 <p className="font-bold text-foreground text-lg">— {featuredTestimonial.name}</p>
-                <p className="text-muted-foreground text-sm">{featuredTestimonial.role}</p>
               </div>
             </div>
           </div>
@@ -135,7 +127,6 @@ const TestimonialsSectionZhTw = () => {
                   {/* Attribution */}
                   <div className="text-center">
                     <p className="font-bold text-foreground">— {testimonial.name}</p>
-                    <p className="text-muted-foreground text-xs">{testimonial.role}</p>
                   </div>
                 </div>
               ))}
@@ -159,7 +150,6 @@ const TestimonialsSectionZhTw = () => {
                 {/* Attribution */}
                 <div className="text-center">
                   <p className="font-bold text-foreground">— {testimonials[4].name}</p>
-                  <p className="text-muted-foreground text-xs">{testimonials[4].role}</p>
                 </div>
               </div>
             </div>
