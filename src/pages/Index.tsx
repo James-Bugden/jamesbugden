@@ -148,7 +148,7 @@ const Index = () => {
             </ul>
           </div>
 
-          <div className="ml-embedded max-w-[500px] mx-auto animate-fade-up-delay-2" data-form="sMiX80"></div>
+          <div className="ml-embedded max-w-[500px] mx-auto animate-fade-up-delay-2" data-form="sM1X80"></div>
           <p className="text-sm text-muted-foreground mt-4 animate-fade-up-delay-2">
             Your info stays private. I don't spam. Ever.
           </p>
