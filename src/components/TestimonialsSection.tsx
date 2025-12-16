@@ -135,15 +135,13 @@ const TestimonialsSection = ({ title = "What Clients Say" }: TestimonialsSection
                 </div>
               ))}
               
-              {/* Sunny - spans both columns */}
+              {/* David - spans both columns */}
               <div className="sm:col-span-2 bg-card rounded-xl p-6 md:p-8 shadow-md hover:shadow-lg transition-all duration-300 hover:-translate-y-1">
-                {/* Photo */}
+                {/* Initial Circle */}
                 <div className="flex justify-center mb-4">
-                  <img
-                    src={testimonials[4].photo}
-                    alt={testimonials[4].name}
-                    className="w-[60px] h-[60px] rounded-full object-cover border-2 border-gold transition-transform duration-300 hover:scale-105"
-                  />
+                  <div className={`w-[60px] h-[60px] rounded-full ${testimonials[4].initialBg} flex items-center justify-center border-2 border-gold`}>
+                    <span className="text-xl font-bold text-foreground">{testimonials[4].initial}</span>
+                  </div>
                 </div>
                 
                 {/* Quote */}
