@@ -2018,19 +2018,19 @@ const CharleneLeeReview = () => {
 
             <ul className="space-y-2 mb-6">
               <li className="flex items-start gap-3 text-foreground">
-                <CheckCircle className="w-5 h-5 text-primary mt-0.5 flex-shrink-0" />
+                <CheckCircle className="w-5 h-5 text-gold mt-0.5 flex-shrink-0" />
                 <strong>Positions you clearly as a Senior Operations Manager</strong>
               </li>
               <li className="flex items-start gap-3 text-foreground">
-                <CheckCircle className="w-5 h-5 text-primary mt-0.5 flex-shrink-0" />
+                <CheckCircle className="w-5 h-5 text-gold mt-0.5 flex-shrink-0" />
                 <strong>Demonstrates 20 years of progressive Microsoft experience</strong>
               </li>
               <li className="flex items-start gap-3 text-foreground">
-                <CheckCircle className="w-5 h-5 text-primary mt-0.5 flex-shrink-0" />
+                <CheckCircle className="w-5 h-5 text-gold mt-0.5 flex-shrink-0" />
                 <strong>Shows quantified, impressive business results</strong>
               </li>
               <li className="flex items-start gap-3 text-foreground">
-                <CheckCircle className="w-5 h-5 text-primary mt-0.5 flex-shrink-0" />
+                <CheckCircle className="w-5 h-5 text-gold mt-0.5 flex-shrink-0" />
                 <strong>Competes for $120K-180K operations roles at top tech companies</strong>
               </li>
             </ul>
