@@ -65,8 +65,16 @@ const CharleneLeeReview = () => {
               </div>
             </div>
             
+            <p className="text-foreground leading-relaxed mb-4">
+              Charlene, your resume shows strong experience at a prestigious company (Microsoft) with impressive retention metrics (120%+, 100% renewals).
+            </p>
+            
+            <p className="text-foreground leading-relaxed mb-4">
+              However, the resume is currently positioned for Customer Success roles but trying to pivot to Operations/Supply roles (likely Uber/ride-sharing based on your framing). The heavy use of analogies ("directly applicable to driver acquisition") actually weakens your positioning—you're telling recruiters how to interpret your experience rather than letting your achievements speak for themselves.
+            </p>
+            
             <p className="text-foreground leading-relaxed mb-6">
-              Charlene, your resume shows strong experience at a prestigious company (Microsoft) with impressive retention metrics (120%+, 100% renewals). However, the resume is currently positioned for Customer Success roles but trying to pivot to Operations/Supply roles (likely Uber/ride-sharing based on your framing). The heavy use of analogies ("directly applicable to driver acquisition") actually weakens your positioning—you're telling recruiters how to interpret your experience rather than letting your achievements speak for themselves. With focused repositioning and content refinement, this resume can be highly competitive for Operations Manager or Supply Growth roles. My assumption is that you are targeting these kind of roles but in retrospect I should have asked for your target job descriptions.
+              With focused repositioning and content refinement, this resume can be highly competitive for Operations Manager or Supply Growth roles. My assumption is that you are targeting these kind of roles but in retrospect I should have asked for your target job descriptions.
             </p>
           </div>
 
