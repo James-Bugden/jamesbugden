@@ -456,7 +456,7 @@ const CharleneLeeReview = () => {
 
             <div className="space-y-3">
               <label className="flex items-start gap-3 bg-card p-4 rounded-lg border border-border cursor-pointer hover:bg-muted/50 transition-colors">
-                <input type="checkbox" className="mt-1 w-5 h-5 rounded border-border text-primary focus:ring-primary" />
+                <input type="checkbox" className="mt-1 w-5 h-5 rounded border-border text-gold focus:ring-gold accent-gold" />
                 <div>
                   <p className="text-foreground font-medium">Remove ALL analogies from summary and bullets</p>
                   <p className="text-sm text-muted-foreground">Delete every phrase in parentheses: "(directly applicable to...)", "(analogous to...)", "(mirroring...)" - Simply state what you did and what results you achieved</p>
@@ -464,7 +464,7 @@ const CharleneLeeReview = () => {
               </label>
 
               <label className="flex items-start gap-3 bg-card p-4 rounded-lg border border-border cursor-pointer hover:bg-muted/50 transition-colors">
-                <input type="checkbox" className="mt-1 w-5 h-5 rounded border-border text-primary focus:ring-primary" />
+                <input type="checkbox" className="mt-1 w-5 h-5 rounded border-border text-gold focus:ring-gold accent-gold" />
                 <div>
                   <p className="text-foreground font-medium">Rewrite Professional Summary to 3-4 lines focusing on achievements, not pivot explanation</p>
                   <p className="text-sm text-muted-foreground">Lead with: "Senior Operations Manager with 20 years at Microsoft" • Include: 120%+ growth, 100% renewals, $15M+ accounts • Remove: All analogies and defensive positioning</p>
@@ -472,7 +472,7 @@ const CharleneLeeReview = () => {
               </label>
 
               <label className="flex items-start gap-3 bg-card p-4 rounded-lg border border-border cursor-pointer hover:bg-muted/50 transition-colors">
-                <input type="checkbox" className="mt-1 w-5 h-5 rounded border-border text-primary focus:ring-primary" />
+                <input type="checkbox" className="mt-1 w-5 h-5 rounded border-border text-gold focus:ring-gold accent-gold" />
                 <div>
                   <p className="text-foreground font-medium">Add specific metrics to 5 weakest bullets in Work Experience</p>
                   <p className="text-sm text-muted-foreground">How many executives/accounts/team members? What $ value or % impact? What business outcome resulted?</p>
@@ -490,7 +490,7 @@ const CharleneLeeReview = () => {
 
             <div className="space-y-3">
               <label className="flex items-start gap-3 bg-card p-4 rounded-lg border border-border cursor-pointer hover:bg-muted/50 transition-colors">
-                <input type="checkbox" className="mt-1 w-5 h-5 rounded border-border text-primary focus:ring-primary" />
+                <input type="checkbox" className="mt-1 w-5 h-5 rounded border-border text-gold focus:ring-gold accent-gold" />
                 <div>
                   <p className="text-foreground font-medium">Reorder Core Skills to prioritize operational language</p>
                   <p className="text-sm text-muted-foreground">Move "Supply-Demand Forecasting" and "Operational Excellence" to top. Remove or de-emphasize "Customer Success" terminology.</p>
@@ -498,7 +498,7 @@ const CharleneLeeReview = () => {
               </label>
 
               <label className="flex items-start gap-3 bg-card p-4 rounded-lg border border-border cursor-pointer hover:bg-muted/50 transition-colors">
-                <input type="checkbox" className="mt-1 w-5 h-5 rounded border-border text-primary focus:ring-primary" />
+                <input type="checkbox" className="mt-1 w-5 h-5 rounded border-border text-gold focus:ring-gold accent-gold" />
                 <div>
                   <p className="text-foreground font-medium">Consolidate two Microsoft roles into clearer progression</p>
                   <p className="text-sm text-muted-foreground">Current format makes it unclear if you were promoted. Show: Business Excellence Operations (2005-2022) → Customer Success Account Manager (2022-2025)</p>
@@ -506,7 +506,7 @@ const CharleneLeeReview = () => {
               </label>
 
               <label className="flex items-start gap-3 bg-card p-4 rounded-lg border border-border cursor-pointer hover:bg-muted/50 transition-colors">
-                <input type="checkbox" className="mt-1 w-5 h-5 rounded border-border text-primary focus:ring-primary" />
+                <input type="checkbox" className="mt-1 w-5 h-5 rounded border-border text-gold focus:ring-gold accent-gold" />
                 <div>
                   <p className="text-foreground font-medium">Add certification dates to show recency</p>
                   <p className="text-sm text-muted-foreground">Azure Fundamentals (2023), AI Fundamentals (2024) — Dates show continuous learning vs old certifications</p>
@@ -524,7 +524,7 @@ const CharleneLeeReview = () => {
 
             <div className="space-y-3">
               <label className="flex items-start gap-3 bg-card p-4 rounded-lg border border-border cursor-pointer hover:bg-muted/50 transition-colors">
-                <input type="checkbox" className="mt-1 w-5 h-5 rounded border-border text-primary focus:ring-primary" />
+                <input type="checkbox" className="mt-1 w-5 h-5 rounded border-border text-gold focus:ring-gold accent-gold" />
                 <div>
                   <p className="text-foreground font-medium">Fix formatting inconsistency in second role description</p>
                   <p className="text-sm text-muted-foreground">"的" appears instead of English text: "aligning leadership 的 strategic priorities"</p>
@@ -532,7 +532,7 @@ const CharleneLeeReview = () => {
               </label>
 
               <label className="flex items-start gap-3 bg-card p-4 rounded-lg border border-border cursor-pointer hover:bg-muted/50 transition-colors">
-                <input type="checkbox" className="mt-1 w-5 h-5 rounded border-border text-primary focus:ring-primary" />
+                <input type="checkbox" className="mt-1 w-5 h-5 rounded border-border text-gold focus:ring-gold accent-gold" />
                 <div>
                   <p className="text-foreground font-medium">Add Education year</p>
                   <p className="text-sm text-muted-foreground">Currently just says "Finance, National Taipei University of Business" — Add graduation year: "B.S. Finance, 2005" (or whatever year)</p>
@@ -540,7 +540,7 @@ const CharleneLeeReview = () => {
               </label>
 
               <label className="flex items-start gap-3 bg-card p-4 rounded-lg border border-border cursor-pointer hover:bg-muted/50 transition-colors">
-                <input type="checkbox" className="mt-1 w-5 h-5 rounded border-border text-primary focus:ring-primary" />
+                <input type="checkbox" className="mt-1 w-5 h-5 rounded border-border text-gold focus:ring-gold accent-gold" />
                 <div>
                   <p className="text-foreground font-medium">Consider adding Languages section since you're in Taiwan (5 min)</p>
                   <p className="text-sm text-muted-foreground">Mandarin (Native), English (Professional Working Proficiency) — Shows bilingual capability for multinational companies</p>
@@ -1268,14 +1268,14 @@ const CharleneLeeReview = () => {
 
             <div className="grid md:grid-cols-2 gap-6 mb-6">
               <div>
-                <p className="text-sm font-semibold text-primary mb-3 flex items-center gap-2">
+                <p className="text-sm font-semibold text-gold mb-3 flex items-center gap-2">
                   <CheckCircle className="w-4 h-4" /> What's Working
                 </p>
                 <ul className="space-y-2 text-sm text-foreground">
-                  <li>• <strong>Four Microsoft certifications:</strong> Shows continuous learning and technical aptitude</li>
-                  <li>• <strong>Recent certification stack:</strong> Azure, M365, AI, Security all current technologies</li>
-                  <li>• <strong>Relevant to tech roles:</strong> Demonstrates you understand cloud, AI, security landscape</li>
-                  <li>• <strong>Microsoft-specific:</strong> Reinforces your company expertise</li>
+                  <li>• Four Microsoft certifications: Shows continuous learning and technical aptitude</li>
+                  <li>• Recent certification stack: Azure, M365, AI, Security all current technologies</li>
+                  <li>• Relevant to tech roles: Demonstrates you understand cloud, AI, security landscape</li>
+                  <li>• Microsoft-specific: Reinforces your company expertise</li>
                 </ul>
               </div>
               <div>
@@ -1328,13 +1328,13 @@ const CharleneLeeReview = () => {
 
             <div className="grid md:grid-cols-2 gap-6 mb-6">
               <div>
-                <p className="text-sm font-semibold text-primary mb-3 flex items-center gap-2">
+                <p className="text-sm font-semibold text-gold mb-3 flex items-center gap-2">
                   <CheckCircle className="w-4 h-4" /> What's Working
                 </p>
                 <ul className="space-y-2 text-sm text-foreground">
-                  <li>• <strong>Clear degree and institution:</strong> Finance, National Taipei University of Business</li>
-                  <li>• <strong>Relevant major:</strong> Finance is solid foundation for operations/business roles</li>
-                  <li>• <strong>Clean format:</strong> Simple one-line listing</li>
+                  <li>• Clear degree and institution: Finance, National Taipei University of Business</li>
+                  <li>• Relevant major: Finance is solid foundation for operations/business roles</li>
+                  <li>• Clean format: Simple one-line listing</li>
                 </ul>
               </div>
               <div>
@@ -1500,8 +1500,8 @@ const CharleneLeeReview = () => {
         {/* ATS Compliance Check */}
         <section className="mb-16">
           <div className="flex items-center gap-3 mb-6">
-            <div className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center">
-              <FileText className="w-5 h-5 text-primary" />
+            <div className="w-10 h-10 rounded-full bg-gold/10 flex items-center justify-center">
+              <FileText className="w-5 h-5 text-gold" />
             </div>
             <h2 className="font-heading text-3xl text-foreground">ATS Compliance Check ✅</h2>
           </div>
@@ -1520,38 +1520,38 @@ const CharleneLeeReview = () => {
             <div className="grid md:grid-cols-2 gap-4 mb-6">
               <div className="space-y-2">
                 <div className="flex items-center gap-2 text-sm text-foreground">
-                  <CheckCircle className="w-4 h-4 text-primary" />
-                  <strong>Single-column layout:</strong> Yes, clean single column
+                  <CheckCircle className="w-4 h-4 text-gold" />
+                  Single-column layout: Yes, clean single column
                 </div>
                 <div className="flex items-center gap-2 text-sm text-foreground">
-                  <CheckCircle className="w-4 h-4 text-primary" />
-                  <strong>Standard fonts:</strong> Yes, professional font used
+                  <CheckCircle className="w-4 h-4 text-gold" />
+                  Standard fonts: Yes, professional font used
                 </div>
                 <div className="flex items-center gap-2 text-sm text-foreground">
-                  <CheckCircle className="w-4 h-4 text-primary" />
-                  <strong>No graphics/tables:</strong> Yes, pure text format
+                  <CheckCircle className="w-4 h-4 text-gold" />
+                  No graphics/tables: Yes, pure text format
                 </div>
                 <div className="flex items-center gap-2 text-sm text-foreground">
-                  <CheckCircle className="w-4 h-4 text-primary" />
-                  <strong>Keywords present:</strong> Yes, but could be stronger
+                  <CheckCircle className="w-4 h-4 text-gold" />
+                  Keywords present: Yes, but could be stronger
                 </div>
               </div>
               <div className="space-y-2">
                 <div className="flex items-center gap-2 text-sm text-foreground">
-                  <CheckCircle className="w-4 h-4 text-primary" />
-                  <strong>Proper section headings:</strong> Yes, all caps, clear
+                  <CheckCircle className="w-4 h-4 text-gold" />
+                  Proper section headings: Yes, all caps, clear
                 </div>
                 <div className="flex items-center gap-2 text-sm text-foreground">
-                  <CheckCircle className="w-4 h-4 text-primary" />
-                  <strong>Standard date format:</strong> Yes, consistent
+                  <CheckCircle className="w-4 h-4 text-gold" />
+                  Standard date format: Yes, consistent
                 </div>
                 <div className="flex items-center gap-2 text-sm text-foreground">
-                  <CheckCircle className="w-4 h-4 text-primary" />
-                  <strong>No headers/footers with critical info:</strong> Correct
+                  <CheckCircle className="w-4 h-4 text-gold" />
+                  No headers/footers with critical info: Correct
                 </div>
                 <div className="flex items-center gap-2 text-sm text-foreground">
-                  <CheckCircle className="w-4 h-4 text-primary" />
-                  <strong>Contact info at top:</strong> Yes, all present
+                  <CheckCircle className="w-4 h-4 text-gold" />
+                  Contact info at top: Yes, all present
                 </div>
               </div>
             </div>
@@ -1589,31 +1589,31 @@ const CharleneLeeReview = () => {
 
           <div className="grid md:grid-cols-2 gap-6 mb-8">
             <div className="bg-card rounded-xl p-6 border border-border">
-              <p className="text-sm font-semibold text-primary mb-4">Your Strengths vs. Competition:</p>
+              <p className="text-sm font-semibold text-gold mb-4">Your Strengths vs. Competition:</p>
               <ul className="space-y-3">
                 <li className="flex items-start gap-3">
-                  <CheckCircle className="w-5 h-5 text-primary mt-0.5 flex-shrink-0" />
+                  <CheckCircle className="w-5 h-5 text-gold mt-0.5 flex-shrink-0" />
                   <div>
                     <p className="text-foreground font-medium">✅ 20 years at Microsoft</p>
                     <p className="text-sm text-muted-foreground">Most candidates have 5-10 years total experience across multiple companies. Your longevity demonstrates loyalty and deep institutional knowledge.</p>
                   </div>
                 </li>
                 <li className="flex items-start gap-3">
-                  <CheckCircle className="w-5 h-5 text-primary mt-0.5 flex-shrink-0" />
+                  <CheckCircle className="w-5 h-5 text-gold mt-0.5 flex-shrink-0" />
                   <div>
                     <p className="text-foreground font-medium">✅ Impressive retention metrics</p>
                     <p className="text-sm text-muted-foreground">120%+ growth and 100% renewals are genuinely outstanding. Many ops managers struggle to quantify their impact this clearly.</p>
                   </div>
                 </li>
                 <li className="flex items-start gap-3">
-                  <CheckCircle className="w-5 h-5 text-primary mt-0.5 flex-shrink-0" />
+                  <CheckCircle className="w-5 h-5 text-gold mt-0.5 flex-shrink-0" />
                   <div>
                     <p className="text-foreground font-medium">✅ C-level stakeholder management</p>
                     <p className="text-sm text-muted-foreground">Direct executive interaction is not universal, especially in operations roles. This differentiates you.</p>
                   </div>
                 </li>
                 <li className="flex items-start gap-3">
-                  <CheckCircle className="w-5 h-5 text-primary mt-0.5 flex-shrink-0" />
+                  <CheckCircle className="w-5 h-5 text-gold mt-0.5 flex-shrink-0" />
                   <div>
                     <p className="text-foreground font-medium">✅ Cross-functional leadership</p>
                     <p className="text-sm text-muted-foreground">Coordinating Engineering, Product, Support shows you can work horizontally, a key ops skill.</p>
@@ -1668,20 +1668,20 @@ const CharleneLeeReview = () => {
             <div className="grid md:grid-cols-2 gap-4">
               <ul className="space-y-2 text-sm">
                 <li className="flex items-center gap-2 text-foreground">
-                  <CheckCircle className="w-4 h-4 text-primary" />
-                  6-10 years experience <strong>(you have 20 ✅)</strong>
+                  <CheckCircle className="w-4 h-4 text-gold" />
+                  6-10 years experience (you have 20 ✅)
                 </li>
                 <li className="flex items-center gap-2 text-foreground">
-                  <CheckCircle className="w-4 h-4 text-primary" />
-                  Proven portfolio/program management <strong>(you have this ✅)</strong>
+                  <CheckCircle className="w-4 h-4 text-gold" />
+                  Proven portfolio/program management (you have this ✅)
                 </li>
                 <li className="flex items-center gap-2 text-foreground">
-                  <CheckCircle className="w-4 h-4 text-primary" />
-                  Data-driven decision making <strong>(you have this ✅)</strong>
+                  <CheckCircle className="w-4 h-4 text-gold" />
+                  Data-driven decision making (you have this ✅)
                 </li>
                 <li className="flex items-center gap-2 text-foreground">
-                  <CheckCircle className="w-4 h-4 text-primary" />
-                  Cross-functional leadership <strong>(you have this ✅)</strong>
+                  <CheckCircle className="w-4 h-4 text-gold" />
+                  Cross-functional leadership (you have this ✅)
                 </li>
               </ul>
               <ul className="space-y-2 text-sm">
@@ -1719,25 +1719,37 @@ const CharleneLeeReview = () => {
               <h3 className="text-lg font-semibold text-foreground">Annotated Resume Reference</h3>
             </div>
             <p className="text-foreground mb-4">
-              Below is your original resume. Use this as a reference while implementing the action items above.
+              Your original resume for reference while implementing the action items above.
             </p>
-            <a 
-              href="/reviews/charlene-lee-resume.pdf" 
-              target="_blank"
-              rel="noopener noreferrer"
-              className="inline-flex items-center gap-2 px-4 py-2 bg-gold text-foreground rounded-lg hover:bg-gold/90 transition-colors font-medium"
-            >
-              <FileText className="w-4 h-4" />
-              View Resume PDF
-            </a>
-            <a 
-              href="/reviews/charlene-lee-resume.pdf" 
-              download 
-              className="inline-flex items-center gap-2 ml-3 px-4 py-2 bg-muted text-foreground rounded-lg hover:bg-muted/80 transition-colors font-medium"
-            >
-              <Download className="w-4 h-4" />
-              Download
-            </a>
+            
+            {/* Embedded PDF Viewer */}
+            <div className="bg-card rounded-lg overflow-hidden border border-border mb-4">
+              <iframe 
+                src="/reviews/charlene-lee-resume.pdf" 
+                className="w-full h-[600px]"
+                title="Charlene Lee Resume"
+              />
+            </div>
+            
+            <div className="flex flex-wrap gap-3">
+              <a 
+                href="/reviews/charlene-lee-resume.pdf" 
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center gap-2 px-4 py-2 bg-gold text-foreground rounded-lg hover:bg-gold/90 transition-colors font-medium"
+              >
+                <FileText className="w-4 h-4" />
+                Open in New Tab
+              </a>
+              <a 
+                href="/reviews/charlene-lee-resume.pdf" 
+                download 
+                className="inline-flex items-center gap-2 px-4 py-2 bg-muted text-foreground rounded-lg hover:bg-muted/80 transition-colors font-medium"
+              >
+                <Download className="w-4 h-4" />
+                Download PDF
+              </a>
+            </div>
           </div>
 
           {/* Quick Wins - Day 1 */}
@@ -1752,7 +1764,7 @@ const CharleneLeeReview = () => {
 
             <div className="space-y-3">
               <label className="flex items-start gap-3 bg-muted/50 p-4 rounded-lg cursor-pointer hover:bg-muted transition-colors">
-                <input type="checkbox" className="mt-1 w-5 h-5 rounded border-border text-primary focus:ring-primary" />
+                <input type="checkbox" className="mt-1 w-5 h-5 rounded border-border text-gold focus:ring-gold accent-gold" />
                 <div>
                   <p className="text-foreground font-medium">Delete all parenthetical analogies</p>
                   <p className="text-sm text-muted-foreground">Find: "(directly applicable to", "(analogous to", "(mirroring". Delete everything in those parentheses.</p>
@@ -1760,7 +1772,7 @@ const CharleneLeeReview = () => {
               </label>
 
               <label className="flex items-start gap-3 bg-muted/50 p-4 rounded-lg cursor-pointer hover:bg-muted transition-colors">
-                <input type="checkbox" className="mt-1 w-5 h-5 rounded border-border text-primary focus:ring-primary" />
+                <input type="checkbox" className="mt-1 w-5 h-5 rounded border-border text-gold focus:ring-gold accent-gold" />
                 <div>
                   <p className="text-foreground font-medium">Fix character encoding error</p>
                   <p className="text-sm text-muted-foreground">Find: "leadership 的 strategic". Change to: "leadership strategic" or "leadership's strategic"</p>
@@ -1768,7 +1780,7 @@ const CharleneLeeReview = () => {
               </label>
 
               <label className="flex items-start gap-3 bg-muted/50 p-4 rounded-lg cursor-pointer hover:bg-muted transition-colors">
-                <input type="checkbox" className="mt-1 w-5 h-5 rounded border-border text-primary focus:ring-primary" />
+                <input type="checkbox" className="mt-1 w-5 h-5 rounded border-border text-gold focus:ring-gold accent-gold" />
                 <div>
                   <p className="text-foreground font-medium">Add phone number spaces</p>
                   <p className="text-sm text-muted-foreground">Change: "886 920187795" to "+886 920 187 795"</p>
@@ -1776,7 +1788,7 @@ const CharleneLeeReview = () => {
               </label>
 
               <label className="flex items-start gap-3 bg-muted/50 p-4 rounded-lg cursor-pointer hover:bg-muted transition-colors">
-                <input type="checkbox" className="mt-1 w-5 h-5 rounded border-border text-primary focus:ring-primary" />
+                <input type="checkbox" className="mt-1 w-5 h-5 rounded border-border text-gold focus:ring-gold accent-gold" />
                 <div>
                   <p className="text-foreground font-medium">Add job title under your name</p>
                   <p className="text-sm text-muted-foreground">CHARLENE LEE → Senior Operations Manager | Growth Strategy | Client Success</p>
@@ -1799,19 +1811,19 @@ const CharleneLeeReview = () => {
 
             <div className="space-y-2">
               <label className="flex items-start gap-3 p-3 rounded-lg cursor-pointer hover:bg-muted/50 transition-colors">
-                <input type="checkbox" className="mt-1 w-5 h-5 rounded border-border text-primary focus:ring-primary" />
+                <input type="checkbox" className="mt-1 w-5 h-5 rounded border-border text-gold focus:ring-gold accent-gold" />
                 <span className="text-foreground">Rewrite Professional Summary to 3-4 lines using provided template</span>
               </label>
               <label className="flex items-start gap-3 p-3 rounded-lg cursor-pointer hover:bg-muted/50 transition-colors">
-                <input type="checkbox" className="mt-1 w-5 h-5 rounded border-border text-primary focus:ring-primary" />
+                <input type="checkbox" className="mt-1 w-5 h-5 rounded border-border text-gold focus:ring-gold accent-gold" />
                 <span className="text-foreground">Rewrite all 5 Key Achievements bullets using provided examples</span>
               </label>
               <label className="flex items-start gap-3 p-3 rounded-lg cursor-pointer hover:bg-muted/50 transition-colors">
-                <input type="checkbox" className="mt-1 w-5 h-5 rounded border-border text-primary focus:ring-primary" />
+                <input type="checkbox" className="mt-1 w-5 h-5 rounded border-border text-gold focus:ring-gold accent-gold" />
                 <span className="text-foreground">Add specific metrics using [PLACEHOLDER] format where needed</span>
               </label>
               <label className="flex items-start gap-3 p-3 rounded-lg cursor-pointer hover:bg-muted/50 transition-colors">
-                <input type="checkbox" className="mt-1 w-5 h-5 rounded border-border text-primary focus:ring-primary" />
+                <input type="checkbox" className="mt-1 w-5 h-5 rounded border-border text-gold focus:ring-gold accent-gold" />
                 <span className="text-foreground">Save as: Charlene_Lee_Resume_v2.pdf</span>
               </label>
             </div>
@@ -1829,15 +1841,15 @@ const CharleneLeeReview = () => {
 
             <div className="space-y-2">
               <label className="flex items-start gap-3 p-3 rounded-lg cursor-pointer hover:bg-muted/50 transition-colors">
-                <input type="checkbox" className="mt-1 w-5 h-5 rounded border-border text-primary focus:ring-primary" />
+                <input type="checkbox" className="mt-1 w-5 h-5 rounded border-border text-gold focus:ring-gold accent-gold" />
                 <span className="text-foreground">Rewrite all 4 bullets using CAR model (Context, Action, Result)</span>
               </label>
               <label className="flex items-start gap-3 p-3 rounded-lg cursor-pointer hover:bg-muted/50 transition-colors">
-                <input type="checkbox" className="mt-1 w-5 h-5 rounded border-border text-primary focus:ring-primary" />
+                <input type="checkbox" className="mt-1 w-5 h-5 rounded border-border text-gold focus:ring-gold accent-gold" />
                 <span className="text-foreground">Add scale metrics: # of accounts, $ ARR, team sizes</span>
               </label>
               <label className="flex items-start gap-3 p-3 rounded-lg cursor-pointer hover:bg-muted/50 transition-colors">
-                <input type="checkbox" className="mt-1 w-5 h-5 rounded border-border text-primary focus:ring-primary" />
+                <input type="checkbox" className="mt-1 w-5 h-5 rounded border-border text-gold focus:ring-gold accent-gold" />
                 <span className="text-foreground">Add outcome metrics: % adoption, $ expansion, time savings</span>
               </label>
             </div>
@@ -1855,19 +1867,19 @@ const CharleneLeeReview = () => {
 
             <div className="space-y-2">
               <label className="flex items-start gap-3 p-3 rounded-lg cursor-pointer hover:bg-muted/50 transition-colors">
-                <input type="checkbox" className="mt-1 w-5 h-5 rounded border-border text-primary focus:ring-primary" />
+                <input type="checkbox" className="mt-1 w-5 h-5 rounded border-border text-gold focus:ring-gold accent-gold" />
                 <span className="text-foreground">Decide: break into sub-roles or keep as one section</span>
               </label>
               <label className="flex items-start gap-3 p-3 rounded-lg cursor-pointer hover:bg-muted/50 transition-colors">
-                <input type="checkbox" className="mt-1 w-5 h-5 rounded border-border text-primary focus:ring-primary" />
+                <input type="checkbox" className="mt-1 w-5 h-5 rounded border-border text-gold focus:ring-gold accent-gold" />
                 <span className="text-foreground">Add 2-3 more bullets showing operational breadth</span>
               </label>
               <label className="flex items-start gap-3 p-3 rounded-lg cursor-pointer hover:bg-muted/50 transition-colors">
-                <input type="checkbox" className="mt-1 w-5 h-5 rounded border-border text-primary focus:ring-primary" />
+                <input type="checkbox" className="mt-1 w-5 h-5 rounded border-border text-gold focus:ring-gold accent-gold" />
                 <span className="text-foreground">Rewrite existing 4 bullets with specific metrics</span>
               </label>
               <label className="flex items-start gap-3 p-3 rounded-lg cursor-pointer hover:bg-muted/50 transition-colors">
-                <input type="checkbox" className="mt-1 w-5 h-5 rounded border-border text-primary focus:ring-primary" />
+                <input type="checkbox" className="mt-1 w-5 h-5 rounded border-border text-gold focus:ring-gold accent-gold" />
                 <span className="text-foreground">Show progression across 17 years</span>
               </label>
             </div>
@@ -1885,19 +1897,19 @@ const CharleneLeeReview = () => {
 
             <div className="space-y-2">
               <label className="flex items-start gap-3 p-3 rounded-lg cursor-pointer hover:bg-muted/50 transition-colors">
-                <input type="checkbox" className="mt-1 w-5 h-5 rounded border-border text-primary focus:ring-primary" />
+                <input type="checkbox" className="mt-1 w-5 h-5 rounded border-border text-gold focus:ring-gold accent-gold" />
                 <span className="text-foreground">Review 3-5 target job descriptions</span>
               </label>
               <label className="flex items-start gap-3 p-3 rounded-lg cursor-pointer hover:bg-muted/50 transition-colors">
-                <input type="checkbox" className="mt-1 w-5 h-5 rounded border-border text-primary focus:ring-primary" />
+                <input type="checkbox" className="mt-1 w-5 h-5 rounded border-border text-gold focus:ring-gold accent-gold" />
                 <span className="text-foreground">Add 5-10 operational keywords naturally throughout</span>
               </label>
               <label className="flex items-start gap-3 p-3 rounded-lg cursor-pointer hover:bg-muted/50 transition-colors">
-                <input type="checkbox" className="mt-1 w-5 h-5 rounded border-border text-primary focus:ring-primary" />
+                <input type="checkbox" className="mt-1 w-5 h-5 rounded border-border text-gold focus:ring-gold accent-gold" />
                 <span className="text-foreground">Reorder Core Skills to match target role priority</span>
               </label>
               <label className="flex items-start gap-3 p-3 rounded-lg cursor-pointer hover:bg-muted/50 transition-colors">
-                <input type="checkbox" className="mt-1 w-5 h-5 rounded border-border text-primary focus:ring-primary" />
+                <input type="checkbox" className="mt-1 w-5 h-5 rounded border-border text-gold focus:ring-gold accent-gold" />
                 <span className="text-foreground">Ensure keywords appear in summary, skills, and experience</span>
               </label>
             </div>
@@ -1915,31 +1927,31 @@ const CharleneLeeReview = () => {
 
             <div className="space-y-2">
               <label className="flex items-start gap-3 p-3 rounded-lg cursor-pointer hover:bg-muted/50 transition-colors">
-                <input type="checkbox" className="mt-1 w-5 h-5 rounded border-border text-primary focus:ring-primary" />
+                <input type="checkbox" className="mt-1 w-5 h-5 rounded border-border text-gold focus:ring-gold accent-gold" />
                 <span className="text-foreground">Send to 2-3 trusted colleagues/mentors</span>
               </label>
               <label className="flex items-start gap-3 p-3 rounded-lg cursor-pointer hover:bg-muted/50 transition-colors">
-                <input type="checkbox" className="mt-1 w-5 h-5 rounded border-border text-primary focus:ring-primary" />
+                <input type="checkbox" className="mt-1 w-5 h-5 rounded border-border text-gold focus:ring-gold accent-gold" />
                 <span className="text-foreground">Ask: "Does this read as Operations Manager level?"</span>
               </label>
               <label className="flex items-start gap-3 p-3 rounded-lg cursor-pointer hover:bg-muted/50 transition-colors">
-                <input type="checkbox" className="mt-1 w-5 h-5 rounded border-border text-primary focus:ring-primary" />
+                <input type="checkbox" className="mt-1 w-5 h-5 rounded border-border text-gold focus:ring-gold accent-gold" />
                 <span className="text-foreground">Incorporate feedback</span>
               </label>
               <label className="flex items-start gap-3 p-3 rounded-lg cursor-pointer hover:bg-muted/50 transition-colors">
-                <input type="checkbox" className="mt-1 w-5 h-5 rounded border-border text-primary focus:ring-primary" />
+                <input type="checkbox" className="mt-1 w-5 h-5 rounded border-border text-gold focus:ring-gold accent-gold" />
                 <span className="text-foreground">Print and review on paper</span>
               </label>
               <label className="flex items-start gap-3 p-3 rounded-lg cursor-pointer hover:bg-muted/50 transition-colors">
-                <input type="checkbox" className="mt-1 w-5 h-5 rounded border-border text-primary focus:ring-primary" />
+                <input type="checkbox" className="mt-1 w-5 h-5 rounded border-border text-gold focus:ring-gold accent-gold" />
                 <span className="text-foreground">Read entire resume aloud</span>
               </label>
               <label className="flex items-start gap-3 p-3 rounded-lg cursor-pointer hover:bg-muted/50 transition-colors">
-                <input type="checkbox" className="mt-1 w-5 h-5 rounded border-border text-primary focus:ring-primary" />
+                <input type="checkbox" className="mt-1 w-5 h-5 rounded border-border text-gold focus:ring-gold accent-gold" />
                 <span className="text-foreground">Proofread for typos and consistency</span>
               </label>
               <label className="flex items-start gap-3 p-3 rounded-lg cursor-pointer hover:bg-muted/50 transition-colors">
-                <input type="checkbox" className="mt-1 w-5 h-5 rounded border-border text-primary focus:ring-primary" />
+                <input type="checkbox" className="mt-1 w-5 h-5 rounded border-border text-gold focus:ring-gold accent-gold" />
                 <span className="text-foreground">Save final: Charlene_Lee_Resume_Operations_Final.pdf</span>
               </label>
             </div>
@@ -1954,7 +1966,7 @@ const CharleneLeeReview = () => {
             <p className="text-sm text-muted-foreground mb-3">For each specific job:</p>
             <div className="space-y-2">
               <label className="flex items-start gap-3 p-3 rounded-lg cursor-pointer hover:bg-gold/20 transition-colors">
-                <input type="checkbox" className="mt-1 w-5 h-5 rounded border-border text-primary focus:ring-primary" />
+                <input type="checkbox" className="mt-1 w-5 h-5 rounded border-border text-gold focus:ring-gold accent-gold" />
                 <span className="text-foreground">Read job description, identify top 10 keywords</span>
               </label>
               <label className="flex items-start gap-3 p-3 rounded-lg cursor-pointer hover:bg-gold/20 transition-colors">
