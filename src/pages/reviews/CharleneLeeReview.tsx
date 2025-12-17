@@ -95,9 +95,9 @@ const CharleneLeeReview = () => {
               <p className="text-sm text-muted-foreground mb-2">After Implementing Fixes</p>
               <div className="flex items-end gap-3 mb-3">
                 <div className="flex-1 h-3 bg-muted rounded-full overflow-hidden">
-                  <div className="h-full w-[85%] bg-primary rounded-full"></div>
+                  <div className="h-full w-[85%] bg-gold rounded-full"></div>
                 </div>
-                <span className="text-2xl font-bold text-primary">85%</span>
+                <span className="text-2xl font-bold text-gold">85%</span>
               </div>
               <p className="text-sm text-muted-foreground mb-3">
                 <strong>After implementing the 3 priorities above:</strong> Resume will be 85% ready and competitive for:
@@ -134,8 +134,8 @@ const CharleneLeeReview = () => {
         {/* Top 3 Strengths */}
         <section className="mb-16">
           <div className="flex items-center gap-3 mb-6">
-            <div className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center">
-              <TrendingUp className="w-5 h-5 text-primary" />
+            <div className="w-10 h-10 rounded-full bg-gold/10 flex items-center justify-center">
+              <TrendingUp className="w-5 h-5 text-gold" />
             </div>
             <h2 className="font-heading text-3xl text-foreground">Top 3 Strengths ✅</h2>
           </div>
@@ -144,24 +144,24 @@ const CharleneLeeReview = () => {
             {/* Strength 1 */}
             <div className="bg-card rounded-xl p-6 border border-border">
               <div className="flex items-center gap-3 mb-4">
-                <div className="w-8 h-8 rounded-full bg-primary text-primary-foreground flex items-center justify-center font-bold text-sm">1</div>
+                <div className="w-8 h-8 rounded-full bg-gold text-foreground flex items-center justify-center font-bold text-sm">1</div>
                 <h3 className="text-xl font-semibold text-foreground">Quantified, Impressive Results</h3>
               </div>
               <ul className="space-y-2">
                 <li className="flex items-start gap-3">
-                  <CheckCircle className="w-5 h-5 text-primary mt-0.5 flex-shrink-0" />
+                  <CheckCircle className="w-5 h-5 text-gold mt-0.5 flex-shrink-0" />
                   <span className="text-foreground"><strong>120%+ retention and growth across portfolio</strong></span>
                 </li>
                 <li className="flex items-start gap-3">
-                  <CheckCircle className="w-5 h-5 text-primary mt-0.5 flex-shrink-0" />
+                  <CheckCircle className="w-5 h-5 text-gold mt-0.5 flex-shrink-0" />
                   <span className="text-foreground"><strong>100% client renewals</strong></span>
                 </li>
                 <li className="flex items-start gap-3">
-                  <CheckCircle className="w-5 h-5 text-primary mt-0.5 flex-shrink-0" />
+                  <CheckCircle className="w-5 h-5 text-gold mt-0.5 flex-shrink-0" />
                   <span className="text-foreground"><strong>20% reduction in reporting time</strong></span>
                 </li>
                 <li className="flex items-start gap-3">
-                  <CheckCircle className="w-5 h-5 text-primary mt-0.5 flex-shrink-0" />
+                  <CheckCircle className="w-5 h-5 text-gold mt-0.5 flex-shrink-0" />
                   <span className="text-foreground"><strong>These metrics immediately show you drive business impact and are results-oriented</strong></span>
                 </li>
               </ul>
@@ -170,20 +170,20 @@ const CharleneLeeReview = () => {
             {/* Strength 2 */}
             <div className="bg-card rounded-xl p-6 border border-border">
               <div className="flex items-center gap-3 mb-4">
-                <div className="w-8 h-8 rounded-full bg-primary text-primary-foreground flex items-center justify-center font-bold text-sm">2</div>
+                <div className="w-8 h-8 rounded-full bg-gold text-foreground flex items-center justify-center font-bold text-sm">2</div>
                 <h3 className="text-xl font-semibold text-foreground">Blue-Chip Brand Credibility</h3>
               </div>
               <ul className="space-y-2">
                 <li className="flex items-start gap-3">
-                  <CheckCircle className="w-5 h-5 text-primary mt-0.5 flex-shrink-0" />
+                  <CheckCircle className="w-5 h-5 text-gold mt-0.5 flex-shrink-0" />
                   <span className="text-foreground"><strong>20 years at Microsoft (2005-2025) demonstrates loyalty, progression, and ability to work in complex enterprise environments</strong></span>
                 </li>
                 <li className="flex items-start gap-3">
-                  <CheckCircle className="w-5 h-5 text-primary mt-0.5 flex-shrink-0" />
+                  <CheckCircle className="w-5 h-5 text-gold mt-0.5 flex-shrink-0" />
                   <span className="text-foreground"><strong>Microsoft name instantly builds trust with recruiters</strong></span>
                 </li>
                 <li className="flex items-start gap-3">
-                  <CheckCircle className="w-5 h-5 text-primary mt-0.5 flex-shrink-0" />
+                  <CheckCircle className="w-5 h-5 text-gold mt-0.5 flex-shrink-0" />
                   <span className="text-foreground"><strong>Certification stack (Azure, M365, AI, Security) shows continuous learning</strong></span>
                 </li>
               </ul>
@@ -192,24 +192,24 @@ const CharleneLeeReview = () => {
             {/* Strength 3 */}
             <div className="bg-card rounded-xl p-6 border border-border">
               <div className="flex items-center gap-3 mb-4">
-                <div className="w-8 h-8 rounded-full bg-primary text-primary-foreground flex items-center justify-center font-bold text-sm">3</div>
+                <div className="w-8 h-8 rounded-full bg-gold text-foreground flex items-center justify-center font-bold text-sm">3</div>
                 <h3 className="text-xl font-semibold text-foreground">Clear Cross-Functional Leadership</h3>
               </div>
               <ul className="space-y-2">
                 <li className="flex items-start gap-3">
-                  <CheckCircle className="w-5 h-5 text-primary mt-0.5 flex-shrink-0" />
+                  <CheckCircle className="w-5 h-5 text-gold mt-0.5 flex-shrink-0" />
                   <span className="text-foreground"><strong>Orchestrated Engineering, Delivery, Support teams</strong></span>
                 </li>
                 <li className="flex items-start gap-3">
-                  <CheckCircle className="w-5 h-5 text-primary mt-0.5 flex-shrink-0" />
+                  <CheckCircle className="w-5 h-5 text-gold mt-0.5 flex-shrink-0" />
                   <span className="text-foreground"><strong>Partnered with C-level executives</strong></span>
                 </li>
                 <li className="flex items-start gap-3">
-                  <CheckCircle className="w-5 h-5 text-primary mt-0.5 flex-shrink-0" />
+                  <CheckCircle className="w-5 h-5 text-gold mt-0.5 flex-shrink-0" />
                   <span className="text-foreground"><strong>Coordinated across sales, services, support organizations</strong></span>
                 </li>
                 <li className="flex items-start gap-3">
-                  <CheckCircle className="w-5 h-5 text-primary mt-0.5 flex-shrink-0" />
+                  <CheckCircle className="w-5 h-5 text-gold mt-0.5 flex-shrink-0" />
                   <span className="text-foreground"><strong>Shows you can influence without authority and manage complex stakeholders</strong></span>
                 </li>
               </ul>
@@ -250,8 +250,8 @@ const CharleneLeeReview = () => {
                 <p className="text-foreground italic">"Achieved 100% client renewals while surpassing 120% retention and growth across a high-value portfolio, proving capability in building scalable, long-term engagement strategies (analogous to driver loyalty)."</p>
               </div>
               
-              <div className="bg-primary/5 rounded-lg p-4 border-l-4 border-primary">
-                <p className="text-sm font-semibold text-primary mb-2">✅ Better (Strong):</p>
+              <div className="bg-gold/10 rounded-lg p-4 border-l-4 border-gold">
+                <p className="text-sm font-semibold text-gold mb-2">✅ Better (Strong):</p>
                 <p className="text-foreground italic">"Achieved 100% client renewals while surpassing 120% retention and growth across high-value portfolio of 25+ enterprise accounts worth $15M+ ARR."</p>
               </div>
             </div>
@@ -302,8 +302,8 @@ const CharleneLeeReview = () => {
               <li><strong>Core expertise/specialization</strong></li>
             </ol>
 
-            <div className="bg-primary/5 rounded-lg p-4 border-l-4 border-primary mb-4">
-              <p className="text-sm font-semibold text-primary mb-2">✅ RECOMMENDED REWRITE:</p>
+            <div className="bg-gold/10 rounded-lg p-4 border-l-4 border-gold mb-4">
+              <p className="text-sm font-semibold text-gold mb-2">✅ RECOMMENDED REWRITE:</p>
               <p className="text-foreground">
                 Senior Operations Manager with 20 years at Microsoft, specializing in growth strategy, client retention, and operational excellence. Delivered 120%+ portfolio growth while maintaining 100% client renewals across $15M+ accounts. Expert in data-driven pipeline management, cross-functional team leadership, and strategic forecasting to drive measurable business outcomes.
               </p>
@@ -312,23 +312,23 @@ const CharleneLeeReview = () => {
             <p className="text-foreground font-semibold mb-3">Why this is better:</p>
             <ul className="space-y-2 mb-6">
               <li className="flex items-start gap-2 text-foreground">
-                <CheckCircle className="w-5 h-5 text-primary mt-0.5 flex-shrink-0" />
+                <CheckCircle className="w-5 h-5 text-gold mt-0.5 flex-shrink-0" />
                 <strong>Immediately clear what you do</strong>
               </li>
               <li className="flex items-start gap-2 text-foreground">
-                <CheckCircle className="w-5 h-5 text-primary mt-0.5 flex-shrink-0" />
+                <CheckCircle className="w-5 h-5 text-gold mt-0.5 flex-shrink-0" />
                 <strong>Microsoft brand up front</strong>
               </li>
               <li className="flex items-start gap-2 text-foreground">
-                <CheckCircle className="w-5 h-5 text-primary mt-0.5 flex-shrink-0" />
+                <CheckCircle className="w-5 h-5 text-gold mt-0.5 flex-shrink-0" />
                 <strong>Top metrics in second line</strong>
               </li>
               <li className="flex items-start gap-2 text-foreground">
-                <CheckCircle className="w-5 h-5 text-primary mt-0.5 flex-shrink-0" />
+                <CheckCircle className="w-5 h-5 text-gold mt-0.5 flex-shrink-0" />
                 <strong>Specific expertise without analogies</strong>
               </li>
               <li className="flex items-start gap-2 text-foreground">
-                <CheckCircle className="w-5 h-5 text-primary mt-0.5 flex-shrink-0" />
+                <CheckCircle className="w-5 h-5 text-gold mt-0.5 flex-shrink-0" />
                 <strong>Confident, professional tone</strong>
               </li>
             </ul>
@@ -375,10 +375,6 @@ const CharleneLeeReview = () => {
           <div className="bg-card rounded-xl p-6 border border-border">
             <div className="flex items-center gap-3 mb-4">
               <span className="px-3 py-1 bg-gold/20 text-gold text-xs font-bold rounded-full uppercase tracking-wide">Priority 3 - Medium Impact 🟡</span>
-              <div className="flex items-center gap-2 text-muted-foreground text-sm">
-                <Clock className="w-4 h-4" />
-                <span>Est. Time: 60 minutes</span>
-              </div>
             </div>
             <h3 className="font-heading text-2xl text-foreground mb-4">Add Missing Metrics and Context to Work Experience Bullets</h3>
             
@@ -416,8 +412,8 @@ const CharleneLeeReview = () => {
                   <li>• <strong>What was the outcome? (Adoption %, revenue impact, time savings?)</strong></li>
                 </ul>
 
-                <div className="bg-primary/5 rounded-lg p-4 border-l-4 border-primary">
-                  <p className="text-sm font-semibold text-primary mb-2">✅ Stronger version:</p>
+                <div className="bg-gold/10 rounded-lg p-4 border-l-4 border-gold">
+                  <p className="text-sm font-semibold text-gold mb-2">✅ Stronger version:</p>
                   <p className="text-foreground text-sm">"Partnered with 15+ C-level executives to design strategic adoption roadmaps for $8M+ accounts, achieving 85% feature adoption within 6 months and reducing time-to-value by 40%."</p>
                 </div>
               </div>
@@ -433,8 +429,8 @@ const CharleneLeeReview = () => {
                   <li>• <strong>What was the measurable impact?</strong></li>
                 </ul>
 
-                <div className="bg-primary/5 rounded-lg p-4 border-l-4 border-primary">
-                  <p className="text-sm font-semibold text-primary mb-2">✅ Stronger version:</p>
+                <div className="bg-gold/10 rounded-lg p-4 border-l-4 border-gold">
+                  <p className="text-sm font-semibold text-gold mb-2">✅ Stronger version:</p>
                   <p className="text-foreground text-sm">"Designed and deployed 5 forecasting dashboards used by 40+ sales leaders, improving pipeline visibility and contributing to 15% increase in forecast accuracy."</p>
                 </div>
               </div>
@@ -557,8 +553,8 @@ const CharleneLeeReview = () => {
         {/* Detailed Section Analysis */}
         <section className="mb-16">
           <div className="flex items-center gap-3 mb-6">
-            <div className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center">
-              <BookOpen className="w-5 h-5 text-primary" />
+            <div className="w-10 h-10 rounded-full bg-gold/10 flex items-center justify-center">
+              <BookOpen className="w-5 h-5 text-gold" />
             </div>
             <h2 className="font-heading text-3xl text-foreground">Detailed Section Analysis</h2>
           </div>
@@ -1722,14 +1718,24 @@ const CharleneLeeReview = () => {
               <Lightbulb className="w-5 h-5 text-gold" />
               <h3 className="text-lg font-semibold text-foreground">Annotated Resume Reference</h3>
             </div>
-            <p className="text-muted-foreground mb-4">
-              Below is your original resume with annotations showing exactly where to make changes. Use this as a visual guide while implementing the action items.
+            <p className="text-foreground mb-4">
+              Below is your original resume. Use this as a reference while implementing the action items above.
             </p>
-            <div className="bg-background rounded-lg p-4 border border-border">
-              <p className="text-sm text-muted-foreground italic text-center">
-                [Annotated resume image will be added here - Please provide the annotated version of the resume]
-              </p>
+            <div className="bg-background rounded-lg border border-border overflow-hidden">
+              <iframe 
+                src="/reviews/charlene-lee-resume.pdf" 
+                className="w-full h-[600px]"
+                title="Charlene Lee Resume"
+              />
             </div>
+            <a 
+              href="/reviews/charlene-lee-resume.pdf" 
+              download 
+              className="inline-flex items-center gap-2 mt-4 px-4 py-2 bg-gold text-foreground rounded-lg hover:bg-gold/90 transition-colors font-medium"
+            >
+              <Download className="w-4 h-4" />
+              Download Resume PDF
+            </a>
           </div>
 
           {/* Quick Wins - Day 1 */}
