@@ -9,6 +9,7 @@ import NotFound from "./pages/NotFound";
 import AdminLogin from "./pages/AdminLogin";
 import AdminReviews from "./pages/AdminReviews";
 import ClientReviewGate from "./pages/ClientReviewGate";
+import CharleneLeeReview from "./pages/reviews/CharleneLeeReview";
 
 const queryClient = new QueryClient();
 
