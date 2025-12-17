@@ -1970,19 +1970,19 @@ const CharleneLeeReview = () => {
                 <span className="text-foreground">Read job description, identify top 10 keywords</span>
               </label>
               <label className="flex items-start gap-3 p-3 rounded-lg cursor-pointer hover:bg-gold/20 transition-colors">
-                <input type="checkbox" className="mt-1 w-5 h-5 rounded border-border text-primary focus:ring-primary" />
+                <input type="checkbox" className="mt-1 w-5 h-5 rounded border-border text-gold focus:ring-gold accent-gold" />
                 <span className="text-foreground">Adjust summary to include 2-3 of their keywords</span>
               </label>
               <label className="flex items-start gap-3 p-3 rounded-lg cursor-pointer hover:bg-gold/20 transition-colors">
-                <input type="checkbox" className="mt-1 w-5 h-5 rounded border-border text-primary focus:ring-primary" />
+                <input type="checkbox" className="mt-1 w-5 h-5 rounded border-border text-gold focus:ring-gold accent-gold" />
                 <span className="text-foreground">Reorder skills to match their priorities</span>
               </label>
               <label className="flex items-start gap-3 p-3 rounded-lg cursor-pointer hover:bg-gold/20 transition-colors">
-                <input type="checkbox" className="mt-1 w-5 h-5 rounded border-border text-primary focus:ring-primary" />
+                <input type="checkbox" className="mt-1 w-5 h-5 rounded border-border text-gold focus:ring-gold accent-gold" />
                 <span className="text-foreground">Add 1-2 relevant keywords to experience bullets</span>
               </label>
               <label className="flex items-start gap-3 p-3 rounded-lg cursor-pointer hover:bg-gold/20 transition-colors">
-                <input type="checkbox" className="mt-1 w-5 h-5 rounded border-border text-primary focus:ring-primary" />
+                <input type="checkbox" className="mt-1 w-5 h-5 rounded border-border text-gold focus:ring-gold accent-gold" />
                 <span className="text-foreground">Save as: Charlene_Lee_Resume_[CompanyName].pdf</span>
               </label>
             </div>
@@ -1994,8 +1994,8 @@ const CharleneLeeReview = () => {
         {/* Closing Thoughts */}
         <section className="mb-16">
           <div className="flex items-center gap-3 mb-6">
-            <div className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center">
-              <Lightbulb className="w-5 h-5 text-primary" />
+            <div className="w-10 h-10 rounded-full bg-gold/10 flex items-center justify-center">
+              <Lightbulb className="w-5 h-5 text-gold" />
             </div>
             <h2 className="font-heading text-3xl text-foreground">Closing Thoughts</h2>
           </div>
