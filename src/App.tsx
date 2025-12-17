@@ -6,6 +6,9 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Index from "./pages/Index";
 import IndexZhTw from "./pages/IndexZhTw";
 import NotFound from "./pages/NotFound";
+import AdminLogin from "./pages/AdminLogin";
+import AdminReviews from "./pages/AdminReviews";
+import ClientReviewGate from "./pages/ClientReviewGate";
 
 const queryClient = new QueryClient();
 
@@ -18,6 +21,9 @@ const App = () => (
         <Routes>
           <Route path="/" element={<Index />} />
           <Route path="/zh-tw" element={<IndexZhTw />} />
+          <Route path="/admin/login" element={<AdminLogin />} />
+          <Route path="/admin/reviews" element={<AdminReviews />} />
+          <Route path="/review/:clientId" element={<ClientReviewGate />} />
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
           <Route path="*" element={<NotFound />} />
         </Routes>
