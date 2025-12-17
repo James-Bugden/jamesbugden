@@ -518,7 +518,7 @@ const CharleneLeeReview = () => {
           {/* LOW IMPACT */}
           <div>
             <div className="flex items-center gap-3 mb-4">
-              <span className="px-3 py-1 bg-primary/10 text-primary text-xs font-bold rounded-full uppercase tracking-wide">Low Impact 🟢</span>
+              <span className="px-3 py-1 bg-gold/10 text-gold text-xs font-bold rounded-full uppercase tracking-wide">Low Impact 🟢</span>
               <span className="text-foreground font-semibold">Polish</span>
             </div>
 
@@ -568,8 +568,8 @@ const CharleneLeeReview = () => {
 
             <div className="grid md:grid-cols-2 gap-6 mb-6">
               <div>
-                <p className="text-sm font-semibold text-primary mb-3 flex items-center gap-2">
-                  <CheckCircle className="w-4 h-4" /> What's Working
+                <p className="text-sm font-semibold text-foreground mb-3 flex items-center gap-2">
+                  <CheckCircle className="w-4 h-4 text-gold" /> What's Working
                 </p>
                 <ul className="space-y-2 text-sm text-foreground">
                   <li>• <strong>Complete contact information:</strong> Phone, email, location, LinkedIn all present</li>
@@ -626,8 +626,8 @@ const CharleneLeeReview = () => {
 
             <div className="grid md:grid-cols-2 gap-6 mb-6">
               <div>
-                <p className="text-sm font-semibold text-primary mb-3 flex items-center gap-2">
-                  <CheckCircle className="w-4 h-4" /> What's Working
+                <p className="text-sm font-semibold text-foreground mb-3 flex items-center gap-2">
+                  <CheckCircle className="w-4 h-4 text-gold" /> What's Working
                 </p>
                 <ul className="space-y-2 text-sm text-foreground">
                   <li>• <strong>Single-column, ATS-friendly layout:</strong> No tables, graphics, or text boxes that would break parsing</li>
@@ -678,8 +678,8 @@ const CharleneLeeReview = () => {
 
             <div className="grid md:grid-cols-2 gap-6 mb-6">
               <div>
-                <p className="text-sm font-semibold text-primary mb-3 flex items-center gap-2">
-                  <CheckCircle className="w-4 h-4" /> What's Working
+                <p className="text-sm font-semibold text-foreground mb-3 flex items-center gap-2">
+                  <CheckCircle className="w-4 h-4 text-gold" /> What's Working
                 </p>
                 <ul className="space-y-2 text-sm text-foreground">
                   <li>• <strong>Quantified achievements mentioned:</strong> 120%+ retention, 100% renewals</li>
@@ -713,8 +713,8 @@ const CharleneLeeReview = () => {
 
             <div className="grid md:grid-cols-2 gap-6 mb-6">
               <div>
-                <p className="text-sm font-semibold text-primary mb-3 flex items-center gap-2">
-                  <CheckCircle className="w-4 h-4" /> What's Working
+                <p className="text-sm font-semibold text-foreground mb-3 flex items-center gap-2">
+                  <CheckCircle className="w-4 h-4 text-gold" /> What's Working
                 </p>
                 <ul className="space-y-2 text-sm text-foreground">
                   <li>• <strong>Smart to have this section:</strong> Pulls your best wins to the top where recruiters will definitely see them</li>
@@ -745,8 +745,8 @@ const CharleneLeeReview = () => {
                   <li>• <strong>Missing:</strong> How many clients? What $ value?</li>
                 </ul>
 
-                <div className="bg-primary/5 rounded-lg p-4 border-l-4 border-primary mb-3">
-                  <p className="text-sm font-semibold text-primary mb-2">✅ Bullet 1 Rewrite:</p>
+                <div className="bg-gold/10 rounded-lg p-4 border-l-4 border-gold mb-3">
+                  <p className="text-sm font-semibold text-gold mb-2">✅ Bullet 1 Rewrite:</p>
                   <p className="text-foreground text-sm">Supply Retention & Growth: Achieved 100% client renewals and 120%+ portfolio growth across [NUMBER] enterprise accounts worth [$VALUE] ARR, implementing proactive engagement strategies and data-driven health scoring to reduce churn risk.</p>
                 </div>
 
@@ -772,8 +772,8 @@ const CharleneLeeReview = () => {
                   <li>• <strong>Missing:</strong> How many accounts acquired? From what starting point?</li>
                 </ul>
 
-                <div className="bg-primary/5 rounded-lg p-4 border-l-4 border-primary mb-3">
-                  <p className="text-sm font-semibold text-primary mb-2">✅ Bullet 2 Rewrite:</p>
+                <div className="bg-gold/10 rounded-lg p-4 border-l-4 border-gold mb-3">
+                  <p className="text-sm font-semibold text-gold mb-2">✅ Bullet 2 Rewrite:</p>
                   <p className="text-foreground text-sm">Acquisition Strategy & Growth: Exceeded 120% new account acquisition target, expanding enterprise portfolio from [NUMBER] to [NUMBER] clients ([%] growth) in [TIMEFRAME] through data-driven funnel segmentation and targeted outreach.</p>
                 </div>
 
@@ -801,8 +801,8 @@ const CharleneLeeReview = () => {
                   <li>• <strong>Missing:</strong> What decisions were made? What changed?</li>
                 </ul>
 
-                <div className="bg-primary/5 rounded-lg p-4 border-l-4 border-primary mb-3">
-                  <p className="text-sm font-semibold text-primary mb-2">✅ Bullet 3 Rewrite:</p>
+                <div className="bg-gold/10 rounded-lg p-4 border-l-4 border-gold mb-3">
+                  <p className="text-sm font-semibold text-gold mb-2">✅ Bullet 3 Rewrite:</p>
                   <p className="text-foreground text-sm">Business Reviews & Strategic Planning: Conducted [FREQUENCY] Business Reviews for C-level executives across [NUMBER] accounts, utilizing KPI dashboards and usage analytics to identify [$VALUE] in expansion opportunities and inform product roadmap priorities.</p>
                 </div>
 
@@ -822,8 +822,8 @@ const CharleneLeeReview = () => {
                 <p className="text-sm font-semibold text-foreground mb-2">Current Bullet 4 (pretty good, just needs minor refinement):</p>
                 <p className="text-foreground italic mb-3">"Operational Excellence: Delivered operational improvements that reduced reporting time by 20%, increasing agility and data-driven responsiveness for customer-facing teams."</p>
 
-                <div className="bg-primary/5 rounded-lg p-4 border-l-4 border-primary mb-3">
-                  <p className="text-sm font-semibold text-primary mb-2">✅ Slight improvement:</p>
+                <div className="bg-gold/10 rounded-lg p-4 border-l-4 border-gold mb-3">
+                  <p className="text-sm font-semibold text-gold mb-2">✅ Slight improvement:</p>
                   <p className="text-foreground text-sm">Operational Excellence: Automated reporting workflows and optimized data pipelines, reducing reporting time by 20% for [NUMBER] customer-facing team members and enabling real-time business intelligence.</p>
                 </div>
 
@@ -841,8 +841,8 @@ const CharleneLeeReview = () => {
                 <p className="text-sm font-semibold text-foreground mb-2">Current Bullet 5 (also decent, just tighten):</p>
                 <p className="text-foreground italic mb-3">"Cross-functional Leadership: Coordinated delivery, engineering, and support teams to co-create and execute complex adoption strategies, ensuring project delivery within scope and timeline."</p>
 
-                <div className="bg-primary/5 rounded-lg p-4 border-l-4 border-primary mb-3">
-                  <p className="text-sm font-semibold text-primary mb-2">✅ Slight improvement:</p>
+                <div className="bg-gold/10 rounded-lg p-4 border-l-4 border-gold mb-3">
+                  <p className="text-sm font-semibold text-gold mb-2">✅ Slight improvement:</p>
                   <p className="text-foreground text-sm">Cross-functional Project Leadership: Led [NUMBER] cross-functional initiatives across Engineering, Delivery, and Support teams, delivering complex adoption projects [%] on-time and within budget, resulting in [%] customer satisfaction.</p>
                 </div>
 
@@ -874,8 +874,8 @@ const CharleneLeeReview = () => {
 
             <div className="grid md:grid-cols-2 gap-6 mb-6">
               <div>
-                <p className="text-sm font-semibold text-primary mb-3 flex items-center gap-2">
-                  <CheckCircle className="w-4 h-4" /> What's Working
+                <p className="text-sm font-semibold text-foreground mb-3 flex items-center gap-2">
+                  <CheckCircle className="w-4 h-4 text-gold" /> What's Working
                 </p>
                 <ul className="space-y-2 text-sm text-foreground">
                   <li>• <strong>Well-organized:</strong> Logically grouped skills, easy to scan</li>
@@ -941,8 +941,8 @@ const CharleneLeeReview = () => {
 
             <div className="grid md:grid-cols-2 gap-6 mb-6">
               <div>
-                <p className="text-sm font-semibold text-primary mb-3 flex items-center gap-2">
-                  <CheckCircle className="w-4 h-4" /> What's Working Overall
+                <p className="text-sm font-semibold text-foreground mb-3 flex items-center gap-2">
+                  <CheckCircle className="w-4 h-4 text-gold" /> What's Working Overall
                 </p>
                 <ul className="space-y-2 text-sm text-foreground">
                   <li>• <strong>20 years at Microsoft:</strong> Shows loyalty, progression, ability to work in complex enterprise environment</li>
@@ -985,8 +985,8 @@ const CharleneLeeReview = () => {
                     <li>• Too generic - could apply to anyone in CS</li>
                   </ul>
 
-                  <div className="bg-primary/5 rounded-lg p-4 border-l-4 border-primary mb-3">
-                    <p className="text-sm font-semibold text-primary mb-2">✅ Rewrite:</p>
+                  <div className="bg-gold/10 rounded-lg p-4 border-l-4 border-gold mb-3">
+                    <p className="text-sm font-semibold text-gold mb-2">✅ Rewrite:</p>
                     <p className="text-foreground text-sm">Partnered with [NUMBER] C-level executives across [NUMBER] enterprise accounts ([$VALUE] ARR) to design strategic modernization roadmaps, achieving [%] feature adoption within [TIMEFRAME] and reducing time-to-value by [%].</p>
                   </div>
 
@@ -1008,8 +1008,8 @@ const CharleneLeeReview = () => {
                   <p className="text-sm font-semibold text-foreground mb-2">Bullet 2 (actually pretty good! Minor refinement):</p>
                   <p className="text-foreground italic mb-3">"Achieved 100% client renewals while surpassing 120% retention and growth, applying proactive, data-informed engagement strategies to sustain loyalty and expansion."</p>
 
-                  <div className="bg-primary/5 rounded-lg p-4 border-l-4 border-primary mb-3">
-                    <p className="text-sm font-semibold text-primary mb-2">✅ Rewrite:</p>
+                  <div className="bg-gold/10 rounded-lg p-4 border-l-4 border-gold mb-3">
+                    <p className="text-sm font-semibold text-gold mb-2">✅ Rewrite:</p>
                     <p className="text-foreground text-sm">Achieved 100% client renewals ([NUMBER]/[NUMBER] accounts) while exceeding 120% retention and growth targets, implementing proactive health scoring and engagement strategies to drive [$VALUE] in expansion revenue.</p>
                   </div>
 
@@ -1035,8 +1035,8 @@ const CharleneLeeReview = () => {
                     <li>• "Identify risks and pinpoint opportunities" - vague, what decisions resulted?</li>
                   </ul>
 
-                  <div className="bg-primary/5 rounded-lg p-4 border-l-4 border-primary mb-3">
-                    <p className="text-sm font-semibold text-primary mb-2">✅ Rewrite:</p>
+                  <div className="bg-gold/10 rounded-lg p-4 border-l-4 border-gold mb-3">
+                    <p className="text-sm font-semibold text-gold mb-2">✅ Rewrite:</p>
                     <p className="text-foreground text-sm">Conducted [FREQUENCY] Business Reviews for [NUMBER] enterprise accounts, utilizing KPI dashboards and usage analytics to identify churn risks and capture [$VALUE] in upsell opportunities, resulting in [%] increase in average account value.</p>
                   </div>
 
@@ -1064,8 +1064,8 @@ const CharleneLeeReview = () => {
                     <li>• "Measurable business impact" - but no actual measurements given!</li>
                   </ul>
 
-                  <div className="bg-primary/5 rounded-lg p-4 border-l-4 border-primary mb-3">
-                    <p className="text-sm font-semibold text-primary mb-2">✅ Rewrite:</p>
+                  <div className="bg-gold/10 rounded-lg p-4 border-l-4 border-gold mb-3">
+                    <p className="text-sm font-semibold text-gold mb-2">✅ Rewrite:</p>
                     <p className="text-foreground text-sm">Led [NUMBER] cross-functional transformation projects across Engineering, Delivery, and Support teams ([NUMBER] people per project), delivering [%] on-time completion rate and achieving [%] improvement in customer onboarding time.</p>
                   </div>
 
@@ -1088,8 +1088,8 @@ const CharleneLeeReview = () => {
               
               <div className="grid md:grid-cols-2 gap-6 mb-6">
                 <div>
-                  <p className="text-sm font-semibold text-primary mb-3 flex items-center gap-2">
-                    <CheckCircle className="w-4 h-4" /> What's Working
+                  <p className="text-sm font-semibold text-foreground mb-3 flex items-center gap-2">
+                    <CheckCircle className="w-4 h-4 text-gold" /> What's Working
                   </p>
                   <ul className="space-y-2 text-sm text-foreground">
                     <li>• <strong>Shows longevity:</strong> 17 years at Microsoft before moving to CS role</li>
@@ -1124,8 +1124,8 @@ const CharleneLeeReview = () => {
                     <li>• No metrics or impact shown</li>
                   </ul>
 
-                  <div className="bg-primary/5 rounded-lg p-4 border-l-4 border-primary mb-3">
-                    <p className="text-sm font-semibold text-primary mb-2">✅ Rewrite:</p>
+                  <div className="bg-gold/10 rounded-lg p-4 border-l-4 border-gold mb-3">
+                    <p className="text-sm font-semibold text-gold mb-2">✅ Rewrite:</p>
                     <p className="text-foreground text-sm">Designed and deployed [NUMBER] forecasting dashboards tracking [$VALUE] pipeline, used by [NUMBER] sales leaders to improve forecast accuracy by [%] and reduce sales cycle time by [NUMBER] days.</p>
                   </div>
 
@@ -1154,8 +1154,8 @@ const CharleneLeeReview = () => {
                     <li>• "High-impact operational teams" - which teams? How many people?</li>
                   </ul>
 
-                  <div className="bg-primary/5 rounded-lg p-4 border-l-4 border-primary mb-3">
-                    <p className="text-sm font-semibold text-primary mb-2">✅ Rewrite:</p>
+                  <div className="bg-gold/10 rounded-lg p-4 border-l-4 border-gold mb-3">
+                    <p className="text-sm font-semibold text-gold mb-2">✅ Rewrite:</p>
                     <p className="text-foreground text-sm">Managed Business Rhythm (RoB) processes for [NUMBER] operational teams ([NUMBER] people), aligning strategic priorities across sales, services, and support organizations and improving cross-team collaboration efficiency by [%].</p>
                   </div>
 
@@ -1174,8 +1174,8 @@ const CharleneLeeReview = () => {
                   <p className="text-sm font-semibold text-foreground mb-2">Bullet 3 (pretty good! Just add scale):</p>
                   <p className="text-foreground italic mb-3">"Drove Operational Excellence improvements that reduced reporting time by 20%, directly increasing agility and data-driven responsiveness for customer-facing teams."</p>
 
-                  <div className="bg-primary/5 rounded-lg p-4 border-l-4 border-primary mb-3">
-                    <p className="text-sm font-semibold text-primary mb-2">✅ Rewrite:</p>
+                  <div className="bg-gold/10 rounded-lg p-4 border-l-4 border-gold mb-3">
+                    <p className="text-sm font-semibold text-gold mb-2">✅ Rewrite:</p>
                     <p className="text-foreground text-sm">Drove Operational Excellence improvements by automating manual reporting processes, reducing reporting time by 20% for [NUMBER] customer-facing team members and enabling real-time business intelligence dashboards.</p>
                   </div>
 
@@ -1201,8 +1201,8 @@ const CharleneLeeReview = () => {
                     <li>• Could be deleted entirely without losing anything</li>
                   </ul>
 
-                  <div className="bg-primary/5 rounded-lg p-4 border-l-4 border-primary mb-3">
-                    <p className="text-sm font-semibold text-primary mb-2">✅ Rewrite:</p>
+                  <div className="bg-gold/10 rounded-lg p-4 border-l-4 border-gold mb-3">
+                    <p className="text-sm font-semibold text-gold mb-2">✅ Rewrite:</p>
                     <p className="text-foreground text-sm">Led operational process redesign across sales, services, and support teams, consolidating [NUMBER] fragmented workflows into [NUMBER] standardized processes and reducing handoff errors by [%].</p>
                   </div>
 
@@ -1397,8 +1397,8 @@ const CharleneLeeReview = () => {
               </ul>
             </div>
             
-            <div className="bg-primary/5 rounded-lg p-4 border-l-4 border-primary mb-4">
-              <p className="text-sm font-semibold text-primary mb-2">AFTER ✅</p>
+            <div className="bg-gold/10 rounded-lg p-4 border-l-4 border-gold mb-4">
+              <p className="text-sm font-semibold text-gold mb-2">AFTER ✅</p>
               <p className="text-foreground text-sm italic">
                 Senior Operations Manager with 20 years at Microsoft, driving growth strategy, client retention, and operational excellence. Delivered 120%+ portfolio growth with 100% renewals across [$VALUE] enterprise accounts. Expert in data-driven pipeline management, cross-functional team leadership, and strategic forecasting to achieve measurable business outcomes.
               </p>
@@ -1437,8 +1437,8 @@ const CharleneLeeReview = () => {
               </ul>
             </div>
             
-            <div className="bg-primary/5 rounded-lg p-4 border-l-4 border-primary mb-4">
-              <p className="text-sm font-semibold text-primary mb-2">AFTER ✅</p>
+            <div className="bg-gold/10 rounded-lg p-4 border-l-4 border-gold mb-4">
+              <p className="text-sm font-semibold text-gold mb-2">AFTER ✅</p>
               <p className="text-foreground text-sm italic">
                 Acquisition Strategy & Growth: Exceeded 120% new account acquisition target, expanding enterprise portfolio from [NUMBER] to [NUMBER] clients ([%] growth) in [TIMEFRAME] through data-driven funnel segmentation and targeted outreach.
               </p>
@@ -1476,8 +1476,8 @@ const CharleneLeeReview = () => {
               </ul>
             </div>
             
-            <div className="bg-primary/5 rounded-lg p-4 border-l-4 border-primary mb-4">
-              <p className="text-sm font-semibold text-primary mb-2">AFTER ✅</p>
+            <div className="bg-gold/10 rounded-lg p-4 border-l-4 border-gold mb-4">
+              <p className="text-sm font-semibold text-gold mb-2">AFTER ✅</p>
               <p className="text-foreground text-sm italic">
                 Partnered with [NUMBER] C-level executives across [NUMBER] enterprise accounts ([$VALUE] ARR) to design strategic modernization roadmaps, achieving [%] feature adoption within [TIMEFRAME] and reducing time-to-value by [%].
               </p>
@@ -1721,29 +1721,31 @@ const CharleneLeeReview = () => {
             <p className="text-foreground mb-4">
               Below is your original resume. Use this as a reference while implementing the action items above.
             </p>
-            <div className="bg-background rounded-lg border border-border overflow-hidden">
-              <iframe 
-                src="/reviews/charlene-lee-resume.pdf" 
-                className="w-full h-[600px]"
-                title="Charlene Lee Resume"
-              />
-            </div>
+            <a 
+              href="/reviews/charlene-lee-resume.pdf" 
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center gap-2 px-4 py-2 bg-gold text-foreground rounded-lg hover:bg-gold/90 transition-colors font-medium"
+            >
+              <FileText className="w-4 h-4" />
+              View Resume PDF
+            </a>
             <a 
               href="/reviews/charlene-lee-resume.pdf" 
               download 
-              className="inline-flex items-center gap-2 mt-4 px-4 py-2 bg-gold text-foreground rounded-lg hover:bg-gold/90 transition-colors font-medium"
+              className="inline-flex items-center gap-2 ml-3 px-4 py-2 bg-muted text-foreground rounded-lg hover:bg-muted/80 transition-colors font-medium"
             >
               <Download className="w-4 h-4" />
-              Download Resume PDF
+              Download
             </a>
           </div>
 
           {/* Quick Wins - Day 1 */}
           <div className="bg-card rounded-xl p-6 mb-6 border border-border">
             <div className="flex items-center gap-3 mb-4">
-              <div className="w-8 h-8 rounded-full bg-primary text-primary-foreground flex items-center justify-center text-sm font-bold">1</div>
+              <div className="w-8 h-8 rounded-full bg-gold text-foreground flex items-center justify-center text-sm font-bold">1</div>
               <div>
-                <h3 className="text-lg font-semibold text-foreground">Quick Wins - Day 1 (10 min)</h3>
+                <h3 className="text-lg font-semibold text-foreground">Quick Wins - Day 1</h3>
                 <p className="text-sm text-muted-foreground">Do these 4 changes immediately for instant improvement:</p>
               </div>
             </div>
@@ -1782,15 +1784,15 @@ const CharleneLeeReview = () => {
               </label>
             </div>
 
-            <p className="text-sm text-primary font-medium mt-4">Result: Instantly more confident, professional presentation</p>
+            <p className="text-sm text-gold font-medium mt-4">Result: Instantly more confident, professional presentation</p>
           </div>
 
           {/* Day 2 */}
           <div className="bg-card rounded-xl p-6 mb-6 border border-border">
             <div className="flex items-center gap-3 mb-4">
-              <div className="w-8 h-8 rounded-full bg-primary text-primary-foreground flex items-center justify-center text-sm font-bold">2</div>
+              <div className="w-8 h-8 rounded-full bg-gold text-foreground flex items-center justify-center text-sm font-bold">2</div>
               <div>
-                <h3 className="text-lg font-semibold text-foreground">Day 1: Core Content (2 hours)</h3>
+                <h3 className="text-lg font-semibold text-foreground">Day 1: Core Content</h3>
                 <p className="text-sm text-muted-foreground">Summary & Key Achievements</p>
               </div>
             </div>
@@ -1818,9 +1820,9 @@ const CharleneLeeReview = () => {
           {/* Day 3 */}
           <div className="bg-card rounded-xl p-6 mb-6 border border-border">
             <div className="flex items-center gap-3 mb-4">
-              <div className="w-8 h-8 rounded-full bg-primary text-primary-foreground flex items-center justify-center text-sm font-bold">3</div>
+              <div className="w-8 h-8 rounded-full bg-gold text-foreground flex items-center justify-center text-sm font-bold">3</div>
               <div>
-                <h3 className="text-lg font-semibold text-foreground">Day 2: Work Experience - Recent Role (2 hours)</h3>
+                <h3 className="text-lg font-semibold text-foreground">Day 2: Work Experience - Recent Role</h3>
                 <p className="text-sm text-muted-foreground">Customer Success Account Manager (2022-2025)</p>
               </div>
             </div>
@@ -1844,9 +1846,9 @@ const CharleneLeeReview = () => {
           {/* Day 4 */}
           <div className="bg-card rounded-xl p-6 mb-6 border border-border">
             <div className="flex items-center gap-3 mb-4">
-              <div className="w-8 h-8 rounded-full bg-primary text-primary-foreground flex items-center justify-center text-sm font-bold">4</div>
+              <div className="w-8 h-8 rounded-full bg-gold text-foreground flex items-center justify-center text-sm font-bold">4</div>
               <div>
-                <h3 className="text-lg font-semibold text-foreground">Day 3: Work Experience - Operations Role (2 hours)</h3>
+                <h3 className="text-lg font-semibold text-foreground">Day 3: Work Experience - Operations Role</h3>
                 <p className="text-sm text-muted-foreground">Business Excellence Operations (2005-2022)</p>
               </div>
             </div>
@@ -1874,7 +1876,7 @@ const CharleneLeeReview = () => {
           {/* Day 5 - ATS Optimization */}
           <div className="bg-card rounded-xl p-6 mb-6 border border-border">
             <div className="flex items-center gap-3 mb-4">
-              <div className="w-8 h-8 rounded-full bg-primary text-primary-foreground flex items-center justify-center text-sm font-bold">5</div>
+              <div className="w-8 h-8 rounded-full bg-gold text-foreground flex items-center justify-center text-sm font-bold">5</div>
               <div>
                 <h3 className="text-lg font-semibold text-foreground">Day 4: ATS Optimization & Skills</h3>
                 <p className="text-sm text-muted-foreground">Keyword Enhancement</p>
@@ -1904,7 +1906,7 @@ const CharleneLeeReview = () => {
           {/* Day 6 - Review & Polish */}
           <div className="bg-card rounded-xl p-6 mb-6 border border-border">
             <div className="flex items-center gap-3 mb-4">
-              <div className="w-8 h-8 rounded-full bg-primary text-primary-foreground flex items-center justify-center text-sm font-bold">6</div>
+              <div className="w-8 h-8 rounded-full bg-gold text-foreground flex items-center justify-center text-sm font-bold">6</div>
               <div>
                 <h3 className="text-lg font-semibold text-foreground">Day 5: Review & Polish</h3>
                 <p className="text-sm text-muted-foreground">Peer Review & Final Check</p>
