@@ -158,19 +158,19 @@ const CharleneLeeReview = () => {
               <ul className="space-y-2">
                 <li className="flex items-start gap-3">
                   <CheckCircle className="w-5 h-5 text-gold mt-0.5 flex-shrink-0" />
-                  <span className="text-foreground"><strong>120%+ retention and growth across portfolio</strong></span>
+                  <span className="text-foreground">120%+ retention and growth across portfolio</span>
                 </li>
                 <li className="flex items-start gap-3">
                   <CheckCircle className="w-5 h-5 text-gold mt-0.5 flex-shrink-0" />
-                  <span className="text-foreground"><strong>100% client renewals</strong></span>
+                  <span className="text-foreground">100% client renewals</span>
                 </li>
                 <li className="flex items-start gap-3">
                   <CheckCircle className="w-5 h-5 text-gold mt-0.5 flex-shrink-0" />
-                  <span className="text-foreground"><strong>20% reduction in reporting time</strong></span>
+                  <span className="text-foreground">20% reduction in reporting time</span>
                 </li>
                 <li className="flex items-start gap-3">
                   <CheckCircle className="w-5 h-5 text-gold mt-0.5 flex-shrink-0" />
-                  <span className="text-foreground"><strong>These metrics immediately show you drive business impact and are results-oriented</strong></span>
+                  <span className="text-foreground">These metrics immediately show you drive business impact and are results-oriented</span>
                 </li>
               </ul>
             </div>
@@ -184,15 +184,15 @@ const CharleneLeeReview = () => {
               <ul className="space-y-2">
                 <li className="flex items-start gap-3">
                   <CheckCircle className="w-5 h-5 text-gold mt-0.5 flex-shrink-0" />
-                  <span className="text-foreground"><strong>20 years at Microsoft (2005-2025) demonstrates loyalty, progression, and ability to work in complex enterprise environments</strong></span>
+                  <span className="text-foreground">20 years at Microsoft (2005-2025) demonstrates loyalty, progression, and ability to work in complex enterprise environments</span>
                 </li>
                 <li className="flex items-start gap-3">
                   <CheckCircle className="w-5 h-5 text-gold mt-0.5 flex-shrink-0" />
-                  <span className="text-foreground"><strong>Microsoft name instantly builds trust with recruiters</strong></span>
+                  <span className="text-foreground">Microsoft name instantly builds trust with recruiters</span>
                 </li>
                 <li className="flex items-start gap-3">
                   <CheckCircle className="w-5 h-5 text-gold mt-0.5 flex-shrink-0" />
-                  <span className="text-foreground"><strong>Certification stack (Azure, M365, AI, Security) shows continuous learning</strong></span>
+                  <span className="text-foreground">Certification stack (Azure, M365, AI, Security) shows continuous learning</span>
                 </li>
               </ul>
             </div>
@@ -206,19 +206,19 @@ const CharleneLeeReview = () => {
               <ul className="space-y-2">
                 <li className="flex items-start gap-3">
                   <CheckCircle className="w-5 h-5 text-gold mt-0.5 flex-shrink-0" />
-                  <span className="text-foreground"><strong>Orchestrated Engineering, Delivery, Support teams</strong></span>
+                  <span className="text-foreground">Orchestrated Engineering, Delivery, Support teams</span>
                 </li>
                 <li className="flex items-start gap-3">
                   <CheckCircle className="w-5 h-5 text-gold mt-0.5 flex-shrink-0" />
-                  <span className="text-foreground"><strong>Partnered with C-level executives</strong></span>
+                  <span className="text-foreground">Partnered with C-level executives</span>
                 </li>
                 <li className="flex items-start gap-3">
                   <CheckCircle className="w-5 h-5 text-gold mt-0.5 flex-shrink-0" />
-                  <span className="text-foreground"><strong>Coordinated across sales, services, support organizations</strong></span>
+                  <span className="text-foreground">Coordinated across sales, services, support organizations</span>
                 </li>
                 <li className="flex items-start gap-3">
                   <CheckCircle className="w-5 h-5 text-gold mt-0.5 flex-shrink-0" />
-                  <span className="text-foreground"><strong>Shows you can influence without authority and manage complex stakeholders</strong></span>
+                  <span className="text-foreground">Shows you can influence without authority and manage complex stakeholders</span>
                 </li>
               </ul>
             </div>
