@@ -1720,43 +1720,49 @@ const CharleneLeeReview = () => {
             <h2 className="font-heading text-3xl text-foreground">Action Plan</h2>
           </div>
 
-          {/* Annotated Resume Section */}
-          <div className="bg-gold/10 rounded-xl p-6 mb-8 border border-gold/20">
-            <div className="flex items-center gap-3 mb-4">
+          {/* Before & After Comparison */}
+          <div className="mb-8">
+            <div className="flex items-center gap-3 mb-6">
               <Lightbulb className="w-5 h-5 text-gold" />
-              <h3 className="text-lg font-semibold text-foreground">Annotated Resume Reference</h3>
-            </div>
-            <p className="text-foreground mb-4">
-              Your original resume for reference while implementing the action items below.
-            </p>
-            
-            {/* Embedded PDF Viewer */}
-            <div className="bg-card rounded-lg overflow-hidden border border-border mb-4">
-              <iframe 
-                src="/reviews/charlene-lee-resume.pdf" 
-                className="w-full h-[600px]"
-                title="Charlene Lee Resume"
-              />
+              <h3 className="text-lg font-semibold text-foreground">Visual Comparison: Before & After</h3>
             </div>
             
-            <div className="flex flex-wrap gap-3">
-              <a 
-                href="/reviews/charlene-lee-resume.pdf" 
-                target="_blank"
-                rel="noopener noreferrer"
-                className="inline-flex items-center gap-2 px-4 py-2 bg-gold text-foreground rounded-lg hover:bg-gold/90 transition-colors font-medium"
-              >
-                <FileText className="w-4 h-4" />
-                Open in New Tab
-              </a>
-              <a 
-                href="/reviews/charlene-lee-resume.pdf" 
-                download 
-                className="inline-flex items-center gap-2 px-4 py-2 bg-muted text-foreground rounded-lg hover:bg-muted/80 transition-colors font-medium"
-              >
-                <Download className="w-4 h-4" />
-                Download PDF
-              </a>
+            <div className="grid md:grid-cols-2 gap-6">
+              {/* Before - With Errors */}
+              <div className="bg-card rounded-xl border border-destructive/30 overflow-hidden">
+                <div className="bg-destructive/10 px-4 py-3 border-b border-destructive/20">
+                  <div className="flex items-center gap-2">
+                    <XCircle className="w-5 h-5 text-destructive" />
+                    <span className="font-semibold text-foreground">Before: Issues Highlighted</span>
+                  </div>
+                  <p className="text-sm text-muted-foreground mt-1">Red boxes show areas needing improvement</p>
+                </div>
+                <div className="p-2">
+                  <img 
+                    src="/reviews/charlene-lee-before.png" 
+                    alt="Original resume with errors highlighted" 
+                    className="w-full rounded-lg border border-border"
+                  />
+                </div>
+              </div>
+
+              {/* After - Fixed */}
+              <div className="bg-card rounded-xl border border-gold/30 overflow-hidden">
+                <div className="bg-gold/10 px-4 py-3 border-b border-gold/20">
+                  <div className="flex items-center gap-2">
+                    <CheckCircle className="w-5 h-5 text-gold" />
+                    <span className="font-semibold text-foreground">After: Improvements Applied</span>
+                  </div>
+                  <p className="text-sm text-muted-foreground mt-1">Clean, professional presentation</p>
+                </div>
+                <div className="p-2">
+                  <img 
+                    src="/reviews/charlene-lee-after.png" 
+                    alt="Improved resume with fixes applied" 
+                    className="w-full rounded-lg border border-border"
+                  />
+                </div>
+              </div>
             </div>
           </div>
 
