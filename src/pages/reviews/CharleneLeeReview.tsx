@@ -1524,7 +1524,7 @@ const CharleneLeeReview = () => {
             <div className="w-10 h-10 rounded-full bg-gold/10 flex items-center justify-center">
               <FileText className="w-5 h-5 text-gold" />
             </div>
-            <h2 className="font-heading text-3xl text-foreground">ATS Compliance Check ✅</h2>
+            <h2 className="font-heading text-3xl text-foreground">ATS Compliance Check</h2>
           </div>
 
           <div className="bg-card rounded-xl p-6 border border-border">
