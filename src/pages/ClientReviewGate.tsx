@@ -5,23 +5,13 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Loader2, Lock } from "lucide-react";
+import bcrypt from "bcryptjs";
 
-// Constant-time string comparison to prevent timing attacks
-const constantTimeCompare = (a: string, b: string): boolean => {
-  if (a.length !== b.length) {
-    // Still do the comparison to maintain constant time
-    let result = 1;
-    for (let i = 0; i < Math.max(a.length, b.length); i++) {
-      result |= (a.charCodeAt(i % a.length) || 0) ^ (b.charCodeAt(i % b.length) || 0);
-    }
-    return false;
-  }
-  
-  let result = 0;
-  for (let i = 0; i < a.length; i++) {
-    result |= a.charCodeAt(i) ^ b.charCodeAt(i);
-  }
-  return result === 0;
+// Validate that URL is an internal path only (prevents open redirect attacks)
+const isInternalUrl = (url: string): boolean => {
+  return url.startsWith('/') && 
+         !url.startsWith('//') && 
+         !url.match(/^(javascript|data|vbscript):/i);
 };
 
 const ClientReviewGate = () => {
@@ -47,15 +37,20 @@ const ClientReviewGate = () => {
     const minResponseTime = 500;
     const startTime = Date.now();
 
-    // Fetch and verify in one step - don't reveal if review exists
+    // Use secure RPC function to get review data (no direct table access)
     const { data, error: fetchError } = await supabase
-      .from("client_reviews")
-      .select("client_name, password, review_url")
-      .eq("id", clientId)
-      .maybeSingle();
+      .rpc('get_review_for_verification', {
+        review_id: clientId
+      });
 
-    // Use constant-time comparison for password
-    const passwordMatches = data ? constantTimeCompare(data.password, password) : false;
+    // Use bcrypt.compare for secure password verification
+    let passwordMatches = false;
+    let reviewUrl = '';
+    
+    if (data && data.length > 0 && data[0].password_hash) {
+      passwordMatches = await bcrypt.compare(password, data[0].password_hash);
+      reviewUrl = data[0].review_url || '';
+    }
     
     // Ensure minimum response time regardless of result
     const elapsed = Date.now() - startTime;
@@ -64,20 +59,26 @@ const ClientReviewGate = () => {
     }
 
     // Same error message whether review doesn't exist or password is wrong
-    if (fetchError || !data || !passwordMatches) {
+    if (fetchError || !data || data.length === 0 || !passwordMatches) {
       setError("Incorrect password. Please try again.");
       setSubmitting(false);
       return;
     }
 
-    // Update last_viewed_at
-    await supabase
-      .from("client_reviews")
-      .update({ last_viewed_at: new Date().toISOString() })
-      .eq("id", clientId);
+    // Validate review URL is internal only (defense in depth)
+    if (!isInternalUrl(reviewUrl)) {
+      setError("Invalid review configuration. Please contact support.");
+      setSubmitting(false);
+      return;
+    }
+
+    // Update last_viewed_at using secure RPC function
+    await supabase.rpc('mark_review_viewed', {
+      review_id: clientId
+    });
 
     // Redirect to the actual review page
-    navigate(data.review_url);
+    navigate(reviewUrl);
   };
 
   return (
