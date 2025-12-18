@@ -1720,47 +1720,90 @@ const CharleneLeeReview = () => {
             <h2 className="font-heading text-3xl text-foreground">Action Plan</h2>
           </div>
 
-          {/* Before & After Comparison */}
+          {/* Original Resume Reference */}
           <div className="mb-8">
             <div className="flex items-center gap-3 mb-6">
               <Lightbulb className="w-5 h-5 text-gold" />
-              <h3 className="text-lg font-semibold text-foreground">Visual Comparison: Before & After</h3>
+              <h3 className="text-lg font-semibold text-foreground">Original Resume Reference</h3>
             </div>
             
-            <div className="grid md:grid-cols-2 gap-6">
-              {/* Before - With Errors */}
-              <div className="bg-card rounded-xl border border-destructive/30 overflow-hidden">
-                <div className="bg-destructive/10 px-4 py-3 border-b border-destructive/20">
-                  <div className="flex items-center gap-2">
-                    <XCircle className="w-5 h-5 text-destructive" />
-                    <span className="font-semibold text-foreground">Before: Issues Highlighted</span>
+            <div className="grid lg:grid-cols-3 gap-6">
+              {/* Resume Images */}
+              <div className="lg:col-span-2 space-y-4">
+                <div className="bg-card rounded-xl border border-border overflow-hidden">
+                  <div className="bg-muted/50 px-4 py-2 border-b border-border">
+                    <span className="text-sm font-medium text-foreground">Page 1</span>
                   </div>
-                  <p className="text-sm text-muted-foreground mt-1">Red boxes show areas needing improvement</p>
+                  <div className="p-2">
+                    <img 
+                      src="/reviews/charlene-lee-original.png" 
+                      alt="Charlene Lee Resume - Page 1" 
+                      className="w-full rounded-lg border border-border"
+                    />
+                  </div>
                 </div>
-                <div className="p-2">
-                  <img 
-                    src="/reviews/charlene-lee-before.png" 
-                    alt="Original resume with errors highlighted" 
-                    className="w-full rounded-lg border border-border"
-                  />
+                <div className="bg-card rounded-xl border border-border overflow-hidden">
+                  <div className="bg-muted/50 px-4 py-2 border-b border-border">
+                    <span className="text-sm font-medium text-foreground">Page 2</span>
+                  </div>
+                  <div className="p-2">
+                    <img 
+                      src="/reviews/charlene-lee-original-page2.png" 
+                      alt="Charlene Lee Resume - Page 2" 
+                      className="w-full rounded-lg border border-border"
+                    />
+                  </div>
                 </div>
               </div>
 
-              {/* After - Fixed */}
-              <div className="bg-card rounded-xl border border-gold/30 overflow-hidden">
-                <div className="bg-gold/10 px-4 py-3 border-b border-gold/20">
-                  <div className="flex items-center gap-2">
-                    <CheckCircle className="w-5 h-5 text-gold" />
-                    <span className="font-semibold text-foreground">After: Improvements Applied</span>
-                  </div>
-                  <p className="text-sm text-muted-foreground mt-1">Clean, professional presentation</p>
+              {/* Key Issues Summary */}
+              <div className="space-y-4">
+                <div className="bg-destructive/5 rounded-xl p-4 border border-destructive/20">
+                  <p className="font-semibold text-destructive mb-3 flex items-center gap-2">
+                    <XCircle className="w-4 h-4" />
+                    Issues Found
+                  </p>
+                  <ul className="space-y-2 text-sm">
+                    <li className="flex items-start gap-2">
+                      <span className="w-5 h-5 rounded-full bg-gold text-foreground text-xs flex items-center justify-center flex-shrink-0 mt-0.5">1</span>
+                      <span className="text-foreground">Phone number formatting</span>
+                    </li>
+                    <li className="flex items-start gap-2">
+                      <span className="w-5 h-5 rounded-full bg-gold text-foreground text-xs flex items-center justify-center flex-shrink-0 mt-0.5">2</span>
+                      <span className="text-foreground">Character encoding error (的)</span>
+                    </li>
+                    <li className="flex items-start gap-2">
+                      <span className="w-5 h-5 rounded-full bg-gold text-foreground text-xs flex items-center justify-center flex-shrink-0 mt-0.5">3</span>
+                      <span className="text-foreground">Defensive analogies throughout</span>
+                    </li>
+                    <li className="flex items-start gap-2">
+                      <span className="w-5 h-5 rounded-full bg-gold text-foreground text-xs flex items-center justify-center flex-shrink-0 mt-0.5">4</span>
+                      <span className="text-foreground">Missing job title under name</span>
+                    </li>
+                    <li className="flex items-start gap-2">
+                      <span className="w-5 h-5 rounded-full bg-gold text-foreground text-xs flex items-center justify-center flex-shrink-0 mt-0.5">5</span>
+                      <span className="text-foreground">Summary too long (6 lines)</span>
+                    </li>
+                    <li className="flex items-start gap-2">
+                      <span className="w-5 h-5 rounded-full bg-gold text-foreground text-xs flex items-center justify-center flex-shrink-0 mt-0.5">6</span>
+                      <span className="text-foreground">Missing specific metrics</span>
+                    </li>
+                  </ul>
                 </div>
-                <div className="p-2">
-                  <img 
-                    src="/reviews/charlene-lee-after.png" 
-                    alt="Improved resume with fixes applied" 
-                    className="w-full rounded-lg border border-border"
-                  />
+
+                <div className="bg-gold/10 rounded-xl p-4 border border-gold/20">
+                  <p className="font-semibold text-gold mb-3 flex items-center gap-2">
+                    <CheckCircle className="w-4 h-4" />
+                    After Fixes
+                  </p>
+                  <ul className="space-y-2 text-sm text-foreground">
+                    <li>• +886 920 187 795</li>
+                    <li>• Job title added under name</li>
+                    <li>• All analogies removed</li>
+                    <li>• Summary condensed to 4 lines</li>
+                    <li>• Specific metrics added</li>
+                    <li>• Professional, confident tone</li>
+                  </ul>
                 </div>
               </div>
             </div>
