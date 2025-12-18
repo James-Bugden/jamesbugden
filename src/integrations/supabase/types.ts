@@ -14,6 +14,27 @@ export type Database = {
   }
   public: {
     Tables: {
+      admin_users: {
+        Row: {
+          created_at: string | null
+          email: string
+          id: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string | null
+          email: string
+          id?: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string | null
+          email?: string
+          id?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       client_reviews: {
         Row: {
           client_name: string
@@ -46,7 +67,24 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
-      [_ in never]: never
+      get_review_for_verification: {
+        Args: { review_id: string }
+        Returns: {
+          client_name: string
+          password_hash: string
+          review_url: string
+        }[]
+      }
+      is_admin: { Args: { _user_id: string }; Returns: boolean }
+      mark_review_viewed: { Args: { review_id: string }; Returns: undefined }
+      verify_review_password: {
+        Args: { input_password: string; review_id: string }
+        Returns: {
+          client_name: string
+          is_valid: boolean
+          review_url: string
+        }[]
+      }
     }
     Enums: {
       [_ in never]: never

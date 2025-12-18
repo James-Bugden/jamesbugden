@@ -33,6 +33,7 @@ import {
 import { useToast } from "@/hooks/use-toast";
 import { Loader2, Plus, Copy, Trash2, LogOut, Check } from "lucide-react";
 import { format } from "date-fns";
+import bcrypt from "bcryptjs";
 
 interface ClientReview {
   id: string;
@@ -42,6 +43,23 @@ interface ClientReview {
   created_at: string;
   last_viewed_at: string | null;
 }
+
+// Validate that URL is an internal path only (prevents open redirect attacks)
+const validateReviewUrl = (url: string): boolean => {
+  // Must start with / for internal paths
+  if (!url.startsWith('/')) {
+    return false;
+  }
+  // Prevent protocol-relative URLs
+  if (url.startsWith('//')) {
+    return false;
+  }
+  // Prevent protocol handlers (XSS vectors)
+  if (url.match(/^(javascript|data|vbscript):/i)) {
+    return false;
+  }
+  return true;
+};
 
 const AdminReviews = () => {
   const [reviews, setReviews] = useState<ClientReview[]>([]);
@@ -103,12 +121,27 @@ const AdminReviews = () => {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+
+    // Validate review URL is internal only
+    if (!validateReviewUrl(reviewUrl)) {
+      toast({
+        title: "Invalid review URL",
+        description: "Review URL must be an internal path starting with /",
+        variant: "destructive",
+      });
+      return;
+    }
+
     setSubmitting(true);
+
+    // Hash password before storing (security best practice)
+    const saltRounds = 10;
+    const hashedPassword = await bcrypt.hash(password, saltRounds);
 
     const { error } = await supabase.from("client_reviews").insert({
       id: clientId,
       client_name: clientName,
-      password: password,
+      password: hashedPassword,
       review_url: reviewUrl,
     });
 
@@ -261,11 +294,11 @@ const AdminReviews = () => {
                     id="reviewUrl"
                     value={reviewUrl}
                     onChange={(e) => setReviewUrl(e.target.value)}
-                    placeholder="/resume-review-sarah-wang"
+                    placeholder="/reviews/sarah-wang"
                     required
                   />
                   <p className="text-xs text-muted-foreground">
-                    The actual path to the review page
+                    Must be an internal path starting with /
                   </p>
                 </div>
 
