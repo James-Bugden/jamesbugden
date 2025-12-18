@@ -87,7 +87,7 @@ const CharleneLeeReview = () => {
             </p>
             
             <p className="text-foreground leading-relaxed mb-4">
-              However, the resume is currently positioned for Customer Success roles but trying to pivot to Operations/Supply roles (likely Uber/ride-sharing based on your framing). The heavy use of analogies ("directly applicable to driver acquisition") actually weakens your positioning—you're telling recruiters how to interpret your experience rather than letting your achievements speak for themselves.
+              However, the resume is currently positioned for Customer Success roles but trying to pivot to Operations/Supply roles (likely Uber/ride-sharing based on your framing). The heavy use of analogies ("directly applicable to driver acquisition") actually weakens your positioning. You're telling recruiters how to interpret your experience rather than letting your achievements speak for themselves.
             </p>
             
             <p className="text-foreground leading-relaxed mb-6">
@@ -534,7 +534,7 @@ const CharleneLeeReview = () => {
                 <input type="checkbox" className="mt-1 w-5 h-5 rounded border-border text-gold focus:ring-gold accent-gold" />
                 <div>
                   <p className="text-foreground font-medium">Add certification dates to show recency</p>
-                  <p className="text-sm text-muted-foreground">Azure Fundamentals (2023), AI Fundamentals (2024) — Dates show continuous learning vs old certifications</p>
+                  <p className="text-sm text-muted-foreground">Azure Fundamentals (2023), AI Fundamentals (2024). Dates show continuous learning vs old certifications</p>
                 </div>
               </label>
             </div>
@@ -560,7 +560,7 @@ const CharleneLeeReview = () => {
                 <input type="checkbox" className="mt-1 w-5 h-5 rounded border-border text-gold focus:ring-gold accent-gold" />
                 <div>
                   <p className="text-foreground font-medium">Add Education year</p>
-                  <p className="text-sm text-muted-foreground">Currently just says "Finance, National Taipei University of Business" — Add graduation year: "B.S. Finance, 2005" (or whatever year)</p>
+                  <p className="text-sm text-muted-foreground">Currently just says "Finance, National Taipei University of Business". Add graduation year: "B.S. Finance, 2005" (or whatever year)</p>
                 </div>
               </label>
 
@@ -568,7 +568,7 @@ const CharleneLeeReview = () => {
                 <input type="checkbox" className="mt-1 w-5 h-5 rounded border-border text-gold focus:ring-gold accent-gold" />
                 <div>
                   <p className="text-foreground font-medium">Consider adding Languages section since you're in Taiwan (5 min)</p>
-                  <p className="text-sm text-muted-foreground">Mandarin (Native), English (Professional Working Proficiency) — Shows bilingual capability for multinational companies</p>
+                  <p className="text-sm text-muted-foreground">Mandarin (Native), English (Professional Working Proficiency). Shows bilingual capability for multinational companies</p>
                 </div>
               </label>
             </div>
@@ -638,7 +638,7 @@ const CharleneLeeReview = () => {
 
             <div className="bg-muted/30 rounded-lg p-4 border-l-4 border-muted-foreground">
               <p className="text-sm font-semibold text-foreground mb-2">📋 Principle:</p>
-              <p className="text-sm text-foreground"><strong>First 15 words label the candidate clearly</strong> - A vague or missing professional title forces recruiters to guess what roles you're suited for. A sharp, specific opening (name + title + key skills) immediately communicates who you are and why you fit the job. This is especially important when pivoting—you need to clearly state your target function.</p>
+              <p className="text-sm text-foreground"><strong>First 15 words label the candidate clearly</strong> - A vague or missing professional title forces recruiters to guess what roles you're suited for. A sharp, specific opening (name + title + key skills) immediately communicates who you are and why you fit the job. This is especially important when pivoting. You need to clearly state your target function.</p>
             </div>
           </div>
 
@@ -680,7 +680,7 @@ const CharleneLeeReview = () => {
               <ul className="text-sm text-foreground space-y-1 mb-4">
                 <li>• 12-18pt space between major sections</li>
                 <li>• 6-8pt space between job roles</li>
-                <li>• Test by printing—should look balanced</li>
+                <li>• Test by printing and should look balanced</li>
               </ul>
               
               <p className="text-sm text-muted-foreground mb-2"><strong>Fix encoding error:</strong></p>
