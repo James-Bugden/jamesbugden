@@ -1733,6 +1733,26 @@ const CharleneLeeReview = () => {
             <h2 className="font-heading text-3xl text-foreground">Corrected Resume</h2>
           </div>
 
+          {/* Corrected Resume Images */}
+          <div className="grid md:grid-cols-2 gap-6 mb-8">
+            <div className="bg-card rounded-xl p-4 border border-border">
+              <p className="text-sm font-medium text-muted-foreground mb-3">Page 1</p>
+              <img 
+                src="/reviews/charlene-corrected-page1.png" 
+                alt="Corrected Resume Page 1" 
+                className="w-full rounded-lg border border-border"
+              />
+            </div>
+            <div className="bg-card rounded-xl p-4 border border-border">
+              <p className="text-sm font-medium text-muted-foreground mb-3">Page 2</p>
+              <img 
+                src="/reviews/charlene-corrected-page2.png" 
+                alt="Corrected Resume Page 2" 
+                className="w-full rounded-lg border border-border"
+              />
+            </div>
+          </div>
+
           {/* Actions Section */}
           <div className="bg-gradient-to-br from-gold/10 to-gold/5 rounded-xl p-6 mb-8 border-2 border-gold/30">
             <div className="flex items-center gap-3 mb-2">
