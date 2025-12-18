@@ -1,5 +1,18 @@
 import { ArrowLeft, Download, FileText, TrendingUp, Zap, Target, CheckCircle, XCircle, Clock, Users, AlertTriangle, Calendar, Lightbulb, Star, BookOpen, Layout, Award, GraduationCap, RefreshCw } from 'lucide-react';
 import { Link } from 'react-router-dom';
+import AnnotatedResume from '@/components/AnnotatedResume';
+
+// Annotations for page 1 - positions are percentages
+const page1Annotations = [
+  { id: 1, x: 22, y: 2.5, width: 18, height: 2, label: 'Phone number needs formatting: +886 920 187 795', type: 'error' as const },
+  { id: 2, x: 3, y: 5, width: 94, height: 14, label: 'Summary too long (6 lines). Contains defensive analogies. Rewrite to 3-4 lines.', type: 'error' as const },
+  { id: 3, x: 3, y: 20, width: 94, height: 28, label: 'Key Achievements contain analogies like "(analogous to driver loyalty)" - remove all', type: 'error' as const },
+  { id: 4, x: 3, y: 64, width: 94, height: 18, label: 'Work experience bullets need specific metrics and CAR format', type: 'error' as const },
+];
+
+const page2Annotations = [
+  { id: 5, x: 45, y: 6, width: 5, height: 2, label: 'Character encoding error: "的" should be removed', type: 'error' as const },
+];
 
 const CharleneLeeReview = () => {
   return (
@@ -1728,29 +1741,36 @@ const CharleneLeeReview = () => {
             </div>
             
             <div className="grid lg:grid-cols-3 gap-6">
-              {/* Resume Images */}
+              {/* Resume Images with Annotations */}
               <div className="lg:col-span-2 space-y-4">
-                <div className="bg-card rounded-xl border border-border overflow-hidden">
-                  <div className="bg-muted/50 px-4 py-2 border-b border-border">
-                    <span className="text-sm font-medium text-foreground">Page 1</span>
+                <div className="bg-card rounded-xl border border-destructive/30 overflow-hidden">
+                  <div className="bg-destructive/10 px-4 py-2 border-b border-destructive/20 flex items-center justify-between">
+                    <span className="text-sm font-medium text-foreground flex items-center gap-2">
+                      <XCircle className="w-4 h-4 text-destructive" />
+                      Page 1 - Issues Highlighted
+                    </span>
+                    <span className="text-xs text-muted-foreground">Hover annotations for details</span>
                   </div>
                   <div className="p-2">
-                    <img 
-                      src="/reviews/charlene-lee-original.png" 
-                      alt="Charlene Lee Resume - Page 1" 
-                      className="w-full rounded-lg border border-border"
+                    <AnnotatedResume 
+                      imageSrc="/reviews/charlene-lee-original.png" 
+                      alt="Charlene Lee Resume - Page 1 with annotations"
+                      annotations={page1Annotations}
                     />
                   </div>
                 </div>
-                <div className="bg-card rounded-xl border border-border overflow-hidden">
-                  <div className="bg-muted/50 px-4 py-2 border-b border-border">
-                    <span className="text-sm font-medium text-foreground">Page 2</span>
+                <div className="bg-card rounded-xl border border-destructive/30 overflow-hidden">
+                  <div className="bg-destructive/10 px-4 py-2 border-b border-destructive/20">
+                    <span className="text-sm font-medium text-foreground flex items-center gap-2">
+                      <XCircle className="w-4 h-4 text-destructive" />
+                      Page 2 - Issues Highlighted
+                    </span>
                   </div>
                   <div className="p-2">
-                    <img 
-                      src="/reviews/charlene-lee-original-page2.png" 
-                      alt="Charlene Lee Resume - Page 2" 
-                      className="w-full rounded-lg border border-border"
+                    <AnnotatedResume 
+                      imageSrc="/reviews/charlene-lee-original-page2.png" 
+                      alt="Charlene Lee Resume - Page 2 with annotations"
+                      annotations={page2Annotations}
                     />
                   </div>
                 </div>
