@@ -60,16 +60,8 @@ const AdminReviews = () => {
   const { toast } = useToast();
 
   useEffect(() => {
-    checkAuth();
     fetchReviews();
   }, []);
-
-  const checkAuth = async () => {
-    const { data: { session } } = await supabase.auth.getSession();
-    if (!session) {
-      navigate("/admin/login");
-    }
-  };
 
   const fetchReviews = async () => {
     const { data, error } = await supabase

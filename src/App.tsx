@@ -10,6 +10,7 @@ import AdminLogin from "./pages/AdminLogin";
 import AdminReviews from "./pages/AdminReviews";
 import ClientReviewGate from "./pages/ClientReviewGate";
 import CharleneLeeReview from "./pages/reviews/CharleneLeeReview";
+import ProtectedRoute from "./components/ProtectedRoute";
 
 const queryClient = new QueryClient();
 
@@ -23,7 +24,14 @@ const App = () => (
           <Route path="/" element={<Index />} />
           <Route path="/zh-tw" element={<IndexZhTw />} />
           <Route path="/admin/login" element={<AdminLogin />} />
-          <Route path="/admin/reviews" element={<AdminReviews />} />
+          <Route 
+            path="/admin/reviews" 
+            element={
+              <ProtectedRoute>
+                <AdminReviews />
+              </ProtectedRoute>
+            } 
+          />
           <Route path="/review/:clientId" element={<ClientReviewGate />} />
           <Route path="/reviews/charlene-lee" element={<CharleneLeeReview />} />
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
