@@ -1733,12 +1733,11 @@ const CharleneLeeReview = () => {
             <h2 className="font-heading text-3xl text-foreground">Corrected Resume</h2>
           </div>
 
-          {/* Quick Wins - Priority Section */}
+          {/* Actions Section */}
           <div className="bg-gradient-to-br from-gold/10 to-gold/5 rounded-xl p-6 mb-8 border-2 border-gold/30">
             <div className="flex items-center gap-3 mb-2">
               <Zap className="w-5 h-5 text-gold" />
-              <h3 className="text-xl font-semibold text-foreground">Quick Wins</h3>
-              <span className="px-2 py-0.5 bg-gold/20 text-gold text-xs font-semibold rounded-full">Start Here</span>
+              <h3 className="text-xl font-semibold text-foreground">Here are the actions if you want to correct the resume</h3>
             </div>
             <p className="text-sm text-muted-foreground mb-5">4 changes for instant improvement</p>
 
