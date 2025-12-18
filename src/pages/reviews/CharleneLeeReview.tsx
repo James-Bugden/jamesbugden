@@ -1711,13 +1711,13 @@ const CharleneLeeReview = () => {
           </div>
         </section>
 
-        {/* Next Steps / 5-Day Action Plan */}
+        {/* Next Steps / Action Plan */}
         <section className="mb-16">
           <div className="flex items-center gap-3 mb-6">
             <div className="w-10 h-10 rounded-full bg-gold/10 flex items-center justify-center">
-              <Calendar className="w-5 h-5 text-gold" />
+              <Target className="w-5 h-5 text-gold" />
             </div>
-            <h2 className="font-heading text-3xl text-foreground">Next Steps</h2>
+            <h2 className="font-heading text-3xl text-foreground">Action Plan</h2>
           </div>
 
           {/* Annotated Resume Section */}
@@ -1727,7 +1727,7 @@ const CharleneLeeReview = () => {
               <h3 className="text-lg font-semibold text-foreground">Annotated Resume Reference</h3>
             </div>
             <p className="text-foreground mb-4">
-              Your original resume for reference while implementing the action items above.
+              Your original resume for reference while implementing the action items below.
             </p>
             
             {/* Embedded PDF Viewer */}
@@ -1760,18 +1760,17 @@ const CharleneLeeReview = () => {
             </div>
           </div>
 
-          {/* Quick Wins - Day 1 */}
-          <div className="bg-card rounded-xl p-6 mb-6 border border-border">
-            <div className="flex items-center gap-3 mb-4">
-              <div className="w-8 h-8 rounded-full bg-gold text-foreground flex items-center justify-center text-sm font-bold">1</div>
-              <div>
-                <h3 className="text-lg font-semibold text-foreground">Quick Wins - Day 1</h3>
-                <p className="text-sm text-muted-foreground">Do these 4 changes immediately for instant improvement:</p>
-              </div>
+          {/* Quick Wins - Priority Section */}
+          <div className="bg-gradient-to-br from-gold/10 to-gold/5 rounded-xl p-6 mb-8 border-2 border-gold/30">
+            <div className="flex items-center gap-3 mb-2">
+              <Zap className="w-5 h-5 text-gold" />
+              <h3 className="text-xl font-semibold text-foreground">Quick Wins</h3>
+              <span className="px-2 py-0.5 bg-gold/20 text-gold text-xs font-semibold rounded-full">Start Here</span>
             </div>
+            <p className="text-sm text-muted-foreground mb-5">4 changes for instant improvement</p>
 
             <div className="space-y-3">
-              <label className="flex items-start gap-3 bg-muted/50 p-4 rounded-lg cursor-pointer hover:bg-muted transition-colors">
+              <label className="flex items-start gap-3 bg-card p-4 rounded-lg cursor-pointer hover:bg-muted/50 transition-colors border border-border">
                 <input type="checkbox" className="mt-1 w-5 h-5 rounded border-border text-gold focus:ring-gold accent-gold" />
                 <div>
                   <p className="text-foreground font-medium">Delete all parenthetical analogies</p>
@@ -1779,7 +1778,7 @@ const CharleneLeeReview = () => {
                 </div>
               </label>
 
-              <label className="flex items-start gap-3 bg-muted/50 p-4 rounded-lg cursor-pointer hover:bg-muted transition-colors">
+              <label className="flex items-start gap-3 bg-card p-4 rounded-lg cursor-pointer hover:bg-muted/50 transition-colors border border-border">
                 <input type="checkbox" className="mt-1 w-5 h-5 rounded border-border text-gold focus:ring-gold accent-gold" />
                 <div>
                   <p className="text-foreground font-medium">Fix character encoding error</p>
@@ -1787,7 +1786,7 @@ const CharleneLeeReview = () => {
                 </div>
               </label>
 
-              <label className="flex items-start gap-3 bg-muted/50 p-4 rounded-lg cursor-pointer hover:bg-muted transition-colors">
+              <label className="flex items-start gap-3 bg-card p-4 rounded-lg cursor-pointer hover:bg-muted/50 transition-colors border border-border">
                 <input type="checkbox" className="mt-1 w-5 h-5 rounded border-border text-gold focus:ring-gold accent-gold" />
                 <div>
                   <p className="text-foreground font-medium">Add phone number spaces</p>
@@ -1795,7 +1794,7 @@ const CharleneLeeReview = () => {
                 </div>
               </label>
 
-              <label className="flex items-start gap-3 bg-muted/50 p-4 rounded-lg cursor-pointer hover:bg-muted transition-colors">
+              <label className="flex items-start gap-3 bg-card p-4 rounded-lg cursor-pointer hover:bg-muted/50 transition-colors border border-border">
                 <input type="checkbox" className="mt-1 w-5 h-5 rounded border-border text-gold focus:ring-gold accent-gold" />
                 <div>
                   <p className="text-foreground font-medium">Add job title under your name</p>
@@ -1803,199 +1802,143 @@ const CharleneLeeReview = () => {
                 </div>
               </label>
             </div>
-
-            <p className="text-sm text-gold font-medium mt-4">Result: Instantly more confident, professional presentation</p>
           </div>
 
-          {/* Day 2 */}
-          <div className="bg-card rounded-xl p-6 mb-6 border border-border">
-            <div className="flex items-center gap-3 mb-4">
-              <div className="w-8 h-8 rounded-full bg-gold text-foreground flex items-center justify-center text-sm font-bold">2</div>
-              <div>
-                <h3 className="text-lg font-semibold text-foreground">Day 1: Core Content</h3>
-                <p className="text-sm text-muted-foreground">Summary & Key Achievements</p>
+          {/* Main Checklist Grid */}
+          <div className="grid md:grid-cols-2 gap-6">
+            {/* Summary & Key Achievements */}
+            <div className="bg-card rounded-xl p-5 border border-border">
+              <div className="flex items-center gap-2 mb-4">
+                <BookOpen className="w-4 h-4 text-gold" />
+                <h3 className="font-semibold text-foreground">Summary & Key Achievements</h3>
+              </div>
+              <div className="space-y-2">
+                <label className="flex items-start gap-3 p-2 rounded-lg cursor-pointer hover:bg-muted/50 transition-colors">
+                  <input type="checkbox" className="mt-0.5 w-4 h-4 rounded border-border text-gold focus:ring-gold accent-gold" />
+                  <span className="text-sm text-foreground">Rewrite Professional Summary to 3-4 lines</span>
+                </label>
+                <label className="flex items-start gap-3 p-2 rounded-lg cursor-pointer hover:bg-muted/50 transition-colors">
+                  <input type="checkbox" className="mt-0.5 w-4 h-4 rounded border-border text-gold focus:ring-gold accent-gold" />
+                  <span className="text-sm text-foreground">Rewrite all 5 Key Achievements bullets</span>
+                </label>
+                <label className="flex items-start gap-3 p-2 rounded-lg cursor-pointer hover:bg-muted/50 transition-colors">
+                  <input type="checkbox" className="mt-0.5 w-4 h-4 rounded border-border text-gold focus:ring-gold accent-gold" />
+                  <span className="text-sm text-foreground">Add specific metrics using [PLACEHOLDER] format</span>
+                </label>
+                <label className="flex items-start gap-3 p-2 rounded-lg cursor-pointer hover:bg-muted/50 transition-colors">
+                  <input type="checkbox" className="mt-0.5 w-4 h-4 rounded border-border text-gold focus:ring-gold accent-gold" />
+                  <span className="text-sm text-foreground">Save as: Charlene_Lee_Resume_v2.pdf</span>
+                </label>
               </div>
             </div>
 
-            <div className="space-y-2">
-              <label className="flex items-start gap-3 p-3 rounded-lg cursor-pointer hover:bg-muted/50 transition-colors">
-                <input type="checkbox" className="mt-1 w-5 h-5 rounded border-border text-gold focus:ring-gold accent-gold" />
-                <span className="text-foreground">Rewrite Professional Summary to 3-4 lines using provided template</span>
-              </label>
-              <label className="flex items-start gap-3 p-3 rounded-lg cursor-pointer hover:bg-muted/50 transition-colors">
-                <input type="checkbox" className="mt-1 w-5 h-5 rounded border-border text-gold focus:ring-gold accent-gold" />
-                <span className="text-foreground">Rewrite all 5 Key Achievements bullets using provided examples</span>
-              </label>
-              <label className="flex items-start gap-3 p-3 rounded-lg cursor-pointer hover:bg-muted/50 transition-colors">
-                <input type="checkbox" className="mt-1 w-5 h-5 rounded border-border text-gold focus:ring-gold accent-gold" />
-                <span className="text-foreground">Add specific metrics using [PLACEHOLDER] format where needed</span>
-              </label>
-              <label className="flex items-start gap-3 p-3 rounded-lg cursor-pointer hover:bg-muted/50 transition-colors">
-                <input type="checkbox" className="mt-1 w-5 h-5 rounded border-border text-gold focus:ring-gold accent-gold" />
-                <span className="text-foreground">Save as: Charlene_Lee_Resume_v2.pdf</span>
-              </label>
-            </div>
-          </div>
-
-          {/* Day 3 */}
-          <div className="bg-card rounded-xl p-6 mb-6 border border-border">
-            <div className="flex items-center gap-3 mb-4">
-              <div className="w-8 h-8 rounded-full bg-gold text-foreground flex items-center justify-center text-sm font-bold">3</div>
-              <div>
-                <h3 className="text-lg font-semibold text-foreground">Day 2: Work Experience - Recent Role</h3>
-                <p className="text-sm text-muted-foreground">Customer Success Account Manager (2022-2025)</p>
+            {/* Recent Role */}
+            <div className="bg-card rounded-xl p-5 border border-border">
+              <div className="flex items-center gap-2 mb-4">
+                <TrendingUp className="w-4 h-4 text-gold" />
+                <h3 className="font-semibold text-foreground">Recent Role (2022-2025)</h3>
+              </div>
+              <div className="space-y-2">
+                <label className="flex items-start gap-3 p-2 rounded-lg cursor-pointer hover:bg-muted/50 transition-colors">
+                  <input type="checkbox" className="mt-0.5 w-4 h-4 rounded border-border text-gold focus:ring-gold accent-gold" />
+                  <span className="text-sm text-foreground">Rewrite all 4 bullets using CAR model</span>
+                </label>
+                <label className="flex items-start gap-3 p-2 rounded-lg cursor-pointer hover:bg-muted/50 transition-colors">
+                  <input type="checkbox" className="mt-0.5 w-4 h-4 rounded border-border text-gold focus:ring-gold accent-gold" />
+                  <span className="text-sm text-foreground">Add scale metrics: # accounts, $ ARR, team sizes</span>
+                </label>
+                <label className="flex items-start gap-3 p-2 rounded-lg cursor-pointer hover:bg-muted/50 transition-colors">
+                  <input type="checkbox" className="mt-0.5 w-4 h-4 rounded border-border text-gold focus:ring-gold accent-gold" />
+                  <span className="text-sm text-foreground">Add outcome metrics: % adoption, $ expansion</span>
+                </label>
               </div>
             </div>
 
-            <div className="space-y-2">
-              <label className="flex items-start gap-3 p-3 rounded-lg cursor-pointer hover:bg-muted/50 transition-colors">
-                <input type="checkbox" className="mt-1 w-5 h-5 rounded border-border text-gold focus:ring-gold accent-gold" />
-                <span className="text-foreground">Rewrite all 4 bullets using CAR model (Context, Action, Result)</span>
-              </label>
-              <label className="flex items-start gap-3 p-3 rounded-lg cursor-pointer hover:bg-muted/50 transition-colors">
-                <input type="checkbox" className="mt-1 w-5 h-5 rounded border-border text-gold focus:ring-gold accent-gold" />
-                <span className="text-foreground">Add scale metrics: # of accounts, $ ARR, team sizes</span>
-              </label>
-              <label className="flex items-start gap-3 p-3 rounded-lg cursor-pointer hover:bg-muted/50 transition-colors">
-                <input type="checkbox" className="mt-1 w-5 h-5 rounded border-border text-gold focus:ring-gold accent-gold" />
-                <span className="text-foreground">Add outcome metrics: % adoption, $ expansion, time savings</span>
-              </label>
-            </div>
-          </div>
-
-          {/* Day 4 */}
-          <div className="bg-card rounded-xl p-6 mb-6 border border-border">
-            <div className="flex items-center gap-3 mb-4">
-              <div className="w-8 h-8 rounded-full bg-gold text-foreground flex items-center justify-center text-sm font-bold">4</div>
-              <div>
-                <h3 className="text-lg font-semibold text-foreground">Day 3: Work Experience - Operations Role</h3>
-                <p className="text-sm text-muted-foreground">Business Excellence Operations (2005-2022)</p>
+            {/* Operations Role */}
+            <div className="bg-card rounded-xl p-5 border border-border">
+              <div className="flex items-center gap-2 mb-4">
+                <RefreshCw className="w-4 h-4 text-gold" />
+                <h3 className="font-semibold text-foreground">Operations Role (2005-2022)</h3>
+              </div>
+              <div className="space-y-2">
+                <label className="flex items-start gap-3 p-2 rounded-lg cursor-pointer hover:bg-muted/50 transition-colors">
+                  <input type="checkbox" className="mt-0.5 w-4 h-4 rounded border-border text-gold focus:ring-gold accent-gold" />
+                  <span className="text-sm text-foreground">Decide: break into sub-roles or keep as one</span>
+                </label>
+                <label className="flex items-start gap-3 p-2 rounded-lg cursor-pointer hover:bg-muted/50 transition-colors">
+                  <input type="checkbox" className="mt-0.5 w-4 h-4 rounded border-border text-gold focus:ring-gold accent-gold" />
+                  <span className="text-sm text-foreground">Add 2-3 bullets showing operational breadth</span>
+                </label>
+                <label className="flex items-start gap-3 p-2 rounded-lg cursor-pointer hover:bg-muted/50 transition-colors">
+                  <input type="checkbox" className="mt-0.5 w-4 h-4 rounded border-border text-gold focus:ring-gold accent-gold" />
+                  <span className="text-sm text-foreground">Rewrite existing 4 bullets with specific metrics</span>
+                </label>
+                <label className="flex items-start gap-3 p-2 rounded-lg cursor-pointer hover:bg-muted/50 transition-colors">
+                  <input type="checkbox" className="mt-0.5 w-4 h-4 rounded border-border text-gold focus:ring-gold accent-gold" />
+                  <span className="text-sm text-foreground">Show progression across 17 years</span>
+                </label>
               </div>
             </div>
 
-            <div className="space-y-2">
-              <label className="flex items-start gap-3 p-3 rounded-lg cursor-pointer hover:bg-muted/50 transition-colors">
-                <input type="checkbox" className="mt-1 w-5 h-5 rounded border-border text-gold focus:ring-gold accent-gold" />
-                <span className="text-foreground">Decide: break into sub-roles or keep as one section</span>
-              </label>
-              <label className="flex items-start gap-3 p-3 rounded-lg cursor-pointer hover:bg-muted/50 transition-colors">
-                <input type="checkbox" className="mt-1 w-5 h-5 rounded border-border text-gold focus:ring-gold accent-gold" />
-                <span className="text-foreground">Add 2-3 more bullets showing operational breadth</span>
-              </label>
-              <label className="flex items-start gap-3 p-3 rounded-lg cursor-pointer hover:bg-muted/50 transition-colors">
-                <input type="checkbox" className="mt-1 w-5 h-5 rounded border-border text-gold focus:ring-gold accent-gold" />
-                <span className="text-foreground">Rewrite existing 4 bullets with specific metrics</span>
-              </label>
-              <label className="flex items-start gap-3 p-3 rounded-lg cursor-pointer hover:bg-muted/50 transition-colors">
-                <input type="checkbox" className="mt-1 w-5 h-5 rounded border-border text-gold focus:ring-gold accent-gold" />
-                <span className="text-foreground">Show progression across 17 years</span>
-              </label>
-            </div>
-          </div>
-
-          {/* Day 5 - ATS Optimization */}
-          <div className="bg-card rounded-xl p-6 mb-6 border border-border">
-            <div className="flex items-center gap-3 mb-4">
-              <div className="w-8 h-8 rounded-full bg-gold text-foreground flex items-center justify-center text-sm font-bold">5</div>
-              <div>
-                <h3 className="text-lg font-semibold text-foreground">Day 4: ATS Optimization & Skills</h3>
-                <p className="text-sm text-muted-foreground">Keyword Enhancement</p>
+            {/* ATS & Keywords */}
+            <div className="bg-card rounded-xl p-5 border border-border">
+              <div className="flex items-center gap-2 mb-4">
+                <FileText className="w-4 h-4 text-gold" />
+                <h3 className="font-semibold text-foreground">ATS & Keywords</h3>
+              </div>
+              <div className="space-y-2">
+                <label className="flex items-start gap-3 p-2 rounded-lg cursor-pointer hover:bg-muted/50 transition-colors">
+                  <input type="checkbox" className="mt-0.5 w-4 h-4 rounded border-border text-gold focus:ring-gold accent-gold" />
+                  <span className="text-sm text-foreground">Review 3-5 target job descriptions</span>
+                </label>
+                <label className="flex items-start gap-3 p-2 rounded-lg cursor-pointer hover:bg-muted/50 transition-colors">
+                  <input type="checkbox" className="mt-0.5 w-4 h-4 rounded border-border text-gold focus:ring-gold accent-gold" />
+                  <span className="text-sm text-foreground">Add 5-10 operational keywords naturally</span>
+                </label>
+                <label className="flex items-start gap-3 p-2 rounded-lg cursor-pointer hover:bg-muted/50 transition-colors">
+                  <input type="checkbox" className="mt-0.5 w-4 h-4 rounded border-border text-gold focus:ring-gold accent-gold" />
+                  <span className="text-sm text-foreground">Reorder Core Skills to match target role</span>
+                </label>
+                <label className="flex items-start gap-3 p-2 rounded-lg cursor-pointer hover:bg-muted/50 transition-colors">
+                  <input type="checkbox" className="mt-0.5 w-4 h-4 rounded border-border text-gold focus:ring-gold accent-gold" />
+                  <span className="text-sm text-foreground">Ensure keywords in summary, skills, experience</span>
+                </label>
               </div>
             </div>
 
-            <div className="space-y-2">
-              <label className="flex items-start gap-3 p-3 rounded-lg cursor-pointer hover:bg-muted/50 transition-colors">
-                <input type="checkbox" className="mt-1 w-5 h-5 rounded border-border text-gold focus:ring-gold accent-gold" />
-                <span className="text-foreground">Review 3-5 target job descriptions</span>
-              </label>
-              <label className="flex items-start gap-3 p-3 rounded-lg cursor-pointer hover:bg-muted/50 transition-colors">
-                <input type="checkbox" className="mt-1 w-5 h-5 rounded border-border text-gold focus:ring-gold accent-gold" />
-                <span className="text-foreground">Add 5-10 operational keywords naturally throughout</span>
-              </label>
-              <label className="flex items-start gap-3 p-3 rounded-lg cursor-pointer hover:bg-muted/50 transition-colors">
-                <input type="checkbox" className="mt-1 w-5 h-5 rounded border-border text-gold focus:ring-gold accent-gold" />
-                <span className="text-foreground">Reorder Core Skills to match target role priority</span>
-              </label>
-              <label className="flex items-start gap-3 p-3 rounded-lg cursor-pointer hover:bg-muted/50 transition-colors">
-                <input type="checkbox" className="mt-1 w-5 h-5 rounded border-border text-gold focus:ring-gold accent-gold" />
-                <span className="text-foreground">Ensure keywords appear in summary, skills, and experience</span>
-              </label>
-            </div>
-          </div>
-
-          {/* Day 6 - Review & Polish */}
-          <div className="bg-card rounded-xl p-6 mb-6 border border-border">
-            <div className="flex items-center gap-3 mb-4">
-              <div className="w-8 h-8 rounded-full bg-gold text-foreground flex items-center justify-center text-sm font-bold">6</div>
-              <div>
-                <h3 className="text-lg font-semibold text-foreground">Day 5: Review & Polish</h3>
-                <p className="text-sm text-muted-foreground">Peer Review & Final Check</p>
+            {/* Final Review - spans full width */}
+            <div className="bg-card rounded-xl p-5 border border-border md:col-span-2">
+              <div className="flex items-center gap-2 mb-4">
+                <Award className="w-4 h-4 text-gold" />
+                <h3 className="font-semibold text-foreground">Final Review & Polish</h3>
+              </div>
+              <div className="grid sm:grid-cols-2 gap-x-6 gap-y-2">
+                <label className="flex items-start gap-3 p-2 rounded-lg cursor-pointer hover:bg-muted/50 transition-colors">
+                  <input type="checkbox" className="mt-0.5 w-4 h-4 rounded border-border text-gold focus:ring-gold accent-gold" />
+                  <span className="text-sm text-foreground">Send to 2-3 trusted colleagues/mentors</span>
+                </label>
+                <label className="flex items-start gap-3 p-2 rounded-lg cursor-pointer hover:bg-muted/50 transition-colors">
+                  <input type="checkbox" className="mt-0.5 w-4 h-4 rounded border-border text-gold focus:ring-gold accent-gold" />
+                  <span className="text-sm text-foreground">Ask: "Does this read as Operations Manager level?"</span>
+                </label>
+                <label className="flex items-start gap-3 p-2 rounded-lg cursor-pointer hover:bg-muted/50 transition-colors">
+                  <input type="checkbox" className="mt-0.5 w-4 h-4 rounded border-border text-gold focus:ring-gold accent-gold" />
+                  <span className="text-sm text-foreground">Incorporate feedback</span>
+                </label>
+                <label className="flex items-start gap-3 p-2 rounded-lg cursor-pointer hover:bg-muted/50 transition-colors">
+                  <input type="checkbox" className="mt-0.5 w-4 h-4 rounded border-border text-gold focus:ring-gold accent-gold" />
+                  <span className="text-sm text-foreground">Print and review on paper</span>
+                </label>
+                <label className="flex items-start gap-3 p-2 rounded-lg cursor-pointer hover:bg-muted/50 transition-colors">
+                  <input type="checkbox" className="mt-0.5 w-4 h-4 rounded border-border text-gold focus:ring-gold accent-gold" />
+                  <span className="text-sm text-foreground">Read entire resume aloud</span>
+                </label>
+                <label className="flex items-start gap-3 p-2 rounded-lg cursor-pointer hover:bg-muted/50 transition-colors">
+                  <input type="checkbox" className="mt-0.5 w-4 h-4 rounded border-border text-gold focus:ring-gold accent-gold" />
+                  <span className="text-sm text-foreground">Proofread for typos and consistency</span>
+                </label>
               </div>
             </div>
-
-            <div className="space-y-2">
-              <label className="flex items-start gap-3 p-3 rounded-lg cursor-pointer hover:bg-muted/50 transition-colors">
-                <input type="checkbox" className="mt-1 w-5 h-5 rounded border-border text-gold focus:ring-gold accent-gold" />
-                <span className="text-foreground">Send to 2-3 trusted colleagues/mentors</span>
-              </label>
-              <label className="flex items-start gap-3 p-3 rounded-lg cursor-pointer hover:bg-muted/50 transition-colors">
-                <input type="checkbox" className="mt-1 w-5 h-5 rounded border-border text-gold focus:ring-gold accent-gold" />
-                <span className="text-foreground">Ask: "Does this read as Operations Manager level?"</span>
-              </label>
-              <label className="flex items-start gap-3 p-3 rounded-lg cursor-pointer hover:bg-muted/50 transition-colors">
-                <input type="checkbox" className="mt-1 w-5 h-5 rounded border-border text-gold focus:ring-gold accent-gold" />
-                <span className="text-foreground">Incorporate feedback</span>
-              </label>
-              <label className="flex items-start gap-3 p-3 rounded-lg cursor-pointer hover:bg-muted/50 transition-colors">
-                <input type="checkbox" className="mt-1 w-5 h-5 rounded border-border text-gold focus:ring-gold accent-gold" />
-                <span className="text-foreground">Print and review on paper</span>
-              </label>
-              <label className="flex items-start gap-3 p-3 rounded-lg cursor-pointer hover:bg-muted/50 transition-colors">
-                <input type="checkbox" className="mt-1 w-5 h-5 rounded border-border text-gold focus:ring-gold accent-gold" />
-                <span className="text-foreground">Read entire resume aloud</span>
-              </label>
-              <label className="flex items-start gap-3 p-3 rounded-lg cursor-pointer hover:bg-muted/50 transition-colors">
-                <input type="checkbox" className="mt-1 w-5 h-5 rounded border-border text-gold focus:ring-gold accent-gold" />
-                <span className="text-foreground">Proofread for typos and consistency</span>
-              </label>
-              <label className="flex items-start gap-3 p-3 rounded-lg cursor-pointer hover:bg-muted/50 transition-colors">
-                <input type="checkbox" className="mt-1 w-5 h-5 rounded border-border text-gold focus:ring-gold accent-gold" />
-                <span className="text-foreground">Save final: Charlene_Lee_Resume_Operations_Final.pdf</span>
-              </label>
-            </div>
-          </div>
-
-          {/* Ongoing: Tailoring */}
-          <div className="bg-gold/10 rounded-xl p-6 border border-gold/20">
-            <div className="flex items-center gap-3 mb-4">
-              <RefreshCw className="w-5 h-5 text-gold" />
-              <h3 className="text-lg font-semibold text-foreground">Ongoing: Tailoring</h3>
-            </div>
-            <p className="text-sm text-muted-foreground mb-3">For each specific job:</p>
-            <div className="space-y-2">
-              <label className="flex items-start gap-3 p-3 rounded-lg cursor-pointer hover:bg-gold/20 transition-colors">
-                <input type="checkbox" className="mt-1 w-5 h-5 rounded border-border text-gold focus:ring-gold accent-gold" />
-                <span className="text-foreground">Read job description, identify top 10 keywords</span>
-              </label>
-              <label className="flex items-start gap-3 p-3 rounded-lg cursor-pointer hover:bg-gold/20 transition-colors">
-                <input type="checkbox" className="mt-1 w-5 h-5 rounded border-border text-gold focus:ring-gold accent-gold" />
-                <span className="text-foreground">Adjust summary to include 2-3 of their keywords</span>
-              </label>
-              <label className="flex items-start gap-3 p-3 rounded-lg cursor-pointer hover:bg-gold/20 transition-colors">
-                <input type="checkbox" className="mt-1 w-5 h-5 rounded border-border text-gold focus:ring-gold accent-gold" />
-                <span className="text-foreground">Reorder skills to match their priorities</span>
-              </label>
-              <label className="flex items-start gap-3 p-3 rounded-lg cursor-pointer hover:bg-gold/20 transition-colors">
-                <input type="checkbox" className="mt-1 w-5 h-5 rounded border-border text-gold focus:ring-gold accent-gold" />
-                <span className="text-foreground">Add 1-2 relevant keywords to experience bullets</span>
-              </label>
-              <label className="flex items-start gap-3 p-3 rounded-lg cursor-pointer hover:bg-gold/20 transition-colors">
-                <input type="checkbox" className="mt-1 w-5 h-5 rounded border-border text-gold focus:ring-gold accent-gold" />
-                <span className="text-foreground">Save as: Charlene_Lee_Resume_[CompanyName].pdf</span>
-              </label>
-            </div>
-            <p className="text-sm text-foreground mt-4"><strong>Total time investment:</strong> ~8-9 hours over 5 days</p>
-            <p className="text-sm text-gold font-semibold"><strong>ROI:</strong> Transform from 65% ready to 85% ready for senior operations roles</p>
           </div>
         </section>
 
