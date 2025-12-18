@@ -1708,11 +1708,11 @@ const CharleneLeeReview = () => {
               <ul className="space-y-2 text-sm">
                 <li className="flex items-center gap-2 text-foreground">
                   <AlertTriangle className="w-4 h-4 text-gold" />
-                  Process improvement expertise <strong>(you mention but don't emphasize)</strong>
+                  Process improvement expertise (you mention but don't emphasize)
                 </li>
                 <li className="flex items-center gap-2 text-foreground">
                   <AlertTriangle className="w-4 h-4 text-gold" />
-                  Budget/resource management <strong>(not mentioned)</strong>
+                  Budget/resource management (not mentioned)
                 </li>
                 <li className="flex items-center gap-2 text-foreground">
                   <AlertTriangle className="w-4 h-4 text-gold" />
