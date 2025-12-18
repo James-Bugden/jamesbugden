@@ -158,7 +158,7 @@ const CharleneLeeReview = () => {
             <div className="w-10 h-10 rounded-full bg-gold/10 flex items-center justify-center">
               <TrendingUp className="w-5 h-5 text-gold" />
             </div>
-            <h2 className="font-heading text-3xl text-foreground">Top 3 Strengths ✅</h2>
+            <h2 className="font-heading text-3xl text-foreground">Top 3 Strengths</h2>
           </div>
 
           <div className="space-y-6">
@@ -244,7 +244,7 @@ const CharleneLeeReview = () => {
             <div className="w-10 h-10 rounded-full bg-destructive/10 flex items-center justify-center">
               <Target className="w-5 h-5 text-destructive" />
             </div>
-            <h2 className="font-heading text-3xl text-foreground">Top 3 Priorities 🎯 (Ranked by Impact)</h2>
+            <h2 className="font-heading text-3xl text-foreground">Top 3 Priorities (Ranked by Impact)</h2>
           </div>
 
           {/* Priority 1 */}
@@ -1615,28 +1615,28 @@ const CharleneLeeReview = () => {
                 <li className="flex items-start gap-3">
                   <CheckCircle className="w-5 h-5 text-gold mt-0.5 flex-shrink-0" />
                   <div>
-                    <p className="text-foreground font-medium">✅ 20 years at Microsoft</p>
+                    <p className="text-foreground font-medium">20 years at Microsoft</p>
                     <p className="text-sm text-muted-foreground">Most candidates have 5-10 years total experience across multiple companies. Your longevity demonstrates loyalty and deep institutional knowledge.</p>
                   </div>
                 </li>
                 <li className="flex items-start gap-3">
                   <CheckCircle className="w-5 h-5 text-gold mt-0.5 flex-shrink-0" />
                   <div>
-                    <p className="text-foreground font-medium">✅ Impressive retention metrics</p>
+                    <p className="text-foreground font-medium">Impressive retention metrics</p>
                     <p className="text-sm text-muted-foreground">120%+ growth and 100% renewals are genuinely outstanding. Many ops managers struggle to quantify their impact this clearly.</p>
                   </div>
                 </li>
                 <li className="flex items-start gap-3">
                   <CheckCircle className="w-5 h-5 text-gold mt-0.5 flex-shrink-0" />
                   <div>
-                    <p className="text-foreground font-medium">✅ C-level stakeholder management</p>
+                    <p className="text-foreground font-medium">C-level stakeholder management</p>
                     <p className="text-sm text-muted-foreground">Direct executive interaction is not universal, especially in operations roles. This differentiates you.</p>
                   </div>
                 </li>
                 <li className="flex items-start gap-3">
                   <CheckCircle className="w-5 h-5 text-gold mt-0.5 flex-shrink-0" />
                   <div>
-                    <p className="text-foreground font-medium">✅ Cross-functional leadership</p>
+                    <p className="text-foreground font-medium">Cross-functional leadership</p>
                     <p className="text-sm text-muted-foreground">Coordinating Engineering, Product, Support shows you can work horizontally, a key ops skill.</p>
                   </div>
                 </li>
@@ -1649,21 +1649,21 @@ const CharleneLeeReview = () => {
                 <li className="flex items-start gap-3">
                   <AlertTriangle className="w-5 h-5 text-gold mt-0.5 flex-shrink-0" />
                   <div>
-                    <p className="text-foreground font-medium">⚠️ Customer Success title</p>
+                    <p className="text-foreground font-medium">Customer Success title</p>
                     <p className="text-sm text-muted-foreground">For pure operations roles, your most recent title (Customer Success Account Manager) may raise questions about fit. Operations Managers typically come from titles with "Operations," "Supply," "Program," or "Process" in the name.</p>
                   </div>
                 </li>
                 <li className="flex items-start gap-3">
                   <AlertTriangle className="w-5 h-5 text-gold mt-0.5 flex-shrink-0" />
                   <div>
-                    <p className="text-foreground font-medium">⚠️ Limited technical operations language</p>
+                    <p className="text-foreground font-medium">Limited technical operations language</p>
                     <p className="text-sm text-muted-foreground">Your resume emphasizes client-facing work. Competitors may show more systems/process/analytical work.</p>
                   </div>
                 </li>
                 <li className="flex items-start gap-3">
                   <AlertTriangle className="w-5 h-5 text-gold mt-0.5 flex-shrink-0" />
                   <div>
-                    <p className="text-foreground font-medium">⚠️ No operational certifications</p>
+                    <p className="text-foreground font-medium">No operational certifications</p>
                     <p className="text-sm text-muted-foreground">Many ops managers have Six Sigma, PMP, Lean, or similar process certifications. Your Microsoft certs are great for tech knowledge but don't signal operations expertise.</p>
                   </div>
                 </li>
@@ -1690,33 +1690,33 @@ const CharleneLeeReview = () => {
               <ul className="space-y-2 text-sm">
                 <li className="flex items-center gap-2 text-foreground">
                   <CheckCircle className="w-4 h-4 text-gold" />
-                  6-10 years experience (you have 20 ✅)
+                  6-10 years experience (you have 20)
                 </li>
                 <li className="flex items-center gap-2 text-foreground">
                   <CheckCircle className="w-4 h-4 text-gold" />
-                  Proven portfolio/program management (you have this ✅)
+                  Proven portfolio/program management (you have this)
                 </li>
                 <li className="flex items-center gap-2 text-foreground">
                   <CheckCircle className="w-4 h-4 text-gold" />
-                  Data-driven decision making (you have this ✅)
+                  Data-driven decision making (you have this)
                 </li>
                 <li className="flex items-center gap-2 text-foreground">
                   <CheckCircle className="w-4 h-4 text-gold" />
-                  Cross-functional leadership (you have this ✅)
+                  Cross-functional leadership (you have this)
                 </li>
               </ul>
               <ul className="space-y-2 text-sm">
                 <li className="flex items-center gap-2 text-foreground">
                   <AlertTriangle className="w-4 h-4 text-gold" />
-                  Process improvement expertise <strong>(you mention but don't emphasize ⚠️)</strong>
+                  Process improvement expertise <strong>(you mention but don't emphasize)</strong>
                 </li>
                 <li className="flex items-center gap-2 text-foreground">
                   <AlertTriangle className="w-4 h-4 text-gold" />
-                  Budget/resource management <strong>(not mentioned ⚠️)</strong>
+                  Budget/resource management <strong>(not mentioned)</strong>
                 </li>
                 <li className="flex items-center gap-2 text-foreground">
                   <AlertTriangle className="w-4 h-4 text-gold" />
-                  Having too much experience can be a blocker sometimes <strong>⚠️</strong>
+                  Having too much experience can be a blocker sometimes
                 </li>
               </ul>
             </div>
