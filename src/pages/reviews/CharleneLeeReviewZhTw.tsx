@@ -87,7 +87,7 @@ const CharleneLeeReviewZhTw = () => {
             </p>
             
             <p className="text-foreground leading-relaxed mb-4">
-              然而，這份履歷目前定位於客戶成功職位，但似乎想轉型到營運/供應鏈相關職位（根據你的用詞推測可能是 Uber/共享出行）。大量使用類比（「直接適用於司機招募」）實際上削弱了你的定位——你在告訴招募人員如何理解你的經驗，而不是讓你的成就自己說話。
+              然而，這份履歷目前定位於客戶成功職位，但似乎想轉型到營運/供應鏈相關職位（根據你的用詞推測可能是 Uber/共享出行）。大量使用類比（「直接適用於司機招募」）實際上削弱了你的定位。你在告訴招募人員如何理解你的經驗，而不是讓你的成就自己說話。
             </p>
             
             <p className="text-foreground leading-relaxed mb-6">
@@ -327,7 +327,7 @@ const CharleneLeeReviewZhTw = () => {
             <h3 className="font-heading text-2xl text-foreground mb-4">在姓名下方添加職稱</h3>
             
             <p className="text-foreground mb-4">
-              <strong>為什麼重要：</strong>目前你的聯絡資訊直接在姓名下方，但招募人員在收到數十份履歷時，掃描平均 6-7 秒。前 2 秒用於識別：「這個人是誰？」姓名下方的職稱立即回答這個問題，並框架你的整份履歷。沒有它，你就是在強迫招募人員瀏覽你的內容來找出你是誰——他們可能不會這樣做。
+              <strong>為什麼重要：</strong>目前你的聯絡資訊直接在姓名下方，但招募人員在收到數十份履歷時，掃描平均 6-7 秒。前 2 秒用於識別：「這個人是誰？」姓名下方的職稱立即回答這個問題，並框架你的整份履歷。沒有它，你就是在強迫招募人員瀏覽你的內容來找出你是誰，他們可能不會這樣做。
             </p>
 
             <div className="bg-gold/10 rounded-lg p-4 border-l-4 border-gold">
@@ -422,11 +422,11 @@ const CharleneLeeReviewZhTw = () => {
 
           <div className="bg-card rounded-xl p-6 border border-border">
             <p className="text-foreground leading-relaxed mb-4">
-              Charlene，你擁有在世界頂級公司之一取得真正成就的堅實基礎。你的挑戰不是缺乏經驗——而是展示方式。
+              Charlene，你擁有在世界頂級公司之一取得真正成就的堅實基礎。你的挑戰不是缺乏經驗，而是展示方式。
             </p>
 
             <p className="text-foreground leading-relaxed mb-4">
-              你需要關注的核心問題是：停止為你的經驗道歉，停止為你的經驗辯解。移除那些類比。讓你的數字自己說話。如果你在微軟達成 100% 客戶續約和 120%+ 成長——這些成就在任何行業都令人印象深刻。你不需要解釋為什麼它們很重要。
+              你需要關注的核心問題是：停止為你的經驗道歉，停止為你的經驗辯解。移除那些類比。讓你的數字自己說話。如果你在微軟達成 100% 客戶續約和 120%+ 成長，這些成就在任何行業都令人印象深刻。你不需要解釋為什麼它們很重要。
             </p>
 
             <p className="text-foreground leading-relaxed mb-6">
