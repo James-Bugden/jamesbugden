@@ -1737,7 +1737,7 @@ const CharleneLeeReview = () => {
           <div className="bg-gradient-to-br from-gold/10 to-gold/5 rounded-xl p-6 mb-8 border-2 border-gold/30">
             <div className="flex items-center gap-3 mb-2">
               <Zap className="w-5 h-5 text-gold" />
-              <h3 className="text-xl font-semibold text-foreground">Here are the actions if you want to correct the resume</h3>
+              <h3 className="text-xl font-semibold text-foreground">What to Do Next</h3>
             </div>
             <p className="text-sm text-muted-foreground mb-5">4 changes for instant improvement</p>
 
