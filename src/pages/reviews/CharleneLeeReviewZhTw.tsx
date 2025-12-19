@@ -67,7 +67,7 @@ const CharleneLeeReviewZhTw = () => {
           <div className="bg-card rounded-xl p-6 mb-8 border border-border">
             <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-6">
               <div>
-                <p className="text-sm text-muted-foreground mb-1">整體評估</p>
+                <p className="text-sm text-muted-foreground mb-1 font-semibold">整體評估</p>
                 <p className="text-3xl font-bold text-gold">良好</p>
               </div>
               <div className="flex items-center gap-2">
@@ -98,7 +98,7 @@ const CharleneLeeReviewZhTw = () => {
           {/* Target Readiness */}
           <div className="grid md:grid-cols-2 gap-6 mb-8">
             <div className="bg-card rounded-xl p-6 border border-border">
-              <p className="text-sm text-muted-foreground mb-2">目標準備度</p>
+              <p className="text-sm text-muted-foreground mb-2 font-semibold">目標準備度</p>
               <div className="flex items-end gap-3 mb-3">
                 <div className="flex-1 h-3 bg-muted rounded-full overflow-hidden">
                   <div className="h-full w-[65%] bg-gold rounded-full"></div>
@@ -117,7 +117,7 @@ const CharleneLeeReviewZhTw = () => {
             </div>
             
             <div className="bg-card rounded-xl p-6 border border-border">
-              <p className="text-sm text-muted-foreground mb-2">修改後</p>
+              <p className="text-sm text-muted-foreground mb-2 font-semibold">修改後</p>
               <div className="flex items-end gap-3 mb-3">
                 <div className="flex-1 h-3 bg-muted rounded-full overflow-hidden">
                   <div className="h-full w-[85%] bg-gold rounded-full"></div>
