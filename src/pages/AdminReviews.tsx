@@ -4,6 +4,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { getSafeErrorMessage } from "@/lib/utils";
 import {
   Dialog,
   DialogContent,
@@ -90,7 +91,7 @@ const AdminReviews = () => {
     if (error) {
       toast({
         title: "Error fetching reviews",
-        description: error.message,
+        description: getSafeErrorMessage(error),
         variant: "destructive",
       });
     } else {
@@ -150,7 +151,7 @@ const AdminReviews = () => {
     if (error) {
       toast({
         title: "Error creating review",
-        description: error.message,
+        description: getSafeErrorMessage(error),
         variant: "destructive",
       });
     } else {
@@ -176,7 +177,7 @@ const AdminReviews = () => {
     if (error) {
       toast({
         title: "Error deleting review",
-        description: error.message,
+        description: getSafeErrorMessage(error),
         variant: "destructive",
       });
     } else {

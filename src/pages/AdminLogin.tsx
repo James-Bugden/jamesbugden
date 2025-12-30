@@ -6,6 +6,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { useToast } from "@/hooks/use-toast";
 import { Loader2 } from "lucide-react";
+import { getSafeErrorMessage } from "@/lib/utils";
 
 const AdminLogin = () => {
   const [email, setEmail] = useState("");
@@ -28,7 +29,7 @@ const AdminLogin = () => {
     if (error) {
       toast({
         title: "Login failed",
-        description: error.message,
+        description: getSafeErrorMessage(error),
         variant: "destructive",
       });
     } else {
