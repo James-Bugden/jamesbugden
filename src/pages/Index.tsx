@@ -1,4 +1,3 @@
-import { useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Linkedin } from "lucide-react";
 import { InstagramIcon, ThreadsIcon } from "@/components/SocialIcons";
@@ -7,10 +6,11 @@ import LanguageToggle from "@/components/LanguageToggle";
 import MobileMenu from "@/components/MobileMenu";
 import GoldCheckBadge from "@/components/GoldCheckBadge";
 import TestimonialsSection from "@/components/TestimonialsSection";
+import MailerLiteForm from "@/components/MailerLiteForm";
 
 declare global {
   interface Window {
-    ml: (action: string, ...args: unknown[]) => void;
+    ml?: (action: string, ...args: unknown[]) => void;
   }
 }
 
@@ -20,51 +20,6 @@ const Index = () => {
     { href: "#testimonials", label: "Testimonials" },
     { href: "#results", label: "Results" },
   ];
-
-  useEffect(() => {
-    // MailerLite: ensure script is loaded, then bootstrap embedded forms.
-    // This is resilient to slow network/script loading.
-    const SCRIPT_SRC = "https://assets.mailerlite.com/js/universal.js";
-
-    const bootstrap = () => {
-      if (typeof window.ml === "function") {
-        window.ml("webforms", "bootstrap");
-        // Some setups need an extra refresh pass
-        window.ml("webforms", "update");
-        console.log("[MailerLite] bootstrap called");
-        return true;
-      }
-      return false;
-    };
-
-    // If the script tag is missing for any reason, inject it.
-    const existing = document.querySelector(`script[src="${SCRIPT_SRC}"]`);
-    if (!existing) {
-      const s = document.createElement("script");
-      s.async = true;
-      s.src = SCRIPT_SRC;
-      s.onload = () => {
-        console.log("[MailerLite] universal.js loaded");
-        bootstrap();
-      };
-      document.head.appendChild(s);
-      console.log("[MailerLite] universal.js injected");
-    }
-
-    // Try immediately (queue may exist), then poll briefly until it works.
-    let tries = 0;
-    const maxTries = 20; // ~5s
-    const timer = window.setInterval(() => {
-      tries += 1;
-      const ok = bootstrap();
-      if (ok || tries >= maxTries) {
-        window.clearInterval(timer);
-        if (!ok) console.warn("[MailerLite] bootstrap never became available");
-      }
-    }, 250);
-
-    return () => window.clearInterval(timer);
-  }, []);
 
   return (
     <div className="min-h-screen bg-background overflow-x-hidden">
@@ -123,9 +78,7 @@ const Index = () => {
                 (Worth $300 USD - 5 places monthly)
               </p>
               
-              {/* MailerLite Form Embed */}
-              <div className="ml-embedded max-w-[400px] mb-4" data-form="sM1X80"></div>
-              
+              <MailerLiteForm formId="sM1X80" className="ml-embedded max-w-[400px] mb-4" />
               <p className="text-sm text-muted-foreground mb-6">
                 Your info stays private. No spam. Ever.
               </p>
@@ -200,7 +153,7 @@ const Index = () => {
             </ul>
           </div>
 
-          <div className="ml-embedded max-w-[500px] mx-auto" data-form="sM1X80"></div>
+          <MailerLiteForm formId="sM1X80" className="ml-embedded max-w-[500px] mx-auto" />
           <p className="text-sm text-muted-foreground mt-4">
             Your info stays private. I don't spam. Ever.
           </p>
