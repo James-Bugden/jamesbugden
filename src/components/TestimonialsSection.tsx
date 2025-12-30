@@ -19,7 +19,7 @@ const testimonials: Testimonial[] = [
     photo: juliePhoto
   },
   {
-    quote: "Direct feedback that found my blind spots. Used his tips with AI tools — amazing results.",
+    quote: "Direct feedback that found my blind spots. Used his tips with AI tools, amazing results.",
     name: "Cynthia",
     photo: cynthiaPhoto
   },
@@ -44,7 +44,7 @@ const testimonials: Testimonial[] = [
 
 const featuredTestimonial: Testimonial = {
   quote: "Reviewed my resume from a recruiter's perspective. Showed me what hiring managers actually care about.",
-  pullQuote: "Didn't just tell me what was wrong — showed me how to fix it and why.",
+  pullQuote: "Didn't just tell me what was wrong, showed me how to fix it and why.",
   name: "Monica",
   photo: monicaPhoto
 };
