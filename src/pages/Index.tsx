@@ -107,26 +107,54 @@ const Index = () => {
       <TestimonialsSection />
 
 
-      {/* Results Section - Updated Stats */}
-      <section id="results" className="py-16 md:py-24 px-5 md:px-6 bg-background">
-        <div className="container mx-auto max-w-5xl text-center">
-          <h2 className="font-heading text-3xl md:text-5xl text-foreground mb-12 md:mb-16">
-            The Numbers
+      {/* Waitlist CTA Section */}
+      <section id="results" className="py-16 md:py-20 px-5 md:px-6 bg-card border-y border-border">
+        <div className="container mx-auto max-w-3xl text-center">
+          <h2 className="font-heading text-3xl md:text-4xl lg:text-5xl text-foreground mb-4 leading-tight">
+            Join The Waitlist: Free Resume Review
           </h2>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 md:gap-12">
-            <div>
-              <p className="font-heading text-4xl md:text-5xl text-gold-gradient mb-2">20,000+</p>
-              <p className="text-sm md:text-base text-muted-foreground">Resumes Reviewed</p>
-            </div>
-            <div>
-              <p className="font-heading text-4xl md:text-5xl text-gold-gradient mb-2">500+</p>
-              <p className="text-sm md:text-base text-muted-foreground">People Hired</p>
-            </div>
-            <div>
-              <p className="font-heading text-4xl md:text-5xl text-gold-gradient mb-2">22K+</p>
-              <p className="text-sm md:text-base text-muted-foreground">LinkedIn + Threads Community</p>
-            </div>
+          <p className="text-gold font-semibold text-lg md:text-xl mb-6">
+            (Worth $200 - Limited Spots)
+          </p>
+          <p className="text-base md:text-lg text-foreground mb-2">
+            I've reviewed <span className="font-bold">20,000+ resumes</span> as an Uber recruiter.
+          </p>
+          <p className="text-base md:text-lg text-foreground mb-8">
+            Right now I'm fully booked, but join the waitlist and I'll let you know when spots open up.
+          </p>
+          
+          <div className="bg-background border border-border rounded-lg p-6 md:p-8 mb-8 text-left max-w-xl mx-auto">
+            <p className="text-foreground mb-4 font-medium">Here's the deal: I'm swamped.</p>
+            <p className="text-foreground mb-4 text-sm md:text-base leading-relaxed">
+              I work full-time at Uber but I want to help people. I can't review every resume.
+            </p>
+            <p className="text-foreground mb-6 text-sm md:text-base leading-relaxed">
+              But I know how it feels. You send 50 applications. You hear nothing back.
+            </p>
+            <p className="text-foreground mb-6 text-sm md:text-base leading-relaxed">
+              So here's what I'm doing: Join the waitlist for a free resume review. When I have time, I'll reach out.
+            </p>
+            <p className="text-foreground font-medium mb-3">What you'll get:</p>
+            <ul className="space-y-2 mb-0">
+              <li className="flex items-start gap-3 text-sm md:text-base text-foreground">
+                <GoldCheckBadge />
+                <span>The exact changes that make recruiters reach out</span>
+              </li>
+              <li className="flex items-start gap-3 text-sm md:text-base text-foreground">
+                <GoldCheckBadge />
+                <span>Tips from someone who reviews resumes every day at Uber</span>
+              </li>
+              <li className="flex items-start gap-3 text-sm md:text-base text-foreground">
+                <GoldCheckBadge />
+                <span>Real feedback from an active Fortune 500 recruiter</span>
+              </li>
+            </ul>
           </div>
+
+          <div className="ml-embedded max-w-[500px] mx-auto" data-form="sM1X80"></div>
+          <p className="text-sm text-muted-foreground mt-4">
+            Your info stays private. I don't spam. Ever.
+          </p>
         </div>
       </section>
 
