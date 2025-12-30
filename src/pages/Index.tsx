@@ -114,27 +114,24 @@ const Index = () => {
             Join The Waitlist: Free Resume Review
           </h2>
           <p className="text-gold font-semibold text-lg md:text-xl mb-6">
-            (Worth $200 - Limited Spots)
+            (Worth $300 USD - 5 Spots Monthly)
           </p>
           <p className="text-base md:text-lg text-foreground mb-2">
-            I've reviewed <span className="font-bold">20,000+ resumes</span> as an Uber recruiter.
+            I only review <span className="font-bold">5 resumes per month</span> while working full-time at Uber.
           </p>
           <p className="text-base md:text-lg text-foreground mb-8">
-            Right now I'm fully booked, but join the waitlist and I'll let you know when spots open up.
+            Right now I'm fully booked, but join the waitlist and I'll reach out when a spot opens.
           </p>
           
           <div className="bg-background border border-border rounded-lg p-6 md:p-8 mb-8 text-left max-w-xl mx-auto">
-            <p className="text-foreground mb-4 font-medium">Here's the deal: I'm swamped.</p>
-            <p className="text-foreground mb-4 text-sm md:text-base leading-relaxed">
-              I work full-time at Uber but I want to help people. I can't review every resume.
+            <p className="text-foreground mb-4 font-medium">Here's why the waitlist exists:</p>
+            <p className="text-foreground mb-6 text-sm md:text-base leading-relaxed">
+              I could review 50 resumes a month and give surface-level feedback. Or I could review 5 and actually make them Fortune 500-ready.
             </p>
             <p className="text-foreground mb-6 text-sm md:text-base leading-relaxed">
-              But I know how it feels. You send 50 applications. You hear nothing back.
+              I chose option 2.
             </p>
-            <p className="text-foreground mb-6 text-sm md:text-base leading-relaxed">
-              So here's what I'm doing: Join the waitlist for a free resume review. When I have time, I'll reach out.
-            </p>
-            <p className="text-foreground font-medium mb-3">What you'll get:</p>
+            <p className="text-foreground font-medium mb-3">What you'll get when your spot opens:</p>
             <ul className="space-y-2 mb-0">
               <li className="flex items-start gap-3 text-sm md:text-base text-foreground">
                 <GoldCheckBadge />
