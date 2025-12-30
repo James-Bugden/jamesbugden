@@ -23,7 +23,7 @@
     --secondary-foreground: 0 0% 0%;
 
     --muted: 39 20% 90%;
-    --muted-foreground: 0 0% 0%;
+    --muted-foreground: 0 0% 40%;
 
     /* Luxe gold accent */
     --accent: 42 52% 56%;
@@ -45,6 +45,7 @@
     --cream-light: 39 47% 98%;
     --gold: 42 52% 56%;
     --gold-dark: 42 48% 47%;
+    --gold-bright: 42 70% 55%;
 
     --font-heading: 'Playfair Display', 'Times New Roman', Georgia, serif;
     --font-body: -apple-system, BlinkMacSystemFont, 'SF Pro Text', 'Segoe UI', Roboto, sans-serif;
@@ -70,12 +71,14 @@
     font-family: var(--font-body);
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
-    line-height: 1.7;
+    line-height: 1.6;
+    background: linear-gradient(180deg, #F8F6F3 0%, #F5F2ED 100%);
+    background-attachment: fixed;
   }
 
   h1, h2, h3, h4, h5, h6 {
     font-family: var(--font-heading);
-    letter-spacing: -0.01em;
+    letter-spacing: -0.02em;
     font-weight: 400;
   }
 }
@@ -124,9 +127,18 @@
   .text-gold {
     color: hsl(42 52% 56%);
   }
+
+  .text-gold-bright {
+    color: #E6B566;
+    text-shadow: 0 1px 2px rgba(230, 181, 102, 0.2);
+  }
   
   .bg-cream {
     background-color: hsl(39 47% 96%);
+  }
+
+  .bg-cream-light {
+    background-color: hsl(39 47% 98%);
   }
 
   /* Premium Gold Gradient Text */
