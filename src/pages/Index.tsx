@@ -22,10 +22,48 @@ const Index = () => {
   ];
 
   useEffect(() => {
-    // Trigger MailerLite to render embedded forms after component mounts
-    if (window.ml) {
-      window.ml('webforms', 'bootstrap');
+    // MailerLite: ensure script is loaded, then bootstrap embedded forms.
+    // This is resilient to slow network/script loading.
+    const SCRIPT_SRC = "https://assets.mailerlite.com/js/universal.js";
+
+    const bootstrap = () => {
+      if (typeof window.ml === "function") {
+        window.ml("webforms", "bootstrap");
+        // Some setups need an extra refresh pass
+        window.ml("webforms", "update");
+        console.log("[MailerLite] bootstrap called");
+        return true;
+      }
+      return false;
+    };
+
+    // If the script tag is missing for any reason, inject it.
+    const existing = document.querySelector(`script[src="${SCRIPT_SRC}"]`);
+    if (!existing) {
+      const s = document.createElement("script");
+      s.async = true;
+      s.src = SCRIPT_SRC;
+      s.onload = () => {
+        console.log("[MailerLite] universal.js loaded");
+        bootstrap();
+      };
+      document.head.appendChild(s);
+      console.log("[MailerLite] universal.js injected");
     }
+
+    // Try immediately (queue may exist), then poll briefly until it works.
+    let tries = 0;
+    const maxTries = 20; // ~5s
+    const timer = window.setInterval(() => {
+      tries += 1;
+      const ok = bootstrap();
+      if (ok || tries >= maxTries) {
+        window.clearInterval(timer);
+        if (!ok) console.warn("[MailerLite] bootstrap never became available");
+      }
+    }, 250);
+
+    return () => window.clearInterval(timer);
   }, []);
 
   return (
