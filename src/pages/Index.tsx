@@ -52,7 +52,7 @@ const Index = () => {
         <div className="container mx-auto max-w-5xl">
           <div className="grid md:grid-cols-2 gap-10 md:gap-12 items-center">
             <div className="order-2 md:order-1">
-              <h1 className="font-heading text-4xl md:text-5xl lg:text-6xl text-foreground mb-6 leading-tight">
+              <h1 className="font-heading text-4xl md:text-5xl lg:text-6xl text-executive-green mb-6 leading-tight">
                 Stop Getting<br />Ghosted By<br />Recruiters
               </h1>
               <p className="text-base md:text-lg text-foreground leading-relaxed mb-4">
