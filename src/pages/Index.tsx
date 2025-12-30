@@ -82,7 +82,7 @@ const Index = () => {
                 Get on the waitlist for a free review.
               </p>
               <p className="text-gold font-semibold text-base md:text-lg mb-6">
-                (Worth $200 - 5 spots monthly)
+                (Worth $300 USD - 5 places monthly)
               </p>
               
               {/* MailerLite Form Embed */}
@@ -128,13 +128,13 @@ const Index = () => {
             Join The Waitlist: Free Resume Review
           </h2>
           <p className="text-gold font-semibold text-lg md:text-xl mb-6">
-            (Worth $300 USD - 5 Spots Monthly)
+            (Worth $300 USD - 5 Places Monthly)
           </p>
           <p className="text-base md:text-lg text-foreground mb-2">
             I only review <span className="font-bold">5 resumes per month</span> while working full-time at Uber.
           </p>
           <p className="text-base md:text-lg text-foreground mb-8">
-            Right now I'm fully booked, but join the waitlist and I'll reach out when a spot opens.
+            Right now I'm fully booked, but join the waitlist and I'll reach out when a place opens.
           </p>
           
           <div className="bg-background border border-border rounded-lg p-6 md:p-8 mb-8 text-left max-w-xl mx-auto">
