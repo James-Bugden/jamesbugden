@@ -321,41 +321,117 @@
   /* MailerLite Form Styling */
   .ml-embedded {
     max-width: 500px;
-    margin: 0 auto;
   }
 
-  .ml-embedded input[type="email"] {
+  .ml-embedded .ml-form-embedWrapper {
+    background: transparent !important;
+    border: none !important;
+    box-shadow: none !important;
+    padding: 0 !important;
+  }
+
+  .ml-embedded .ml-form-embedBody {
+    background: transparent !important;
+    padding: 0 !important;
+  }
+
+  .ml-embedded .ml-form-fieldRow {
+    display: flex !important;
+    flex-direction: row !important;
+    gap: 12px !important;
+    align-items: stretch !important;
+  }
+
+  .ml-embedded .ml-form-fieldRow .ml-field-group {
+    flex: 1 !important;
+    margin-bottom: 0 !important;
+  }
+
+  .ml-embedded .ml-form-fieldRow .ml-button-horizontal {
+    flex-shrink: 0 !important;
+  }
+
+  .ml-embedded input[type="email"],
+  .ml-embedded input[type="text"] {
     padding: 14px 20px !important;
     border: 1px solid hsl(var(--border)) !important;
     border-radius: 8px !important;
     font-size: 16px !important;
     width: 100% !important;
-    margin-bottom: 12px !important;
-    background: hsl(var(--background)) !important;
+    background: white !important;
+    color: hsl(var(--foreground)) !important;
+    height: 52px !important;
+    box-sizing: border-box !important;
   }
 
-  .ml-embedded button[type="submit"] {
+  .ml-embedded input[type="email"]:focus,
+  .ml-embedded input[type="text"]:focus {
+    outline: none !important;
+    border-color: hsl(42 52% 56%) !important;
+    box-shadow: 0 0 0 3px hsla(42, 52%, 56%, 0.15) !important;
+  }
+
+  .ml-embedded input::placeholder {
+    color: hsl(var(--muted-foreground)) !important;
+  }
+
+  .ml-embedded button[type="submit"],
+  .ml-embedded .ml-form-embedSubmit button {
     background: linear-gradient(135deg, hsl(42 52% 56%) 0%, hsl(42 48% 47%) 100%) !important;
     color: white !important;
-    padding: 14px 32px !important;
+    padding: 14px 28px !important;
     border: none !important;
     border-radius: 8px !important;
     font-weight: 600 !important;
     cursor: pointer !important;
     font-size: 16px !important;
-    width: 100% !important;
     transition: all 0.3s ease !important;
     box-shadow: 0 4px 12px hsla(42, 52%, 56%, 0.3) !important;
+    height: 52px !important;
+    white-space: nowrap !important;
   }
 
-  .ml-embedded button[type="submit"]:hover {
+  .ml-embedded button[type="submit"]:hover,
+  .ml-embedded .ml-form-embedSubmit button:hover {
     box-shadow: 0 6px 20px hsla(42, 52%, 56%, 0.4) !important;
     transform: translateY(-2px) !important;
   }
 
-  @media (max-width: 768px) {
+  .ml-embedded .ml-form-successBody,
+  .ml-embedded .ml-form-successContent {
+    background: transparent !important;
+    padding: 0 !important;
+  }
+
+  .ml-embedded .ml-form-successContent h4 {
+    color: hsl(var(--foreground)) !important;
+    font-family: var(--font-heading) !important;
+  }
+
+  .ml-embedded .ml-form-successContent p {
+    color: hsl(var(--muted-foreground)) !important;
+  }
+
+  /* Hide MailerLite branding */
+  .ml-embedded .ml-mobileButton-horizontal,
+  .ml-embedded .ml-form-embedPermissions,
+  .ml-embedded .ml-form-embedPermissions span {
+    display: none !important;
+  }
+
+  @media (max-width: 640px) {
     .ml-embedded {
       max-width: 100%;
+    }
+
+    .ml-embedded .ml-form-fieldRow {
+      flex-direction: column !important;
+      gap: 8px !important;
+    }
+
+    .ml-embedded button[type="submit"],
+    .ml-embedded .ml-form-embedSubmit button {
+      width: 100% !important;
     }
   }
 }
