@@ -89,10 +89,6 @@ const TestimonialsSection = ({ title = "What Clients Say" }: TestimonialsSection
                 </p>
               </div>
               
-              <p className="text-foreground leading-relaxed mb-6">
-                "Even after fixing my resume 10+ times, I still learned so much."
-              </p>
-              
               {/* Attribution */}
               <div className="text-center">
                 <p className="font-bold text-foreground text-lg">{featuredTestimonial.name}</p>
