@@ -1,3 +1,4 @@
+import { useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Linkedin } from "lucide-react";
 import { InstagramIcon, ThreadsIcon } from "@/components/SocialIcons";
@@ -7,12 +8,25 @@ import MobileMenu from "@/components/MobileMenu";
 import GoldCheckBadge from "@/components/GoldCheckBadge";
 import TestimonialsSection from "@/components/TestimonialsSection";
 
+declare global {
+  interface Window {
+    ml: (action: string, ...args: unknown[]) => void;
+  }
+}
+
 const Index = () => {
   const navLinks = [
     { href: "#about", label: "About" },
     { href: "#testimonials", label: "Testimonials" },
     { href: "#results", label: "Results" },
   ];
+
+  useEffect(() => {
+    // Trigger MailerLite to render embedded forms after component mounts
+    if (window.ml) {
+      window.ml('webforms', 'bootstrap');
+    }
+  }, []);
 
   return (
     <div className="min-h-screen bg-background overflow-x-hidden">
