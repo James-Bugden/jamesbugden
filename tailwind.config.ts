@@ -71,10 +71,11 @@ export default {
   				DEFAULT: 'hsl(39 47% 96%)',
   				light: 'hsl(39 47% 98%)'
   			},
-  			executive: {
-  				DEFAULT: 'hsl(153 38% 17%)',
-  				light: 'hsl(153 30% 23%)'
-  			}
+			executive: {
+				DEFAULT: 'hsl(153 38% 17%)',
+				light: 'hsl(153 30% 23%)',
+				dark: 'hsl(var(--executive-dark))'
+			}
   		},
   		fontFamily: {
   			heading: [
