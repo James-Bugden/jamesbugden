@@ -55,7 +55,7 @@ interface TestimonialsSectionProps {
 
 const TestimonialsSection = ({ title = "What Clients Say" }: TestimonialsSectionProps) => {
   return (
-    <section id="testimonials" className="py-16 md:py-24 px-5 md:px-6 bg-background">
+    <section id="testimonials" className="py-16 md:py-24 px-5 md:px-6 bg-muted">
       <div className="container mx-auto max-w-6xl">
         <h2 className="font-heading text-3xl md:text-5xl text-foreground text-center mb-12 md:mb-16">
           {title}
