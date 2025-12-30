@@ -4,8 +4,8 @@ import cynthiaPhoto from "@/assets/testimonials/cynthia.jpeg";
 import sunnyPhoto from "@/assets/testimonials/sunny.jpeg";
 
 interface Testimonial {
-  headline: string;
   quote: string;
+  pullQuote?: string;
   name: string;
   photo?: string;
   initial?: string;
@@ -14,30 +14,40 @@ interface Testimonial {
 
 const testimonials: Testimonial[] = [
   {
-    headline: "Showed me what hiring managers actually care about",
-    quote: "Reviewed my resume from a recruiter's perspective. Even after fixing my resume 10+ times, I still learned so much.",
-    name: "Monica",
-    photo: monicaPhoto
-  },
-  {
-    headline: "Super practical feedback - learning so much",
-    quote: "The feedback was practical and useful. I'm applying now and the guide has been incredibly helpful.",
+    quote: "Super practical feedback. Learning so much from the guide!",
     name: "Julie",
     photo: juliePhoto
   },
   {
-    headline: "Direct feedback that found my blind spots",
-    quote: "James's feedback was direct and hit every point. Used his tips with AI tools — amazing results.",
+    quote: "Direct feedback that found my blind spots. Used his tips with AI tools — amazing results.",
     name: "Cynthia",
     photo: cynthiaPhoto
   },
   {
-    headline: "Found blind spots I didn't know about",
-    quote: "Detailed review with clear guidance on formatting and positioning. Extremely helpful.",
+    quote: "Detailed review with clear guidance on formatting and positioning. Found blind spots I missed.",
     name: "Sunny",
     photo: sunnyPhoto
+  },
+  {
+    quote: "Clear explanations with good/bad examples. The before/after difference was huge.",
+    name: "Lichen",
+    initial: "L",
+    initialBg: "bg-purple-100"
+  },
+  {
+    quote: "More thorough than my HR friends or headhunters. Super professional.",
+    name: "David",
+    initial: "D",
+    initialBg: "bg-amber-50"
   }
 ];
+
+const featuredTestimonial: Testimonial = {
+  quote: "Reviewed my resume from a recruiter's perspective. Showed me what hiring managers actually care about.",
+  pullQuote: "Didn't just tell me what was wrong — showed me how to fix it and why.",
+  name: "Monica",
+  photo: monicaPhoto
+};
 
 interface TestimonialsSectionProps {
   title?: string;
@@ -45,53 +55,107 @@ interface TestimonialsSectionProps {
 
 const TestimonialsSection = ({ title = "What Clients Say" }: TestimonialsSectionProps) => {
   return (
-    <section id="testimonials" className="py-20 md:py-[120px] px-5 md:px-6">
+    <section id="testimonials" className="py-16 md:py-24 px-5 md:px-6 bg-background">
       <div className="container mx-auto max-w-6xl">
-        <h2 
-          className="font-heading text-foreground text-center mb-16 md:mb-20"
-          style={{ fontSize: 'clamp(36px, 4vw, 56px)' }}
-        >
+        <h2 className="font-heading text-3xl md:text-5xl text-foreground text-center mb-12 md:mb-16">
           {title}
         </h2>
         
-        {/* Grid Layout - 2 columns desktop, 1 mobile */}
-        <div className="grid md:grid-cols-2 gap-8 md:gap-10">
-          {testimonials.map((testimonial, i) => (
-            <div
-              key={i}
-              className="bg-card rounded-2xl p-8 md:p-10 shadow-premium hover:shadow-premium-hover transition-all duration-300 hover:-translate-y-1"
-            >
-              {/* Large Photo */}
+        <div className="flex flex-col lg:flex-row gap-6 md:gap-8">
+          {/* Featured Testimonial - Monica */}
+          <div className="lg:w-[40%]">
+            <div className="bg-card rounded-2xl p-8 md:p-12 shadow-lg hover:shadow-xl transition-all duration-300 hover:-translate-y-1 h-full relative">
+              {/* Large decorative quote */}
+              <span className="absolute top-6 left-8 text-6xl text-gold/20 font-serif leading-none">"</span>
+              
+              {/* Photo */}
               <div className="flex justify-center mb-6">
-                {testimonial.photo ? (
-                  <img
-                    src={testimonial.photo}
-                    alt={testimonial.name}
-                    className="w-[120px] h-[120px] md:w-[150px] md:h-[150px] rounded-full object-cover border-3 border-gold shadow-lg"
-                  />
-                ) : (
-                  <div className={`w-[120px] h-[120px] md:w-[150px] md:h-[150px] rounded-full ${testimonial.initialBg} flex items-center justify-center border-3 border-gold shadow-lg`}>
-                    <span className="text-3xl font-bold text-foreground">{testimonial.initial}</span>
-                  </div>
-                )}
+                <img
+                  src={featuredTestimonial.photo}
+                  alt={featuredTestimonial.name}
+                  className="w-20 h-20 rounded-full object-cover border-[3px] border-gold shadow-md"
+                />
               </div>
               
-              {/* Headline - Key Result */}
-              <h3 className="text-xl md:text-2xl font-semibold text-foreground text-center mb-4 leading-tight">
-                "{testimonial.headline}"
-              </h3>
-              
               {/* Quote */}
-              <p className="text-muted-foreground text-base md:text-lg leading-relaxed text-center mb-6 max-w-md mx-auto">
-                {testimonial.quote}
+              <p className="text-foreground text-lg md:text-xl leading-relaxed mb-6 relative z-10">
+                "{featuredTestimonial.quote}"
               </p>
               
-              {/* Name */}
-              <p className="font-bold text-foreground text-lg md:text-xl text-center">
-                {testimonial.name}
+              {/* Pull Quote */}
+              <div className="bg-accent/10 rounded-lg p-4 mb-6">
+                <p className="text-foreground text-base md:text-lg font-medium leading-relaxed">
+                  "{featuredTestimonial.pullQuote}"
+                </p>
+              </div>
+              
+              <p className="text-foreground leading-relaxed mb-6">
+                "Even after fixing my resume 10+ times, I still learned so much."
               </p>
+              
+              {/* Attribution */}
+              <div className="text-center">
+                <p className="font-bold text-foreground text-lg">{featuredTestimonial.name}</p>
+              </div>
             </div>
-          ))}
+          </div>
+          
+          {/* Grid Testimonials */}
+          <div className="lg:w-[60%]">
+            <div className="grid sm:grid-cols-2 gap-6">
+              {testimonials.slice(0, 4).map((testimonial, i) => (
+                <div
+                  key={i}
+                  className="bg-card rounded-xl p-6 md:p-8 shadow-md hover:shadow-lg transition-all duration-300 hover:-translate-y-1"
+                >
+                  {/* Photo or Initial */}
+                  <div className="flex justify-center mb-4">
+                    {testimonial.photo ? (
+                      <img
+                        src={testimonial.photo}
+                        alt={testimonial.name}
+                        className="w-[60px] h-[60px] rounded-full object-cover border-2 border-gold transition-transform duration-300 hover:scale-105"
+                      />
+                    ) : (
+                      <div className={`w-[60px] h-[60px] rounded-full ${testimonial.initialBg} flex items-center justify-center border-2 border-gold`}>
+                        <span className="text-xl font-bold text-foreground">{testimonial.initial}</span>
+                      </div>
+                    )}
+                  </div>
+                  
+                  {/* Quote */}
+                  <p className="text-foreground text-sm md:text-base leading-relaxed mb-4">
+                    "{testimonial.quote}"
+                  </p>
+                  
+                  {/* Attribution */}
+                  <div className="text-center">
+                    <p className="font-bold text-foreground">{testimonial.name}</p>
+                  </div>
+                </div>
+              ))}
+              
+              {/* David - spans both columns */}
+              <div className="sm:col-span-2 bg-card rounded-xl p-6 md:p-8 shadow-md hover:shadow-lg transition-all duration-300 hover:-translate-y-1">
+                {/* Initial Circle */}
+                <div className="flex justify-center mb-4">
+                  <div className={`w-[60px] h-[60px] rounded-full ${testimonials[4].initialBg} flex items-center justify-center border-2 border-gold`}>
+                    <span className="text-xl font-bold text-foreground">{testimonials[4].initial}</span>
+                  </div>
+                </div>
+                
+                {/* Quote */}
+                <p className="text-foreground text-sm md:text-base leading-relaxed mb-4 text-center max-w-xl mx-auto">
+                  "{testimonials[4].quote}"
+                </p>
+                
+                {/* Attribution */}
+                <div className="text-center">
+                  <p className="font-bold text-foreground">{testimonials[4].name}</p>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
     </section>
