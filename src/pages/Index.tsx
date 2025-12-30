@@ -47,44 +47,46 @@ const Index = () => {
         </div>
       </nav>
 
-      {/* Bio Section - Now first after nav */}
-      <section id="about" className="pt-28 md:pt-32 pb-16 md:pb-20 px-5 md:px-6 bg-card border-b border-border">
+      {/* Hero Section - Lead Magnet */}
+      <section id="about" className="pt-28 md:pt-32 pb-16 md:pb-20 px-5 md:px-6 bg-background">
         <div className="container mx-auto max-w-5xl">
-          <h2 className="font-heading text-3xl md:text-5xl text-foreground text-center mb-12 md:mb-16">
-            Hi, I'm James
-          </h2>
           <div className="grid md:grid-cols-2 gap-10 md:gap-12 items-center">
             <div className="order-2 md:order-1">
-              <p className="text-base md:text-lg text-foreground leading-relaxed mb-6">
-                I'm a <span className="font-bold">Senior Recruiter at Uber</span> in Taiwan.
+              <h1 className="font-heading text-4xl md:text-5xl lg:text-6xl text-foreground mb-6 leading-tight">
+                Stop Getting<br />Ghosted By<br />Recruiters
+              </h1>
+              <p className="text-base md:text-lg text-foreground leading-relaxed mb-4">
+                I'm an active Uber recruiter who sees what actually works.
+              </p>
+              <p className="text-base md:text-lg text-foreground leading-relaxed mb-4">
+                I've reviewed <span className="text-gold font-bold">20,000+ resumes</span> and hired <span className="text-gold font-bold">500+ people</span>.
               </p>
               <p className="text-base md:text-lg text-foreground leading-relaxed mb-6">
-                I've hired <span className="font-bold">500+ people</span> and reviewed over <span className="text-gold font-bold">20,000 resumes</span>.
+                I know exactly why yours isn't getting callbacks.
               </p>
-              <p className="text-base md:text-lg text-foreground leading-relaxed mb-6">
-                I know exactly what gets people rejected. And what makes them stand out.
+              <p className="text-base md:text-lg text-foreground leading-relaxed mb-1">
+                Get on the waitlist for a free review.
               </p>
-              <p className="text-base md:text-lg text-foreground leading-relaxed mb-6">
-                I don't teach theory. I teach what actually works.
+              <p className="text-gold font-semibold text-base md:text-lg mb-6">
+                (Worth $200 - 5 spots monthly)
               </p>
-              <p className="text-base md:text-lg text-foreground leading-relaxed mb-8">
-                I spent years as an English teacher in Taiwan. Then I moved into tech recruiting. I want to help others achieve their goals through finding their dream job.
+              
+              {/* MailerLite Form Embed */}
+              <div className="ml-embedded max-w-[400px] mb-4" data-form="sM1X80"></div>
+              
+              <p className="text-sm text-muted-foreground mb-6">
+                Your info stays private. No spam. Ever.
               </p>
+              
               <div className="flex flex-wrap gap-3">
-                <a href="https://www.linkedin.com/in/james-bugden/" target="_blank" rel="noopener noreferrer">
-                  <Button variant="outline" size="sm" className="gap-2 border-2 border-foreground/20 hover:bg-secondary hover:border-foreground/40 h-10 md:h-9">
-                    <Linkedin className="w-4 h-4" /> LinkedIn
-                  </Button>
+                <a href="https://www.linkedin.com/in/james-bugden/" target="_blank" rel="noopener noreferrer" className="text-muted-foreground hover:text-foreground transition-colors">
+                  <Linkedin className="w-5 h-5" />
                 </a>
-                <a href="https://www.instagram.com/james.careers/" target="_blank" rel="noopener noreferrer">
-                  <Button variant="outline" size="sm" className="gap-2 border-2 border-foreground/20 hover:bg-secondary hover:border-foreground/40 h-10 md:h-9">
-                    <InstagramIcon className="w-4 h-4" /> Instagram
-                  </Button>
+                <a href="https://www.instagram.com/james.careers/" target="_blank" rel="noopener noreferrer" className="text-muted-foreground hover:text-foreground transition-colors">
+                  <InstagramIcon className="w-5 h-5" />
                 </a>
-                <a href="https://www.threads.com/@james.careers" target="_blank" rel="noopener noreferrer">
-                  <Button variant="outline" size="sm" className="gap-2 border-2 border-foreground/20 hover:bg-secondary hover:border-foreground/40 h-10 md:h-9">
-                    <ThreadsIcon className="w-4 h-4" /> Threads
-                  </Button>
+                <a href="https://www.threads.com/@james.careers" target="_blank" rel="noopener noreferrer" className="text-muted-foreground hover:text-foreground transition-colors">
+                  <ThreadsIcon className="w-5 h-5" />
                 </a>
               </div>
             </div>
@@ -104,56 +106,6 @@ const Index = () => {
       {/* Testimonials Section */}
       <TestimonialsSection />
 
-      {/* Hero Section - Waitlist Lead Magnet (Now after testimonials) */}
-      <section className="py-16 md:py-20 px-5 md:px-6 bg-card border-y border-border">
-        <div className="container mx-auto max-w-3xl text-center">
-          <h2 className="font-heading text-3xl md:text-4xl lg:text-5xl text-foreground mb-4 animate-fade-up leading-tight">
-            Join The Waitlist: Free Resume Review
-          </h2>
-          <p className="text-gold font-semibold text-lg md:text-xl mb-6 animate-fade-up-delay">
-            (Worth $200 - Limited Spots)
-          </p>
-          <p className="text-base md:text-lg text-foreground mb-2 animate-fade-up-delay">
-            I've reviewed <span className="font-bold">20,000+ resumes</span> as an Uber recruiter.
-          </p>
-          <p className="text-base md:text-lg text-foreground mb-8 animate-fade-up-delay">
-            Right now I'm fully booked, but join the waitlist and I'll let you know when spots open up.
-          </p>
-          
-          <div className="bg-background border border-border rounded-lg p-6 md:p-8 mb-8 text-left max-w-xl mx-auto animate-fade-up-delay-2">
-            <p className="text-foreground mb-4 font-medium">Here's the deal: I'm swamped.</p>
-            <p className="text-foreground mb-4 text-sm md:text-base leading-relaxed">
-              I work full-time at Uber but I want to help people. I can't review every resume.
-            </p>
-            <p className="text-foreground mb-6 text-sm md:text-base leading-relaxed">
-              But I know how it feels. You send 50 applications. You hear nothing back.
-            </p>
-            <p className="text-foreground mb-6 text-sm md:text-base leading-relaxed">
-              So here's what I'm doing: Join the waitlist for a free resume review. When I have time, I'll reach out.
-            </p>
-            <p className="text-foreground font-medium mb-3">What you'll get:</p>
-            <ul className="space-y-2 mb-0">
-              <li className="flex items-start gap-3 text-sm md:text-base text-foreground">
-                <GoldCheckBadge />
-                <span>The exact changes that make recruiters reach out</span>
-              </li>
-              <li className="flex items-start gap-3 text-sm md:text-base text-foreground">
-                <GoldCheckBadge />
-                <span>Tips from someone who reviews resumes every day at Uber</span>
-              </li>
-              <li className="flex items-start gap-3 text-sm md:text-base text-foreground">
-                <GoldCheckBadge />
-                <span>Real feedback from an active Fortune 500 recruiter</span>
-              </li>
-            </ul>
-          </div>
-
-          <div className="ml-embedded max-w-[500px] mx-auto animate-fade-up-delay-2" data-form="sM1X80"></div>
-          <p className="text-sm text-muted-foreground mt-4 animate-fade-up-delay-2">
-            Your info stays private. I don't spam. Ever.
-          </p>
-        </div>
-      </section>
 
       {/* Results Section - Updated Stats */}
       <section id="results" className="py-16 md:py-24 px-5 md:px-6 bg-background">
