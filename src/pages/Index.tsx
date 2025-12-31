@@ -59,24 +59,28 @@ const Index = () => {
         <div className="container mx-auto max-w-5xl">
           <div className="grid md:grid-cols-2 gap-10 md:gap-12 items-center">
             <div className="order-2 md:order-1">
-              <h1 className="font-heading text-4xl md:text-5xl lg:text-6xl text-executive-green mb-4 leading-tight">
-                Your Resume Isn't<br />Getting You a Job
+              <h1 className="font-heading text-4xl md:text-5xl lg:text-6xl text-executive-green mb-2 leading-[1.1]">
+                Your Resume Isn't Getting You a Job
               </h1>
-              <p className="font-heading text-xl md:text-2xl text-foreground mb-6">
+              <p className="font-heading text-2xl md:text-3xl text-foreground mb-8">
                 I'll Tell You Why
               </p>
-              <p className="text-base md:text-lg text-foreground leading-relaxed mb-4">
-                I'm an active Uber recruiter.
-              </p>
-              <p className="text-base md:text-lg text-foreground leading-relaxed mb-6">
-                I've reviewed <span className="text-gold font-bold">20,000+ resumes</span> and hired <span className="text-gold font-bold">500+ people</span>.
-              </p>
-              <p className="text-base md:text-lg text-foreground leading-relaxed mb-4">
-                Most resumes are rejected in under 10 seconds.
-              </p>
-              <p className="text-base md:text-lg text-foreground leading-relaxed mb-6">
-                I'll show you exactly what's costing you the job.
-              </p>
+              <div className="space-y-1 mb-6">
+                <p className="text-base md:text-lg text-foreground leading-relaxed">
+                  I'm an active Uber recruiter.
+                </p>
+                <p className="text-base md:text-lg text-foreground leading-relaxed">
+                  I've reviewed <span className="text-gold font-bold">20,000+ resumes</span> and hired <span className="text-gold font-bold">500+ people</span>.
+                </p>
+              </div>
+              <div className="space-y-1 mb-6">
+                <p className="text-base md:text-lg text-foreground leading-relaxed">
+                  Most resumes are rejected in under 10 seconds.
+                </p>
+                <p className="text-base md:text-lg text-foreground leading-relaxed font-medium">
+                  I'll show you exactly what's costing you the job.
+                </p>
+              </div>
               <p className="text-gold font-semibold text-base md:text-lg mb-6">
                 $500 USD value · Only 5 candidates per month
               </p>
