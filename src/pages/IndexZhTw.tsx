@@ -55,7 +55,7 @@ const IndexZhTw = () => {
             <div className="order-2 md:order-1">
               {/* Headline Block - Dominant element with breathing room */}
               <div className="mb-14 md:mb-16">
-                <h1 className="font-heading text-[2.5rem] md:text-6xl lg:text-7xl text-executive-green leading-[1.05] tracking-tight mb-2">
+                <h1 className="font-heading text-[2.5rem] md:text-6xl lg:text-7xl text-executive-green leading-[1.2] tracking-tight mb-3">
                   你的履歷沒有幫你拿到工作
                 </h1>
                 <p className="font-heading text-xl md:text-2xl text-foreground/70 font-normal">
