@@ -28,9 +28,11 @@ const IndexZhTw = () => {
             ))}
           </div>
           <div className="flex items-center gap-3 md:gap-4">
-            <div className="hidden md:block">
-              <LanguageToggle variant="nav" />
-            </div>
+            {/* Mobile: show link and language toggle */}
+            <a href="#resources" className="md:hidden text-sm text-cream-70 hover:text-cream transition-colors">
+              免費資源
+            </a>
+            <LanguageToggle variant="nav" />
             <div className="hidden md:flex items-center gap-3">
               <a href="https://www.linkedin.com/in/james-bugden/" target="_blank" rel="noopener noreferrer" className="text-cream-70 hover:text-cream transition-colors">
                 <Linkedin className="w-5 h-5" />
