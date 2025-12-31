@@ -59,23 +59,26 @@ const Index = () => {
         <div className="container mx-auto max-w-5xl">
           <div className="grid md:grid-cols-2 gap-10 md:gap-12 items-center">
             <div className="order-2 md:order-1">
-              <h1 className="font-heading text-4xl md:text-5xl lg:text-6xl text-executive-green mb-6 leading-tight">
-                Stop Getting<br />Ghosted By<br />Recruiters
+              <h1 className="font-heading text-4xl md:text-5xl lg:text-6xl text-executive-green mb-4 leading-tight">
+                Your Resume Isn't<br />Getting You a Job
               </h1>
-              <p className="text-base md:text-lg text-foreground leading-relaxed mb-4">
-                I'm an active Uber recruiter who sees what actually works.
+              <p className="font-heading text-xl md:text-2xl text-foreground mb-6">
+                I'll Tell You Why
               </p>
               <p className="text-base md:text-lg text-foreground leading-relaxed mb-4">
-                I've reviewed <span className="text-gold font-bold">20,000+ resumes</span> and hired <span className="text-gold font-bold">500+ people</span>.
+                I'm an active Uber recruiter.
               </p>
               <p className="text-base md:text-lg text-foreground leading-relaxed mb-6">
-                I know exactly why yours isn't getting callbacks.
+                I've reviewed <span className="text-gold font-bold">20,000+ resumes</span> and hired <span className="text-gold font-bold">500+ people</span>.
               </p>
-              <p className="text-base md:text-lg text-foreground leading-relaxed mb-1">
-                Get on the waitlist for a free review.
+              <p className="text-base md:text-lg text-foreground leading-relaxed mb-4">
+                Most resumes are rejected in under 10 seconds.
+              </p>
+              <p className="text-base md:text-lg text-foreground leading-relaxed mb-6">
+                I'll show you exactly what's costing you the job.
               </p>
               <p className="text-gold font-semibold text-base md:text-lg mb-6">
-                (Worth $300 USD - 5 places monthly)
+                $500 USD value · Only 5 candidates per month
               </p>
               
               <MailerLiteForm formId="sM1X80" className="ml-embedded max-w-[400px] mb-4" />
