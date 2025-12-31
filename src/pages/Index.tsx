@@ -82,7 +82,7 @@ const Index = () => {
                 </p>
               </div>
               <p className="text-gold font-semibold text-base md:text-lg mb-6">
-                $500 USD value · Only 5 candidates per month
+                $500 USD value · No charge while I'm testing this · Only 5 candidates per month
               </p>
               
               <MailerLiteForm formId="sM1X80" className="ml-embedded max-w-[400px] mb-4" />
