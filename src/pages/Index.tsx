@@ -189,10 +189,10 @@ const Index = () => {
       <section className="py-16 md:py-24 px-5 md:px-6 bg-executive-green relative border-t border-cream/10">
         <div className="container mx-auto max-w-xl text-center relative z-10">
           <h2 className="font-heading text-3xl md:text-5xl text-cream mb-4">
-            Not sure if this is a fit?
+            Ask me anything
           </h2>
           <p className="text-cream/70 text-base md:text-lg mb-8 leading-relaxed">
-            If you have a quick question before joining the waitlist,<br className="hidden md:block" /> you can ask it here.
+            I can also help with interview preparation and salary negotiation.
           </p>
           <a href="mailto:james@jamesbugden.com?subject=Quick question about resume review">
             <Button size="lg" className="h-14 px-10 btn-gold font-medium text-base uppercase tracking-wider">
