@@ -174,12 +174,14 @@ const Index = () => {
       <section className="py-16 md:py-24 px-5 md:px-6 bg-executive-green relative border-t border-cream/10">
         <div className="container mx-auto max-w-3xl text-center relative z-10">
           <h2 className="font-heading text-3xl md:text-5xl text-cream mb-8 md:mb-10">
-            Want to contact me?
+            Contact me
           </h2>
           <div className="flex justify-center">
-            <Button size="lg" className="h-14 px-10 btn-gold font-medium text-base uppercase tracking-wider">
-              MESSAGE
-            </Button>
+            <a href="mailto:james@jamesbugden.com">
+              <Button size="lg" className="h-14 px-10 btn-gold font-medium text-base uppercase tracking-wider">
+                MESSAGE
+              </Button>
+            </a>
           </div>
         </div>
       </section>
