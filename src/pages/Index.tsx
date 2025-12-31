@@ -173,18 +173,12 @@ const Index = () => {
       {/* Final CTA Section */}
       <section className="py-16 md:py-24 px-5 md:px-6 bg-executive-green relative border-t border-cream/10">
         <div className="container mx-auto max-w-3xl text-center relative z-10">
-          <h2 className="font-heading text-3xl md:text-5xl text-cream mb-6">
-            Ready to Level Up?
+          <h2 className="font-heading text-3xl md:text-5xl text-cream mb-8 md:mb-10">
+            Want to contact me?
           </h2>
-          <p className="text-cream-90 text-base md:text-lg mb-8 md:mb-10 max-w-xl mx-auto">
-            Every week you wait is money left on the table. Let's change that.
-          </p>
-          <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <Button size="lg" className="h-14 px-10 btn-gold font-medium text-base uppercase tracking-wider w-full sm:w-auto">
-              Work With Me
-            </Button>
-            <Button size="lg" className="h-14 px-10 btn-secondary-blur font-medium text-base uppercase tracking-wider w-full sm:w-auto">
-              Get Free Tips
+          <div className="flex justify-center">
+            <Button size="lg" className="h-14 px-10 btn-gold font-medium text-base uppercase tracking-wider">
+              MESSAGE
             </Button>
           </div>
         </div>
