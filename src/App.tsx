@@ -12,6 +12,7 @@ import ClientReviewGate from "./pages/ClientReviewGate";
 import CharleneLeeReview from "./pages/reviews/CharleneLeeReview";
 import CharleneLeeReviewZhTw from "./pages/reviews/CharleneLeeReviewZhTw";
 import ProtectedRoute from "./components/ProtectedRoute";
+import ResumeGuide from "./pages/ResumeGuide";
 
 const queryClient = new QueryClient();
 
@@ -36,6 +37,7 @@ const App = () => (
           <Route path="/review/:clientId" element={<ClientReviewGate />} />
           <Route path="/reviews/charlene-lee" element={<CharleneLeeReview />} />
           <Route path="/zh-tw/reviews/charlene-lee" element={<CharleneLeeReviewZhTw />} />
+          <Route path="/resume-guide" element={<ResumeGuide />} />
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
           <Route path="*" element={<NotFound />} />
         </Routes>
