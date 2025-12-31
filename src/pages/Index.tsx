@@ -60,47 +60,48 @@ const Index = () => {
           <div className="grid md:grid-cols-2 gap-12 md:gap-16 items-center">
             {/* Content */}
             <div className="order-2 md:order-1">
-              {/* Headline - Largest element */}
-              <h1 className="font-heading text-4xl md:text-5xl lg:text-6xl text-executive-green leading-[1.1] mb-3">
-                Your Resume Isn't Getting You a Job
-              </h1>
-              <p className="font-heading text-2xl md:text-3xl text-foreground mb-12">
-                I'll Tell You Why.
-              </p>
+              {/* Headline Block - Dominant element with breathing room */}
+              <div className="mb-14 md:mb-16">
+                <h1 className="font-heading text-[2.5rem] md:text-6xl lg:text-7xl text-executive-green leading-[1.05] tracking-tight mb-2">
+                  Your Resume Isn't Getting You a Job
+                </h1>
+                <p className="font-heading text-xl md:text-2xl text-foreground/70 font-normal">
+                  I'll Tell You Why.
+                </p>
+              </div>
 
-              {/* Authority lines - Neutral, factual */}
-              <div className="space-y-1 mb-10">
-                <p className="text-base md:text-lg text-muted-foreground leading-relaxed">
+              {/* Authority lines - Tightly grouped, neutral */}
+              <div className="mb-8 md:mb-10">
+                <p className="text-base text-muted-foreground leading-relaxed">
                   I'm an active Uber recruiter.
                 </p>
-                <p className="text-base md:text-lg text-muted-foreground leading-relaxed">
+                <p className="text-base text-muted-foreground leading-relaxed">
                   I've reviewed 20,000+ resumes and hired 500+ people.
                 </p>
               </div>
 
-              {/* Value proposition */}
-              <div className="space-y-1 mb-10">
+              {/* Diagnosis lines - Separate section, slightly more emphasis */}
+              <div className="mb-10 md:mb-12">
                 <p className="text-base md:text-lg text-foreground leading-relaxed">
-                  Most resumes are rejected in under 10 seconds.
+                  Recruiters decide whether to reject a resume in under 10 seconds.
                 </p>
                 <p className="text-base md:text-lg text-foreground leading-relaxed">
-                  I'll show you exactly what's costing you the job.
+                  I'll show you exactly what gets your resume rejected.
                 </p>
               </div>
 
-              {/* Value + Scarcity line - Gold accent */}
-              <p className="text-gold font-semibold text-base md:text-lg mb-10">
-                $500 USD value · No charge while I'm testing this<br className="md:hidden" />
-                <span className="hidden md:inline"> · </span>Only 5 candidates per month
-              </p>
-              
-              {/* CTA - Visually isolated */}
-              <div className="mb-6">
+              {/* Value + Scarcity + CTA - Grouped together */}
+              <div className="space-y-5">
+                <p className="text-gold font-semibold text-base md:text-lg">
+                  $500 USD value · No charge during testing · Only 5 candidates per month
+                </p>
+                
                 <MailerLiteForm formId="sM1X80" className="ml-embedded max-w-[400px]" />
+                
+                <p className="text-sm text-muted-foreground">
+                  Your info stays private. No spam. Ever.
+                </p>
               </div>
-              <p className="text-sm text-muted-foreground mb-8">
-                Your info stays private. No spam. Ever.
-              </p>
               
               {/* Social links */}
               <div className="flex flex-wrap gap-3">
