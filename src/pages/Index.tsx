@@ -153,15 +153,15 @@ const Index = () => {
             <ul className="space-y-2 mb-0">
               <li className="flex items-start gap-3 text-sm md:text-base text-foreground">
                 <GoldCheckBadge />
-                <span>The exact changes that make recruiters reach out</span>
+                <span>Full report and updated English resume</span>
               </li>
               <li className="flex items-start gap-3 text-sm md:text-base text-foreground">
                 <GoldCheckBadge />
-                <span>Tips from someone who reviews resumes every day at Uber</span>
+                <span>Real feedback from an active Fortune 100 recruiter</span>
               </li>
               <li className="flex items-start gap-3 text-sm md:text-base text-foreground">
                 <GoldCheckBadge />
-                <span>Real feedback from an active Fortune 500 recruiter</span>
+                <span>Learn how to target your resume to your dream jobs</span>
               </li>
             </ul>
           </div>
