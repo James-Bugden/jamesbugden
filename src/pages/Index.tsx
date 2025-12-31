@@ -102,19 +102,6 @@ const Index = () => {
                   Your info stays private. No spam. Ever.
                 </p>
               </div>
-              
-              {/* Social links */}
-              <div className="flex flex-wrap gap-3">
-                <a href="https://www.linkedin.com/in/james-bugden/" target="_blank" rel="noopener noreferrer" className="text-muted-foreground hover:text-foreground transition-colors">
-                  <Linkedin className="w-5 h-5" />
-                </a>
-                <a href="https://www.instagram.com/james.careers/" target="_blank" rel="noopener noreferrer" className="text-muted-foreground hover:text-foreground transition-colors">
-                  <InstagramIcon className="w-5 h-5" />
-                </a>
-                <a href="https://www.threads.com/@james.careers" target="_blank" rel="noopener noreferrer" className="text-muted-foreground hover:text-foreground transition-colors">
-                  <ThreadsIcon className="w-5 h-5" />
-                </a>
-              </div>
             </div>
 
             {/* Photo */}
