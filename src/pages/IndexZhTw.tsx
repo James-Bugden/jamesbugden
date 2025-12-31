@@ -59,7 +59,7 @@ const IndexZhTw = () => {
                   你的履歷沒有幫你拿到工作
                 </h1>
                 <p className="font-heading text-xl md:text-2xl text-foreground/70 font-normal">
-                  讓我告訴你為什麼。
+                  讓我告訴你為什麼
                 </p>
               </div>
 
@@ -86,7 +86,7 @@ const IndexZhTw = () => {
               {/* Value + Scarcity + CTA - Grouped together */}
               <div className="space-y-5">
                 <p className="text-gold font-semibold text-base md:text-lg">
-                  價值 $500 美元 · 測試期間免費 · 每月僅限 5 位
+                  價值 1萬元 · 測試期間免費 · 每月僅限 5 位
                 </p>
                 
                 <MailerLiteForm formId="sM1X80" className="ml-embedded max-w-[400px]" buttonText="加入等候名單" />
@@ -124,7 +124,7 @@ const IndexZhTw = () => {
             加入等候名單：免費履歷健檢
           </h2>
           <p className="text-gold font-semibold text-lg md:text-xl mb-2">
-            價值 $500 美元 · 測試期間免費
+            價值 1萬元 · 測試期間免費
           </p>
           <p className="text-base md:text-lg text-foreground mb-8">
             每月僅限 5 位
