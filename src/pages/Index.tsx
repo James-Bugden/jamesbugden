@@ -6,6 +6,7 @@ import LanguageToggle from "@/components/LanguageToggle";
 import MobileMenu from "@/components/MobileMenu";
 import GoldCheckBadge from "@/components/GoldCheckBadge";
 import TestimonialsSection from "@/components/TestimonialsSection";
+import FreeResourcesSection from "@/components/FreeResourcesSection";
 import MailerLiteForm from "@/components/MailerLiteForm";
 
 declare global {
@@ -120,6 +121,9 @@ const Index = () => {
 
       {/* Testimonials Section */}
       <TestimonialsSection />
+
+      {/* Free Resources Section */}
+      <FreeResourcesSection />
 
 
       {/* Waitlist CTA Section */}
