@@ -75,7 +75,7 @@ const MobileMenu = ({ links }: MobileMenuProps) => {
 
           <div className="mt-8 pt-8 border-t border-cream/10">
             <div className="mb-6">
-              <LanguageToggle variant="nav" />
+              <LanguageToggle variant="mobile" />
             </div>
             <div className="flex items-center gap-6">
               <a

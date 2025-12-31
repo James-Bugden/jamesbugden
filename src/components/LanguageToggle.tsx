@@ -2,7 +2,7 @@ import { useNavigate, useLocation } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 
 interface LanguageToggleProps {
-  variant?: "nav" | "default";
+  variant?: "nav" | "mobile" | "default";
 }
 
 const LanguageToggle = ({ variant = "default" }: LanguageToggleProps) => {
@@ -26,6 +26,17 @@ const LanguageToggle = ({ variant = "default" }: LanguageToggleProps) => {
         className="px-3 py-1.5 text-sm font-semibold bg-gold/20 hover:bg-gold/30 text-gold border border-gold/40 rounded-md transition-all duration-200 hover:scale-105"
       >
         {isZhTw ? "EN" : "中文"}
+      </button>
+    );
+  }
+
+  if (variant === "mobile") {
+    return (
+      <button 
+        onClick={toggleLanguage}
+        className="w-full py-3 text-lg font-semibold bg-gold/20 hover:bg-gold/30 text-gold border border-gold/40 rounded-md transition-all duration-200"
+      >
+        {isZhTw ? "Switch to English" : "切換至中文"}
       </button>
     );
   }
