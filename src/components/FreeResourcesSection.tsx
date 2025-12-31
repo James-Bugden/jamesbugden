@@ -50,7 +50,7 @@ const resources: Resource[] = [
 
 const FreeResourcesSection = () => {
   return (
-    <section id="resources" className="py-16 md:py-24 px-5 md:px-6 bg-muted">
+    <section id="resources" className="py-16 md:py-24 px-5 md:px-6 bg-background">
       <div className="container mx-auto max-w-5xl">
         {/* Section Header - matching "What Clients Say" style */}
         <h2 className="font-heading text-3xl md:text-5xl text-foreground text-center mb-12 md:mb-16">
