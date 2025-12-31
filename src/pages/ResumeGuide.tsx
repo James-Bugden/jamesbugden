@@ -1,346 +1,510 @@
-import { CheckCircle, XCircle, ArrowLeft, Download } from "lucide-react";
+import { ArrowLeft, Download, Target, AlertTriangle, FileText, Clock, Shield, Sparkles, Ban, Linkedin } from "lucide-react";
 import { Link } from "react-router-dom";
+import { Button } from "@/components/ui/button";
+import GoldCheckBadge from "@/components/GoldCheckBadge";
+import { InstagramIcon, ThreadsIcon } from "@/components/SocialIcons";
 
 const ResumeGuide = () => {
   return (
     <div className="min-h-screen bg-background">
-      {/* Header */}
-      <header className="bg-primary text-primary-foreground py-8">
-        <div className="container mx-auto px-4">
-          <Link to="/" className="inline-flex items-center gap-2 text-primary-foreground/80 hover:text-primary-foreground mb-4 transition-colors">
+      {/* Navigation */}
+      <nav className="fixed top-0 left-0 right-0 z-50 bg-nav-green">
+        <div className="container mx-auto px-5 md:px-6 py-4 flex items-center justify-between">
+          <Link to="/" className="font-heading text-lg md:text-xl font-medium text-cream tracking-tight hover:text-cream-90 transition-colors">
+            JAMES BUGDEN
+          </Link>
+          <Link to="/" className="text-sm text-cream-70 hover:text-cream transition-colors flex items-center gap-2">
             <ArrowLeft className="w-4 h-4" />
             Back to Home
           </Link>
-          <h1 className="text-3xl md:text-4xl font-bold">The Job-Winning Resume Guide</h1>
         </div>
-      </header>
+      </nav>
 
-      <main className="container mx-auto px-4 py-12 max-w-4xl">
-        {/* 5-Minute Resume Audit Checklist */}
-        <section className="mb-16">
-          <h2 className="text-2xl md:text-3xl font-bold mb-8 flex items-center gap-3">
-            <span className="text-3xl">🎯</span> The 5-Minute Resume Audit Checklist
-          </h2>
-          <p className="text-muted-foreground mb-8">Run through this checklist and honestly assess your current resume:</p>
+      {/* Hero Section */}
+      <section className="pt-32 md:pt-40 pb-16 md:pb-20 px-5 md:px-6 bg-background">
+        <div className="container mx-auto max-w-3xl text-center">
+          <div className="inline-flex items-center gap-2 px-4 py-2 bg-card border border-border rounded-full mb-8">
+            <FileText className="w-4 h-4 text-gold" />
+            <span className="text-sm text-muted-foreground">Free Career Resource</span>
+          </div>
+          <h1 className="font-heading text-4xl md:text-5xl lg:text-6xl text-foreground leading-tight mb-6">
+            The Job-Winning Resume Guide
+          </h1>
+          <p className="text-lg md:text-xl text-muted-foreground leading-relaxed max-w-2xl mx-auto">
+            I've reviewed 20,000+ resumes and hired 500+ people. Here's exactly what separates the resumes that get interviews from the ones that get ignored.
+          </p>
+        </div>
+      </section>
+
+      <main className="container mx-auto px-5 md:px-6 pb-20 max-w-3xl">
+        
+        {/* 5-Minute Audit Checklist */}
+        <section className="mb-20">
+          <div className="flex items-center gap-3 mb-8">
+            <div className="w-12 h-12 rounded-full bg-executive-green flex items-center justify-center">
+              <Target className="w-6 h-6 text-cream" />
+            </div>
+            <h2 className="font-heading text-2xl md:text-3xl text-foreground">
+              The 5-Minute Resume Audit
+            </h2>
+          </div>
+          <p className="text-muted-foreground mb-10 text-lg">
+            Run through this checklist and honestly assess your current resume.
+          </p>
 
           {/* First Impressions */}
-          <div className="mb-8">
-            <h3 className="text-xl font-semibold mb-4 text-primary">✓ First Impressions (0-6 seconds)</h3>
-            <ul className="space-y-2 text-foreground/90">
-              <li className="flex items-start gap-2">
-                <CheckCircle className="w-5 h-5 text-primary mt-0.5 flex-shrink-0" />
-                <span><strong>Clean layout</strong> - If it looks like a design project, it's wrong</span>
+          <div className="bg-card border border-border rounded-xl p-6 md:p-8 mb-6">
+            <div className="flex items-center gap-3 mb-6">
+              <Clock className="w-5 h-5 text-gold" />
+              <h3 className="font-heading text-xl text-foreground">First Impressions (0-6 seconds)</h3>
+            </div>
+            <ul className="space-y-4">
+              <li className="flex items-start gap-3">
+                <GoldCheckBadge />
+                <div>
+                  <span className="font-medium text-foreground">Clean layout</span>
+                  <p className="text-muted-foreground text-sm mt-0.5">If it looks like a design project, it's wrong</p>
+                </div>
               </li>
-              <li className="flex items-start gap-2">
-                <CheckCircle className="w-5 h-5 text-primary mt-0.5 flex-shrink-0" />
-                <span><strong>Contact info is complete</strong> - Phone, email, LinkedIn (all working and professional)</span>
+              <li className="flex items-start gap-3">
+                <GoldCheckBadge />
+                <div>
+                  <span className="font-medium text-foreground">Contact info is complete</span>
+                  <p className="text-muted-foreground text-sm mt-0.5">Phone, email, LinkedIn — all working and professional</p>
+                </div>
               </li>
-              <li className="flex items-start gap-2">
-                <CheckCircle className="w-5 h-5 text-primary mt-0.5 flex-shrink-0" />
-                <span><strong>One page</strong> for &lt;10 years experience, two pages max otherwise</span>
+              <li className="flex items-start gap-3">
+                <GoldCheckBadge />
+                <div>
+                  <span className="font-medium text-foreground">Proper length</span>
+                  <p className="text-muted-foreground text-sm mt-0.5">One page for &lt;10 years experience, two pages max otherwise</p>
+                </div>
               </li>
-              <li className="flex items-start gap-2">
-                <CheckCircle className="w-5 h-5 text-primary mt-0.5 flex-shrink-0" />
-                <span><strong>Standard font</strong> - Arial, Calibri, or Helvetica (10-12pt)</span>
+              <li className="flex items-start gap-3">
+                <GoldCheckBadge />
+                <div>
+                  <span className="font-medium text-foreground">Standard font</span>
+                  <p className="text-muted-foreground text-sm mt-0.5">Arial, Calibri, or Helvetica (10-12pt)</p>
+                </div>
               </li>
-              <li className="flex items-start gap-2">
-                <CheckCircle className="w-5 h-5 text-primary mt-0.5 flex-shrink-0" />
-                <span><strong>White space</strong> - I need to scan it in 6 seconds. Make it easy on me</span>
+              <li className="flex items-start gap-3">
+                <GoldCheckBadge />
+                <div>
+                  <span className="font-medium text-foreground">White space</span>
+                  <p className="text-muted-foreground text-sm mt-0.5">I need to scan it in 6 seconds. Make it easy on me</p>
+                </div>
               </li>
             </ul>
           </div>
 
           {/* Content Strength */}
-          <div className="mb-8">
-            <h3 className="text-xl font-semibold mb-4 text-primary">✓ Content Strength (The meat)</h3>
-            <ul className="space-y-2 text-foreground/90">
-              <li className="flex items-start gap-2">
-                <CheckCircle className="w-5 h-5 text-primary mt-0.5 flex-shrink-0" />
-                <span><strong>Strong summary</strong> - 2-3 lines that sell your value, not just describe you</span>
+          <div className="bg-card border border-border rounded-xl p-6 md:p-8 mb-6">
+            <div className="flex items-center gap-3 mb-6">
+              <Sparkles className="w-5 h-5 text-gold" />
+              <h3 className="font-heading text-xl text-foreground">Content Strength</h3>
+            </div>
+            <ul className="space-y-4">
+              <li className="flex items-start gap-3">
+                <GoldCheckBadge />
+                <div>
+                  <span className="font-medium text-foreground">Strong summary</span>
+                  <p className="text-muted-foreground text-sm mt-0.5">2-3 lines that sell your value, not just describe you</p>
+                </div>
               </li>
-              <li className="flex items-start gap-2">
-                <CheckCircle className="w-5 h-5 text-primary mt-0.5 flex-shrink-0" />
-                <span><strong>Results over responsibilities</strong> - "Increased sales by 30%" not "Responsible for sales"</span>
+              <li className="flex items-start gap-3">
+                <GoldCheckBadge />
+                <div>
+                  <span className="font-medium text-foreground">Results over responsibilities</span>
+                  <p className="text-muted-foreground text-sm mt-0.5">"Increased sales by 30%" not "Responsible for sales"</p>
+                </div>
               </li>
-              <li className="flex items-start gap-2">
-                <CheckCircle className="w-5 h-5 text-primary mt-0.5 flex-shrink-0" />
-                <span><strong>Numbers everywhere</strong> - Numbers, percentages, dollar amounts wherever possible</span>
+              <li className="flex items-start gap-3">
+                <GoldCheckBadge />
+                <div>
+                  <span className="font-medium text-foreground">Numbers everywhere</span>
+                  <p className="text-muted-foreground text-sm mt-0.5">Numbers, percentages, dollar amounts wherever possible</p>
+                </div>
               </li>
-              <li className="flex items-start gap-2">
-                <CheckCircle className="w-5 h-5 text-primary mt-0.5 flex-shrink-0" />
-                <span><strong>Tailored to the job</strong> - Keywords from the job description are strategically placed</span>
+              <li className="flex items-start gap-3">
+                <GoldCheckBadge />
+                <div>
+                  <span className="font-medium text-foreground">Tailored to the job</span>
+                  <p className="text-muted-foreground text-sm mt-0.5">Keywords from the job description are strategically placed</p>
+                </div>
               </li>
-              <li className="flex items-start gap-2">
-                <CheckCircle className="w-5 h-5 text-primary mt-0.5 flex-shrink-0" />
-                <span><strong>No generic buzzwords</strong> - "Team player," "hard worker," "detail-oriented" without proof = instant no</span>
+              <li className="flex items-start gap-3">
+                <GoldCheckBadge />
+                <div>
+                  <span className="font-medium text-foreground">No generic buzzwords</span>
+                  <p className="text-muted-foreground text-sm mt-0.5">"Team player" and "detail-oriented" without proof = instant no</p>
+                </div>
               </li>
             </ul>
           </div>
 
           {/* ATS-Friendly */}
-          <div className="mb-8">
-            <h3 className="text-xl font-semibold mb-4 text-primary">✓ ATS-Friendly</h3>
-            <ul className="space-y-2 text-foreground/90">
-              <li className="flex items-start gap-2">
-                <CheckCircle className="w-5 h-5 text-primary mt-0.5 flex-shrink-0" />
-                <span><strong>Standard section headings</strong> - "Experience," "Education," "Skills"</span>
+          <div className="bg-card border border-border rounded-xl p-6 md:p-8 mb-6">
+            <div className="flex items-center gap-3 mb-6">
+              <Shield className="w-5 h-5 text-gold" />
+              <h3 className="font-heading text-xl text-foreground">ATS-Friendly</h3>
+            </div>
+            <p className="text-muted-foreground text-sm mb-5 bg-muted/50 p-3 rounded-lg">
+              <strong>ATS</strong> = Applicant Tracking System. The software that scans your resume before a human ever sees it. If it can't read your resume, you're out.
+            </p>
+            <ul className="space-y-4">
+              <li className="flex items-start gap-3">
+                <GoldCheckBadge />
+                <div>
+                  <span className="font-medium text-foreground">Standard section headings</span>
+                  <p className="text-muted-foreground text-sm mt-0.5">"Experience," "Education," "Skills"</p>
+                </div>
               </li>
-              <li className="flex items-start gap-2">
-                <CheckCircle className="w-5 h-5 text-primary mt-0.5 flex-shrink-0" />
-                <span><strong>Skills match job description</strong> - Use exact terminology from the posting</span>
+              <li className="flex items-start gap-3">
+                <GoldCheckBadge />
+                <div>
+                  <span className="font-medium text-foreground">Skills match job description</span>
+                  <p className="text-muted-foreground text-sm mt-0.5">Use exact terminology from the posting</p>
+                </div>
               </li>
-              <li className="flex items-start gap-2">
-                <CheckCircle className="w-5 h-5 text-primary mt-0.5 flex-shrink-0" />
-                <span><strong>Simple formatting</strong> - Bullet points are fine, but avoid complex formatting or images. No tables or text boxes—modern ATS can read them but parse inconsistently. Why risk it?</span>
+              <li className="flex items-start gap-3">
+                <GoldCheckBadge />
+                <div>
+                  <span className="font-medium text-foreground">Simple formatting</span>
+                  <p className="text-muted-foreground text-sm mt-0.5">No tables or text boxes — modern ATS can read them but parse inconsistently</p>
+                </div>
               </li>
             </ul>
           </div>
 
           {/* Red Flag Check */}
-          <div className="mb-8">
-            <h3 className="text-xl font-semibold mb-4 text-primary">✓ Red Flag Check</h3>
-            <ul className="space-y-2 text-foreground/90">
-              <li className="flex items-start gap-2">
-                <CheckCircle className="w-5 h-5 text-primary mt-0.5 flex-shrink-0" />
-                <span><strong>Zero typos</strong> - Use Grammarly or ChatGPT to proofread. One typo in your header = instant reject</span>
+          <div className="bg-card border border-border rounded-xl p-6 md:p-8 mb-6">
+            <div className="flex items-center gap-3 mb-6">
+              <AlertTriangle className="w-5 h-5 text-gold" />
+              <h3 className="font-heading text-xl text-foreground">Red Flag Check</h3>
+            </div>
+            <ul className="space-y-4">
+              <li className="flex items-start gap-3">
+                <GoldCheckBadge />
+                <div>
+                  <span className="font-medium text-foreground">Zero typos</span>
+                  <p className="text-muted-foreground text-sm mt-0.5">Use Grammarly or ChatGPT to proofread. One typo in your header = instant reject</p>
+                </div>
               </li>
-              <li className="flex items-start gap-2">
-                <CheckCircle className="w-5 h-5 text-primary mt-0.5 flex-shrink-0" />
-                <span><strong>Employment gaps</strong> - If you have many gaps or short tenures (1 year each), briefly explain why in one line</span>
+              <li className="flex items-start gap-3">
+                <GoldCheckBadge />
+                <div>
+                  <span className="font-medium text-foreground">Employment gaps explained</span>
+                  <p className="text-muted-foreground text-sm mt-0.5">If you have gaps or short tenures, briefly explain why in one line</p>
+                </div>
               </li>
-              <li className="flex items-start gap-2">
-                <CheckCircle className="w-5 h-5 text-primary mt-0.5 flex-shrink-0" />
-                <span><strong>Consistent dates</strong> - Pick one style and stick to it</span>
+              <li className="flex items-start gap-3">
+                <GoldCheckBadge />
+                <div>
+                  <span className="font-medium text-foreground">Consistent dates</span>
+                  <p className="text-muted-foreground text-sm mt-0.5">Pick one style and stick to it</p>
+                </div>
               </li>
-              <li className="flex items-start gap-2">
-                <CheckCircle className="w-5 h-5 text-primary mt-0.5 flex-shrink-0" />
-                <span><strong>Relevant experience first</strong> - Remove irrelevant stuff from 10+ years ago. Lead with what matters for THIS job</span>
+              <li className="flex items-start gap-3">
+                <GoldCheckBadge />
+                <div>
+                  <span className="font-medium text-foreground">Relevant experience first</span>
+                  <p className="text-muted-foreground text-sm mt-0.5">Remove irrelevant stuff from 10+ years ago. Lead with what matters for THIS job</p>
+                </div>
               </li>
             </ul>
           </div>
 
           {/* Final Polish */}
-          <div className="mb-8">
-            <h3 className="text-xl font-semibold mb-4 text-primary">✓ The Final Polish</h3>
-            <ul className="space-y-2 text-foreground/90">
-              <li className="flex items-start gap-2">
-                <CheckCircle className="w-5 h-5 text-primary mt-0.5 flex-shrink-0" />
-                <span><strong>Professional email</strong> - firstname.lastname@email.com (yes, I judge partygirl99@)</span>
+          <div className="bg-card border border-border rounded-xl p-6 md:p-8">
+            <div className="flex items-center gap-3 mb-6">
+              <Sparkles className="w-5 h-5 text-gold" />
+              <h3 className="font-heading text-xl text-foreground">The Final Polish</h3>
+            </div>
+            <ul className="space-y-4">
+              <li className="flex items-start gap-3">
+                <GoldCheckBadge />
+                <div>
+                  <span className="font-medium text-foreground">Professional email</span>
+                  <p className="text-muted-foreground text-sm mt-0.5">firstname.lastname@email.com — yes, I judge partygirl99@</p>
+                </div>
               </li>
-              <li className="flex items-start gap-2">
-                <CheckCircle className="w-5 h-5 text-primary mt-0.5 flex-shrink-0" />
-                <span><strong>LinkedIn URL customized</strong> - Use linkedin.com/in/yourname (not the random number version)</span>
+              <li className="flex items-start gap-3">
+                <GoldCheckBadge />
+                <div>
+                  <span className="font-medium text-foreground">LinkedIn URL customized</span>
+                  <p className="text-muted-foreground text-sm mt-0.5">Use linkedin.com/in/yourname (not the random number version)</p>
+                </div>
               </li>
-              <li className="flex items-start gap-2">
-                <CheckCircle className="w-5 h-5 text-primary mt-0.5 flex-shrink-0" />
-                <span><strong>File naming</strong> - "FirstName_LastName_Resume.pdf" not "Resume Final v3.docx". When I download 50 resumes, I need to know whose is whose</span>
+              <li className="flex items-start gap-3">
+                <GoldCheckBadge />
+                <div>
+                  <span className="font-medium text-foreground">File naming</span>
+                  <p className="text-muted-foreground text-sm mt-0.5">"FirstName_LastName_Resume.pdf" not "Resume Final v3.docx"</p>
+                </div>
               </li>
-              <li className="flex items-start gap-2">
-                <CheckCircle className="w-5 h-5 text-primary mt-0.5 flex-shrink-0" />
-                <span><strong>PDF format</strong> - Unless specifically asked for Word doc</span>
+              <li className="flex items-start gap-3">
+                <GoldCheckBadge />
+                <div>
+                  <span className="font-medium text-foreground">PDF format</span>
+                  <p className="text-muted-foreground text-sm mt-0.5">Unless specifically asked for Word doc</p>
+                </div>
               </li>
             </ul>
           </div>
         </section>
 
         {/* Common Mistakes Section */}
-        <section className="mb-16">
-          <h2 className="text-2xl md:text-3xl font-bold mb-8 flex items-center gap-3">
-            <span className="text-3xl">🚫</span> Common Mistakes That Kill Applications
-          </h2>
+        <section className="mb-20">
+          <div className="flex items-center gap-3 mb-8">
+            <div className="w-12 h-12 rounded-full bg-destructive/10 flex items-center justify-center">
+              <Ban className="w-6 h-6 text-destructive" />
+            </div>
+            <h2 className="font-heading text-2xl md:text-3xl text-foreground">
+              Mistakes That Kill Applications
+            </h2>
+          </div>
 
           {/* Mistake 1 */}
-          <div className="bg-card rounded-lg p-6 mb-6 border">
-            <h3 className="text-xl font-semibold mb-4">Mistake #1: The Generic Resume Spray-and-Pray</h3>
-            <div className="mb-4">
-              <div className="flex items-start gap-2 text-destructive mb-2">
-                <XCircle className="w-5 h-5 mt-0.5 flex-shrink-0" />
-                <span><strong>WHAT NOT TO DO:</strong> Using the exact same resume for every job application without customization.</span>
-              </div>
+          <div className="border border-border rounded-xl overflow-hidden mb-6">
+            <div className="bg-muted/50 px-6 py-4 border-b border-border">
+              <h3 className="font-heading text-lg text-foreground">Mistake #1: The Generic Resume Spray-and-Pray</h3>
             </div>
-            <div>
-              <div className="flex items-start gap-2 text-primary mb-2">
-                <CheckCircle className="w-5 h-5 mt-0.5 flex-shrink-0" />
-                <span><strong>WHAT TO DO INSTEAD:</strong> Customize your resume for each type of role by:</span>
+            <div className="p-6 md:p-8 space-y-6">
+              <div className="bg-destructive/5 border border-destructive/20 rounded-lg p-4">
+                <p className="font-medium text-destructive mb-2 flex items-center gap-2">
+                  <Ban className="w-4 h-4" /> What not to do
+                </p>
+                <p className="text-foreground/80 text-sm">Using the exact same resume for every job application without customization.</p>
               </div>
-              <ul className="ml-7 space-y-1 text-foreground/80">
-                <li>• Using keywords from the job description (especially in your summary and skills)</li>
-                <li>• Highlighting relevant experience first</li>
-                <li>• Adjusting your bullet points to match what they're looking for</li>
-                <li>• Showing you understand their industry/company</li>
-              </ul>
-              <p className="mt-3 text-muted-foreground text-sm">You don't need to create a new resume for every application but if it is a different job type ex. Sales vs Operations, then you will need to create a new version.</p>
+              <div className="bg-card border border-gold/30 rounded-lg p-4">
+                <p className="font-medium text-gold mb-3 flex items-center gap-2">
+                  <GoldCheckBadge /> What to do instead
+                </p>
+                <ul className="space-y-2 text-sm text-foreground/80">
+                  <li>• Use keywords from the job description in your summary and skills</li>
+                  <li>• Highlight relevant experience first</li>
+                  <li>• Adjust your bullet points to match what they're looking for</li>
+                  <li>• Show you understand their industry</li>
+                </ul>
+                <p className="text-muted-foreground text-xs mt-4 pt-3 border-t border-border">
+                  You don't need a new resume for every application — but different job types (Sales vs Operations) need different versions.
+                </p>
+              </div>
             </div>
           </div>
 
           {/* Mistake 2 */}
-          <div className="bg-card rounded-lg p-6 mb-6 border">
-            <h3 className="text-xl font-semibold mb-4">Mistake #2: Vague, Responsibility-Focused Bullets</h3>
-            <div className="mb-4">
-              <div className="flex items-start gap-2 text-destructive mb-2">
-                <XCircle className="w-5 h-5 mt-0.5 flex-shrink-0" />
-                <strong>WHAT NOT TO DO:</strong>
-              </div>
-              <ul className="ml-7 space-y-1 text-foreground/80">
-                <li>• "Responsible for managing social media accounts"</li>
-                <li>• "Handled customer service inquiries"</li>
-                <li>• "Worked on team projects"</li>
-              </ul>
+          <div className="border border-border rounded-xl overflow-hidden mb-6">
+            <div className="bg-muted/50 px-6 py-4 border-b border-border">
+              <h3 className="font-heading text-lg text-foreground">Mistake #2: Vague, Responsibility-Focused Bullets</h3>
             </div>
-            <div>
-              <div className="flex items-start gap-2 text-primary mb-2">
-                <CheckCircle className="w-5 h-5 mt-0.5 flex-shrink-0" />
-                <strong>WHAT TO DO INSTEAD:</strong>
-              </div>
-              <ul className="ml-7 space-y-1 text-foreground/80">
-                <li>• "Grew Instagram following from 2K to 15K in 6 months, increasing engagement by 140%"</li>
-                <li>• "Resolved 95% of customer issues on first contact, maintaining 4.9/5 satisfaction rating"</li>
-                <li>• "Led cross-functional team of 5 to deliver $2M project 3 weeks ahead of schedule"</li>
-              </ul>
-              <div className="mt-4 p-4 bg-muted rounded-lg">
-                <p className="font-medium mb-2">Pro tip: Use the formula: Action Verb + What You Did + Quantified Result</p>
-                <p className="text-sm text-muted-foreground">You can use either of these frameworks:</p>
-                <ul className="text-sm text-muted-foreground mt-1">
-                  <li>• <strong>CAR</strong> (Challenge you faced, Action you took, Result you achieved)</li>
-                  <li>• <strong>XYZ</strong> (Accomplished X as measured by Y, by doing Z)</li>
+            <div className="p-6 md:p-8 space-y-6">
+              <div className="bg-destructive/5 border border-destructive/20 rounded-lg p-4">
+                <p className="font-medium text-destructive mb-3 flex items-center gap-2">
+                  <Ban className="w-4 h-4" /> What not to do
+                </p>
+                <ul className="space-y-1 text-sm text-foreground/80">
+                  <li>• "Responsible for managing social media accounts"</li>
+                  <li>• "Handled customer service inquiries"</li>
+                  <li>• "Worked on team projects"</li>
                 </ul>
+              </div>
+              <div className="bg-card border border-gold/30 rounded-lg p-4">
+                <p className="font-medium text-gold mb-3 flex items-center gap-2">
+                  <GoldCheckBadge /> What to do instead
+                </p>
+                <ul className="space-y-2 text-sm text-foreground/80">
+                  <li>• "Grew Instagram following from 2K to 15K in 6 months, increasing engagement by 140%"</li>
+                  <li>• "Resolved 95% of customer issues on first contact, maintaining 4.9/5 satisfaction rating"</li>
+                  <li>• "Led cross-functional team of 5 to deliver $2M project 3 weeks ahead of schedule"</li>
+                </ul>
+              </div>
+              <div className="bg-executive-green text-cream rounded-lg p-5">
+                <p className="font-medium mb-2">The Formula</p>
+                <p className="text-cream-90 text-sm mb-3">Action Verb + What You Did + Quantified Result</p>
+                <div className="text-cream-70 text-xs space-y-1">
+                  <p><strong className="text-cream">CAR:</strong> Challenge → Action → Result</p>
+                  <p><strong className="text-cream">XYZ:</strong> Accomplished X as measured by Y, by doing Z</p>
+                </div>
               </div>
             </div>
           </div>
 
           {/* Mistake 3 */}
-          <div className="bg-card rounded-lg p-6 mb-6 border">
-            <h3 className="text-xl font-semibold mb-4">Mistake #3: The Wall of Text</h3>
-            <div className="mb-4">
-              <div className="flex items-start gap-2 text-destructive mb-2">
-                <XCircle className="w-5 h-5 mt-0.5 flex-shrink-0" />
-                <span><strong>WHAT NOT TO DO:</strong> Dense paragraphs, no white space, tiny fonts, cramming everything onto one page at the expense of readability.</span>
-              </div>
+          <div className="border border-border rounded-xl overflow-hidden mb-6">
+            <div className="bg-muted/50 px-6 py-4 border-b border-border">
+              <h3 className="font-heading text-lg text-foreground">Mistake #3: The Wall of Text</h3>
             </div>
-            <div>
-              <div className="flex items-start gap-2 text-primary mb-2">
-                <CheckCircle className="w-5 h-5 mt-0.5 flex-shrink-0" />
-                <strong>WHAT TO DO INSTEAD:</strong>
+            <div className="p-6 md:p-8 space-y-6">
+              <div className="bg-destructive/5 border border-destructive/20 rounded-lg p-4">
+                <p className="font-medium text-destructive mb-2 flex items-center gap-2">
+                  <Ban className="w-4 h-4" /> What not to do
+                </p>
+                <p className="text-foreground/80 text-sm">Dense paragraphs, no white space, tiny fonts, cramming everything onto one page at the expense of readability.</p>
               </div>
-              <ul className="ml-7 space-y-1 text-foreground/80">
-                <li>• Use bullet points (3-5 per role maximum)</li>
-                <li>• Keep bullets to 1-2 lines each</li>
-                <li>• Add space between sections</li>
-                <li>• Use standard 10-12pt font</li>
-                <li>• Leave enough space on the page so it is easy to read</li>
-              </ul>
+              <div className="bg-card border border-gold/30 rounded-lg p-4">
+                <p className="font-medium text-gold mb-3 flex items-center gap-2">
+                  <GoldCheckBadge /> What to do instead
+                </p>
+                <ul className="space-y-2 text-sm text-foreground/80">
+                  <li>• Use bullet points (3-5 per role maximum)</li>
+                  <li>• Keep bullets to 1-2 lines each</li>
+                  <li>• Add space between sections</li>
+                  <li>• Use standard 10-12pt font</li>
+                  <li>• Leave enough white space for easy scanning</li>
+                </ul>
+              </div>
             </div>
           </div>
 
           {/* Mistake 4 */}
-          <div className="bg-card rounded-lg p-6 mb-6 border">
-            <h3 className="text-xl font-semibold mb-4">Mistake #4: Outdated or Irrelevant Information</h3>
-            <div className="mb-4">
-              <div className="flex items-start gap-2 text-destructive mb-2">
-                <XCircle className="w-5 h-5 mt-0.5 flex-shrink-0" />
-                <strong>WHAT NOT TO DO:</strong>
-              </div>
-              <ul className="ml-7 space-y-1 text-foreground/80">
-                <li>• Including your full address (city, country is enough)</li>
-                <li>• Listing "Microsoft Office" as a skill in 2024</li>
-                <li>• 'References available upon request' (companies assume this, it's wasted space)</li>
-                <li>• Objective statements (you applied for the position so it's assumed that you want this job)</li>
-                <li>• Jobs from 10+ years ago that aren't relevant</li>
-              </ul>
+          <div className="border border-border rounded-xl overflow-hidden mb-6">
+            <div className="bg-muted/50 px-6 py-4 border-b border-border">
+              <h3 className="font-heading text-lg text-foreground">Mistake #4: Outdated or Irrelevant Information</h3>
             </div>
-            <div>
-              <div className="flex items-start gap-2 text-primary mb-2">
-                <CheckCircle className="w-5 h-5 mt-0.5 flex-shrink-0" />
-                <span><strong>WHAT TO DO INSTEAD:</strong> Focus on what matters NOW for the job you're applying for. Keep it relevant, recent, and results-driven.</span>
+            <div className="p-6 md:p-8 space-y-6">
+              <div className="bg-destructive/5 border border-destructive/20 rounded-lg p-4">
+                <p className="font-medium text-destructive mb-3 flex items-center gap-2">
+                  <Ban className="w-4 h-4" /> What not to do
+                </p>
+                <ul className="space-y-1 text-sm text-foreground/80">
+                  <li>• Including your full address (city, country is enough)</li>
+                  <li>• Listing "Microsoft Office" as a skill in 2024</li>
+                  <li>• "References available upon request" (wasted space)</li>
+                  <li>• Objective statements (you applied — it's assumed you want the job)</li>
+                  <li>• Irrelevant jobs from 10+ years ago</li>
+                </ul>
+              </div>
+              <div className="bg-card border border-gold/30 rounded-lg p-4">
+                <p className="font-medium text-gold mb-2 flex items-center gap-2">
+                  <GoldCheckBadge /> What to do instead
+                </p>
+                <p className="text-foreground/80 text-sm">Focus on what matters NOW for the job you're applying for. Keep it relevant, recent, and results-driven.</p>
               </div>
             </div>
           </div>
 
           {/* Mistake 5 */}
-          <div className="bg-card rounded-lg p-6 mb-6 border">
-            <h3 className="text-xl font-semibold mb-4">Mistake #5: Lying or Exaggerating</h3>
-            <div className="mb-4">
-              <div className="flex items-start gap-2 text-destructive mb-2">
-                <XCircle className="w-5 h-5 mt-0.5 flex-shrink-0" />
-                <strong>WHAT NOT TO DO:</strong>
-              </div>
-              <ul className="ml-7 space-y-1 text-foreground/80">
-                <li>• Inflating job titles</li>
-                <li>• Claiming skills you don't have</li>
-                <li>• Extending employment dates to hide gaps</li>
-                <li>• Taking credit for team achievements as solely your own</li>
-              </ul>
+          <div className="border border-border rounded-xl overflow-hidden mb-6">
+            <div className="bg-muted/50 px-6 py-4 border-b border-border">
+              <h3 className="font-heading text-lg text-foreground">Mistake #5: Lying or Exaggerating</h3>
             </div>
-            <div>
-              <div className="flex items-start gap-2 text-primary mb-2">
-                <CheckCircle className="w-5 h-5 mt-0.5 flex-shrink-0" />
-                <strong>WHAT TO DO INSTEAD:</strong> Be honest but strategic:
+            <div className="p-6 md:p-8 space-y-6">
+              <div className="bg-destructive/5 border border-destructive/20 rounded-lg p-4">
+                <p className="font-medium text-destructive mb-3 flex items-center gap-2">
+                  <Ban className="w-4 h-4" /> What not to do
+                </p>
+                <ul className="space-y-1 text-sm text-foreground/80">
+                  <li>• Inflating job titles</li>
+                  <li>• Claiming skills you don't have</li>
+                  <li>• Extending employment dates to hide gaps</li>
+                  <li>• Taking credit for team achievements as solely your own</li>
+                </ul>
               </div>
-              <ul className="ml-7 space-y-1 text-foreground/80">
-                <li>• "Contributing team member on project that achieved X" (if it was team work)</li>
-                <li>• List skills you're "proficient" vs "expert" in honestly</li>
-                <li>• Explain gaps briefly if asked (career break, upskilling, personal reasons)</li>
-                <li>• Your integrity matters more than a perfect resume</li>
-              </ul>
+              <div className="bg-card border border-gold/30 rounded-lg p-4">
+                <p className="font-medium text-gold mb-3 flex items-center gap-2">
+                  <GoldCheckBadge /> What to do instead
+                </p>
+                <p className="text-foreground/80 text-sm mb-3">Be honest but strategic:</p>
+                <ul className="space-y-2 text-sm text-foreground/80">
+                  <li>• "Contributing team member on project that achieved X"</li>
+                  <li>• List skills you're "proficient" vs "expert" in honestly</li>
+                  <li>• Explain gaps briefly if asked</li>
+                </ul>
+                <p className="text-muted-foreground text-xs mt-4 pt-3 border-t border-border">
+                  Your integrity matters more than a perfect resume.
+                </p>
+              </div>
             </div>
           </div>
 
           {/* Mistake 6 */}
-          <div className="bg-card rounded-lg p-6 mb-6 border">
-            <h3 className="text-xl font-semibold mb-4">Mistake #6: Ignoring ATS (Applicant Tracking Systems)</h3>
-            <div className="mb-4">
-              <div className="flex items-start gap-2 text-destructive mb-2">
-                <XCircle className="w-5 h-5 mt-0.5 flex-shrink-0" />
-                <strong>WHAT NOT TO DO:</strong>
-              </div>
-              <ul className="ml-7 space-y-1 text-foreground/80">
-                <li>• Putting important info in headers/footers</li>
-                <li>• Using images, graphics, or logos</li>
-                <li>• Fancy fonts or colors</li>
-              </ul>
+          <div className="border border-border rounded-xl overflow-hidden">
+            <div className="bg-muted/50 px-6 py-4 border-b border-border">
+              <h3 className="font-heading text-lg text-foreground">Mistake #6: Ignoring the ATS</h3>
             </div>
-            <div>
-              <div className="flex items-start gap-2 text-primary mb-2">
-                <CheckCircle className="w-5 h-5 mt-0.5 flex-shrink-0" />
-                <strong>WHAT TO DO INSTEAD:</strong> Keep it simple and scannable:
+            <div className="p-6 md:p-8 space-y-6">
+              <div className="bg-destructive/5 border border-destructive/20 rounded-lg p-4">
+                <p className="font-medium text-destructive mb-3 flex items-center gap-2">
+                  <Ban className="w-4 h-4" /> What not to do
+                </p>
+                <ul className="space-y-1 text-sm text-foreground/80">
+                  <li>• Putting important info in headers/footers</li>
+                  <li>• Using images, graphics, or logos</li>
+                  <li>• Fancy fonts or colors</li>
+                </ul>
               </div>
-              <ul className="ml-7 space-y-1 text-foreground/80">
-                <li>• Standard section headings</li>
-                <li>• Plain text format with simple bullets</li>
-                <li>• Keywords from the job description strategically placed</li>
-                <li>• Standard fonts</li>
-                <li>• No graphics or images</li>
-              </ul>
+              <div className="bg-card border border-gold/30 rounded-lg p-4">
+                <p className="font-medium text-gold mb-3 flex items-center gap-2">
+                  <GoldCheckBadge /> What to do instead
+                </p>
+                <ul className="space-y-2 text-sm text-foreground/80">
+                  <li>• Standard section headings</li>
+                  <li>• Plain text format with simple bullets</li>
+                  <li>• Keywords from the job description</li>
+                  <li>• Standard fonts, no graphics</li>
+                </ul>
+              </div>
             </div>
           </div>
         </section>
 
         {/* CTA Section */}
-        <section className="bg-primary text-primary-foreground rounded-xl p-8 text-center">
-          <h2 className="text-2xl font-bold mb-4">Access Your Free Resume Templates</h2>
-          <p className="mb-6 text-primary-foreground/90">👉 Click here to get your professional resume templates</p>
-          <div className="space-y-2 text-primary-foreground/80 mb-6">
-            <p>✅ ATS-friendly</p>
-            <p>✅ Clean and professional</p>
-            <p>✅ Easy to customize</p>
-            <p>✅ Proven to get interviews</p>
+        <section className="bg-executive-green rounded-2xl p-8 md:p-12 text-center relative overflow-hidden">
+          <div className="relative z-10">
+            <h2 className="font-heading text-2xl md:text-3xl text-cream mb-4">
+              Get Your Free Resume Templates
+            </h2>
+            <p className="text-cream-70 mb-8 max-w-md mx-auto">
+              Professional templates that are ATS-friendly, clean, easy to customize, and proven to get interviews.
+            </p>
+            <div className="grid grid-cols-2 gap-4 max-w-sm mx-auto mb-8">
+              <div className="flex items-center gap-2 text-cream-90 text-sm">
+                <GoldCheckBadge />
+                <span>ATS-friendly</span>
+              </div>
+              <div className="flex items-center gap-2 text-cream-90 text-sm">
+                <GoldCheckBadge />
+                <span>Professional</span>
+              </div>
+              <div className="flex items-center gap-2 text-cream-90 text-sm">
+                <GoldCheckBadge />
+                <span>Easy to customize</span>
+              </div>
+              <div className="flex items-center gap-2 text-cream-90 text-sm">
+                <GoldCheckBadge />
+                <span>Proven results</span>
+              </div>
+            </div>
+            <Link to="/#resources">
+              <Button size="lg" className="h-14 px-10 btn-gold font-medium text-base">
+                <Download className="w-5 h-5 mr-2" />
+                Download Free Templates
+              </Button>
+            </Link>
           </div>
-          <Link 
-            to="/#free-resources" 
-            className="inline-flex items-center gap-2 bg-background text-foreground px-6 py-3 rounded-lg font-semibold hover:bg-background/90 transition-colors"
-          >
-            <Download className="w-5 h-5" />
-            Get Free Templates
-          </Link>
         </section>
       </main>
 
       {/* Footer */}
-      <footer className="bg-muted py-8 mt-16">
-        <div className="container mx-auto px-4 text-center text-muted-foreground">
-          <Link to="/" className="hover:text-foreground transition-colors">
-            ← Back to Home
-          </Link>
+      <footer className="py-8 md:py-10 px-5 md:px-6 bg-card border-t border-border">
+        <div className="container mx-auto max-w-5xl">
+          <div className="flex flex-col md:flex-row justify-between items-center gap-4">
+            <Link to="/" className="text-sm text-muted-foreground hover:text-foreground transition-colors">
+              ← Back to Home
+            </Link>
+            <div className="flex items-center gap-6">
+              <a href="https://www.linkedin.com/in/james-bugden/" target="_blank" rel="noopener noreferrer" className="text-muted-foreground hover:text-foreground transition-colors">
+                <Linkedin className="w-5 h-5" />
+              </a>
+              <a href="https://www.instagram.com/james.careers/" target="_blank" rel="noopener noreferrer" className="text-muted-foreground hover:text-foreground transition-colors">
+                <InstagramIcon className="w-5 h-5" />
+              </a>
+              <a href="https://www.threads.com/@james.careers" target="_blank" rel="noopener noreferrer" className="text-muted-foreground hover:text-foreground transition-colors">
+                <ThreadsIcon className="w-5 h-5" />
+              </a>
+            </div>
+          </div>
         </div>
       </footer>
     </div>
