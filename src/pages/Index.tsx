@@ -171,16 +171,16 @@ const Index = () => {
       </section>
 
       {/* Contact Section */}
-      <section className="py-14 md:py-20 px-5 md:px-6 bg-executive-dark relative border-t border-cream/5">
+      <section className="py-16 md:py-24 px-5 md:px-6 bg-executive-green relative border-t border-cream/10">
         <div className="container mx-auto max-w-xl text-center relative z-10">
-          <h3 className="font-heading text-xl md:text-2xl text-cream/90 mb-3">
+          <h2 className="font-heading text-3xl md:text-5xl text-cream mb-4">
             Not sure if this is a fit?
-          </h3>
-          <p className="text-cream/60 text-sm md:text-base mb-6 leading-relaxed">
+          </h2>
+          <p className="text-cream/70 text-base md:text-lg mb-8 leading-relaxed">
             If you have a quick question before joining the waitlist,<br className="hidden md:block" /> you can ask it here.
           </p>
           <a href="mailto:james@jamesbugden.com?subject=Quick question about resume review">
-            <Button variant="outline" size="default" className="border-cream/20 text-cream/70 hover:text-cream hover:border-cream/40 hover:bg-cream/5 font-medium text-sm tracking-wide">
+            <Button size="lg" className="h-14 px-10 btn-gold font-medium text-base uppercase tracking-wider">
               Ask a quick question
             </Button>
           </a>
