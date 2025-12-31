@@ -40,7 +40,7 @@ const resources = [
 
 const FreeResourcesSection = () => {
   return (
-    <section className="py-20 md:py-28 px-5 md:px-6 bg-background">
+    <section id="resources" className="py-20 md:py-28 px-5 md:px-6 bg-background">
       <div className="container mx-auto max-w-5xl">
         {/* Section Header */}
         <div className="text-center mb-12 md:mb-16">

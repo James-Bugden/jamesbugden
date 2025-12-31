@@ -17,9 +17,7 @@ declare global {
 
 const Index = () => {
   const navLinks = [
-    { href: "#about", label: "About" },
-    { href: "#testimonials", label: "Testimonials" },
-    { href: "#results", label: "Results" },
+    { href: "#resources", label: "Free Resources" },
   ];
 
   return (
