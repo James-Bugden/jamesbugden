@@ -54,42 +54,55 @@ const Index = () => {
         </div>
       </nav>
 
-      {/* Hero Section - Lead Magnet */}
-      <section id="about" className="pt-28 md:pt-32 pb-16 md:pb-20 px-5 md:px-6 bg-background">
+      {/* Hero Section */}
+      <section id="about" className="pt-32 md:pt-40 pb-20 md:pb-28 px-5 md:px-6 bg-background">
         <div className="container mx-auto max-w-5xl">
-          <div className="grid md:grid-cols-2 gap-10 md:gap-12 items-center">
+          <div className="grid md:grid-cols-2 gap-12 md:gap-16 items-center">
+            {/* Content */}
             <div className="order-2 md:order-1">
-              <h1 className="font-heading text-4xl md:text-5xl lg:text-6xl text-executive-green mb-2 leading-[1.1]">
+              {/* Headline - Largest element */}
+              <h1 className="font-heading text-4xl md:text-5xl lg:text-6xl text-executive-green leading-[1.1] mb-3">
                 Your Resume Isn't Getting You a Job
               </h1>
-              <p className="font-heading text-2xl md:text-3xl text-foreground mb-8">
-                I'll Tell You Why
+              <p className="font-heading text-2xl md:text-3xl text-foreground mb-12">
+                I'll Tell You Why.
               </p>
-              <div className="space-y-1 mb-6">
-                <p className="text-base md:text-lg text-foreground leading-relaxed">
+
+              {/* Authority lines - Neutral, factual */}
+              <div className="space-y-1 mb-10">
+                <p className="text-base md:text-lg text-muted-foreground leading-relaxed">
                   I'm an active Uber recruiter.
                 </p>
-                <p className="text-base md:text-lg text-foreground leading-relaxed">
-                  I've reviewed <span className="text-gold font-bold">20,000+ resumes</span> and hired <span className="text-gold font-bold">500+ people</span>.
+                <p className="text-base md:text-lg text-muted-foreground leading-relaxed">
+                  I've reviewed 20,000+ resumes and hired 500+ people.
                 </p>
               </div>
-              <div className="space-y-1 mb-6">
+
+              {/* Value proposition */}
+              <div className="space-y-1 mb-10">
                 <p className="text-base md:text-lg text-foreground leading-relaxed">
                   Most resumes are rejected in under 10 seconds.
                 </p>
-                <p className="text-base md:text-lg text-foreground leading-relaxed font-medium">
+                <p className="text-base md:text-lg text-foreground leading-relaxed">
                   I'll show you exactly what's costing you the job.
                 </p>
               </div>
-              <p className="text-gold font-semibold text-base md:text-lg mb-6">
-                $500 USD value · No charge while I'm testing this · Only 5 candidates per month
+
+              {/* Value + Scarcity line - Gold accent */}
+              <p className="text-gold font-semibold text-base md:text-lg mb-10">
+                $500 USD value · No charge while I'm testing this<br className="md:hidden" />
+                <span className="hidden md:inline"> · </span>Only 5 candidates per month
               </p>
               
-              <MailerLiteForm formId="sM1X80" className="ml-embedded max-w-[400px] mb-4" />
-              <p className="text-sm text-muted-foreground mb-6">
+              {/* CTA - Visually isolated */}
+              <div className="mb-6">
+                <MailerLiteForm formId="sM1X80" className="ml-embedded max-w-[400px]" />
+              </div>
+              <p className="text-sm text-muted-foreground mb-8">
                 Your info stays private. No spam. Ever.
               </p>
               
+              {/* Social links */}
               <div className="flex flex-wrap gap-3">
                 <a href="https://www.linkedin.com/in/james-bugden/" target="_blank" rel="noopener noreferrer" className="text-muted-foreground hover:text-foreground transition-colors">
                   <Linkedin className="w-5 h-5" />
@@ -102,6 +115,8 @@ const Index = () => {
                 </a>
               </div>
             </div>
+
+            {/* Photo */}
             <div className="flex justify-center md:justify-end order-1 md:order-2">
               <div className="relative">
                 <img
