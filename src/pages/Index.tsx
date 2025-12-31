@@ -71,10 +71,10 @@ const Index = () => {
 
               {/* Authority lines - Tightly grouped, neutral */}
               <div className="mb-8 md:mb-10">
-                <p className="text-base text-muted-foreground leading-relaxed">
+                <p className="text-base md:text-lg text-muted-foreground leading-relaxed">
                   I'm an active Uber recruiter.
                 </p>
-                <p className="text-base text-muted-foreground leading-relaxed">
+                <p className="text-base md:text-lg text-muted-foreground leading-relaxed">
                   I've reviewed 20,000+ resumes and hired 500+ people.
                 </p>
               </div>
