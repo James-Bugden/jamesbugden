@@ -125,14 +125,11 @@ const Index = () => {
           <h2 className="font-heading text-3xl md:text-4xl lg:text-5xl text-foreground mb-4 leading-tight">
             Join The Waitlist: Free Resume Review
           </h2>
-          <p className="text-gold font-semibold text-lg md:text-xl mb-6">
-            (Worth $300 USD - 5 Places Monthly)
-          </p>
-          <p className="text-base md:text-lg text-foreground mb-2">
-            I only review <span className="font-bold">5 resumes per month</span> while working full-time at Uber.
+          <p className="text-gold font-semibold text-lg md:text-xl mb-2">
+            $500 USD value · No charge while I'm testing this
           </p>
           <p className="text-base md:text-lg text-foreground mb-8">
-            Right now I'm fully booked, but join the waitlist and I'll reach out when a place opens.
+            Only 5 candidates per month
           </p>
           
           <div className="bg-background border border-border rounded-lg p-6 md:p-8 mb-8 text-left max-w-xl mx-auto">
