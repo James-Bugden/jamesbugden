@@ -136,12 +136,18 @@ const Index = () => {
           </p>
           
           <div className="bg-background border border-border rounded-lg p-6 md:p-8 mb-8 text-left max-w-xl mx-auto">
-            <p className="text-foreground mb-4 font-medium">Here's why the waitlist exists:</p>
-            <p className="text-foreground mb-6 text-sm md:text-base leading-relaxed">
-              I could review 50 resumes a month and give surface-level feedback. Or I could review 5 and actually make them Fortune 500-ready.
+            <p className="text-foreground mb-4 font-medium">Why there's a waitlist:</p>
+            <p className="text-foreground mb-4 text-sm md:text-base leading-relaxed">
+              Good resume feedback takes time.<br />
+              And rushed feedback doesn't help anyone.
+            </p>
+            <p className="text-foreground mb-4 text-sm md:text-base leading-relaxed">
+              To keep this useful,<br />
+              I limit reviews to 5 candidates per month.
             </p>
             <p className="text-foreground mb-6 text-sm md:text-base leading-relaxed">
-              I chose option 2.
+              That way, each resume gets thoughtful, honest input<br />
+              based on real hiring decisions.
             </p>
             <p className="text-foreground font-medium mb-3">What you'll get when your spot opens:</p>
             <ul className="space-y-2 mb-0">
