@@ -3,7 +3,6 @@ import { Linkedin } from "lucide-react";
 import { InstagramIcon, ThreadsIcon } from "@/components/SocialIcons";
 import jamesPhoto from "@/assets/james-bugden.jpg";
 import LanguageToggle from "@/components/LanguageToggle";
-import MobileMenu from "@/components/MobileMenu";
 import GoldCheckBadge from "@/components/GoldCheckBadge";
 import TestimonialsSectionZhTw from "@/components/TestimonialsSectionZhTw";
 import FreeResourcesSectionZhTw from "@/components/FreeResourcesSectionZhTw";
@@ -44,7 +43,6 @@ const IndexZhTw = () => {
                 <ThreadsIcon className="w-5 h-5" />
               </a>
             </div>
-            <MobileMenu links={navLinks} />
           </div>
         </div>
       </nav>
