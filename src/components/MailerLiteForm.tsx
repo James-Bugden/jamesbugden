@@ -3,9 +3,10 @@ import { useState, useRef, useEffect } from "react";
 type MailerLiteFormProps = {
   formId: string;
   className?: string;
+  buttonText?: string;
 };
 
-export default function MailerLiteForm({ formId, className }: MailerLiteFormProps) {
+export default function MailerLiteForm({ formId, className, buttonText = "Get on the waitlist" }: MailerLiteFormProps) {
   const [email, setEmail] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [isSuccess, setIsSuccess] = useState(false);
@@ -92,14 +93,14 @@ export default function MailerLiteForm({ formId, className }: MailerLiteFormProp
           onChange={(e) => setEmail(e.target.value)}
           placeholder="Enter your email"
           required
-          className="flex-1 px-4 py-3 rounded-md border border-border bg-background text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-gold/50 focus:border-gold"
+          className="flex-1 px-4 py-3 rounded-md border border-border/60 bg-muted/30 text-foreground placeholder:text-muted-foreground/70 focus:outline-none focus:ring-2 focus:ring-gold/40 focus:border-gold focus:bg-background transition-colors"
         />
         <button
           type="submit"
           disabled={isLoading}
-          className="px-6 py-3 bg-gold hover:bg-gold/90 text-white font-semibold rounded-md transition-colors disabled:opacity-50 disabled:cursor-not-allowed whitespace-nowrap"
+          className="px-8 py-3.5 bg-gold hover:bg-gold/90 text-white font-semibold rounded-md transition-colors disabled:opacity-50 disabled:cursor-not-allowed whitespace-nowrap shadow-md hover:shadow-lg"
         >
-          {isLoading ? "Joining..." : "Join Waitlist"}
+          {isLoading ? "Joining..." : buttonText}
         </button>
       </form>
     </div>
