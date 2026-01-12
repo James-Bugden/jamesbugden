@@ -11,6 +11,8 @@ import AdminReviews from "./pages/AdminReviews";
 import ClientReviewGate from "./pages/ClientReviewGate";
 import ProtectedRoute from "./components/ProtectedRoute";
 import ResumeGuide from "./pages/ResumeGuide";
+import InterviewPrepGuide from "./pages/InterviewPrepGuide";
+import InterviewPrepGuideZhTw from "./pages/InterviewPrepGuideZhTw";
 
 const queryClient = new QueryClient();
 
@@ -34,6 +36,8 @@ const App = () => (
           />
           <Route path="/review/:clientId" element={<ClientReviewGate />} />
           <Route path="/resume-guide" element={<ResumeGuide />} />
+          <Route path="/interview-prep-guide" element={<InterviewPrepGuide />} />
+          <Route path="/zh-tw/interview-prep-guide" element={<InterviewPrepGuideZhTw />} />
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
           <Route path="*" element={<NotFound />} />
         </Routes>
