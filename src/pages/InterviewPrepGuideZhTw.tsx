@@ -43,27 +43,15 @@ const InterviewPrepGuideZhTw = () => {
       {/* Hero Section */}
       <section className="pt-28 md:pt-36 pb-12 md:pb-16 px-5 md:px-6 bg-executive-green">
         <div className="container mx-auto max-w-4xl text-center">
-          <div className="inline-flex items-center gap-2 px-4 py-2 bg-gold/20 border border-gold/40 rounded-full mb-6">
-            <Clock className="w-4 h-4 text-gold" />
-            <span className="text-sm font-medium text-gold">10 小時系統</span>
-          </div>
           <h1 className="font-heading text-3xl md:text-5xl lg:text-6xl text-cream leading-tight mb-4">
             10 小時面試準備系統
           </h1>
           <p className="text-lg md:text-xl text-cream/80 mb-2">
             你準備面試真正需要的檢查清單
           </p>
-          <p className="text-base text-cream/60 mb-8">
+          <p className="text-base text-cream/60">
             James Bugden｜Uber 資深招募顧問
           </p>
-          <Button 
-            onClick={handleDownload}
-            size="lg" 
-            className="h-14 px-8 btn-gold font-medium text-base uppercase tracking-wider"
-          >
-            <Download className="w-5 h-5 mr-2" />
-            下載 PDF 指南
-          </Button>
         </div>
       </section>
 
@@ -622,7 +610,7 @@ const InterviewPrepGuideZhTw = () => {
             <div className="bg-background border border-border rounded-lg p-6">
               <h3 className="font-semibold text-foreground mb-2">履歷健檢</h3>
               <p className="text-muted-foreground">
-                我每月免費審 5 份履歷，提供超完整報告。<Link to="/zh-tw" className="text-gold hover:underline">加入候補名單。</Link>
+                我每月免費審 5 份履歷，提供超完整報告。<a href="https://tally.so/r/lbeBdv" target="_blank" rel="noopener noreferrer" className="text-gold hover:underline">加入候補名單。</a>
               </p>
             </div>
 

@@ -43,27 +43,15 @@ const InterviewPrepGuide = () => {
       {/* Hero Section */}
       <section className="pt-28 md:pt-36 pb-12 md:pb-16 px-5 md:px-6 bg-executive-green">
         <div className="container mx-auto max-w-4xl text-center">
-          <div className="inline-flex items-center gap-2 px-4 py-2 bg-gold/20 border border-gold/40 rounded-full mb-6">
-            <Clock className="w-4 h-4 text-gold" />
-            <span className="text-sm font-medium text-gold">10-Hour System</span>
-          </div>
           <h1 className="font-heading text-3xl md:text-5xl lg:text-6xl text-cream leading-tight mb-4">
             The 10-Hour Interview Prep System
           </h1>
           <p className="text-lg md:text-xl text-cream/80 mb-2">
             The Checklist You Need to Prepare For The Interview
           </p>
-          <p className="text-base text-cream/60 mb-8">
+          <p className="text-base text-cream/60">
             By James Bugden, Senior Recruiter at Uber
           </p>
-          <Button 
-            onClick={handleDownload}
-            size="lg" 
-            className="h-14 px-8 btn-gold font-medium text-base uppercase tracking-wider"
-          >
-            <Download className="w-5 h-5 mr-2" />
-            Download PDF Guide
-          </Button>
         </div>
       </section>
 
@@ -622,7 +610,7 @@ const InterviewPrepGuide = () => {
             <div className="bg-background border border-border rounded-lg p-6">
               <h3 className="font-semibold text-foreground mb-2">Resume Reviews</h3>
               <p className="text-muted-foreground">
-                I review 5 resumes per month for free using an exhaustive report. <Link to="/" className="text-gold hover:underline">Join the waitlist here.</Link>
+                I review 5 resumes per month for free using an exhaustive report. <a href="https://tally.so/r/Pd1jlB" target="_blank" rel="noopener noreferrer" className="text-gold hover:underline">Join the waitlist here.</a>
               </p>
             </div>
 
