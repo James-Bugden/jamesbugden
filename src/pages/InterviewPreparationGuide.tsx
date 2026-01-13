@@ -513,15 +513,15 @@ const InterviewPreparationGuide = () => {
               <p className="text-sm text-muted-foreground mb-2 font-mono text-center">
                 Visual Guide: The Home Base Model
               </p>
-              <pre className="text-xs text-muted-foreground text-center whitespace-pre font-mono overflow-x-auto">
-{`                    PATH 1
-               (Specific idea)
-                      |
+              <pre className="text-xs text-muted-foreground whitespace-pre font-mono overflow-x-auto flex justify-center">
+{`         PATH 1
+    (Specific idea)
+          |
 PATH 2 -------- HOME BASE -------- PATH 3
 (Specific idea)  (Foundation)  (Specific idea)
-                      |
-                    PATH 4
-               (Specific idea)`}
+          |
+       PATH 4
+    (Specific idea)`}
               </pre>
               <p className="text-sm text-foreground text-center mt-3">
                 Think of it like a hub-and-spoke: HOME BASE = Your central framework/approach, PATHS = Specific ideas that branch out from your framework
