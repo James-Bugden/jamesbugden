@@ -13,6 +13,7 @@ import ProtectedRoute from "./components/ProtectedRoute";
 import ResumeGuide from "./pages/ResumeGuide";
 import InterviewPrepGuide from "./pages/InterviewPrepGuide";
 import InterviewPrepGuideZhTw from "./pages/InterviewPrepGuideZhTw";
+import InterviewPreparationGuide from "./pages/InterviewPreparationGuide";
 
 const queryClient = new QueryClient();
 
