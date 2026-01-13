@@ -39,6 +39,7 @@ const App = () => (
           <Route path="/resume-guide" element={<ResumeGuide />} />
           <Route path="/interview-prep-guide" element={<InterviewPrepGuide />} />
           <Route path="/zh-tw/interview-prep-guide" element={<InterviewPrepGuideZhTw />} />
+          <Route path="/interview-preparation-guide" element={<InterviewPreparationGuide />} />
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
           <Route path="*" element={<NotFound />} />
         </Routes>
