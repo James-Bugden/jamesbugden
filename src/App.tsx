@@ -14,6 +14,7 @@ import ResumeGuide from "./pages/ResumeGuide";
 import InterviewPrepGuide from "./pages/InterviewPrepGuide";
 import InterviewPrepGuideZhTw from "./pages/InterviewPrepGuideZhTw";
 import InterviewPreparationGuide from "./pages/InterviewPreparationGuide";
+import InterviewPreparationGuideZhTw from "./pages/InterviewPreparationGuideZhTw";
 
 const queryClient = new QueryClient();
 
@@ -40,6 +41,7 @@ const App = () => (
           <Route path="/interview-prep-guide" element={<InterviewPrepGuide />} />
           <Route path="/zh-tw/interview-prep-guide" element={<InterviewPrepGuideZhTw />} />
           <Route path="/interview-preparation-guide" element={<InterviewPreparationGuide />} />
+          <Route path="/zh-tw/interview-preparation-guide" element={<InterviewPreparationGuideZhTw />} />
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
           <Route path="*" element={<NotFound />} />
         </Routes>
