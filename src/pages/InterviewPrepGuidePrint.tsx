@@ -738,7 +738,7 @@ const InterviewPrepGuidePrint = () => {
 
           html, body {
             width: 210mm;
-            height: 297mm;
+            height: auto;
           }
 
           .report {
@@ -748,18 +748,22 @@ const InterviewPrepGuidePrint = () => {
             background: white;
           }
 
+          /* IMPORTANT: don't force a fixed height — it can clip content during "Save as PDF" */
           .page {
             width: 210mm;
-            height: 297mm;
+            height: auto;
             min-height: 297mm;
             margin: 0;
             box-shadow: none;
             border-radius: 0;
+            page-break-after: always;
+            page-break-inside: avoid;
+            overflow: visible;
           }
 
           .page-content {
             padding: 20mm 18mm;
-            min-height: calc(297mm - 40mm);
+            min-height: auto;
           }
 
           .cover-page .page-content {
