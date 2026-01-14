@@ -630,35 +630,56 @@ const InterviewPrepGuidePrint = () => {
           <div className="page-content flex flex-col justify-center items-center h-full text-center">
             <div className="w-24 h-1 bg-[#c9a227] mb-8"></div>
             <h2 className="text-2xl font-bold text-[#1a2e1a] mb-6">Need More Help?</h2>
-            
-            <div className="text-left max-w-md mb-8">
-              <div className="mb-6">
+
+            <div className="text-left max-w-xl mb-10 w-full">
+              <div className="mb-8">
                 <h3 className="font-semibold text-[#1a2e1a] mb-2">Resume Reviews</h3>
-                <p className="text-[#666] text-sm">
-                  I review 5 resumes per month for free using an exhaustive report. Join the waitlist at jamesbugden.com
+                <p className="text-[#666] leading-relaxed">
+                  I review 5 resumes per month for free using an exhaustive report. Join the waitlist here: 
+                  <span className="text-[#1a2e1a] underline">https://tally.so/r/Pd1jlB</span>
                 </p>
               </div>
-              
-              <div className="mb-6">
+
+              <div className="mb-8">
                 <h3 className="font-semibold text-[#1a2e1a] mb-2">Full Career Package</h3>
-                <p className="text-[#666] text-sm">
-                  Resume, LinkedIn optimization, interview preparation, salary negotiation coaching - I'm testing this product at a discounted rate right now.
+                <p className="text-[#666] leading-relaxed">
+                  If you want the complete package - resume, LinkedIn optimization, interview preparation, salary negotiation coaching - I'm testing this product at a discounted rate right now.
                 </p>
               </div>
+
+              <p className="text-[#333] leading-relaxed">
+                Email <span className="text-[#1a2e1a] underline">james@jamesbugden.com</span> or message me on LinkedIn or Threads to find out more.
+              </p>
             </div>
 
-            <p className="text-lg text-[#333] mb-2">
-              Email james@jamesbugden.com
-            </p>
-            <p className="text-lg font-semibold text-[#1a2e1a] mb-8">jamesbugden.com</p>
-            
-            <p className="text-sm text-[#888] italic max-w-md">
+            <p className="text-sm text-[#888] italic max-w-xl">
               This guide is based on Sam Owens' "I Hate Job Interviews" methodology. Support the author - his book is the best resource on interviewing I've read.
             </p>
 
             <div className="mt-auto">
-              <p className="text-sm text-[#888]">© James Bugden • Senior Recruiter at Uber</p>
+              <p className="text-sm text-[#888]">© 2024 James Bugden. All rights reserved.</p>
             </div>
+          </div>
+        </div>
+
+        {/* Page 18: Save This Guide */}
+        <div className="page">
+          <div className="page-content flex flex-col justify-center items-center h-full text-center">
+            <h2 className="text-3xl font-bold text-[#1a2e1a] mb-6">Save This Guide</h2>
+            <p className="text-xl text-[#333] mb-10 max-w-xl leading-relaxed">
+              Download the PDF to reference before your next interview.
+            </p>
+
+            <div className="bg-[#f8f6f0] p-8 rounded-lg max-w-xl w-full">
+              <p className="text-[#666] mb-3">Download:</p>
+              <p className="text-[#1a2e1a] font-semibold">
+                The_10-Hour_Interview_Prep_System.pdf
+              </p>
+            </div>
+
+            <p className="mt-10 text-sm text-[#666]">
+              Tip: In Chrome, go to Print → Save as PDF, paper size A4, margins None, scale 100%, background graphics ON.
+            </p>
           </div>
         </div>
 
