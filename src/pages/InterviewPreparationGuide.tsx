@@ -44,14 +44,21 @@ const InterviewPreparationGuide = () => {
       <section className="pt-28 md:pt-36 pb-12 md:pb-16 px-5 md:px-6 bg-executive-green">
         <div className="container mx-auto max-w-4xl text-center">
           <h1 className="font-heading text-3xl md:text-5xl lg:text-6xl text-cream leading-tight mb-4">
-            Interview Preparation Guide
+            Full Interview Preparation Guide
           </h1>
           <p className="text-lg md:text-xl text-cream/80 mb-2">
             Stop Stressing. Start Performing. Get the Job.
           </p>
-          <p className="text-base text-cream/60">
+          <p className="text-base text-cream/60 mb-6">
             By James Bugden, Senior Recruiter at Uber
           </p>
+          <Button 
+            onClick={handleDownload}
+            className="bg-gold hover:bg-gold/90 text-executive-green font-semibold px-6 py-3 rounded-lg shadow-lg hover:shadow-xl transition-all duration-300"
+          >
+            <Download className="w-5 h-5 mr-2" />
+            Download PDF Guide
+          </Button>
         </div>
       </section>
 
