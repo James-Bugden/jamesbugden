@@ -165,9 +165,6 @@ const InterviewPrepGuidePrint = () => {
         </div>
       </div>
 
-      {/* Page Break before FORMULATION */}
-      <div className="page-break"></div>
-
       {/* FORMULATION Section */}
       <div className="mb-10">
         <div className="flex items-center gap-3 mb-6">
@@ -270,9 +267,6 @@ const InterviewPrepGuidePrint = () => {
               </li>
             </ul>
           </div>
-
-          {/* Page Break before Framework 2 */}
-          <div className="page-break"></div>
 
           {/* Framework 2: Home Base */}
           <div className="bg-gray-50 border border-gray-200 rounded-lg p-5 mb-5 avoid-break">
