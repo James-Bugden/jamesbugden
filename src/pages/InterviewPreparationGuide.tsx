@@ -509,22 +509,65 @@ const InterviewPreparationGuide = () => {
             <p className="text-foreground mb-4">These are the hardest questions because they're wide open.</p>
             <p className="text-foreground mb-4">Use the Home Base model: <strong>Establish, Explore, Summarize</strong></p>
 
-            <div className="bg-card border border-border rounded p-4 mb-6">
-              <p className="text-sm text-muted-foreground mb-2 font-mono text-center">
+            <div className="bg-card border border-border rounded p-6 mb-6">
+              <p className="text-sm text-muted-foreground mb-4 font-medium text-center">
                 Visual Guide: The Home Base Model
               </p>
-              <pre className="text-xs text-muted-foreground whitespace-pre font-mono overflow-x-auto flex justify-center">
-{`         PATH 1
-    (Specific idea)
-          |
-PATH 2 -------- HOME BASE -------- PATH 3
-(Specific idea)  (Foundation)  (Specific idea)
-          |
-       PATH 4
-    (Specific idea)`}
-              </pre>
-              <p className="text-sm text-foreground text-center mt-3">
-                Think of it like a hub-and-spoke: HOME BASE = Your central framework/approach, PATHS = Specific ideas that branch out from your framework
+              
+              {/* Visual Diagram */}
+              <div className="flex flex-col items-center py-4">
+                {/* PATH 1 - Top */}
+                <div className="flex flex-col items-center mb-2">
+                  <div className="bg-gold/20 border border-gold/40 rounded-lg px-4 py-2 text-center">
+                    <p className="text-gold font-semibold text-sm">PATH 1</p>
+                    <p className="text-muted-foreground text-xs">(Specific idea)</p>
+                  </div>
+                </div>
+                
+                {/* Vertical connector */}
+                <div className="w-0.5 h-6 bg-gold/40"></div>
+                
+                {/* Middle row: PATH 2 - HOME BASE - PATH 3 */}
+                <div className="flex items-center justify-center gap-0 w-full max-w-lg">
+                  {/* PATH 2 */}
+                  <div className="bg-gold/20 border border-gold/40 rounded-lg px-4 py-2 text-center">
+                    <p className="text-gold font-semibold text-sm">PATH 2</p>
+                    <p className="text-muted-foreground text-xs">(Specific idea)</p>
+                  </div>
+                  
+                  {/* Horizontal connector left */}
+                  <div className="h-0.5 w-8 md:w-12 bg-gold/40"></div>
+                  
+                  {/* HOME BASE - Center */}
+                  <div className="bg-executive-green border-2 border-gold rounded-lg px-5 py-3 text-center shadow-lg">
+                    <p className="text-gold font-bold text-base">HOME BASE</p>
+                    <p className="text-cream/80 text-xs">(Foundation)</p>
+                  </div>
+                  
+                  {/* Horizontal connector right */}
+                  <div className="h-0.5 w-8 md:w-12 bg-gold/40"></div>
+                  
+                  {/* PATH 3 */}
+                  <div className="bg-gold/20 border border-gold/40 rounded-lg px-4 py-2 text-center">
+                    <p className="text-gold font-semibold text-sm">PATH 3</p>
+                    <p className="text-muted-foreground text-xs">(Specific idea)</p>
+                  </div>
+                </div>
+                
+                {/* Vertical connector */}
+                <div className="w-0.5 h-6 bg-gold/40"></div>
+                
+                {/* PATH 4 - Bottom */}
+                <div className="flex flex-col items-center mt-2">
+                  <div className="bg-gold/20 border border-gold/40 rounded-lg px-4 py-2 text-center">
+                    <p className="text-gold font-semibold text-sm">PATH 4</p>
+                    <p className="text-muted-foreground text-xs">(Specific idea)</p>
+                  </div>
+                </div>
+              </div>
+              
+              <p className="text-sm text-foreground text-center mt-4">
+                Think of it like a hub-and-spoke: <span className="text-gold font-semibold">HOME BASE</span> = Your central framework/approach, <span className="text-gold font-semibold">PATHS</span> = Specific ideas that branch out from your framework
               </p>
             </div>
 
