@@ -49,9 +49,16 @@ const InterviewPrepGuide = () => {
           <p className="text-lg md:text-xl text-cream/80 mb-2">
             The Checklist You Need to Prepare For The Interview
           </p>
-          <p className="text-base text-cream/60">
+          <p className="text-base text-cream/60 mb-6">
             By James Bugden, Senior Recruiter at Uber
           </p>
+          <Button 
+            onClick={handleDownload}
+            className="bg-gold hover:bg-gold/90 text-executive-green font-semibold"
+          >
+            <Download className="w-4 h-4 mr-2" />
+            Download PDF Guide
+          </Button>
         </div>
       </section>
 

@@ -49,9 +49,16 @@ const InterviewPrepGuideZhTw = () => {
           <p className="text-lg md:text-xl text-cream/80 mb-2">
             你準備面試真正需要的檢查清單
           </p>
-          <p className="text-base text-cream/60">
+          <p className="text-base text-cream/60 mb-6">
             James Bugden｜Uber 資深招募顧問
           </p>
+          <Button 
+            onClick={handleDownload}
+            className="bg-gold hover:bg-gold/90 text-executive-green font-semibold"
+          >
+            <Download className="w-4 h-4 mr-2" />
+            下載 PDF 指南
+          </Button>
         </div>
       </section>
 
