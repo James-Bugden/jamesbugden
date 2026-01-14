@@ -529,9 +529,6 @@ const InterviewPrepGuidePrint = () => {
         </div>
       </div>
 
-      {/* Page Break before Common Mistakes */}
-      <div className="page-break"></div>
-
       {/* Common Mistakes */}
       <div className="mb-10">
         <div className="flex items-center gap-3 mb-6">
