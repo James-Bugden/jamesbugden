@@ -77,6 +77,13 @@ export type Database = {
       }
       is_admin: { Args: { _user_id: string }; Returns: boolean }
       mark_review_viewed: { Args: { review_id: string }; Returns: undefined }
+      verify_client_password: {
+        Args: { input_password: string }
+        Returns: {
+          review_id: string
+          review_url: string
+        }[]
+      }
       verify_review_password: {
         Args: { input_password: string; review_id: string }
         Returns: {

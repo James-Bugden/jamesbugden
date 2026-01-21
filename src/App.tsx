@@ -23,7 +23,6 @@ import ChienJungLiuReview from "./pages/reviews/ChienJungLiuReview";
 import ChienJungLiuReviewZhTw from "./pages/reviews/ChienJungLiuReviewZhTw";
 import JamesBugdenReview from "./pages/reviews/JamesBugdenReview";
 import JamesBugdenReviewZhTw from "./pages/reviews/JamesBugdenReviewZhTw";
-import SetupReviews from "./pages/SetupReviews";
 
 const queryClient = new QueryClient();
 
@@ -60,7 +59,6 @@ const App = () => (
           <Route path="/zh-tw/reviews/chien-jung-liu" element={<ChienJungLiuReviewZhTw />} />
           <Route path="/reviews/james-bugden" element={<JamesBugdenReview />} />
           <Route path="/zh-tw/reviews/james-bugden" element={<JamesBugdenReviewZhTw />} />
-          <Route path="/setup-reviews" element={<SetupReviews />} />
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
           <Route path="*" element={<NotFound />} />
         </Routes>

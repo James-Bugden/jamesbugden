@@ -4,7 +4,6 @@ import { supabase } from "@/integrations/supabase/client";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Loader2, Lock } from "lucide-react";
-import bcrypt from "bcryptjs";
 
 // Validate that URL is an internal path only (prevents open redirect attacks)
 const isInternalUrl = (url: string): boolean => {
@@ -29,34 +28,9 @@ const ClientReviewGate = () => {
     const minResponseTime = 500;
     const startTime = Date.now();
 
-    // Fetch all reviews to check password against each
-    const { data: reviews, error: fetchError } = await supabase
-      .from('client_reviews')
-      .select('id, password, review_url');
-
-    if (fetchError || !reviews || reviews.length === 0) {
-      // Ensure minimum response time
-      const elapsed = Date.now() - startTime;
-      if (elapsed < minResponseTime) {
-        await new Promise(resolve => setTimeout(resolve, minResponseTime - elapsed));
-      }
-      setError("Incorrect password. Please try again.");
-      setSubmitting(false);
-      return;
-    }
-
-    // Check password against each review
-    let matchedReview: { id: string; review_url: string } | null = null;
-    
-    for (const review of reviews) {
-      if (review.password) {
-        const matches = await bcrypt.compare(password, review.password);
-        if (matches) {
-          matchedReview = { id: review.id, review_url: review.review_url || '' };
-          break;
-        }
-      }
-    }
+    // Use secure RPC function that verifies password server-side
+    const { data, error: rpcError } = await supabase
+      .rpc('verify_client_password', { input_password: password });
 
     // Ensure minimum response time regardless of result
     const elapsed = Date.now() - startTime;
@@ -64,11 +38,13 @@ const ClientReviewGate = () => {
       await new Promise(resolve => setTimeout(resolve, minResponseTime - elapsed));
     }
 
-    if (!matchedReview) {
+    if (rpcError || !data || data.length === 0) {
       setError("Incorrect password. Please try again.");
       setSubmitting(false);
       return;
     }
+
+    const matchedReview = data[0];
 
     // Validate review URL is internal only (defense in depth)
     if (!isInternalUrl(matchedReview.review_url)) {
@@ -79,7 +55,7 @@ const ClientReviewGate = () => {
 
     // Update last_viewed_at using secure RPC function
     await supabase.rpc('mark_review_viewed', {
-      review_id: matchedReview.id
+      review_id: matchedReview.review_id
     });
 
     // Redirect to the actual review page
