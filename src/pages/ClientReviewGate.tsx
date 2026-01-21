@@ -1,7 +1,6 @@
 import { useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
-import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Loader2, Lock } from "lucide-react";
@@ -83,23 +82,23 @@ const ClientReviewGate = () => {
 
   return (
     <div className="min-h-screen bg-background flex items-center justify-center px-4">
-      <div className="w-full max-w-md">
-        <div className="bg-card border border-border rounded-lg shadow-lg p-8">
+      <div className="w-full max-w-lg">
+        <div className="bg-card rounded-2xl shadow-lg p-10 md:p-12">
           <div className="text-center mb-8">
-            <div className="w-16 h-16 bg-executive-green/10 rounded-full flex items-center justify-center mx-auto mb-4">
-              <Lock className="h-8 w-8 text-executive-green" />
-            </div>
-            <h1 className="font-heading text-2xl font-semibold text-foreground mb-2">
+            <Lock className="h-8 w-8 mx-auto mb-6 text-foreground" strokeWidth={1.5} />
+            <h1 className="font-heading text-3xl md:text-4xl text-foreground mb-3">
               Resume Review Access
             </h1>
-            <p className="text-muted-foreground text-sm">
+            <p className="text-muted-foreground">
               Enter your password to access your personalized review
             </p>
           </div>
 
           <form onSubmit={handleSubmit} className="space-y-6">
             <div className="space-y-2">
-              <Label htmlFor="password">Password</Label>
+              <Label htmlFor="password" className="text-foreground font-medium">
+                Password
+              </Label>
               <Input
                 id="password"
                 type="password"
@@ -110,35 +109,38 @@ const ClientReviewGate = () => {
                 }}
                 placeholder="Enter your password"
                 required
-                className={error ? "border-destructive" : ""}
+                className={`h-14 text-base px-4 bg-muted/50 border-border ${error ? "border-destructive" : ""}`}
               />
               {error && (
                 <p className="text-sm text-destructive">{error}</p>
               )}
             </div>
 
-            <Button
+            <button
               type="submit"
               disabled={submitting}
-              className="w-full bg-executive-green hover:bg-executive-green/90"
+              className="w-full h-14 rounded-lg text-base font-medium text-cream transition-all duration-300 disabled:opacity-70"
+              style={{
+                background: 'linear-gradient(135deg, hsl(153 38% 17%) 0%, hsl(153 30% 23%) 100%)',
+              }}
             >
               {submitting ? (
-                <>
-                  <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                <span className="flex items-center justify-center">
+                  <Loader2 className="mr-2 h-5 w-5 animate-spin" />
                   Verifying...
-                </>
+                </span>
               ) : (
-                "View Review"
+                "View My Review"
               )}
-            </Button>
+            </button>
           </form>
         </div>
 
-        <p className="text-center mt-6 text-sm text-muted-foreground">
+        <p className="text-center mt-8 text-muted-foreground">
           Need help?{" "}
           <a
             href="mailto:james@james.careers"
-            className="text-executive-green hover:underline"
+            className="text-foreground hover:underline font-medium"
           >
             Contact James
           </a>
