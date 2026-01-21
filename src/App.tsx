@@ -45,7 +45,7 @@ const App = () => (
               </ProtectedRoute>
             } 
           />
-          <Route path="/review/:clientId" element={<ClientReviewGate />} />
+          <Route path="/review" element={<ClientReviewGate />} />
           <Route path="/resume-guide" element={<ResumeGuide />} />
           <Route path="/interview-prep-guide" element={<InterviewPrepGuide />} />
           <Route path="/zh-tw/interview-prep-guide" element={<InterviewPrepGuideZhTw />} />
