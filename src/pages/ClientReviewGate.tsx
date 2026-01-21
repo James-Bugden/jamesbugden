@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { useParams, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -14,7 +14,6 @@ const isInternalUrl = (url: string): boolean => {
 };
 
 const ClientReviewGate = () => {
-  const { clientId } = useParams<{ clientId: string }>();
   const [password, setPassword] = useState("");
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -26,46 +25,53 @@ const ClientReviewGate = () => {
     setError(null);
     setSubmitting(true);
 
-    if (!clientId) {
+    // Add minimum response time to prevent timing attacks
+    const minResponseTime = 500;
+    const startTime = Date.now();
+
+    // Fetch all reviews to check password against each
+    const { data: reviews, error: fetchError } = await supabase
+      .from('client_reviews')
+      .select('id, password, review_url');
+
+    if (fetchError || !reviews || reviews.length === 0) {
+      // Ensure minimum response time
+      const elapsed = Date.now() - startTime;
+      if (elapsed < minResponseTime) {
+        await new Promise(resolve => setTimeout(resolve, minResponseTime - elapsed));
+      }
       setError("Incorrect password. Please try again.");
       setSubmitting(false);
       return;
     }
 
-    // Add minimum response time to prevent timing attacks
-    const minResponseTime = 500;
-    const startTime = Date.now();
-
-    // Use secure RPC function to get review data (no direct table access)
-    const { data, error: fetchError } = await supabase
-      .rpc('get_review_for_verification', {
-        review_id: clientId
-      });
-
-    // Use bcrypt.compare for secure password verification
-    let passwordMatches = false;
-    let reviewUrl = '';
+    // Check password against each review
+    let matchedReview: { id: string; review_url: string } | null = null;
     
-    if (data && data.length > 0 && data[0].password_hash) {
-      passwordMatches = await bcrypt.compare(password, data[0].password_hash);
-      reviewUrl = data[0].review_url || '';
+    for (const review of reviews) {
+      if (review.password) {
+        const matches = await bcrypt.compare(password, review.password);
+        if (matches) {
+          matchedReview = { id: review.id, review_url: review.review_url || '' };
+          break;
+        }
+      }
     }
-    
+
     // Ensure minimum response time regardless of result
     const elapsed = Date.now() - startTime;
     if (elapsed < minResponseTime) {
       await new Promise(resolve => setTimeout(resolve, minResponseTime - elapsed));
     }
 
-    // Same error message whether review doesn't exist or password is wrong
-    if (fetchError || !data || data.length === 0 || !passwordMatches) {
+    if (!matchedReview) {
       setError("Incorrect password. Please try again.");
       setSubmitting(false);
       return;
     }
 
     // Validate review URL is internal only (defense in depth)
-    if (!isInternalUrl(reviewUrl)) {
+    if (!isInternalUrl(matchedReview.review_url)) {
       setError("Invalid review configuration. Please contact support.");
       setSubmitting(false);
       return;
@@ -73,11 +79,11 @@ const ClientReviewGate = () => {
 
     // Update last_viewed_at using secure RPC function
     await supabase.rpc('mark_review_viewed', {
-      review_id: clientId
+      review_id: matchedReview.id
     });
 
     // Redirect to the actual review page
-    navigate(reviewUrl);
+    navigate(matchedReview.review_url);
   };
 
   return (
