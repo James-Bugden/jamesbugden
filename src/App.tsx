@@ -17,6 +17,12 @@ import InterviewPrepGuidePrint from "./pages/InterviewPrepGuidePrint";
 import InterviewPreparationGuide from "./pages/InterviewPreparationGuide";
 import InterviewPreparationGuideZhTw from "./pages/InterviewPreparationGuideZhTw";
 import InterviewPreparationGuidePrint from "./pages/InterviewPreparationGuidePrint";
+import CharleneLeeReview from "./pages/reviews/CharleneLeeReview";
+import CharleneLeeReviewZhTw from "./pages/reviews/CharleneLeeReviewZhTw";
+import ChienJungLiuReview from "./pages/reviews/ChienJungLiuReview";
+import ChienJungLiuReviewZhTw from "./pages/reviews/ChienJungLiuReviewZhTw";
+import JamesBugdenReview from "./pages/reviews/JamesBugdenReview";
+import JamesBugdenReviewZhTw from "./pages/reviews/JamesBugdenReviewZhTw";
 
 const queryClient = new QueryClient();
 
@@ -46,6 +52,13 @@ const App = () => (
           <Route path="/interview-preparation-guide" element={<InterviewPreparationGuide />} />
           <Route path="/interview-preparation-guide/print" element={<InterviewPreparationGuidePrint />} />
           <Route path="/zh-tw/interview-preparation-guide" element={<InterviewPreparationGuideZhTw />} />
+          {/* Client Review Pages */}
+          <Route path="/reviews/charlene-lee" element={<CharleneLeeReview />} />
+          <Route path="/zh-tw/reviews/charlene-lee" element={<CharleneLeeReviewZhTw />} />
+          <Route path="/reviews/chien-jung-liu" element={<ChienJungLiuReview />} />
+          <Route path="/zh-tw/reviews/chien-jung-liu" element={<ChienJungLiuReviewZhTw />} />
+          <Route path="/reviews/james-bugden" element={<JamesBugdenReview />} />
+          <Route path="/zh-tw/reviews/james-bugden" element={<JamesBugdenReviewZhTw />} />
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
           <Route path="*" element={<NotFound />} />
         </Routes>
