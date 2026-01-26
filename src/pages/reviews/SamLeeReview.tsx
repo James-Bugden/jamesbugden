@@ -1253,33 +1253,67 @@ const SamLeeReview = () => {
             <p className="text-foreground mb-6">I hope this review has been valuable in strengthening your application.</p>
             <p className="text-muted-foreground mb-6">If you found this review helpful, I'd greatly appreciate your feedback:</p>
             
-            <div className="space-y-6">
-              <div>
-                <h3 className="text-lg font-semibold text-foreground mb-2">
-                  1. <a href="https://tally.so/r/81L09x" target="_blank" rel="noopener noreferrer" className="text-gold hover:underline">Share Your Feedback</a>
-                </h3>
-                <ul className="text-sm text-muted-foreground space-y-1">
-                  <li>• Your honest feedback helps me improve the service</li>
-                  <li>• Testimonials help other job seekers discover this service</li>
-                  <li>• I read every response and continuously refine my approach</li>
-                </ul>
-              </div>
-              
-              <div>
-                <h3 className="text-lg font-semibold text-foreground mb-2">
-                  2. Leave a <a href="https://www.trustpilot.com/review/jamesbugden.com" target="_blank" rel="noopener noreferrer" className="text-gold hover:underline">Trustpilot</a> Review
-                </h3>
-                <ul className="text-sm text-muted-foreground space-y-1">
-                  <li>• Public reviews help build credibility</li>
-                  <li>• Your review helps other professionals make informed decisions</li>
-                  <li>• Note: I've just started so new businesses on Trustpilot start with a weighted average that includes 7 neutral (3.5★) reviews. This means my current TrustScore may appear lower than the actual client feedback. Your honest review helps provide an accurate representation of the service quality.</li>
-                </ul>
-              </div>
-              
-              <div>
-                <h3 className="text-lg font-semibold text-foreground mb-2">3. Share Your Results</h3>
-                <p className="text-sm text-muted-foreground">When you land interviews or offers, let me know!</p>
-              </div>
+            {/* Prominent CTA Cards */}
+            <div className="grid md:grid-cols-2 gap-6 mb-8">
+              {/* Share Feedback Card */}
+              <a 
+                href="https://tally.so/r/81L09x" 
+                target="_blank" 
+                rel="noopener noreferrer"
+                className="group block p-6 rounded-xl border-2 border-gold/30 bg-gradient-to-br from-gold/5 to-gold/10 hover:border-gold hover:shadow-gold transition-all duration-300"
+              >
+                <div className="flex items-center gap-4 mb-3">
+                  <div className="w-12 h-12 rounded-full bg-gradient-to-br from-gold to-gold-dark flex items-center justify-center">
+                    <svg className="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
+                    </svg>
+                  </div>
+                  <div>
+                    <h3 className="text-lg font-semibold text-foreground group-hover:text-gold transition-colors">Share Your Feedback</h3>
+                    <p className="text-sm text-muted-foreground">Takes 2 minutes</p>
+                  </div>
+                </div>
+                <p className="text-sm text-muted-foreground">Your honest feedback helps me improve and helps other job seekers discover this service.</p>
+                <div className="mt-4 flex items-center text-gold font-medium text-sm">
+                  Leave Feedback
+                  <svg className="w-4 h-4 ml-2 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                  </svg>
+                </div>
+              </a>
+
+              {/* Trustpilot Card */}
+              <a 
+                href="https://www.trustpilot.com/review/jamesbugden.com" 
+                target="_blank" 
+                rel="noopener noreferrer"
+                className="group block p-6 rounded-xl border-2 border-gold/30 bg-gradient-to-br from-gold/5 to-gold/10 hover:border-gold hover:shadow-gold transition-all duration-300"
+              >
+                <div className="flex items-center gap-4 mb-3">
+                  <div className="w-12 h-12 rounded-full bg-gradient-to-br from-gold to-gold-dark flex items-center justify-center">
+                    <svg className="w-6 h-6 text-white" fill="currentColor" viewBox="0 0 24 24">
+                      <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" />
+                    </svg>
+                  </div>
+                  <div>
+                    <h3 className="text-lg font-semibold text-foreground group-hover:text-gold transition-colors">Leave a Trustpilot Review</h3>
+                    <p className="text-sm text-muted-foreground">Help others find quality service</p>
+                  </div>
+                </div>
+                <p className="text-sm text-muted-foreground">Public reviews build credibility and help other professionals make informed decisions.</p>
+                <div className="mt-4 flex items-center text-gold font-medium text-sm">
+                  Write Review
+                  <svg className="w-4 h-4 ml-2 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                  </svg>
+                </div>
+              </a>
+            </div>
+
+            {/* Share Results - Smaller */}
+            <div className="text-center p-4 bg-muted/50 rounded-lg">
+              <p className="text-foreground font-medium">🎉 When you land interviews or offers, let me know!</p>
+              <p className="text-sm text-muted-foreground mt-1">Your wins are my wins. Success stories help refine my approach.</p>
             </div>
 
             <div className="mt-8 pt-6 border-t border-border">
