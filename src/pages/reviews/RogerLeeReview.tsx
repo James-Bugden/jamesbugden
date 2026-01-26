@@ -1409,6 +1409,11 @@ const RogerLeeReview = () => {
               </a>
             </div>
 
+            {/* Trustpilot Score Note */}
+            <p className="text-xs text-muted-foreground/70 text-center italic">
+              Why is the Trustpilot score 3.8? I've just started a new business and Trustpilot applies an initial weighting for new businesses, which can temporarily lower early scores. As more real client reviews are added, the score adjusts to reflect actual service quality.
+            </p>
+
             {/* Share Results - Smaller */}
             <div className="text-center p-4 bg-muted/50 rounded-lg">
               <p className="text-foreground font-medium">🎉 When you land interviews or offers, let me know!</p>
