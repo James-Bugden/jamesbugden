@@ -570,7 +570,19 @@ const SamLeeReview = () => {
               </div>
             </div>
 
-            <p className="text-sm text-muted-foreground"><strong>Score Improvement:</strong> (4/5 - Strong Foundation, Missing Critical Element) → (5/5 - Complete)</p>
+            <div className="flex items-center gap-2 text-sm text-muted-foreground">
+              <strong>Score Improvement:</strong>
+              <span className="flex items-center gap-0.5">
+                {[1, 2, 3, 4].map((i) => (<Star key={i} className="w-4 h-4 fill-gold text-gold" />))}
+                <Star className="w-4 h-4 text-border" />
+              </span>
+              <span>(4/5)</span>
+              <span>→</span>
+              <span className="flex items-center gap-0.5">
+                {[1, 2, 3, 4, 5].map((i) => (<Star key={i} className="w-4 h-4 fill-gold text-gold" />))}
+              </span>
+              <span>(5/5)</span>
+            </div>
           </div>
 
           {/* 2. Executive Summary */}
@@ -615,7 +627,20 @@ const SamLeeReview = () => {
               </div>
             </div>
 
-            <p className="text-sm text-muted-foreground"><strong>Score Improvement:</strong> (3/5 - Good Content, Generic Language) → (5/5 - Complete)</p>
+            <div className="flex items-center gap-2 text-sm text-muted-foreground flex-wrap">
+              <strong>Score Improvement:</strong>
+              <span className="flex items-center gap-0.5">
+                {[1, 2, 3].map((i) => (<Star key={i} className="w-4 h-4 fill-gold text-gold" />))}
+                <Star className="w-4 h-4 text-border" />
+                <Star className="w-4 h-4 text-border" />
+              </span>
+              <span>(3/5)</span>
+              <span>→</span>
+              <span className="flex items-center gap-0.5">
+                {[1, 2, 3, 4, 5].map((i) => (<Star key={i} className="w-4 h-4 fill-gold text-gold" />))}
+              </span>
+              <span>(5/5)</span>
+            </div>
           </div>
 
           {/* 3. Skills Section */}
@@ -664,7 +689,19 @@ const SamLeeReview = () => {
               <p className="text-foreground text-sm">Consumption-Based Sales (ARR/ACR) · New Logo Acquisition & Expansion · Territory & Account Planning · Salesforce (SFDC) Pipeline Management · POC/Pilot Design & Execution · Executive Stakeholder Engagement (C-suite/VP-level) · Technical Buyer Engagement (Architects/Engineering) · Enterprise Cloud/Data/AI Platforms</p>
             </div>
 
-            <p className="text-sm text-muted-foreground"><strong>Score Improvement:</strong> (4/5 - Relevant Skills, Missing Key Terms) → (5/5 - Complete)</p>
+            <div className="flex items-center gap-2 text-sm text-muted-foreground flex-wrap">
+              <strong>Score Improvement:</strong>
+              <span className="flex items-center gap-0.5">
+                {[1, 2, 3, 4].map((i) => (<Star key={i} className="w-4 h-4 fill-gold text-gold" />))}
+                <Star className="w-4 h-4 text-border" />
+              </span>
+              <span>(4/5)</span>
+              <span>→</span>
+              <span className="flex items-center gap-0.5">
+                {[1, 2, 3, 4, 5].map((i) => (<Star key={i} className="w-4 h-4 fill-gold text-gold" />))}
+              </span>
+              <span>(5/5)</span>
+            </div>
           </div>
 
           {/* 4. Work Experience - Microsoft */}
@@ -737,7 +774,19 @@ const SamLeeReview = () => {
               </div>
             </div>
 
-            <p className="text-sm text-muted-foreground mt-4"><strong>Score Improvement:</strong> (4/5 - Strong Metrics, Missing Databricks Keywords) → (5/5 - Complete)</p>
+            <div className="flex items-center gap-2 text-sm text-muted-foreground mt-4 flex-wrap">
+              <strong>Score Improvement:</strong>
+              <span className="flex items-center gap-0.5">
+                {[1, 2, 3, 4].map((i) => (<Star key={i} className="w-4 h-4 fill-gold text-gold" />))}
+                <Star className="w-4 h-4 text-border" />
+              </span>
+              <span>(4/5)</span>
+              <span>→</span>
+              <span className="flex items-center gap-0.5">
+                {[1, 2, 3, 4, 5].map((i) => (<Star key={i} className="w-4 h-4 fill-gold text-gold" />))}
+              </span>
+              <span>(5/5)</span>
+            </div>
           </div>
 
           {/* 5. Work Experience - IBM Senior Client Representative */}
