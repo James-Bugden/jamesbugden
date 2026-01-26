@@ -56,6 +56,7 @@ const SamLeeReview = () => {
               <div className="flex-1">
                 <p className="text-sm text-muted-foreground mb-1 font-semibold">Overall Assessment</p>
                 <p className="text-3xl font-bold text-gold">Strong Resume</p>
+                <p className="text-sm text-muted-foreground mt-3">Strong sales track record with highly relevant cloud/data/AI experience and consumption-based sales model alignment. However, <strong className="text-foreground">critical blocker: work authorization status unclear</strong>. Without explicit visa/work rights statement, likely being filtered out before human review. Additionally, it needs stronger demonstration of prospecting tactics and POC methodology to match Databricks' emphasis on these areas.</p>
               </div>
               <ScoreGauge score={90} label="Current Score" size="md" />
             </div>
@@ -187,7 +188,6 @@ const SamLeeReview = () => {
                 </tbody>
               </table>
             </div>
-            <p className="text-sm text-muted-foreground mt-3"><strong>Overall Fit: 90%</strong> - Strong sales track record with highly relevant cloud/data/AI experience and consumption-based sales model alignment. However, <strong>critical blocker: work authorization status unclear</strong>. Without explicit visa/work rights statement, likely being filtered out before human review. Additionally, it needs stronger demonstration of prospecting tactics and POC methodology to match Databricks' emphasis on these areas.</p>
           </div>
 
           {/* Before/After Readiness */}
@@ -570,7 +570,7 @@ const SamLeeReview = () => {
               </div>
             </div>
 
-            <p className="text-sm text-muted-foreground"><strong>Score Improvement:</strong> ⭐⭐⭐⭐ (4/5) → ⭐⭐⭐⭐⭐ (5/5)</p>
+            <p className="text-sm text-muted-foreground"><strong>Score Improvement:</strong> (4/5 - Strong Foundation, Missing Critical Element) → (5/5 - Complete)</p>
           </div>
 
           {/* 2. Executive Summary */}
@@ -615,7 +615,7 @@ const SamLeeReview = () => {
               </div>
             </div>
 
-            <p className="text-sm text-muted-foreground"><strong>Score Improvement:</strong> ⭐⭐⭐ (3/5) → ⭐⭐⭐⭐⭐ (5/5)</p>
+            <p className="text-sm text-muted-foreground"><strong>Score Improvement:</strong> (3/5 - Good Content, Generic Language) → (5/5 - Complete)</p>
           </div>
 
           {/* 3. Skills Section */}
@@ -664,7 +664,7 @@ const SamLeeReview = () => {
               <p className="text-foreground text-sm">Consumption-Based Sales (ARR/ACR) · New Logo Acquisition & Expansion · Territory & Account Planning · Salesforce (SFDC) Pipeline Management · POC/Pilot Design & Execution · Executive Stakeholder Engagement (C-suite/VP-level) · Technical Buyer Engagement (Architects/Engineering) · Enterprise Cloud/Data/AI Platforms</p>
             </div>
 
-            <p className="text-sm text-muted-foreground"><strong>Score Improvement:</strong> ⭐⭐⭐⭐ (4/5) → ⭐⭐⭐⭐⭐ (5/5)</p>
+            <p className="text-sm text-muted-foreground"><strong>Score Improvement:</strong> (4/5 - Relevant Skills, Missing Key Terms) → (5/5 - Complete)</p>
           </div>
 
           {/* 4. Work Experience - Microsoft */}
@@ -737,7 +737,7 @@ const SamLeeReview = () => {
               </div>
             </div>
 
-            <p className="text-sm text-muted-foreground mt-4"><strong>Score Improvement:</strong> ⭐⭐⭐⭐ (4/5) → ⭐⭐⭐⭐⭐ (5/5)</p>
+            <p className="text-sm text-muted-foreground mt-4"><strong>Score Improvement:</strong> (4/5 - Strong Metrics, Missing Databricks Keywords) → (5/5 - Complete)</p>
           </div>
 
           {/* 5. Work Experience - IBM Senior Client Representative */}
@@ -1067,6 +1067,15 @@ const SamLeeReview = () => {
                   <li>• Technical deep-dives</li>
                 </ul>
               </div>
+              <div>
+                <p className="text-sm font-semibold text-gold mb-2">Competitive & Value</p>
+                <ul className="text-sm text-foreground space-y-1">
+                  <li>• Competitive displacement</li>
+                  <li>• ROI-based business cases</li>
+                  <li>• Value realization</li>
+                  <li>• Cost-benefit analysis</li>
+                </ul>
+              </div>
             </div>
             <p className="text-sm text-muted-foreground mt-4"><strong>Tip:</strong> Only include keywords that genuinely reflect your experience as interviewers will ask you to elaborate on anything listed.</p>
           </div>
@@ -1184,6 +1193,47 @@ const SamLeeReview = () => {
               <p className="text-foreground"><strong>Final Thought:</strong></p>
               <p className="text-muted-foreground mt-2">Your previous resume wasn't telling this story effectively. Your new resume does.</p>
               <p className="text-gold mt-4 font-semibold">You have the experience. Now you have the positioning. Go get the offer. 🚀</p>
+            </div>
+          </div>
+        </section>
+
+        {/* Your Feedback Matters */}
+        <section className="mb-16">
+          <div className="bg-card rounded-xl p-8 border border-border">
+            <h2 className="font-heading text-2xl text-foreground mb-6">Your Feedback Matters</h2>
+            <p className="text-foreground mb-6">I hope this review has been valuable in strengthening your application.</p>
+            <p className="text-muted-foreground mb-6">If you found this review helpful, I'd greatly appreciate your feedback:</p>
+            
+            <div className="space-y-6">
+              <div>
+                <h3 className="text-lg font-semibold text-foreground mb-2">1. Share Your Feedback</h3>
+                <ul className="text-sm text-muted-foreground space-y-1">
+                  <li>• Your honest feedback helps me improve the service</li>
+                  <li>• Testimonials help other job seekers discover this service</li>
+                  <li>• I read every response and continuously refine my approach</li>
+                </ul>
+              </div>
+              
+              <div>
+                <h3 className="text-lg font-semibold text-foreground mb-2">2. Leave a Trustpilot Review</h3>
+                <ul className="text-sm text-muted-foreground space-y-1">
+                  <li>• Public reviews help build credibility</li>
+                  <li>• Your review helps other professionals make informed decisions</li>
+                  <li>• Note: I've just started so new businesses on Trustpilot start with a weighted average that includes 7 neutral (3.5★) reviews. This means my current TrustScore may appear lower than the actual client feedback. Your honest review helps provide an accurate representation of the service quality.</li>
+                </ul>
+              </div>
+              
+              <div>
+                <h3 className="text-lg font-semibold text-foreground mb-2">3. Share Your Results</h3>
+                <p className="text-sm text-muted-foreground">When you land interviews or offers, let me know!</p>
+              </div>
+            </div>
+
+            <div className="mt-8 pt-6 border-t border-border">
+              <p className="text-foreground">Questions or need clarification on any recommendations?</p>
+              <p className="text-muted-foreground mt-2">Feel free to reach out. I'm here to help you succeed.</p>
+              <p className="text-gold mt-4 font-semibold">Best of luck with your applications!</p>
+              <p className="text-sm text-muted-foreground mt-4">Review Completed: January 2026</p>
             </div>
           </div>
         </section>
