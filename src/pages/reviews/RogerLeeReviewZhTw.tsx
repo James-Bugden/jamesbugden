@@ -717,9 +717,19 @@ const RogerLeeReviewZhTw = () => {
                     <td className="py-2 text-muted-foreground">所有項目都有清晰指標量化；Google Analytics 認證；優化工作（30% 成本降低、20% 銷量增加）</td>
                   </tr>
                   <tr className="border-b border-border">
+                    <td className="py-2 text-foreground">專案溝通與推廣</td>
+                    <td className="py-2"><span className="text-gold font-semibold">✅ 強</span></td>
+                    <td className="py-2 text-muted-foreground">教育路線圖（10 國）、合作夥伴擴張（300%+）、對高階主管的市場進入簡報與對齊</td>
+                  </tr>
+                  <tr className="border-b border-border">
                     <td className="py-2 text-foreground">成本效益分析與商業案例</td>
                     <td className="py-2"><span className="text-yellow-500 font-semibold">⚠️ 中等</span></td>
                     <td className="py-2 text-muted-foreground">柬埔寨市場規模（$200-300M）、AMD 機會（$6M），但沒有明確的損益表或 ROI 計算經驗展示</td>
+                  </tr>
+                  <tr className="border-b border-border">
+                    <td className="py-2 text-foreground">變革管理與共識建立</td>
+                    <td className="py-2"><span className="text-yellow-500 font-semibold">⚠️ 中等</span></td>
+                    <td className="py-2 text-muted-foreground">跨職能協調很明顯，但缺少明確的「變革管理」或「組織轉型」類型案例</td>
                   </tr>
                   <tr className="border-b border-border">
                     <td className="py-2 text-foreground">目標學校 MBA</td>
