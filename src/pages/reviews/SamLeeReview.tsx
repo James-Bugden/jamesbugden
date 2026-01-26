@@ -1311,9 +1311,13 @@ const SamLeeReview = () => {
             </div>
 
             {/* Trustpilot Score Note */}
-            <p className="text-xs text-muted-foreground/70 text-center italic">
-              Why is the Trustpilot score 3.8? I've just started a new business and Trustpilot applies an initial weighting for new businesses, which can temporarily lower early scores. As more real client reviews are added, the score adjusts to reflect actual service quality.
-            </p>
+            <div className="p-4 bg-muted/30 rounded-lg border border-border mb-6">
+              <p className="text-sm text-muted-foreground text-center">
+                <span className="font-medium text-foreground">Why is the Trustpilot score 3.8?</span>
+                <br className="hidden sm:block" />{" "}
+                I've just started a new business and Trustpilot applies an initial weighting for new businesses, which can temporarily lower early scores. As more real client reviews are added, the score adjusts to reflect actual service quality.
+              </p>
+            </div>
 
             {/* Share Results - Smaller */}
             <div className="text-center p-4 bg-muted/50 rounded-lg">
