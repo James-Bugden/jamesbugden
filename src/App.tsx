@@ -27,6 +27,8 @@ import SamLeeReview from "./pages/reviews/SamLeeReview";
 import SamLeeReviewZhTw from "./pages/reviews/SamLeeReviewZhTw";
 import RogerLeeReview from "./pages/reviews/RogerLeeReview";
 import RogerLeeReviewZhTw from "./pages/reviews/RogerLeeReviewZhTw";
+import PinWeiWuReview from "./pages/reviews/PinWeiWuReview";
+import PinWeiWuReviewZhTw from "./pages/reviews/PinWeiWuReviewZhTw";
 
 const queryClient = new QueryClient();
 
