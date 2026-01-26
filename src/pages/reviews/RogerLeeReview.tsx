@@ -1354,9 +1354,10 @@ const RogerLeeReview = () => {
             
             <div className="space-y-6">
               <div>
-                <h3 className="text-lg font-semibold text-foreground mb-2">1. Share Your Feedback</h3>
+                <h3 className="text-lg font-semibold text-foreground mb-2">
+                  1. <a href="https://tally.so/r/81L09x" target="_blank" rel="noopener noreferrer" className="text-gold hover:underline">Share Your Feedback</a>
+                </h3>
                 <ul className="text-sm text-muted-foreground space-y-1">
-                  <li>• Leave your thoughts at james.careers/feedback</li>
                   <li>• Your honest feedback helps me improve the service</li>
                   <li>• Testimonials help other job seekers discover this service</li>
                   <li>• I read every response and continuously refine my approach</li>
@@ -1364,7 +1365,9 @@ const RogerLeeReview = () => {
               </div>
               
               <div>
-                <h3 className="text-lg font-semibold text-foreground mb-2">2. Leave a Trustpilot Review</h3>
+                <h3 className="text-lg font-semibold text-foreground mb-2">
+                  2. Leave a <a href="https://www.trustpilot.com/review/jamesbugden.com" target="_blank" rel="noopener noreferrer" className="text-gold hover:underline">Trustpilot</a> Review
+                </h3>
                 <ul className="text-sm text-muted-foreground space-y-1">
                   <li>• Share your experience</li>
                   <li>• Public reviews help build credibility</li>
