@@ -971,6 +971,62 @@ const PinWeiWuReview = () => {
               <p className="text-sm text-foreground"><strong>CRITICAL NOTE:</strong> This role contains your strongest sales/BD evidence. The 58% growth through partnership development is extremely relevant for both Uber AM and BDR roles. By reframing this as Partnership Development & Account Management work, you significantly strengthen your candidacy.</p>
             </div>
 
+            {/* Detailed Bullet Transformations for Gaston Luga */}
+            <div className="space-y-4 mb-6">
+              <h4 className="text-sm font-semibold text-foreground">Detailed Bullet Transformations:</h4>
+              
+              {/* Bullet #1 */}
+              <div className="bg-destructive/5 rounded-lg p-4 border-l-4 border-destructive">
+                <p className="text-sm font-semibold text-destructive mb-2">Bullet #1 - Before:</p>
+                <p className="text-foreground italic">Partner Growth: Delivered a 58% sales increase in the Taiwan market by building and managing high-performing affiliate and retail partnerships.</p>
+              </div>
+              <div className="bg-gold/10 rounded-lg p-4 border-l-4 border-gold">
+                <p className="text-sm font-semibold text-gold mb-2">After:</p>
+                <p className="text-foreground italic"><strong>Partnership Development & Account Management:</strong> Built Taiwan market from zero to [NUMBER] affiliate and retail partnerships (e-commerce platforms, retail stores, influencer affiliates), delivering 58% sales increase ([$VALUE] revenue growth from [$BASELINE] to [$END]) through partner acquisition, relationship management, and performance optimization.</p>
+                <div className="mt-3 space-y-1 text-sm text-foreground">
+                  <p>✅ Subheader repositions work as BD/AM</p>
+                  <p>✅ "From zero" shows business development capability</p>
+                  <p>✅ Partner count quantified with partnership types specified</p>
+                  <p>✅ Absolute revenue numbers contextualize 58% growth</p>
+                  <p>✅ "Relationship management and performance optimization" are AM activities</p>
+                </div>
+              </div>
+
+              {/* Bullet #2 */}
+              <div className="bg-destructive/5 rounded-lg p-4 border-l-4 border-destructive">
+                <p className="text-sm font-semibold text-destructive mb-2">Bullet #2 - Before:</p>
+                <p className="text-foreground italic">CRM Digital Strategy: Managed CRM-based influencer campaigns and standardized internal data processes to ensure seamless marketing-commercial alignment.</p>
+              </div>
+              <div className="bg-gold/10 rounded-lg p-4 border-l-4 border-gold">
+                <p className="text-sm font-semibold text-gold mb-2">After:</p>
+                <p className="text-foreground italic">Managed [NUMBER] influencer partnership campaigns generating [$VALUE] revenue through performance tracking in CRM system, negotiating commercial terms ([X]% commission structure), and conducting monthly partner performance reviews to optimize ROI and ensure [Y]% partner retention rate.</p>
+                <div className="mt-3 space-y-1 text-sm text-foreground">
+                  <p>✅ Campaign volume and revenue quantified</p>
+                  <p>✅ "Negotiating commercial terms" shows sales/BD skill</p>
+                  <p>✅ Commission structure demonstrates understanding of partnership economics</p>
+                  <p>✅ "Monthly partner performance reviews" mirrors AM quarterly business reviews</p>
+                  <p>✅ Partner retention rate proves relationship management capability</p>
+                </div>
+              </div>
+
+              {/* Bullet #3 */}
+              <div className="bg-destructive/5 rounded-lg p-4 border-l-4 border-destructive">
+                <p className="text-sm font-semibold text-destructive mb-2">Bullet #3 - Before:</p>
+                <p className="text-foreground italic">Workflow Enablement: Trained team members on CRM usage and data processes.</p>
+              </div>
+              <div className="bg-gold/10 rounded-lg p-4 border-l-4 border-gold">
+                <p className="text-sm font-semibold text-gold mb-2">After:</p>
+                <p className="text-foreground italic">Trained [NUMBER] cross-functional team members (sales, marketing, operations) on partnership management best practices and CRM workflow optimization, improving data quality by [X]% and enabling [$Y] incremental revenue through partner segmentation and targeted engagement.</p>
+                <div className="mt-3 space-y-1 text-sm text-foreground">
+                  <p>✅ Training scope quantified</p>
+                  <p>✅ Cross-functional impact shown</p>
+                  <p>✅ Data quality improvement measured</p>
+                  <p>✅ Links training to revenue impact</p>
+                  <p>✅ "Partner segmentation and targeted engagement" are sales/AM skills</p>
+                </div>
+              </div>
+            </div>
+
             <div className="flex items-center gap-2 text-sm text-muted-foreground mt-4 flex-wrap">
               <strong>Score Improvement:</strong>
               <span className="flex items-center gap-0.5">
@@ -986,16 +1042,103 @@ const PinWeiWuReview = () => {
             </div>
           </div>
 
-          {/* 7. Education */}
+          {/* 7. E-commerce Coordinator (Intern), Unilever */}
+          <div className="bg-card rounded-xl p-6 mb-6 border border-border">
+            <div className="flex items-center gap-3 mb-4">
+              <Building className="w-5 h-5 text-gold" />
+              <h3 className="text-xl font-semibold text-foreground">7. E-commerce Coordinator (Intern), Unilever (Feb 2023 - Jun 2023)</h3>
+              <div className="flex items-center gap-1 ml-auto">
+                {[1, 2, 3, 4].map((i) => (
+                  <Star key={i} className="w-4 h-4 fill-gold text-gold" />
+                ))}
+                {[5].map((i) => (
+                  <Star key={i} className="w-4 h-4 text-border" />
+                ))}
+                <span className="text-sm text-muted-foreground ml-2">(4/5 - Clean, Appropriate for Internship)</span>
+              </div>
+            </div>
+
+            <div className="grid md:grid-cols-2 gap-6 mb-6">
+              <div>
+                <p className="text-sm font-semibold text-gold mb-3 flex items-center gap-2">
+                  <CheckCircle className="w-4 h-4" /> What Was Working
+                </p>
+                <ul className="space-y-2 text-sm text-foreground">
+                  <li>• Recognizable brand name - Unilever provides instant credibility</li>
+                  <li>• Quantified achievement - "25% growth in visibility" is concrete metric</li>
+                  <li>• Supporting Account Managers mentioned - Shows exposure to AM function</li>
+                  <li>• Data-driven approach - "Evidence-based decisions" and "actionable insights" demonstrate analytical skills</li>
+                  <li>• Appropriate brevity - Two bullets suitable for 4-month internship from 2 years ago</li>
+                </ul>
+              </div>
+              <div>
+                <p className="text-sm font-semibold text-muted-foreground mb-3 flex items-center gap-2">
+                  <AlertTriangle className="w-4 h-4" /> What Could Be Enhanced (Minor)
+                </p>
+                <ul className="space-y-2 text-sm text-foreground">
+                  <li>• Role is less relevant - Internship focused on data support rather than client-facing work; appropriate to keep minimal detail</li>
+                  <li>• Could quantify scale - Number of retail partners, product portfolio value</li>
+                </ul>
+              </div>
+            </div>
+
+            <div className="space-y-4 mb-6">
+              <div className="bg-destructive/5 rounded-lg p-4 border-l-4 border-destructive">
+                <p className="text-sm font-semibold text-destructive mb-2">Before:</p>
+                <p className="text-foreground italic">Data-Driven Support: Improved retail data accuracy to support Account Managers in making faster, evidence-based decisions.</p>
+              </div>
+              
+              <div className="bg-gold/10 rounded-lg p-4 border-l-4 border-gold">
+                <p className="text-sm font-semibold text-gold mb-2">After:</p>
+                <p className="text-foreground italic">Supported e-commerce Account Management team by improving retail data accuracy across [NUMBER] online retail partners, enabling faster decision-making on [$VALUE] product portfolio and contributing to [X]% reduction in reporting cycle time.</p>
+                <div className="mt-3 space-y-1 text-sm text-foreground">
+                  <p>✅ Partner count and portfolio value add scale</p>
+                  <p>✅ "Reporting cycle time reduction" is measurable efficiency gain</p>
+                  <p>✅ Maintains appropriate brevity for internship</p>
+                </div>
+              </div>
+            </div>
+
+            <div className="flex items-center gap-2 text-sm text-muted-foreground mt-4 flex-wrap">
+              <strong>Score Improvement:</strong>
+              <span className="flex items-center gap-0.5">
+                {[1, 2, 3, 4].map((i) => (<Star key={i} className="w-4 h-4 fill-gold text-gold" />))}
+                {[5].map((i) => (<Star key={i} className="w-4 h-4 text-border" />))}
+              </span>
+              <span>(4/5)</span>
+              <span>→</span>
+              <span className="flex items-center gap-0.5">
+                {[1, 2, 3, 4, 5].map((i) => (<Star key={i} className="w-4 h-4 fill-gold text-gold" />))}
+              </span>
+              <span>(5/5)</span>
+            </div>
+          </div>
+
+          {/* 8. Education */}
           <div className="bg-card rounded-xl p-6 mb-6 border border-border">
             <div className="flex items-center gap-3 mb-4">
               <GraduationCap className="w-5 h-5 text-gold" />
-              <h3 className="text-xl font-semibold text-foreground">7. Education</h3>
+              <h3 className="text-xl font-semibold text-foreground">8. Education</h3>
               <div className="flex items-center gap-1 ml-auto">
                 {[1, 2, 3, 4, 5].map((i) => (
                   <Star key={i} className="w-4 h-4 fill-gold text-gold" />
                 ))}
                 <span className="text-sm text-muted-foreground ml-2">(5/5 - Clean and Appropriate)</span>
+              </div>
+            </div>
+
+            <div className="grid md:grid-cols-2 gap-6 mb-4">
+              <div>
+                <p className="text-sm font-semibold text-gold mb-3 flex items-center gap-2">
+                  <CheckCircle className="w-4 h-4" /> What Was Working
+                </p>
+                <ul className="space-y-2 text-sm text-foreground">
+                  <li>• Properly placed - At bottom of resume (correct for experienced professional)</li>
+                  <li>• Relevant degree - Bachelor of Science in Marketing-Management relevant to sales/BD roles</li>
+                  <li>• Clean format - Degree, institution, location, dates clearly presented</li>
+                  <li>• Swedish language study shown - Demonstrates commitment to Swedish market integration</li>
+                  <li>• No unnecessary detail - No GPA (appropriate for 10+ years post-graduation)</li>
+                </ul>
               </div>
             </div>
 
