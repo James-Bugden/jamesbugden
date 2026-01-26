@@ -807,46 +807,241 @@ const SamLeeReviewZhTw = () => {
             </div>
           </div>
 
-          {/* 6. 認證與教育 */}
+          {/* 6. IBM - Consulting Sales Specialist */}
+          <div className="bg-card rounded-xl p-6 mb-6 border border-border">
+            <div className="flex items-center gap-3 mb-4">
+              <Building className="w-5 h-5 text-gold" />
+              <h3 className="text-xl font-semibold text-foreground">6. IBM - Consulting Sales Specialist (Apr 2014-Mar 2019)</h3>
+              <div className="flex items-center gap-1 ml-auto">
+                {[1, 2, 3, 4].map((i) => (
+                  <Star key={i} className="w-4 h-4 fill-gold text-gold" />
+                ))}
+                <Star className="w-4 h-4 text-border" />
+                <span className="text-sm text-muted-foreground ml-2">(4/5 - 成就良好，舊職位細節過多)</span>
+              </div>
+            </div>
+
+            <div className="grid md:grid-cols-2 gap-6 mb-6">
+              <div>
+                <p className="text-sm font-semibold text-gold mb-3 flex items-center gap-2">
+                  <CheckCircle className="w-4 h-4" /> 優勢亮點
+                </p>
+                <ul className="space-y-2 text-sm text-foreground">
+                  <li>• 超越配額 - 「數百萬美元」加20%+ YoY</li>
+                  <li>• 大型交易範例 - $20M技術支援、$2M資料中心</li>
+                  <li>• 多利害關係人協調 - 內外部資源管理</li>
+                </ul>
+              </div>
+              <div>
+                <p className="text-sm font-semibold text-destructive mb-3 flex items-center gap-2">
+                  <XCircle className="w-4 h-4" /> 待改進項目
+                </p>
+                <ul className="space-y-2 text-sm text-foreground">
+                  <li>• 10年以上 - 應大幅精簡</li>
+                  <li>• 細節過多 - 2014-2019職位有2個項目</li>
+                </ul>
+              </div>
+            </div>
+
+            <div className="bg-gold/10 rounded-lg p-4 border-l-4 border-gold mb-4">
+              <p className="text-sm font-semibold text-gold mb-2">優化版本（精簡為1個項目）：</p>
+              <p className="text-foreground text-sm">• <strong>（範例）透過主導IT基礎設施和多供應商服務交易（包括$20M技術支援合約和$2M資料中心遷移），超越$5M+年度配額，20%+ YoY</strong></p>
+            </div>
+          </div>
+
+          {/* 7. Gemalto */}
+          <div className="bg-card rounded-xl p-6 mb-6 border border-border">
+            <div className="flex items-center gap-3 mb-4">
+              <Building className="w-5 h-5 text-gold" />
+              <h3 className="text-xl font-semibold text-foreground">7. Gemalto - Technical Consultant (Nov 2012-Apr 2014)</h3>
+              <div className="flex items-center gap-1 ml-auto">
+                {[1, 2, 3].map((i) => (
+                  <Star key={i} className="w-4 h-4 fill-gold text-gold" />
+                ))}
+                {[4, 5].map((i) => (
+                  <Star key={i} className="w-4 h-4 text-border" />
+                ))}
+                <span className="text-sm text-muted-foreground ml-2">(3/5 - 成果良好，相關性較低)</span>
+              </div>
+            </div>
+
+            <div className="grid md:grid-cols-2 gap-6 mb-6">
+              <div>
+                <p className="text-sm font-semibold text-gold mb-3 flex items-center gap-2">
+                  <CheckCircle className="w-4 h-4" /> 優勢亮點
+                </p>
+                <ul className="space-y-2 text-sm text-foreground">
+                  <li>• 強勁配額績效 - 120%達成</li>
+                  <li>• 營收數字 - 年度$5M</li>
+                  <li>• APAC範圍 - 展示區域責任</li>
+                </ul>
+              </div>
+              <div>
+                <p className="text-sm font-semibold text-destructive mb-3 flex items-center gap-2">
+                  <XCircle className="w-4 h-4" /> 待改進項目
+                </p>
+                <ul className="space-y-2 text-sm text-foreground">
+                  <li>• 12年以上 - 應為最少細節</li>
+                </ul>
+              </div>
+            </div>
+
+            <div className="bg-gold/10 rounded-lg p-4 border-l-4 border-gold mb-4">
+              <p className="text-sm font-semibold text-gold mb-2">優化版本（保持原樣，新增背景）：</p>
+              <p className="text-foreground text-sm">• <strong>透過開發APAC區域數位安全解決方案的策略性合作夥伴關係，達成120%配額（$5M ARR）</strong></p>
+            </div>
+          </div>
+
+          {/* 8. Panasonic */}
+          <div className="bg-card rounded-xl p-6 mb-6 border border-border">
+            <div className="flex items-center gap-3 mb-4">
+              <Building className="w-5 h-5 text-gold" />
+              <h3 className="text-xl font-semibold text-foreground">8. Panasonic - Sales Engineer/Supervisor (Feb 2006-Mar 2012)</h3>
+              <div className="flex items-center gap-1 ml-auto">
+                {[1, 2, 3].map((i) => (
+                  <Star key={i} className="w-4 h-4 fill-gold text-gold" />
+                ))}
+                {[4, 5].map((i) => (
+                  <Star key={i} className="w-4 h-4 text-border" />
+                ))}
+                <span className="text-sm text-muted-foreground ml-2">(3/5 - 早期職涯強勁，應精簡)</span>
+              </div>
+            </div>
+
+            <div className="grid md:grid-cols-2 gap-6 mb-6">
+              <div>
+                <p className="text-sm font-semibold text-gold mb-3 flex items-center gap-2">
+                  <CheckCircle className="w-4 h-4" /> 優勢亮點
+                </p>
+                <ul className="space-y-2 text-sm text-foreground">
+                  <li>• 出色配額績效 - 145%和175%</li>
+                  <li>• 大型交易價值 - $34M訂單</li>
+                  <li>• 上市策略 - 展示策略思維</li>
+                </ul>
+              </div>
+              <div>
+                <p className="text-sm font-semibold text-destructive mb-3 flex items-center gap-2">
+                  <XCircle className="w-4 h-4" /> 待改進項目
+                </p>
+                <ul className="space-y-2 text-sm text-foreground">
+                  <li>• 18年以上 - 細節過多（2個項目）</li>
+                  <li>• 工業設備銷售 - 與雲端/Data/AI最不相關</li>
+                </ul>
+              </div>
+            </div>
+
+            <div className="bg-gold/10 rounded-lg p-4 border-l-4 border-gold mb-4">
+              <p className="text-sm font-semibold text-gold mb-2">優化版本（精簡為1個項目）：</p>
+              <p className="text-foreground text-sm">• <strong>在技術銷售職位持續超越配額（145-175%），開發上市策略並透過規格銷售和通路合作夥伴關係贏得$34M+新業務</strong></p>
+            </div>
+          </div>
+
+          {/* 9. 認證 */}
+          <div className="bg-card rounded-xl p-6 mb-6 border border-border">
+            <div className="flex items-center gap-3 mb-4">
+              <Award className="w-5 h-5 text-gold" />
+              <h3 className="text-xl font-semibold text-foreground">9. 認證</h3>
+              <div className="flex items-center gap-1 ml-auto">
+                {[1, 2, 3].map((i) => (
+                  <Star key={i} className="w-4 h-4 fill-gold text-gold" />
+                ))}
+                {[4, 5].map((i) => (
+                  <Star key={i} className="w-4 h-4 text-border" />
+                ))}
+                <span className="text-sm text-muted-foreground ml-2">(3/5 - 優秀證書，格式不佳)</span>
+              </div>
+            </div>
+
+            <div className="grid md:grid-cols-2 gap-6 mb-6">
+              <div>
+                <p className="text-sm font-semibold text-gold mb-3 flex items-center gap-2">
+                  <CheckCircle className="w-4 h-4" /> 優勢亮點
+                </p>
+                <ul className="space-y-2 text-sm text-foreground">
+                  <li>• 高度相關認證 - AWS Solutions Architect、Microsoft AI/Data認證</li>
+                  <li>• 展示持續學習 - 多項近期認證</li>
+                  <li>• 技術公信力 - AI-102、DP-900展示實務平台知識</li>
+                </ul>
+              </div>
+              <div>
+                <p className="text-sm font-semibold text-destructive mb-3 flex items-center gap-2">
+                  <XCircle className="w-4 h-4" /> 待改進項目
+                </p>
+                <ul className="space-y-2 text-sm text-foreground">
+                  <li>• 字母湯格式 - 「AI-102/AI-900/DP-900/AZ-900/SC-900/MS-900/PL-900」難以解讀</li>
+                  <li>• 無說明 - 未釐清每項認證代表什麼</li>
+                  <li>• 壓縮成單行 - 難以快速掃描</li>
+                </ul>
+              </div>
+            </div>
+
+            <div className="bg-gold/10 rounded-lg p-4 border-l-4 border-gold mb-4">
+              <p className="text-sm font-semibold text-gold mb-2">優化版本（按類別分組）：</p>
+              <div className="text-foreground text-sm space-y-3">
+                <div>
+                  <p className="font-semibold text-gold">雲端基礎設施：</p>
+                  <p>• AWS Certified Solutions Architect – Associate（基礎設施設計與部署）</p>
+                </div>
+                <div>
+                  <p className="font-semibold text-gold">Microsoft AI與資料平台：</p>
+                  <p>• AI-102（Azure AI Engineer Associate）</p>
+                  <p>• DP-900（Azure Data Fundamentals）</p>
+                  <p>• AI-900（Azure AI Fundamentals）</p>
+                </div>
+                <div>
+                  <p className="font-semibold text-gold">Microsoft雲端與安全基礎：</p>
+                  <p>• AZ-900（Azure Fundamentals）| SC-900（Security, Compliance, Identity）</p>
+                  <p>• MS-900（Microsoft 365 Fundamentals）| PL-900（Power Platform Fundamentals）</p>
+                </div>
+              </div>
+            </div>
+
+            <div className="flex items-center gap-2 text-sm text-muted-foreground flex-wrap">
+              <strong>分數改進：</strong>
+              <span className="flex items-center gap-0.5">
+                {[1, 2, 3].map((i) => (<Star key={i} className="w-4 h-4 fill-gold text-gold" />))}
+                {[4, 5].map((i) => (<Star key={i} className="w-4 h-4 text-border" />))}
+              </span>
+              <span>(3/5)</span>
+              <span>→</span>
+              <span className="flex items-center gap-0.5">
+                {[1, 2, 3, 4, 5].map((i) => (<Star key={i} className="w-4 h-4 fill-gold text-gold" />))}
+              </span>
+              <span>(5/5)</span>
+            </div>
+          </div>
+
+          {/* 10. 教育 */}
           <div className="bg-card rounded-xl p-6 mb-6 border border-border">
             <div className="flex items-center gap-3 mb-4">
               <GraduationCap className="w-5 h-5 text-gold" />
-              <h3 className="text-xl font-semibold text-foreground">6. 認證與教育</h3>
-            </div>
-
-            <div className="mb-6">
-              <p className="text-sm font-semibold text-foreground mb-2">認證 (3/5 → 5/5)</p>
-              <div className="grid md:grid-cols-2 gap-6">
-                <div>
-                  <p className="text-sm font-semibold text-gold mb-3 flex items-center gap-2">
-                    <CheckCircle className="w-4 h-4" /> 優勢亮點
-                  </p>
-                  <ul className="space-y-2 text-sm text-foreground">
-                    <li>• 高度相關認證 - AWS Solutions Architect、Microsoft AI/Data認證</li>
-                    <li>• 展示持續學習 - 多項近期認證</li>
-                    <li>• 技術公信力 - AI-102、DP-900展示實務平台知識</li>
-                  </ul>
-                </div>
-                <div>
-                  <p className="text-sm font-semibold text-destructive mb-3 flex items-center gap-2">
-                    <XCircle className="w-4 h-4" /> 待改進項目
-                  </p>
-                  <ul className="space-y-2 text-sm text-foreground">
-                    <li>• 字母湯格式 - 「AI-102/AI-900/DP-900/AZ-900/SC-900/MS-900/PL-900」難以解讀</li>
-                    <li>• 無說明 - 未釐清每項認證代表什麼</li>
-                    <li>• 壓縮成單行 - 難以快速掃描</li>
-                  </ul>
-                </div>
+              <h3 className="text-xl font-semibold text-foreground">10. 教育</h3>
+              <div className="flex items-center gap-1 ml-auto">
+                {[1, 2, 3, 4, 5].map((i) => (
+                  <Star key={i} className="w-4 h-4 fill-gold text-gold" />
+                ))}
+                <span className="text-sm text-muted-foreground ml-2">(5/5 - 簡潔、適當)</span>
               </div>
             </div>
 
-            <div className="mb-6">
-              <p className="text-sm font-semibold text-foreground mb-2">教育 (4/5 → 5/5)</p>
-              <div className="bg-muted/30 rounded-lg p-4">
-                <p className="text-sm text-foreground"><strong>無需變更：</strong></p>
-                <p className="text-sm text-muted-foreground mt-2 font-mono">EDUCATION<br/>Bachelor of Electronic Engineering, Yuan Ze University, Taoyuan, Taiwan</p>
-                <p className="text-sm text-muted-foreground mt-2">對資深專業人員而言格式完美。</p>
+            <div className="grid md:grid-cols-2 gap-6 mb-6">
+              <div>
+                <p className="text-sm font-semibold text-gold mb-3 flex items-center gap-2">
+                  <CheckCircle className="w-4 h-4" /> 優勢亮點
+                </p>
+                <ul className="space-y-2 text-sm text-foreground">
+                  <li>• 適當配置 - 在履歷底部（18年經驗正確）</li>
+                  <li>• 相關學位 - 電子工程與技術銷售相關</li>
+                  <li>• 簡潔格式 - 單行，無不必要細節</li>
+                  <li>• 無GPA - 適合資深專業人員</li>
+                </ul>
               </div>
+            </div>
+
+            <div className="bg-muted/30 rounded-lg p-4">
+              <p className="text-sm text-foreground"><strong>無需變更：</strong></p>
+              <p className="text-sm text-muted-foreground mt-2 font-mono">EDUCATION<br/>Bachelor of Electronic Engineering, Yuan Ze University, Taoyuan, Taiwan</p>
+              <p className="text-sm text-muted-foreground mt-2">對資深專業人員而言格式完美。分數：5/5</p>
             </div>
           </div>
         </section>
@@ -946,6 +1141,8 @@ const SamLeeReviewZhTw = () => {
               </table>
             </div>
 
+            <p className="text-sm text-destructive font-semibold mt-4 mb-6">關鍵字匹配分數：35% - 缺少招聘人員和招聘經理尋找的Databricks特定術語</p>
+
             <p className="text-sm font-semibold text-foreground mb-4">優化後：</p>
             <div className="overflow-x-auto">
               <table className="w-full text-sm">
@@ -1025,6 +1222,7 @@ const SamLeeReviewZhTw = () => {
                 </tbody>
               </table>
             </div>
+            <p className="text-sm text-gold font-semibold mt-4">關鍵字匹配分數：95% - 與招聘人員和招聘經理立即認出的Databricks職缺描述術語強力契合</p>
           </div>
 
           {/* 可考慮納入的關鍵字 */}
