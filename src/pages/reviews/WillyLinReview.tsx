@@ -1,5 +1,6 @@
 import { ArrowLeft, Download, FileText, TrendingUp, Zap, Target, CheckCircle, XCircle, Clock, Users, AlertTriangle, Calendar, Lightbulb, Star, BookOpen, Layout, Award, GraduationCap, RefreshCw, Briefcase, Building, Globe, BarChart3, MessageSquare, Phone, MapPin, Shield, Trash2, Edit3, Search, UserCheck, Code, Database, TestTube, Handshake, FileWarning, Layers } from 'lucide-react';
 import { Link } from 'react-router-dom';
+import ReviewLanguageToggle from '@/components/ReviewLanguageToggle';
 import ScoreGauge from '@/components/ScoreGauge';
 
 const WillyLinReview = () => {
@@ -13,6 +14,7 @@ const WillyLinReview = () => {
             <span className="text-sm font-medium">Back to Home</span>
           </Link>
           <div className="flex items-center gap-3">
+            <ReviewLanguageToggle />
             <a 
               href="/downloads/WILLY_LIN_RESUME_REVIEW.pdf" 
               download 

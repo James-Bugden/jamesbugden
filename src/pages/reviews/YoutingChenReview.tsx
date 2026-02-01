@@ -1,5 +1,6 @@
 import { ArrowLeft, Download, FileText, Zap, Target, CheckCircle, XCircle, Clock, Star, BarChart3, MessageSquare, AlertTriangle, Lightbulb, ListChecks, BookOpen, TrendingUp } from 'lucide-react';
 import { Link } from 'react-router-dom';
+import ReviewLanguageToggle from '@/components/ReviewLanguageToggle';
 import ScoreGauge from '@/components/ScoreGauge';
 
 const YoutingChenReview = () => {
@@ -12,10 +13,13 @@ const YoutingChenReview = () => {
             <ArrowLeft className="w-5 h-5" />
             <span className="text-sm font-medium">Back to Home</span>
           </Link>
-          <a href="/downloads/YOUTING_CHEN_RESUME_REVIEW.pdf" download className="flex items-center gap-2 px-4 py-2 bg-gold/20 hover:bg-gold/30 text-cream rounded-lg transition-colors">
-            <Download className="w-4 h-4" />
-            <span className="text-sm font-medium">Download PDF</span>
-          </a>
+          <div className="flex items-center gap-3">
+            <ReviewLanguageToggle />
+            <a href="/downloads/YOUTING_CHEN_RESUME_REVIEW.pdf" download className="flex items-center gap-2 px-4 py-2 bg-gold/20 hover:bg-gold/30 text-cream rounded-lg transition-colors">
+              <Download className="w-4 h-4" />
+              <span className="text-sm font-medium">Download PDF</span>
+            </a>
+          </div>
         </div>
       </header>
 
