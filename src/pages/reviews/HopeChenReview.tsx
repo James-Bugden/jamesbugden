@@ -1,5 +1,6 @@
 import { ArrowLeft, Download, FileText, Star, MessageSquare, ExternalLink } from "lucide-react";
 import { Link } from "react-router-dom";
+import ReviewLanguageToggle from "@/components/ReviewLanguageToggle";
 import ScoreGauge from "@/components/ScoreGauge";
 
 const HopeChenReview = () => {
@@ -8,10 +9,19 @@ const HopeChenReview = () => {
       {/* Header */}
       <header className="bg-[#1B3A2F] text-[#FBF7F0] py-6">
         <div className="container mx-auto px-4">
-          <Link to="/" className="inline-flex items-center text-[#C9A961] hover:text-[#E5C87B] transition-colors mb-4">
-            <ArrowLeft className="w-4 h-4 mr-2" />
-            Back to Home
-          </Link>
+          <div className="flex items-center justify-between mb-4">
+            <Link to="/" className="inline-flex items-center text-[#C9A961] hover:text-[#E5C87B] transition-colors">
+              <ArrowLeft className="w-4 h-4 mr-2" />
+              Back to Home
+            </Link>
+            <div className="flex items-center gap-3">
+              <ReviewLanguageToggle />
+              <a href="/downloads/HOPE_CHEN_RESUME_REVIEW.pdf" download className="flex items-center gap-2 px-4 py-2 bg-[#C9A961]/20 hover:bg-[#C9A961]/30 text-[#FBF7F0] rounded-lg transition-colors">
+                <Download className="w-4 h-4" />
+                <span className="text-sm font-medium">Download PDF</span>
+              </a>
+            </div>
+          </div>
           <h1 className="font-heading text-3xl md:text-4xl">Resume Review Report</h1>
           <p className="text-[#C9A961] mt-2">Hope Chen - Brand & Category Growth Manager</p>
         </div>
