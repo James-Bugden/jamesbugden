@@ -33,6 +33,7 @@ import PeihuaYehReview from "./pages/reviews/PeihuaYehReview";
 import SilviaChenReview from "./pages/reviews/SilviaChenReview";
 import YoutingChenReview from "./pages/reviews/YoutingChenReview";
 import RoyTsaiReview from "./pages/reviews/RoyTsaiReview";
+import JanelleChengReview from "./pages/reviews/JanelleChengReview";
 
 const queryClient = new QueryClient();
 
@@ -79,6 +80,7 @@ const App = () => (
           <Route path="/reviews/silvia-chen" element={<SilviaChenReview />} />
           <Route path="/reviews/youting-chen" element={<YoutingChenReview />} />
           <Route path="/reviews/roy-tsai" element={<RoyTsaiReview />} />
+          <Route path="/reviews/janelle-cheng" element={<JanelleChengReview />} />
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
           <Route path="*" element={<NotFound />} />
         </Routes>
