@@ -1,4 +1,4 @@
-import { ArrowLeft, Download, FileText, Target, CheckCircle, XCircle, Star, MessageSquare, Zap, Calendar, Building, Search, TrendingUp } from 'lucide-react';
+import { ArrowLeft, Download, FileText, TrendingUp, Zap, Target, CheckCircle, XCircle, Clock, Users, AlertTriangle, Calendar, Lightbulb, Star, BookOpen, Layout, Award, GraduationCap, RefreshCw, Briefcase, Building, Globe, BarChart3, MessageSquare, Phone, MapPin, Shield, Trash2, Edit3, Search, UserCheck, Code, Database, TestTube, Handshake } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import ReviewLanguageToggle from '@/components/ReviewLanguageToggle';
 import ScoreGauge from '@/components/ScoreGauge';
@@ -143,6 +143,89 @@ const JanelleChengReviewZhTw = () => {
               </ul>
             </div>
           </div>
+
+          {/* 總覽表格 */}
+          <div className="bg-card rounded-xl p-6 mb-8 border border-border overflow-x-auto">
+            <h3 className="text-lg font-semibold text-foreground mb-4">總覽</h3>
+            <table className="w-full text-sm">
+              <thead>
+                <tr className="border-b border-border">
+                  <th className="text-left py-2 text-foreground">項目</th>
+                  <th className="text-left py-2 text-muted-foreground">目前狀態</th>
+                  <th className="text-left py-2 text-gold">最佳狀態</th>
+                  <th className="text-center py-2 text-foreground">優先級</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr className="border-b border-border">
+                  <td className="py-2 text-foreground font-semibold">電話號碼</td>
+                  <td className="py-2 text-muted-foreground">頁首未包含</td>
+                  <td className="py-2 text-foreground">新增國際格式：+886-XXX-XXX-XXX 以提高可及性</td>
+                  <td className="py-2 text-center"><span className="text-destructive font-semibold">高</span></td>
+                </tr>
+                <tr className="border-b border-border">
+                  <td className="py-2 text-foreground font-semibold">地點</td>
+                  <td className="py-2 text-muted-foreground">未指定</td>
+                  <td className="py-2 text-foreground">明確的城市/國家：「台北，台灣」以說明時區和背景</td>
+                  <td className="py-2 text-center"><span className="text-destructive font-semibold">高</span></td>
+                </tr>
+                <tr className="border-b border-border">
+                  <td className="py-2 text-foreground font-semibold">工作授權</td>
+                  <td className="py-2 text-muted-foreground">未提及</td>
+                  <td className="py-2 text-foreground">明確聲明：「歐盟工作授權」或「需要贊助」或「搬遷至 [城市]」</td>
+                  <td className="py-2 text-center"><span className="text-destructive font-semibold">高</span></td>
+                </tr>
+                <tr className="border-b border-border">
+                  <td className="py-2 text-foreground font-semibold">專業發展區塊</td>
+                  <td className="py-2 text-muted-foreground">dbt Meetup Taiwan、Tableau User Group Meetup Taiwan</td>
+                  <td className="py-2 text-foreground">完全移除 - 聚會參與不展示經過驗證的能力</td>
+                  <td className="py-2 text-center"><span className="text-destructive font-semibold">高</span></td>
+                </tr>
+                <tr className="border-b border-border">
+                  <td className="py-2 text-foreground font-semibold">志工經驗區塊</td>
+                  <td className="py-2 text-muted-foreground">2013 年觀光規劃（12 年前，與工作無關）</td>
+                  <td className="py-2 text-foreground">建議移除 - 與分析工程師職位無關</td>
+                  <td className="py-2 text-center"><span className="text-yellow-500 font-semibold">中</span></td>
+                </tr>
+                <tr className="border-b border-border">
+                  <td className="py-2 text-foreground font-semibold">Teamson 第 4 點具體性</td>
+                  <td className="py-2 text-muted-foreground">模糊：「KPI 和費用分析...實現 3 倍貢獻毛利增加」</td>
+                  <td className="py-2 text-foreground">指明哪些 KPI、什麼費用類別、分析如何直接促成增長</td>
+                  <td className="py-2 text-center"><span className="text-yellow-500 font-semibold">中</span></td>
+                </tr>
+                <tr className="border-b border-border">
+                  <td className="py-2 text-foreground font-semibold">資料品質強調</td>
+                  <td className="py-2 text-muted-foreground">儘管有做這項工作但未明確提及</td>
+                  <td className="py-2 text-foreground">新增要點或強化現有要點以突顯測試、驗證框架、資料品質流程</td>
+                  <td className="py-2 text-center"><span className="text-yellow-500 font-semibold">中</span></td>
+                </tr>
+                <tr className="border-b border-border">
+                  <td className="py-2 text-foreground font-semibold">利害關係人協作流程</td>
+                  <td className="py-2 text-muted-foreground">展示產出（儀表板、模型）但非協作流程</td>
+                  <td className="py-2 text-foreground">新增需求收集、利害關係人工作坊、將商業需求轉化為技術解決方案的細節</td>
+                  <td className="py-2 text-center"><span className="text-yellow-500 font-semibold">中</span></td>
+                </tr>
+                <tr className="border-b border-border">
+                  <td className="py-2 text-foreground font-semibold">摘要</td>
+                  <td className="py-2 text-muted-foreground">已經出色 - 作為分析工程師並量化經驗的強大定位</td>
+                  <td className="py-2 text-foreground">無需更改</td>
+                  <td className="py-2 text-center"><span className="text-green-600 font-semibold">低</span></td>
+                </tr>
+                <tr className="border-b border-border">
+                  <td className="py-2 text-foreground font-semibold">認證</td>
+                  <td className="py-2 text-muted-foreground">近期相關的 Tableau 和敏捷專案管理認證</td>
+                  <td className="py-2 text-foreground">無需更改 - 格式正確且有價值</td>
+                  <td className="py-2 text-center"><span className="text-green-600 font-semibold">低</span></td>
+                </tr>
+                <tr>
+                  <td className="py-2 text-foreground font-semibold">目前職位（Teamson）</td>
+                  <td className="py-2 text-muted-foreground">具有量化影響的強大技術要點</td>
+                  <td className="py-2 text-foreground">無需重大更改 - 6 個要點中有 5 個出色</td>
+                  <td className="py-2 text-center"><span className="text-green-600 font-semibold">低</span></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
         </section>
 
         {/* 目標職位準備度評估 */}
@@ -154,16 +237,144 @@ const JanelleChengReviewZhTw = () => {
             <h2 className="font-heading text-3xl text-foreground">目標職位準備度評估</h2>
           </div>
 
+          {/* Maniko Nails */}
           <div className="bg-card rounded-xl p-6 mb-6 border border-border">
             <h3 className="font-heading text-xl text-foreground mb-4">資深分析工程師 - Maniko Nails（德國）</h3>
+            <div className="overflow-x-auto">
+              <table className="w-full text-sm mb-6">
+                <thead>
+                  <tr className="border-b border-border">
+                    <th className="text-left py-2 text-foreground">要求</th>
+                    <th className="text-left py-2 text-foreground">準備度</th>
+                    <th className="text-left py-2 text-muted-foreground">差距分析</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr className="border-b border-border">
+                    <td className="py-2 text-foreground">3 年以上分析工程師經驗</td>
+                    <td className="py-2"><span className="text-green-600 font-semibold">強</span></td>
+                    <td className="py-2 text-muted-foreground">Teamson 1.5 年明確的分析工程聚焦加上 Tasameng 4 年商品分析，約等於 5 年相關經驗 - 遠超最低要求</td>
+                  </tr>
+                  <tr className="border-b border-border">
+                    <td className="py-2 text-foreground">強大的 SQL 和資料轉換（dbt）</td>
+                    <td className="py-2"><span className="text-green-600 font-semibold">強</span></td>
+                    <td className="py-2 text-muted-foreground">明確要點：「設計並優化 dbt 工作流程，將 SAP 資料轉換為 20 多個商業模型」並有 20% 延遲改善，展現 dbt 實務專業</td>
+                  </tr>
+                  <tr className="border-b border-border">
+                    <td className="py-2 text-foreground">資料建模和結構化專業知識</td>
+                    <td className="py-2"><span className="text-green-600 font-semibold">強</span></td>
+                    <td className="py-2 text-muted-foreground">明確要點：「開發可重用的星型綱要資料模型以支援可擴展的自助分析」展現維度建模知識</td>
+                  </tr>
+                  <tr className="border-b border-border">
+                    <td className="py-2 text-foreground">視覺化工具（偏好 Tableau）</td>
+                    <td className="py-2"><span className="text-green-600 font-semibold">強</span></td>
+                    <td className="py-2 text-muted-foreground">多個 Tableau 要點（10+ 儀表板、100+ 用戶管理、培訓工作坊）加上 Tableau Desktop 認證（2023-2024）展現專家級熟練度</td>
+                  </tr>
+                  <tr className="border-b border-border">
+                    <td className="py-2 text-foreground">資料品質和可靠性聚焦</td>
+                    <td className="py-2"><span className="text-yellow-500 font-semibold">中等</span></td>
+                    <td className="py-2 text-muted-foreground">您顯然有做這項工作（20+ 商業模型、提及資料準確性）但沒有關於測試框架、驗證流程或資料品質保證的明確要點</td>
+                  </tr>
+                  <tr className="border-b border-border">
+                    <td className="py-2 text-foreground">協作和利害關係人管理</td>
+                    <td className="py-2"><span className="text-yellow-500 font-semibold">中等</span></td>
+                    <td className="py-2 text-muted-foreground">展示產出（儀表板、模型、培訓）但協作流程未明確描述 - 沒有關於需求收集、利害關係人工作坊、轉化商業需求的要點</td>
+                  </tr>
+                  <tr className="border-b border-border">
+                    <td className="py-2 text-foreground">自助分析賦能</td>
+                    <td className="py-2"><span className="text-green-600 font-semibold">強</span></td>
+                    <td className="py-2 text-muted-foreground">兩個明確要點：自助用星型綱要、培訓工作坊建立自助文化、減少臨時請求</td>
+                  </tr>
+                  <tr className="border-b border-border">
+                    <td className="py-2 text-foreground">商業影響和優先排序</td>
+                    <td className="py-2"><span className="text-green-600 font-semibold">強</span></td>
+                    <td className="py-2 text-muted-foreground">多個商業影響指標：3 倍貢獻毛利增加、24% IT 工單減少、消除手動報表、20% 年成長</td>
+                  </tr>
+                  <tr className="border-b border-border">
+                    <td className="py-2 text-foreground">Python（加分項）</td>
+                    <td className="py-2"><span className="text-green-600 font-semibold">有</span></td>
+                    <td className="py-2 text-muted-foreground">列在技術堆疊中，根據經驗背景用於資料工程任務</td>
+                  </tr>
+                  <tr>
+                    <td className="py-2 text-foreground">德國工作授權</td>
+                    <td className="py-2"><span className="text-destructive font-semibold">關鍵</span></td>
+                    <td className="py-2 text-muted-foreground">沒有歐盟工作權聲明 - 除非您有簽證或願意事先說明贊助需求，否則是德國雇主的主要阻礙</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
             <div className="bg-gold/10 rounded-lg p-4 border-l-4 border-gold">
               <p className="text-foreground font-semibold">整體適配度：75% 準備就緒 → 95% 準備就緒（實施後）</p>
               <p className="text-sm text-muted-foreground mt-1">待工作授權明確</p>
             </div>
           </div>
 
+          {/* Riot */}
           <div className="bg-card rounded-xl p-6 border border-border">
             <h3 className="font-heading text-xl text-foreground mb-4">首席分析工程師 - Riot（法國）</h3>
+            <div className="overflow-x-auto">
+              <table className="w-full text-sm mb-6">
+                <thead>
+                  <tr className="border-b border-border">
+                    <th className="text-left py-2 text-foreground">要求（來自 JD）</th>
+                    <th className="text-left py-2 text-foreground">準備度</th>
+                    <th className="text-left py-2 text-muted-foreground">差距分析</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr className="border-b border-border">
+                    <td className="py-2 text-foreground">分析工程師經驗</td>
+                    <td className="py-2"><span className="text-green-600 font-semibold">強</span></td>
+                    <td className="py-2 text-muted-foreground">1.5 年明確的分析工程加上商業/營運分析背景展現能力</td>
+                  </tr>
+                  <tr className="border-b border-border">
+                    <td className="py-2 text-foreground">資料基礎設施開發</td>
+                    <td className="py-2"><span className="text-green-600 font-semibold">強</span></td>
+                    <td className="py-2 text-muted-foreground">dbt 工作流程、星型綱要建模、PostgreSQL 資料模型展現超越臨時分析的基礎設施建設</td>
+                  </tr>
+                  <tr className="border-b border-border">
+                    <td className="py-2 text-foreground">可擴展的分析資料模型</td>
+                    <td className="py-2"><span className="text-green-600 font-semibold">強</span></td>
+                    <td className="py-2 text-muted-foreground">明確：「開發可重用的星型綱要資料模型以支援可擴展的自助分析」</td>
+                  </tr>
+                  <tr className="border-b border-border">
+                    <td className="py-2 text-foreground">為利害關係人的資料產品</td>
+                    <td className="py-2"><span className="text-green-600 font-semibold">強</span></td>
+                    <td className="py-2 text-muted-foreground">10+ 自動化 Tableau 儀表板、建立自助文化、100+ 用戶賦能展現資料產品創建</td>
+                  </tr>
+                  <tr className="border-b border-border">
+                    <td className="py-2 text-foreground">資料品質</td>
+                    <td className="py-2"><span className="text-yellow-500 font-semibold">中等</span></td>
+                    <td className="py-2 text-muted-foreground">工作明顯（商業模型、資料準確性）但沒有明確提及測試框架或驗證流程</td>
+                  </tr>
+                  <tr className="border-b border-border">
+                    <td className="py-2 text-foreground">商業合作夥伴與轉譯</td>
+                    <td className="py-2"><span className="text-yellow-500 font-semibold">中等</span></td>
+                    <td className="py-2 text-muted-foreground">展示結果（儀表板、模型）但未明確描述需求收集或轉譯流程</td>
+                  </tr>
+                  <tr className="border-b border-border">
+                    <td className="py-2 text-foreground">利害關係人管理</td>
+                    <td className="py-2"><span className="text-yellow-500 font-semibold">中等</span></td>
+                    <td className="py-2 text-muted-foreground">高階 BI 報告和培訓展現參與但缺少流程細節</td>
+                  </tr>
+                  <tr className="border-b border-border">
+                    <td className="py-2 text-foreground">挑戰假設和倡導</td>
+                    <td className="py-2"><span className="text-yellow-500 font-semibold">弱</span></td>
+                    <td className="py-2 text-muted-foreground">沒有挑戰利害關係人或倡導資料驅動方法的證據 - 要點聚焦於交付</td>
+                  </tr>
+                  <tr className="border-b border-border">
+                    <td className="py-2 text-foreground">SQL 和資料轉換</td>
+                    <td className="py-2"><span className="text-green-600 font-semibold">強</span></td>
+                    <td className="py-2 text-muted-foreground">dbt + SQL + 20+ 模型展現強大能力</td>
+                  </tr>
+                  <tr>
+                    <td className="py-2 text-foreground">法國工作授權</td>
+                    <td className="py-2"><span className="text-destructive font-semibold">關鍵</span></td>
+                    <td className="py-2 text-muted-foreground">沒有歐盟工作權聲明 - 法國雇主的阻礙</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
             <div className="bg-gold/10 rounded-lg p-4 border-l-4 border-gold">
               <p className="text-foreground font-semibold">整體適配度：70% 準備就緒 → 90% 準備就緒（實施後）</p>
               <p className="text-sm text-muted-foreground mt-1">待工作授權明確並新增利害關係人挑戰範例</p>
@@ -195,9 +406,11 @@ const JanelleChengReviewZhTw = () => {
               <div className="bg-destructive/5 rounded-lg p-4 border-l-4 border-destructive">
                 <p className="text-sm font-semibold text-destructive mb-2">目前版本（造成重大招聘摩擦）：</p>
                 <div className="mt-3 space-y-2 text-sm text-foreground">
-                  <p>沒有電話號碼降低可及性，招募人員需要多種聯絡方式，特別是需要亞洲與歐洲時區協調的國際遠端職位</p>
-                  <p>缺少地點造成困惑，歐盟招募人員無法判斷您是在台灣、已在歐洲，還是計劃搬遷，除非有明確的城市/國家</p>
-                  <p>沒有工作授權聲明是關鍵阻礙，從台灣申請德國和法國卻沒有明確簽證狀態意味著招募人員會假設您需要贊助（昂貴且複雜），並首先過濾您的申請，無論資歷如何</p>
+                  <p>沒有電話號碼降低可及性 - 招募人員需要多種聯絡方式，特別是需要亞洲與歐洲時區協調的國際遠端職位</p>
+                  <p>缺少地點造成困惑 - 歐盟招募人員無法判斷您是在台灣、已在歐洲，還是計劃搬遷，除非有明確的城市/國家</p>
+                  <p>沒有工作授權聲明是關鍵阻礙 - 從台灣申請德國和法國卻沒有明確簽證狀態意味著招募人員會假設您需要贊助（昂貴且複雜），並首先過濾您的申請，無論資歷如何</p>
+                  <p>與本地歐盟候選人競爭 - 沒有明確的授權聲明，您比資歷相同的本地申請者看起來風險更高、成本更高</p>
+                  <p>背景調查和合規顧慮 - 不明確的工作權造成法律合規擔憂，讓招募人員完全跳過您的申請</p>
                 </div>
               </div>
               
@@ -210,6 +423,37 @@ const JanelleChengReviewZhTw = () => {
                   <p>+886-XXX-XXX-XXX | iamjanellecheng@gmail.com | linkedin.com/in/janellecheng</p>
                 </div>
               </div>
+
+              <div className="bg-gold/10 rounded-lg p-4 border-l-4 border-gold">
+                <p className="text-sm font-semibold text-gold mb-2">優化版本 - 選項 B（如果搬遷中並持有效簽證）：</p>
+                <div className="bg-muted/30 rounded p-3 mt-2 text-sm font-mono">
+                  <p className="font-bold">鄭季 (JANELLE)</p>
+                  <p>分析工程師</p>
+                  <p>搬遷至柏林/巴黎 [月份 年份] | 有效工作授權</p>
+                  <p>+886-XXX-XXX-XXX | iamjanellecheng@gmail.com | linkedin.com/in/janellecheng</p>
+                </div>
+              </div>
+
+              <div className="bg-gold/10 rounded-lg p-4 border-l-4 border-gold">
+                <p className="text-sm font-semibold text-gold mb-2">優化版本 - 選項 C（如果您需要贊助 - 坦誠說明）：</p>
+                <div className="bg-muted/30 rounded p-3 mt-2 text-sm font-mono">
+                  <p className="font-bold">鄭季 (JANELLE)</p>
+                  <p>分析工程師</p>
+                  <p>台北，台灣 | 需要工作贊助 | 願意搬遷</p>
+                  <p>+886-XXX-XXX-XXX | iamjanellecheng@gmail.com | linkedin.com/in/janellecheng</p>
+                </div>
+              </div>
+            </div>
+
+            <div className="bg-muted/30 rounded-lg p-4">
+              <p className="text-sm font-semibold text-foreground mb-2">為什麼有效：</p>
+              <ul className="text-sm text-foreground space-y-1">
+                <li>移除關鍵阻礙 - 明確的工作授權聲明防止在您的資歷被考慮之前就被自動過濾</li>
+                <li>電話號碼確保可及性 - 國際格式（+886）使歐盟招募人員可以輕鬆聯繫</li>
+                <li>地點提供時區背景 - 遠端協作需要清楚的時區預期</li>
+                <li>專業頭銜強化定位 - 「分析工程師」而非籠統的「資料分析師」符合目標職位</li>
+              </ul>
+              <p className="mt-4 text-sm font-semibold text-gold">影響：這些看似小的變化解決歐盟招募人員對國際候選人的最常見阻礙。</p>
             </div>
           </div>
 
@@ -232,6 +476,17 @@ const JanelleChengReviewZhTw = () => {
                 <p className="text-foreground text-sm">完全移除這兩個區塊。聚會參與不展示經過驗證的能力，12 年前的觀光規劃與分析工程師職位無關。釋放的空間可用於擴展目前職位成就或新增資料品質要點。</p>
               </div>
             </div>
+
+            <div className="bg-muted/30 rounded-lg p-4">
+              <p className="text-sm font-semibold text-foreground mb-2">為什麼有效：</p>
+              <ul className="text-sm text-foreground space-y-1">
+                <li>履歷空間是寶貴的 - 每個區塊都應支持您的分析工程師定位</li>
+                <li>聚會參與不等於能力 - 參加活動不等同於經過驗證的技能</li>
+                <li>12 年前的志工工作無關緊要 - 2013 年的觀光規劃不支持技術職位申請</li>
+                <li>節省的空間可用於更高價值的內容 - 資料品質要點、利害關係人協作細節</li>
+              </ul>
+              <p className="mt-4 text-sm font-semibold text-gold">影響：移除 2 個不相關區塊釋放空間給直接支持 Maniko 和 Riot 優先事項的內容。</p>
+            </div>
           </div>
 
           {/* 改進 #3 */}
@@ -242,15 +497,162 @@ const JanelleChengReviewZhTw = () => {
             <h3 className="font-heading text-2xl text-foreground mb-4">新增資料品質和測試要點</h3>
             
             <div className="space-y-4 mb-6">
+              <div className="bg-destructive/5 rounded-lg p-4 border-l-4 border-destructive">
+                <p className="text-sm font-semibold text-destructive mb-2">缺少的內容：</p>
+                <p className="text-foreground text-sm mb-3">兩個 JD 都強調資料品質：</p>
+                <ul className="text-muted-foreground text-sm ml-4 list-disc space-y-1">
+                  <li>Maniko JD：「你對資料品質可靠性有自豪感，對每個資料集你建立測試框架和驗證流程」</li>
+                  <li>Riot JD：「確保高資料品質和可靠性」和「你關心資料品質」</li>
+                </ul>
+                <p className="text-foreground text-sm mt-3">您的履歷沒有明確提及測試、驗證框架或資料品質流程 - 儘管您的工作（20+ 商業模型、資料準確性）暗示您做了這項工作。</p>
+              </div>
+              
               <div className="bg-gold/10 rounded-lg p-4 border-l-4 border-gold">
-                <p className="text-sm font-semibold text-gold mb-2">新增要點：</p>
-                <p className="text-foreground text-sm italic">「建立資料品質框架，使用 dbt 測試自動化資料驗證，覆蓋 20 多個商業模型的空值檢查、唯一性約束和關聯完整性，減少 40% 的資料品質相關事件並將儀表板可靠性提升至 99%。」</p>
+                <p className="text-sm font-semibold text-gold mb-2">在 Teamson 職位新增要點：</p>
+                <p className="text-foreground text-sm italic">「使用 dbt 測試和驗證檢查在 20+ 資料模型中實施資料品質框架，在生產前捕捉資料異常並提升資料可靠性 XX%，減少下游報表錯誤並建立利害關係人對分析產出的信任。」</p>
+              </div>
+
+              <div className="bg-gold/10 rounded-lg p-4 border-l-4 border-gold">
+                <p className="text-sm font-semibold text-gold mb-2">替代方案 - 強化現有第 2 點：</p>
+                <p className="text-sm text-muted-foreground mb-2">目前：「開發可重用的星型綱要資料模型以支援可擴展的自助分析，提升資料可及性、準確性和治理。」</p>
+                <p className="text-foreground text-sm italic">強化：「開發帶有內建資料品質檢查（dbt 測試、參照完整性驗證、空值檢查）的可重用星型綱要資料模型，支援 100+ 用戶的自助分析，同時確保所有分析產出的準確性、一致性和治理。」</p>
               </div>
             </div>
+
+            <div className="bg-muted/30 rounded-lg p-4">
+              <p className="text-sm font-semibold text-foreground mb-2">為什麼有效：</p>
+              <ul className="text-sm text-foreground space-y-1">
+                <li>解決關鍵 JD 要求 - 兩個職位都明確要求測試框架和驗證流程</li>
+                <li>展現工程嚴謹性 - 測試和驗證區分分析工程師與基本分析師</li>
+                <li>展示資料優先思維 - 主動的品質保證證明您如 Maniko JD 所要求的對可靠性有自豪感</li>
+                <li>建立利害關係人信任 - 品質聚焦連結到兩個 JD 都強調的商業合作夥伴方面</li>
+                <li>技術深度 - 具體方法（dbt 測試、參照完整性、空值檢查）展現實務實作知識</li>
+              </ul>
+              <p className="mt-4 text-sm font-semibold text-gold">影響：新增明確的資料品質強調直接解決兩家目標公司都優先考慮的要求 - 展現您理解分析工程師負責資料可靠性，而非只是資料交付。</p>
+            </div>
+          </div>
+
+          {/* 改進 #4 */}
+          <div className="bg-card rounded-xl p-6 mb-6 border border-border">
+            <div className="flex items-center gap-3 mb-4">
+              <span className="px-3 py-1 bg-yellow-500/20 text-yellow-700 text-xs font-bold rounded-full uppercase tracking-wide">#4 KPI 要點具體性</span>
+            </div>
+            <h3 className="font-heading text-2xl text-foreground mb-4">重寫 Teamson 第 4 點以更具體</h3>
+            
+            <div className="space-y-4 mb-6">
+              <div className="bg-destructive/5 rounded-lg p-4 border-l-4 border-destructive">
+                <p className="text-sm font-semibold text-destructive mb-2">目前版本（缺乏具體性）：</p>
+                <p className="text-muted-foreground text-sm italic">「透過 KPI 和費用分析促進資料驅動行動，發現成本驅動因素並實現 3 倍貢獻毛利增加」</p>
+                <p className="text-foreground text-sm mt-3">這個要點有令人印象深刻的結果（3 倍增加）但沒有說明哪些 KPI、什麼類型的費用、或您的分析如何直接促成這個結果。</p>
+              </div>
+              
+              <div className="bg-gold/10 rounded-lg p-4 border-l-4 border-gold">
+                <p className="text-sm font-semibold text-gold mb-2">優化版本：</p>
+                <p className="text-foreground text-sm italic">「透過交付追蹤產品級獲利能力、供應商成本和運輸費用的 KPI 儀表板實現 3 倍貢獻毛利增加，找出 $50K 節省成本機會（重新談判供應商條款、優化運輸路線）並為 200+ SKU 提供定價策略調整資訊。」</p>
+              </div>
+            </div>
+
+            <div className="bg-muted/30 rounded-lg p-4">
+              <p className="text-sm font-semibold text-foreground mb-2">為什麼有效：</p>
+              <ul className="text-sm text-foreground space-y-1">
+                <li>指明分析了哪些 KPI - 產品獲利能力、供應商成本、運輸費用展現深度</li>
+                <li>量化成本節省 - $50K 是具體可驗證的影響</li>
+                <li>展示可操作洞察 - 供應商談判、路線優化是具體商業決策</li>
+                <li>建立規模感 - 200+ SKU 定價影響展現企業級工作</li>
+              </ul>
+              <p className="mt-4 text-sm font-semibold text-gold">影響：將 3 倍毛利增加從模糊成就轉變為可信的資料驅動商業影響故事。</p>
+            </div>
+          </div>
+
+          {/* 改進 #5 */}
+          <div className="bg-card rounded-xl p-6 mb-6 border border-border">
+            <div className="flex items-center gap-3 mb-4">
+              <span className="px-3 py-1 bg-yellow-500/20 text-yellow-700 text-xs font-bold rounded-full uppercase tracking-wide">#5 利害關係人協作</span>
+            </div>
+            <h3 className="font-heading text-2xl text-foreground mb-4">新增利害關係人協作流程細節</h3>
+            
+            <div className="space-y-4 mb-6">
+              <div className="bg-destructive/5 rounded-lg p-4 border-l-4 border-destructive">
+                <p className="text-sm font-semibold text-destructive mb-2">缺少的內容：</p>
+                <p className="text-foreground text-sm mb-3">兩個 JD 都強調協作流程，而非只是產出：</p>
+                <ul className="text-muted-foreground text-sm ml-4 list-disc space-y-1">
+                  <li>Maniko JD：「您將成為團隊的緊密商業合作夥伴，與同事合作將他們的需求轉化為可執行的資料解決方案」</li>
+                  <li>Riot JD：「與利害關係人緊密合作定義指標和啟用資料驅動決策是您的強項之一」</li>
+                </ul>
+                <p className="text-foreground text-sm mt-3">您的要點展示出色的產出（儀表板、模型、培訓）但沒有描述您如何與利害關係人協作收集需求、轉化商業需求或定義指標。</p>
+              </div>
+              
+              <div className="bg-gold/10 rounded-lg p-4 border-l-4 border-gold">
+                <p className="text-sm font-semibold text-gold mb-2">選項 1 - 在 Teamson 新增要點：</p>
+                <p className="text-foreground text-sm italic">「與商業、財務和營運領導者合作將商業需求轉化為資料解決方案，舉辦利害關係人工作坊定義 KPI、根據商業影響排序分析請求，並交付解決特定決策需求的客製化儀表板。」</p>
+              </div>
+
+              <div className="bg-gold/10 rounded-lg p-4 border-l-4 border-gold">
+                <p className="text-sm font-semibold text-gold mb-2">選項 2 - 強化現有培訓要點：</p>
+                <p className="text-sm text-muted-foreground mb-2">目前：「透過 Tableau 和 Power BI 工作坊提升商業、供應鏈、財務和營運團隊的技能，建立自助文化並減少臨時請求。」</p>
+                <p className="text-foreground text-sm italic">強化：「透過與商業、供應鏈、財務和營運團隊舉辦 10+ 利害關係人工作坊建立自助分析文化，將他們的商業問題轉化為 Tableau 和 Power BI 解決方案，培訓 50+ 用戶自助能力，並減少 30% 臨時分析請求。」</p>
+              </div>
+            </div>
+
+            <div className="bg-muted/30 rounded-lg p-4">
+              <p className="text-sm font-semibold text-foreground mb-2">為什麼有效：</p>
+              <ul className="text-sm text-foreground space-y-1">
+                <li>展示商業合作夥伴關係 - 「與領導者合作」和「利害關係人工作坊」展現兩個 JD 都想要的緊密協作</li>
+                <li>強調轉譯技能 - 「將商業需求轉化為資料解決方案」是 Maniko JD 的確切語言</li>
+                <li>展示優先排序 - 「根據商業影響排序」展現您策略性地平衡請求</li>
+                <li>流程重於產出 - 聚焦於您如何與利害關係人工作，而非只是交付什麼</li>
+                <li>決策啟用聚焦 - 「解決特定決策需求」連結到 Riot 的「啟用資料驅動決策」</li>
+              </ul>
+              <p className="mt-4 text-sm font-semibold text-gold">影響：使協作流程明確而非隱含 - 證明您能成為兩家公司都尋求的「緊密商業合作夥伴」，而非只是技術執行者。</p>
+            </div>
+          </div>
+
+          {/* 改進 #6 */}
+          <div className="bg-card rounded-xl p-6 mb-6 border border-border">
+            <div className="flex items-center gap-3 mb-4">
+              <span className="px-3 py-1 bg-green-500/20 text-green-700 text-xs font-bold rounded-full uppercase tracking-wide">#6 選擇性強化</span>
+            </div>
+            <h3 className="font-heading text-2xl text-foreground mb-4">選擇性強化以達到最大影響</h3>
+            
+            <p className="text-muted-foreground mb-4">這些變更優先級較低，但可以進一步強化定位：</p>
+
+            <div className="space-y-4">
+              <div className="bg-muted/30 rounded-lg p-4">
+                <p className="text-sm font-semibold text-foreground mb-2">A) 分類技術堆疊以便於掃描</p>
+                <div className="grid md:grid-cols-2 gap-4 mt-3 text-sm">
+                  <div>
+                    <p className="text-muted-foreground mb-2">目前：</p>
+                    <p className="text-foreground">dbt, SQL, Tableau, Python, Airflow, Docker, Jira, Git (Version Control, CI/CD), GCP (GCS, BigQuery, Compute Engine)</p>
+                  </div>
+                  <div>
+                    <p className="text-gold mb-2">強化：</p>
+                    <ul className="text-foreground space-y-1">
+                      <li><strong>資料建模與轉換：</strong>dbt、SQL、星型綱要、維度建模</li>
+                      <li><strong>資料庫與倉儲：</strong>PostgreSQL、BigQuery、SAP</li>
+                      <li><strong>視覺化與 BI：</strong>Tableau、Power BI</li>
+                      <li><strong>程式語言：</strong>Python、SQL</li>
+                      <li><strong>編排：</strong>Airflow</li>
+                      <li><strong>雲端平台：</strong>GCP（BigQuery、GCS、Compute Engine）</li>
+                      <li><strong>DevOps 與協作：</strong>Git（CI/CD）、Docker、Jira</li>
+                    </ul>
+                  </div>
+                </div>
+              </div>
+
+              <div className="bg-muted/30 rounded-lg p-4">
+                <p className="text-sm font-semibold text-foreground mb-2">B) 量化 Teamson 第 6 點培訓成果</p>
+                <div className="mt-3 text-sm">
+                  <p className="text-muted-foreground mb-2">目前：「透過 Tableau 和 Power BI 工作坊提升商業、供應鏈、財務和營運團隊的技能，建立自助文化並減少臨時請求。」</p>
+                  <p className="text-gold mt-2">強化：「透過 10+ Tableau 和 Power BI 工作坊提升商業、供應鏈、財務和營運等四個部門 50+ 用戶的技能，建立自助文化並減少 30% 臨時分析請求。」</p>
+                </div>
+              </div>
+            </div>
+
+            <p className="text-sm text-muted-foreground mt-4">這些選擇性改進增加光澤和深度，但不是關鍵的，因為您的核心定位已經很強。</p>
           </div>
         </section>
 
-        {/* 策略定位與 ATS 優化 */}
+        {/* ATS 優化 */}
         <section className="mb-16">
           <div className="flex items-center gap-3 mb-6">
             <div className="w-10 h-10 rounded-full bg-gold/10 flex items-center justify-center">
@@ -259,85 +661,74 @@ const JanelleChengReviewZhTw = () => {
             <h2 className="font-heading text-3xl text-foreground">策略定位與 ATS 優化</h2>
           </div>
 
+          {/* ATS 關鍵字匹配分析 */}
           <div className="bg-card rounded-xl p-6 mb-6 border border-border">
-            <h3 className="font-heading text-xl text-foreground mb-4">角色明確策略：建立兩個客製化版本</h3>
-            <p className="text-muted-foreground mb-4">您正在申請兩家不同公司，它們有類似但略有不同的分析工程師重點。雖然一份履歷適用於兩者，但小幅客製化將提高匹配率。</p>
-
-            <div className="grid md:grid-cols-2 gap-6">
-              <div className="bg-muted/30 rounded-lg p-4">
-                <p className="text-sm font-semibold text-gold mb-3">版本 1：資深分析工程師 - Maniko Nails（主要目標）</p>
-                <ul className="text-sm text-foreground space-y-1">
-                  <li><strong>職稱：</strong>「分析工程師」</li>
-                  <li><strong>摘要重點：</strong>自助分析、dbt 資料建模、利害關係人協作、多區域 BI</li>
-                  <li><strong>關鍵字強調：</strong>dbt、SQL、Tableau、資料建模、自助服務、資料品質、驗證、商業合作夥伴關係</li>
-                </ul>
-              </div>
-
-              <div className="bg-muted/30 rounded-lg p-4">
-                <p className="text-sm font-semibold text-gold mb-3">版本 2：首席分析工程師 - Riot（次要目標）</p>
-                <ul className="text-sm text-foreground space-y-1">
-                  <li><strong>職稱：</strong>「分析工程師」或「首席分析工程師」</li>
-                  <li><strong>摘要重點：</strong>資料基礎設施、可擴展資料產品、利害關係人管理、資料驅動方法</li>
-                  <li><strong>關鍵字強調：</strong>資料基礎設施、資料產品、可擴展性、利害關係人管理、挑戰假設</li>
-                </ul>
-              </div>
-            </div>
-          </div>
-
-          <div className="bg-card rounded-xl p-6 border border-border">
             <h3 className="font-heading text-xl text-foreground mb-4">ATS 關鍵字匹配分析</h3>
             
             <div className="grid md:grid-cols-2 gap-6">
               <div>
                 <p className="text-sm font-semibold text-muted-foreground mb-3">優化前 - Maniko 關鍵字</p>
+                <div className="space-y-2 text-sm">
+                  <p className="flex justify-between"><span>Analytics Engineer</span> <span className="text-yellow-500">弱</span></p>
+                  <p className="flex justify-between"><span>dbt</span> <span className="text-green-600">有</span></p>
+                  <p className="flex justify-between"><span>SQL</span> <span className="text-green-600">有</span></p>
+                  <p className="flex justify-between"><span>Tableau</span> <span className="text-green-600">強</span></p>
+                  <p className="flex justify-between"><span>資料建模</span> <span className="text-yellow-500">弱</span></p>
+                  <p className="flex justify-between"><span>自助分析</span> <span className="text-yellow-500">弱</span></p>
+                  <p className="flex justify-between"><span>資料品質</span> <span className="text-yellow-500">弱</span></p>
+                  <p className="flex justify-between"><span>驗證流程</span> <span className="text-destructive">缺少</span></p>
+                  <p className="flex justify-between"><span>測試框架</span> <span className="text-destructive">缺少</span></p>
+                  <p className="flex justify-between"><span>商業合作夥伴</span> <span className="text-destructive">缺少</span></p>
+                </div>
                 <p className="mt-3 text-sm font-semibold">關鍵字匹配分數：<span className="text-yellow-500">55%</span></p>
               </div>
 
               <div>
                 <p className="text-sm font-semibold text-gold mb-3">優化後 - Maniko 關鍵字</p>
+                <div className="space-y-2 text-sm">
+                  <p className="flex justify-between"><span>Analytics Engineer</span> <span className="text-green-600">強</span></p>
+                  <p className="flex justify-between"><span>dbt</span> <span className="text-green-600">強</span></p>
+                  <p className="flex justify-between"><span>SQL</span> <span className="text-green-600">強</span></p>
+                  <p className="flex justify-between"><span>Tableau</span> <span className="text-green-600">強</span></p>
+                  <p className="flex justify-between"><span>資料建模</span> <span className="text-green-600">強</span></p>
+                  <p className="flex justify-between"><span>自助分析</span> <span className="text-green-600">強</span></p>
+                  <p className="flex justify-between"><span>資料品質</span> <span className="text-green-600">強</span></p>
+                  <p className="flex justify-between"><span>驗證流程</span> <span className="text-green-600">強</span></p>
+                  <p className="flex justify-between"><span>測試框架</span> <span className="text-green-600">強</span></p>
+                  <p className="flex justify-between"><span>商業合作夥伴</span> <span className="text-green-600">強</span></p>
+                </div>
                 <p className="mt-3 text-sm font-semibold">關鍵字匹配分數：<span className="text-green-600">95%</span></p>
               </div>
             </div>
           </div>
-        </section>
 
-        {/* 履歷效能改善 */}
-        <section className="mb-16">
-          <div className="flex items-center gap-3 mb-6">
-            <div className="w-10 h-10 rounded-full bg-gold/10 flex items-center justify-center">
-              <TrendingUp className="w-5 h-5 text-gold" />
+          {/* 履歷效能提升 */}
+          <div className="bg-card rounded-xl p-6 border border-border">
+            <h3 className="font-heading text-xl text-foreground mb-4">履歷效能提升</h3>
+
+            <div className="grid md:grid-cols-2 gap-6">
+              <div>
+                <p className="text-sm font-semibold text-muted-foreground mb-3">目前履歷效能：</p>
+                <ul className="space-y-2 text-sm text-foreground">
+                  <li><strong>ATS 成功率：</strong>60%（技術關鍵字強但缺少流程關鍵字）</li>
+                  <li><strong>招募人員回覆率：</strong>55%（經驗好但聯絡/授權有摩擦）</li>
+                  <li><strong>面試轉換率：</strong>70%（一旦通過篩選技術能力強）</li>
+                </ul>
+              </div>
+
+              <div>
+                <p className="text-sm font-semibold text-gold mb-3">優化後履歷效能：</p>
+                <ul className="space-y-2 text-sm text-foreground">
+                  <li><strong>ATS 成功率：</strong>95%（技術和流程領域全面關鍵字覆蓋）</li>
+                  <li><strong>招募人員回覆率：</strong>90%（清晰定位、完整資訊、無授權摩擦）</li>
+                  <li><strong>面試轉換率：</strong>85%（能表達技術深度和商業合作夥伴關係）</li>
+                </ul>
+              </div>
             </div>
-            <h2 className="font-heading text-3xl text-foreground">履歷效能改善</h2>
-          </div>
 
-          <div className="grid md:grid-cols-2 gap-6 mb-8">
-            <div className="bg-card rounded-xl p-6 border border-border">
-              <p className="text-sm font-semibold text-destructive mb-4 flex items-center gap-2">
-                <XCircle className="w-5 h-5" /> 優化前
-              </p>
-              <ul className="space-y-2 text-sm text-foreground">
-                <li>缺少聯絡資訊 → 降低可及性並對歐盟招募人員造成工作授權不確定性</li>
-                <li>不相關區塊佔用空間 → 專業發展和志工經驗稀釋對技術成就的聚焦</li>
-                <li>部分要點缺乏具體性 → KPI 分析、客戶留存方法不清楚，削弱能力證明</li>
-              </ul>
-              <p className="mt-4 text-sm font-semibold text-muted-foreground">預估通過率：Maniko 55%，Riot 45%</p>
+            <div className="bg-gold/10 rounded-lg p-4 mt-4 border-l-4 border-gold">
+              <p className="text-sm text-foreground"><strong>底線：</strong>優化聯絡資訊、移除不相關區塊和新增策略關鍵字可將您的歐盟分析工程師職位面試率提高約 3 倍。您的技術經驗已經出色 - 這些變更只是確保招募人員能無摩擦地看到它。</p>
             </div>
-
-            <div className="bg-card rounded-xl p-6 border border-border">
-              <p className="text-sm font-semibold text-green-600 mb-4 flex items-center gap-2">
-                <CheckCircle className="w-5 h-5" /> 優化後
-              </p>
-              <ul className="space-y-2 text-sm text-foreground">
-                <li>完整聯絡資訊附工作授權 → 移除關鍵的歐盟招聘阻礙並展現專業度</li>
-                <li>聚焦於相關成就 → 每個區塊都直接支持分析工程師定位</li>
-                <li>所有要點遵循 XYZ 框架 → 全篇有清晰成果、量化指標、具體方法</li>
-              </ul>
-              <p className="mt-4 text-sm font-semibold text-green-600">預估通過率：Maniko 95%，Riot 90%</p>
-            </div>
-          </div>
-
-          <div className="bg-gold/10 rounded-lg p-4 border-l-4 border-gold">
-            <p className="text-sm text-foreground"><strong>結論：</strong>優化聯絡資訊、移除不相關區塊並新增策略關鍵字，可以將您在歐盟分析工程師職位的面試率提高約 3 倍。您的技術經驗已經非常出色，這些改變只是確保招募人員能無障礙地看到它。</p>
           </div>
         </section>
 
@@ -345,109 +736,252 @@ const JanelleChengReviewZhTw = () => {
         <section className="mb-16">
           <div className="flex items-center gap-3 mb-6">
             <div className="w-10 h-10 rounded-full bg-gold/10 flex items-center justify-center">
-              <Calendar className="w-5 h-5 text-gold" />
+              <CheckCircle className="w-5 h-5 text-gold" />
             </div>
             <h2 className="font-heading text-3xl text-foreground">下一步行動</h2>
           </div>
 
+          {/* 步驟 1 */}
+          <div className="bg-card rounded-xl p-6 mb-4 border border-border">
+            <div className="flex items-center gap-3 mb-4">
+              <div className="w-8 h-8 rounded-full bg-gold/20 flex items-center justify-center text-gold font-bold">1</div>
+              <h3 className="font-heading text-xl text-foreground">修正聯絡資訊和頁首</h3>
+            </div>
+            <div className="space-y-3 text-sm text-foreground ml-11">
+              <div>
+                <p className="font-semibold">新增完整聯絡詳情（15 分鐘）</p>
+                <ul className="text-muted-foreground mt-1 ml-4 list-disc">
+                  <li>新增國際格式電話號碼：+886-XXX-XXX-XXX</li>
+                  <li>新增明確地點：台北，台灣</li>
+                  <li>新增工作授權聲明（根據您的簽證狀態選擇適當選項）</li>
+                  <li>新增專業頭銜：分析工程師</li>
+                  <li>完整 LinkedIn URL 格式：linkedin.com/in/[yourprofile]</li>
+                </ul>
+              </div>
+              <div>
+                <p className="font-semibold">選擇工作授權方法（5 分鐘）</p>
+                <ul className="text-muted-foreground mt-1 ml-4 list-disc">
+                  <li>「歐盟工作授權 | 願意搬遷」（如果您有簽證/許可）</li>
+                  <li>「搬遷至 [柏林/巴黎] [月份 年份] | 有效工作授權」（如果已規劃）</li>
+                  <li>「需要工作贊助 | 願意搬遷」（如果您需要雇主贊助）</li>
+                </ul>
+              </div>
+            </div>
+          </div>
+
+          {/* 步驟 2 */}
+          <div className="bg-card rounded-xl p-6 mb-4 border border-border">
+            <div className="flex items-center gap-3 mb-4">
+              <div className="w-8 h-8 rounded-full bg-gold/20 flex items-center justify-center text-gold font-bold">2</div>
+              <h3 className="font-heading text-xl text-foreground">移除不相關區塊</h3>
+            </div>
+            <div className="space-y-3 text-sm text-foreground ml-11">
+              <div>
+                <p className="font-semibold">刪除專業發展區塊（2 分鐘）</p>
+                <ul className="text-muted-foreground mt-1 ml-4 list-disc">
+                  <li>移除「dbt Meetup Taiwan」和「Tableau User Group Meetup Taiwan」</li>
+                  <li>社群參與可保留在 LinkedIn，但不屬於履歷</li>
+                </ul>
+              </div>
+              <div>
+                <p className="font-semibold">刪除志工經驗區塊（2 分鐘）</p>
+                <ul className="text-muted-foreground mt-1 ml-4 list-disc">
+                  <li>移除 2013 年觀光規劃項目</li>
+                  <li>12 年前與工作無關的志工工作不支持分析工程師定位</li>
+                </ul>
+              </div>
+            </div>
+          </div>
+
+          {/* 步驟 3 */}
+          <div className="bg-card rounded-xl p-6 mb-4 border border-border">
+            <div className="flex items-center gap-3 mb-4">
+              <div className="w-8 h-8 rounded-full bg-gold/20 flex items-center justify-center text-gold font-bold">3</div>
+              <h3 className="font-heading text-xl text-foreground">強化關鍵要點以增加具體性</h3>
+            </div>
+            <div className="space-y-3 text-sm text-foreground ml-11">
+              <div>
+                <p className="font-semibold">重寫 Teamson 第 4 點 KPI 分析（20 分鐘）</p>
+                <p className="text-muted-foreground mt-1">目前：「透過 KPI 和費用分析促進資料驅動行動，發現成本驅動因素並實現 3 倍貢獻毛利增加」</p>
+                <p className="text-gold mt-2">強化：「透過交付追蹤產品級獲利能力、供應商成本和運輸費用的 KPI 儀表板實現 3 倍貢獻毛利增加，找出 $50K 節省成本機會（重新談判供應商條款、優化運輸路線）並為 200+ SKU 提供定價策略調整資訊。」</p>
+              </div>
+              <div>
+                <p className="font-semibold">資料品質強化 - 新增要點或強化現有第 2 點</p>
+                <ul className="text-muted-foreground mt-1 ml-4 list-disc">
+                  <li><strong>選項 A - 新增要點：</strong>「使用 dbt 測試和驗證檢查在 20+ 資料模型中實施資料品質框架，在生產前捕捉資料異常並提升資料可靠性 25%，減少下游報表錯誤並建立利害關係人對分析產出的信任。」</li>
+                  <li><strong>選項 B - 強化現有第 2 點：</strong>「開發帶有內建資料品質檢查（dbt 測試、參照完整性驗證、空值檢查）的可重用星型綱要資料模型，支援 100+ 用戶的自助分析，同時確保所有分析產出的準確性、一致性和治理。」</li>
+                </ul>
+              </div>
+            </div>
+          </div>
+
+          {/* 步驟 4-7 簡化版 */}
+          <div className="bg-card rounded-xl p-6 mb-4 border border-border">
+            <div className="flex items-center gap-3 mb-4">
+              <div className="w-8 h-8 rounded-full bg-gold/20 flex items-center justify-center text-gold font-bold">4</div>
+              <h3 className="font-heading text-xl text-foreground">選擇性強化</h3>
+            </div>
+            <ul className="text-sm text-muted-foreground ml-11 list-disc space-y-1">
+              <li>分類技術堆疊（15 分鐘 - 選擇性）</li>
+              <li>量化培訓成果（10 分鐘 - 選擇性）</li>
+            </ul>
+          </div>
+
+          <div className="bg-card rounded-xl p-6 mb-4 border border-border">
+            <div className="flex items-center gap-3 mb-4">
+              <div className="w-8 h-8 rounded-full bg-gold/20 flex items-center justify-center text-gold font-bold">5</div>
+              <h3 className="font-heading text-xl text-foreground">建立兩個客製化版本</h3>
+            </div>
+            <div className="space-y-3 text-sm text-foreground ml-11">
+              <div>
+                <p className="font-semibold">版本 A：Maniko Nails 聚焦（30 分鐘）</p>
+                <ul className="text-muted-foreground mt-1 ml-4 list-disc">
+                  <li>強調：自助分析、Tableau 專業、培訓/賦能、資料品質</li>
+                </ul>
+              </div>
+              <div>
+                <p className="font-semibold">版本 B：Riot 聚焦（30 分鐘）</p>
+                <ul className="text-muted-foreground mt-1 ml-4 list-disc">
+                  <li>強調：資料基礎設施、可擴展資料產品、Python、編排</li>
+                </ul>
+              </div>
+            </div>
+          </div>
+
+          <div className="bg-card rounded-xl p-6 mb-4 border border-border">
+            <div className="flex items-center gap-3 mb-4">
+              <div className="w-8 h-8 rounded-full bg-gold/20 flex items-center justify-center text-gold font-bold">6</div>
+              <h3 className="font-heading text-xl text-foreground">準備面試</h3>
+            </div>
+            <div className="space-y-3 text-sm text-foreground ml-11">
+              <div>
+                <p className="font-semibold">使用 STAR 方法準備故事（2-3 小時）</p>
+                <ul className="text-muted-foreground mt-1 ml-4 list-disc">
+                  <li><strong>Situation（情境）：</strong>背景/問題是什麼？</li>
+                  <li><strong>Task（任務）：</strong>您的具體職責是什麼？</li>
+                  <li><strong>Action（行動）：</strong>您做了什麼？（步驟）</li>
+                  <li><strong>Result（結果）：</strong>發生了什麼？（量化成果）</li>
+                </ul>
+              </div>
+              <div>
+                <p className="font-semibold">要準備的故事：</p>
+                <ul className="text-muted-foreground mt-1 ml-4 list-disc">
+                  <li>dbt 實施和優化</li>
+                  <li>100% 準時交付儀表板</li>
+                  <li>透過培訓建立自助文化</li>
+                  <li>3 倍貢獻毛利增加分析</li>
+                  <li>100+ 用戶 Tableau 管理</li>
+                </ul>
+              </div>
+            </div>
+          </div>
+
+          <div className="bg-card rounded-xl p-6 mb-4 border border-border">
+            <div className="flex items-center gap-3 mb-4">
+              <div className="w-8 h-8 rounded-full bg-gold/20 flex items-center justify-center text-gold font-bold">7</div>
+              <h3 className="font-heading text-xl text-foreground">申請目標職位</h3>
+            </div>
+            <ul className="text-sm text-muted-foreground ml-11 list-disc space-y-1">
+              <li>Maniko：使用版本 A（自助分析強調）</li>
+              <li>Riot：使用版本 B（資料基礎設施強調）</li>
+              <li>客製化 2-3 個要點以符合特定 JD 語言</li>
+            </ul>
+          </div>
+
+          {/* 提醒 */}
           <div className="bg-card rounded-xl p-6 border border-border">
-            <div className="space-y-4">
-              <div className="flex items-start gap-4">
-                <div className="w-8 h-8 rounded-full bg-gold text-white flex items-center justify-center font-bold text-sm flex-shrink-0">1</div>
-                <div>
-                  <p className="font-semibold text-foreground">修正格式和基本資訊</p>
-                  <p className="text-muted-foreground text-sm">新增電話號碼、地點和工作授權聲明（15 分鐘）</p>
-                </div>
+            <h3 className="font-heading text-xl text-foreground mb-4">提醒</h3>
+            <div className="grid md:grid-cols-2 gap-6">
+              <div>
+                <p className="text-sm font-semibold text-green-600 mb-2 flex items-center gap-2"><CheckCircle className="w-4 h-4" /> 應該做</p>
+                <ul className="text-sm text-foreground space-y-1">
+                  <li>• 為每個申請客製化，更改 2-3 個要點以符合 JD</li>
+                  <li>• 申請後跟進，5-7 天後發信給招募人員</li>
+                  <li>• 準備好解釋每個指標，面試官會問</li>
+                  <li>• 保持範例機密，不要提及內部專案名稱</li>
+                  <li>• 展現真誠熱情，引用公司的具體計畫</li>
+                </ul>
               </div>
-              <div className="flex items-start gap-4">
-                <div className="w-8 h-8 rounded-full bg-gold text-white flex items-center justify-center font-bold text-sm flex-shrink-0">2</div>
-                <div>
-                  <p className="font-semibold text-foreground">移除不相關區塊</p>
-                  <p className="text-muted-foreground text-sm">刪除專業發展和志工經驗區塊（5 分鐘）</p>
-                </div>
-              </div>
-              <div className="flex items-start gap-4">
-                <div className="w-8 h-8 rounded-full bg-gold text-white flex items-center justify-center font-bold text-sm flex-shrink-0">3</div>
-                <div>
-                  <p className="font-semibold text-foreground">新增資料品質要點</p>
-                  <p className="text-muted-foreground text-sm">在 Teamson 經驗中加入測試和驗證工作（30 分鐘）</p>
-                </div>
-              </div>
-              <div className="flex items-start gap-4">
-                <div className="w-8 h-8 rounded-full bg-gold text-white flex items-center justify-center font-bold text-sm flex-shrink-0">4</div>
-                <div>
-                  <p className="font-semibold text-foreground">增強利害關係人協作語言</p>
-                  <p className="text-muted-foreground text-sm">在要點中加入需求收集、商業翻譯流程（30 分鐘）</p>
-                </div>
-              </div>
-              <div className="flex items-start gap-4">
-                <div className="w-8 h-8 rounded-full bg-gold text-white flex items-center justify-center font-bold text-sm flex-shrink-0">5</div>
-                <div>
-                  <p className="font-semibold text-foreground">建立兩個客製化版本</p>
-                  <p className="text-muted-foreground text-sm">一個針對 Maniko（Tableau 重點）、一個針對 Riot（基礎設施重點）（45 分鐘）</p>
-                </div>
-              </div>
-              <div className="flex items-start gap-4">
-                <div className="w-8 h-8 rounded-full bg-gold text-white flex items-center justify-center font-bold text-sm flex-shrink-0">6</div>
-                <div>
-                  <p className="font-semibold text-foreground">申請 5-10 個目標職位</p>
-                  <p className="text-muted-foreground text-sm">為每個申請客製化履歷（持續進行）</p>
-                </div>
-              </div>
-              <div className="flex items-start gap-4">
-                <div className="w-8 h-8 rounded-full bg-gold text-white flex items-center justify-center font-bold text-sm flex-shrink-0">7</div>
-                <div>
-                  <p className="font-semibold text-foreground">使用 STAR 方法準備面試故事</p>
-                  <p className="text-muted-foreground text-sm">為每個主要成就準備 2-3 分鐘的故事</p>
-                </div>
+              <div>
+                <p className="text-sm font-semibold text-destructive mb-2 flex items-center gap-2"><XCircle className="w-4 h-4" /> 不應該做</p>
+                <ul className="text-sm text-foreground space-y-1">
+                  <li>• 不要未客製化就申請，質量重於數量</li>
+                  <li>• 不要誇大指標，準備好用數據支持</li>
+                  <li>• 不要批評前雇主，保持專業</li>
+                  <li>• 不要忽略文化契合度，研究公司價值觀</li>
+                </ul>
               </div>
             </div>
           </div>
         </section>
 
-        {/* 最後想法 */}
+        {/* 最後感想 */}
         <section className="mb-16">
-          <div className="bg-executive-green rounded-xl p-8 text-cream">
-            <h2 className="font-heading text-2xl mb-4">最後想法</h2>
-            <div className="space-y-4 text-cream/90">
-              <p>您的經驗對資深分析工程師職位來說是優秀的。</p>
-              <p>您在 Teamson 的 dbt 工作、Tableau 儀表板交付、多區域協作和自助文化建立都直接符合 Maniko 和 Riot 的要求。</p>
-              <p>唯一真正的阻礙是工作授權明確性和小幅呈現優化。</p>
-              <p className="text-gold font-semibold text-lg">您有經驗。現在您有定位。去拿到 offer 吧。</p>
-              <p className="text-xl">祝好運！🚀</p>
+          <div className="bg-gold/10 rounded-xl p-8 border border-gold/20">
+            <h2 className="font-heading text-2xl text-foreground mb-6 text-center">您的履歷轉型</h2>
+            <div className="flex flex-col sm:flex-row items-center justify-center gap-8 sm:gap-16 mb-8">
+              <div className="text-center">
+                <ScoreGauge score={90} label="修改前" size="lg" />
+              </div>
+              <span className="text-4xl text-gold hidden sm:block">→</span>
+              <div className="text-center">
+                <ScoreGauge score={95} label="修改後" size="lg" />
+              </div>
+            </div>
+            <div className="bg-card rounded-lg p-6 text-center space-y-4">
+              <p className="text-foreground">您的履歷已經有很強的技術基礎。透過解決聯絡資訊、移除不相關區塊，以及新增資料品質和利害關係人協作的明確強調，您將消除歐盟招募人員的所有摩擦點。</p>
+              <p className="text-gold font-semibold text-lg">您有經驗。現在您有了定位。去拿到 offer 吧。祝好運！🚀</p>
             </div>
           </div>
         </section>
 
         {/* 回饋區塊 */}
         <section className="mb-16">
-          <div className="flex items-center gap-3 mb-6">
-            <div className="w-10 h-10 rounded-full bg-gold/10 flex items-center justify-center">
-              <MessageSquare className="w-5 h-5 text-gold" />
+          <div className="bg-card rounded-xl p-8 border border-border">
+            <h2 className="font-heading text-2xl text-foreground mb-4">您的回饋很重要</h2>
+            <p className="text-foreground mb-6">希望這份審閱對加強您的申請有所幫助。</p>
+            <p className="text-muted-foreground mb-6">如果您覺得這份審閱有幫助，我非常感謝您的回饋：</p>
+            
+            <div className="grid md:grid-cols-2 gap-6 mb-8">
+              <a href="https://tally.so/r/81L09x" target="_blank" rel="noopener noreferrer" className="group block p-6 rounded-xl border-2 border-gold/30 bg-gradient-to-br from-gold/5 to-gold/10 hover:border-gold transition-all">
+                <div className="flex items-center gap-4 mb-3">
+                  <div className="w-12 h-12 rounded-full bg-gradient-to-br from-gold to-gold-dark flex items-center justify-center">
+                    <MessageSquare className="w-6 h-6 text-white" />
+                  </div>
+                  <div>
+                    <h3 className="text-lg font-semibold text-foreground">分享您的回饋</h3>
+                    <p className="text-sm text-muted-foreground">在此留下您的想法</p>
+                  </div>
+                </div>
+                <ul className="text-sm text-muted-foreground space-y-1 mt-3">
+                  <li>• 您誠實的回饋幫助我改進服務</li>
+                  <li>• 推薦語幫助其他求職者發現這項服務</li>
+                  <li>• 我會閱讀每則回覆並持續優化我的方法</li>
+                </ul>
+              </a>
+              <a href="https://www.trustpilot.com/review/jamesbugden.com" target="_blank" rel="noopener noreferrer" className="group block p-6 rounded-xl border-2 border-gold/30 bg-gradient-to-br from-gold/5 to-gold/10 hover:border-gold transition-all">
+                <div className="flex items-center gap-4 mb-3">
+                  <div className="w-12 h-12 rounded-full bg-gradient-to-br from-gold to-gold-dark flex items-center justify-center">
+                    <Star className="w-6 h-6 text-white" />
+                  </div>
+                  <div>
+                    <h3 className="text-lg font-semibold text-foreground">在 Trustpilot 留下評論</h3>
+                    <p className="text-sm text-muted-foreground">在此分享您的體驗</p>
+                  </div>
+                </div>
+                <ul className="text-sm text-muted-foreground space-y-1 mt-3">
+                  <li>• 公開評論有助於建立可信度</li>
+                  <li>• 您的評論幫助其他專業人士做出明智決定</li>
+                </ul>
+              </a>
             </div>
-            <h2 className="font-heading text-3xl text-foreground">您的回饋很重要</h2>
-          </div>
-          <div className="grid md:grid-cols-2 gap-6">
-            <a href="https://tally.so/r/81L09x" target="_blank" rel="noopener noreferrer" className="block p-6 rounded-xl border-2 border-gold bg-gradient-to-br from-background to-card hover:shadow-lg transition-shadow">
-              <div className="flex items-center gap-3 mb-3">
-                <MessageSquare className="w-6 h-6 text-gold" />
-                <h3 className="font-semibold text-foreground">分享您的回饋</h3>
-              </div>
-              <p className="text-sm text-muted-foreground">您誠實的回饋幫助我改進服務。我會閱讀每一則回覆並持續優化我的方法。</p>
-            </a>
-            <a href="https://www.trustpilot.com/review/jamesbugden.com" target="_blank" rel="noopener noreferrer" className="block p-6 rounded-xl border-2 border-gold bg-gradient-to-br from-background to-card hover:shadow-lg transition-shadow">
-              <div className="flex items-center gap-3 mb-3">
-                <Star className="w-6 h-6 text-gold" />
-                <h3 className="font-semibold text-foreground">在 Trustpilot 留下評論</h3>
-              </div>
-              <p className="text-sm text-muted-foreground">公開評論有助於建立可信度，幫助其他專業人士做出明智的決定。</p>
-            </a>
-          </div>
 
-          <div className="mt-6 p-4 bg-muted/30 rounded-xl">
-            <p className="text-sm text-muted-foreground">
-              <strong>為什麼 Trustpilot 分數是 3.8？</strong>我剛開始新事業，Trustpilot 對新企業會套用初始權重，這可能暫時降低早期分數。隨著更多真實客戶評論的加入，分數會調整以反映實際服務品質。
-            </p>
+            <div className="bg-muted/30 rounded-lg p-4 mb-6">
+              <p className="text-sm text-foreground"><strong>為什麼 Trustpilot 分數是 3.8？</strong></p>
+              <p className="text-sm text-muted-foreground mt-2">我剛開始新事業，Trustpilot 對新企業會套用初始權重，這可能暫時降低早期分數。隨著更多真實客戶評論的加入，分數會調整以反映實際服務品質。</p>
+            </div>
+
+            <p className="text-foreground text-center font-semibold">感謝您的信任。祝您求職之旅順利成功！</p>
           </div>
         </section>
       </main>
