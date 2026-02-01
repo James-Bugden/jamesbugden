@@ -30,12 +30,19 @@ import RogerLeeReviewZhTw from "./pages/reviews/RogerLeeReviewZhTw";
 import PinWeiWuReview from "./pages/reviews/PinWeiWuReview";
 import PinWeiWuReviewZhTw from "./pages/reviews/PinWeiWuReviewZhTw";
 import PeihuaYehReview from "./pages/reviews/PeihuaYehReview";
+import PeihuaYehReviewZhTw from "./pages/reviews/PeihuaYehReviewZhTw";
 import SilviaChenReview from "./pages/reviews/SilviaChenReview";
+import SilviaChenReviewZhTw from "./pages/reviews/SilviaChenReviewZhTw";
 import YoutingChenReview from "./pages/reviews/YoutingChenReview";
+import YoutingChenReviewZhTw from "./pages/reviews/YoutingChenReviewZhTw";
 import RoyTsaiReview from "./pages/reviews/RoyTsaiReview";
+import RoyTsaiReviewZhTw from "./pages/reviews/RoyTsaiReviewZhTw";
 import JanelleChengReview from "./pages/reviews/JanelleChengReview";
+import JanelleChengReviewZhTw from "./pages/reviews/JanelleChengReviewZhTw";
 import WillyLinReview from "./pages/reviews/WillyLinReview";
+import WillyLinReviewZhTw from "./pages/reviews/WillyLinReviewZhTw";
 import HopeChenReview from "./pages/reviews/HopeChenReview";
+import HopeChenReviewZhTw from "./pages/reviews/HopeChenReviewZhTw";
 
 const queryClient = new QueryClient();
 
@@ -79,12 +86,19 @@ const App = () => (
           <Route path="/reviews/pin-wei-wu" element={<PinWeiWuReview />} />
           <Route path="/zh-tw/reviews/pin-wei-wu" element={<PinWeiWuReviewZhTw />} />
           <Route path="/reviews/peihua-yeh" element={<PeihuaYehReview />} />
+          <Route path="/zh-tw/reviews/peihua-yeh" element={<PeihuaYehReviewZhTw />} />
           <Route path="/reviews/silvia-chen" element={<SilviaChenReview />} />
+          <Route path="/zh-tw/reviews/silvia-chen" element={<SilviaChenReviewZhTw />} />
           <Route path="/reviews/youting-chen" element={<YoutingChenReview />} />
+          <Route path="/zh-tw/reviews/youting-chen" element={<YoutingChenReviewZhTw />} />
           <Route path="/reviews/roy-tsai" element={<RoyTsaiReview />} />
+          <Route path="/zh-tw/reviews/roy-tsai" element={<RoyTsaiReviewZhTw />} />
           <Route path="/reviews/janelle-cheng" element={<JanelleChengReview />} />
+          <Route path="/zh-tw/reviews/janelle-cheng" element={<JanelleChengReviewZhTw />} />
           <Route path="/reviews/willy-lin" element={<WillyLinReview />} />
+          <Route path="/zh-tw/reviews/willy-lin" element={<WillyLinReviewZhTw />} />
           <Route path="/reviews/hope-chen" element={<HopeChenReview />} />
+          <Route path="/zh-tw/reviews/hope-chen" element={<HopeChenReviewZhTw />} />
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
           <Route path="*" element={<NotFound />} />
         </Routes>
