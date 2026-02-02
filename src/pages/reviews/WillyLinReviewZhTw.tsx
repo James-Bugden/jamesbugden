@@ -1,4 +1,4 @@
-import { ArrowLeft, Download, FileText, Target, CheckCircle, XCircle, Star, MessageSquare, Zap, Calendar } from 'lucide-react';
+import { ArrowLeft, Download, FileText, Target, CheckCircle, XCircle, Star, MessageSquare, Zap, TrendingUp, Search } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import ReviewLanguageToggle from '@/components/ReviewLanguageToggle';
 import ScoreGauge from '@/components/ScoreGauge';
@@ -147,8 +147,14 @@ const WillyLinReviewZhTw = () => {
               <tbody>
                 <tr className="border-b border-border">
                   <td className="py-2 text-foreground font-semibold">聯絡資訊</td>
-                  <td className="py-2 text-muted-foreground">不專業的電子郵件，缺少電話和 LinkedIn</td>
-                  <td className="py-2 text-foreground">willy.lin@gmail.com + 電話號碼 + LinkedIn URL</td>
+                  <td className="py-2 text-muted-foreground">不專業的電子郵件（willy1234willy123413@gmail.com），缺少電話和 LinkedIn</td>
+                  <td className="py-2 text-foreground">willy.lin@gmail.com（或 firstname.lastname 格式）+ 電話號碼 + LinkedIn URL</td>
+                  <td className="py-2 text-center"><span className="text-destructive font-semibold">高</span></td>
+                </tr>
+                <tr className="border-b border-border">
+                  <td className="py-2 text-foreground font-semibold">格式與視覺層次</td>
+                  <td className="py-2 text-muted-foreground">基本、平淡版面，無結構引導讀者注意力</td>
+                  <td className="py-2 text-foreground">清晰區塊搭配留白，策略性使用粗體/標題突出優勢</td>
                   <td className="py-2 text-center"><span className="text-destructive font-semibold">高</span></td>
                 </tr>
                 <tr className="border-b border-border">
@@ -167,6 +173,12 @@ const WillyLinReviewZhTw = () => {
                   <td className="py-2 text-foreground font-semibold">摘要導向</td>
                   <td className="py-2 text-muted-foreground">職責導向（「專精於」、「實務經驗交付」）沒有量化成果</td>
                   <td className="py-2 text-foreground">成果導向帶指標：處理的 token 量、模型效能改善、部署速度</td>
+                  <td className="py-2 text-center"><span className="text-destructive font-semibold">高</span></td>
+                </tr>
+                <tr className="border-b border-border">
+                  <td className="py-2 text-foreground font-semibold">摘要結構</td>
+                  <td className="py-2 text-muted-foreground">密集單一段落，第一行混合「AI 工程師」和「資料科學碩士」造成混亂</td>
+                  <td className="py-2 text-foreground">3-4 句簡潔句子，開頭有清晰角色身分和量化成就</td>
                   <td className="py-2 text-center"><span className="text-destructive font-semibold">高</span></td>
                 </tr>
                 <tr className="border-b border-border">
@@ -228,6 +240,11 @@ const WillyLinReviewZhTw = () => {
                     <li>使用 Go + LibTorch + gRPC 部署低延遲嵌入推論服務，減少 [X]ms 模型初始化開銷並支援 1000+ QPS 的生產虛擬助理平台即時 RAG 檢索</li>
                     <li>建立 LLM 評估框架，針對 ChatGPT API 基準測試 RAG 能力、多輪對話一致性和主動回應行為，找出 [X] 個關鍵改進領域引導 GRPO 優化優先順序</li>
                   </ul>
+                  <p className="font-semibold mt-4">資料分析培訓計畫 | 台灣</p>
+                  <p className="text-muted-foreground">資料分析實習生 | 2024 年 12 月 – 2025 年 3 月</p>
+                  <ul className="mt-2 space-y-2 text-foreground list-disc ml-4">
+                    <li>[1 個使用 XYZ 框架展示商業影響的要點]</li>
+                  </ul>
                 </div>
               </div>
             </div>
@@ -239,6 +256,8 @@ const WillyLinReviewZhTw = () => {
                 <li>4-5 個要點聚焦於直接證明您能在目標職位成功的成就</li>
                 <li>每個要點遵循 XYZ 框架：完成 [X] 透過 [Y] 衡量，藉由做 [Z]，展示成果而非職責</li>
                 <li>統一的經驗區塊消除「工作」和「實習」之間的人為分割</li>
+                <li>量化指標（處理的 token 數、改善百分比、延遲減少）取代模糊描述</li>
+                <li>策略關鍵字配置：GRPO、RAG、embedding、多輪一致性、幻覺減少都自然出現</li>
               </ul>
               <p className="mt-4 text-sm font-semibold text-gold">影響：一頁履歷展現判斷力，強迫您只闡述最強的價值主張，並確保招募人員真正閱讀您的內容而非略過或跳過。</p>
             </div>
@@ -258,6 +277,9 @@ const WillyLinReviewZhTw = () => {
                   <p>第一行造成身分混亂：「擁有資料科學碩士學位的 AI 工程師」，您的學位是職稱嗎？這讓人不清楚您實際目標是什麼職位</p>
                   <p>零量化成果：沒有指標、沒有成果、沒有影響力證明，只有您「專精於」和「有經驗」的領域清單</p>
                   <p>密集段落一眼無法閱讀：一個 100+ 字的文字區塊違背摘要的目的，招募人員不會讀這個</p>
+                  <p>全篇被動語言：「專精於」、「實務經驗」、「參與過」、「強烈聚焦」，全是職責導向，沒有成果導向</p>
+                  <p>沒有差異化：這裡沒有任何東西證明您比其他 50 個同樣有「LLM 訓練經驗」的候選人更好</p>
+                  <p>副標題增加更多混亂：「大型語言模型與資料管線」，您是 AI 工程師還是資料工程師？</p>
                 </div>
               </div>
               
@@ -279,6 +301,8 @@ const WillyLinReviewZhTw = () => {
                 <li>量化經驗優先：「9 個月專業生產 LLM 訓練經驗」設定務實期望同時強調深度</li>
                 <li>三個具體、可衡量的成就：Token 量、效能改善、效率提升，證明您交付成果</li>
                 <li>策略關鍵字載入：Qwen3-8B、GRPO、多語言、PyTorch、Transformers、HPC，命中主要 ATS 要求</li>
+                <li>教育定位為資歷：碩士提供可信度而不造成身分混亂</li>
+                <li>可讀結構：三句話有清晰層次，招募人員 6 秒內可掃描</li>
               </ul>
               <p className="mt-4 text-sm font-semibold text-gold">影響：摘要是履歷上最重要的 60 個字，它決定招募人員是否繼續閱讀。帶有清晰定位和量化成就的成果導向摘要讓他們想繼續讀下去。</p>
             </div>
@@ -298,6 +322,8 @@ const WillyLinReviewZhTw = () => {
                   <p>每個要點都是職責導向：「領導並執行」、「設計並交付」、「擁有」、「建立」、「實施」，全部描述職責而非成果</p>
                   <p>零可衡量成果：沒有效能改善、沒有效率提升、沒有商業影響指標</p>
                   <p>「顯著減少」毫無意義：多少？10%？50%？90%？模糊的形容詞什麼都證明不了</p>
+                  <p>沒有說明這些任務為何重要的背景：這解決了什麼問題？之前狀態是什麼？您的工作後改變了什麼？</p>
+                  <p>讀起來像職位描述：這些可以從職位公告複製貼上，這裡沒有證明您特別交付了價值</p>
                 </div>
               </div>
               
@@ -307,6 +333,7 @@ const WillyLinReviewZhTw = () => {
                   <li>透過實施使用 Qwen-14B 獎勵模型和三個針對幻覺減少、上下文一致性和主動參與的自訂評分標準評估提示的 GRPO 強化學習，將 Qwen3-8B 多語言用例（中/英/日）的對話品質改善 [X]%，以角色一致性和回應適當性的人類評估分數衡量</li>
                   <li>透過建立自動化生成、清洗、去重和 JSON/JSONL 驗證的 Python 多執行緒資料管線（260-270 億 token，200 億預訓練 + 60-70 億微調），將 LLM 訓練迭代時間減少 [Y]%（從 [A] 天減至每週期 [B] 天），實現 3 倍更快的模型實驗</li>
                   <li>透過開發使用 LibTorch 和 gRPC 的 Go 語言嵌入服務（消除 Python 解譯器開銷並啟用並發請求處理），將嵌入推論延遲減少 [Z]ms（達成 {'<'}[X]ms 第 95 百分位），支援生產 RAG 檢索每秒 1000+ 查詢</li>
+                  <li>透過建立針對 ChatGPT API 基準測試 Qwen3-8B 在 RAG 準確性、多輪一致性和角色穩定性指標的比較評估框架，找出 [N] 個關鍵模型改進領域，以成本/品質點改善衡量將訓練 ROI 提升 [X]%</li>
                 </ul>
               </div>
             </div>
@@ -318,6 +345,7 @@ const WillyLinReviewZhTw = () => {
                 <li>提供可衡量的 [Y] 證明：您如何量化改善，百分比、時間節省、延遲減少</li>
                 <li>解釋具體的 [Z] 方法：您實際做了什麼來達成成果，工具、技術、方法</li>
                 <li>商業背景清晰：為什麼這很重要，更快迭代、更低延遲、更好 ROI</li>
+                <li>競爭差異化：這些要點證明您能交付可衡量的改善，而非只是完成任務</li>
               </ul>
               <div className="mt-4 p-3 bg-gold/10 rounded-lg">
                 <p className="text-sm text-foreground"><strong>注意：</strong>您需要新增實際指標（用括號標記如 [X]%、[Y] 天、[Z]ms）。如果沒有確切數字，使用基於觀察的保守估計：「大約快 40%」、「從 7 天減至 5 天」、「達成 {'<'}50ms p95 延遲」。絕不捏造，但要量化。</p>
@@ -340,6 +368,7 @@ const WillyLinReviewZhTw = () => {
                   <p>分開區塊造成分割：通過隔離實習讓您的時間軸看起來人為單薄</p>
                   <p>「實習經驗」聽起來資淺：專業履歷使用統一的「經驗」區塊</p>
                   <p>浪費垂直空間：區塊標題在一頁履歷上消耗寶貴行數</p>
+                  <p>打斷時間順序流程：讀者期望在一個統一區塊中看到反向時間順序</p>
                 </div>
               </div>
               
@@ -368,9 +397,195 @@ const WillyLinReviewZhTw = () => {
               <p className="mt-4 text-sm font-semibold text-gold">影響：小的結構改變消除業餘的分割並使您的時間軸看起來更連貫。</p>
             </div>
           </div>
+
+          {/* 改進 #5 */}
+          <div className="bg-card rounded-xl p-6 mb-6 border border-border">
+            <div className="flex items-center gap-3 mb-4">
+              <span className="px-3 py-1 bg-green-500/20 text-green-700 text-xs font-bold rounded-full uppercase tracking-wide">#5 教育、技能、認證</span>
+            </div>
+            <h3 className="font-heading text-2xl text-foreground mb-4">確認教育、技能和認證已經優化</h3>
+            
+            <div className="space-y-4 mb-6">
+              <div className="bg-green-500/10 rounded-lg p-4 border-l-4 border-green-600">
+                <p className="text-sm font-semibold text-green-700 mb-2">目前版本（已經很強）：</p>
+                <div className="mt-3 space-y-4 text-sm">
+                  <div>
+                    <p className="font-semibold text-foreground">教育</p>
+                    <p className="text-foreground">英國巴斯大學 — 資料科學碩士</p>
+                    <p className="text-foreground">中國文化大學，台灣 — 應用數學學士</p>
+                  </div>
+                  <div>
+                    <p className="font-semibold text-foreground">技術技能</p>
+                    <ul className="text-foreground space-y-1">
+                      <li><strong>程式語言：</strong>Python、JavaScript、Go</li>
+                      <li><strong>LLM 與 NLP：</strong>Qwen3-8B、Transformers、NLP、Prompt Engineering</li>
+                      <li><strong>模型訓練：</strong>CPR、SFT、QAT、GRPO</li>
+                      <li><strong>資料與管線：</strong>資料生成、資料清洗、JSON/JSONL 綱要設計</li>
+                      <li><strong>框架與工具：</strong>PyTorch、TensorFlow、Scikit-learn、Axolotl</li>
+                      <li><strong>基礎設施：</strong>HPC、RunPod、Vast.ai、遠端 GPU 環境</li>
+                      <li><strong>視覺化與 BI：</strong>Pandas、Matplotlib、Plotly、Power BI</li>
+                      <li><strong>版本控制：</strong>Git、GitHub</li>
+                    </ul>
+                  </div>
+                  <div>
+                    <p className="font-semibold text-foreground">認證</p>
+                    <p className="text-foreground">經濟部 iPAS AI 應用規劃師（中級）— 台灣經濟部</p>
+                    <p className="text-foreground">AI 與數位創新計畫 — CMRI 數位創新研究所</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div className="bg-muted/30 rounded-lg p-4">
+              <p className="text-sm font-semibold text-foreground mb-2">評估：</p>
+              <ul className="text-sm text-foreground space-y-1">
+                <li>這些區塊已經結構良好且適當</li>
+                <li>教育格式清晰：大學、學位、地點，所有必要資訊都有</li>
+                <li>技能邏輯分組：按類別（語言、LLM 與 NLP、模型訓練等）而非字母順序堆砌</li>
+                <li>認證提供本地可信度：台灣特定資歷對鴻海申請很有價值</li>
+                <li>沒有不必要的細節：沒有 GPA（適合有經驗專業人士）、沒有不相關課程</li>
+              </ul>
+              <div className="mt-4 p-3 bg-gold/10 rounded-lg">
+                <p className="text-sm text-foreground"><strong>只需要小幅增強：</strong>為每個申請客製化時在技能區塊新增角色特定關鍵字：</p>
+                <ul className="text-sm text-foreground mt-2 space-y-1 ml-4 list-disc">
+                  <li>NLP 職位：新增 SpaCy、NLTK、Gensim、Word2Vec、NER、文本分類</li>
+                  <li>RAG 職位：新增 LangChain（學習中）、RAG 架構、LlamaIndex（熟悉）、Azure OpenAI（熟悉）</li>
+                  <li>微軟：新增 ML 系統、模型服務、線上學習（如適用）</li>
+                </ul>
+              </div>
+              <p className="mt-4 text-sm font-semibold text-gold">影響：這些區塊已經符合專業標準，當其他區塊需要關鍵修正時，不要浪費時間過度優化它們。</p>
+            </div>
+          </div>
         </section>
 
-        {/* 下一步 */}
+        {/* 策略定位與 ATS 優化 */}
+        <section className="mb-16">
+          <div className="flex items-center gap-3 mb-6">
+            <div className="w-10 h-10 rounded-full bg-gold/10 flex items-center justify-center">
+              <Search className="w-5 h-5 text-gold" />
+            </div>
+            <h2 className="font-heading text-3xl text-foreground">策略定位與 ATS 優化</h2>
+          </div>
+
+          {/* 角色清晰策略 */}
+          <div className="bg-card rounded-xl p-6 mb-6 border border-border">
+            <h3 className="font-heading text-xl text-foreground mb-4">角色清晰策略：建立三個客製化版本</h3>
+            <p className="text-muted-foreground mb-4">您寄了三種不同的職位類型，需要三種不同的定位方法。您不能用一份履歷申請所有三個並期望好結果。以下是如何客製化：</p>
+
+            <div className="grid md:grid-cols-3 gap-4">
+              <div className="bg-muted/30 rounded-lg p-4">
+                <p className="text-sm font-semibold text-gold mb-3">版本 1：AI 工程師（微軟 Applied Scientist 2）</p>
+                <ul className="text-sm text-foreground space-y-1">
+                  <li><strong>職稱：</strong>「AI 工程師」</li>
+                  <li><strong>摘要重點：</strong>LLM 訓練、模型優化、強化學習、評估框架</li>
+                  <li><strong>關鍵字強調：</strong>GRPO、Qwen3-8B、模型訓練、基準測試、PyTorch、大規模系統</li>
+                  <li><strong>要點強調：</strong>訓練管線效率、模型效能改善、評估框架設計</li>
+                  <li><strong>技能區塊：</strong>移除 BI 工具（Power BI、Plotly），新增 ML 系統、模型服務（如適用）</li>
+                </ul>
+              </div>
+
+              <div className="bg-muted/30 rounded-lg p-4">
+                <p className="text-sm font-semibold text-gold mb-3">版本 2：NLP 工程師（鴻海 Type 2）</p>
+                <ul className="text-sm text-foreground space-y-1">
+                  <li><strong>職稱：</strong>「NLP 工程師」</li>
+                  <li><strong>摘要重點：</strong>多語言 NLP、文字處理、中/英/日語言模型</li>
+                  <li><strong>關鍵字強調：</strong>NLP、文字探勘、多語言、transformers、微調、Hugging Face</li>
+                  <li><strong>要點強調：</strong>語言特定能力、文字處理管線、NLP 演算法實作</li>
+                  <li><strong>技能區塊：</strong>新增 SpaCy、NLTK、Gensim、Word2Vec、文本分類、NER、POS 標記</li>
+                </ul>
+              </div>
+
+              <div className="bg-muted/30 rounded-lg p-4">
+                <p className="text-sm font-semibold text-gold mb-3">版本 3：LLM 資料科學家（RAG/Agentic AI 職位）</p>
+                <ul className="text-sm text-foreground space-y-1">
+                  <li><strong>職稱：</strong>「LLM 資料科學家」或「GenAI 工程師」</li>
+                  <li><strong>摘要重點：</strong>RAG 系統、知識檢索、評估框架、生產部署</li>
+                  <li><strong>關鍵字強調：</strong>RAG、retrieval-augmented generation、LangChain、評估、embeddings、context-aware</li>
+                  <li><strong>要點強調：</strong>將評估工作重新框架為 RAG 能力測試，強調用於檢索的 embedding 服務</li>
+                  <li><strong>技能區塊：</strong>新增 LangChain（學習中）、RAG 架構、LlamaIndex（熟悉）、Azure OpenAI（熟悉）、Cohere（熟悉）</li>
+                </ul>
+              </div>
+            </div>
+
+            <div className="bg-gold/10 rounded-lg p-4 mt-4 border-l-4 border-gold">
+              <p className="text-sm font-semibold text-foreground mb-2">缺少關鍵字的誠實方法：</p>
+              <ul className="text-sm text-foreground space-y-1">
+                <li><strong>「（學習中）」：</strong>用於您正在學習的工具（LangChain、LlamaIndex）</li>
+                <li><strong>「（熟悉）」：</strong>用於您概念上理解但沒有廣泛使用的工具（Azure OpenAI、Cohere）</li>
+                <li><strong>重新框架現有工作：</strong>您的評估框架確實測試了檢索能力，稱它為「RAG 能力評估」是誠實的</li>
+                <li><strong>不要捏造：</strong>如果您對某個工具真的零接觸，不要聲稱它，專注於相鄰經驗</li>
+              </ul>
+            </div>
+          </div>
+        </section>
+
+        {/* 履歷效能改善 */}
+        <section className="mb-16">
+          <div className="flex items-center gap-3 mb-6">
+            <div className="w-10 h-10 rounded-full bg-gold/10 flex items-center justify-center">
+              <TrendingUp className="w-5 h-5 text-gold" />
+            </div>
+            <h2 className="font-heading text-3xl text-foreground">履歷效能改善</h2>
+          </div>
+
+          <div className="grid md:grid-cols-2 gap-6 mb-8">
+            <div className="bg-card rounded-xl p-6 border border-border">
+              <p className="text-sm font-semibold text-destructive mb-4 flex items-center gap-2">
+                <XCircle className="w-5 h-5" /> 優化前
+              </p>
+              <ul className="space-y-2 text-sm text-foreground">
+                <li><strong>整體分數：</strong>60/100</li>
+                <li>不到 1 年經驗用兩頁</li>
+                <li>13 個職責導向要點，零可衡量成果</li>
+                <li>不專業的電子郵件，缺少電話/LinkedIn</li>
+                <li>角色定位混亂</li>
+                <li>依目標職位 39-61% 關鍵字覆蓋率</li>
+              </ul>
+            </div>
+
+            <div className="bg-card rounded-xl p-6 border border-border">
+              <p className="text-sm font-semibold text-green-600 mb-4 flex items-center gap-2">
+                <CheckCircle className="w-5 h-5" /> 優化後
+              </p>
+              <ul className="space-y-2 text-sm text-foreground">
+                <li><strong>整體分數：</strong>90/100</li>
+                <li>一頁搭配 4-5 個高影響力成就要點</li>
+                <li>每個要點遵循 XYZ 框架帶量化成果</li>
+                <li>專業聯絡資訊含所有必要元素</li>
+                <li>每個申請有清晰、聚焦的角色身分</li>
+                <li>依目標職位 77-100% 關鍵字覆蓋率</li>
+              </ul>
+            </div>
+          </div>
+
+          {/* 關鍵指標 */}
+          <div className="bg-card rounded-xl p-6 border border-border">
+            <h3 className="font-heading text-xl text-foreground mb-4">關鍵指標</h3>
+            
+            <div className="grid md:grid-cols-2 gap-6 mb-6">
+              <div>
+                <p className="text-sm font-semibold text-foreground mb-3">ATS 通過率改善：</p>
+                <ul className="space-y-2 text-sm text-foreground">
+                  <li><strong>ATS 通過率：</strong>55-61% → 77-100%（依目標職位）</li>
+                  <li><strong>招募人員閱讀時間：</strong>2 頁（可能略過）→ 1 頁（完整閱讀）</li>
+                  <li><strong>要點影響力：</strong>13 個弱要點 → 4-5 個強要點（每個要點強 2.6 倍）</li>
+                  <li><strong>角色清晰度：</strong>混亂定位 → 清晰、聚焦的身分</li>
+                </ul>
+              </div>
+
+              <div>
+                <p className="text-sm font-semibold text-gold mb-3">預估申請成功率改善：</p>
+                <ul className="space-y-2 text-sm text-foreground">
+                  <li><strong>鴻海 NLP 工程師：</strong>30% → 85%（回覆率）</li>
+                  <li><strong>LLM/RAG 資料科學家：</strong>25% → 70%（回覆率）</li>
+                  <li><strong>微軟 Applied Scientist 2：</strong>15% → 45%（回覆率，因資淺）</li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        {/* 下一步行動 */}
         <section className="mb-16">
           <div className="flex items-center gap-3 mb-6">
             <div className="w-10 h-10 rounded-full bg-gold/10 flex items-center justify-center">
@@ -379,6 +594,7 @@ const WillyLinReviewZhTw = () => {
             <h2 className="font-heading text-3xl text-foreground">下一步行動</h2>
           </div>
 
+          {/* 步驟 1 */}
           <div className="bg-card rounded-xl p-6 mb-4 border border-border">
             <div className="flex items-center gap-3 mb-4">
               <div className="w-8 h-8 rounded-full bg-gold/20 flex items-center justify-center text-gold font-bold">1</div>
@@ -401,9 +617,27 @@ const WillyLinReviewZhTw = () => {
                   <li>完全移除副標題「大型語言模型與資料管線」</li>
                 </ul>
               </div>
+              <div>
+                <p className="font-semibold">將摘要重寫為成果導向（45 分鐘）</p>
+                <ul className="text-muted-foreground mt-1 ml-4 list-disc">
+                  <li>使用為您選擇的角色提供的優化版本</li>
+                  <li>如果有的話新增您的實際效能指標（模型改善 %、延遲減少等）</li>
+                  <li>保持最多 3-4 句</li>
+                </ul>
+              </div>
+              <div>
+                <p className="font-semibold">移除 8+ 個要點壓縮至一頁（60 分鐘）</p>
+                <ul className="text-muted-foreground mt-1 ml-4 list-disc">
+                  <li>只選擇您 4-5 個最強、最相關的成就</li>
+                  <li>將「實習經驗」合併到主要「經驗」區塊</li>
+                  <li>移除斜體專案註記</li>
+                  <li>刪除冗餘/低影響力要點</li>
+                </ul>
+              </div>
             </div>
           </div>
 
+          {/* 步驟 2 */}
           <div className="bg-card rounded-xl p-6 mb-4 border border-border">
             <div className="flex items-center gap-3 mb-4">
               <div className="w-8 h-8 rounded-full bg-gold/20 flex items-center justify-center text-gold font-bold">2</div>
@@ -420,9 +654,24 @@ const WillyLinReviewZhTw = () => {
                 </ul>
                 <p className="text-gold mt-2">格式：完成 [X] 透過 [Y] 衡量，藉由做 [Z]</p>
               </div>
+              <div>
+                <p className="font-semibold">新增您的實際指標（60 分鐘）</p>
+                <p className="text-muted-foreground mt-1">如果沒有確切數字，使用保守估計：</p>
+                <ul className="text-muted-foreground mt-1 ml-4 list-disc">
+                  <li>模型改善：「改善約 15-25%」</li>
+                  <li>時間減少：「從每次迭代 7 天減至 5 天」</li>
+                  <li>延遲：「達成 {'<'}50ms p95 延遲」</li>
+                  <li>絕不捏造，但要根據觀察量化</li>
+                </ul>
+              </div>
+              <div>
+                <p className="font-semibold">重寫 1-2 個實習要點（30 分鐘）</p>
+                <p className="text-muted-foreground mt-1">將 XYZ 框架應用到展示商業影響的實習工作</p>
+              </div>
             </div>
           </div>
 
+          {/* 步驟 3 */}
           <div className="bg-card rounded-xl p-6 mb-4 border border-border">
             <div className="flex items-center gap-3 mb-4">
               <div className="w-8 h-8 rounded-full bg-gold/20 flex items-center justify-center text-gold font-bold">3</div>
@@ -460,6 +709,7 @@ const WillyLinReviewZhTw = () => {
             </div>
           </div>
 
+          {/* 步驟 4 */}
           <div className="bg-card rounded-xl p-6 mb-4 border border-border">
             <div className="flex items-center gap-3 mb-4">
               <div className="w-8 h-8 rounded-full bg-gold/20 flex items-center justify-center text-gold font-bold">4</div>
@@ -476,6 +726,7 @@ const WillyLinReviewZhTw = () => {
             </div>
           </div>
 
+          {/* 步驟 5 */}
           <div className="bg-card rounded-xl p-6 mb-4 border border-border">
             <div className="flex items-center gap-3 mb-4">
               <div className="w-8 h-8 rounded-full bg-gold/20 flex items-center justify-center text-gold font-bold">5</div>
@@ -499,6 +750,32 @@ const WillyLinReviewZhTw = () => {
                   <li><strong>任務：</strong>改善生產虛擬助理平台的對話品質</li>
                   <li><strong>行動：</strong>使用 Qwen-14B 獎勵模型和三個針對幻覺、一致性、角色的自訂評分標準實施 GRPO</li>
                   <li><strong>結果：</strong>人類評估分數達成 23% 改善，幻覺率減少 18%，實現生產部署</li>
+                </ul>
+              </div>
+            </div>
+          </div>
+
+          {/* 提醒 */}
+          <div className="bg-card rounded-xl p-6 border border-border">
+            <h3 className="font-heading text-xl text-foreground mb-4">提醒</h3>
+            <div className="grid md:grid-cols-2 gap-6">
+              <div>
+                <p className="text-sm font-semibold text-green-600 mb-2 flex items-center gap-2"><CheckCircle className="w-4 h-4" /> 要做的</p>
+                <ul className="text-sm text-foreground space-y-1">
+                  <li>為每個申請客製化，更改 2-3 個要點以符合 JD</li>
+                  <li>申請後追蹤，5-7 天後發郵件給招募人員</li>
+                  <li>準備好解釋每個指標，面試官會問</li>
+                  <li>保持範例保密，不要提及內部專案名稱</li>
+                  <li>展現真誠熱情，引用特定公司舉措</li>
+                </ul>
+              </div>
+              <div>
+                <p className="text-sm font-semibold text-destructive mb-2 flex items-center gap-2"><XCircle className="w-4 h-4" /> 不要做的</p>
+                <ul className="text-sm text-foreground space-y-1">
+                  <li>不要沒有客製化就申請，質量 {'>'} 數量</li>
+                  <li>不要誇大指標，準備好用資料支持</li>
+                  <li>不要說前雇主壞話，保持專業</li>
+                  <li>不要忽視文化適配，研究公司價值觀</li>
                 </ul>
               </div>
             </div>
@@ -527,27 +804,40 @@ const WillyLinReviewZhTw = () => {
             </div>
             <h2 className="font-heading text-3xl text-foreground">您的回饋很重要</h2>
           </div>
+
+          <p className="text-muted-foreground mb-6">希望這份審閱對強化您的申請有所幫助。</p>
+
           <div className="grid md:grid-cols-2 gap-6">
-            <a href="https://tally.so/r/81L09x" target="_blank" rel="noopener noreferrer" className="block p-6 rounded-xl border-2 border-gold bg-gradient-to-br from-background to-card hover:shadow-lg transition-shadow">
+            <a 
+              href="https://tally.so/r/81L09x" 
+              target="_blank" 
+              rel="noopener noreferrer"
+              className="block bg-card rounded-xl p-6 border-2 border-gold/30 hover:border-gold transition-colors"
+            >
               <div className="flex items-center gap-3 mb-3">
                 <MessageSquare className="w-6 h-6 text-gold" />
-                <h3 className="font-semibold text-foreground">分享您的回饋</h3>
+                <h3 className="font-heading text-xl text-foreground">分享您的回饋</h3>
               </div>
-              <p className="text-sm text-muted-foreground">您誠實的回饋幫助我改進服務。我會閱讀每一則回覆並持續優化我的方法。</p>
+              <p className="text-sm text-muted-foreground">您誠實的回饋幫助我改進服務。推薦語幫助其他求職者發現這項服務。我會閱讀每一則回覆並持續優化我的方法。</p>
             </a>
-            <a href="https://www.trustpilot.com/review/jamesbugden.com" target="_blank" rel="noopener noreferrer" className="block p-6 rounded-xl border-2 border-gold bg-gradient-to-br from-background to-card hover:shadow-lg transition-shadow">
+
+            <a 
+              href="https://www.trustpilot.com/review/jamesbugden.com" 
+              target="_blank" 
+              rel="noopener noreferrer"
+              className="block bg-card rounded-xl p-6 border-2 border-gold/30 hover:border-gold transition-colors"
+            >
               <div className="flex items-center gap-3 mb-3">
-                <Star className="w-6 h-6 text-gold" />
-                <h3 className="font-semibold text-foreground">在 Trustpilot 留下評論</h3>
+                <Star className="w-6 h-6 text-gold fill-gold" />
+                <h3 className="font-heading text-xl text-foreground">Trustpilot</h3>
               </div>
-              <p className="text-sm text-muted-foreground">公開評論有助於建立可信度，幫助其他專業人士做出明智的決定。</p>
+              <p className="text-sm text-muted-foreground">公開評論有助於建立可信度。您的評論幫助其他專業人士做出明智的決定。</p>
             </a>
           </div>
 
-          <div className="mt-6 p-4 bg-muted/30 rounded-xl">
-            <p className="text-sm text-muted-foreground">
-              <strong>為什麼 Trustpilot 分數是 3.8？</strong>我剛開始新事業，Trustpilot 對新企業會套用初始權重，這可能暫時降低早期分數。隨著更多真實客戶評論的加入，分數會調整以反映實際服務品質。
-            </p>
+          <div className="bg-muted/30 rounded-xl p-6 mt-6 border border-border">
+            <h4 className="font-semibold text-foreground mb-2">為什麼 Trustpilot 分數是 3.8？</h4>
+            <p className="text-sm text-muted-foreground">我剛開始新事業，Trustpilot 對新企業會套用初始權重，這可能暫時降低早期分數。隨著更多真實客戶評論的加入，分數會調整以反映實際服務品質。</p>
           </div>
         </section>
       </main>
