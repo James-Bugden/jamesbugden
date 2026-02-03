@@ -744,6 +744,78 @@ const YoutingChenReviewZhTw = () => {
           </div>
         </section>
 
+        {/* TRANSFORMATION SUMMARY */}
+        <section className="mb-16">
+          <div className="flex items-center gap-3 mb-6">
+            <div className="w-10 h-10 rounded-full bg-gold/10 flex items-center justify-center">
+              <TrendingUp className="w-5 h-5 text-gold" />
+            </div>
+            <h2 className="font-heading text-3xl text-foreground">轉型影響總結</h2>
+          </div>
+
+          <div className="grid md:grid-cols-2 gap-6">
+            <div className="bg-card rounded-xl p-6 border border-border">
+              <h4 className="font-semibold text-destructive mb-4">優化前</h4>
+              <ul className="space-y-3 text-sm text-foreground">
+                <li className="flex items-start gap-2">
+                  <XCircle className="w-4 h-4 text-destructive mt-0.5 flex-shrink-0" />
+                  <span>沒有執行摘要 → 招募人員必須從密集的要點中拼湊價值</span>
+                </li>
+                <li className="flex items-start gap-2">
+                  <XCircle className="w-4 h-4 text-destructive mt-0.5 flex-shrink-0" />
+                  <span>籠統技能區塊 → 看起來與非加密產品經理一樣</span>
+                </li>
+                <li className="flex items-start gap-2">
+                  <XCircle className="w-4 h-4 text-destructive mt-0.5 flex-shrink-0" />
+                  <span>Bybit 8 個要點含填充內容 → 稀釋最強成就的影響力</span>
+                </li>
+                <li className="flex items-start gap-2">
+                  <XCircle className="w-4 h-4 text-destructive mt-0.5 flex-shrink-0" />
+                  <span>缺少 OKX 關鍵字 → ATS 評分 40%，可能在人工審閱前就被過濾</span>
+                </li>
+                <li className="flex items-start gap-2">
+                  <XCircle className="w-4 h-4 text-destructive mt-0.5 flex-shrink-0" />
+                  <span>未說明的 QR 碼 → 造成困惑和安全顧慮</span>
+                </li>
+                <li className="flex items-start gap-2">
+                  <XCircle className="w-4 h-4 text-destructive mt-0.5 flex-shrink-0" />
+                  <span>顯示畢業日期 → 潛在年齡偏見觸發</span>
+                </li>
+              </ul>
+            </div>
+
+            <div className="bg-card rounded-xl p-6 border border-border">
+              <h4 className="font-semibold text-gold mb-4">優化後</h4>
+              <ul className="space-y-3 text-sm text-foreground">
+                <li className="flex items-start gap-2">
+                  <CheckCircle className="w-4 h-4 text-gold mt-0.5 flex-shrink-0" />
+                  <span>強大的 4 句摘要 → 立即定位為具有 $15 億以上影響力的加密產品領導者</span>
+                </li>
+                <li className="flex items-start gap-2">
+                  <CheckCircle className="w-4 h-4 text-gold mt-0.5 flex-shrink-0" />
+                  <span>加密特定技能 → 展現代幣上架、DeFi、做市的深度技術專業知識</span>
+                </li>
+                <li className="flex items-start gap-2">
+                  <CheckCircle className="w-4 h-4 text-gold mt-0.5 flex-shrink-0" />
+                  <span>聚焦的 5 點 Bybit 區塊 → 只突出頂級成就，移除填充內容</span>
+                </li>
+                <li className="flex items-start gap-2">
+                  <CheckCircle className="w-4 h-4 text-gold mt-0.5 flex-shrink-0" />
+                  <span>策略性 OKX 關鍵字整合 → ATS 評分 95%，通過自動篩選</span>
+                </li>
+                <li className="flex items-start gap-2">
+                  <CheckCircle className="w-4 h-4 text-gold mt-0.5 flex-shrink-0" />
+                  <span>清楚的 QR 碼標籤 → 專業打磨，引導流量至作品集/LinkedIn</span>
+                </li>
+                <li className="flex items-start gap-2">
+                  <CheckCircle className="w-4 h-4 text-gold mt-0.5 flex-shrink-0" />
+                  <span>移除畢業日期 → 消除年齡偏見，聚焦目前能力</span>
+                </li>
+              </ul>
+            </div>
+          </div>
+        </section>
+
         {/* NEXT STEPS */}
         <section className="mb-16">
           <div className="flex items-center gap-3 mb-6">
@@ -822,6 +894,60 @@ const YoutingChenReviewZhTw = () => {
             <div className="bg-card rounded-xl p-6 border border-border">
               <div className="flex items-center gap-3 mb-4">
                 <div className="w-8 h-8 rounded-full bg-gold/20 flex items-center justify-center text-gold font-bold text-sm">5</div>
+                <h3 className="font-heading text-xl text-foreground">修正 QR 碼和超連結格式</h3>
+              </div>
+              <ul className="space-y-2 text-sm text-foreground ml-11">
+                <li className="flex items-start gap-2">
+                  <CheckCircle className="w-4 h-4 text-gold mt-0.5 flex-shrink-0" />
+                  <span><strong>新增 QR 碼標籤（2 分鐘）</strong>：如果 QR 連結到 LinkedIn：在 QR 碼下方加上「LinkedIn 個人檔案」文字。如果 QR 連結到作品集：在 QR 碼下方加上「掃描查看作品集」文字。如果 QR 不是必要的：完全移除並使用標準 LinkedIn 網址。</span>
+                </li>
+                <li className="flex items-start gap-2">
+                  <CheckCircle className="w-4 h-4 text-gold mt-0.5 flex-shrink-0" />
+                  <span><strong>格式化公司超連結</strong></span>
+                </li>
+              </ul>
+            </div>
+
+            {/* Step 6 */}
+            <div className="bg-card rounded-xl p-6 border border-border">
+              <div className="flex items-center gap-3 mb-4">
+                <div className="w-8 h-8 rounded-full bg-gold/20 flex items-center justify-center text-gold font-bold text-sm">6</div>
+                <h3 className="font-heading text-xl text-foreground">考慮移除畢業日期</h3>
+              </div>
+              <ul className="space-y-2 text-sm text-foreground ml-11">
+                <li className="flex items-start gap-2">
+                  <CheckCircle className="w-4 h-4 text-gold mt-0.5 flex-shrink-0" />
+                  <span><strong>評估年齡偏見顧慮</strong>：如果您對潛在年齡計算感到自在：保留日期。如果您想避免無意識偏見：移除所有日期（Sep. 2015 - Aug. 2017 等）。無論決定如何都保留大學名稱和學位。</span>
+                </li>
+                <li className="flex items-start gap-2">
+                  <CheckCircle className="w-4 h-4 text-gold mt-0.5 flex-shrink-0" />
+                  <span><strong>評估交換生計畫相關性</strong></span>
+                </li>
+              </ul>
+            </div>
+
+            {/* Step 7 */}
+            <div className="bg-card rounded-xl p-6 border border-border">
+              <div className="flex items-center gap-3 mb-4">
+                <div className="w-8 h-8 rounded-full bg-gold/20 flex items-center justify-center text-gold font-bold text-sm">7</div>
+                <h3 className="font-heading text-xl text-foreground">申請 5-10 個目標職位</h3>
+              </div>
+              <ul className="space-y-2 text-sm text-foreground ml-11">
+                <li className="flex items-start gap-2">
+                  <CheckCircle className="w-4 h-4 text-gold mt-0.5 flex-shrink-0" />
+                  <span><strong>為每次申請客製化（每個職位 30 分鐘）</strong>：仔細閱讀職位描述並記錄特定關鍵字要求。調整 2-3 個要點以匹配特定 JD 術語。如果 JD 強調不同技術領域則更新技能區塊。如有需要撰寫自訂求職信（大多數加密交易所不需要）。</span>
+                </li>
+                <li className="flex items-start gap-2">
+                  <CheckCircle className="w-4 h-4 text-gold mt-0.5 flex-shrink-0" />
+                  <span><strong>追蹤申請（持續進行）</strong></span>
+                </li>
+              </ul>
+            </div>
+
+            {/* Step 8 */}
+            <div className="bg-card rounded-xl p-6 border border-border">
+              <div className="flex items-center gap-3 mb-4">
+                <div className="w-8 h-8 rounded-full bg-gold/20 flex items-center justify-center text-gold font-bold text-sm">8</div>
                 <h3 className="font-heading text-xl text-foreground">使用 STAR 方法準備面試故事</h3>
               </div>
               <ul className="space-y-2 text-sm text-foreground ml-11">
@@ -846,6 +972,24 @@ const YoutingChenReviewZhTw = () => {
                   <li>• Orderly 30 多家做市商關係（如何建立、如何管理、業務成果）</li>
                 </ul>
               </div>
+            </div>
+
+            {/* Step 9 */}
+            <div className="bg-card rounded-xl p-6 border border-border">
+              <div className="flex items-center gap-3 mb-4">
+                <div className="w-8 h-8 rounded-full bg-gold/20 flex items-center justify-center text-gold font-bold text-sm">9</div>
+                <h3 className="font-heading text-xl text-foreground">LinkedIn 和線上形象</h3>
+              </div>
+              <ul className="space-y-2 text-sm text-foreground ml-11">
+                <li className="flex items-start gap-2">
+                  <CheckCircle className="w-4 h-4 text-gold mt-0.5 flex-shrink-0" />
+                  <span><strong>更新 LinkedIn 個人檔案</strong>：將履歷變更同步到 LinkedIn。使用相同的摘要（可以稍微擴展）。確保經驗部分一致。新增技能並請求認可。</span>
+                </li>
+                <li className="flex items-start gap-2">
+                  <CheckCircle className="w-4 h-4 text-gold mt-0.5 flex-shrink-0" />
+                  <span><strong>參與加密/產品社群</strong>：追蹤 OKX 領導者和競爭對手。對相關產業貼文發表評論。分享您對加密產品趨勢的見解。</span>
+                </li>
+              </ul>
             </div>
           </div>
 
