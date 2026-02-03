@@ -274,6 +274,17 @@ const HopeChenReviewZhTw = () => {
               <h3 className="font-heading text-xl text-[#1B3A2F] mb-2">版本 1：產品行銷經理（UNIQLO）</h3>
               <p className="text-[#1B3A2F]/60 text-sm mb-4">目標：UNIQLO 產品行銷副理/經理</p>
               
+              <div className="mb-4">
+                <h4 className="font-semibold text-[#1B3A2F] mb-2">職缺描述關鍵要求：</h4>
+                <ul className="text-sm text-[#1B3A2F]/70 space-y-1">
+                  <li>• 8 年以上零售、服飾、化妝品或快消品行銷經驗</li>
+                  <li>• 付費和自有媒體活動管理</li>
+                  <li>• 本地專案：活動、數位競賽、與 KOL 內容創作</li>
+                  <li>• 雙語製作和校對</li>
+                  <li>• A&P 預算管理</li>
+                </ul>
+              </div>
+              
               <div className="flex items-center gap-2 mb-4">
                 <span className="text-[#1B3A2F] font-medium">您的適配度：</span>
                 <span className="bg-[#C9A961] text-white px-3 py-1 rounded-full text-sm">85% 匹配</span>
@@ -286,6 +297,7 @@ const HopeChenReviewZhTw = () => {
                   <li>• 摘要：強調「零售經驗」和「產品上市規劃」（LTO/NPD）</li>
                   <li>• 亮點：以 LTO 上市規劃要點為首（產品上市是這個職位的關鍵）</li>
                   <li>• 核心能力：新增「產品生命週期管理」、「零售行銷」、「全通路策略」</li>
+                  <li>• 經驗：強調跨觸及優化（零售需要廣泛客戶觸及）和季節規劃</li>
                 </ul>
               </div>
             </div>
@@ -294,6 +306,17 @@ const HopeChenReviewZhTw = () => {
             <div className="bg-[#FBF7F0] rounded-xl p-6">
               <h3 className="font-heading text-xl text-[#1B3A2F] mb-2">版本 2：品牌行銷營運經理（全億寢飾）</h3>
               <p className="text-[#1B3A2F]/60 text-sm mb-4">目標：全億寢飾品牌行銷營運經理</p>
+              
+              <div className="mb-4">
+                <h4 className="font-semibold text-[#1B3A2F] mb-2">職缺描述關鍵要求：</h4>
+                <ul className="text-sm text-[#1B3A2F]/70 space-y-1">
+                  <li>• 品牌行銷策略和執行</li>
+                  <li>• 行銷營運和預算管理</li>
+                  <li>• 代理商和供應商管理</li>
+                  <li>• 流程優化</li>
+                  <li>• 內容行銷和品牌敘事</li>
+                </ul>
+              </div>
               
               <div className="flex items-center gap-2 mb-4">
                 <span className="text-[#1B3A2F] font-medium">您的適配度：</span>
@@ -307,6 +330,7 @@ const HopeChenReviewZhTw = () => {
                   <li>• 摘要：強調「A&P 預算管理」（1800 萬台幣）和「跨部門領導」</li>
                   <li>• 亮點：以展示營運效率的 A&P 優化要點為首（10%+ 觸及提升、40% CPR 降低）</li>
                   <li>• 核心能力：新增「行銷營運」、「預算管理」、「流程優化」、「供應商/代理商管理」</li>
+                  <li>• 經驗：強調所有職位的營運效率改善和代理商合作</li>
                 </ul>
               </div>
             </div>
@@ -343,6 +367,108 @@ const HopeChenReviewZhTw = () => {
               <p className="text-sm text-green-700 font-medium mt-4">關鍵字匹配分數：90%</p>
             </div>
           </div>
+        </section>
+
+        {/* 履歷關鍵字參考清單 */}
+        <section className="bg-white rounded-2xl shadow-sm p-8 mb-8">
+          <h2 className="font-heading text-2xl text-[#1B3A2F] mb-6">履歷關鍵字參考清單</h2>
+          
+          <div className="grid md:grid-cols-2 gap-8">
+            <div>
+              <h3 className="font-heading text-lg text-[#1B3A2F] mb-4">UNIQLO 產品行銷職位適用</h3>
+              
+              <div className="space-y-4">
+                <div>
+                  <h4 className="font-semibold text-[#C9A961] mb-2">產品行銷與零售</h4>
+                  <ul className="text-sm text-[#1B3A2F]/70 space-y-1">
+                    <li>• 產品生命週期管理</li>
+                    <li>• 零售行銷</li>
+                    <li>• 產品上市規劃</li>
+                    <li>• LTO/NPD 執行</li>
+                    <li>• 全通路策略</li>
+                    <li>• 店內行銷</li>
+                    <li>• 新店開幕支援</li>
+                  </ul>
+                </div>
+                
+                <div>
+                  <h4 className="font-semibold text-[#C9A961] mb-2">活動與內容</h4>
+                  <ul className="text-sm text-[#1B3A2F]/70 space-y-1">
+                    <li>• KOL 合作</li>
+                    <li>• 網紅行銷</li>
+                    <li>• 內容創作</li>
+                    <li>• 雙語活動執行</li>
+                    <li>• 社群媒體行銷</li>
+                    <li>• 數位競賽</li>
+                    <li>• 活動管理</li>
+                  </ul>
+                </div>
+                
+                <div>
+                  <h4 className="font-semibold text-[#C9A961] mb-2">營運與預算</h4>
+                  <ul className="text-sm text-[#1B3A2F]/70 space-y-1">
+                    <li>• A&P 預算管理</li>
+                    <li>• 付費與自有媒體</li>
+                    <li>• 全球活動協調</li>
+                    <li>• 跨部門合作</li>
+                    <li>• 行銷營運</li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+            
+            <div>
+              <h3 className="font-heading text-lg text-[#1B3A2F] mb-4">全億寢飾品牌行銷營運職位適用</h3>
+              
+              <div className="space-y-4">
+                <div>
+                  <h4 className="font-semibold text-[#C9A961] mb-2">行銷營運</h4>
+                  <ul className="text-sm text-[#1B3A2F]/70 space-y-1">
+                    <li>• 行銷營運管理</li>
+                    <li>• 流程優化</li>
+                    <li>• 預算管理與預測</li>
+                    <li>• 行銷效率</li>
+                    <li>• 活動營運</li>
+                  </ul>
+                </div>
+                
+                <div>
+                  <h4 className="font-semibold text-[#C9A961] mb-2">代理商與供應商管理</h4>
+                  <ul className="text-sm text-[#1B3A2F]/70 space-y-1">
+                    <li>• 代理商關係管理</li>
+                    <li>• 供應商管理</li>
+                    <li>• 外部夥伴協調</li>
+                    <li>• 製作管理</li>
+                    <li>• 創意代理商合作</li>
+                  </ul>
+                </div>
+                
+                <div>
+                  <h4 className="font-semibold text-[#C9A961] mb-2">品牌與內容</h4>
+                  <ul className="text-sm text-[#1B3A2F]/70 space-y-1">
+                    <li>• 品牌行銷策略</li>
+                    <li>• 品牌敘事</li>
+                    <li>• 內容行銷</li>
+                    <li>• 品牌定位</li>
+                    <li>• 整合行銷傳播</li>
+                  </ul>
+                </div>
+                
+                <div>
+                  <h4 className="font-semibold text-[#C9A961] mb-2">分析與優化</h4>
+                  <ul className="text-sm text-[#1B3A2F]/70 space-y-1">
+                    <li>• 行銷分析</li>
+                    <li>• 活動績效分析</li>
+                    <li>• 資料驅動優化</li>
+                    <li>• 行銷效益</li>
+                    <li>• ROI 衡量</li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+          </div>
+          
+          <p className="text-sm text-[#1B3A2F]/60 mt-6 italic">提示：只包含真正反映您經驗的關鍵字，因為面試官會要求您詳細說明列出的任何內容。</p>
         </section>
 
         {/* 履歷效能改善 */}
