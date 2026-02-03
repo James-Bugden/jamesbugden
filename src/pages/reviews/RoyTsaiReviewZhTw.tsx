@@ -30,7 +30,7 @@ const RoyTsaiReviewZhTw = () => {
             <FileText className="w-5 h-5" />
             <span className="text-sm font-semibold tracking-wide uppercase">履歷審閱報告</span>
           </div>
-          <h1 className="font-heading text-4xl sm:text-5xl text-cream mb-3">蔡宜庭 (Roy)</h1>
+          <h1 className="font-heading text-4xl sm:text-5xl text-cream mb-3">Roy Tsai</h1>
           <p className="text-cream/80 text-lg">品牌激活經理 | Revolut / 產品行銷經理 | Snap</p>
         </div>
       </section>

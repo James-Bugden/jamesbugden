@@ -28,7 +28,7 @@ const JanelleChengReviewZhTw = () => {
             <FileText className="w-5 h-5" />
             <span className="text-sm font-semibold tracking-wide uppercase">履歷審閱報告</span>
           </div>
-          <h1 className="font-heading text-4xl sm:text-5xl text-cream mb-3">鄭季 (Janelle)</h1>
+          <h1 className="font-heading text-4xl sm:text-5xl text-cream mb-3">Janelle Cheng</h1>
           <p className="text-cream/80 text-lg">資深分析工程師 | Maniko Nails & Riot</p>
         </div>
       </section>
