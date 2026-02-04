@@ -485,27 +485,182 @@ const PivotMethodGuideZhTw = () => {
           <div className="space-y-4">
             <div className="bg-background border border-border rounded-lg p-5">
               <p className="text-foreground font-semibold mb-2">陷阱 #1：分析癱瘓</p>
-              <p className="text-muted-foreground">無休止的研究而從不採取行動。解決方案：為研究階段設定時間限制，關注行動而不是研究。</p>
+              <p className="text-muted-foreground">無休止的研究而從不採取行動。解決方案：為研究階段設定時間限制，關注行動而不是研究。「你永遠不會在開始時看到整個轉換路徑，你也不會想要。」</p>
             </div>
             <div className="bg-background border border-border rounded-lg p-5">
               <p className="text-foreground font-semibold mb-2">陷阱 #2：從零開始</p>
-              <p className="text-muted-foreground">忽略所有現有技能並嘗試在全新領域重新開始。解決方案：尋找相鄰的舉動，從你現在的位置開始一步。</p>
+              <p className="text-muted-foreground">忽略所有現有技能並嘗試在全新領域重新開始。解決方案：尋找相鄰的舉動，從你現在的位置開始一步。轉換是從已經有效的部分加倍投入。</p>
             </div>
             <div className="bg-background border border-border rounded-lg p-5">
               <p className="text-foreground font-semibold mb-2">陷阱 #3：跳過試點</p>
-              <p className="text-muted-foreground">沒有測試就辭掉工作轉換到新職業。解決方案：總是在承諾之前運行試點。</p>
+              <p className="text-muted-foreground">沒有測試就辭掉工作轉換到新職業。解決方案：總是在承諾之前運行試點。如果你討厭試點，你就會討厭轉換。</p>
             </div>
             <div className="bg-background border border-border rounded-lg p-5">
               <p className="text-foreground font-semibold mb-2">陷阱 #4：等待完美條件</p>
-              <p className="text-muted-foreground">完美的條件永遠不會到來。解決方案：定義你的啟動標準，當標準滿足時啟動。</p>
+              <p className="text-muted-foreground">完美的條件永遠不會到來。解決方案：定義你的啟動標準，當標準滿足時啟動。區分「還不是時候」和「我害怕」。</p>
             </div>
             <div className="bg-background border border-border rounded-lg p-5">
               <p className="text-foreground font-semibold mb-2">陷阱 #5：沒有財務跑道就啟動</p>
-              <p className="text-muted-foreground">絕望會產生糟糕的決定。解決方案：在啟動前建立 3-6 個月的費用。</p>
+              <p className="text-muted-foreground">絕望會產生糟糕的決定。解決方案：在啟動前建立 3-6 個月的費用。絕望的候選人接受糟糕的 offer，協商不力。</p>
             </div>
             <div className="bg-background border border-border rounded-lg p-5">
               <p className="text-foreground font-semibold mb-2">陷阱 #6：忽略人脈網絡</p>
-              <p className="text-muted-foreground">依靠線上申請。解決方案：70-80% 的工作通過人脈網填補，在需要之前開始建立人脈網。</p>
+              <p className="text-muted-foreground">依靠線上申請。解決方案：70-80% 的工作通過人脈網填補，在需要之前開始建立人脈網。通過內部推薦來到招募人員桌上的候選人比冷申請者領先 10 倍。</p>
+            </div>
+            <div className="bg-background border border-border rounded-lg p-5">
+              <p className="text-foreground font-semibold mb-2">陷阱 #7：太快放棄</p>
+              <p className="text-muted-foreground">在它有時間奏效之前放棄轉換。解決方案：為試點階段設定現實的時間框架（3-6 個月，不是 2 週），將早期失敗視為學習，而不是最終答案。</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Special Situations */}
+      <section className="py-12 md:py-16 px-5 md:px-6 bg-background">
+        <div className="container mx-auto max-w-3xl">
+          <h2 className="font-heading text-2xl md:text-3xl text-foreground mb-8 text-center">
+            特殊情況的轉換
+          </h2>
+
+          <div className="space-y-8">
+            {/* After Layoff */}
+            <div className="bg-card border border-border rounded-lg p-6">
+              <h3 className="font-heading text-xl text-foreground mb-4">裁員後的轉換</h3>
+              <p className="text-foreground mb-4">被裁員實際上可能是轉換的好時機 — 如果你策略性地處理它。</p>
+              
+              <div className="grid md:grid-cols-2 gap-4 mb-4">
+                <div className="bg-executive-green/10 border border-executive-green/30 rounded-lg p-4">
+                  <p className="text-gold mb-2">為什麼裁員可以幫助：</p>
+                  <ul className="space-y-1 text-foreground text-sm">
+                    <li>• 遣散費給你跑道</li>
+                    <li>• 你有時間進行深度掃描和試點</li>
+                    <li>• 心理上更容易證明改變的合理性</li>
+                    <li>• 你已經「在市場上」</li>
+                  </ul>
+                </div>
+                <div className="bg-card border border-border rounded-lg p-4">
+                  <p className="text-muted-foreground mb-2">要避免的陷阱：</p>
+                  <ul className="space-y-1 text-muted-foreground text-sm">
+                    <li>• 恐慌並接受第一個 offer</li>
+                    <li>• 跳過試點階段因為你「需要」工作</li>
+                    <li>• 在沒有策略的情況下做出反應性的轉換</li>
+                  </ul>
+                </div>
+              </div>
+
+              <p className="text-muted-foreground italic text-sm">從招募人員的角度：被裁員的候選人如果他們能展示他們在過渡期間做了什麼（課程、試點、自由職業、技能建設），實際上可以更具吸引力。它顯示主動性。</p>
+            </div>
+
+            {/* Mid-Career */}
+            <div className="bg-card border border-border rounded-lg p-6">
+              <h3 className="font-heading text-xl text-foreground mb-4">中年職業轉換</h3>
+              <p className="text-foreground mb-4">在你的 40 多歲或 50 多歲轉換有獨特的挑戰和優勢。</p>
+              
+              <div className="grid md:grid-cols-2 gap-4">
+                <div>
+                  <p className="text-foreground font-semibold mb-2">挑戰：</p>
+                  <ul className="space-y-1 text-muted-foreground text-sm">
+                    <li>• 年齡歧視（真實的，即使是非法的）</li>
+                    <li>• 更多的財務責任</li>
+                    <li>• 可能需要降低薪水</li>
+                    <li>• 感覺「太晚了」的心理障礙</li>
+                  </ul>
+                </div>
+                <div>
+                  <p className="text-foreground font-semibold mb-2">優勢：</p>
+                  <ul className="space-y-1 text-foreground text-sm">
+                    <li>• 幾十年的可轉移技能</li>
+                    <li>• 已建立的人脈網絡</li>
+                    <li>• 財務穩定（如果你一直在儲蓄）</li>
+                    <li>• 知道你的價值觀和你想要什麼的清晰度</li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+
+            {/* During Parenthood */}
+            <div className="bg-card border border-border rounded-lg p-6">
+              <h3 className="font-heading text-xl text-foreground mb-4">父母身份期間的轉換</h3>
+              <p className="text-foreground mb-4">有年幼孩子的父母面臨額外的限制，但轉換仍然可能。</p>
+              
+              <ul className="space-y-2 text-foreground mb-4">
+                <li>• 延長時間線（12-18 個月的試點而不是 6 個月）</li>
+                <li>• 運行非常小的、低承諾的試點</li>
+                <li>• 與伴侶協調以創造試點時間</li>
+                <li>• 考慮兼職或諮詢角色作為過渡</li>
+              </ul>
+
+              <p className="text-muted-foreground italic text-sm">許多成功的轉換發生在育兒假期間或當一個伴侶承擔更多家務時。創造力和靈活性是關鍵。</p>
+            </div>
+
+            {/* International */}
+            <div className="bg-card border border-border rounded-lg p-6">
+              <h3 className="font-heading text-xl text-foreground mb-4">國際轉換</h3>
+              <p className="text-foreground mb-4">移動到新國家為職業轉換增加了複雜性。</p>
+              
+              <div className="grid md:grid-cols-2 gap-4">
+                <div>
+                  <p className="text-foreground font-semibold mb-2">額外因素：</p>
+                  <ul className="space-y-1 text-muted-foreground text-sm">
+                    <li>• 簽證和工作授權</li>
+                    <li>• 語言障礙</li>
+                    <li>• 憑證可能不轉移</li>
+                    <li>• 人脈網從零開始</li>
+                  </ul>
+                </div>
+                <div>
+                  <p className="text-foreground font-semibold mb-2">策略：</p>
+                  <ul className="space-y-1 text-foreground text-sm">
+                    <li>• 從內部轉移開始（如果你在跨國公司）</li>
+                    <li>• 針對有國際曝光的角色</li>
+                    <li>• 在移動前建立人脈網</li>
+                    <li>• 考慮語言作為技能差距來彌合</li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Career Conversations for Leaders */}
+      <section className="py-12 md:py-16 px-5 md:px-6 bg-card border-y border-border">
+        <div className="container mx-auto max-w-3xl">
+          <h2 className="font-heading text-2xl md:text-3xl text-foreground mb-8 text-center">
+            為領導者：促進職涯對話
+          </h2>
+
+          <p className="text-foreground mb-6">如果你是經理或領導者，幫助你的團隊成長，即使這意味著他們可能離開。</p>
+
+          <div className="bg-gold/10 border border-gold/30 rounded-lg p-5 mb-6">
+            <h3 className="font-heading text-lg text-gold mb-3">每季度職涯對話框架：</h3>
+            <ul className="space-y-2 text-foreground">
+              <li>• 你最享受什麼工作？</li>
+              <li>• 什麼讓你筋疲力盡？</li>
+              <li>• 你想發展什麼技能？</li>
+              <li>• 你在 1-2 年內看到自己在哪裡？</li>
+              <li>• 我如何支持你的成長？</li>
+            </ul>
+          </div>
+
+          <div className="grid md:grid-cols-2 gap-6">
+            <div className="bg-background border border-border rounded-lg p-5">
+              <h4 className="font-semibold text-foreground mb-3">為什麼這有效：</h4>
+              <ul className="space-y-1 text-muted-foreground text-sm">
+                <li>• 建立信任和忠誠</li>
+                <li>• 減少意外辭職</li>
+                <li>• 幫助識別延伸任務和內部轉換</li>
+                <li>• 創造一個人們想留下的環境</li>
+              </ul>
+            </div>
+            <div className="bg-background border border-border rounded-lg p-5">
+              <h4 className="font-semibold text-foreground mb-3">內部試點機會：</h4>
+              <ul className="space-y-1 text-muted-foreground text-sm">
+                <li>• 輪調計劃（3-6 個月）</li>
+                <li>• 跨職能專案團隊</li>
+                <li>• 延伸任務在舒適區之外</li>
+                <li>• 內部教學或培訓機會</li>
+              </ul>
             </div>
           </div>
         </div>
