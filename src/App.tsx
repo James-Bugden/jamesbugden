@@ -43,6 +43,7 @@ import WillyLinReview from "./pages/reviews/WillyLinReview";
 import WillyLinReviewZhTw from "./pages/reviews/WillyLinReviewZhTw";
 import HopeChenReview from "./pages/reviews/HopeChenReview";
 import HopeChenReviewZhTw from "./pages/reviews/HopeChenReviewZhTw";
+import LinkedInGuideZhTw from "./pages/LinkedInGuideZhTw";
 
 const queryClient = new QueryClient();
 
@@ -72,6 +73,7 @@ const App = () => (
           <Route path="/interview-preparation-guide" element={<InterviewPreparationGuide />} />
           <Route path="/interview-preparation-guide/print" element={<InterviewPreparationGuidePrint />} />
           <Route path="/zh-tw/interview-preparation-guide" element={<InterviewPreparationGuideZhTw />} />
+          <Route path="/zh-tw/linkedin-guide" element={<LinkedInGuideZhTw />} />
           {/* Client Review Pages */}
           <Route path="/reviews/charlene-lee" element={<CharleneLeeReview />} />
           <Route path="/zh-tw/reviews/charlene-lee" element={<CharleneLeeReviewZhTw />} />
