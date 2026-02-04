@@ -281,6 +281,73 @@ const LinkedInBrandingGuide = () => {
             </div>
           </div>
 
+          {/* Profile Photo & Banner */}
+          <div className="mb-10">
+            <h3 className="font-heading text-xl text-foreground mb-4 flex items-center gap-2">
+              <span className="text-gold">Profile Photo & Background Banner</span>
+            </h3>
+            <p className="text-foreground mb-4">Your profile photo is your "visual brand" — the first thing people notice.</p>
+            
+            <div className="grid md:grid-cols-2 gap-4 mb-6">
+              <div className="bg-executive-green/10 border border-executive-green/30 rounded-lg p-4">
+                <p className="text-gold mb-2">✅ What works:</p>
+                <ul className="space-y-1 text-foreground text-sm">
+                  <li>• Professional but approachable</li>
+                  <li>• High quality, not grainy</li>
+                  <li>• Recent (within last 2 years)</li>
+                  <li>• Good lighting, simple background</li>
+                  <li>• You're the only person in the photo</li>
+                  <li>• Smiling or warm expression</li>
+                </ul>
+              </div>
+              <div className="bg-card border border-border rounded-lg p-4">
+                <p className="text-muted-foreground mb-2">❌ What doesn't work:</p>
+                <ul className="space-y-1 text-muted-foreground text-sm">
+                  <li>• Casual vacation photos</li>
+                  <li>• Group photos</li>
+                  <li>• Sunglasses or hats obscuring face</li>
+                  <li>• Overly filtered or edited</li>
+                  <li>• 10+ years old</li>
+                </ul>
+              </div>
+            </div>
+
+            <div className="bg-gold/10 border border-gold/30 rounded-lg p-4 mb-4">
+              <p className="text-foreground">
+                <strong className="text-gold">Recruiter Reality:</strong> Profiles with professional photos get 14x more views and 36x more messages. If you don't have a photo, I assume you're not serious about LinkedIn.
+              </p>
+            </div>
+
+            <h4 className="font-semibold text-foreground mb-3">Background Banner (1584 x 396 pixels)</h4>
+            <p className="text-foreground mb-2">Most people ignore this. Don't. It's free billboard space.</p>
+            <ul className="space-y-1 text-muted-foreground text-sm">
+              <li>• Your company logo or brand</li>
+              <li>• A design with your tagline or value proposition</li>
+              <li>• An image representing your industry or expertise</li>
+              <li>• Text overlay with contact info or website</li>
+            </ul>
+          </div>
+
+          {/* Featured Section */}
+          <div className="mb-10">
+            <h3 className="font-heading text-xl text-foreground mb-4 flex items-center gap-2">
+              <span className="text-gold">Featured Section</span>
+            </h3>
+            <p className="text-foreground mb-4">This section lets you showcase your best work at the top of your profile. Most people ignore it — that's a mistake.</p>
+            
+            <h4 className="font-semibold text-foreground mb-3">What to Feature:</h4>
+            <ul className="space-y-1 text-foreground mb-4">
+              <li>• Your best articles or blog posts</li>
+              <li>• Media mentions or press coverage</li>
+              <li>• Case studies or portfolio work</li>
+              <li>• Speaking videos or presentations</li>
+              <li>• Testimonials or success stories</li>
+              <li>• Lead magnets (white papers, ebooks)</li>
+            </ul>
+
+            <p className="text-muted-foreground italic">From my perspective: When I'm hiring for senior roles, I always check the Featured section. It shows me what someone considers their best work. Empty Featured section = missed opportunity to impress.</p>
+          </div>
+
           {/* Experience Section */}
           <div className="mb-10">
             <h3 className="font-heading text-xl text-foreground mb-4 flex items-center gap-2">
@@ -295,9 +362,60 @@ const LinkedInBrandingGuide = () => {
               <li>• <strong>Results</strong> (numbers and outcomes): What impact did you have?</li>
             </ul>
 
-            <div className="bg-gold/10 border border-gold/30 rounded-lg p-5">
+            <div className="bg-gold/10 border border-gold/30 rounded-lg p-5 mb-6">
               <p className="text-foreground">
                 <strong className="text-gold">What I'm Looking For:</strong> Scope (how big was your responsibility?), Impact (what changed because of your work?), Skills (what capabilities did you demonstrate?), Growth (did you get promoted or expand responsibilities?)
+              </p>
+            </div>
+
+            <h4 className="font-semibold text-foreground mb-3">Pro Tips for Experience Descriptions:</h4>
+            <ul className="space-y-1 text-muted-foreground text-sm">
+              <li>• Lead with your biggest accomplishment</li>
+              <li>• Use specific numbers whenever possible</li>
+              <li>• Include context (team size, budget, timeline)</li>
+              <li>• Highlight transferable skills</li>
+              <li>• Show progression within the role</li>
+            </ul>
+          </div>
+
+          {/* Education Section */}
+          <div className="mb-10">
+            <h3 className="font-heading text-xl text-foreground mb-4 flex items-center gap-2">
+              <span className="text-gold">Education Section</span>
+            </h3>
+            <p className="text-foreground mb-4">Don't just list your degree. Use this space strategically.</p>
+            
+            <h4 className="font-semibold text-foreground mb-3">What to Include:</h4>
+            <ul className="space-y-1 text-foreground mb-4">
+              <li>• Degree and field of study</li>
+              <li>• Honors, awards, or notable achievements</li>
+              <li>• Relevant coursework (especially for recent grads)</li>
+              <li>• Extracurriculars that demonstrate leadership</li>
+              <li>• Thesis or major projects</li>
+            </ul>
+
+            <p className="text-muted-foreground italic">Recruiter's view: For entry-level candidates, education matters more. For experienced professionals, I spend 5 seconds here — unless you went to Stanford/MIT/etc.</p>
+          </div>
+
+          {/* Skills & Endorsements */}
+          <div className="mb-10">
+            <h3 className="font-heading text-xl text-foreground mb-4 flex items-center gap-2">
+              <span className="text-gold">Skills & Endorsements</span>
+            </h3>
+            <p className="text-foreground mb-4">This section is partially about SEO (helping you appear in searches) and partially about social proof.</p>
+            
+            <h4 className="font-semibold text-foreground mb-3">How to Optimize Skills:</h4>
+            <ul className="space-y-1 text-foreground mb-4">
+              <li>• List your top 50 skills (LinkedIn's maximum)</li>
+              <li>• Put your most important skills at the top (you can reorder)</li>
+              <li>• Include a mix of technical and soft skills</li>
+              <li>• Use industry-standard terms (what people search for)</li>
+              <li>• Ask colleagues to endorse specific skills</li>
+            </ul>
+
+            <div className="bg-gold/10 border border-gold/30 rounded-lg p-4">
+              <p className="text-foreground">
+                <strong className="text-gold">Recruiter Reality:</strong> I use skills as a quick screener. If I'm hiring for a Python role and you don't list Python in your top 10 skills, you're probably not a strong match.
               </p>
             </div>
           </div>
@@ -364,6 +482,72 @@ const LinkedInBrandingGuide = () => {
             <div className="bg-background border border-border rounded-lg p-4">
               <p className="text-foreground"><strong className="text-gold">Relationships</strong> — Comments and engagement build connections</p>
             </div>
+            <div className="bg-background border border-border rounded-lg p-4">
+              <p className="text-foreground"><strong className="text-gold">Top of Mind</strong> — You stay front and center with your network</p>
+            </div>
+            <div className="bg-background border border-border rounded-lg p-4">
+              <p className="text-foreground"><strong className="text-gold">Learning</strong> — Creating content forces you to clarify your thinking</p>
+            </div>
+          </div>
+
+          <h3 className="font-heading text-xl text-foreground mb-4">Content Types on LinkedIn</h3>
+          <div className="grid md:grid-cols-2 gap-3 mb-8">
+            <div className="bg-background border border-border rounded-lg p-3">
+              <p className="text-foreground font-semibold text-sm">1. Text Posts</p>
+              <p className="text-muted-foreground text-xs">1,300 chars max. Easiest to create, high engagement.</p>
+            </div>
+            <div className="bg-background border border-border rounded-lg p-3">
+              <p className="text-foreground font-semibold text-sm">2. Image Posts</p>
+              <p className="text-muted-foreground text-xs">Stand out in feed. Up to 20 images in a carousel.</p>
+            </div>
+            <div className="bg-background border border-border rounded-lg p-3">
+              <p className="text-foreground font-semibold text-sm">3. Video Posts</p>
+              <p className="text-muted-foreground text-xs">Highest engagement. Up to 10 minutes. Native performs better.</p>
+            </div>
+            <div className="bg-background border border-border rounded-lg p-3">
+              <p className="text-foreground font-semibold text-sm">4. Articles</p>
+              <p className="text-muted-foreground text-xs">Up to 125,000 chars. Indexed by Google (SEO benefit).</p>
+            </div>
+            <div className="bg-background border border-border rounded-lg p-3">
+              <p className="text-foreground font-semibold text-sm">5. Documents (PDF)</p>
+              <p className="text-muted-foreground text-xs">Great for carousels. Highly shareable.</p>
+            </div>
+            <div className="bg-background border border-border rounded-lg p-3">
+              <p className="text-foreground font-semibold text-sm">6. Polls</p>
+              <p className="text-muted-foreground text-xs">Easy engagement. Provides audience data.</p>
+            </div>
+          </div>
+
+          <h3 className="font-heading text-xl text-foreground mb-4">Finding Content Ideas</h3>
+          <div className="space-y-3 mb-8">
+            <div className="flex items-start gap-3">
+              <GoldCheckBadge />
+              <div>
+                <p className="text-foreground font-semibold">Your Expertise</p>
+                <p className="text-muted-foreground text-sm">Problems you've solved, lessons learned, frameworks you use</p>
+              </div>
+            </div>
+            <div className="flex items-start gap-3">
+              <GoldCheckBadge />
+              <div>
+                <p className="text-foreground font-semibold">Audience Questions</p>
+                <p className="text-muted-foreground text-sm">Common questions, challenges, misconceptions you see</p>
+              </div>
+            </div>
+            <div className="flex items-start gap-3">
+              <GoldCheckBadge />
+              <div>
+                <p className="text-foreground font-semibold">Current Events</p>
+                <p className="text-muted-foreground text-sm">Industry news, new research, conferences you attend</p>
+              </div>
+            </div>
+            <div className="flex items-start gap-3">
+              <GoldCheckBadge />
+              <div>
+                <p className="text-foreground font-semibold">Other's Content</p>
+                <p className="text-muted-foreground text-sm">Share with your commentary, respond to discussions, build on ideas</p>
+              </div>
+            </div>
           </div>
 
           <h3 className="font-heading text-xl text-foreground mb-4">The Anatomy of High-Performing Posts</h3>
@@ -372,7 +556,7 @@ const LinkedInBrandingGuide = () => {
               <p className="text-foreground"><strong>Hook (first 1-2 lines)</strong> — This is what people see before clicking "See more." Make it compelling.</p>
             </div>
             <div className="bg-background border border-border rounded-lg p-4">
-              <p className="text-foreground"><strong>Body</strong> — Tell a story, share a lesson, or provide value. Use short paragraphs.</p>
+              <p className="text-foreground"><strong>Body</strong> — Tell a story, share a lesson, or provide value. Use short paragraphs (1-3 sentences max).</p>
             </div>
             <div className="bg-background border border-border rounded-lg p-4">
               <p className="text-foreground"><strong>Call to Action</strong> — Ask a question to drive comments. Invite people to share their experiences.</p>
@@ -387,12 +571,35 @@ const LinkedInBrandingGuide = () => {
           </ul>
 
           <h3 className="font-heading text-xl text-foreground mb-4">Daily Engagement Routine (15-20 minutes):</h3>
-          <ul className="space-y-2 text-foreground">
+          <ul className="space-y-2 text-foreground mb-6">
             <li>• React to 10-15 posts from your network</li>
             <li>• Leave 5-7 thoughtful comments (not just "Great post!")</li>
             <li>• Respond to all comments on your recent posts</li>
             <li>• Share 1-2 posts with your own commentary</li>
           </ul>
+
+          <h3 className="font-heading text-xl text-foreground mb-4">Video Content on LinkedIn</h3>
+          <p className="text-foreground mb-4">Video is the highest-engagement content type, yet most people avoid it. Don't.</p>
+          <div className="grid md:grid-cols-2 gap-4">
+            <div className="bg-background border border-border rounded-lg p-4">
+              <h4 className="font-semibold text-foreground mb-2">Why Video Works:</h4>
+              <ul className="space-y-1 text-muted-foreground text-sm">
+                <li>• Builds personal connection faster</li>
+                <li>• Algorithm favors native video</li>
+                <li>• Less competition</li>
+                <li>• Showcases communication skills</li>
+              </ul>
+            </div>
+            <div className="bg-background border border-border rounded-lg p-4">
+              <h4 className="font-semibold text-foreground mb-2">Video Ideas:</h4>
+              <ul className="space-y-1 text-muted-foreground text-sm">
+                <li>• Quick tips (30-60 seconds)</li>
+                <li>• Q&A answering common questions</li>
+                <li>• Behind-the-scenes of your work</li>
+                <li>• Reactions to industry news</li>
+              </ul>
+            </div>
+          </div>
         </div>
       </section>
 
@@ -502,11 +709,12 @@ const LinkedInBrandingGuide = () => {
             <div className="bg-white/10 backdrop-blur-sm rounded-lg p-6">
               <h3 className="font-heading text-xl text-gold mb-4">Weeks 3-4: Content Launch</h3>
               <ul className="space-y-2 text-cream/90">
-                <li>☐ Brainstorm 20 content ideas</li>
+                <li>☐ Brainstorm 20 content ideas using the 5 sources framework</li>
                 <li>☐ Create content calendar (2-3 posts per week)</li>
                 <li>☐ Publish first content piece</li>
-                <li>☐ Engage with 10-15 posts daily</li>
+                <li>☐ Start daily engagement routine (15-20 min)</li>
                 <li>☐ Send 10 personalized connection requests</li>
+                <li>☐ Request 5 recommendations from key people</li>
               </ul>
             </div>
 
@@ -515,9 +723,10 @@ const LinkedInBrandingGuide = () => {
               <ul className="space-y-2 text-cream/90">
                 <li>☐ Post 2-3 times per week as planned</li>
                 <li>☐ Send 20 connection requests to strategic targets</li>
-                <li>☐ Join 3-5 relevant LinkedIn groups</li>
+                <li>☐ Join 5-10 relevant LinkedIn groups</li>
                 <li>☐ Create first video post</li>
                 <li>☐ Write first LinkedIn article</li>
+                <li>☐ Check SSI score at linkedin.com/sales/ssi</li>
               </ul>
             </div>
 
@@ -527,6 +736,7 @@ const LinkedInBrandingGuide = () => {
                 <li>☐ Engage with industry influencers</li>
                 <li>☐ Send personalized messages to engaged connections</li>
                 <li>☐ Schedule coffee chats or calls</li>
+                <li>☐ Analyze content performance, double down on what works</li>
                 <li>☐ Review 90-day progress and plan next 90 days</li>
               </ul>
             </div>

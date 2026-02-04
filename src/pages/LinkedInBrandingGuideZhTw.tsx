@@ -281,6 +281,73 @@ const LinkedInBrandingGuideZhTw = () => {
             </div>
           </div>
 
+          {/* Profile Photo & Banner */}
+          <div className="mb-10">
+            <h3 className="font-heading text-xl text-foreground mb-4 flex items-center gap-2">
+              <span className="text-gold">個人照片與背景橫幅</span>
+            </h3>
+            <p className="text-foreground mb-4">你的個人照片是你的「視覺品牌」— 人們注意到的第一件事。</p>
+            
+            <div className="grid md:grid-cols-2 gap-4 mb-6">
+              <div className="bg-executive-green/10 border border-executive-green/30 rounded-lg p-4">
+                <p className="text-gold mb-2">✅ 什麼有效：</p>
+                <ul className="space-y-1 text-foreground text-sm">
+                  <li>• 專業但平易近人</li>
+                  <li>• 高品質，不模糊</li>
+                  <li>• 最近的（2 年內）</li>
+                  <li>• 良好的照明，簡單的背景</li>
+                  <li>• 照片中只有你一個人</li>
+                  <li>• 微笑或溫暖的表情</li>
+                </ul>
+              </div>
+              <div className="bg-card border border-border rounded-lg p-4">
+                <p className="text-muted-foreground mb-2">❌ 什麼不行：</p>
+                <ul className="space-y-1 text-muted-foreground text-sm">
+                  <li>• 休閒度假照片</li>
+                  <li>• 團體照</li>
+                  <li>• 太陽眼鏡或帽子遮住臉</li>
+                  <li>• 過度濾鏡或編輯</li>
+                  <li>• 超過 10 年前的照片</li>
+                </ul>
+              </div>
+            </div>
+
+            <div className="bg-gold/10 border border-gold/30 rounded-lg p-4 mb-4">
+              <p className="text-foreground">
+                <strong className="text-gold">招募人員現實：</strong>有專業照片的個人檔案獲得 14 倍的瀏覽量和 36 倍的訊息。如果你沒有照片，我會認為你對 LinkedIn 不認真。
+              </p>
+            </div>
+
+            <h4 className="font-semibold text-foreground mb-3">背景橫幅（1584 x 396 像素）</h4>
+            <p className="text-foreground mb-2">大多數人忽略這個。不要。這是免費的廣告牌空間。</p>
+            <ul className="space-y-1 text-muted-foreground text-sm">
+              <li>• 你的公司標誌或品牌</li>
+              <li>• 包含你的標語或價值主張的設計</li>
+              <li>• 代表你的產業或專業知識的圖片</li>
+              <li>• 包含聯絡資訊或網站的文字覆蓋</li>
+            </ul>
+          </div>
+
+          {/* Featured Section */}
+          <div className="mb-10">
+            <h3 className="font-heading text-xl text-foreground mb-4 flex items-center gap-2">
+              <span className="text-gold">精選區塊</span>
+            </h3>
+            <p className="text-foreground mb-4">這個區塊讓你在個人檔案頂部展示你最好的作品。大多數人忽略它 — 這是個錯誤。</p>
+            
+            <h4 className="font-semibold text-foreground mb-3">要展示什麼：</h4>
+            <ul className="space-y-1 text-foreground mb-4">
+              <li>• 你最好的文章或部落格貼文</li>
+              <li>• 媒體報導或新聞報導</li>
+              <li>• 案例研究或作品集</li>
+              <li>• 演講影片或簡報</li>
+              <li>• 推薦信或成功故事</li>
+              <li>• 引流磁鐵（白皮書、電子書）</li>
+            </ul>
+
+            <p className="text-muted-foreground italic">從我的角度來看：當我招募高級職位時，我總是檢查精選區塊。它向我展示某人認為什麼是他們最好的作品。空的精選區塊 = 錯失留下深刻印象的機會。</p>
+          </div>
+
           {/* Experience Section */}
           <div className="mb-10">
             <h3 className="font-heading text-xl text-foreground mb-4 flex items-center gap-2">
@@ -295,9 +362,60 @@ const LinkedInBrandingGuideZhTw = () => {
               <li>• <strong>結果</strong>（數字和結果）：你產生了什麼影響？</li>
             </ul>
 
-            <div className="bg-gold/10 border border-gold/30 rounded-lg p-5">
+            <div className="bg-gold/10 border border-gold/30 rounded-lg p-5 mb-6">
               <p className="text-foreground">
                 <strong className="text-gold">我在尋找：</strong>範圍（你的責任有多大？）、影響（因為你的工作改變了什麼？）、技能（你展示了什麼能力？）、成長（你有晉升或擴大責任嗎？）
+              </p>
+            </div>
+
+            <h4 className="font-semibold text-foreground mb-3">經歷描述的專業技巧：</h4>
+            <ul className="space-y-1 text-muted-foreground text-sm">
+              <li>• 以你最大的成就開頭</li>
+              <li>• 盡可能使用具體數字</li>
+              <li>• 包含背景（團隊規模、預算、時間表）</li>
+              <li>• 突出可轉移的技能</li>
+              <li>• 展示角色內的進步</li>
+            </ul>
+          </div>
+
+          {/* Education Section */}
+          <div className="mb-10">
+            <h3 className="font-heading text-xl text-foreground mb-4 flex items-center gap-2">
+              <span className="text-gold">教育區塊</span>
+            </h3>
+            <p className="text-foreground mb-4">不要只是列出你的學位。策略性地使用這個空間。</p>
+            
+            <h4 className="font-semibold text-foreground mb-3">要包含什麼：</h4>
+            <ul className="space-y-1 text-foreground mb-4">
+              <li>• 學位和研究領域</li>
+              <li>• 榮譽、獎項或顯著成就</li>
+              <li>• 相關課程（特別是對應屆畢業生）</li>
+              <li>• 展示領導力的課外活動</li>
+              <li>• 論文或主要專案</li>
+            </ul>
+
+            <p className="text-muted-foreground italic">招募人員觀點：對於入門級候選人，教育更重要。對於有經驗的專業人士，我在這裡花 5 秒 — 除非你去了史丹佛/MIT 等。</p>
+          </div>
+
+          {/* Skills & Endorsements */}
+          <div className="mb-10">
+            <h3 className="font-heading text-xl text-foreground mb-4 flex items-center gap-2">
+              <span className="text-gold">技能與認可</span>
+            </h3>
+            <p className="text-foreground mb-4">這個區塊部分是關於 SEO（幫助你出現在搜尋中），部分是關於社會證明。</p>
+            
+            <h4 className="font-semibold text-foreground mb-3">如何優化技能：</h4>
+            <ul className="space-y-1 text-foreground mb-4">
+              <li>• 列出你的前 50 項技能（LinkedIn 的最大限制）</li>
+              <li>• 把你最重要的技能放在頂部（你可以重新排序）</li>
+              <li>• 包含技術和軟技能的組合</li>
+              <li>• 使用產業標準術語（人們搜尋的內容）</li>
+              <li>• 請同事認可特定技能</li>
+            </ul>
+
+            <div className="bg-gold/10 border border-gold/30 rounded-lg p-4">
+              <p className="text-foreground">
+                <strong className="text-gold">招募人員現實：</strong>我使用技能作為快速篩選器。如果我在招聘 Python 角色，而你沒有在你的前 10 項技能中列出 Python，你可能不是強力匹配。
               </p>
             </div>
           </div>
@@ -364,6 +482,72 @@ const LinkedInBrandingGuideZhTw = () => {
             <div className="bg-background border border-border rounded-lg p-4">
               <p className="text-foreground"><strong className="text-gold">關係</strong> — 評論和參與建立連接</p>
             </div>
+            <div className="bg-background border border-border rounded-lg p-4">
+              <p className="text-foreground"><strong className="text-gold">保持在心中</strong> — 你在你的人脈網中保持前沿和中心</p>
+            </div>
+            <div className="bg-background border border-border rounded-lg p-4">
+              <p className="text-foreground"><strong className="text-gold">學習</strong> — 創建內容迫使你澄清你的思維</p>
+            </div>
+          </div>
+
+          <h3 className="font-heading text-xl text-foreground mb-4">LinkedIn 上的內容類型</h3>
+          <div className="grid md:grid-cols-2 gap-3 mb-8">
+            <div className="bg-background border border-border rounded-lg p-3">
+              <p className="text-foreground font-semibold text-sm">1. 文字貼文</p>
+              <p className="text-muted-foreground text-xs">最多 1,300 字元。最容易創建，高參與度。</p>
+            </div>
+            <div className="bg-background border border-border rounded-lg p-3">
+              <p className="text-foreground font-semibold text-sm">2. 圖片貼文</p>
+              <p className="text-muted-foreground text-xs">在動態中突出。輪播最多 20 張圖片。</p>
+            </div>
+            <div className="bg-background border border-border rounded-lg p-3">
+              <p className="text-foreground font-semibold text-sm">3. 影片貼文</p>
+              <p className="text-muted-foreground text-xs">最高參與度。最長 10 分鐘。原生效果更好。</p>
+            </div>
+            <div className="bg-background border border-border rounded-lg p-3">
+              <p className="text-foreground font-semibold text-sm">4. 文章</p>
+              <p className="text-muted-foreground text-xs">最多 125,000 字元。被 Google 索引（SEO 好處）。</p>
+            </div>
+            <div className="bg-background border border-border rounded-lg p-3">
+              <p className="text-foreground font-semibold text-sm">5. 文件（PDF）</p>
+              <p className="text-muted-foreground text-xs">適合輪播。高度可分享。</p>
+            </div>
+            <div className="bg-background border border-border rounded-lg p-3">
+              <p className="text-foreground font-semibold text-sm">6. 投票</p>
+              <p className="text-muted-foreground text-xs">簡單的參與。提供受眾數據。</p>
+            </div>
+          </div>
+
+          <h3 className="font-heading text-xl text-foreground mb-4">尋找內容想法</h3>
+          <div className="space-y-3 mb-8">
+            <div className="flex items-start gap-3">
+              <GoldCheckBadge />
+              <div>
+                <p className="text-foreground font-semibold">你的專業知識</p>
+                <p className="text-muted-foreground text-sm">你解決過的問題、學到的教訓、你使用的框架</p>
+              </div>
+            </div>
+            <div className="flex items-start gap-3">
+              <GoldCheckBadge />
+              <div>
+                <p className="text-foreground font-semibold">受眾問題</p>
+                <p className="text-muted-foreground text-sm">常見問題、挑戰、你看到的誤解</p>
+              </div>
+            </div>
+            <div className="flex items-start gap-3">
+              <GoldCheckBadge />
+              <div>
+                <p className="text-foreground font-semibold">時事</p>
+                <p className="text-muted-foreground text-sm">產業新聞、新研究、你參加的會議</p>
+              </div>
+            </div>
+            <div className="flex items-start gap-3">
+              <GoldCheckBadge />
+              <div>
+                <p className="text-foreground font-semibold">他人的內容</p>
+                <p className="text-muted-foreground text-sm">分享並加上你的評論，回應討論，建立在想法上</p>
+              </div>
+            </div>
           </div>
 
           <h3 className="font-heading text-xl text-foreground mb-4">高績效貼文的剖析</h3>
@@ -372,7 +556,7 @@ const LinkedInBrandingGuideZhTw = () => {
               <p className="text-foreground"><strong>鉤子（前 1-2 行）</strong> — 這是人們在點擊「查看更多」之前看到的。讓它引人注目。</p>
             </div>
             <div className="bg-background border border-border rounded-lg p-4">
-              <p className="text-foreground"><strong>正文</strong> — 講一個故事，分享一個教訓，或提供價值。使用短段落。</p>
+              <p className="text-foreground"><strong>正文</strong> — 講一個故事，分享一個教訓，或提供價值。使用短段落（最多 1-3 句）。</p>
             </div>
             <div className="bg-background border border-border rounded-lg p-4">
               <p className="text-foreground"><strong>行動呼籲</strong> — 問一個問題來推動評論。邀請人們分享他們的經驗。</p>
@@ -387,12 +571,35 @@ const LinkedInBrandingGuideZhTw = () => {
           </ul>
 
           <h3 className="font-heading text-xl text-foreground mb-4">每日參與例行公事（15-20 分鐘）：</h3>
-          <ul className="space-y-2 text-foreground">
+          <ul className="space-y-2 text-foreground mb-6">
             <li>• 對來自你人脈網的 10-15 篇貼文做出反應</li>
             <li>• 留下 5-7 個深思熟慮的評論（不只是「很棒的貼文！」）</li>
             <li>• 回應你最近貼文上的所有評論</li>
             <li>• 分享 1-2 篇貼文並加上你自己的評論</li>
           </ul>
+
+          <h3 className="font-heading text-xl text-foreground mb-4">LinkedIn 上的影片內容</h3>
+          <p className="text-foreground mb-4">影片是最高參與度的內容類型，但大多數人避免它。不要這樣。</p>
+          <div className="grid md:grid-cols-2 gap-4">
+            <div className="bg-background border border-border rounded-lg p-4">
+              <h4 className="font-semibold text-foreground mb-2">為什麼影片有效：</h4>
+              <ul className="space-y-1 text-muted-foreground text-sm">
+                <li>• 更快建立個人連接</li>
+                <li>• 演算法偏好原生影片</li>
+                <li>• 競爭較少</li>
+                <li>• 展示溝通技巧</li>
+              </ul>
+            </div>
+            <div className="bg-background border border-border rounded-lg p-4">
+              <h4 className="font-semibold text-foreground mb-2">影片想法：</h4>
+              <ul className="space-y-1 text-muted-foreground text-sm">
+                <li>• 快速提示（30-60 秒）</li>
+                <li>• 回答常見問題的問答</li>
+                <li>• 你工作的幕後花絮</li>
+                <li>• 對產業新聞的反應</li>
+              </ul>
+            </div>
+          </div>
         </div>
       </section>
 
