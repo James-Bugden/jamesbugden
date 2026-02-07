@@ -16,14 +16,14 @@ const guides: Guide[] = [
   // LinkedIn Guides
   {
     icon: Linkedin,
-    title: "LinkedIn 求職指南（精簡版）",
+    title: "LinkedIn 求職攻略：讓獵頭主動找上你（迷你指南）",
     description: "快速優化 LinkedIn 個人檔案，提升求職成功率",
     href: "/zh-tw/linkedin-guide",
     category: "LinkedIn",
   },
   {
     icon: Linkedin,
-    title: "LinkedIn 個人品牌指南（完整版）",
+    title: "LinkedIn 求職者必讀：別再投履歷，讓機會主動上門",
     description: "全面打造 LinkedIn 個人品牌的戰術指南",
     href: "/zh-tw/linkedin-branding-guide",
     category: "LinkedIn",
@@ -31,14 +31,14 @@ const guides: Guide[] = [
   // Career Change Guides
   {
     icon: Briefcase,
-    title: "職涯轉型方法論（精簡版）",
+    title: "轉職方法論：快速轉換職涯跑道（迷你指南）",
     description: "快速了解成功轉職的 5 階段框架",
     href: "/zh-tw/pivot-method-mini-guide",
     category: "職涯轉型",
   },
   {
     icon: Briefcase,
-    title: "職涯轉型方法論（完整版）",
+    title: "轉職方法論：快速轉換職涯跑道",
     description: "招募人員的完整職涯轉型指南，助你自信地開啟新篇章",
     href: "/zh-tw/pivot-method-guide",
     category: "職涯轉型",
