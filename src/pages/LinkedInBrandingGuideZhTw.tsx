@@ -48,7 +48,7 @@ const LinkedInBrandingGuideZhTw = () => {
             </div>
           </div>
           <h1 className="font-heading text-3xl md:text-5xl lg:text-6xl text-cream leading-tight mb-4">
-            LinkedIn 個人品牌完整指南
+            LinkedIn 求職者必讀：別再投履歷，讓機會主動上門
           </h1>
           <p className="text-lg md:text-xl text-cream/80 mb-2">
             招募人員的戰術指南
