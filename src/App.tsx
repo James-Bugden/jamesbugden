@@ -49,6 +49,8 @@ import LinkedInBrandingGuideZhTw from "./pages/LinkedInBrandingGuideZhTw";
 import LinkedInBrandingGuide from "./pages/LinkedInBrandingGuide";
 import PivotMethodGuideZhTw from "./pages/PivotMethodGuideZhTw";
 import PivotMethodGuide from "./pages/PivotMethodGuide";
+import PivotMethodMiniGuide from "./pages/PivotMethodMiniGuide";
+import PivotMethodMiniGuideZhTw from "./pages/PivotMethodMiniGuideZhTw";
 
 const queryClient = new QueryClient();
 
@@ -84,6 +86,8 @@ const App = () => (
           <Route path="/linkedin-branding-guide" element={<LinkedInBrandingGuide />} />
           <Route path="/zh-tw/pivot-method-guide" element={<PivotMethodGuideZhTw />} />
           <Route path="/pivot-method-guide" element={<PivotMethodGuide />} />
+          <Route path="/pivot-method-mini-guide" element={<PivotMethodMiniGuide />} />
+          <Route path="/zh-tw/pivot-method-mini-guide" element={<PivotMethodMiniGuideZhTw />} />
           {/* Client Review Pages */}
           <Route path="/reviews/charlene-lee" element={<CharleneLeeReview />} />
           <Route path="/zh-tw/reviews/charlene-lee" element={<CharleneLeeReviewZhTw />} />
