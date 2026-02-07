@@ -16,14 +16,14 @@ const guides: Guide[] = [
   // LinkedIn Guides
   {
     icon: Linkedin,
-    title: "LinkedIn for Job Search (Mini Guide)",
+    title: "LinkedIn for Job Search: Get Recruiters to Find You (Mini Guide)",
     description: "Quick-start guide to optimizing your LinkedIn profile for job searching",
     href: "/linkedin-guide",
     category: "LinkedIn",
   },
   {
     icon: Linkedin,
-    title: "LinkedIn Personal Branding (Full Guide)",
+    title: "LinkedIn for Job Seekers: Stop Applying, Start Getting Found",
     description: "Comprehensive tactical guide to building your personal brand on LinkedIn",
     href: "/linkedin-branding-guide",
     category: "LinkedIn",
@@ -31,14 +31,14 @@ const guides: Guide[] = [
   // Career Change Guides
   {
     icon: Briefcase,
-    title: "The Pivot Method (Mini Guide)",
+    title: "The Pivot Method: Quick Guide to Career Change (Mini Guide)",
     description: "Quick overview of the 5-stage framework for successful career transitions",
     href: "/pivot-method-mini-guide",
     category: "Career Change",
   },
   {
     icon: Briefcase,
-    title: "The Pivot Method (Full Guide)",
+    title: "The Pivot Method: A Full Guide to Career Change",
     description: "Complete recruiter's guide to navigating career changes with confidence",
     href: "/pivot-method-guide",
     category: "Career Change",
