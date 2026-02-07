@@ -48,7 +48,7 @@ const LinkedInBrandingGuide = () => {
             </div>
           </div>
           <h1 className="font-heading text-3xl md:text-5xl lg:text-6xl text-cream leading-tight mb-4">
-            LinkedIn Personal Branding
+            LinkedIn for Job Seekers: Stop Applying, Start Getting Found
           </h1>
           <p className="text-lg md:text-xl text-cream/80 mb-2">
             A Recruiter's Tactical Guide
