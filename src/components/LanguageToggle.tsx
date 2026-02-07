@@ -13,9 +13,13 @@ const LanguageToggle = ({ variant = "default" }: LanguageToggleProps) => {
   
   const toggleLanguage = () => {
     if (isZhTw) {
-      navigate("/");
+      // Remove /zh-tw prefix to get English path
+      const enPath = location.pathname.replace(/^\/zh-tw/, "") || "/";
+      navigate(enPath);
     } else {
-      navigate("/zh-tw");
+      // Add /zh-tw prefix for Chinese path
+      const zhPath = location.pathname === "/" ? "/zh-tw" : `/zh-tw${location.pathname}`;
+      navigate(zhPath);
     }
   };
 

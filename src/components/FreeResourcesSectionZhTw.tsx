@@ -1,6 +1,7 @@
-import { Mail, ClipboardList, Briefcase, Calculator, CheckSquare, Star } from "lucide-react";
+import { Mail, ClipboardList, Briefcase, BookOpen, CheckSquare, Star } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { LucideIcon } from "lucide-react";
+import { Link } from "react-router-dom";
 
 interface Resource {
   icon: LucideIcon;
@@ -10,6 +11,7 @@ interface Resource {
   href: string;
   featured: boolean;
   showEmailIcon?: boolean;
+  isInternalLink?: boolean;
 }
 
 const resources: Resource[] = [
@@ -30,12 +32,13 @@ const resources: Resource[] = [
     featured: false,
   },
   {
-    icon: Calculator,
-    title: "薪資計算器",
-    description: "計算你的市場價值和談判空間",
-    buttonText: "計算薪資",
-    href: "#",
+    icon: BookOpen,
+    title: "職涯指南合集",
+    description: "LinkedIn、面試準備、職涯轉型完整指南",
+    buttonText: "查看指南",
+    href: "/zh-tw/guides",
     featured: false,
+    isInternalLink: true,
   },
   {
     icon: CheckSquare,
@@ -102,10 +105,17 @@ const FreeResourcesSectionZhTw = () => {
                   asChild
                   className="btn-gold h-11 px-6 font-medium text-sm uppercase tracking-wider"
                 >
-                  <a href={resource.href} className="flex items-center justify-center gap-2">
-                    {resource.showEmailIcon && <Mail className="w-4 h-4" />}
-                    {resource.buttonText}
-                  </a>
+                  {resource.isInternalLink ? (
+                    <Link to={resource.href} className="flex items-center justify-center gap-2">
+                      {resource.showEmailIcon && <Mail className="w-4 h-4" />}
+                      {resource.buttonText}
+                    </Link>
+                  ) : (
+                    <a href={resource.href} className="flex items-center justify-center gap-2">
+                      {resource.showEmailIcon && <Mail className="w-4 h-4" />}
+                      {resource.buttonText}
+                    </a>
+                  )}
                 </Button>
               </div>
             );

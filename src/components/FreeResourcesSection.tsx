@@ -1,6 +1,7 @@
-import { Mail, ClipboardList, Briefcase, Calculator, CheckSquare, Star } from "lucide-react";
+import { Mail, ClipboardList, Briefcase, BookOpen, CheckSquare, Star } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { LucideIcon } from "lucide-react";
+import { Link } from "react-router-dom";
 
 interface Resource {
   icon: LucideIcon;
@@ -10,6 +11,7 @@ interface Resource {
   href: string;
   featured: boolean;
   showEmailIcon?: boolean;
+  isInternalLink?: boolean;
 }
 
 const resources: Resource[] = [
@@ -30,12 +32,13 @@ const resources: Resource[] = [
     featured: false,
   },
   {
-    icon: Calculator,
-    title: "Offer Salary Calculator",
-    description: "Calculate your market value and negotiation range",
-    buttonText: "Calculate Salary",
-    href: "#",
+    icon: BookOpen,
+    title: "Career Guides Collection",
+    description: "LinkedIn, interview prep, and career change guides",
+    buttonText: "View Guides",
+    href: "/guides",
     featured: false,
+    isInternalLink: true,
   },
   {
     icon: CheckSquare,
@@ -102,10 +105,17 @@ const FreeResourcesSection = () => {
                   asChild
                   className="btn-gold h-11 px-6 font-medium text-sm uppercase tracking-wider"
                 >
-                  <a href={resource.href} className="flex items-center justify-center gap-2">
-                    {resource.showEmailIcon && <Mail className="w-4 h-4" />}
-                    {resource.buttonText}
-                  </a>
+                  {resource.isInternalLink ? (
+                    <Link to={resource.href} className="flex items-center justify-center gap-2">
+                      {resource.showEmailIcon && <Mail className="w-4 h-4" />}
+                      {resource.buttonText}
+                    </Link>
+                  ) : (
+                    <a href={resource.href} className="flex items-center justify-center gap-2">
+                      {resource.showEmailIcon && <Mail className="w-4 h-4" />}
+                      {resource.buttonText}
+                    </a>
+                  )}
                 </Button>
               </div>
             );

@@ -51,6 +51,8 @@ import PivotMethodGuideZhTw from "./pages/PivotMethodGuideZhTw";
 import PivotMethodGuide from "./pages/PivotMethodGuide";
 import PivotMethodMiniGuide from "./pages/PivotMethodMiniGuide";
 import PivotMethodMiniGuideZhTw from "./pages/PivotMethodMiniGuideZhTw";
+import GuidesPage from "./pages/GuidesPage";
+import GuidesPageZhTw from "./pages/GuidesPageZhTw";
 
 const queryClient = new QueryClient();
 
@@ -88,6 +90,8 @@ const App = () => (
           <Route path="/pivot-method-guide" element={<PivotMethodGuide />} />
           <Route path="/pivot-method-mini-guide" element={<PivotMethodMiniGuide />} />
           <Route path="/zh-tw/pivot-method-mini-guide" element={<PivotMethodMiniGuideZhTw />} />
+          <Route path="/guides" element={<GuidesPage />} />
+          <Route path="/zh-tw/guides" element={<GuidesPageZhTw />} />
           {/* Client Review Pages */}
           <Route path="/reviews/charlene-lee" element={<CharleneLeeReview />} />
           <Route path="/zh-tw/reviews/charlene-lee" element={<CharleneLeeReviewZhTw />} />
