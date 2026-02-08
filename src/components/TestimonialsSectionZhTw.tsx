@@ -4,6 +4,7 @@ import monicaPhoto from "@/assets/testimonials/monica.jpg";
 import juliePhoto from "@/assets/testimonials/julie.jpeg";
 import cynthiaPhoto from "@/assets/testimonials/cynthia.jpeg";
 import sunnyPhoto from "@/assets/testimonials/sunny.jpeg";
+import pinweiPhoto from "@/assets/testimonials/pinwei.png";
 
 interface Testimonial {
   name: string;
@@ -19,8 +20,7 @@ const allTestimonials: Testimonial[] = [
     name: "Pin-Wei Wu",
     hook: "比起單純的履歷檢查，這更像是一場高密度的職涯諮詢。",
     full: "這太棒了！現在大家都用AI來潤履歷，但讓一個專業recruiter做深度review完全是另一個層級。比起單純的履歷檢查，這更像是一場高密度的職涯諮詢。你幫我找到了那些我自己永遠不會注意到的『隱藏亮點』。真的很感謝你的幫助，James！這讓我對下一步有了更多信心。",
-    initial: "P",
-    initialBg: "bg-emerald-100",
+    photo: pinweiPhoto,
   },
   {
     name: "David",
@@ -142,11 +142,13 @@ const TestimonialsSectionZhTw = ({ title = "客戶怎麼說" }: TestimonialsSect
               {/* Large decorative quote */}
               <span className="absolute top-6 left-8 text-6xl text-gold/20 font-serif leading-none">"</span>
               
-              {/* Initial */}
+              {/* Photo */}
               <div className="flex justify-center mb-6">
-                <div className={`w-20 h-20 rounded-full ${featured.initialBg} flex items-center justify-center border-[3px] border-gold shadow-md`}>
-                  <span className="text-2xl font-bold text-foreground">{featured.initial}</span>
-                </div>
+                <img
+                  src={featured.photo}
+                  alt={featured.name}
+                  className="w-20 h-20 rounded-full object-cover border-[3px] border-gold shadow-md"
+                />
               </div>
               
               {/* Hook Quote */}
