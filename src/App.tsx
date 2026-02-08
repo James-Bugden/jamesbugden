@@ -1,59 +1,73 @@
+import { Suspense, lazy } from "react";
 import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { ScrollToTop } from "./components/ScrollToTop";
+
+// Loading fallback component
+const PageLoader = () => (
+  <div className="min-h-screen flex items-center justify-center bg-background">
+    <div className="w-8 h-8 border-4 border-gold border-t-transparent rounded-full animate-spin" />
+  </div>
+);
+
+// Core pages - load immediately
 import Index from "./pages/Index";
 import IndexZhTw from "./pages/IndexZhTw";
 import NotFound from "./pages/NotFound";
-import AdminLogin from "./pages/AdminLogin";
-import AdminReviews from "./pages/AdminReviews";
-import ClientReviewGate from "./pages/ClientReviewGate";
-import ProtectedRoute from "./components/ProtectedRoute";
-import ResumeGuide from "./pages/ResumeGuide";
-import InterviewPrepGuide from "./pages/InterviewPrepGuide";
-import InterviewPrepGuideZhTw from "./pages/InterviewPrepGuideZhTw";
-import InterviewPrepGuidePrint from "./pages/InterviewPrepGuidePrint";
-import InterviewPreparationGuide from "./pages/InterviewPreparationGuide";
-import InterviewPreparationGuideZhTw from "./pages/InterviewPreparationGuideZhTw";
-import InterviewPreparationGuidePrint from "./pages/InterviewPreparationGuidePrint";
-import CharleneLeeReview from "./pages/reviews/CharleneLeeReview";
-import CharleneLeeReviewZhTw from "./pages/reviews/CharleneLeeReviewZhTw";
-import ChienJungLiuReview from "./pages/reviews/ChienJungLiuReview";
-import ChienJungLiuReviewZhTw from "./pages/reviews/ChienJungLiuReviewZhTw";
-import JamesBugdenReview from "./pages/reviews/JamesBugdenReview";
-import JamesBugdenReviewZhTw from "./pages/reviews/JamesBugdenReviewZhTw";
-import SamLeeReview from "./pages/reviews/SamLeeReview";
-import SamLeeReviewZhTw from "./pages/reviews/SamLeeReviewZhTw";
-import RogerLeeReview from "./pages/reviews/RogerLeeReview";
-import RogerLeeReviewZhTw from "./pages/reviews/RogerLeeReviewZhTw";
-import PinWeiWuReview from "./pages/reviews/PinWeiWuReview";
-import PinWeiWuReviewZhTw from "./pages/reviews/PinWeiWuReviewZhTw";
-import PeihuaYehReview from "./pages/reviews/PeihuaYehReview";
-import PeihuaYehReviewZhTw from "./pages/reviews/PeihuaYehReviewZhTw";
-import SilviaChenReview from "./pages/reviews/SilviaChenReview";
-import SilviaChenReviewZhTw from "./pages/reviews/SilviaChenReviewZhTw";
-import YoutingChenReview from "./pages/reviews/YoutingChenReview";
-import YoutingChenReviewZhTw from "./pages/reviews/YoutingChenReviewZhTw";
-import RoyTsaiReview from "./pages/reviews/RoyTsaiReview";
-import RoyTsaiReviewZhTw from "./pages/reviews/RoyTsaiReviewZhTw";
-import JanelleChengReview from "./pages/reviews/JanelleChengReview";
-import JanelleChengReviewZhTw from "./pages/reviews/JanelleChengReviewZhTw";
-import WillyLinReview from "./pages/reviews/WillyLinReview";
-import WillyLinReviewZhTw from "./pages/reviews/WillyLinReviewZhTw";
-import HopeChenReview from "./pages/reviews/HopeChenReview";
-import HopeChenReviewZhTw from "./pages/reviews/HopeChenReviewZhTw";
-import LinkedInGuideZhTw from "./pages/LinkedInGuideZhTw";
-import LinkedInGuide from "./pages/LinkedInGuide";
-import LinkedInBrandingGuideZhTw from "./pages/LinkedInBrandingGuideZhTw";
-import LinkedInBrandingGuide from "./pages/LinkedInBrandingGuide";
-import PivotMethodGuideZhTw from "./pages/PivotMethodGuideZhTw";
-import PivotMethodGuide from "./pages/PivotMethodGuide";
-import PivotMethodMiniGuide from "./pages/PivotMethodMiniGuide";
-import PivotMethodMiniGuideZhTw from "./pages/PivotMethodMiniGuideZhTw";
-import GuidesPage from "./pages/GuidesPage";
-import GuidesPageZhTw from "./pages/GuidesPageZhTw";
-import { ScrollToTop } from "./components/ScrollToTop";
+
+// Lazy load all other pages
+const AdminLogin = lazy(() => import("./pages/AdminLogin"));
+const AdminReviews = lazy(() => import("./pages/AdminReviews"));
+const ClientReviewGate = lazy(() => import("./pages/ClientReviewGate"));
+const ProtectedRoute = lazy(() => import("./components/ProtectedRoute"));
+const ResumeGuide = lazy(() => import("./pages/ResumeGuide"));
+const InterviewPrepGuide = lazy(() => import("./pages/InterviewPrepGuide"));
+const InterviewPrepGuideZhTw = lazy(() => import("./pages/InterviewPrepGuideZhTw"));
+const InterviewPrepGuidePrint = lazy(() => import("./pages/InterviewPrepGuidePrint"));
+const InterviewPreparationGuide = lazy(() => import("./pages/InterviewPreparationGuide"));
+const InterviewPreparationGuideZhTw = lazy(() => import("./pages/InterviewPreparationGuideZhTw"));
+const InterviewPreparationGuidePrint = lazy(() => import("./pages/InterviewPreparationGuidePrint"));
+const LinkedInGuideZhTw = lazy(() => import("./pages/LinkedInGuideZhTw"));
+const LinkedInGuide = lazy(() => import("./pages/LinkedInGuide"));
+const LinkedInBrandingGuideZhTw = lazy(() => import("./pages/LinkedInBrandingGuideZhTw"));
+const LinkedInBrandingGuide = lazy(() => import("./pages/LinkedInBrandingGuide"));
+const PivotMethodGuideZhTw = lazy(() => import("./pages/PivotMethodGuideZhTw"));
+const PivotMethodGuide = lazy(() => import("./pages/PivotMethodGuide"));
+const PivotMethodMiniGuide = lazy(() => import("./pages/PivotMethodMiniGuide"));
+const PivotMethodMiniGuideZhTw = lazy(() => import("./pages/PivotMethodMiniGuideZhTw"));
+const GuidesPage = lazy(() => import("./pages/GuidesPage"));
+const GuidesPageZhTw = lazy(() => import("./pages/GuidesPageZhTw"));
+
+// Lazy load review pages
+const CharleneLeeReview = lazy(() => import("./pages/reviews/CharleneLeeReview"));
+const CharleneLeeReviewZhTw = lazy(() => import("./pages/reviews/CharleneLeeReviewZhTw"));
+const ChienJungLiuReview = lazy(() => import("./pages/reviews/ChienJungLiuReview"));
+const ChienJungLiuReviewZhTw = lazy(() => import("./pages/reviews/ChienJungLiuReviewZhTw"));
+const JamesBugdenReview = lazy(() => import("./pages/reviews/JamesBugdenReview"));
+const JamesBugdenReviewZhTw = lazy(() => import("./pages/reviews/JamesBugdenReviewZhTw"));
+const SamLeeReview = lazy(() => import("./pages/reviews/SamLeeReview"));
+const SamLeeReviewZhTw = lazy(() => import("./pages/reviews/SamLeeReviewZhTw"));
+const RogerLeeReview = lazy(() => import("./pages/reviews/RogerLeeReview"));
+const RogerLeeReviewZhTw = lazy(() => import("./pages/reviews/RogerLeeReviewZhTw"));
+const PinWeiWuReview = lazy(() => import("./pages/reviews/PinWeiWuReview"));
+const PinWeiWuReviewZhTw = lazy(() => import("./pages/reviews/PinWeiWuReviewZhTw"));
+const PeihuaYehReview = lazy(() => import("./pages/reviews/PeihuaYehReview"));
+const PeihuaYehReviewZhTw = lazy(() => import("./pages/reviews/PeihuaYehReviewZhTw"));
+const SilviaChenReview = lazy(() => import("./pages/reviews/SilviaChenReview"));
+const SilviaChenReviewZhTw = lazy(() => import("./pages/reviews/SilviaChenReviewZhTw"));
+const YoutingChenReview = lazy(() => import("./pages/reviews/YoutingChenReview"));
+const YoutingChenReviewZhTw = lazy(() => import("./pages/reviews/YoutingChenReviewZhTw"));
+const RoyTsaiReview = lazy(() => import("./pages/reviews/RoyTsaiReview"));
+const RoyTsaiReviewZhTw = lazy(() => import("./pages/reviews/RoyTsaiReviewZhTw"));
+const JanelleChengReview = lazy(() => import("./pages/reviews/JanelleChengReview"));
+const JanelleChengReviewZhTw = lazy(() => import("./pages/reviews/JanelleChengReviewZhTw"));
+const WillyLinReview = lazy(() => import("./pages/reviews/WillyLinReview"));
+const WillyLinReviewZhTw = lazy(() => import("./pages/reviews/WillyLinReviewZhTw"));
+const HopeChenReview = lazy(() => import("./pages/reviews/HopeChenReview"));
+const HopeChenReviewZhTw = lazy(() => import("./pages/reviews/HopeChenReviewZhTw"));
 
 const queryClient = new QueryClient();
 
@@ -64,66 +78,68 @@ const App = () => (
       <Sonner />
       <BrowserRouter>
         <ScrollToTop />
-        <Routes>
-          <Route path="/" element={<Index />} />
-          <Route path="/zh-tw" element={<IndexZhTw />} />
-          <Route path="/admin/login" element={<AdminLogin />} />
-          <Route 
-            path="/admin/reviews" 
-            element={
-              <ProtectedRoute requireAdmin={true}>
-                <AdminReviews />
-              </ProtectedRoute>
-            } 
-          />
-          <Route path="/review" element={<ClientReviewGate />} />
-          <Route path="/resume-guide" element={<ResumeGuide />} />
-          <Route path="/interview-prep-guide" element={<InterviewPrepGuide />} />
-          <Route path="/zh-tw/interview-prep-guide" element={<InterviewPrepGuideZhTw />} />
-          <Route path="/interview-prep-guide/print" element={<InterviewPrepGuidePrint />} />
-          <Route path="/interview-preparation-guide" element={<InterviewPreparationGuide />} />
-          <Route path="/interview-preparation-guide/print" element={<InterviewPreparationGuidePrint />} />
-          <Route path="/zh-tw/interview-preparation-guide" element={<InterviewPreparationGuideZhTw />} />
-          <Route path="/zh-tw/linkedin-guide" element={<LinkedInGuideZhTw />} />
-          <Route path="/linkedin-guide" element={<LinkedInGuide />} />
-          <Route path="/zh-tw/linkedin-branding-guide" element={<LinkedInBrandingGuideZhTw />} />
-          <Route path="/linkedin-branding-guide" element={<LinkedInBrandingGuide />} />
-          <Route path="/zh-tw/pivot-method-guide" element={<PivotMethodGuideZhTw />} />
-          <Route path="/pivot-method-guide" element={<PivotMethodGuide />} />
-          <Route path="/pivot-method-mini-guide" element={<PivotMethodMiniGuide />} />
-          <Route path="/zh-tw/pivot-method-mini-guide" element={<PivotMethodMiniGuideZhTw />} />
-          <Route path="/guides" element={<GuidesPage />} />
-          <Route path="/zh-tw/guides" element={<GuidesPageZhTw />} />
-          {/* Client Review Pages */}
-          <Route path="/reviews/charlene-lee" element={<CharleneLeeReview />} />
-          <Route path="/zh-tw/reviews/charlene-lee" element={<CharleneLeeReviewZhTw />} />
-          <Route path="/reviews/chien-jung-liu" element={<ChienJungLiuReview />} />
-          <Route path="/zh-tw/reviews/chien-jung-liu" element={<ChienJungLiuReviewZhTw />} />
-          <Route path="/reviews/james-bugden" element={<JamesBugdenReview />} />
-          <Route path="/zh-tw/reviews/james-bugden" element={<JamesBugdenReviewZhTw />} />
-          <Route path="/reviews/sam-lee" element={<SamLeeReview />} />
-          <Route path="/zh-tw/reviews/sam-lee" element={<SamLeeReviewZhTw />} />
-          <Route path="/reviews/roger-lee" element={<RogerLeeReview />} />
-          <Route path="/zh-tw/reviews/roger-lee" element={<RogerLeeReviewZhTw />} />
-          <Route path="/reviews/pin-wei-wu" element={<PinWeiWuReview />} />
-          <Route path="/zh-tw/reviews/pin-wei-wu" element={<PinWeiWuReviewZhTw />} />
-          <Route path="/reviews/peihua-yeh" element={<PeihuaYehReview />} />
-          <Route path="/zh-tw/reviews/peihua-yeh" element={<PeihuaYehReviewZhTw />} />
-          <Route path="/reviews/silvia-chen" element={<SilviaChenReview />} />
-          <Route path="/zh-tw/reviews/silvia-chen" element={<SilviaChenReviewZhTw />} />
-          <Route path="/reviews/youting-chen" element={<YoutingChenReview />} />
-          <Route path="/zh-tw/reviews/youting-chen" element={<YoutingChenReviewZhTw />} />
-          <Route path="/reviews/roy-tsai" element={<RoyTsaiReview />} />
-          <Route path="/zh-tw/reviews/roy-tsai" element={<RoyTsaiReviewZhTw />} />
-          <Route path="/reviews/janelle-cheng" element={<JanelleChengReview />} />
-          <Route path="/zh-tw/reviews/janelle-cheng" element={<JanelleChengReviewZhTw />} />
-          <Route path="/reviews/willy-lin" element={<WillyLinReview />} />
-          <Route path="/zh-tw/reviews/willy-lin" element={<WillyLinReviewZhTw />} />
-          <Route path="/reviews/hope-chen" element={<HopeChenReview />} />
-          <Route path="/zh-tw/reviews/hope-chen" element={<HopeChenReviewZhTw />} />
-          {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
-          <Route path="*" element={<NotFound />} />
-        </Routes>
+        <Suspense fallback={<PageLoader />}>
+          <Routes>
+            <Route path="/" element={<Index />} />
+            <Route path="/zh-tw" element={<IndexZhTw />} />
+            <Route path="/admin/login" element={<AdminLogin />} />
+            <Route 
+              path="/admin/reviews" 
+              element={
+                <ProtectedRoute requireAdmin={true}>
+                  <AdminReviews />
+                </ProtectedRoute>
+              } 
+            />
+            <Route path="/review" element={<ClientReviewGate />} />
+            <Route path="/resume-guide" element={<ResumeGuide />} />
+            <Route path="/interview-prep-guide" element={<InterviewPrepGuide />} />
+            <Route path="/zh-tw/interview-prep-guide" element={<InterviewPrepGuideZhTw />} />
+            <Route path="/interview-prep-guide/print" element={<InterviewPrepGuidePrint />} />
+            <Route path="/interview-preparation-guide" element={<InterviewPreparationGuide />} />
+            <Route path="/interview-preparation-guide/print" element={<InterviewPreparationGuidePrint />} />
+            <Route path="/zh-tw/interview-preparation-guide" element={<InterviewPreparationGuideZhTw />} />
+            <Route path="/zh-tw/linkedin-guide" element={<LinkedInGuideZhTw />} />
+            <Route path="/linkedin-guide" element={<LinkedInGuide />} />
+            <Route path="/zh-tw/linkedin-branding-guide" element={<LinkedInBrandingGuideZhTw />} />
+            <Route path="/linkedin-branding-guide" element={<LinkedInBrandingGuide />} />
+            <Route path="/zh-tw/pivot-method-guide" element={<PivotMethodGuideZhTw />} />
+            <Route path="/pivot-method-guide" element={<PivotMethodGuide />} />
+            <Route path="/pivot-method-mini-guide" element={<PivotMethodMiniGuide />} />
+            <Route path="/zh-tw/pivot-method-mini-guide" element={<PivotMethodMiniGuideZhTw />} />
+            <Route path="/guides" element={<GuidesPage />} />
+            <Route path="/zh-tw/guides" element={<GuidesPageZhTw />} />
+            {/* Client Review Pages */}
+            <Route path="/reviews/charlene-lee" element={<CharleneLeeReview />} />
+            <Route path="/zh-tw/reviews/charlene-lee" element={<CharleneLeeReviewZhTw />} />
+            <Route path="/reviews/chien-jung-liu" element={<ChienJungLiuReview />} />
+            <Route path="/zh-tw/reviews/chien-jung-liu" element={<ChienJungLiuReviewZhTw />} />
+            <Route path="/reviews/james-bugden" element={<JamesBugdenReview />} />
+            <Route path="/zh-tw/reviews/james-bugden" element={<JamesBugdenReviewZhTw />} />
+            <Route path="/reviews/sam-lee" element={<SamLeeReview />} />
+            <Route path="/zh-tw/reviews/sam-lee" element={<SamLeeReviewZhTw />} />
+            <Route path="/reviews/roger-lee" element={<RogerLeeReview />} />
+            <Route path="/zh-tw/reviews/roger-lee" element={<RogerLeeReviewZhTw />} />
+            <Route path="/reviews/pin-wei-wu" element={<PinWeiWuReview />} />
+            <Route path="/zh-tw/reviews/pin-wei-wu" element={<PinWeiWuReviewZhTw />} />
+            <Route path="/reviews/peihua-yeh" element={<PeihuaYehReview />} />
+            <Route path="/zh-tw/reviews/peihua-yeh" element={<PeihuaYehReviewZhTw />} />
+            <Route path="/reviews/silvia-chen" element={<SilviaChenReview />} />
+            <Route path="/zh-tw/reviews/silvia-chen" element={<SilviaChenReviewZhTw />} />
+            <Route path="/reviews/youting-chen" element={<YoutingChenReview />} />
+            <Route path="/zh-tw/reviews/youting-chen" element={<YoutingChenReviewZhTw />} />
+            <Route path="/reviews/roy-tsai" element={<RoyTsaiReview />} />
+            <Route path="/zh-tw/reviews/roy-tsai" element={<RoyTsaiReviewZhTw />} />
+            <Route path="/reviews/janelle-cheng" element={<JanelleChengReview />} />
+            <Route path="/zh-tw/reviews/janelle-cheng" element={<JanelleChengReviewZhTw />} />
+            <Route path="/reviews/willy-lin" element={<WillyLinReview />} />
+            <Route path="/zh-tw/reviews/willy-lin" element={<WillyLinReviewZhTw />} />
+            <Route path="/reviews/hope-chen" element={<HopeChenReview />} />
+            <Route path="/zh-tw/reviews/hope-chen" element={<HopeChenReviewZhTw />} />
+            {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
+            <Route path="*" element={<NotFound />} />
+          </Routes>
+        </Suspense>
       </BrowserRouter>
     </TooltipProvider>
   </QueryClientProvider>

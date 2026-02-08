@@ -80,6 +80,7 @@ const TestimonialCard = ({ testimonial }: { testimonial: Testimonial }) => {
           <img
             src={testimonial.photo}
             alt={testimonial.name}
+            loading="lazy"
             className="w-14 h-14 rounded-full object-cover border-2 border-gold"
           />
         </div>
@@ -147,6 +148,7 @@ const TestimonialsSection = ({ title = "What Clients Say" }: TestimonialsSection
                 <img
                   src={featured.photo}
                   alt={featured.name}
+                  loading="eager"
                   className="w-20 h-20 rounded-full object-cover border-[3px] border-gold shadow-md"
                 />
               </div>
