@@ -4,6 +4,7 @@ import monicaPhoto from "@/assets/testimonials/monica.jpg";
 import juliePhoto from "@/assets/testimonials/julie.jpeg";
 import cynthiaPhoto from "@/assets/testimonials/cynthia.jpeg";
 import sunnyPhoto from "@/assets/testimonials/sunny.jpeg";
+import pinweiPhoto from "@/assets/testimonials/pinwei.png";
 
 interface Testimonial {
   name: string;
@@ -19,8 +20,7 @@ const allTestimonials: Testimonial[] = [
     name: "Pin-Wei Wu",
     hook: "It felt more like a high-density career session than just a resume check.",
     full: "This is awesome! These days, everyone is using AI to polish their resumes, but having a professional recruiter do a deep-dive review is on a whole different level. It felt more like a high-density career session than just a resume check. You helped me spot those 'hidden' wins that I would've never noticed on my own. Really appreciate the help, James! This gave me a lot more confidence for my next steps.",
-    initial: "P",
-    initialBg: "bg-emerald-100",
+    photo: pinweiPhoto,
   },
   {
     name: "David",
@@ -142,11 +142,13 @@ const TestimonialsSection = ({ title = "What Clients Say" }: TestimonialsSection
               {/* Large decorative quote */}
               <span className="absolute top-6 left-8 text-6xl text-gold/20 font-serif leading-none">"</span>
               
-              {/* Initial */}
+              {/* Photo */}
               <div className="flex justify-center mb-6">
-                <div className={`w-20 h-20 rounded-full ${featured.initialBg} flex items-center justify-center border-[3px] border-gold shadow-md`}>
-                  <span className="text-2xl font-bold text-foreground">{featured.initial}</span>
-                </div>
+                <img
+                  src={featured.photo}
+                  alt={featured.name}
+                  className="w-20 h-20 rounded-full object-cover border-[3px] border-gold shadow-md"
+                />
               </div>
               
               {/* Hook Quote */}
