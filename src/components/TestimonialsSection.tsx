@@ -1,10 +1,15 @@
 import { useState } from "react";
 import { ChevronDown } from "lucide-react";
+import monicaPhoto from "@/assets/testimonials/monica.jpg";
+import juliePhoto from "@/assets/testimonials/julie.jpeg";
+import cynthiaPhoto from "@/assets/testimonials/cynthia.jpeg";
+import sunnyPhoto from "@/assets/testimonials/sunny.jpeg";
 
 interface Testimonial {
   name: string;
   hook: string;
   full: string;
+  photo?: string;
   initial?: string;
   initialBg?: string;
 }
@@ -26,6 +31,7 @@ const allTestimonials: Testimonial[] = [
     name: "Sunny",
     hook: "This is advice that even my HR friends and headhunter friends couldn't give me.",
     full: "Thank you James for the thorough resume review. I was truly surprised when I received the feedback — how could someone be this meticulous! I felt like I gained so much. This is advice that even my HR friends and headhunter friends couldn't give me. Highly recommended — James is incredibly dedicated and professional.",
+    photo: sunnyPhoto,
   },
   {
     name: "Sam Lee",
@@ -36,16 +42,19 @@ const allTestimonials: Testimonial[] = [
     name: "Monica",
     hook: "I now have a much clearer direction and confidence in how to write a resume with real content and strategy.",
     full: "After comparing my original resume with the revised version, it looked significantly more professional. The feedback for every section was very specific — tailored to my years of experience and background, with logical and actionable suggestions. This also gave me a reusable framework and way of thinking that I can adapt for different companies and roles in the future, greatly improving my efficiency and precision. I now have a much clearer direction and confidence in how to write a resume with real content and strategy.",
+    photo: monicaPhoto,
   },
   {
     name: "Cynthia Chiang",
     hook: "You helped me identify several important blind spots, especially around ATS optimisation, impact-driven writing, and role alignment.",
     full: "Thank you for the detailed and insightful CV review. You helped me identify several important blind spots that I wasn't aware of, especially around ATS optimisation, impact-driven writing, and role alignment. Your guidance on improving the header format, strengthening the first 15 words, and presenting a clear professional title was extremely helpful. Overall, your review was concise, professional, and full of actionable recommendations. It's exactly the type of structured feedback I needed.",
+    photo: cynthiaPhoto,
   },
   {
     name: "Julie Huang",
     hook: "James's feedback is direct and hits the nail on the head every time.",
     full: "James's feedback is direct and hits the nail on the head every time. Afterwards, I used his comments together with AI tools to have ongoing conversations, and ultimately made the bold decision to remove less relevant education and a short internship. I'll continue to improve and train my writing skills. Thank you for taking the time to review my resume.",
+    photo: juliePhoto,
   },
   {
     name: "Roger Lee",
@@ -61,15 +70,29 @@ const allTestimonials: Testimonial[] = [
 
 const TestimonialCard = ({ testimonial }: { testimonial: Testimonial }) => {
   const [isExpanded, setIsExpanded] = useState(false);
+  const hasPhoto = !!testimonial.photo;
 
   return (
     <div className="bg-card rounded-xl p-5 shadow-md hover:shadow-lg transition-all duration-300">
-      {/* Decorative Quote */}
-      <span className="block text-3xl text-gold/30 font-serif leading-none mb-2">"</span>
+      {/* Photo if available */}
+      {hasPhoto && (
+        <div className="flex justify-center mb-4">
+          <img
+            src={testimonial.photo}
+            alt={testimonial.name}
+            className="w-14 h-14 rounded-full object-cover border-2 border-gold"
+          />
+        </div>
+      )}
+      
+      {/* Decorative Quote (only if no photo) */}
+      {!hasPhoto && (
+        <span className="block text-3xl text-gold/30 font-serif leading-none mb-2">"</span>
+      )}
       
       {/* Hook Quote */}
-      <p className="text-foreground text-sm leading-relaxed mb-2">
-        {testimonial.hook}
+      <p className={`text-foreground text-sm leading-relaxed mb-2 ${hasPhoto ? 'text-center' : ''}`}>
+        "{testimonial.hook}"
       </p>
       
       {/* Expandable Full Content */}
@@ -80,7 +103,7 @@ const TestimonialCard = ({ testimonial }: { testimonial: Testimonial }) => {
       </div>
       
       {/* Name + Read More */}
-      <div className="flex items-center justify-between mt-3">
+      <div className={`flex items-center justify-between mt-3 ${hasPhoto ? '' : ''}`}>
         <p className="font-semibold text-foreground text-sm">{testimonial.name}</p>
         <button
           onClick={() => setIsExpanded(!isExpanded)}

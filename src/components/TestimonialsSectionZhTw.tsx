@@ -1,10 +1,15 @@
 import { useState } from "react";
 import { ChevronDown } from "lucide-react";
+import monicaPhoto from "@/assets/testimonials/monica.jpg";
+import juliePhoto from "@/assets/testimonials/julie.jpeg";
+import cynthiaPhoto from "@/assets/testimonials/cynthia.jpeg";
+import sunnyPhoto from "@/assets/testimonials/sunny.jpeg";
 
 interface Testimonial {
   name: string;
   hook: string;
   full: string;
+  photo?: string;
   initial?: string;
   initialBg?: string;
 }
@@ -26,6 +31,7 @@ const allTestimonials: Testimonial[] = [
     name: "Sunny",
     hook: "這是就連我身邊的HR朋友，或是獵頭朋友，都給不了我的建議。",
     full: "謝謝James認真的幫我做履歷健檢，我收到回饋的時候非常訝異！怎麼能夠這麼細心，我感受到收穫滿滿，這是就連我身邊的HR朋友，或是獵頭朋友，都給不了我的建議。推薦給大家，非常認真又專業的James。",
+    photo: sunnyPhoto,
   },
   {
     name: "Sam Lee",
@@ -36,16 +42,19 @@ const allTestimonials: Testimonial[] = [
     name: "Monica",
     hook: "讓我對「怎麼寫一份有內容與策略的履歷」有了更清楚的方向與信心。",
     full: "在看原版履歷以及調整的履歷後，呈現的感覺都專業了許多。我覺得在針對履歷每一個 section 所提供的回饋都非常具體，會依照我目前的工作年資與過往經驗，給出有脈絡與可實際調整的建議。這也讓我能夠未來在面對不同公司時，可以沿用同樣架構與思考方式，依照職缺與企業做客製化調整，大幅提升修改效率與精準度。非常感謝這次細心而專業的指導，讓我對「怎麼寫一份有內容與策略的履歷」有了更清楚的方向與信心。",
+    photo: monicaPhoto,
   },
   {
     name: "Cynthia Chiang",
     hook: "你幫我發現了幾個重要的盲點，特別是ATS優化、影響力導向的寫法，以及職位對齊。",
     full: "感謝你提供如此詳細且有洞察力的履歷review。你幫我發現了幾個重要的盲點，特別是ATS優化、影響力導向的寫法，以及職位對齊。你在改善header格式、強化開頭15個字，以及呈現清晰的專業頭銜方面的指導，都非常有幫助。整體來說，你的review簡潔、專業，而且充滿可以立即執行的建議。這正是我需要的那種有架構的回饋。",
+    photo: cynthiaPhoto,
   },
   {
     name: "Julie Huang",
     hook: "James的回應很直接且針針見血。",
     full: "我覺得James的回應很直接且針針見血，後續我是搭配評語以及AI工具不斷的對話，最後果斷刪除與我現在經歷較少關聯的學歷以及其中一段較為短暫的實習經驗。後續也會陸續精進自己，訓練自己撰寫能力。感謝您抽空審視我的履歷。",
+    photo: juliePhoto,
   },
   {
     name: "Roger Lee",
@@ -61,15 +70,29 @@ const allTestimonials: Testimonial[] = [
 
 const TestimonialCard = ({ testimonial }: { testimonial: Testimonial }) => {
   const [isExpanded, setIsExpanded] = useState(false);
+  const hasPhoto = !!testimonial.photo;
 
   return (
     <div className="bg-card rounded-xl p-5 shadow-md hover:shadow-lg transition-all duration-300">
-      {/* Decorative Quote */}
-      <span className="block text-3xl text-gold/30 font-serif leading-none mb-2">"</span>
+      {/* Photo if available */}
+      {hasPhoto && (
+        <div className="flex justify-center mb-4">
+          <img
+            src={testimonial.photo}
+            alt={testimonial.name}
+            className="w-14 h-14 rounded-full object-cover border-2 border-gold"
+          />
+        </div>
+      )}
+      
+      {/* Decorative Quote (only if no photo) */}
+      {!hasPhoto && (
+        <span className="block text-3xl text-gold/30 font-serif leading-none mb-2">"</span>
+      )}
       
       {/* Hook Quote */}
-      <p className="text-foreground text-sm leading-relaxed mb-2">
-        {testimonial.hook}
+      <p className={`text-foreground text-sm leading-relaxed mb-2 ${hasPhoto ? 'text-center' : ''}`}>
+        「{testimonial.hook}」
       </p>
       
       {/* Expandable Full Content */}
