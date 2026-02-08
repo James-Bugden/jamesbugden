@@ -53,6 +53,7 @@ import PivotMethodMiniGuide from "./pages/PivotMethodMiniGuide";
 import PivotMethodMiniGuideZhTw from "./pages/PivotMethodMiniGuideZhTw";
 import GuidesPage from "./pages/GuidesPage";
 import GuidesPageZhTw from "./pages/GuidesPageZhTw";
+import { ScrollToTop } from "./components/ScrollToTop";
 
 const queryClient = new QueryClient();
 
@@ -62,6 +63,7 @@ const App = () => (
       <Toaster />
       <Sonner />
       <BrowserRouter>
+        <ScrollToTop />
         <Routes>
           <Route path="/" element={<Index />} />
           <Route path="/zh-tw" element={<IndexZhTw />} />
