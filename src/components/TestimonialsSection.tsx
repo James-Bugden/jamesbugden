@@ -77,8 +77,10 @@ const allTestimonials: Testimonial[] = [
 ];
 
 const TestimonialCard = ({ testimonial }: { testimonial: Testimonial }) => {
+  const [isExpanded, setIsExpanded] = useState(false);
+
   return (
-    <div className="bg-card rounded-xl p-6 shadow-md hover:shadow-lg transition-all duration-300 hover:-translate-y-1">
+    <div className="bg-card rounded-xl p-6 shadow-md hover:shadow-lg transition-all duration-300">
       {/* Photo or Initial */}
       <div className="flex justify-center mb-4">
         {testimonial.photo ? (
@@ -95,12 +97,28 @@ const TestimonialCard = ({ testimonial }: { testimonial: Testimonial }) => {
       </div>
       
       {/* Hook Quote */}
-      <p className="text-foreground text-sm leading-relaxed mb-3 text-center">
+      <p className="text-foreground text-sm leading-relaxed mb-2 text-center">
         "{testimonial.hook}"
       </p>
       
-      {/* Name */}
-      <p className="font-semibold text-foreground text-center text-sm">{testimonial.name}</p>
+      {/* Expandable Full Content */}
+      <div className={`overflow-hidden transition-all duration-300 ease-out ${isExpanded ? 'max-h-96 opacity-100 mt-3' : 'max-h-0 opacity-0'}`}>
+        <p className="text-muted-foreground text-xs leading-relaxed border-t border-border pt-3">
+          {testimonial.full}
+        </p>
+      </div>
+      
+      {/* Name + Read More */}
+      <div className="flex items-center justify-between mt-3">
+        <p className="font-semibold text-foreground text-sm">{testimonial.name}</p>
+        <button
+          onClick={() => setIsExpanded(!isExpanded)}
+          className="flex items-center gap-1 text-gold hover:text-gold/80 transition-colors text-xs font-medium"
+        >
+          {isExpanded ? "Less" : "More"}
+          <ChevronDown className={`w-3 h-3 transition-transform duration-300 ${isExpanded ? 'rotate-180' : ''}`} />
+        </button>
+      </div>
     </div>
   );
 };
