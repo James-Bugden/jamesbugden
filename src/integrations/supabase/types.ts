@@ -92,14 +92,6 @@ export type Database = {
           review_url: string
         }[]
       }
-      verify_review_password_secure: {
-        Args: { p_input_password: string; p_review_id: string }
-        Returns: {
-          client_name: string
-          review_url: string
-          success: boolean
-        }[]
-      }
     }
     Enums: {
       [_ in never]: never
