@@ -634,7 +634,6 @@ const SalaryStarterKitZhTw = () => {
                 <tr className="border-t border-border"><td className="px-4 py-3">中階（3 到 5 年）</td><td className="px-4 py-3">65K 到 95K</td><td className="px-4 py-3">1.1M 到 1.7M</td></tr>
                 <tr className="border-t border-border bg-muted/50"><td className="px-4 py-3">資深（5 到 10 年）</td><td className="px-4 py-3">90K 到 140K</td><td className="px-4 py-3">1.5M 到 2.5M</td></tr>
                 <tr className="border-t border-border"><td className="px-4 py-3">Staff / Principal（10 年以上）</td><td className="px-4 py-3">120K 到 200K+</td><td className="px-4 py-3">2M 到 4M+</td></tr>
-                <tr className="border-t border-border bg-gold/20"><td className="px-4 py-3 font-semibold">頂尖（台積電、聯發科等）</td><td className="px-4 py-3">差異很大</td><td className="px-4 py-3">2.5M 到 5M+</td></tr>
               </tbody>
             </table>
           </div>

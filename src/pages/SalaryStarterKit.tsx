@@ -611,52 +611,6 @@ const SalaryStarterKit = () => {
         </div>
       </section>
 
-      {/* Taiwan Salary Benchmarks */}
-      <section className="py-12 px-5 md:px-6 border-b border-border">
-        <div className="container mx-auto max-w-3xl">
-          <h2 className="font-heading text-2xl md:text-3xl text-foreground mb-6">Taiwan Salary Benchmarks (2025)</h2>
-          <p className="text-foreground mb-6">
-            Use these when preparing your scripts. <span className="text-muted-foreground italic">Disclaimer: These ranges are based on candidates I've hired and coached, most of whom work at American or multinational companies in Taiwan. These figures skew higher than the Taiwan market average. If you're targeting local companies, adjust your expectations down 15 to 30% and verify with 104人力銀行 or CakeResume. Do your own research for your specific role, company, and city.</span>
-          </p>
-
-          <div className="overflow-x-auto mb-8">
-            <table className="w-full text-sm border border-border rounded-lg overflow-hidden">
-              <thead className="bg-executive text-cream">
-                <tr>
-                  <th className="text-left px-4 py-3 font-semibold">Level</th>
-                  <th className="text-left px-4 py-3 font-semibold">Monthly Base (NT$)</th>
-                  <th className="text-left px-4 py-3 font-semibold">Approx. Annual TC (NT$)</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr className="border-t border-border"><td className="px-4 py-3">New grad (0 to 1 yr)</td><td className="px-4 py-3">38K to 52K</td><td className="px-4 py-3">550K to 800K</td></tr>
-                <tr className="border-t border-border bg-muted/50"><td className="px-4 py-3">Entry-level (1 to 3 yrs)</td><td className="px-4 py-3">45K to 65K</td><td className="px-4 py-3">700K to 1.1M</td></tr>
-                <tr className="border-t border-border"><td className="px-4 py-3">Mid-level (3 to 5 yrs)</td><td className="px-4 py-3">65K to 95K</td><td className="px-4 py-3">1.1M to 1.7M</td></tr>
-                <tr className="border-t border-border bg-muted/50"><td className="px-4 py-3">Senior (5 to 10 yrs)</td><td className="px-4 py-3">90K to 140K</td><td className="px-4 py-3">1.5M to 2.5M</td></tr>
-                <tr className="border-t border-border"><td className="px-4 py-3">Staff / Principal (10+ yrs)</td><td className="px-4 py-3">120K to 200K+</td><td className="px-4 py-3">2M to 4M+</td></tr>
-                <tr className="border-t border-border bg-gold/20"><td className="px-4 py-3 font-semibold">Top-tier (TSMC, MediaTek, etc.)</td><td className="px-4 py-3">Varies widely</td><td className="px-4 py-3">2.5M to 5M+</td></tr>
-              </tbody>
-            </table>
-          </div>
-
-          <p className="text-foreground mb-6">
-            Annual TC = base × guaranteed months + year-end bonus + profit sharing + allowances. Semiconductor and IC design companies skew significantly higher due to profit sharing and employee bonuses.
-          </p>
-
-          <h3 className="font-heading text-xl text-foreground mb-4">Where to research:</h3>
-          <div className="bg-card rounded-xl p-6 border border-border">
-            <ul className="space-y-2 text-foreground">
-              <li>• <strong>104人力銀行</strong> (104.com.tw), largest Taiwan job board, salary ranges by role</li>
-              <li>• <strong>CakeResume</strong>, tech-focused, user-reported salaries</li>
-              <li>• <strong>Glassdoor</strong>, international companies and multinationals in Taiwan</li>
-              <li>• <strong>Levels.fyi</strong>, big tech compensation data, some Taiwan entries</li>
-              <li>• <strong>Salary.tw</strong>, community-reported salaries</li>
-              <li>• <strong>Dcard 工作版</strong>, forum discussions with real salary data (verify before citing)</li>
-            </ul>
-          </div>
-        </div>
-      </section>
-
       {/* Quick Reference */}
       <section className="py-12 px-5 md:px-6 bg-muted border-b border-border">
         <div className="container mx-auto max-w-3xl">
