@@ -1,10 +1,11 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
-import { ArrowLeft, Copy, Share2, Linkedin, Check } from "lucide-react";
+import { ArrowLeft, Copy, Share2, Check } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useToast } from "@/hooks/use-toast";
-import { InstagramIcon, ThreadsIcon } from "@/components/SocialIcons";
+import ToolkitHeader from "@/components/toolkit/ToolkitHeader";
+import ToolkitFooter from "@/components/toolkit/ToolkitFooter";
 import ToolkitNav from "@/components/toolkit/ToolkitNav";
 
 const emailTemplates = [
@@ -126,7 +127,7 @@ const CounterofferEmail = () => {
     return parts.map((part, index) => {
       if (part.match(/^\[[^\]]+\]$/)) {
         return (
-          <span key={index} className="bg-[#FFF3CD] text-amber-800 px-1 rounded font-mono text-sm">
+          <span key={index} className="bg-gold/20 text-gold-dark px-1 rounded font-mono text-sm">
             {part}
           </span>
         );
@@ -136,48 +137,32 @@ const CounterofferEmail = () => {
   };
 
   return (
-    <div className="min-h-screen bg-[#1A1A2E]">
-      {/* Header */}
-      <header className="bg-[#1A1A2E] border-b border-white/10">
-        <div className="container mx-auto px-5 md:px-6 py-4 flex items-center justify-between">
-          <Link to="/" className="font-heading text-lg md:text-xl font-medium text-white tracking-tight">
-            JAMES BUGDEN
-          </Link>
-          <div className="hidden md:flex items-center gap-3">
-            <a href="https://www.linkedin.com/in/james-bugden/" target="_blank" rel="noopener noreferrer" className="text-white/70 hover:text-white transition-colors">
-              <Linkedin className="w-5 h-5" />
-            </a>
-            <a href="https://www.instagram.com/james.careers/" target="_blank" rel="noopener noreferrer" className="text-white/70 hover:text-white transition-colors">
-              <InstagramIcon className="w-5 h-5" />
-            </a>
-            <a href="https://www.threads.com/@james.careers" target="_blank" rel="noopener noreferrer" className="text-white/70 hover:text-white transition-colors">
-              <ThreadsIcon className="w-5 h-5" />
-            </a>
-          </div>
-        </div>
-      </header>
+    <div className="min-h-screen bg-background">
+      <ToolkitHeader />
 
       {/* Hero */}
-      <section className="py-12 md:py-16 px-5 md:px-6">
-        <div className="container mx-auto max-w-3xl text-center">
+      <section className="bg-executive-green py-12 md:py-16 px-5 md:px-6 relative">
+        <div className="container mx-auto max-w-3xl text-center relative z-10">
           <Link 
             to="/toolkit" 
-            className="inline-flex items-center gap-2 text-white/60 hover:text-white transition-colors mb-6 text-sm"
+            className="inline-flex items-center gap-2 text-cream-70 hover:text-cream transition-colors mb-6 text-sm"
           >
             <ArrowLeft className="w-4 h-4" />
             Back to Toolkit
           </Link>
-          <h1 className="font-heading text-3xl md:text-4xl lg:text-5xl text-white mb-4">
+          <h1 className="font-heading text-3xl md:text-4xl lg:text-5xl text-cream mb-4">
             The Counteroffer Email
           </h1>
-          <p className="text-lg text-white/70">
+          <p className="text-lg text-cream-90">
             4 versions for 4 situations. Find yours, fill in the blanks, hit send.
           </p>
         </div>
       </section>
 
       {/* Toolkit Navigation */}
-      <ToolkitNav currentTemplate="T3" />
+      <div className="pt-8">
+        <ToolkitNav currentTemplate="T3" />
+      </div>
 
       {/* Email Templates */}
       <section className="pb-8 px-5 md:px-6">
@@ -188,7 +173,7 @@ const CounterofferEmail = () => {
                 <TabsTrigger 
                   key={template.id} 
                   value={template.id}
-                  className="flex-1 min-w-[140px] bg-white/10 text-white/70 data-[state=active]:bg-[#E94560] data-[state=active]:text-white rounded-lg px-4 py-3"
+                  className="flex-1 min-w-[140px] bg-muted text-muted-foreground data-[state=active]:bg-gold data-[state=active]:text-white rounded-lg px-4 py-3"
                 >
                   {template.label}
                 </TabsTrigger>
@@ -197,23 +182,23 @@ const CounterofferEmail = () => {
 
             {emailTemplates.map((template) => (
               <TabsContent key={template.id} value={template.id}>
-                <div className="bg-white rounded-xl overflow-hidden shadow-lg">
+                <div className="bg-card rounded-xl overflow-hidden shadow-premium border border-border">
                   {/* When to use */}
-                  <div className="bg-gray-50 px-6 py-4 border-b">
-                    <p className="text-sm text-gray-600">
-                      <span className="font-semibold">When to use:</span> {template.whenToUse}
+                  <div className="bg-muted px-6 py-4 border-b border-border">
+                    <p className="text-sm text-muted-foreground">
+                      <span className="font-semibold text-foreground">When to use:</span> {template.whenToUse}
                     </p>
                   </div>
 
                   {/* Subject Line */}
-                  <div className="bg-[#0F3460] px-6 py-3">
-                    <p className="text-sm text-white/70">SUBJECT:</p>
-                    <p className="text-white font-mono">{template.subject}</p>
+                  <div className="bg-executive px-6 py-3">
+                    <p className="text-sm text-cream-70">SUBJECT:</p>
+                    <p className="text-cream font-mono">{template.subject}</p>
                   </div>
 
                   {/* Email Body */}
                   <div className="px-6 py-6">
-                    <pre className="whitespace-pre-wrap font-sans text-gray-800 text-sm leading-relaxed">
+                    <pre className="whitespace-pre-wrap font-sans text-foreground text-sm leading-relaxed">
                       {highlightPlaceholders(template.body)}
                     </pre>
                   </div>
@@ -223,7 +208,7 @@ const CounterofferEmail = () => {
                     <Button 
                       onClick={() => copyEmail(template)}
                       size="sm"
-                      className="bg-[#E94560] hover:bg-[#d13a54] text-white"
+                      className="btn-gold"
                     >
                       {copiedId === template.id ? <Check className="w-4 h-4 mr-2" /> : <Copy className="w-4 h-4 mr-2" />}
                       {copiedId === template.id ? "Copied!" : "Copy Email"}
@@ -231,9 +216,9 @@ const CounterofferEmail = () => {
                   </div>
 
                   {/* Why it works */}
-                  <div className="bg-[#E8F4FD] px-6 py-4 border-t">
-                    <p className="text-sm text-[#0F3460]">
-                      <span className="font-semibold">💡 Why this version works:</span> {template.whyItWorks}
+                  <div className="bg-executive/5 px-6 py-4 border-t border-border">
+                    <p className="text-sm text-foreground">
+                      <span className="font-semibold text-gold">💡 Why this version works:</span> {template.whyItWorks}
                     </p>
                   </div>
                 </div>
@@ -246,17 +231,17 @@ const CounterofferEmail = () => {
       {/* Key Principles */}
       <section className="pb-12 px-5 md:px-6">
         <div className="container mx-auto max-w-3xl">
-          <div className="bg-white rounded-xl p-6 shadow-lg">
-            <h3 className="font-heading text-xl text-gray-900 mb-4">5 Rules for Every Counteroffer Email</h3>
+          <div className="bg-card rounded-xl p-6 shadow-premium border border-border">
+            <h3 className="font-heading text-xl text-foreground mb-4">5 Rules for Every Counteroffer Email</h3>
             <ol className="space-y-4">
               {keyPrinciples.map((principle, index) => (
                 <li key={index} className="flex items-start gap-4">
-                  <span className="w-8 h-8 rounded-full bg-[#E94560] text-white font-bold flex items-center justify-center flex-shrink-0 text-sm">
+                  <span className="w-8 h-8 rounded-full bg-gold text-white font-bold flex items-center justify-center flex-shrink-0 text-sm">
                     {index + 1}
                   </span>
                   <div>
-                    <p className="font-semibold text-gray-900">{principle.title}</p>
-                    <p className="text-gray-600 text-sm">{principle.text}</p>
+                    <p className="font-semibold text-foreground">{principle.title}</p>
+                    <p className="text-muted-foreground text-sm">{principle.text}</p>
                   </div>
                 </li>
               ))}
@@ -271,7 +256,7 @@ const CounterofferEmail = () => {
           <Button 
             onClick={shareUrl}
             variant="outline"
-            className="border-white/30 text-white hover:bg-white/10 px-6 py-3 h-auto"
+            className="border-executive text-executive hover:bg-executive/10 px-6 py-3 h-auto"
           >
             {shared ? <Check className="w-4 h-4 mr-2" /> : <Share2 className="w-4 h-4 mr-2" />}
             {shared ? "Link Copied!" : "Share This Page"}
@@ -279,17 +264,7 @@ const CounterofferEmail = () => {
         </div>
       </section>
 
-      {/* Footer */}
-      <footer className="py-8 px-5 md:px-6 border-t border-white/10">
-        <div className="container mx-auto max-w-3xl text-center">
-          <p className="text-white/50 text-sm">
-            From the Salary Negotiation Toolkit by{" "}
-            <Link to="/" className="text-[#E94560] hover:underline">James Bugden</Link>
-            . Get the full 5-email series →{" "}
-            <Link to="/" className="text-[#E94560] hover:underline">Subscribe</Link>
-          </p>
-        </div>
-      </footer>
+      <ToolkitFooter />
     </div>
   );
 };

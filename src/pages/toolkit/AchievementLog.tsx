@@ -1,9 +1,10 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
-import { ArrowLeft, Copy, Share2, Linkedin, Check, Printer } from "lucide-react";
+import { ArrowLeft, Copy, Share2, Check, Printer } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useToast } from "@/hooks/use-toast";
-import { InstagramIcon, ThreadsIcon } from "@/components/SocialIcons";
+import ToolkitHeader from "@/components/toolkit/ToolkitHeader";
+import ToolkitFooter from "@/components/toolkit/ToolkitFooter";
 import ToolkitNav from "@/components/toolkit/ToolkitNav";
 
 const exampleWeek = {
@@ -18,10 +19,10 @@ const exampleWeek = {
 };
 
 const categories = {
-  revenue: { icon: "💰", label: "Revenue", color: "bg-green-100 text-green-700" },
-  efficiency: { icon: "⚡", label: "Efficiency", color: "bg-blue-100 text-blue-700" },
-  leadership: { icon: "👥", label: "Leadership", color: "bg-purple-100 text-purple-700" },
-  innovation: { icon: "💡", label: "Innovation", color: "bg-orange-100 text-orange-700" },
+  revenue: { icon: "💰", label: "Revenue", color: "bg-accent/20 text-accent-foreground" },
+  efficiency: { icon: "⚡", label: "Efficiency", color: "bg-executive/10 text-executive" },
+  leadership: { icon: "👥", label: "Leadership", color: "bg-muted text-foreground" },
+  innovation: { icon: "💡", label: "Innovation", color: "bg-gold/20 text-gold-dark" },
 };
 
 const goodEntries = [
@@ -83,67 +84,49 @@ CATEGORIES:
   };
 
   return (
-    <div className="min-h-screen bg-[#1A1A2E]">
-      {/* Header */}
-      <header className="bg-[#1A1A2E] border-b border-white/10 print:hidden">
-        <div className="container mx-auto px-5 md:px-6 py-4 flex items-center justify-between">
-          <Link to="/" className="font-heading text-lg md:text-xl font-medium text-white tracking-tight">
-            JAMES BUGDEN
-          </Link>
-          <div className="hidden md:flex items-center gap-3">
-            <a href="https://www.linkedin.com/in/james-bugden/" target="_blank" rel="noopener noreferrer" className="text-white/70 hover:text-white transition-colors">
-              <Linkedin className="w-5 h-5" />
-            </a>
-            <a href="https://www.instagram.com/james.careers/" target="_blank" rel="noopener noreferrer" className="text-white/70 hover:text-white transition-colors">
-              <InstagramIcon className="w-5 h-5" />
-            </a>
-            <a href="https://www.threads.com/@james.careers" target="_blank" rel="noopener noreferrer" className="text-white/70 hover:text-white transition-colors">
-              <ThreadsIcon className="w-5 h-5" />
-            </a>
-          </div>
-        </div>
-      </header>
+    <div className="min-h-screen bg-background">
+      <ToolkitHeader />
 
       {/* Hero */}
-      <section className="py-12 md:py-16 px-5 md:px-6 print:hidden">
-        <div className="container mx-auto max-w-4xl text-center">
+      <section className="bg-executive-green py-12 md:py-16 px-5 md:px-6 relative print:hidden">
+        <div className="container mx-auto max-w-4xl text-center relative z-10">
           <Link 
             to="/toolkit" 
-            className="inline-flex items-center gap-2 text-white/60 hover:text-white transition-colors mb-6 text-sm"
+            className="inline-flex items-center gap-2 text-cream-70 hover:text-cream transition-colors mb-6 text-sm"
           >
             <ArrowLeft className="w-4 h-4" />
             Back to Toolkit
           </Link>
-          <h1 className="font-heading text-3xl md:text-4xl lg:text-5xl text-white mb-4">
+          <h1 className="font-heading text-3xl md:text-4xl lg:text-5xl text-cream mb-4">
             Weekly Achievement Log
           </h1>
-          <p className="text-lg text-white/70">
+          <p className="text-lg text-cream-90">
             5 minutes every Friday. The most valuable career habit you'll ever build.
           </p>
         </div>
       </section>
 
       {/* Toolkit Navigation */}
-      <div className="print:hidden">
+      <div className="pt-8 print:hidden">
         <ToolkitNav currentTemplate="T7" />
       </div>
 
       {/* How It Works */}
       <section className="pb-8 px-5 md:px-6 print:hidden">
         <div className="container mx-auto max-w-4xl">
-          <div className="bg-[#0F3460] rounded-xl p-6">
-            <h2 className="text-white font-semibold text-lg mb-4">How It Works</h2>
-            <ol className="space-y-2 text-white/80">
+          <div className="bg-executive rounded-xl p-6">
+            <h2 className="text-cream font-semibold text-lg mb-4">How It Works</h2>
+            <ol className="space-y-2 text-cream-90">
               <li className="flex items-start gap-3">
-                <span className="w-6 h-6 rounded-full bg-[#E94560] text-white text-sm font-bold flex items-center justify-center flex-shrink-0">1</span>
+                <span className="w-6 h-6 rounded-full bg-gold text-white text-sm font-bold flex items-center justify-center flex-shrink-0">1</span>
                 <span>Every Friday, spend 5 minutes writing down what you accomplished that week</span>
               </li>
               <li className="flex items-start gap-3">
-                <span className="w-6 h-6 rounded-full bg-[#E94560] text-white text-sm font-bold flex items-center justify-center flex-shrink-0">2</span>
+                <span className="w-6 h-6 rounded-full bg-gold text-white text-sm font-bold flex items-center justify-center flex-shrink-0">2</span>
                 <span>Be specific — use numbers, percentages, dollar amounts, and outcomes</span>
               </li>
               <li className="flex items-start gap-3">
-                <span className="w-6 h-6 rounded-full bg-[#E94560] text-white text-sm font-bold flex items-center justify-center flex-shrink-0">3</span>
+                <span className="w-6 h-6 rounded-full bg-gold text-white text-sm font-bold flex items-center justify-center flex-shrink-0">3</span>
                 <span>When it's time to ask for a raise, you'll have months of documented proof instead of vague memories</span>
               </li>
             </ol>
@@ -154,28 +137,28 @@ CATEGORIES:
       {/* Example Week */}
       <section className="pb-8 px-5 md:px-6 print:hidden">
         <div className="container mx-auto max-w-4xl">
-          <div className="bg-[#F8F8F8] rounded-xl overflow-hidden shadow-lg">
-            <div className="bg-[#0F3460] px-6 py-3">
-              <h2 className="text-white font-semibold">FILLED EXAMPLE: Week of {exampleWeek.weekOf}</h2>
+          <div className="bg-muted rounded-xl overflow-hidden shadow-premium">
+            <div className="bg-executive px-6 py-3">
+              <h2 className="text-cream font-semibold">FILLED EXAMPLE: Week of {exampleWeek.weekOf}</h2>
             </div>
             <div className="overflow-x-auto">
               <table className="w-full text-sm">
-                <thead className="bg-gray-100">
+                <thead className="bg-card">
                   <tr>
-                    <th className="text-left px-4 py-3 font-semibold text-gray-700 w-16">Day</th>
-                    <th className="text-left px-4 py-3 font-semibold text-gray-700">Achievement</th>
-                    <th className="text-left px-4 py-3 font-semibold text-gray-700">Impact / Metric</th>
-                    <th className="text-left px-4 py-3 font-semibold text-gray-700 w-28">Category</th>
+                    <th className="text-left px-4 py-3 font-semibold text-foreground w-16">Day</th>
+                    <th className="text-left px-4 py-3 font-semibold text-foreground">Achievement</th>
+                    <th className="text-left px-4 py-3 font-semibold text-foreground">Impact / Metric</th>
+                    <th className="text-left px-4 py-3 font-semibold text-foreground w-28">Category</th>
                   </tr>
                 </thead>
                 <tbody>
                   {exampleWeek.entries.map((entry, index) => {
                     const cat = categories[entry.category as keyof typeof categories];
                     return (
-                      <tr key={index} className={index % 2 === 0 ? "bg-white" : "bg-gray-50"}>
-                        <td className="px-4 py-3 font-medium text-gray-900">{entry.day}</td>
-                        <td className="px-4 py-3 text-gray-700">{entry.achievement}</td>
-                        <td className="px-4 py-3 text-gray-700">{entry.impact}</td>
+                      <tr key={index} className={index % 2 === 0 ? "bg-card" : "bg-muted/50"}>
+                        <td className="px-4 py-3 font-medium text-foreground">{entry.day}</td>
+                        <td className="px-4 py-3 text-foreground">{entry.achievement}</td>
+                        <td className="px-4 py-3 text-foreground">{entry.impact}</td>
                         <td className="px-4 py-3">
                           <span className={`inline-flex items-center gap-1 px-2 py-1 rounded-full text-xs font-medium ${cat.color}`}>
                             {cat.icon} {cat.label}
@@ -195,31 +178,31 @@ CATEGORIES:
       <section className="pb-8 px-5 md:px-6">
         <div className="container mx-auto max-w-4xl space-y-6">
           {[1, 2, 3, 4].map((weekNum) => (
-            <div key={weekNum} className="bg-white rounded-xl overflow-hidden shadow-lg print:shadow-none print:border print:border-gray-300 print:break-inside-avoid">
-              <div className="bg-gray-100 px-6 py-3 print:bg-gray-50">
-                <h2 className="text-gray-700 font-semibold">BLANK TEMPLATE: Week of ________________</h2>
+            <div key={weekNum} className="bg-card rounded-xl overflow-hidden shadow-premium border border-border print:shadow-none print:border print:border-gray-300 print:break-inside-avoid">
+              <div className="bg-muted px-6 py-3 print:bg-gray-50">
+                <h2 className="text-foreground font-semibold">BLANK TEMPLATE: Week of ________________</h2>
               </div>
               <div className="overflow-x-auto">
                 <table className="w-full text-sm">
-                  <thead className="bg-gray-50">
+                  <thead className="bg-muted/50">
                     <tr>
-                      <th className="text-left px-4 py-3 font-semibold text-gray-700 w-16">Day</th>
-                      <th className="text-left px-4 py-3 font-semibold text-gray-700">Achievement</th>
-                      <th className="text-left px-4 py-3 font-semibold text-gray-700">Impact / Metric</th>
-                      <th className="text-left px-4 py-3 font-semibold text-gray-700 w-32">Category</th>
+                      <th className="text-left px-4 py-3 font-semibold text-foreground w-16">Day</th>
+                      <th className="text-left px-4 py-3 font-semibold text-foreground">Achievement</th>
+                      <th className="text-left px-4 py-3 font-semibold text-foreground">Impact / Metric</th>
+                      <th className="text-left px-4 py-3 font-semibold text-foreground w-32">Category</th>
                     </tr>
                   </thead>
                   <tbody>
                     {days.map((day, index) => (
-                      <tr key={day} className={index % 2 === 0 ? "bg-white" : "bg-gray-50"}>
-                        <td className="px-4 py-4 font-medium text-gray-900">{day}</td>
+                      <tr key={day} className={index % 2 === 0 ? "bg-card" : "bg-muted/50"}>
+                        <td className="px-4 py-4 font-medium text-foreground">{day}</td>
                         <td className="px-4 py-4">
-                          <div className="border-b-2 border-dashed border-gray-300 h-6"></div>
+                          <div className="border-b-2 border-dashed border-border h-6"></div>
                         </td>
                         <td className="px-4 py-4">
-                          <div className="border-b-2 border-dashed border-gray-300 h-6"></div>
+                          <div className="border-b-2 border-dashed border-border h-6"></div>
                         </td>
-                        <td className="px-4 py-4 text-gray-400 text-xs">☐💰 ☐⚡ ☐👥 ☐💡</td>
+                        <td className="px-4 py-4 text-muted-foreground text-xs">☐💰 ☐⚡ ☐👥 ☐💡</td>
                       </tr>
                     ))}
                   </tbody>
@@ -233,23 +216,23 @@ CATEGORIES:
       {/* What Makes a Good Entry */}
       <section className="pb-8 px-5 md:px-6 print:hidden">
         <div className="container mx-auto max-w-4xl">
-          <div className="bg-white rounded-xl overflow-hidden shadow-lg">
-            <div className="bg-[#0F3460] px-6 py-3">
-              <h2 className="text-white font-semibold">What Makes a Good Entry</h2>
+          <div className="bg-card rounded-xl overflow-hidden shadow-premium border border-border">
+            <div className="bg-executive px-6 py-3">
+              <h2 className="text-cream font-semibold">What Makes a Good Entry</h2>
             </div>
             <div className="overflow-x-auto">
               <table className="w-full text-sm">
-                <thead className="bg-gray-100">
+                <thead className="bg-muted">
                   <tr>
-                    <th className="text-left px-4 py-3 font-semibold text-red-600">❌ Vague (don't write this)</th>
-                    <th className="text-left px-4 py-3 font-semibold text-green-600">✅ Specific (write this)</th>
+                    <th className="text-left px-4 py-3 font-semibold text-destructive">✕ Vague (don't write this)</th>
+                    <th className="text-left px-4 py-3 font-semibold text-executive">✓ Specific (write this)</th>
                   </tr>
                 </thead>
                 <tbody>
                   {goodEntries.map((entry, index) => (
-                    <tr key={index} className={index % 2 === 0 ? "bg-white" : "bg-gray-50"}>
-                      <td className="px-4 py-3 text-gray-500 italic">{entry.bad}</td>
-                      <td className="px-4 py-3 text-gray-800">{entry.good}</td>
+                    <tr key={index} className={index % 2 === 0 ? "bg-card" : "bg-muted/50"}>
+                      <td className="px-4 py-3 text-muted-foreground italic">{entry.bad}</td>
+                      <td className="px-4 py-3 text-foreground">{entry.good}</td>
                     </tr>
                   ))}
                 </tbody>
@@ -262,15 +245,15 @@ CATEGORIES:
       {/* Categories */}
       <section className="pb-8 px-5 md:px-6 print:hidden">
         <div className="container mx-auto max-w-4xl">
-          <div className="bg-white rounded-xl p-6 shadow-lg">
-            <h3 className="font-heading text-lg text-gray-900 mb-4">Categories</h3>
+          <div className="bg-card rounded-xl p-6 shadow-premium border border-border">
+            <h3 className="font-heading text-lg text-foreground mb-4">Categories</h3>
             <div className="grid sm:grid-cols-2 gap-4">
               {categoryDescriptions.map((cat, index) => (
                 <div key={index} className="flex items-start gap-3">
                   <span className={`inline-flex items-center gap-1 px-3 py-1 rounded-full text-sm font-medium ${cat.color}`}>
                     {cat.icon} {cat.label}
                   </span>
-                  <p className="text-gray-600 text-sm">{cat.desc}</p>
+                  <p className="text-muted-foreground text-sm">{cat.desc}</p>
                 </div>
               ))}
             </div>
@@ -281,9 +264,9 @@ CATEGORIES:
       {/* 5-Minute Friday Habit */}
       <section className="pb-12 px-5 md:px-6 print:hidden">
         <div className="container mx-auto max-w-4xl">
-          <div className="bg-amber-50 rounded-xl p-6 border-l-4 border-amber-400">
-            <h3 className="font-heading text-lg text-amber-800 mb-3">📅 The 5-Minute Friday Habit</h3>
-            <p className="text-amber-800">
+          <div className="bg-gold/10 rounded-xl p-6 border-l-4 border-gold">
+            <h3 className="font-heading text-lg text-gold mb-3">📅 The 5-Minute Friday Habit</h3>
+            <p className="text-foreground">
               Set a recurring calendar event: every Friday at 4:30 PM. Title it "Log Wins." Open this page, fill in the week's row, and close it. That's it. In 6 months, you'll have 120+ documented achievements — more evidence than 99% of people bring to a raise conversation.
             </p>
           </div>
@@ -295,14 +278,14 @@ CATEGORIES:
         <div className="container mx-auto max-w-4xl flex flex-col sm:flex-row gap-4 justify-center">
           <Button 
             onClick={printPage}
-            className="bg-[#0F3460] hover:bg-[#0a2a4d] text-white px-6 py-3 h-auto"
+            className="bg-executive hover:bg-executive-light text-cream px-6 py-3 h-auto"
           >
             <Printer className="w-4 h-4 mr-2" />
             Print This
           </Button>
           <Button 
             onClick={copyTemplate}
-            className="bg-[#E94560] hover:bg-[#d13a54] text-white px-6 py-3 h-auto"
+            className="btn-gold px-6 py-3 h-auto"
           >
             {copied ? <Check className="w-4 h-4 mr-2" /> : <Copy className="w-4 h-4 mr-2" />}
             {copied ? "Copied!" : "Copy Template"}
@@ -310,7 +293,7 @@ CATEGORIES:
           <Button 
             onClick={shareUrl}
             variant="outline"
-            className="border-white/30 text-white hover:bg-white/10 px-6 py-3 h-auto"
+            className="border-executive text-executive hover:bg-executive/10 px-6 py-3 h-auto"
           >
             {shared ? <Check className="w-4 h-4 mr-2" /> : <Share2 className="w-4 h-4 mr-2" />}
             {shared ? "Link Copied!" : "Share"}
@@ -318,17 +301,7 @@ CATEGORIES:
         </div>
       </section>
 
-      {/* Footer */}
-      <footer className="py-8 px-5 md:px-6 border-t border-white/10 print:hidden">
-        <div className="container mx-auto max-w-4xl text-center">
-          <p className="text-white/50 text-sm">
-            From the Salary Negotiation Toolkit by{" "}
-            <Link to="/" className="text-[#E94560] hover:underline">James Bugden</Link>
-            . Get the full 5-email series →{" "}
-            <Link to="/" className="text-[#E94560] hover:underline">Subscribe</Link>
-          </p>
-        </div>
-      </footer>
+      <ToolkitFooter />
     </div>
   );
 };
