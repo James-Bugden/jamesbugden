@@ -43,7 +43,7 @@ const GuidesPageZhTw = lazy(() => import("./pages/GuidesPageZhTw"));
 const SalaryStarterKit = lazy(() => import("./pages/SalaryStarterKit"));
 const SalaryStarterKitZhTw = lazy(() => import("./pages/SalaryStarterKitZhTw"));
 
-// Toolkit pages
+// Toolkit pages - English
 const ToolkitIndex = lazy(() => import("./pages/toolkit/ToolkitIndex"));
 const DeflectionScripts = lazy(() => import("./pages/toolkit/DeflectionScripts"));
 const OfferResponse = lazy(() => import("./pages/toolkit/OfferResponse"));
@@ -52,6 +52,16 @@ const CompensationCalculator = lazy(() => import("./pages/toolkit/CompensationCa
 const PushbackCheatSheet = lazy(() => import("./pages/toolkit/PushbackCheatSheet"));
 const RaiseOnePager = lazy(() => import("./pages/toolkit/RaiseOnePager"));
 const AchievementLog = lazy(() => import("./pages/toolkit/AchievementLog"));
+
+// Toolkit pages - Traditional Chinese
+const ToolkitIndexZhTw = lazy(() => import("./pages/toolkit/ToolkitIndexZhTw"));
+const DeflectionScriptsZhTw = lazy(() => import("./pages/toolkit/DeflectionScriptsZhTw"));
+const OfferResponseZhTw = lazy(() => import("./pages/toolkit/OfferResponseZhTw"));
+const CounterofferEmailZhTw = lazy(() => import("./pages/toolkit/CounterofferEmailZhTw"));
+const CompensationCalculatorZhTw = lazy(() => import("./pages/toolkit/CompensationCalculatorZhTw"));
+const PushbackCheatSheetZhTw = lazy(() => import("./pages/toolkit/PushbackCheatSheetZhTw"));
+const RaiseOnePagerZhTw = lazy(() => import("./pages/toolkit/RaiseOnePagerZhTw"));
+const AchievementLogZhTw = lazy(() => import("./pages/toolkit/AchievementLogZhTw"));
 
 // Lazy load review pages
 const CharleneLeeReview = lazy(() => import("./pages/reviews/CharleneLeeReview"));
@@ -132,6 +142,15 @@ const App = () => (
             <Route path="/toolkit/pushback" element={<PushbackCheatSheet />} />
             <Route path="/toolkit/raise" element={<RaiseOnePager />} />
             <Route path="/toolkit/log" element={<AchievementLog />} />
+            {/* Traditional Chinese Toolkit */}
+            <Route path="/zh-tw/toolkit" element={<ToolkitIndexZhTw />} />
+            <Route path="/zh-tw/toolkit/scripts" element={<DeflectionScriptsZhTw />} />
+            <Route path="/zh-tw/toolkit/offer-response" element={<OfferResponseZhTw />} />
+            <Route path="/zh-tw/toolkit/counteroffer" element={<CounterofferEmailZhTw />} />
+            <Route path="/zh-tw/toolkit/calculator" element={<CompensationCalculatorZhTw />} />
+            <Route path="/zh-tw/toolkit/pushback" element={<PushbackCheatSheetZhTw />} />
+            <Route path="/zh-tw/toolkit/raise" element={<RaiseOnePagerZhTw />} />
+            <Route path="/zh-tw/toolkit/log" element={<AchievementLogZhTw />} />
             {/* Client Review Pages */}
             <Route path="/reviews/charlene-lee" element={<CharleneLeeReview />} />
             <Route path="/zh-tw/reviews/charlene-lee" element={<CharleneLeeReviewZhTw />} />
