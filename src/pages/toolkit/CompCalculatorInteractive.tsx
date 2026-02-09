@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/button";
 import { Switch } from "@/components/ui/switch";
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
 import { useToast } from "@/hooks/use-toast";
+import { useIsMobile } from "@/hooks/use-mobile";
 import {
   AlertDialog,
   AlertDialogAction,
@@ -23,7 +24,7 @@ import { CalculatorSection } from "@/components/toolkit/calculator/CalculatorSec
 import { CurrencyInput, PercentInput, formatCurrency } from "@/components/toolkit/calculator/CurrencyInput";
 import { ResultsPanel } from "@/components/toolkit/calculator/ResultsPanel";
 import { useCompCalculator } from "@/components/toolkit/calculator/useCompCalculator";
-import { VESTING_SCHEDULES } from "@/components/toolkit/calculator/types";
+import { VESTING_SCHEDULES, OfferData } from "@/components/toolkit/calculator/types";
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible";
 import { ChevronDown } from "lucide-react";
 
@@ -50,6 +51,15 @@ function RowLabel({ children, tip, isSubtracted }: { children: React.ReactNode; 
   );
 }
 
+/** Returns the visible offers and their real indices based on mobile/desktop */
+function useVisibleOffers(offers: OfferData[], isMobile: boolean, mobileTab: number) {
+  if (isMobile) {
+    const idx = Math.min(mobileTab, offers.length - 1);
+    return { visible: [offers[idx]], indices: [idx] };
+  }
+  return { visible: offers, indices: offers.map((_, i) => i) };
+}
+
 const hrQuestions = [
   "What is the target bonus percentage for this role?",
   "What was the average actual bonus payout last year?",
@@ -72,6 +82,7 @@ const howToUseSteps = [
 
 const CompCalculatorInteractive = () => {
   const { toast } = useToast();
+  const isMobile = useIsMobile();
   const {
     offers,
     results,
@@ -88,12 +99,15 @@ const CompCalculatorInteractive = () => {
   const [shared, setShared] = useState(false);
   const [mobileTab, setMobileTab] = useState(0);
 
+  const { visible, indices } = useVisibleOffers(offers, isMobile, mobileTab);
+  const colCount = visible.length;
+  const gridCols = `repeat(${colCount}, 1fr)`;
+
   const copySummary = useCallback(() => {
     const lines = offers.map((o, i) => {
       const r = results[i];
       return `${o.name || `Offer ${i + 1}`}: Year 1 = ${formatCurrency(r.year1Total)} | Year 2+ = ${formatCurrency(r.year2Total)}`;
     });
-
     if (offers.length > 1) {
       const best = results.reduce((bi, r, i) => (r.year1Total > results[bi].year1Total ? i : bi), 0);
       const worst = results.reduce((bi, r, i) => (r.year1Total < results[bi].year1Total ? i : bi), 0);
@@ -102,7 +116,6 @@ const CompCalculatorInteractive = () => {
         lines.push(`Difference: ${offers[best].name} pays ${formatCurrency(diff)} more in Year 1`);
       }
     }
-
     navigator.clipboard.writeText(`Total Compensation Comparison\n\n${lines.join("\n")}`);
     setCopied(true);
     toast({ title: "Copied!", description: "Summary copied to clipboard." });
@@ -116,7 +129,6 @@ const CompCalculatorInteractive = () => {
     setTimeout(() => setShared(false), 2000);
   }, [toast]);
 
-  // Mobile: show one offer at a time
   const activeOfferIndex = Math.min(mobileTab, offers.length - 1);
 
   return (
@@ -126,26 +138,16 @@ const CompCalculatorInteractive = () => {
       {/* Hero */}
       <section className="bg-executive-green py-12 md:py-16 px-5 md:px-6 relative">
         <div className="container mx-auto max-w-[1200px] text-center relative z-10">
-          <Link
-            to="/toolkit"
-            className="inline-flex items-center gap-2 text-cream-70 hover:text-cream transition-colors mb-6 text-sm"
-          >
-            <ArrowLeft className="w-4 h-4" />
-            Back to Toolkit
+          <Link to="/toolkit" className="inline-flex items-center gap-2 text-cream-70 hover:text-cream transition-colors mb-6 text-sm">
+            <ArrowLeft className="w-4 h-4" /> Back to Toolkit
           </Link>
-          <h1 className="font-heading text-3xl md:text-4xl lg:text-5xl text-cream mb-3">
-            Total Compensation Calculator
-          </h1>
-          <p className="text-lg text-cream-90 max-w-2xl mx-auto mb-2">
-            Your offer is more than the base salary. See the full picture, compare offers, and find the real winner.
-          </p>
+          <h1 className="font-heading text-3xl md:text-4xl lg:text-5xl text-cream mb-3">Total Compensation Calculator</h1>
+          <p className="text-lg text-cream-90 max-w-2xl mx-auto mb-2">Your offer is more than the base salary. See the full picture, compare offers, and find the real winner.</p>
           <p className="text-sm text-cream-70">Compare up to 3 offers. Every field updates totals in real time.</p>
         </div>
       </section>
 
-      <div className="pt-8">
-        <ToolkitNav currentTemplate="T4" />
-      </div>
+      <div className="pt-8"><ToolkitNav currentTemplate="T4" /></div>
 
       {/* Calculator */}
       <section className="px-5 md:px-6 pb-8">
@@ -154,9 +156,7 @@ const CompCalculatorInteractive = () => {
           <div className="flex flex-wrap items-center justify-between gap-3 mb-6">
             <div className="flex gap-2">
               {!exampleLoaded && (
-                <button onClick={loadExample} className="text-sm text-gold hover:underline">
-                  Load example data
-                </button>
+                <button onClick={loadExample} className="text-sm text-gold hover:underline">Load example data</button>
               )}
             </div>
             <div className="flex gap-2">
@@ -198,55 +198,51 @@ const CompCalculatorInteractive = () => {
           )}
 
           {/* Mobile tab bar */}
-          <div className="md:hidden flex gap-1 bg-muted rounded-lg p-1 mb-6 overflow-x-auto">
-            {offers.map((o, i) => (
-              <button
-                key={i}
-                onClick={() => setMobileTab(i)}
-                className={`flex-1 px-3 py-2 text-sm font-medium rounded-md transition-colors min-w-0 truncate ${
-                  mobileTab === i ? "bg-card text-foreground shadow-sm" : "text-muted-foreground"
-                }`}
-              >
-                {o.name || `Offer ${i + 1}`}
-              </button>
-            ))}
-            {offers.length < 3 && (
-              <button
-                onClick={addOffer}
-                className="px-3 py-2 text-sm text-gold font-medium rounded-md hover:bg-gold/10 transition-colors flex-shrink-0"
-              >
-                <Plus className="w-4 h-4" />
-              </button>
-            )}
-          </div>
+          {isMobile && (
+            <div className="flex gap-1 bg-muted rounded-lg p-1 mb-6 overflow-x-auto">
+              {offers.map((o, i) => (
+                <button
+                  key={i}
+                  onClick={() => setMobileTab(i)}
+                  className={`flex-1 px-3 py-2 text-sm font-medium rounded-md transition-colors min-w-0 truncate ${mobileTab === i ? "bg-card text-foreground shadow-sm" : "text-muted-foreground"}`}
+                >
+                  {o.name || `Offer ${i + 1}`}
+                </button>
+              ))}
+              {offers.length < 3 && (
+                <button onClick={addOffer} className="px-3 py-2 text-sm text-gold font-medium rounded-md hover:bg-gold/10 transition-colors flex-shrink-0">
+                  <Plus className="w-4 h-4" />
+                </button>
+              )}
+            </div>
+          )}
 
           {/* Column headers (desktop) */}
-          <div className="hidden md:grid gap-3 mb-4" style={{ gridTemplateColumns: `200px repeat(${offers.length}, 1fr)${offers.length < 3 ? " auto" : ""}` }}>
-            <div />
-            {offers.map((offer, i) => (
-              <div key={i} className="flex items-center gap-2">
-                <input
-                  value={offer.name}
-                  onChange={(e) => updateOffer(i, { name: e.target.value })}
-                  className="font-semibold text-sm bg-transparent border-b border-dashed border-border focus:border-gold focus:outline-none px-1 py-1 w-full"
-                  placeholder={`Offer ${String.fromCharCode(65 + i)}`}
-                />
-                {offers.length > 1 && (
-                  <button onClick={() => removeOffer(i)} className="text-muted-foreground hover:text-destructive transition-colors" aria-label="Remove offer">
-                    <X className="w-4 h-4" />
-                  </button>
-                )}
-              </div>
-            ))}
-            {offers.length < 3 && (
-              <button
-                onClick={addOffer}
-                className="flex items-center gap-1 px-3 py-1 text-sm text-gold hover:bg-gold/10 rounded-lg transition-colors"
-              >
-                <Plus className="w-4 h-4" /> Add Offer
-              </button>
-            )}
-          </div>
+          {!isMobile && (
+            <div className="grid gap-3 mb-4" style={{ gridTemplateColumns: `200px ${gridCols}${offers.length < 3 ? " auto" : ""}` }}>
+              <div />
+              {offers.map((offer, i) => (
+                <div key={i} className="flex items-center gap-2">
+                  <input
+                    value={offer.name}
+                    onChange={(e) => updateOffer(i, { name: e.target.value })}
+                    className="font-semibold text-sm bg-transparent border-b border-dashed border-border focus:border-gold focus:outline-none px-1 py-1 w-full"
+                    placeholder={`Offer ${String.fromCharCode(65 + i)}`}
+                  />
+                  {offers.length > 1 && (
+                    <button onClick={() => removeOffer(i)} className="text-muted-foreground hover:text-destructive transition-colors" aria-label="Remove offer">
+                      <X className="w-4 h-4" />
+                    </button>
+                  )}
+                </div>
+              ))}
+              {offers.length < 3 && (
+                <button onClick={addOffer} className="flex items-center gap-1 px-3 py-1 text-sm text-gold hover:bg-gold/10 rounded-lg transition-colors">
+                  <Plus className="w-4 h-4" /> Add Offer
+                </button>
+              )}
+            </div>
+          )}
 
           {/* Sections */}
           <div className="space-y-4">
@@ -254,114 +250,62 @@ const CompCalculatorInteractive = () => {
             <CalculatorSection title="Cash Compensation" description="Base salary, bonuses, and one-time payments" defaultOpen>
               {/* Base Salary */}
               <div>
-                <RowLabel tip="Your fixed annual pay before taxes. This is the foundation. Bonuses, 401(k) match, and ESPP contributions are calculated from this number.">
-                  Annual Base Salary
-                </RowLabel>
-                <div className="grid gap-3" style={{ gridTemplateColumns: `repeat(${offers.length > 1 || window.innerWidth >= 768 ? offers.length : 1}, 1fr)` }}>
-                  {(window.innerWidth < 768 ? [offers[activeOfferIndex]] : offers).map((offer, idx) => {
-                    const i = window.innerWidth < 768 ? activeOfferIndex : idx;
-                    return (
-                      <CurrencyInput
-                        key={i}
-                        value={offer.baseSalary}
-                        onChange={(v) => updateOffer(i, { baseSalary: v })}
-                        placeholder="e.g. 150,000"
-                        isLarge
-                        ariaLabel={`Base salary for ${offer.name}`}
-                      />
-                    );
-                  })}
+                <RowLabel tip="Your fixed annual pay before taxes. This is the foundation. Bonuses, 401(k) match, and ESPP contributions are calculated from this number.">Annual Base Salary</RowLabel>
+                <div className="grid gap-3" style={{ gridTemplateColumns: gridCols }}>
+                  {visible.map((offer, vi) => (
+                    <CurrencyInput key={indices[vi]} value={offer.baseSalary} onChange={(v) => updateOffer(indices[vi], { baseSalary: v })} placeholder="e.g. 150,000" isLarge ariaLabel={`Base salary for ${offer.name}`} />
+                  ))}
                 </div>
               </div>
 
               {/* Performance Bonus */}
               <div>
-                <RowLabel tip="Annual target bonus. Usually 10-30% of base at large companies. Enter the target, not the maximum.">
-                  Performance Bonus
-                </RowLabel>
-                {(window.innerWidth < 768 ? [offers[activeOfferIndex]] : offers).map((offer, idx) => {
-                  const i = window.innerWidth < 768 ? activeOfferIndex : idx;
-                  return (
-                    <div key={i} className="mb-2">
-                      <div className="flex items-center gap-3 mb-2 md:hidden">
-                        <span className="text-xs text-muted-foreground">{offer.name}</span>
-                      </div>
-                      <div className="flex items-center gap-3">
-                        <div className="flex items-center gap-2">
-                          <span className={`text-xs ${offer.bonusMode === "percent" ? "text-foreground font-medium" : "text-muted-foreground"}`}>% of base</span>
-                          <Switch
-                            checked={offer.bonusMode === "fixed"}
-                            onCheckedChange={(checked) => updateOffer(i, { bonusMode: checked ? "fixed" : "percent" })}
-                          />
+                <RowLabel tip="Annual target bonus. Usually 10-30% of base at large companies. Enter the target, not the maximum.">Performance Bonus</RowLabel>
+                <div className="grid gap-3" style={{ gridTemplateColumns: gridCols }}>
+                  {visible.map((offer, vi) => {
+                    const i = indices[vi];
+                    return (
+                      <div key={i}>
+                        <div className="flex items-center gap-2 mb-2">
+                          <span className={`text-xs ${offer.bonusMode === "percent" ? "text-foreground font-medium" : "text-muted-foreground"}`}>%</span>
+                          <Switch checked={offer.bonusMode === "fixed"} onCheckedChange={(checked) => updateOffer(i, { bonusMode: checked ? "fixed" : "percent" })} />
                           <span className={`text-xs ${offer.bonusMode === "fixed" ? "text-foreground font-medium" : "text-muted-foreground"}`}>Fixed</span>
                         </div>
                         {offer.bonusMode === "percent" ? (
-                          <div className="flex items-center gap-2 flex-1">
-                            <div className="w-24">
-                              <PercentInput
-                                value={offer.bonusPercent}
-                                onChange={(v) => updateOffer(i, { bonusPercent: v })}
-                                placeholder="15"
-                                max={200}
-                                ariaLabel={`Bonus percent for ${offer.name}`}
-                              />
+                          <div className="flex items-center gap-2">
+                            <div className="w-24 flex-shrink-0">
+                              <PercentInput value={offer.bonusPercent} onChange={(v) => updateOffer(i, { bonusPercent: v })} placeholder="15" max={200} ariaLabel={`Bonus % for ${offer.name}`} />
                             </div>
                             {offer.baseSalary > 0 && offer.bonusPercent > 0 && (
-                              <span className="text-xs text-muted-foreground">= {formatCurrency(offer.baseSalary * offer.bonusPercent / 100)}</span>
+                              <span className="text-xs text-muted-foreground whitespace-nowrap">= {formatCurrency(offer.baseSalary * offer.bonusPercent / 100)}</span>
                             )}
                           </div>
                         ) : (
-                          <div className="flex-1">
-                            <CurrencyInput
-                              value={offer.bonusFixed}
-                              onChange={(v) => updateOffer(i, { bonusFixed: v })}
-                              placeholder="e.g. 25,000"
-                              ariaLabel={`Bonus amount for ${offer.name}`}
-                            />
-                          </div>
+                          <CurrencyInput value={offer.bonusFixed} onChange={(v) => updateOffer(i, { bonusFixed: v })} placeholder="e.g. 25,000" ariaLabel={`Bonus for ${offer.name}`} />
                         )}
                       </div>
-                    </div>
-                  );
-                })}
+                    );
+                  })}
+                </div>
               </div>
 
               {/* Sign-On Bonus */}
               <div>
-                <RowLabel tip="One-time payment for joining. If paid across 2 years, enter Year 1 amount here.">
-                  Sign-On Bonus
-                </RowLabel>
-                <div className="grid gap-3" style={{ gridTemplateColumns: `repeat(${offers.length > 1 || window.innerWidth >= 768 ? offers.length : 1}, 1fr)` }}>
-                  {(window.innerWidth < 768 ? [offers[activeOfferIndex]] : offers).map((offer, idx) => {
-                    const i = window.innerWidth < 768 ? activeOfferIndex : idx;
+                <RowLabel tip="One-time payment for joining. If paid across 2 years, enter Year 1 amount here.">Sign-On Bonus</RowLabel>
+                <div className="grid gap-3" style={{ gridTemplateColumns: gridCols }}>
+                  {visible.map((offer, vi) => {
+                    const i = indices[vi];
                     return (
                       <div key={i}>
-                        <CurrencyInput
-                          value={offer.signOnYear1}
-                          onChange={(v) => updateOffer(i, { signOnYear1: v })}
-                          placeholder="e.g. 30,000"
-                          disabled={offer.isCurrentJob}
-                          disabledPlaceholder="N/A"
-                          ariaLabel={`Sign-on bonus for ${offer.name}`}
-                        />
+                        <CurrencyInput value={offer.signOnYear1} onChange={(v) => updateOffer(i, { signOnYear1: v })} placeholder="e.g. 30,000" disabled={offer.isCurrentJob} disabledPlaceholder="N/A" ariaLabel={`Sign-on for ${offer.name}`} />
                         {!offer.isCurrentJob && (
                           <>
                             {!offer.showYear2SignOn ? (
-                              <button
-                                onClick={() => updateOffer(i, { showYear2SignOn: true })}
-                                className="text-xs text-gold hover:underline mt-1"
-                              >
-                                + Add Year 2 sign-on
-                              </button>
+                              <button onClick={() => updateOffer(i, { showYear2SignOn: true })} className="text-xs text-gold hover:underline mt-1">+ Add Year 2 sign-on</button>
                             ) : (
                               <div className="mt-2">
-                                <label className="text-xs text-muted-foreground">Year 2 Sign-On</label>
-                                <CurrencyInput
-                                  value={offer.signOnYear2}
-                                  onChange={(v) => updateOffer(i, { signOnYear2: v })}
-                                  placeholder="e.g. 15,000"
-                                  ariaLabel={`Year 2 sign-on for ${offer.name}`}
-                                />
+                                <label className="text-xs text-muted-foreground">Year 2</label>
+                                <CurrencyInput value={offer.signOnYear2} onChange={(v) => updateOffer(i, { signOnYear2: v })} placeholder="e.g. 15,000" ariaLabel={`Year 2 sign-on for ${offer.name}`} />
                               </div>
                             )}
                           </>
@@ -374,24 +318,11 @@ const CompCalculatorInteractive = () => {
 
               {/* Relocation */}
               <div>
-                <RowLabel tip="One-time payment to cover moving costs. Enter $0 if not relocating.">
-                  Relocation Bonus
-                </RowLabel>
-                <div className="grid gap-3" style={{ gridTemplateColumns: `repeat(${offers.length > 1 || window.innerWidth >= 768 ? offers.length : 1}, 1fr)` }}>
-                  {(window.innerWidth < 768 ? [offers[activeOfferIndex]] : offers).map((offer, idx) => {
-                    const i = window.innerWidth < 768 ? activeOfferIndex : idx;
-                    return (
-                      <CurrencyInput
-                        key={i}
-                        value={offer.relocation}
-                        onChange={(v) => updateOffer(i, { relocation: v })}
-                        placeholder="e.g. 10,000"
-                        disabled={offer.isCurrentJob}
-                        disabledPlaceholder="N/A"
-                        ariaLabel={`Relocation bonus for ${offer.name}`}
-                      />
-                    );
-                  })}
+                <RowLabel tip="One-time payment to cover moving costs. Enter $0 if not relocating.">Relocation Bonus</RowLabel>
+                <div className="grid gap-3" style={{ gridTemplateColumns: gridCols }}>
+                  {visible.map((offer, vi) => (
+                    <CurrencyInput key={indices[vi]} value={offer.relocation} onChange={(v) => updateOffer(indices[vi], { relocation: v })} placeholder="e.g. 10,000" disabled={offer.isCurrentJob} disabledPlaceholder="N/A" ariaLabel={`Relocation for ${offer.name}`} />
+                  ))}
                 </div>
               </div>
             </CalculatorSection>
@@ -400,169 +331,123 @@ const CompCalculatorInteractive = () => {
             <CalculatorSection title="Equity" description="RSUs, stock options, and employee stock purchase plans">
               {/* RSUs */}
               <div>
-                <RowLabel tip="The total dollar value of your RSU grant. If given in shares, multiply shares × current stock price.">
-                  RSUs (Restricted Stock Units)
-                </RowLabel>
-                {(window.innerWidth < 768 ? [offers[activeOfferIndex]] : offers).map((offer, idx) => {
-                  const i = window.innerWidth < 768 ? activeOfferIndex : idx;
-                  const vestPcts = offer.vestingSchedule === "Custom"
-                    ? offer.customVesting
-                    : VESTING_SCHEDULES[offer.vestingSchedule] || [25, 25, 25, 25];
-                  return (
-                    <div key={i} className="mb-4 last:mb-0">
-                      <p className="text-xs text-muted-foreground mb-1 md:hidden">{offer.name}</p>
-                      <div className="space-y-3">
-                        <CurrencyInput
-                          value={offer.rsuGrant}
-                          onChange={(v) => updateOffer(i, { rsuGrant: v })}
-                          placeholder="e.g. 200,000"
-                          ariaLabel={`Total RSU grant for ${offer.name}`}
-                        />
+                <RowLabel tip="The total dollar value of your RSU grant. If given in shares, multiply shares × current stock price.">RSUs (Restricted Stock Units)</RowLabel>
+                <div className="grid gap-3" style={{ gridTemplateColumns: gridCols }}>
+                  {visible.map((offer, vi) => {
+                    const i = indices[vi];
+                    const vestPcts = offer.vestingSchedule === "Custom" ? offer.customVesting : VESTING_SCHEDULES[offer.vestingSchedule] || [25, 25, 25, 25];
+                    return (
+                      <div key={i} className="space-y-3">
+                        {isMobile && <p className="text-xs text-muted-foreground font-medium">{offer.name}</p>}
+                        <CurrencyInput value={offer.rsuGrant} onChange={(v) => updateOffer(i, { rsuGrant: v })} placeholder="e.g. 200,000" ariaLabel={`RSU grant for ${offer.name}`} />
                         <div>
                           <label className="text-xs text-muted-foreground">Vesting Schedule</label>
-                          <select
-                            value={offer.vestingSchedule}
-                            onChange={(e) => updateOffer(i, { vestingSchedule: e.target.value })}
-                            className="w-full h-10 rounded-lg border border-input bg-background px-3 text-sm focus:outline-none focus:ring-2 focus:ring-ring"
-                          >
-                            {Object.keys(VESTING_SCHEDULES).map((key) => (
-                              <option key={key} value={key}>{key}</option>
-                            ))}
+                          <select value={offer.vestingSchedule} onChange={(e) => updateOffer(i, { vestingSchedule: e.target.value })} className="w-full h-10 rounded-lg border border-input bg-background px-3 text-sm focus:outline-none focus:ring-2 focus:ring-ring">
+                            {Object.keys(VESTING_SCHEDULES).map((key) => <option key={key} value={key}>{key}</option>)}
                           </select>
                         </div>
                         {offer.vestingSchedule === "Custom" && (
                           <div className="grid grid-cols-4 gap-2">
                             {[0, 1, 2, 3].map((yi) => (
                               <div key={yi}>
-                                <label className="text-xs text-muted-foreground">Yr {yi + 1} %</label>
-                                <PercentInput
-                                  value={offer.customVesting[yi]}
-                                  onChange={(v) => {
-                                    const next = [...offer.customVesting] as [number, number, number, number];
-                                    next[yi] = v;
-                                    updateOffer(i, { customVesting: next });
-                                  }}
-                                  placeholder="25"
-                                />
+                                <label className="text-xs text-muted-foreground">Yr {yi + 1}</label>
+                                <PercentInput value={offer.customVesting[yi]} onChange={(v) => { const next = [...offer.customVesting] as [number, number, number, number]; next[yi] = v; updateOffer(i, { customVesting: next }); }} placeholder="25" />
                               </div>
                             ))}
                           </div>
                         )}
                         {offer.rsuGrant > 0 && (
-                          <p className="text-xs text-muted-foreground">
-                            {vestPcts.map((p, yi) => `Year ${yi + 1}: ${formatCurrency(offer.rsuGrant * p / 100)}`).join(" | ")}
-                          </p>
+                          <p className="text-xs text-muted-foreground">{vestPcts.map((p, yi) => `Yr${yi + 1}: ${formatCurrency(offer.rsuGrant * p / 100)}`).join(" | ")}</p>
                         )}
                       </div>
-                    </div>
-                  );
-                })}
+                    );
+                  })}
+                </div>
               </div>
 
               {/* Stock Options */}
               <div>
-                {(window.innerWidth < 768 ? [offers[activeOfferIndex]] : offers).map((offer, idx) => {
-                  const i = window.innerWidth < 768 ? activeOfferIndex : idx;
-                  if (!offer.showStockOptions) {
+                <div className="grid gap-3" style={{ gridTemplateColumns: gridCols }}>
+                  {visible.map((offer, vi) => {
+                    const i = indices[vi];
+                    if (!offer.showStockOptions) {
+                      return (
+                        <button key={i} onClick={() => updateOffer(i, { showStockOptions: true })} className="text-sm text-gold hover:underline text-left">
+                          + Add Stock Options{colCount > 1 ? ` (${offer.name})` : ""}
+                        </button>
+                      );
+                    }
+                    const annualVal = Math.max(0, ((offer.optionFMV - offer.optionStrike) * offer.optionShares) / (offer.optionVestingYears || 4));
+                    const underwater = offer.optionStrike >= offer.optionFMV && offer.optionShares > 0;
                     return (
-                      <button key={i} onClick={() => updateOffer(i, { showStockOptions: true })} className="text-sm text-gold hover:underline block mb-1">
-                        + Add Stock Options {offers.length > 1 ? `(${offer.name})` : ""}
-                      </button>
-                    );
-                  }
-                  const annualVal = Math.max(0, ((offer.optionFMV - offer.optionStrike) * offer.optionShares) / (offer.optionVestingYears || 4));
-                  const underwater = offer.optionStrike >= offer.optionFMV && offer.optionShares > 0;
-                  return (
-                    <div key={i} className="mb-4 last:mb-0 bg-muted/30 rounded-lg p-4 border border-border">
-                      <div className="flex items-center justify-between mb-3">
-                        <p className="text-sm font-medium">Stock Options {offers.length > 1 ? `(${offer.name})` : ""}</p>
-                        <button onClick={() => updateOffer(i, { showStockOptions: false, optionShares: 0 })} className="text-xs text-muted-foreground hover:text-destructive">Remove</button>
-                      </div>
-                      <div className="grid grid-cols-2 gap-3">
-                        <div><label className="text-xs text-muted-foreground">Shares</label><CurrencyInput value={offer.optionShares} onChange={(v) => updateOffer(i, { optionShares: v })} prefix="" placeholder="e.g. 10,000" /></div>
-                        <div><label className="text-xs text-muted-foreground">Strike Price ($)</label><CurrencyInput value={offer.optionStrike} onChange={(v) => updateOffer(i, { optionStrike: v })} placeholder="e.g. 10" /></div>
-                        <div><label className="text-xs text-muted-foreground">Current FMV ($)</label><CurrencyInput value={offer.optionFMV} onChange={(v) => updateOffer(i, { optionFMV: v })} placeholder="e.g. 25" /></div>
-                        <div>
-                          <label className="text-xs text-muted-foreground">Vesting (years)</label>
-                          <select value={offer.optionVestingYears} onChange={(e) => updateOffer(i, { optionVestingYears: Number(e.target.value) })} className="w-full h-12 rounded-lg border border-input bg-background px-3 text-sm">
-                            <option value={3}>3 years</option><option value={4}>4 years</option><option value={5}>5 years</option>
-                          </select>
+                      <div key={i} className="bg-muted/30 rounded-lg p-4 border border-border">
+                        <div className="flex items-center justify-between mb-3">
+                          <p className="text-sm font-medium">Stock Options{colCount > 1 ? ` (${offer.name})` : ""}</p>
+                          <button onClick={() => updateOffer(i, { showStockOptions: false, optionShares: 0 })} className="text-xs text-muted-foreground hover:text-destructive">Remove</button>
                         </div>
+                        <div className="grid grid-cols-2 gap-3">
+                          <div><label className="text-xs text-muted-foreground">Shares</label><CurrencyInput value={offer.optionShares} onChange={(v) => updateOffer(i, { optionShares: v })} prefix="" placeholder="e.g. 10,000" /></div>
+                          <div><label className="text-xs text-muted-foreground">Strike ($)</label><CurrencyInput value={offer.optionStrike} onChange={(v) => updateOffer(i, { optionStrike: v })} placeholder="e.g. 10" /></div>
+                          <div><label className="text-xs text-muted-foreground">FMV ($)</label><CurrencyInput value={offer.optionFMV} onChange={(v) => updateOffer(i, { optionFMV: v })} placeholder="e.g. 25" /></div>
+                          <div>
+                            <label className="text-xs text-muted-foreground">Vesting</label>
+                            <select value={offer.optionVestingYears} onChange={(e) => updateOffer(i, { optionVestingYears: Number(e.target.value) })} className="w-full h-12 rounded-lg border border-input bg-background px-3 text-sm"><option value={3}>3 years</option><option value={4}>4 years</option><option value={5}>5 years</option></select>
+                          </div>
+                        </div>
+                        {underwater ? <p className="text-xs text-muted-foreground mt-2">Currently underwater ($0 value)</p> : annualVal > 0 ? <p className="text-xs text-gold mt-2">Annual value: {formatCurrency(annualVal)}</p> : null}
                       </div>
-                      {underwater ? (
-                        <p className="text-xs text-muted-foreground mt-2">Currently underwater ($0 value)</p>
-                      ) : annualVal > 0 ? (
-                        <p className="text-xs text-gold mt-2">Potential annual value: {formatCurrency(annualVal)}</p>
-                      ) : null}
-                    </div>
-                  );
-                })}
+                    );
+                  })}
+                </div>
               </div>
 
               {/* ESPP */}
               <div>
-                {(window.innerWidth < 768 ? [offers[activeOfferIndex]] : offers).map((offer, idx) => {
-                  const i = window.innerWidth < 768 ? activeOfferIndex : idx;
-                  if (!offer.showESPP) {
+                <div className="grid gap-3" style={{ gridTemplateColumns: gridCols }}>
+                  {visible.map((offer, vi) => {
+                    const i = indices[vi];
+                    if (!offer.showESPP) {
+                      return <button key={i} onClick={() => updateOffer(i, { showESPP: true })} className="text-sm text-gold hover:underline text-left">+ Add ESPP{colCount > 1 ? ` (${offer.name})` : ""}</button>;
+                    }
+                    const benefit = offer.esppContribution * (offer.esppDiscount / 100);
                     return (
-                      <button key={i} onClick={() => updateOffer(i, { showESPP: true })} className="text-sm text-gold hover:underline block mb-1">
-                        + Add ESPP {offers.length > 1 ? `(${offer.name})` : ""}
-                      </button>
+                      <div key={i} className="bg-muted/30 rounded-lg p-4 border border-border">
+                        <div className="flex items-center justify-between mb-3">
+                          <p className="text-sm font-medium">ESPP{colCount > 1 ? ` (${offer.name})` : ""}</p>
+                          <button onClick={() => updateOffer(i, { showESPP: false, esppContribution: 0 })} className="text-xs text-muted-foreground hover:text-destructive">Remove</button>
+                        </div>
+                        <div className="grid grid-cols-2 gap-3">
+                          <div><label className="text-xs text-muted-foreground">Annual Contribution</label><CurrencyInput value={offer.esppContribution} onChange={(v) => updateOffer(i, { esppContribution: v })} placeholder="e.g. 10,000" /></div>
+                          <div><label className="text-xs text-muted-foreground">Discount %</label><PercentInput value={offer.esppDiscount} onChange={(v) => updateOffer(i, { esppDiscount: v })} placeholder="15" max={25} /></div>
+                        </div>
+                        {benefit > 0 && <p className="text-xs text-gold mt-2">Annual ESPP benefit: {formatCurrency(benefit)}</p>}
+                      </div>
                     );
-                  }
-                  const benefit = offer.esppContribution * (offer.esppDiscount / 100);
-                  return (
-                    <div key={i} className="mb-4 last:mb-0 bg-muted/30 rounded-lg p-4 border border-border">
-                      <div className="flex items-center justify-between mb-3">
-                        <p className="text-sm font-medium">ESPP {offers.length > 1 ? `(${offer.name})` : ""}</p>
-                        <button onClick={() => updateOffer(i, { showESPP: false, esppContribution: 0 })} className="text-xs text-muted-foreground hover:text-destructive">Remove</button>
-                      </div>
-                      <div className="grid grid-cols-2 gap-3">
-                        <div>
-                          <label className="text-xs text-muted-foreground">Annual Contribution ($)</label>
-                          <CurrencyInput value={offer.esppContribution} onChange={(v) => updateOffer(i, { esppContribution: v })} placeholder="e.g. 10,000" ariaLabel="ESPP contribution" />
-                        </div>
-                        <div>
-                          <label className="text-xs text-muted-foreground">Discount (%)</label>
-                          <PercentInput value={offer.esppDiscount} onChange={(v) => updateOffer(i, { esppDiscount: v })} placeholder="15" max={25} />
-                        </div>
-                      </div>
-                      {benefit > 0 && <p className="text-xs text-gold mt-2">Annual ESPP benefit: {formatCurrency(benefit)}</p>}
-                    </div>
-                  );
-                })}
+                  })}
+                </div>
               </div>
             </CalculatorSection>
 
             {/* SECTION 3: RETIREMENT */}
             <CalculatorSection title="Retirement" description="Employer retirement contributions">
               <div>
-                <RowLabel tip="What percentage of your contribution does the employer match? Common: 50% or 100%. Match Cap: the employer matches up to this percentage of your salary (common: 3-6%).">
-                  401(k) / Retirement Employer Match
-                </RowLabel>
-                {(window.innerWidth < 768 ? [offers[activeOfferIndex]] : offers).map((offer, idx) => {
-                  const i = window.innerWidth < 768 ? activeOfferIndex : idx;
-                  const annual = offer.baseSalary * (offer.matchCap / 100) * (offer.matchRate / 100);
-                  return (
-                    <div key={i} className="mb-3 last:mb-0">
-                      <p className="text-xs text-muted-foreground mb-1 md:hidden">{offer.name}</p>
-                      <div className="grid grid-cols-2 gap-3">
-                        <div>
-                          <label className="text-xs text-muted-foreground">Match Rate (%)</label>
-                          <PercentInput value={offer.matchRate} onChange={(v) => updateOffer(i, { matchRate: v })} placeholder="50" />
+                <RowLabel tip="What percentage of your contribution does the employer match? Common: 50% or 100%. Match Cap: employer matches up to this % of your salary (common: 3-6%).">401(k) / Retirement Employer Match</RowLabel>
+                <div className="grid gap-3" style={{ gridTemplateColumns: gridCols }}>
+                  {visible.map((offer, vi) => {
+                    const i = indices[vi];
+                    const annual = offer.baseSalary * (offer.matchCap / 100) * (offer.matchRate / 100);
+                    return (
+                      <div key={i}>
+                        {isMobile && <p className="text-xs text-muted-foreground font-medium mb-1">{offer.name}</p>}
+                        <div className="grid grid-cols-2 gap-2">
+                          <div><label className="text-xs text-muted-foreground">Match Rate %</label><PercentInput value={offer.matchRate} onChange={(v) => updateOffer(i, { matchRate: v })} placeholder="50" /></div>
+                          <div><label className="text-xs text-muted-foreground">Cap % of salary</label><PercentInput value={offer.matchCap} onChange={(v) => updateOffer(i, { matchCap: v })} placeholder="6" /></div>
                         </div>
-                        <div>
-                          <label className="text-xs text-muted-foreground">Match Cap (% of salary)</label>
-                          <PercentInput value={offer.matchCap} onChange={(v) => updateOffer(i, { matchCap: v })} placeholder="6" />
-                        </div>
+                        {annual > 0 && <p className="text-xs text-muted-foreground mt-1">Employer contribution: {formatCurrency(annual)}/yr</p>}
                       </div>
-                      {annual > 0 && <p className="text-xs text-muted-foreground mt-1">Annual employer contribution: {formatCurrency(annual)}</p>}
-                      {offer.matchRate > 0 && offer.matchCap > 0 && offer.baseSalary > 0 && (
-                        <p className="text-xs text-muted-foreground">e.g. {offer.matchRate}% match up to {offer.matchCap}% of {formatCurrency(offer.baseSalary)} = {formatCurrency(annual)}/year</p>
-                      )}
-                    </div>
-                  );
-                })}
+                    );
+                  })}
+                </div>
               </div>
             </CalculatorSection>
 
@@ -570,23 +455,14 @@ const CompCalculatorInteractive = () => {
             <CalculatorSection title="Benefits and Perks" description="Insurance, time off, commute, and other perks that affect your real take-home value">
               {/* Health Insurance */}
               <div>
-                <RowLabel isSubtracted tip="Enter $0 if fully covered by employer. This amount is SUBTRACTED from your total since it is a cost to you.">
-                  Health Insurance (Your Monthly Cost)
-                </RowLabel>
-                <div className="grid gap-3" style={{ gridTemplateColumns: `repeat(${offers.length > 1 || window.innerWidth >= 768 ? offers.length : 1}, 1fr)` }}>
-                  {(window.innerWidth < 768 ? [offers[activeOfferIndex]] : offers).map((offer, idx) => {
-                    const i = window.innerWidth < 768 ? activeOfferIndex : idx;
+                <RowLabel isSubtracted tip="Enter $0 if fully covered by employer. This amount is SUBTRACTED from your total since it is a cost to you.">Health Insurance (Monthly Cost)</RowLabel>
+                <div className="grid gap-3" style={{ gridTemplateColumns: gridCols }}>
+                  {visible.map((offer, vi) => {
+                    const i = indices[vi];
                     return (
                       <div key={i}>
-                        <CurrencyInput
-                          value={offer.healthInsuranceMonthly}
-                          onChange={(v) => updateOffer(i, { healthInsuranceMonthly: v })}
-                          placeholder="e.g. 200"
-                          ariaLabel={`Monthly health cost for ${offer.name}`}
-                        />
-                        {offer.healthInsuranceMonthly > 0 && (
-                          <p className="text-xs text-destructive mt-1">Annual cost: -{formatCurrency(offer.healthInsuranceMonthly * 12)}</p>
-                        )}
+                        <CurrencyInput value={offer.healthInsuranceMonthly} onChange={(v) => updateOffer(i, { healthInsuranceMonthly: v })} placeholder="e.g. 200" ariaLabel={`Health cost for ${offer.name}`} />
+                        {offer.healthInsuranceMonthly > 0 && <p className="text-xs text-destructive mt-1">Annual: -{formatCurrency(offer.healthInsuranceMonthly * 12)}</p>}
                       </div>
                     );
                   })}
@@ -595,26 +471,18 @@ const CompCalculatorInteractive = () => {
 
               {/* PTO */}
               <div>
-                <RowLabel tip="Total paid time off days per year. Does not include company holidays or sick leave.">
-                  PTO / Vacation Days
-                </RowLabel>
-                <div className="grid gap-3" style={{ gridTemplateColumns: `repeat(${offers.length > 1 || window.innerWidth >= 768 ? offers.length : 1}, 1fr)` }}>
-                  {(window.innerWidth < 768 ? [offers[activeOfferIndex]] : offers).map((offer, idx) => {
-                    const i = window.innerWidth < 768 ? activeOfferIndex : idx;
+                <RowLabel tip="Total paid time off days per year. Does not include company holidays or sick leave.">PTO / Vacation Days</RowLabel>
+                <div className="grid gap-3" style={{ gridTemplateColumns: gridCols }}>
+                  {visible.map((offer, vi) => {
+                    const i = indices[vi];
                     const ptoVal = offer.ptoDays * (offer.baseSalary / 260);
                     return (
                       <div key={i}>
-                        <CurrencyInput
-                          value={offer.ptoDays}
-                          onChange={(v) => updateOffer(i, { ptoDays: v })}
-                          placeholder="e.g. 20"
-                          prefix=""
-                          ariaLabel={`PTO days for ${offer.name}`}
-                        />
+                        <CurrencyInput value={offer.ptoDays} onChange={(v) => updateOffer(i, { ptoDays: v })} placeholder="e.g. 20" prefix="" ariaLabel={`PTO for ${offer.name}`} />
                         {offer.ptoDays > 0 && offer.baseSalary > 0 && (
                           <div className="flex items-center gap-1 mt-1">
-                            <Info className="w-3 h-3 text-muted-foreground" />
-                            <p className="text-xs text-muted-foreground">Value: {formatCurrency(ptoVal)} (included in base, not added)</p>
+                            <Info className="w-3 h-3 text-muted-foreground flex-shrink-0" />
+                            <p className="text-xs text-muted-foreground">Value: {formatCurrency(ptoVal)} (in base, not added)</p>
                           </div>
                         )}
                       </div>
@@ -625,23 +493,14 @@ const CompCalculatorInteractive = () => {
 
               {/* Commute */}
               <div>
-                <RowLabel isSubtracted tip="Gas, transit, parking, tolls. Enter $0 if fully remote. This is SUBTRACTED from your total.">
-                  Monthly Commute Cost
-                </RowLabel>
-                <div className="grid gap-3" style={{ gridTemplateColumns: `repeat(${offers.length > 1 || window.innerWidth >= 768 ? offers.length : 1}, 1fr)` }}>
-                  {(window.innerWidth < 768 ? [offers[activeOfferIndex]] : offers).map((offer, idx) => {
-                    const i = window.innerWidth < 768 ? activeOfferIndex : idx;
+                <RowLabel isSubtracted tip="Gas, transit, parking, tolls. Enter $0 if fully remote. SUBTRACTED from total.">Monthly Commute Cost</RowLabel>
+                <div className="grid gap-3" style={{ gridTemplateColumns: gridCols }}>
+                  {visible.map((offer, vi) => {
+                    const i = indices[vi];
                     return (
                       <div key={i}>
-                        <CurrencyInput
-                          value={offer.commuteMonthly}
-                          onChange={(v) => updateOffer(i, { commuteMonthly: v })}
-                          placeholder="e.g. 150"
-                          ariaLabel={`Monthly commute for ${offer.name}`}
-                        />
-                        {offer.commuteMonthly > 0 && (
-                          <p className="text-xs text-destructive mt-1">Annual cost: -{formatCurrency(offer.commuteMonthly * 12)}</p>
-                        )}
+                        <CurrencyInput value={offer.commuteMonthly} onChange={(v) => updateOffer(i, { commuteMonthly: v })} placeholder="e.g. 150" ariaLabel={`Commute for ${offer.name}`} />
+                        {offer.commuteMonthly > 0 && <p className="text-xs text-destructive mt-1">Annual: -{formatCurrency(offer.commuteMonthly * 12)}</p>}
                       </div>
                     );
                   })}
@@ -650,22 +509,11 @@ const CompCalculatorInteractive = () => {
 
               {/* Other Stipends */}
               <div>
-                <RowLabel tip="Combine all other annual perks: wellness stipend, learning budget, childcare subsidy, home office allowance, gym, phone, etc.">
-                  Other Annual Stipends
-                </RowLabel>
-                <div className="grid gap-3" style={{ gridTemplateColumns: `repeat(${offers.length > 1 || window.innerWidth >= 768 ? offers.length : 1}, 1fr)` }}>
-                  {(window.innerWidth < 768 ? [offers[activeOfferIndex]] : offers).map((offer, idx) => {
-                    const i = window.innerWidth < 768 ? activeOfferIndex : idx;
-                    return (
-                      <CurrencyInput
-                        key={i}
-                        value={offer.otherStipends}
-                        onChange={(v) => updateOffer(i, { otherStipends: v })}
-                        placeholder="e.g. 5,000"
-                        ariaLabel={`Other stipends for ${offer.name}`}
-                      />
-                    );
-                  })}
+                <RowLabel tip="Combine all annual perks: wellness, learning, childcare, home office, gym, phone, etc.">Other Annual Stipends</RowLabel>
+                <div className="grid gap-3" style={{ gridTemplateColumns: gridCols }}>
+                  {visible.map((offer, vi) => (
+                    <CurrencyInput key={indices[vi]} value={offer.otherStipends} onChange={(v) => updateOffer(indices[vi], { otherStipends: v })} placeholder="e.g. 5,000" ariaLabel={`Stipends for ${offer.name}`} />
+                  ))}
                 </div>
                 <Collapsible>
                   <CollapsibleTrigger className="text-xs text-gold hover:underline mt-2 flex items-center gap-1">
@@ -682,12 +530,7 @@ const CompCalculatorInteractive = () => {
       </section>
 
       {/* Results Panel */}
-      <ResultsPanel
-        offers={offers}
-        results={results}
-        cascadeInsight={cascadeInsight}
-        mobileSelectedIndex={activeOfferIndex}
-      />
+      <ResultsPanel offers={offers} results={results} cascadeInsight={cascadeInsight} mobileSelectedIndex={activeOfferIndex} />
 
       {/* Reference Sections */}
       <section className="px-5 md:px-6 py-8">
