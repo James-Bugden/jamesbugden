@@ -8,16 +8,16 @@ import ToolkitFooter from "@/components/toolkit/ToolkitFooter";
 import ToolkitNav from "@/components/toolkit/ToolkitNav";
 
 const exampleData = [
-  { component: "Monthly Base (本薪)", offerA: "NT$75,000", offerB: "NT$85,000", current: "NT$65,000", formula: "As stated in offer" },
+  { component: "Monthly Base", offerA: "NT$75,000", offerB: "NT$85,000", current: "NT$65,000", formula: "As stated in offer" },
   { component: "Guaranteed Months", offerA: "14 months", offerB: "14 months", current: "13 months", formula: "12 + guaranteed year-end months" },
   { component: "Base × Guaranteed", offerA: "NT$1,050,000", offerB: "NT$1,190,000", current: "NT$845,000", formula: "Monthly base × guaranteed months" },
   { component: "Year-End above guarantee", offerA: "NT$50,000", offerB: "NT$200,000", current: "NT$30,000", formula: "Ask HR for last year's average" },
-  { component: "Profit Sharing (員工分紅)", offerA: "NT$0", offerB: "NT$400,000", current: "NT$0", formula: "Ask HR for this level's average" },
+  { component: "Profit Sharing", offerA: "NT$0", offerB: "NT$400,000", current: "NT$0", formula: "Ask HR for this level's average" },
   { component: "Stock / ESPP", offerA: "NT$100,000", offerB: "NT$120,000", current: "NT$35,000", formula: "Annual vest value or ESPP discount" },
-  { component: "Sign-on Bonus (簽約獎金)", offerA: "NT$100,000", offerB: "NT$0", current: "N/A", formula: "One-time; divide by expected years to annualize" },
-  { component: "Meal Allowance (伙食津貼)", offerA: "NT$2,400/mo", offerB: "NT$2,400/mo", current: "NT$2,400/mo", formula: "Monthly amount × 12" },
+  { component: "Sign-on Bonus", offerA: "NT$100,000", offerB: "NT$0", current: "N/A", formula: "One-time; divide by expected years to annualize" },
+  { component: "Meal Allowance", offerA: "NT$2,400/mo", offerB: "NT$2,400/mo", current: "NT$2,400/mo", formula: "Monthly amount × 12" },
   { component: "Transport/Other Allowances", offerA: "NT$0", offerB: "NT$3,000/mo", current: "NT$0", formula: "Monthly amount × 12" },
-  { component: "Group Insurance Upgrade (團保)", offerA: "Basic", offerB: "Premium (+dental, family)", current: "Basic", formula: "Estimate value of premium coverage" },
+  { component: "Group Insurance Upgrade", offerA: "Basic", offerB: "Premium (+dental, family)", current: "Basic", formula: "Estimate value of premium coverage" },
   { component: "Annual Leave", offerA: "15 days", offerB: "12 days", current: "10 days", formula: "Above legal minimum = real value" },
 ];
 
@@ -38,11 +38,11 @@ const effectiveMonthlyRow = {
 };
 
 const blankTemplate = [
-  { component: "Monthly Base (本薪)", formula: "As stated" },
+  { component: "Monthly Base", formula: "As stated" },
   { component: "Guaranteed Months", formula: "12 + guaranteed year-end" },
   { component: "Base × Guaranteed", formula: "Row 1 × Row 2" },
   { component: "Year-End above guarantee", formula: "Ask HR for last year's average" },
-  { component: "Profit Sharing (員工分紅)", formula: "Ask HR for this level's average" },
+  { component: "Profit Sharing", formula: "Ask HR for this level's average" },
   { component: "Stock / ESPP", formula: "Annual value" },
   { component: "Sign-on Bonus", formula: "One-time payment" },
   { component: "Meal Allowance × 12", formula: "Monthly × 12" },
@@ -59,12 +59,10 @@ const howToUse = [
 ];
 
 const marketDataSources = [
-  { name: "104人力銀行", url: "https://www.104.com.tw", desc: "Largest Taiwan job board, has salary ranges by role/industry" },
   { name: "CakeResume", url: "https://www.cakeresume.com", desc: "Tech-focused, has reported salaries from users" },
   { name: "Glassdoor", url: "https://www.glassdoor.com", desc: "International roles and multinationals in Taiwan" },
   { name: "Levels.fyi", url: "https://www.levels.fyi", desc: "Best for FAANG/big tech comp data, some Taiwan entries" },
   { name: "Salary.tw", url: "https://salary.tw", desc: "Community-reported salaries" },
-  { name: "Dcard 工作版", url: "https://www.dcard.tw/f/job", desc: "Forum discussions with real salary sharing (use carefully, not always verified)" },
 ];
 
 const CompensationCalculator = () => {
