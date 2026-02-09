@@ -41,6 +41,16 @@ const PivotMethodMiniGuideZhTw = lazy(() => import("./pages/PivotMethodMiniGuide
 const GuidesPage = lazy(() => import("./pages/GuidesPage"));
 const GuidesPageZhTw = lazy(() => import("./pages/GuidesPageZhTw"));
 
+// Toolkit pages
+const ToolkitIndex = lazy(() => import("./pages/toolkit/ToolkitIndex"));
+const DeflectionScripts = lazy(() => import("./pages/toolkit/DeflectionScripts"));
+const OfferResponse = lazy(() => import("./pages/toolkit/OfferResponse"));
+const CounterofferEmail = lazy(() => import("./pages/toolkit/CounterofferEmail"));
+const CompensationCalculator = lazy(() => import("./pages/toolkit/CompensationCalculator"));
+const PushbackCheatSheet = lazy(() => import("./pages/toolkit/PushbackCheatSheet"));
+const RaiseOnePager = lazy(() => import("./pages/toolkit/RaiseOnePager"));
+const AchievementLog = lazy(() => import("./pages/toolkit/AchievementLog"));
+
 // Lazy load review pages
 const CharleneLeeReview = lazy(() => import("./pages/reviews/CharleneLeeReview"));
 const CharleneLeeReviewZhTw = lazy(() => import("./pages/reviews/CharleneLeeReviewZhTw"));
@@ -109,6 +119,15 @@ const App = () => (
             <Route path="/zh-tw/pivot-method-mini-guide" element={<PivotMethodMiniGuideZhTw />} />
             <Route path="/guides" element={<GuidesPage />} />
             <Route path="/zh-tw/guides" element={<GuidesPageZhTw />} />
+            {/* Salary Negotiation Toolkit */}
+            <Route path="/toolkit" element={<ToolkitIndex />} />
+            <Route path="/toolkit/scripts" element={<DeflectionScripts />} />
+            <Route path="/toolkit/offer-response" element={<OfferResponse />} />
+            <Route path="/toolkit/counteroffer" element={<CounterofferEmail />} />
+            <Route path="/toolkit/calculator" element={<CompensationCalculator />} />
+            <Route path="/toolkit/pushback" element={<PushbackCheatSheet />} />
+            <Route path="/toolkit/raise" element={<RaiseOnePager />} />
+            <Route path="/toolkit/log" element={<AchievementLog />} />
             {/* Client Review Pages */}
             <Route path="/reviews/charlene-lee" element={<CharleneLeeReview />} />
             <Route path="/zh-tw/reviews/charlene-lee" element={<CharleneLeeReviewZhTw />} />
