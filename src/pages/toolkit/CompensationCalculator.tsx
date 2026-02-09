@@ -1,9 +1,10 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
-import { ArrowLeft, Copy, Share2, Linkedin, Check, ExternalLink } from "lucide-react";
+import { ArrowLeft, Copy, Share2, Check, ExternalLink } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useToast } from "@/hooks/use-toast";
-import { InstagramIcon, ThreadsIcon } from "@/components/SocialIcons";
+import ToolkitHeader from "@/components/toolkit/ToolkitHeader";
+import ToolkitFooter from "@/components/toolkit/ToolkitFooter";
 import ToolkitNav from "@/components/toolkit/ToolkitNav";
 
 const exampleData = [
@@ -93,79 +94,63 @@ Effective Monthly | NT$_______ | NT$_______ | NT$_______ | Total ÷ 12`;
   };
 
   return (
-    <div className="min-h-screen bg-[#1A1A2E]">
-      {/* Header */}
-      <header className="bg-[#1A1A2E] border-b border-white/10">
-        <div className="container mx-auto px-5 md:px-6 py-4 flex items-center justify-between">
-          <Link to="/" className="font-heading text-lg md:text-xl font-medium text-white tracking-tight">
-            JAMES BUGDEN
-          </Link>
-          <div className="hidden md:flex items-center gap-3">
-            <a href="https://www.linkedin.com/in/james-bugden/" target="_blank" rel="noopener noreferrer" className="text-white/70 hover:text-white transition-colors">
-              <Linkedin className="w-5 h-5" />
-            </a>
-            <a href="https://www.instagram.com/james.careers/" target="_blank" rel="noopener noreferrer" className="text-white/70 hover:text-white transition-colors">
-              <InstagramIcon className="w-5 h-5" />
-            </a>
-            <a href="https://www.threads.com/@james.careers" target="_blank" rel="noopener noreferrer" className="text-white/70 hover:text-white transition-colors">
-              <ThreadsIcon className="w-5 h-5" />
-            </a>
-          </div>
-        </div>
-      </header>
+    <div className="min-h-screen bg-background">
+      <ToolkitHeader />
 
       {/* Hero */}
-      <section className="py-12 md:py-16 px-5 md:px-6">
-        <div className="container mx-auto max-w-5xl text-center">
+      <section className="bg-executive-green py-12 md:py-16 px-5 md:px-6 relative">
+        <div className="container mx-auto max-w-5xl text-center relative z-10">
           <Link 
             to="/toolkit" 
-            className="inline-flex items-center gap-2 text-white/60 hover:text-white transition-colors mb-6 text-sm"
+            className="inline-flex items-center gap-2 text-cream-70 hover:text-cream transition-colors mb-6 text-sm"
           >
             <ArrowLeft className="w-4 h-4" />
             Back to Toolkit
           </Link>
-          <h1 className="font-heading text-3xl md:text-4xl lg:text-5xl text-white mb-4">
+          <h1 className="font-heading text-3xl md:text-4xl lg:text-5xl text-cream mb-4">
             Total Annual Compensation Calculator
           </h1>
-          <p className="text-lg text-white/70">
+          <p className="text-lg text-cream-90">
             Your offer is more than the monthly number. Here's how to see the full picture.
           </p>
         </div>
       </section>
 
       {/* Toolkit Navigation */}
-      <ToolkitNav currentTemplate="T4" />
+      <div className="pt-8">
+        <ToolkitNav currentTemplate="T4" />
+      </div>
 
       {/* Example Table */}
       <section className="pb-8 px-5 md:px-6">
         <div className="container mx-auto max-w-5xl">
-          <div className="bg-white rounded-xl overflow-hidden shadow-lg">
-            <div className="bg-[#0F3460] px-6 py-4">
-              <h2 className="text-white font-semibold text-lg">EXAMPLE: How to Calculate</h2>
+          <div className="bg-card rounded-xl overflow-hidden shadow-premium border border-border">
+            <div className="bg-executive px-6 py-4">
+              <h2 className="text-cream font-semibold text-lg">EXAMPLE: How to Calculate</h2>
             </div>
             <div className="overflow-x-auto">
               <table className="w-full text-sm">
-                <thead className="bg-gray-100">
+                <thead className="bg-muted">
                   <tr>
-                    <th className="text-left px-4 py-3 font-semibold text-gray-700">Component</th>
-                    <th className="text-left px-4 py-3 font-semibold text-gray-700">Offer A (Tech Co)</th>
-                    <th className="text-left px-4 py-3 font-semibold text-gray-700">Offer B (Semiconductor)</th>
-                    <th className="text-left px-4 py-3 font-semibold text-gray-700">Current Job</th>
-                    <th className="text-left px-4 py-3 font-semibold text-gray-500 text-xs">How to Calculate</th>
+                    <th className="text-left px-4 py-3 font-semibold text-foreground">Component</th>
+                    <th className="text-left px-4 py-3 font-semibold text-foreground">Offer A (Tech Co)</th>
+                    <th className="text-left px-4 py-3 font-semibold text-foreground">Offer B (Semiconductor)</th>
+                    <th className="text-left px-4 py-3 font-semibold text-foreground">Current Job</th>
+                    <th className="text-left px-4 py-3 font-semibold text-muted-foreground text-xs">How to Calculate</th>
                   </tr>
                 </thead>
                 <tbody>
                   {exampleData.map((row, index) => (
-                    <tr key={index} className={index % 2 === 0 ? "bg-white" : "bg-gray-50"}>
-                      <td className="px-4 py-3 font-medium text-gray-900">{row.component}</td>
-                      <td className="px-4 py-3 text-gray-700">{row.offerA}</td>
-                      <td className="px-4 py-3 text-gray-700">{row.offerB}</td>
-                      <td className="px-4 py-3 text-gray-700">{row.current}</td>
-                      <td className="px-4 py-3 text-gray-500 text-xs">{row.formula}</td>
+                    <tr key={index} className={index % 2 === 0 ? "bg-card" : "bg-muted/50"}>
+                      <td className="px-4 py-3 font-medium text-foreground">{row.component}</td>
+                      <td className="px-4 py-3 text-foreground">{row.offerA}</td>
+                      <td className="px-4 py-3 text-foreground">{row.offerB}</td>
+                      <td className="px-4 py-3 text-foreground">{row.current}</td>
+                      <td className="px-4 py-3 text-muted-foreground text-xs">{row.formula}</td>
                     </tr>
                   ))}
                   {/* Total Row */}
-                  <tr className="bg-[#E94560] text-white font-bold">
+                  <tr className="bg-gold text-white font-bold">
                     <td className="px-4 py-3">{totalRow.component}</td>
                     <td className="px-4 py-3">{totalRow.offerA}</td>
                     <td className="px-4 py-3">{totalRow.offerB}</td>
@@ -173,7 +158,7 @@ Effective Monthly | NT$_______ | NT$_______ | NT$_______ | Total ÷ 12`;
                     <td className="px-4 py-3 text-xs font-normal">{totalRow.formula}</td>
                   </tr>
                   {/* Effective Monthly Row */}
-                  <tr className="bg-[#0F3460] text-white font-bold">
+                  <tr className="bg-executive text-cream font-bold">
                     <td className="px-4 py-3">{effectiveMonthlyRow.component}</td>
                     <td className="px-4 py-3">{effectiveMonthlyRow.offerA}</td>
                     <td className="px-4 py-3">{effectiveMonthlyRow.offerB}</td>
@@ -183,7 +168,7 @@ Effective Monthly | NT$_______ | NT$_______ | NT$_______ | Total ÷ 12`;
                 </tbody>
               </table>
             </div>
-            <div className="px-6 py-4 bg-gray-50 border-t text-xs text-gray-500 italic">
+            <div className="px-6 py-4 bg-muted border-t border-border text-xs text-muted-foreground italic">
               Note: Sign-on bonus shown at full value in Year 1. In subsequent years, Offer A drops to NT$1,233,800.
             </div>
           </div>
@@ -193,9 +178,9 @@ Effective Monthly | NT$_______ | NT$_______ | NT$_______ | Total ÷ 12`;
       {/* Key Insight */}
       <section className="pb-8 px-5 md:px-6">
         <div className="container mx-auto max-w-5xl">
-          <div className="bg-amber-50 border-l-4 border-amber-400 rounded-r-xl p-6">
-            <p className="text-amber-800">
-              <span className="font-semibold">💡 Key Insight:</span> Offer B's monthly base is only NT$10,000/month more than Offer A — but the total annual TC is NT$611,800 more because of profit sharing, stock, and bonus structure. Never compare offers by monthly base alone.
+          <div className="bg-gold/10 border-l-4 border-gold rounded-r-xl p-6">
+            <p className="text-foreground">
+              <span className="font-semibold text-gold">💡 Key Insight:</span> Offer B's monthly base is only NT$10,000/month more than Offer A — but the total annual TC is NT$611,800 more because of profit sharing, stock, and bonus structure. Never compare offers by monthly base alone.
             </p>
           </div>
         </div>
@@ -204,64 +189,64 @@ Effective Monthly | NT$_______ | NT$_______ | NT$_______ | Total ÷ 12`;
       {/* Blank Template */}
       <section className="pb-8 px-5 md:px-6">
         <div className="container mx-auto max-w-5xl">
-          <div className="bg-white rounded-xl overflow-hidden shadow-lg">
-            <div className="bg-[#0F3460] px-6 py-4">
-              <h2 className="text-white font-semibold text-lg">YOUR COMPARISON — Blank Template</h2>
+          <div className="bg-card rounded-xl overflow-hidden shadow-premium border border-border">
+            <div className="bg-executive px-6 py-4">
+              <h2 className="text-cream font-semibold text-lg">YOUR COMPARISON — Blank Template</h2>
             </div>
             <div className="overflow-x-auto">
               <table className="w-full text-sm">
-                <thead className="bg-gray-100">
+                <thead className="bg-muted">
                   <tr>
-                    <th className="text-left px-4 py-3 font-semibold text-gray-700">Component</th>
-                    <th className="text-left px-4 py-3 font-semibold text-gray-700">Offer A: [______]</th>
-                    <th className="text-left px-4 py-3 font-semibold text-gray-700">Offer B: [______]</th>
-                    <th className="text-left px-4 py-3 font-semibold text-gray-700">Current Job</th>
-                    <th className="text-left px-4 py-3 font-semibold text-gray-500 text-xs">Formula</th>
+                    <th className="text-left px-4 py-3 font-semibold text-foreground">Component</th>
+                    <th className="text-left px-4 py-3 font-semibold text-foreground">Offer A: [______]</th>
+                    <th className="text-left px-4 py-3 font-semibold text-foreground">Offer B: [______]</th>
+                    <th className="text-left px-4 py-3 font-semibold text-foreground">Current Job</th>
+                    <th className="text-left px-4 py-3 font-semibold text-muted-foreground text-xs">Formula</th>
                   </tr>
                 </thead>
                 <tbody>
                   {blankTemplate.map((row, index) => (
-                    <tr key={index} className={index % 2 === 0 ? "bg-white" : "bg-gray-50"}>
-                      <td className="px-4 py-3 font-medium text-gray-900">{row.component}</td>
+                    <tr key={index} className={index % 2 === 0 ? "bg-card" : "bg-muted/50"}>
+                      <td className="px-4 py-3 font-medium text-foreground">{row.component}</td>
                       <td className="px-4 py-3">
-                        <span className="border-b-2 border-dashed border-gray-300 text-gray-400 px-4">NT$_______</span>
+                        <span className="border-b-2 border-dashed border-border text-muted-foreground px-4">NT$_______</span>
                       </td>
                       <td className="px-4 py-3">
-                        <span className="border-b-2 border-dashed border-gray-300 text-gray-400 px-4">NT$_______</span>
+                        <span className="border-b-2 border-dashed border-border text-muted-foreground px-4">NT$_______</span>
                       </td>
                       <td className="px-4 py-3">
-                        <span className="border-b-2 border-dashed border-gray-300 text-gray-400 px-4">NT$_______</span>
+                        <span className="border-b-2 border-dashed border-border text-muted-foreground px-4">NT$_______</span>
                       </td>
-                      <td className="px-4 py-3 text-gray-500 text-xs">{row.formula}</td>
+                      <td className="px-4 py-3 text-muted-foreground text-xs">{row.formula}</td>
                     </tr>
                   ))}
                   {/* Total Row */}
-                  <tr className="bg-gray-200 font-bold">
-                    <td className="px-4 py-3 text-gray-900">TOTAL ANNUAL TC</td>
+                  <tr className="bg-muted font-bold">
+                    <td className="px-4 py-3 text-foreground">TOTAL ANNUAL TC</td>
                     <td className="px-4 py-3">
-                      <span className="border-b-2 border-gray-400 text-gray-600 px-4">NT$_______</span>
+                      <span className="border-b-2 border-foreground text-foreground px-4">NT$_______</span>
                     </td>
                     <td className="px-4 py-3">
-                      <span className="border-b-2 border-gray-400 text-gray-600 px-4">NT$_______</span>
+                      <span className="border-b-2 border-foreground text-foreground px-4">NT$_______</span>
                     </td>
                     <td className="px-4 py-3">
-                      <span className="border-b-2 border-gray-400 text-gray-600 px-4">NT$_______</span>
+                      <span className="border-b-2 border-foreground text-foreground px-4">NT$_______</span>
                     </td>
-                    <td className="px-4 py-3 text-gray-500 text-xs font-normal">Sum all above</td>
+                    <td className="px-4 py-3 text-muted-foreground text-xs font-normal">Sum all above</td>
                   </tr>
                   {/* Effective Monthly Row */}
-                  <tr className="bg-gray-300 font-bold">
-                    <td className="px-4 py-3 text-gray-900">Effective Monthly</td>
+                  <tr className="bg-executive/10 font-bold">
+                    <td className="px-4 py-3 text-foreground">Effective Monthly</td>
                     <td className="px-4 py-3">
-                      <span className="border-b-2 border-gray-500 text-gray-700 px-4">NT$_______</span>
+                      <span className="border-b-2 border-executive text-executive px-4">NT$_______</span>
                     </td>
                     <td className="px-4 py-3">
-                      <span className="border-b-2 border-gray-500 text-gray-700 px-4">NT$_______</span>
+                      <span className="border-b-2 border-executive text-executive px-4">NT$_______</span>
                     </td>
                     <td className="px-4 py-3">
-                      <span className="border-b-2 border-gray-500 text-gray-700 px-4">NT$_______</span>
+                      <span className="border-b-2 border-executive text-executive px-4">NT$_______</span>
                     </td>
-                    <td className="px-4 py-3 text-gray-500 text-xs font-normal">Total ÷ 12</td>
+                    <td className="px-4 py-3 text-muted-foreground text-xs font-normal">Total ÷ 12</td>
                   </tr>
                 </tbody>
               </table>
@@ -273,15 +258,15 @@ Effective Monthly | NT$_______ | NT$_______ | NT$_______ | Total ÷ 12`;
       {/* How to Use */}
       <section className="pb-8 px-5 md:px-6">
         <div className="container mx-auto max-w-5xl">
-          <div className="bg-white rounded-xl p-6 shadow-lg">
-            <h3 className="font-heading text-xl text-gray-900 mb-4">How to Use This</h3>
+          <div className="bg-card rounded-xl p-6 shadow-premium border border-border">
+            <h3 className="font-heading text-xl text-foreground mb-4">How to Use This</h3>
             <ol className="space-y-3">
               {howToUse.map((item, index) => (
                 <li key={index} className="flex items-start gap-3">
-                  <span className="w-6 h-6 rounded-full bg-[#0F3460] text-white text-sm font-bold flex items-center justify-center flex-shrink-0">
+                  <span className="w-6 h-6 rounded-full bg-executive text-cream text-sm font-bold flex items-center justify-center flex-shrink-0">
                     {index + 1}
                   </span>
-                  <p className="text-gray-700">{item}</p>
+                  <p className="text-foreground">{item}</p>
                 </li>
               ))}
             </ol>
@@ -292,8 +277,8 @@ Effective Monthly | NT$_______ | NT$_______ | NT$_______ | Total ÷ 12`;
       {/* Market Data Sources */}
       <section className="pb-12 px-5 md:px-6">
         <div className="container mx-auto max-w-5xl">
-          <div className="bg-[#E8F4FD] rounded-xl p-6 border-l-4 border-[#0F3460]">
-            <h3 className="font-heading text-xl text-[#0F3460] mb-4">Where to Find Market Data</h3>
+          <div className="bg-executive/5 rounded-xl p-6 border-l-4 border-executive">
+            <h3 className="font-heading text-xl text-executive mb-4">Where to Find Market Data</h3>
             <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
               {marketDataSources.map((source, index) => (
                 <a 
@@ -301,12 +286,12 @@ Effective Monthly | NT$_______ | NT$_______ | NT$_______ | Total ÷ 12`;
                   href={source.url} 
                   target="_blank" 
                   rel="noopener noreferrer"
-                  className="flex items-start gap-2 text-[#0F3460] hover:underline"
+                  className="flex items-start gap-2 text-executive hover:text-gold transition-colors"
                 >
                   <ExternalLink className="w-4 h-4 mt-0.5 flex-shrink-0" />
                   <div>
                     <p className="font-semibold">{source.name}</p>
-                    <p className="text-sm text-gray-600">{source.desc}</p>
+                    <p className="text-sm text-muted-foreground">{source.desc}</p>
                   </div>
                 </a>
               ))}
@@ -320,7 +305,7 @@ Effective Monthly | NT$_______ | NT$_______ | NT$_______ | Total ÷ 12`;
         <div className="container mx-auto max-w-5xl flex flex-col sm:flex-row gap-4 justify-center">
           <Button 
             onClick={copyTable}
-            className="bg-[#E94560] hover:bg-[#d13a54] text-white px-6 py-3 h-auto"
+            className="btn-gold px-6 py-3 h-auto"
           >
             {copied ? <Check className="w-4 h-4 mr-2" /> : <Copy className="w-4 h-4 mr-2" />}
             {copied ? "Copied!" : "Copy Table"}
@@ -328,7 +313,7 @@ Effective Monthly | NT$_______ | NT$_______ | NT$_______ | Total ÷ 12`;
           <Button 
             onClick={shareUrl}
             variant="outline"
-            className="border-white/30 text-white hover:bg-white/10 px-6 py-3 h-auto"
+            className="border-executive text-executive hover:bg-executive/10 px-6 py-3 h-auto"
           >
             {shared ? <Check className="w-4 h-4 mr-2" /> : <Share2 className="w-4 h-4 mr-2" />}
             {shared ? "Link Copied!" : "Share"}
@@ -336,17 +321,7 @@ Effective Monthly | NT$_______ | NT$_______ | NT$_______ | Total ÷ 12`;
         </div>
       </section>
 
-      {/* Footer */}
-      <footer className="py-8 px-5 md:px-6 border-t border-white/10">
-        <div className="container mx-auto max-w-5xl text-center">
-          <p className="text-white/50 text-sm">
-            From the Salary Negotiation Toolkit by{" "}
-            <Link to="/" className="text-[#E94560] hover:underline">James Bugden</Link>
-            . Get the full 5-email series →{" "}
-            <Link to="/" className="text-[#E94560] hover:underline">Subscribe</Link>
-          </p>
-        </div>
-      </footer>
+      <ToolkitFooter />
     </div>
   );
 };

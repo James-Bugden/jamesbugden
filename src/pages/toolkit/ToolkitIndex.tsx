@@ -1,6 +1,7 @@
 import { Link } from "react-router-dom";
-import { ArrowLeft, ArrowRight, Linkedin, FileText, Calculator, MessageSquare, TrendingUp, ClipboardList } from "lucide-react";
-import { InstagramIcon, ThreadsIcon } from "@/components/SocialIcons";
+import { ArrowLeft, ArrowRight, FileText, Calculator, MessageSquare, TrendingUp, ClipboardList } from "lucide-react";
+import ToolkitHeader from "@/components/toolkit/ToolkitHeader";
+import ToolkitFooter from "@/components/toolkit/ToolkitFooter";
 
 const templates = [
   {
@@ -63,48 +64,30 @@ const templates = [
 
 const ToolkitIndex = () => {
   return (
-    <div className="min-h-screen bg-[#1A1A2E]">
-      {/* Header */}
-      <header className="bg-[#1A1A2E] border-b border-white/10">
-        <div className="container mx-auto px-5 md:px-6 py-4 flex items-center justify-between">
-          <Link to="/" className="font-heading text-lg md:text-xl font-medium text-white tracking-tight">
-            JAMES BUGDEN
-          </Link>
-          <div className="hidden md:flex items-center gap-3">
-            <a href="https://www.linkedin.com/in/james-bugden/" target="_blank" rel="noopener noreferrer" className="text-white/70 hover:text-white transition-colors">
-              <Linkedin className="w-5 h-5" />
-            </a>
-            <a href="https://www.instagram.com/james.careers/" target="_blank" rel="noopener noreferrer" className="text-white/70 hover:text-white transition-colors">
-              <InstagramIcon className="w-5 h-5" />
-            </a>
-            <a href="https://www.threads.com/@james.careers" target="_blank" rel="noopener noreferrer" className="text-white/70 hover:text-white transition-colors">
-              <ThreadsIcon className="w-5 h-5" />
-            </a>
-          </div>
-        </div>
-      </header>
+    <div className="min-h-screen bg-background">
+      <ToolkitHeader />
 
       {/* Hero */}
-      <section className="py-16 md:py-24 px-5 md:px-6">
-        <div className="container mx-auto max-w-4xl text-center">
+      <section className="bg-executive-green py-16 md:py-24 px-5 md:px-6 relative">
+        <div className="container mx-auto max-w-4xl text-center relative z-10">
           <Link 
             to="/" 
-            className="inline-flex items-center gap-2 text-white/60 hover:text-white transition-colors mb-6 text-sm"
+            className="inline-flex items-center gap-2 text-cream-70 hover:text-cream transition-colors mb-6 text-sm"
           >
             <ArrowLeft className="w-4 h-4" />
             Back to Home
           </Link>
-          <h1 className="font-heading text-4xl md:text-5xl lg:text-6xl text-white mb-4">
+          <h1 className="font-heading text-4xl md:text-5xl lg:text-6xl text-cream mb-4">
             Salary Negotiation Toolkit
           </h1>
-          <p className="text-lg md:text-xl text-white/70 max-w-2xl mx-auto">
+          <p className="text-lg md:text-xl text-cream-90 max-w-2xl mx-auto">
             7 free templates to help you negotiate your salary with confidence. Taiwan-localized with NT$ and bilingual phrasing.
           </p>
         </div>
       </section>
 
       {/* Templates Grid */}
-      <section className="pb-20 px-5 md:px-6">
+      <section className="py-16 px-5 md:px-6">
         <div className="container mx-auto max-w-4xl">
           <div className="grid gap-4">
             {templates.map((template) => {
@@ -113,26 +96,26 @@ const ToolkitIndex = () => {
                 <Link
                   key={template.id}
                   to={template.href}
-                  className="group bg-white/5 hover:bg-white/10 border border-white/10 hover:border-[#E94560]/50 rounded-xl p-6 transition-all duration-300"
+                  className="group card-premium bg-card rounded-xl p-6 border border-border"
                 >
                   <div className="flex items-start gap-4">
-                    <div className="w-12 h-12 rounded-lg bg-[#E94560]/20 flex items-center justify-center flex-shrink-0">
-                      <IconComponent className="w-6 h-6 text-[#E94560]" />
+                    <div className="w-12 h-12 rounded-lg bg-gold/10 flex items-center justify-center flex-shrink-0">
+                      <IconComponent className="w-6 h-6 text-gold" />
                     </div>
                     <div className="flex-1 min-w-0">
                       <div className="flex items-center gap-2 mb-1">
-                        <span className="text-xs text-[#E94560] font-semibold uppercase">{template.id}</span>
-                        <span className="text-xs text-white/40">•</span>
-                        <span className="text-xs text-white/40">{template.email}</span>
+                        <span className="text-xs text-gold font-semibold uppercase">{template.id}</span>
+                        <span className="text-xs text-muted-foreground">•</span>
+                        <span className="text-xs text-muted-foreground">{template.email}</span>
                       </div>
-                      <h3 className="text-lg font-semibold text-white group-hover:text-[#E94560] transition-colors mb-1">
+                      <h3 className="text-lg font-semibold text-foreground group-hover:text-gold transition-colors mb-1">
                         {template.title}
                       </h3>
-                      <p className="text-sm text-white/60">
+                      <p className="text-sm text-muted-foreground">
                         {template.description}
                       </p>
                     </div>
-                    <ArrowRight className="w-5 h-5 text-white/30 group-hover:text-[#E94560] group-hover:translate-x-1 transition-all flex-shrink-0 mt-1" />
+                    <ArrowRight className="w-5 h-5 text-muted-foreground group-hover:text-gold group-hover:translate-x-1 transition-all flex-shrink-0 mt-1" />
                   </div>
                 </Link>
               );
@@ -144,33 +127,27 @@ const ToolkitIndex = () => {
       {/* Email Series CTA */}
       <section className="pb-20 px-5 md:px-6">
         <div className="container mx-auto max-w-4xl">
-          <div className="bg-gradient-to-r from-[#E94560]/20 to-[#0F3460]/20 rounded-xl p-8 text-center border border-[#E94560]/30">
-            <h2 className="font-heading text-2xl md:text-3xl text-white mb-3">
-              Get the Complete 5-Email Series
-            </h2>
-            <p className="text-white/70 mb-6 max-w-xl mx-auto">
-              These templates are part of a free 5-email salary negotiation course. Subscribe to get all the context and strategies.
-            </p>
-            <Link
-              to="/"
-              className="inline-flex items-center gap-2 bg-[#E94560] hover:bg-[#d13a54] text-white px-6 py-3 rounded-lg font-semibold transition-colors"
-            >
-              Subscribe Free
-              <ArrowRight className="w-4 h-4" />
-            </Link>
+          <div className="bg-executive-green rounded-xl p-8 text-center relative overflow-hidden">
+            <div className="relative z-10">
+              <h2 className="font-heading text-2xl md:text-3xl text-cream mb-3">
+                Get the Complete 5-Email Series
+              </h2>
+              <p className="text-cream-90 mb-6 max-w-xl mx-auto">
+                These templates are part of a free 5-email salary negotiation course. Subscribe to get all the context and strategies.
+              </p>
+              <Link
+                to="/"
+                className="inline-flex items-center gap-2 btn-gold px-6 py-3 rounded-lg font-semibold"
+              >
+                Subscribe Free
+                <ArrowRight className="w-4 h-4" />
+              </Link>
+            </div>
           </div>
         </div>
       </section>
 
-      {/* Footer */}
-      <footer className="py-8 px-5 md:px-6 border-t border-white/10">
-        <div className="container mx-auto max-w-4xl text-center">
-          <p className="text-white/50 text-sm">
-            From the Salary Negotiation Toolkit by{" "}
-            <Link to="/" className="text-[#E94560] hover:underline">James Bugden</Link>
-          </p>
-        </div>
-      </footer>
+      <ToolkitFooter />
     </div>
   );
 };

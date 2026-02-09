@@ -1,9 +1,10 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
-import { ArrowLeft, Copy, Share2, Linkedin, Check } from "lucide-react";
+import { ArrowLeft, Copy, Share2, Check } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useToast } from "@/hooks/use-toast";
-import { InstagramIcon, ThreadsIcon } from "@/components/SocialIcons";
+import ToolkitHeader from "@/components/toolkit/ToolkitHeader";
+import ToolkitFooter from "@/components/toolkit/ToolkitFooter";
 import ToolkitNav from "@/components/toolkit/ToolkitNav";
 
 const mainCards = [
@@ -84,74 +85,58 @@ const PushbackCheatSheet = () => {
   };
 
   return (
-    <div className="min-h-screen bg-[#1A1A2E]">
-      {/* Header */}
-      <header className="bg-[#1A1A2E] border-b border-white/10">
-        <div className="container mx-auto px-5 md:px-6 py-4 flex items-center justify-between">
-          <Link to="/" className="font-heading text-lg md:text-xl font-medium text-white tracking-tight">
-            JAMES BUGDEN
-          </Link>
-          <div className="hidden md:flex items-center gap-3">
-            <a href="https://www.linkedin.com/in/james-bugden/" target="_blank" rel="noopener noreferrer" className="text-white/70 hover:text-white transition-colors">
-              <Linkedin className="w-5 h-5" />
-            </a>
-            <a href="https://www.instagram.com/james.careers/" target="_blank" rel="noopener noreferrer" className="text-white/70 hover:text-white transition-colors">
-              <InstagramIcon className="w-5 h-5" />
-            </a>
-            <a href="https://www.threads.com/@james.careers" target="_blank" rel="noopener noreferrer" className="text-white/70 hover:text-white transition-colors">
-              <ThreadsIcon className="w-5 h-5" />
-            </a>
-          </div>
-        </div>
-      </header>
+    <div className="min-h-screen bg-background">
+      <ToolkitHeader />
 
       {/* Hero */}
-      <section className="py-12 md:py-16 px-5 md:px-6">
-        <div className="container mx-auto max-w-3xl text-center">
+      <section className="bg-executive-green py-12 md:py-16 px-5 md:px-6 relative">
+        <div className="container mx-auto max-w-3xl text-center relative z-10">
           <Link 
             to="/toolkit" 
-            className="inline-flex items-center gap-2 text-white/60 hover:text-white transition-colors mb-6 text-sm"
+            className="inline-flex items-center gap-2 text-cream-70 hover:text-cream transition-colors mb-6 text-sm"
           >
             <ArrowLeft className="w-4 h-4" />
             Back to Toolkit
           </Link>
-          <h1 className="font-heading text-3xl md:text-4xl lg:text-5xl text-white mb-4">
+          <h1 className="font-heading text-3xl md:text-4xl lg:text-5xl text-cream mb-4">
             Pushback Response Cheat Sheet
           </h1>
-          <p className="text-lg text-white/70">
+          <p className="text-lg text-cream-90">
             They will push back. Here's what to say.
           </p>
         </div>
       </section>
 
       {/* Toolkit Navigation */}
-      <ToolkitNav currentTemplate="T5" />
+      <div className="pt-8">
+        <ToolkitNav currentTemplate="T5" />
+      </div>
 
       {/* Main Cards */}
       <section className="pb-8 px-5 md:px-6">
         <div className="container mx-auto max-w-3xl space-y-6">
           {mainCards.map((card) => (
-            <div key={card.number} className="bg-white rounded-xl overflow-hidden shadow-lg">
+            <div key={card.number} className="bg-card rounded-xl overflow-hidden shadow-premium border border-border">
               <div className="grid md:grid-cols-2">
                 {/* They Say */}
-                <div className="bg-[#F0F0F0] p-6">
+                <div className="bg-muted p-6">
                   <div className="flex items-center gap-3 mb-3">
-                    <span className="w-8 h-8 rounded-full bg-[#1A1A2E] text-white font-bold flex items-center justify-center text-sm">
+                    <span className="w-8 h-8 rounded-full bg-executive text-cream font-bold flex items-center justify-center text-sm">
                       {card.number}
                     </span>
-                    <p className="text-xs font-semibold text-gray-500 uppercase tracking-wide">WHEN THEY SAY:</p>
+                    <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wide">WHEN THEY SAY:</p>
                   </div>
-                  <p className="text-gray-800 italic mb-2">"{card.theySay}"</p>
-                  <p className="text-gray-600 text-sm italic">({card.theySayChinese})</p>
-                  <div className="mt-4 pt-4 border-t border-gray-300">
-                    <p className="text-xs font-semibold text-gray-500 uppercase tracking-wide mb-1">TRANSLATION:</p>
-                    <p className="text-gray-600 text-sm italic">{card.translation}</p>
+                  <p className="text-foreground italic mb-2">"{card.theySay}"</p>
+                  <p className="text-muted-foreground text-sm italic">({card.theySayChinese})</p>
+                  <div className="mt-4 pt-4 border-t border-border">
+                    <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wide mb-1">TRANSLATION:</p>
+                    <p className="text-muted-foreground text-sm italic">{card.translation}</p>
                   </div>
                 </div>
                 {/* You Say */}
-                <div className="p-6 border-l-4 border-[#E94560]">
-                  <p className="text-xs font-semibold text-gray-500 uppercase tracking-wide mb-3">YOU SAY:</p>
-                  <p className="text-gray-900">"{card.youSay}"</p>
+                <div className="p-6 border-l-4 border-gold">
+                  <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wide mb-3">YOU SAY:</p>
+                  <p className="text-foreground">"{card.youSay}"</p>
                 </div>
               </div>
             </div>
@@ -162,24 +147,24 @@ const PushbackCheatSheet = () => {
       {/* Bonus Scripts */}
       <section className="pb-8 px-5 md:px-6">
         <div className="container mx-auto max-w-3xl">
-          <h2 className="text-white text-xl font-heading mb-4">Bonus Scripts</h2>
+          <h2 className="text-foreground text-xl font-heading mb-4">Bonus Scripts</h2>
           <div className="grid md:grid-cols-2 gap-6">
             {bonusScripts.map((script) => (
-              <div key={script.id} className="bg-[#E8F4FD] rounded-xl overflow-hidden shadow-lg border-l-4 border-[#0F3460]">
+              <div key={script.id} className="bg-executive/5 rounded-xl overflow-hidden shadow-premium border-l-4 border-executive">
                 <div className="p-6">
-                  <h3 className="font-semibold text-[#0F3460] text-lg mb-2">{script.title}</h3>
-                  <p className="text-sm text-gray-600 mb-4">
-                    <span className="font-semibold">SITUATION:</span> {script.situation}
+                  <h3 className="font-semibold text-executive text-lg mb-2">{script.title}</h3>
+                  <p className="text-sm text-muted-foreground mb-4">
+                    <span className="font-semibold text-foreground">SITUATION:</span> {script.situation}
                   </p>
-                  <div className="bg-white rounded-lg p-4 mb-3">
-                    <p className="text-xs font-semibold text-gray-500 uppercase tracking-wide mb-2">YOU SAY:</p>
-                    <p className="text-gray-900 text-sm">"{script.youSay}"</p>
+                  <div className="bg-card rounded-lg p-4 mb-3 border border-border">
+                    <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wide mb-2">YOU SAY:</p>
+                    <p className="text-foreground text-sm">"{script.youSay}"</p>
                   </div>
                   {script.followUp && (
-                    <p className="text-sm text-gray-600 italic">{script.followUp}</p>
+                    <p className="text-sm text-muted-foreground italic">{script.followUp}</p>
                   )}
                   {script.key && (
-                    <p className="text-sm text-[#0F3460] mt-3">
+                    <p className="text-sm text-executive mt-3">
                       <span className="font-semibold">Key:</span> {script.key}
                     </p>
                   )}
@@ -193,9 +178,9 @@ const PushbackCheatSheet = () => {
       {/* Remember Box */}
       <section className="pb-12 px-5 md:px-6">
         <div className="container mx-auto max-w-3xl">
-          <div className="bg-amber-50 rounded-xl p-6 border-l-4 border-amber-400">
-            <h3 className="font-heading text-lg text-amber-800 mb-3">📌 Remember</h3>
-            <p className="text-amber-800">
+          <div className="bg-gold/10 rounded-xl p-6 border-l-4 border-gold">
+            <h3 className="font-heading text-lg text-gold mb-3">📌 Remember</h3>
+            <p className="text-foreground">
               HR isn't your enemy. They want to close the deal too. Your job is to make it easy for them to justify paying you more — give them data they can take to their manager. In Taiwan, framing your ask as "what's fair for this level in the market" works far better than "what I want."
             </p>
           </div>
@@ -207,7 +192,7 @@ const PushbackCheatSheet = () => {
         <div className="container mx-auto max-w-3xl flex flex-col sm:flex-row gap-4 justify-center">
           <Button 
             onClick={copyAllScripts}
-            className="bg-[#E94560] hover:bg-[#d13a54] text-white px-6 py-3 h-auto"
+            className="btn-gold px-6 py-3 h-auto"
           >
             {copied ? <Check className="w-4 h-4 mr-2" /> : <Copy className="w-4 h-4 mr-2" />}
             {copied ? "Copied!" : "Copy All"}
@@ -215,7 +200,7 @@ const PushbackCheatSheet = () => {
           <Button 
             onClick={shareUrl}
             variant="outline"
-            className="border-white/30 text-white hover:bg-white/10 px-6 py-3 h-auto"
+            className="border-executive text-executive hover:bg-executive/10 px-6 py-3 h-auto"
           >
             {shared ? <Check className="w-4 h-4 mr-2" /> : <Share2 className="w-4 h-4 mr-2" />}
             {shared ? "Link Copied!" : "Share"}
@@ -223,17 +208,7 @@ const PushbackCheatSheet = () => {
         </div>
       </section>
 
-      {/* Footer */}
-      <footer className="py-8 px-5 md:px-6 border-t border-white/10">
-        <div className="container mx-auto max-w-3xl text-center">
-          <p className="text-white/50 text-sm">
-            From the Salary Negotiation Toolkit by{" "}
-            <Link to="/" className="text-[#E94560] hover:underline">James Bugden</Link>
-            . Get the full 5-email series →{" "}
-            <Link to="/" className="text-[#E94560] hover:underline">Subscribe</Link>
-          </p>
-        </div>
-      </footer>
+      <ToolkitFooter />
     </div>
   );
 };

@@ -1,9 +1,10 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
-import { ArrowLeft, Copy, Share2, Linkedin, Check } from "lucide-react";
+import { ArrowLeft, Copy, Share2, Check } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useToast } from "@/hooks/use-toast";
-import { InstagramIcon, ThreadsIcon } from "@/components/SocialIcons";
+import ToolkitHeader from "@/components/toolkit/ToolkitHeader";
+import ToolkitFooter from "@/components/toolkit/ToolkitFooter";
 import ToolkitNav from "@/components/toolkit/ToolkitNav";
 
 const scenarios = [
@@ -89,91 +90,75 @@ const DeflectionScripts = () => {
   };
 
   return (
-    <div className="min-h-screen bg-[#1A1A2E]">
-      {/* Header */}
-      <header className="bg-[#1A1A2E] border-b border-white/10">
-        <div className="container mx-auto px-5 md:px-6 py-4 flex items-center justify-between">
-          <Link to="/" className="font-heading text-lg md:text-xl font-medium text-white tracking-tight">
-            JAMES BUGDEN
-          </Link>
-          <div className="hidden md:flex items-center gap-3">
-            <a href="https://www.linkedin.com/in/james-bugden/" target="_blank" rel="noopener noreferrer" className="text-white/70 hover:text-white transition-colors">
-              <Linkedin className="w-5 h-5" />
-            </a>
-            <a href="https://www.instagram.com/james.careers/" target="_blank" rel="noopener noreferrer" className="text-white/70 hover:text-white transition-colors">
-              <InstagramIcon className="w-5 h-5" />
-            </a>
-            <a href="https://www.threads.com/@james.careers" target="_blank" rel="noopener noreferrer" className="text-white/70 hover:text-white transition-colors">
-              <ThreadsIcon className="w-5 h-5" />
-            </a>
-          </div>
-        </div>
-      </header>
+    <div className="min-h-screen bg-background">
+      <ToolkitHeader />
 
       {/* Hero */}
-      <section className="py-12 md:py-16 px-5 md:px-6">
-        <div className="container mx-auto max-w-3xl text-center">
+      <section className="bg-executive-green py-12 md:py-16 px-5 md:px-6 relative">
+        <div className="container mx-auto max-w-3xl text-center relative z-10">
           <Link 
             to="/toolkit" 
-            className="inline-flex items-center gap-2 text-white/60 hover:text-white transition-colors mb-6 text-sm"
+            className="inline-flex items-center gap-2 text-cream-70 hover:text-cream transition-colors mb-6 text-sm"
           >
             <ArrowLeft className="w-4 h-4" />
             Back to Toolkit
           </Link>
-          <h1 className="font-heading text-3xl md:text-4xl lg:text-5xl text-white mb-4">
+          <h1 className="font-heading text-3xl md:text-4xl lg:text-5xl text-cream mb-4">
             What to Say When They Ask Your Salary
           </h1>
-          <p className="text-lg text-white/70">
+          <p className="text-lg text-cream-90">
             5 copy-paste scripts for every scenario. Save this page to your phone.
           </p>
         </div>
       </section>
 
       {/* Toolkit Navigation */}
-      <ToolkitNav currentTemplate="T1" />
+      <div className="pt-8">
+        <ToolkitNav currentTemplate="T1" />
+      </div>
 
       {/* Scenarios */}
       <section className="pb-12 px-5 md:px-6">
         <div className="container mx-auto max-w-2xl space-y-6">
           {scenarios.map((scenario) => (
-            <div key={scenario.number} className="bg-white rounded-xl overflow-hidden shadow-lg">
+            <div key={scenario.number} className="bg-card rounded-xl overflow-hidden shadow-premium border border-border">
               {/* Scenario Header */}
-              <div className="bg-[#1A1A2E] px-6 py-4 flex items-center gap-4">
-                <div className="w-10 h-10 rounded-full bg-[#E94560] flex items-center justify-center text-white font-bold text-lg flex-shrink-0">
+              <div className="bg-executive px-6 py-4 flex items-center gap-4">
+                <div className="w-10 h-10 rounded-full bg-gold flex items-center justify-center text-white font-bold text-lg flex-shrink-0">
                   {scenario.number}
                 </div>
-                <h2 className="text-white font-semibold text-lg">{scenario.title}</h2>
+                <h2 className="text-cream font-semibold text-lg">{scenario.title}</h2>
               </div>
 
               {/* They Say */}
               {scenario.theySay && (
-                <div className="bg-[#F0F0F0] px-6 py-4">
-                  <p className="text-xs font-semibold text-gray-500 uppercase tracking-wide mb-2">THEY SAY:</p>
-                  <p className="text-gray-700 italic">"{scenario.theySay}"</p>
+                <div className="bg-muted px-6 py-4">
+                  <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wide mb-2">THEY SAY:</p>
+                  <p className="text-foreground italic">"{scenario.theySay}"</p>
                 </div>
               )}
 
               {/* You Say */}
               {scenario.youSay && (
-                <div className="px-6 py-4 border-l-4 border-[#E94560] bg-white">
-                  <p className="text-xs font-semibold text-gray-500 uppercase tracking-wide mb-2">YOU SAY:</p>
-                  <p className="text-gray-900">"{scenario.youSay}"</p>
+                <div className="px-6 py-4 border-l-4 border-gold bg-card">
+                  <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wide mb-2">YOU SAY:</p>
+                  <p className="text-foreground">"{scenario.youSay}"</p>
                 </div>
               )}
 
               {/* What To Write (Scenario 5) */}
               {scenario.whatToWrite && (
-                <div className="px-6 py-4 border-l-4 border-[#E94560] bg-white">
-                  <p className="text-xs font-semibold text-gray-500 uppercase tracking-wide mb-2">WHAT TO WRITE:</p>
-                  <p className="text-gray-900">{scenario.whatToWrite}</p>
+                <div className="px-6 py-4 border-l-4 border-gold bg-card">
+                  <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wide mb-2">WHAT TO WRITE:</p>
+                  <p className="text-foreground">{scenario.whatToWrite}</p>
                 </div>
               )}
 
               {/* Pro Tip (Scenario 4) */}
               {scenario.proTip && (
-                <div className="px-6 py-4 bg-amber-50 border-t border-amber-100">
-                  <p className="text-sm text-amber-800">
-                    <span className="font-semibold">💡 PRO TIP:</span> {scenario.proTip}
+                <div className="px-6 py-4 bg-gold/10 border-t border-gold/20">
+                  <p className="text-sm text-foreground">
+                    <span className="font-semibold text-gold">💡 PRO TIP:</span> {scenario.proTip}
                   </p>
                 </div>
               )}
@@ -185,12 +170,12 @@ const DeflectionScripts = () => {
       {/* Pro Tips Box */}
       <section className="pb-12 px-5 md:px-6">
         <div className="container mx-auto max-w-2xl">
-          <div className="bg-[#E8F4FD] rounded-xl p-6 border-l-4 border-[#0F3460]">
-            <h3 className="font-heading text-xl text-[#0F3460] mb-4">Pro Tips</h3>
+          <div className="bg-executive/5 rounded-xl p-6 border-l-4 border-executive">
+            <h3 className="font-heading text-xl text-executive mb-4">Pro Tips</h3>
             <div className="space-y-4">
               {proTips.map((tip, index) => (
                 <div key={index}>
-                  <p className="text-[#0F3460]">
+                  <p className="text-foreground">
                     <span className="font-semibold">{tip.icon} {tip.title}:</span> {tip.text}
                   </p>
                 </div>
@@ -205,7 +190,7 @@ const DeflectionScripts = () => {
         <div className="container mx-auto max-w-2xl flex flex-col sm:flex-row gap-4 justify-center">
           <Button 
             onClick={copyAllScripts}
-            className="bg-[#E94560] hover:bg-[#d13a54] text-white px-6 py-3 h-auto"
+            className="btn-gold px-6 py-3 h-auto"
           >
             {copied ? <Check className="w-4 h-4 mr-2" /> : <Copy className="w-4 h-4 mr-2" />}
             {copied ? "Copied!" : "Copy All Scripts"}
@@ -213,7 +198,7 @@ const DeflectionScripts = () => {
           <Button 
             onClick={shareUrl}
             variant="outline"
-            className="border-white/30 text-white hover:bg-white/10 px-6 py-3 h-auto"
+            className="border-executive text-executive hover:bg-executive/10 px-6 py-3 h-auto"
           >
             {shared ? <Check className="w-4 h-4 mr-2" /> : <Share2 className="w-4 h-4 mr-2" />}
             {shared ? "Link Copied!" : "Share"}
@@ -221,17 +206,7 @@ const DeflectionScripts = () => {
         </div>
       </section>
 
-      {/* Footer */}
-      <footer className="py-8 px-5 md:px-6 border-t border-white/10">
-        <div className="container mx-auto max-w-2xl text-center">
-          <p className="text-white/50 text-sm">
-            From the Salary Negotiation Toolkit by{" "}
-            <Link to="/" className="text-[#E94560] hover:underline">James Bugden</Link>
-            . Get the full 5-email series →{" "}
-            <Link to="/" className="text-[#E94560] hover:underline">Subscribe</Link>
-          </p>
-        </div>
-      </footer>
+      <ToolkitFooter />
     </div>
   );
 };

@@ -23,10 +23,10 @@ const ToolkitNav = ({ currentTemplate }: ToolkitNavProps) => {
             <Link
               key={template.id}
               to={template.href}
-              className={`px-3 py-2 rounded-lg text-xs md:text-sm transition-colors ${
+              className={`px-3 py-2 rounded-lg text-xs md:text-sm transition-all duration-300 ${
                 template.id === currentTemplate
-                  ? "bg-[#E94560] text-white"
-                  : "bg-white/10 text-white/70 hover:bg-white/20 hover:text-white"
+                  ? "bg-gold text-white shadow-gold"
+                  : "bg-executive/10 text-executive hover:bg-executive/20"
               }`}
             >
               {template.label}
