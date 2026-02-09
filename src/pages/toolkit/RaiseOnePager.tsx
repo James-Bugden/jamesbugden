@@ -17,7 +17,7 @@ const exampleAchievements = [
 const exampleMarketData = {
   currentComp: "NT$78,000/month (annual TC ~NT$1.17M)",
   marketRange: "NT$85,000–NT$110,000/month",
-  source: "104人力銀行, Glassdoor, CakeResume",
+  source: "Glassdoor, LinkedIn Salary, Payscale",
   gap: "NT$7,000–32,000/month below market midpoint",
 };
 
@@ -29,7 +29,7 @@ const exampleAsk = {
 
 const exampleTalkingPoints = {
   opening: "Over the past year, I've led our cloud migration saving NT$2.4M annually, built the automated testing pipeline that cut release cycles by 70%, and mentored 3 junior engineers — all of whom passed probation.",
-  data: "Based on 104人力銀行 and Glassdoor, the market range for Senior Engineers in Taipei with my experience is NT$85K–110K/month. My current base of NT$78K falls below this range.",
+  data: "Based on Glassdoor and LinkedIn Salary, the market range for Senior Engineers in [city] with my experience is NT$85K–110K/month. My current base of NT$78K falls below this range.",
   ask: "I'd like to discuss adjusting my compensation to NT$92K/month to reflect my contributions and align with market rates.",
   ifNo: "I understand. What specific milestones or goals would need to be met for a compensation adjustment at the next review cycle? I'd like to make sure we're aligned.",
 };

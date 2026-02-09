@@ -11,29 +11,25 @@ const mainCards = [
   {
     number: 1,
     theySay: "This is the standard offer for this level.",
-    theySayChinese: "這是這個職等的標準薪資",
     translation: "Monthly base might be locked to a pay grade — but bonuses, allowances, and review timing usually are not.",
     youSay: "I understand the pay structure. If the monthly base is firm, is there flexibility on the guaranteed year-end bonus or the timing of my first performance review? An earlier review would give me a chance to demonstrate my value sooner.",
   },
   {
     number: 2,
     theySay: "We don't have the budget.",
-    theySayChinese: "我們的預算有限",
     translation: "The budget for base salary might be locked — but sign-on bonuses, training budgets, and allowances often come from different budget lines.",
     youSay: "I completely understand budget constraints. I also know that similar roles at comparable companies are offering monthly packages in the NT$[X–Y] range. If the base is firm, is there room to adjust the year-end guarantee or add a sign-on bonus to align the total annual package?",
   },
   {
     number: 3,
     theySay: "This is already a competitive offer.",
-    theySayChinese: "這已經是很有競爭力的條件了",
     translation: "They want you to feel like you're asking for too much. \"Competitive\" means \"in the range.\" It doesn't mean \"at the top.\"",
     youSay: "I agree it's a strong offer, and I appreciate it. Based on my experience level and the contributions I'll be making, I was expecting something closer to NT$[X]/month. I'd love to work together to find a package that reflects that.",
   },
   {
     number: 4,
     theySay: "We need to maintain internal equity.",
-    theySayChinese: "我們需要維持內部公平性",
-    translation: "Internal salary consistency matters. In Taiwan, many companies have rigid pay grade systems — that's exactly why non-salary components are your leverage.",
+    translation: "Internal salary consistency matters. Many companies have rigid pay grade systems — that's exactly why non-salary components are your leverage.",
     youSay: "That makes complete sense. Since internal equity is important, could we look at a guaranteed 3-month year-end bonus or an accelerated review cycle? Those wouldn't affect the salary structure but would help align the total annual compensation.",
   },
 ];
@@ -127,7 +123,6 @@ const PushbackCheatSheet = () => {
                     <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wide">WHEN THEY SAY:</p>
                   </div>
                   <p className="text-foreground italic mb-2">"{card.theySay}"</p>
-                  <p className="text-muted-foreground text-sm italic">({card.theySayChinese})</p>
                   <div className="mt-4 pt-4 border-t border-border">
                     <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wide mb-1">TRANSLATION:</p>
                     <p className="text-muted-foreground text-sm italic">{card.translation}</p>
@@ -181,7 +176,7 @@ const PushbackCheatSheet = () => {
           <div className="bg-gold/10 rounded-xl p-6 border-l-4 border-gold">
             <h3 className="font-heading text-lg text-gold mb-3">📌 Remember</h3>
             <p className="text-foreground">
-              HR isn't your enemy. They want to close the deal too. Your job is to make it easy for them to justify paying you more — give them data they can take to their manager. In Taiwan, framing your ask as "what's fair for this level in the market" works far better than "what I want."
+              HR isn't your enemy. They want to close the deal too. Your job is to make it easy for them to justify paying you more — give them data they can take to their manager. Framing your ask as "what's fair for this level in the market" works far better than "what I want."
             </p>
           </div>
         </div>

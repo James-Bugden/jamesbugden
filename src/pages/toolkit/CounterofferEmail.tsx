@@ -20,7 +20,7 @@ Thank you so much for the offer — I'm genuinely excited about the opportunity 
 
 After reviewing the offer in detail, I'd love to discuss a few adjustments to better align with market rates and my experience.
 
-Based on my research through 104人力銀行, Glassdoor, and industry benchmarks, I was expecting:
+Based on my research through Glassdoor, LinkedIn Salary, and industry benchmarks, I was expecting:
 
 • Monthly Base Salary: NT$[your target] to better match the market range for this role and experience level in [city/region]
 
@@ -62,7 +62,7 @@ Best regards,
 
 Thank you so much for the offer — I'm thrilled about the opportunity to bring my [X years] of experience in [domain] to [Company] and contribute to [specific team/project].
 
-After reviewing the full package, I'd love to discuss one adjustment. Based on my research through 104人力銀行, Glassdoor, and conversations with industry peers, the market range for this role is NT$[X]–[Y] per month. Given my track record of [specific achievement with metric], I believe a monthly base of NT$[target] would better reflect the value I'll deliver.
+After reviewing the full package, I'd love to discuss one adjustment. Based on my research through Glassdoor, LinkedIn Salary, and conversations with industry peers, the market range for this role is NT$[X]–[Y] per month. Given my track record of [specific achievement with metric], I believe a monthly base of NT$[target] would better reflect the value I'll deliver.
 
 I'm very excited about joining the team and confident we can find a package that works for both sides.
 
@@ -83,7 +83,7 @@ Thank you for the opportunity to step into the [new role/title] — I'm excited 
 
 As I transition into this role, I'd love to discuss aligning my compensation with the increased responsibilities. Over the past [timeframe], I've [specific achievements with metrics], and the new role involves [key new responsibilities].
 
-Based on market data from 104人力銀行 and Glassdoor, comparable roles at this level in [industry/region] are compensated at NT$[X]–[Y] per month. I'd love to discuss adjusting to NT$[target] to reflect the new scope.
+Based on market data from Glassdoor and LinkedIn Salary, comparable roles at this level in [industry/region] are compensated at NT$[X]–[Y] per month. I'd love to discuss adjusting to NT$[target] to reflect the new scope.
 
 I'm committed to delivering results in this role and would appreciate the chance to align the package accordingly.
 
