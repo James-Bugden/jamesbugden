@@ -66,6 +66,11 @@ const allTestimonials: Testimonial[] = [
     hook: "Your review helped me discover my own strengths and where I can keep improving!",
     full: "Although this resume review came a bit late, I think it helped a lot! Sometimes we have blind spots, and your review really helped me discover my own strengths and where I can keep improving on my resume!",
   },
+  {
+    name: "Youting Chen",
+    hook: "The suggestions are supported by objective and concrete sources rather than subjective opinions, which makes the review feel very logical and well-structured.",
+    full: "The analysis structure is extremely clear. It doesn't just provide suggestions on wording and descriptions, but also gives detailed guidance on presentation and formatting, which are details I often overlooked when reviewing my own resume in the past. It also places the target job description together with the improvement suggestions, allowing me to immediately understand the reasoning behind each recommendation. The suggestions are supported by objective and concrete sources rather than subjective opinions, which makes the review process feel very logical and well-structured. The formatting suggestions were very helpful. Several long-standing detail issues were pointed out, and the feedback also explained the reasoning and evaluation standards behind each suggestion. Overall, the resume review is very structured and logical, and I was also able to learn more about resume writing concepts through the process.",
+  },
 ];
 
 const TestimonialCard = ({ testimonial }: { testimonial: Testimonial }) => {
