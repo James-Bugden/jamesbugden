@@ -49,6 +49,7 @@ const DeflectionScripts = lazy(() => import("./pages/toolkit/DeflectionScripts")
 const OfferResponse = lazy(() => import("./pages/toolkit/OfferResponse"));
 const CounterofferEmail = lazy(() => import("./pages/toolkit/CounterofferEmail"));
 const CompensationCalculator = lazy(() => import("./pages/toolkit/CompensationCalculator"));
+const CompCalculatorInteractive = lazy(() => import("./pages/toolkit/CompCalculatorInteractive"));
 const PushbackCheatSheet = lazy(() => import("./pages/toolkit/PushbackCheatSheet"));
 const RaiseOnePager = lazy(() => import("./pages/toolkit/RaiseOnePager"));
 const AchievementLog = lazy(() => import("./pages/toolkit/AchievementLog"));
@@ -139,6 +140,7 @@ const App = () => (
             <Route path="/toolkit/offer-response" element={<OfferResponse />} />
             <Route path="/toolkit/counteroffer" element={<CounterofferEmail />} />
             <Route path="/toolkit/calculator" element={<CompensationCalculator />} />
+            <Route path="/toolkit/calculator-interactive" element={<CompCalculatorInteractive />} />
             <Route path="/toolkit/pushback" element={<PushbackCheatSheet />} />
             <Route path="/toolkit/raise" element={<RaiseOnePager />} />
             <Route path="/toolkit/log" element={<AchievementLog />} />
