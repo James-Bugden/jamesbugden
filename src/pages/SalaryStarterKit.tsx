@@ -1,33 +1,49 @@
-import { Link } from "react-router-dom";
-import { ArrowLeft, ArrowRight } from "lucide-react";
+import { ArrowLeft, ArrowRight, DollarSign } from "lucide-react";
+import { Link, useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
-import LanguageToggle from "@/components/LanguageToggle";
 
 const SalaryStarterKit = () => {
+  const navigate = useNavigate();
+
   return (
     <div className="min-h-screen bg-background">
       {/* Navigation */}
-      <nav className="bg-nav-green py-4 px-5 md:px-6 sticky top-0 z-50">
-        <div className="container mx-auto max-w-4xl flex items-center justify-between">
-          <Link 
-            to="/" 
-            className="inline-flex items-center gap-2 text-cream-70 hover:text-cream transition-colors text-sm"
-          >
-            <ArrowLeft className="w-4 h-4" />
-            Home
+      <nav className="fixed top-0 left-0 right-0 z-50 bg-nav-green">
+        <div className="container mx-auto px-5 md:px-6 py-4 flex items-center justify-between">
+          <Link to="/" className="font-heading text-lg md:text-xl font-medium text-cream tracking-tight">
+            JAMES BUGDEN
           </Link>
-          <LanguageToggle />
+          <div className="flex items-center gap-3 md:gap-4">
+            <Link to="/" className="text-sm text-cream-70 hover:text-cream transition-colors flex items-center gap-1">
+              <ArrowLeft className="w-4 h-4" />
+              <span className="hidden sm:inline">Back to Home</span>
+            </Link>
+            <button 
+              onClick={() => navigate("/zh-tw/salary-starter-kit")}
+              className="px-3 py-1.5 text-sm font-semibold bg-gold/20 hover:bg-gold/30 text-gold border border-gold/40 rounded-md transition-all duration-200 hover:scale-105"
+            >
+              中文
+            </button>
+          </div>
         </div>
       </nav>
 
       {/* Hero */}
-      <section className="bg-executive-green py-16 md:py-20 px-5 md:px-6">
+      <section className="pt-28 md:pt-36 pb-12 md:pb-16 px-5 md:px-6 bg-executive-green">
         <div className="container mx-auto max-w-4xl text-center">
-          <h1 className="font-heading text-3xl md:text-4xl lg:text-5xl text-cream mb-4">
+          <div className="flex justify-center mb-4">
+            <div className="w-16 h-16 rounded-full bg-gold/20 flex items-center justify-center">
+              <DollarSign className="w-8 h-8 text-gold" />
+            </div>
+          </div>
+          <h1 className="font-heading text-3xl md:text-5xl lg:text-6xl text-cream leading-tight mb-4">
             Negotiate 20-30% More at Your Next Offer
           </h1>
-          <p className="text-lg md:text-xl text-cream-90 max-w-3xl mx-auto">
-            Word-for-word scripts for every salary conversation. Copy them. Fill in the blanks. Send.
+          <p className="text-lg md:text-xl text-cream/80 mb-2">
+            Word-for-word scripts for every salary conversation
+          </p>
+          <p className="text-base text-cream/60">
+            Copy them. Fill in the blanks. Send.
           </p>
         </div>
       </section>
