@@ -40,6 +40,8 @@ const PivotMethodMiniGuide = lazy(() => import("./pages/PivotMethodMiniGuide"));
 const PivotMethodMiniGuideZhTw = lazy(() => import("./pages/PivotMethodMiniGuideZhTw"));
 const GuidesPage = lazy(() => import("./pages/GuidesPage"));
 const GuidesPageZhTw = lazy(() => import("./pages/GuidesPageZhTw"));
+const SalaryStarterKit = lazy(() => import("./pages/SalaryStarterKit"));
+const SalaryStarterKitZhTw = lazy(() => import("./pages/SalaryStarterKitZhTw"));
 
 // Toolkit pages
 const ToolkitIndex = lazy(() => import("./pages/toolkit/ToolkitIndex"));
@@ -119,6 +121,8 @@ const App = () => (
             <Route path="/zh-tw/pivot-method-mini-guide" element={<PivotMethodMiniGuideZhTw />} />
             <Route path="/guides" element={<GuidesPage />} />
             <Route path="/zh-tw/guides" element={<GuidesPageZhTw />} />
+            <Route path="/salary-starter-kit" element={<SalaryStarterKit />} />
+            <Route path="/zh-tw/salary-starter-kit" element={<SalaryStarterKitZhTw />} />
             {/* Salary Negotiation Toolkit */}
             <Route path="/toolkit" element={<ToolkitIndex />} />
             <Route path="/toolkit/scripts" element={<DeflectionScripts />} />
