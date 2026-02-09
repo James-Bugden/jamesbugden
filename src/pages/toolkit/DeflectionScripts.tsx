@@ -38,7 +38,7 @@ const scenarios = [
     title: "Written application requires a number",
     theySay: null,
     youSay: null,
-    whatToWrite: "Write \"面議\" (to be discussed) or \"依公司規定\" (per company standards) whenever possible. If the field only accepts numbers, enter a range based on your market research — not your current salary.",
+    whatToWrite: "Write \"negotiable\" or \"per company policy\" whenever possible. If the field only accepts numbers, enter a range based on your market research — not your current salary.",
   },
 ];
 
@@ -51,7 +51,7 @@ const proTips = [
   {
     icon: "💡",
     title: "Data reframe (especially for women)",
-    text: "Instead of \"I want,\" try \"My research shows that this role typically pays...\" Citing external data (104人力銀行, Glassdoor) takes the focus off you and onto the market.",
+    text: "Instead of \"I want,\" try \"My research shows that this role typically pays...\" Citing external data (Glassdoor, LinkedIn Salary, Payscale) takes the focus off you and onto the market.",
   },
   {
     icon: "💡",
