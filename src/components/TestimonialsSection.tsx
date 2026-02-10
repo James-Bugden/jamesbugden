@@ -1,10 +1,10 @@
 import { useState } from "react";
 import { ChevronDown } from "lucide-react";
-import monicaPhoto from "@/assets/testimonials/monica.jpg";
-import juliePhoto from "@/assets/testimonials/julie.jpeg";
-import cynthiaPhoto from "@/assets/testimonials/cynthia.jpeg";
-import sunnyPhoto from "@/assets/testimonials/sunny.jpeg";
-import pinweiPhoto from "@/assets/testimonials/pinwei.png";
+import monicaPhoto from "@/assets/testimonials/monica.webp";
+import juliePhoto from "@/assets/testimonials/julie.webp";
+import cynthiaPhoto from "@/assets/testimonials/cynthia.webp";
+import sunnyPhoto from "@/assets/testimonials/sunny.webp";
+import pinweiPhoto from "@/assets/testimonials/pinwei.webp";
 
 interface Testimonial {
   name: string;

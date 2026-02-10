@@ -1,5 +1,22 @@
 import { useState, useRef, useEffect } from "react";
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+declare const ml: any;
+
+let mailerLiteLoaded = false;
+function loadMailerLite() {
+  if (mailerLiteLoaded) return;
+  mailerLiteLoaded = true;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const w = window as any;
+  w.ml = w.ml || function () { (w.ml.q = w.ml.q || []).push(arguments); };
+  const s = document.createElement("script");
+  s.async = true;
+  s.src = "https://assets.mailerlite.com/js/universal.js";
+  document.head.appendChild(s);
+  ml("account", "1937443");
+}
+
 type MailerLiteFormProps = {
   formId: string;
   className?: string;
@@ -12,26 +29,10 @@ export default function MailerLiteForm({ formId, className, buttonText = "Get on
   const [isSuccess, setIsSuccess] = useState(false);
   const formRef = useRef<HTMLFormElement>(null);
 
-  // Generate a unique callback name for JSONP
-  const callbackName = `ml_callback_${formId}_${Date.now()}`;
-
+  // Load MailerLite script only when this component mounts
   useEffect(() => {
-    // Set up the callback function for JSONP response
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    (window as any)[callbackName] = (response: unknown) => {
-      setIsSuccess(true);
-      setIsLoading(false);
-      setEmail("");
-      // Clean up
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      delete (window as any)[callbackName];
-    };
-
-    return () => {
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      delete (window as any)[callbackName];
-    };
-  }, [callbackName]);
+    loadMailerLite();
+  }, []);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
