@@ -56,43 +56,26 @@ const IndexZhTw = () => {
               {/* Headline Block - Dominant element with breathing room */}
               <div className="mb-14 md:mb-16">
                 <h1 className="font-heading text-[2.5rem] md:text-6xl lg:text-7xl text-executive-green leading-[1.2] tracking-tight mb-3">
-                  你的履歷沒有幫你拿到工作
+                  拿到年薪 200 萬+ 的外商 offer，進你真正想去的公司
                 </h1>
-                <p className="font-heading text-xl md:text-2xl text-foreground/70 font-normal">
-                  讓我告訴你為什麼
-                </p>
               </div>
 
-              {/* Authority lines - Tightly grouped, neutral */}
-              <div className="mb-8 md:mb-10">
-                <p className="text-base md:text-lg text-muted-foreground leading-relaxed">
-                  我是 Uber 現任招募人員。
-                </p>
-                <p className="text-base md:text-lg text-muted-foreground leading-relaxed">
-                  我已審閱超過 20,000 份履歷，錄用超過 500 人。
-                </p>
-              </div>
-
-              {/* Diagnosis lines - Separate section, slightly more emphasis */}
+              {/* Authority + value prop */}
               <div className="mb-10 md:mb-12">
                 <p className="text-base md:text-lg text-foreground leading-relaxed">
-                  招募人員在 10 秒內就決定是否淘汰一份履歷。
+                  我是 Uber 的資深招募官。審過 20,000+ 份履歷，在財富500大企業錄取超過 750 人。每週免費分享薪資談判、履歷優化和面試攻略。
                 </p>
-                <p className="text-base md:text-lg text-foreground leading-relaxed">
-                  我會告訴你到底是什麼讓你的履歷被刷掉。
+                <p className="text-base md:text-lg text-foreground leading-relaxed mt-3">
+                  這些是多數職涯教練不會告訴你的內部策略。
                 </p>
               </div>
 
-              {/* Value + Scarcity + CTA - Grouped together */}
+              {/* CTA */}
               <div className="space-y-5">
-                <p className="text-gold font-semibold text-base md:text-lg">
-                  價值 1萬元 · 測試期間免費 · 每月僅限 5 位
-                </p>
-                
-                <MailerLiteForm formId="sM1X80" className="ml-embedded max-w-[400px]" buttonText="加入等候名單" />
+                <MailerLiteForm formId="sM1X80" className="ml-embedded max-w-[400px]" buttonText="免費訂閱每週攻略" />
                 
                 <p className="text-sm text-muted-foreground">
-                  你的資訊絕對保密。絕不發送垃圾郵件。
+                  加入 2,000+ 位專業人士，每週收到來自招募官的內部求職情報。
                 </p>
               </div>
             </div>

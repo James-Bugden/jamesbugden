@@ -61,44 +61,27 @@ const Index = () => {
             <div className="order-2 md:order-1">
               {/* Headline Block - Dominant element with breathing room */}
               <div className="mb-14 md:mb-16">
-                <h1 className="font-heading text-[2.5rem] md:text-6xl lg:text-7xl text-executive-green leading-[1.05] tracking-tight mb-2">
-                  Your Resume Isn't Getting You a Job
+                <h1 className="font-heading text-[2.5rem] md:text-6xl lg:text-7xl text-executive-green leading-[1.05] tracking-tight mb-3">
+                  Land a $200K+ Role at a Company You Want to Work At
                 </h1>
-                <p className="font-heading text-xl md:text-2xl text-foreground/70 font-normal">
-                  I'll Tell You Why.
-                </p>
               </div>
 
-              {/* Authority lines - Tightly grouped, neutral */}
-              <div className="mb-8 md:mb-10">
-                <p className="text-base md:text-lg text-muted-foreground leading-relaxed">
-                  I'm an active Uber recruiter.
-                </p>
-                <p className="text-base md:text-lg text-muted-foreground leading-relaxed">
-                  I've reviewed 20,000+ resumes and hired 500+ people.
-                </p>
-              </div>
-
-              {/* Diagnosis lines - Separate section, slightly more emphasis */}
+              {/* Authority + value prop */}
               <div className="mb-10 md:mb-12">
                 <p className="text-base md:text-lg text-foreground leading-relaxed">
-                  Recruiters decide whether to reject a resume in under 10 seconds.
+                  I've reviewed 20,000+ resumes and hired 750+ people at Fortune 500 companies.
                 </p>
-                <p className="text-base md:text-lg text-foreground leading-relaxed">
-                  I'll show you exactly what gets your resume rejected.
+                <p className="text-base md:text-lg text-foreground leading-relaxed mt-3">
+                  Every week I share the salary, resume, and interview strategies most career coaches don't know.
                 </p>
               </div>
 
-              {/* Value + Scarcity + CTA - Grouped together */}
+              {/* CTA */}
               <div className="space-y-5">
-                <p className="text-gold font-semibold text-base md:text-lg">
-                  $500 USD value · No charge during testing · Only 5 candidates per month
-                </p>
-                
-                <MailerLiteForm formId="sM1X80" className="ml-embedded max-w-[400px]" />
+                <MailerLiteForm formId="sM1X80" className="ml-embedded max-w-[400px]" buttonText="Get Free Weekly Strategies" />
                 
                 <p className="text-sm text-muted-foreground">
-                  Your info stays private. No spam. Ever.
+                  Join 2,000+ professionals who get insider recruiting tips every week.
                 </p>
               </div>
             </div>
