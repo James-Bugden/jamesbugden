@@ -1,5 +1,5 @@
 import { Button } from "@/components/ui/button";
-import { Linkedin } from "lucide-react";
+import { Linkedin, Users, Briefcase, FileCheck } from "lucide-react";
 import { InstagramIcon, ThreadsIcon } from "@/components/SocialIcons";
 import jamesPhoto from "@/assets/james-bugden.jpg";
 import LanguageToggle from "@/components/LanguageToggle";
@@ -15,7 +15,7 @@ const IndexZhTw = () => {
 
   return (
     <div className="min-h-screen bg-background overflow-x-hidden">
-      {/* Navigation - Executive Green */}
+      {/* Navigation */}
       <nav className="fixed top-0 left-0 right-0 z-50 bg-nav-green">
         <div className="container mx-auto px-5 md:px-6 py-4 flex items-center justify-between">
           <span className="font-heading text-lg md:text-xl font-medium text-cream tracking-tight">JAMES BUGDEN</span>
@@ -27,7 +27,6 @@ const IndexZhTw = () => {
             ))}
           </div>
           <div className="flex items-center gap-3 md:gap-4">
-            {/* Mobile: show link and language toggle */}
             <a href="#resources" className="md:hidden text-sm text-cream-70 hover:text-cream transition-colors">
               免費資源
             </a>
@@ -48,45 +47,61 @@ const IndexZhTw = () => {
       </nav>
 
       {/* Hero Section */}
-      <section id="about" className="pt-32 md:pt-40 pb-20 md:pb-28 px-5 md:px-6 bg-background">
+      <section id="about" className="pt-28 md:pt-36 pb-16 md:pb-24 px-5 md:px-6 bg-background relative">
         <div className="container mx-auto max-w-5xl">
-          <div className="grid md:grid-cols-2 gap-12 md:gap-16 items-center">
+          <div className="grid md:grid-cols-[1fr_auto] gap-10 md:gap-16 items-center">
             {/* Content */}
             <div className="order-2 md:order-1">
-              {/* Headline Block - Dominant element with breathing room */}
-              <div className="mb-14 md:mb-16">
-                <h1 className="font-heading text-[2.5rem] md:text-6xl lg:text-7xl text-executive-green leading-[1.2] tracking-tight mb-3">
-                  拿到年薪 200 萬+ 的外商 offer，進你真正想去的公司
-                </h1>
+              {/* Credential badge */}
+              <div className="mb-6">
+                <span className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-executive-green/8 border border-executive-green/15 text-sm text-executive-green font-medium">
+                  <Briefcase className="w-3.5 h-3.5" />
+                  Uber 資深招募官 · 財富 500 大
+                </span>
               </div>
 
-              {/* Authority + value prop */}
-              <div className="mb-10 md:mb-12">
-                <p className="text-base md:text-lg text-foreground leading-relaxed">
-                  我是 Uber 的資深招募官。審過 20,000+ 份履歷，在財富500大企業錄取超過 750 人。每週免費分享薪資談判、履歷優化和面試攻略。
-                </p>
-                <p className="text-base md:text-lg text-foreground leading-relaxed mt-3">
-                  這些是多數職涯教練不會告訴你的內部策略。
-                </p>
+              {/* Headline */}
+              <h1 className="font-heading text-[2.25rem] md:text-[3.5rem] lg:text-[4rem] text-executive-green leading-[1.15] tracking-tight mb-5">
+                拿到年薪 200 萬+ 的外商 offer，進你真正想去的公司
+              </h1>
+
+              {/* Subheadline */}
+              <p className="text-base md:text-lg text-foreground/80 leading-relaxed max-w-lg mb-8">
+                每週免費分享薪資談判、履歷優化和面試攻略——基於 20,000+ 份履歷審閱與 750+ 次錄取經驗。這些是多數職涯教練不會告訴你的內部策略。
+              </p>
+
+              {/* CTA block */}
+              <div className="mb-6">
+                <MailerLiteForm formId="sM1X80" className="ml-embedded max-w-[460px]" buttonText="免費訂閱每週攻略" />
               </div>
 
-              {/* CTA */}
-              <div className="space-y-5">
-                <MailerLiteForm formId="sM1X80" className="ml-embedded max-w-[400px]" buttonText="免費訂閱每週攻略" />
-                
-                <p className="text-sm text-muted-foreground">
-                  加入 2,000+ 位專業人士，每週收到來自招募官的內部求職情報。
-                </p>
+              {/* Social proof */}
+              <div className="flex items-center gap-2 text-sm text-muted-foreground">
+                <Users className="w-4 h-4 text-gold" />
+                <span>加入 2,000+ 位專業人士，每週收到招募官的內部求職情報</span>
+              </div>
+
+              {/* Trust stats */}
+              <div className="flex flex-wrap gap-x-6 gap-y-2 mt-8 pt-6 border-t border-border/60">
+                <div className="flex items-center gap-2 text-sm text-foreground/70">
+                  <FileCheck className="w-4 h-4 text-executive-green/60" />
+                  <span><strong className="text-foreground">20,000+</strong> 份履歷審閱</span>
+                </div>
+                <div className="flex items-center gap-2 text-sm text-foreground/70">
+                  <Briefcase className="w-4 h-4 text-executive-green/60" />
+                  <span><strong className="text-foreground">750+</strong> 人成功錄取</span>
+                </div>
               </div>
             </div>
 
             {/* Photo */}
             <div className="flex justify-center md:justify-end order-1 md:order-2">
               <div className="relative">
+                <div className="absolute -inset-3 rounded-full bg-gradient-to-br from-gold/20 via-transparent to-executive-green/10 blur-xl" />
                 <img
                   src={jamesPhoto}
                   alt="James Bugden"
-                  className="w-56 h-56 md:w-80 md:h-80 rounded-full object-cover hero-photo-shadow border-4 border-card"
+                  className="relative w-52 h-52 md:w-72 md:h-72 lg:w-80 lg:h-80 rounded-full object-cover hero-photo-shadow border-4 border-card"
                 />
               </div>
             </div>
