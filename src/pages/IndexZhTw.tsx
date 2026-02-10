@@ -78,11 +78,8 @@ const IndexZhTw = () => {
               </h1>
 
               {/* Subhead */}
-              <p className="text-[1.0625rem] md:text-lg text-foreground/85 leading-relaxed max-w-xl mx-auto md:mx-0 mb-3">
+              <p className="text-[1.0625rem] md:text-lg text-foreground/85 leading-relaxed max-w-xl mx-auto md:mx-0 mb-6">
                 我是 Uber 的資深招募官。審過 20,000+ 份履歷，在財富500大企業錄取超過 750 人。每週免費分享薪資談判、履歷優化和面試攻略。
-              </p>
-              <p className="text-base text-foreground/60 italic leading-relaxed max-w-xl mx-auto md:mx-0 mb-6">
-                📩 本週主題：Uber 的 ATS 系統最愛的履歷格式
               </p>
 
               {/* Social proof — ABOVE form */}
@@ -93,7 +90,7 @@ const IndexZhTw = () => {
 
               {/* CTA block */}
               <div className="mb-2 max-w-md mx-auto md:mx-0">
-                <MailerLiteForm formId="sM1X80" className="ml-embedded" buttonText="免費訂閱每週攻略" />
+                <MailerLiteForm formId="sM1X80" className="ml-embedded" buttonText="免費索取攻略" />
               </div>
 
               {/* Micro-commitment reducer */}
