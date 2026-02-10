@@ -79,7 +79,7 @@ const IndexZhTw = () => {
 
               {/* Subhead */}
               <p className="text-[1.0625rem] md:text-lg text-foreground/85 leading-relaxed max-w-xl mx-auto md:mx-0 mb-6">
-                我是 Uber 的資深招募官。審過 20,000+ 份履歷，在財富500大企業錄取超過 750 人。每週免費分享薪資談判、履歷優化和面試攻略。
+                我在 Google、Uber、Microsoft 等企業成功錄取超過 750 位候選人的內部招募策略
               </p>
 
               {/* Social proof — ABOVE form */}
