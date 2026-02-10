@@ -7,6 +7,7 @@ import GoldCheckBadge from "@/components/GoldCheckBadge";
 import TestimonialsSection from "@/components/TestimonialsSection";
 import FreeResourcesSection from "@/components/FreeResourcesSection";
 import MailerLiteForm from "@/components/MailerLiteForm";
+import PageSEO from "@/components/PageSEO";
 
 declare global {
   interface Window {
@@ -21,6 +22,11 @@ const Index = () => {
 
   return (
     <div className="min-h-screen bg-background overflow-x-hidden">
+      <PageSEO
+        title="James Bugden — Get a $200K+ Offer"
+        description="Senior Fortune 500 recruiter shares insider strategies that helped 750+ candidates land offers at Google, Uber, Microsoft."
+        path="/"
+      />
       {/* Navigation - Executive Green */}
       <header>
       <nav className="fixed top-0 left-0 right-0 z-50 bg-nav-green">
