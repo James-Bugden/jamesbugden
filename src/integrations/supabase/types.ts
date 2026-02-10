@@ -67,14 +67,6 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
-      get_review_for_verification: {
-        Args: { review_id: string }
-        Returns: {
-          client_name: string
-          password_hash: string
-          review_url: string
-        }[]
-      }
       is_admin: { Args: { _user_id: string }; Returns: boolean }
       mark_review_viewed: { Args: { review_id: string }; Returns: undefined }
       verify_client_password: {
