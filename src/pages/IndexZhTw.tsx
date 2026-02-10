@@ -47,13 +47,25 @@ const IndexZhTw = () => {
       </nav>
 
       {/* Hero Section */}
-      <section id="about" className="pt-28 md:pt-36 pb-16 md:pb-24 px-5 md:px-6 bg-background relative">
+      <section id="about" className="pt-24 md:pt-36 pb-16 md:pb-24 px-5 md:px-6 bg-background relative">
         <div className="container mx-auto max-w-5xl">
-          <div className="grid md:grid-cols-[1fr_auto] gap-10 md:gap-16 items-center">
-            {/* Content */}
-            <div className="order-2 md:order-1">
+          <div className="flex flex-col items-center text-center md:grid md:grid-cols-[1fr_auto] md:gap-16 md:items-center md:text-left">
+
+            <div className="order-2 md:order-1 w-full">
+              {/* Photo — mobile only */}
+              <div className="flex justify-center mb-3 md:hidden">
+                <div className="relative">
+                  <div className="absolute -inset-3 rounded-full bg-gradient-to-br from-gold/20 via-transparent to-executive-green/10 blur-xl" />
+                  <img
+                    src={jamesPhoto}
+                    alt="James Bugden"
+                    className="relative w-36 h-36 rounded-full object-cover hero-photo-shadow border-4 border-card"
+                  />
+                </div>
+              </div>
+
               {/* Credential badge */}
-              <div className="mb-6">
+              <div className="mb-8">
                 <span className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-executive-green/8 border border-executive-green/15 text-sm text-executive-green font-medium">
                   <Briefcase className="w-3.5 h-3.5" />
                   Uber 資深招募官 · 財富 500 大
@@ -61,47 +73,61 @@ const IndexZhTw = () => {
               </div>
 
               {/* Headline */}
-              <h1 className="font-heading text-[2.25rem] md:text-[3.5rem] lg:text-[4rem] text-executive-green leading-[1.15] tracking-tight mb-5">
+              <h1 className="font-heading text-[2.25rem] md:text-[3.5rem] lg:text-[4rem] text-foreground leading-[1.15] tracking-tight mb-5 max-w-2xl mx-auto md:mx-0">
                 拿到年薪 200 萬+ 的外商 offer，進你真正想去的公司
               </h1>
 
-              {/* Subheadline */}
-              <p className="text-base md:text-lg text-foreground/80 leading-relaxed max-w-lg mb-8">
-                每週免費分享薪資談判、履歷優化和面試攻略——基於 20,000+ 份履歷審閱與 750+ 次錄取經驗。這些是多數職涯教練不會告訴你的內部策略。
+              {/* Subhead */}
+              <p className="text-[1.0625rem] md:text-lg text-foreground/85 leading-relaxed max-w-xl mx-auto md:mx-0 mb-3">
+                我是 Uber 的資深招募官。審過 20,000+ 份履歷，在財富500大企業錄取超過 750 人。每週免費分享薪資談判、履歷優化和面試攻略。
+              </p>
+              <p className="text-base text-foreground/60 italic leading-relaxed max-w-xl mx-auto md:mx-0 mb-6">
+                📩 本週主題：Uber 的 ATS 系統最愛的履歷格式
               </p>
 
+              {/* Social proof — ABOVE form */}
+              <div className="flex items-center justify-center md:justify-start gap-2 text-sm text-muted-foreground mb-5">
+                <Users className="w-4 h-4 text-gold flex-shrink-0" />
+                <span>加入 2,000+ 位專業人士，每週收到來自招募官的內部求職情報</span>
+              </div>
+
               {/* CTA block */}
-              <div className="mb-6">
-                <MailerLiteForm formId="sM1X80" className="ml-embedded max-w-[460px]" buttonText="免費訂閱每週攻略" />
+              <div className="mb-2 max-w-md mx-auto md:mx-0">
+                <MailerLiteForm formId="sM1X80" className="ml-embedded" buttonText="免費訂閱每週攻略" />
               </div>
 
-              {/* Social proof */}
-              <div className="flex items-center gap-2 text-sm text-muted-foreground">
-                <Users className="w-4 h-4 text-gold" />
-                <span>加入 2,000+ 位專業人士，每週收到招募官的內部求職情報</span>
-              </div>
+              {/* Micro-commitment reducer */}
+              <p className="text-[13px] text-muted-foreground/70 mb-8">
+                免費加入 · 隨時取消 · 絕不發垃圾郵件
+              </p>
 
-              {/* Trust stats */}
-              <div className="flex flex-wrap gap-x-6 gap-y-2 mt-8 pt-6 border-t border-border/60">
-                <div className="flex items-center gap-2 text-sm text-foreground/70">
-                  <FileCheck className="w-4 h-4 text-executive-green/60" />
-                  <span><strong className="text-foreground">20,000+</strong> 份履歷審閱</span>
+              {/* Stats bar */}
+              <div className="flex flex-wrap justify-center md:justify-start gap-x-8 gap-y-3 pt-6 border-t border-border/60">
+                <div className="flex flex-col items-center md:items-start">
+                  <span className="text-xl font-bold text-foreground flex items-center gap-1.5">
+                    <FileCheck className="w-5 h-5 text-executive-green/60" />
+                    20,000+
+                  </span>
+                  <span className="text-sm text-foreground/60">份履歷審閱</span>
                 </div>
-                <div className="flex items-center gap-2 text-sm text-foreground/70">
-                  <Briefcase className="w-4 h-4 text-executive-green/60" />
-                  <span><strong className="text-foreground">750+</strong> 人成功錄取</span>
+                <div className="flex flex-col items-center md:items-start">
+                  <span className="text-xl font-bold text-foreground flex items-center gap-1.5">
+                    <Briefcase className="w-5 h-5 text-executive-green/60" />
+                    750+
+                  </span>
+                  <span className="text-sm text-foreground/60">人成功錄取</span>
                 </div>
               </div>
             </div>
 
-            {/* Photo */}
-            <div className="flex justify-center md:justify-end order-1 md:order-2">
+            {/* Photo — desktop only */}
+            <div className="hidden md:flex justify-end order-2">
               <div className="relative">
                 <div className="absolute -inset-3 rounded-full bg-gradient-to-br from-gold/20 via-transparent to-executive-green/10 blur-xl" />
                 <img
                   src={jamesPhoto}
                   alt="James Bugden"
-                  className="relative w-52 h-52 md:w-72 md:h-72 lg:w-80 lg:h-80 rounded-full object-cover hero-photo-shadow border-4 border-card"
+                  className="relative w-72 h-72 lg:w-80 lg:h-80 rounded-full object-cover hero-photo-shadow border-4 border-card"
                 />
               </div>
             </div>
