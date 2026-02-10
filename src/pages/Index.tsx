@@ -1,5 +1,5 @@
 import { Button } from "@/components/ui/button";
-import { Linkedin } from "lucide-react";
+import { Linkedin, Users, Briefcase, FileCheck } from "lucide-react";
 import { InstagramIcon, ThreadsIcon } from "@/components/SocialIcons";
 import jamesPhoto from "@/assets/james-bugden.jpg";
 import LanguageToggle from "@/components/LanguageToggle";
@@ -33,7 +33,6 @@ const Index = () => {
             ))}
           </div>
           <div className="flex items-center gap-3 md:gap-4">
-            {/* Mobile: show link and language toggle */}
             <a href="#resources" className="md:hidden text-sm text-cream-70 hover:text-cream transition-colors">
               Resources
             </a>
@@ -54,45 +53,61 @@ const Index = () => {
       </nav>
 
       {/* Hero Section */}
-      <section id="about" className="pt-32 md:pt-40 pb-20 md:pb-28 px-5 md:px-6 bg-background">
+      <section id="about" className="pt-28 md:pt-36 pb-16 md:pb-24 px-5 md:px-6 bg-background relative">
         <div className="container mx-auto max-w-5xl">
-          <div className="grid md:grid-cols-2 gap-12 md:gap-16 items-center">
+          <div className="grid md:grid-cols-[1fr_auto] gap-10 md:gap-16 items-center">
             {/* Content */}
             <div className="order-2 md:order-1">
-              {/* Headline Block - Dominant element with breathing room */}
-              <div className="mb-14 md:mb-16">
-                <h1 className="font-heading text-[2.5rem] md:text-6xl lg:text-7xl text-executive-green leading-[1.05] tracking-tight mb-3">
-                  Land a $200K+ Role at a Company You Want to Work At
-                </h1>
+              {/* Credential badge */}
+              <div className="mb-6">
+                <span className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-executive-green/8 border border-executive-green/15 text-sm text-executive-green font-medium">
+                  <Briefcase className="w-3.5 h-3.5" />
+                  Senior Recruiter · Fortune 500
+                </span>
               </div>
 
-              {/* Authority + value prop */}
-              <div className="mb-10 md:mb-12">
-                <p className="text-base md:text-lg text-foreground leading-relaxed">
-                  I've reviewed 20,000+ resumes and hired 750+ people at Fortune 500 companies.
-                </p>
-                <p className="text-base md:text-lg text-foreground leading-relaxed mt-3">
-                  Every week I share the salary, resume, and interview strategies most career coaches don't know.
-                </p>
+              {/* Headline */}
+              <h1 className="font-heading text-[2.25rem] md:text-[3.5rem] lg:text-[4rem] text-executive-green leading-[1.08] tracking-tight mb-5">
+                Land a $200K+ Role at a Company You Actually Want
+              </h1>
+
+              {/* Subheadline */}
+              <p className="text-base md:text-lg text-foreground/80 leading-relaxed max-w-lg mb-8">
+                Every week I share the salary, resume, and interview strategies most career coaches don't know — based on 20,000+ resumes reviewed and 750+ hires.
+              </p>
+
+              {/* CTA block */}
+              <div className="mb-6">
+                <MailerLiteForm formId="sM1X80" className="ml-embedded max-w-[460px]" buttonText="Get Free Weekly Strategies" />
               </div>
 
-              {/* CTA */}
-              <div className="space-y-5">
-                <MailerLiteForm formId="sM1X80" className="ml-embedded max-w-[400px]" buttonText="Get Free Weekly Strategies" />
-                
-                <p className="text-sm text-muted-foreground">
-                  Join 2,000+ professionals who get insider recruiting tips every week.
-                </p>
+              {/* Social proof */}
+              <div className="flex items-center gap-2 text-sm text-muted-foreground">
+                <Users className="w-4 h-4 text-gold" />
+                <span>Join 2,000+ professionals getting insider recruiting tips weekly</span>
+              </div>
+
+              {/* Trust stats */}
+              <div className="flex flex-wrap gap-x-6 gap-y-2 mt-8 pt-6 border-t border-border/60">
+                <div className="flex items-center gap-2 text-sm text-foreground/70">
+                  <FileCheck className="w-4 h-4 text-executive-green/60" />
+                  <span><strong className="text-foreground">20,000+</strong> resumes reviewed</span>
+                </div>
+                <div className="flex items-center gap-2 text-sm text-foreground/70">
+                  <Briefcase className="w-4 h-4 text-executive-green/60" />
+                  <span><strong className="text-foreground">750+</strong> people hired</span>
+                </div>
               </div>
             </div>
 
             {/* Photo */}
             <div className="flex justify-center md:justify-end order-1 md:order-2">
               <div className="relative">
+                <div className="absolute -inset-3 rounded-full bg-gradient-to-br from-gold/20 via-transparent to-executive-green/10 blur-xl" />
                 <img
                   src={jamesPhoto}
                   alt="James Bugden"
-                  className="w-56 h-56 md:w-80 md:h-80 rounded-full object-cover hero-photo-shadow border-4 border-card"
+                  className="relative w-52 h-52 md:w-72 md:h-72 lg:w-80 lg:h-80 rounded-full object-cover hero-photo-shadow border-4 border-card"
                 />
               </div>
             </div>
