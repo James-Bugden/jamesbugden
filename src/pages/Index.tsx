@@ -82,15 +82,12 @@ const Index = () => {
 
               {/* Headline */}
               <h1 className="font-heading text-[2.25rem] md:text-[3.5rem] lg:text-[4rem] text-foreground leading-[1.12] tracking-tight mb-5 max-w-2xl mx-auto md:mx-0">
-                Land a $200K+ Role at a Top Multinational — Without Cold&nbsp;Applying
+                Get a $200K+ Offer at Your Dream&nbsp;Company
               </h1>
 
-              {/* Subhead — two visual layers */}
-              <p className="text-[1.0625rem] md:text-lg text-foreground/85 leading-relaxed max-w-xl mx-auto md:mx-0 mb-3">
-                The insider recruiting strategies I used to place 750+ candidates at companies like Google, Uber, and Netskope.
-              </p>
-              <p className="text-base text-foreground/60 italic leading-relaxed max-w-xl mx-auto md:mx-0 mb-6">
-                📩 This week: The exact resume format that gets past Uber's ATS
+              {/* Subhead */}
+              <p className="text-[1.0625rem] md:text-lg text-foreground/85 leading-relaxed max-w-xl mx-auto md:mx-0 mb-6">
+                The insider recruiting strategies I used to place 750+ candidates at companies like Google, Uber, and Microsoft.
               </p>
 
               {/* Social proof — ABOVE form */}
@@ -101,7 +98,7 @@ const Index = () => {
 
               {/* CTA block */}
               <div className="mb-2 max-w-md mx-auto md:mx-0">
-                <MailerLiteForm formId="sM1X80" className="ml-embedded" buttonText="Send Me This Week's Strategy" />
+                <MailerLiteForm formId="sM1X80" className="ml-embedded" buttonText="Send My Guides" />
               </div>
 
               {/* Micro-commitment reducer */}
