@@ -22,6 +22,7 @@ const Index = () => {
   return (
     <div className="min-h-screen bg-background overflow-x-hidden">
       {/* Navigation - Executive Green */}
+      <header>
       <nav className="fixed top-0 left-0 right-0 z-50 bg-nav-green">
         <div className="container mx-auto px-5 md:px-6 py-4 flex items-center justify-between">
           <span className="font-heading text-lg md:text-xl font-medium text-cream tracking-tight">JAMES BUGDEN</span>
@@ -51,7 +52,9 @@ const Index = () => {
           </div>
         </div>
       </nav>
+      </header>
 
+      <main>
       {/* Hero Section */}
       <section id="about" className="pt-24 md:pt-36 pb-16 md:pb-24 px-5 md:px-6 bg-background relative">
         <div className="container mx-auto max-w-5xl">
@@ -214,6 +217,7 @@ const Index = () => {
           </a>
         </div>
       </section>
+      </main>
 
       {/* Footer */}
       <footer className="py-8 md:py-10 px-5 md:px-6 bg-card border-t border-border">
