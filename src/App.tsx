@@ -13,9 +13,9 @@ const PageLoader = () => (
   </div>
 );
 
-// Core pages - load immediately
-import Index from "./pages/Index";
-import IndexZhTw from "./pages/IndexZhTw";
+// Core pages - lazy load for smaller initial bundle
+const Index = lazy(() => import("./pages/Index"));
+const IndexZhTw = lazy(() => import("./pages/IndexZhTw"));
 import NotFound from "./pages/NotFound";
 
 // Lazy load all other pages

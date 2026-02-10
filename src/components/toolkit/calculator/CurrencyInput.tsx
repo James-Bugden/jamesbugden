@@ -1,4 +1,4 @@
-import { useState, useCallback, useRef } from "react";
+import { useState, useCallback, useRef, memo } from "react";
 
 interface CurrencyInputProps {
   value: number;
@@ -20,7 +20,7 @@ export function formatCurrency(value: number): string {
   return "$" + Math.round(value).toLocaleString("en-US");
 }
 
-export function CurrencyInput({
+export const CurrencyInput = memo(function CurrencyInput({
   value,
   onChange,
   placeholder = "0",
@@ -105,7 +105,7 @@ export function CurrencyInput({
       )}
     </div>
   );
-}
+});
 
 interface PercentInputProps {
   value: number;
@@ -115,7 +115,7 @@ interface PercentInputProps {
   ariaLabel?: string;
 }
 
-export function PercentInput({
+export const PercentInput = memo(function PercentInput({
   value,
   onChange,
   placeholder = "0",
@@ -167,4 +167,4 @@ export function PercentInput({
       </span>
     </div>
   );
-}
+});
