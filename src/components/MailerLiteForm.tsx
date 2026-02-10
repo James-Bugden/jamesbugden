@@ -1,4 +1,5 @@
 import { useState, useRef, useEffect } from "react";
+import { Mail } from "lucide-react";
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 declare const ml: any;
@@ -87,19 +88,22 @@ export default function MailerLiteForm({ formId, className, buttonText = "Get on
 
   return (
     <div className={className || ""}>
-      <form ref={formRef} onSubmit={handleSubmit} className="flex flex-col sm:flex-row gap-3">
-        <input
-          type="email"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-          placeholder="Enter your email"
-          required
-          className="flex-1 px-4 py-3 rounded-md border border-border/60 bg-muted/30 text-foreground placeholder:text-muted-foreground/70 focus:outline-none focus:ring-2 focus:ring-gold/40 focus:border-gold focus:bg-background transition-colors"
-        />
+      <form ref={formRef} onSubmit={handleSubmit} className="flex flex-col gap-2">
+        <div className="relative">
+          <input
+            type="email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            placeholder="Enter your email"
+            required
+            className="w-full px-4 py-3.5 pr-12 rounded-lg border border-border/60 bg-card text-foreground placeholder:text-muted-foreground/60 focus:outline-none focus:ring-2 focus:ring-gold/40 focus:border-gold transition-colors text-base"
+          />
+          <Mail className="absolute right-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gold/60 pointer-events-none" />
+        </div>
         <button
           type="submit"
           disabled={isLoading}
-          className="px-8 py-3.5 bg-gold hover:bg-gold/90 text-white font-semibold rounded-md transition-colors disabled:opacity-50 disabled:cursor-not-allowed whitespace-nowrap shadow-md hover:shadow-lg"
+          className="w-full py-3.5 btn-gold text-[1.125rem] font-semibold rounded-lg disabled:opacity-50 disabled:cursor-not-allowed"
         >
           {isLoading ? "Joining..." : buttonText}
         </button>

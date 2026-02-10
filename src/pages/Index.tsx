@@ -53,13 +53,27 @@ const Index = () => {
       </nav>
 
       {/* Hero Section */}
-      <section id="about" className="pt-28 md:pt-36 pb-16 md:pb-24 px-5 md:px-6 bg-background relative">
+      <section id="about" className="pt-24 md:pt-36 pb-16 md:pb-24 px-5 md:px-6 bg-background relative">
         <div className="container mx-auto max-w-5xl">
-          <div className="grid md:grid-cols-[1fr_auto] gap-10 md:gap-16 items-center">
-            {/* Content */}
-            <div className="order-2 md:order-1">
+          {/* Mobile: centered stack / Desktop: two-column */}
+          <div className="flex flex-col items-center text-center md:grid md:grid-cols-[1fr_auto] md:gap-16 md:items-center md:text-left">
+
+            {/* Content column */}
+            <div className="order-2 md:order-1 w-full">
+              {/* Photo — mobile only, centered */}
+              <div className="flex justify-center mb-3 md:hidden">
+                <div className="relative">
+                  <div className="absolute -inset-3 rounded-full bg-gradient-to-br from-gold/20 via-transparent to-executive-green/10 blur-xl" />
+                  <img
+                    src={jamesPhoto}
+                    alt="James Bugden"
+                    className="relative w-36 h-36 rounded-full object-cover hero-photo-shadow border-4 border-card"
+                  />
+                </div>
+              </div>
+
               {/* Credential badge */}
-              <div className="mb-6">
+              <div className="mb-8">
                 <span className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-executive-green/8 border border-executive-green/15 text-sm text-executive-green font-medium">
                   <Briefcase className="w-3.5 h-3.5" />
                   Senior Recruiter · Fortune 500
@@ -67,47 +81,61 @@ const Index = () => {
               </div>
 
               {/* Headline */}
-              <h1 className="font-heading text-[2.25rem] md:text-[3.5rem] lg:text-[4rem] text-executive-green leading-[1.08] tracking-tight mb-5">
-                Land a $200K+ Role at a Company You Actually Want
+              <h1 className="font-heading text-[2.25rem] md:text-[3.5rem] lg:text-[4rem] text-foreground leading-[1.12] tracking-tight mb-5 max-w-2xl mx-auto md:mx-0">
+                Land a $200K+ Role at a Top Multinational — Without Cold&nbsp;Applying
               </h1>
 
-              {/* Subheadline */}
-              <p className="text-base md:text-lg text-foreground/80 leading-relaxed max-w-lg mb-8">
-                Every week I share the salary, resume, and interview strategies most career coaches don't know — based on 20,000+ resumes reviewed and 750+ hires.
+              {/* Subhead — two visual layers */}
+              <p className="text-[1.0625rem] md:text-lg text-foreground/85 leading-relaxed max-w-xl mx-auto md:mx-0 mb-3">
+                The insider recruiting strategies I used to place 750+ candidates at companies like Google, Uber, and Netskope.
+              </p>
+              <p className="text-base text-foreground/60 italic leading-relaxed max-w-xl mx-auto md:mx-0 mb-6">
+                📩 This week: The exact resume format that gets past Uber's ATS
               </p>
 
-              {/* CTA block */}
-              <div className="mb-6">
-                <MailerLiteForm formId="sM1X80" className="ml-embedded max-w-[460px]" buttonText="Get Free Weekly Strategies" />
-              </div>
-
-              {/* Social proof */}
-              <div className="flex items-center gap-2 text-sm text-muted-foreground">
-                <Users className="w-4 h-4 text-gold" />
+              {/* Social proof — ABOVE form */}
+              <div className="flex items-center justify-center md:justify-start gap-2 text-sm text-muted-foreground mb-5">
+                <Users className="w-4 h-4 text-gold flex-shrink-0" />
                 <span>Join 2,000+ professionals getting insider recruiting tips weekly</span>
               </div>
 
-              {/* Trust stats */}
-              <div className="flex flex-wrap gap-x-6 gap-y-2 mt-8 pt-6 border-t border-border/60">
-                <div className="flex items-center gap-2 text-sm text-foreground/70">
-                  <FileCheck className="w-4 h-4 text-executive-green/60" />
-                  <span><strong className="text-foreground">20,000+</strong> resumes reviewed</span>
+              {/* CTA block */}
+              <div className="mb-2 max-w-md mx-auto md:mx-0">
+                <MailerLiteForm formId="sM1X80" className="ml-embedded" buttonText="Send Me This Week's Strategy" />
+              </div>
+
+              {/* Micro-commitment reducer */}
+              <p className="text-[13px] text-muted-foreground/70 mb-8">
+                Join free · Unsubscribe anytime · No spam
+              </p>
+
+              {/* Stats bar */}
+              <div className="flex flex-wrap justify-center md:justify-start gap-x-8 gap-y-3 pt-6 border-t border-border/60">
+                <div className="flex flex-col items-center md:items-start">
+                  <span className="text-xl font-bold text-foreground flex items-center gap-1.5">
+                    <FileCheck className="w-5 h-5 text-executive-green/60" />
+                    20,000+
+                  </span>
+                  <span className="text-sm text-foreground/60">resumes reviewed</span>
                 </div>
-                <div className="flex items-center gap-2 text-sm text-foreground/70">
-                  <Briefcase className="w-4 h-4 text-executive-green/60" />
-                  <span><strong className="text-foreground">750+</strong> people hired</span>
+                <div className="flex flex-col items-center md:items-start">
+                  <span className="text-xl font-bold text-foreground flex items-center gap-1.5">
+                    <Briefcase className="w-5 h-5 text-executive-green/60" />
+                    750+
+                  </span>
+                  <span className="text-sm text-foreground/60">people hired</span>
                 </div>
               </div>
             </div>
 
-            {/* Photo */}
-            <div className="flex justify-center md:justify-end order-1 md:order-2">
+            {/* Photo — desktop only */}
+            <div className="hidden md:flex justify-end order-2">
               <div className="relative">
                 <div className="absolute -inset-3 rounded-full bg-gradient-to-br from-gold/20 via-transparent to-executive-green/10 blur-xl" />
                 <img
                   src={jamesPhoto}
                   alt="James Bugden"
-                  className="relative w-52 h-52 md:w-72 md:h-72 lg:w-80 lg:h-80 rounded-full object-cover hero-photo-shadow border-4 border-card"
+                  className="relative w-72 h-72 lg:w-80 lg:h-80 rounded-full object-cover hero-photo-shadow border-4 border-card"
                 />
               </div>
             </div>
