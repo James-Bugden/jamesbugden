@@ -60,6 +60,7 @@ const DeflectionScriptsZhTw = lazy(() => import("./pages/toolkit/DeflectionScrip
 const OfferResponseZhTw = lazy(() => import("./pages/toolkit/OfferResponseZhTw"));
 const CounterofferEmailZhTw = lazy(() => import("./pages/toolkit/CounterofferEmailZhTw"));
 const CompensationCalculatorZhTw = lazy(() => import("./pages/toolkit/CompensationCalculatorZhTw"));
+const CompCalculatorInteractiveZhTw = lazy(() => import("./pages/toolkit/CompCalculatorInteractiveZhTw"));
 const PushbackCheatSheetZhTw = lazy(() => import("./pages/toolkit/PushbackCheatSheetZhTw"));
 const RaiseOnePagerZhTw = lazy(() => import("./pages/toolkit/RaiseOnePagerZhTw"));
 const AchievementLogZhTw = lazy(() => import("./pages/toolkit/AchievementLogZhTw"));
@@ -150,6 +151,7 @@ const App = () => (
             <Route path="/zh-tw/toolkit/offer-response" element={<OfferResponseZhTw />} />
             <Route path="/zh-tw/toolkit/counteroffer" element={<CounterofferEmailZhTw />} />
             <Route path="/zh-tw/toolkit/calculator" element={<CompensationCalculatorZhTw />} />
+            <Route path="/zh-tw/toolkit/calculator-interactive" element={<CompCalculatorInteractiveZhTw />} />
             <Route path="/zh-tw/toolkit/pushback" element={<PushbackCheatSheetZhTw />} />
             <Route path="/zh-tw/toolkit/raise" element={<RaiseOnePagerZhTw />} />
             <Route path="/zh-tw/toolkit/log" element={<AchievementLogZhTw />} />
