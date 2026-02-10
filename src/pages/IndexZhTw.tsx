@@ -74,7 +74,7 @@ const IndexZhTw = () => {
 
               {/* Headline */}
               <h1 className="font-heading text-[2.25rem] md:text-[3.5rem] lg:text-[4rem] text-foreground leading-[1.15] tracking-tight mb-5 max-w-2xl mx-auto md:mx-0">
-                拿到年薪 200 萬+ 的外商 offer，進你真正想去的公司
+                拿到年薪 200 萬+ 的外商 Offer
               </h1>
 
               {/* Subhead */}
