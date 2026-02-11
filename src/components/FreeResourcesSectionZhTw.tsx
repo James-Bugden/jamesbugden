@@ -28,7 +28,7 @@ const resources: Resource[] = [
     title: "面試準備表",
     description: "用我實證有效的方法準備任何面試",
     buttonText: "取得準備表",
-    href: "#",
+    href: "/zh-tw/interview-preparation-guide",
     featured: false,
   },
   {
