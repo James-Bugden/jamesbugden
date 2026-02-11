@@ -28,7 +28,7 @@ const resources: Resource[] = [
     title: "Interview Preparation Sheet",
     description: "Prepare for any interview using my proven framework",
     buttonText: "Get Prep Sheet",
-    href: "#",
+    href: "/interview-preparation-guide",
     featured: false,
   },
   {
