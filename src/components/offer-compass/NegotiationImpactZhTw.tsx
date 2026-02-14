@@ -99,6 +99,7 @@ export default function NegotiationImpactZhTw({ currentComp, currency, fxRate }:
               type="number"
               value={salary}
               onChange={(e) => setSalary(parseFloat(e.target.value) || 0)}
+              onFocus={(e) => e.target.select()}
               className="border-0 bg-transparent text-lg font-bold text-foreground p-0 h-auto focus-visible:ring-0"
             />
           </div>
@@ -126,7 +127,7 @@ export default function NegotiationImpactZhTw({ currentComp, currency, fxRate }:
           <p className="text-xs text-muted-foreground mb-1">方案A</p>
           <p className="text-sm font-semibold text-foreground mb-2">接受第一個報價</p>
           <div className="flex items-center gap-2">
-            <Input type="number" value={raiseA} onChange={(e) => setRaiseA(parseFloat(e.target.value) || 0)} className="h-10 text-center text-lg font-bold" />
+            <Input type="number" value={raiseA} onChange={(e) => setRaiseA(parseFloat(e.target.value) || 0)} onFocus={(e) => e.target.select()} className="h-10 text-center text-lg font-bold" />
             <span className="text-lg font-bold text-foreground">%</span>
           </div>
           <p className="text-xs text-muted-foreground mt-2">每次轉職加薪幅度</p>
@@ -135,7 +136,7 @@ export default function NegotiationImpactZhTw({ currentComp, currency, fxRate }:
           <p className="text-xs text-green-600 dark:text-green-400 mb-1">方案B</p>
           <p className="text-sm font-semibold text-green-700 dark:text-green-400 mb-2">策略性談判</p>
           <div className="flex items-center gap-2">
-            <Input type="number" value={raiseB} onChange={(e) => setRaiseB(parseFloat(e.target.value) || 0)} className="h-10 text-center text-lg font-bold border-green-300 dark:border-green-700" />
+            <Input type="number" value={raiseB} onChange={(e) => setRaiseB(parseFloat(e.target.value) || 0)} onFocus={(e) => e.target.select()} className="h-10 text-center text-lg font-bold border-green-300 dark:border-green-700" />
             <span className="text-lg font-bold text-green-700 dark:text-green-400">%</span>
           </div>
           <p className="text-xs text-green-600 dark:text-green-400 mt-2">每次轉職加薪幅度</p>

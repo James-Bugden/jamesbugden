@@ -95,6 +95,7 @@ export default function NegotiationImpact({ currentComp, currency, fxRate }: Pro
               type="number"
               value={salary}
               onChange={(e) => setSalary(parseFloat(e.target.value) || 0)}
+              onFocus={(e) => e.target.select()}
               className="border-0 bg-transparent text-lg font-bold text-foreground p-0 h-auto focus-visible:ring-0"
             />
           </div>
@@ -133,6 +134,7 @@ export default function NegotiationImpact({ currentComp, currency, fxRate }: Pro
               type="number"
               value={raiseA}
               onChange={(e) => setRaiseA(parseFloat(e.target.value) || 0)}
+              onFocus={(e) => e.target.select()}
               className="h-10 text-center text-lg font-bold"
             />
             <span className="text-lg font-bold text-foreground">%</span>
@@ -147,6 +149,7 @@ export default function NegotiationImpact({ currentComp, currency, fxRate }: Pro
               type="number"
               value={raiseB}
               onChange={(e) => setRaiseB(parseFloat(e.target.value) || 0)}
+              onFocus={(e) => e.target.select()}
               className="h-10 text-center text-lg font-bold border-green-300 dark:border-green-700"
             />
             <span className="text-lg font-bold text-green-700 dark:text-green-400">%</span>
