@@ -63,12 +63,19 @@ export default function NegotiationImpactZhTw({ currentComp, currency, fxRate }:
 
   const jobChangeYears = data.filter((_, i) => i > 0 && i % jobChangeEvery === 0).map((d) => d.year);
 
-  const fmtWan = (n: number) => formatCurrency(n, currency, fxRate);
+  const fmtWan = (n: number) => {
+    const converted = currency === "TWD" ? n : n / (fxRate || 1);
+    const symbol = currency === "TWD" ? "NT$" : currency === "USD" ? "US$" : currency;
+    if (Math.abs(converted) >= 100_000_000) return `${symbol}${(converted / 100_000_000).toFixed(1)}億`;
+    if (Math.abs(converted) >= 10_000) return `${symbol}${(converted / 10_000).toFixed(converted >= 1_000_000 ? 0 : 1)}萬`;
+    return `${symbol}${new Intl.NumberFormat("zh-TW").format(Math.round(converted))}`;
+  };
 
   const fmtK = (n: number) => {
     const converted = currency === "TWD" ? n : n / fxRate;
-    if (converted >= 1_000_000) return `${(converted / 1_000_000).toFixed(1)}M`;
-    return `${Math.round(converted / 1_000)}K`;
+    if (converted >= 100_000_000) return `${(converted / 100_000_000).toFixed(1)}億`;
+    if (converted >= 10_000) return `${Math.round(converted / 10_000)}萬`;
+    return new Intl.NumberFormat("zh-TW").format(Math.round(converted));
   };
 
   const dataKey1 = viewMode === "cumulative" ? "acceptCum" : "accept";
