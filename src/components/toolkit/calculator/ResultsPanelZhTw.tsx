@@ -2,6 +2,7 @@ import { useState } from "react";
 import { Crown, ChevronUp, ChevronDown, TrendingUp } from "lucide-react";
 import { OfferDataTw, OfferResultsTw } from "./types-tw";
 import { BarChart, Bar, XAxis, YAxis, Tooltip as RechartsTooltip, ResponsiveContainer, Legend } from "recharts";
+import { EmailGateOverlay } from "@/components/EmailGateOverlay";
 
 function formatNTD(value: number): string {
   if (value === 0) return "NT$0";
@@ -13,11 +14,13 @@ interface ResultsPanelZhTwProps {
   results: OfferResultsTw[];
   cascadeInsight: { guaranteedExtra: number; bonusExtra: number; laborExtra: number; total: number } | null;
   mobileSelectedIndex: number;
+  isUnlocked: boolean;
+  onUnlock: (email: string) => void;
 }
 
 const OFFER_COLORS = ["hsl(var(--gold))", "hsl(var(--executive-green))", "hsl(153, 30%, 40%)"];
 
-export function ResultsPanelZhTw({ offers, results, cascadeInsight, mobileSelectedIndex }: ResultsPanelZhTwProps) {
+export function ResultsPanelZhTw({ offers, results, cascadeInsight, mobileSelectedIndex, isUnlocked, onUnlock }: ResultsPanelZhTwProps) {
   const [show4Year, setShow4Year] = useState(false);
   const [mobileExpanded, setMobileExpanded] = useState(false);
 
@@ -112,50 +115,57 @@ export function ResultsPanelZhTw({ offers, results, cascadeInsight, mobileSelect
               )}
             </>
           ) : (
-            <div className="space-y-4">
-              <div className="h-56">
-                <ResponsiveContainer width="100%" height="100%">
-                  <BarChart data={chartData} barCategoryGap="20%">
-                    <XAxis dataKey="year" tick={{ fontSize: 12 }} />
-                    <YAxis tick={{ fontSize: 11 }} tickFormatter={(v) => `${(v / 1000).toFixed(0)}k`} width={60} />
-                    <RechartsTooltip formatter={(value: number) => formatNTD(value)} />
-                    <Legend />
-                    {offers.map((o, i) => (
-                      <Bar key={i} dataKey={o.name || `Offer ${i + 1}`} fill={OFFER_COLORS[i]} radius={[4, 4, 0, 0]} />
-                    ))}
-                  </BarChart>
-                </ResponsiveContainer>
-              </div>
-              <div className="overflow-x-auto">
-                <table className="w-full text-sm">
-                  <thead>
-                    <tr className="border-b border-border">
-                      <th className="text-left py-2 text-muted-foreground font-medium">年度</th>
+            <EmailGateOverlay
+              isUnlocked={isUnlocked}
+              onUnlock={onUnlock}
+              headline="解鎖完整分析"
+              subtext="輸入你的 Email 查看詳細薪酬分析和四年預估。"
+            >
+              <div className="space-y-4">
+                <div className="h-56">
+                  <ResponsiveContainer width="100%" height="100%">
+                    <BarChart data={chartData} barCategoryGap="20%">
+                      <XAxis dataKey="year" tick={{ fontSize: 12 }} />
+                      <YAxis tick={{ fontSize: 11 }} tickFormatter={(v) => `${(v / 1000).toFixed(0)}k`} width={60} />
+                      <RechartsTooltip formatter={(value: number) => formatNTD(value)} />
+                      <Legend />
                       {offers.map((o, i) => (
-                        <th key={i} className="text-right py-2 text-muted-foreground font-medium">{o.name || `Offer ${i + 1}`}</th>
+                        <Bar key={i} dataKey={o.name || `Offer ${i + 1}`} fill={OFFER_COLORS[i]} radius={[4, 4, 0, 0]} />
                       ))}
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {[1, 2, 3, 4].map((year) => (
-                      <tr key={year} className="border-b border-border">
-                        <td className="py-2 font-medium">第{year}年</td>
-                        {results.map((r, i) => {
-                          const vals = [r.year1Total, r.year2Total, r.year3Total, r.year4Total];
-                          return <td key={i} className="text-right py-2">{formatNTD(vals[year - 1])}</td>;
-                        })}
+                    </BarChart>
+                  </ResponsiveContainer>
+                </div>
+                <div className="overflow-x-auto">
+                  <table className="w-full text-sm">
+                    <thead>
+                      <tr className="border-b border-border">
+                        <th className="text-left py-2 text-muted-foreground font-medium">年度</th>
+                        {offers.map((o, i) => (
+                          <th key={i} className="text-right py-2 text-muted-foreground font-medium">{o.name || `Offer ${i + 1}`}</th>
+                        ))}
                       </tr>
-                    ))}
-                    <tr className="border-t-2 border-gold bg-gold/5">
-                      <td className="py-2 font-bold">四年合計</td>
-                      {results.map((r, i) => (
-                        <td key={i} className="text-right py-2 font-bold">{formatNTD(r.fourYearTotal)}</td>
+                    </thead>
+                    <tbody>
+                      {[1, 2, 3, 4].map((year) => (
+                        <tr key={year} className="border-b border-border">
+                          <td className="py-2 font-medium">第{year}年</td>
+                          {results.map((r, i) => {
+                            const vals = [r.year1Total, r.year2Total, r.year3Total, r.year4Total];
+                            return <td key={i} className="text-right py-2">{formatNTD(vals[year - 1])}</td>;
+                          })}
+                        </tr>
                       ))}
-                    </tr>
-                  </tbody>
-                </table>
+                      <tr className="border-t-2 border-gold bg-gold/5">
+                        <td className="py-2 font-bold">四年合計</td>
+                        {results.map((r, i) => (
+                          <td key={i} className="text-right py-2 font-bold">{formatNTD(r.fourYearTotal)}</td>
+                        ))}
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
               </div>
-            </div>
+            </EmailGateOverlay>
           )}
 
           {/* Cascade Insight */}

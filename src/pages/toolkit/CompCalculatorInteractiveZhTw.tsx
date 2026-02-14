@@ -27,6 +27,8 @@ import { useCompCalculatorZhTw } from "@/components/toolkit/calculator/useCompCa
 import { VESTING_SCHEDULES_TW, OfferDataTw } from "@/components/toolkit/calculator/types-tw";
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible";
 import { ChevronDown } from "lucide-react";
+import { useEmailGate } from "@/hooks/useEmailGate";
+import { EmailGateOverlay } from "@/components/EmailGateOverlay";
 
 function formatNTD(value: number): string {
   if (value === 0) return "NT$0";
@@ -102,6 +104,7 @@ const CompCalculatorInteractiveZhTw = () => {
   const { toast } = useToast();
   const navigate = useNavigate();
   const isMobile = useIsMobile();
+  const { isUnlocked, unlock } = useEmailGate();
   const {
     offers,
     results,
@@ -168,11 +171,25 @@ const CompCalculatorInteractiveZhTw = () => {
               EN
             </button>
           </div>
-          <h1 className="font-heading text-3xl md:text-4xl lg:text-5xl text-cream mb-3">年度總薪酬計算器</h1>
+          <h1 className="font-heading text-3xl md:text-4xl lg:text-5xl text-cream mb-3">Offer Calculator</h1>
           <p className="text-lg text-cream-90 max-w-2xl mx-auto mb-2">你的 offer 不只是月薪數字。算出完整年薪，才能看見真正的贏家。</p>
           <p className="text-sm text-cream-70">最多比較 3 份 offer，所有欄位即時更新計算結果。</p>
         </div>
       </section>
+
+      {/* Creator bar */}
+      <div className="bg-muted/50 border-b border-border px-5 md:px-6 py-3">
+        <div className="container mx-auto max-w-[1200px] flex flex-wrap items-center justify-between gap-2 text-sm">
+          <p className="text-muted-foreground">
+            Offer Calculator by{" "}
+            <a href="https://james.careers" target="_blank" rel="noopener noreferrer" className="text-gold hover:underline font-medium">
+              james.careers
+            </a>
+            <span className="text-muted-foreground/60"> · 招募專家打造的真實薪資比較工具</span>
+          </p>
+          <a href="mailto:james@james.careers" className="text-gold hover:underline text-xs">回饋建議</a>
+        </div>
+      </div>
 
       <div className="pt-8"><ToolkitNavZhTw currentTemplate="T4" /></div>
 
@@ -658,7 +675,36 @@ const CompCalculatorInteractiveZhTw = () => {
       </section>
 
       {/* Results Panel */}
-      <ResultsPanelZhTw offers={offers} results={results} cascadeInsight={cascadeInsight} mobileSelectedIndex={activeOfferIndex} />
+      <ResultsPanelZhTw offers={offers} results={results} cascadeInsight={cascadeInsight} mobileSelectedIndex={activeOfferIndex} isUnlocked={isUnlocked} onUnlock={unlock} />
+
+      {/* Coaching CTA */}
+      <section className="px-5 md:px-6 py-8 print:hidden">
+        <div className="mx-auto max-w-[1200px]">
+          <div className="bg-foreground rounded-xl p-8 md:p-10">
+            <div className="w-10 h-1 rounded-full bg-gold mb-5" />
+            <h3 className="font-heading text-xl md:text-2xl font-bold text-background mb-3">
+              大多數人在談判中少拿了 10–20%。
+            </h3>
+            <p className="text-muted mb-6 text-sm md:text-base max-w-xl">
+              我協助過 Google、Uber、Meta 的專業人士談出更好的 offer。如果你正在比較 offer，我可以告訴你哪些是合理的 — 以及可以爭取什麼。
+            </p>
+            <a
+              href="https://james.careers/#coaching"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex h-11 px-6 items-center justify-center rounded-lg font-semibold text-sm transition-transform hover:scale-[1.02]"
+              style={{ backgroundColor: "#C9A961", color: "#1B3A2F" }}
+            >
+              預約免費策略通話
+            </a>
+            <p className="mt-3">
+              <a href="https://james.careers" target="_blank" rel="noopener noreferrer" className="text-xs text-muted-foreground hover:text-gold transition-colors">
+                探索更多 → james.careers
+              </a>
+            </p>
+          </div>
+        </div>
+      </section>
 
       {/* Reference Sections */}
       <section className="px-5 md:px-6 py-8">

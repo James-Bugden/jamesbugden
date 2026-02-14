@@ -18,8 +18,8 @@ interface Testimonial {
 const allTestimonials: Testimonial[] = [
   {
     name: "Pin-Wei Wu",
-    hook: "比起單純的履歷檢查，這更像是一場高密度的職涯諮詢。",
-    full: "這太棒了！現在大家都用AI來潤履歷，但讓一個專業recruiter做深度review完全是另一個層級。比起單純的履歷檢查，這更像是一場高密度的職涯諮詢。你幫我找到了那些我自己永遠不會注意到的『隱藏亮點』。真的很感謝你的幫助，James！這讓我對下一步有了更多信心。",
+    hook: "讓一個專業招募官做深度審閱完全是另一個層級。",
+    full: "這太棒了！現在大家都用AI來潤履歷，但讓一個專業招募官做深度審閱完全是另一個層級。比起單純的履歷檢查，這更像是一場高密度的職涯諮詢。你幫我找到了那些我自己永遠不會注意到的『隱藏亮點』。真的很感謝你的幫助，James！這讓我對下一步有了更多信心。",
     photo: pinweiPhoto,
   },
   {
@@ -73,12 +73,40 @@ const allTestimonials: Testimonial[] = [
   },
 ];
 
+const FeaturedTestimonialCard = ({ testimonial }: { testimonial: Testimonial }) => {
+  const [isExpanded, setIsExpanded] = useState(false);
+
+  return (
+    <div className="bg-card rounded-2xl p-8 md:p-10 shadow-lg hover:shadow-xl transition-all duration-300 h-full relative border-l-4 border-gold">
+      <span className="absolute top-6 left-8 text-6xl text-gold/20 font-serif leading-none">"</span>
+      <div className="flex justify-center mb-6">
+        <img src={testimonial.photo} alt={testimonial.name} loading="eager" className="w-20 h-20 rounded-full object-cover border-[3px] border-gold shadow-md" />
+      </div>
+      <p className="font-heading text-lg md:text-xl text-foreground leading-relaxed mb-4 relative z-10 text-center">
+        「{testimonial.hook}」
+      </p>
+      <div className={`overflow-hidden transition-all duration-300 ease-out ${isExpanded ? 'max-h-96 opacity-100' : 'max-h-0 opacity-0'}`}>
+        <p className="text-muted-foreground text-sm md:text-base leading-relaxed border-t border-border pt-4 mb-4">
+          {testimonial.full}
+        </p>
+      </div>
+      <div className="flex items-center justify-between mt-3">
+        <p className="font-bold text-foreground text-lg">{testimonial.name}</p>
+        <button onClick={() => setIsExpanded(!isExpanded)} className="flex items-center gap-1 text-gold hover:text-gold/80 transition-colors text-sm font-medium">
+          {isExpanded ? "收起" : "更多"}
+          <ChevronDown className={`w-4 h-4 transition-transform duration-300 ${isExpanded ? 'rotate-180' : ''}`} />
+        </button>
+      </div>
+    </div>
+  );
+};
+
 const TestimonialCard = ({ testimonial }: { testimonial: Testimonial }) => {
   const [isExpanded, setIsExpanded] = useState(false);
   const hasPhoto = !!testimonial.photo;
 
   return (
-    <div className="bg-card rounded-xl p-5 shadow-md hover:shadow-lg transition-all duration-300">
+    <div className="bg-card rounded-xl p-5 shadow-[0_2px_12px_rgba(0,0,0,0.06)] hover:shadow-[0_4px_20px_rgba(0,0,0,0.10)] transition-all duration-200">
       {/* Photo if available */}
       {hasPhoto && (
         <div className="flex justify-center mb-4">
@@ -135,7 +163,7 @@ const TestimonialsSectionZhTw = ({ title = "客戶怎麼說" }: TestimonialsSect
   const hiddenTestimonials = allTestimonials.slice(5);
 
   return (
-    <section id="testimonials" className="py-16 md:py-24 px-5 md:px-6 bg-muted">
+    <section id="testimonials" className="py-20 md:py-28 px-5 md:px-6 bg-muted">
       <div className="container mx-auto max-w-6xl">
         <h2 className="font-heading text-3xl md:text-5xl text-foreground text-center mb-12 md:mb-16">
           {title}
@@ -144,35 +172,7 @@ const TestimonialsSectionZhTw = ({ title = "客戶怎麼說" }: TestimonialsSect
         <div className="flex flex-col lg:flex-row gap-6 md:gap-8">
           {/* Featured Testimonial - Pin-Wei Wu */}
           <div className="lg:w-[40%]">
-            <div className="bg-card rounded-2xl p-8 md:p-10 shadow-lg hover:shadow-xl transition-all duration-300 h-full relative border-l-4 border-gold">
-              {/* Large decorative quote */}
-              <span className="absolute top-6 left-8 text-6xl text-gold/20 font-serif leading-none">"</span>
-              
-              {/* Photo */}
-              <div className="flex justify-center mb-6">
-                <img
-                  src={featured.photo}
-                  alt={featured.name}
-                  loading="eager"
-                  className="w-20 h-20 rounded-full object-cover border-[3px] border-gold shadow-md"
-                />
-              </div>
-              
-              {/* Hook Quote */}
-              <p className="font-heading text-lg md:text-xl text-foreground leading-relaxed mb-6 relative z-10 text-center">
-                「{featured.hook}」
-              </p>
-              
-              {/* Full Testimonial */}
-              <p className="text-muted-foreground text-sm md:text-base leading-relaxed mb-6">
-                {featured.full}
-              </p>
-              
-              {/* Attribution */}
-              <div className="text-center">
-                <p className="font-bold text-foreground text-lg">{featured.name}</p>
-              </div>
-            </div>
+            <FeaturedTestimonialCard testimonial={featured} />
           </div>
           
           {/* Grid Testimonials */}

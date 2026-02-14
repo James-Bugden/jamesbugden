@@ -1,13 +1,9 @@
 import { ArrowLeft, Download, CheckCircle2, AlertTriangle, Lightbulb, Target, Users, Rocket, Crown } from "lucide-react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
+import LanguageToggle from "@/components/LanguageToggle";
 import { Button } from "@/components/ui/button";
 
 const PivotMethodMiniGuide = () => {
-  const navigate = useNavigate();
-  
-  const toggleLanguage = () => {
-    navigate("/zh-tw/pivot-method-mini-guide");
-  };
 
   return (
     <div className="min-h-screen bg-background">
@@ -19,12 +15,7 @@ const PivotMethodMiniGuide = () => {
             <span className="font-medium">Back to Home</span>
           </Link>
           <div className="flex items-center gap-3">
-            <button 
-              onClick={toggleLanguage}
-              className="px-3 py-1.5 text-sm font-semibold bg-gold/20 hover:bg-gold/30 text-gold border border-gold/40 rounded-md transition-all duration-200 hover:scale-105"
-            >
-              中文
-            </button>
+            <LanguageToggle variant="nav" />
             <Button asChild className="btn-gold">
               <a href="/downloads/The_Pivot_Method_Mini_Guide.pdf" download>
                 <Download className="w-4 h-4 mr-2" />

@@ -27,6 +27,8 @@ import { useCompCalculator } from "@/components/toolkit/calculator/useCompCalcul
 import { VESTING_SCHEDULES, OfferData } from "@/components/toolkit/calculator/types";
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible";
 import { ChevronDown } from "lucide-react";
+import { useEmailGate } from "@/hooks/useEmailGate";
+import { EmailGateOverlay } from "@/components/EmailGateOverlay";
 
 function TipIcon({ text }: { text: string }) {
   return (
@@ -83,6 +85,7 @@ const howToUseSteps = [
 const CompCalculatorInteractive = () => {
   const { toast } = useToast();
   const isMobile = useIsMobile();
+  const { isUnlocked, unlock } = useEmailGate();
   const {
     offers,
     results,
@@ -141,11 +144,25 @@ const CompCalculatorInteractive = () => {
           <Link to="/toolkit" className="inline-flex items-center gap-2 text-cream-70 hover:text-cream transition-colors mb-6 text-sm">
             <ArrowLeft className="w-4 h-4" /> Back to Toolkit
           </Link>
-          <h1 className="font-heading text-3xl md:text-4xl lg:text-5xl text-cream mb-3">Total Compensation Calculator</h1>
+          <h1 className="font-heading text-3xl md:text-4xl lg:text-5xl text-cream mb-3">Offer Calculator</h1>
           <p className="text-lg text-cream-90 max-w-2xl mx-auto mb-2">Your offer is more than the base salary. See the full picture, compare offers, and find the real winner.</p>
           <p className="text-sm text-cream-70">Compare up to 3 offers. Every field updates totals in real time.</p>
         </div>
       </section>
+
+      {/* Creator bar */}
+      <div className="bg-muted/50 border-b border-border px-5 md:px-6 py-3">
+        <div className="container mx-auto max-w-[1200px] flex flex-wrap items-center justify-between gap-2 text-sm">
+          <p className="text-muted-foreground">
+            Offer Calculator by{" "}
+            <a href="https://james.careers" target="_blank" rel="noopener noreferrer" className="text-gold hover:underline font-medium">
+              james.careers
+            </a>
+            <span className="text-muted-foreground/60"> · The recruiter's tool for understanding your real comp</span>
+          </p>
+          <a href="mailto:james@james.careers" className="text-gold hover:underline text-xs">Send Feedback</a>
+        </div>
+      </div>
 
       <div className="pt-8"><ToolkitNav currentTemplate="T4" /></div>
 
@@ -530,7 +547,36 @@ const CompCalculatorInteractive = () => {
       </section>
 
       {/* Results Panel */}
-      <ResultsPanel offers={offers} results={results} cascadeInsight={cascadeInsight} mobileSelectedIndex={activeOfferIndex} />
+      <ResultsPanel offers={offers} results={results} cascadeInsight={cascadeInsight} mobileSelectedIndex={activeOfferIndex} isUnlocked={isUnlocked} onUnlock={unlock} />
+
+      {/* Coaching CTA */}
+      <section className="px-5 md:px-6 py-8 print:hidden">
+        <div className="mx-auto max-w-[1200px]">
+          <div className="bg-foreground rounded-xl p-8 md:p-10">
+            <div className="w-10 h-1 rounded-full bg-gold mb-5" />
+            <h3 className="font-heading text-xl md:text-2xl font-bold text-background mb-3">
+              Most candidates leave 10–20% on the table.
+            </h3>
+            <p className="text-muted mb-6 text-sm md:text-base max-w-xl">
+              I've helped professionals at Google, Uber, and Meta negotiate better offers. If you're comparing packages, I can tell you what's realistic — and what to push back on.
+            </p>
+            <a
+              href="https://james.careers/#coaching"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex h-11 px-6 items-center justify-center rounded-lg font-semibold text-sm transition-transform hover:scale-[1.02]"
+              style={{ backgroundColor: "#C9A961", color: "#1B3A2F" }}
+            >
+              Book a Free Strategy Call
+            </a>
+            <p className="mt-3">
+              <a href="https://james.careers" target="_blank" rel="noopener noreferrer" className="text-xs text-muted-foreground hover:text-gold transition-colors">
+                Or explore → james.careers
+              </a>
+            </p>
+          </div>
+        </div>
+      </section>
 
       {/* Reference Sections */}
       <section className="px-5 md:px-6 py-8">

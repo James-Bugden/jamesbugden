@@ -43,6 +43,11 @@ const GuidesPage = lazy(() => import("./pages/GuidesPage"));
 const GuidesPageZhTw = lazy(() => import("./pages/GuidesPageZhTw"));
 const SalaryStarterKit = lazy(() => import("./pages/SalaryStarterKit"));
 const SalaryStarterKitZhTw = lazy(() => import("./pages/SalaryStarterKitZhTw"));
+const Quiz = lazy(() => import("./pages/Quiz"));
+const QuizZhTw = lazy(() => import("./pages/QuizZhTw"));
+const OfferCompass = lazy(() => import("./pages/OfferCompass"));
+const OfferCompassCompare = lazy(() => import("./pages/OfferCompassCompare"));
+const OfferCompassZhTw = lazy(() => import("./pages/OfferCompassZhTw"));
 
 // Toolkit pages - English
 const ToolkitIndex = lazy(() => import("./pages/toolkit/ToolkitIndex"));
@@ -137,6 +142,11 @@ const App = () => (
             <Route path="/zh-tw/guides" element={<GuidesPageZhTw />} />
             <Route path="/salary-starter-kit" element={<SalaryStarterKit />} />
             <Route path="/zh-tw/salary-starter-kit" element={<SalaryStarterKitZhTw />} />
+            <Route path="/quiz" element={<Quiz />} />
+            <Route path="/zh-tw/quiz" element={<QuizZhTw />} />
+            <Route path="/offer-compass" element={<OfferCompass />} />
+            <Route path="/offer-compass/compare" element={<OfferCompassCompare />} />
+            <Route path="/zh-tw/offer-compass" element={<OfferCompassZhTw />} />
             {/* Salary Negotiation Toolkit */}
             <Route path="/toolkit" element={<ToolkitIndex />} />
             <Route path="/toolkit/scripts" element={<DeflectionScripts />} />

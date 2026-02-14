@@ -3,17 +3,20 @@ import { Crown, ChevronUp, ChevronDown, TrendingUp } from "lucide-react";
 import { OfferData, OfferResults } from "./types";
 import { formatCurrency } from "./CurrencyInput";
 import { BarChart, Bar, XAxis, YAxis, Tooltip as RechartsTooltip, ResponsiveContainer, Legend } from "recharts";
+import { EmailGateOverlay } from "@/components/EmailGateOverlay";
 
 interface ResultsPanelProps {
   offers: OfferData[];
   results: OfferResults[];
   cascadeInsight: { bonusExtra: number; matchExtra: number; esppExtra: number; total: number } | null;
   mobileSelectedIndex: number;
+  isUnlocked: boolean;
+  onUnlock: (email: string) => void;
 }
 
 const OFFER_COLORS = ["hsl(var(--gold))", "hsl(var(--executive-green))", "hsl(153, 30%, 40%)"];
 
-export function ResultsPanel({ offers, results, cascadeInsight, mobileSelectedIndex }: ResultsPanelProps) {
+export function ResultsPanel({ offers, results, cascadeInsight, mobileSelectedIndex, isUnlocked, onUnlock }: ResultsPanelProps) {
   const [show4Year, setShow4Year] = useState(false);
   const [mobileExpanded, setMobileExpanded] = useState(false);
 
@@ -36,6 +39,53 @@ export function ResultsPanel({ offers, results, cascadeInsight, mobileSelectedIn
   // Mobile: collapsed bottom bar
   const mobileResult = results[mobileSelectedIndex];
   const mobileOffer = offers[mobileSelectedIndex];
+
+  const fourYearContent = (
+    <div className="space-y-4">
+      <div className="h-56">
+        <ResponsiveContainer width="100%" height="100%">
+          <BarChart data={chartData} barCategoryGap="20%">
+            <XAxis dataKey="year" tick={{ fontSize: 12 }} />
+            <YAxis tick={{ fontSize: 11 }} tickFormatter={(v) => `$${(v / 1000).toFixed(0)}k`} width={60} />
+            <RechartsTooltip formatter={(value: number) => formatCurrency(value)} />
+            <Legend />
+            {offers.map((o, i) => (
+              <Bar key={i} dataKey={o.name || `Offer ${i + 1}`} fill={OFFER_COLORS[i]} radius={[4, 4, 0, 0]} />
+            ))}
+          </BarChart>
+        </ResponsiveContainer>
+      </div>
+      <div className="overflow-x-auto">
+        <table className="w-full text-sm">
+          <thead>
+            <tr className="border-b border-border">
+              <th className="text-left py-2 text-muted-foreground font-medium">Year</th>
+              {offers.map((o, i) => (
+                <th key={i} className="text-right py-2 text-muted-foreground font-medium">{o.name || `Offer ${i + 1}`}</th>
+              ))}
+            </tr>
+          </thead>
+          <tbody>
+            {[1, 2, 3, 4].map((year) => (
+              <tr key={year} className="border-b border-border">
+                <td className="py-2 font-medium">Year {year}</td>
+                {results.map((r, i) => {
+                  const vals = [r.year1Total, r.year2Total, r.year3Total, r.year4Total];
+                  return <td key={i} className="text-right py-2">{formatCurrency(vals[year - 1])}</td>;
+                })}
+              </tr>
+            ))}
+            <tr className="border-t-2 border-gold bg-gold/5">
+              <td className="py-2 font-bold">4-Year Total</td>
+              {results.map((r, i) => (
+                <td key={i} className="text-right py-2 font-bold">{formatCurrency(r.fourYearTotal)}</td>
+              ))}
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  );
 
   return (
     <>
@@ -97,54 +147,24 @@ export function ResultsPanel({ offers, results, cascadeInsight, mobileSelectedIn
                   {offers.length > 1 && results[i].year1Total === minYear1 && maxYear1 > 0 && maxYear1 !== minYear1 && (
                     <p className="text-xs text-muted-foreground font-medium mt-2">Lowest</p>
                   )}
+                  {/* Subtle coaching nudge */}
+                  {offers.length > 1 && results[i].year1Total !== minYear1 && maxYear1 > 0 && (
+                    <a
+                      href="https://james.careers/#coaching"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="text-xs text-muted-foreground hover:text-gold transition-colors mt-1 inline-block"
+                    >
+                      Want help negotiating this? →
+                    </a>
+                  )}
                 </div>
               ))}
             </div>
           ) : (
-            <div className="space-y-4">
-              <div className="h-56">
-                <ResponsiveContainer width="100%" height="100%">
-                  <BarChart data={chartData} barCategoryGap="20%">
-                    <XAxis dataKey="year" tick={{ fontSize: 12 }} />
-                    <YAxis tick={{ fontSize: 11 }} tickFormatter={(v) => `$${(v / 1000).toFixed(0)}k`} width={60} />
-                    <RechartsTooltip formatter={(value: number) => formatCurrency(value)} />
-                    <Legend />
-                    {offers.map((o, i) => (
-                      <Bar key={i} dataKey={o.name || `Offer ${i + 1}`} fill={OFFER_COLORS[i]} radius={[4, 4, 0, 0]} />
-                    ))}
-                  </BarChart>
-                </ResponsiveContainer>
-              </div>
-              <div className="overflow-x-auto">
-                <table className="w-full text-sm">
-                  <thead>
-                    <tr className="border-b border-border">
-                      <th className="text-left py-2 text-muted-foreground font-medium">Year</th>
-                      {offers.map((o, i) => (
-                        <th key={i} className="text-right py-2 text-muted-foreground font-medium">{o.name || `Offer ${i + 1}`}</th>
-                      ))}
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {[1, 2, 3, 4].map((year) => (
-                      <tr key={year} className="border-b border-border">
-                        <td className="py-2 font-medium">Year {year}</td>
-                        {results.map((r, i) => {
-                          const vals = [r.year1Total, r.year2Total, r.year3Total, r.year4Total];
-                          return <td key={i} className="text-right py-2">{formatCurrency(vals[year - 1])}</td>;
-                        })}
-                      </tr>
-                    ))}
-                    <tr className="border-t-2 border-gold bg-gold/5">
-                      <td className="py-2 font-bold">4-Year Total</td>
-                      {results.map((r, i) => (
-                        <td key={i} className="text-right py-2 font-bold">{formatCurrency(r.fourYearTotal)}</td>
-                      ))}
-                    </tr>
-                  </tbody>
-                </table>
-              </div>
-            </div>
+            <EmailGateOverlay isUnlocked={isUnlocked} onUnlock={onUnlock}>
+              {fourYearContent}
+            </EmailGateOverlay>
           )}
 
           {/* Cascade Insight */}

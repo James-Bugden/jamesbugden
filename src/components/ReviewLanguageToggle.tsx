@@ -23,7 +23,7 @@ const ReviewLanguageToggle = () => {
       onClick={toggleLanguage}
       className="flex items-center gap-2 px-3 py-2 bg-gold/20 hover:bg-gold/30 text-cream rounded-lg transition-colors text-sm font-medium"
     >
-      {isZhTw ? "EN" : "中文"}
+      {isZhTw ? "English" : "中文"}
     </button>
   );
 };

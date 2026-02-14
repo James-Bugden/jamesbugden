@@ -1,11 +1,11 @@
 import { ArrowLeft, Download, Star, Users, FileText, MessageSquare, Search, CheckCircle2, Calendar, Linkedin } from "lucide-react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
+import LanguageToggle from "@/components/LanguageToggle";
 import { Button } from "@/components/ui/button";
 import { InstagramIcon, ThreadsIcon } from "@/components/SocialIcons";
 import GoldCheckBadge from "@/components/GoldCheckBadge";
 
 const LinkedInGuide = () => {
-  const navigate = useNavigate();
 
   const handleDownload = () => {
     const link = document.createElement('a');
@@ -29,12 +29,7 @@ const LinkedInGuide = () => {
               <ArrowLeft className="w-4 h-4" />
               <span className="hidden sm:inline">Back to Home</span>
             </Link>
-            <button 
-              onClick={() => navigate("/zh-tw/linkedin-guide")}
-              className="px-3 py-1.5 text-sm font-semibold bg-gold/20 hover:bg-gold/30 text-gold border border-gold/40 rounded-md transition-all duration-200 hover:scale-105"
-            >
-              中文
-            </button>
+            <LanguageToggle variant="nav" />
           </div>
         </div>
       </nav>

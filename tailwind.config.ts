@@ -156,12 +156,21 @@ export default {
   					opacity: '1',
   					transform: 'translateY(0)'
   				}
+  			},
+  			'logo-scroll': {
+  				'0%': {
+  					transform: 'translateX(0)'
+  				},
+				'100%': {
+					transform: 'translateX(-50%)'
+				}
   			}
   		},
   		animation: {
   			'accordion-down': 'accordion-down 0.2s ease-out',
   			'accordion-up': 'accordion-up 0.2s ease-out',
-  			'fade-in': 'fade-in 0.6s ease-out forwards'
+  			'fade-in': 'fade-in 0.6s ease-out forwards',
+  			'logo-scroll': 'logo-scroll 45s linear infinite'
   		}
   	}
   },
