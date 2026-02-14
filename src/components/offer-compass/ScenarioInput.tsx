@@ -24,30 +24,15 @@ interface ScenarioInputProps {
   onLoadExample?: () => void;
 }
 
-function SectionAccordion({
-  title,
-  defaultOpen = false,
-  children,
-}: {
-  title: string;
-  defaultOpen?: boolean;
-  children: React.ReactNode;
-}) {
+function SectionAccordion({ title, defaultOpen = false, children }: { title: string; defaultOpen?: boolean; children: React.ReactNode }) {
   const [open, setOpen] = useState(defaultOpen);
-
   return (
     <Collapsible open={open} onOpenChange={setOpen}>
       <CollapsibleTrigger className="flex items-center justify-between w-full py-2 group">
         <span className="text-sm font-semibold text-foreground">{title}</span>
-        <ChevronDown
-          className={`w-4 h-4 text-muted-foreground transition-transform duration-200 ${
-            open ? "rotate-180" : ""
-          }`}
-        />
+        <ChevronDown className={`w-4 h-4 text-muted-foreground transition-transform duration-200 ${open ? "rotate-180" : ""}`} />
       </CollapsibleTrigger>
-      <CollapsibleContent className="space-y-3 pt-1 pb-2">
-        {children}
-      </CollapsibleContent>
+      <CollapsibleContent className="space-y-3 pt-1 pb-2">{children}</CollapsibleContent>
     </Collapsible>
   );
 }
@@ -80,6 +65,7 @@ export default function ScenarioInput({ scenario, onChange, currency, onLoadExam
   }, [s.annual_leave_days, s.base_twd, s.bonus_twd, holidayCalcOpen]);
 
   const numVal = (n: number) => (n === 0 ? "0" : (n || ""));
+  const autoSelect = (e: React.FocusEvent<HTMLInputElement>) => e.target.select();
 
   const numChange = (field: keyof Scenario) => (e: React.ChangeEvent<HTMLInputElement>) => {
     const raw = e.target.value;
@@ -88,9 +74,7 @@ export default function ScenarioInput({ scenario, onChange, currency, onLoadExam
       return;
     }
     const v = parseFloat(raw);
-    if (!isNaN(v)) {
-      onChange({ [field]: v });
-    }
+    if (!isNaN(v)) onChange({ [field]: v });
   };
 
   const isEmpty = s.base_twd === 0 && s.bonus_twd === 0 && s.equity_4y_twd === 0;
@@ -126,6 +110,7 @@ export default function ScenarioInput({ scenario, onChange, currency, onLoadExam
           inputMode="numeric"
           value={numVal(s.base_twd)}
           onChange={numChange("base_twd")}
+          onFocus={autoSelect}
           placeholder="e.g. 1800000"
         />
       </div>
@@ -138,6 +123,7 @@ export default function ScenarioInput({ scenario, onChange, currency, onLoadExam
           inputMode="numeric"
           value={numVal(s.bonus_twd)}
           onChange={numChange("bonus_twd")}
+          onFocus={autoSelect}
           placeholder="e.g. 300000"
         />
       </div>
@@ -149,7 +135,7 @@ export default function ScenarioInput({ scenario, onChange, currency, onLoadExam
       <SectionAccordion title="Equity / Stock" defaultOpen={s.equity_4y_twd > 0}>
         <div className="space-y-1">
           <span className="text-xs text-muted-foreground">Total Equity Grant (4-year, TWD)</span>
-          <Input type="number" inputMode="numeric" value={numVal(s.equity_4y_twd)} onChange={numChange("equity_4y_twd")} placeholder="e.g. 2560000" />
+          <Input type="number" inputMode="numeric" value={numVal(s.equity_4y_twd)} onChange={numChange("equity_4y_twd")} onFocus={autoSelect} placeholder="e.g. 2560000" />
         </div>
         <div className="grid grid-cols-2 gap-3">
           <div className="space-y-1">
@@ -187,7 +173,7 @@ export default function ScenarioInput({ scenario, onChange, currency, onLoadExam
       <SectionAccordion title="Sign-on Bonus" defaultOpen={s.signon_months > 0}>
         <div className="space-y-1">
           <span className="text-xs text-muted-foreground">Months of base salary</span>
-          <Input type="number" inputMode="decimal" value={numVal(s.signon_months)} onChange={numChange("signon_months")} placeholder="e.g. 2" min={0} step={0.5} />
+          <Input type="number" inputMode="decimal" value={numVal(s.signon_months)} onChange={numChange("signon_months")} onFocus={autoSelect} placeholder="e.g. 2" min={0} step={0.5} />
         </div>
         {s.signon_months > 0 && s.base_twd > 0 && (
           <p className="text-xs text-muted-foreground">Sign-on: {formatTWD(s.base_twd * (s.signon_months / 12))}</p>
@@ -198,7 +184,7 @@ export default function ScenarioInput({ scenario, onChange, currency, onLoadExam
       <SectionAccordion title="Benefits" defaultOpen={s.benefits_twd > 0}>
         <div className="space-y-1">
           <span className="text-xs text-muted-foreground">Annual Benefits Value (TWD)</span>
-          <Input type="number" inputMode="numeric" value={numVal(s.benefits_twd)} onChange={numChange("benefits_twd")} placeholder="e.g. 120000" />
+          <Input type="number" inputMode="numeric" value={numVal(s.benefits_twd)} onChange={numChange("benefits_twd")} onFocus={autoSelect} placeholder="e.g. 120000" />
           <p className="text-xs text-muted-foreground">Health insurance, meal allowance, transport subsidy, gym membership, learning budget, etc.</p>
         </div>
       </SectionAccordion>
@@ -212,6 +198,7 @@ export default function ScenarioInput({ scenario, onChange, currency, onLoadExam
             inputMode="numeric"
             value={numVal(s.holiday_twd)}
             onChange={numChange("holiday_twd")}
+            onFocus={autoSelect}
             placeholder="e.g. 50000"
             disabled={holidayCalcOpen}
           />
@@ -233,6 +220,7 @@ export default function ScenarioInput({ scenario, onChange, currency, onLoadExam
                 inputMode="numeric"
                 value={numVal(s.annual_leave_days)}
                 onChange={numChange("annual_leave_days")}
+                onFocus={autoSelect}
                 placeholder="e.g. 15"
                 min={0}
               />
@@ -263,6 +251,7 @@ export default function ScenarioInput({ scenario, onChange, currency, onLoadExam
             const raw = e.target.value;
             onChange({ current_comp_twd: raw === "" ? 0 : (parseFloat(raw) || 0) });
           }}
+          onFocus={autoSelect}
           placeholder="Optional"
           disabled={currentExpanded}
         />
@@ -277,15 +266,15 @@ export default function ScenarioInput({ scenario, onChange, currency, onLoadExam
           <div className="space-y-2 pl-3 border-l-2 border-border">
             <div className="space-y-1">
               <span className="text-xs text-muted-foreground">Current Base</span>
-              <Input type="number" inputMode="numeric" value={numVal(s.current_base_twd)} onChange={numChange("current_base_twd")} placeholder="0" />
+              <Input type="number" inputMode="numeric" value={numVal(s.current_base_twd)} onChange={numChange("current_base_twd")} onFocus={autoSelect} placeholder="0" />
             </div>
             <div className="space-y-1">
               <span className="text-xs text-muted-foreground">Current Bonus</span>
-              <Input type="number" inputMode="numeric" value={numVal(s.current_bonus_twd)} onChange={numChange("current_bonus_twd")} placeholder="0" />
+              <Input type="number" inputMode="numeric" value={numVal(s.current_bonus_twd)} onChange={numChange("current_bonus_twd")} onFocus={autoSelect} placeholder="0" />
             </div>
             <div className="space-y-1">
               <span className="text-xs text-muted-foreground">Current Equity (annual)</span>
-              <Input type="number" inputMode="numeric" value={numVal(s.current_equity_twd)} onChange={numChange("current_equity_twd")} placeholder="0" />
+              <Input type="number" inputMode="numeric" value={numVal(s.current_equity_twd)} onChange={numChange("current_equity_twd")} onFocus={autoSelect} placeholder="0" />
             </div>
             <p className="text-xs text-muted-foreground">
               Total: {formatTWD(s.current_base_twd + s.current_bonus_twd + s.current_equity_twd)}

@@ -59,6 +59,7 @@ export default function ScenarioInputZhTw({ scenario, onChange, currency, onLoad
   }, [s.annual_leave_days, s.base_twd, s.bonus_twd, holidayCalcOpen]);
 
   const numVal = (n: number) => (n === 0 ? "0" : (n || ""));
+  const autoSelect = (e: React.FocusEvent<HTMLInputElement>) => e.target.select();
 
   const numChange = (field: keyof Scenario) => (e: React.ChangeEvent<HTMLInputElement>) => {
     const raw = e.target.value;
@@ -86,12 +87,12 @@ export default function ScenarioInputZhTw({ scenario, onChange, currency, onLoad
 
       <div className="space-y-2">
         <Label>底薪（年薪，台幣）</Label>
-        <Input type="number" inputMode="numeric" value={numVal(s.base_twd)} onChange={numChange("base_twd")} placeholder="例如 1800000" />
+        <Input type="number" inputMode="numeric" value={numVal(s.base_twd)} onChange={numChange("base_twd")} onFocus={autoSelect} placeholder="例如 1800000" />
       </div>
 
       <div className="space-y-2">
         <Label>目標獎金（年度，台幣）</Label>
-        <Input type="number" inputMode="numeric" value={numVal(s.bonus_twd)} onChange={numChange("bonus_twd")} placeholder="例如 300000" />
+        <Input type="number" inputMode="numeric" value={numVal(s.bonus_twd)} onChange={numChange("bonus_twd")} onFocus={autoSelect} placeholder="例如 300000" />
       </div>
 
       <div className="border-t border-border" />
@@ -99,7 +100,7 @@ export default function ScenarioInputZhTw({ scenario, onChange, currency, onLoad
       <SectionAccordion title="股票 / 股權" defaultOpen={s.equity_4y_twd > 0}>
         <div className="space-y-1">
           <span className="text-xs text-muted-foreground">股票總授予額（4年，台幣）</span>
-          <Input type="number" inputMode="numeric" value={numVal(s.equity_4y_twd)} onChange={numChange("equity_4y_twd")} placeholder="例如 2560000" />
+          <Input type="number" inputMode="numeric" value={numVal(s.equity_4y_twd)} onChange={numChange("equity_4y_twd")} onFocus={autoSelect} placeholder="例如 2560000" />
         </div>
         <div className="grid grid-cols-2 gap-3">
           <div className="space-y-1">
@@ -132,7 +133,7 @@ export default function ScenarioInputZhTw({ scenario, onChange, currency, onLoad
       <SectionAccordion title="簽約獎金" defaultOpen={s.signon_months > 0}>
         <div className="space-y-1">
           <span className="text-xs text-muted-foreground">底薪月數</span>
-          <Input type="number" inputMode="decimal" value={numVal(s.signon_months)} onChange={numChange("signon_months")} placeholder="例如 2" min={0} step={0.5} />
+          <Input type="number" inputMode="decimal" value={numVal(s.signon_months)} onChange={numChange("signon_months")} onFocus={autoSelect} placeholder="例如 2" min={0} step={0.5} />
         </div>
         {s.signon_months > 0 && s.base_twd > 0 && <p className="text-xs text-muted-foreground">簽約獎金：{formatTWD(s.base_twd * (s.signon_months / 12))}</p>}
       </SectionAccordion>
@@ -140,7 +141,7 @@ export default function ScenarioInputZhTw({ scenario, onChange, currency, onLoad
       <SectionAccordion title="福利" defaultOpen={s.benefits_twd > 0}>
         <div className="space-y-1">
           <span className="text-xs text-muted-foreground">年度福利價值（台幣）</span>
-          <Input type="number" inputMode="numeric" value={numVal(s.benefits_twd)} onChange={numChange("benefits_twd")} placeholder="例如 120000" />
+          <Input type="number" inputMode="numeric" value={numVal(s.benefits_twd)} onChange={numChange("benefits_twd")} onFocus={autoSelect} placeholder="例如 120000" />
           <p className="text-xs text-muted-foreground">健康保險、餐費補貼、交通補助、健身房會員、學習預算等</p>
         </div>
       </SectionAccordion>
@@ -148,7 +149,7 @@ export default function ScenarioInputZhTw({ scenario, onChange, currency, onLoad
       <SectionAccordion title="假期 / 休假價值" defaultOpen={s.holiday_twd > 0 || s.annual_leave_days > 0}>
         <div className="space-y-1">
           <span className="text-xs text-muted-foreground">年度假期價值（台幣）</span>
-          <Input type="number" inputMode="numeric" value={numVal(s.holiday_twd)} onChange={numChange("holiday_twd")} placeholder="例如 50000" disabled={holidayCalcOpen} />
+          <Input type="number" inputMode="numeric" value={numVal(s.holiday_twd)} onChange={numChange("holiday_twd")} onFocus={autoSelect} placeholder="例如 50000" disabled={holidayCalcOpen} />
         </div>
         <button type="button" onClick={() => setHolidayCalcOpen(!holidayCalcOpen)} className="flex items-center gap-1 text-xs text-muted-foreground hover:text-foreground transition-colors">
           <Calculator className="w-3 h-3" />
@@ -158,7 +159,7 @@ export default function ScenarioInputZhTw({ scenario, onChange, currency, onLoad
           <div className="space-y-2 pl-3 border-l-2 border-border">
             <div className="space-y-1">
               <span className="text-xs text-muted-foreground">年假天數</span>
-              <Input type="number" inputMode="numeric" value={numVal(s.annual_leave_days)} onChange={numChange("annual_leave_days")} placeholder="例如 15" min={0} />
+              <Input type="number" inputMode="numeric" value={numVal(s.annual_leave_days)} onChange={numChange("annual_leave_days")} onFocus={autoSelect} placeholder="例如 15" min={0} />
             </div>
             {s.annual_leave_days > 0 && (s.base_twd + s.bonus_twd) > 0 && (
               <p className="text-xs text-muted-foreground">({formatTWD(s.base_twd + s.bonus_twd)} / 365) × {s.annual_leave_days} 天 = {formatTWD(s.holiday_twd)}</p>
@@ -174,7 +175,7 @@ export default function ScenarioInputZhTw({ scenario, onChange, currency, onLoad
 
       <div className="space-y-3">
         <Label>你目前的年度總薪酬（台幣）</Label>
-        <Input type="number" inputMode="numeric" value={numVal(s.current_comp_twd)} onChange={(e) => { const raw = e.target.value; onChange({ current_comp_twd: raw === "" ? 0 : (parseFloat(raw) || 0) }); }} placeholder="選填" disabled={currentExpanded} />
+        <Input type="number" inputMode="numeric" value={numVal(s.current_comp_twd)} onChange={(e) => { const raw = e.target.value; onChange({ current_comp_twd: raw === "" ? 0 : (parseFloat(raw) || 0) }); }} onFocus={autoSelect} placeholder="選填" disabled={currentExpanded} />
         <button type="button" onClick={() => setCurrentExpanded(!currentExpanded)} className="text-xs text-muted-foreground hover:text-foreground transition-colors">
           {currentExpanded ? "改用單一總額" : "拆分為底薪、獎金、股票"}
         </button>
@@ -182,15 +183,15 @@ export default function ScenarioInputZhTw({ scenario, onChange, currency, onLoad
           <div className="space-y-2 pl-3 border-l-2 border-border">
             <div className="space-y-1">
               <span className="text-xs text-muted-foreground">目前底薪</span>
-              <Input type="number" inputMode="numeric" value={numVal(s.current_base_twd)} onChange={numChange("current_base_twd")} placeholder="0" />
+              <Input type="number" inputMode="numeric" value={numVal(s.current_base_twd)} onChange={numChange("current_base_twd")} onFocus={autoSelect} placeholder="0" />
             </div>
             <div className="space-y-1">
               <span className="text-xs text-muted-foreground">目前獎金</span>
-              <Input type="number" inputMode="numeric" value={numVal(s.current_bonus_twd)} onChange={numChange("current_bonus_twd")} placeholder="0" />
+              <Input type="number" inputMode="numeric" value={numVal(s.current_bonus_twd)} onChange={numChange("current_bonus_twd")} onFocus={autoSelect} placeholder="0" />
             </div>
             <div className="space-y-1">
               <span className="text-xs text-muted-foreground">目前股票（年度）</span>
-              <Input type="number" inputMode="numeric" value={numVal(s.current_equity_twd)} onChange={numChange("current_equity_twd")} placeholder="0" />
+              <Input type="number" inputMode="numeric" value={numVal(s.current_equity_twd)} onChange={numChange("current_equity_twd")} onFocus={autoSelect} placeholder="0" />
             </div>
             <p className="text-xs text-muted-foreground">合計：{formatTWD(s.current_base_twd + s.current_bonus_twd + s.current_equity_twd)}</p>
           </div>
