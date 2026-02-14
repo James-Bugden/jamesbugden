@@ -172,33 +172,33 @@ export default function NegotiationImpactZhTw({ currentComp, currency, fxRate }:
       </div>
 
       <div className="grid grid-cols-2 gap-3 mb-4">
-        <div className="border border-border rounded-xl p-4">
+        <div className="border border-border rounded-xl p-4 overflow-hidden">
           <p className="text-xs font-semibold tracking-wide uppercase text-muted-foreground">接受第一個報價</p>
-          <p className="text-xl font-bold text-foreground mt-1">{fmtWan(totalA)}</p>
+          <p className="text-base md:text-xl font-bold text-foreground mt-1 break-all">{fmtWan(totalA)}</p>
           <p className="text-xs text-muted-foreground mt-1">{careerYears}年總計</p>
         </div>
-        <div className="border-2 border-green-500/30 bg-green-50/50 dark:bg-green-950/20 rounded-xl p-4">
+        <div className="border-2 border-green-500/30 bg-green-50/50 dark:bg-green-950/20 rounded-xl p-4 overflow-hidden">
           <p className="text-xs font-semibold tracking-wide uppercase text-green-600 dark:text-green-400">策略性談判</p>
-          <p className="text-xl font-bold text-green-700 dark:text-green-400 mt-1">{fmtWan(totalB)}</p>
+          <p className="text-base md:text-xl font-bold text-green-700 dark:text-green-400 mt-1 break-all">{fmtWan(totalB)}</p>
           <p className="text-xs text-green-600 dark:text-green-400 mt-1">{careerYears}年總計</p>
         </div>
       </div>
 
       <div className="border-2 border-green-500/30 bg-green-50/50 dark:bg-green-950/20 rounded-xl p-6 text-center mb-4">
         <p className="text-xs font-semibold tracking-wide uppercase text-green-600 dark:text-green-400 mb-2">總收入差距</p>
-        <p className="text-3xl md:text-4xl font-bold text-green-700 dark:text-green-400">+{fmtWan(totalDiff)}</p>
+        <p className="text-2xl md:text-4xl font-bold text-green-700 dark:text-green-400 break-all">+{fmtWan(totalDiff)}</p>
         <p className="text-sm text-green-600/80 dark:text-green-400/70 mt-1">職涯中多賺 +{(diffPct * 100).toFixed(1)}%</p>
       </div>
 
       <div className="grid grid-cols-2 gap-3">
-        <div className="bg-red-50/50 dark:bg-red-950/20 border border-red-200/50 dark:border-red-800/30 rounded-xl p-4">
+        <div className="bg-red-50/50 dark:bg-red-950/20 border border-red-200/50 dark:border-red-800/30 rounded-xl p-4 overflow-hidden">
           <p className="text-xs text-muted-foreground">平均每月損失</p>
-          <p className="text-lg font-bold text-red-600 dark:text-red-400 mt-1">{fmtWan(monthlyDiff)}</p>
+          <p className="text-base md:text-lg font-bold text-red-600 dark:text-red-400 mt-1 break-all">{fmtWan(monthlyDiff)}</p>
           <p className="text-xs text-red-500/70 dark:text-red-400/60 mt-1">每月未談判的損失</p>
         </div>
-        <div className="bg-red-50/50 dark:bg-red-950/20 border border-red-200/50 dark:border-red-800/30 rounded-xl p-4">
+        <div className="bg-red-50/50 dark:bg-red-950/20 border border-red-200/50 dark:border-red-800/30 rounded-xl p-4 overflow-hidden">
           <p className="text-xs text-muted-foreground">{careerYears}年總損失</p>
-          <p className="text-lg font-bold text-red-600 dark:text-red-400 mt-1">{fmtWan(totalDiff)}</p>
+          <p className="text-base md:text-lg font-bold text-red-600 dark:text-red-400 mt-1 break-all">{fmtWan(totalDiff)}</p>
           <p className="text-xs text-red-500/70 dark:text-red-400/60 mt-1">白白錯過的薪資</p>
         </div>
       </div>
