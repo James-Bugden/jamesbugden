@@ -88,46 +88,91 @@ export default function SelfSegmentation() {
             const Icon = stage.icon;
 
             return (
-              <button
-                key={stage.id}
-                type="button"
-                onClick={() => handleSelect(stage.id)}
-                className={`w-full relative text-left rounded-xl border-2 p-6 transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-gold/40 ${
-                  isSelected
-                    ? "border-gold bg-card shadow-lg -translate-y-1"
-                    : isDimmed
-                    ? "border-border bg-card/60 opacity-60"
-                    : "border-border bg-card hover:-translate-y-1 hover:border-gold/50 hover:shadow-md"
-                }`}
-              >
-                <div className="flex items-center gap-3 mb-4">
-                  <div
-                    className={`w-10 h-10 rounded-lg flex items-center justify-center transition-colors duration-300 ${
-                      isSelected
-                        ? "bg-gold text-white"
-                        : "bg-muted text-muted-foreground"
-                    }`}
-                  >
-                    <Icon className="w-5 h-5" />
+              <div key={stage.id} className="contents md:block">
+                <button
+                  type="button"
+                  onClick={() => handleSelect(stage.id)}
+                  className={`w-full relative text-left rounded-xl border-2 p-6 transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-gold/40 ${
+                    isSelected
+                      ? "border-gold bg-card shadow-lg -translate-y-1"
+                      : isDimmed
+                      ? "border-border bg-card/60 opacity-60"
+                      : "border-border bg-card hover:-translate-y-1 hover:border-gold/50 hover:shadow-md"
+                  }`}
+                >
+                  <div className="flex items-center gap-3 mb-4">
+                    <div
+                      className={`w-10 h-10 rounded-lg flex items-center justify-center transition-colors duration-300 ${
+                        isSelected
+                          ? "bg-gold text-white"
+                          : "bg-muted text-muted-foreground"
+                      }`}
+                    >
+                      <Icon className="w-5 h-5" />
+                    </div>
+                    <span className="text-xs font-semibold text-muted-foreground uppercase tracking-wider">
+                      Step {i + 1}
+                    </span>
                   </div>
-                  <span className="text-xs font-semibold text-muted-foreground uppercase tracking-wider">
-                    Step {i + 1}
-                  </span>
-                </div>
-                <p className="font-semibold text-foreground text-base mb-2">
-                  {stage.label}
-                </p>
-                <p className="text-sm text-muted-foreground italic leading-relaxed">
-                  "{stage.quote}"
-                </p>
-              </button>
+                  <p className="font-semibold text-foreground text-base mb-2">
+                    {stage.label}
+                  </p>
+                  <p className="text-sm text-muted-foreground italic leading-relaxed">
+                    "{stage.quote}"
+                  </p>
+                </button>
+
+                {/* Inline panel — mobile only */}
+                {isSelected && selectedStage && (
+                  <div className="md:hidden mt-4">
+                    <div className="bg-card border border-border rounded-xl p-6 text-center">
+                      {submitted === selected ? (
+                        <p className="text-executive-green font-medium text-base">
+                          Thanks! Check your inbox. 🎉
+                        </p>
+                      ) : (
+                        <>
+                          <h3 className="font-heading text-xl text-foreground mb-2">
+                            {selectedStage.resource}
+                          </h3>
+                          <p className="text-sm text-muted-foreground mb-6 max-w-lg mx-auto">
+                            {selectedStage.description}
+                          </p>
+                          <form
+                            onSubmit={handleSubmit}
+                            className="max-w-md mx-auto flex flex-col gap-3"
+                          >
+                            <input
+                              type="email"
+                              value={email}
+                              onChange={(e) => setEmail(e.target.value)}
+                              placeholder="Enter your email"
+                              className="flex-1 h-12 px-4 rounded-lg border border-border bg-background text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-gold/50 text-base"
+                            />
+                            <input type="hidden" name="stage" value={selectedStage.id} />
+                            <button
+                              type="submit"
+                              className="h-12 px-6 rounded-lg btn-gold text-base font-semibold whitespace-nowrap"
+                            >
+                              {selectedStage.cta}
+                            </button>
+                          </form>
+                          {emailError && (
+                            <p className="text-destructive text-sm mt-2">{emailError}</p>
+                          )}
+                        </>
+                      )}
+                    </div>
+                  </div>
+                )}
+              </div>
             );
           })}
         </div>
 
-        {/* Panel — full width below grid */}
+        {/* Panel — desktop only, full width below grid */}
         <div
-          className={`transition-all duration-500 ease-in-out overflow-hidden ${
+          className={`hidden md:block transition-all duration-500 ease-in-out overflow-hidden ${
             selectedStage ? "max-h-[500px] opacity-100 mt-6" : "max-h-0 opacity-0"
           }`}
         >
