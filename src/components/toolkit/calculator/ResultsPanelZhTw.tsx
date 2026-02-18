@@ -42,9 +42,6 @@ export function ResultsPanelZhTw({ offers, results, cascadeInsight, mobileSelect
   const mobileResult = results[mobileSelectedIndex];
   const mobileOffer = offers[mobileSelectedIndex];
 
-  // Find labor retirement for footnote (same across all offers with same base)
-  const laborFootnote = results.length > 0 ? results[0].laborRetirement : 0;
-
   return (
     <>
       {/* Desktop Results */}
@@ -108,11 +105,6 @@ export function ResultsPanelZhTw({ offers, results, cascadeInsight, mobileSelect
                   </div>
                 ))}
               </div>
-              {laborFootnote > 0 && (
-                <p className="text-xs text-muted-foreground mt-3">
-                  另有法定勞退提撥（各 offer 皆同，未計入比較）
-                </p>
-              )}
             </>
           ) : (
             <EmailGateOverlay
@@ -180,7 +172,7 @@ export function ResultsPanelZhTw({ offers, results, cascadeInsight, mobileSelect
                 {cascadeInsight.bonusExtra > 0 && (
                   <div><span className="text-muted-foreground">績效獎金增加</span><p className="font-semibold">+{formatNTD(cascadeInsight.bonusExtra)}</p></div>
                 )}
-                <div><span className="text-muted-foreground">勞退提撥增加</span><p className="font-semibold">+{formatNTD(cascadeInsight.laborExtra)}</p></div>
+                
                 <div><span className="text-muted-foreground">年度總影響</span><p className="font-bold text-executive">= +{formatNTD(cascadeInsight.total)}/年</p></div>
               </div>
             </div>

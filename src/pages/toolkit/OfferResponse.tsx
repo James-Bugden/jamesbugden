@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import { ArrowLeft, ArrowDown, Copy, Share2, Check } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useToast } from "@/hooks/use-toast";
+import { nativeShare } from "@/lib/share";
 import ToolkitHeader from "@/components/toolkit/ToolkitHeader";
 import ToolkitFooter from "@/components/toolkit/ToolkitFooter";
 import ToolkitNav from "@/components/toolkit/ToolkitNav";
@@ -13,26 +14,26 @@ const steps = [
     label: "Echo",
     title: "REPEAT THE NUMBER",
     script: "NT$[X]...",
-    instruction: "Say it with a slight tone of thoughtfulness. Not shock — just mild, reflective surprise. Like you're processing it carefully.",
+    instruction: "Say it with a thoughtful tone. Not shock. Like you're processing it carefully.",
   },
   {
     number: 2,
     label: "Pause",
     title: "GO SILENT",
     script: null,
-    instruction: "Don't say anything for 15–30 seconds. Count in your head if you need to. This will feel uncomfortable — that's exactly why it works.",
-    note: "What happens during the silence: The recruiter's brain starts working against their own offer.",
+    instruction: "Say nothing for 15 to 30 seconds. Count in your head if needed. It will feel uncomfortable. That is exactly why it works.",
+    note: "What happens during the silence: the recruiter's brain starts working against their own offer.",
     branches: [
-      { label: "A", text: "They improve the number before you speak → proceed to Step 3" },
-      { label: "B", text: "They wait for you → proceed to Step 3" },
+      { label: "A", text: "They improve the number before you speak. Go to Step 3." },
+      { label: "B", text: "They wait for you. Go to Step 3." },
     ],
   },
   {
     number: 3,
     label: "Redirect",
     title: "RESPOND WITH ENTHUSIASM + A QUESTION",
-    script: "Thank you — I'm really excited about this opportunity and the team. I'd love to take a day or two to review the full package. Could you send me the complete offer details in writing, including the bonus structure and benefits?",
-    instruction: "Why it works: You haven't said yes. You haven't said no. You've expressed enthusiasm while buying time to prepare a real counter.",
+    script: "Thank you. I'm excited about this opportunity and the team. I'd love to take a day or two to review the full package. Could you send me the complete offer details in writing, including the bonus structure and benefits?",
+    instruction: "Why it works: you did not say yes. You did not say no. You showed enthusiasm while buying time to prepare a real counter.",
   },
 ];
 
@@ -40,21 +41,21 @@ const outcomes = [
   {
     label: "A",
     title: "Verbal offer only",
-    text: "Follow up by email: \"Thank you for the conversation today. I'm very excited about the opportunity. Could you send the full offer details in writing so I can review the complete package?\"",
+    text: "Follow up by email: \"Thank you for the conversation today. I'm excited about the opportunity. Could you send the full offer details in writing so I can review the complete package?\"",
   },
   {
     label: "B",
     title: "Written offer received",
-    text: "You're ready for the counteroffer email (Template T3)",
+    text: "You're ready for the counteroffer email (Template T3).",
     link: "/toolkit/counteroffer",
   },
 ];
 
 const donts = [
-  "Say \"That sounds great!\" — you just accepted without negotiating",
-  "Blurt out a counter with no preparation — you sound desperate",
-  "Compare to your current salary — \"I currently make NT$X\" anchors you to an irrelevant number",
-  "Negotiate over phone or LINE if you can avoid it — you lose composure and can't review details",
+  "Say \"That sounds great!\" You accepted without negotiating.",
+  "Blurt out a counter with no preparation. You sound desperate.",
+  "Compare to your current salary. \"I currently make NT$X\" anchors you to the wrong number.",
+  "Negotiate over phone or LINE if you have a choice. You lose composure and miss details.",
 ];
 
 const OfferResponse = () => {
@@ -89,11 +90,13 @@ ${outcomes[1].text}`;
     setTimeout(() => setCopied(false), 2000);
   };
 
-  const shareUrl = () => {
-    navigator.clipboard.writeText(window.location.href);
-    setShared(true);
-    toast({ title: "Link copied!", description: "Share it with anyone who needs it." });
-    setTimeout(() => setShared(false), 2000);
+  const shareUrl = async () => {
+    const didShare = await nativeShare();
+    if (!didShare) {
+      setShared(true);
+      toast({ title: "Link copied!", description: "Share it with anyone who needs it." });
+      setTimeout(() => setShared(false), 2000);
+    }
   };
 
   return (
@@ -121,7 +124,7 @@ ${outcomes[1].text}`;
 
       {/* Toolkit Navigation */}
       <div className="pt-8">
-        <ToolkitNav currentTemplate="T2" />
+        <ToolkitNav currentTemplate="offer-response" />
       </div>
 
       {/* Flowchart Steps */}
@@ -240,7 +243,7 @@ ${outcomes[1].text}`;
           <div className="bg-executive/5 rounded-xl p-6 border-l-4 border-executive">
             <h3 className="font-heading text-lg text-executive mb-3">💡 For women</h3>
             <p className="text-foreground">
-              Pair silence with warmth. After the pause, lead with genuine enthusiasm before pivoting to the review request. Research shows this "relentlessly pleasant" combination neutralizes the likeability penalty women sometimes face when negotiating.
+              Pair silence with warmth. After the pause, lead with genuine enthusiasm before asking for the written offer. Research shows this combination neutralizes the likeability penalty women sometimes face when negotiating.
             </p>
           </div>
         </div>

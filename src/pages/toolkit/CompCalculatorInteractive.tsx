@@ -32,13 +32,13 @@ import { EmailGateOverlay } from "@/components/EmailGateOverlay";
 
 function TipIcon({ text }: { text: string }) {
   return (
-    <Tooltip>
+    <Tooltip delayDuration={0}>
       <TooltipTrigger asChild>
         <button type="button" className="text-muted-foreground hover:text-foreground transition-colors" aria-label="More info">
           <HelpCircle className="w-4 h-4" />
         </button>
       </TooltipTrigger>
-      <TooltipContent className="max-w-xs text-xs">{text}</TooltipContent>
+      <TooltipContent side="top" className="max-w-xs text-xs">{text}</TooltipContent>
     </Tooltip>
   );
 }
@@ -74,7 +74,6 @@ const hrQuestions = [
 ];
 
 const howToUseSteps = [
-  "Get the full written offer before filling this in.",
   "Start with base salary and bonus. These two rows alone show the cash compensation difference.",
   "Expand Equity and Retirement if your offers include RSUs or 401(k) matching. These sections can change the winner.",
   "Fill in Benefits last. Health insurance cost and commute are real expenses that reduce your take-home.",
@@ -150,21 +149,8 @@ const CompCalculatorInteractive = () => {
         </div>
       </section>
 
-      {/* Creator bar */}
-      <div className="bg-muted/50 border-b border-border px-5 md:px-6 py-3">
-        <div className="container mx-auto max-w-[1200px] flex flex-wrap items-center justify-between gap-2 text-sm">
-          <p className="text-muted-foreground">
-            Offer Calculator by{" "}
-            <a href="https://james.careers" target="_blank" rel="noopener noreferrer" className="text-gold hover:underline font-medium">
-              james.careers
-            </a>
-            <span className="text-muted-foreground/60"> · The recruiter's tool for understanding your real comp</span>
-          </p>
-          <a href="mailto:james@james.careers" className="text-gold hover:underline text-xs">Send Feedback</a>
-        </div>
-      </div>
 
-      <div className="pt-8"><ToolkitNav currentTemplate="T4" /></div>
+      <div className="pt-8"><ToolkitNav currentTemplate="calculator" /></div>
 
       {/* Calculator */}
       <section className="px-5 md:px-6 pb-8">

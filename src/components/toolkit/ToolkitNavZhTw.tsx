@@ -5,13 +5,13 @@ interface ToolkitNavZhTwProps {
 }
 
 const templates = [
-  { id: "T1", label: "話術", href: "/zh-tw/toolkit/scripts" },
-  { id: "T2", label: "Offer 回應", href: "/zh-tw/toolkit/offer-response" },
-  { id: "T3", label: "還價信", href: "/zh-tw/toolkit/counteroffer" },
-  { id: "T4", label: "計算表", href: "/zh-tw/toolkit/calculator" },
-  { id: "T5", label: "回絕應對", href: "/zh-tw/toolkit/pushback" },
-  { id: "T6", label: "加薪準備", href: "/zh-tw/toolkit/raise" },
-  { id: "T7", label: "成就記錄", href: "/zh-tw/toolkit/log" },
+  { id: "scripts", label: "話術", href: "/zh-tw/toolkit/scripts" },
+  { id: "offer-response", label: "Offer 回應", href: "/zh-tw/toolkit/offer-response" },
+  { id: "counter", label: "還價信", href: "/zh-tw/toolkit/counteroffer" },
+  { id: "calculator", label: "計算表", href: "/zh-tw/toolkit/calculator" },
+  { id: "pushback", label: "回絕應對", href: "/zh-tw/toolkit/pushback" },
+  { id: "raise", label: "加薪準備", href: "/zh-tw/toolkit/raise" },
+  { id: "log", label: "成就記錄", href: "/zh-tw/toolkit/log" },
 ];
 
 const ToolkitNavZhTw = ({ currentTemplate }: ToolkitNavZhTwProps) => {
@@ -33,7 +33,6 @@ const ToolkitNavZhTw = ({ currentTemplate }: ToolkitNavZhTwProps) => {
                     : "bg-muted text-muted-foreground hover:bg-executive/10 hover:text-executive"
                 }`}
               >
-                <span className="text-xs opacity-70 mr-1">{template.id}</span>
                 {template.label}
               </Link>
             );

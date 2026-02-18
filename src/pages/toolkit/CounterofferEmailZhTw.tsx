@@ -1,9 +1,10 @@
 import { useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { ArrowLeft, Copy, Share2, Check } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useToast } from "@/hooks/use-toast";
+import { nativeShare } from "@/lib/share";
 import ToolkitHeaderZhTw from "@/components/toolkit/ToolkitHeaderZhTw";
 import ToolkitFooterZhTw from "@/components/toolkit/ToolkitFooterZhTw";
 import ToolkitNavZhTw from "@/components/toolkit/ToolkitNavZhTw";
@@ -95,7 +96,6 @@ const emailTemplates = [
 
 const keyPrinciples = [
   { title: "開頭展現熱忱", text: "讓他們知道你不是要走人。" },
-  { title: "一封信只提一個要求", text: "底薪談完之後，再另外跟進下一個項目。不要打包。" },
   { title: "用市場數據，不用個人需求", text: "「產業基準顯示……」不是「我需要付房租」。" },
   { title: "結尾留開放空間", text: "「我很期待討論」不是「我需要週五前得到答覆」。" },
   { title: "即使你很滿意", text: "也問一句：「方案中有哪些部分有彈性空間嗎？」答案通常是有的。" },
@@ -103,7 +103,6 @@ const keyPrinciples = [
 
 const CounterofferEmailZhTw = () => {
   const { toast } = useToast();
-  const navigate = useNavigate();
   const [copiedId, setCopiedId] = useState<string | null>(null);
   const [shared, setShared] = useState(false);
 
@@ -115,10 +114,13 @@ const CounterofferEmailZhTw = () => {
     setTimeout(() => setCopiedId(null), 2000);
   };
 
-  const shareUrl = () => {
-    navigator.clipboard.writeText(window.location.href);
-    setShared(true);
-    toast({ title: "已複製連結！", description: "分享給需要的人。" });
+  const shareUrl = async () => {
+    const shared = await nativeShare();
+    if (!shared) {
+      setShared(true);
+      toast({ title: "已複製連結！", description: "分享給需要的人。" });
+      setTimeout(() => setShared(false), 2000);
+    }
     setTimeout(() => setShared(false), 2000);
   };
 
@@ -143,21 +145,13 @@ const CounterofferEmailZhTw = () => {
       {/* Hero */}
       <section className="bg-executive-green py-12 md:py-16 px-5 md:px-6 relative">
         <div className="container mx-auto max-w-3xl text-center relative z-10">
-          <div className="flex items-center justify-center gap-4 mb-6">
-            <Link 
-              to="/zh-tw/toolkit" 
-              className="inline-flex items-center gap-2 text-cream-70 hover:text-cream transition-colors text-sm"
-            >
-              <ArrowLeft className="w-4 h-4" />
-              返回工具包
-            </Link>
-            <button 
-              onClick={() => navigate("/toolkit/counteroffer")}
-              className="px-3 py-1.5 text-sm font-semibold bg-gold/20 hover:bg-gold/30 text-gold border border-gold/40 rounded-md transition-all duration-200 hover:scale-105"
-            >
-              EN
-            </button>
-          </div>
+          <Link 
+            to="/zh-tw/toolkit" 
+            className="inline-flex items-center gap-2 text-cream-70 hover:text-cream transition-colors mb-6 text-sm"
+          >
+            <ArrowLeft className="w-4 h-4" />
+            返回工具包
+          </Link>
           <h1 className="font-heading text-3xl md:text-4xl lg:text-5xl text-cream mb-4">
             還價信
           </h1>
@@ -169,7 +163,7 @@ const CounterofferEmailZhTw = () => {
 
       {/* Toolkit Navigation */}
       <div className="pt-8">
-        <ToolkitNavZhTw currentTemplate="T3" />
+        <ToolkitNavZhTw currentTemplate="counter" />
       </div>
 
       {/* Email Templates */}

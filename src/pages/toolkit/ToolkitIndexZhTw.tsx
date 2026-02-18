@@ -1,4 +1,4 @@
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { ArrowLeft, ArrowRight, FileText, Calculator, MessageSquare, TrendingUp, ClipboardList } from "lucide-react";
 import ToolkitHeaderZhTw from "@/components/toolkit/ToolkitHeaderZhTw";
 import ToolkitFooterZhTw from "@/components/toolkit/ToolkitFooterZhTw";
@@ -63,7 +63,6 @@ const templates = [
 ];
 
 const ToolkitIndexZhTw = () => {
-  const navigate = useNavigate();
 
   return (
     <div className="min-h-screen bg-background">
@@ -72,26 +71,11 @@ const ToolkitIndexZhTw = () => {
       {/* Hero */}
       <section className="bg-executive-green py-16 md:py-24 px-5 md:px-6 relative">
         <div className="container mx-auto max-w-4xl text-center relative z-10">
-          <div className="flex items-center justify-center gap-4 mb-6">
-            <Link 
-              to="/zh-tw" 
-              className="inline-flex items-center gap-2 text-cream-70 hover:text-cream transition-colors text-sm"
-            >
-              <ArrowLeft className="w-4 h-4" />
-              首頁
-            </Link>
-            <button 
-              onClick={() => navigate("/toolkit")}
-              className="px-3 py-1.5 text-sm font-semibold bg-gold/20 hover:bg-gold/30 text-gold border border-gold/40 rounded-md transition-all duration-200 hover:scale-105"
-            >
-              English
-            </button>
-          </div>
           <h1 className="font-heading text-4xl md:text-5xl lg:text-6xl text-cream mb-4">
             薪資談判工具包
           </h1>
           <p className="text-lg md:text-xl text-cream-90 max-w-2xl mx-auto">
-            7 個免費模板，讓你談薪水更有信心。台灣市場專屬，NT$ 計價，中英雙語。
+            7 個免費模板，讓你談薪水更有信心。
           </p>
         </div>
       </section>

@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import { ArrowLeft, Copy, Share2, Check, Printer } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useToast } from "@/hooks/use-toast";
+import { nativeShare } from "@/lib/share";
 import ToolkitHeader from "@/components/toolkit/ToolkitHeader";
 import ToolkitFooter from "@/components/toolkit/ToolkitFooter";
 import ToolkitNav from "@/components/toolkit/ToolkitNav";
@@ -10,35 +11,35 @@ import ToolkitNav from "@/components/toolkit/ToolkitNav";
 const exampleAchievements = [
   { achievement: "Led migration of legacy system to cloud infrastructure", impact: "Reduced server costs by 35% (NT$2.4M annual savings)" },
   { achievement: "Built automated testing pipeline for mobile team", impact: "Cut release cycle from 3 weeks to 5 days" },
-  { achievement: "Mentored 3 junior engineers through onboarding", impact: "All 3 passed probation; one promoted within 8 months" },
+  { achievement: "Mentored 3 junior engineers through onboarding", impact: "All 3 passed probation. One promoted within 8 months" },
   { achievement: "Delivered client-facing analytics dashboard", impact: "Adopted by 12 enterprise clients in first quarter" },
 ];
 
 const exampleMarketData = {
   currentComp: "NT$78,000/month (annual TC ~NT$1.17M)",
-  marketRange: "NT$85,000–NT$110,000/month",
+  marketRange: "NT$85,000 to NT$110,000/month",
   source: "Glassdoor, LinkedIn Salary, Payscale",
-  gap: "NT$7,000–32,000/month below market midpoint",
+  gap: "NT$7,000 to 32,000/month below market midpoint",
 };
 
 const exampleAsk = {
   primary: "Adjust monthly base to NT$92,000 (market midpoint)",
-  alternative: "Promotion to Senior Engineer level (unlocks higher pay band)",
+  alternative: "Promotion to Senior Engineer level (opens higher pay band)",
   fallback: "Guaranteed 3-month year-end bonus + NT$30,000 training budget + 3 additional PTO days",
 };
 
 const exampleTalkingPoints = {
-  opening: "Over the past year, I've led our cloud migration saving NT$2.4M annually, built the automated testing pipeline that cut release cycles by 70%, and mentored 3 junior engineers — all of whom passed probation.",
-  data: "Based on Glassdoor and LinkedIn Salary, the market range for Senior Engineers in [city] with my experience is NT$85K–110K/month. My current base of NT$78K falls below this range.",
-  ask: "I'd like to discuss adjusting my compensation to NT$92K/month to reflect my contributions and align with market rates.",
-  ifNo: "I understand. What specific milestones or goals would need to be met for a compensation adjustment at the next review cycle? I'd like to make sure we're aligned.",
+  opening: "Over the past year, I led our cloud migration saving NT$2.4M per year, built the automated testing pipeline cutting release cycles by 70%, and mentored 3 junior engineers, all of whom passed probation.",
+  data: "Based on Glassdoor and LinkedIn Salary, the market range for Senior Engineers in [city] with my experience is NT$85K to 110K/month. My current base of NT$78K falls below this range.",
+  ask: "I'd like to discuss adjusting my pay to NT$92K/month to reflect my contributions and match market rates.",
+  ifNo: "I understand. What specific milestones or goals would need to be met for a pay adjustment at the next review cycle? I'd like to make sure we're aligned.",
 };
 
 const tips = [
-  "Bring a printed copy to the meeting — don't read from it, but reference it",
-  "Send a follow-up email after the meeting summarizing what was discussed and agreed",
-  "If your company has a rigid pay grade system, consider asking for a level/title promotion — this often unlocks a higher pay band entirely",
-  "Time it right: 1–2 months before annual reviews, right after a major win, or when your responsibilities have clearly expanded",
+  "Bring a printed copy to the meeting. Do not read from it, but reference it.",
+  "Send a follow-up email after the meeting. Summarize what was discussed and agreed.",
+  "If your company has a rigid pay grade system, ask for a level/title promotion. This often opens a higher pay band entirely.",
+  "Time it right: 1 to 2 months before annual reviews, right after a big win, or when your responsibilities have clearly grown.",
 ];
 
 const RaiseOnePager = () => {
@@ -57,8 +58,8 @@ _________________________________ | _________________________________
 _________________________________ | _________________________________
 
 MARKET DATA
-- My current compensation: NT$________/month (annual TC ~NT$________)
-- Market range for this role: NT$________–NT$________/month
+- My current pay: NT$________/month (annual TC ~NT$________)
+- Market range for this role: NT$________ to NT$________/month
 - Source: _________________________________
 - Gap: NT$________/month below market
 
@@ -69,9 +70,9 @@ MY ASK
 
 TALKING POINTS
 - Opening: "Over the past ________, I've ________________________________________________________________"
-- Data: "Based on ________, the market range for ________ in ________ with my experience is NT$________–________/month."
-- Ask: "I'd like to discuss adjusting my compensation to NT$________/month to reflect ________________________________________________________________"
-- If No: "I understand. What specific milestones would need to be met for a compensation adjustment at the next review cycle?"`;
+- Data: "Based on ________, the market range for ________ in ________ with my experience is NT$________ to ________/month."
+- Ask: "I'd like to discuss adjusting my pay to NT$________/month to reflect ________________________________________________________________"
+- If No: "I understand. What specific milestones would need to be met for a pay adjustment at the next review cycle?"`;
 
     navigator.clipboard.writeText(templateText);
     setCopied(true);
@@ -79,11 +80,13 @@ TALKING POINTS
     setTimeout(() => setCopied(false), 2000);
   };
 
-  const shareUrl = () => {
-    navigator.clipboard.writeText(window.location.href);
-    setShared(true);
-    toast({ title: "Link copied!", description: "Share it with anyone who needs it." });
-    setTimeout(() => setShared(false), 2000);
+  const shareUrl = async () => {
+    const didShare = await nativeShare();
+    if (!didShare) {
+      setShared(true);
+      toast({ title: "Link copied!", description: "Share it with anyone who needs it." });
+      setTimeout(() => setShared(false), 2000);
+    }
   };
 
   const printPage = () => {
@@ -115,7 +118,7 @@ TALKING POINTS
 
       {/* Toolkit Navigation */}
       <div className="pt-8 print:hidden">
-        <ToolkitNav currentTemplate="T6" />
+        <ToolkitNav currentTemplate="raise" />
       </div>
 
       {/* Side-by-side Cards */}
@@ -153,7 +156,7 @@ TALKING POINTS
                 <div>
                   <h3 className="font-semibold text-foreground mb-3">MARKET DATA</h3>
                   <ul className="text-sm space-y-1">
-                    <li className="text-foreground">• My current compensation: {exampleMarketData.currentComp}</li>
+                    <li className="text-foreground">• My current pay: {exampleMarketData.currentComp}</li>
                     <li className="text-foreground">• Market range for this role: {exampleMarketData.marketRange}</li>
                     <li className="text-foreground">• Source: {exampleMarketData.source}</li>
                     <li className="text-foreground">• Gap: {exampleMarketData.gap}</li>
@@ -226,8 +229,8 @@ TALKING POINTS
                 <div>
                   <h3 className="font-semibold text-foreground mb-3">MARKET DATA</h3>
                   <ul className="text-sm space-y-2">
-                    <li className="text-foreground">• My current compensation: NT$<span className="border-b border-dashed border-border px-8">________</span>/month (annual TC ~NT$<span className="border-b border-dashed border-border px-8">________</span>)</li>
-                    <li className="text-foreground">• Market range for this role: NT$<span className="border-b border-dashed border-border px-8">________</span>–NT$<span className="border-b border-dashed border-border px-8">________</span>/month</li>
+                    <li className="text-foreground">• My current pay: NT$<span className="border-b border-dashed border-border px-8">________</span>/month (annual TC ~NT$<span className="border-b border-dashed border-border px-8">________</span>)</li>
+                    <li className="text-foreground">• Market range for this role: NT$<span className="border-b border-dashed border-border px-8">________</span> to NT$<span className="border-b border-dashed border-border px-8">________</span>/month</li>
                     <li className="text-foreground">• Source: <span className="border-b border-dashed border-border px-16">_________________________________</span></li>
                     <li className="text-foreground">• Gap: NT$<span className="border-b border-dashed border-border px-8">________</span>/month below market ☐ midpoint ☐ 75th percentile</li>
                   </ul>
@@ -253,15 +256,15 @@ TALKING POINTS
                     </div>
                     <div className="border-l-4 border-gold pl-3">
                       <p className="text-muted-foreground font-semibold">Data:</p>
-                      <p className="text-muted-foreground italic">"Based on ________, the market range for ________ in ________ with my experience is NT$________–________/month."</p>
+                      <p className="text-muted-foreground italic">"Based on ________, the market range for ________ in ________ with my experience is NT$________ to ________/month."</p>
                     </div>
                     <div className="border-l-4 border-gold pl-3">
                       <p className="text-muted-foreground font-semibold">Ask:</p>
-                      <p className="text-muted-foreground italic">"I'd like to discuss adjusting my compensation to NT$________/month to reflect ________________________________________________________________"</p>
+                      <p className="text-muted-foreground italic">"I'd like to discuss adjusting my pay to NT$________/month to reflect ________________________________________________________________"</p>
                     </div>
                     <div className="border-l-4 border-gold pl-3">
                       <p className="text-muted-foreground font-semibold">If No:</p>
-                      <p className="text-muted-foreground italic">"I understand. What specific milestones would need to be met for a compensation adjustment at the next review cycle?"</p>
+                      <p className="text-muted-foreground italic">"I understand. What specific milestones would need to be met for a pay adjustment at the next review cycle?"</p>
                     </div>
                   </div>
                 </div>

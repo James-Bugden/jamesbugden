@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import { ArrowLeft, Copy, Share2, Check } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useToast } from "@/hooks/use-toast";
+import { nativeShare } from "@/lib/share";
 import ToolkitHeader from "@/components/toolkit/ToolkitHeader";
 import ToolkitFooter from "@/components/toolkit/ToolkitFooter";
 import ToolkitNav from "@/components/toolkit/ToolkitNav";
@@ -12,33 +13,33 @@ const scenarios = [
     number: 1,
     title: "First time they ask",
     theySay: "Can you share your salary expectations?",
-    youSay: "Right now, I'm focused on learning more about the role and how I can contribute. Compensation is important, but I'd love to understand more about the responsibilities, team, and expectations before discussing specific numbers.",
+    youSay: "Right now, I want to learn more about the role and how I contribute. Pay matters, but I'd love to understand the responsibilities, team, and expectations before we talk numbers.",
   },
   {
     number: 2,
     title: "They push harder",
     theySay: "We just want to make sure we're in the same range so we don't waste your time.",
-    youSay: "I'd be happy to discuss compensation once we've determined I'm the right fit. Could you share the salary range for this role?",
+    youSay: "I'd be happy to talk about pay once we've confirmed I'm the right fit. What is the salary range for this role?",
   },
   {
     number: 3,
     title: "They won't budge",
     theySay: "We really need a number to move forward.",
-    youSay: "I'm flexible and open to competitive offers. I know compensation varies based on experience and impact. What range are you targeting for this position?",
+    youSay: "I'm flexible and open to competitive offers. Pay varies based on experience and impact. What range are you targeting for this position?",
   },
   {
     number: 4,
-    title: "You absolutely must give a number",
+    title: "You must give a number",
     theySay: null,
-    youSay: "Based on my research and industry benchmarks, similar roles at this level typically offer a monthly base of NT$[X]–[Y], but I'm open to discussing the full compensation package including bonuses and benefits.",
-    proTip: "Take the monthly salary you'd actually be happy with and add 10–20% on top. That gives them room to \"negotiate you down\" to the number you wanted all along.",
+    youSay: "Based on my research and industry benchmarks, similar roles at this level typically offer a monthly base of NT$[X] to [Y]. I'm open to discussing the full package, including bonuses and benefits.",
+    proTip: "Take the monthly salary you'd be happy with and add 10 to 20% on top. This gives them room to \"negotiate you down\" to the number you wanted all along.",
   },
   {
     number: 5,
     title: "Written application requires a number",
     theySay: null,
     youSay: null,
-    whatToWrite: "Write \"negotiable\" or \"per company policy\" whenever possible. If the field only accepts numbers, enter a range based on your market research — not your current salary.",
+    whatToWrite: "Write \"negotiable\" or \"per company policy\" whenever possible. If the field only accepts numbers, enter a range based on your market research. Never enter your current salary.",
   },
 ];
 
@@ -46,17 +47,17 @@ const proTips = [
   {
     icon: "💡",
     title: "Pattern",
-    text: "Every script ends with a question back to them. This shifts the power dynamic — they reveal information, you don't.",
+    text: "Every script ends with a question back to them. This shifts the conversation. They share information first, not you.",
   },
   {
     icon: "💡",
-    title: "Data reframe (especially for women)",
-    text: "Instead of \"I want,\" try \"My research shows that this role typically pays...\" Citing external data (Glassdoor, LinkedIn Salary, Payscale) takes the focus off you and onto the market.",
+    title: "Data reframe (for women especially)",
+    text: "Instead of \"I want,\" try \"My research shows this role typically pays...\" Citing external data (Glassdoor, LinkedIn Salary, Payscale) puts the focus on the market, not on you.",
   },
   {
     icon: "💡",
     title: "Remember",
-    text: "You never have to answer this question directly. Deflecting is not rude — it's professional.",
+    text: "You never have to answer this question directly. Deflecting is not rude. It is professional.",
   },
 ];
 
@@ -82,11 +83,13 @@ const DeflectionScripts = () => {
     setTimeout(() => setCopied(false), 2000);
   };
 
-  const shareUrl = () => {
-    navigator.clipboard.writeText(window.location.href);
-    setShared(true);
-    toast({ title: "Link copied!", description: "Share it with anyone who needs it." });
-    setTimeout(() => setShared(false), 2000);
+  const shareUrl = async () => {
+    const didShare = await nativeShare();
+    if (!didShare) {
+      setShared(true);
+      toast({ title: "Link copied!", description: "Share it with anyone who needs it." });
+      setTimeout(() => setShared(false), 2000);
+    }
   };
 
   return (
@@ -114,7 +117,7 @@ const DeflectionScripts = () => {
 
       {/* Toolkit Navigation */}
       <div className="pt-8">
-        <ToolkitNav currentTemplate="T1" />
+        <ToolkitNav currentTemplate="scripts" />
       </div>
 
       {/* Scenarios */}

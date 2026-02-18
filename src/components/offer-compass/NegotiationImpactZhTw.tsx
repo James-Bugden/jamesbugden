@@ -63,12 +63,20 @@ export default function NegotiationImpactZhTw({ currentComp, currency, fxRate }:
 
   const jobChangeYears = data.filter((_, i) => i > 0 && i % jobChangeEvery === 0).map((d) => d.year);
 
-  const fmtWan = (n: number) => formatCurrency(n, currency, fxRate);
+  const fmtWan = (n: number) => {
+    const converted = currency === "TWD" ? n : n / (fxRate || 1);
+    const symbol = currency === "TWD" ? "NT$" : currency === "USD" ? "US$" : currency;
+    const abs = Math.abs(converted);
+    if (abs >= 100_000_000) return `${symbol}${(converted / 100_000_000).toFixed(2)}億`;
+    if (abs >= 10_000) return `${symbol}${(converted / 10_000).toFixed(1)}萬`;
+    return `${symbol}${Math.round(converted).toLocaleString()}`;
+  };
 
   const fmtK = (n: number) => {
     const converted = currency === "TWD" ? n : n / fxRate;
-    if (converted >= 1_000_000) return `${(converted / 1_000_000).toFixed(1)}M`;
-    return `${Math.round(converted / 1_000)}K`;
+    if (converted >= 100_000_000) return `${(converted / 100_000_000).toFixed(1)}億`;
+    if (converted >= 10_000) return `${Math.round(converted / 10_000)}萬`;
+    return `${Math.round(converted)}`;
   };
 
   const dataKey1 = viewMode === "cumulative" ? "acceptCum" : "accept";
@@ -164,14 +172,14 @@ export default function NegotiationImpactZhTw({ currentComp, currency, fxRate }:
       </div>
 
       <div className="grid grid-cols-2 gap-3 mb-4">
-        <div className="border border-border rounded-xl p-4">
+        <div className="border border-border rounded-xl p-4 min-w-0">
           <p className="text-xs font-semibold tracking-wide uppercase text-muted-foreground">接受第一個報價</p>
-          <p className="text-xl font-bold text-foreground mt-1">{fmtWan(totalA)}</p>
+          <p className="text-base md:text-xl font-bold text-foreground mt-1 truncate">{fmtWan(totalA)}</p>
           <p className="text-xs text-muted-foreground mt-1">{careerYears}年總計</p>
         </div>
-        <div className="border-2 border-green-500/30 bg-green-50/50 dark:bg-green-950/20 rounded-xl p-4">
+        <div className="border-2 border-green-500/30 bg-green-50/50 dark:bg-green-950/20 rounded-xl p-4 min-w-0">
           <p className="text-xs font-semibold tracking-wide uppercase text-green-600 dark:text-green-400">策略性談判</p>
-          <p className="text-xl font-bold text-green-700 dark:text-green-400 mt-1">{fmtWan(totalB)}</p>
+          <p className="text-base md:text-xl font-bold text-green-700 dark:text-green-400 mt-1 truncate">{fmtWan(totalB)}</p>
           <p className="text-xs text-green-600 dark:text-green-400 mt-1">{careerYears}年總計</p>
         </div>
       </div>
@@ -183,14 +191,14 @@ export default function NegotiationImpactZhTw({ currentComp, currency, fxRate }:
       </div>
 
       <div className="grid grid-cols-2 gap-3">
-        <div className="bg-red-50/50 dark:bg-red-950/20 border border-red-200/50 dark:border-red-800/30 rounded-xl p-4">
+        <div className="bg-red-50/50 dark:bg-red-950/20 border border-red-200/50 dark:border-red-800/30 rounded-xl p-4 min-w-0">
           <p className="text-xs text-muted-foreground">平均每月損失</p>
-          <p className="text-lg font-bold text-red-600 dark:text-red-400 mt-1">{fmtWan(monthlyDiff)}</p>
+          <p className="text-base md:text-lg font-bold text-red-600 dark:text-red-400 mt-1 truncate">{fmtWan(monthlyDiff)}</p>
           <p className="text-xs text-red-500/70 dark:text-red-400/60 mt-1">每月未談判的損失</p>
         </div>
-        <div className="bg-red-50/50 dark:bg-red-950/20 border border-red-200/50 dark:border-red-800/30 rounded-xl p-4">
+        <div className="bg-red-50/50 dark:bg-red-950/20 border border-red-200/50 dark:border-red-800/30 rounded-xl p-4 min-w-0">
           <p className="text-xs text-muted-foreground">{careerYears}年總損失</p>
-          <p className="text-lg font-bold text-red-600 dark:text-red-400 mt-1">{fmtWan(totalDiff)}</p>
+          <p className="text-base md:text-lg font-bold text-red-600 dark:text-red-400 mt-1 truncate">{fmtWan(totalDiff)}</p>
           <p className="text-xs text-red-500/70 dark:text-red-400/60 mt-1">白白錯過的薪資</p>
         </div>
       </div>

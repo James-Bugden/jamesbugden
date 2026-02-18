@@ -12,7 +12,13 @@ import {
   Cell,
 } from "recharts";
 
-const COLORS = ["#1B3A2F", "#3D7A5F", "#C9A961", "#B06B3A", "#6B5B95"];
+const STACK_COLORS = {
+  Base: "#1B3A2F",
+  Bonus: "#C9A961",
+  Equity: "#3D7A5F",
+  "Sign-on": "#B0B0B0",
+  Benefits: "#D4C8A0",
+};
 const CURRENT_COLOR = "#9CA3AF";
 
 interface Props {
@@ -61,40 +67,46 @@ export default function ScenarioComparison({ scenarios, activeId, currency, loca
   const currentLabel = isZh ? "目前" : "Current";
   const baselineLabel = isZh ? "基準" : "Baseline";
 
-  // Chart data — map metric keys consistently
-  const metricKeys = ["base", "variable", "equityY1", "ote", "year1"] as const;
-  const chartData = CHART_LABELS.map((label, idx) => {
-    const metricKey = metricKeys[idx];
-    const row: Record<string, string | number> = { metric: label };
+  // Stacked bar chart data — one bar per scenario (+ current), stacked by component
+  const stackedData: Record<string, string | number>[] = [];
 
-    if (hasCurrent) {
-      const cur = activeCurrent!;
-      row[currentLabel] =
-        metricKey === "base" ? cur.current_base_twd :
-        metricKey === "variable" ? cur.current_bonus_twd :
-        metricKey === "equityY1" ? cur.current_equity_twd :
-        metricKey === "ote" ? cur.current_comp_twd :
-        cur.current_comp_twd;
-    }
-
-    calcs.forEach(({ scenario, calc }) => {
-      const val =
-        metricKey === "base" ? calc.base :
-        metricKey === "variable" ? calc.variable :
-        metricKey === "equityY1" ? calc.equityY1 :
-        metricKey === "ote" ? calc.ote :
-        calc.year1Total;
-      row[scenario.name] = Math.round(val);
+  if (hasCurrent) {
+    const cur = activeCurrent!;
+    stackedData.push({
+      name: currentLabel,
+      Base: cur.current_base_twd,
+      Bonus: cur.current_bonus_twd,
+      Equity: cur.current_equity_twd,
+      "Sign-on": 0,
+      Benefits: 0,
     });
-    return row;
+  }
+
+  calcs.forEach(({ scenario, calc }) => {
+    stackedData.push({
+      name: scenario.name,
+      Base: Math.round(calc.base),
+      Bonus: Math.round(calc.variable),
+      Equity: Math.round(calc.equityY1),
+      "Sign-on": Math.round(calc.signon),
+      Benefits: Math.round(calc.benefits),
+    });
   });
 
   const fxRate = scenarios[0]?.fx_rate ?? 32;
-  const fmtC = (n: number) => formatCurrency(n, currency, fxRate);
+  const fmtC = (n: number) => {
+    if (!isZh) return formatCurrency(n, currency, fxRate);
+    const converted = currency === "TWD" ? n : n / (fxRate || 1);
+    const symbol = currency === "TWD" ? "NT$" : currency === "USD" ? "US$" : currency;
+    const abs = Math.abs(converted);
+    if (abs >= 100_000_000) return `${symbol}${(converted / 100_000_000).toFixed(2)}億`;
+    if (abs >= 10_000) return `${symbol}${(converted / 10_000).toFixed(1)}萬`;
+    return `${symbol}${Math.round(converted).toLocaleString()}`;
+  };
 
   return (
     <div className="space-y-8">
-      {/* Grouped Bar Chart */}
+      {/* Stacked Bar Chart */}
       <div className="bg-card border border-border rounded-2xl p-6 md:p-8">
         <h3 className="font-heading text-xl font-bold text-foreground mb-1">
           {isZh ? "Offer 比較" : "Offer Comparison"}
@@ -102,12 +114,12 @@ export default function ScenarioComparison({ scenarios, activeId, currency, loca
         <p className="text-sm text-muted-foreground mb-6">
           {isZh ? "各項薪酬組成一覽" : "Side-by-side breakdown of each compensation component"}
         </p>
-        <div className="h-80">
+        <div className="h-[400px] md:h-[480px]">
           <ResponsiveContainer width="100%" height="100%">
-            <BarChart data={chartData} barGap={2} barCategoryGap="20%">
+            <BarChart data={stackedData}>
               <CartesianGrid strokeDasharray="3 3" stroke="hsl(var(--border))" vertical={false} />
               <XAxis
-                dataKey="metric"
+                dataKey="name"
                 tick={{ fontSize: 12, fill: "hsl(var(--muted-foreground))" }}
                 axisLine={{ stroke: "hsl(var(--border))" }}
                 tickLine={false}
@@ -136,12 +148,11 @@ export default function ScenarioComparison({ scenarios, activeId, currency, loca
                 iconType="circle"
                 iconSize={10}
               />
-              {hasCurrent && (
-                <Bar dataKey={currentLabel} fill={CURRENT_COLOR} radius={[4, 4, 0, 0]} />
-              )}
-              {scenarios.map((s, i) => (
-                <Bar key={s.id} dataKey={s.name} fill={COLORS[i % COLORS.length]} radius={[4, 4, 0, 0]} />
-              ))}
+              <Bar dataKey="Base" stackId="a" fill={STACK_COLORS.Base} />
+              <Bar dataKey="Bonus" stackId="a" fill={STACK_COLORS.Bonus} />
+              <Bar dataKey="Equity" stackId="a" fill={STACK_COLORS.Equity} />
+              <Bar dataKey="Sign-on" stackId="a" fill={STACK_COLORS["Sign-on"]} />
+              <Bar dataKey="Benefits" stackId="a" fill={STACK_COLORS.Benefits} radius={[4, 4, 0, 0]} />
             </BarChart>
           </ResponsiveContainer>
         </div>

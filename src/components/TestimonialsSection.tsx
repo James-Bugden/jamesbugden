@@ -71,6 +71,11 @@ const allTestimonials: Testimonial[] = [
     hook: "The suggestions are supported by objective and concrete sources rather than subjective opinions, which makes the review feel very logical and well-structured.",
     full: "The analysis structure is extremely clear. It doesn't just provide suggestions on wording and descriptions, but also gives detailed guidance on presentation and formatting, which are details I often overlooked when reviewing my own resume in the past. It also places the target job description together with the improvement suggestions, allowing me to immediately understand the reasoning behind each recommendation. The suggestions are supported by objective and concrete sources rather than subjective opinions, which makes the review process feel very logical and well-structured. The formatting suggestions were very helpful. Several long-standing detail issues were pointed out, and the feedback also explained the reasoning and evaluation standards behind each suggestion. Overall, the resume review is very structured and logical, and I was also able to learn more about resume writing concepts through the process.",
   },
+  {
+    name: "Sean Wang",
+    hook: "Learning to read between the lines during interviews to strengthen your negotiation leverage is incredibly comprehensive and practical knowledge.",
+    full: "Huge thanks to James for the help! Through this consultation, I realized that salary negotiation actually starts from the very first interaction with the recruiter. You need to understand the dynamics between yourself, the recruiter, and the hiring manager, and learn to pick up on subtle cues during interviews to strengthen your negotiation position. This is incredibly comprehensive and practical knowledge.",
+  },
 ];
 
 const TestimonialCard = ({ testimonial }: { testimonial: Testimonial }) => {

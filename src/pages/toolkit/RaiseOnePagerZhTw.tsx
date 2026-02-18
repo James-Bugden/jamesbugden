@@ -1,8 +1,9 @@
 import { useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { ArrowLeft, Copy, Share2, Check, Printer } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useToast } from "@/hooks/use-toast";
+import { nativeShare } from "@/lib/share";
 import ToolkitHeaderZhTw from "@/components/toolkit/ToolkitHeaderZhTw";
 import ToolkitFooterZhTw from "@/components/toolkit/ToolkitFooterZhTw";
 import ToolkitNavZhTw from "@/components/toolkit/ToolkitNavZhTw";
@@ -43,7 +44,6 @@ const tips = [
 
 const RaiseOnePagerZhTw = () => {
   const { toast } = useToast();
-  const navigate = useNavigate();
   const [copied, setCopied] = useState(false);
   const [shared, setShared] = useState(false);
 
@@ -80,10 +80,13 @@ _________________________________ | _________________________________
     setTimeout(() => setCopied(false), 2000);
   };
 
-  const shareUrl = () => {
-    navigator.clipboard.writeText(window.location.href);
-    setShared(true);
-    toast({ title: "已複製連結！", description: "分享給需要的人。" });
+  const shareUrl = async () => {
+    const shared = await nativeShare();
+    if (!shared) {
+      setShared(true);
+      toast({ title: "已複製連結！", description: "分享給需要的人。" });
+      setTimeout(() => setShared(false), 2000);
+    }
     setTimeout(() => setShared(false), 2000);
   };
 
@@ -93,18 +96,15 @@ _________________________________ | _________________________________
 
       <section className="bg-executive-green py-12 md:py-16 px-5 md:px-6 relative print:hidden">
         <div className="container mx-auto max-w-5xl text-center relative z-10">
-          <div className="flex items-center justify-center gap-4 mb-6">
-            <Link to="/zh-tw/toolkit" className="inline-flex items-center gap-2 text-cream-70 hover:text-cream transition-colors text-sm">
-              <ArrowLeft className="w-4 h-4" />返回工具包
-            </Link>
-            <button onClick={() => navigate("/toolkit/raise")} className="px-3 py-1.5 text-sm font-semibold bg-gold/20 hover:bg-gold/30 text-gold border border-gold/40 rounded-md transition-all duration-200 hover:scale-105">EN</button>
-          </div>
+          <Link to="/zh-tw/toolkit" className="inline-flex items-center gap-2 text-cream-70 hover:text-cream transition-colors mb-6 text-sm">
+            <ArrowLeft className="w-4 h-4" />返回工具包
+          </Link>
           <h1 className="font-heading text-3xl md:text-4xl lg:text-5xl text-cream mb-4">加薪準備單</h1>
           <p className="text-lg text-cream-90">把你的論述整理在一頁上。帶進會議。</p>
         </div>
       </section>
 
-      <div className="pt-8 print:hidden"><ToolkitNavZhTw currentTemplate="T6" /></div>
+      <div className="pt-8 print:hidden"><ToolkitNavZhTw currentTemplate="raise" /></div>
 
       <section className="pb-8 px-5 md:px-6">
         <div className="container mx-auto max-w-5xl">

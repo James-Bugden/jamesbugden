@@ -6,6 +6,7 @@ import juliePhoto from "@/assets/testimonials/julie.webp";
 import cynthiaPhoto from "@/assets/testimonials/cynthia.webp";
 import pinweiPhoto from "@/assets/testimonials/pinwei.webp";
 import airuPhoto from "@/assets/testimonials/airu.png";
+import omarPhoto from "@/assets/testimonials/omar-li.jpg";
 
 const featured = {
   hook: "讓一個專業招募官做深度審閱完全是另一個層級。",
@@ -25,7 +26,7 @@ const scrollCards = [
     hook: "他的建議清晰、實用，而且完全針對我的情況量身打造。",
     full: "跟 James 討論薪資談判的經驗非常好。他的建議清晰、實用，而且完全針對我的情況量身打造。他不僅幫我更了解自己的市場價值，也給了我在談判中專業溝通的信心和策略。整個過程中，他非常支持、有洞察力，而且真心關注我的成功。我非常推薦他的服務。",
     name: "Omar Li",
-    photo: undefined as string | undefined,
+    photo: omarPhoto,
   },
   {
     hook: "能事先了解每個利害關係人重視什麼，真的幫助很大。",
@@ -88,6 +89,12 @@ const remainingTestimonials = [
     hook: "經過你的review的確讓我發現本身的優勢以及未來在resume上可以再加強跟改進的部分！",
     full: "雖然這份履歷健檢來的太晚，但我認為幫助很多！確實有時候會有盲點，但經過你的review的確讓我發現本身的優勢以及未來在resume上可以再加強跟改進的部分！",
     name: "Charlene Lee",
+    photo: undefined as string | undefined,
+  },
+  {
+    hook: "從面試過程中去觀察蛛絲馬跡來增加自身談判籌碼，是非常全面且實用的知識。",
+    full: "非常感謝James 提供幫助！透過這次諮詢，認知到談薪資的其實從一開與招募人員接洽就開始，過重中需釐清自己、招募人員與hiring manager 之間的利害關係，並從面試過程中去觀察蛛絲馬跡來增加自身談判籌碼，是非常全面且實用的知識。",
+    name: "Sean Wang",
     photo: undefined as string | undefined,
   },
 ];

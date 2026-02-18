@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import { ArrowLeft, Copy, Share2, Check, Printer } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useToast } from "@/hooks/use-toast";
+import { nativeShare } from "@/lib/share";
 import ToolkitHeader from "@/components/toolkit/ToolkitHeader";
 import ToolkitFooter from "@/components/toolkit/ToolkitFooter";
 import ToolkitNav from "@/components/toolkit/ToolkitNav";
@@ -10,8 +11,8 @@ import ToolkitNav from "@/components/toolkit/ToolkitNav";
 const exampleWeek = {
   weekOf: "February 3, 2026",
   entries: [
-    { day: "Mon", achievement: "Delivered revised API documentation to partner team", impact: "Unblocked 3 downstream integrations that were waiting 2 weeks", category: "efficiency" },
-    { day: "Tue", achievement: "Closed renewal deal with [Client X]", impact: "NT$1.2M ARR retained; upsold premium tier (+NT$300K)", category: "revenue" },
+    { day: "Mon", achievement: "Delivered revised API documentation to partner team", impact: "Unblocked 3 downstream integrations waiting 2 weeks", category: "efficiency" },
+    { day: "Tue", achievement: "Closed renewal deal with [Client X]", impact: "NT$1.2M ARR retained. Upsold premium tier (+NT$300K)", category: "revenue" },
     { day: "Wed", achievement: "Presented Q4 results to department leads (40 people)", impact: "Received VP recognition in follow-up email", category: "leadership" },
     { day: "Thu", achievement: "Proposed and prototyped automated alert system for prod outages", impact: "Estimated 60% reduction in response time if adopted", category: "innovation" },
     { day: "Fri", achievement: "Paired with junior developer on debugging production issue", impact: "She resolved a P1 independently by end of day", category: "leadership" },
@@ -26,12 +27,12 @@ const categories = {
 };
 
 const goodEntries = [
-  { bad: "Worked on the project", good: "Shipped user authentication module — 3 days ahead of deadline" },
-  { bad: "Had meetings", good: "Led cross-team sync that resolved 2-week blocker on API integration" },
-  { bad: "Helped a colleague", good: "Mentored junior dev through first code review; she now reviews independently" },
-  { bad: "Did sales stuff", good: "Closed NT$800K deal with [Client]; shortest sales cycle this quarter (18 days)" },
-  { bad: "Fixed bugs", good: "Resolved P1 production outage in 45 minutes; affected 12K users" },
-  { bad: "Attended training", good: "Completed AWS Solutions Architect certification; applied VPC knowledge to reduce infra costs" },
+  { bad: "Worked on the project", good: "Shipped user authentication module, 3 days ahead of deadline" },
+  { bad: "Had meetings", good: "Led cross-team sync resolving 2-week blocker on API integration" },
+  { bad: "Helped a colleague", good: "Mentored junior dev through first code review. She now reviews independently" },
+  { bad: "Did sales stuff", good: "Closed NT$800K deal with [Client]. Shortest sales cycle this quarter (18 days)" },
+  { bad: "Fixed bugs", good: "Resolved P1 production outage in 45 minutes. Affected 12K users" },
+  { bad: "Attended training", good: "Completed AWS Solutions Architect certification. Applied VPC knowledge to reduce infra costs" },
 ];
 
 const categoryDescriptions = [
@@ -61,10 +62,10 @@ Thu | _________________________________ | _________________________________ | �
 Fri | _________________________________ | _________________________________ | ☐💰 ☐⚡ ☐👥 ☐💡
 
 CATEGORIES:
-💰 Revenue — Deals closed, revenue generated, costs saved, clients retained
-⚡ Efficiency — Time saved, processes improved, bottlenecks removed, automation built
-👥 Leadership — People mentored, presentations given, cross-team coordination, hiring
-💡 Innovation — New ideas proposed, prototypes built, experiments run, patents filed`;
+💰 Revenue: Deals closed, revenue generated, costs saved, clients retained
+⚡ Efficiency: Time saved, processes improved, bottlenecks removed, automation built
+👥 Leadership: People mentored, presentations given, cross-team coordination, hiring
+💡 Innovation: New ideas proposed, prototypes built, experiments run, patents filed`;
 
     navigator.clipboard.writeText(templateText);
     setCopied(true);
@@ -72,11 +73,13 @@ CATEGORIES:
     setTimeout(() => setCopied(false), 2000);
   };
 
-  const shareUrl = () => {
-    navigator.clipboard.writeText(window.location.href);
-    setShared(true);
-    toast({ title: "Link copied!", description: "Share it with anyone who needs it." });
-    setTimeout(() => setShared(false), 2000);
+  const shareUrl = async () => {
+    const didShare = await nativeShare();
+    if (!didShare) {
+      setShared(true);
+      toast({ title: "Link copied!", description: "Share it with anyone who needs it." });
+      setTimeout(() => setShared(false), 2000);
+    }
   };
 
   const printPage = () => {
@@ -101,14 +104,14 @@ CATEGORIES:
             Weekly Achievement Log
           </h1>
           <p className="text-lg text-cream-90">
-            5 minutes every Friday. The most valuable career habit you'll ever build.
+            5 minutes every Friday. The most valuable career habit you will ever build.
           </p>
         </div>
       </section>
 
       {/* Toolkit Navigation */}
       <div className="pt-8 print:hidden">
-        <ToolkitNav currentTemplate="T7" />
+        <ToolkitNav currentTemplate="log" />
       </div>
 
       {/* How It Works */}
@@ -119,15 +122,15 @@ CATEGORIES:
             <ol className="space-y-2 text-cream-90">
               <li className="flex items-start gap-3">
                 <span className="w-6 h-6 rounded-full bg-gold text-white text-sm font-bold flex items-center justify-center flex-shrink-0">1</span>
-                <span>Every Friday, spend 5 minutes writing down what you accomplished that week</span>
+                <span>Every Friday, spend 5 minutes writing down what you accomplished this week.</span>
               </li>
               <li className="flex items-start gap-3">
                 <span className="w-6 h-6 rounded-full bg-gold text-white text-sm font-bold flex items-center justify-center flex-shrink-0">2</span>
-                <span>Be specific — use numbers, percentages, dollar amounts, and outcomes</span>
+                <span>Be specific. Use numbers, percentages, dollar amounts, and outcomes.</span>
               </li>
               <li className="flex items-start gap-3">
                 <span className="w-6 h-6 rounded-full bg-gold text-white text-sm font-bold flex items-center justify-center flex-shrink-0">3</span>
-                <span>When it's time to ask for a raise, you'll have months of documented proof instead of vague memories</span>
+                <span>When it is time to ask for a raise, you will have months of documented proof instead of vague memories.</span>
               </li>
             </ol>
           </div>
@@ -267,7 +270,7 @@ CATEGORIES:
           <div className="bg-gold/10 rounded-xl p-6 border-l-4 border-gold">
             <h3 className="font-heading text-lg text-gold mb-3">📅 The 5-Minute Friday Habit</h3>
             <p className="text-foreground">
-              Set a recurring calendar event: every Friday at 4:30 PM. Title it "Log Wins." Open this page, fill in the week's row, and close it. That's it. In 6 months, you'll have 120+ documented achievements — more evidence than 99% of people bring to a raise conversation.
+              Set a recurring calendar event: every Friday at 4:30 PM. Title it "Log Wins." Open this page, fill in the week's row, and close it. In 6 months, you will have 120+ documented achievements. More evidence than 99% of people bring to a raise conversation.
             </p>
           </div>
         </div>

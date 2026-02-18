@@ -48,7 +48,7 @@ export default function OfferCompassCompare() {
           <p className="text-muted-foreground mb-6">
             Add at least 2 scenarios to compare. Go to the Calculator page to create more.
           </p>
-          <Link to="/offer-compass">
+          <Link to="/offer-calculator">
             <Button className="bg-gold hover:bg-gold/90 text-foreground">Go to Calculator</Button>
           </Link>
         </div>
@@ -202,7 +202,7 @@ function Header({ currency, setCurrency }: { currency: Currency; setCurrency: (c
     <header style={{ backgroundColor: "#1B3A2F" }}>
       <div className="max-w-7xl mx-auto px-4 md:px-6 h-14 flex items-center justify-between">
         <div className="flex items-center gap-4">
-          <Link to="/offer-compass" className="flex items-center gap-2 text-white/70 hover:text-white transition-colors text-sm">
+          <Link to="/offer-calculator" className="flex items-center gap-2 text-white/70 hover:text-white transition-colors text-sm">
             <ArrowLeft className="w-4 h-4" /> Back to Calculator
           </Link>
           <span className="text-white/30">|</span>

@@ -1,4 +1,5 @@
-import { useState, useCallback, useEffect } from "react";
+import { useState, useCallback } from "react";
+import { supabase } from "@/integrations/supabase/client";
 
 const STORAGE_KEY = "offer-compass-unlocked";
 const EMAIL_KEY = "offer-compass-email";
@@ -29,8 +30,12 @@ export function useEmailGate() {
     } catch {
       // localStorage unavailable
     }
-    // TODO: Connect to MailerLite API
-    console.log({ email, source: "calculator", event: "offer-compass-unlock" });
+    supabase
+      .from("email_gate_leads")
+      .insert({ email, source: "offer-compass" })
+      .then(({ error }) => {
+        if (error) console.error("Failed to save email lead:", error);
+      });
   }, []);
 
   return { isUnlocked, userEmail, unlock };

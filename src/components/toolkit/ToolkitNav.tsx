@@ -5,13 +5,13 @@ interface ToolkitNavProps {
 }
 
 const templates = [
-  { id: "T1", label: "📧1 Scripts", href: "/toolkit/scripts" },
-  { id: "T2", label: "📧2 Offer Response", href: "/toolkit/offer-response" },
-  { id: "T3", label: "📧3 Counter", href: "/toolkit/counteroffer" },
-  { id: "T4", label: "📧3 Calculator", href: "/toolkit/calculator" },
-  { id: "T5", label: "📧4 Pushback", href: "/toolkit/pushback" },
-  { id: "T6", label: "📧5 Raise", href: "/toolkit/raise" },
-  { id: "T7", label: "📧5 Log", href: "/toolkit/log" },
+  { id: "scripts", label: "Scripts", href: "/toolkit/scripts" },
+  { id: "offer-response", label: "Offer Response", href: "/toolkit/offer-response" },
+  { id: "counter", label: "Counter", href: "/toolkit/counteroffer" },
+  { id: "calculator", label: "Calculator", href: "/toolkit/calculator" },
+  { id: "pushback", label: "Pushback", href: "/toolkit/pushback" },
+  { id: "raise", label: "Raise", href: "/toolkit/raise" },
+  { id: "log", label: "Log", href: "/toolkit/log" },
 ];
 
 const ToolkitNav = ({ currentTemplate }: ToolkitNavProps) => {

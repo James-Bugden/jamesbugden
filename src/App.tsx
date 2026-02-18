@@ -3,7 +3,7 @@ import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import { ScrollToTop } from "./components/ScrollToTop";
 import { HelmetProvider } from "react-helmet-async";
 
@@ -27,10 +27,9 @@ const ProtectedRoute = lazy(() => import("./components/ProtectedRoute"));
 const ResumeGuide = lazy(() => import("./pages/ResumeGuide"));
 const InterviewPrepGuide = lazy(() => import("./pages/InterviewPrepGuide"));
 const InterviewPrepGuideZhTw = lazy(() => import("./pages/InterviewPrepGuideZhTw"));
-const InterviewPrepGuidePrint = lazy(() => import("./pages/InterviewPrepGuidePrint"));
 const InterviewPreparationGuide = lazy(() => import("./pages/InterviewPreparationGuide"));
 const InterviewPreparationGuideZhTw = lazy(() => import("./pages/InterviewPreparationGuideZhTw"));
-const InterviewPreparationGuidePrint = lazy(() => import("./pages/InterviewPreparationGuidePrint"));
+
 const LinkedInGuideZhTw = lazy(() => import("./pages/LinkedInGuideZhTw"));
 const LinkedInGuide = lazy(() => import("./pages/LinkedInGuide"));
 const LinkedInBrandingGuideZhTw = lazy(() => import("./pages/LinkedInBrandingGuideZhTw"));
@@ -48,6 +47,11 @@ const QuizZhTw = lazy(() => import("./pages/QuizZhTw"));
 const OfferCompass = lazy(() => import("./pages/OfferCompass"));
 const OfferCompassCompare = lazy(() => import("./pages/OfferCompassCompare"));
 const OfferCompassZhTw = lazy(() => import("./pages/OfferCompassZhTw"));
+const SiteDirectory = lazy(() => import("./pages/SiteDirectory"));
+const ResumeAnalyzer = lazy(() => import("./pages/ResumeAnalyzer"));
+const ResumeBuilder = lazy(() => import("./pages/ResumeBuilder"));
+const JobTracker = lazy(() => import("./pages/JobTracker"));
+const TrackerPage = lazy(() => import("./pages/TrackerPage"));
 
 // Toolkit pages - English
 const ToolkitIndex = lazy(() => import("./pages/toolkit/ToolkitIndex"));
@@ -126,9 +130,9 @@ const App = () => (
             <Route path="/resume-guide" element={<ResumeGuide />} />
             <Route path="/interview-prep-guide" element={<InterviewPrepGuide />} />
             <Route path="/zh-tw/interview-prep-guide" element={<InterviewPrepGuideZhTw />} />
-            <Route path="/interview-prep-guide/print" element={<InterviewPrepGuidePrint />} />
+            
             <Route path="/interview-preparation-guide" element={<InterviewPreparationGuide />} />
-            <Route path="/interview-preparation-guide/print" element={<InterviewPreparationGuidePrint />} />
+            
             <Route path="/zh-tw/interview-preparation-guide" element={<InterviewPreparationGuideZhTw />} />
             <Route path="/zh-tw/linkedin-guide" element={<LinkedInGuideZhTw />} />
             <Route path="/linkedin-guide" element={<LinkedInGuide />} />
@@ -144,9 +148,13 @@ const App = () => (
             <Route path="/zh-tw/salary-starter-kit" element={<SalaryStarterKitZhTw />} />
             <Route path="/quiz" element={<Quiz />} />
             <Route path="/zh-tw/quiz" element={<QuizZhTw />} />
-            <Route path="/offer-compass" element={<OfferCompass />} />
-            <Route path="/offer-compass/compare" element={<OfferCompassCompare />} />
-            <Route path="/zh-tw/offer-compass" element={<OfferCompassZhTw />} />
+            <Route path="/offer-calculator" element={<OfferCompass />} />
+            <Route path="/offer-calculator/compare" element={<OfferCompassCompare />} />
+            <Route path="/zh-tw/offer-calculator" element={<OfferCompassZhTw />} />
+            {/* Redirects from old URLs */}
+            <Route path="/offer-compass" element={<Navigate to="/offer-calculator" replace />} />
+            <Route path="/offer-compass/compare" element={<Navigate to="/offer-calculator/compare" replace />} />
+            <Route path="/zh-tw/offer-compass" element={<Navigate to="/zh-tw/offer-calculator" replace />} />
             {/* Salary Negotiation Toolkit */}
             <Route path="/toolkit" element={<ToolkitIndex />} />
             <Route path="/toolkit/scripts" element={<DeflectionScripts />} />
@@ -194,6 +202,11 @@ const App = () => (
             <Route path="/zh-tw/reviews/willy-lin" element={<WillyLinReviewZhTw />} />
             <Route path="/reviews/hope-chen" element={<HopeChenReview />} />
             <Route path="/zh-tw/reviews/hope-chen" element={<HopeChenReviewZhTw />} />
+            <Route path="/resume-analyzer" element={<ResumeAnalyzer />} />
+            <Route path="/resume" element={<ResumeBuilder />} />
+            <Route path="/jobs" element={<JobTracker />} />
+            <Route path="/tracker" element={<TrackerPage />} />
+            <Route path="/site-directory" element={<SiteDirectory />} />
             {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
             <Route path="*" element={<NotFound />} />
           </Routes>

@@ -25,7 +25,14 @@ const PIE_COLORS = ["#1B3A2F", "#C9A961", "#3D7A5F", "#B0B0B0", "#D4C8A0"];
 export default function ResultsColumnZhTw({ scenario, currency, scenarios, activeId }: ResultsColumnProps) {
   const calc = calcScenario(scenario);
   const { isUnlocked, unlock } = useEmailGate();
-  const fmtC = (n: number) => formatCurrency(n, currency, scenario.fx_rate);
+  const fmtC = (n: number) => {
+    const converted = currency === "TWD" ? n : n / (scenario.fx_rate || 1);
+    const symbol = currency === "TWD" ? "NT$" : currency === "USD" ? "US$" : currency;
+    const abs = Math.abs(converted);
+    if (abs >= 100_000_000) return `${symbol}${(converted / 100_000_000).toFixed(2)}億`;
+    if (abs >= 10_000) return `${symbol}${(converted / 10_000).toFixed(1)}萬`;
+    return `${symbol}${Math.round(converted).toLocaleString()}`;
+  };
   const [growthOn, setGrowthOn] = useState(false);
   const [growthRate, setGrowthRate] = useState(3);
 
@@ -92,7 +99,7 @@ export default function ResultsColumnZhTw({ scenario, currency, scenarios, activ
         </a>
       </div>
 
-      <EmailGateOverlay isUnlocked={isUnlocked} onUnlock={unlock} headline="解鎖完整分析" subtext="輸入你的 Email 查看薪酬明細、4年預測和情境比較。">
+      <EmailGateOverlay isUnlocked={isUnlocked} onUnlock={unlock} headline="解鎖完整分析" subtext="輸入你的 Email 查看薪酬明細、4年預測和情境比較。" buttonText="解鎖完整分析" footerText="每週談判技巧，隨時取消訂閱。" errorText="請輸入有效的 Email 地址。">
         <div className="space-y-6">
           <div className="bg-card border border-border rounded-2xl p-6 md:p-8">
             <h3 className="font-heading text-lg font-bold text-foreground mb-4">薪酬組成</h3>
@@ -102,7 +109,7 @@ export default function ResultsColumnZhTw({ scenario, currency, scenarios, activ
                   <Pie data={pieData} dataKey="value" nameKey="name" cx="50%" cy="50%" innerRadius={50} outerRadius={90} strokeWidth={2} stroke="#FBF7F0">
                     {pieData.map((_, i) => (<Cell key={i} fill={PIE_COLORS[i % PIE_COLORS.length]} />))}
                   </Pie>
-                  <Tooltip formatter={(value: number) => fmtC(value)} contentStyle={{ backgroundColor: "#fff", border: "1px solid #e5e5e5", borderRadius: "8px", fontSize: "13px" }} />
+                  <Tooltip formatter={(value: number) => fmtC(value)} contentStyle={{ backgroundColor: "hsl(var(--card))", border: "1px solid hsl(var(--border))", borderRadius: "12px", fontSize: "13px", padding: "10px 14px", boxShadow: "0 4px 12px rgba(0,0,0,0.08)" }} />
                   <Legend verticalAlign="bottom" iconType="circle" wrapperStyle={{ fontSize: "12px" }} />
                 </PieChart>
               </ResponsiveContainer>
@@ -111,20 +118,31 @@ export default function ResultsColumnZhTw({ scenario, currency, scenarios, activ
 
           <div className="bg-card border border-border rounded-2xl p-6 md:p-8">
             <h3 className="font-heading text-lg font-bold text-foreground mb-4">多年預測</h3>
-            <div className="h-72">
+            <div className="h-[400px] md:h-[480px]">
               <ResponsiveContainer width="100%" height="100%">
                 <BarChart data={barData}>
-                  <CartesianGrid strokeDasharray="3 3" stroke="#E5E5E5" />
-                  <XAxis dataKey="name" tick={{ fontSize: 12 }} />
-                  <YAxis tickFormatter={(v) => `${Math.round(v / 1000)}k`} tick={{ fontSize: 11 }} />
-                  <Tooltip formatter={(value: number) => fmtC(value)} contentStyle={{ backgroundColor: "#fff", border: "1px solid #e5e5e5", borderRadius: "8px", fontSize: "13px" }} />
-                  <Legend wrapperStyle={{ fontSize: "12px" }} />
+                  <CartesianGrid strokeDasharray="3 3" stroke="hsl(var(--border))" vertical={false} />
+                  <XAxis dataKey="name" tick={{ fontSize: 12, fill: "hsl(var(--muted-foreground))" }} axisLine={{ stroke: "hsl(var(--border))" }} tickLine={false} />
+                  <YAxis tickFormatter={(v) => `${Math.round(v / 1000)}k`} tick={{ fontSize: 11, fill: "hsl(var(--muted-foreground))" }} axisLine={false} tickLine={false} width={48} />
+                  <Tooltip
+                    formatter={(value: number) => fmtC(value)}
+                    contentStyle={{
+                      backgroundColor: "hsl(var(--card))",
+                      border: "1px solid hsl(var(--border))",
+                      borderRadius: "12px",
+                      fontSize: "13px",
+                      padding: "10px 14px",
+                      boxShadow: "0 4px 12px rgba(0,0,0,0.08)",
+                    }}
+                    cursor={{ fill: "hsl(var(--muted) / 0.3)" }}
+                  />
+                  <Legend wrapperStyle={{ fontSize: "13px", paddingTop: "12px" }} iconType="circle" iconSize={10} />
                   <Bar dataKey="底薪" stackId="a" fill="#1B3A2F" />
                   <Bar dataKey="獎金" stackId="a" fill="#C9A961" />
                   <Bar dataKey="股票" stackId="a" fill="#3D7A5F" />
                   <Bar dataKey="簽約" stackId="a" fill="#B0B0B0" />
                   <Bar dataKey="福利" stackId="a" fill="#D4C8A0" />
-                  <Bar dataKey="假期" stackId="a" fill="#8B7355" />
+                  <Bar dataKey="假期" stackId="a" fill="#8B7355" radius={[4, 4, 0, 0]} />
                 </BarChart>
               </ResponsiveContainer>
             </div>
@@ -182,24 +200,7 @@ export default function ResultsColumnZhTw({ scenario, currency, scenarios, activ
         </div>
       </EmailGateOverlay>
 
-      {scenarios && activeId && scenarios.length >= 2 && (
-        <ScenarioComparison scenarios={scenarios} activeId={activeId} currency={currency} locale="zh-tw" />
-      )}
-
-      <NegotiationImpactZhTw currentComp={scenario.current_comp_twd || undefined} currency={currency} fxRate={scenario.fx_rate} />
-
-      <div className="rounded-2xl p-8 print:hidden" style={{ backgroundColor: "#1A1A1A" }}>
-        <div className="w-10 h-1 rounded-full mb-4" style={{ backgroundColor: "#C9A961" }} />
-        <h3 className="font-heading text-xl font-bold mb-3" style={{ color: "#FBF7F0" }}>
-          大多數候選人在談判中少拿 10-20%。
-        </h3>
-        <p className="text-sm mb-6 leading-relaxed" style={{ color: "#A0A0A0" }}>
-          我曾協助 Google、Uber 和 Meta 的專業人士談判更好的 Offer。如果你正在比較方案，我可以告訴你什麼是合理的，什麼可以爭取。
-        </p>
-        <a href="https://james.careers/#coaching" target="_blank" rel="noopener noreferrer" className="inline-flex h-11 px-6 items-center justify-center rounded-lg font-semibold text-sm transition-transform hover:scale-[1.02]" style={{ backgroundColor: "#C9A961", color: "#1B3A2F" }}>
-          預約免費策略諮詢
-        </a>
-      </div>
+      {/* Moved to parent for full-width layout */}
     </div>
   );
 }

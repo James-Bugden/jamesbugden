@@ -1,22 +1,21 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
 import { Helmet } from "react-helmet-async";
-import { Plus, Copy, Sparkles, Trash2, RotateCcw, ArrowRight, Send } from "lucide-react";
+import { Plus, Copy, Sparkles, Trash2, RotateCcw, ArrowRight } from "lucide-react";
 import LanguageToggle from "@/components/LanguageToggle";
 import { Button } from "@/components/ui/button";
 import {
   Select, SelectContent, SelectItem, SelectTrigger, SelectValue,
 } from "@/components/ui/select";
-import {
-  Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription,
-} from "@/components/ui/dialog";
-import { Textarea } from "@/components/ui/textarea";
+import FeedbackBox from "@/components/FeedbackBox";
 import { CURRENCY_OPTIONS } from "@/components/offer-compass/types";
 import type { Currency } from "@/components/offer-compass/types";
 import { useScenarios } from "@/hooks/useScenarios";
 import { useDisplayCurrency } from "@/hooks/useDisplayCurrency";
 import ScenarioInputZhTw from "@/components/offer-compass/ScenarioInputZhTw";
 import ResultsColumnZhTw from "@/components/offer-compass/ResultsColumnZhTw";
+import ScenarioComparison from "@/components/offer-compass/ScenarioComparison";
+import NegotiationImpactZhTw from "@/components/offer-compass/NegotiationImpactZhTw";
 
 export default function OfferCompassZhTw() {
   const {
@@ -25,14 +24,6 @@ export default function OfferCompassZhTw() {
   } = useScenarios();
 
   const { currency, setCurrency } = useDisplayCurrency();
-  const [feedbackOpen, setFeedbackOpen] = useState(false);
-  const [feedbackText, setFeedbackText] = useState("");
-
-  const handleSendFeedback = () => {
-    window.location.href = `mailto:james@james.careers?subject=Offer Calculator 意見回饋&body=${encodeURIComponent(feedbackText)}`;
-    setFeedbackOpen(false);
-    setFeedbackText("");
-  };
 
   return (
     <>
@@ -50,7 +41,7 @@ export default function OfferCompassZhTw() {
               </Link>
               <span className="text-white/30">|</span>
               <h1 className="font-heading text-lg font-bold text-white">Offer 計算機</h1>
-              <span className="hidden md:inline text-white/50 text-xs">免費工具 · 由在台灣談判過 750+ 外商 Offer 的獵頭打造</span>
+              <span className="hidden md:inline text-white/50 text-xs">免費工具 · 由談判過 750+ Offer 的招募專家打造</span>
             </div>
             <LanguageToggle variant="nav" />
           </div>
@@ -99,36 +90,51 @@ export default function OfferCompassZhTw() {
           </div>
         </div>
 
-        <div className="max-w-7xl mx-auto px-4 md:px-6 py-6 md:py-8">
+        <div className="max-w-7xl mx-auto px-4 md:px-6 py-6 md:py-8 space-y-8">
           {active && (
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 lg:gap-8 items-start">
-              <div className="print:hidden">
-                <ScenarioInputZhTw scenario={active} onChange={updateActive} currency={currency} onLoadExample={() => loadExample("zh-tw")} />
+            <>
+              <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 lg:gap-8 items-start">
+                <div className="print:hidden">
+                  <ScenarioInputZhTw scenario={active} onChange={updateActive} currency={currency} onLoadExample={() => loadExample("zh-tw")} />
+                </div>
+                <div className="lg:sticky lg:top-6">
+                  <ResultsColumnZhTw scenario={active} currency={currency} scenarios={scenarios} activeId={activeId} />
+                </div>
               </div>
-              <div className="lg:sticky lg:top-6">
-                <ResultsColumnZhTw scenario={active} currency={currency} scenarios={scenarios} activeId={activeId} />
+
+              {/* Full-width Scenario Comparison */}
+              {(scenarios.length >= 2 || active.current_comp_twd > 0) && (
+                <ScenarioComparison scenarios={scenarios} activeId={activeId} currency={currency} locale="zh-tw" />
+              )}
+
+              {/* Negotiation Impact — constrained width */}
+              <div className="max-w-4xl mx-auto">
+                <NegotiationImpactZhTw currentComp={active.current_comp_twd || undefined} currency={currency} fxRate={active.fx_rate} />
               </div>
-            </div>
+
+              {/* Coaching Upsell */}
+              <div className="max-w-4xl mx-auto rounded-2xl p-8 print:hidden" style={{ backgroundColor: "#1A1A1A" }}>
+                <div className="w-10 h-1 rounded-full mb-4" style={{ backgroundColor: "#C9A961" }} />
+                <h3 className="font-heading text-xl font-bold mb-3" style={{ color: "#FBF7F0" }}>
+                  大多數候選人在談判中少拿 10-20%。
+                </h3>
+                <p className="text-sm mb-6 leading-relaxed" style={{ color: "#A0A0A0" }}>
+                  我曾協助 Google、Uber 和 Meta 的專業人士談判更好的 Offer。如果你正在比較方案，我可以告訴你什麼是合理的，什麼可以爭取。
+                </p>
+                <a href="https://james.careers/#coaching" target="_blank" rel="noopener noreferrer" className="inline-flex h-11 px-6 items-center justify-center rounded-lg font-semibold text-sm transition-transform hover:scale-[1.02]" style={{ backgroundColor: "#C9A961", color: "#1B3A2F" }}>
+                  預約免費策略諮詢
+                </a>
+              </div>
+
+              <FeedbackBox locale="zh-tw" />
+            </>
           )}
         </div>
 
         <div className="hidden print:block print:mt-12 print:text-center print:text-xs print:text-muted-foreground print:border-t print:border-border print:pt-4">
-          <p>本文件僅供估算參考。james@james.careers · james.careers</p>
+          <p>本文件僅供估算參考。james@jamesbugden.com · james.careers</p>
         </div>
       </div>
-
-      <Dialog open={feedbackOpen} onOpenChange={setFeedbackOpen}>
-        <DialogContent className="sm:max-w-md">
-          <DialogHeader>
-            <DialogTitle>意見回饋</DialogTitle>
-            <DialogDescription>訊息將發送至 james@james.careers</DialogDescription>
-          </DialogHeader>
-          <Textarea value={feedbackText} onChange={(e) => setFeedbackText(e.target.value)} placeholder="你有什麼想法？" rows={5} />
-          <Button onClick={handleSendFeedback} disabled={!feedbackText.trim()} className="w-full">
-            <Send className="w-4 h-4 mr-2" /> 透過 Email 發送
-          </Button>
-        </DialogContent>
-      </Dialog>
     </>
   );
 }

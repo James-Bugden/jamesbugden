@@ -2,11 +2,14 @@ import { Calculator, ArrowRightLeft, TrendingUp, BarChart3 } from "lucide-react"
 
 export default function OfferCalculatorCTA() {
   return (
-    <section id="calculator" className="py-14 md:py-20 px-5 md:px-6 bg-background">
+    <section id="calculator" className="py-14 md:py-20 px-5 md:px-6 bg-card border-y border-border">
       <div className="container mx-auto max-w-3xl text-center">
         <h2 className="font-heading text-3xl md:text-4xl lg:text-5xl text-foreground mb-3">
-          Got an Offer? Know What It's Really&nbsp;Worth.
+          Got an Offer?
         </h2>
+        <p className="text-base md:text-lg text-muted-foreground mb-10 max-w-2xl mx-auto">
+          See your true total compensation.
+        </p>
 
         {/* Card */}
         <div className="bg-card border border-border rounded-2xl p-8 md:p-10 max-w-xl mx-auto shadow-[0_2px_12px_rgba(0,0,0,0.06)] hover:shadow-[0_4px_20px_rgba(0,0,0,0.10)] transition-shadow duration-200">
@@ -32,7 +35,7 @@ export default function OfferCalculatorCTA() {
           </div>
 
           <a
-            href="/offer-compass"
+            href="/offer-calculator"
             className="inline-flex h-12 px-8 items-center justify-center rounded-lg btn-gold text-base font-semibold"
           >
             Calculate My Offer

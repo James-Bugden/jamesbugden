@@ -6,6 +6,7 @@ import juliePhoto from "@/assets/testimonials/julie.webp";
 import cynthiaPhoto from "@/assets/testimonials/cynthia.webp";
 import pinweiPhoto from "@/assets/testimonials/pinwei.webp";
 import airuPhoto from "@/assets/testimonials/airu.png";
+import omarPhoto from "@/assets/testimonials/omar-li.jpg";
 
 /* ── Data ── */
 const featured = {
@@ -26,7 +27,7 @@ const scrollCards = [
     hook: "His advice was clear, practical, and tailored to my specific situation.",
     full: "I had an excellent experience talking with James on salary negotiation. His advice was clear, practical, and tailored to my specific situation. He not only helped me understand my market value better, but also gave me the confidence and strategies to communicate professionally during negotiations. Throughout the process, he was supportive, insightful, and genuinely invested in my success. I highly recommend his services to anyone looking to grow their career and approach salary discussions with clarity and confidence.",
     name: "Omar Li",
-    photo: undefined as string | undefined,
+    photo: omarPhoto,
   },
   {
     hook: "I'm really grateful to have understood what each stakeholder values beforehand. It made a huge difference.",
@@ -91,6 +92,12 @@ const remainingTestimonials = [
     hook: "Your review helped me discover my own strengths and where I can keep improving!",
     full: "Although this resume review came a bit late, I think it helped a lot! Sometimes we have blind spots, and your review really helped me discover my own strengths and where I can keep improving on my resume!",
     name: "Charlene Lee",
+    photo: undefined as string | undefined,
+  },
+  {
+    hook: "Learning to read between the lines during interviews to strengthen your negotiation leverage is incredibly comprehensive and practical knowledge.",
+    full: "Huge thanks to James for the help! Through this consultation, I realized that salary negotiation actually starts from the very first interaction with the recruiter. You need to understand the dynamics between yourself, the recruiter, and the hiring manager, and learn to pick up on subtle cues during interviews to strengthen your negotiation position. This is incredibly comprehensive and practical knowledge.",
+    name: "Sean Wang",
     photo: undefined as string | undefined,
   },
 ];

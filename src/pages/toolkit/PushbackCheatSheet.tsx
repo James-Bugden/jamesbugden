@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import { ArrowLeft, Copy, Share2, Check } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useToast } from "@/hooks/use-toast";
+import { nativeShare } from "@/lib/share";
 import ToolkitHeader from "@/components/toolkit/ToolkitHeader";
 import ToolkitFooter from "@/components/toolkit/ToolkitFooter";
 import ToolkitNav from "@/components/toolkit/ToolkitNav";
@@ -11,26 +12,26 @@ const mainCards = [
   {
     number: 1,
     theySay: "This is the standard offer for this level.",
-    translation: "Monthly base might be locked to a pay grade — but bonuses, allowances, and review timing usually are not.",
-    youSay: "I understand the pay structure. If the monthly base is firm, is there flexibility on the guaranteed year-end bonus or the timing of my first performance review? An earlier review would give me a chance to demonstrate my value sooner.",
+    translation: "Monthly base is locked to a pay grade. But bonuses, allowances, and review timing usually are not.",
+    youSay: "I understand the pay structure. If the monthly base is firm, is there flexibility on the guaranteed year-end bonus or the timing of my first performance review? An earlier review gives me a chance to show my value sooner.",
   },
   {
     number: 2,
     theySay: "We don't have the budget.",
-    translation: "The budget for base salary might be locked — but sign-on bonuses, training budgets, and allowances often come from different budget lines.",
-    youSay: "I completely understand budget constraints. I also know that similar roles at comparable companies are offering monthly packages in the NT$[X–Y] range. If the base is firm, is there room to adjust the year-end guarantee or add a sign-on bonus to align the total annual package?",
+    translation: "The budget for base salary is locked. But sign-on bonuses, training budgets, and allowances often come from different budget lines.",
+    youSay: "I understand budget constraints. I also know similar roles at comparable companies offer monthly packages in the NT$[X to Y] range. If the base is firm, is there room to adjust the year-end guarantee or add a sign-on bonus to align the total annual package?",
   },
   {
     number: 3,
     theySay: "This is already a competitive offer.",
-    translation: "They want you to feel like you're asking for too much. \"Competitive\" means \"in the range.\" It doesn't mean \"at the top.\"",
-    youSay: "I agree it's a strong offer, and I appreciate it. Based on my experience level and the contributions I'll be making, I was expecting something closer to NT$[X]/month. I'd love to work together to find a package that reflects that.",
+    translation: "They want you to feel like you're asking for too much. \"Competitive\" means \"in the range.\" It does not mean \"at the top.\"",
+    youSay: "I agree it's a strong offer, and I appreciate it. Based on my experience level and the contributions I'll be making, I was expecting something closer to NT$[X]/month. I'd love to work together to find a package reflecting that.",
   },
   {
     number: 4,
     theySay: "We need to maintain internal equity.",
-    translation: "Internal salary consistency matters. Many companies have rigid pay grade systems — that's exactly why non-salary components are your leverage.",
-    youSay: "That makes complete sense. Since internal equity is important, could we look at a guaranteed 3-month year-end bonus or an accelerated review cycle? Those wouldn't affect the salary structure but would help align the total annual compensation.",
+    translation: "Internal salary consistency matters. Many companies have rigid pay grade systems. This is exactly why non-salary components are your leverage.",
+    youSay: "That makes complete sense. Since internal equity is important, could we look at a guaranteed 3-month year-end bonus or an accelerated review cycle? Those would not affect the salary structure but would help align the total annual compensation.",
   },
 ];
 
@@ -39,15 +40,15 @@ const bonusScripts = [
     id: "competing",
     title: "Competing Offer",
     situation: "You have a written offer from another company.",
-    youSay: "I want to be transparent — I've received another offer with a compelling total annual package. However, [Company] remains my top choice. Is there flexibility to adjust the offer to align more closely?",
-    key: "No ultimatum, no threat. You're giving them a reason to move, while making it clear you want to be there.",
+    youSay: "I want to be transparent. I've received another offer with a strong total annual package. [Company] remains my top choice. Is there flexibility to adjust the offer to align more closely?",
+    key: "No ultimatum, no threat. You give them a reason to move while making it clear you want to be there.",
   },
   {
     id: "deadline",
     title: "Deadline Extension",
-    situation: "They're pressuring you to decide quickly.",
-    youSay: "I really appreciate the offer and I'm excited about the opportunity. Making a career decision is important to me — would it be possible to extend the deadline by one week so I can properly evaluate? I want to make sure I'm fully committed when I join.",
-    followUp: "Then accelerate other companies: \"I've received an offer with a deadline. Your company remains my top choice — is there any flexibility to expedite the process?\"",
+    situation: "They're pressuring you to decide fast.",
+    youSay: "I appreciate the offer and I'm excited about the opportunity. Making a career decision is important to me. Would it be possible to extend the deadline by one week so I properly evaluate? I want to be fully committed when I join.",
+    followUp: "Then speed up other companies: \"I've received an offer with a deadline. Your company remains my top choice. Is there any way to move faster?\"",
   },
 ];
 
@@ -73,11 +74,13 @@ const PushbackCheatSheet = () => {
     setTimeout(() => setCopied(false), 2000);
   };
 
-  const shareUrl = () => {
-    navigator.clipboard.writeText(window.location.href);
-    setShared(true);
-    toast({ title: "Link copied!", description: "Share it with anyone who needs it." });
-    setTimeout(() => setShared(false), 2000);
+  const shareUrl = async () => {
+    const didShare = await nativeShare();
+    if (!didShare) {
+      setShared(true);
+      toast({ title: "Link copied!", description: "Share it with anyone who needs it." });
+      setTimeout(() => setShared(false), 2000);
+    }
   };
 
   return (
@@ -98,14 +101,14 @@ const PushbackCheatSheet = () => {
             Pushback Response Cheat Sheet
           </h1>
           <p className="text-lg text-cream-90">
-            They will push back. Here's what to say.
+            They will push back. Here is what to say.
           </p>
         </div>
       </section>
 
       {/* Toolkit Navigation */}
       <div className="pt-8">
-        <ToolkitNav currentTemplate="T5" />
+        <ToolkitNav currentTemplate="pushback" />
       </div>
 
       {/* Main Cards */}
@@ -176,7 +179,7 @@ const PushbackCheatSheet = () => {
           <div className="bg-gold/10 rounded-xl p-6 border-l-4 border-gold">
             <h3 className="font-heading text-lg text-gold mb-3">📌 Remember</h3>
             <p className="text-foreground">
-              HR isn't your enemy. They want to close the deal too. Your job is to make it easy for them to justify paying you more — give them data they can take to their manager. Framing your ask as "what's fair for this level in the market" works far better than "what I want."
+              HR is not your enemy. They want to close the deal too. Your job is to make it easy for them to justify paying you more. Give them data they bring to their manager. Framing your ask as "what's fair for this level in the market" works far better than "what I want."
             </p>
           </div>
         </div>

@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
 import { Helmet } from "react-helmet-async";
-import { Plus, Copy, Sparkles, Trash2, RotateCcw, ArrowRight, X, Send } from "lucide-react";
+import { Plus, Copy, Sparkles, Trash2, RotateCcw, ArrowRight, X } from "lucide-react";
 import LanguageToggle from "@/components/LanguageToggle";
 import { Button } from "@/components/ui/button";
 import {
@@ -11,20 +11,15 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import {
-  Dialog,
-  DialogContent,
-  DialogHeader,
-  DialogTitle,
-  DialogDescription,
-} from "@/components/ui/dialog";
-import { Textarea } from "@/components/ui/textarea";
+import FeedbackBox from "@/components/FeedbackBox";
 import { CURRENCY_OPTIONS } from "@/components/offer-compass/types";
 import type { Currency } from "@/components/offer-compass/types";
 import { useScenarios } from "@/hooks/useScenarios";
 import { useDisplayCurrency } from "@/hooks/useDisplayCurrency";
 import ScenarioInput from "@/components/offer-compass/ScenarioInput";
 import ResultsColumn from "@/components/offer-compass/ResultsColumn";
+import ScenarioComparison from "@/components/offer-compass/ScenarioComparison";
+import NegotiationImpact from "@/components/offer-compass/NegotiationImpact";
 
 export default function OfferCompass() {
   const {
@@ -42,14 +37,6 @@ export default function OfferCompass() {
 
   const { currency, setCurrency } = useDisplayCurrency();
   const [disclaimerVisible, setDisclaimerVisible] = useState(true);
-  const [feedbackOpen, setFeedbackOpen] = useState(false);
-  const [feedbackText, setFeedbackText] = useState("");
-
-  const handleSendFeedback = () => {
-    window.location.href = `mailto:james@james.careers?subject=Offer Calculator Feedback&body=${encodeURIComponent(feedbackText)}`;
-    setFeedbackOpen(false);
-    setFeedbackText("");
-  };
 
   return (
     <>
@@ -69,7 +56,7 @@ export default function OfferCompass() {
               </Link>
               <span className="text-white/30">|</span>
               <h1 className="font-heading text-lg font-bold text-white">Offer Calculator</h1>
-              <span className="hidden md:inline text-white/50 text-xs">Free tool · Built by a recruiter who's negotiated 750+ foreign company offers in Taiwan</span>
+              <span className="hidden md:inline text-white/50 text-xs">Free tool · Built by a recruiter who's negotiated 750+ offers</span>
             </div>
             <LanguageToggle variant="nav" />
           </div>
@@ -129,43 +116,59 @@ export default function OfferCompass() {
         </div>
 
         {/* ── Main Content ── */}
-        <div className="max-w-7xl mx-auto px-4 md:px-6 py-6 md:py-8">
+        <div className="max-w-7xl mx-auto px-4 md:px-6 py-6 md:py-8 space-y-8">
           {active && (
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 lg:gap-8 items-start">
-              <div className="print:hidden">
-                <ScenarioInput scenario={active} onChange={updateActive} currency={currency} onLoadExample={() => loadExample("en")} />
+            <>
+              <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 lg:gap-8 items-start">
+                <div className="print:hidden">
+                  <ScenarioInput scenario={active} onChange={updateActive} currency={currency} onLoadExample={() => loadExample("en")} />
+                </div>
+                <div className="lg:sticky lg:top-6">
+                  <ResultsColumn scenario={active} currency={currency} scenarios={scenarios} activeId={activeId} />
+                </div>
               </div>
-              <div className="lg:sticky lg:top-6">
-                <ResultsColumn scenario={active} currency={currency} scenarios={scenarios} activeId={activeId} />
+
+              {/* Full-width Scenario Comparison */}
+              {(scenarios.length >= 2 || active.current_comp_twd > 0) && (
+                <ScenarioComparison scenarios={scenarios} activeId={activeId} currency={currency} />
+              )}
+
+              {/* Negotiation Impact — constrained width */}
+              <div className="max-w-4xl mx-auto">
+                <NegotiationImpact currentComp={active.current_comp_twd || undefined} currency={currency} fxRate={active.fx_rate} />
               </div>
-            </div>
+
+              {/* Coaching Upsell */}
+              <div className="max-w-4xl mx-auto rounded-2xl p-8 print:hidden" style={{ backgroundColor: "#1A1A1A" }}>
+                <div className="w-10 h-1 rounded-full mb-4" style={{ backgroundColor: "#C9A961" }} />
+                <h3 className="font-heading text-xl font-bold mb-3" style={{ color: "#FBF7F0" }}>
+                  Most candidates leave 10-20% on the table.
+                </h3>
+                <p className="text-sm mb-6 leading-relaxed" style={{ color: "#A0A0A0" }}>
+                  I've helped professionals at Google, Uber, and Meta negotiate better offers. If you are comparing packages, I can tell you what is realistic and what to push back on.
+                </p>
+                <a
+                  href="https://james.careers/#coaching"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex h-11 px-6 items-center justify-center rounded-lg font-semibold text-sm transition-transform hover:scale-[1.02]"
+                  style={{ backgroundColor: "#C9A961", color: "#1B3A2F" }}
+                >
+                  Book a Free Strategy Call
+                </a>
+              </div>
+
+              <FeedbackBox locale="en" />
+            </>
           )}
         </div>
 
         {/* ── Print footer ── */}
         <div className="hidden print:block print:mt-12 print:text-center print:text-xs print:text-muted-foreground print:border-t print:border-border print:pt-4">
-          <p>This document is for estimation only. james@james.careers · james.careers</p>
+          <p>This document is for estimation only. james@jamesbugden.com · james.careers</p>
         </div>
       </div>
 
-      {/* ── Feedback Modal ── */}
-      <Dialog open={feedbackOpen} onOpenChange={setFeedbackOpen}>
-        <DialogContent className="sm:max-w-md">
-          <DialogHeader>
-            <DialogTitle>Send Feedback</DialogTitle>
-            <DialogDescription>Messages go to james@james.careers</DialogDescription>
-          </DialogHeader>
-          <Textarea
-            value={feedbackText}
-            onChange={(e) => setFeedbackText(e.target.value)}
-            placeholder="What's on your mind?"
-            rows={5}
-          />
-          <Button onClick={handleSendFeedback} disabled={!feedbackText.trim()} className="w-full">
-            <Send className="w-4 h-4 mr-2" /> Send via Email
-          </Button>
-        </DialogContent>
-      </Dialog>
     </>
   );
 }

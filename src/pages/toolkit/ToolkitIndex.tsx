@@ -16,7 +16,7 @@ const templates = [
     id: "T2",
     email: "Email 2",
     title: "Offer Response Script",
-    description: "3-step flowchart for the 30 seconds after receiving an offer",
+    description: "A 3-step flowchart for the 30 seconds after you get an offer",
     href: "/toolkit/offer-response",
     icon: FileText,
   },
@@ -24,7 +24,7 @@ const templates = [
     id: "T3",
     email: "Email 3",
     title: "Counteroffer Email Templates",
-    description: "4 pre-written emails for different negotiation scenarios",
+    description: "4 pre-written emails for different negotiation situations",
     href: "/toolkit/counteroffer",
     icon: FileText,
   },
@@ -70,18 +70,11 @@ const ToolkitIndex = () => {
       {/* Hero */}
       <section className="bg-executive-green py-16 md:py-24 px-5 md:px-6 relative">
         <div className="container mx-auto max-w-4xl text-center relative z-10">
-          <Link 
-            to="/" 
-            className="inline-flex items-center gap-2 text-cream-70 hover:text-cream transition-colors mb-6 text-sm"
-          >
-            <ArrowLeft className="w-4 h-4" />
-            Back to Home
-          </Link>
           <h1 className="font-heading text-4xl md:text-5xl lg:text-6xl text-cream mb-4">
             Salary Negotiation Toolkit
           </h1>
           <p className="text-lg md:text-xl text-cream-90 max-w-2xl mx-auto">
-            7 free templates to help you negotiate your salary with confidence. Taiwan-localized with NT$ and bilingual phrasing.
+            7 free templates to help you negotiate your salary with confidence.
           </p>
         </div>
       </section>
@@ -133,7 +126,7 @@ const ToolkitIndex = () => {
                 Get the Complete 5-Email Series
               </h2>
               <p className="text-cream-90 mb-6 max-w-xl mx-auto">
-                These templates are part of a free 5-email salary negotiation course. Subscribe to get all the context and strategies.
+                These templates are part of a free 5-email salary negotiation course. Subscribe to get all the strategies.
               </p>
               <Link
                 to="/"

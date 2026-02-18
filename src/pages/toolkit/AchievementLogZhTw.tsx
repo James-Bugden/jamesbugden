@@ -1,8 +1,9 @@
 import { useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { ArrowLeft, Copy, Share2, Check, Printer } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useToast } from "@/hooks/use-toast";
+import { nativeShare } from "@/lib/share";
 import ToolkitHeaderZhTw from "@/components/toolkit/ToolkitHeaderZhTw";
 import ToolkitFooterZhTw from "@/components/toolkit/ToolkitFooterZhTw";
 import ToolkitNavZhTw from "@/components/toolkit/ToolkitNavZhTw";
@@ -21,6 +22,7 @@ const goodExamples = [
   { bad: "幫了同事", good: "帶新人做第一次 code review。她現在獨立 review 了" },
   { bad: "做了業務", good: "成交 [客戶] NT$800K 案子。本季最短銷售週期（18 天）" },
   { bad: "修了 bug", good: "45 分鐘內解決 P1 線上事故。影響 12K 用戶" },
+  { bad: "上了課", good: "完成 AWS 解決方案架構師認證。用 VPC 知識降低基礎設施成本" },
 ];
 
 const categories = [
@@ -32,7 +34,6 @@ const categories = [
 
 const AchievementLogZhTw = () => {
   const { toast } = useToast();
-  const navigate = useNavigate();
   const [copied, setCopied] = useState(false);
   const [shared, setShared] = useState(false);
 
@@ -53,10 +54,13 @@ ________ 那週
     setTimeout(() => setCopied(false), 2000);
   };
 
-  const shareUrl = () => {
-    navigator.clipboard.writeText(window.location.href);
-    setShared(true);
-    toast({ title: "已複製連結！", description: "分享給需要的人。" });
+  const shareUrl = async () => {
+    const shared = await nativeShare();
+    if (!shared) {
+      setShared(true);
+      toast({ title: "已複製連結！", description: "分享給需要的人。" });
+      setTimeout(() => setShared(false), 2000);
+    }
     setTimeout(() => setShared(false), 2000);
   };
 
@@ -66,16 +70,13 @@ ________ 那週
 
       <section className="bg-executive-green py-12 md:py-16 px-5 md:px-6 relative print:hidden">
         <div className="container mx-auto max-w-4xl text-center relative z-10">
-          <div className="flex items-center justify-center gap-4 mb-6">
-            <Link to="/zh-tw/toolkit" className="inline-flex items-center gap-2 text-cream-70 hover:text-cream transition-colors text-sm"><ArrowLeft className="w-4 h-4" />返回工具包</Link>
-            <button onClick={() => navigate("/toolkit/log")} className="px-3 py-1.5 text-sm font-semibold bg-gold/20 hover:bg-gold/30 text-gold border border-gold/40 rounded-md transition-all duration-200 hover:scale-105">EN</button>
-          </div>
+          <Link to="/zh-tw/toolkit" className="inline-flex items-center gap-2 text-cream-70 hover:text-cream transition-colors mb-6 text-sm"><ArrowLeft className="w-4 h-4" />返回工具包</Link>
           <h1 className="font-heading text-3xl md:text-4xl lg:text-5xl text-cream mb-4">每週成就記錄表</h1>
           <p className="text-lg text-cream-90">每週五花 5 分鐘。你職涯中最值得的習慣。</p>
         </div>
       </section>
 
-      <div className="pt-8 print:hidden"><ToolkitNavZhTw currentTemplate="T7" /></div>
+      <div className="pt-8 print:hidden"><ToolkitNavZhTw currentTemplate="log" /></div>
 
       <section className="pb-8 px-5 md:px-6">
         <div className="container mx-auto max-w-4xl">
@@ -89,7 +90,8 @@ ________ 那週
       <section className="pb-8 px-5 md:px-6">
         <div className="container mx-auto max-w-4xl">
           <h2 className="font-heading text-xl text-foreground mb-4">填好的範例：2026 年 2 月 3 日那週</h2>
-          <div className="bg-muted rounded-xl overflow-hidden shadow-premium print:hidden">
+          {/* Desktop table */}
+          <div className="hidden md:block bg-muted rounded-xl overflow-hidden shadow-premium print:hidden">
             <div className="overflow-x-auto">
               <table className="w-full text-sm">
                 <thead className="bg-executive text-cream"><tr><th className="text-left px-4 py-3">日</th><th className="text-left px-4 py-3">成就</th><th className="text-left px-4 py-3">影響 / 數據</th><th className="text-left px-4 py-3">類別</th></tr></thead>
@@ -97,13 +99,27 @@ ________ 那週
               </table>
             </div>
           </div>
+          {/* Mobile cards */}
+          <div className="md:hidden space-y-3 print:hidden">
+            {exampleWeek.map((row, i) => (
+              <div key={i} className="bg-card rounded-xl p-4 border border-border space-y-2">
+                <div className="flex items-center justify-between">
+                  <span className="text-xs font-bold text-muted-foreground">週{row.day}</span>
+                  <span className={`px-2 py-0.5 rounded text-xs font-medium ${row.category.includes('營收') ? 'bg-green-100 text-green-800' : row.category.includes('效率') ? 'bg-blue-100 text-blue-800' : row.category.includes('領導力') ? 'bg-purple-100 text-purple-800' : 'bg-orange-100 text-orange-800'}`}>{row.category}</span>
+                </div>
+                <p className="text-sm font-medium text-foreground">{row.achievement}</p>
+                <p className="text-xs text-muted-foreground">{row.impact}</p>
+              </div>
+            ))}
+          </div>
         </div>
       </section>
 
       <section className="pb-8 px-5 md:px-6">
         <div className="container mx-auto max-w-4xl">
           <h2 className="font-heading text-xl text-foreground mb-4">空白模板：________ 那週</h2>
-          <div className="bg-card rounded-xl overflow-hidden shadow-premium border border-border">
+          {/* Desktop table */}
+          <div className="hidden md:block bg-card rounded-xl overflow-hidden shadow-premium border border-border">
             <div className="overflow-x-auto">
               <table className="w-full text-sm">
                 <thead className="bg-muted"><tr><th className="text-left px-4 py-3">日</th><th className="text-left px-4 py-3">成就</th><th className="text-left px-4 py-3">影響 / 數據</th><th className="text-left px-4 py-3">類別</th></tr></thead>
@@ -111,19 +127,46 @@ ________ 那週
               </table>
             </div>
           </div>
+          {/* Mobile cards */}
+          <div className="md:hidden space-y-3">
+            {["一","二","三","四","五"].map((day, i) => (
+              <div key={i} className="bg-card rounded-xl p-4 border border-dashed border-border space-y-2">
+                <span className="text-xs font-bold text-muted-foreground">週{day}</span>
+                <div className="space-y-1">
+                  <p className="text-xs text-muted-foreground">成就</p>
+                  <div className="h-8 border-b border-dashed border-border" />
+                </div>
+                <div className="space-y-1">
+                  <p className="text-xs text-muted-foreground">影響 / 數據</p>
+                  <div className="h-8 border-b border-dashed border-border" />
+                </div>
+                <p className="text-xs text-muted-foreground">☐💰 ☐⚡ ☐👥 ☐💡</p>
+              </div>
+            ))}
+          </div>
         </div>
       </section>
 
       <section className="pb-8 px-5 md:px-6">
         <div className="container mx-auto max-w-4xl">
           <h2 className="font-heading text-xl text-foreground mb-4">什麼是好的記錄</h2>
-          <div className="bg-card rounded-xl overflow-hidden shadow-premium border border-border">
+          {/* Desktop table */}
+          <div className="hidden md:block bg-card rounded-xl overflow-hidden shadow-premium border border-border">
             <div className="overflow-x-auto">
               <table className="w-full text-sm">
-                <thead className="bg-muted"><tr><th className="text-left px-4 py-3 text-destructive">❌ 模糊（不要這樣寫）</th><th className="text-left px-4 py-3 text-gold">✅ 具體（這樣寫）</th></tr></thead>
+                <thead className="bg-muted"><tr><th className="text-left px-4 py-3 text-destructive">❌ 模糊</th><th className="text-left px-4 py-3 text-gold">✅ 具體</th></tr></thead>
                 <tbody>{goodExamples.map((row, i) => (<tr key={i} className="border-t border-border"><td className="px-4 py-3 text-muted-foreground">{row.bad}</td><td className="px-4 py-3">{row.good}</td></tr>))}</tbody>
               </table>
             </div>
+          </div>
+          {/* Mobile cards */}
+          <div className="md:hidden space-y-3">
+            {goodExamples.map((row, i) => (
+              <div key={i} className="bg-card rounded-xl p-4 border border-border space-y-2">
+                <p className="text-sm text-muted-foreground line-through">❌ {row.bad}</p>
+                <p className="text-sm text-foreground font-medium">✅ {row.good}</p>
+              </div>
+            ))}
           </div>
         </div>
       </section>

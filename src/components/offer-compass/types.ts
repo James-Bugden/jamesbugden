@@ -165,23 +165,61 @@ export function defaultScenario(): Scenario {
   };
 }
 
+const EXAMPLES: Array<{ en: string; zhTw: string; data: Omit<Scenario, "id" | "name"> }> = [
+  {
+    en: "Example: Senior Engineer (TW)",
+    zhTw: "範例：資深工程師（台灣）",
+    data: {
+      base_twd: 2190000, bonus_twd: 300000, equity_4y_twd: 2560000,
+      vesting_years: 4, vesting_schedule: "equal", signon_months: 2,
+      benefits_twd: 120000, holiday_twd: 50000, annual_leave_days: 15,
+      current_comp_twd: 2200000, current_base_twd: 1600000,
+      current_bonus_twd: 400000, current_equity_twd: 200000, fx_rate: 32,
+    },
+  },
+  {
+    en: "Example: Product Manager (TW)",
+    zhTw: "範例：產品經理（台灣）",
+    data: {
+      base_twd: 1800000, bonus_twd: 250000, equity_4y_twd: 1600000,
+      vesting_years: 4, vesting_schedule: "equal", signon_months: 1,
+      benefits_twd: 100000, holiday_twd: 40000, annual_leave_days: 12,
+      current_comp_twd: 1500000, current_base_twd: 1200000,
+      current_bonus_twd: 200000, current_equity_twd: 100000, fx_rate: 32,
+    },
+  },
+  {
+    en: "Example: Data Scientist (TW)",
+    zhTw: "範例：資料科學家（台灣）",
+    data: {
+      base_twd: 2400000, bonus_twd: 400000, equity_4y_twd: 3200000,
+      vesting_years: 4, vesting_schedule: "equal", signon_months: 3,
+      benefits_twd: 150000, holiday_twd: 60000, annual_leave_days: 18,
+      current_comp_twd: 1800000, current_base_twd: 1400000,
+      current_bonus_twd: 300000, current_equity_twd: 100000, fx_rate: 32,
+    },
+  },
+  {
+    en: "Example: Marketing Manager (TW)",
+    zhTw: "範例：行銷經理（台灣）",
+    data: {
+      base_twd: 1500000, bonus_twd: 200000, equity_4y_twd: 800000,
+      vesting_years: 4, vesting_schedule: "equal", signon_months: 1,
+      benefits_twd: 80000, holiday_twd: 30000, annual_leave_days: 10,
+      current_comp_twd: 1200000, current_base_twd: 1000000,
+      current_bonus_twd: 150000, current_equity_twd: 50000, fx_rate: 32,
+    },
+  },
+];
+
+let exampleIndex = 0;
+
 export function exampleScenario(locale: "en" | "zh-tw" = "en"): Scenario {
+  const ex = EXAMPLES[exampleIndex % EXAMPLES.length];
+  exampleIndex++;
   return {
     id: crypto.randomUUID(),
-    name: locale === "zh-tw" ? "範例：資深工程師（台灣）" : "Example: Senior Engineer (TW)",
-    base_twd: 2190000,
-    bonus_twd: 300000,
-    equity_4y_twd: 2560000,
-    vesting_years: 4,
-    vesting_schedule: "equal",
-    signon_months: 2,
-    benefits_twd: 120000,
-    holiday_twd: 50000,
-    annual_leave_days: 15,
-    current_comp_twd: 2200000,
-    current_base_twd: 1600000,
-    current_bonus_twd: 400000,
-    current_equity_twd: 200000,
-    fx_rate: 32,
+    name: locale === "zh-tw" ? ex.zhTw : ex.en,
+    ...ex.data,
   };
 }

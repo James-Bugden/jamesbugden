@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import { ArrowLeft, Copy, Share2, Check } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { nativeShare } from "@/lib/share";
 import { useToast } from "@/hooks/use-toast";
 import ToolkitHeader from "@/components/toolkit/ToolkitHeader";
 import ToolkitFooter from "@/components/toolkit/ToolkitFooter";
@@ -16,89 +17,88 @@ const emailTemplates = [
     subject: "Follow-Up on Offer Discussion",
     body: `Hi [HR/Recruiter Name],
 
-Thank you so much for the offer — I'm genuinely excited about the opportunity to join [Company] and contribute to [specific team or project].
+Thank you so much for the offer. I'm excited about the opportunity to join [Company] and contribute to [specific team or project].
 
-After reviewing the offer in detail, I'd love to discuss a few adjustments to better align with market rates and my experience.
+After reviewing the offer in detail, I'd love to discuss a few adjustments to better match market rates and my experience.
 
 Based on my research through Glassdoor, LinkedIn Salary, and industry benchmarks, I was expecting:
 
 • Monthly Base Salary: NT$[your target] to better match the market range for this role and experience level in [city/region]
 
-I'd love to discuss this and explore what flexibility exists. I'm very excited about the team and confident we can find a package that works for both sides.
+I'd love to discuss this and explore what flexibility exists. I'm excited about the team and confident we'll find a package for both sides.
 
 Please let me know a good time to connect.
 
 Best regards,
 [Your Name]`,
-    whyItWorks: "Opens with enthusiasm so they know you're not about to walk away. Frames the ask around market data, not personal need. Asks for ONE thing — once base is resolved, you follow up for the next component. Ends with an open door, not an ultimatum.",
+    whyItWorks: "Opens with enthusiasm so they know you're not leaving. Frames your ask around market data, not personal need. Asks for ONE thing. Once base is settled, you follow up for the next item. Ends with an open door, not a deadline.",
   },
   {
     id: "competing",
     label: "Competing Offer",
     whenToUse: "You have a written offer from another company and want this company to match or beat it.",
-    subject: "Follow-Up on Offer — Additional Context",
+    subject: "Follow-Up on Offer, Additional Context",
     body: `Hi [HR/Recruiter Name],
 
-Thank you again for the offer to join [Company] — I'm genuinely excited about the role and the team's work on [specific project].
+Thank you again for the offer to join [Company]. I'm excited about the role and the team's work on [specific project].
 
-I want to be transparent: I've received another offer with a total annual package of approximately NT$[competing TC]. I'm sharing this not as an ultimatum, but because [Company] remains my top choice and I'd love to find a way to make it work.
+I want to be upfront: I've received another offer with a total annual package of approximately NT$[competing TC]. I'm sharing this not as a threat, but because [Company] remains my top choice and I'd love to find a way to make it work.
 
 Based on the competing offer and market data, I was hoping we could discuss adjusting:
 
 • Monthly Base Salary: NT$[target] to align the total annual compensation more closely
 
-I'm confident in the value I'll bring to [team], and I'd love to discuss what flexibility exists so I can commit fully to [Company].
+I'm confident in the value I'll bring to [team], and I'd love to discuss what flexibility exists so I commit fully to [Company].
 
 Best regards,
 [Your Name]`,
-    whyItWorks: "\"I'm sharing this not as an ultimatum\" removes the threat. Naming them as your top choice gives HR motivation to fight for budget. You're giving them a concrete number to match — which makes their job easier.",
+    whyItWorks: "\"I'm sharing this not as a threat\" removes the ultimatum. Naming them as your top choice gives HR motivation to fight for budget. You give them a specific number to match, which makes their job easier.",
   },
   {
     id: "unemployed",
     label: "Currently Unemployed",
-    whenToUse: "You're between jobs and don't want your negotiating position to feel weak.",
+    whenToUse: "You're between jobs and want your negotiating position to stay strong.",
     subject: "Follow-Up on Offer Discussion",
     body: `Hi [HR/Recruiter Name],
 
-Thank you so much for the offer — I'm thrilled about the opportunity to bring my [X years] of experience in [domain] to [Company] and contribute to [specific team/project].
+Thank you so much for the offer. I'm thrilled about the opportunity to bring my [X years] of experience in [domain] to [Company] and contribute to [specific team/project].
 
-After reviewing the full package, I'd love to discuss one adjustment. Based on my research through Glassdoor, LinkedIn Salary, and conversations with industry peers, the market range for this role is NT$[X]–[Y] per month. Given my track record of [specific achievement with metric], I believe a monthly base of NT$[target] would better reflect the value I'll deliver.
+After reviewing the full package, I'd love to discuss one adjustment. Based on my research through Glassdoor, LinkedIn Salary, and conversations with industry peers, the market range for this role is NT$[X] to [Y] per month. Given my track record of [specific achievement with metric], I believe a monthly base of NT$[target] would better reflect the value I will deliver.
 
-I'm very excited about joining the team and confident we can find a package that works for both sides.
+I'm excited about joining the team and confident we'll find a package for both sides.
 
 Please let me know a good time to connect.
 
 Best regards,
 [Your Name]`,
-    whyItWorks: "Never mentions being unemployed — that's irrelevant to your market value. Leads with experience and specific results, not your situation. Uses the same market-data framing as the standard version. Your negotiating power comes from what you'll deliver, not where you're coming from.",
+    whyItWorks: "Never mentions being unemployed. It's irrelevant to your market value. Leads with experience and results, not your situation. Uses the same market-data framing as the standard version. Your negotiating power comes from what you will deliver, not where you came from.",
   },
   {
     id: "promoted",
     label: "Recently Promoted",
-    whenToUse: "You've been promoted or taken on significantly more responsibility, and the new comp doesn't reflect it.",
+    whenToUse: "You've been promoted or taken on more responsibility, and the new pay does not reflect it.",
     subject: "Discussion on Updated Compensation",
     body: `Hi [Manager/HR Name],
 
-Thank you for the opportunity to step into the [new role/title] — I'm excited about the expanded scope and the chance to [specific goal or project].
+Thank you for the opportunity to step into the [new role/title]. I'm excited about the expanded scope and the chance to [specific goal or project].
 
-As I transition into this role, I'd love to discuss aligning my compensation with the increased responsibilities. Over the past [timeframe], I've [specific achievements with metrics], and the new role involves [key new responsibilities].
+As I move into this role, I'd love to discuss aligning my pay with the increased responsibilities. Over the past [timeframe], I've [specific achievements with metrics], and the new role involves [key new responsibilities].
 
-Based on market data from Glassdoor and LinkedIn Salary, comparable roles at this level in [industry/region] are compensated at NT$[X]–[Y] per month. I'd love to discuss adjusting to NT$[target] to reflect the new scope.
+Based on market data from Glassdoor and LinkedIn Salary, comparable roles at this level in [industry/region] pay NT$[X] to [Y] per month. I'd love to discuss adjusting to NT$[target] to reflect the new scope.
 
-I'm committed to delivering results in this role and would appreciate the chance to align the package accordingly.
+I'm committed to delivering results in this role and would appreciate the chance to align the package.
 
 Best regards,
 [Your Name]`,
-    whyItWorks: "Positions the raise as natural alignment with new responsibilities — not a demand. Acknowledges the promotion with gratitude while immediately connecting it to market data. Works for both internal promotions and role expansions that came without a formal title change.",
+    whyItWorks: "Positions the raise as natural alignment with new responsibilities, not a demand. Acknowledges the promotion with gratitude while connecting it to market data. Works for both internal promotions and role expansions without a formal title change.",
   },
 ];
 
 const keyPrinciples = [
-  { title: "Open with enthusiasm", text: "They need to know you're not about to walk away" },
-  { title: "One ask per email", text: "Once base is resolved, follow up separately for bonus, equity, or benefits. Don't bundle." },
-  { title: "Market data, not personal need", text: "\"Industry benchmarks show...\" not \"I have rent to pay\"" },
-  { title: "End with an open door", text: "\"I'd love to discuss\" not \"I need an answer by Friday\"" },
-  { title: "Even if you're happy with the offer", text: "Ask: \"Are there any areas of the package that have flexibility?\" The answer is usually yes." },
+  { title: "Open with enthusiasm", text: "They need to know you're not about to walk away." },
+  { title: "Market data, not personal need", text: "\"Industry benchmarks show...\" not \"I have rent to pay.\"" },
+  { title: "End with an open door", text: "\"I'd love to discuss\" not \"I need an answer by Friday.\"" },
+  { title: "Even if you're happy with the offer", text: "Ask: \"Are there any areas of the package with flexibility?\" The answer is usually yes." },
 ];
 
 const CounterofferEmail = () => {
@@ -114,11 +114,13 @@ const CounterofferEmail = () => {
     setTimeout(() => setCopiedId(null), 2000);
   };
 
-  const shareUrl = () => {
-    navigator.clipboard.writeText(window.location.href);
-    setShared(true);
-    toast({ title: "Link copied!", description: "Share it with anyone who needs it." });
-    setTimeout(() => setShared(false), 2000);
+  const shareUrl = async () => {
+    const didShare = await nativeShare();
+    if (!didShare) {
+      setShared(true);
+      toast({ title: "Link copied!", description: "Share it with anyone who needs it." });
+      setTimeout(() => setShared(false), 2000);
+    }
   };
 
   // Helper to highlight placeholders
@@ -161,7 +163,7 @@ const CounterofferEmail = () => {
 
       {/* Toolkit Navigation */}
       <div className="pt-8">
-        <ToolkitNav currentTemplate="T3" />
+        <ToolkitNav currentTemplate="counter" />
       </div>
 
       {/* Email Templates */}

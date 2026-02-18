@@ -146,7 +146,7 @@ export default function ResultsColumn({ scenario, currency, scenarios, activeId 
                   </Pie>
                   <Tooltip
                     formatter={(value: number) => fmtC(value)}
-                    contentStyle={{ backgroundColor: "#fff", border: "1px solid #e5e5e5", borderRadius: "8px", fontSize: "13px" }}
+                    contentStyle={{ backgroundColor: "hsl(var(--card))", border: "1px solid hsl(var(--border))", borderRadius: "12px", fontSize: "13px", padding: "10px 14px", boxShadow: "0 4px 12px rgba(0,0,0,0.08)" }}
                   />
                   <Legend
                     verticalAlign="bottom"
@@ -161,23 +161,31 @@ export default function ResultsColumn({ scenario, currency, scenarios, activeId 
           {/* Multi-Year Projection */}
           <div className="bg-card border border-border rounded-2xl p-6 md:p-8">
             <h3 className="font-heading text-lg font-bold text-foreground mb-4">Multi-Year Projection</h3>
-            <div className="h-72">
+            <div className="h-[400px] md:h-[480px]">
               <ResponsiveContainer width="100%" height="100%">
                 <BarChart data={barData}>
-                  <CartesianGrid strokeDasharray="3 3" stroke="#E5E5E5" />
-                  <XAxis dataKey="name" tick={{ fontSize: 12 }} />
-                  <YAxis tickFormatter={(v) => `${Math.round(v / 1000)}k`} tick={{ fontSize: 11 }} />
+                  <CartesianGrid strokeDasharray="3 3" stroke="hsl(var(--border))" vertical={false} />
+                  <XAxis dataKey="name" tick={{ fontSize: 12, fill: "hsl(var(--muted-foreground))" }} axisLine={{ stroke: "hsl(var(--border))" }} tickLine={false} />
+                  <YAxis tickFormatter={(v) => `${Math.round(v / 1000)}k`} tick={{ fontSize: 11, fill: "hsl(var(--muted-foreground))" }} axisLine={false} tickLine={false} width={48} />
                   <Tooltip
                     formatter={(value: number) => fmtC(value)}
-                    contentStyle={{ backgroundColor: "#fff", border: "1px solid #e5e5e5", borderRadius: "8px", fontSize: "13px" }}
+                    contentStyle={{
+                      backgroundColor: "hsl(var(--card))",
+                      border: "1px solid hsl(var(--border))",
+                      borderRadius: "12px",
+                      fontSize: "13px",
+                      padding: "10px 14px",
+                      boxShadow: "0 4px 12px rgba(0,0,0,0.08)",
+                    }}
+                    cursor={{ fill: "hsl(var(--muted) / 0.3)" }}
                   />
-                  <Legend wrapperStyle={{ fontSize: "12px" }} />
+                  <Legend wrapperStyle={{ fontSize: "13px", paddingTop: "12px" }} iconType="circle" iconSize={10} />
                   <Bar dataKey="Base" stackId="a" fill="#1B3A2F" />
                   <Bar dataKey="Bonus" stackId="a" fill="#C9A961" />
                   <Bar dataKey="Equity" stackId="a" fill="#3D7A5F" />
                   <Bar dataKey="Sign-on" stackId="a" fill="#B0B0B0" />
-                   <Bar dataKey="Benefits" stackId="a" fill="#D4C8A0" />
-                   <Bar dataKey="Holiday" stackId="a" fill="#8B7355" />
+                  <Bar dataKey="Benefits" stackId="a" fill="#D4C8A0" />
+                  <Bar dataKey="Holiday" stackId="a" fill="#8B7355" radius={[4, 4, 0, 0]} />
                 </BarChart>
               </ResponsiveContainer>
             </div>
@@ -240,33 +248,9 @@ export default function ResultsColumn({ scenario, currency, scenarios, activeId 
         </div>
       </EmailGateOverlay>
 
-      {/* Scenario Comparison — show when 2+ scenarios */}
-      {scenarios && activeId && scenarios.length >= 2 && (
-        <ScenarioComparison scenarios={scenarios} activeId={activeId} currency={currency} />
-      )}
+      {/* Scenario Comparison moved to parent for full-width layout */}
 
-      {/* Negotiation Impact Calculator */}
-      <NegotiationImpact currentComp={scenario.current_comp_twd || undefined} currency={currency} fxRate={scenario.fx_rate} />
-
-      {/* Coaching Upsell — always visible */}
-      <div className="rounded-2xl p-8 print:hidden" style={{ backgroundColor: "#1A1A1A" }}>
-        <div className="w-10 h-1 rounded-full mb-4" style={{ backgroundColor: "#C9A961" }} />
-        <h3 className="font-heading text-xl font-bold mb-3" style={{ color: "#FBF7F0" }}>
-          Most candidates leave 10-20% on the table.
-        </h3>
-        <p className="text-sm mb-6 leading-relaxed" style={{ color: "#A0A0A0" }}>
-          I've helped professionals at Google, Uber, and Meta negotiate better offers. If you are comparing packages, I can tell you what is realistic and what to push back on.
-        </p>
-        <a
-          href="https://james.careers/#coaching"
-          target="_blank"
-          rel="noopener noreferrer"
-          className="inline-flex h-11 px-6 items-center justify-center rounded-lg font-semibold text-sm transition-transform hover:scale-[1.02]"
-          style={{ backgroundColor: "#C9A961", color: "#1B3A2F" }}
-        >
-          Book a Free Strategy Call
-        </a>
-      </div>
+      {/* Coaching Upsell moved to parent for full-width layout */}
     </div>
   );
 }

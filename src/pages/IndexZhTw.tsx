@@ -58,7 +58,7 @@ const IndexZhTw = () => {
                 <div className="flex justify-center mb-2 md:hidden">
                   <div className="relative">
                     <div className="absolute -inset-3 rounded-full bg-gradient-to-br from-gold/20 via-transparent to-executive-green/10 blur-xl" />
-                    <img src={jamesPhoto} alt="James Bugden" className="relative w-32 h-32 rounded-full object-cover hero-photo-shadow border-4 border-card" />
+                    <img src={jamesPhoto} alt="James Bugden" className="relative w-40 h-40 rounded-full object-cover hero-photo-shadow border-4 border-card" />
                   </div>
                 </div>
 
@@ -77,7 +77,7 @@ const IndexZhTw = () => {
                 </div>
 
                 <div className="mb-2 max-w-md mx-auto md:mx-0">
-                  <MailerLiteForm formId="sM1X80" className="ml-embedded" buttonText="免費索取攻略" />
+                  <MailerLiteForm formId="sM1X80" className="ml-embedded" buttonText="立即註冊" />
                 </div>
 
                 <p className="text-[13px] text-muted-foreground/70 mb-5">
@@ -106,7 +106,7 @@ const IndexZhTw = () => {
               <div className="hidden md:flex justify-end order-2">
                 <div className="relative">
                   <div className="absolute -inset-3 rounded-full bg-gradient-to-br from-gold/20 via-transparent to-executive-green/10 blur-xl" />
-                  <img src={jamesPhoto} alt="James Bugden" className="relative w-72 h-72 lg:w-80 lg:h-80 rounded-full object-cover hero-photo-shadow border-4 border-card" />
+                  <img src={jamesPhoto} alt="James Bugden" className="relative w-80 h-80 lg:w-88 lg:h-88 rounded-full object-cover hero-photo-shadow border-4 border-card" />
                 </div>
               </div>
             </div>
@@ -122,11 +122,11 @@ const IndexZhTw = () => {
         {/* ── Self-Segmentation ── */}
         <SelfSegmentationZhTw />
 
-        {/* ── Readiness Assessment ── */}
-        <ReadinessAssessmentZhTw />
-
         {/* ── Offer Calculator ── */}
         <OfferCalculatorCTAZhTw />
+
+        {/* ── Readiness Assessment ── */}
+        <ReadinessAssessmentZhTw />
 
         {/* ── Coaching CTA ── */}
         <CoachingCTAZhTw />

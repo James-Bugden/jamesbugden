@@ -1,8 +1,9 @@
 import { useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { ArrowLeft, ArrowDown, Copy, Share2, Check } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useToast } from "@/hooks/use-toast";
+import { nativeShare } from "@/lib/share";
 import ToolkitHeaderZhTw from "@/components/toolkit/ToolkitHeaderZhTw";
 import ToolkitFooterZhTw from "@/components/toolkit/ToolkitFooterZhTw";
 import ToolkitNavZhTw from "@/components/toolkit/ToolkitNavZhTw";
@@ -59,7 +60,6 @@ const donts = [
 
 const OfferResponseZhTw = () => {
   const { toast } = useToast();
-  const navigate = useNavigate();
   const [copied, setCopied] = useState(false);
   const [shared, setShared] = useState(false);
 
@@ -90,10 +90,13 @@ ${outcomes[1].text}`;
     setTimeout(() => setCopied(false), 2000);
   };
 
-  const shareUrl = () => {
-    navigator.clipboard.writeText(window.location.href);
-    setShared(true);
-    toast({ title: "已複製連結！", description: "分享給需要的人。" });
+  const shareUrl = async () => {
+    const shared = await nativeShare();
+    if (!shared) {
+      setShared(true);
+      toast({ title: "已複製連結！", description: "分享給需要的人。" });
+      setTimeout(() => setShared(false), 2000);
+    }
     setTimeout(() => setShared(false), 2000);
   };
 
@@ -104,21 +107,13 @@ ${outcomes[1].text}`;
       {/* Hero */}
       <section className="bg-executive-green py-12 md:py-16 px-5 md:px-6 relative">
         <div className="container mx-auto max-w-3xl text-center relative z-10">
-          <div className="flex items-center justify-center gap-4 mb-6">
-            <Link 
-              to="/zh-tw/toolkit" 
-              className="inline-flex items-center gap-2 text-cream-70 hover:text-cream transition-colors text-sm"
-            >
-              <ArrowLeft className="w-4 h-4" />
-              返回工具包
-            </Link>
-            <button 
-              onClick={() => navigate("/toolkit/offer-response")}
-              className="px-3 py-1.5 text-sm font-semibold bg-gold/20 hover:bg-gold/30 text-gold border border-gold/40 rounded-md transition-all duration-200 hover:scale-105"
-            >
-              EN
-            </button>
-          </div>
+          <Link 
+            to="/zh-tw/toolkit" 
+            className="inline-flex items-center gap-2 text-cream-70 hover:text-cream transition-colors mb-6 text-sm"
+          >
+            <ArrowLeft className="w-4 h-4" />
+            返回工具包
+          </Link>
           <h1 className="font-heading text-3xl md:text-4xl lg:text-5xl text-cream mb-4">
             Offer 回應話術
           </h1>
@@ -130,7 +125,7 @@ ${outcomes[1].text}`;
 
       {/* Toolkit Navigation */}
       <div className="pt-8">
-        <ToolkitNavZhTw currentTemplate="T2" />
+        <ToolkitNavZhTw currentTemplate="offer-response" />
       </div>
 
       {/* Flowchart Steps */}

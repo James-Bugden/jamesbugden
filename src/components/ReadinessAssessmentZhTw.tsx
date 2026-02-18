@@ -2,7 +2,7 @@ import { Users } from "lucide-react";
 
 export default function ReadinessAssessmentZhTw() {
   return (
-    <section id="assessment" className="py-14 md:py-20 px-5 md:px-6 bg-card border-y border-border">
+    <section id="assessment" className="py-14 md:py-20 px-5 md:px-6 bg-background">
       <div className="container mx-auto max-w-3xl text-center">
         <h2 className="font-heading text-3xl md:text-4xl lg:text-5xl text-foreground mb-3">
           你準備好進外商了嗎？

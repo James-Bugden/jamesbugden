@@ -220,14 +220,14 @@ export default function NegotiationImpact({ currentComp, currency, fxRate }: Pro
 
       {/* Summary cards */}
       <div className="grid grid-cols-2 gap-3 mb-4">
-        <div className="border border-border rounded-xl p-4">
+        <div className="border border-border rounded-xl p-4 min-w-0">
           <p className="text-xs font-semibold tracking-wide uppercase text-muted-foreground">Accept First Offer</p>
-          <p className="text-xl font-bold text-foreground mt-1">{fmtCurrency(totalA)}</p>
+          <p className="text-base md:text-xl font-bold text-foreground mt-1 truncate">{fmtCurrency(totalA)}</p>
           <p className="text-xs text-muted-foreground mt-1">Total over {careerYears} years</p>
         </div>
-        <div className="border-2 border-green-500/30 bg-green-50/50 dark:bg-green-950/20 rounded-xl p-4">
+        <div className="border-2 border-green-500/30 bg-green-50/50 dark:bg-green-950/20 rounded-xl p-4 min-w-0">
           <p className="text-xs font-semibold tracking-wide uppercase text-green-600 dark:text-green-400">Negotiate Strategically</p>
-          <p className="text-xl font-bold text-green-700 dark:text-green-400 mt-1">{fmtCurrency(totalB)}</p>
+          <p className="text-base md:text-xl font-bold text-green-700 dark:text-green-400 mt-1 truncate">{fmtCurrency(totalB)}</p>
           <p className="text-xs text-green-600 dark:text-green-400 mt-1">Total over {careerYears} years</p>
         </div>
       </div>
@@ -247,14 +247,14 @@ export default function NegotiationImpact({ currentComp, currency, fxRate }: Pro
 
       {/* Monthly / Total lost cards */}
       <div className="grid grid-cols-2 gap-3">
-        <div className="bg-red-50/50 dark:bg-red-950/20 border border-red-200/50 dark:border-red-800/30 rounded-xl p-4">
+        <div className="bg-red-50/50 dark:bg-red-950/20 border border-red-200/50 dark:border-red-800/30 rounded-xl p-4 min-w-0">
           <p className="text-xs text-muted-foreground">Avg. Monthly Income Lost</p>
-          <p className="text-lg font-bold text-red-600 dark:text-red-400 mt-1">{fmtCurrency(monthlyDiff)}</p>
+          <p className="text-base md:text-lg font-bold text-red-600 dark:text-red-400 mt-1 truncate">{fmtCurrency(monthlyDiff)}</p>
           <p className="text-xs text-red-500/70 dark:text-red-400/60 mt-1">per month without negotiating</p>
         </div>
-        <div className="bg-red-50/50 dark:bg-red-950/20 border border-red-200/50 dark:border-red-800/30 rounded-xl p-4">
+        <div className="bg-red-50/50 dark:bg-red-950/20 border border-red-200/50 dark:border-red-800/30 rounded-xl p-4 min-w-0">
           <p className="text-xs text-muted-foreground">Total Lost Over {careerYears} Years</p>
-          <p className="text-lg font-bold text-red-600 dark:text-red-400 mt-1">{fmtCurrency(totalDiff)}</p>
+          <p className="text-base md:text-lg font-bold text-red-600 dark:text-red-400 mt-1 truncate">{fmtCurrency(totalDiff)}</p>
           <p className="text-xs text-red-500/70 dark:text-red-400/60 mt-1">left on the table</p>
         </div>
       </div>

@@ -1,5 +1,5 @@
 import { useState, useCallback } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { ArrowLeft, Copy, Share2, Check, RotateCcw, Plus, X, Minus, HelpCircle } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Switch } from "@/components/ui/switch";
@@ -37,13 +37,13 @@ function formatNTD(value: number): string {
 
 function TipIcon({ text }: { text: string }) {
   return (
-    <Tooltip>
+    <Tooltip delayDuration={0}>
       <TooltipTrigger asChild>
         <button type="button" className="text-muted-foreground hover:text-foreground transition-colors" aria-label="更多說明">
           <HelpCircle className="w-4 h-4" />
         </button>
       </TooltipTrigger>
-      <TooltipContent className="max-w-xs text-xs">{text}</TooltipContent>
+      <TooltipContent side="top" className="max-w-xs text-xs">{text}</TooltipContent>
     </Tooltip>
   );
 }
@@ -80,18 +80,8 @@ const hrQuestions = [
   "這個職位平均每月加班時數和加班費大約多少？",
 ];
 
-const marketDataSources = [
-  { name: "104人力銀行", desc: " (104.com.tw)：台灣最大求職平台，可查各產業職位薪資範圍" },
-  { name: "CakeResume", desc: "：科技業為主，有使用者回報薪資" },
-  { name: "Glassdoor", desc: "：外商和跨國企業在台薪資" },
-  { name: "Levels.fyi", desc: "：大型科技公司薪資資料，有部分台灣數據" },
-  { name: "Salary.tw", desc: "：社群回報薪資" },
-  { name: "Dcard 工作版", desc: "：真實薪資討論（資訊未經驗證，請謹慎參考）" },
-  { name: "比薪水", desc: " (salary.tw)：匿名薪資分享平台" },
-];
 
 const howToUseSteps = [
-  "拿到正式書面 offer 再填寫。用 Offer 回應話術幫你爭取思考時間。",
   "先填月薪和保障月數。光這兩個欄位就能看出保障年薪的差距。",
   "展開「股票與分紅」填入員工分紅。在台灣科技業，分紅往往是薪資差距最大的項目。",
   "如果是製造業、半導體廠或有輪班的職位，記得展開「加班/輪班津貼」。這個數字常常被忽略，但年度加起來可能超過 NT$200,000。",
@@ -102,7 +92,6 @@ const howToUseSteps = [
 
 const CompCalculatorInteractiveZhTw = () => {
   const { toast } = useToast();
-  const navigate = useNavigate();
   const isMobile = useIsMobile();
   const { isUnlocked, unlock } = useEmailGate();
   const {
@@ -160,38 +149,17 @@ const CompCalculatorInteractiveZhTw = () => {
       {/* Hero */}
       <section className="bg-executive-green py-12 md:py-16 px-5 md:px-6 relative">
         <div className="container mx-auto max-w-[1200px] text-center relative z-10">
-          <div className="flex items-center justify-center gap-4 mb-6">
-            <Link to="/zh-tw/toolkit" className="inline-flex items-center gap-2 text-cream-70 hover:text-cream transition-colors text-sm">
-              <ArrowLeft className="w-4 h-4" /> 返回工具包
-            </Link>
-            <button
-              onClick={() => navigate("/toolkit/calculator-interactive")}
-              className="px-3 py-1.5 text-sm font-semibold bg-gold/20 hover:bg-gold/30 text-gold border border-gold/40 rounded-md transition-all duration-200 hover:scale-105"
-            >
-              EN
-            </button>
-          </div>
+          <Link to="/zh-tw/toolkit" className="inline-flex items-center gap-2 text-cream-70 hover:text-cream transition-colors mb-6 text-sm">
+            <ArrowLeft className="w-4 h-4" /> 返回工具包
+          </Link>
           <h1 className="font-heading text-3xl md:text-4xl lg:text-5xl text-cream mb-3">Offer Calculator</h1>
           <p className="text-lg text-cream-90 max-w-2xl mx-auto mb-2">你的 offer 不只是月薪數字。算出完整年薪，才能看見真正的贏家。</p>
           <p className="text-sm text-cream-70">最多比較 3 份 offer，所有欄位即時更新計算結果。</p>
         </div>
       </section>
 
-      {/* Creator bar */}
-      <div className="bg-muted/50 border-b border-border px-5 md:px-6 py-3">
-        <div className="container mx-auto max-w-[1200px] flex flex-wrap items-center justify-between gap-2 text-sm">
-          <p className="text-muted-foreground">
-            Offer Calculator by{" "}
-            <a href="https://james.careers" target="_blank" rel="noopener noreferrer" className="text-gold hover:underline font-medium">
-              james.careers
-            </a>
-            <span className="text-muted-foreground/60"> · 招募專家打造的真實薪資比較工具</span>
-          </p>
-          <a href="mailto:james@james.careers" className="text-gold hover:underline text-xs">回饋建議</a>
-        </div>
-      </div>
 
-      <div className="pt-8"><ToolkitNavZhTw currentTemplate="T4" /></div>
+      <div className="pt-8"><ToolkitNavZhTw currentTemplate="calculator" /></div>
 
       {/* Calculator */}
       <section className="px-5 md:px-6 pb-8">
@@ -537,31 +505,6 @@ const CompCalculatorInteractiveZhTw = () => {
               </div>
             </CalculatorSection>
 
-            {/* SECTION 3: 退休福利 */}
-            <CalculatorSection title="退休福利" description="勞退提撥與企業額外退休金">
-              {/* 勞退雇主提撥 (auto) */}
-              <div>
-                <RowLabel tip="依勞工退休金條例，雇主每月提撥月薪 6% 至你的勞退帳戶。此金額為法定義務，所有 offer 都有。">勞退雇主提撥（法定 6%，自動計算）</RowLabel>
-                <div className="grid gap-3" style={{ gridTemplateColumns: gridCols }}>
-                  {visible.map((offer, vi) => (
-                    <div key={indices[vi]} className="h-12 rounded-lg border border-input bg-muted/50 px-3 flex items-center text-sm text-muted-foreground">
-                      {formatNTD(offer.monthlySalary * 0.06 * 12)}/年
-                    </div>
-                  ))}
-                </div>
-                <p className="text-xs text-muted-foreground mt-1">各 offer 皆同，未計入總薪酬比較。</p>
-              </div>
-
-              {/* 企業額外退休提撥 */}
-              <div>
-                <RowLabel tip="部分外商或大企業提供法定之外的額外退休金提撥或企業年金。若無則填 0。">企業額外退休提撥</RowLabel>
-                <div className="grid gap-3" style={{ gridTemplateColumns: gridCols }}>
-                  {visible.map((offer, vi) => (
-                    <CurrencyInput key={indices[vi]} value={offer.extraRetirement} onChange={(v) => updateOffer(indices[vi], { extraRetirement: v })} placeholder="例：30,000" prefix="NT$" ariaLabel={`額外退休 ${offer.name}`} />
-                  ))}
-                </div>
-              </div>
-            </CalculatorSection>
 
             {/* SECTION 4: 保險、假期與津貼 */}
             <CalculatorSection title="保險、假期與津貼" description="團保升級、年假、通勤、各類津貼">
@@ -726,19 +669,6 @@ const CompCalculatorInteractiveZhTw = () => {
             </CollapsibleContent>
           </Collapsible>
 
-          <Collapsible>
-            <CollapsibleTrigger className="w-full flex items-center justify-between bg-card rounded-xl px-6 py-4 border border-border hover:bg-muted/50 transition-colors">
-              <span className="font-semibold text-foreground">哪裡查薪資行情</span>
-              <ChevronDown className="w-5 h-5 text-muted-foreground" />
-            </CollapsibleTrigger>
-            <CollapsibleContent className="bg-card rounded-b-xl border border-t-0 border-border px-6 py-4">
-              <ul className="space-y-2 text-sm text-foreground">
-                {marketDataSources.map((source, i) => (
-                  <li key={i}>• <strong>{source.name}</strong>{source.desc}</li>
-                ))}
-              </ul>
-            </CollapsibleContent>
-          </Collapsible>
 
           <Collapsible>
             <CollapsibleTrigger className="w-full flex items-center justify-between bg-card rounded-xl px-6 py-4 border border-border hover:bg-muted/50 transition-colors">
