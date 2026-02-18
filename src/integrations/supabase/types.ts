@@ -62,6 +62,78 @@ export type Database = {
         }
         Relationships: []
       }
+      email_gate_leads: {
+        Row: {
+          created_at: string
+          email: string
+          id: string
+          source: string | null
+        }
+        Insert: {
+          created_at?: string
+          email: string
+          id?: string
+          source?: string | null
+        }
+        Update: {
+          created_at?: string
+          email?: string
+          id?: string
+          source?: string | null
+        }
+        Relationships: []
+      }
+      resume_leads: {
+        Row: {
+          analysis_result: Json | null
+          created_at: string
+          current_company_type: string | null
+          email: string
+          id: string
+          industry: string | null
+          language: string | null
+          name: string | null
+          overall_score: number | null
+          resume_file_url: string | null
+          resume_text: string | null
+          seniority_level: string | null
+          target_readiness: string | null
+          years_experience: string | null
+        }
+        Insert: {
+          analysis_result?: Json | null
+          created_at?: string
+          current_company_type?: string | null
+          email: string
+          id?: string
+          industry?: string | null
+          language?: string | null
+          name?: string | null
+          overall_score?: number | null
+          resume_file_url?: string | null
+          resume_text?: string | null
+          seniority_level?: string | null
+          target_readiness?: string | null
+          years_experience?: string | null
+        }
+        Update: {
+          analysis_result?: Json | null
+          created_at?: string
+          current_company_type?: string | null
+          email?: string
+          id?: string
+          industry?: string | null
+          language?: string | null
+          name?: string | null
+          overall_score?: number | null
+          resume_file_url?: string | null
+          resume_text?: string | null
+          seniority_level?: string | null
+          target_readiness?: string | null
+          years_experience?: string | null
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
