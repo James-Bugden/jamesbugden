@@ -192,7 +192,7 @@ Deno.serve(async (req) => {
       analysis = JSON.parse(cleanJson);
     } catch (parseErr) {
       // Try to fix common JSON issues: unescaped quotes in strings
-      console.error('JSON parse failed, attempting repair:', parseErr.message);
+      console.error('JSON parse failed, attempting repair:', (parseErr as Error).message);
       // Extract JSON object between first { and last }
       const firstBrace = cleanJson.indexOf('{');
       const lastBrace = cleanJson.lastIndexOf('}');
@@ -217,7 +217,7 @@ Deno.serve(async (req) => {
   } catch (error) {
     console.error('Error:', error);
     return new Response(
-      JSON.stringify({ error: error.message || 'Analysis failed' }),
+      JSON.stringify({ error: (error as Error).message || 'Analysis failed' }),
       { status: 500, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
     );
   }

@@ -4,6 +4,11 @@
   <url><loc>https://jamesbugden.lovable.app/zh-tw</loc><priority>0.9</priority></url>
   <url><loc>https://jamesbugden.lovable.app/guides</loc><priority>0.8</priority></url>
   <url><loc>https://jamesbugden.lovable.app/zh-tw/guides</loc><priority>0.7</priority></url>
+  <url><loc>https://jamesbugden.lovable.app/quiz</loc><priority>0.7</priority></url>
+  <url><loc>https://jamesbugden.lovable.app/zh-tw/quiz</loc><priority>0.6</priority></url>
+  <url><loc>https://jamesbugden.lovable.app/offer-calculator</loc><priority>0.8</priority></url>
+  <url><loc>https://jamesbugden.lovable.app/offer-calculator/compare</loc><priority>0.7</priority></url>
+  <url><loc>https://jamesbugden.lovable.app/zh-tw/offer-calculator</loc><priority>0.7</priority></url>
   <url><loc>https://jamesbugden.lovable.app/linkedin-guide</loc><priority>0.7</priority></url>
   <url><loc>https://jamesbugden.lovable.app/zh-tw/linkedin-guide</loc><priority>0.6</priority></url>
   <url><loc>https://jamesbugden.lovable.app/linkedin-branding-guide</loc><priority>0.7</priority></url>
@@ -16,16 +21,54 @@
   <url><loc>https://jamesbugden.lovable.app/zh-tw/interview-prep-guide</loc><priority>0.6</priority></url>
   <url><loc>https://jamesbugden.lovable.app/interview-preparation-guide</loc><priority>0.7</priority></url>
   <url><loc>https://jamesbugden.lovable.app/zh-tw/interview-preparation-guide</loc><priority>0.6</priority></url>
+  <url><loc>https://jamesbugden.lovable.app/resume-guide</loc><priority>0.7</priority></url>
   <url><loc>https://jamesbugden.lovable.app/salary-starter-kit</loc><priority>0.7</priority></url>
   <url><loc>https://jamesbugden.lovable.app/zh-tw/salary-starter-kit</loc><priority>0.6</priority></url>
+  <url><loc>https://jamesbugden.lovable.app/resume-analyzer</loc><priority>0.6</priority></url>
+  <url><loc>https://jamesbugden.lovable.app/resume</loc><priority>0.6</priority></url>
+  <url><loc>https://jamesbugden.lovable.app/tracker</loc><priority>0.5</priority></url>
   <url><loc>https://jamesbugden.lovable.app/toolkit</loc><priority>0.7</priority></url>
   <url><loc>https://jamesbugden.lovable.app/zh-tw/toolkit</loc><priority>0.6</priority></url>
   <url><loc>https://jamesbugden.lovable.app/toolkit/scripts</loc><priority>0.5</priority></url>
+  <url><loc>https://jamesbugden.lovable.app/zh-tw/toolkit/scripts</loc><priority>0.5</priority></url>
   <url><loc>https://jamesbugden.lovable.app/toolkit/offer-response</loc><priority>0.5</priority></url>
+  <url><loc>https://jamesbugden.lovable.app/zh-tw/toolkit/offer-response</loc><priority>0.5</priority></url>
   <url><loc>https://jamesbugden.lovable.app/toolkit/counteroffer</loc><priority>0.5</priority></url>
+  <url><loc>https://jamesbugden.lovable.app/zh-tw/toolkit/counteroffer</loc><priority>0.5</priority></url>
   <url><loc>https://jamesbugden.lovable.app/toolkit/calculator</loc><priority>0.5</priority></url>
+  <url><loc>https://jamesbugden.lovable.app/zh-tw/toolkit/calculator</loc><priority>0.5</priority></url>
   <url><loc>https://jamesbugden.lovable.app/toolkit/calculator-interactive</loc><priority>0.5</priority></url>
+  <url><loc>https://jamesbugden.lovable.app/zh-tw/toolkit/calculator-interactive</loc><priority>0.5</priority></url>
   <url><loc>https://jamesbugden.lovable.app/toolkit/pushback</loc><priority>0.5</priority></url>
+  <url><loc>https://jamesbugden.lovable.app/zh-tw/toolkit/pushback</loc><priority>0.5</priority></url>
   <url><loc>https://jamesbugden.lovable.app/toolkit/raise</loc><priority>0.5</priority></url>
+  <url><loc>https://jamesbugden.lovable.app/zh-tw/toolkit/raise</loc><priority>0.5</priority></url>
   <url><loc>https://jamesbugden.lovable.app/toolkit/log</loc><priority>0.5</priority></url>
+  <url><loc>https://jamesbugden.lovable.app/zh-tw/toolkit/log</loc><priority>0.5</priority></url>
+  <url><loc>https://jamesbugden.lovable.app/reviews/charlene-lee</loc><priority>0.4</priority></url>
+  <url><loc>https://jamesbugden.lovable.app/zh-tw/reviews/charlene-lee</loc><priority>0.4</priority></url>
+  <url><loc>https://jamesbugden.lovable.app/reviews/chien-jung-liu</loc><priority>0.4</priority></url>
+  <url><loc>https://jamesbugden.lovable.app/zh-tw/reviews/chien-jung-liu</loc><priority>0.4</priority></url>
+  <url><loc>https://jamesbugden.lovable.app/reviews/james-bugden</loc><priority>0.4</priority></url>
+  <url><loc>https://jamesbugden.lovable.app/zh-tw/reviews/james-bugden</loc><priority>0.4</priority></url>
+  <url><loc>https://jamesbugden.lovable.app/reviews/sam-lee</loc><priority>0.4</priority></url>
+  <url><loc>https://jamesbugden.lovable.app/zh-tw/reviews/sam-lee</loc><priority>0.4</priority></url>
+  <url><loc>https://jamesbugden.lovable.app/reviews/roger-lee</loc><priority>0.4</priority></url>
+  <url><loc>https://jamesbugden.lovable.app/zh-tw/reviews/roger-lee</loc><priority>0.4</priority></url>
+  <url><loc>https://jamesbugden.lovable.app/reviews/pin-wei-wu</loc><priority>0.4</priority></url>
+  <url><loc>https://jamesbugden.lovable.app/zh-tw/reviews/pin-wei-wu</loc><priority>0.4</priority></url>
+  <url><loc>https://jamesbugden.lovable.app/reviews/peihua-yeh</loc><priority>0.4</priority></url>
+  <url><loc>https://jamesbugden.lovable.app/zh-tw/reviews/peihua-yeh</loc><priority>0.4</priority></url>
+  <url><loc>https://jamesbugden.lovable.app/reviews/silvia-chen</loc><priority>0.4</priority></url>
+  <url><loc>https://jamesbugden.lovable.app/zh-tw/reviews/silvia-chen</loc><priority>0.4</priority></url>
+  <url><loc>https://jamesbugden.lovable.app/reviews/youting-chen</loc><priority>0.4</priority></url>
+  <url><loc>https://jamesbugden.lovable.app/zh-tw/reviews/youting-chen</loc><priority>0.4</priority></url>
+  <url><loc>https://jamesbugden.lovable.app/reviews/roy-tsai</loc><priority>0.4</priority></url>
+  <url><loc>https://jamesbugden.lovable.app/zh-tw/reviews/roy-tsai</loc><priority>0.4</priority></url>
+  <url><loc>https://jamesbugden.lovable.app/reviews/janelle-cheng</loc><priority>0.4</priority></url>
+  <url><loc>https://jamesbugden.lovable.app/zh-tw/reviews/janelle-cheng</loc><priority>0.4</priority></url>
+  <url><loc>https://jamesbugden.lovable.app/reviews/willy-lin</loc><priority>0.4</priority></url>
+  <url><loc>https://jamesbugden.lovable.app/zh-tw/reviews/willy-lin</loc><priority>0.4</priority></url>
+  <url><loc>https://jamesbugden.lovable.app/reviews/hope-chen</loc><priority>0.4</priority></url>
+  <url><loc>https://jamesbugden.lovable.app/zh-tw/reviews/hope-chen</loc><priority>0.4</priority></url>
 </urlset>
