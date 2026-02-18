@@ -31,6 +31,14 @@ const sections: Section[] = [
     ],
   },
   {
+    title: "Tools",
+    links: [
+      { label: "Resume Analyzer", en: "/resume-analyzer" },
+      { label: "Resume Builder", en: "/resume" },
+      { label: "Job Tracker", en: "/tracker" },
+    ],
+  },
+  {
     title: "Guides",
     links: [
       { label: "Resume Guide", en: "/resume-guide" },
