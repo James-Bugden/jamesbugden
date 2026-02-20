@@ -26,7 +26,9 @@
   <url><loc>https://jamesbugden.lovable.app/zh-tw/salary-starter-kit</loc><priority>0.6</priority></url>
   <url><loc>https://jamesbugden.lovable.app/resume-analyzer</loc><priority>0.6</priority></url>
   <url><loc>https://jamesbugden.lovable.app/resume</loc><priority>0.6</priority></url>
+  <url><loc>https://jamesbugden.lovable.app/jobs</loc><priority>0.5</priority></url>
   <url><loc>https://jamesbugden.lovable.app/tracker</loc><priority>0.5</priority></url>
+  <url><loc>https://jamesbugden.lovable.app/site-directory</loc><priority>0.3</priority></url>
   <url><loc>https://jamesbugden.lovable.app/toolkit</loc><priority>0.7</priority></url>
   <url><loc>https://jamesbugden.lovable.app/zh-tw/toolkit</loc><priority>0.6</priority></url>
   <url><loc>https://jamesbugden.lovable.app/toolkit/scripts</loc><priority>0.5</priority></url>
