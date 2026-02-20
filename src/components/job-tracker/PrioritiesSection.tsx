@@ -16,9 +16,9 @@ interface Priority {
 export default function PrioritiesSection({ jobs, onSwitchToBoard }: Props) {
   const priorities: Priority[] = [];
 
-  const bookmarked = jobs.filter((j) => j.stage === "wishlist");
+  const bookmarked = jobs.filter((j) => j.stage === "bookmarked");
   const applied = jobs.filter((j) => j.stage === "applied");
-  const interviewing = jobs.filter((j) => j.stage === "interview");
+  const interviewing = jobs.filter((j) => j.stage === "interviewing");
 
   if (jobs.length === 0) {
     priorities.push({
