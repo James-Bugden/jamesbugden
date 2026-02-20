@@ -14,6 +14,7 @@ import PipelineStats from "@/components/job-tracker/PipelineStats";
 import PrioritiesSection from "@/components/job-tracker/PrioritiesSection";
 import KanbanBoard, { JobDetailPanel } from "@/components/job-tracker/KanbanBoard";
 import TableView from "@/components/job-tracker/TableView";
+import OnboardingModal from "@/components/job-tracker/OnboardingModal";
 
 type View = "dashboard" | "board" | "table";
 
@@ -80,6 +81,7 @@ export default function JobTracker() {
 
   return (
     <div className="min-h-screen" style={{ backgroundColor: "#FBF7F0" }}>
+      <OnboardingModal />
       {/* Header */}
       <header className="px-4 sm:px-6 pt-6 pb-4 max-w-6xl mx-auto">
         <div className="flex items-center justify-between">
