@@ -105,22 +105,124 @@ const SECTION_HEADER_MAP: Record<string, string> = {
   "hobbies": "interests",
   // references
   "references": "references",
+
+  // ── Traditional Chinese / Simplified Chinese ──
+  // experience
+  "工作經歷": "experience",
+  "工作经历": "experience",
+  "工作經驗": "experience",
+  "工作经验": "experience",
+  "專業經歷": "experience",
+  "专业经历": "experience",
+  "職業經歷": "experience",
+  "职业经历": "experience",
+  "實習經歷": "experience",
+  "实习经历": "experience",
+  "經歷": "experience",
+  "经历": "experience",
+  // education
+  "學歷": "education",
+  "学历": "education",
+  "教育背景": "education",
+  "教育經歷": "education",
+  "教育经历": "education",
+  "學術背景": "education",
+  "学术背景": "education",
+  // skills
+  "技能": "skills",
+  "專業技能": "skills",
+  "专业技能": "skills",
+  "核心能力": "skills",
+  "技術能力": "skills",
+  "技术能力": "skills",
+  "技能專長": "skills",
+  "技能专长": "skills",
+  // summary
+  "自我介紹": "summary",
+  "自我介绍": "summary",
+  "個人簡介": "summary",
+  "个人简介": "summary",
+  "個人摘要": "summary",
+  "个人摘要": "summary",
+  "簡介": "summary",
+  "简介": "summary",
+  "求職目標": "summary",
+  "求职目标": "summary",
+  // projects
+  "專案經歷": "projects",
+  "专案经历": "projects",
+  "項目經歷": "projects",
+  "项目经历": "projects",
+  "專案": "projects",
+  "项目": "projects",
+  // languages
+  "語言能力": "languages",
+  "语言能力": "languages",
+  "語言": "languages",
+  "语言": "languages",
+  // certifications
+  "證照": "certifications",
+  "证照": "certifications",
+  "認證": "certifications",
+  "认证": "certifications",
+  "證書": "certifications",
+  "证书": "certifications",
+  "執照與認證": "certifications",
+  // awards
+  "獎項": "awards",
+  "奖项": "awards",
+  "榮譽": "awards",
+  "荣誉": "awards",
+  "獲獎經歷": "awards",
+  "获奖经历": "awards",
+  // volunteering
+  "志工經歷": "volunteering",
+  "志愿者经历": "volunteering",
+  "志願服務": "volunteering",
+  "社會服務": "volunteering",
+  // publications
+  "著作": "publications",
+  "發表": "publications",
+  "研究": "publications",
+  // interests
+  "興趣": "interests",
+  "兴趣": "interests",
+  "嗜好": "interests",
+  // references
+  "推薦人": "references",
+  "推荐人": "references",
 };
 
 function detectSectionType(headerText: string): string | null {
-  const clean = headerText.toLowerCase().replace(/[^a-z\s&]/g, "").trim();
-  return SECTION_HEADER_MAP[clean] || null;
+  // Try English match first
+  const cleanEn = headerText.toLowerCase().replace(/[^a-z\s&]/g, "").trim();
+  if (cleanEn && SECTION_HEADER_MAP[cleanEn]) return SECTION_HEADER_MAP[cleanEn];
+
+  // Try Chinese match (strip whitespace and common punctuation)
+  const cleanZh = headerText.replace(/[\s:：\-–—·•|]/g, "").trim();
+  if (SECTION_HEADER_MAP[cleanZh]) return SECTION_HEADER_MAP[cleanZh];
+
+  return null;
 }
 
 function isSectionHeader(line: string, allLines: string[], idx: number): boolean {
-  const clean = line.replace(/[^a-zA-Z\s&]/g, "").trim();
-  if (clean.length === 0 || clean.length > 50) return false;
   if (detectSectionType(line) !== null) return true;
-  // Heuristic: short line (<=4 words), all-caps or title-case, followed by longer content
-  const words = clean.split(/\s+/);
-  if (words.length > 5) return false;
-  const isAllCaps = clean === clean.toUpperCase() && clean.length > 2;
-  if (isAllCaps) return true;
+
+  const clean = line.replace(/[^a-zA-Z\s&]/g, "").trim();
+  // English heuristics
+  if (clean.length > 0 && clean.length <= 50) {
+    const words = clean.split(/\s+/);
+    if (words.length <= 5) {
+      const isAllCaps = clean === clean.toUpperCase() && clean.length > 2;
+      if (isAllCaps) return true;
+    }
+  }
+
+  // Chinese heuristic: short line (<=8 chars) with CJK characters and no long content
+  const cjkOnly = line.replace(/[\s:：\-–—·•|]/g, "");
+  const hasCJK = /[\u4e00-\u9fff]/.test(cjkOnly);
+  if (hasCJK && cjkOnly.length <= 8 && cjkOnly.length >= 2) return true;
+
   return false;
 }
 
