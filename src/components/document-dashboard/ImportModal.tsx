@@ -33,18 +33,10 @@ export function ImportModal({ open, onClose, type, onImported }: ImportModalProp
           fullName: parsed.fullName,
           email: parsed.email,
           phone: parsed.phone,
+          ...(parsed.linkedin ? { linkedin: parsed.linkedin } : {}),
+          ...(parsed.website ? { website: parsed.website } : {}),
         },
-        sections: parsed.summary
-          ? [
-              {
-                id: crypto.randomUUID(),
-                type: "summary",
-                title: "Summary",
-                entries: [{ id: crypto.randomUUID(), fields: { description: `<p>${parsed.summary}</p>` } }],
-                collapsed: false,
-              },
-            ]
-          : [],
+        sections: parsed.sections,
       },
     });
   };
