@@ -1,4 +1,4 @@
-import { JobApplication, JOB_STAGES } from "@/lib/jobStore";
+import { JobApplication, ACTIVE_STAGES } from "@/lib/jobStore";
 
 interface Props {
   jobs: JobApplication[];
@@ -7,7 +7,6 @@ interface Props {
 
 export default function PipelineStats({ jobs, weekRange }: Props) {
   const total = jobs.length || 1;
-  const activeStages = JOB_STAGES.filter((s) => s.id !== "rejected");
 
   return (
     <div className="rounded-xl border p-6 sm:p-8" style={{ borderColor: "#E5E0D8", backgroundColor: "#FFFFFF" }}>
@@ -19,7 +18,7 @@ export default function PipelineStats({ jobs, weekRange }: Props) {
       </p>
 
       <div className="mt-6 space-y-4">
-        {activeStages.map((stage) => {
+        {ACTIVE_STAGES.map((stage) => {
           const count = jobs.filter((j) => j.stage === stage.id).length;
           const pct = Math.round((count / total) * 100);
           return (
