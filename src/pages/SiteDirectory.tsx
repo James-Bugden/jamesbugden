@@ -21,6 +21,7 @@ const sections: Section[] = [
       { label: "Homepage", en: "/", zh: "/zh-tw" },
       { label: "Guides", en: "/guides", zh: "/zh-tw/guides" },
       { label: "Quiz", en: "/quiz", zh: "/zh-tw/quiz" },
+      { label: "Site Directory", en: "/site-directory" },
     ],
   },
   {
@@ -35,7 +36,8 @@ const sections: Section[] = [
     links: [
       { label: "Resume Analyzer", en: "/resume-analyzer" },
       { label: "Resume Builder", en: "/resume" },
-      { label: "Job Tracker", en: "/tracker" },
+      { label: "Job Tracker", en: "/jobs" },
+      { label: "Tracker", en: "/tracker" },
     ],
   },
   {
@@ -93,7 +95,6 @@ const sections: Section[] = [
     ],
   },
 ];
-
 const SectionBlock = ({ section }: { section: Section }) => {
   const [open, setOpen] = useState(!section.collapsible);
 
