@@ -311,10 +311,46 @@ function buildResumeSection(section: ParsedSection) {
 const DATE_PATTERN = /(?:(?:Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec)\w*\.?\s*)?(?:19|20)\d{2}\s*[-–—to]+\s*(?:(?:Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec)\w*\.?\s*)?(?:(?:19|20)\d{2}|[Pp]resent|[Cc]urrent)/i;
 const SINGLE_DATE = /(?:(?:Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec)\w*\.?\s+)?(?:19|20)\d{2}/i;
 
+/** Detect location patterns like "San Francisco, CA", "New York, NY", "London, UK", "Taipei, Taiwan", "Remote" */
+const LOCATION_PATTERN = /(?:^|[|,·•–—])\s*([A-Z][a-zA-Z\s.'-]+,\s*[A-Z]{2,}(?:\s+\d{5})?)\s*(?:$|[|,·•–—])/;
+const LOCATION_STANDALONE = /^(?:Remote|Hybrid|On-?site|[A-Z][a-zA-Z\s.'-]+,\s*(?:[A-Z]{2,}|[A-Z][a-zA-Z]+))$/;
+
+const COMMON_CITIES = [
+  "New York", "Los Angeles", "San Francisco", "Chicago", "Seattle", "Austin", "Boston",
+  "London", "Paris", "Berlin", "Tokyo", "Singapore", "Hong Kong", "Sydney", "Melbourne",
+  "Toronto", "Vancouver", "Dubai", "Mumbai", "Bangalore", "Shanghai", "Beijing",
+  "Taipei", "Seoul", "Amsterdam", "Stockholm", "Zurich", "Dublin", "Barcelona",
+  "São Paulo", "Mexico City", "Jakarta", "Bangkok", "Ho Chi Minh City",
+  "Remote", "Hybrid",
+];
+
+function extractLocation(text: string): string | null {
+  // Check for "City, STATE" pattern
+  const locMatch = text.match(LOCATION_PATTERN);
+  if (locMatch) return locMatch[1].trim();
+
+  // Check standalone location
+  if (LOCATION_STANDALONE.test(text.trim())) return text.trim();
+
+  // Check for known city names
+  for (const city of COMMON_CITIES) {
+    if (text.includes(city)) {
+      // Try to grab "City, XX" substring
+      const cityIdx = text.indexOf(city);
+      const afterCity = text.slice(cityIdx);
+      const fullMatch = afterCity.match(/^([A-Z][a-zA-Z\s.'-]+,\s*[A-Z][a-zA-Z]+)/);
+      if (fullMatch) return fullMatch[1].trim();
+      return city;
+    }
+  }
+
+  return null;
+}
+
 /** Parse experience/education entries from lines */
 function parseEntries(lines: string[], isExperience: boolean) {
   const entries: any[] = [];
-  let currentEntry: { title: string; org: string; date: string; bullets: string[] } | null = null;
+  let currentEntry: { title: string; org: string; date: string; location: string; bullets: string[] } | null = null;
 
   for (const line of lines) {
     const dateMatch = line.match(DATE_PATTERN) || line.match(SINGLE_DATE);
@@ -328,26 +364,40 @@ function parseEntries(lines: string[], isExperience: boolean) {
 
       const dateStr = dateMatch?.[0] || "";
       const textWithoutDate = line.replace(dateStr, "").replace(/[|,·•\-–—]\s*$/, "").trim();
-      const parts = textWithoutDate.split(/[|,·•–—]/).map((p) => p.trim()).filter(Boolean);
+      const location = extractLocation(textWithoutDate);
+      const textWithoutLocation = location
+        ? textWithoutDate.replace(location, "").replace(/[|,·•\-–—]\s*$/, "").trim()
+        : textWithoutDate;
+      const parts = textWithoutLocation.split(/[|,·•–—]/).map((p) => p.trim()).filter(Boolean);
 
       currentEntry = {
         title: parts[0] || line,
         org: parts[1] || "",
         date: dateStr,
+        location: location || "",
         bullets: [],
       };
     } else if (isBullet && currentEntry) {
       currentEntry.bullets.push(line.replace(/^[•\-\*·▪▸►→]\s*/, "").trim());
     } else if (currentEntry) {
-      // Continuation line — might be org or bullet
-      if (currentEntry.bullets.length === 0 && !currentEntry.org && line.length < 60) {
-        currentEntry.org = line;
+      // Continuation line — might be location, org, or bullet
+      if (currentEntry.bullets.length === 0 && !currentEntry.location && LOCATION_STANDALONE.test(line.trim())) {
+        currentEntry.location = line.trim();
+      } else if (currentEntry.bullets.length === 0 && !currentEntry.org && line.length < 60) {
+        // Check if this line contains a location
+        const loc = extractLocation(line);
+        if (loc && !currentEntry.location) {
+          currentEntry.org = line.replace(loc, "").replace(/[|,·•\-–—]\s*$/, "").trim();
+          currentEntry.location = loc;
+        } else {
+          currentEntry.org = line;
+        }
       } else {
         currentEntry.bullets.push(line);
       }
     } else {
       // Orphan line before first entry
-      currentEntry = { title: line, org: "", date: "", bullets: [] };
+      currentEntry = { title: line, org: "", date: "", location: "", bullets: [] };
     }
   }
 
@@ -358,7 +408,7 @@ function parseEntries(lines: string[], isExperience: boolean) {
     : [{ id: crypto.randomUUID(), fields: { description: `<p>${lines.join("<br/>")}</p>` } }];
 }
 
-function formatEntry(entry: { title: string; org: string; date: string; bullets: string[] }, isExperience: boolean) {
+function formatEntry(entry: { title: string; org: string; date: string; location: string; bullets: string[] }, isExperience: boolean) {
   const bulletHtml = entry.bullets.length > 0
     ? `<ul>${entry.bullets.map((b) => `<li>${b}</li>`).join("")}</ul>`
     : "";
@@ -370,6 +420,7 @@ function formatEntry(entry: { title: string; org: string; date: string; bullets:
         ? { jobTitle: entry.title, company: entry.org }
         : { degree: entry.title, school: entry.org }),
       date: entry.date,
+      location: entry.location,
       description: bulletHtml,
     },
   };
