@@ -1,10 +1,10 @@
 import { useState, useRef } from "react";
 import { ChevronDown, ChevronUp, Quote } from "lucide-react";
-import sunnyPhoto from "@/assets/testimonials/sunny.webp";
-import monicaPhoto from "@/assets/testimonials/monica.webp";
-import juliePhoto from "@/assets/testimonials/julie.webp";
-import cynthiaPhoto from "@/assets/testimonials/cynthia.webp";
-import pinweiPhoto from "@/assets/testimonials/pinwei.webp";
+import sunnyPhoto from "@/assets/testimonials/sunny-thumb.webp";
+import monicaPhoto from "@/assets/testimonials/monica-thumb.webp";
+import juliePhoto from "@/assets/testimonials/julie-thumb.webp";
+import cynthiaPhoto from "@/assets/testimonials/cynthia-thumb.webp";
+import pinweiPhoto from "@/assets/testimonials/pinwei-thumb.webp";
 import airuPhoto from "@/assets/testimonials/airu.png";
 import omarPhoto from "@/assets/testimonials/omar-li.jpg";
 
