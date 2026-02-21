@@ -11,6 +11,7 @@ import ReadinessAssessmentZhTw from "@/components/ReadinessAssessmentZhTw";
 import OfferCalculatorCTAZhTw from "@/components/OfferCalculatorCTAZhTw";
 import CoachingCTAZhTw from "@/components/CoachingCTAZhTw";
 import MailerLiteForm from "@/components/MailerLiteForm";
+import LazySection from "@/components/LazySection";
 
 const IndexZhTw = () => {
   const [scrolled, setScrolled] = useState(false);
@@ -117,19 +118,29 @@ const IndexZhTw = () => {
         <LogoScroll heading="我曾協助來自以下企業的專業人士" />
 
         {/* ── Testimonials ── */}
-        <HomepageTestimonialsZhTw />
+        <LazySection>
+          <HomepageTestimonialsZhTw />
+        </LazySection>
 
         {/* ── Self-Segmentation ── */}
-        <SelfSegmentationZhTw />
+        <LazySection>
+          <SelfSegmentationZhTw />
+        </LazySection>
 
         {/* ── Offer Calculator ── */}
-        <OfferCalculatorCTAZhTw />
+        <LazySection>
+          <OfferCalculatorCTAZhTw />
+        </LazySection>
 
         {/* ── Readiness Assessment ── */}
-        <ReadinessAssessmentZhTw />
+        <LazySection>
+          <ReadinessAssessmentZhTw />
+        </LazySection>
 
         {/* ── Coaching CTA ── */}
-        <CoachingCTAZhTw />
+        <LazySection>
+          <CoachingCTAZhTw />
+        </LazySection>
       </main>
 
       {/* ── Footer ── */}

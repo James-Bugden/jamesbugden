@@ -11,6 +11,7 @@ import ReadinessAssessment from "@/components/ReadinessAssessment";
 import OfferCalculatorCTA from "@/components/OfferCalculatorCTA";
 import CoachingCTA from "@/components/CoachingCTA";
 import MailerLiteForm from "@/components/MailerLiteForm";
+import LazySection from "@/components/LazySection";
 
 const Index = () => {
   const [scrolled, setScrolled] = useState(false);
@@ -122,19 +123,29 @@ const Index = () => {
         <LogoScroll />
 
         {/* ── Section 3: Testimonials ── */}
-        <HomepageTestimonials />
+        <LazySection>
+          <HomepageTestimonials />
+        </LazySection>
 
         {/* ── Section 4: Self-Segmentation Walkthrough ── */}
-        <SelfSegmentation />
+        <LazySection>
+          <SelfSegmentation />
+        </LazySection>
 
         {/* ── Section 5: Offer Calculator ── */}
-        <OfferCalculatorCTA />
+        <LazySection>
+          <OfferCalculatorCTA />
+        </LazySection>
 
         {/* ── Section 6: Readiness Assessment ── */}
-        <ReadinessAssessment />
+        <LazySection>
+          <ReadinessAssessment />
+        </LazySection>
 
         {/* ── Section 7: Paid Coaching ── */}
-        <CoachingCTA />
+        <LazySection>
+          <CoachingCTA />
+        </LazySection>
       </main>
 
       {/* ── Section 8: Footer ── */}

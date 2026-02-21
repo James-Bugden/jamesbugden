@@ -1,4 +1,4 @@
-import { useState, useRef, useEffect } from "react";
+import { useState, useRef } from "react";
 import { Mail } from "lucide-react";
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -30,10 +30,10 @@ export default function MailerLiteForm({ formId, className, buttonText = "Get on
   const [isSuccess, setIsSuccess] = useState(false);
   const formRef = useRef<HTMLFormElement>(null);
 
-  // Load MailerLite script only when this component mounts
-  useEffect(() => {
+  // Load MailerLite script only when user interacts with the form
+  const handleFocus = () => {
     loadMailerLite();
-  }, []);
+  };
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -94,6 +94,7 @@ export default function MailerLiteForm({ formId, className, buttonText = "Get on
             type="email"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
+            onFocus={handleFocus}
             placeholder="Enter your email"
             required
             className="w-full px-4 py-3.5 pr-12 rounded-lg border border-border/60 bg-card text-foreground placeholder:text-muted-foreground/60 focus:outline-none focus:ring-2 focus:ring-gold/40 focus:border-gold transition-colors text-base"

@@ -129,7 +129,7 @@ function FeaturedCard() {
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-4">
           {featured.photo ? (
-            <img src={featured.photo} alt={featured.name} className="w-12 h-12 rounded-full object-cover border-2 border-gold" />
+            <img src={featured.photo} alt={featured.name} width={48} height={48} className="w-12 h-12 rounded-full object-cover border-2 border-gold" />
           ) : (
             <div className="w-12 h-12 rounded-full border-2 border-gold bg-muted flex items-center justify-center text-muted-foreground font-semibold text-lg">
               {featured.name[0]}
@@ -159,7 +159,7 @@ function ScrollCard({ item }: { item: (typeof scrollCards)[0] }) {
       className="snap-start shrink-0 w-[42vw] sm:w-56 text-left bg-background rounded-xl border border-border border-l-4 border-l-gold p-4 shadow-[0_2px_12px_rgba(0,0,0,0.06)] transition-all duration-200 hover:-translate-y-1 hover:shadow-[0_4px_20px_rgba(0,0,0,0.10)] focus:outline-none focus:ring-2 focus:ring-gold/40"
     >
       {item.photo && (
-        <img src={item.photo} alt={item.name} loading="lazy" className="w-10 h-10 rounded-full object-cover border-2 border-gold mb-3" />
+        <img src={item.photo} alt={item.name} loading="lazy" width={40} height={40} className="w-10 h-10 rounded-full object-cover border-2 border-gold mb-3" />
       )}
       <p className="text-foreground text-sm leading-relaxed mb-2">
         "{item.hook}"
@@ -252,7 +252,7 @@ function ExpandableTestimonial({ item }: { item: (typeof allTestimonials)[0] }) 
   return (
     <div className="bg-background rounded-xl border border-border border-l-4 border-l-gold/60 p-5 shadow-[0_2px_12px_rgba(0,0,0,0.06)] hover:shadow-[0_4px_20px_rgba(0,0,0,0.10)] transition-shadow duration-200">
       {item.photo && (
-        <img src={item.photo} alt={item.name} loading="lazy" className="w-10 h-10 rounded-full object-cover border-2 border-gold mb-3" />
+        <img src={item.photo} alt={item.name} loading="lazy" width={40} height={40} className="w-10 h-10 rounded-full object-cover border-2 border-gold mb-3" />
       )}
       <p className="text-foreground text-sm leading-relaxed mb-2">
         "{item.hook}"
