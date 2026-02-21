@@ -45,7 +45,7 @@ const companies: Company[] = [
   ) },
   { name: "Appier", color: "#1A00B8", logo: appierLogo, wide: true },
   { name: "momo", color: "#D6006E" },
-  { name: "P&G", color: "#003DA5", logo: pgLogo, wide: true },
+  { name: "P&G", color: "#003DA5", logo: pgLogo, large: true },
   { name: "Unilever", color: "#1F36C7", logo: unileverLogo },
   { name: "L'Oréal", color: "#000000" },
   { name: "McKinsey", color: "#051C2C", logo: mckinseyLogo, wide: true },
