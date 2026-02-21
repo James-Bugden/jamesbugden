@@ -132,22 +132,27 @@ export default function OfferCompass() {
                 </div>
               </div>
 
-              {/* Full-width Scenario Comparison */}
-              {(scenarios.length >= 2 || active.current_comp_twd > 0) && (
-                <EmailGateOverlay
-                  isUnlocked={isUnlocked}
-                  onUnlock={unlock}
-                  headline="Unlock Offer Comparison"
-                  subtext="Enter your email to see side-by-side offer comparison and detailed breakdown."
-                >
-                  <ScenarioComparison scenarios={scenarios} activeId={activeId} currency={currency} />
-                </EmailGateOverlay>
-              )}
+              {/* Single email gate for all detailed sections */}
+              <EmailGateOverlay
+                isUnlocked={isUnlocked}
+                onUnlock={unlock}
+                headline="Unlock Full Breakdown"
+                subtext="Enter your email to see your compensation breakdown, 4-year projection, and scenario comparison."
+              >
+                <div className="space-y-8">
+                  {/* Pie + Projection are inside ResultsColumn but now ungated there */}
+                  
+                  {/* Full-width Scenario Comparison */}
+                  {(scenarios.length >= 2 || active.current_comp_twd > 0) && (
+                    <ScenarioComparison scenarios={scenarios} activeId={activeId} currency={currency} />
+                  )}
 
-              {/* Negotiation Impact — constrained width */}
-              <div className="max-w-4xl mx-auto">
-                <NegotiationImpact currentComp={active.current_comp_twd || undefined} currency={currency} fxRate={active.fx_rate} />
-              </div>
+                  {/* Negotiation Impact */}
+                  <div className="max-w-4xl mx-auto">
+                    <NegotiationImpact currentComp={active.current_comp_twd || undefined} currency={currency} fxRate={active.fx_rate} />
+                  </div>
+                </div>
+              </EmailGateOverlay>
 
               {/* Coaching Upsell */}
               <div className="max-w-4xl mx-auto rounded-2xl p-8 print:hidden" style={{ backgroundColor: "#1A1A1A" }}>

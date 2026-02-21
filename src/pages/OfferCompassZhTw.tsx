@@ -106,25 +106,26 @@ export default function OfferCompassZhTw() {
                 </div>
               </div>
 
-              {/* Full-width Scenario Comparison */}
-              {(scenarios.length >= 2 || active.current_comp_twd > 0) && (
-                <EmailGateOverlay
-                  isUnlocked={isUnlocked}
-                  onUnlock={unlock}
-                  headline="解鎖 Offer 比較"
-                  subtext="輸入你的 Email 查看 Offer 並排比較和詳細分析。"
-                  buttonText="解鎖比較分析"
-                  footerText="每週談判技巧，隨時取消訂閱。"
-                  errorText="請輸入有效的 Email 地址。"
-                >
-                  <ScenarioComparison scenarios={scenarios} activeId={activeId} currency={currency} locale="zh-tw" />
-                </EmailGateOverlay>
-              )}
+              {/* Single email gate for all detailed sections */}
+              <EmailGateOverlay
+                isUnlocked={isUnlocked}
+                onUnlock={unlock}
+                headline="解鎖完整分析"
+                subtext="輸入你的 Email 查看薪酬明細、4年預測和情境比較。"
+                buttonText="解鎖完整分析"
+                footerText="每週談判技巧，隨時取消訂閱。"
+                errorText="請輸入有效的 Email 地址。"
+              >
+                <div className="space-y-8">
+                  {(scenarios.length >= 2 || active.current_comp_twd > 0) && (
+                    <ScenarioComparison scenarios={scenarios} activeId={activeId} currency={currency} locale="zh-tw" />
+                  )}
 
-              {/* Negotiation Impact — constrained width */}
-              <div className="max-w-4xl mx-auto">
-                <NegotiationImpactZhTw currentComp={active.current_comp_twd || undefined} currency={currency} fxRate={active.fx_rate} />
-              </div>
+                  <div className="max-w-4xl mx-auto">
+                    <NegotiationImpactZhTw currentComp={active.current_comp_twd || undefined} currency={currency} fxRate={active.fx_rate} />
+                  </div>
+                </div>
+              </EmailGateOverlay>
 
               {/* Coaching Upsell */}
               <div className="max-w-4xl mx-auto rounded-2xl p-8 print:hidden" style={{ backgroundColor: "#1A1A1A" }}>

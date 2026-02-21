@@ -2,7 +2,6 @@ import { useState } from "react";
 import type { Scenario, Currency } from "./types";
 import { calcScenario, formatCurrency, formatPct } from "./types";
 import { useEmailGate } from "@/hooks/useEmailGate";
-import { EmailGateOverlay } from "@/components/EmailGateOverlay";
 import {
   PieChart,
   Pie,
@@ -115,14 +114,8 @@ export default function ResultsColumn({ scenario, currency, scenarios, activeId 
         </a>
       </div>
 
-      {/* Card 2: Pie Chart + 4-Year Projection + SIP — single gate */}
-      <EmailGateOverlay
-        isUnlocked={isUnlocked}
-        onUnlock={unlock}
-        headline="Unlock Full Breakdown"
-        subtext="Enter your email to see your compensation breakdown, 4-year projection, and scenario comparison."
-      >
-        <div className="space-y-6">
+      {/* Card 2: Pie Chart + 4-Year Projection — only shown when unlocked */}
+      {isUnlocked && <div className="space-y-6">
           {/* Pie Chart */}
           <div className="bg-card border border-border rounded-2xl p-6 md:p-8">
             <h3 className="font-heading text-lg font-bold text-foreground mb-4">Compensation Breakdown</h3>
@@ -245,8 +238,7 @@ export default function ResultsColumn({ scenario, currency, scenarios, activeId 
             </div>
           </div>
 
-        </div>
-      </EmailGateOverlay>
+        </div>}
 
       {/* Scenario Comparison moved to parent for full-width layout */}
 
