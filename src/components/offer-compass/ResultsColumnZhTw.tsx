@@ -2,7 +2,6 @@ import { useState } from "react";
 import type { Scenario, Currency } from "./types";
 import { calcScenario, formatCurrency, formatPct } from "./types";
 import { useEmailGate } from "@/hooks/useEmailGate";
-import { EmailGateOverlay } from "@/components/EmailGateOverlay";
 import {
   PieChart, Pie, Cell, ResponsiveContainer, Tooltip,
   BarChart, Bar, XAxis, YAxis, CartesianGrid, Legend,
@@ -99,7 +98,7 @@ export default function ResultsColumnZhTw({ scenario, currency, scenarios, activ
         </a>
       </div>
 
-      <EmailGateOverlay isUnlocked={isUnlocked} onUnlock={unlock} headline="解鎖完整分析" subtext="輸入你的 Email 查看薪酬明細、4年預測和情境比較。" buttonText="解鎖完整分析" footerText="每週談判技巧，隨時取消訂閱。" errorText="請輸入有效的 Email 地址。">
+      {isUnlocked && <div className="space-y-6">
         <div className="space-y-6">
           <div className="bg-card border border-border rounded-2xl p-6 md:p-8">
             <h3 className="font-heading text-lg font-bold text-foreground mb-4">薪酬組成</h3>
@@ -198,7 +197,7 @@ export default function ResultsColumnZhTw({ scenario, currency, scenarios, activ
             </div>
           </div>
         </div>
-      </EmailGateOverlay>
+      </div>}
 
       {/* Moved to parent for full-width layout */}
     </div>
