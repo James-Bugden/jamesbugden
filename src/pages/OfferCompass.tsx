@@ -1,4 +1,6 @@
 import { useState } from "react";
+import { useEmailGate } from "@/hooks/useEmailGate";
+import { EmailGateOverlay } from "@/components/EmailGateOverlay";
 import { Link } from "react-router-dom";
 import { Helmet } from "react-helmet-async";
 import { Plus, Copy, Sparkles, Trash2, RotateCcw, ArrowRight, X } from "lucide-react";
@@ -34,6 +36,8 @@ export default function OfferCompass() {
     clearActive,
     deleteActive,
   } = useScenarios();
+
+  const { isUnlocked, unlock } = useEmailGate();
 
   const { currency, setCurrency } = useDisplayCurrency();
   const [disclaimerVisible, setDisclaimerVisible] = useState(true);
@@ -130,7 +134,14 @@ export default function OfferCompass() {
 
               {/* Full-width Scenario Comparison */}
               {(scenarios.length >= 2 || active.current_comp_twd > 0) && (
-                <ScenarioComparison scenarios={scenarios} activeId={activeId} currency={currency} />
+                <EmailGateOverlay
+                  isUnlocked={isUnlocked}
+                  onUnlock={unlock}
+                  headline="Unlock Offer Comparison"
+                  subtext="Enter your email to see side-by-side offer comparison and detailed breakdown."
+                >
+                  <ScenarioComparison scenarios={scenarios} activeId={activeId} currency={currency} />
+                </EmailGateOverlay>
               )}
 
               {/* Negotiation Impact — constrained width */}

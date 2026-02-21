@@ -1,4 +1,6 @@
 import { useState } from "react";
+import { useEmailGate } from "@/hooks/useEmailGate";
+import { EmailGateOverlay } from "@/components/EmailGateOverlay";
 import { Link } from "react-router-dom";
 import { Helmet } from "react-helmet-async";
 import { Plus, Copy, Sparkles, Trash2, RotateCcw, ArrowRight } from "lucide-react";
@@ -22,6 +24,8 @@ export default function OfferCompassZhTw() {
     scenarios, activeId, active, setActiveId, updateActive,
     addScenario, duplicateActive, loadExample, clearActive, deleteActive,
   } = useScenarios();
+
+  const { isUnlocked, unlock } = useEmailGate();
 
   const { currency, setCurrency } = useDisplayCurrency();
 
@@ -104,7 +108,17 @@ export default function OfferCompassZhTw() {
 
               {/* Full-width Scenario Comparison */}
               {(scenarios.length >= 2 || active.current_comp_twd > 0) && (
-                <ScenarioComparison scenarios={scenarios} activeId={activeId} currency={currency} locale="zh-tw" />
+                <EmailGateOverlay
+                  isUnlocked={isUnlocked}
+                  onUnlock={unlock}
+                  headline="解鎖 Offer 比較"
+                  subtext="輸入你的 Email 查看 Offer 並排比較和詳細分析。"
+                  buttonText="解鎖比較分析"
+                  footerText="每週談判技巧，隨時取消訂閱。"
+                  errorText="請輸入有效的 Email 地址。"
+                >
+                  <ScenarioComparison scenarios={scenarios} activeId={activeId} currency={currency} locale="zh-tw" />
+                </EmailGateOverlay>
               )}
 
               {/* Negotiation Impact — constrained width */}
