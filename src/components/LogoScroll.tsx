@@ -1,6 +1,6 @@
 import googleLogo from "@/assets/logos/google.svg";
-import microsoftLogo from "@/assets/logos/microsoft.png";
-import metaLogo from "@/assets/logos/meta.png";
+import microsoftLogo from "@/assets/logos/microsoft.svg";
+import metaLogo from "@/assets/logos/meta.svg";
 import amazonLogo from "@/assets/logos/amazon.svg";
 import sapLogo from "@/assets/logos/sap.svg";
 import shopeeLogo from "@/assets/logos/shopee.svg";
@@ -14,7 +14,7 @@ import pgLogo from "@/assets/logos/pg.png";
 import teslaLogo from "@/assets/logos/tesla.png";
 import momoLogo from "@/assets/logos/momo.png";
 import mckinseyLogo from "@/assets/logos/mckinsey.svg";
-import bcgLogo from "@/assets/logos/bcg.png";
+import bcgLogo from "@/assets/logos/bcg.svg";
 
 interface Company {
   name: string;
