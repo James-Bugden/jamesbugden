@@ -63,9 +63,11 @@ export function useScenarios() {
 
   const loadExample = useCallback((locale?: "en" | "zh-tw") => {
     const ex = exampleScenario(locale);
-    setScenarios((prev) => [...prev, ex]);
-    setActiveId(ex.id);
-  }, []);
+    // Replace the active scenario instead of adding a new one
+    setScenarios((prev) =>
+      prev.map((s) => (s.id === activeId ? { ...ex, id: activeId } : s))
+    );
+  }, [activeId]);
 
   const clearActive = useCallback(() => {
     if (!active) return;
