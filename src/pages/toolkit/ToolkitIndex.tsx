@@ -96,11 +96,6 @@ const ToolkitIndex = () => {
                       <IconComponent className="w-6 h-6 text-gold" />
                     </div>
                     <div className="flex-1 min-w-0">
-                      <div className="flex items-center gap-2 mb-1">
-                        <span className="text-xs text-gold font-semibold uppercase">{template.id}</span>
-                        <span className="text-xs text-muted-foreground">•</span>
-                        <span className="text-xs text-muted-foreground">{template.email}</span>
-                      </div>
                       <h3 className="text-lg font-semibold text-foreground group-hover:text-gold transition-colors mb-1">
                         {template.title}
                       </h3>
