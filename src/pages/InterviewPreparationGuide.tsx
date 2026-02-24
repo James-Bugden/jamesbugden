@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import LanguageToggle from "@/components/LanguageToggle";
 import { Button } from "@/components/ui/button";
 import { Linkedin } from "lucide-react";
+import GuideShareButtons from "@/components/GuideShareButtons";
 import { InstagramIcon, ThreadsIcon } from "@/components/SocialIcons";
 import GoldCheckBadge from "@/components/GoldCheckBadge";
 
@@ -1182,6 +1183,8 @@ const InterviewPreparationGuide = () => {
           </Button>
         </div>
       </section>
+
+      <GuideShareButtons />
 
       {/* Footer */}
       <footer className="py-8 md:py-10 px-5 md:px-6 bg-card border-t border-border">

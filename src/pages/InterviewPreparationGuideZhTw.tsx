@@ -3,6 +3,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Linkedin } from "lucide-react";
 import { InstagramIcon, ThreadsIcon } from "@/components/SocialIcons";
+import GuideShareButtons from "@/components/GuideShareButtons";
 import GoldCheckBadge from "@/components/GoldCheckBadge";
 
 const InterviewPreparationGuideZhTw = () => {
@@ -1187,6 +1188,8 @@ const InterviewPreparationGuideZhTw = () => {
           </Button>
         </div>
       </section>
+
+      <GuideShareButtons isZhTw />
 
       {/* Footer */}
       <footer className="py-8 md:py-10 px-5 md:px-6 bg-card border-t border-border">

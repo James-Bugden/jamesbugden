@@ -1,6 +1,7 @@
 import { ArrowLeft, Download, CheckCircle2, AlertTriangle, Lightbulb, Target, Users, Rocket, Crown } from "lucide-react";
 import { Link, useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
+import GuideShareButtons from "@/components/GuideShareButtons";
 
 const PivotMethodMiniGuideZhTw = () => {
   const navigate = useNavigate();
@@ -503,6 +504,8 @@ const PivotMethodMiniGuideZhTw = () => {
             </a>
           </Button>
         </section>
+
+        <GuideShareButtons isZhTw />
 
         {/* Footer */}
         <footer className="mt-16 pt-8 border-t border-border text-center text-muted-foreground">

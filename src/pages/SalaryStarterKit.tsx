@@ -2,6 +2,7 @@ import { ArrowLeft, ArrowRight, DollarSign } from "lucide-react";
 import { Link } from "react-router-dom";
 import LanguageToggle from "@/components/LanguageToggle";
 import { Button } from "@/components/ui/button";
+import GuideShareButtons from "@/components/GuideShareButtons";
 
 const SalaryStarterKit = () => {
 
@@ -698,6 +699,8 @@ const SalaryStarterKit = () => {
           </Link>
         </div>
       </section>
+
+      <GuideShareButtons />
 
       {/* Footer */}
       <footer className="py-8 px-5 md:px-6 border-t border-border">
