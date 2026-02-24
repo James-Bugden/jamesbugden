@@ -1,6 +1,7 @@
 import { ArrowLeft, ArrowRight, DollarSign } from "lucide-react";
 import { Link, useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
+import GuideShareButtons from "@/components/GuideShareButtons";
 
 const SalaryStarterKitZhTw = () => {
   const navigate = useNavigate();
@@ -748,6 +749,8 @@ const SalaryStarterKitZhTw = () => {
           </Link>
         </div>
       </section>
+
+      <GuideShareButtons isZhTw />
 
       {/* Footer */}
       <footer className="py-8 px-5 md:px-6 border-t border-border">

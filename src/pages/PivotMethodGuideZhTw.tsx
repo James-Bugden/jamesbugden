@@ -3,6 +3,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { InstagramIcon, ThreadsIcon } from "@/components/SocialIcons";
 import GoldCheckBadge from "@/components/GoldCheckBadge";
+import GuideShareButtons from "@/components/GuideShareButtons";
 
 const PivotMethodGuideZhTw = () => {
   const navigate = useNavigate();
@@ -750,6 +751,8 @@ const PivotMethodGuideZhTw = () => {
           </p>
         </div>
       </section>
+
+      <GuideShareButtons isZhTw />
 
       {/* Footer */}
       <footer className="py-8 px-5 md:px-6 bg-nav-green">

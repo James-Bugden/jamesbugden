@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import GoldCheckBadge from "@/components/GoldCheckBadge";
 import { InstagramIcon, ThreadsIcon } from "@/components/SocialIcons";
+import GuideShareButtons from "@/components/GuideShareButtons";
 
 const ResumeGuide = () => {
   return (
@@ -485,6 +486,8 @@ const ResumeGuide = () => {
           </div>
         </section>
       </main>
+
+      <GuideShareButtons />
 
       {/* Footer */}
       <footer className="py-8 md:py-10 px-5 md:px-6 bg-card border-t border-border">

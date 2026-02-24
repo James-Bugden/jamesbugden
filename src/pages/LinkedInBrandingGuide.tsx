@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import LanguageToggle from "@/components/LanguageToggle";
 import { Button } from "@/components/ui/button";
 import { InstagramIcon, ThreadsIcon } from "@/components/SocialIcons";
+import GuideShareButtons from "@/components/GuideShareButtons";
 import GoldCheckBadge from "@/components/GoldCheckBadge";
 
 const LinkedInBrandingGuide = () => {
@@ -812,6 +813,8 @@ const LinkedInBrandingGuide = () => {
           </p>
         </div>
       </section>
+
+      <GuideShareButtons />
 
       {/* Footer */}
       <footer className="py-8 px-5 md:px-6 bg-nav-green">

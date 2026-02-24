@@ -2,6 +2,7 @@ import { ArrowLeft, Download, CheckCircle2, AlertTriangle, Lightbulb, Target, Us
 import { Link } from "react-router-dom";
 import LanguageToggle from "@/components/LanguageToggle";
 import { Button } from "@/components/ui/button";
+import GuideShareButtons from "@/components/GuideShareButtons";
 
 const PivotMethodMiniGuide = () => {
 
@@ -494,6 +495,8 @@ const PivotMethodMiniGuide = () => {
             </a>
           </Button>
         </section>
+
+        <GuideShareButtons />
 
         {/* Footer */}
         <footer className="mt-16 pt-8 border-t border-border text-center text-muted-foreground">
