@@ -22,8 +22,9 @@ const GuideShareButtons = ({ isZhTw = false }: GuideShareButtonsProps) => {
   };
 
   const handleLineShare = () => {
-    const url = encodeURIComponent(window.location.href);
-    window.open(`https://social-plugins.line.me/lineit/share?url=${url}`, "_blank", "noopener,noreferrer");
+    const url = window.location.href;
+    const text = encodeURIComponent(url);
+    window.location.href = `https://line.me/R/share?text=${text}`;
   };
 
   return (
