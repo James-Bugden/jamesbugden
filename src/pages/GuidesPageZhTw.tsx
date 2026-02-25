@@ -43,6 +43,14 @@ const guides: Guide[] = [
     href: "/zh-tw/pivot-method-guide",
     category: "職涯轉型",
   },
+  // Resume Guide
+  {
+    icon: FileText,
+    title: "履歷攻略：讓招募人員一眼選中你",
+    description: "來自財富 100 強招募人員的履歷撰寫完整指南",
+    href: "/zh-tw/resume-guide",
+    category: "履歷撰寫",
+  },
   // Interview Guides
   {
     icon: MessageSquare,
@@ -62,6 +70,7 @@ const guides: Guide[] = [
 
 const categories = [
   { en: "LinkedIn", zh: "LinkedIn" },
+  { en: "履歷撰寫", zh: "履歷撰寫" },
   { en: "職涯轉型", zh: "職涯轉型" },
   { en: "面試準備", zh: "面試準備" },
 ];
@@ -119,6 +128,7 @@ const GuidesPageZhTw = () => {
             <div key={category.zh} className="mb-12 last:mb-0">
               <h2 className="font-heading text-2xl md:text-3xl text-foreground mb-6 flex items-center gap-3">
                 {category.zh === "LinkedIn" && <Linkedin className="w-6 h-6 text-gold" />}
+                {category.zh === "履歷撰寫" && <FileText className="w-6 h-6 text-gold" />}
                 {category.zh === "職涯轉型" && <Briefcase className="w-6 h-6 text-gold" />}
                 {category.zh === "面試準備" && <MessageSquare className="w-6 h-6 text-gold" />}
                 {category.zh}
