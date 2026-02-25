@@ -25,6 +25,7 @@ const AdminReviews = lazy(() => import("./pages/AdminReviews"));
 const ClientReviewGate = lazy(() => import("./pages/ClientReviewGate"));
 const ProtectedRoute = lazy(() => import("./components/ProtectedRoute"));
 const ResumeGuide = lazy(() => import("./pages/ResumeGuide"));
+const ResumeGuideZhTw = lazy(() => import("./pages/ResumeGuideZhTw"));
 const InterviewPrepGuide = lazy(() => import("./pages/InterviewPrepGuide"));
 const InterviewPrepGuideZhTw = lazy(() => import("./pages/InterviewPrepGuideZhTw"));
 const InterviewPreparationGuide = lazy(() => import("./pages/InterviewPreparationGuide"));
@@ -128,6 +129,7 @@ const App = () => (
             />
             <Route path="/review" element={<ClientReviewGate />} />
             <Route path="/resume-guide" element={<ResumeGuide />} />
+            <Route path="/zh-tw/resume-guide" element={<ResumeGuideZhTw />} />
             <Route path="/interview-prep-guide" element={<InterviewPrepGuide />} />
             <Route path="/zh-tw/interview-prep-guide" element={<InterviewPrepGuideZhTw />} />
             
