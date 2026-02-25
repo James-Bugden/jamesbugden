@@ -397,10 +397,6 @@ const ResumeGuideZhTw = () => {
             JAMES BUGDEN
           </Link>
           <div className="flex items-center gap-3 md:gap-4">
-            <Link to="/zh-tw" className="text-sm text-cream-70 hover:text-cream transition-colors flex items-center gap-1">
-              <ArrowLeft className="w-4 h-4" />
-              <span className="hidden sm:inline">返回首頁</span>
-            </Link>
             <button
               onClick={() => navigate("/resume-guide")}
               className="px-3 py-1.5 text-sm font-semibold bg-gold/20 hover:bg-gold/30 text-gold border border-gold/40 rounded-md transition-all duration-200 hover:scale-105"
@@ -1146,9 +1142,9 @@ const ResumeGuideZhTw = () => {
       <footer className="py-8 md:py-10 px-5 md:px-6 bg-card border-t border-border">
         <div className="container mx-auto max-w-5xl">
           <div className="flex flex-col md:flex-row justify-between items-center gap-4">
-            <Link to="/zh-tw" className="text-sm text-muted-foreground hover:text-foreground transition-colors">
-              ← 返回首頁
-            </Link>
+            <span className="text-sm text-muted-foreground">
+              © 2024 James Bugden. 版權所有。
+            </span>
             <div className="flex items-center gap-6">
               <a href="https://www.linkedin.com/in/james-bugden/" target="_blank" rel="noopener noreferrer" className="text-muted-foreground hover:text-foreground transition-colors">
                 <Linkedin className="w-5 h-5" />
