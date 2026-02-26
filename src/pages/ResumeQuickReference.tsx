@@ -48,39 +48,40 @@ const ResumeQuickReference = () => {
       <main className="container mx-auto px-5 md:px-6 pb-20 max-w-3xl">
 
         {/* Download Your Resume Template */}
-        <section className="py-12 md:py-16">
-          <div className="flex items-center gap-3 mb-6">
-            <div className="w-12 h-12 rounded-full bg-gold/20 flex items-center justify-center">
-              <Download className="w-6 h-6 text-gold" />
+        <section className="-mx-5 md:-mx-6 px-5 md:px-6 py-10 md:py-14 bg-executive-green mt-0">
+          <div className="max-w-3xl mx-auto text-center">
+            <div className="inline-flex items-center gap-2 px-4 py-1.5 bg-cream/10 border border-cream/20 rounded-full mb-5">
+              <Download className="w-4 h-4 text-gold" />
+              <span className="text-sm text-cream/80 font-medium">Free Template</span>
             </div>
-            <h2 className="font-heading text-2xl md:text-3xl text-foreground">
+            <h2 className="font-heading text-2xl md:text-3xl text-cream mb-3">
               Download Your Resume Template
             </h2>
-          </div>
-          <p className="text-muted-foreground mb-6 text-lg">
-            Pre-formatted. Ready to fill in. Follows every rule in this guide.
-          </p>
-          <div className="flex flex-col sm:flex-row gap-4">
-            <a
-              href="https://docs.google.com/document/d/1BAkVHZ57JsLzL0hk1AUvFBu4bsx8ymMA7tPJKuJROIM/edit?usp=sharing"
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              <Button className="bg-gold hover:bg-gold/90 text-executive-green font-semibold w-full sm:w-auto">
-                <Download className="w-4 h-4 mr-2" />
-                English Template
-              </Button>
-            </a>
-            <a
-              href="https://docs.google.com/document/d/1U14BS5yISb17ejgVIX5IyeaVZKiww33hpJNOnEy4Wy0/edit?usp=sharing"
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              <Button variant="outline" className="border-gold/40 text-gold hover:bg-gold/10 font-semibold w-full sm:w-auto">
-                <Download className="w-4 h-4 mr-2" />
-                中文模板
-              </Button>
-            </a>
+            <p className="text-cream/70 mb-8 text-lg">
+              Pre-formatted. Ready to fill in. Follows every rule in this guide.
+            </p>
+            <div className="flex flex-col sm:flex-row gap-4 justify-center">
+              <a
+                href="https://docs.google.com/document/d/1BAkVHZ57JsLzL0hk1AUvFBu4bsx8ymMA7tPJKuJROIM/edit?usp=sharing"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                <Button size="lg" className="bg-gold hover:bg-gold/90 text-executive-green font-semibold w-full sm:w-auto h-12 px-8 text-base">
+                  <Download className="w-5 h-5 mr-2" />
+                  English Template
+                </Button>
+              </a>
+              <a
+                href="https://docs.google.com/document/d/1U14BS5yISb17ejgVIX5IyeaVZKiww33hpJNOnEy4Wy0/edit?usp=sharing"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                <Button size="lg" variant="outline" className="border-cream/30 text-cream hover:bg-cream/10 font-semibold w-full sm:w-auto h-12 px-8 text-base">
+                  <Download className="w-5 h-5 mr-2" />
+                  中文模板
+                </Button>
+              </a>
+            </div>
           </div>
         </section>
 
@@ -319,27 +320,30 @@ const ResumeQuickReference = () => {
         </section>
 
         {/* More Free Guides */}
-        <section className="mb-16">
-          <h2 className="font-heading text-2xl md:text-3xl text-foreground mb-6">
-            More Free Guides
-          </h2>
-          <div className="space-y-4">
-            <div className="bg-card border border-border rounded-lg p-5">
-              <p className="text-foreground font-medium mb-2">Got the interview? Win it.</p>
-              <Link to="/interview-preparation-guide" className="text-gold hover:underline text-sm">
-                Interview Preparation Guide →
+        <section className="-mx-5 md:-mx-6 px-5 md:px-6 py-10 md:py-14 bg-executive-green/5 border-y border-gold/20 mb-16">
+          <div className="max-w-3xl mx-auto">
+            <h2 className="font-heading text-2xl md:text-3xl text-foreground mb-2 text-center">
+              More Free Guides
+            </h2>
+            <p className="text-muted-foreground text-center mb-8">Keep levelling up your job search</p>
+            <div className="grid sm:grid-cols-3 gap-4">
+              <Link to="/interview-preparation-guide" className="group bg-card border border-border rounded-xl p-6 text-center hover:border-gold/40 hover:shadow-md transition-all">
+                <p className="text-foreground font-semibold mb-2 group-hover:text-gold transition-colors">Got the interview? Win it.</p>
+                <span className="text-gold text-sm font-medium">
+                  Interview Prep →
+                </span>
               </Link>
-            </div>
-            <div className="bg-card border border-border rounded-lg p-5">
-              <p className="text-foreground font-medium mb-2">Thinking about a career change?</p>
-              <Link to="/pivot-method-guide" className="text-gold hover:underline text-sm">
-                The Pivot Method Guide →
+              <Link to="/pivot-method-guide" className="group bg-card border border-border rounded-xl p-6 text-center hover:border-gold/40 hover:shadow-md transition-all">
+                <p className="text-foreground font-semibold mb-2 group-hover:text-gold transition-colors">Thinking about a career change?</p>
+                <span className="text-gold text-sm font-medium">
+                  Pivot Method →
+                </span>
               </Link>
-            </div>
-            <div className="bg-card border border-border rounded-lg p-5">
-              <p className="text-foreground font-medium mb-2">All guides</p>
-              <Link to="/guides" className="text-gold hover:underline text-sm">
-                View All Guides →
+              <Link to="/guides" className="group bg-card border border-border rounded-xl p-6 text-center hover:border-gold/40 hover:shadow-md transition-all">
+                <p className="text-foreground font-semibold mb-2 group-hover:text-gold transition-colors">Browse all resources</p>
+                <span className="text-gold text-sm font-medium">
+                  All Guides →
+                </span>
               </Link>
             </div>
           </div>
