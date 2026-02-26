@@ -45,11 +45,11 @@ const ResumeQuickReference = () => {
           <p className="text-lg md:text-xl text-cream/80 mb-3">
             Everything you need on one page. No fluff.
           </p>
-          <div className="flex items-center justify-center gap-4 mb-6">
+          <div className="flex flex-col sm:flex-row items-center justify-center gap-2 sm:gap-4 mb-6">
             <p className="text-base text-cream/60">
               By James Bugden, Senior Recruiter at Uber
             </p>
-            <span className="text-cream/30">·</span>
+            <span className="hidden sm:inline text-cream/30">·</span>
             <div className="flex items-center gap-1.5 text-cream/60">
               <Clock className="w-4 h-4" />
               <span className="text-sm">3 min read</span>
