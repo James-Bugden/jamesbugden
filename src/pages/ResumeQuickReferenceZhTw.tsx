@@ -86,7 +86,7 @@ const ResumeQuickReferenceZhTw = () => {
             >
               <Button size="lg" className="bg-gold hover:bg-gold/90 text-executive-green font-semibold w-full sm:w-auto h-12 px-8 text-base">
                 <Download className="w-5 h-5 mr-2" />
-                English Template
+                英文模板
               </Button>
             </a>
             <a
