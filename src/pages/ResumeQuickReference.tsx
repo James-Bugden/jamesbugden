@@ -1,4 +1,4 @@
-import { Download, FileText, Target, CheckSquare, Linkedin } from "lucide-react";
+import { Download, FileText, Target, CheckSquare, Linkedin, Clock, ArrowRight } from "lucide-react";
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import GoldCheckBadge from "@/components/GoldCheckBadge";
@@ -6,6 +6,12 @@ import { InstagramIcon, ThreadsIcon } from "@/components/SocialIcons";
 import GuideShareButtons from "@/components/GuideShareButtons";
 import LanguageToggle from "@/components/LanguageToggle";
 import PageSEO from "@/components/PageSEO";
+
+const SectionNumber = ({ num }: { num: string }) => (
+  <span className="text-gold/30 font-heading text-6xl md:text-7xl font-bold leading-none select-none">
+    {num}
+  </span>
+);
 
 const ResumeQuickReference = () => {
   return (
@@ -27,104 +33,118 @@ const ResumeQuickReference = () => {
       </nav>
 
       {/* Hero Section */}
-      <section className="pt-28 md:pt-36 pb-12 md:pb-16 px-5 md:px-6 bg-executive-green">
+      <section className="pt-28 md:pt-36 pb-14 md:pb-20 px-5 md:px-6 bg-executive-green">
         <div className="container mx-auto max-w-4xl text-center">
           <div className="inline-flex items-center gap-2 px-4 py-2 bg-cream/10 border border-cream/20 rounded-full mb-6">
             <FileText className="w-4 h-4 text-gold" />
             <span className="text-sm text-cream/80">Free Career Resource</span>
           </div>
           <h1 className="font-heading text-3xl md:text-5xl lg:text-6xl text-cream leading-tight mb-4">
-            The Perfect Resume: Quick Reference Guide
+            The Perfect Resume:<br className="hidden sm:block" /> Quick Reference Guide
           </h1>
-          <p className="text-lg md:text-xl text-cream/80 mb-2">
+          <p className="text-lg md:text-xl text-cream/80 mb-3">
             Everything you need on one page. No fluff.
           </p>
-          <p className="text-base text-cream/60 mb-6">
-            By James Bugden, Senior Recruiter at Uber
+          <div className="flex items-center justify-center gap-4 mb-6">
+            <p className="text-base text-cream/60">
+              By James Bugden, Senior Recruiter at Uber
+            </p>
+            <span className="text-cream/30">·</span>
+            <div className="flex items-center gap-1.5 text-cream/60">
+              <Clock className="w-4 h-4" />
+              <span className="text-sm">3 min read</span>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Template Download - separate from hero with distinct background */}
+      <section className="py-10 md:py-14 px-5 md:px-6 bg-card border-b border-border">
+        <div className="container mx-auto max-w-3xl text-center">
+          <div className="inline-flex items-center gap-2 px-4 py-1.5 bg-gold/10 border border-gold/20 rounded-full mb-5">
+            <Download className="w-4 h-4 text-gold" />
+            <span className="text-sm text-gold font-medium">Free Template</span>
+          </div>
+          <h2 className="font-heading text-2xl md:text-3xl text-foreground mb-3">
+            Download Your Resume Template
+          </h2>
+          <p className="text-muted-foreground mb-8 text-lg max-w-xl mx-auto">
+            Pre-formatted. Ready to fill in. Follows every rule in this guide.
           </p>
+          <div className="flex flex-col sm:flex-row gap-4 justify-center">
+            <a
+              href="https://docs.google.com/document/d/1BAkVHZ57JsLzL0hk1AUvFBu4bsx8ymMA7tPJKuJROIM/edit?usp=sharing"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              <Button size="lg" className="bg-gold hover:bg-gold/90 text-executive-green font-semibold w-full sm:w-auto h-12 px-8 text-base">
+                <Download className="w-5 h-5 mr-2" />
+                English Template
+              </Button>
+            </a>
+            <a
+              href="https://docs.google.com/document/d/1U14BS5yISb17ejgVIX5IyeaVZKiww33hpJNOnEy4Wy0/edit?usp=sharing"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              <Button size="lg" variant="outline" className="border-border text-foreground hover:bg-muted font-semibold w-full sm:w-auto h-12 px-8 text-base">
+                <Download className="w-5 h-5 mr-2" />
+                中文模板
+              </Button>
+            </a>
+          </div>
         </div>
       </section>
 
       <main className="container mx-auto px-5 md:px-6 pb-20 max-w-3xl">
 
-        {/* Download Your Resume Template */}
-        <section className="-mx-5 md:-mx-6 px-5 md:px-6 py-10 md:py-14 bg-executive-green mt-0">
-          <div className="max-w-3xl mx-auto text-center">
-            <div className="inline-flex items-center gap-2 px-4 py-1.5 bg-cream/10 border border-cream/20 rounded-full mb-5">
-              <Download className="w-4 h-4 text-gold" />
-              <span className="text-sm text-cream/80 font-medium">Free Template</span>
-            </div>
-            <h2 className="font-heading text-2xl md:text-3xl text-cream mb-3">
-              Download Your Resume Template
-            </h2>
-            <p className="text-cream/70 mb-8 text-lg">
-              Pre-formatted. Ready to fill in. Follows every rule in this guide.
-            </p>
-            <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <a
-                href="https://docs.google.com/document/d/1BAkVHZ57JsLzL0hk1AUvFBu4bsx8ymMA7tPJKuJROIM/edit?usp=sharing"
-                target="_blank"
-                rel="noopener noreferrer"
-              >
-                <Button size="lg" className="bg-gold hover:bg-gold/90 text-executive-green font-semibold w-full sm:w-auto h-12 px-8 text-base">
-                  <Download className="w-5 h-5 mr-2" />
-                  English Template
-                </Button>
-              </a>
-              <a
-                href="https://docs.google.com/document/d/1U14BS5yISb17ejgVIX5IyeaVZKiww33hpJNOnEy4Wy0/edit?usp=sharing"
-                target="_blank"
-                rel="noopener noreferrer"
-              >
-                <Button size="lg" variant="outline" className="border-cream/30 text-cream hover:bg-cream/10 font-semibold w-full sm:w-auto h-12 px-8 text-base">
-                  <Download className="w-5 h-5 mr-2" />
-                  中文模板
-                </Button>
-              </a>
-            </div>
-          </div>
-        </section>
-
         {/* The 4 Tests */}
-        <section className="mb-16">
-          <div className="flex items-center gap-3 mb-6">
-            <div className="w-12 h-12 rounded-full bg-executive-green flex items-center justify-center">
-              <Target className="w-6 h-6 text-cream" />
+        <section className="py-14 md:py-20">
+          <div className="flex items-start gap-5 mb-8">
+            <SectionNumber num="01" />
+            <div className="pt-3">
+              <h2 className="font-heading text-2xl md:text-3xl text-foreground mb-2">
+                The 4 Tests Your Resume Must Pass
+              </h2>
+              <p className="text-muted-foreground text-lg">
+                Your resume goes through four tests, in order. Fail any one and you're out.
+              </p>
             </div>
-            <h2 className="font-heading text-2xl md:text-3xl text-foreground">
-              The 4 Tests Your Resume Must Pass
-            </h2>
           </div>
-          <p className="text-muted-foreground mb-6 text-lg">
-            Your resume goes through four tests, in order. Fail any one and you're out.
-          </p>
-          <div className="flex flex-wrap items-center gap-2 md:gap-3 mb-4">
-            {["Test 1: Keyword", "Test 2: Scan (6 sec)", "Test 3: Qualifications", "Test 4: Fit"].map((test, i) => (
-              <div key={test} className="flex items-center gap-2">
-                <span className="px-3 py-1.5 bg-card border border-border rounded-lg text-sm font-medium text-foreground">
-                  {test}
-                </span>
-                {i < 3 && <span className="text-gold font-bold">→</span>}
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-3 mb-6">
+            {[
+              { num: "1", label: "Keyword" },
+              { num: "2", label: "Scan (6 sec)" },
+              { num: "3", label: "Qualifications" },
+              { num: "4", label: "Fit" },
+            ].map((test, i) => (
+              <div key={i} className="bg-card border border-border rounded-xl p-4 text-center relative">
+                <span className="text-gold font-heading text-2xl font-bold">{test.num}</span>
+                <p className="text-foreground text-sm font-medium mt-1">{test.label}</p>
+                {i < 3 && (
+                  <ArrowRight className="w-4 h-4 text-gold absolute -right-3.5 top-1/2 -translate-y-1/2 hidden md:block" />
+                )}
               </div>
             ))}
-            <div className="flex items-center gap-2">
-              <span className="text-gold font-bold">→</span>
-              <span className="px-3 py-1.5 bg-gold/20 border border-gold/40 rounded-lg text-sm font-semibold text-gold">
-                ✓ Callback
-              </span>
-            </div>
           </div>
-          <p className="text-foreground font-medium">
-            Pass all four and the recruiter picks up the phone.
-          </p>
+          <div className="bg-gold/10 border border-gold/30 rounded-lg px-5 py-3 text-center">
+            <p className="text-foreground font-medium">
+              Pass all four → <span className="text-gold font-semibold">the recruiter picks up the phone.</span>
+            </p>
+          </div>
         </section>
 
         {/* 10 Golden Rules */}
-        <section className="mb-16">
-          <h2 className="font-heading text-2xl md:text-3xl text-foreground mb-8">
-            10 Golden Rules
-          </h2>
-          <div className="space-y-4">
+        <section className="pb-14 md:pb-20">
+          <div className="flex items-start gap-5 mb-8">
+            <SectionNumber num="02" />
+            <div className="pt-3">
+              <h2 className="font-heading text-2xl md:text-3xl text-foreground">
+                10 Golden Rules
+              </h2>
+            </div>
+          </div>
+          <div className="grid sm:grid-cols-2 gap-3">
             {[
               "Only apply to jobs you're qualified for.",
               "Mirror the language from your target job descriptions.",
@@ -137,218 +157,262 @@ const ResumeQuickReference = () => {
               "Perfection prevents rejection.",
               "Be persistently consistent.",
             ].map((rule, i) => (
-              <div key={i} className="flex items-start gap-4">
-                <span className="w-8 h-8 rounded-full bg-gold/20 flex items-center justify-center flex-shrink-0 text-sm font-bold text-gold">
+              <div key={i} className="flex items-start gap-3 bg-card border border-border rounded-xl p-4 hover:border-gold/30 transition-colors">
+                <span className="w-7 h-7 rounded-full bg-gold/20 flex items-center justify-center flex-shrink-0 text-xs font-bold text-gold mt-0.5">
                   {i + 1}
                 </span>
-                <p className="text-foreground text-base md:text-lg pt-1">{rule}</p>
+                <p className="text-foreground text-sm md:text-base leading-relaxed">{rule}</p>
               </div>
             ))}
-          </div>
-        </section>
-
-        {/* The Three R Model */}
-        <section className="mb-16">
-          <h2 className="font-heading text-2xl md:text-3xl text-foreground mb-6">
-            The Three R Model
-          </h2>
-          <p className="text-muted-foreground mb-6 text-lg">
-            Every bullet on your resume must be:
-          </p>
-          <div className="space-y-4 mb-8">
-            {[
-              { letter: "R", title: "Relevant", desc: "Tied to the job description." },
-              { letter: "R", title: "Relative", desc: "Compared to a benchmark." },
-              { letter: "R", title: "Results-oriented", desc: "Focused on outcomes, not tasks." },
-            ].map((item, i) => (
-              <div key={i} className="flex items-start gap-3">
-                <span className="w-8 h-8 rounded-full bg-gold/20 flex items-center justify-center flex-shrink-0 font-bold text-gold text-sm">
-                  {item.letter}
-                </span>
-                <div>
-                  <span className="font-semibold text-foreground">{item.title}:</span>{" "}
-                  <span className="text-muted-foreground">{item.desc}</span>
-                </div>
-              </div>
-            ))}
-          </div>
-
-          {/* Weak vs Strong */}
-          <div className="bg-destructive/5 border border-destructive/20 rounded-lg p-5 mb-4">
-            <p className="font-medium text-destructive mb-2">WEAK:</p>
-            <p className="text-foreground text-sm italic">"Responsible for managing client accounts."</p>
-            <p className="text-muted-foreground text-xs mt-1">(Not relevant. Not relative. No results.)</p>
-          </div>
-          <div className="bg-card border border-gold/30 rounded-lg p-5 mb-4">
-            <p className="font-medium text-gold mb-2">STRONG:</p>
-            <p className="text-foreground text-sm italic">"Drove 85% client retention across 37 accounts, exceeding growth targets by 55%."</p>
-            <p className="text-muted-foreground text-xs mt-1">(Relevant. Relative. Results-oriented.)</p>
-          </div>
-          <p className="text-muted-foreground italic text-sm">
-            Same person. Same job. Completely different impression.
-          </p>
-        </section>
-
-        {/* The Framing Technique */}
-        <section className="mb-16">
-          <h2 className="font-heading text-2xl md:text-3xl text-foreground mb-6">
-            The Framing Technique
-          </h2>
-          <p className="text-muted-foreground mb-6 text-lg">
-            Convert vague impact into specific numbers. Make the math work for you.
-          </p>
-          <div className="bg-executive-green rounded-lg p-6 mb-6">
-            <p className="text-cream font-mono text-sm md:text-base text-center">
-              8 people × 2 hrs saved/week × $30/hr × 52 weeks = <span className="text-gold font-bold">$25,000/year</span>
-            </p>
-          </div>
-          <div className="bg-destructive/5 border border-destructive/20 rounded-lg p-5 mb-4">
-            <p className="font-medium text-destructive mb-2">Before:</p>
-            <p className="text-foreground text-sm italic">"Streamlined a process that saved the team time."</p>
-          </div>
-          <div className="bg-card border border-gold/30 rounded-lg p-5 mb-4">
-            <p className="font-medium text-gold mb-2">After:</p>
-            <p className="text-foreground text-sm italic">"Saved $25,000 annually across 8 team members."</p>
-          </div>
-          <p className="text-muted-foreground italic text-sm">
-            Same project. Same result. 10x stronger impression.
-          </p>
-        </section>
-
-        {/* Pre-Submission Checklist */}
-        <section className="mb-16">
-          <div className="flex items-center gap-3 mb-8">
-            <div className="w-12 h-12 rounded-full bg-gold/20 flex items-center justify-center">
-              <CheckSquare className="w-6 h-6 text-gold" />
-            </div>
-            <h2 className="font-heading text-2xl md:text-3xl text-foreground">
-              Pre-Submission Checklist
-            </h2>
-          </div>
-
-          {/* Planning */}
-          <div className="bg-card border border-border rounded-xl p-6 md:p-8 mb-6">
-            <h3 className="font-heading text-xl text-gold mb-4">PLANNING</h3>
-            <ul className="space-y-3">
-              <li className="flex items-start gap-3">
-                <GoldCheckBadge />
-                <span className="text-foreground">Identified target companies and roles</span>
-              </li>
-              <li className="flex items-start gap-3">
-                <GoldCheckBadge />
-                <span className="text-foreground">Extracted keywords from 3-5 job descriptions</span>
-              </li>
-              <li className="flex items-start gap-3">
-                <GoldCheckBadge />
-                <span className="text-foreground">Mapped achievements to job description keywords</span>
-              </li>
-            </ul>
-          </div>
-
-          {/* Format */}
-          <div className="bg-card border border-border rounded-xl p-6 md:p-8 mb-6">
-            <h3 className="font-heading text-xl text-gold mb-4">FORMAT</h3>
-            <ul className="space-y-3">
-              <li className="flex items-start gap-3">
-                <GoldCheckBadge />
-                <span className="text-foreground">Exactly one page, edge to edge</span>
-              </li>
-              <li className="flex items-start gap-3">
-                <GoldCheckBadge />
-                <span className="text-foreground">Content density 30-50%</span>
-              </li>
-              <li className="flex items-start gap-3">
-                <GoldCheckBadge />
-                <span className="text-foreground">One font throughout. No color, no graphics.</span>
-              </li>
-              <li className="flex items-start gap-3">
-                <GoldCheckBadge />
-                <span className="text-foreground">Margins 0.5-1 inch. Line spacing 1.0-1.15.</span>
-              </li>
-            </ul>
-          </div>
-
-          {/* Content */}
-          <div className="bg-card border border-border rounded-xl p-6 md:p-8 mb-6">
-            <h3 className="font-heading text-xl text-gold mb-4">CONTENT</h3>
-            <ul className="space-y-3">
-              <li className="flex items-start gap-3">
-                <GoldCheckBadge />
-                <span className="text-foreground">Name is the most prominent element</span>
-              </li>
-              <li className="flex items-start gap-3">
-                <GoldCheckBadge />
-                <span className="text-foreground">Every bullet starts with a strong action verb</span>
-              </li>
-              <li className="flex items-start gap-3">
-                <GoldCheckBadge />
-                <span className="text-foreground">Every bullet focuses on results, not responsibilities</span>
-              </li>
-              <li className="flex items-start gap-3">
-                <GoldCheckBadge />
-                <span className="text-foreground">Numbers, percentages, or dollar amounts in bullets</span>
-              </li>
-              <li className="flex items-start gap-3">
-                <GoldCheckBadge />
-                <span className="text-foreground">"5 For 5" rule: max 5 bullets (recent), max 3 (older)</span>
-              </li>
-              <li className="flex items-start gap-3">
-                <GoldCheckBadge />
-                <span className="text-foreground">Nothing from the "never include" list</span>
-              </li>
-            </ul>
-          </div>
-
-          {/* Polish */}
-          <div className="bg-card border border-border rounded-xl p-6 md:p-8">
-            <h3 className="font-heading text-xl text-gold mb-4">POLISH</h3>
-            <ul className="space-y-3">
-              <li className="flex items-start gap-3">
-                <GoldCheckBadge />
-                <span className="text-foreground">Zero spelling or grammar errors</span>
-              </li>
-              <li className="flex items-start gap-3">
-                <GoldCheckBadge />
-                <span className="text-foreground">Consistent formatting (bold, italics, dates, spacing)</span>
-              </li>
-              <li className="flex items-start gap-3">
-                <GoldCheckBadge />
-                <span className="text-foreground">File saved as PDF: "[Name] Resume_[Month Year]_[Company]"</span>
-              </li>
-            </ul>
-          </div>
-        </section>
-
-        {/* More Free Guides */}
-        <section className="-mx-5 md:-mx-6 px-5 md:px-6 py-10 md:py-14 bg-executive-green/5 border-y border-gold/20 mb-16">
-          <div className="max-w-3xl mx-auto">
-            <h2 className="font-heading text-2xl md:text-3xl text-foreground mb-2 text-center">
-              More Free Guides
-            </h2>
-            <p className="text-muted-foreground text-center mb-8">Keep levelling up your job search</p>
-            <div className="grid sm:grid-cols-3 gap-4">
-              <Link to="/interview-preparation-guide" className="group bg-card border border-border rounded-xl p-6 text-center hover:border-gold/40 hover:shadow-md transition-all">
-                <p className="text-foreground font-semibold mb-2 group-hover:text-gold transition-colors">Got the interview? Win it.</p>
-                <span className="text-gold text-sm font-medium">
-                  Interview Prep →
-                </span>
-              </Link>
-              <Link to="/pivot-method-guide" className="group bg-card border border-border rounded-xl p-6 text-center hover:border-gold/40 hover:shadow-md transition-all">
-                <p className="text-foreground font-semibold mb-2 group-hover:text-gold transition-colors">Thinking about a career change?</p>
-                <span className="text-gold text-sm font-medium">
-                  Pivot Method →
-                </span>
-              </Link>
-              <Link to="/guides" className="group bg-card border border-border rounded-xl p-6 text-center hover:border-gold/40 hover:shadow-md transition-all">
-                <p className="text-foreground font-semibold mb-2 group-hover:text-gold transition-colors">Browse all resources</p>
-                <span className="text-gold text-sm font-medium">
-                  All Guides →
-                </span>
-              </Link>
-            </div>
           </div>
         </section>
       </main>
+
+      {/* Three R Model - full width alternate bg */}
+      <section className="py-14 md:py-20 px-5 md:px-6 bg-card border-y border-border">
+        <div className="container mx-auto max-w-3xl">
+          <div className="flex items-start gap-5 mb-8">
+            <SectionNumber num="03" />
+            <div className="pt-3">
+              <h2 className="font-heading text-2xl md:text-3xl text-foreground mb-2">
+                The Three R Model
+              </h2>
+              <p className="text-muted-foreground text-lg">
+                Every bullet on your resume must be:
+              </p>
+            </div>
+          </div>
+
+          <div className="grid sm:grid-cols-3 gap-4 mb-10">
+            {[
+              { title: "Relevant", desc: "Tied to the job description." },
+              { title: "Relative", desc: "Compared to a benchmark." },
+              { title: "Results-oriented", desc: "Focused on outcomes, not tasks." },
+            ].map((item, i) => (
+              <div key={i} className="bg-background border border-border rounded-xl p-5 text-center">
+                <span className="inline-flex w-10 h-10 rounded-full bg-gold/20 items-center justify-center font-bold text-gold text-lg mb-3">
+                  R
+                </span>
+                <h3 className="font-semibold text-foreground mb-1">{item.title}</h3>
+                <p className="text-muted-foreground text-sm">{item.desc}</p>
+              </div>
+            ))}
+          </div>
+
+          {/* Side-by-side comparison */}
+          <div className="grid md:grid-cols-2 gap-4">
+            <div className="bg-destructive/5 border border-destructive/20 rounded-xl p-5">
+              <p className="font-medium text-destructive mb-3 text-sm uppercase tracking-wider">✕ Weak</p>
+              <p className="text-foreground italic mb-2">"Responsible for managing client accounts."</p>
+              <p className="text-muted-foreground text-xs">(Not relevant. Not relative. No results.)</p>
+            </div>
+            <div className="bg-background border border-gold/30 rounded-xl p-5">
+              <p className="font-medium text-gold mb-3 text-sm uppercase tracking-wider">✓ Strong</p>
+              <p className="text-foreground italic mb-2">"Drove 85% client retention across 37 accounts, exceeding growth targets by 55%."</p>
+              <p className="text-muted-foreground text-xs">(Relevant. Relative. Results-oriented.)</p>
+            </div>
+          </div>
+          <p className="text-muted-foreground italic text-sm text-center mt-6">
+            Same person. Same job. Completely different impression.
+          </p>
+        </div>
+      </section>
+
+      {/* The Framing Technique */}
+      <section className="py-14 md:py-20 px-5 md:px-6 bg-background">
+        <div className="container mx-auto max-w-3xl">
+          <div className="flex items-start gap-5 mb-8">
+            <SectionNumber num="04" />
+            <div className="pt-3">
+              <h2 className="font-heading text-2xl md:text-3xl text-foreground mb-2">
+                The Framing Technique
+              </h2>
+              <p className="text-muted-foreground text-lg">
+                Convert vague impact into specific numbers. Make the math work for you.
+              </p>
+            </div>
+          </div>
+
+          <div className="bg-executive-green rounded-xl p-6 md:p-8 mb-8">
+            <p className="text-cream/60 text-xs uppercase tracking-wider mb-3 text-center">The Formula</p>
+            <p className="text-cream font-mono text-sm md:text-base text-center leading-relaxed">
+              8 people × 2 hrs saved/week × $30/hr × 52 weeks
+            </p>
+            <p className="text-gold font-heading text-2xl md:text-3xl text-center mt-2 font-bold">
+              = $25,000/year
+            </p>
+          </div>
+
+          <div className="grid md:grid-cols-2 gap-4">
+            <div className="bg-destructive/5 border border-destructive/20 rounded-xl p-5">
+              <p className="font-medium text-destructive mb-3 text-sm uppercase tracking-wider">✕ Before</p>
+              <p className="text-foreground text-sm italic">"Streamlined a process that saved the team time."</p>
+            </div>
+            <div className="bg-card border border-gold/30 rounded-xl p-5">
+              <p className="font-medium text-gold mb-3 text-sm uppercase tracking-wider">✓ After</p>
+              <p className="text-foreground text-sm italic">"Saved $25,000 annually across 8 team members."</p>
+            </div>
+          </div>
+          <p className="text-muted-foreground italic text-sm text-center mt-6">
+            Same project. Same result. 10x stronger impression.
+          </p>
+        </div>
+      </section>
+
+      {/* Pre-Submission Checklist */}
+      <section className="py-14 md:py-20 px-5 md:px-6 bg-card border-y border-border">
+        <div className="container mx-auto max-w-3xl">
+          <div className="flex items-start gap-5 mb-10">
+            <SectionNumber num="05" />
+            <div className="pt-3">
+              <h2 className="font-heading text-2xl md:text-3xl text-foreground">
+                Pre-Submission Checklist
+              </h2>
+            </div>
+          </div>
+
+          <div className="grid md:grid-cols-2 gap-6">
+            {/* Planning */}
+            <div className="bg-background border border-border rounded-xl p-6">
+              <h3 className="font-heading text-lg text-gold mb-4 flex items-center gap-2">
+                <span className="w-2 h-2 rounded-full bg-gold" />
+                PLANNING
+              </h3>
+              <ul className="space-y-3">
+                <li className="flex items-start gap-3">
+                  <GoldCheckBadge />
+                  <span className="text-foreground text-sm">Identified target companies and roles</span>
+                </li>
+                <li className="flex items-start gap-3">
+                  <GoldCheckBadge />
+                  <span className="text-foreground text-sm">Extracted keywords from 3-5 job descriptions</span>
+                </li>
+                <li className="flex items-start gap-3">
+                  <GoldCheckBadge />
+                  <span className="text-foreground text-sm">Mapped achievements to JD keywords</span>
+                </li>
+              </ul>
+            </div>
+
+            {/* Format */}
+            <div className="bg-background border border-border rounded-xl p-6">
+              <h3 className="font-heading text-lg text-gold mb-4 flex items-center gap-2">
+                <span className="w-2 h-2 rounded-full bg-gold" />
+                FORMAT
+              </h3>
+              <ul className="space-y-3">
+                <li className="flex items-start gap-3">
+                  <GoldCheckBadge />
+                  <span className="text-foreground text-sm">Exactly one page, edge to edge</span>
+                </li>
+                <li className="flex items-start gap-3">
+                  <GoldCheckBadge />
+                  <span className="text-foreground text-sm">Content density 30-50%</span>
+                </li>
+                <li className="flex items-start gap-3">
+                  <GoldCheckBadge />
+                  <span className="text-foreground text-sm">One font throughout. No color, no graphics.</span>
+                </li>
+                <li className="flex items-start gap-3">
+                  <GoldCheckBadge />
+                  <span className="text-foreground text-sm">Margins 0.5-1 inch. Line spacing 1.0-1.15.</span>
+                </li>
+              </ul>
+            </div>
+
+            {/* Content */}
+            <div className="bg-background border border-border rounded-xl p-6">
+              <h3 className="font-heading text-lg text-gold mb-4 flex items-center gap-2">
+                <span className="w-2 h-2 rounded-full bg-gold" />
+                CONTENT
+              </h3>
+              <ul className="space-y-3">
+                <li className="flex items-start gap-3">
+                  <GoldCheckBadge />
+                  <span className="text-foreground text-sm">Name is the most prominent element</span>
+                </li>
+                <li className="flex items-start gap-3">
+                  <GoldCheckBadge />
+                  <span className="text-foreground text-sm">Every bullet starts with a strong action verb</span>
+                </li>
+                <li className="flex items-start gap-3">
+                  <GoldCheckBadge />
+                  <span className="text-foreground text-sm">Every bullet focuses on results, not responsibilities</span>
+                </li>
+                <li className="flex items-start gap-3">
+                  <GoldCheckBadge />
+                  <span className="text-foreground text-sm">Numbers, percentages, or dollar amounts in bullets</span>
+                </li>
+                <li className="flex items-start gap-3">
+                  <GoldCheckBadge />
+                  <span className="text-foreground text-sm">"5 For 5" rule: max 5 bullets (recent), max 3 (older)</span>
+                </li>
+                <li className="flex items-start gap-3">
+                  <GoldCheckBadge />
+                  <span className="text-foreground text-sm">Nothing from the "never include" list</span>
+                </li>
+              </ul>
+            </div>
+
+            {/* Polish */}
+            <div className="bg-background border border-border rounded-xl p-6">
+              <h3 className="font-heading text-lg text-gold mb-4 flex items-center gap-2">
+                <span className="w-2 h-2 rounded-full bg-gold" />
+                POLISH
+              </h3>
+              <ul className="space-y-3">
+                <li className="flex items-start gap-3">
+                  <GoldCheckBadge />
+                  <span className="text-foreground text-sm">Zero spelling or grammar errors</span>
+                </li>
+                <li className="flex items-start gap-3">
+                  <GoldCheckBadge />
+                  <span className="text-foreground text-sm">Consistent formatting (bold, italics, dates, spacing)</span>
+                </li>
+                <li className="flex items-start gap-3">
+                  <GoldCheckBadge />
+                  <span className="text-foreground text-sm">File saved as PDF: "[Name] Resume_[Month Year]_[Company]"</span>
+                </li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* More Free Guides */}
+      <section className="py-14 md:py-20 px-5 md:px-6 bg-executive-green">
+        <div className="container mx-auto max-w-3xl">
+          <div className="flex items-start gap-5 mb-8">
+            <span className="text-cream/20 font-heading text-6xl md:text-7xl font-bold leading-none select-none">06</span>
+            <div className="pt-3">
+              <h2 className="font-heading text-2xl md:text-3xl text-cream mb-2">
+                More Free Guides
+              </h2>
+              <p className="text-cream/60">Keep levelling up your job search</p>
+            </div>
+          </div>
+          <div className="grid sm:grid-cols-3 gap-4">
+            <Link to="/interview-preparation-guide" className="group bg-cream/5 border border-cream/10 rounded-xl p-6 text-center hover:bg-cream/10 transition-all">
+              <p className="text-cream font-semibold mb-2 group-hover:text-gold transition-colors">Got the interview? Win it.</p>
+              <span className="text-gold text-sm font-medium">
+                Interview Prep →
+              </span>
+            </Link>
+            <Link to="/pivot-method-guide" className="group bg-cream/5 border border-cream/10 rounded-xl p-6 text-center hover:bg-cream/10 transition-all">
+              <p className="text-cream font-semibold mb-2 group-hover:text-gold transition-colors">Thinking about a career change?</p>
+              <span className="text-gold text-sm font-medium">
+                Pivot Method →
+              </span>
+            </Link>
+            <Link to="/guides" className="group bg-cream/5 border border-cream/10 rounded-xl p-6 text-center hover:bg-cream/10 transition-all">
+              <p className="text-cream font-semibold mb-2 group-hover:text-gold transition-colors">Browse all resources</p>
+              <span className="text-gold text-sm font-medium">
+                All Guides →
+              </span>
+            </Link>
+          </div>
+        </div>
+      </section>
 
       <GuideShareButtons />
 
