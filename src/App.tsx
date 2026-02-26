@@ -49,6 +49,8 @@ const OfferCompass = lazy(() => import("./pages/OfferCompass"));
 const OfferCompassCompare = lazy(() => import("./pages/OfferCompassCompare"));
 const OfferCompassZhTw = lazy(() => import("./pages/OfferCompassZhTw"));
 const SiteDirectory = lazy(() => import("./pages/SiteDirectory"));
+const ResumeQuickReference = lazy(() => import("./pages/ResumeQuickReference"));
+const ResumeQuickReferenceZhTw = lazy(() => import("./pages/ResumeQuickReferenceZhTw"));
 const ResumeAnalyzer = lazy(() => import("./pages/ResumeAnalyzer"));
 const ResumeBuilder = lazy(() => import("./pages/ResumeBuilder"));
 const JobTracker = lazy(() => import("./pages/JobTracker"));
@@ -204,6 +206,8 @@ const App = () => (
             <Route path="/zh-tw/reviews/willy-lin" element={<WillyLinReviewZhTw />} />
             <Route path="/reviews/hope-chen" element={<HopeChenReview />} />
             <Route path="/zh-tw/reviews/hope-chen" element={<HopeChenReviewZhTw />} />
+            <Route path="/resume-quick-reference" element={<ResumeQuickReference />} />
+            <Route path="/zh-tw/resume-quick-reference" element={<ResumeQuickReferenceZhTw />} />
             <Route path="/resume-analyzer" element={<ResumeAnalyzer />} />
             <Route path="/resume" element={<ResumeBuilder />} />
             <Route path="/jobs" element={<JobTracker />} />
