@@ -44,6 +44,7 @@ const sections: Section[] = [
     title: "Guides",
     links: [
       { label: "Resume Guide", en: "/resume-guide" },
+      { label: "Resume Quick Reference", en: "/resume-quick-reference", zh: "/zh-tw/resume-quick-reference" },
       { label: "Interview Prep Guide", en: "/interview-prep-guide", zh: "/zh-tw/interview-prep-guide" },
       { label: "Interview Preparation Guide", en: "/interview-preparation-guide", zh: "/zh-tw/interview-preparation-guide" },
       { label: "LinkedIn Guide", en: "/linkedin-guide", zh: "/zh-tw/linkedin-guide" },
