@@ -417,7 +417,7 @@ const ResumeQuickReferenceZhTw = () => {
         </div>
       </section>
 
-      <GuideShareButtons />
+      <GuideShareButtons isZhTw />
 
       {/* Footer */}
       <footer className="py-8 md:py-10 px-5 md:px-6 bg-card border-t border-border">
