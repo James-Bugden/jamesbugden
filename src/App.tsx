@@ -6,6 +6,7 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import { ScrollToTop } from "./components/ScrollToTop";
 import { HelmetProvider } from "react-helmet-async";
+import { AuthProvider } from "./contexts/AuthContext";
 
 // Loading fallback component
 const PageLoader = () => (
@@ -55,6 +56,9 @@ const ResumeAnalyzer = lazy(() => import("./pages/ResumeAnalyzer"));
 const ResumeBuilder = lazy(() => import("./pages/ResumeBuilder"));
 const JobTracker = lazy(() => import("./pages/JobTracker"));
 const TrackerPage = lazy(() => import("./pages/TrackerPage"));
+const Login = lazy(() => import("./pages/Login"));
+const Signup = lazy(() => import("./pages/Signup"));
+const ResetPassword = lazy(() => import("./pages/ResetPassword"));
 
 // Toolkit pages - English
 const ToolkitIndex = lazy(() => import("./pages/toolkit/ToolkitIndex"));
@@ -115,6 +119,7 @@ const App = () => (
       <Toaster />
       <Sonner />
       <BrowserRouter>
+        <AuthProvider>
         <ScrollToTop />
         <Suspense fallback={<PageLoader />}>
           <Routes>
@@ -213,10 +218,14 @@ const App = () => (
             <Route path="/jobs" element={<JobTracker />} />
             <Route path="/tracker" element={<TrackerPage />} />
             <Route path="/site-directory" element={<SiteDirectory />} />
+            <Route path="/login" element={<Login />} />
+            <Route path="/signup" element={<Signup />} />
+            <Route path="/reset-password" element={<ResetPassword />} />
             {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
             <Route path="*" element={<NotFound />} />
           </Routes>
         </Suspense>
+        </AuthProvider>
       </BrowserRouter>
     </TooltipProvider>
   </QueryClientProvider>
