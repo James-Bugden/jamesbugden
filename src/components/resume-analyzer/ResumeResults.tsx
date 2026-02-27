@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { ChevronDown, CheckCircle, AlertTriangle, XCircle, ExternalLink, Share2 } from "lucide-react";
+import { ChevronDown, CheckCircle, AlertTriangle, XCircle, ExternalLink, Share2, ArrowRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import type { AnalysisResult } from "./types";
 
@@ -145,7 +145,7 @@ export default function ResumeResults({ analysis, lang }: { analysis: AnalysisRe
           </h2>
           <div className="space-y-3">
             {analysis.sections.map((section, i) => (
-              <SectionCard key={i} section={section} lang={lang} defaultOpen={i === 0} />
+              <SectionCard key={i} section={section} lang={lang} defaultOpen={i === 0 || section.score < 6} />
             ))}
           </div>
         </div>
@@ -203,6 +203,26 @@ export default function ResumeResults({ analysis, lang }: { analysis: AnalysisRe
           </div>
         </div>
 
+        {/* Coaching CTA */}
+        <div className="border-2 border-gold/40 rounded-2xl p-6 md:p-8 text-center" style={{ background: 'radial-gradient(ellipse at center, hsl(153 38% 17%) 0%, hsl(153 42% 13%) 100%)' }}>
+          <h2 className="font-heading text-xl md:text-2xl text-cream mb-2">
+            {t(lang, "Want a Recruiter to Fix All of This For You?", "想讓招募官幫你全部改好？")}
+          </h2>
+          <p className="text-sm text-cream/70 mb-5 max-w-md mx-auto leading-relaxed">
+            {t(lang,
+              "I personally review and rewrite resumes for a small number of clients each month. See real before-and-after examples.",
+              "我每月為少數客戶親自審閱並改寫履歷。查看真實的修改前後範例。"
+            )}
+          </p>
+          <a
+            href={lang === "zh-TW" ? "/zh-tw#coaching" : "/#coaching"}
+            className="inline-flex items-center gap-2 px-6 py-3 rounded-lg bg-gold text-[#1B3A2F] text-sm font-bold hover:bg-gold/90 transition-colors"
+          >
+            {t(lang, "See If You're a Fit", "查看是否適合你")}
+            <ArrowRight className="w-4 h-4" />
+          </a>
+        </div>
+
         {/* Free Templates */}
         <div className="bg-card border border-border rounded-xl p-6">
           <h2 className="font-heading text-xl text-foreground mb-2">
@@ -213,8 +233,8 @@ export default function ResumeResults({ analysis, lang }: { analysis: AnalysisRe
           </p>
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             {[
-              { label: t(lang, "English Resume Template", "英文履歷模板"), url: "#" },
-              { label: t(lang, "Chinese Resume Template", "中文履歷模板"), url: "#" },
+              { label: t(lang, "English Resume Template", "英文履歷模板"), url: "https://docs.google.com/document/d/1BAkVHZ57JsLzL0hk1AUvFBu4bsx8ymMA7tPJKuJROIM/edit?usp=sharing" },
+              { label: t(lang, "Chinese Resume Template", "中文履歷模板"), url: "https://docs.google.com/document/d/1U14BS5yISb17ejgVIX5IyeaVZKiww33hpJNOnEy4Wy0/edit?usp=sharing" },
             ].map((tmpl) => (
               <a key={tmpl.label} href={tmpl.url} target="_blank" rel="noopener noreferrer"
                 className="flex items-center justify-between p-4 rounded-lg border border-border hover:border-gold/50 hover:bg-gold/5 transition-all"

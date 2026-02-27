@@ -32,8 +32,9 @@ export default function ResumeAnalyzer() {
   const [gateEmail, setGateEmail] = useState("");
   const [gateError, setGateError] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [hasAnalyzed, setHasAnalyzed] = useState(false);
+  const [remainingUses, setRemainingUses] = useState<number | null>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
+  const analysisPromiseRef = useRef<Promise<AnalysisResult> | null>(null);
 
   const analyzeSteps = [
     t(lang, "Extracting resume content...", "擷取履歷內容..."),
@@ -85,19 +86,11 @@ export default function ResumeAnalyzer() {
     if (droppedFile) handleFileSelect(droppedFile);
   }, [handleFileSelect]);
 
-  const handleAnalyze = useCallback(async () => {
-    if (hasAnalyzed) {
-      setError(t(lang, "You've already analyzed a resume in this session. Use a different browser or try again later.", "你已在此次瀏覽中分析過履歷。請使用其他瀏覽器或稍後再試。"));
-      return;
-    }
-
+  // New flow: Upload → Email Gate → Analyzing → Results
+  // Step 1: Extract text and move to email gate
+  const handleSubmitResume = useCallback(async () => {
     setError("");
-    setScreen("analyzing");
-    setAnalyzeStep(0);
-    setProgress(0);
-
     try {
-      // Extract text
       let text = "";
       if (file) {
         const ext = file.name.split(".").pop()?.toLowerCase();
@@ -116,28 +109,37 @@ export default function ResumeAnalyzer() {
         } else {
           setError(t(lang, "Resume text is too short. Please paste your full resume.", "履歷內容太短。請貼上完整的履歷。"));
         }
-        setScreen("upload");
         return;
       }
 
       setResumeText(text);
+      setScreen("email-gate");
+    } catch (err: any) {
+      console.error("Extract error:", err);
+      setError(t(lang, "Could not read file. Please try pasting instead.", "無法讀取檔案。請改用貼上方式。"));
+    }
+  }, [file, pasteText, lang, extractTextFromPDF, extractTextFromDOCX]);
 
-      // Animate steps
-      const stepInterval = setInterval(() => {
-        setAnalyzeStep(prev => {
-          if (prev < 3) return prev + 1;
-          return prev;
-        });
-      }, 1200);
+  // Step 2: After email, check rate limit then start analysis
+  const startAnalysis = useCallback(async (text: string) => {
+    setScreen("analyzing");
+    setAnalyzeStep(0);
+    setProgress(0);
 
-      const progressInterval = setInterval(() => {
-        setProgress(prev => {
-          if (prev < 70) return prev + 2;
-          return prev;
-        });
-      }, 100);
+    // Animate steps
+    const stepInterval = setInterval(() => {
+      setAnalyzeStep(prev => (prev < 3 ? prev + 1 : prev));
+    }, 1200);
 
-      // Call edge function
+    // Progress crawls to 85% over ~15s
+    const progressInterval = setInterval(() => {
+      setProgress(prev => {
+        if (prev < 85) return prev + (85 - prev) * 0.04 + 0.3;
+        return prev;
+      });
+    }, 200);
+
+    try {
       const { data, error: fnError } = await supabase.functions.invoke("analyze-resume", {
         body: { resumeText: text, language: lang },
       });
@@ -149,24 +151,30 @@ export default function ResumeAnalyzer() {
         throw new Error(data?.error || fnError?.message || "Analysis failed");
       }
 
-      setAnalysisResult(data as AnalysisResult);
+      const result = data as AnalysisResult;
+      setAnalysisResult(result);
       setAnalyzeStep(4);
       setProgress(100);
-      setHasAnalyzed(true);
 
-      // Brief pause at 100% then transition
-      setTimeout(() => setScreen("email-gate"), 800);
-
+      // Return the result so handleUnlock can use it for the DB insert
+      return result;
     } catch (err: any) {
+      clearInterval(stepInterval);
+      clearInterval(progressInterval);
       console.error("Analysis error:", err);
       setError(t(lang, "Something went wrong with the analysis. Please try again.", "分析過程發生錯誤。請再試一次。"));
       setScreen("upload");
+      return null;
     }
-  }, [file, pasteText, lang, hasAnalyzed, extractTextFromPDF, extractTextFromDOCX]);
+  }, [lang]);
 
   const handleUnlock = useCallback(async () => {
     const trimmedEmail = gateEmail.trim();
-    const trimmedName = gateName.trim() || "Anonymous";
+    const trimmedName = gateName.trim();
+    if (!trimmedName) {
+      setGateError(t(lang, "Please enter your name.", "請輸入你的名字。"));
+      return;
+    }
     if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(trimmedEmail)) {
       setGateError(t(lang, "Please enter a valid email address.", "請輸入有效的電子信箱。"));
       return;
@@ -176,6 +184,29 @@ export default function ResumeAnalyzer() {
     setGateError("");
 
     try {
+      // Rate-limit check: count analyses this calendar month via secure RPC
+      const { data: usageCount, error: countError } = await supabase
+        .rpc("count_resume_analyses_this_month", { p_email: trimmedEmail });
+
+      const count = (typeof usageCount === "number" ? usageCount : 0);
+      if (!countError && count >= 5) {
+        setRemainingUses(0);
+        setGateError(t(lang,
+          "You've reached the limit of 5 free analyses per month. Try again next month!",
+          "你已達到每月 5 次免費分析的上限。下個月再試吧！"
+        ));
+        setIsSubmitting(false);
+        return;
+      }
+      setRemainingUses(5 - count - 1);
+
+      // Start analysis
+      const result = await startAnalysis(resumeText);
+      if (!result) {
+        setIsSubmitting(false);
+        return;
+      }
+
       // Upload file if exists
       let fileUrl: string | null = null;
       if (file) {
@@ -195,26 +226,28 @@ export default function ResumeAnalyzer() {
         name: trimmedName,
         resume_text: resumeText,
         resume_file_url: fileUrl,
-        analysis_result: analysisResult as any,
-        overall_score: analysisResult?.overall_score ? Math.round(analysisResult.overall_score) : null,
+        analysis_result: result as any,
+        overall_score: result?.overall_score ? Math.round(result.overall_score) : null,
         language: lang,
-        years_experience: analysisResult?.segmentation?.years_experience,
-        seniority_level: analysisResult?.segmentation?.seniority_level,
-        current_company_type: analysisResult?.segmentation?.current_company_type,
-        industry: analysisResult?.segmentation?.industry,
-        target_readiness: analysisResult?.segmentation?.target_readiness,
+        years_experience: result?.segmentation?.years_experience,
+        seniority_level: result?.segmentation?.seniority_level,
+        current_company_type: result?.segmentation?.current_company_type,
+        industry: result?.segmentation?.industry,
+        target_readiness: result?.segmentation?.target_readiness,
         input_method: inputMethod,
         user_agent: navigator.userAgent,
       });
 
-      setScreen("results");
+      // Brief pause at 100% then show results
+      setTimeout(() => setScreen("results"), 800);
     } catch (err) {
       console.error("Save error:", err);
       setGateError(t(lang, "Something went wrong. Please try again.", "出了點問題。請再試一次。"));
+      setScreen("upload");
     } finally {
       setIsSubmitting(false);
     }
-  }, [gateEmail, gateName, lang, file, resumeText, analysisResult, inputMethod]);
+  }, [gateEmail, gateName, lang, file, resumeText, inputMethod, startAnalysis]);
 
   const canSubmit = file || pasteText.trim().length >= 200;
 
@@ -339,7 +372,7 @@ export default function ResumeAnalyzer() {
                 )}
 
                 <Button
-                  onClick={handleAnalyze}
+                  onClick={handleSubmitResume}
                   disabled={!canSubmit}
                   className="w-full mt-6 h-12 text-base font-semibold bg-[#1B3A2F] hover:bg-[#152E25] text-white disabled:opacity-40"
                 >
@@ -401,55 +434,55 @@ export default function ResumeAnalyzer() {
           </div>
         )}
 
-        {/* SCREEN 3: EMAIL GATE */}
-        {screen === "email-gate" && analysisResult && (
+        {/* SCREEN 3: EMAIL GATE (now before analysis) */}
+        {screen === "email-gate" && (
           <div className="py-12 md:py-20 px-5">
-            <div className="container mx-auto max-w-4xl">
-              {/* Blurred preview - full height visible */}
-              <div className="relative rounded-xl overflow-hidden">
-                <div className="pointer-events-none select-none" aria-hidden>
-                  <div style={{ filter: "blur(8px)" }}>
-                    <ResumeResults analysis={analysisResult} lang={lang} />
-                  </div>
+            <div className="container mx-auto max-w-md text-center">
+              <div className="bg-card border border-border rounded-2xl shadow-xl p-8">
+                <div className="w-12 h-12 rounded-full bg-gold/10 flex items-center justify-center mx-auto mb-4">
+                  <Lock className="w-6 h-6 text-gold" />
+                </div>
+                <h2 className="font-heading text-xl md:text-2xl font-bold text-foreground mb-2">
+                  {t(lang, "Almost There!", "即將完成！")}
+                </h2>
+                <p className="text-sm text-muted-foreground mb-6">
+                  {t(lang,
+                    "Enter your name and email to start your free resume analysis.",
+                    "輸入你的名字和 Email 以開始免費履歷分析。"
+                  )}
+                </p>
+
+                <div className="space-y-3 text-left">
+                  <Input
+                    type="text"
+                    value={gateName}
+                    onChange={(e) => { setGateName(e.target.value); setGateError(""); }}
+                    placeholder={t(lang, "Your name", "你的名字")}
+                    className="h-11"
+                  />
+                  <Input
+                    type="email"
+                    value={gateEmail}
+                    onChange={(e) => { setGateEmail(e.target.value); setGateError(""); }}
+                    placeholder="your@email.com"
+                    className="h-11"
+                  />
+                  {gateError && <p className="text-xs text-destructive">{gateError}</p>}
+                  {remainingUses !== null && remainingUses > 0 && (
+                    <p className="text-xs text-muted-foreground">
+                      {t(lang, `${remainingUses} free analyses remaining this month`, `本月剩餘 ${remainingUses} 次免費分析`)}
+                    </p>
+                  )}
+                  <Button onClick={handleUnlock} disabled={isSubmitting} className="w-full h-11 font-semibold">
+                    {isSubmitting
+                      ? t(lang, "Analyzing...", "分析中...")
+                      : t(lang, "Analyze My Resume", "分析我的履歷")}
+                  </Button>
                 </div>
 
-                {/* Gate card overlay */}
-                <div className="absolute inset-0 flex items-start justify-center pt-12 md:pt-20 bg-background/60">
-                  <div className="bg-card border border-border rounded-2xl shadow-xl p-8 max-w-[420px] w-full mx-4 text-center">
-                    <div className="w-12 h-12 rounded-full bg-gold/10 flex items-center justify-center mx-auto mb-4">
-                      <Lock className="w-6 h-6 text-gold" />
-                    </div>
-                    <h2 className="font-heading text-xl md:text-2xl font-bold text-foreground mb-2">
-                      {t(lang, "Your Resume Analysis is Ready!", "你的履歷分析已完成！")}
-                    </h2>
-                    <p className="text-sm text-muted-foreground mb-6">
-                      {t(lang,
-                        "Enter your email to unlock your full score breakdown, section-by-section feedback, and a free resume template.",
-                        "輸入你的 Email 來解鎖完整分數分析、逐項回饋，以及免費履歷模板。"
-                      )}
-                    </p>
-
-                    <div className="space-y-3">
-                      <Input
-                        type="email"
-                        value={gateEmail}
-                        onChange={(e) => { setGateEmail(e.target.value); setGateError(""); }}
-                        placeholder="your@email.com"
-                        className="h-11"
-                      />
-                      {gateError && <p className="text-xs text-destructive text-left">{gateError}</p>}
-                      <Button onClick={handleUnlock} disabled={isSubmitting} className="w-full h-11 font-semibold">
-                        {isSubmitting
-                          ? t(lang, "Unlocking...", "解鎖中...")
-                          : t(lang, "Unlock My Results", "解鎖我的結果")}
-                      </Button>
-                    </div>
-
-                    <p className="text-xs text-muted-foreground mt-3">
-                      🔒 {t(lang, "We respect your privacy. No spam, ever.", "我們尊重你的隱私。絕不寄送垃圾郵件。")}
-                    </p>
-                  </div>
-                </div>
+                <p className="text-xs text-muted-foreground mt-3">
+                  🔒 {t(lang, "We respect your privacy. No spam, ever.", "我們尊重你的隱私。絕不寄送垃圾郵件。")}
+                </p>
               </div>
             </div>
           </div>
