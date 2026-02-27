@@ -338,12 +338,6 @@ export default function ResumeAnalyzer() {
                     {t(lang, "100% Private — Your resume is never shared or sold", "100% 隱私保護 — 你的履歷不會外流，絕不轉賣")}
                   </span>
                 </div>
-                <p className="text-xs text-muted-foreground mt-3 text-center italic">
-                  {t(lang, 
-                    'Frameworks based on "How to Write the Perfect Resume" by Dan Clay', 
-                    '分析框架參考 Dan Clay 著作《How to Write the Perfect Resume》'
-                  )}
-                </p>
               </div>
 
               {/* How It Works */}
