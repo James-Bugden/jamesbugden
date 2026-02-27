@@ -1,76 +1,63 @@
 
 
-# Three Improvements: Auto-Sitemap, Premium 404, Stronger Email Gate
+# Resume Analyzer: Rate Limiting, Bug Fixes, and UX Improvements
 
-## 1. Auto-Generated Sitemap via Build Script
+## Overview
+Fix all identified issues in the Resume Analyzer: add server-side rate limiting (5/month), fix broken template links, fix database insert errors, add coaching CTA, improve progress animation, and auto-expand weak sections.
 
-**Problem**: The sitemap is a static XML file that requires manual updates whenever new pages are added.
+## Changes
 
-**Solution**: Create a Vite plugin that auto-generates `sitemap.xml` at build time by extracting all route paths from `App.tsx`.
+### 1. Server-Side Rate Limiting (5 uses/month per email)
+**New migration**: Add `input_method` and `user_agent` columns to `resume_leads` table (fixes the insert bug simultaneously), then use the existing `resume_leads` table to count analyses per email per month.
 
-**Changes**:
-- Create `scripts/generate-sitemap.ts` -- a small script that parses the route definitions in `App.tsx` using regex, maps them to full URLs with priority rules, and writes `public/sitemap.xml`
-- Add a custom Vite plugin in `vite.config.ts` that runs this generation at build time (via `buildStart` hook) and during dev server startup
-- The priority rules: homepage = 1.0, `/zh-tw` = 0.9, tools/guides = 0.7, toolkit sub-pages = 0.5, reviews = 0.4, admin/utility = 0.3
-- Delete the manually-maintained `public/sitemap.xml` (it will be auto-generated)
+**`src/pages/ResumeAnalyzer.tsx`** -- Add a rate-limit check in `handleUnlock`:
+- After the user submits their email, query `resume_leads` to count rows with that email in the current calendar month
+- If count >= 5, show an error: "You've reached the limit of 5 free analyses per month. Try again next month."
+- Remove the client-side `hasAnalyzed` state guard (replaced by server-side check)
+- Move the rate check to BEFORE the analysis runs (ask for email first, then analyze) -- this prevents wasting API calls on rate-limited users
 
----
+**Flow change**: Upload -> Email gate (moved earlier) -> Analyzing -> Results
+This way we collect the email before spending API credits.
 
-## 2. Premium 404 Page
+### 2. Fix Dead Template Links
+**`src/components/resume-analyzer/ResumeResults.tsx`** -- Replace the template section's `href="#"` with:
+- English: `https://docs.google.com/document/d/1BAkVHZ57JsLzL0hk1AUvFBu4bsx8ymMA7tPJKuJROIM/edit?usp=sharing`
+- Chinese: `https://docs.google.com/document/d/1U14BS5yISb17ejgVIX5IyeaVZKiww33hpJNOnEy4Wy0/edit?usp=sharing`
 
-**Problem**: The current NotFound page is a plain white screen with generic "404" text -- no navigation, no branding, no helpful links.
+Also add a link to `/resume-quick-reference` (the user's dedicated template page).
 
-**Solution**: Redesign it to match the executive green/gold brand with helpful navigation.
+### 3. Fix Database Insert Error
+**New migration**: Add `input_method text` and `user_agent text` nullable columns to `resume_leads`.
 
-**Changes to `src/pages/NotFound.tsx`**:
-- Use the site's `bg-background` with subtle gradient textures (matching the premium visual language)
-- Large gold "404" heading with `font-heading`
-- Friendly copy: "This page doesn't exist" with a suggestion to check the URL
-- Quick-link grid with cards to: Homepage, Guides, Offer Calculator, Toolkit, Quiz
-- Each card has an icon (from lucide-react), title, and brief description
-- "Return to Homepage" primary button below
-- Footer link to `/site-directory` for the full site index
-- Responsive layout: 2-column grid on mobile, 3 columns on desktop
+This fixes the current insert that references these non-existent columns.
 
----
+### 4. Sync Progress Animation with API
+**`src/pages/ResumeAnalyzer.tsx`** -- Instead of a fixed timer reaching 70% and stalling:
+- Progress crawls to 85% over ~15 seconds
+- When the API response arrives, jump to 100%
+- Clear intervals immediately on completion or error
 
-## 3. Server-Side Email Gate Verification
+### 5. Add Coaching CTA After Top 3 Priorities
+**`src/components/resume-analyzer/ResumeResults.tsx`** -- Insert a CTA card between "Top 3 Priorities" and "Free Templates":
+- Heading: "Want a recruiter to fix all of this for you?"
+- Body: Brief pitch for the 1:1 resume review service
+- Button linking to homepage `/#coaching` section
+- Styled with gold border to match the brand
 
-**Problem**: The email gate stores unlock state in `localStorage`, so users can bypass it by clearing storage or using incognito mode. The email is collected but the unlock check is purely client-side.
+### 6. Auto-Expand Weak Sections
+**`src/components/resume-analyzer/ResumeResults.tsx`** -- Change `SectionCard` to auto-expand sections scoring below 6 (in addition to the first section):
+```
+defaultOpen={i === 0 || section.score < 6}
+```
 
-**Solution**: Move unlock verification to the database. When a user submits their email, store it server-side. On page load, check the database (by email or by authenticated user) before unlocking.
+### 7. Add Name Field to Email Gate
+**`src/pages/ResumeAnalyzer.tsx`** -- The `gateName` state already exists but there's no input for it. Add a name input field above the email input in the gate form.
 
-**Changes**:
+## File Changes Summary
 
-**Database**: The `email_gate_leads` table already exists with `email`, `source`, and `created_at` columns. No schema changes needed -- we'll query it to verify unlock status.
-
-**`src/hooks/useEmailGate.ts`** -- rewrite:
-- On mount, check if user is logged in (auto-unlock) OR check if the email stored in localStorage exists in `email_gate_leads` table via a database query
-- The `unlock` function still inserts into `email_gate_leads` and stores the email in localStorage (for the query key on next visit), but `isUnlocked` is now driven by the database response rather than a simple localStorage boolean
-- Remove the `STORAGE_KEY` ("offer-compass-unlocked") boolean -- only store the email for lookup purposes
-- Use React Query or a simple `useEffect` + state for the async check, with a brief loading state
-
-**Flow**:
-1. Logged-in user --> always unlocked (no change)
-2. Returning visitor with email in localStorage --> query `email_gate_leads` to verify, unlock if found
-3. New visitor --> gate is locked, must submit email
-4. Clearing localStorage --> gate re-locks (they'd need to re-enter email, which already exists in DB, so it re-unlocks after submission)
-5. Incognito --> no localStorage, gate is locked, must submit email again
-
-This makes the gate meaningfully harder to bypass while keeping the UX smooth for legitimate users.
-
----
-
-## Technical Details
-
-### File Changes Summary
 | File | Action |
 |------|--------|
-| `scripts/generate-sitemap.ts` | Create new |
-| `vite.config.ts` | Add sitemap plugin |
-| `public/sitemap.xml` | Will be auto-generated (can delete manual version) |
-| `src/pages/NotFound.tsx` | Rewrite with premium design |
-| `src/hooks/useEmailGate.ts` | Rewrite with server-side verification |
+| `supabase migration` | Add `input_method` and `user_agent` columns to `resume_leads` |
+| `src/pages/ResumeAnalyzer.tsx` | Reorder flow (email first), add rate limiting, fix progress, add name input |
+| `src/components/resume-analyzer/ResumeResults.tsx` | Fix template URLs, add coaching CTA, auto-expand weak sections |
 
-### No database migrations needed
-The existing `email_gate_leads` table already has the right schema. We just need to add a SELECT query (currently only INSERT is used). RLS policy may need a check -- if there's no SELECT policy for anon, we'll add one scoped to checking by email.
