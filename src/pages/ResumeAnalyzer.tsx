@@ -420,6 +420,69 @@ export default function ResumeAnalyzer() {
                 </div>
               </div>
 
+              {/* Sample Results Preview */}
+              <div className="mt-12">
+                <h2 className="text-center font-heading text-lg font-semibold text-foreground mb-2">
+                  {t(lang, "See What You'll Get", "看看你會得到什麼")}
+                </h2>
+                <p className="text-center text-sm text-muted-foreground mb-6">
+                  {t(lang, "A detailed breakdown with actionable improvements", "詳細分析報告，附帶可執行的改善建議")}
+                </p>
+                <div className="relative rounded-2xl border border-border bg-card p-5 md:p-7 shadow-[0_8px_24px_rgba(27,58,47,0.08)] overflow-hidden">
+                  {/* Blurred overlay at bottom */}
+                  <div className="absolute bottom-0 left-0 right-0 h-28 bg-gradient-to-t from-card via-card/90 to-transparent z-10 flex items-end justify-center pb-4">
+                    <span className="text-xs font-medium text-muted-foreground">{t(lang, "Upload your resume to see your full report", "上傳履歷查看完整報告")}</span>
+                  </div>
+
+                  {/* Mock score header */}
+                  <div className="flex flex-col items-center mb-5">
+                    <div className="w-20 h-20 rounded-full border-[5px] border-executive-green flex items-center justify-center mb-2">
+                      <span className="font-heading text-2xl font-bold text-executive-green">B+</span>
+                    </div>
+                    <p className="font-heading text-lg font-bold text-foreground">74 <span className="text-sm font-normal text-muted-foreground">/100</span></p>
+                    <p className="text-xs text-muted-foreground">{t(lang, "Overall Resume Score", "整體履歷評分")}</p>
+                  </div>
+
+                  {/* Mock test cards */}
+                  <div className="grid grid-cols-2 gap-2 mb-5">
+                    {[
+                      { label: t(lang, "Keyword Test", "關鍵字測試"), pass: true },
+                      { label: t(lang, "Scan Test", "快速掃描測試"), pass: true },
+                      { label: t(lang, "Qualifications Test", "資歷測試"), pass: false },
+                      { label: t(lang, "Fit Test", "適配度測試"), pass: true },
+                    ].map((test, i) => (
+                      <div key={i} className="flex items-center gap-2 rounded-lg border border-border px-3 py-2">
+                        {test.pass ? (
+                          <Check className="w-3.5 h-3.5 text-executive-green shrink-0" />
+                        ) : (
+                          <X className="w-3.5 h-3.5 text-destructive shrink-0" />
+                        )}
+                        <span className="text-xs font-medium text-foreground">{test.label}</span>
+                      </div>
+                    ))}
+                  </div>
+
+                  {/* Mock section bars */}
+                  <div className="space-y-3">
+                    {[
+                      { label: t(lang, "Header & Contact Info", "基本資訊"), score: 9, max: 10 },
+                      { label: t(lang, "Professional Summary", "專業摘要"), score: 6, max: 10 },
+                      { label: t(lang, "Work Experience", "工作經歷"), score: 7, max: 10 },
+                    ].map((s, i) => (
+                      <div key={i}>
+                        <div className="flex justify-between text-xs mb-1">
+                          <span className="font-medium text-foreground">{s.label}</span>
+                          <span className="text-muted-foreground">{s.score}/{s.max}</span>
+                        </div>
+                        <div className="h-1.5 rounded-full bg-muted overflow-hidden">
+                          <div className="h-full rounded-full bg-executive-green transition-all" style={{ width: `${(s.score / s.max) * 100}%` }} />
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              </div>
+
               {/* Logo Scroll */}
               <div className="mt-10">
                 <LogoScroll heading={t(lang, "I've helped professionals from", "這些公司的人都找過我")} />
