@@ -1,4 +1,4 @@
-import { useState, useCallback, useRef } from "react";
+import { useState, useCallback, useRef, useEffect } from "react";
 import { Helmet } from "react-helmet-async";
 import { Link } from "react-router-dom";
 import { Upload, FileText, Sparkles, BarChart3, CloudUpload, X, Check, Lock, ArrowRight, ShieldCheck, ChevronRight } from "lucide-react";
@@ -10,16 +10,18 @@ import { supabase } from "@/integrations/supabase/client";
 import ResumeResults from "@/components/resume-analyzer/ResumeResults";
 import type { AnalysisResult } from "@/components/resume-analyzer/types";
 import LogoScroll from "@/components/LogoScroll";
+import { useAuth } from "@/contexts/AuthContext";
 import jamesPhoto from "@/assets/james-bugden.jpg";
 
 
-type Screen = "upload" | "analyzing" | "email-gate" | "results";
+type Screen = "upload" | "analyzing" | "results";
 type Language = "en" | "zh-TW";
 type InputMethod = "upload_pdf" | "upload_docx" | "paste";
 
 const t = (lang: Language, en: string, zh: string) => lang === "en" ? en : zh;
 
 export default function ResumeAnalyzer() {
+  const { isLoggedIn } = useAuth();
   const [lang, setLang] = useState<Language>("en");
   const [screen, setScreen] = useState<Screen>("upload");
   const [file, setFile] = useState<File | null>(null);
@@ -30,13 +32,24 @@ export default function ResumeAnalyzer() {
   const [error, setError] = useState("");
   const [analyzeStep, setAnalyzeStep] = useState(0);
   const [progress, setProgress] = useState(0);
-  const [gateName, setGateName] = useState("");
-  const [gateEmail, setGateEmail] = useState("");
-  const [gateError, setGateError] = useState("");
-  const [isSubmitting, setIsSubmitting] = useState(false);
-  const [remainingUses, setRemainingUses] = useState<number | null>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
-  const analysisPromiseRef = useRef<Promise<AnalysisResult> | null>(null);
+
+  // Restore analysis from sessionStorage after auth redirect
+  useEffect(() => {
+    if (isLoggedIn && !analysisResult) {
+      const stored = sessionStorage.getItem("resume-analysis-result");
+      const storedLang = sessionStorage.getItem("resume-analysis-lang");
+      if (stored) {
+        try {
+          setAnalysisResult(JSON.parse(stored));
+          if (storedLang) setLang(storedLang as Language);
+          setScreen("results");
+          sessionStorage.removeItem("resume-analysis-result");
+          sessionStorage.removeItem("resume-analysis-lang");
+        } catch {}
+      }
+    }
+  }, [isLoggedIn, analysisResult]);
 
   const analyzeSteps = [
     t(lang, "Extracting resume content...", "擷取履歷內容..."),
@@ -88,8 +101,50 @@ export default function ResumeAnalyzer() {
     if (droppedFile) handleFileSelect(droppedFile);
   }, [handleFileSelect]);
 
-  // New flow: Upload → Email Gate → Analyzing → Results
-  // Step 1: Extract text and move to email gate
+  const startAnalysis = useCallback(async (text: string) => {
+    setScreen("analyzing");
+    setAnalyzeStep(0);
+    setProgress(0);
+
+    const stepInterval = setInterval(() => {
+      setAnalyzeStep(prev => (prev < 3 ? prev + 1 : prev));
+    }, 1200);
+
+    const progressInterval = setInterval(() => {
+      setProgress(prev => {
+        if (prev < 85) return prev + (85 - prev) * 0.04 + 0.3;
+        return prev;
+      });
+    }, 200);
+
+    try {
+      const { data, error: fnError } = await supabase.functions.invoke("analyze-resume", {
+        body: { resumeText: text, language: lang },
+      });
+
+      clearInterval(stepInterval);
+      clearInterval(progressInterval);
+
+      if (fnError || data?.error) {
+        throw new Error(data?.error || fnError?.message || "Analysis failed");
+      }
+
+      const result = data as AnalysisResult;
+      setAnalysisResult(result);
+      setAnalyzeStep(4);
+      setProgress(100);
+      return result;
+    } catch (err: any) {
+      clearInterval(stepInterval);
+      clearInterval(progressInterval);
+      console.error("Analysis error:", err);
+      setError(t(lang, "Something went wrong with the analysis. Please try again.", "分析過程發生錯誤。請再試一次。"));
+      setScreen("upload");
+      return null;
+    }
+  }, [lang]);
+
+  // New flow: Upload → Analyzing → Results (no email gate)
   const handleSubmitResume = useCallback(async () => {
     setError("");
     try {
@@ -115,141 +170,18 @@ export default function ResumeAnalyzer() {
       }
 
       setResumeText(text);
-      setScreen("email-gate");
+      const result = await startAnalysis(text);
+      if (result) {
+        sessionStorage.setItem("resume-analysis-result", JSON.stringify(result));
+        sessionStorage.setItem("resume-analysis-lang", lang);
+        setTimeout(() => setScreen("results"), 800);
+      }
     } catch (err: any) {
       console.error("Extract error:", err);
       setError(t(lang, "Could not read file. Please try pasting instead.", "無法讀取檔案。請改用貼上方式。"));
     }
-  }, [file, pasteText, lang, extractTextFromPDF, extractTextFromDOCX]);
+  }, [file, pasteText, lang, extractTextFromPDF, extractTextFromDOCX, startAnalysis]);
 
-  // Step 2: After email, check rate limit then start analysis
-  const startAnalysis = useCallback(async (text: string) => {
-    setScreen("analyzing");
-    setAnalyzeStep(0);
-    setProgress(0);
-
-    // Animate steps
-    const stepInterval = setInterval(() => {
-      setAnalyzeStep(prev => (prev < 3 ? prev + 1 : prev));
-    }, 1200);
-
-    // Progress crawls to 85% over ~15s
-    const progressInterval = setInterval(() => {
-      setProgress(prev => {
-        if (prev < 85) return prev + (85 - prev) * 0.04 + 0.3;
-        return prev;
-      });
-    }, 200);
-
-    try {
-      const { data, error: fnError } = await supabase.functions.invoke("analyze-resume", {
-        body: { resumeText: text, language: lang },
-      });
-
-      clearInterval(stepInterval);
-      clearInterval(progressInterval);
-
-      if (fnError || data?.error) {
-        throw new Error(data?.error || fnError?.message || "Analysis failed");
-      }
-
-      const result = data as AnalysisResult;
-      setAnalysisResult(result);
-      setAnalyzeStep(4);
-      setProgress(100);
-
-      // Return the result so handleUnlock can use it for the DB insert
-      return result;
-    } catch (err: any) {
-      clearInterval(stepInterval);
-      clearInterval(progressInterval);
-      console.error("Analysis error:", err);
-      setError(t(lang, "Something went wrong with the analysis. Please try again.", "分析過程發生錯誤。請再試一次。"));
-      setScreen("upload");
-      return null;
-    }
-  }, [lang]);
-
-  const handleUnlock = useCallback(async () => {
-    const trimmedEmail = gateEmail.trim();
-    const trimmedName = gateName.trim();
-    if (!trimmedName) {
-      setGateError(t(lang, "Please enter your name.", "請輸入你的名字。"));
-      return;
-    }
-    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(trimmedEmail)) {
-      setGateError(t(lang, "Please enter a valid email address.", "請輸入有效的電子信箱。"));
-      return;
-    }
-
-    setIsSubmitting(true);
-    setGateError("");
-
-    try {
-      // Rate-limit check: count analyses this calendar month via secure RPC
-      const { data: usageCount, error: countError } = await supabase
-        .rpc("count_resume_analyses_this_month", { p_email: trimmedEmail });
-
-      const count = (typeof usageCount === "number" ? usageCount : 0);
-      if (!countError && count >= 5) {
-        setRemainingUses(0);
-        setGateError(t(lang,
-          "You've reached the limit of 5 free analyses per month. Try again next month!",
-          "你已達到每月 5 次免費分析的上限。下個月再試吧！"
-        ));
-        setIsSubmitting(false);
-        return;
-      }
-      setRemainingUses(5 - count - 1);
-
-      // Start analysis
-      const result = await startAnalysis(resumeText);
-      if (!result) {
-        setIsSubmitting(false);
-        return;
-      }
-
-      // Upload file if exists
-      let fileUrl: string | null = null;
-      if (file) {
-        const ext = file.name.split(".").pop();
-        const path = `${Date.now()}-${Math.random().toString(36).slice(2)}.${ext}`;
-        const { error: uploadError } = await supabase.storage
-          .from("resume-files")
-          .upload(path, file);
-        if (!uploadError) {
-          fileUrl = path;
-        }
-      }
-
-      // Save lead
-      await supabase.from("resume_leads").insert({
-        email: trimmedEmail,
-        name: trimmedName,
-        resume_text: resumeText,
-        resume_file_url: fileUrl,
-        analysis_result: result as any,
-        overall_score: result?.overall_score ? Math.round(result.overall_score) : null,
-        language: lang,
-        years_experience: result?.segmentation?.years_experience,
-        seniority_level: result?.segmentation?.seniority_level,
-        current_company_type: result?.segmentation?.current_company_type,
-        industry: result?.segmentation?.industry,
-        target_readiness: result?.segmentation?.target_readiness,
-        input_method: inputMethod,
-        user_agent: navigator.userAgent,
-      });
-
-      // Brief pause at 100% then show results
-      setTimeout(() => setScreen("results"), 800);
-    } catch (err) {
-      console.error("Save error:", err);
-      setGateError(t(lang, "Something went wrong. Please try again.", "出了點問題。請再試一次。"));
-      setScreen("upload");
-    } finally {
-      setIsSubmitting(false);
-    }
-  }, [gateEmail, gateName, lang, file, resumeText, inputMethod, startAnalysis]);
 
   const canSubmit = file || pasteText.trim().length >= 200;
 
@@ -556,76 +488,22 @@ export default function ResumeAnalyzer() {
           </div>
         )}
 
-        {/* SCREEN 3: EMAIL GATE (now before analysis) */}
-        {screen === "email-gate" && (
-          <div className="py-12 md:py-20 px-5">
-            <div className="container mx-auto max-w-md text-center">
-              <div className="bg-card border border-border rounded-2xl shadow-xl p-8">
-                <div className="w-12 h-12 rounded-full bg-gold/10 flex items-center justify-center mx-auto mb-4">
-                  <Lock className="w-6 h-6 text-gold" />
-                </div>
-                <h2 className="font-heading text-xl md:text-2xl font-bold text-foreground mb-2">
-                  {t(lang, "Almost There!", "即將完成！")}
-                </h2>
-                <p className="text-sm text-muted-foreground mb-6">
-                  {t(lang,
-                    "Enter your name and email to start your free resume analysis.",
-                    "輸入你的名字和 Email 以開始免費履歷分析。"
-                  )}
-                </p>
-
-                <div className="space-y-3 text-left">
-                  <Input
-                    type="text"
-                    value={gateName}
-                    onChange={(e) => { setGateName(e.target.value); setGateError(""); }}
-                    placeholder={t(lang, "Your name", "你的名字")}
-                    className="h-11"
-                  />
-                  <Input
-                    type="email"
-                    value={gateEmail}
-                    onChange={(e) => { setGateEmail(e.target.value); setGateError(""); }}
-                    placeholder="your@email.com"
-                    className="h-11"
-                  />
-                  {gateError && <p className="text-xs text-destructive">{gateError}</p>}
-                  {remainingUses !== null && remainingUses > 0 && (
-                    <p className="text-xs text-muted-foreground">
-                      {t(lang, `${remainingUses} free analyses remaining this month`, `本月剩餘 ${remainingUses} 次免費分析`)}
-                    </p>
-                  )}
-                  <Button onClick={handleUnlock} disabled={isSubmitting} className="w-full h-11 font-semibold">
-                    {isSubmitting
-                      ? t(lang, "Analyzing...", "分析中...")
-                      : t(lang, "Analyze My Resume", "分析我的履歷")}
-                  </Button>
-                </div>
-
-                <p className="text-xs text-muted-foreground mt-3">
-                  🔒 {t(lang, "We respect your privacy. No spam, ever.", "我們尊重你的隱私。絕不寄送垃圾郵件。")}
-                </p>
-              </div>
-            </div>
-          </div>
-        )}
-
-        {/* SCREEN 4: FULL RESULTS */}
+        {/* SCREEN 3: RESULTS */}
         {screen === "results" && analysisResult && (
           <ResumeResults
             analysis={analysisResult}
             lang={lang}
+            isUnlocked={isLoggedIn}
             onReset={() => {
               setAnalysisResult(null);
               setFile(null);
               setPasteText("");
               setResumeText("");
-              setGateName("");
-              setGateEmail("");
               setError("");
-              setGateError("");
               setProgress(0);
               setAnalyzeStep(0);
+              sessionStorage.removeItem("resume-analysis-result");
+              sessionStorage.removeItem("resume-analysis-lang");
               setScreen("upload");
             }}
           />
