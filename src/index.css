@@ -445,3 +445,18 @@
 /* Hide scrollbar utility */
 .no-scrollbar::-webkit-scrollbar { display: none; }
 .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+
+/* Print styles for Resume Analysis report */
+@media print {
+  body { background: white !important; }
+  header, footer, nav, .sticky, [data-print-hide] { display: none !important; }
+  #analysis-results-container {
+    padding: 0 !important;
+    margin: 0 auto !important;
+  }
+  #analysis-results-container * {
+    break-inside: avoid;
+  }
+  .blur-sm { filter: none !important; }
+  .pointer-events-none { pointer-events: auto !important; }
+}
