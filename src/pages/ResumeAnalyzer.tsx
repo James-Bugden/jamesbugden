@@ -294,8 +294,8 @@ export default function ResumeAnalyzer() {
                 </h1>
                 <p className="text-base md:text-lg text-muted-foreground mb-5 max-w-xl mx-auto">
                   {t(lang,
-                    "Start for free — no signup required.",
-                    "免費開始 — 無需註冊。"
+                    "Start for free.",
+                    "免費開始。"
                   )}
                 </p>
                 {/* Authority badge */}
