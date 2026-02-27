@@ -24,7 +24,11 @@ export default function Login() {
   const [mode, setMode] = useState<"login" | "forgot">("login");
 
   useEffect(() => {
-    if (isLoggedIn) navigate(location.state?.from || "/", { replace: true });
+    if (isLoggedIn) {
+      const redirectTo = location.state?.from || sessionStorage.getItem("auth_redirect") || "/";
+      sessionStorage.removeItem("auth_redirect");
+      navigate(redirectTo, { replace: true });
+    }
   }, [isLoggedIn, navigate, location.state]);
 
   const handleLogin = async (e: React.FormEvent) => {
@@ -57,6 +61,8 @@ export default function Login() {
 
   const handleGoogle = async () => {
     setError("");
+    const from = location.state?.from;
+    if (from) sessionStorage.setItem("auth_redirect", from);
     const { error } = await lovable.auth.signInWithOAuth("google", {
       redirect_uri: window.location.origin,
     });

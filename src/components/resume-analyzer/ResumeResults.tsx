@@ -3,7 +3,7 @@ import { ChevronDown, CheckCircle, AlertTriangle, XCircle, ExternalLink, Share2,
 import { Button } from "@/components/ui/button";
 import { exportToPdf } from "@/lib/pdfExport";
 import type { AnalysisResult } from "./types";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 
 type Language = "en" | "zh-TW";
 const t = (lang: Language, en: string, zh: string) => lang === "en" ? en : zh;
@@ -111,9 +111,9 @@ function SectionCard({ section, lang, defaultOpen, locked }: { section: Analysis
   );
 }
 
-function LockedOverlay({ lang }: { lang: Language }) {
+function LockedOverlay({ lang, currentPath }: { lang: Language; currentPath: string }) {
   return (
-    <div className="absolute inset-0 z-10 flex flex-col items-center justify-center bg-background/60 backdrop-blur-[6px] rounded-xl">
+    <div className="absolute inset-0 z-10 flex flex-col items-center justify-start pt-16 bg-background/60 backdrop-blur-[6px] rounded-xl">
       <div className="bg-card border border-border rounded-2xl shadow-xl p-8 max-w-sm text-center">
         <div className="w-12 h-12 rounded-full bg-gold/10 flex items-center justify-center mx-auto mb-4">
           <Lock className="w-6 h-6 text-gold" />
@@ -129,6 +129,7 @@ function LockedOverlay({ lang }: { lang: Language }) {
         </p>
         <Link
           to="/signup"
+          state={{ from: currentPath }}
           className="inline-flex items-center gap-2 px-6 py-3 rounded-lg bg-gold text-[#1B3A2F] text-sm font-bold hover:bg-gold/90 transition-colors"
         >
           {t(lang, "Sign Up Free", "免費註冊")}
@@ -136,7 +137,7 @@ function LockedOverlay({ lang }: { lang: Language }) {
         </Link>
         <p className="text-xs text-muted-foreground mt-3">
           {t(lang, "Already have an account?", "已有帳號？")}{" "}
-          <Link to="/login" className="text-gold hover:underline font-medium">
+          <Link to="/login" state={{ from: currentPath }} className="text-gold hover:underline font-medium">
             {t(lang, "Sign in", "登入")}
           </Link>
         </p>
@@ -146,12 +147,7 @@ function LockedOverlay({ lang }: { lang: Language }) {
 }
 
 export default function ResumeResults({ analysis, lang, onReset, isUnlocked = true }: { analysis: AnalysisResult; lang: Language; onReset?: () => void; isUnlocked?: boolean }) {
-  const fourTests = [
-    { key: "keyword_test", en: "Keyword Test", zh: "關鍵字測試", pass: analysis.four_tests.keyword_test, enDesc: "Does your resume contain the right keywords for ATS systems?", zhDesc: "你的履歷是否包含正確的 ATS 關鍵字？" },
-    { key: "scan_test", en: "Scan Test", zh: "掃描測試", pass: analysis.four_tests.scan_test, enDesc: "Will a recruiter spot your value in a 6-second scan?", zhDesc: "招募官能在 6 秒掃描中看到你的價值嗎？" },
-    { key: "qualifications_test", en: "Qualifications Test", zh: "資格測試", pass: analysis.four_tests.qualifications_test, enDesc: "Do your achievements prove you meet the role requirements?", zhDesc: "你的成就是否證明你符合職位要求？" },
-    { key: "fit_test", en: "Fit Test", zh: "適配測試", pass: analysis.four_tests.fit_test, enDesc: "Does your resume signal culture and team fit?", zhDesc: "你的履歷是否展現出文化和團隊適配度？" },
-  ];
+  const location = useLocation();
 
   return (
     <div className="py-12 md:py-20 px-5" id="analysis-results-container">
@@ -182,40 +178,24 @@ export default function ResumeResults({ analysis, lang, onReset, isUnlocked = tr
         {/* Overall Score */}
         <div className="text-center">
           <ScoreHero score={analysis.overall_score} lang={lang} />
-
-          {/* Four Tests - expanded */}
-          <div className="grid grid-cols-2 gap-3 mt-8 max-w-md mx-auto">
-            {fourTests.map((test) => (
-              <div key={test.key} className={`flex flex-col items-start gap-1 p-3 rounded-xl border text-left ${test.pass ? "border-executive-green/30 bg-executive-green/5" : "border-destructive/30 bg-destructive/5"}`}>
-                <div className="flex items-center gap-1.5">
-                  {test.pass ? <CheckCircle className="w-4 h-4 text-executive-green" /> : <XCircle className="w-4 h-4 text-destructive" />}
-                  <span className="text-foreground font-semibold text-xs">{t(lang, test.en, test.zh)}</span>
-                </div>
-                <p className="text-[11px] text-muted-foreground leading-snug">{t(lang, test.enDesc, test.zhDesc)}</p>
-              </div>
-            ))}
-          </div>
-          <p className="text-xs text-muted-foreground mt-3">
-            {t(lang, "Every resume must pass these 4 tests to land an interview", "每份履歷都必須通過這 4 項測試才能獲得面試")}
-          </p>
         </div>
 
-        {/* Section Breakdown */}
-        <div>
-          <h2 className="font-heading text-2xl text-foreground mb-4">
-            {t(lang, "Section-by-Section Breakdown", "逐項分析")}
-          </h2>
-          <div className="space-y-3">
-            {analysis.sections.map((section, i) => (
-              <SectionCard key={i} section={section} lang={lang} defaultOpen={isUnlocked && (i === 0 || section.score < 6)} locked={!isUnlocked} />
-            ))}
-          </div>
-        </div>
-
-        {/* Locked sections wrapper */}
+        {/* Locked sections wrapper — everything after score */}
         <div className="relative">
-          {!isUnlocked && <LockedOverlay lang={lang} />}
+          {!isUnlocked && <LockedOverlay lang={lang} currentPath={location.pathname} />}
           <div className={`space-y-10 ${!isUnlocked ? "blur-sm pointer-events-none select-none" : ""}`}>
+
+            {/* Section Breakdown */}
+            <div>
+              <h2 className="font-heading text-2xl text-foreground mb-4">
+                {t(lang, "Section-by-Section Breakdown", "逐項分析")}
+              </h2>
+              <div className="space-y-3">
+                {analysis.sections.map((section, i) => (
+                  <SectionCard key={i} section={section} lang={lang} defaultOpen={isUnlocked && (i === 0 || section.score < 6)} locked={!isUnlocked} />
+                ))}
+              </div>
+            </div>
 
             {/* Bullet Rewrite */}
             <div className="bg-card border-2 border-gold/30 rounded-xl p-6">
