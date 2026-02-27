@@ -145,6 +145,7 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
+      check_email_gate: { Args: { p_email: string }; Returns: boolean }
       count_resume_analyses_this_month: {
         Args: { p_email: string }
         Returns: number
