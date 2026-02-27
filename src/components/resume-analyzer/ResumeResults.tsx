@@ -227,6 +227,7 @@ function ShareSection({ lang }: { lang: Language }) {
 }
 
 /* ──────────────────── Main Results Component ──────────────────── */
+
 export default function ResumeResults({
   analysis,
   lang,
