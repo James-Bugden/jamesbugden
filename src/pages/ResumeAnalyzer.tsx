@@ -1,13 +1,15 @@
 import { useState, useCallback, useRef } from "react";
 import { Helmet } from "react-helmet-async";
 import { Link } from "react-router-dom";
-import { Upload, FileText, Sparkles, BarChart3, CloudUpload, X, Check, Lock, ArrowRight } from "lucide-react";
+import { Upload, FileText, Sparkles, BarChart3, CloudUpload, X, Check, Lock, ArrowRight, ShieldCheck, ChevronRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
 import { supabase } from "@/integrations/supabase/client";
 import ResumeResults from "@/components/resume-analyzer/ResumeResults";
 import type { AnalysisResult } from "@/components/resume-analyzer/types";
+import LogoScroll from "@/components/LogoScroll";
 import jamesPhoto from "@/assets/james-bugden.jpg";
 
 
@@ -379,15 +381,68 @@ export default function ResumeAnalyzer() {
                   {t(lang, "Analyze My Resume", "分析我的履歷")}
                 </Button>
 
-                <p className="text-xs text-muted-foreground mt-3 text-center">
-                  🔒 {t(lang, "Your resume is analyzed securely. We never sell your data.", "你的履歷將被安全分析。我們絕不販售你的資料。")}
-                </p>
-                <p className="text-xs text-muted-foreground mt-2 text-center italic">
+                {/* Privacy Badge */}
+                <div className="flex items-center justify-center gap-2 mt-4 px-4 py-2.5 rounded-full bg-executive-green/5 border border-executive-green/20 mx-auto w-fit">
+                  <ShieldCheck className="w-4 h-4 text-executive-green shrink-0" />
+                  <span className="text-xs font-medium text-executive-green">
+                    {t(lang, "100% Private — Your resume is never shared or sold", "100% 隱私保護 — 你的履歷絕不會被分享或販售")}
+                  </span>
+                </div>
+                <p className="text-xs text-muted-foreground mt-3 text-center italic">
                   {t(lang, 
                     'Frameworks based on "How to Write the Perfect Resume" by Dan Clay', 
                     '框架基於 Dan Clay 所著《How to Write the Perfect Resume》'
                   )}
                 </p>
+              </div>
+
+              {/* How It Works */}
+              <div className="mt-10">
+                <h2 className="text-center font-heading text-lg font-semibold text-foreground mb-6">
+                  {t(lang, "How It Works", "使用方式")}
+                </h2>
+                <div className="grid grid-cols-3 gap-4">
+                  {[
+                    { icon: CloudUpload, title: t(lang, "Upload", "上傳"), desc: t(lang, "Upload your resume or paste the text", "上傳履歷或貼上文字") },
+                    { icon: BarChart3, title: t(lang, "Get Scored", "獲得評分"), desc: t(lang, "AI analyzes against recruiter criteria", "AI 依據招募標準進行分析") },
+                    { icon: Sparkles, title: t(lang, "Improve", "改善"), desc: t(lang, "Get actionable fixes to land interviews", "獲得具體建議以爭取面試") },
+                  ].map((step, i) => (
+                    <div key={i} className="flex flex-col items-center text-center gap-2">
+                      <div className="w-12 h-12 rounded-full bg-gold/10 flex items-center justify-center">
+                        <step.icon className="w-5 h-5 text-gold" />
+                      </div>
+                      <p className="font-semibold text-sm text-foreground">{step.title}</p>
+                      <p className="text-xs text-muted-foreground leading-snug">{step.desc}</p>
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+              {/* Logo Scroll */}
+              <div className="mt-10">
+                <LogoScroll heading={t(lang, "I've helped professionals from", "我曾幫助來自這些公司的專業人士")} />
+              </div>
+
+              {/* FAQ Section */}
+              <div className="mt-12">
+                <h2 className="text-center font-heading text-lg font-semibold text-foreground mb-4">
+                  {t(lang, "Frequently Asked Questions", "常見問題")}
+                </h2>
+                <Accordion type="single" collapsible className="w-full">
+                  {[
+                    { q: t(lang, "What is an ATS and why does it matter?", "什麼是 ATS？為什麼它很重要？"), a: t(lang, "An Applicant Tracking System (ATS) is software used by 99% of large employers to screen resumes. If your resume isn't ATS-friendly, it may be rejected before a human ever reads it.", "ATS（應徵者追蹤系統）是 99% 大型企業用來篩選履歷的軟體。如果你的履歷不符合 ATS 規範，它可能在人類閱讀前就被淘汰了。") },
+                    { q: t(lang, "How does the resume analyzer work?", "履歷分析工具如何運作？"), a: t(lang, "Our AI evaluates your resume against the same criteria top recruiters use: keyword optimization, formatting, quantified achievements, and overall readability. You get a score and specific recommendations.", "我們的 AI 會依據頂尖招募官使用的標準來評估你的履歷：關鍵字優化、格式、量化成就和整體可讀性。你會獲得評分和具體建議。") },
+                    { q: t(lang, "Is my resume data safe?", "我的履歷資料安全嗎？"), a: t(lang, "Yes. Your resume is processed securely, never shared with third parties, and never used for training. We take your privacy seriously.", "是的。你的履歷會被安全處理，不會分享給第三方，也不會用於訓練。我們非常重視你的隱私。") },
+                    { q: t(lang, "How many times can I use this tool?", "我可以使用這個工具幾次？"), a: t(lang, "You can analyze up to 5 resumes per month for free. This resets at the beginning of each calendar month.", "你每月最多可以免費分析 5 份履歷。每月月初重置。") },
+                    { q: t(lang, "What file formats are supported?", "支援哪些檔案格式？"), a: t(lang, "We support PDF and DOCX files up to 5MB. You can also paste your resume text directly.", "我們支援 5MB 以內的 PDF 和 DOCX 檔案。你也可以直接貼上履歷文字。") },
+                    { q: t(lang, "How is this different from other resume scanners?", "這跟其他履歷掃描工具有什麼不同？"), a: t(lang, "This tool is built by a senior recruiter who has personally reviewed 20,000+ resumes. The scoring criteria reflect real hiring decisions, not generic AI rules.", "這個工具由親自審閱超過 20,000 份履歷的資深招募官打造。評分標準反映真實的招聘決策，而非通用的 AI 規則。") },
+                  ].map((item, i) => (
+                    <AccordionItem key={i} value={`faq-${i}`}>
+                      <AccordionTrigger className="text-sm text-left font-medium">{item.q}</AccordionTrigger>
+                      <AccordionContent className="text-sm text-muted-foreground">{item.a}</AccordionContent>
+                    </AccordionItem>
+                  ))}
+                </Accordion>
               </div>
             </div>
           </div>
@@ -490,7 +545,23 @@ export default function ResumeAnalyzer() {
 
         {/* SCREEN 4: FULL RESULTS */}
         {screen === "results" && analysisResult && (
-          <ResumeResults analysis={analysisResult} lang={lang} />
+          <ResumeResults
+            analysis={analysisResult}
+            lang={lang}
+            onReset={() => {
+              setAnalysisResult(null);
+              setFile(null);
+              setPasteText("");
+              setResumeText("");
+              setGateName("");
+              setGateEmail("");
+              setError("");
+              setGateError("");
+              setProgress(0);
+              setAnalyzeStep(0);
+              setScreen("upload");
+            }}
+          />
         )}
       </main>
     </>

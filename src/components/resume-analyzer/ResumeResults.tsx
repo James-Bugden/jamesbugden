@@ -1,6 +1,7 @@
 import { useState } from "react";
-import { ChevronDown, CheckCircle, AlertTriangle, XCircle, ExternalLink, Share2, ArrowRight } from "lucide-react";
+import { ChevronDown, CheckCircle, AlertTriangle, XCircle, ExternalLink, Share2, ArrowRight, RotateCcw, Download } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { exportToPdf } from "@/lib/pdfExport";
 import type { AnalysisResult } from "./types";
 
 type Language = "en" | "zh-TW";
@@ -105,7 +106,7 @@ function SectionCard({ section, lang, defaultOpen }: { section: AnalysisResult["
   );
 }
 
-export default function ResumeResults({ analysis, lang }: { analysis: AnalysisResult; lang: Language }) {
+export default function ResumeResults({ analysis, lang, onReset }: { analysis: AnalysisResult; lang: Language; onReset?: () => void }) {
   const fourTests = [
     { key: "keyword_test", en: "Keyword Test", zh: "關鍵字測試", pass: analysis.four_tests.keyword_test, enDesc: "Does your resume contain the right keywords for ATS systems?", zhDesc: "你的履歷是否包含正確的 ATS 關鍵字？" },
     { key: "scan_test", en: "Scan Test", zh: "掃描測試", pass: analysis.four_tests.scan_test, enDesc: "Will a recruiter spot your value in a 6-second scan?", zhDesc: "招募官能在 6 秒掃描中看到你的價值嗎？" },
@@ -114,8 +115,28 @@ export default function ResumeResults({ analysis, lang }: { analysis: AnalysisRe
   ];
 
   return (
-    <div className="py-12 md:py-20 px-5">
+    <div className="py-12 md:py-20 px-5" id="analysis-results-container">
       <div className="container mx-auto max-w-3xl space-y-10">
+
+        {/* Action bar */}
+        <div className="flex items-center justify-between gap-3">
+          {onReset && (
+            <button
+              onClick={onReset}
+              className="inline-flex items-center gap-2 text-sm font-medium text-muted-foreground hover:text-foreground transition-colors"
+            >
+              <RotateCcw className="w-4 h-4" />
+              {t(lang, "Scan Another Resume", "掃描另一份履歷")}
+            </button>
+          )}
+          <button
+            onClick={() => exportToPdf({ elementId: "analysis-results-container", fileName: "Resume-Analysis-Report.pdf", pageFormat: "a4" })}
+            className="inline-flex items-center gap-2 text-sm font-medium text-muted-foreground hover:text-foreground transition-colors ml-auto"
+          >
+            <Download className="w-4 h-4" />
+            {t(lang, "Download PDF", "下載 PDF")}
+          </button>
+        </div>
 
         {/* Overall Score */}
         <div className="text-center">
