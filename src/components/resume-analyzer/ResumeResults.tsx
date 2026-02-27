@@ -1,18 +1,47 @@
-import { useState } from "react";
-import { ChevronDown, CheckCircle, AlertTriangle, XCircle, ExternalLink, Share2, ArrowRight, RotateCcw, Download, Lock } from "lucide-react";
+import { useState, useEffect } from "react";
+import { ChevronDown, CheckCircle, AlertTriangle, XCircle, ExternalLink, ArrowRight, RotateCcw, Download, Lock, ArrowDown, Mail } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { exportToPdf } from "@/lib/pdfExport";
 import type { AnalysisResult } from "./types";
 import { Link, useLocation } from "react-router-dom";
+import { motion } from "framer-motion";
+import ResumeVisualSummary from "./ResumeVisualSummary";
 
 type Language = "en" | "zh-TW";
 const t = (lang: Language, en: string, zh: string) => lang === "en" ? en : zh;
 
+const LineIcon = () => (
+  <svg viewBox="0 0 24 24" fill="currentColor" className="w-5 h-5">
+    <path d="M19.365 9.863c.349 0 .63.285.63.631 0 .348-.281.63-.63.63H17.61v1.125h1.755c.349 0 .63.283.63.63 0 .349-.281.631-.63.631h-2.386c-.345 0-.627-.282-.627-.631V8.108c0-.345.282-.63.63-.63h2.386c.346 0 .627.285.627.63 0 .349-.281.63-.63.63H17.61v1.125h1.755zm-3.855 3.016c0 .27-.174.51-.432.596-.064.021-.133.031-.199.031-.211 0-.391-.09-.51-.25l-2.443-3.317v2.94c0 .344-.279.629-.631.629-.346 0-.626-.285-.626-.629V8.108c0-.27.173-.51.43-.595.06-.023.136-.033.194-.033.195 0 .375.104.495.254l2.462 3.33V8.108c0-.345.282-.63.63-.63.345 0 .63.285.63.63v4.771zm-5.741 0c0 .344-.282.629-.631.629-.345 0-.627-.285-.627-.629V8.108c0-.345.282-.63.63-.63.346 0 .628.285.628.63v4.771zm-2.466.629H4.917c-.345 0-.63-.285-.63-.629V8.108c0-.345.285-.63.63-.63.348 0 .63.285.63.63v4.141h1.756c.348 0 .629.283.629.63 0 .349-.281.631-.629.631M24 10.314C24 4.943 18.615.572 12 .572S0 4.943 0 10.314c0 4.811 4.27 8.842 10.035 9.608.391.082.923.258 1.058.59.12.301.079.766.038 1.08l-.164 1.02c-.045.301-.24 1.186 1.049.645 1.291-.539 6.916-4.078 9.436-6.975C23.176 14.393 24 12.458 24 10.314" />
+  </svg>
+);
+
+/* ──────────────────── Animated Score Counter ──────────────────── */
+function useAnimatedCounter(target: number, duration = 1200) {
+  const [value, setValue] = useState(0);
+  useEffect(() => {
+    let start = 0;
+    const startTime = performance.now();
+    const tick = (now: number) => {
+      const elapsed = now - startTime;
+      const progress = Math.min(elapsed / duration, 1);
+      // ease-out
+      const eased = 1 - Math.pow(1 - progress, 3);
+      setValue(Math.round(eased * target));
+      if (progress < 1) requestAnimationFrame(tick);
+    };
+    requestAnimationFrame(tick);
+  }, [target, duration]);
+  return value;
+}
+
+/* ──────────────────── Score Hero ──────────────────── */
 function ScoreHero({ score, lang }: { score: number; lang: Language }) {
+  const animatedScore = useAnimatedCounter(score);
   const size = 180;
   const radius = (size - 14) / 2;
   const circumference = 2 * Math.PI * radius;
-  const offset = circumference - (score / 100) * circumference;
+  const offset = circumference - (animatedScore / 100) * circumference;
   const color = score >= 90 ? "hsl(142 60% 35%)" : score >= 75 ? "hsl(142 50% 45%)" : score >= 65 ? "hsl(45 80% 50%)" : score >= 50 ? "hsl(30 80% 50%)" : "hsl(0 70% 50%)";
   const grade = score >= 90 ? "A+" : score >= 80 ? "A" : score >= 70 ? "B" : score >= 60 ? "C" : score >= 50 ? "D" : "F";
 
@@ -25,8 +54,12 @@ function ScoreHero({ score, lang }: { score: number; lang: Language }) {
   };
 
   return (
-    <div className="flex flex-col items-center gap-2">
-      {/* Ring + Grade combo */}
+    <motion.div
+      className="flex flex-col items-center gap-2"
+      initial={{ opacity: 0, scale: 0.9 }}
+      animate={{ opacity: 1, scale: 1 }}
+      transition={{ duration: 0.6, ease: "easeOut" }}
+    >
       <div className="relative inline-flex items-center justify-center">
         <svg width={size} height={size} className="-rotate-90">
           <circle cx={size / 2} cy={size / 2} r={radius} fill="none" stroke="hsl(var(--border))" strokeWidth="10" />
@@ -42,9 +75,8 @@ function ScoreHero({ score, lang }: { score: number; lang: Language }) {
         </div>
       </div>
 
-      {/* Score number */}
       <div className="flex items-baseline gap-1">
-        <span className="font-heading text-3xl font-bold text-foreground">{score}</span>
+        <span className="font-heading text-3xl font-bold text-foreground">{animatedScore}</span>
         <span className="text-base text-muted-foreground font-medium">/100</span>
       </div>
 
@@ -53,24 +85,26 @@ function ScoreHero({ score, lang }: { score: number; lang: Language }) {
       <p className="text-base text-foreground mt-2 max-w-lg mx-auto text-center leading-relaxed">
         {verdictText(score)}
       </p>
-    </div>
+    </motion.div>
   );
 }
 
+/* ──────────────────── Section Card ──────────────────── */
 function SectionCard({ section, lang, defaultOpen, locked }: { section: AnalysisResult["sections"][0]; lang: Language; defaultOpen?: boolean; locked?: boolean }) {
   const [open, setOpen] = useState(locked ? false : (defaultOpen || false));
   const scoreColor = section.score >= 8 ? "border-l-executive-green" : section.score >= 6 ? "border-l-gold" : section.score >= 4 ? "border-l-yellow-500" : "border-l-destructive";
   const bgTint = section.score >= 8 ? "" : section.score >= 6 ? "" : section.score < 4 ? "bg-destructive/[0.02]" : "";
   const barColor = section.score >= 7 ? "bg-executive-green" : section.score >= 5 ? "bg-yellow-500" : "bg-destructive";
   const barWidth = `${section.score * 10}%`;
+  const headerColor = section.score >= 7 ? "text-executive-green" : section.score >= 5 ? "text-yellow-600" : "text-destructive";
 
   return (
     <div className={`bg-card border border-border border-l-4 ${scoreColor} rounded-xl overflow-hidden ${bgTint}`}>
       <button onClick={() => !locked && setOpen(!open)} className={`w-full flex items-center gap-4 p-5 text-left transition-colors ${locked ? "cursor-default" : "hover:bg-muted/30"}`}>
         <div className="flex-1 min-w-0">
           <div className="flex items-center gap-3 mb-1">
-            <h3 className="font-semibold text-foreground text-sm">{section.name}</h3>
-            <span className={`text-xs font-bold ${section.score >= 7 ? "text-executive-green" : section.score >= 5 ? "text-yellow-600" : "text-destructive"}`}>{section.score}/10</span>
+            <h3 className={`font-semibold text-sm ${headerColor}`}>{section.name}</h3>
+            <span className={`text-xs font-bold ${headerColor}`}>{section.score}/10</span>
           </div>
           <div className="w-full h-1.5 bg-muted rounded-full overflow-hidden">
             <div className={`h-full rounded-full ${barColor} transition-all duration-500`} style={{ width: barWidth }} />
@@ -111,6 +145,7 @@ function SectionCard({ section, lang, defaultOpen, locked }: { section: Analysis
   );
 }
 
+/* ──────────────────── Locked Overlay ──────────────────── */
 function LockedOverlay({ lang, currentPath }: { lang: Language; currentPath: string }) {
   return (
     <div className="absolute inset-0 z-10 flex flex-col items-center justify-start pt-16 bg-background/60 backdrop-blur-[6px] rounded-xl">
@@ -146,8 +181,67 @@ function LockedOverlay({ lang, currentPath }: { lang: Language; currentPath: str
   );
 }
 
-export default function ResumeResults({ analysis, lang, onReset, isUnlocked = true }: { analysis: AnalysisResult; lang: Language; onReset?: () => void; isUnlocked?: boolean }) {
+/* ──────────────────── Share Section ──────────────────── */
+function ShareSection({ lang }: { lang: Language }) {
+  const isZhTw = lang === "zh-TW";
+  const handleEmailShare = () => {
+    const subject = encodeURIComponent(isZhTw ? "推薦給你的免費履歷分析工具" : "Free resume analyzer I found helpful");
+    const body = encodeURIComponent(
+      `${isZhTw ? "我發現了這個免費履歷分析工具，分享給你：" : "I found this free resume analyzer and wanted to share it with you:"}\n\n${window.location.origin}/resume-analyzer`
+    );
+    window.open(`mailto:?subject=${subject}&body=${body}`, "_self");
+  };
+  const handleLineShare = () => {
+    const url = `${window.location.origin}/resume-analyzer`;
+    window.location.href = `https://line.me/R/share?text=${encodeURIComponent(url)}`;
+  };
+
+  return (
+    <div className="bg-[#1B3A2F] rounded-2xl p-8 text-center">
+      <h2 className="font-heading text-xl text-white mb-2">
+        {t(lang, "Know someone who needs resume help?", "認識需要履歷幫助的人？")}
+      </h2>
+      <p className="text-white/70 text-sm mb-5">
+        {t(lang, "Send them this free tool — it takes 30 seconds.", "把這個免費工具分享給他們——只要 30 秒。")}
+      </p>
+      <div className="flex items-center justify-center gap-3">
+        <button
+          onClick={handleEmailShare}
+          className="inline-flex items-center gap-2 px-5 py-2.5 rounded-lg border border-white/20 bg-white/10 text-white hover:bg-white/20 transition-colors text-sm font-medium"
+          aria-label="Share via Email"
+        >
+          <Mail className="w-5 h-5" />
+          Email
+        </button>
+        <button
+          onClick={handleLineShare}
+          className="inline-flex items-center gap-2 px-5 py-2.5 rounded-lg bg-[#06C755] text-white hover:bg-[#05b34d] transition-colors text-sm font-medium"
+          aria-label="Share via LINE"
+        >
+          <LineIcon />
+          LINE
+        </button>
+      </div>
+    </div>
+  );
+}
+
+/* ──────────────────── Main Results Component ──────────────────── */
+export default function ResumeResults({
+  analysis,
+  lang,
+  onReset,
+  isUnlocked = true,
+  resumeImageUrl,
+}: {
+  analysis: AnalysisResult;
+  lang: Language;
+  onReset?: () => void;
+  isUnlocked?: boolean;
+  resumeImageUrl?: string | null;
+}) {
   const location = useLocation();
+  const needsWork = analysis.sections.filter(s => s.score < 7).length;
 
   return (
     <div className="py-12 md:py-20 px-5" id="analysis-results-container">
@@ -156,13 +250,15 @@ export default function ResumeResults({ analysis, lang, onReset, isUnlocked = tr
         {/* Action bar */}
         <div className="flex items-center justify-between gap-3">
           {onReset && (
-            <button
+            <Button
+              variant="outline"
+              size="sm"
               onClick={onReset}
-              className="inline-flex items-center gap-2 text-sm font-medium text-muted-foreground hover:text-foreground transition-colors"
+              className="gap-2"
             >
               <RotateCcw className="w-4 h-4" />
               {t(lang, "Scan Another Resume", "掃描另一份履歷")}
-            </button>
+            </Button>
           )}
           {isUnlocked && (
             <button
@@ -185,11 +281,25 @@ export default function ResumeResults({ analysis, lang, onReset, isUnlocked = tr
           {!isUnlocked && <LockedOverlay lang={lang} currentPath={location.pathname} />}
           <div className={`space-y-10 ${!isUnlocked ? "blur-sm pointer-events-none select-none" : ""}`}>
 
+            {/* Resume Visual Summary */}
+            <ResumeVisualSummary
+              sections={analysis.sections}
+              resumeImageUrl={resumeImageUrl}
+              lang={lang}
+            />
+
             {/* Section Breakdown */}
             <div>
-              <h2 className="font-heading text-2xl text-foreground mb-4">
-                {t(lang, "Section-by-Section Breakdown", "逐項分析")}
-              </h2>
+              <div className="flex items-center justify-between mb-4">
+                <h2 className="font-heading text-2xl text-foreground">
+                  {t(lang, "Section-by-Section Breakdown", "逐項分析")}
+                </h2>
+                {needsWork > 0 && (
+                  <span className="text-xs font-medium px-3 py-1 rounded-full bg-destructive/10 text-destructive">
+                    {t(lang, `${needsWork} need${needsWork > 1 ? "" : "s"} work`, `${needsWork} 項需改善`)}
+                  </span>
+                )}
+              </div>
               <div className="space-y-3">
                 {analysis.sections.map((section, i) => (
                   <SectionCard key={i} section={section} lang={lang} defaultOpen={isUnlocked && (i === 0 || section.score < 6)} locked={!isUnlocked} />
@@ -202,16 +312,22 @@ export default function ResumeResults({ analysis, lang, onReset, isUnlocked = tr
               <h2 className="font-heading text-xl text-foreground mb-4">
                 {t(lang, "Example: How to Transform Your Resume Bullets", "範例：如何改造你的履歷描述")}
               </h2>
-              <div className="space-y-4">
+              <div className="space-y-2">
                 <div>
                   <p className="text-xs font-semibold text-destructive uppercase mb-1">{t(lang, "Before", "修改前")}</p>
                   <p className="text-sm text-muted-foreground bg-muted rounded-lg p-3 italic">"{analysis.bullet_rewrite.original}"</p>
+                </div>
+                {/* Visual arrow */}
+                <div className="flex justify-center py-1">
+                  <div className="flex flex-col items-center text-gold">
+                    <ArrowDown className="w-5 h-5" />
+                  </div>
                 </div>
                 <div>
                   <p className="text-xs font-semibold text-executive-green uppercase mb-1">{t(lang, "After", "修改後")}</p>
                   <p className="text-sm text-foreground bg-executive-green/10 rounded-lg p-3 font-medium">"{analysis.bullet_rewrite.improved}"</p>
                 </div>
-                <div>
+                <div className="pt-2">
                   <p className="text-xs font-semibold text-muted-foreground uppercase mb-2">{t(lang, "What changed", "改了什麼")}</p>
                   <ul className="space-y-1">
                     {analysis.bullet_rewrite.changes.map((c, i) => (
@@ -255,11 +371,14 @@ export default function ResumeResults({ analysis, lang, onReset, isUnlocked = tr
               <h2 className="font-heading text-xl md:text-2xl text-cream mb-2">
                 {t(lang, "Want a Recruiter to Fix All of This For You?", "想讓招募官幫你全部改好？")}
               </h2>
-              <p className="text-sm text-cream/70 mb-5 max-w-md mx-auto leading-relaxed">
+              <p className="text-sm text-cream/70 mb-2 max-w-md mx-auto leading-relaxed">
                 {t(lang,
                   "I personally review and rewrite resumes for a small number of clients each month. See real before-and-after examples.",
                   "我每月為少數客戶親自審閱並改寫履歷。查看真實的修改前後範例。"
                 )}
+              </p>
+              <p className="text-xs text-cream/50 mb-5">
+                {t(lang, "Join 500+ professionals who improved their resumes", "加入超過 500 位已改善履歷的專業人士")}
               </p>
               <a
                 href={lang === "zh-TW" ? "/zh-tw#coaching" : "/#coaching"}
@@ -318,34 +437,7 @@ export default function ResumeResults({ analysis, lang, onReset, isUnlocked = tr
         </div>
 
         {/* Share */}
-        <div className="bg-[#1B3A2F] rounded-2xl p-8 text-center">
-          <Share2 className="w-8 h-8 text-gold mx-auto mb-3" />
-          <h2 className="font-heading text-xl text-white mb-2">
-            {t(lang, "Know someone who needs resume help?", "認識需要履歷幫助的人？")}
-          </h2>
-          <p className="text-white/70 text-sm mb-5">
-            {t(lang, "Send them this free tool — it takes 30 seconds.", "把這個免費工具分享給他們——只要 30 秒。")}
-          </p>
-          <button
-            onClick={() => {
-              const url = window.location.origin + "/resume-analyzer";
-              const text = t(lang,
-                "I found this free resume analyzer. It scores your resume and shows you exactly what to fix.",
-                "我發現了這個免費履歷分析工具。它會幫你的履歷評分，並告訴你該改什麼。"
-              );
-              if (navigator.share) {
-                navigator.share({ title: t(lang, "Free Resume Analyzer", "免費履歷分析工具"), text, url });
-              } else {
-                navigator.clipboard.writeText(`${text} ${url}`);
-                alert(t(lang, "Link copied to clipboard!", "連結已複製！"));
-              }
-            }}
-            className="inline-flex items-center gap-2 px-6 py-3 rounded-lg bg-gold text-[#1B3A2F] text-sm font-bold hover:bg-gold/90 transition-colors"
-          >
-            <Share2 className="w-4 h-4" />
-            {t(lang, "Share with a friend", "分享給朋友")}
-          </button>
-        </div>
+        <ShareSection lang={lang} />
       </div>
     </div>
   );
