@@ -1,8 +1,9 @@
 import { useState } from "react";
-import { ChevronDown, CheckCircle, AlertTriangle, XCircle, ExternalLink, Share2, ArrowRight, RotateCcw, Download } from "lucide-react";
+import { ChevronDown, CheckCircle, AlertTriangle, XCircle, ExternalLink, Share2, ArrowRight, RotateCcw, Download, Lock } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { exportToPdf } from "@/lib/pdfExport";
 import type { AnalysisResult } from "./types";
+import { Link } from "react-router-dom";
 
 type Language = "en" | "zh-TW";
 const t = (lang: Language, en: string, zh: string) => lang === "en" ? en : zh;
@@ -56,8 +57,8 @@ function ScoreHero({ score, lang }: { score: number; lang: Language }) {
   );
 }
 
-function SectionCard({ section, lang, defaultOpen }: { section: AnalysisResult["sections"][0]; lang: Language; defaultOpen?: boolean }) {
-  const [open, setOpen] = useState(defaultOpen || false);
+function SectionCard({ section, lang, defaultOpen, locked }: { section: AnalysisResult["sections"][0]; lang: Language; defaultOpen?: boolean; locked?: boolean }) {
+  const [open, setOpen] = useState(locked ? false : (defaultOpen || false));
   const scoreColor = section.score >= 8 ? "border-l-executive-green" : section.score >= 6 ? "border-l-gold" : section.score >= 4 ? "border-l-yellow-500" : "border-l-destructive";
   const bgTint = section.score >= 8 ? "" : section.score >= 6 ? "" : section.score < 4 ? "bg-destructive/[0.02]" : "";
   const barColor = section.score >= 7 ? "bg-executive-green" : section.score >= 5 ? "bg-yellow-500" : "bg-destructive";
@@ -65,7 +66,7 @@ function SectionCard({ section, lang, defaultOpen }: { section: AnalysisResult["
 
   return (
     <div className={`bg-card border border-border border-l-4 ${scoreColor} rounded-xl overflow-hidden ${bgTint}`}>
-      <button onClick={() => setOpen(!open)} className="w-full flex items-center gap-4 p-5 text-left hover:bg-muted/30 transition-colors">
+      <button onClick={() => !locked && setOpen(!open)} className={`w-full flex items-center gap-4 p-5 text-left transition-colors ${locked ? "cursor-default" : "hover:bg-muted/30"}`}>
         <div className="flex-1 min-w-0">
           <div className="flex items-center gap-3 mb-1">
             <h3 className="font-semibold text-foreground text-sm">{section.name}</h3>
@@ -76,7 +77,11 @@ function SectionCard({ section, lang, defaultOpen }: { section: AnalysisResult["
           </div>
           <p className="text-xs text-muted-foreground mt-1.5 line-clamp-1">{section.summary}</p>
         </div>
-        <ChevronDown className={`w-4 h-4 text-muted-foreground shrink-0 transition-transform ${open ? "rotate-180" : ""}`} />
+        {locked ? (
+          <Lock className="w-4 h-4 text-muted-foreground/50 shrink-0" />
+        ) : (
+          <ChevronDown className={`w-4 h-4 text-muted-foreground shrink-0 transition-transform ${open ? "rotate-180" : ""}`} />
+        )}
       </button>
 
       {open && (
@@ -106,7 +111,41 @@ function SectionCard({ section, lang, defaultOpen }: { section: AnalysisResult["
   );
 }
 
-export default function ResumeResults({ analysis, lang, onReset }: { analysis: AnalysisResult; lang: Language; onReset?: () => void }) {
+function LockedOverlay({ lang }: { lang: Language }) {
+  return (
+    <div className="absolute inset-0 z-10 flex flex-col items-center justify-center bg-background/60 backdrop-blur-[6px] rounded-xl">
+      <div className="bg-card border border-border rounded-2xl shadow-xl p-8 max-w-sm text-center">
+        <div className="w-12 h-12 rounded-full bg-gold/10 flex items-center justify-center mx-auto mb-4">
+          <Lock className="w-6 h-6 text-gold" />
+        </div>
+        <h3 className="font-heading text-lg font-bold text-foreground mb-2">
+          {t(lang, "Create a Free Account", "建立免費帳號")}
+        </h3>
+        <p className="text-sm text-muted-foreground mb-5">
+          {t(lang,
+            "Sign up to unlock your full report — detailed findings, bullet rewrites, and top priorities.",
+            "註冊即可解鎖完整報告 — 詳細分析、履歷描述改寫和優先改善建議。"
+          )}
+        </p>
+        <Link
+          to="/signup"
+          className="inline-flex items-center gap-2 px-6 py-3 rounded-lg bg-gold text-[#1B3A2F] text-sm font-bold hover:bg-gold/90 transition-colors"
+        >
+          {t(lang, "Sign Up Free", "免費註冊")}
+          <ArrowRight className="w-4 h-4" />
+        </Link>
+        <p className="text-xs text-muted-foreground mt-3">
+          {t(lang, "Already have an account?", "已有帳號？")}{" "}
+          <Link to="/login" className="text-gold hover:underline font-medium">
+            {t(lang, "Sign in", "登入")}
+          </Link>
+        </p>
+      </div>
+    </div>
+  );
+}
+
+export default function ResumeResults({ analysis, lang, onReset, isUnlocked = true }: { analysis: AnalysisResult; lang: Language; onReset?: () => void; isUnlocked?: boolean }) {
   const fourTests = [
     { key: "keyword_test", en: "Keyword Test", zh: "關鍵字測試", pass: analysis.four_tests.keyword_test, enDesc: "Does your resume contain the right keywords for ATS systems?", zhDesc: "你的履歷是否包含正確的 ATS 關鍵字？" },
     { key: "scan_test", en: "Scan Test", zh: "掃描測試", pass: analysis.four_tests.scan_test, enDesc: "Will a recruiter spot your value in a 6-second scan?", zhDesc: "招募官能在 6 秒掃描中看到你的價值嗎？" },
@@ -129,13 +168,15 @@ export default function ResumeResults({ analysis, lang, onReset }: { analysis: A
               {t(lang, "Scan Another Resume", "掃描另一份履歷")}
             </button>
           )}
-          <button
-            onClick={() => exportToPdf({ elementId: "analysis-results-container", fileName: "Resume-Analysis-Report.pdf", pageFormat: "a4" })}
-            className="inline-flex items-center gap-2 text-sm font-medium text-muted-foreground hover:text-foreground transition-colors ml-auto"
-          >
-            <Download className="w-4 h-4" />
-            {t(lang, "Download PDF", "下載 PDF")}
-          </button>
+          {isUnlocked && (
+            <button
+              onClick={() => exportToPdf({ elementId: "analysis-results-container", fileName: "Resume-Analysis-Report.pdf", pageFormat: "a4" })}
+              className="inline-flex items-center gap-2 text-sm font-medium text-muted-foreground hover:text-foreground transition-colors ml-auto"
+            >
+              <Download className="w-4 h-4" />
+              {t(lang, "Download PDF", "下載 PDF")}
+            </button>
+          )}
         </div>
 
         {/* Overall Score */}
@@ -166,83 +207,91 @@ export default function ResumeResults({ analysis, lang, onReset }: { analysis: A
           </h2>
           <div className="space-y-3">
             {analysis.sections.map((section, i) => (
-              <SectionCard key={i} section={section} lang={lang} defaultOpen={i === 0 || section.score < 6} />
+              <SectionCard key={i} section={section} lang={lang} defaultOpen={isUnlocked && (i === 0 || section.score < 6)} locked={!isUnlocked} />
             ))}
           </div>
         </div>
 
-        {/* Bullet Rewrite */}
-        <div className="bg-card border-2 border-gold/30 rounded-xl p-6">
-          <h2 className="font-heading text-xl text-foreground mb-4">
-            {t(lang, "Example: How to Transform Your Resume Bullets", "範例：如何改造你的履歷描述")}
-          </h2>
-          <div className="space-y-4">
-            <div>
-              <p className="text-xs font-semibold text-destructive uppercase mb-1">{t(lang, "Before", "修改前")}</p>
-              <p className="text-sm text-muted-foreground bg-muted rounded-lg p-3 italic">"{analysis.bullet_rewrite.original}"</p>
-            </div>
-            <div>
-              <p className="text-xs font-semibold text-executive-green uppercase mb-1">{t(lang, "After", "修改後")}</p>
-              <p className="text-sm text-foreground bg-executive-green/10 rounded-lg p-3 font-medium">"{analysis.bullet_rewrite.improved}"</p>
-            </div>
-            <div>
-              <p className="text-xs font-semibold text-muted-foreground uppercase mb-2">{t(lang, "What changed", "改了什麼")}</p>
-              <ul className="space-y-1">
-                {analysis.bullet_rewrite.changes.map((c, i) => (
-                  <li key={i} className="text-xs text-muted-foreground flex gap-2">
-                    <span className="text-gold">•</span> {c}
-                  </li>
-                ))}
-              </ul>
-            </div>
-          </div>
-          <p className="text-xs text-muted-foreground mt-4 italic">
-            {t(lang, "This is just one example. A full resume review transforms every bullet this way.", "這只是一個範例。完整的履歷審查會將每一條描述都這樣改善。")}
-          </p>
-        </div>
+        {/* Locked sections wrapper */}
+        <div className="relative">
+          {!isUnlocked && <LockedOverlay lang={lang} />}
+          <div className={`space-y-10 ${!isUnlocked ? "blur-sm pointer-events-none select-none" : ""}`}>
 
-        {/* Top 3 Priorities */}
-        <div>
-          <h2 className="font-heading text-2xl text-foreground mb-1">
-            {t(lang, "Your Top 3 Priorities", "你的前 3 項優先改善")}
-          </h2>
-          <p className="text-sm text-muted-foreground mb-4">
-            {t(lang, "Fix these first for maximum impact", "先修正這些以獲得最大效果")}
-          </p>
-          <div className="space-y-3">
-            {analysis.top_priorities.map((p) => (
-              <div key={p.priority} className="bg-card border border-border rounded-xl p-5 border-l-4 border-l-destructive">
-                <div className="flex items-start gap-3">
-                  <span className="text-lg">🔴</span>
-                  <div>
-                    <p className="font-semibold text-foreground text-sm mb-1">{p.principle}: {p.title}</p>
-                    <p className="text-sm text-muted-foreground">{p.description}</p>
-                  </div>
+            {/* Bullet Rewrite */}
+            <div className="bg-card border-2 border-gold/30 rounded-xl p-6">
+              <h2 className="font-heading text-xl text-foreground mb-4">
+                {t(lang, "Example: How to Transform Your Resume Bullets", "範例：如何改造你的履歷描述")}
+              </h2>
+              <div className="space-y-4">
+                <div>
+                  <p className="text-xs font-semibold text-destructive uppercase mb-1">{t(lang, "Before", "修改前")}</p>
+                  <p className="text-sm text-muted-foreground bg-muted rounded-lg p-3 italic">"{analysis.bullet_rewrite.original}"</p>
+                </div>
+                <div>
+                  <p className="text-xs font-semibold text-executive-green uppercase mb-1">{t(lang, "After", "修改後")}</p>
+                  <p className="text-sm text-foreground bg-executive-green/10 rounded-lg p-3 font-medium">"{analysis.bullet_rewrite.improved}"</p>
+                </div>
+                <div>
+                  <p className="text-xs font-semibold text-muted-foreground uppercase mb-2">{t(lang, "What changed", "改了什麼")}</p>
+                  <ul className="space-y-1">
+                    {analysis.bullet_rewrite.changes.map((c, i) => (
+                      <li key={i} className="text-xs text-muted-foreground flex gap-2">
+                        <span className="text-gold">•</span> {c}
+                      </li>
+                    ))}
+                  </ul>
                 </div>
               </div>
-            ))}
-          </div>
-        </div>
+              <p className="text-xs text-muted-foreground mt-4 italic">
+                {t(lang, "This is just one example. A full resume review transforms every bullet this way.", "這只是一個範例。完整的履歷審查會將每一條描述都這樣改善。")}
+              </p>
+            </div>
 
-        {/* Coaching CTA */}
-        <div className="border-2 border-gold/40 rounded-2xl p-6 md:p-8 text-center" style={{ background: 'radial-gradient(ellipse at center, hsl(153 38% 17%) 0%, hsl(153 42% 13%) 100%)' }}>
-          <h2 className="font-heading text-xl md:text-2xl text-cream mb-2">
-            {t(lang, "Want a Recruiter to Fix All of This For You?", "想讓招募官幫你全部改好？")}
-          </h2>
-          <p className="text-sm text-cream/70 mb-5 max-w-md mx-auto leading-relaxed">
-            {t(lang,
-              "I personally review and rewrite resumes for a small number of clients each month. See real before-and-after examples.",
-              "我每月為少數客戶親自審閱並改寫履歷。查看真實的修改前後範例。"
-            )}
-          </p>
-          <a
-            href={lang === "zh-TW" ? "/zh-tw#coaching" : "/#coaching"}
-            className="inline-flex items-center gap-2 px-6 py-3 rounded-lg bg-gold text-[#1B3A2F] text-sm font-bold hover:bg-gold/90 transition-colors"
-          >
-            {t(lang, "See If You're a Fit", "查看是否適合你")}
-            <ArrowRight className="w-4 h-4" />
-          </a>
-        </div>
+            {/* Top 3 Priorities */}
+            <div>
+              <h2 className="font-heading text-2xl text-foreground mb-1">
+                {t(lang, "Your Top 3 Priorities", "你的前 3 項優先改善")}
+              </h2>
+              <p className="text-sm text-muted-foreground mb-4">
+                {t(lang, "Fix these first for maximum impact", "先修正這些以獲得最大效果")}
+              </p>
+              <div className="space-y-3">
+                {analysis.top_priorities.map((p) => (
+                  <div key={p.priority} className="bg-card border border-border rounded-xl p-5 border-l-4 border-l-destructive">
+                    <div className="flex items-start gap-3">
+                      <span className="text-lg">🔴</span>
+                      <div>
+                        <p className="font-semibold text-foreground text-sm mb-1">{p.principle}: {p.title}</p>
+                        <p className="text-sm text-muted-foreground">{p.description}</p>
+                      </div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            {/* Coaching CTA */}
+            <div className="border-2 border-gold/40 rounded-2xl p-6 md:p-8 text-center" style={{ background: 'radial-gradient(ellipse at center, hsl(153 38% 17%) 0%, hsl(153 42% 13%) 100%)' }}>
+              <h2 className="font-heading text-xl md:text-2xl text-cream mb-2">
+                {t(lang, "Want a Recruiter to Fix All of This For You?", "想讓招募官幫你全部改好？")}
+              </h2>
+              <p className="text-sm text-cream/70 mb-5 max-w-md mx-auto leading-relaxed">
+                {t(lang,
+                  "I personally review and rewrite resumes for a small number of clients each month. See real before-and-after examples.",
+                  "我每月為少數客戶親自審閱並改寫履歷。查看真實的修改前後範例。"
+                )}
+              </p>
+              <a
+                href={lang === "zh-TW" ? "/zh-tw#coaching" : "/#coaching"}
+                className="inline-flex items-center gap-2 px-6 py-3 rounded-lg bg-gold text-[#1B3A2F] text-sm font-bold hover:bg-gold/90 transition-colors"
+              >
+                {t(lang, "See If You're a Fit", "查看是否適合你")}
+                <ArrowRight className="w-4 h-4" />
+              </a>
+            </div>
+
+          </div>{/* end blur wrapper */}
+        </div>{/* end relative wrapper */}
 
         {/* Free Templates */}
         <div className="bg-card border border-border rounded-xl p-6">
