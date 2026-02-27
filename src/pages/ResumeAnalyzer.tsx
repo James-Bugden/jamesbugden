@@ -288,12 +288,14 @@ export default function ResumeAnalyzer() {
               {/* Hero */}
               <div className="text-center mb-8">
                 <h1 className="font-heading text-4xl md:text-5xl lg:text-6xl text-foreground mb-4">
-                  {t(lang, "How Strong Is Your Resume?", "你的履歷有多強？")}
+                  {t(lang, "98% of Resumes Get Ignored.", "98% 的履歷被忽略。")}
+                  <br />
+                  <span className="text-gold">{t(lang, "Fix Yours in 1 Minute.", "1 分鐘修好你的。")}</span>
                 </h1>
                 <p className="text-base md:text-lg text-muted-foreground mb-5 max-w-xl mx-auto">
                   {t(lang,
-                    "I put all my knowledge about resumes into this tool. Get a score and recommendations in 20 seconds.",
-                    "我把所有履歷知識都注入了這個工具。20 秒內獲得評分和改善建議。"
+                    "Start for free — no signup required.",
+                    "免費開始 — 無需註冊。"
                   )}
                 </p>
                 {/* Authority badge */}
