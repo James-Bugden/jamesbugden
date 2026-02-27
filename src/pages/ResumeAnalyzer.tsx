@@ -11,6 +11,7 @@ import ResumeResults from "@/components/resume-analyzer/ResumeResults";
 import type { AnalysisResult } from "@/components/resume-analyzer/types";
 import LogoScroll from "@/components/LogoScroll";
 import { useAuth } from "@/contexts/AuthContext";
+import { renderPdfToImage } from "@/lib/renderPdfToImage";
 import jamesPhoto from "@/assets/james-bugden.jpg";
 
 
@@ -32,6 +33,7 @@ export default function ResumeAnalyzer() {
   const [error, setError] = useState("");
   const [analyzeStep, setAnalyzeStep] = useState(0);
   const [progress, setProgress] = useState(0);
+  const [resumeImageUrl, setResumeImageUrl] = useState<string | null>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   // Restore analysis from sessionStorage after auth redirect
@@ -39,13 +41,16 @@ export default function ResumeAnalyzer() {
     if (isLoggedIn && !analysisResult) {
       const stored = sessionStorage.getItem("resume-analysis-result");
       const storedLang = sessionStorage.getItem("resume-analysis-lang");
+      const storedImg = sessionStorage.getItem("resume-analysis-image");
       if (stored) {
         try {
           setAnalysisResult(JSON.parse(stored));
           if (storedLang) setLang(storedLang as Language);
+          if (storedImg) setResumeImageUrl(storedImg);
           setScreen("results");
           sessionStorage.removeItem("resume-analysis-result");
           sessionStorage.removeItem("resume-analysis-lang");
+          sessionStorage.removeItem("resume-analysis-image");
         } catch {}
       }
     }
@@ -153,6 +158,14 @@ export default function ResumeAnalyzer() {
         const ext = file.name.split(".").pop()?.toLowerCase();
         if (ext === "pdf") {
           text = await extractTextFromPDF(file);
+          // Render first page as image for visual summary
+          try {
+            const imgUrl = await renderPdfToImage(file);
+            setResumeImageUrl(imgUrl);
+            sessionStorage.setItem("resume-analysis-image", imgUrl);
+          } catch {
+            // Non-critical — continue without image
+          }
         } else {
           text = await extractTextFromDOCX(file);
         }
@@ -494,16 +507,19 @@ export default function ResumeAnalyzer() {
             analysis={analysisResult}
             lang={lang}
             isUnlocked={isLoggedIn}
+            resumeImageUrl={resumeImageUrl}
             onReset={() => {
               setAnalysisResult(null);
               setFile(null);
               setPasteText("");
               setResumeText("");
+              setResumeImageUrl(null);
               setError("");
               setProgress(0);
               setAnalyzeStep(0);
               sessionStorage.removeItem("resume-analysis-result");
               sessionStorage.removeItem("resume-analysis-lang");
+              sessionStorage.removeItem("resume-analysis-image");
               setScreen("upload");
             }}
           />
