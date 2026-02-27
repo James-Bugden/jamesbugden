@@ -387,13 +387,13 @@ export default function ResumeAnalyzer() {
                 <div className="flex items-center justify-center gap-2 mt-4 px-4 py-2.5 rounded-full bg-executive-green/5 border border-executive-green/20 mx-auto w-fit">
                   <ShieldCheck className="w-4 h-4 text-executive-green shrink-0" />
                   <span className="text-xs font-medium text-executive-green">
-                    {t(lang, "100% Private — Your resume is never shared or sold", "100% 隱私保護 — 你的履歷絕不會被分享或販售")}
+                    {t(lang, "100% Private — Your resume is never shared or sold", "100% 隱私保護 — 你的履歷不會外流，絕不轉賣")}
                   </span>
                 </div>
                 <p className="text-xs text-muted-foreground mt-3 text-center italic">
                   {t(lang, 
                     'Frameworks based on "How to Write the Perfect Resume" by Dan Clay', 
-                    '框架基於 Dan Clay 所著《How to Write the Perfect Resume》'
+                    '分析框架參考 Dan Clay 著作《How to Write the Perfect Resume》'
                   )}
                 </p>
               </div>
@@ -401,13 +401,13 @@ export default function ResumeAnalyzer() {
               {/* How It Works */}
               <div className="mt-10">
                 <h2 className="text-center font-heading text-lg font-semibold text-foreground mb-6">
-                  {t(lang, "How It Works", "使用方式")}
+                  {t(lang, "How It Works", "三步驟，快速搞定")}
                 </h2>
                 <div className="grid grid-cols-3 gap-4">
                   {[
-                    { icon: CloudUpload, title: t(lang, "Upload", "上傳"), desc: t(lang, "Upload your resume or paste the text", "上傳履歷或貼上文字") },
-                    { icon: BarChart3, title: t(lang, "Get Scored", "獲得評分"), desc: t(lang, "AI analyzes against recruiter criteria", "AI 依據招募標準進行分析") },
-                    { icon: Sparkles, title: t(lang, "Improve", "改善"), desc: t(lang, "Get actionable fixes to land interviews", "獲得具體建議以爭取面試") },
+                    { icon: CloudUpload, title: t(lang, "Upload", "上傳履歷"), desc: t(lang, "Upload your resume or paste the text", "上傳檔案或直接貼上文字") },
+                    { icon: BarChart3, title: t(lang, "Get Scored", "即時評分"), desc: t(lang, "AI analyzes against recruiter criteria", "AI 用招募官標準幫你打分") },
+                    { icon: Sparkles, title: t(lang, "Improve", "精準改善"), desc: t(lang, "Get actionable fixes to land interviews", "拿到具體建議，提高面試機會") },
                   ].map((step, i) => (
                     <div key={i} className="flex flex-col items-center text-center gap-2">
                       <div className="w-12 h-12 rounded-full bg-gold/10 flex items-center justify-center">
@@ -422,22 +422,22 @@ export default function ResumeAnalyzer() {
 
               {/* Logo Scroll */}
               <div className="mt-10">
-                <LogoScroll heading={t(lang, "I've helped professionals from", "我曾幫助來自這些公司的專業人士")} />
+                <LogoScroll heading={t(lang, "I've helped professionals from", "這些公司的人都找過我")} />
               </div>
 
               {/* FAQ Section */}
               <div className="mt-12">
                 <h2 className="text-center font-heading text-lg font-semibold text-foreground mb-4">
-                  {t(lang, "Frequently Asked Questions", "常見問題")}
+                  {t(lang, "Frequently Asked Questions", "你可能想問")}
                 </h2>
                 <Accordion type="single" collapsible className="w-full">
                   {[
-                    { q: t(lang, "What is an ATS and why does it matter?", "什麼是 ATS？為什麼它很重要？"), a: t(lang, "An Applicant Tracking System (ATS) is software used by 99% of large employers to screen resumes. If your resume isn't ATS-friendly, it may be rejected before a human ever reads it.", "ATS（應徵者追蹤系統）是 99% 大型企業用來篩選履歷的軟體。如果你的履歷不符合 ATS 規範，它可能在人類閱讀前就被淘汰了。") },
-                    { q: t(lang, "How does the resume analyzer work?", "履歷分析工具如何運作？"), a: t(lang, "Our AI evaluates your resume against the same criteria top recruiters use: keyword optimization, formatting, quantified achievements, and overall readability. You get a score and specific recommendations.", "我們的 AI 會依據頂尖招募官使用的標準來評估你的履歷：關鍵字優化、格式、量化成就和整體可讀性。你會獲得評分和具體建議。") },
-                    { q: t(lang, "Is my resume data safe?", "我的履歷資料安全嗎？"), a: t(lang, "Yes. Your resume is processed securely, never shared with third parties, and never used for training. We take your privacy seriously.", "是的。你的履歷會被安全處理，不會分享給第三方，也不會用於訓練。我們非常重視你的隱私。") },
-                    { q: t(lang, "How many times can I use this tool?", "我可以使用這個工具幾次？"), a: t(lang, "You can analyze up to 5 resumes per month for free. This resets at the beginning of each calendar month.", "你每月最多可以免費分析 5 份履歷。每月月初重置。") },
-                    { q: t(lang, "What file formats are supported?", "支援哪些檔案格式？"), a: t(lang, "We support PDF and DOCX files up to 5MB. You can also paste your resume text directly.", "我們支援 5MB 以內的 PDF 和 DOCX 檔案。你也可以直接貼上履歷文字。") },
-                    { q: t(lang, "How is this different from other resume scanners?", "這跟其他履歷掃描工具有什麼不同？"), a: t(lang, "This tool is built by a senior recruiter who has personally reviewed 20,000+ resumes. The scoring criteria reflect real hiring decisions, not generic AI rules.", "這個工具由親自審閱超過 20,000 份履歷的資深招募官打造。評分標準反映真實的招聘決策，而非通用的 AI 規則。") },
+                    { q: t(lang, "What is an ATS and why does it matter?", "ATS 是什麼？為什麼很重要？"), a: t(lang, "An Applicant Tracking System (ATS) is software used by 99% of large employers to screen resumes. If your resume isn't ATS-friendly, it may be rejected before a human ever reads it.", "ATS（應徵者追蹤系統）是 99% 大企業用來自動篩選履歷的軟體。如果你的履歷不符合 ATS 格式，還沒被人看到就會被刷掉。") },
+                    { q: t(lang, "How does the resume analyzer work?", "這個分析工具怎麼運作？"), a: t(lang, "Our AI evaluates your resume against the same criteria top recruiters use: keyword optimization, formatting, quantified achievements, and overall readability. You get a score and specific recommendations.", "AI 會根據頂尖招募官的實際篩選標準來評估你的履歷，包括關鍵字、格式、量化成就和可讀性，最後給你評分和具體改善建議。") },
+                    { q: t(lang, "Is my resume data safe?", "我的履歷資料安全嗎？"), a: t(lang, "Yes. Your resume is processed securely, never shared with third parties, and never used for training. We take your privacy seriously.", "完全安全。你的履歷經過加密處理，不會分享給任何第三方，也不會用來訓練 AI 模型。") },
+                    { q: t(lang, "How many times can I use this tool?", "可以免費用幾次？"), a: t(lang, "You can analyze up to 5 resumes per month for free. This resets at the beginning of each calendar month.", "每月可免費分析 5 份履歷，每月月初自動重置。") },
+                    { q: t(lang, "What file formats are supported?", "支援哪些檔案格式？"), a: t(lang, "We support PDF and DOCX files up to 5MB. You can also paste your resume text directly.", "支援 5MB 以內的 PDF 和 DOCX 檔案，也可以直接貼上履歷文字。") },
+                    { q: t(lang, "How is this different from other resume scanners?", "跟其他履歷工具有什麼不同？"), a: t(lang, "This tool is built by a senior recruiter who has personally reviewed 20,000+ resumes. The scoring criteria reflect real hiring decisions, not generic AI rules.", "這個工具由親自審閱超過兩萬份履歷的資深招募官打造，評分標準來自真實招聘經驗，不是套公式的 AI 規則。") },
                   ].map((item, i) => (
                     <AccordionItem key={i} value={`faq-${i}`}>
                       <AccordionTrigger className="text-sm text-left font-medium">{item.q}</AccordionTrigger>
