@@ -1,58 +1,55 @@
 
 
-# User Authentication System
+# Add Login Button to All Page Headers
 
 ## Overview
-Add a login/signup system so returning users don't need to re-enter their email every time they use gated tools (Offer Calculator, Comp Calculator, etc.). Logged-in users get full access to all tools with no email gate.
+The `AuthHeaderButton` component already exists and works in the toolkit headers. The task is to add it to every other page that has a navigation bar -- the homepage, guides pages, and all individual guide pages.
 
-## What Changes
+## Current State
+- `AuthHeaderButton` is already used in `ToolkitHeader.tsx` and `ToolkitHeaderZhTw.tsx`
+- All other pages (homepage, guides, individual guide pages) have inline `<nav>` bars with a `LanguageToggle` but no sign-in button
+- There are approximately 18 pages with inline nav bars that need updating
 
-### 1. Auth Pages
-- **`/login`** -- Sign in with email/password or Google. Includes "Forgot password?" link. Bilingual support (detects if user came from `/zh-tw/` route).
-- **`/signup`** -- Create account with email/password or Google. Email verification required before first sign-in.
-- **`/reset-password`** -- Page where users land after clicking the password reset link in their email. Shows a form to set a new password.
+## Changes
 
-### 2. Auth Context
-- Create `src/contexts/AuthContext.tsx` -- a React context that wraps the app, tracks the current session via `onAuthStateChange`, and exposes `user`, `isLoggedIn`, `signOut`.
+For each page listed below, add two lines:
+1. Import `AuthHeaderButton`
+2. Place `<AuthHeaderButton variant="nav" />` next to the `LanguageToggle` inside the nav's flex container
 
-### 3. Update the Email Gate
-- Modify `useEmailGate` hook: if the user is logged in (from AuthContext), `isUnlocked` is automatically `true` -- no overlay shown at all.
-- If not logged in, the overlay changes: instead of just an email input, it shows **"Sign in or create a free account"** buttons that link to `/login` and `/signup`, plus the existing email-only option as a fallback for quick one-time access.
+### Pages to Update (18 files)
 
-### 4. Routing
-- Add `/login`, `/signup`, `/reset-password` routes in `App.tsx`.
-- No pages become "protected" -- all guides and content remain publicly viewable. Only the gated tool sections (detailed breakdowns in Offer Calculator, etc.) prompt login.
+**Homepage (2)**
+- `src/pages/Index.tsx`
+- `src/pages/IndexZhTw.tsx`
 
-### 5. Nav Updates
-- Add a small "Sign in" link or user avatar to the tool headers (Offer Calculator, Comp Calculator) when relevant. Logged-in users see their email/avatar with a sign-out option.
+**Guides Hub (2)**
+- `src/pages/GuidesPage.tsx`
+- `src/pages/GuidesPageZhTw.tsx`
 
-### 6. Password Reset Flow
-- Forgot password on the login page calls `supabase.auth.resetPasswordForEmail()` with `redirectTo` pointing to `/reset-password`.
-- The `/reset-password` page detects the recovery token in the URL hash and shows a "Set new password" form that calls `supabase.auth.updateUser({ password })`.
-- Default system emails are used (no custom domain setup needed).
+**Individual Guides - English (8)**
+- `src/pages/ResumeGuide.tsx`
+- `src/pages/ResumeQuickReference.tsx`
+- `src/pages/LinkedInGuide.tsx`
+- `src/pages/LinkedInBrandingGuide.tsx`
+- `src/pages/InterviewPrepGuide.tsx`
+- `src/pages/InterviewPreparationGuide.tsx`
+- `src/pages/PivotMethodGuide.tsx`
+- `src/pages/PivotMethodMiniGuide.tsx`
 
-### 7. Google Sign-In
-- Use the Lovable Cloud managed Google OAuth via `lovable.auth.signInWithOAuth("google")`. No API keys needed.
-- Configure social login using the platform tool, which generates the required integration module.
+**Individual Guides - Chinese (8)**
+- `src/pages/ResumeGuideZhTw.tsx`
+- `src/pages/ResumeQuickReferenceZhTw.tsx`
+- `src/pages/LinkedInGuideZhTw.tsx`
+- `src/pages/LinkedInBrandingGuideZhTw.tsx`
+- `src/pages/InterviewPrepGuideZhTw.tsx`
+- `src/pages/InterviewPreparationGuideZhTw.tsx`
+- `src/pages/PivotMethodGuideZhTw.tsx`
+- `src/pages/PivotMethodMiniGuideZhTw.tsx`
 
-## Technical Details
+**Salary Starter Kit (2)**
+- `src/pages/SalaryStarterKit.tsx`
+- `src/pages/SalaryStarterKitZhTw.tsx`
 
-### New Files
-- `src/contexts/AuthContext.tsx` -- session provider
-- `src/pages/Login.tsx` -- login page (email/password + Google)
-- `src/pages/Signup.tsx` -- signup page
-- `src/pages/ResetPassword.tsx` -- password reset page
-
-### Modified Files
-- `src/App.tsx` -- wrap with `AuthProvider`, add 3 new routes
-- `src/hooks/useEmailGate.ts` -- check auth context first; if logged in, auto-unlock
-- `src/components/EmailGateOverlay.tsx` -- add "Sign in" / "Create account" buttons alongside existing email input
-
-### Database
-- No new tables needed. The existing `email_gate_leads` table continues to capture leads from non-logged-in users. Logged-in users bypass the gate entirely.
-
-### Security
-- Email verification is required (no auto-confirm).
-- Google OAuth uses Lovable Cloud's managed credentials.
-- No profile table needed since we only need auth status, not extra user data.
+### No New Components Needed
+The existing `AuthHeaderButton` handles both states (guest shows "Sign in" link, logged-in shows avatar + sign-out) and already supports the `variant="nav"` style that matches the dark green nav bars used across all pages.
 
