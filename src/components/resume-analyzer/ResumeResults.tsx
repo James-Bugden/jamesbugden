@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { ChevronDown, CheckCircle, AlertTriangle, XCircle, ExternalLink, ArrowRight, RotateCcw, Download, Lock, ArrowDown, Mail } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { exportToPdf } from "@/lib/pdfExport";
+
 import type { AnalysisResult } from "./types";
 import { Link, useLocation } from "react-router-dom";
 import { motion } from "framer-motion";
@@ -249,7 +249,7 @@ export default function ResumeResults({
       <div className="container mx-auto max-w-3xl space-y-10">
 
         {/* Action bar */}
-        <div className="flex items-center justify-between gap-3">
+        <div className="flex items-center justify-between gap-3" data-print-hide>
           {onReset && (
             <Button
               variant="outline"
@@ -263,7 +263,7 @@ export default function ResumeResults({
           )}
           {isUnlocked && (
             <button
-              onClick={() => exportToPdf({ elementId: "analysis-results-container", fileName: "Resume-Analysis-Report.pdf", pageFormat: "a4" })}
+              onClick={() => window.print()}
               className="inline-flex items-center gap-2 text-sm font-medium text-muted-foreground hover:text-foreground transition-colors ml-auto"
             >
               <Download className="w-4 h-4" />
