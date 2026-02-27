@@ -1,28 +1,85 @@
+## Resume Analyzer Results Page Improvements
 
+### 1. Resume Visual with Section Highlights
 
-## Three Changes to Resume Analyzer Results
+Since the AI analysis doesn't return pixel-level coordinates, we'll take a practical approach:
 
-### 1. Remove the Four Test Cards
-Remove the entire "Four Tests" grid (Keyword Test, Scan Test, Qualifications Test, Fit Test) and the tagline below it from the results page. Only the score ring + grade + verdict text will remain in the top section.
+- **Render the uploaded PDF's first page as an image** using the existing `pdfjs-dist` library (canvas render, then convert to data URL)
+- **Display it alongside a "Section Health Map"** — a side-by-side layout where the left shows the actual resume image and the right shows colored indicators mapping to each scored section
+- Each section indicator uses the same color coding as the SectionCards (green/gold/yellow/red) with a connecting line or numbered badge pointing to the approximate area on the resume
+- This appears **above** the Section-by-Section Breakdown as a visual summary
+- For paste-text users (no PDF), show just the Section Health Map without the resume image
 
-**File:** `src/components/resume-analyzer/ResumeResults.tsx`
-- Delete the `fourTests` array (lines 149-154)
-- Delete the Four Tests grid markup (lines 187-201)
+**Technical approach:**
 
-### 2. Move the Locked Overlay Higher
-Currently the "Create a Free Account" blocker appears after the Section Breakdown, requiring lots of scrolling. Move it so the blur + overlay starts right after the score hero, covering the Section Breakdown and everything below it.
+- Pass the uploaded `File` object (or rendered image data URL) from `ResumeAnalyzer.tsx` down to `ResumeResults.tsx` via a new `resumeImageUrl` prop
+- Add a `renderPdfToImage` utility that uses pdfjs-dist to render page 1 to a canvas and return a data URL
+- Create a `ResumeVisualSummary` component inside `ResumeResults.tsx` that displays the resume thumbnail with section score badges overlaid at approximate positions (header area at top, experience in the middle, education near bottom, etc.)
 
-**File:** `src/components/resume-analyzer/ResumeResults.tsx`
-- Wrap the Section Breakdown, Bullet Rewrite, Top 3 Priorities, and Coaching CTA all inside the blur/lock container
-- The locked overlay will appear immediately after the score, so users see it without scrolling
+### 2. Replace Share Section with Email + LINE Buttons
 
-### 3. Redirect Back to Original Page After Signup/Login
-Currently, after creating an account the user is sent to the homepage. Instead, pass the current page path via `location.state.from` so Login/Signup redirect back.
+Replace the current custom share button (using `navigator.share`) with the same Email + LINE pattern used in `GuideShareButtons.tsx`:
 
-**Files:**
-- `src/components/resume-analyzer/ResumeResults.tsx` — Update the `LockedOverlay` links to `/signup` and `/login` to include `state={{ from: currentPath }}` (using `useLocation`)
-- `src/pages/Signup.tsx` — Update the Google OAuth `redirect_uri` to include the `from` path so users return to the correct page after Google sign-in
-- `src/pages/Login.tsx` — Same Google OAuth redirect fix
+- Reuse the `GuideShareButtons` component directly, or replicate its Email (mailto) + LINE (`line.me/R/share`) button pattern
+- Keep the dark green card styling but swap the single "Share with a friend" button for two buttons: Email and LINE
+- Pass `isZhTw={lang === "zh-TW"}` for localized text
 
-**Technical detail for Google OAuth:** Since OAuth redirects lose React state, we'll store the `from` path in `sessionStorage` before initiating OAuth, then read it back on return. The Signup/Login `useEffect` that runs on `isLoggedIn` already reads `location.state?.from` — we'll extend it to also check `sessionStorage` as a fallback.
+### 3. General UX/UI Improvements
 
+**Score Hero section:**
+
+- Add a subtle entrance animation (fade-in + scale) on the score ring using framer-motion
+- Show the score counting up from 0 to the actual number (animated counter)
+
+**Section Breakdown:**
+
+- Add a summary stat bar above the cards: "X of Y sections need improvement" with a mini progress indicator
+- Color the section headers more prominently so users can quickly spot red flags
+
+**Bullet Rewrite section:**
+
+- Add a visual arrow or transformation indicator between "Before" and "After" to make the improvement feel more dramatic
+
+**Action bar:**
+
+- Make "Scan Another Resume" more prominent with an outlined button style instead of plain text link
+
+**Mobile polish:**
+
+- Ensure the resume visual summary stacks vertically on mobile (image on top, health map below)
+
+### 4. Files to Modify
+
+1. `**src/pages/ResumeAnalyzer.tsx**` — Render PDF page 1 as image data URL after extraction, pass it to ResumeResults, store in sessionStorage for auth round-trip
+2. `**src/components/resume-analyzer/ResumeResults.tsx**` — Add ResumeVisualSummary component before Section Breakdown, replace Share section with Email/LINE buttons, add animated score counter, add section summary stats, improve action bar styling
+3. `**src/components/resume-analyzer/types.ts**` — No changes needed (existing types suffice)
+
+### Summary of Visual Layout (Results Page, Top to Bottom)
+
+```text
++----------------------------------+
+|  Action Bar (Reset | Download)   |
++----------------------------------+
+|  Score Ring + Grade + Verdict     |
+|  (animated counter)              |
++----------------------------------+
+|  [LOCKED OVERLAY IF NOT SIGNED IN]
+|                                  |
+|  Resume Visual Summary           |
+|  +------------+  +-----------+   |
+|  | PDF Page 1 |  | Section   |   |
+|  | (thumbnail)|  | Health    |   |
+|  |            |  | Map with  |   |
+|  |            |  | scores    |   |
+|  +------------+  +-----------+   |
+|                                  |
+|  Section-by-Section Breakdown    |
+|  Bullet Rewrite (Before/After)   |
+|  Top 3 Priorities                |
+|  Coaching CTA                    |
++----------------------------------+
+|  Free Templates                  |
+|  Next Steps                      |
+|  Share (Email + LINE buttons)    |
++----------------------------------+
+```
