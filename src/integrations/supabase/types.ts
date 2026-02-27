@@ -91,6 +91,7 @@ export type Database = {
           email: string
           id: string
           industry: string | null
+          input_method: string | null
           language: string | null
           name: string | null
           overall_score: number | null
@@ -98,6 +99,7 @@ export type Database = {
           resume_text: string | null
           seniority_level: string | null
           target_readiness: string | null
+          user_agent: string | null
           years_experience: string | null
         }
         Insert: {
@@ -107,6 +109,7 @@ export type Database = {
           email: string
           id?: string
           industry?: string | null
+          input_method?: string | null
           language?: string | null
           name?: string | null
           overall_score?: number | null
@@ -114,6 +117,7 @@ export type Database = {
           resume_text?: string | null
           seniority_level?: string | null
           target_readiness?: string | null
+          user_agent?: string | null
           years_experience?: string | null
         }
         Update: {
@@ -123,6 +127,7 @@ export type Database = {
           email?: string
           id?: string
           industry?: string | null
+          input_method?: string | null
           language?: string | null
           name?: string | null
           overall_score?: number | null
@@ -130,6 +135,7 @@ export type Database = {
           resume_text?: string | null
           seniority_level?: string | null
           target_readiness?: string | null
+          user_agent?: string | null
           years_experience?: string | null
         }
         Relationships: []
@@ -139,6 +145,10 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
+      count_resume_analyses_this_month: {
+        Args: { p_email: string }
+        Returns: number
+      }
       is_admin: { Args: { _user_id: string }; Returns: boolean }
       mark_review_viewed: { Args: { review_id: string }; Returns: undefined }
       verify_client_password: {
