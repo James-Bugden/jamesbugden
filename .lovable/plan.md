@@ -1,63 +1,88 @@
 
 
-# Resume Analyzer: Rate Limiting, Bug Fixes, and UX Improvements
+# Resume Analyzer Page: Competitive UX/UI Improvements
 
-## Overview
-Fix all identified issues in the Resume Analyzer: add server-side rate limiting (5/month), fix broken template links, fix database insert errors, add coaching CTA, improve progress animation, and auto-expand weak sections.
+## Research Summary: What the Best Resume Scanners Do
 
-## Changes
+After analyzing **Cultivated Culture (ResyMatch)**, **Jobscan**, and **Resume Worded**, here are the key patterns your page is missing:
 
-### 1. Server-Side Rate Limiting (5 uses/month per email)
-**New migration**: Add `input_method` and `user_agent` columns to `resume_leads` table (fixes the insert bug simultaneously), then use the existing `resume_leads` table to count analyses per email per month.
+### Landing Page (Before Upload)
 
-**`src/pages/ResumeAnalyzer.tsx`** -- Add a rate-limit check in `handleUnlock`:
-- After the user submits their email, query `resume_leads` to count rows with that email in the current calendar month
-- If count >= 5, show an error: "You've reached the limit of 5 free analyses per month. Try again next month."
-- Remove the client-side `hasAnalyzed` state guard (replaced by server-side check)
-- Move the rate check to BEFORE the analysis runs (ask for email first, then analyze) -- this prevents wasting API calls on rate-limited users
+| Pattern | Cultivated Culture | Jobscan | Resume Worded | Your Page |
+|---------|-------------------|---------|---------------|-----------|
+| Social proof counter ("X resumes scanned") | 1.5M+ counter | Company logos | "1M+ job seekers" | Missing |
+| Company logo scroll (where users got hired) | 60+ logos, scrolling | IBM, Uber, etc. | None | Missing |
+| "How it works" 3-step visual | Step 1-2-3 with illustrations | 4-step with icons | None | Missing |
+| Sample/preview of results | Screenshot of sample scan | Inline sample result | Full app mockup | Missing |
+| FAQ section (SEO + trust) | 8 Q&A items | 10+ Q&A items | None | Missing |
+| Privacy badge prominent | None | None | "100% privacy" badge | Small text only |
+| Testimonial/review social proof | Logos only | Customer quotes | Trustpilot 4.9 stars | Missing |
 
-**Flow change**: Upload -> Email gate (moved earlier) -> Analyzing -> Results
-This way we collect the email before spending API credits.
+### Results Page
 
-### 2. Fix Dead Template Links
-**`src/components/resume-analyzer/ResumeResults.tsx`** -- Replace the template section's `href="#"` with:
-- English: `https://docs.google.com/document/d/1BAkVHZ57JsLzL0hk1AUvFBu4bsx8ymMA7tPJKuJROIM/edit?usp=sharing`
-- Chinese: `https://docs.google.com/document/d/1U14BS5yISb17ejgVIX5IyeaVZKiww33hpJNOnEy4Wy0/edit?usp=sharing`
+| Pattern | Cultivated Culture | Jobscan | Resume Worded | Your Page |
+|---------|-------------------|---------|---------------|-----------|
+| Score categories breakdown (sub-scores) | Match %, keyword %, formatting | Sidebar with category bars | Impact, Brevity, Style, Skills | 4 pass/fail tests + sections |
+| "Upload & rescan" button | Yes | Yes, prominent | Yes | Missing |
+| Print/export results | None | "Print" button | None | Missing |
+| Sticky sidebar navigation | None | Category sidebar | Tab navigation | Missing |
 
-Also add a link to `/resume-quick-reference` (the user's dedicated template page).
+---
 
-### 3. Fix Database Insert Error
-**New migration**: Add `input_method text` and `user_agent text` nullable columns to `resume_leads`.
+## Improvement Plan
 
-This fixes the current insert that references these non-existent columns.
+### 1. Add Social Proof Section Below Hero
+Add a counter + scrolling logo bar below the upload hero, reusing the existing `LogoScroll` component already on the homepage.
 
-### 4. Sync Progress Animation with API
-**`src/pages/ResumeAnalyzer.tsx`** -- Instead of a fixed timer reaching 70% and stalling:
-- Progress crawls to 85% over ~15 seconds
-- When the API response arrives, jump to 100%
-- Clear intervals immediately on completion or error
+**Changes to `src/pages/ResumeAnalyzer.tsx`**:
+- Import and render the existing `LogoScroll` component below the authority badge
+- Add a "resumes analyzed" counter text above it (static number, e.g., "2,500+ resumes analyzed")
 
-### 5. Add Coaching CTA After Top 3 Priorities
-**`src/components/resume-analyzer/ResumeResults.tsx`** -- Insert a CTA card between "Top 3 Priorities" and "Free Templates":
-- Heading: "Want a recruiter to fix all of this for you?"
-- Body: Brief pitch for the 1:1 resume review service
-- Button linking to homepage `/#coaching` section
-- Styled with gold border to match the brand
+### 2. Add "How It Works" 3-Step Visual
+Below the upload card, add a simple 3-step horizontal row using lucide icons.
 
-### 6. Auto-Expand Weak Sections
-**`src/components/resume-analyzer/ResumeResults.tsx`** -- Change `SectionCard` to auto-expand sections scoring below 6 (in addition to the first section):
-```
-defaultOpen={i === 0 || section.score < 6}
-```
+**Changes to `src/pages/ResumeAnalyzer.tsx`**:
+- Add a section with 3 columns: Upload (CloudUpload icon) -> Get Your Score (BarChart3 icon) -> Improve & Apply (Sparkles icon)
+- Each step: icon, title, one-line description
+- Connected by a subtle line or arrow
 
-### 7. Add Name Field to Email Gate
-**`src/pages/ResumeAnalyzer.tsx`** -- The `gateName` state already exists but there's no input for it. Add a name input field above the email input in the gate form.
+### 3. Add FAQ Section (SEO + Trust)
+Add an accordion FAQ below the upload area covering common questions about ATS, how the tool works, and what makes a strong resume.
 
-## File Changes Summary
+**Changes to `src/pages/ResumeAnalyzer.tsx`**:
+- Import `Accordion` from the existing UI components
+- Add 6-8 bilingual FAQ items targeting SEO keywords like "ATS resume scanner", "resume score", "how to pass ATS"
+- Place below the upload card, before footer
 
-| File | Action |
-|------|--------|
-| `supabase migration` | Add `input_method` and `user_agent` columns to `resume_leads` |
-| `src/pages/ResumeAnalyzer.tsx` | Reorder flow (email first), add rate limiting, fix progress, add name input |
-| `src/components/resume-analyzer/ResumeResults.tsx` | Fix template URLs, add coaching CTA, auto-expand weak sections |
+### 4. Add "Re-analyze" Button to Results
+Let users go back and try again after seeing their results.
+
+**Changes to `src/components/resume-analyzer/ResumeResults.tsx`**:
+- Add a sticky bottom bar or a "Scan Another Resume" button at the top and bottom of results
+- On click, reset state and return to upload screen (pass a callback prop from parent)
+
+### 5. Add PDF Export of Results
+Allow users to download their analysis as a PDF.
+
+**Changes to `src/components/resume-analyzer/ResumeResults.tsx`**:
+- Add a "Download PDF Report" button in the results header area
+- Use the existing `exportToPdf` utility from `src/lib/pdfExport.ts`
+- Wrap the results content in a div with an id for the export target
+
+### 6. Enlarge Privacy Badge
+Make the "100% privacy" message more prominent like Resume Worded does.
+
+**Changes to `src/pages/ResumeAnalyzer.tsx`**:
+- Replace the small text privacy note with a visible badge/chip with a lock icon: "100% Private - Your resume is never shared or sold"
+
+---
+
+## Technical File Changes
+
+| File | Changes |
+|------|---------|
+| `src/pages/ResumeAnalyzer.tsx` | Add LogoScroll, 3-step section, FAQ accordion, privacy badge, re-analyze callback |
+| `src/components/resume-analyzer/ResumeResults.tsx` | Add re-analyze button, PDF export button, wrap content in export target div |
+
+No database changes needed. No new dependencies -- everything uses existing components (Accordion, LogoScroll, exportToPdf).
 
