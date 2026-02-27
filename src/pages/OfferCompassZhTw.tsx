@@ -111,10 +111,13 @@ export default function OfferCompassZhTw() {
                 isUnlocked={isUnlocked}
                 onUnlock={unlock}
                 headline="解鎖完整分析"
-                subtext="輸入你的 Email 查看薪酬明細、4年預測和情境比較。"
+                subtext="查看薪酬明細、4年預測和情境比較。"
                 buttonText="解鎖完整分析"
                 footerText="每週談判技巧，隨時取消訂閱。"
                 errorText="請輸入有效的 Email 地址。"
+                signInText="登入"
+                createAccountText="建立免費帳號"
+                orEmailText="或僅使用 Email 繼續"
               >
                 <div className="space-y-8">
                   {(scenarios.length >= 2 || active.current_comp_twd > 0) && (

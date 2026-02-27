@@ -111,7 +111,10 @@ export function ResultsPanelZhTw({ offers, results, cascadeInsight, mobileSelect
               isUnlocked={isUnlocked}
               onUnlock={onUnlock}
               headline="解鎖完整分析"
-              subtext="輸入你的 Email 查看詳細薪酬分析和四年預估。"
+              subtext="查看詳細薪酬分析和四年預估。"
+              signInText="登入"
+              createAccountText="建立免費帳號"
+              orEmailText="或僅使用 Email 繼續"
             >
               <div className="space-y-4">
                 <div className="h-56">
