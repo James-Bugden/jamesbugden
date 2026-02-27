@@ -467,7 +467,7 @@ export default function ResumeAnalyzer() {
                   />
                 </svg>
                 <span className="absolute inset-0 flex items-center justify-center font-heading text-xl font-bold text-foreground">
-                  {progress}%
+                  {Math.round(progress)}%
                 </span>
               </div>
 
