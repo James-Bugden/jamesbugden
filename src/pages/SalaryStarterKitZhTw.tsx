@@ -2,6 +2,7 @@ import { ArrowLeft, ArrowRight, DollarSign } from "lucide-react";
 import { Link, useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import GuideShareButtons from "@/components/GuideShareButtons";
+import { AuthHeaderButton } from "@/components/AuthHeaderButton";
 
 const SalaryStarterKitZhTw = () => {
   const navigate = useNavigate();
@@ -15,6 +16,7 @@ const SalaryStarterKitZhTw = () => {
             JAMES BUGDEN
           </Link>
           <div className="flex items-center gap-3 md:gap-4">
+            <AuthHeaderButton variant="nav" />
             <Link to="/zh-tw" className="text-sm text-cream-70 hover:text-cream transition-colors flex items-center gap-1">
               <ArrowLeft className="w-4 h-4" />
               <span className="hidden sm:inline">返回首頁</span>

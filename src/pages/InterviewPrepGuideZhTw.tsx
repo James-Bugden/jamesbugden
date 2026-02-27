@@ -4,6 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Linkedin } from "lucide-react";
 import { InstagramIcon, ThreadsIcon } from "@/components/SocialIcons";
 import GuideShareButtons from "@/components/GuideShareButtons";
+import { AuthHeaderButton } from "@/components/AuthHeaderButton";
 import GoldCheckBadge from "@/components/GoldCheckBadge";
 
 const InterviewPrepGuideZhTw = () => {
@@ -27,6 +28,7 @@ const InterviewPrepGuideZhTw = () => {
             JAMES BUGDEN
           </Link>
           <div className="flex items-center gap-3 md:gap-4">
+            <AuthHeaderButton variant="nav" />
             <Link to="/zh-tw" className="text-sm text-cream-70 hover:text-cream transition-colors flex items-center gap-1">
               <ArrowLeft className="w-4 h-4" />
               <span className="hidden sm:inline">返回首頁</span>

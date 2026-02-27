@@ -2,6 +2,7 @@ import { ArrowLeft, Download, CheckCircle2, AlertTriangle, Lightbulb, Target, Us
 import { Link, useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import GuideShareButtons from "@/components/GuideShareButtons";
+import { AuthHeaderButton } from "@/components/AuthHeaderButton";
 
 const PivotMethodMiniGuideZhTw = () => {
   const navigate = useNavigate();
@@ -20,6 +21,7 @@ const PivotMethodMiniGuideZhTw = () => {
             <span className="font-medium">返回首頁</span>
           </Link>
           <div className="flex items-center gap-3">
+            <AuthHeaderButton variant="nav" />
             <button 
               onClick={toggleLanguage}
               className="px-3 py-1.5 text-sm font-semibold bg-gold/20 hover:bg-gold/30 text-gold border border-gold/40 rounded-md transition-all duration-200 hover:scale-105"

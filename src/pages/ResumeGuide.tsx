@@ -4,6 +4,7 @@ import { Button } from "@/components/ui/button";
 import GoldCheckBadge from "@/components/GoldCheckBadge";
 import { InstagramIcon, ThreadsIcon } from "@/components/SocialIcons";
 import GuideShareButtons from "@/components/GuideShareButtons";
+import { AuthHeaderButton } from "@/components/AuthHeaderButton";
 
 const ResumeGuide = () => {
   return (
@@ -14,10 +15,13 @@ const ResumeGuide = () => {
           <Link to="/" className="font-heading text-lg md:text-xl font-medium text-cream tracking-tight hover:text-cream-90 transition-colors">
             JAMES BUGDEN
           </Link>
-          <Link to="/" className="text-sm text-cream-70 hover:text-cream transition-colors flex items-center gap-2">
-            <ArrowLeft className="w-4 h-4" />
-            Back to Home
-          </Link>
+          <div className="flex items-center gap-3 md:gap-4">
+            <AuthHeaderButton variant="nav" />
+            <Link to="/" className="text-sm text-cream-70 hover:text-cream transition-colors flex items-center gap-2">
+              <ArrowLeft className="w-4 h-4" />
+              Back to Home
+            </Link>
+          </div>
         </div>
       </nav>
 

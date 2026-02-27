@@ -5,6 +5,7 @@ import GoldCheckBadge from "@/components/GoldCheckBadge";
 import { InstagramIcon, ThreadsIcon } from "@/components/SocialIcons";
 import GuideShareButtons from "@/components/GuideShareButtons";
 import LanguageToggle from "@/components/LanguageToggle";
+import { AuthHeaderButton } from "@/components/AuthHeaderButton";
 import PageSEO from "@/components/PageSEO";
 
 const SectionNumber = ({ num }: { num: string }) => (
@@ -28,7 +29,10 @@ const ResumeQuickReference = () => {
           <Link to="/" className="font-heading text-lg md:text-xl font-medium text-cream tracking-tight">
             JAMES BUGDEN
           </Link>
-          <LanguageToggle variant="nav" />
+          <div className="flex items-center gap-3">
+            <AuthHeaderButton variant="nav" />
+            <LanguageToggle variant="nav" />
+          </div>
         </div>
       </nav>
 

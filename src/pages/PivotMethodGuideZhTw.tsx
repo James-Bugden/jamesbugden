@@ -4,6 +4,7 @@ import { Button } from "@/components/ui/button";
 import { InstagramIcon, ThreadsIcon } from "@/components/SocialIcons";
 import GoldCheckBadge from "@/components/GoldCheckBadge";
 import GuideShareButtons from "@/components/GuideShareButtons";
+import { AuthHeaderButton } from "@/components/AuthHeaderButton";
 
 const PivotMethodGuideZhTw = () => {
   const navigate = useNavigate();
@@ -26,6 +27,7 @@ const PivotMethodGuideZhTw = () => {
             JAMES BUGDEN
           </Link>
           <div className="flex items-center gap-3 md:gap-4">
+            <AuthHeaderButton variant="nav" />
             <Link to="/zh-tw" className="text-sm text-cream-70 hover:text-cream transition-colors flex items-center gap-1">
               <ArrowLeft className="w-4 h-4" />
               <span className="hidden sm:inline">返回首頁</span>

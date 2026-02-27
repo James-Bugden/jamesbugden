@@ -3,6 +3,7 @@ import { Linkedin, ArrowLeft, FileText, Briefcase, MessageSquare, Users } from "
 import { Link } from "react-router-dom";
 import { InstagramIcon, ThreadsIcon } from "@/components/SocialIcons";
 import LanguageToggle from "@/components/LanguageToggle";
+import { AuthHeaderButton } from "@/components/AuthHeaderButton";
 
 interface Guide {
   icon: typeof FileText;
@@ -72,6 +73,7 @@ const GuidesPage = () => {
             JAMES BUGDEN
           </Link>
           <div className="flex items-center gap-3 md:gap-4">
+            <AuthHeaderButton variant="nav" />
             <LanguageToggle variant="nav" />
             <div className="hidden md:flex items-center gap-3">
               <a href="https://www.linkedin.com/in/james-bugden/" target="_blank" rel="noopener noreferrer" className="text-cream-70 hover:text-cream transition-colors">

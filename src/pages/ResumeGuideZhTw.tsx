@@ -4,6 +4,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { InstagramIcon, ThreadsIcon } from "@/components/SocialIcons";
 import GuideShareButtons from "@/components/GuideShareButtons";
 import PageSEO from "@/components/PageSEO";
+import { AuthHeaderButton } from "@/components/AuthHeaderButton";
 
 /* ─── Reading Progress Bar ─── */
 const ReadingProgress = () => {
@@ -397,6 +398,7 @@ const ResumeGuideZhTw = () => {
             JAMES BUGDEN
           </Link>
           <div className="flex items-center gap-3 md:gap-4">
+            <AuthHeaderButton variant="nav" />
             <button
               onClick={() => navigate("/resume-guide")}
               className="px-3 py-1.5 text-sm font-semibold bg-gold/20 hover:bg-gold/30 text-gold border border-gold/40 rounded-md transition-all duration-200 hover:scale-105"

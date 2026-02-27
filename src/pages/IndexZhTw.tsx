@@ -3,6 +3,7 @@ import { Briefcase, Users, Linkedin, FileCheck } from "lucide-react";
 import { InstagramIcon, ThreadsIcon } from "@/components/SocialIcons";
 import jamesPhoto from "@/assets/james-bugden.jpg";
 import LanguageToggle from "@/components/LanguageToggle";
+import { AuthHeaderButton } from "@/components/AuthHeaderButton";
 import PageSEO from "@/components/PageSEO";
 import HomepageTestimonialsZhTw from "@/components/HomepageTestimonialsZhTw";
 import LogoScroll from "@/components/LogoScroll";
@@ -43,6 +44,7 @@ const IndexZhTw = () => {
               JAMES BUGDEN
             </span>
             <div className="flex items-center gap-4">
+              <AuthHeaderButton variant="nav" />
               <LanguageToggle variant="nav" />
             </div>
           </div>
