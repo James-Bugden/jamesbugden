@@ -5,6 +5,7 @@ import GoldCheckBadge from "@/components/GoldCheckBadge";
 import { InstagramIcon, ThreadsIcon } from "@/components/SocialIcons";
 import GuideShareButtons from "@/components/GuideShareButtons";
 import PageSEO from "@/components/PageSEO";
+import { AuthHeaderButton } from "@/components/AuthHeaderButton";
 
 const SectionNumber = ({ num }: { num: string }) => (
   <span className="text-gold/30 font-heading text-6xl md:text-7xl font-bold leading-none select-none">
@@ -30,12 +31,15 @@ const ResumeQuickReferenceZhTw = () => {
           <Link to="/zh-tw" className="font-heading text-lg md:text-xl font-medium text-cream tracking-tight">
             JAMES BUGDEN
           </Link>
-          <button
-            onClick={() => navigate("/resume-quick-reference")}
-            className="px-3 py-1.5 text-sm font-semibold bg-gold/20 hover:bg-gold/30 text-gold border border-gold/40 rounded-md transition-all duration-200 hover:scale-105"
-          >
-            EN
-          </button>
+          <div className="flex items-center gap-3">
+            <AuthHeaderButton variant="nav" />
+            <button
+              onClick={() => navigate("/resume-quick-reference")}
+              className="px-3 py-1.5 text-sm font-semibold bg-gold/20 hover:bg-gold/30 text-gold border border-gold/40 rounded-md transition-all duration-200 hover:scale-105"
+            >
+              EN
+            </button>
+          </div>
         </div>
       </nav>
 

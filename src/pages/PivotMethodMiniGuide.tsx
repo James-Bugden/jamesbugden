@@ -1,6 +1,7 @@
 import { ArrowLeft, Download, CheckCircle2, AlertTriangle, Lightbulb, Target, Users, Rocket, Crown } from "lucide-react";
 import { Link } from "react-router-dom";
 import LanguageToggle from "@/components/LanguageToggle";
+import { AuthHeaderButton } from "@/components/AuthHeaderButton";
 import { Button } from "@/components/ui/button";
 import GuideShareButtons from "@/components/GuideShareButtons";
 
@@ -16,6 +17,7 @@ const PivotMethodMiniGuide = () => {
             <span className="font-medium">Back to Home</span>
           </Link>
           <div className="flex items-center gap-3">
+            <AuthHeaderButton variant="nav" />
             <LanguageToggle variant="nav" />
             <Button asChild className="btn-gold">
               <a href="/downloads/The_Pivot_Method_Mini_Guide.pdf" download>
