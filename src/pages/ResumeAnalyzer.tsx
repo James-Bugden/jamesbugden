@@ -288,9 +288,9 @@ export default function ResumeAnalyzer() {
               {/* Hero */}
               <div className="text-center mb-8">
                 <h1 className="font-heading text-4xl md:text-5xl lg:text-6xl text-foreground mb-4" style={lang === "zh-TW" ? { lineHeight: 1.2 } : undefined}>
-                  {t(lang, "98% of Resumes Get Ignored.", "98% 的履歷石沉大海")}
+                  {t(lang, "98% of Resumes Get Ignored.", "98% 的履歷，沒人看")}
                   <br />
-                  <span className="text-gold">{t(lang, "Fix Yours in 1 Minute.", "1 分鐘讓你的脫穎而出")}</span>
+                  <span className="text-gold">{t(lang, "Fix Yours in 1 Minute.", "1 分鐘幫你修好")}</span>
                 </h1>
                 <p className="text-base md:text-lg text-muted-foreground mb-5 max-w-xl mx-auto">
                   {t(lang,
