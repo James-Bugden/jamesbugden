@@ -29,18 +29,13 @@ export function useEmailGate() {
       return;
     }
 
-    // Query database to verify stored email
+    // Use secure RPC to check email existence (no direct table access)
     supabase
-      .from("email_gate_leads")
-      .select("email")
-      .eq("email", userEmail)
-      .limit(1)
-      .maybeSingle()
+      .rpc("check_email_gate", { p_email: userEmail })
       .then(({ data, error }) => {
-        if (!error && data) {
+        if (!error && data === true) {
           setIsVerified(true);
         } else {
-          // Email not found in DB — clear stale localStorage
           setIsVerified(false);
           try { localStorage.removeItem(EMAIL_KEY); } catch {}
           setUserEmail("");
