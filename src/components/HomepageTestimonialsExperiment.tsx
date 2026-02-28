@@ -1,24 +1,24 @@
 import { useState } from "react";
-import { ChevronDown, Quote } from "lucide-react";
+import { ChevronDown } from "lucide-react";
 import pinweiPhoto from "@/assets/testimonials/pinwei-thumb.webp";
 import cynthiaPhoto from "@/assets/testimonials/cynthia-thumb.webp";
 import airuPhoto from "@/assets/testimonials/airu.png";
-import monicaPhoto from "@/assets/testimonials/monica-thumb.webp";
-import sunnyPhoto from "@/assets/testimonials/sunny-thumb.webp";
-import omarPhoto from "@/assets/testimonials/omar-li.jpg";
-import juliePhoto from "@/assets/testimonials/julie-thumb.webp";
 import royPhoto from "@/assets/testimonials/roy.jpeg";
+import monicaPhoto from "@/assets/testimonials/monica-thumb.webp";
 import janellePhoto from "@/assets/testimonials/janelle.jpg";
 import annePhoto from "@/assets/testimonials/anne.jpeg";
 import silviaPhoto from "@/assets/testimonials/silvia.jpg";
+import sunnyPhoto from "@/assets/testimonials/sunny-thumb.webp";
+import omarPhoto from "@/assets/testimonials/omar-li.jpg";
+import juliePhoto from "@/assets/testimonials/julie-thumb.webp";
 import peterPhoto from "@/assets/testimonials/peter.jpg";
 import kikiPhoto from "@/assets/testimonials/kiki.png";
 import rockPhoto from "@/assets/testimonials/rock.png";
 
-/* ── Types ── */
 type Testimonial = {
+  headline: string;
   name: string;
-  label: string;
+  titleSource: string;
   photo: string;
   quote: string;
   bold: string;
@@ -26,43 +26,49 @@ type Testimonial = {
 
 const tier1: Testimonial[] = [
   {
+    headline: "Way More Than Just a Resume Check",
     name: "Pin-Wei Wu",
-    label: "via Resume Review",
+    titleSource: "Career Changer · via Resume Review",
     photo: pinweiPhoto,
     quote: "Everyone is using AI to polish their resumes, but having a professional recruiter do a deep-dive review is on a whole different level. It felt more like a high-density career session than just a resume check. You helped me spot those 'hidden' wins that I would've never noticed on my own. This gave me a lot more confidence for my next steps.",
     bold: "It felt more like a high-density career session than just a resume check.",
   },
   {
+    headline: "Full of Actionable Recommendations",
     name: "Cynthia Chiang",
-    label: "via Resume Review",
+    titleSource: "Professional · via Resume Review",
     photo: cynthiaPhoto,
     quote: "You helped me identify several important blind spots, especially around ATS optimization, impact-driven writing, and role alignment. Your guidance on improving the header format, strengthening the first 15 words, and presenting a clear professional title was extremely helpful. Your review was concise, professional, and full of actionable recommendations.",
     bold: "Full of actionable recommendations.",
   },
   {
+    headline: "First Time I Truly Understood What HR Cares About",
     name: "Airu",
-    label: "via Salary Coaching",
+    titleSource: "Job Seeker · via Salary Coaching",
     photo: airuPhoto,
     quote: "My favorite part was learning to think about negotiation from different roles in the hiring process. This was the first time I clearly understood what HR really cares about when evaluating candidates. It helped me prepare for interviews and gave me a much clearer direction.",
     bold: "The first time I clearly understood what HR really cares about.",
   },
   {
+    headline: "A Confidence Boost for Cross-Industry Job Seekers",
     name: "Roy Tsai",
-    label: "via Resume Review",
+    titleSource: "Career Switcher · via Resume Review",
     photo: royPhoto,
     quote: "The depth of this review far exceeded my expectations. James didn't just suggest edits — he gave me a strategic framework for positioning my background against target roles. He helped me realize my strongest achievements were buried in the wrong places. This wasn't just a resume fix — it was a confidence boost that helped me see my career value with completely fresh eyes.",
     bold: "This wasn't just a resume fix — it was a confidence boost.",
   },
   {
+    headline: "Now I Can Customize My Resume for Any Role",
     name: "Monica",
-    label: "via Resume Review",
+    titleSource: "Professional · via Resume Review",
     photo: monicaPhoto,
     quote: "After seeing the before-and-after, the difference was remarkable — everything felt so much more professional. The feedback for each section was incredibly specific, with suggestions tailored to my experience level. Now I can use the same framework to customize my resume for any role, which has dramatically improved my efficiency.",
     bold: "I can use the same framework to customize my resume for any role.",
   },
   {
+    headline: "He Finds the Potential Hidden in Your Story",
     name: "Janelle Cheng",
-    label: "via Resume Review",
+    titleSource: "Professional · via Resume Review",
     photo: janellePhoto,
     quote: "James is dedicated to the details and the potential hidden in my plain description. It's highly recommended to have a professional like James assess your CV from an expert perspective. I'm truly grateful for the experience.",
     bold: "Dedicated to the details and the potential hidden in my plain description.",
@@ -71,29 +77,33 @@ const tier1: Testimonial[] = [
 
 const tier2: Testimonial[] = [
   {
+    headline: "Understand How Every Person in Hiring Thinks",
     name: "Anne Chen",
-    label: "via Salary Coaching",
+    titleSource: "Professional · via Salary Coaching",
     photo: annePhoto,
     quote: "This session completely changed how I see salary negotiation. I used to think it was awkward and confrontational, but James helped me understand it's actually professional career communication. He broke down how recruiters, headhunters, and hiring teams each think differently — so you know exactly how to position yourself with each one.",
     bold: "He broke down how recruiters, headhunters, and hiring teams each think differently.",
   },
   {
+    headline: "Prioritized Improvements I Could Act on Immediately",
     name: "Silvia Chen",
-    label: "via Resume Review",
+    titleSource: "Professional · via Resume Review",
     photo: silviaPhoto,
     quote: "The visual layout made the review report incredibly easy to read. Strengths and areas for improvement were clearly laid out and applicable across different positions. The prioritized improvement suggestions with optimized examples made it very easy to understand and act on immediately.",
     bold: "Prioritized improvement suggestions with optimized examples.",
   },
   {
+    headline: "Better Advice Than My HR and Headhunter Friends",
     name: "Sunny",
-    label: "via Resume Review",
+    titleSource: "Professional · via Resume Review",
     photo: sunnyPhoto,
     quote: "I was honestly shocked by how detailed the feedback was. This is the kind of advice that even my HR friends and headhunter connections couldn't give me. James is incredibly thorough and truly professional — I can't recommend him enough.",
     bold: "The kind of advice that even my HR friends and headhunter connections couldn't give me.",
   },
   {
+    headline: "Genuinely Invested in Helping Me Succeed",
     name: "Omar Li",
-    label: "via Salary Coaching",
+    titleSource: "Professional · via Salary Coaching",
     photo: omarPhoto,
     quote: "Throughout the entire process, James was supportive, deeply insightful, and genuinely invested in my success. I highly recommend his services to anyone looking to advance their career and approach salary discussions with more clarity and confidence.",
     bold: "Genuinely invested in my success.",
@@ -102,29 +112,33 @@ const tier2: Testimonial[] = [
 
 const tier3: Testimonial[] = [
   {
+    headline: "A Professional Roadmap for My Applications",
     name: "Julie Huang",
-    label: "via Resume Review",
+    titleSource: "Professional · via Resume Review",
     photo: juliePhoto,
     quote: "James was direct and hit every point that mattered. I took his feedback and paired it with AI tools to refine my resume further — it was like having a professional roadmap to follow. I've already seen a real difference in the quality of my applications.",
     bold: "Direct and hit every point that mattered.",
   },
   {
+    headline: "Now I Know How HR Actually Thinks",
     name: "Peter Cho",
-    label: "via Salary Coaching",
+    titleSource: "Professional · via Salary Coaching",
     photo: peterPhoto,
     quote: "James quickly zeroed in on my situation, helped me understand how HR thinks, and gave me practical solutions I could use right away. I feel much more prepared for my upcoming interviews and salary conversations.",
     bold: "Helped me understand how HR thinks.",
   },
   {
+    headline: "Realized My Salary Has Room to Grow",
     name: "Kiki",
-    label: "via Salary Coaching",
+    titleSource: "Professional · via Salary Coaching",
     photo: kikiPhoto,
     quote: "In just 30 minutes, James helped me realize my salary actually has room to grow — I just needed more confidence in my own value. Knowing where I stand compared to others in my industry was an incredible starting point.",
     bold: "Helped me realize my salary actually has room to grow.",
   },
   {
+    headline: "Customized Guidance, Not Generic Advice",
     name: "Rock Shih",
-    label: "via Salary Coaching",
+    titleSource: "Professional · via Salary Coaching",
     photo: rockPhoto,
     quote: "I expected a generic salary negotiation talk, but instead James gave me highly customized guidance based on my specific situation. I now feel much more equipped to communicate with employers and negotiate a better package.",
     bold: "Highly customized guidance based on my specific situation.",
@@ -144,52 +158,29 @@ function BoldQuote({ text, bold }: { text: string; bold: string }) {
   );
 }
 
-/* ── Card Components ── */
-function FeaturedCard({ item }: { item: Testimonial }) {
+/* ── Card ── */
+function TestimonialCard({ item, featured = false }: { item: Testimonial; featured?: boolean }) {
   return (
     <div
-      className="rounded-2xl p-6 md:p-8 flex flex-col md:flex-row gap-6 items-start"
+      className={`rounded-xl ${featured ? "md:col-span-2" : ""}`}
       style={{
         backgroundColor: "#FFFFFF",
         borderLeft: "4px solid #D4930D",
         boxShadow: "0 2px 8px rgba(0,0,0,0.06)",
+        padding: "24px",
       }}
     >
-      <img
-        src={item.photo}
-        alt={item.name}
-        width={64}
-        height={64}
-        className="w-16 h-16 rounded-full object-cover flex-shrink-0"
-        style={{ border: "2px solid #D4930D" }}
-      />
-      <div>
-        <Quote className="w-6 h-6 mb-3" style={{ color: "#D4930D", opacity: 0.5 }} />
-        <p className="leading-relaxed mb-4" style={{ color: "#1A1A1A", fontSize: "1rem" }}>
-          "<BoldQuote text={item.quote} bold={item.bold} />"
-        </p>
-        <p className="font-bold" style={{ color: "#1A1A1A", fontSize: "0.9375rem" }}>
-          {item.name}
-        </p>
-        <p style={{ color: "#6B6B6B", fontSize: "0.8125rem" }}>{item.label}</p>
-      </div>
-    </div>
-  );
-}
+      {/* 1. Headline */}
+      <p className="font-bold mb-3" style={{ color: "#1A1A1A", fontSize: featured ? "1.25rem" : "1.0625rem" }}>
+        {item.headline}
+      </p>
 
-function TestimonialCard({ item }: { item: Testimonial }) {
-  return (
-    <div
-      className="rounded-xl p-6"
-      style={{
-        backgroundColor: "#FFFFFF",
-        borderLeft: "4px solid #D4930D",
-        boxShadow: "0 2px 8px rgba(0,0,0,0.06)",
-      }}
-    >
+      {/* 2-3. Quote with bold sentence */}
       <p className="leading-relaxed mb-4" style={{ color: "#1A1A1A", fontSize: "1rem" }}>
         "<BoldQuote text={item.quote} bold={item.bold} />"
       </p>
+
+      {/* 4. Photo + Name + Title/Source */}
       <div className="flex items-center gap-3">
         <img
           src={item.photo}
@@ -197,14 +188,14 @@ function TestimonialCard({ item }: { item: Testimonial }) {
           width={40}
           height={40}
           loading="lazy"
-          className="w-10 h-10 rounded-full object-cover"
+          className="w-10 h-10 rounded-full object-cover flex-shrink-0"
           style={{ border: "2px solid #D4930D" }}
         />
         <div>
           <p className="font-bold" style={{ color: "#1A1A1A", fontSize: "0.9375rem" }}>
             {item.name}
           </p>
-          <p style={{ color: "#6B6B6B", fontSize: "0.8125rem" }}>{item.label}</p>
+          <p style={{ color: "#6B6B6B", fontSize: "0.8125rem" }}>{item.titleSource}</p>
         </div>
       </div>
     </div>
@@ -227,32 +218,23 @@ function TierReveal({ visible, children }: { visible: boolean; children: React.R
   );
 }
 
-/* ── Main Component ── */
+/* ── Main ── */
 export default function HomepageTestimonialsExperiment() {
-  const [revealLevel, setRevealLevel] = useState(0); // 0 = tier1 only, 1 = +tier2, 2 = +tier3
+  const [revealLevel, setRevealLevel] = useState(0);
 
-  const buttonText =
-    revealLevel === 0 ? "Show More Reviews" : "Show Even More Reviews";
-
+  const buttonText = revealLevel === 0 ? "Show More Reviews" : "Show Even More Reviews";
   const featured = tier1[0];
   const gridTier1 = tier1.slice(1);
 
   return (
-    <section
-      id="testimonials"
-      className="py-12 md:py-20 px-5 md:px-6"
-      style={{ backgroundColor: "#FFFFFF" }}
-    >
+    <section id="testimonials" className="py-12 md:py-20 px-5 md:px-6" style={{ backgroundColor: "#FFFFFF" }}>
       <div className="container mx-auto max-w-5xl">
-        <h2
-          className="font-heading text-center mb-10"
-          style={{ color: "#1A1A1A", fontSize: "clamp(2rem, 4vw, 2.625rem)" }}
-        >
+        <h2 className="font-heading text-center mb-10" style={{ color: "#1A1A1A", fontSize: "clamp(2rem, 4vw, 2.625rem)" }}>
           750+ Professionals Landed Their Dream Offers
         </h2>
 
-        {/* Featured card */}
-        <FeaturedCard item={featured} />
+        {/* Featured */}
+        <TestimonialCard item={featured} featured />
 
         {/* Tier 1 grid */}
         <div className="mt-4 grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -275,26 +257,16 @@ export default function HomepageTestimonialsExperiment() {
           ))}
         </TierReveal>
 
-        {/* Show More button */}
+        {/* Show More */}
         {revealLevel < 2 && (
           <div className="mt-8 text-center">
             <button
               type="button"
               onClick={() => setRevealLevel((v) => v + 1)}
               className="inline-flex items-center gap-2 px-6 py-2.5 rounded-lg text-sm font-semibold transition-all duration-200 border"
-              style={{
-                color: "#2D3A2E",
-                borderColor: "#2D3A2E",
-                backgroundColor: "transparent",
-              }}
-              onMouseEnter={(e) => {
-                e.currentTarget.style.backgroundColor = "#2D3A2E";
-                e.currentTarget.style.color = "#FFFFFF";
-              }}
-              onMouseLeave={(e) => {
-                e.currentTarget.style.backgroundColor = "transparent";
-                e.currentTarget.style.color = "#2D3A2E";
-              }}
+              style={{ color: "#2D3A2E", borderColor: "#2D3A2E", backgroundColor: "transparent" }}
+              onMouseEnter={(e) => { e.currentTarget.style.backgroundColor = "#2D3A2E"; e.currentTarget.style.color = "#FFFFFF"; }}
+              onMouseLeave={(e) => { e.currentTarget.style.backgroundColor = "transparent"; e.currentTarget.style.color = "#2D3A2E"; }}
             >
               {buttonText}
               <ChevronDown className="w-4 h-4" />
