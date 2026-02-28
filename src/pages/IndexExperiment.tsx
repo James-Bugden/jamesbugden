@@ -33,17 +33,18 @@ const IndexExperiment = () => {
       {/* ── Navigation ── */}
       <header>
         <nav
-          className={`fixed top-0 left-0 right-0 z-50 bg-executive-green transition-shadow duration-300 ${
-            scrolled ? "shadow-lg shadow-black/20" : ""
+          className={`fixed top-0 left-0 right-0 z-50 transition-shadow duration-300 ${
+            scrolled ? "shadow-md shadow-black/8" : ""
           }`}
+          style={{ backgroundColor: '#FDFBF7' }}
         >
           <div className="container mx-auto px-5 md:px-6 py-4 flex items-center justify-between">
-            <span className="font-heading text-lg md:text-xl font-bold text-cream tracking-tight">
+            <span className="font-heading text-lg md:text-xl font-bold tracking-tight" style={{ color: '#2D3A2E' }}>
               JAMES BUGDEN
             </span>
             <div className="flex items-center gap-4">
-              <AuthHeaderButton variant="nav" />
-              <LanguageToggle variant="nav" />
+              <AuthHeaderButton variant="light" />
+              <LanguageToggle variant="default" />
             </div>
           </div>
         </nav>
@@ -178,20 +179,20 @@ const IndexExperiment = () => {
       </main>
 
       {/* ── Footer ── */}
-      <footer className="py-8 md:py-10 px-5 md:px-6 bg-card border-t border-border">
+      <footer className="py-8 md:py-10 px-5 md:px-6" style={{ backgroundColor: '#2D3A2E' }}>
         <div className="container mx-auto max-w-5xl flex flex-col items-center gap-4">
           <div className="flex items-center gap-6">
-            <a href="https://www.linkedin.com/in/james-bugden/" target="_blank" rel="noopener noreferrer" className="hover:opacity-70 transition-opacity" style={{ color: '#6B6B6B' }}>
+            <a href="https://www.linkedin.com/in/james-bugden/" target="_blank" rel="noopener noreferrer" className="hover:opacity-70 transition-opacity" style={{ color: '#FFFFFF' }}>
               <Linkedin className="w-5 h-5" />
             </a>
-            <a href="https://www.instagram.com/james.careers/" target="_blank" rel="noopener noreferrer" className="hover:opacity-70 transition-opacity" style={{ color: '#6B6B6B' }}>
+            <a href="https://www.instagram.com/james.careers/" target="_blank" rel="noopener noreferrer" className="hover:opacity-70 transition-opacity" style={{ color: '#FFFFFF' }}>
               <InstagramIcon className="w-5 h-5" />
             </a>
-            <a href="https://www.threads.com/@james.careers" target="_blank" rel="noopener noreferrer" className="hover:opacity-70 transition-opacity" style={{ color: '#6B6B6B' }}>
+            <a href="https://www.threads.com/@james.careers" target="_blank" rel="noopener noreferrer" className="hover:opacity-70 transition-opacity" style={{ color: '#FFFFFF' }}>
               <ThreadsIcon className="w-5 h-5" />
             </a>
           </div>
-          <span className="text-sm text-center w-full" style={{ color: '#6B6B6B' }}>
+          <span className="text-sm text-center w-full" style={{ color: '#A8B5A9' }}>
             © 2026 James Bugden. All rights reserved.
           </span>
         </div>
