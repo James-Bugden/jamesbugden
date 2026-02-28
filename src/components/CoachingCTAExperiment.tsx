@@ -19,22 +19,14 @@ export default function CoachingCTAExperiment() {
 
       <div className="container mx-auto max-w-2xl text-center relative z-10">
         <h2
-          className="font-heading mb-4"
+          className="font-heading mb-6"
           style={{ color: '#FBF7F0', fontSize: 'clamp(2rem, 4vw, 2.625rem)' }}
         >
-          Ready to Fast-Track Your Career?
+          Ready to Get More Interviews?
         </h2>
 
-        <p
-          className="leading-relaxed mb-4 max-w-[550px] mx-auto"
-          style={{ color: 'rgba(251,247,240,0.7)', fontSize: '1.0625rem' }}
-        >
-          I take on a few clients each month. If you're serious about getting a great offer, let's talk.
-        </p>
-
-
         <a
-          href="#qualify"
+          href="/resume-analyzer"
           className="inline-flex items-center justify-center font-semibold"
           style={{
             backgroundColor: '#D4930D',
@@ -52,15 +44,11 @@ export default function CoachingCTAExperiment() {
             ((e.currentTarget as HTMLElement).style.backgroundColor = '#D4930D')
           }
         >
-          See If You're a Fit
+          Score My Resume Now
         </a>
 
         <p style={{ color: '#A8B5A9', fontSize: '0.8125rem', marginTop: '8px' }}>
-          Free intro call · No commitment · No pressure
-        </p>
-
-        <p style={{ color: '#A8B5A9', fontSize: '0.8125rem', marginTop: '16px' }}>
-          Trusted by professionals from Google, Amazon, Meta, and 50+ companies
+          Free. No sign-up. Takes 60 seconds.
         </p>
       </div>
     </section>

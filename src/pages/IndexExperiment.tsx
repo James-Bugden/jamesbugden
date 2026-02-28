@@ -134,7 +134,7 @@ const IndexExperiment = () => {
                 </div>
 
                 <p className="leading-relaxed max-w-xl mx-auto md:mx-0 mb-5" style={{ color: '#1A1A1A', fontSize: '1.0625rem' }}>
-                  You apply, interview, and then... silence. Or worse, they offer you way less than you're worth. I've helped 750+ people get hired at Google, Uber, and Microsoft. Every week, I'll send you what I know. For free.
+                  You apply. You interview. Silence. They lowball you. You accept it. I've helped 750+ people get hired at Google, Uber, and Microsoft. Every week, I'll send you what I know. For free.
                 </p>
 
                 <div className="mb-2 max-w-md mx-auto md:mx-0">
@@ -196,15 +196,15 @@ const IndexExperiment = () => {
             <div className="flex flex-col gap-5 mb-8 text-left max-w-xl mx-auto">
               <div className="flex items-start gap-3">
                 <X className="w-5 h-5 flex-shrink-0 mt-0.5" style={{ color: '#C85A5A' }} strokeWidth={2.5} />
-                <p style={{ color: '#1A1A1A', fontSize: '1.125rem' }}>You've applied to tons of jobs and never heard back</p>
+                <p style={{ color: '#1A1A1A', fontSize: '1.125rem' }}>You apply to tons of jobs. You never hear back.</p>
               </div>
               <div className="flex items-start gap-3">
                 <X className="w-5 h-5 flex-shrink-0 mt-0.5" style={{ color: '#C85A5A' }} strokeWidth={2.5} />
-                <p style={{ color: '#1A1A1A', fontSize: '1.125rem' }}>You made it to the final interview... then nothing. No email. No call.</p>
+                <p style={{ color: '#1A1A1A', fontSize: '1.125rem' }}>You make it to the final interview. Then nothing. No email. No call.</p>
               </div>
               <div className="flex items-start gap-3">
                 <X className="w-5 h-5 flex-shrink-0 mt-0.5" style={{ color: '#C85A5A' }} strokeWidth={2.5} />
-                <p style={{ color: '#1A1A1A', fontSize: '1.125rem' }}>You got a job offer, but you have no idea if the pay is fair or if you should ask for more</p>
+                <p style={{ color: '#1A1A1A', fontSize: '1.125rem' }}>You get a job offer. You have no idea if the pay is fair or if you should ask for more.</p>
               </div>
             </div>
 
