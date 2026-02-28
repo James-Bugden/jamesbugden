@@ -1,6 +1,6 @@
 // Experimental copy of Index.tsx — safe to modify without affecting the live homepage
 import { useState, useEffect } from "react";
-import { Briefcase, Users, Linkedin, FileCheck, X, CheckCircle2, Eye, Building } from "lucide-react";
+import { Briefcase, Users, Linkedin, FileCheck, X, CheckCircle2, Eye, Building, Plus, Minus } from "lucide-react";
 import { InstagramIcon, ThreadsIcon } from "@/components/SocialIcons";
 import jamesPhoto from "@/assets/james-bugden.jpg";
 import LanguageToggle from "@/components/LanguageToggle";
@@ -12,6 +12,62 @@ import SelfSegmentationExperiment from "@/components/SelfSegmentationExperiment"
 import CoachingCTAExperiment from "@/components/CoachingCTAExperiment";
 import MailerLiteForm from "@/components/MailerLiteForm";
 import LazySection from "@/components/LazySection";
+
+const faqs = [
+  { q: "Is the free newsletter actually free? What's the catch?", a: "100% free, no catch. I send weekly recruiting tips, salary insights, and resume strategies straight to your inbox. I also offer paid 1-on-1 coaching for people who want personalized help — but the newsletter stands on its own and you'll never be pressured to buy anything." },
+  { q: "I don't have the confidence to negotiate my salary. Can you actually help with that?", a: "This is the #1 thing I hear from candidates. Most people don't realize that salary negotiation isn't about being aggressive — it's about understanding how the other side thinks. I teach you the recruiter's perspective so you can negotiate with clarity, not confrontation. Even my most nervous clients walk away feeling prepared." },
+  { q: "I keep applying but never hear back. What am I doing wrong?", a: "Usually it's one of three things: your resume isn't passing ATS filters, your headline doesn't match the job title, or your achievements are buried under generic descriptions. My resume review pinpoints exactly which of these is happening to you and gives you specific fixes — not vague advice." },
+  { q: "I don't know how to deal with HR during the hiring process. They feel like gatekeepers.", a: "HR isn't your enemy — they're actually incentivized to fill the role. The problem is most candidates don't understand what HR is optimizing for. I've been that HR person. I show you exactly what recruiters care about at each stage so you can work with them, not against them." },
+  { q: "Can't I just use ChatGPT to fix my resume?", a: "AI is great for a first pass, but it doesn't know what a Fortune 500 recruiter actually looks for. It can't tell you that your strongest achievement is buried on page 2, or that the company you're targeting cares more about X than Y. That's what 20,000+ resume reviews and years of insider experience give you." },
+  { q: "How is the resume review different from other services?", a: "Most resume services give you a proofread and some formatting tweaks. My review is a strategic breakdown — I analyze your resume against specific target roles, identify which achievements to lead with, restructure your positioning, and give you a framework you can reuse for every application going forward. It's a career strategy session disguised as a resume review." },
+];
+
+function FAQSection() {
+  const [open, setOpen] = useState<Set<number>>(new Set());
+  const toggle = (i: number) => setOpen(prev => {
+    const next = new Set(prev);
+    next.has(i) ? next.delete(i) : next.add(i);
+    return next;
+  });
+
+  return (
+    <section className="py-20 px-5 md:px-6" style={{ backgroundColor: '#FFFFFF' }}>
+      <div className="container mx-auto max-w-2xl">
+        <h2 className="font-heading text-center mb-12" style={{ color: '#1A1A1A', fontSize: 'clamp(2rem, 4vw, 2.625rem)' }}>
+          Questions You Might Be Thinking
+        </h2>
+        <div>
+          {faqs.map((faq, i) => {
+            const isOpen = open.has(i);
+            return (
+              <div key={i} style={{ borderBottom: '1px solid #E5E5E5' }}>
+                <button
+                  type="button"
+                  onClick={() => toggle(i)}
+                  className="w-full flex items-center justify-between py-5 text-left gap-4"
+                >
+                  <span className="font-bold text-lg" style={{ color: '#1A1A1A' }}>{faq.q}</span>
+                  {isOpen
+                    ? <Minus className="w-5 h-5 flex-shrink-0 transition-transform duration-200" style={{ color: '#6B6B6B' }} />
+                    : <Plus className="w-5 h-5 flex-shrink-0 transition-transform duration-200" style={{ color: '#6B6B6B' }} />
+                  }
+                </button>
+                <div
+                  className="overflow-hidden transition-all duration-200 ease-in-out"
+                  style={{ maxHeight: isOpen ? '500px' : '0', opacity: isOpen ? 1 : 0 }}
+                >
+                  <p className="pb-5 text-base" style={{ color: '#1A1A1A', paddingTop: '0' }}>
+                    {faq.a}
+                  </p>
+                </div>
+              </div>
+            );
+          })}
+        </div>
+      </div>
+    </section>
+  );
+}
 
 const IndexExperiment = () => {
   const [scrolled, setScrolled] = useState(false);
@@ -212,6 +268,11 @@ const IndexExperiment = () => {
         {/* ── "Find Your Path" — white #FFFFFF ── */}
         <LazySection>
           <SelfSegmentationExperiment />
+        </LazySection>
+
+        {/* ── FAQ — white #FFFFFF ── */}
+        <LazySection>
+          <FAQSection />
         </LazySection>
 
         {/* ── Coaching CTA — dark green gradient ── */}
