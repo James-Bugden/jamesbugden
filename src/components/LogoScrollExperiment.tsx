@@ -86,7 +86,7 @@ export default function LogoScrollExperiment() {
   return (
     <section className="py-4 overflow-hidden relative" style={{ backgroundColor: '#FDFBF7' }}>
       <p className="text-center px-5 mb-3 max-w-lg mx-auto leading-snug" style={{ fontSize: '0.9375rem', color: '#6B6B6B' }}>
-        Helped professionals from these companies negotiate $12M+ in combined salary increases
+        These professionals negotiated $12M+ in combined salary increases
       </p>
 
       {/* Fade edges */}

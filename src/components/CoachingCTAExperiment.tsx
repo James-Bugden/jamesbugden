@@ -29,7 +29,7 @@ export default function CoachingCTAExperiment() {
           className="leading-relaxed mb-4 max-w-[550px] mx-auto"
           style={{ color: 'rgba(251,247,240,0.7)', fontSize: '1.0625rem' }}
         >
-          I only work with a few people each month. If you're serious about getting a great offer, let's chat.
+          I take on a few clients each month. If you're serious about getting a great offer, let's talk.
         </p>
 
         <p className="font-bold mb-8" style={{ color: '#D4930D', fontSize: '0.9375rem' }}>

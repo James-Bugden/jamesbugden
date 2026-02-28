@@ -15,12 +15,12 @@ import MailerLiteForm from "@/components/MailerLiteForm";
 import LazySection from "@/components/LazySection";
 
 const faqs = [
-  { q: "Is the free newsletter actually free? What's the catch?", a: "Yes, 100% free. I send helpful tips every week. I also offer paid 1-on-1 coaching if you want personal help — but the free tips are great on their own. No pressure, ever." },
-  { q: "I don't have the confidence to negotiate my salary. Can you actually help with that?", a: "This is the most common thing I hear. Here's the truth: you don't need to be pushy. You just need to understand what the other side wants. I'll show you how HR thinks — so you feel calm and ready, not scared." },
-  { q: "I keep applying but never hear back. What am I doing wrong?", a: "Usually it's one of three things: your resume doesn't get past the computer filter, your title doesn't match the job, or your best work is hidden in the wrong place. My review finds exactly what's wrong and tells you how to fix it." },
-  { q: "I don't know how to deal with HR during the hiring process. They feel like gatekeepers.", a: "HR isn't your enemy — they actually want to fill the job. The problem is most people don't understand what HR cares about. I've been that person. I'll show you what they're looking for at each step so you can work together, not fight." },
-  { q: "Can't I just use ChatGPT to fix my resume?", a: "AI is a good start, but it doesn't know what a real recruiter looks for. It can't tell you that your best achievement is buried on page 2 or that the company you want cares more about X than Y. That's what 20,000+ resume reviews teach you." },
-  { q: "How is the resume review different from other services?", a: "Most resume services just fix spelling and move things around. My review is different — I look at your resume like a recruiter would and tell you exactly what to change to get more interviews. You also get a simple system you can reuse every time you apply somewhere new." },
+  { q: "Is the free newsletter free? What's the catch?", a: "Yes, 100% free. I send useful tips every week. I also offer paid 1-on-1 coaching if you want personal help. The free tips stand on their own. No pressure, ever." },
+  { q: "I don't have the confidence to negotiate my salary. Will this help?", a: "This is the most common concern I hear. Here's the truth: you don't need to be pushy. You need to understand what the other side wants. I'll show you how HR thinks so you feel calm and ready, not scared." },
+  { q: "I keep applying but never hear back. What am I doing wrong?", a: "Usually one of three things: your resume doesn't get past the computer filter, your title doesn't match the job, or your best work is hidden in the wrong place. My review finds what's wrong and tells you how to fix it." },
+  { q: "I don't know how to deal with HR during the hiring process. They feel like gatekeepers.", a: "HR isn't your enemy. They want to fill the job. The problem is most people don't understand what HR cares about. I've been in HR. I'll show you what they look for at each step so you work together, not against each other." },
+  { q: "Why not use ChatGPT to fix my resume?", a: "AI is a good start. But AI doesn't know what a real recruiter looks for. It won't tell you your best achievement is buried on page 2. Or the company you want cares more about X than Y. 20,000+ resume reviews taught me what AI hasn't learned." },
+  { q: "How is your resume review different from other services?", a: "Most resume services fix spelling and move things around. My review is different. I look at your resume like a recruiter and tell you what to change to get more interviews. You also get a simple system you reuse every time you apply." },
 ];
 
 function FAQSection() {
@@ -134,7 +134,7 @@ const IndexExperiment = () => {
                 </div>
 
                 <p className="leading-relaxed max-w-xl mx-auto md:mx-0 mb-5" style={{ color: '#1A1A1A', fontSize: '1.0625rem' }}>
-                  You apply, interview, and then... silence. Or worse — they give you an offer that's way less than you're worth. I've helped 750+ people get hired at companies like Google, Uber, and Microsoft. Every week, I'll send you exactly what I know — for free.
+                  You apply, interview, and then... silence. Or worse, they offer you way less than you're worth. I've helped 750+ people get hired at Google, Uber, and Microsoft. Every week, I'll send you what I know. For free.
                 </p>
 
                 <div className="mb-2 max-w-md mx-auto md:mx-0">
@@ -204,7 +204,7 @@ const IndexExperiment = () => {
               </div>
               <div className="flex items-start gap-3">
                 <X className="w-5 h-5 flex-shrink-0 mt-0.5" style={{ color: '#C85A5A' }} strokeWidth={2.5} />
-                <p style={{ color: '#1A1A1A', fontSize: '1.125rem' }}>You got a job offer — but you have no idea if the pay is fair or if you could get way more</p>
+                <p style={{ color: '#1A1A1A', fontSize: '1.125rem' }}>You got a job offer, but you have no idea if the pay is fair or if you should ask for more</p>
               </div>
             </div>
 
@@ -225,7 +225,7 @@ const IndexExperiment = () => {
               Get My Free Recruiting Tips
             </a>
             <p className="text-center mt-2" style={{ color: '#6B6B6B', fontSize: '0.8125rem' }}>
-              No spam, no fluff — just insider recruiting strategies weekly
+              No spam, no fluff. Insider recruiting strategies every week.
             </p>
           </div>
         </section>
@@ -247,21 +247,21 @@ const IndexExperiment = () => {
                 <Eye className="w-10 h-10 mx-auto md:mx-0 mb-4" style={{ color: '#2D3A2E' }} strokeWidth={1.5} />
                 <p className="font-bold text-[20px] mb-2" style={{ color: '#1A1A1A' }}>I've Read 20,000+ Resumes</p>
                 <p className="text-base" style={{ color: '#1A1A1A' }}>
-                  I know what makes a recruiter stop and read — and what gets your resume tossed in 6 seconds. No guessing. I've seen it thousands of times.
+                  I know what makes a recruiter stop and read. I also know what gets your resume tossed in 6 seconds. No guessing. I've seen it thousands of times.
                 </p>
               </div>
               <div className="text-center md:text-left">
                 <Users className="w-10 h-10 mx-auto md:mx-0 mb-4" style={{ color: '#2D3A2E' }} strokeWidth={1.5} />
                 <p className="font-bold text-[20px] mb-2" style={{ color: '#1A1A1A' }}>I've Hired 750+ People</p>
                 <p className="text-base" style={{ color: '#1A1A1A' }}>
-                  I've been in the room where they decide your offer. I know what HR is thinking, what the hiring manager cares about, and where most people lose money.
+                  I've sat in the room where they decide your offer. I know what HR thinks, what the hiring manager cares about, and where most people lose money.
                 </p>
               </div>
               <div className="text-center md:text-left">
                 <Building className="w-10 h-10 mx-auto md:mx-0 mb-4" style={{ color: '#2D3A2E' }} strokeWidth={1.5} />
                 <p className="font-bold text-[20px] mb-2" style={{ color: '#1A1A1A' }}>Fortune 500 Insider</p>
                 <p className="text-base" style={{ color: '#1A1A1A' }}>
-                  Google, Amazon, Meta, Microsoft — I've hired for all of them. I know how they interview, how they pay, and what makes you stand out.
+                  Google, Amazon, Meta, Microsoft. I've hired for all of them. I know how they interview, how they pay, and what makes you stand out.
                 </p>
               </div>
             </div>
