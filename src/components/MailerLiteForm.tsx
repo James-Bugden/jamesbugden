@@ -80,7 +80,7 @@ export default function MailerLiteForm({ formId, className, buttonText = "Get on
       <div className={className || ""}>
         <div className="bg-executive-green/10 border border-executive-green/20 rounded-lg p-6 text-center">
           <h4 className="text-xl font-semibold text-executive-green mb-2">Thank you!</h4>
-          <p className="text-foreground">You have successfully joined the resume review waitlist.</p>
+          <p className="text-foreground">You will get an email with your job search guides.</p>
         </div>
       </div>
     );
