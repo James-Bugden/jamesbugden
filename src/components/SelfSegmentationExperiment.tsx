@@ -176,12 +176,15 @@ export default function SelfSegmentationExperiment() {
         onClick={() => handleSelect(stage.id)}
         className={`w-full relative text-left rounded-xl border-2 p-6 transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-gold/40 ${
           isSelected
-            ? "border-gold shadow-lg -translate-y-1"
+            ? "shadow-lg -translate-y-1"
             : isDimmed
             ? "border-border opacity-60"
-            : "border-border hover:-translate-y-1 hover:border-gold/50 hover:shadow-md"
+            : "border-border hover:-translate-y-1 hover:shadow-md"
         }`}
-        style={{ backgroundColor: isSelected ? '#FDFBF7' : isDimmed ? 'rgba(253,251,247,0.6)' : '#FDFBF7' }}
+        style={{
+          backgroundColor: isSelected ? '#FDFBF7' : isDimmed ? 'rgba(253,251,247,0.6)' : '#FDFBF7',
+          borderColor: isSelected ? '#2D3A2E' : undefined,
+        }}
       >
         {/* Large icon above title */}
         <div className="mb-4">
