@@ -1,6 +1,6 @@
 // Experimental copy of Index.tsx — safe to modify without affecting the live homepage
 import { useState, useEffect } from "react";
-import { Briefcase, Users, Linkedin, FileCheck, X, CheckCircle2 } from "lucide-react";
+import { Briefcase, Users, Linkedin, FileCheck, X, CheckCircle2, Eye, Building } from "lucide-react";
 import { InstagramIcon, ThreadsIcon } from "@/components/SocialIcons";
 import jamesPhoto from "@/assets/james-bugden.jpg";
 import LanguageToggle from "@/components/LanguageToggle";
@@ -164,6 +164,48 @@ const IndexExperiment = () => {
             >
               Get My Free Recruiting Tips
             </a>
+          </div>
+        </section>
+
+        {/* ── Why Work With an Insider — white #FFFFFF ── */}
+        <section className="py-20 px-5 md:px-6" style={{ backgroundColor: '#FFFFFF' }}>
+          <div className="container mx-auto max-w-4xl">
+            <div className="text-center mb-12">
+              <h2 className="font-heading mb-3" style={{ color: '#1A1A1A', fontSize: 'clamp(2rem, 4vw, 2.625rem)' }}>
+                Why Work With an Insider?
+              </h2>
+              <p className="text-[17px] max-w-[600px] mx-auto" style={{ color: '#6B6B6B' }}>
+                Most career advice comes from people who've never sat on the other side of the hiring table. I have.
+              </p>
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-10 md:gap-8 mb-10">
+              <div className="text-center md:text-left">
+                <Eye className="w-10 h-10 mx-auto md:mx-0 mb-4" style={{ color: '#2D3A2E' }} strokeWidth={1.5} />
+                <p className="font-bold text-[20px] mb-2" style={{ color: '#1A1A1A' }}>I've Read 20,000+ Resumes</p>
+                <p className="text-base" style={{ color: '#1A1A1A' }}>
+                  I know exactly what makes a recruiter stop scrolling and what gets your resume thrown out in 6 seconds. No guesswork — just patterns I've seen thousands of times.
+                </p>
+              </div>
+              <div className="text-center md:text-left">
+                <Users className="w-10 h-10 mx-auto md:mx-0 mb-4" style={{ color: '#2D3A2E' }} strokeWidth={1.5} />
+                <p className="font-bold text-[20px] mb-2" style={{ color: '#1A1A1A' }}>I've Hired 750+ People</p>
+                <p className="text-base" style={{ color: '#1A1A1A' }}>
+                  I've sat in the room where offers get decided. I know what HR is thinking, what hiring managers care about, and exactly where candidates lose money in negotiation.
+                </p>
+              </div>
+              <div className="text-center md:text-left">
+                <Building className="w-10 h-10 mx-auto md:mx-0 mb-4" style={{ color: '#2D3A2E' }} strokeWidth={1.5} />
+                <p className="font-bold text-[20px] mb-2" style={{ color: '#1A1A1A' }}>Fortune 500 Insider Access</p>
+                <p className="text-base" style={{ color: '#1A1A1A' }}>
+                  Google, Amazon, Meta, Microsoft — I've recruited for them all. I know their interview processes, compensation structures, and what it takes to stand out in their applicant pools.
+                </p>
+              </div>
+            </div>
+
+            <p className="text-center text-sm" style={{ color: '#6B6B6B' }}>
+              This isn't generic career advice from a blog. It's the playbook from someone who's been on the inside.
+            </p>
           </div>
         </section>
 
