@@ -28,10 +28,10 @@ export default function ResumeAnalyzerCTAExperiment() {
   };
 
   return (
-    <section className="py-20 px-5 md:px-6" style={{ backgroundColor: "#FFFFFF" }}>
+    <section className="py-12 md:py-20 px-5 md:px-6" style={{ backgroundColor: "#FFFFFF" }}>
       <div className="container mx-auto max-w-xl text-center">
         <h2
-          className="font-heading mb-3"
+          className="font-heading mb-6"
           style={{ color: "#1A1A1A", fontSize: "clamp(2rem, 4vw, 2.625rem)" }}
         >
           Get Your Resume Scored in 60&nbsp;Seconds
@@ -119,8 +119,8 @@ export default function ResumeAnalyzerCTAExperiment() {
           {/* CTA */}
           <button
             type="submit"
-            className="w-full h-12 rounded-lg text-base font-semibold mt-4 transition-colors duration-200"
-            style={{ backgroundColor: "#2D3A2E", color: "#FFFFFF" }}
+            className="w-full rounded-lg transition-colors duration-200 mt-4"
+            style={{ backgroundColor: "#2D3A2E", color: "#FFFFFF", padding: '16px 32px', borderRadius: '8px', fontSize: '1rem', fontWeight: 600 }}
             onMouseEnter={(e) =>
               ((e.currentTarget as HTMLElement).style.backgroundColor = "#3A4A3B")
             }
