@@ -1,13 +1,13 @@
 import { useState, FormEvent } from "react";
 import { useNavigate } from "react-router-dom";
-import { ClipboardList, Target, DollarSign } from "lucide-react";
+import { Compass, Target, TrendingUp, CheckCircle2, ClipboardCheck } from "lucide-react";
 import { useIsMobile } from "@/hooks/use-mobile";
 
 /* ── Stage data ── */
 const stages = [
   {
     id: "getting-started",
-    icon: ClipboardList,
+    icon: Compass,
     label: "Break Into Top Companies",
     quote: "Even if you don't know where to begin — get the roadmap to land interviews at companies like Google, Amazon, and Microsoft.",
     resource: "The Recruiter's Resume Checklist",
@@ -28,7 +28,7 @@ const stages = [
   },
   {
     id: "got-an-offer",
-    icon: DollarSign,
+    icon: TrendingUp,
     label: "Maximize Your Package",
     quote:
       "Make sure you're not leaving money on the table. Learn how to evaluate, compare, and negotiate your total compensation.",
@@ -58,44 +58,75 @@ function ResourcePanel({
   emailError: string;
   handleSubmit: (e: FormEvent) => void;
 }) {
+  const isScorecard = stage.id === "got-an-offer";
+
   return (
-    <div className="border border-border rounded-xl p-6 text-center" style={{ backgroundColor: '#FDFBF7' }}>
+    <div className="border border-border rounded-xl p-6" style={{ backgroundColor: '#FDFBF7' }}>
       {submitted === selected ? (
-        <p className="font-medium text-base" style={{ color: '#2D3A2E' }}>
+        <p className="font-medium text-base text-center" style={{ color: '#2D3A2E' }}>
           Thanks! Check your inbox. 🎉
         </p>
       ) : (
-        <>
-          <h3 className="font-heading text-xl md:text-2xl mb-2" style={{ color: '#1A1A1A' }}>
-            {stage.resource}
-          </h3>
-          <p className="text-sm md:text-base mb-6 max-w-lg mx-auto" style={{ color: '#6B6B6B' }}>
-            {stage.description}
-          </p>
-          <form
-            onSubmit={handleSubmit}
-            className="max-w-md mx-auto flex flex-col gap-3"
-          >
-            <input
-              type="email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              placeholder="Enter your email"
-              className="flex-1 h-12 px-4 rounded-lg border border-border text-base focus:outline-none focus:ring-2 focus:ring-gold/50"
-              style={{ backgroundColor: '#FFFFFF', color: '#1A1A1A' }}
-            />
-            <input type="hidden" name="stage" value={stage.id} />
-            <button
-              type="submit"
-              className="h-12 px-6 rounded-lg btn-gold text-base font-semibold whitespace-nowrap"
+        <div className={isScorecard ? "md:flex md:items-center md:gap-8" : ""}>
+          <div className={isScorecard ? "md:flex-1 text-center md:text-left" : "text-center"}>
+            <h3 className="font-heading text-xl md:text-2xl mb-2" style={{ color: '#1A1A1A' }}>
+              {stage.resource}
+            </h3>
+            <p className="text-sm md:text-base mb-6 max-w-lg mx-auto md:mx-0" style={{ color: '#6B6B6B' }}>
+              {stage.description}
+            </p>
+            <form
+              onSubmit={handleSubmit}
+              className="max-w-md mx-auto md:mx-0 flex flex-col gap-3"
             >
-              {stage.cta}
-            </button>
-          </form>
-          {emailError && (
-            <p className="text-destructive text-sm mt-2">{emailError}</p>
+              <input
+                type="email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                placeholder="Enter your email"
+                className="flex-1 h-12 px-4 rounded-lg border border-border text-base focus:outline-none focus:ring-2 focus:ring-gold/50"
+                style={{ backgroundColor: '#FFFFFF', color: '#1A1A1A' }}
+              />
+              <input type="hidden" name="stage" value={stage.id} />
+              <button
+                type="submit"
+                className="h-12 px-6 rounded-lg btn-gold text-base font-semibold whitespace-nowrap"
+              >
+                {stage.cta}
+              </button>
+            </form>
+            {emailError && (
+              <p className="text-destructive text-sm mt-2">{emailError}</p>
+            )}
+          </div>
+
+          {/* Scorecard illustration */}
+          {isScorecard && (
+            <div className="hidden md:flex items-center justify-center flex-shrink-0">
+              <svg width="120" height="140" viewBox="0 0 120 140" fill="none" xmlns="http://www.w3.org/2000/svg">
+                {/* Clipboard body */}
+                <rect x="16" y="20" width="88" height="110" rx="8" fill="#2D3A2E" opacity="0.08" stroke="#2D3A2E" strokeWidth="2" />
+                {/* Clipboard clip */}
+                <rect x="40" y="12" width="40" height="16" rx="4" fill="#2D3A2E" opacity="0.15" stroke="#2D3A2E" strokeWidth="1.5" />
+                {/* Check rows */}
+                <rect x="30" y="46" width="60" height="4" rx="2" fill="#2D3A2E" opacity="0.12" />
+                <CheckCircle2 x="30" y="40" width="16" height="16" style={{ color: '#D4930D' }} />
+                <circle cx="38" cy="48" r="6" fill="#D4930D" opacity="0.9" />
+                <path d="M35 48 L37 50 L41 46" stroke="#FFFFFF" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+
+                <rect x="30" y="68" width="60" height="4" rx="2" fill="#2D3A2E" opacity="0.12" />
+                <circle cx="38" cy="70" r="6" fill="#D4930D" opacity="0.9" />
+                <path d="M35 70 L37 72 L41 68" stroke="#FFFFFF" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+
+                <rect x="30" y="90" width="60" height="4" rx="2" fill="#2D3A2E" opacity="0.12" />
+                <circle cx="38" cy="92" r="6" fill="#2D3A2E" opacity="0.25" />
+
+                <rect x="30" y="112" width="60" height="4" rx="2" fill="#2D3A2E" opacity="0.12" />
+                <circle cx="38" cy="114" r="6" fill="#2D3A2E" opacity="0.25" />
+              </svg>
+            </div>
           )}
-        </>
+        </div>
       )}
     </div>
   );
@@ -152,17 +183,13 @@ export default function SelfSegmentationExperiment() {
         }`}
         style={{ backgroundColor: isSelected ? '#FDFBF7' : isDimmed ? 'rgba(253,251,247,0.6)' : '#FDFBF7' }}
       >
-        <div className="flex items-center gap-3 mb-4">
-          <div
-            className="w-10 h-10 rounded-lg flex items-center justify-center transition-colors duration-300"
-            style={{ backgroundColor: isSelected ? '#2D3A2E' : '#E8E4DE', color: isSelected ? '#FFFFFF' : '#6B6B6B' }}
-          >
-            <Icon className="w-5 h-5" />
-          </div>
-          <span className="text-xs font-semibold uppercase tracking-wider" style={{ color: '#6B6B6B' }}>
-            Step {i + 1}
-          </span>
+        {/* Large icon above title */}
+        <div className="mb-4">
+          <Icon className="w-8 h-8" style={{ color: isSelected ? '#2D3A2E' : '#2D3A2E', opacity: isSelected ? 1 : 0.6 }} strokeWidth={1.5} />
         </div>
+        <span className="text-xs font-semibold uppercase tracking-wider mb-2 block" style={{ color: '#6B6B6B' }}>
+          Step {i + 1}
+        </span>
         <p className="font-semibold text-base mb-2" style={{ color: '#1A1A1A' }}>
           {stage.label}
         </p>

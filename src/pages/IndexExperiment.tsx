@@ -1,6 +1,6 @@
 // Experimental copy of Index.tsx — safe to modify without affecting the live homepage
 import { useState, useEffect } from "react";
-import { Briefcase, Users, Linkedin, FileCheck, Send, Ghost, HelpCircle } from "lucide-react";
+import { Briefcase, Users, Linkedin, FileCheck, X, CheckCircle2 } from "lucide-react";
 import { InstagramIcon, ThreadsIcon } from "@/components/SocialIcons";
 import jamesPhoto from "@/assets/james-bugden.jpg";
 import LanguageToggle from "@/components/LanguageToggle";
@@ -137,22 +137,25 @@ const IndexExperiment = () => {
 
             <div className="flex flex-col gap-5 mb-8 text-left max-w-xl mx-auto">
               <div className="flex items-start gap-3">
-                <Send className="w-5 h-5 flex-shrink-0 mt-0.5" style={{ color: '#D4930D' }} />
+                <X className="w-5 h-5 flex-shrink-0 mt-0.5" style={{ color: '#C85A5A' }} strokeWidth={2.5} />
                 <p style={{ color: '#1A1A1A', fontSize: '1.125rem' }}>You've sent 100+ applications and heard nothing back</p>
               </div>
               <div className="flex items-start gap-3">
-                <Ghost className="w-5 h-5 flex-shrink-0 mt-0.5" style={{ color: '#D4930D' }} />
+                <X className="w-5 h-5 flex-shrink-0 mt-0.5" style={{ color: '#C85A5A' }} strokeWidth={2.5} />
                 <p style={{ color: '#1A1A1A', fontSize: '1.125rem' }}>You finally got interviews but keep getting ghosted after the final round</p>
               </div>
               <div className="flex items-start gap-3">
-                <HelpCircle className="w-5 h-5 flex-shrink-0 mt-0.5" style={{ color: '#D4930D' }} />
+                <X className="w-5 h-5 flex-shrink-0 mt-0.5" style={{ color: '#C85A5A' }} strokeWidth={2.5} />
                 <p style={{ color: '#1A1A1A', fontSize: '1.125rem' }}>You got an offer — but you have no idea if it's actually good or if you're leaving $50K+ on the table</p>
               </div>
             </div>
 
-            <p className="mb-6" style={{ color: '#6B6B6B', fontSize: '1rem' }}>
-              You don't need more job boards. You need an insider who knows how the system actually works.
-            </p>
+            <div className="flex items-center justify-center gap-2 mb-6">
+              <CheckCircle2 className="w-5 h-5 flex-shrink-0" style={{ color: '#2D3A2E' }} />
+              <p style={{ color: '#6B6B6B', fontSize: '1rem' }}>
+                You don't need more job boards. You need an insider who knows how the system actually works.
+              </p>
+            </div>
 
             <a
               href="#about"
