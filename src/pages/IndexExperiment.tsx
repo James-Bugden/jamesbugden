@@ -10,7 +10,7 @@ import HomepageTestimonialsExperiment from "@/components/HomepageTestimonialsExp
 import LogoScrollExperiment from "@/components/LogoScrollExperiment";
 import SelfSegmentationExperiment from "@/components/SelfSegmentationExperiment";
 import CoachingCTAExperiment from "@/components/CoachingCTAExperiment";
-import ResumeAnalyzerCTAExperiment from "@/components/ResumeAnalyzerCTAExperiment";
+import ResumeAnalyzerCTAExperiment from "@/components/ResumeAnalyzerCTAExperiment"; // kept for potential reuse
 import MailerLiteForm from "@/components/MailerLiteForm";
 import LazySection from "@/components/LazySection";
 
@@ -32,7 +32,7 @@ function FAQSection() {
   });
 
   return (
-    <section className="py-12 md:py-20 px-5 md:px-6" style={{ backgroundColor: '#FDFBF7' }}>
+    <section className="py-12 md:py-20 px-5 md:px-6" style={{ backgroundColor: '#FFFFFF' }}>
       <div className="container mx-auto max-w-2xl">
         <h2 className="font-heading text-center mb-6" style={{ color: '#1A1A1A', fontSize: 'clamp(2rem, 4vw, 2.625rem)' }}>
           Questions You Might Be Thinking
@@ -275,11 +275,6 @@ const IndexExperiment = () => {
         {/* ── "Find Your Path" — white #FFFFFF ── */}
         <LazySection>
           <SelfSegmentationExperiment />
-        </LazySection>
-
-        {/* ── Resume Analyzer CTA — white #FFFFFF ── */}
-        <LazySection>
-          <ResumeAnalyzerCTAExperiment />
         </LazySection>
 
         {/* ── FAQ — white #FFFFFF ── */}
