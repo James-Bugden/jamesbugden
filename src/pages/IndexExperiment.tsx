@@ -58,39 +58,35 @@ const IndexExperiment = () => {
             <div className="flex flex-col items-center text-center md:grid md:grid-cols-[1fr_auto] md:gap-16 md:items-center md:text-left">
               <div className="order-2 md:order-1 w-full">
                 {/* Photo — mobile only */}
-                <div className="flex justify-center mb-2 md:hidden">
+                <div className="flex justify-center mb-4 md:hidden">
                   <div className="relative">
                     <div className="absolute -inset-3 rounded-full bg-gradient-to-br from-gold/20 via-transparent to-executive-green/10 blur-xl" />
-                    <img src={jamesPhoto} alt="James Bugden" className="relative w-40 h-40 rounded-full object-cover hero-photo-shadow border-4 border-card" />
+                    <img src={jamesPhoto} alt="James Bugden" className="relative w-40 h-40 rounded-full object-cover hero-photo-shadow" style={{ border: '3px solid #D4930D' }} />
                   </div>
                 </div>
 
-                <div className="mb-4 md:mb-8">
-                  <span className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-executive-green/8 border border-executive-green/15 text-sm font-medium" style={{ color: '#2D3A2E' }}>
-                    <Briefcase className="w-3.5 h-3.5" />
+                <h1 className="font-heading leading-[1.12] tracking-tight mb-3 max-w-3xl mx-auto md:mx-0" style={{ color: '#1A1A1A', fontSize: 'clamp(2.25rem, 5vw, 3.5rem)' }}>
+                  Get a $200K+ Offer at Your Dream&nbsp;Company
+                </h1>
+
+                {/* Credential badge — below headline */}
+                <div className="flex items-center justify-center md:justify-start gap-2 mb-5">
+                  <span className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full border" style={{ backgroundColor: 'rgba(45,58,46,0.06)', borderColor: 'rgba(45,58,46,0.12)', color: '#6B6B6B', fontSize: '0.9375rem' }}>
+                    <Briefcase className="w-4 h-4" style={{ color: '#6B6B6B' }} />
                     Senior Recruiter · Fortune 500
                   </span>
                 </div>
 
-                <h1 className="font-heading text-foreground leading-[1.12] tracking-tight mb-4 max-w-2xl mx-auto md:mx-0" style={{ color: '#1A1A1A' }}>
-                  Get a $200K+ Offer at Your Dream&nbsp;Company
-                </h1>
-
-                <p className="md:text-lg leading-relaxed max-w-xl mx-auto md:mx-0 mb-5" style={{ color: '#1A1A1A', fontSize: '1.0625rem' }}>
-                  The insider recruiting strategies I used to help 750+ candidates at companies like Google, Uber, and Microsoft.
+                <p className="leading-relaxed max-w-xl mx-auto md:mx-0 mb-5" style={{ color: '#1A1A1A', fontSize: '1.0625rem' }}>
+                  Tired of getting ghosted after interviews or lowballed on offers? Get the exact recruiting playbook I used to place 750+ candidates at Google, Uber, and Microsoft — delivered to your inbox weekly.
                 </p>
 
-                <div className="flex items-center justify-center md:justify-start gap-2 text-sm mb-4" style={{ color: '#6B6B6B' }}>
-                  <Users className="w-4 h-4 flex-shrink-0" style={{ color: '#D4930D' }} />
-                  <span>Join 2,000+ professionals getting insider recruiting tips weekly</span>
-                </div>
-
                 <div className="mb-2 max-w-md mx-auto md:mx-0">
-                  <MailerLiteForm formId="sM1X80" className="ml-embedded" buttonText="Sign Up" />
+                  <MailerLiteForm formId="sM1X80" className="ml-embedded" buttonText="Get My Free Recruiting Tips" />
                 </div>
 
-                <p className="text-[13px] mb-5" style={{ color: '#6B6B6B' }}>
-                  Join free · Unsubscribe anytime · No spam
+                <p className="mb-5" style={{ color: '#6B6B6B', fontSize: '0.8125rem' }}>
+                  Join 2,000+ professionals. Free forever. Unsubscribe anytime.
                 </p>
 
                 <div className="flex flex-wrap justify-center md:justify-start gap-x-8 gap-y-3 pt-6 border-t border-border/60">
@@ -115,7 +111,7 @@ const IndexExperiment = () => {
               <div className="hidden md:flex justify-end order-2">
                 <div className="relative">
                   <div className="absolute -inset-3 rounded-full bg-gradient-to-br from-gold/20 via-transparent to-executive-green/10 blur-xl" />
-                  <img src={jamesPhoto} alt="James Bugden" className="relative w-80 h-80 lg:w-88 lg:h-88 rounded-full object-cover hero-photo-shadow border-4 border-card" />
+                  <img src={jamesPhoto} alt="James Bugden" className="relative w-80 h-80 lg:w-88 lg:h-88 rounded-full object-cover hero-photo-shadow" style={{ border: '3px solid #D4930D' }} />
                 </div>
               </div>
             </div>
