@@ -55,8 +55,8 @@ export default function CoachingCTAExperiment() {
           See If You're a Fit
         </a>
 
-        <p style={{ color: 'rgba(251,247,240,0.5)', fontSize: '0.8125rem', marginTop: '12px' }}>
-          Free intro call · 5 minutes · No commitment
+        <p style={{ color: '#A8B5A9', fontSize: '0.8125rem', marginTop: '8px' }}>
+          Free intro call · 5 minutes · No commitment · No pressure
         </p>
       </div>
     </section>
