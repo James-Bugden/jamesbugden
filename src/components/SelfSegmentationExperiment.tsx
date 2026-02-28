@@ -1,6 +1,6 @@
 import { useState, FormEvent } from "react";
 import { useNavigate } from "react-router-dom";
-import { Compass, Target, TrendingUp, CheckCircle2, ClipboardCheck } from "lucide-react";
+import { Compass, Target, TrendingUp, CheckCircle2, ClipboardCheck, ChevronUp } from "lucide-react";
 import { useIsMobile } from "@/hooks/use-mobile";
 
 /* ── Stage data ── */
@@ -268,7 +268,7 @@ export default function SelfSegmentationExperiment() {
 
         {!selected && (
           <p className="text-center text-sm mt-6 animate-pulse flex items-center justify-center gap-2" style={{ color: '#6B6B6B' }}>
-            <span className="inline-block text-lg animate-bounce" style={{ color: '#D4930D' }}>☝</span>
+            <ChevronUp className="w-5 h-5 animate-bounce" style={{ color: '#D4930D' }} strokeWidth={2} />
             Tap the path that sounds most like you
           </p>
         )}
