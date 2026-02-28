@@ -442,6 +442,99 @@
   }
 }
 
+/* ══════════════════════════════════════════════
+   EXPERIMENT PAGE — scoped overrides
+   ══════════════════════════════════════════════ */
+
+/* Page background */
+.experiment {
+  --background: 43 33% 98%;       /* #FDFBF7 */
+  --foreground: 0 0% 10%;         /* #1A1A1A */
+  --muted-foreground: 0 0% 42%;   /* #6B6B6B */
+  --card: 43 33% 98%;             /* match default bg */
+  background-color: hsl(43 33% 98%);
+}
+
+/* Body text: 17px minimum, near-black */
+.experiment p,
+.experiment span,
+.experiment li,
+.experiment label,
+.experiment input,
+.experiment textarea {
+  color: hsl(0 0% 10%);
+}
+.experiment p {
+  font-size: max(1.0625rem, 1em); /* 17px floor */
+}
+
+/* Secondary / micro-copy: #6B6B6B floor */
+.experiment .text-muted-foreground,
+.experiment .text-muted-foreground\/70 {
+  color: hsl(0 0% 42%) !important;
+}
+
+/* Heading hierarchy */
+.experiment h1 { font-size: clamp(2.5rem, 5vw, 3.5rem); }
+.experiment h2 { font-size: clamp(2rem, 4vw, 2.625rem); }
+.experiment h3 { font-size: clamp(1.25rem, 2.5vw, 1.5rem); }
+
+/* ── CTA Buttons: dark green ── */
+.experiment .btn-gold {
+  background: #2D3A2E !important;
+  color: #FFFFFF !important;
+  box-shadow: 0 2px 6px rgba(45, 58, 46, 0.18) !important;
+}
+.experiment .btn-gold:hover {
+  background: #1F2B1F !important;
+  box-shadow: 0 4px 12px rgba(31, 43, 31, 0.25) !important;
+}
+
+/* ── Exception: CoachingCTA gold button on dark bg ── */
+.experiment #coaching .btn-gold {
+  background: #D4930D !important;
+  color: #FFFFFF !important;
+  box-shadow: 0 2px 6px rgba(212, 147, 13, 0.25) !important;
+}
+.experiment #coaching .btn-gold:hover {
+  background: #B87D0A !important;
+  box-shadow: 0 4px 12px rgba(212, 147, 13, 0.35) !important;
+}
+
+/* ── MailerLite submit button override ── */
+.experiment .ml-embedded button[type="submit"],
+.experiment .ml-embedded .ml-form-embedSubmit button {
+  background: #2D3A2E !important;
+  box-shadow: 0 2px 6px rgba(45, 58, 46, 0.18) !important;
+}
+.experiment .ml-embedded button[type="submit"]:hover,
+.experiment .ml-embedded .ml-form-embedSubmit button:hover {
+  background: #1F2B1F !important;
+  box-shadow: 0 4px 12px rgba(31, 43, 31, 0.25) !important;
+}
+
+/* ── Quote marks → gold ── */
+.experiment .text-gold\/40,
+.experiment [class*="Quote"],
+.experiment .lucide-quote {
+  color: #D4930D !important;
+}
+
+/* ── Links / "More" buttons: dark green instead of gold/purple ── */
+.experiment .text-gold {
+  color: #2D3A2E;
+}
+.experiment button .text-gold,
+.experiment a .text-gold,
+.experiment .text-gold.hover\:text-gold\/80:hover,
+.experiment .text-gold.hover\:text-gold-dark:hover {
+  color: #1F2B1F;
+}
+
+/* ── Section background overrides ── */
+.experiment .exp-bg-cream { background-color: #FDFBF7 !important; }
+.experiment .exp-bg-white { background-color: #FFFFFF !important; }
+
 /* Hide scrollbar utility */
 .no-scrollbar::-webkit-scrollbar { display: none; }
 .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
