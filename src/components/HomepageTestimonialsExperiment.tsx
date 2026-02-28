@@ -73,6 +73,14 @@ const tier1: Testimonial[] = [
     quote: "James is dedicated to the details and the potential hidden in my plain description. It's highly recommended to have a professional like James assess your CV from an expert perspective. I'm truly grateful for the experience.",
     bold: "Dedicated to the details and the potential hidden in my plain description.",
   },
+  {
+    headline: "Now I Know How HR Actually Thinks",
+    name: "Peter Cho",
+    titleSource: "Professional · via Salary Coaching",
+    photo: peterPhoto,
+    quote: "James quickly zeroed in on my situation, helped me understand how HR thinks, and gave me practical solutions I could use right away. I feel much more prepared for my upcoming interviews and salary conversations.",
+    bold: "Helped me understand how HR thinks.",
+  },
 ];
 
 const tier2: Testimonial[] = [
@@ -118,14 +126,6 @@ const tier3: Testimonial[] = [
     photo: juliePhoto,
     quote: "James was direct and hit every point that mattered. I took his feedback and paired it with AI tools to refine my resume further — it was like having a professional roadmap to follow. I've already seen a real difference in the quality of my applications.",
     bold: "Direct and hit every point that mattered.",
-  },
-  {
-    headline: "Now I Know How HR Actually Thinks",
-    name: "Peter Cho",
-    titleSource: "Professional · via Salary Coaching",
-    photo: peterPhoto,
-    quote: "James quickly zeroed in on my situation, helped me understand how HR thinks, and gave me practical solutions I could use right away. I feel much more prepared for my upcoming interviews and salary conversations.",
-    bold: "Helped me understand how HR thinks.",
   },
   {
     headline: "Realized My Salary Has Room to Grow",
