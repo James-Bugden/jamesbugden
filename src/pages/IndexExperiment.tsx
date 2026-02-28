@@ -9,7 +9,7 @@ import PageSEO from "@/components/PageSEO";
 import HomepageTestimonialsExperiment from "@/components/HomepageTestimonialsExperiment";
 import LogoScrollExperiment from "@/components/LogoScrollExperiment";
 import SelfSegmentationExperiment from "@/components/SelfSegmentationExperiment";
-import CoachingCTA from "@/components/CoachingCTA";
+import CoachingCTAExperiment from "@/components/CoachingCTAExperiment";
 import MailerLiteForm from "@/components/MailerLiteForm";
 import LazySection from "@/components/LazySection";
 
@@ -51,7 +51,7 @@ const IndexExperiment = () => {
 
       <main>
         {/* ── Hero — cream #FDFBF7 ── */}
-        <section id="about" className="pt-20 md:pt-36 pb-10 md:pb-24 px-5 md:px-6 relative" style={{ backgroundColor: '#FDFBF7' }}>
+        <section id="about" className="pt-20 md:pt-36 pb-12 md:pb-20 px-5 md:px-6 relative" style={{ backgroundColor: '#FDFBF7' }}>
           <div className="container mx-auto max-w-5xl">
             <div className="flex flex-col items-center text-center md:grid md:grid-cols-[1fr_auto] md:gap-16 md:items-center md:text-left">
               <div className="order-2 md:order-1 w-full">
@@ -129,9 +129,9 @@ const IndexExperiment = () => {
         </LazySection>
 
         {/* ── Pain-Point Section (NEW) — cream #FDFBF7 ── */}
-        <section className="py-14 md:py-20 px-5 md:px-6" style={{ backgroundColor: '#FDFBF7' }}>
+        <section className="py-12 md:py-20 px-5 md:px-6" style={{ backgroundColor: '#FDFBF7' }}>
           <div className="container mx-auto max-w-2xl text-center">
-            <h2 className="font-heading mb-10" style={{ color: '#1A1A1A', fontSize: 'clamp(2rem, 4vw, 2.625rem)' }}>
+            <h2 className="font-heading mb-6" style={{ color: '#1A1A1A', fontSize: 'clamp(2rem, 4vw, 2.625rem)' }}>
               Sound Familiar?
             </h2>
 
@@ -168,14 +168,9 @@ const IndexExperiment = () => {
           <SelfSegmentationExperiment />
         </LazySection>
 
-        {/* ── Paid Coaching — dark green (unchanged) ── */}
+        {/* ── Coaching CTA — dark green gradient ── */}
         <LazySection>
-          <CoachingCTA />
-        </LazySection>
-
-        {/* ── Paid Coaching — dark green (unchanged) ── */}
-        <LazySection>
-          <CoachingCTA />
+          <CoachingCTAExperiment />
         </LazySection>
       </main>
 
