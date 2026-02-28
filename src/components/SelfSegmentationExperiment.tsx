@@ -10,10 +10,11 @@ const stages = [
     icon: Compass,
     label: "Break Into Top Companies",
     quote: "Don't know where to start? Get a step-by-step plan to land interviews at Google, Amazon, and Microsoft.",
-    resource: "The Recruiter's Resume Checklist",
+    resource: "Get Your Resume Scored in 60 Seconds",
     description:
-      "What I check in the first 6 seconds when a resume lands on my desk at Uber.",
-    cta: "Get the Checklist",
+      "Our free AI tool reviews your resume the way a recruiter at Google or Amazon does. Get your score and a list of fixes.",
+    cta: "Analyze My Resume",
+    redirectAfterSubmit: "/resume-analyzer",
   },
   {
     id: "actively-applying",
