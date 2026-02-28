@@ -208,8 +208,8 @@ const IndexExperiment = () => {
               </div>
             </div>
 
-            <div className="flex items-center justify-center gap-2 mb-6">
-              <CheckCircle2 className="w-5 h-5 flex-shrink-0" style={{ color: '#2D3A2E' }} />
+            <div className="flex items-start justify-center gap-2 mb-6">
+              <CheckCircle2 className="w-5 h-5 flex-shrink-0 mt-0.5" style={{ color: '#2D3A2E' }} />
               <p style={{ color: '#6B6B6B', fontSize: '1rem' }}>
                 You don't need another job board. You need someone who's been on the other side of the table.
               </p>
@@ -242,22 +242,22 @@ const IndexExperiment = () => {
               </p>
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-10 md:gap-8 mb-10">
-              <div className="text-center md:text-left">
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-6 mb-10">
+              <div className="rounded-xl p-6 text-center md:text-left" style={{ backgroundColor: '#FDFBF7', borderTop: '3px solid #D4930D' }}>
                 <Eye className="w-10 h-10 mx-auto md:mx-0 mb-4" style={{ color: '#2D3A2E' }} strokeWidth={1.5} />
                 <p className="font-bold text-[20px] mb-2" style={{ color: '#1A1A1A' }}>I've Read 20,000+ Resumes</p>
                 <p className="text-base" style={{ color: '#1A1A1A' }}>
                   I know what makes a recruiter stop and read. I also know what gets your resume tossed in 6 seconds. No guessing. I've seen it thousands of times.
                 </p>
               </div>
-              <div className="text-center md:text-left">
+              <div className="rounded-xl p-6 text-center md:text-left" style={{ backgroundColor: '#FDFBF7', borderTop: '3px solid #D4930D' }}>
                 <Users className="w-10 h-10 mx-auto md:mx-0 mb-4" style={{ color: '#2D3A2E' }} strokeWidth={1.5} />
                 <p className="font-bold text-[20px] mb-2" style={{ color: '#1A1A1A' }}>I've Hired 750+ People</p>
                 <p className="text-base" style={{ color: '#1A1A1A' }}>
                   I've sat in the room where they decide your offer. I know what HR thinks, what the hiring manager cares about, and where most people lose money.
                 </p>
               </div>
-              <div className="text-center md:text-left">
+              <div className="rounded-xl p-6 text-center md:text-left" style={{ backgroundColor: '#FDFBF7', borderTop: '3px solid #D4930D' }}>
                 <Building className="w-10 h-10 mx-auto md:mx-0 mb-4" style={{ color: '#2D3A2E' }} strokeWidth={1.5} />
                 <p className="font-bold text-[20px] mb-2" style={{ color: '#1A1A1A' }}>Fortune 500 Insider</p>
                 <p className="text-base" style={{ color: '#1A1A1A' }}>

@@ -77,20 +77,21 @@ function ResourcePanel({
             </p>
             <form
               onSubmit={handleSubmit}
-              className="max-w-md mx-auto md:mx-0 flex flex-col gap-3"
+              className="max-w-lg mx-auto md:mx-0 flex flex-col gap-4"
             >
               <input
                 type="email"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 placeholder="Enter your email"
-                className="flex-1 h-12 px-4 rounded-lg border border-border text-base focus:outline-none focus:ring-2 focus:ring-gold/50"
-                style={{ backgroundColor: '#FFFFFF', color: '#1A1A1A' }}
+                className="w-full rounded-lg border border-border text-base focus:outline-none focus:ring-2 focus:ring-gold/50"
+                style={{ backgroundColor: '#FFFFFF', color: '#1A1A1A', padding: '16px' }}
               />
               <input type="hidden" name="stage" value={stage.id} />
               <button
                 type="submit"
-                className="h-12 px-6 rounded-lg btn-gold text-base font-semibold whitespace-nowrap"
+                className="w-full rounded-lg text-base font-semibold transition-colors duration-200"
+                style={{ backgroundColor: '#2D3A2E', color: '#FFFFFF', padding: '16px 32px', borderRadius: '8px', fontSize: '1rem', fontWeight: 600 }}
               >
                 {stage.cta}
               </button>
