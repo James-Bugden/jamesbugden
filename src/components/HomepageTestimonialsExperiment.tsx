@@ -54,15 +54,15 @@ const tier1: Testimonial[] = [
     name: "Roy Tsai",
     titleSource: "Career Switcher · via Resume Review",
     photo: royPhoto,
-    quote: "The depth of this review far exceeded my expectations. James didn't just suggest edits — he gave me a strategic framework for positioning my background against target roles. He helped me realize my strongest achievements were buried in the wrong places. This wasn't just a resume fix — it was a confidence boost that helped me see my career value with completely fresh eyes.",
-    bold: "This wasn't just a resume fix — it was a confidence boost.",
+    quote: "The depth of this review far exceeded my expectations. James didn't just suggest edits. He gave me a strategic framework for positioning my background against target roles. He helped me realize my strongest achievements were buried in the wrong places. This wasn't just a resume fix. It was a confidence boost that helped me see my career value with completely fresh eyes.",
+    bold: "This wasn't just a resume fix. It was a confidence boost.",
   },
   {
     headline: "Now I Can Customize My Resume for Any Role",
     name: "Monica",
     titleSource: "Professional · via Resume Review",
     photo: monicaPhoto,
-    quote: "After seeing the before-and-after, the difference was remarkable — everything felt so much more professional. The feedback for each section was incredibly specific, with suggestions tailored to my experience level. Now I can use the same framework to customize my resume for any role, which has dramatically improved my efficiency.",
+    quote: "After seeing the before-and-after, the difference was remarkable. Everything felt so much more professional. The feedback for each section was incredibly specific, with suggestions tailored to my experience level. Now I can use the same framework to customize my resume for any role, which has dramatically improved my efficiency.",
     bold: "I can use the same framework to customize my resume for any role.",
   },
   {
@@ -89,7 +89,7 @@ const tier2: Testimonial[] = [
     name: "Anne Chen",
     titleSource: "Professional · via Salary Coaching",
     photo: annePhoto,
-    quote: "This session completely changed how I see salary negotiation. I used to think it was awkward and confrontational, but James helped me understand it's actually professional career communication. He broke down how recruiters, headhunters, and hiring teams each think differently — so you know exactly how to position yourself with each one.",
+    quote: "This session completely changed how I see salary negotiation. I used to think it was awkward and confrontational, but James helped me understand it's actually professional career communication. He broke down how recruiters, headhunters, and hiring teams each think differently. So you know exactly how to position yourself with each one.",
     bold: "He broke down how recruiters, headhunters, and hiring teams each think differently.",
   },
   {
@@ -105,7 +105,7 @@ const tier2: Testimonial[] = [
     name: "Sunny",
     titleSource: "Professional · via Resume Review",
     photo: sunnyPhoto,
-    quote: "I was honestly shocked by how detailed the feedback was. This is the kind of advice that even my HR friends and headhunter connections couldn't give me. James is incredibly thorough and truly professional — I can't recommend him enough.",
+    quote: "I was honestly shocked by how detailed the feedback was. This is the kind of advice that even my HR friends and headhunter connections couldn't give me. James is incredibly thorough and truly professional. I can't recommend him enough.",
     bold: "The kind of advice that even my HR friends and headhunter connections couldn't give me.",
   },
   {
@@ -124,7 +124,7 @@ const tier3: Testimonial[] = [
     name: "Julie Huang",
     titleSource: "Professional · via Resume Review",
     photo: juliePhoto,
-    quote: "James was direct and hit every point that mattered. I took his feedback and paired it with AI tools to refine my resume further — it was like having a professional roadmap to follow. I've already seen a real difference in the quality of my applications.",
+    quote: "James was direct and hit every point that mattered. I took his feedback and paired it with AI tools to refine my resume further. It was like having a professional roadmap to follow. I've already seen a real difference in the quality of my applications.",
     bold: "Direct and hit every point that mattered.",
   },
   {
@@ -132,7 +132,7 @@ const tier3: Testimonial[] = [
     name: "Kiki",
     titleSource: "Professional · via Salary Coaching",
     photo: kikiPhoto,
-    quote: "In just 30 minutes, James helped me realize my salary actually has room to grow — I just needed more confidence in my own value. Knowing where I stand compared to others in my industry was an incredible starting point.",
+    quote: "In just 30 minutes, James helped me realize my salary actually has room to grow. I just needed more confidence in my own value. Knowing where I stand compared to others in my industry was an incredible starting point.",
     bold: "Helped me realize my salary actually has room to grow.",
   },
   {
