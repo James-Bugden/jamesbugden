@@ -32,9 +32,9 @@ function FAQSection() {
   });
 
   return (
-    <section className="py-20 px-5 md:px-6" style={{ backgroundColor: '#FFFFFF' }}>
+    <section className="py-12 md:py-20 px-5 md:px-6" style={{ backgroundColor: '#FDFBF7' }}>
       <div className="container mx-auto max-w-2xl">
-        <h2 className="font-heading text-center mb-12" style={{ color: '#1A1A1A', fontSize: 'clamp(2rem, 4vw, 2.625rem)' }}>
+        <h2 className="font-heading text-center mb-6" style={{ color: '#1A1A1A', fontSize: 'clamp(2rem, 4vw, 2.625rem)' }}>
           Questions You Might Be Thinking
         </h2>
         <div>
@@ -217,7 +217,10 @@ const IndexExperiment = () => {
 
             <a
               href="#about"
-              className="inline-flex h-12 px-8 items-center justify-center rounded-lg btn-gold text-base font-semibold"
+              className="inline-flex items-center justify-center rounded-lg font-semibold transition-colors duration-200"
+              style={{ backgroundColor: '#2D3A2E', color: '#FFFFFF', padding: '16px 32px', borderRadius: '8px', fontSize: '1rem', fontWeight: 600 }}
+              onMouseEnter={(e) => ((e.currentTarget as HTMLElement).style.backgroundColor = '#3A4A3B')}
+              onMouseLeave={(e) => ((e.currentTarget as HTMLElement).style.backgroundColor = '#2D3A2E')}
             >
               Get My Free Recruiting Tips
             </a>
@@ -228,9 +231,9 @@ const IndexExperiment = () => {
         </section>
 
         {/* ── Why Work With an Insider — white #FFFFFF ── */}
-        <section className="py-20 px-5 md:px-6" style={{ backgroundColor: '#FFFFFF' }}>
+        <section className="py-12 md:py-20 px-5 md:px-6" style={{ backgroundColor: '#FFFFFF' }}>
           <div className="container mx-auto max-w-4xl">
-            <div className="text-center mb-12">
+            <div className="text-center mb-6">
               <h2 className="font-heading mb-3" style={{ color: '#1A1A1A', fontSize: 'clamp(2rem, 4vw, 2.625rem)' }}>
                 Why Work With an Insider?
               </h2>

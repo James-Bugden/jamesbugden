@@ -210,11 +210,11 @@ export default function SelfSegmentationExperiment() {
   return (
     <section
       id="walkthrough"
-      className="py-14 md:py-20 px-5 md:px-6"
+      className="py-12 md:py-20 px-5 md:px-6"
       style={{ backgroundColor: '#FFFFFF' }}
     >
       <div className="container mx-auto max-w-4xl">
-        <div className="text-center mb-12">
+        <div className="text-center mb-6">
           <h2 className="font-heading mb-3" style={{ color: '#1A1A1A', fontSize: 'clamp(2rem, 4vw, 2.625rem)' }}>
             Find Your Path to a $200K+ Offer
           </h2>

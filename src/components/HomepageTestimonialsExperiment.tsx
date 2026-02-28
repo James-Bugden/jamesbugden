@@ -229,7 +229,7 @@ export default function HomepageTestimonialsExperiment() {
   return (
     <section id="testimonials" className="py-12 md:py-20 px-5 md:px-6" style={{ backgroundColor: "#FFFFFF" }}>
       <div className="container mx-auto max-w-5xl">
-        <h2 className="font-heading text-center mb-10" style={{ color: "#1A1A1A", fontSize: "clamp(2rem, 4vw, 2.625rem)" }}>
+        <h2 className="font-heading text-center mb-6" style={{ color: "#1A1A1A", fontSize: "clamp(2rem, 4vw, 2.625rem)" }}>
           750+ Professionals Landed Their Dream Offers
         </h2>
 
