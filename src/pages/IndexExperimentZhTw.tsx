@@ -13,12 +13,12 @@ import MailerLiteForm from "@/components/MailerLiteForm";
 import LazySection from "@/components/LazySection";
 
 const faqs = [
-  { q: "免費電子報真的免費嗎？有什麼隱藏條件？", a: "對，100% 免費。我每週寄出實用的技巧。我也提供付費的一對一教練服務，如果你需要個人化協助。免費的內容本身就有價值。不會有任何壓力。" },
-  { q: "我沒有自信談薪水。這會有幫助嗎？", a: "這是我最常聽到的問題。事實是：你不需要強勢。你需要了解對方要什麼。我會讓你理解 HR 的思維方式，讓你感覺冷靜、準備好，而不是害怕。" },
-  { q: "我一直投履歷但都沒有回音。我做錯了什麼？", a: "通常是三件事之一：你的履歷沒通過電腦篩選、你的職稱跟職缺不匹配、或者你最好的成果被放在錯誤的位置。我的審查會找出問題，告訴你怎麼修正。" },
-  { q: "我不知道在招募流程中怎麼跟 HR 溝通。他們感覺像守門員。", a: "HR 不是你的敵人。他們想把職缺填滿。問題是大部分人不了解 HR 在意什麼。我做過 HR。我會讓你知道他們在每個階段看什麼，讓你們合作，而不是對立。" },
-  { q: "為什麼不用 ChatGPT 改履歷就好？", a: "AI 是一個好的起點。但 AI 不知道真正的招募官在找什麼。AI 不會告訴你，你最好的成就被埋在第二頁。也不會告訴你目標公司更看重 X 而不是 Y。審閱過 20,000+ 份履歷教會我 AI 還沒學到的事。" },
-  { q: "你的履歷健檢跟其他服務有什麼不同？", a: "大部分的履歷服務修改錯字、調整排版。我的審查不一樣。我用招募官的角度看你的履歷，告訴你怎麼改才能拿到更多面試。你還會得到一套簡單的系統，每次投遞都能重複使用。" },
+  { q: "免費電子報真的免費嗎？有什麼隱藏條件？", a: "100% 免費。我每週寄出實用技巧。我也提供付費一對一教練服務。免費的內容本身有價值，不會有壓力。" },
+  { q: "我沒有自信談薪水。這會有幫助嗎？", a: "你不需要強勢。你需要了解對方要什麼。我讓你理解 HR 的思維方式，讓你感覺冷靜、準備好。" },
+  { q: "我一直投履歷但都沒有回音。我做錯了什麼？", a: "通常三件事之一：履歷沒通過電腦篩選、職稱跟職缺不匹配、或最好的成果放在錯誤位置。我的審查會找出問題，告訴你怎麼改。" },
+  { q: "我不知道在招募流程中怎麼跟 HR 溝通。他們感覺像守門員。", a: "HR 想把職缺填滿。大部分人不了解 HR 在意什麼。我做過 HR。我讓你知道他們每個階段看什麼，讓你們合作。" },
+  { q: "為什麼不用 ChatGPT 改履歷就好？", a: "AI 是好的起點。但 AI 不知道招募官在找什麼。AI 不會告訴你最好的成就被埋在第二頁。審閱過 20,000+ 份履歷教會我 AI 還沒學到的事。" },
+  { q: "你的履歷健檢跟其他服務有什麼不同？", a: "大部分履歷服務修改錯字、調整排版。我用招募官的角度看你的履歷，告訴你怎麼改才能拿到更多面試。你還會得到一套可重複使用的系統。" },
 ];
 
 function FAQSection() {
@@ -131,8 +131,11 @@ const IndexExperimentZhTw = () => {
                   </span>
                 </div>
 
+                <p className="leading-relaxed max-w-xl mx-auto md:mx-0 mb-2" style={{ color: '#1A1A1A', fontSize: '1.0625rem' }}>
+                  你投了履歷、面試了，然後沒有下文。更糟的是，薪水遠低於你的價值。
+                </p>
                 <p className="leading-relaxed max-w-xl mx-auto md:mx-0 mb-5" style={{ color: '#1A1A1A', fontSize: '1.0625rem' }}>
-                  你投了履歷、面試了，然後沒有下文。更糟的是，給你的薪水遠低於你的價值。我已經幫助超過 750 人進入 Google、Uber、Microsoft。每週，我會免費分享我的招募內幕知識。
+                  750+ 人透過我進入 Google、Uber、Microsoft。每週，我免費分享招募內幕。
                 </p>
 
                 <div className="mb-2 max-w-md mx-auto md:mx-0">
@@ -236,21 +239,21 @@ const IndexExperimentZhTw = () => {
                 為什麼要找內部人？
               </h2>
               <p className="text-[17px] max-w-[600px] mx-auto" style={{ color: '#6B6B6B' }}>
-                大部分的職涯建議來自從未招募過任何人的人。我招募過數百人。
+                大部分的職涯建議來自沒招募過任何人的人。我招募過數百人。
               </p>
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-6 mb-10">
               <div className="rounded-xl p-6 text-center md:text-left" style={{ backgroundColor: '#FDFBF7', borderTop: '3px solid #D4930D' }}>
                 <Eye className="w-10 h-10 mx-auto md:mx-0 mb-4" style={{ color: '#2D3A2E' }} strokeWidth={1.5} />
-                <p className="font-bold text-[20px] mb-2" style={{ color: '#1A1A1A' }}>我審閱過 20,000+ 份履歷</p>
+                <p className="font-bold text-[20px] mb-2" style={{ color: '#1A1A1A' }}>審閱過 20,000+ 份履歷</p>
                 <p className="text-base" style={{ color: '#1A1A1A' }}>
-                  我知道什麼會讓招募官停下來仔細看。我也知道什麼會讓你的履歷 6 秒內被淘汰。不用猜。我看過幾千次了。
+                  我知道什麼讓招募官停下來看。也知道什麼讓履歷 6 秒內被淘汰。不用猜，看過幾千次了。
                 </p>
               </div>
               <div className="rounded-xl p-6 text-center md:text-left" style={{ backgroundColor: '#FDFBF7', borderTop: '3px solid #D4930D' }}>
                 <Users className="w-10 h-10 mx-auto md:mx-0 mb-4" style={{ color: '#2D3A2E' }} strokeWidth={1.5} />
-                <p className="font-bold text-[20px] mb-2" style={{ color: '#1A1A1A' }}>我錄取過 750+ 人</p>
+                <p className="font-bold text-[20px] mb-2" style={{ color: '#1A1A1A' }}>錄取過 750+ 人</p>
                 <p className="text-base" style={{ color: '#1A1A1A' }}>
                   我坐在決定你 Offer 的會議室裡。我知道 HR 怎麼想、用人主管在意什麼，還有大部分人在哪裡少拿了錢。
                 </p>
@@ -259,7 +262,7 @@ const IndexExperimentZhTw = () => {
                 <Building className="w-10 h-10 mx-auto md:mx-0 mb-4" style={{ color: '#2D3A2E' }} strokeWidth={1.5} />
                 <p className="font-bold text-[20px] mb-2" style={{ color: '#1A1A1A' }}>財星500大內部人</p>
                 <p className="text-base" style={{ color: '#1A1A1A' }}>
-                  Google、Amazon、Meta、Microsoft。我都招募過。我知道他們怎麼面試、怎麼給薪，還有什麼讓你脫穎而出。
+                  Google、Amazon、Meta、Microsoft。都招募過。我知道他們怎麼面試、怎麼給薪，還有什麼讓你脫穎而出。
                 </p>
               </div>
             </div>
