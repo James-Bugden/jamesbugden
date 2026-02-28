@@ -1,17 +1,17 @@
 
 
-## Replace Emoji with Brand-Aligned Icon
+## Update Form Confirmation Text
 
 **What changes:**
-Replace the ☝ pointing-up emoji in the "Tap the path that sounds most like you" prompt with a Lucide icon that fits the premium, executive brand aesthetic.
+Update the confirmation message in `src/components/MailerLiteForm.tsx` (line 83) from:
 
-**Recommended icon:** `ChevronUp` or `MousePointerClick` from Lucide — clean, minimal, and professional. `ChevronUp` pairs naturally with the "tap" instruction and matches the chevron style already used elsewhere (e.g., the "Show More Reviews" button uses `ChevronDown`).
+> "You have successfully joined the resume review waitlist."
 
-**File:** `src/components/SelfSegmentationExperiment.tsx` (line 271)
+To:
 
-**Details:**
-- Remove the `☝` emoji span
-- Replace with a `ChevronUp` icon (Lucide) in gold (#D4930D), keeping the bounce animation
-- Icon size: 18-20px to match the current text scale
-- Keep the existing text, color, and layout unchanged
+> "You will get an email with your job search guides."
+
+The "Thank you!" heading stays the same. Only the body text changes.
+
+**File:** `src/components/MailerLiteForm.tsx` (line 83)
 
