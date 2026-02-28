@@ -94,6 +94,11 @@ function ResourcePanel({
               >
                 {stage.cta}
               </button>
+              {stage.id === "got-an-offer" && (
+                <p className="text-center mt-2" style={{ color: '#6B6B6B', fontSize: '0.8125rem' }}>
+                  Free PDF · Takes 2 minutes to complete · No email sequence
+                </p>
+              )}
             </form>
             {emailError && (
               <p className="text-destructive text-sm mt-2">{emailError}</p>

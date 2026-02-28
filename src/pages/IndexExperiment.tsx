@@ -140,8 +140,8 @@ const IndexExperiment = () => {
                   <MailerLiteForm formId="sM1X80" className="ml-embedded" buttonText="Get My Free Recruiting Tips" />
                 </div>
 
-                <p className="mb-5" style={{ color: '#6B6B6B', fontSize: '0.8125rem' }}>
-                  Join 2,000+ professionals. Free forever. Unsubscribe anytime.
+                <p className="mb-5" style={{ color: '#6B6B6B', fontSize: '0.8125rem', marginTop: '8px' }}>
+                  Join 2,000+ professionals · Free forever · Unsubscribe anytime
                 </p>
 
                 <div className="flex flex-wrap justify-center md:justify-start gap-x-8 gap-y-3 pt-6 border-t border-border/60">
@@ -220,6 +220,9 @@ const IndexExperiment = () => {
             >
               Get My Free Recruiting Tips
             </a>
+            <p className="text-center mt-2" style={{ color: '#6B6B6B', fontSize: '0.8125rem' }}>
+              No spam, no fluff — just insider recruiting strategies weekly
+            </p>
           </div>
         </section>
 
