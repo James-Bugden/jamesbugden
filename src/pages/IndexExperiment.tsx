@@ -14,12 +14,12 @@ import MailerLiteForm from "@/components/MailerLiteForm";
 import LazySection from "@/components/LazySection";
 
 const faqs = [
-  { q: "Is the free newsletter actually free? What's the catch?", a: "100% free, no catch. I send weekly recruiting tips, salary insights, and resume strategies straight to your inbox. I also offer paid 1-on-1 coaching for people who want personalized help — but the newsletter stands on its own and you'll never be pressured to buy anything." },
-  { q: "I don't have the confidence to negotiate my salary. Can you actually help with that?", a: "This is the #1 thing I hear from candidates. Most people don't realize that salary negotiation isn't about being aggressive — it's about understanding how the other side thinks. I teach you the recruiter's perspective so you can negotiate with clarity, not confrontation. Even my most nervous clients walk away feeling prepared." },
-  { q: "I keep applying but never hear back. What am I doing wrong?", a: "Usually it's one of three things: your resume isn't passing ATS filters, your headline doesn't match the job title, or your achievements are buried under generic descriptions. My resume review pinpoints exactly which of these is happening to you and gives you specific fixes — not vague advice." },
-  { q: "I don't know how to deal with HR during the hiring process. They feel like gatekeepers.", a: "HR isn't your enemy — they're actually incentivized to fill the role. The problem is most candidates don't understand what HR is optimizing for. I've been that HR person. I show you exactly what recruiters care about at each stage so you can work with them, not against them." },
-  { q: "Can't I just use ChatGPT to fix my resume?", a: "AI is great for a first pass, but it doesn't know what a Fortune 500 recruiter actually looks for. It can't tell you that your strongest achievement is buried on page 2, or that the company you're targeting cares more about X than Y. That's what 20,000+ resume reviews and years of insider experience give you." },
-  { q: "How is the resume review different from other services?", a: "Most resume services give you a proofread and some formatting tweaks. My review is a strategic breakdown — I analyze your resume against specific target roles, identify which achievements to lead with, restructure your positioning, and give you a framework you can reuse for every application going forward. It's a career strategy session disguised as a resume review." },
+  { q: "Is the free newsletter actually free? What's the catch?", a: "Yes, 100% free. I send helpful tips every week. I also offer paid 1-on-1 coaching if you want personal help — but the free tips are great on their own. No pressure, ever." },
+  { q: "I don't have the confidence to negotiate my salary. Can you actually help with that?", a: "This is the most common thing I hear. Here's the truth: you don't need to be pushy. You just need to understand what the other side wants. I'll show you how HR thinks — so you feel calm and ready, not scared." },
+  { q: "I keep applying but never hear back. What am I doing wrong?", a: "Usually it's one of three things: your resume doesn't get past the computer filter, your title doesn't match the job, or your best work is hidden in the wrong place. My review finds exactly what's wrong and tells you how to fix it." },
+  { q: "I don't know how to deal with HR during the hiring process. They feel like gatekeepers.", a: "HR isn't your enemy — they actually want to fill the job. The problem is most people don't understand what HR cares about. I've been that person. I'll show you what they're looking for at each step so you can work together, not fight." },
+  { q: "Can't I just use ChatGPT to fix my resume?", a: "AI is a good start, but it doesn't know what a real recruiter looks for. It can't tell you that your best achievement is buried on page 2 or that the company you want cares more about X than Y. That's what 20,000+ resume reviews teach you." },
+  { q: "How is the resume review different from other services?", a: "Most resume services just fix spelling and move things around. My review is different — I look at your resume like a recruiter would and tell you exactly what to change to get more interviews. You also get a simple system you can reuse every time you apply somewhere new." },
 ];
 
 function FAQSection() {
@@ -133,7 +133,7 @@ const IndexExperiment = () => {
                 </div>
 
                 <p className="leading-relaxed max-w-xl mx-auto md:mx-0 mb-5" style={{ color: '#1A1A1A', fontSize: '1.0625rem' }}>
-                  Tired of getting ghosted after interviews or lowballed on offers? Get the exact recruiting playbook I used to place 750+ candidates at Google, Uber, and Microsoft — delivered to your inbox weekly.
+                  You apply, interview, and then... silence. Or worse — they give you an offer that's way less than you're worth. I've helped 750+ people get hired at companies like Google, Uber, and Microsoft. Every week, I'll send you exactly what I know — for free.
                 </p>
 
                 <div className="mb-2 max-w-md mx-auto md:mx-0">
@@ -195,22 +195,22 @@ const IndexExperiment = () => {
             <div className="flex flex-col gap-5 mb-8 text-left max-w-xl mx-auto">
               <div className="flex items-start gap-3">
                 <X className="w-5 h-5 flex-shrink-0 mt-0.5" style={{ color: '#C85A5A' }} strokeWidth={2.5} />
-                <p style={{ color: '#1A1A1A', fontSize: '1.125rem' }}>You've sent 100+ applications and heard nothing back</p>
+                <p style={{ color: '#1A1A1A', fontSize: '1.125rem' }}>You've applied to tons of jobs and never heard back</p>
               </div>
               <div className="flex items-start gap-3">
                 <X className="w-5 h-5 flex-shrink-0 mt-0.5" style={{ color: '#C85A5A' }} strokeWidth={2.5} />
-                <p style={{ color: '#1A1A1A', fontSize: '1.125rem' }}>You finally got interviews but keep getting ghosted after the final round</p>
+                <p style={{ color: '#1A1A1A', fontSize: '1.125rem' }}>You made it to the final interview... then nothing. No email. No call.</p>
               </div>
               <div className="flex items-start gap-3">
                 <X className="w-5 h-5 flex-shrink-0 mt-0.5" style={{ color: '#C85A5A' }} strokeWidth={2.5} />
-                <p style={{ color: '#1A1A1A', fontSize: '1.125rem' }}>You got an offer — but you have no idea if it's actually good or if you're leaving $50K+ on the table</p>
+                <p style={{ color: '#1A1A1A', fontSize: '1.125rem' }}>You got a job offer — but you have no idea if the pay is fair or if you could get way more</p>
               </div>
             </div>
 
             <div className="flex items-center justify-center gap-2 mb-6">
               <CheckCircle2 className="w-5 h-5 flex-shrink-0" style={{ color: '#2D3A2E' }} />
               <p style={{ color: '#6B6B6B', fontSize: '1rem' }}>
-                You don't need more job boards. You need an insider who knows how the system actually works.
+                You don't need another job board. You need someone who's been on the other side of the table.
               </p>
             </div>
 
@@ -234,7 +234,7 @@ const IndexExperiment = () => {
                 Why Work With an Insider?
               </h2>
               <p className="text-[17px] max-w-[600px] mx-auto" style={{ color: '#6B6B6B' }}>
-                Most career advice comes from people who've never sat on the other side of the hiring table. I have.
+                Most career tips come from people who've never hired anyone. I've hired hundreds.
               </p>
             </div>
 
@@ -243,27 +243,27 @@ const IndexExperiment = () => {
                 <Eye className="w-10 h-10 mx-auto md:mx-0 mb-4" style={{ color: '#2D3A2E' }} strokeWidth={1.5} />
                 <p className="font-bold text-[20px] mb-2" style={{ color: '#1A1A1A' }}>I've Read 20,000+ Resumes</p>
                 <p className="text-base" style={{ color: '#1A1A1A' }}>
-                  I know exactly what makes a recruiter stop scrolling and what gets your resume thrown out in 6 seconds. No guesswork — just patterns I've seen thousands of times.
+                  I know what makes a recruiter stop and read — and what gets your resume tossed in 6 seconds. No guessing. I've seen it thousands of times.
                 </p>
               </div>
               <div className="text-center md:text-left">
                 <Users className="w-10 h-10 mx-auto md:mx-0 mb-4" style={{ color: '#2D3A2E' }} strokeWidth={1.5} />
                 <p className="font-bold text-[20px] mb-2" style={{ color: '#1A1A1A' }}>I've Hired 750+ People</p>
                 <p className="text-base" style={{ color: '#1A1A1A' }}>
-                  I've sat in the room where offers get decided. I know what HR is thinking, what hiring managers care about, and exactly where candidates lose money in negotiation.
+                  I've been in the room where they decide your offer. I know what HR is thinking, what the hiring manager cares about, and where most people lose money.
                 </p>
               </div>
               <div className="text-center md:text-left">
                 <Building className="w-10 h-10 mx-auto md:mx-0 mb-4" style={{ color: '#2D3A2E' }} strokeWidth={1.5} />
-                <p className="font-bold text-[20px] mb-2" style={{ color: '#1A1A1A' }}>Fortune 500 Insider Access</p>
+                <p className="font-bold text-[20px] mb-2" style={{ color: '#1A1A1A' }}>Fortune 500 Insider</p>
                 <p className="text-base" style={{ color: '#1A1A1A' }}>
-                  Google, Amazon, Meta, Microsoft — I've recruited for them all. I know their interview processes, compensation structures, and what it takes to stand out in their applicant pools.
+                  Google, Amazon, Meta, Microsoft — I've hired for all of them. I know how they interview, how they pay, and what makes you stand out.
                 </p>
               </div>
             </div>
 
             <p className="text-center text-sm" style={{ color: '#6B6B6B' }}>
-              This isn't generic career advice from a blog. It's the playbook from someone who's been on the inside.
+              This isn't advice from a blog. It's from someone who's done the hiring.
             </p>
           </div>
         </section>

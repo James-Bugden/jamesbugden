@@ -9,7 +9,7 @@ const stages = [
     id: "getting-started",
     icon: Compass,
     label: "Break Into Top Companies",
-    quote: "Even if you don't know where to begin — get the roadmap to land interviews at companies like Google, Amazon, and Microsoft.",
+    quote: "Don't know where to start? Get a simple step-by-step plan to land interviews at companies like Google, Amazon, and Microsoft.",
     resource: "The Recruiter's Resume Checklist",
     description:
       "What I check in the first 6 seconds when a resume lands on my desk at Uber.",
@@ -19,7 +19,7 @@ const stages = [
     id: "actively-applying",
     icon: Target,
     label: "Turn Interviews Into Offers",
-    quote: "Stop getting ghosted after final rounds. Learn the exact strategies that convert interviews into signed offers.",
+    quote: "Keep getting to the final round but no offer? Learn the exact things that turn a 'maybe' into a 'yes.'",
     resource: "Interview Preparation Guide",
     description:
       "The complete system I built after coaching 100+ candidates through interviews at top companies.",
@@ -30,8 +30,7 @@ const stages = [
     id: "got-an-offer",
     icon: TrendingUp,
     label: "Maximize Your Package",
-    quote:
-      "Make sure you're not leaving money on the table. Learn how to evaluate, compare, and negotiate your total compensation.",
+    quote: "Got an offer but not sure if it's good? Learn how to check, compare, and ask for more — without feeling awkward.",
     resource: "Stop Accepting Offers Out of Pressure",
     description:
       "Get the exact framework I give my candidates to objectively evaluate any job offer — so you never wonder 'what if' again.",
