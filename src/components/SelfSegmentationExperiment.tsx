@@ -9,7 +9,7 @@ const stages = [
     id: "getting-started",
     icon: Compass,
     label: "Break Into Top Companies",
-    quote: "Don't know where to start? Get a simple step-by-step plan to land interviews at companies like Google, Amazon, and Microsoft.",
+    quote: "Don't know where to start? Get a step-by-step plan to land interviews at Google, Amazon, and Microsoft.",
     resource: "The Recruiter's Resume Checklist",
     description:
       "What I check in the first 6 seconds when a resume lands on my desk at Uber.",
@@ -19,10 +19,10 @@ const stages = [
     id: "actively-applying",
     icon: Target,
     label: "Turn Interviews Into Offers",
-    quote: "Keep getting to the final round but no offer? Learn the exact things that turn a 'maybe' into a 'yes.'",
+    quote: "Keep reaching the final round but no offer? Learn what turns a 'maybe' into a 'yes.'",
     resource: "Interview Preparation Guide",
     description:
-      "The complete system I built after coaching 100+ candidates through interviews at top companies.",
+      "The system I built after coaching 100+ candidates through interviews at top companies.",
     cta: "Get the Guide",
     redirectAfterSubmit: "/interview-preparation-guide",
   },
@@ -30,10 +30,10 @@ const stages = [
     id: "got-an-offer",
     icon: TrendingUp,
     label: "Maximize Your Package",
-    quote: "Got an offer but not sure if it's good? Learn how to check, compare, and ask for more — without feeling awkward.",
+    quote: "Got an offer but not sure if it's good? Learn how to check, compare, and ask for more. No awkwardness.",
     resource: "Stop Accepting Offers Out of Pressure",
     description:
-      "Get the exact framework I give my candidates to objectively evaluate any job offer — so you never wonder 'what if' again.",
+      "The framework I give my candidates to evaluate any job offer. You'll never wonder 'what if' again.",
     cta: "Send Me the Free Scorecard",
   },
 ] as const;

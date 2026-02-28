@@ -40,8 +40,8 @@ export default function ResumeAnalyzerCTAExperiment() {
           className="mb-10 mx-auto"
           style={{ color: "#6B6B6B", fontSize: "1.0625rem", maxWidth: 550 }}
         >
-          Our free AI tool checks your resume the same way a recruiter at Google
-          or Amazon would. Get your score and a list of what to fix — instantly.
+          Our free AI tool reviews your resume the way a recruiter at Google
+          or Amazon does. Get your score and a list of fixes. Instant results.
         </p>
 
         {/* Tool card */}
