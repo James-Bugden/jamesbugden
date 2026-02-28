@@ -479,11 +479,15 @@
 .experiment h2 { font-size: clamp(2rem, 4vw, 2.625rem); }
 .experiment h3 { font-size: clamp(1.25rem, 2.5vw, 1.5rem); }
 
-/* ── CTA Buttons: dark green ── */
+/* ── CTA Buttons: dark green + consistent sizing ── */
 .experiment .btn-gold {
   background: #2D3A2E !important;
   color: #FFFFFF !important;
   box-shadow: 0 2px 6px rgba(45, 58, 46, 0.18) !important;
+  padding: 16px 32px !important;
+  border-radius: 8px !important;
+  font-size: 1rem !important;
+  font-weight: 600 !important;
 }
 .experiment .btn-gold:hover {
   background: #1F2B1F !important;
