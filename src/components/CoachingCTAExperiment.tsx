@@ -19,19 +19,34 @@ export default function CoachingCTAExperiment() {
 
       <div className="container mx-auto max-w-2xl text-center relative z-10">
         <h2
-          className="font-heading mb-6"
+          className="font-heading mb-4"
           style={{ color: '#FBF7F0', fontSize: 'clamp(2rem, 4vw, 2.625rem)' }}
         >
           Ready to Fast-Track Your Career?
         </h2>
 
         <p
-          className="leading-relaxed mb-8 max-w-lg mx-auto"
+          className="leading-relaxed mb-4 max-w-[550px] mx-auto"
           style={{ color: 'rgba(251,247,240,0.7)', fontSize: '1.0625rem' }}
         >
-          I work with a small number of professionals each month on resume
-          reviews, interview prep, and salary negotiation. Spots are limited.
+          I work with a small number of professionals each month. If you're serious about landing a $200K+ offer, let's talk.
         </p>
+
+        <p className="font-bold mb-8" style={{ color: '#D4930D', fontSize: '0.9375rem' }}>
+          Currently accepting 5 new clients for March 2026
+        </p>
+
+        <div className="flex flex-col md:flex-row items-center justify-center gap-3 md:gap-6 mb-8" style={{ color: '#FFFFFF', fontSize: '0.9375rem' }}>
+          <span className="flex items-center gap-1.5">
+            <span style={{ color: '#D4930D' }}>✓</span> Free 15-minute intro call
+          </span>
+          <span className="flex items-center gap-1.5">
+            <span style={{ color: '#D4930D' }}>✓</span> Personalized career strategy
+          </span>
+          <span className="flex items-center gap-1.5">
+            <span style={{ color: '#D4930D' }}>✓</span> No obligation
+          </span>
+        </div>
 
         <a
           href="#qualify"
@@ -56,7 +71,11 @@ export default function CoachingCTAExperiment() {
         </a>
 
         <p style={{ color: '#A8B5A9', fontSize: '0.8125rem', marginTop: '8px' }}>
-          Free intro call · 5 minutes · No commitment · No pressure
+          Free intro call · No commitment · No pressure
+        </p>
+
+        <p style={{ color: '#A8B5A9', fontSize: '0.8125rem', marginTop: '16px' }}>
+          Trusted by professionals from Google, Amazon, Meta, and 50+ companies
         </p>
       </div>
     </section>
