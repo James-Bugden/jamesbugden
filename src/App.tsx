@@ -18,6 +18,7 @@ const PageLoader = () => (
 // Core pages - lazy load for smaller initial bundle
 const Index = lazy(() => import("./pages/Index"));
 const IndexExperiment = lazy(() => import("./pages/IndexExperiment"));
+const IndexExperimentZhTw = lazy(() => import("./pages/IndexExperimentZhTw"));
 const IndexZhTw = lazy(() => import("./pages/IndexZhTw"));
 import NotFound from "./pages/NotFound";
 
@@ -125,6 +126,7 @@ const App = () => (
         <Suspense fallback={<PageLoader />}>
           <Routes>
             <Route path="/experiment" element={<IndexExperiment />} />
+            <Route path="/zh-tw/experiment" element={<IndexExperimentZhTw />} />
             <Route path="/" element={<Index />} />
             <Route path="/zh-tw" element={<IndexZhTw />} />
             <Route path="/admin/login" element={<AdminLogin />} />
