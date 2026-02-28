@@ -211,7 +211,7 @@ export default function SelfSegmentationExperiment() {
     <section
       id="walkthrough"
       className="py-12 md:py-20 px-5 md:px-6"
-      style={{ backgroundColor: '#FFFFFF' }}
+      style={{ backgroundColor: '#FDFBF7' }}
     >
       <div className="container mx-auto max-w-4xl">
         <div className="text-center mb-6">
