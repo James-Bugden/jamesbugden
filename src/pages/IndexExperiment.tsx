@@ -8,7 +8,7 @@ import { AuthHeaderButton } from "@/components/AuthHeaderButton";
 import PageSEO from "@/components/PageSEO";
 import HomepageTestimonialsExperiment from "@/components/HomepageTestimonialsExperiment";
 import LogoScrollExperiment from "@/components/LogoScrollExperiment";
-import SelfSegmentation from "@/components/SelfSegmentation";
+import SelfSegmentationExperiment from "@/components/SelfSegmentationExperiment";
 import CoachingCTA from "@/components/CoachingCTA";
 import MailerLiteForm from "@/components/MailerLiteForm";
 import LazySection from "@/components/LazySection";
@@ -163,11 +163,9 @@ const IndexExperiment = () => {
           </div>
         </section>
 
-        {/* ── "Where Are You Right Now?" — white #FFFFFF ── */}
+        {/* ── "Find Your Path" — white #FFFFFF ── */}
         <LazySection>
-          <div style={{ backgroundColor: '#FFFFFF' }}>
-            <SelfSegmentation />
-          </div>
+          <SelfSegmentationExperiment />
         </LazySection>
 
         {/* ── Paid Coaching — dark green (unchanged) ── */}
