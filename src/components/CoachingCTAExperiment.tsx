@@ -32,21 +32,6 @@ export default function CoachingCTAExperiment() {
           I take on a few clients each month. If you're serious about getting a great offer, let's talk.
         </p>
 
-        <p className="font-bold mb-8" style={{ color: '#D4930D', fontSize: '0.9375rem' }}>
-          Currently accepting 5 new clients for March 2026
-        </p>
-
-        <div className="flex flex-col md:flex-row items-center justify-center gap-3 md:gap-6 mb-8" style={{ color: '#FFFFFF', fontSize: '0.9375rem' }}>
-          <span className="flex items-center gap-1.5">
-            <span style={{ color: '#D4930D' }}>✓</span> Free 15-minute intro call
-          </span>
-          <span className="flex items-center gap-1.5">
-            <span style={{ color: '#D4930D' }}>✓</span> Personalized career strategy
-          </span>
-          <span className="flex items-center gap-1.5">
-            <span style={{ color: '#D4930D' }}>✓</span> No obligation
-          </span>
-        </div>
 
         <a
           href="#qualify"
