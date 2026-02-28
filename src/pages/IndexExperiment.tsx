@@ -10,6 +10,7 @@ import HomepageTestimonialsExperiment from "@/components/HomepageTestimonialsExp
 import LogoScrollExperiment from "@/components/LogoScrollExperiment";
 import SelfSegmentationExperiment from "@/components/SelfSegmentationExperiment";
 import CoachingCTAExperiment from "@/components/CoachingCTAExperiment";
+import ResumeAnalyzerCTAExperiment from "@/components/ResumeAnalyzerCTAExperiment";
 import MailerLiteForm from "@/components/MailerLiteForm";
 import LazySection from "@/components/LazySection";
 
@@ -271,6 +272,11 @@ const IndexExperiment = () => {
         {/* ── "Find Your Path" — white #FFFFFF ── */}
         <LazySection>
           <SelfSegmentationExperiment />
+        </LazySection>
+
+        {/* ── Resume Analyzer CTA — white #FFFFFF ── */}
+        <LazySection>
+          <ResumeAnalyzerCTAExperiment />
         </LazySection>
 
         {/* ── FAQ — white #FFFFFF ── */}
