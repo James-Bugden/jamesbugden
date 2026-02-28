@@ -7,6 +7,13 @@ import monicaPhoto from "@/assets/testimonials/monica-thumb.webp";
 import sunnyPhoto from "@/assets/testimonials/sunny-thumb.webp";
 import omarPhoto from "@/assets/testimonials/omar-li.jpg";
 import juliePhoto from "@/assets/testimonials/julie-thumb.webp";
+import royPhoto from "@/assets/testimonials/roy.jpeg";
+import janellePhoto from "@/assets/testimonials/janelle.jpg";
+import annePhoto from "@/assets/testimonials/anne.jpeg";
+import silviaPhoto from "@/assets/testimonials/silvia.jpg";
+import peterPhoto from "@/assets/testimonials/peter.jpg";
+import kikiPhoto from "@/assets/testimonials/kiki.png";
+import rockPhoto from "@/assets/testimonials/rock.png";
 
 /* ── Types ── */
 type Testimonial = {
@@ -16,11 +23,6 @@ type Testimonial = {
   quote: string;
   bold: string;
 };
-
-/* ── Data ── */
-// Photos we don't have yet — using placeholder URL. Replace with real uploads.
-const PLACEHOLDER = "https://ui-avatars.com/api/?background=2D3A2E&color=FDFBF7&bold=true&size=80";
-const missingPhoto = (name: string) => `${PLACEHOLDER}&name=${encodeURIComponent(name)}`;
 
 const tier1: Testimonial[] = [
   {
@@ -47,7 +49,7 @@ const tier1: Testimonial[] = [
   {
     name: "Roy Tsai",
     label: "via Resume Review",
-    photo: missingPhoto("Roy Tsai"),
+    photo: royPhoto,
     quote: "The depth of this review far exceeded my expectations. James didn't just suggest edits — he gave me a strategic framework for positioning my background against target roles. He helped me realize my strongest achievements were buried in the wrong places. This wasn't just a resume fix — it was a confidence boost that helped me see my career value with completely fresh eyes.",
     bold: "This wasn't just a resume fix — it was a confidence boost.",
   },
@@ -61,7 +63,7 @@ const tier1: Testimonial[] = [
   {
     name: "Janelle Cheng",
     label: "via Resume Review",
-    photo: missingPhoto("Janelle Cheng"),
+    photo: janellePhoto,
     quote: "James is dedicated to the details and the potential hidden in my plain description. It's highly recommended to have a professional like James assess your CV from an expert perspective. I'm truly grateful for the experience.",
     bold: "Dedicated to the details and the potential hidden in my plain description.",
   },
@@ -71,14 +73,14 @@ const tier2: Testimonial[] = [
   {
     name: "Anne Chen",
     label: "via Salary Coaching",
-    photo: missingPhoto("Anne Chen"),
+    photo: annePhoto,
     quote: "This session completely changed how I see salary negotiation. I used to think it was awkward and confrontational, but James helped me understand it's actually professional career communication. He broke down how recruiters, headhunters, and hiring teams each think differently — so you know exactly how to position yourself with each one.",
     bold: "He broke down how recruiters, headhunters, and hiring teams each think differently.",
   },
   {
     name: "Silvia Chen",
     label: "via Resume Review",
-    photo: missingPhoto("Silvia Chen"),
+    photo: silviaPhoto,
     quote: "The visual layout made the review report incredibly easy to read. Strengths and areas for improvement were clearly laid out and applicable across different positions. The prioritized improvement suggestions with optimized examples made it very easy to understand and act on immediately.",
     bold: "Prioritized improvement suggestions with optimized examples.",
   },
@@ -109,21 +111,21 @@ const tier3: Testimonial[] = [
   {
     name: "Peter Cho",
     label: "via Salary Coaching",
-    photo: missingPhoto("Peter Cho"),
+    photo: peterPhoto,
     quote: "James quickly zeroed in on my situation, helped me understand how HR thinks, and gave me practical solutions I could use right away. I feel much more prepared for my upcoming interviews and salary conversations.",
     bold: "Helped me understand how HR thinks.",
   },
   {
     name: "Kiki",
     label: "via Salary Coaching",
-    photo: missingPhoto("Kiki"),
+    photo: kikiPhoto,
     quote: "In just 30 minutes, James helped me realize my salary actually has room to grow — I just needed more confidence in my own value. Knowing where I stand compared to others in my industry was an incredible starting point.",
     bold: "Helped me realize my salary actually has room to grow.",
   },
   {
     name: "Rock Shih",
     label: "via Salary Coaching",
-    photo: missingPhoto("Rock Shih"),
+    photo: rockPhoto,
     quote: "I expected a generic salary negotiation talk, but instead James gave me highly customized guidance based on my specific situation. I now feel much more equipped to communicate with employers and negotiate a better package.",
     bold: "Highly customized guidance based on my specific situation.",
   },
