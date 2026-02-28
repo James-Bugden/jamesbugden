@@ -6,8 +6,8 @@ import jamesPhoto from "@/assets/james-bugden.jpg";
 import LanguageToggle from "@/components/LanguageToggle";
 import { AuthHeaderButton } from "@/components/AuthHeaderButton";
 import PageSEO from "@/components/PageSEO";
-import HomepageTestimonials from "@/components/HomepageTestimonials";
-import LogoScroll from "@/components/LogoScroll";
+import HomepageTestimonialsExperiment from "@/components/HomepageTestimonialsExperiment";
+import LogoScrollExperiment from "@/components/LogoScrollExperiment";
 import SelfSegmentation from "@/components/SelfSegmentation";
 import ReadinessAssessment from "@/components/ReadinessAssessment";
 import OfferCalculatorCTA from "@/components/OfferCalculatorCTA";
@@ -120,13 +120,13 @@ const IndexExperiment = () => {
 
         {/* ── Logo Trust Bar — cream #FDFBF7 ── */}
         <div style={{ backgroundColor: '#FDFBF7' }}>
-          <LogoScroll />
+          <LogoScrollExperiment />
         </div>
 
         {/* ── Testimonials — white #FFFFFF ── */}
         <LazySection>
           <div style={{ backgroundColor: '#FFFFFF' }}>
-            <HomepageTestimonials />
+            <HomepageTestimonialsExperiment />
           </div>
         </LazySection>
 
