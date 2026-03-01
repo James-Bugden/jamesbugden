@@ -35,7 +35,7 @@ export default function SelfSegmentationExperimentZhTw() {
         <div className="grid grid-cols-1 md:grid-cols-3 gap-10 md:gap-0 relative mb-12">
           <div
             className="hidden md:block absolute top-[52px] left-[16.67%] right-[16.67%] h-[2px]"
-            style={{ backgroundColor: 'rgba(27,58,47,0.15)' }}
+            style={{ backgroundColor: 'rgba(43,71,52,0.15)' }}
           />
 
           {steps.map((step) => {
@@ -44,7 +44,7 @@ export default function SelfSegmentationExperimentZhTw() {
               <div key={step.num} className="flex flex-col items-center text-center relative z-10">
                 <div
                   className="w-[72px] h-[72px] rounded-full flex items-center justify-center text-2xl font-bold mb-5"
-                  style={{ backgroundColor: '#1B3A2F', color: '#FFFFFF' }}
+                  style={{ backgroundColor: '#2b4734', color: '#FFFFFF' }}
                 >
                   {step.num}
                 </div>
@@ -52,12 +52,12 @@ export default function SelfSegmentationExperimentZhTw() {
                 {step.num < 3 && (
                   <div className="md:hidden flex justify-center -mt-2 mb-2">
                     <svg width="16" height="24" viewBox="0 0 16 24" fill="none">
-                      <path d="M8 0 L8 18 M3 14 L8 20 L13 14" stroke="#1B3A2F" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" opacity="0.25" />
+                      <path d="M8 0 L8 18 M3 14 L8 20 L13 14" stroke="#2b4734" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" opacity="0.25" />
                     </svg>
                   </div>
                 )}
 
-                <Icon className="w-8 h-8 mb-4" style={{ color: '#1B3A2F' }} strokeWidth={1.5} />
+                <Icon className="w-8 h-8 mb-4" style={{ color: '#2b4734' }} strokeWidth={1.5} />
 
                 <p className="font-bold text-lg mb-2" style={{ color: '#1A1A1A' }}>
                   {step.headline}
@@ -75,15 +75,15 @@ export default function SelfSegmentationExperimentZhTw() {
             href="/resume-analyzer"
             className="inline-flex items-center justify-center rounded-lg font-semibold transition-colors duration-200"
             style={{
-              backgroundColor: '#1B3A2F',
+              backgroundColor: '#2b4734',
               color: '#FFFFFF',
               padding: '16px 32px',
               borderRadius: '8px',
               fontSize: '1rem',
               fontWeight: 600,
             }}
-            onMouseEnter={(e) => ((e.currentTarget as HTMLElement).style.backgroundColor = '#2A4A3B')}
-            onMouseLeave={(e) => ((e.currentTarget as HTMLElement).style.backgroundColor = '#1B3A2F')}
+            onMouseEnter={(e) => ((e.currentTarget as HTMLElement).style.backgroundColor = '#3a5a45')}
+            onMouseLeave={(e) => ((e.currentTarget as HTMLElement).style.backgroundColor = '#2b4734')}
           >
             立即檢測我的履歷
           </a>
