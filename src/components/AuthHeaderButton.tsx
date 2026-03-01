@@ -34,24 +34,15 @@ export function AuthHeaderButton({ variant = "nav" }: AuthHeaderButtonProps) {
     );
   }
 
-  const initial = (user?.email?.[0] || "U").toUpperCase();
-
   const dashboardLabel = isZhTw ? "我的專區" : "My Toolkit";
 
   return (
     <div className="flex items-center gap-3">
       <Link
         to={dashboardPath}
-        className={`flex items-center gap-2 text-sm font-medium ${baseClass}`}
+        className={`text-sm font-medium ${baseClass}`}
       >
-        <span
-          className={`w-7 h-7 rounded-full flex items-center justify-center text-xs font-bold ${
-            isNav ? "bg-gold/20 text-gold" : "bg-accent/20 text-accent"
-          }`}
-        >
-          {initial}
-        </span>
-        <span>{dashboardLabel}</span>
+        {dashboardLabel}
       </Link>
       <button
         onClick={signOut}
