@@ -60,11 +60,11 @@ export default function SalaryProofSection() {
             >
               <div className="flex items-center gap-2 mb-3">
                 <X className="w-5 h-5" style={{ color: '#C85A5A' }} strokeWidth={2.5} />
-                <span className="font-bold" style={{ color: '#A8B5A9', fontSize: '1rem' }}>Accept First Offer</span>
+                <span className="font-bold" style={{ color: '#E8E8E8', fontSize: '1rem' }}>Accept First Offer</span>
               </div>
-              <p className="mb-1" style={{ color: '#6B6B6B', fontSize: '0.875rem' }}>15% raise per job change</p>
-              <p className="font-bold" style={{ color: '#A8B5A9', fontSize: '1.5rem' }}>NT$73,093,386</p>
-              <p style={{ color: '#6B6B6B', fontSize: '0.8125rem' }}>total over 30 years</p>
+              <p className="mb-1" style={{ color: '#A8B5A9', fontSize: '0.875rem' }}>15% raise per job change</p>
+              <p className="font-bold" style={{ color: '#E8E8E8', fontSize: '1.5rem' }}>NT$73,093,386</p>
+              <p style={{ color: '#A8B5A9', fontSize: '0.8125rem' }}>total over 30 years</p>
             </div>
 
             {/* Card 2 — Negotiate Strategically */}
