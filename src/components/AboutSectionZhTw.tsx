@@ -98,19 +98,6 @@ export default function AboutSectionZhTw() {
               </a>
             </div>
 
-            {/* CTA */}
-            <a
-              href="https://jamesbugden.com/coaching"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="inline-flex items-center justify-center px-7 py-3 rounded-lg font-bold text-base transition-all duration-300 hover:scale-105"
-              style={{
-                backgroundColor: '#D4930D',
-                color: '#FFFFFF',
-              }}
-            >
-              預約 1 對 1 教練
-            </a>
           </div>
         </div>
       </div>
