@@ -62,7 +62,7 @@ function LogoItem({ company }: { company: Company }) {
         : "h-5 md:h-6 w-auto";
 
   return (
-    <span className="mx-5 md:mx-7 flex-shrink-0 select-none whitespace-nowrap flex items-center h-5 md:h-6">
+    <span className="mx-5 md:mx-7 flex-shrink-0 select-none whitespace-nowrap flex items-center h-7 md:h-8">
       {company.inlineSvg ? (
         company.inlineSvg
       ) : company.logo ? (
