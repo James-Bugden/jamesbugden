@@ -1,9 +1,10 @@
-import { useState, useEffect, useRef, useCallback, useMemo } from "react";
+import { useState, useEffect, useRef, useCallback, useMemo, memo } from "react";
 import { useAuth } from "@/contexts/AuthContext";
 import { Navigate, Link } from "react-router-dom";
 import LanguageToggle from "@/components/LanguageToggle";
 import { ArrowRight, FileText, DollarSign, Scale, PenTool, ClipboardList, Search } from "lucide-react";
 import PageSEO from "@/components/PageSEO";
+import LazySection from "@/components/LazySection";
 import { useRecentlyUsed, type RecentItem } from "@/hooks/useRecentlyUsed";
 import { getActiveJobs } from "@/lib/jobStore";
 
@@ -267,7 +268,7 @@ function getProgressBadge(toolId: string, lang: "en" | "zh", t: typeof i18n.en) 
 }
 
 /* ── Guide Card ── */
-function GuideCard({ guide, lang, onTrack }: { guide: Guide; lang: "en" | "zh"; onTrack: (id: string) => void }) {
+const GuideCard = memo(function GuideCard({ guide, lang, onTrack }: { guide: Guide; lang: "en" | "zh"; onTrack: (id: string) => void }) {
   const path = lang === "zh" && guide.zhPath ? guide.zhPath : guide.enPath;
   const tagColor = TAG_COLORS[guide.tag];
   const tagLabel = lang === "zh" ? groupLabelsZh[guide.tag] : groupLabelsEn[guide.tag];
@@ -300,7 +301,7 @@ function GuideCard({ guide, lang, onTrack }: { guide: Guide; lang: "en" | "zh"; 
       </div>
     </Link>
   );
-}
+});
 
 /* ── Main Dashboard ── */
 export default function Dashboard({ lang = "en" }: { lang?: "en" | "zh" }) {
@@ -670,6 +671,7 @@ export default function Dashboard({ lang = "en" }: { lang?: "en" | "zh" }) {
       </main>
 
       {/* Salary Negotiation Toolkit */}
+      <LazySection minHeight="400px">
       <section id="toolkit" style={{ backgroundColor: C.toolkitBg, scrollMarginTop: '80px' }}>
         <div className="max-w-[1200px] mx-auto px-4 md:px-8 py-12 md:py-16">
           <h2 className="font-heading text-2xl md:text-3xl mb-2" style={{ color: C.text }}>{t.toolkitHeading}</h2>
@@ -722,8 +724,10 @@ export default function Dashboard({ lang = "en" }: { lang?: "en" | "zh" }) {
           </div>
         </div>
       </section>
+      </LazySection>
 
       {/* Coaching CTA */}
+      <LazySection minHeight="250px">
       <section className="relative overflow-hidden" style={{ background: `linear-gradient(135deg, ${C.darkGreen} 0%, #152E1F 100%)` }}>
         <div className="absolute inset-0 opacity-[0.03]" style={{ backgroundImage: noiseOverlay, backgroundSize: '128px 128px' }} />
         <div className="max-w-[1200px] mx-auto px-4 md:px-8 py-16 md:py-20 text-center relative z-10">
@@ -753,6 +757,7 @@ export default function Dashboard({ lang = "en" }: { lang?: "en" | "zh" }) {
           <p className="text-sm mt-4" style={{ color: '#A8B5A9' }}>{t.ctaTrust}</p>
         </div>
       </section>
+      </LazySection>
 
       {/* Footer */}
       <footer className="py-10 text-center" style={{ backgroundColor: C.white }}>

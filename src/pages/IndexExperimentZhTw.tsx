@@ -1,3 +1,4 @@
+import "@/styles/experiment.css";
 import { useState, useEffect } from "react";
 import { Briefcase, Users, Linkedin, FileCheck, X, CheckCircle2, Eye, Building, Plus, Minus } from "lucide-react";
 import { InstagramIcon, ThreadsIcon } from "@/components/SocialIcons";

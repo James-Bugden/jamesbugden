@@ -69,6 +69,9 @@ function LogoItem({ company }: { company: Company }) {
         <img
           src={company.logo}
           alt={company.name}
+          loading="lazy"
+          width={80}
+          height={32}
           className={`flex-shrink-0 object-contain ${sizeClass} ${company.rounded ? "rounded-sm bg-white mix-blend-multiply" : ""}`}
         />
       ) : (
