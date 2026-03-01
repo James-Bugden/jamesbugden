@@ -129,7 +129,7 @@ const IndexExperimentZhTw = () => {
                 <div className="flex items-center justify-center md:justify-start gap-2 mb-5">
                   <span className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full border" style={{ backgroundColor: 'rgba(43,71,52,0.06)', borderColor: 'rgba(43,71,52,0.12)', color: '#6B6B6B', fontSize: '0.9375rem' }}>
                     <Briefcase className="w-4 h-4" style={{ color: '#6B6B6B' }} />
-                    Uber 資深 HR
+                    Uber 資深 Recruiter
                   </span>
                 </div>
 
