@@ -62,7 +62,7 @@ export default function SalaryProofSectionZhTw() {
                 <span className="font-bold" style={{ color: '#A8B5A9', fontSize: '1rem' }}>直接接受第一個 Offer</span>
               </div>
               <p className="mb-1" style={{ color: '#6B6B6B', fontSize: '0.875rem' }}>每次換工作加薪 15%</p>
-              <p className="font-bold" style={{ color: '#A8B5A9', fontSize: '1.5rem' }}>7,309 萬</p>
+              <p className="font-bold" style={{ color: '#A8B5A9', fontSize: '1.5rem' }}>7 千萬</p>
               <p style={{ color: '#6B6B6B', fontSize: '0.8125rem' }}>30 年總計</p>
             </div>
 
@@ -76,7 +76,7 @@ export default function SalaryProofSectionZhTw() {
                 <span className="font-bold" style={{ color: '#FBF7F0', fontSize: '1rem' }}>策略性談判</span>
               </div>
               <p className="mb-1" style={{ color: '#A8B5A9', fontSize: '0.875rem' }}>每次換工作加薪 30%</p>
-              <p className="font-bold" style={{ color: '#D4930D', fontSize: '1.5rem' }}>1 億 5,343 萬</p>
+              <p className="font-bold" style={{ color: '#D4930D', fontSize: '1.5rem' }}>1 億 5 千萬</p>
               <p style={{ color: '#A8B5A9', fontSize: '0.8125rem' }}>30 年總計</p>
             </div>
           </div>
@@ -87,7 +87,7 @@ export default function SalaryProofSectionZhTw() {
               className="font-heading font-bold"
               style={{ color: '#D4930D', fontSize: 'clamp(2rem, 5vw, 3.5rem)' }}
             >
-              +8,034 萬
+              +8 千萬
             </p>
             <p className="font-semibold mt-1" style={{ color: '#FBF7F0', fontSize: '1.125rem' }}>
               職涯收入多 109.9%
@@ -100,14 +100,14 @@ export default function SalaryProofSectionZhTw() {
               className="rounded-xl p-5 text-center"
               style={{ backgroundColor: 'rgba(255,255,255,0.06)', border: '1px solid rgba(255,255,255,0.08)' }}
             >
-              <p className="font-bold mb-1" style={{ color: '#D4930D', fontSize: '1.25rem' }}>22.3 萬</p>
+              <p className="font-bold mb-1" style={{ color: '#D4930D', fontSize: '1.25rem' }}>22 萬</p>
               <p style={{ color: '#A8B5A9', fontSize: '0.8125rem' }}>每個月不談判損失的金額</p>
             </div>
             <div
               className="rounded-xl p-5 text-center"
               style={{ backgroundColor: 'rgba(255,255,255,0.06)', border: '1px solid rgba(255,255,255,0.08)' }}
             >
-              <p className="font-bold mb-1" style={{ color: '#D4930D', fontSize: '1.25rem' }}>8,034 萬</p>
+              <p className="font-bold mb-1" style={{ color: '#D4930D', fontSize: '1.25rem' }}>8 千萬</p>
               <p style={{ color: '#A8B5A9', fontSize: '0.8125rem' }}>30 年累計少拿的金額</p>
             </div>
           </div>

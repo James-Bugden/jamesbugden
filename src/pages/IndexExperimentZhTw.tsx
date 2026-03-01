@@ -120,7 +120,7 @@ const IndexExperimentZhTw = () => {
                 </div>
 
                 <h1 className="font-heading leading-[1.12] tracking-tight mb-3 max-w-3xl mx-auto md:mx-0" style={{ color: '#1A1A1A', fontSize: 'clamp(2.25rem, 5vw, 3.5rem)', lineHeight: 1.2 }}>
-                  在夢想公司拿到年薪 $200K+ 的&nbsp;Offer
+                  在夢想公司拿到年薪兩百萬+的&nbsp;Offer
                 </h1>
 
                 {/* Credential badge */}
