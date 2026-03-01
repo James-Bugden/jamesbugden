@@ -127,15 +127,12 @@ const IndexExperimentZhTw = () => {
                 <div className="flex items-center justify-center md:justify-start gap-2 mb-5">
                   <span className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full border" style={{ backgroundColor: 'rgba(45,58,46,0.06)', borderColor: 'rgba(45,58,46,0.12)', color: '#6B6B6B', fontSize: '0.9375rem' }}>
                     <Briefcase className="w-4 h-4" style={{ color: '#6B6B6B' }} />
-                    資深 HR · 財星500大企業
+                    Uber 資深 HR
                   </span>
                 </div>
 
-                <p className="leading-relaxed max-w-xl mx-auto md:mx-0 mb-2" style={{ color: '#1A1A1A', fontSize: '1.0625rem' }}>
-                  你投了履歷、面試了，然後沒有下文。更糟的是，薪水遠低於你的價值。
-                </p>
                 <p className="leading-relaxed max-w-xl mx-auto md:mx-0 mb-5" style={{ color: '#1A1A1A', fontSize: '1.0625rem' }}>
-                  750+ 人透過我進入 Google、Uber、Microsoft。每週，我免費分享招募內幕。
+                  免費工具、模板和內部策略，來自幫助 750 位以上求職者成功錄取的招募官。
                 </p>
 
                 <div className="mb-2 max-w-md mx-auto md:mx-0">
@@ -143,21 +140,21 @@ const IndexExperimentZhTw = () => {
                 </div>
 
                 <p className="mb-5" style={{ color: '#6B6B6B', fontSize: '0.8125rem', marginTop: '8px' }}>
-                  加入 10,000+ 位專業人士 · 永久免費 · 隨時取消訂閱
+                  加入 10,000 以上位專業人士 · 永久免費 · 隨時取消訂閱
                 </p>
 
                 <div className="flex flex-wrap justify-center md:justify-start gap-x-8 gap-y-3 pt-6 border-t border-border/60">
                   <div className="flex flex-col items-center md:items-start">
                     <span className="text-xl font-bold flex items-center gap-1.5" style={{ color: '#1A1A1A' }}>
                       <FileCheck className="w-5 h-5" style={{ color: '#2D3A2E', opacity: 0.7 }} />
-                      20,000+
+                      20,000 以上
                     </span>
                     <span className="text-sm" style={{ color: '#6B6B6B' }}>份履歷審閱</span>
                   </div>
                   <div className="flex flex-col items-center md:items-start">
                     <span className="text-xl font-bold flex items-center gap-1.5" style={{ color: '#1A1A1A' }}>
                       <Users className="w-5 h-5" style={{ color: '#2D3A2E', opacity: 0.7 }} />
-                      750+
+                      750 以上
                     </span>
                     <span className="text-sm" style={{ color: '#6B6B6B' }}>人成功錄取</span>
                   </div>
