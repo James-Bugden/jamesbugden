@@ -1,71 +1,40 @@
-## Create Rema Rao Resume Review Page
 
-Build a new client review page at `/reviews/rema-rao` following the existing premium design template, with 100% content fidelity from the provided markdown (667 lines, all preserved without truncation).
 
-### Content Structure (from the markdown)
+## Link Salary Starter Kit Sections to Toolkit Tools
 
-**Part 1: Summary**
+The Salary Starter Kit guide has 6 parts that map directly to individual tools in the Salary Negotiation Toolkit. Right now there's only a single CTA at the very bottom. We'll add inline "Use the interactive tool" links at the end of each relevant section so readers can jump straight to the toolkit tool they need.
 
-- Overall Assessment: 90/100 (Exceptional Resume), After Implementation: 100/100
-- 5 strengths, 6 areas for improvement
-- Overview comparison table (7 rows: Business Results, People Management, Stakeholder Management, Geographic Scope, LinkedIn Keywords, LinkedIn Alignment, M&A Financial Context)
+### Section-to-Tool Mapping
 
-**Part 2: Key Improvements Explained**
+| Starter Kit Section | Toolkit Tool | Path |
+|---|---|---|
+| Part 1: Deflection Scripts | Deflection Scripts | `/toolkit/scripts` |
+| Part 2: Offer Response | Offer Response Script | `/toolkit/offer-response` |
+| Part 3: Total Compensation | Compensation Calculator | `/toolkit/calculator` |
+| Part 4: Counteroffer Email | Counteroffer Templates | `/toolkit/counteroffer` |
+| Part 5: Pushback Scripts | Pushback Cheat Sheet | `/toolkit/pushback` |
+| Part 6: Raise / Achievement | Raise One-Pager + Achievement Log | `/toolkit/raise` and `/toolkit/log` |
 
-- 3 Must-Fix Issues (RED):
-  1. Add Quantified Business Results to UK EMI/EEA and Taiwan TPPSP Bullets (with before/after examples)
-  2. People Management Experience in Recent Roles (with before/after examples)
-  3. Make Stakeholder Management Explicit (with before/after examples)
-- 5 Important Changes (YELLOW):
-  1. Elevate Geographic Scope in Executive Summary
-  2. Add Financial Context to M&A Integration Bullet
-  3. Add Business Outcome to APAC Payments Strategy Bullet
-  4. LinkedIn Expertise Section: Keyword Gap (with keyword list)
-  5. Align LinkedIn Role Presentation with Resume
+### What changes
 
-**Part 3: Detailed Section-by-Section Analysis**
+**`src/pages/SalaryStarterKit.tsx`**
+- At the end of each of the 6 sections, add a small inline callout card linking to the corresponding toolkit tool (e.g., "Use the interactive Deflection Scripts tool")
+- Style: subtle card with gold left border, toolkit icon, and an arrow link -- consistent with the existing design language
+- Fix: ensure links use proper paths
 
-- 7 sections, each with star ratings and detailed analysis:
-  1. Header & Contact Details (5/5)
-  2. Executive Summary (4/5 -> 5/5)
-  3. Work Experience: GM Role (5/5)
-  4. Work Experience: Progressive Roles (4/5 -> 5/5)
-  5. Board Roles (5/5)
-  6. Early Career (5/5)
-  7. Education (5/5)
+**`src/pages/SalaryStarterKitZhTw.tsx`**
+- Same inline callout cards with Chinese labels
+- Fix the bottom CTA link from `/toolkit` to `/zh-tw/toolkit`
+- All inline links use `/zh-tw/toolkit/...` paths
 
-**Part 4: Strategic Positioning**
+### Design of inline callout
 
-- LinkedIn Optimization section
-- LinkedIn vs Resume Alignment
+A compact card at the bottom of each section:
+```text
++--gold border------------------------------------------+
+|  [icon]  Use the interactive tool  ->                  |
+|          Deflection Scripts                            |
++--------------------------------------------------------+
+```
 
-**Next Steps** (4 steps including STAR method)
-
-**Reminders** (Do's and Don'ts)
-
-**Final Thought**
-
-**Feedback section** ( Trustpilot)
-
-### Files to Create/Modify
-
-1. **Create `src/pages/reviews/RemaRaoReview.tsx**`
-  - Follow the HopeChenReview.tsx template structure
-  - ScoreGauge showing 90 (Before) and 100 (After)
-  - All sections with exact text from the markdown, no truncation
-  - No language toggle (English-only review)
-  - No download PDF button (no PDF provided yet)
-  - Feedback links to Trustpilot
-2. **Update `src/App.tsx**`
-  - Add lazy import for RemaRaoReview
-  - Add route at `/reviews/rema-rao`
-
-### Design Notes
-
-- Hero: Executive Green background, "Rema Rao" title, subtitle "General Manager, Financial Services | Uber"
-- No ReviewLanguageToggle (English-only)
-- No Download PDF button in header (no PDF uploaded)
-- Before/After cards use the existing red/gold color scheme
-- LinkedIn keyword list rendered as a grid of tags
-- All (EXAMPLE) placeholders preserved exactly as written
-- "Review Completed: March 2026" at the bottom
+Uses `Link` from react-router-dom, gold left border, muted background, small text with arrow icon.
