@@ -127,10 +127,10 @@ const App = () => (
         <ScrollToTop />
         <Suspense fallback={<PageLoader />}>
           <Routes>
-            <Route path="/experiment" element={<IndexExperiment />} />
-            <Route path="/zh-tw/experiment" element={<IndexExperimentZhTw />} />
-            <Route path="/" element={<Index />} />
-            <Route path="/zh-tw" element={<IndexZhTw />} />
+            <Route path="/" element={<IndexExperiment />} />
+            <Route path="/zh-tw" element={<IndexExperimentZhTw />} />
+            <Route path="/experiment" element={<Navigate to="/" replace />} />
+            <Route path="/zh-tw/experiment" element={<Navigate to="/zh-tw" replace />} />
             <Route path="/admin/login" element={<AdminLogin />} />
             <Route 
               path="/admin/reviews" 
