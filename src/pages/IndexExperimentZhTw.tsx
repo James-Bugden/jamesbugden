@@ -227,11 +227,8 @@ const IndexExperimentZhTw = () => {
           <div className="container mx-auto max-w-4xl">
             <div className="text-center mb-6">
               <h2 className="font-heading mb-3" style={{ color: '#1A1A1A', fontSize: 'clamp(2rem, 4vw, 2.625rem)', lineHeight: 1.2 }}>
-                為什麼要找內部人？
+                大部分的職涯建議來自沒招募過任何人的人
               </h2>
-              <p className="text-[17px] max-w-[600px] mx-auto" style={{ color: '#6B6B6B' }}>
-                大部分的職涯建議來自沒招募過任何人的人。我招募過數百人。
-              </p>
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-6 mb-10">
@@ -251,16 +248,12 @@ const IndexExperimentZhTw = () => {
               </div>
               <div className="rounded-xl p-6 text-center md:text-left" style={{ backgroundColor: '#FDFBF7', borderTop: '3px solid #D4930D' }}>
                 <Building className="w-10 h-10 mx-auto md:mx-0 mb-4" style={{ color: '#2D3A2E' }} strokeWidth={1.5} />
-                <p className="font-bold text-[20px] mb-2" style={{ color: '#1A1A1A' }}>財星500大內部人</p>
+                <p className="font-bold text-[20px] mb-2" style={{ color: '#1A1A1A' }}>內部知識</p>
                 <p className="text-base" style={{ color: '#1A1A1A' }}>
-                  Google、Amazon、Meta、Microsoft。都招募過。我知道他們怎麼面試、怎麼給薪，還有什麼讓你脫穎而出。
+                  我錄取過 750 位以上的人。我知道他們怎麼面試、怎麼給薪，還有什麼讓你脫穎而出。
                 </p>
               </div>
             </div>
-
-            <p className="text-center text-sm" style={{ color: '#6B6B6B' }}>
-              這不是部落格上的建議。這來自親自做招募的人。
-            </p>
           </div>
         </section>
 
