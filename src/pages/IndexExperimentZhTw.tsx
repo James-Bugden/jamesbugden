@@ -269,14 +269,14 @@ const IndexExperimentZhTw = () => {
           <SalaryProofSectionZhTw />
         </LazySection>
 
-        {/* ── FAQ ── */}
-        <LazySection>
-          <FAQSection />
-        </LazySection>
-
         {/* ── About ── */}
         <LazySection>
           <AboutSectionZhTw />
+        </LazySection>
+
+        {/* ── FAQ ── */}
+        <LazySection>
+          <FAQSection />
         </LazySection>
       </main>
 

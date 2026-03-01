@@ -270,14 +270,14 @@ const IndexExperiment = () => {
           <SalaryProofSection />
         </LazySection>
 
-        {/* ── FAQ ── */}
-        <LazySection>
-          <FAQSection />
-        </LazySection>
-
         {/* ── About ── */}
         <LazySection>
           <AboutSection />
+        </LazySection>
+
+        {/* ── FAQ ── */}
+        <LazySection>
+          <FAQSection />
         </LazySection>
 
       </main>
