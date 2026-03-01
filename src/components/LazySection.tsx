@@ -3,11 +3,13 @@ import { useRef, useState, useEffect, type ReactNode } from "react";
 interface LazySectionProps {
   children: ReactNode;
   className?: string;
+  id?: string;
+  style?: React.CSSProperties;
   /** Minimum placeholder height to prevent layout shift */
   minHeight?: string;
 }
 
-export default function LazySection({ children, className, minHeight = "200px" }: LazySectionProps) {
+export default function LazySection({ children, className, id, style, minHeight = "200px" }: LazySectionProps) {
   const ref = useRef<HTMLDivElement>(null);
   const [visible, setVisible] = useState(false);
 
@@ -30,7 +32,7 @@ export default function LazySection({ children, className, minHeight = "200px" }
   }, []);
 
   return (
-    <div ref={ref} className={className}>
+    <div ref={ref} id={id} style={style} className={className}>
       {visible ? children : <div style={{ minHeight }} />}
     </div>
   );
