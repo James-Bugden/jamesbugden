@@ -114,7 +114,7 @@ export default function SalaryProofSectionZhTw() {
           </div>
 
           {/* Footnote */}
-          <p className="text-center mb-8" style={{ color: '#6B6B6B', fontSize: '0.75rem' }}>
+          <p className="text-center mb-8" style={{ color: '#A8B5A9', fontSize: '0.75rem' }}>
             以年薪 120 萬起薪、每 3 年換一次工作計算。
           </p>
 
