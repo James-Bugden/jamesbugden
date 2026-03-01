@@ -17,6 +17,10 @@ export function AuthHeaderButton({ variant = "nav" }: AuthHeaderButtonProps) {
     ? "text-cream-70 hover:text-cream transition-colors"
     : "text-muted-foreground hover:text-foreground transition-colors";
 
+  // Determine dashboard path based on current locale
+  const isZhTw = location.pathname.startsWith("/zh-tw") || location.pathname.startsWith("/zh");
+  const dashboardPath = isZhTw ? "/zh/dashboard" : "/dashboard";
+
   if (!isLoggedIn) {
     return (
       <Link
@@ -34,14 +38,15 @@ export function AuthHeaderButton({ variant = "nav" }: AuthHeaderButtonProps) {
 
   return (
     <div className="flex items-center gap-2">
-      <div
+      <Link
+        to={dashboardPath}
         className={`w-7 h-7 rounded-full flex items-center justify-center text-xs font-bold ${
           isNav ? "bg-gold/20 text-gold" : "bg-accent/20 text-accent"
         }`}
-        title={user?.email || ""}
+        title="Dashboard"
       >
         {initial}
-      </div>
+      </Link>
       <button
         onClick={signOut}
         className={`flex items-center gap-1 text-sm ${baseClass}`}
