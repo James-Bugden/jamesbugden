@@ -250,9 +250,9 @@ export default function HomepageTestimonialsExperimentZhTw() {
               type="button"
               onClick={() => setRevealLevel((v) => v + 1)}
               className="inline-flex items-center gap-2 px-6 py-2.5 rounded-lg text-sm font-semibold transition-all duration-200 border"
-              style={{ color: "#2D3A2E", borderColor: "#2D3A2E", backgroundColor: "transparent" }}
-              onMouseEnter={(e) => { e.currentTarget.style.backgroundColor = "#2D3A2E"; e.currentTarget.style.color = "#FFFFFF"; }}
-              onMouseLeave={(e) => { e.currentTarget.style.backgroundColor = "transparent"; e.currentTarget.style.color = "#2D3A2E"; }}
+              style={{ color: "#1B3A2F", borderColor: "#1B3A2F", backgroundColor: "transparent" }}
+              onMouseEnter={(e) => { e.currentTarget.style.backgroundColor = "#1B3A2F"; e.currentTarget.style.color = "#FFFFFF"; }}
+              onMouseLeave={(e) => { e.currentTarget.style.backgroundColor = "transparent"; e.currentTarget.style.color = "#1B3A2F"; }}
             >
               {buttonText}
               <ChevronDown className="w-4 h-4" />
