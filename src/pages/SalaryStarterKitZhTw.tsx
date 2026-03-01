@@ -4,6 +4,7 @@ import { Button } from "@/components/ui/button";
 import GuideShareButtons from "@/components/GuideShareButtons";
 import { AuthHeaderButton } from "@/components/AuthHeaderButton";
 import { useTrackGuideProgress } from "@/hooks/useReadingProgress";
+import ToolkitCallout from "@/components/ToolkitCallout";
 
 const SalaryStarterKitZhTw = () => {
   useTrackGuideProgress("salary-kit");
@@ -188,6 +189,8 @@ const SalaryStarterKitZhTw = () => {
           <p className="text-foreground">
             <strong>給女性的建議：</strong>不要說「我想要」。試試看「我的研究顯示這個職位通常的薪酬是……」引用外部數據（104人力銀行、Glassdoor）把焦點從你個人轉移到市場行情。
           </p>
+
+          <ToolkitCallout to="/zh-tw/toolkit/scripts" label="使用互動工具" toolName="薪資期望話術" />
         </div>
       </section>
 
@@ -246,6 +249,8 @@ const SalaryStarterKitZhTw = () => {
               <span className="font-semibold text-executive">🔰 職涯初期提醒：</span>你可能在想：「我還很菜，我沒有籌碼去推回去。」真相是：公司已經決定要錄用你了。他們花了時間和金錢在面試上。他們不想重新來過。這就是你的籌碼，你只是還沒感覺到。沉默技巧不分資歷深淺都有效，因為這不是關於權力，而是給自己時間思考。
             </p>
           </div>
+
+          <ToolkitCallout to="/zh-tw/toolkit/offer-response" label="使用互動工具" toolName="Offer 回應話術" />
         </div>
       </section>
 
@@ -348,6 +353,8 @@ const SalaryStarterKitZhTw = () => {
               問 HR：「去年這個職位的平均年終總共發了幾個月？」這會告訴你保障加績效的總金額。
             </p>
           </div>
+
+          <ToolkitCallout to="/zh-tw/toolkit/calculator" label="使用互動工具" toolName="薪酬計算器" />
         </div>
       </section>
 
@@ -431,6 +438,8 @@ const SalaryStarterKitZhTw = () => {
               <li><strong>5. 即使你很滿意，也問一句：</strong>「方案中有哪些部分有彈性空間嗎？」答案通常是有的。</li>
             </ol>
           </div>
+
+          <ToolkitCallout to="/zh-tw/toolkit/counteroffer" label="使用互動工具" toolName="還價信範本" />
         </div>
       </section>
 
@@ -504,6 +513,8 @@ const SalaryStarterKitZhTw = () => {
               不談判才是風險。第一份薪水會成為未來每一次加薪、獎金、和新 offer 的基準線，持續好幾年。
             </p>
           </div>
+
+          <ToolkitCallout to="/zh-tw/toolkit/pushback" label="使用互動工具" toolName="應對拒絕話術" />
         </div>
       </section>
 
@@ -613,6 +624,9 @@ const SalaryStarterKitZhTw = () => {
               從第一天就開始記成就。不是等你「覺得準備好了」。不是等你「證明了自己」。第一天。
             </p>
           </div>
+
+          <ToolkitCallout to="/zh-tw/toolkit/raise" label="使用互動工具" toolName="加薪提案" />
+          <ToolkitCallout to="/zh-tw/toolkit/log" label="使用互動工具" toolName="每週成就記錄表" />
         </div>
       </section>
 
@@ -745,7 +759,7 @@ const SalaryStarterKitZhTw = () => {
         <div className="container mx-auto max-w-3xl text-center">
           <h2 className="font-heading text-2xl md:text-3xl text-cream mb-4">準備好談下一個 Offer 了嗎？</h2>
           <p className="text-cream-90 mb-6">取得完整的薪資談判工具包，附互動式模板。</p>
-          <Link to="/toolkit">
+          <Link to="/zh-tw/toolkit">
             <Button className="btn-gold px-8 py-3 h-auto">
               查看完整工具包
               <ArrowRight className="w-4 h-4 ml-2" />

@@ -5,6 +5,7 @@ import { AuthHeaderButton } from "@/components/AuthHeaderButton";
 import { Button } from "@/components/ui/button";
 import GuideShareButtons from "@/components/GuideShareButtons";
 import { useTrackGuideProgress } from "@/hooks/useReadingProgress";
+import ToolkitCallout from "@/components/ToolkitCallout";
 
 const SalaryStarterKit = () => {
   useTrackGuideProgress("salary-kit");
@@ -183,6 +184,8 @@ const SalaryStarterKit = () => {
           <p className="text-foreground">
             <strong>For women:</strong> Don't say "I want." Try "My research shows that this role typically pays..." Citing external data (104人力銀行, Glassdoor) takes the focus off you and onto the market.
           </p>
+
+          <ToolkitCallout to="/toolkit/scripts" label="Use the interactive tool" toolName="Deflection Scripts" />
         </div>
       </section>
 
@@ -241,6 +244,8 @@ const SalaryStarterKit = () => {
               <span className="font-semibold text-executive">🔰 Early-career note:</span> You might be thinking: "I'm junior. I don't have leverage to push back." The truth: the company already decided to hire you. They invested time and money in interviews. They don't want to restart the process. That's your leverage. You don't feel it yet. The silence technique works regardless of your experience level because it's not about power. It's about giving yourself time to think.
             </p>
           </div>
+
+          <ToolkitCallout to="/toolkit/offer-response" label="Use the interactive tool" toolName="Offer Response Script" />
         </div>
       </section>
 
@@ -343,6 +348,8 @@ const SalaryStarterKit = () => {
               Ask HR: "What was the average total year-end payout last year?" This tells you the guaranteed plus performance bonus combined.
             </p>
           </div>
+
+          <ToolkitCallout to="/toolkit/calculator" label="Use the interactive tool" toolName="Compensation Calculator" />
         </div>
       </section>
 
@@ -426,6 +433,8 @@ const SalaryStarterKit = () => {
               <li><strong>5. Even if you're happy, ask:</strong> "Are there any areas of the package that have flexibility?" The answer is usually yes.</li>
             </ol>
           </div>
+
+          <ToolkitCallout to="/toolkit/counteroffer" label="Use the interactive tool" toolName="Counteroffer Email Templates" />
         </div>
       </section>
 
@@ -499,6 +508,8 @@ const SalaryStarterKit = () => {
               The real risk is not negotiating. That first salary sets the baseline for every raise, bonus, and future offer for years to come.
             </p>
           </div>
+
+          <ToolkitCallout to="/toolkit/pushback" label="Use the interactive tool" toolName="Pushback Cheat Sheet" />
         </div>
       </section>
 
@@ -608,6 +619,9 @@ const SalaryStarterKit = () => {
               Start the achievement log on day one. Not when you "feel ready." Not when you've "proven yourself." Day one.
             </p>
           </div>
+
+          <ToolkitCallout to="/toolkit/raise" label="Use the interactive tool" toolName="Raise One-Pager" />
+          <ToolkitCallout to="/toolkit/log" label="Use the interactive tool" toolName="Achievement Log" />
         </div>
       </section>
 
