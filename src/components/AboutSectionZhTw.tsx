@@ -1,5 +1,6 @@
 import { Linkedin } from "lucide-react";
 import { ThreadsIcon } from "@/components/SocialIcons";
+import { motion } from "framer-motion";
 import aboutPhoto from "@/assets/james-cake-group.jpg";
 import workshopPhoto from "@/assets/james-cake-workshop.jpg";
 
@@ -16,7 +17,13 @@ export default function AboutSectionZhTw() {
         <div className="flex flex-col md:flex-row gap-8 md:gap-16 items-center">
 
           {/* Left — Photos */}
-          <div className="w-full md:w-1/2 flex-shrink-0 flex flex-col gap-3">
+          <motion.div
+            className="w-full md:w-1/2 flex-shrink-0 flex flex-col gap-3"
+            initial={{ opacity: 0, x: -30 }}
+            whileInView={{ opacity: 1, x: 0 }}
+            viewport={{ once: true, margin: "-80px" }}
+            transition={{ duration: 0.6, ease: "easeOut" }}
+          >
             <img
               src={aboutPhoto}
               alt="James Bugden 在台灣 Cake 職涯活動"
@@ -24,17 +31,27 @@ export default function AboutSectionZhTw() {
               style={{ border: '2px solid rgba(212,147,13,0.3)' }}
               loading="lazy"
             />
-            <img
+            <motion.img
               src={workshopPhoto}
               alt="James Bugden 在台灣主持職涯工作坊"
               className="w-full h-auto rounded-xl object-cover aspect-[16/9]"
               style={{ border: '2px solid rgba(212,147,13,0.3)' }}
               loading="lazy"
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, margin: "-80px" }}
+              transition={{ duration: 0.5, delay: 0.2, ease: "easeOut" }}
             />
-          </div>
+          </motion.div>
 
           {/* Right — Bio */}
-          <div className="w-full md:w-1/2">
+          <motion.div
+            className="w-full md:w-1/2"
+            initial={{ opacity: 0, x: 30 }}
+            whileInView={{ opacity: 1, x: 0 }}
+            viewport={{ once: true, margin: "-80px" }}
+            transition={{ duration: 0.6, delay: 0.15, ease: "easeOut" }}
+          >
             <span
               className="text-sm font-bold tracking-widest uppercase mb-3 block"
               style={{ color: '#D4930D' }}
@@ -98,7 +115,7 @@ export default function AboutSectionZhTw() {
               </a>
             </div>
 
-          </div>
+          </motion.div>
         </div>
       </div>
     </section>
