@@ -29,7 +29,7 @@ export default function SelfSegmentationExperimentZhTw() {
           className="font-heading text-center mb-10 md:mb-14"
           style={{ color: '#1A1A1A', fontSize: 'clamp(2rem, 4vw, 2.625rem)', lineHeight: 1.2 }}
         >
-          拿到 $200K+ Offer 的 3 個步驟
+          拿到年薪百萬以上 Offer 的 3 個步驟
         </h2>
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-10 md:gap-0 relative mb-12">
