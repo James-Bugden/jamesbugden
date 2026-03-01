@@ -104,7 +104,7 @@ export default function MailerLiteForm({ formId, className, buttonText = "Get on
         <button
           type="submit"
           disabled={isLoading}
-          className="w-full py-3.5 btn-gold text-[1.125rem] font-semibold rounded-lg disabled:opacity-50 disabled:cursor-not-allowed"
+          className="w-full py-3.5 btn-gold text-[1.125rem] font-semibold rounded-lg text-center disabled:opacity-50 disabled:cursor-not-allowed"
         >
           {isLoading ? "Joining..." : buttonText}
         </button>
