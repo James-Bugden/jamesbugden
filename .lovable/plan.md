@@ -1,21 +1,13 @@
 
 
-## Fix SalaryProofSection Background Colors
+## Fix "Here's what negotiating looks like" Background Color
 
 ### Problem
-The two dark sections use off-brand colors:
-- Part A uses `#1A1A1A` (charcoal black) -- should be brand dark green
-- Part B uses `#232E24` (dark olive) -- should use the matching darker shade
+Part B of the Salary Proof section currently uses `#2D3A2E`, which doesn't match the brand's primary dark green `#1B3A2F` (the deep forest green used across navigation and dark sections).
 
-### Changes (1 file: `src/components/SalaryProofSection.tsx`)
+### Change (1 file: `src/components/SalaryProofSection.tsx`)
 
-**Part A -- "The numbers speak for themselves"**
-- Change background from `#1A1A1A` to `#1B3A2F` (the brand's deep forest green, matching other dark sections on the site)
+- Change Part B background from `#2D3A2E` to `#1B3A2F` so both salary proof sections use the same brand-consistent deep forest green.
 
-**Part B -- "Here's what negotiating looks like"**
-- Change background from `#232E24` to `#2D3A2E` (the slightly lighter executive green used in the experiment's Final CTA section, creating a subtle two-tone effect)
-
-Both sections will now use the same forest green palette as the rest of the site (nav, footer, final CTA), maintaining visual consistency.
-
-No copy or layout changes -- only the two background-color values.
+This keeps both parts visually unified and aligned with the established color palette.
 
