@@ -36,7 +36,7 @@ export function AuthHeaderButton({ variant = "nav" }: AuthHeaderButtonProps) {
 
   const initial = (user?.email?.[0] || "U").toUpperCase();
 
-  const dashboardLabel = isZhTw ? "我的工具" : "Dashboard";
+  const dashboardLabel = isZhTw ? "我的專區" : "My Toolkit";
 
   return (
     <div className="flex items-center gap-3">
