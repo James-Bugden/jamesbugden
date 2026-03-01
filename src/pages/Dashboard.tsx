@@ -2,7 +2,7 @@ import { useState, useEffect, useRef, useCallback, useMemo, memo } from "react";
 import { useAuth } from "@/contexts/AuthContext";
 import { Navigate, Link } from "react-router-dom";
 import LanguageToggle from "@/components/LanguageToggle";
-import { ArrowRight, FileText, DollarSign, Scale, PenTool, ClipboardList, Search } from "lucide-react";
+import { ArrowRight, FileText, DollarSign, PenTool, ClipboardList, Search } from "lucide-react";
 import PageSEO from "@/components/PageSEO";
 import LazySection from "@/components/LazySection";
 import { useRecentlyUsed, type RecentItem } from "@/hooks/useRecentlyUsed";
@@ -80,14 +80,6 @@ const tools: ToolItem[] = [
     title: { en: "Offer Calculator", zh: "薪資計算器" },
     description: { en: "See how much more you'd earn over 30 years by negotiating strategically.", zh: "看看有策略地談薪水，30 年下來能多賺多少。" },
     path: "/offer-calculator",
-  },
-  {
-    id: "offer-compare",
-    icon: <Scale className="w-5 h-5" />,
-    iconBg: "#F0FDF4",
-    title: { en: "Offer Calculator Compare", zh: "Offer 比較器" },
-    description: { en: "Compare two offers side by side — base, bonus, stock, benefits — and see the real difference.", zh: "並排比較兩個 offer — 底薪、獎金、股票、福利 — 看清楚真正的差異。" },
-    path: "/offer-calculator/compare",
   },
   {
     id: "resume-builder",
@@ -338,16 +330,6 @@ export default function Dashboard({ lang = "en" }: { lang?: "en" | "zh" }) {
   }, []);
 
   // Keyboard shortcut: "/" to focus search
-  useEffect(() => {
-    const handler = (e: KeyboardEvent) => {
-      if (e.key === "/" && !["INPUT", "TEXTAREA"].includes((e.target as HTMLElement).tagName)) {
-        e.preventDefault();
-        searchInputRef.current?.focus();
-      }
-    };
-    window.addEventListener("keydown", handler);
-    return () => window.removeEventListener("keydown", handler);
-  }, []);
 
   const scrollToSection = useCallback((id: string) => {
     document.getElementById(id)?.scrollIntoView({ behavior: "smooth" });
@@ -511,12 +493,6 @@ export default function Dashboard({ lang = "en" }: { lang?: "en" | "zh" }) {
                 '--tw-ring-color': C.gold,
               }}
             />
-            <kbd
-              className="absolute right-3 top-1/2 -translate-y-1/2 text-[11px] font-mono px-1.5 py-0.5 rounded border"
-              style={{ borderColor: 'rgba(0,0,0,0.12)', color: C.textSecondary, backgroundColor: C.white }}
-            >
-              /
-            </kbd>
           </div>
 
           {/* Search Results */}
