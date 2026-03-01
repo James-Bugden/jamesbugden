@@ -64,15 +64,15 @@ const tools: ToolItem[] = [
 ];
 
 const guides: Guide[] = [
-  { title: { en: "Pivot Method Guide", zh: "職涯轉型方法指南" }, description: { en: "The complete 5-stage framework for changing careers without starting over.", zh: "完整的五階段框架，幫你轉換跑道而不用從零開始。" }, enPath: "/pivot-method-guide", zhPath: "/zh-tw/pivot-method-guide", tag: "getting-started" },
-  { title: { en: "Pivot Method Mini Guide", zh: "職涯轉型迷你指南" }, description: { en: "The same framework in 8 minutes. For when you need the short version.", zh: "同樣的框架，8 分鐘讀完。需要精簡版的時候用。" }, enPath: "/pivot-method-mini-guide", zhPath: "/zh-tw/pivot-method-mini-guide", tag: "getting-started" },
-  { title: { en: "LinkedIn Guide", zh: "LinkedIn 指南" }, description: { en: "How to optimize your LinkedIn so recruiters actually find you.", zh: "如何優化你的 LinkedIn，讓招募官真的找得到你。" }, enPath: "/linkedin-guide", zhPath: "/zh-tw/linkedin-guide", tag: "getting-started" },
-  { title: { en: "LinkedIn Branding Guide", zh: "LinkedIn 個人品牌指南" }, description: { en: "Build a personal brand that gets you inbound opportunities. Not just a profile update.", zh: "打造一個能帶來主動機會的個人品牌，不只是更新檔案。" }, enPath: "/linkedin-branding-guide", zhPath: "/zh-tw/linkedin-branding-guide", tag: "getting-started" },
-  { title: { en: "Resume Guide", zh: "履歷指南" }, description: { en: "The complete guide to writing a resume that passes the 6-second recruiter scan.", zh: "完整指南：寫出能通過招募官 6 秒篩選的履歷。" }, enPath: "/resume-guide", tag: "applying" },
-  { title: { en: "Resume Quick Reference", zh: "履歷速查表" }, description: { en: "One-page cheat sheet. The rules I check every resume against.", zh: "一頁速查表。我檢查每份履歷時使用的標準。" }, enPath: "/resume-quick-reference", zhPath: "/zh-tw/resume-quick-reference", tag: "applying" },
-  { title: { en: "Interview Prep Guide", zh: "面試準備指南" }, description: { en: "How to prepare for interviews at foreign companies in Taiwan. What they actually ask and why.", zh: "如何準備台灣外商面試。他們實際問什麼、為什麼這樣問。" }, enPath: "/interview-prep-guide", zhPath: "/zh-tw/interview-prep-guide", tag: "applying" },
-  { title: { en: "Interview Preparation Guide", zh: "面試準備完整指南" }, description: { en: "The extended version with practice questions, frameworks, and recruiter-insider tips.", zh: "延伸版本，包含練習題、框架與招募內部人士的建議。" }, enPath: "/interview-preparation-guide", zhPath: "/zh-tw/interview-preparation-guide", tag: "applying" },
-  { title: { en: "Salary Starter Kit", zh: "薪資談判入門包" }, description: { en: "Everything you need before your next salary conversation. Scripts, data, templates.", zh: "下次薪資對話前你需要的一切。腳本、數據、模板。" }, enPath: "/salary-starter-kit", zhPath: "/zh-tw/salary-starter-kit", tag: "negotiating" },
+  { title: { en: "Pivot Method Guide", zh: "轉職方法指南" }, description: { en: "The complete 5-stage framework for changing careers without starting over.", zh: "完整的 5 階段框架，教你怎麼換跑道但不用從零開始。" }, enPath: "/pivot-method-guide", zhPath: "/zh-tw/pivot-method-guide", tag: "getting-started" },
+  { title: { en: "Pivot Method Mini Guide", zh: "轉職方法迷你指南" }, description: { en: "The same framework in 8 minutes. For when you need the short version.", zh: "同樣的框架，8 分鐘看完。給需要精簡版的你。" }, enPath: "/pivot-method-mini-guide", zhPath: "/zh-tw/pivot-method-mini-guide", tag: "getting-started" },
+  { title: { en: "LinkedIn Guide", zh: "LinkedIn 指南" }, description: { en: "How to optimize your LinkedIn so recruiters actually find you.", zh: "怎麼優化你的 LinkedIn，讓招募官真的找到你。" }, enPath: "/linkedin-guide", zhPath: "/zh-tw/linkedin-guide", tag: "getting-started" },
+  { title: { en: "LinkedIn Branding Guide", zh: "LinkedIn 品牌指南" }, description: { en: "Build a personal brand that gets you inbound opportunities. Not just a profile update.", zh: "建立個人品牌，讓機會主動找上門。不只是改改個人檔案。" }, enPath: "/linkedin-branding-guide", zhPath: "/zh-tw/linkedin-branding-guide", tag: "getting-started" },
+  { title: { en: "Resume Guide", zh: "履歷指南" }, description: { en: "The complete guide to writing a resume that passes the 6-second recruiter scan.", zh: "完整的履歷撰寫指南，通過招募官 6 秒掃描測試。" }, enPath: "/resume-guide", tag: "applying" },
+  { title: { en: "Resume Quick Reference", zh: "履歷快速參考" }, description: { en: "One-page cheat sheet. The rules I check every resume against.", zh: "一頁速查表。我檢查每份履歷時用的標準。" }, enPath: "/resume-quick-reference", zhPath: "/zh-tw/resume-quick-reference", tag: "applying" },
+  { title: { en: "Interview Prep Guide", zh: "面試準備指南" }, description: { en: "How to prepare for interviews at foreign companies in Taiwan. What they actually ask and why.", zh: "怎麼準備外商公司在台灣的面試。他們到底問什麼、為什麼問。" }, enPath: "/interview-prep-guide", zhPath: "/zh-tw/interview-prep-guide", tag: "applying" },
+  { title: { en: "Interview Preparation Guide", zh: "面試準備完整指南" }, description: { en: "The extended version with practice questions, frameworks, and recruiter-insider tips.", zh: "進階版本，附練習題、框架、和招募官的內部技巧。" }, enPath: "/interview-preparation-guide", zhPath: "/zh-tw/interview-preparation-guide", tag: "applying" },
+  { title: { en: "Salary Starter Kit", zh: "薪資談判入門包" }, description: { en: "Everything you need before your next salary conversation. Scripts, data, templates.", zh: "下次談薪水之前你需要的一切。話術、數據、模板。" }, enPath: "/salary-starter-kit", zhPath: "/zh-tw/salary-starter-kit", tag: "negotiating" },
 ];
 
 const toolkitItems: ToolkitItem[] = [
@@ -94,13 +94,13 @@ const filterTabsEn = [
 ];
 const filterTabsZh = [
   { label: "全部", value: "all" as const },
-  { label: "入門準備", value: "getting-started" as const },
-  { label: "求職申請", value: "applying" as const },
+  { label: "起步準備", value: "getting-started" as const },
+  { label: "投遞申請", value: "applying" as const },
   { label: "薪資談判", value: "negotiating" as const },
 ];
 
 const groupLabelsEn: Record<GuideTag, string> = { "getting-started": "Getting Started", applying: "Applying", negotiating: "Negotiating" };
-const groupLabelsZh: Record<GuideTag, string> = { "getting-started": "入門準備", applying: "求職申請", negotiating: "薪資談判" };
+const groupLabelsZh: Record<GuideTag, string> = { "getting-started": "起步準備", applying: "投遞申請", negotiating: "薪資談判" };
 
 const i18n = {
   en: {
@@ -144,7 +144,7 @@ const i18n = {
     toolsSub: "根據真實招募數據打造的互動工具。想用幾次就用幾次。",
     launch: "啟動",
     guidesHeading: "指南",
-    guidesSub: "求職每個階段的實戰手冊。由招募官撰寫，而非職涯部落客。",
+    guidesSub: "求職每個階段的完整攻略。由招募官撰寫，不是職涯部落客。",
     toolkitHeading: "薪資談判工具包",
     toolkitSub: "一套完整的談判系統。先從索引開始，需要時再使用各個工具。",
     toolkitIndex: "工具包索引",
