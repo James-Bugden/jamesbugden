@@ -113,6 +113,7 @@ const WillyLinReview = lazy(() => import("./pages/reviews/WillyLinReview"));
 const WillyLinReviewZhTw = lazy(() => import("./pages/reviews/WillyLinReviewZhTw"));
 const HopeChenReview = lazy(() => import("./pages/reviews/HopeChenReview"));
 const HopeChenReviewZhTw = lazy(() => import("./pages/reviews/HopeChenReviewZhTw"));
+const RemaRaoReview = lazy(() => import("./pages/reviews/RemaRaoReview"));
 
 const queryClient = new QueryClient();
 
@@ -217,6 +218,7 @@ const App = () => (
             <Route path="/zh-tw/reviews/willy-lin" element={<WillyLinReviewZhTw />} />
             <Route path="/reviews/hope-chen" element={<HopeChenReview />} />
             <Route path="/zh-tw/reviews/hope-chen" element={<HopeChenReviewZhTw />} />
+            <Route path="/reviews/rema-rao" element={<RemaRaoReview />} />
             <Route path="/resume-quick-reference" element={<ResumeQuickReference />} />
             <Route path="/zh-tw/resume-quick-reference" element={<ResumeQuickReferenceZhTw />} />
             <Route path="/resume-analyzer" element={<ResumeAnalyzer />} />
