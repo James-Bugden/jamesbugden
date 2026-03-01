@@ -12,6 +12,7 @@ import SelfSegmentationExperimentZhTw from "@/components/SelfSegmentationExperim
 import SalaryProofSectionZhTw from "@/components/SalaryProofSectionZhTw";
 import MailerLiteForm from "@/components/MailerLiteForm";
 import LazySection from "@/components/LazySection";
+import AboutSectionZhTw from "@/components/AboutSectionZhTw";
 
 const faqs = [
   { q: "為什麼這些是免費的？", a: "我的使命是把盡可能多的付費工具和資訊免費開放。我想幫助更多人得到他們想要的工作和生活。" },
@@ -271,6 +272,11 @@ const IndexExperimentZhTw = () => {
         {/* ── FAQ ── */}
         <LazySection>
           <FAQSection />
+        </LazySection>
+
+        {/* ── About ── */}
+        <LazySection>
+          <AboutSectionZhTw />
         </LazySection>
       </main>
 

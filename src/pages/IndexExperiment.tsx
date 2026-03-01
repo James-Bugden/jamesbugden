@@ -12,6 +12,7 @@ import SelfSegmentationExperiment from "@/components/SelfSegmentationExperiment"
 import SalaryProofSection from "@/components/SalaryProofSection";
 import MailerLiteForm from "@/components/MailerLiteForm";
 import LazySection from "@/components/LazySection";
+import AboutSection from "@/components/AboutSection";
 
 const faqs = [
   { q: "Why are these free?", a: "It's my mission to make as many paid tools and information online free. I want to help as many people as I can to have the job and lifestyle they want." },
@@ -272,6 +273,11 @@ const IndexExperiment = () => {
         {/* ── FAQ ── */}
         <LazySection>
           <FAQSection />
+        </LazySection>
+
+        {/* ── About ── */}
+        <LazySection>
+          <AboutSection />
         </LazySection>
 
       </main>
