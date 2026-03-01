@@ -76,14 +76,6 @@ const tools: ToolItem[] = [
     path: "/resume-analyzer",
   },
   {
-    id: "offer-calculator",
-    icon: <DollarSign className="w-5 h-5" />,
-    iconBg: "#FEF9C3",
-    title: { en: "Offer Calculator", zh: "薪資計算器" },
-    description: { en: "See how much more you'd earn over 30 years by negotiating strategically.", zh: "看看有策略地談薪水，30 年下來能多賺多少。" },
-    path: "/offer-calculator",
-  },
-  {
     id: "resume-builder",
     icon: <PenTool className="w-5 h-5" />,
     iconBg: "#FFF7ED",
@@ -98,6 +90,14 @@ const tools: ToolItem[] = [
     title: { en: "Job Tracker", zh: "求職追蹤器" },
     description: { en: "Track every application, interview, and follow-up in one place. Stop losing opportunities.", zh: "在一個地方追蹤每一個申請、面試和後續跟進。別再漏掉機會。" },
     path: "/jobs",
+  },
+  {
+    id: "offer-calculator",
+    icon: <DollarSign className="w-5 h-5" />,
+    iconBg: "#FEF9C3",
+    title: { en: "Offer Calculator", zh: "薪資計算器" },
+    description: { en: "See how much more you'd earn over 30 years by negotiating strategically.", zh: "看看有策略地談薪水，30 年下來能多賺多少。" },
+    path: "/offer-calculator",
   },
 ];
 
