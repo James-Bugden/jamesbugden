@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { useAuth } from "@/contexts/AuthContext";
 import { Navigate, Link } from "react-router-dom";
 import LanguageToggle from "@/components/LanguageToggle";
@@ -37,8 +38,80 @@ const tools = [
   },
 ];
 
+type GuideTag = "getting-started" | "applying" | "negotiating";
+
+interface Guide {
+  title: string;
+  description: string;
+  enPath: string;
+  zhPath?: string;
+  tag: GuideTag;
+  isNew?: boolean;
+}
+
+const guides: Guide[] = [
+  // Getting Started
+  { title: "Pivot Method Guide", description: "The complete 5-stage framework for changing careers without starting over.", enPath: "/pivot-method-guide", zhPath: "/zh-tw/pivot-method-guide", tag: "getting-started" },
+  { title: "Pivot Method Mini Guide", description: "The same framework in 8 minutes. For when you need the short version.", enPath: "/pivot-method-mini-guide", zhPath: "/zh-tw/pivot-method-mini-guide", tag: "getting-started" },
+  { title: "LinkedIn Guide", description: "How to optimize your LinkedIn so recruiters actually find you.", enPath: "/linkedin-guide", zhPath: "/zh-tw/linkedin-guide", tag: "getting-started" },
+  { title: "LinkedIn Branding Guide", description: "Build a personal brand that gets you inbound opportunities. Not just a profile update.", enPath: "/linkedin-branding-guide", zhPath: "/zh-tw/linkedin-branding-guide", tag: "getting-started" },
+  // Applying
+  { title: "Resume Guide", description: "The complete guide to writing a resume that passes the 6-second recruiter scan.", enPath: "/resume-guide", tag: "applying" },
+  { title: "Resume Quick Reference", description: "One-page cheat sheet. The rules I check every resume against.", enPath: "/resume-quick-reference", zhPath: "/zh-tw/resume-quick-reference", tag: "applying" },
+  { title: "Interview Prep Guide", description: "How to prepare for interviews at foreign companies in Taiwan. What they actually ask and why.", enPath: "/interview-prep-guide", zhPath: "/zh-tw/interview-prep-guide", tag: "applying" },
+  { title: "Interview Preparation Guide", description: "The extended version with practice questions, frameworks, and recruiter-insider tips.", enPath: "/interview-preparation-guide", zhPath: "/zh-tw/interview-preparation-guide", tag: "applying" },
+  // Negotiating
+  { title: "Salary Starter Kit", description: "Everything you need before your next salary conversation. Scripts, data, templates.", enPath: "/salary-starter-kit", zhPath: "/zh-tw/salary-starter-kit", tag: "negotiating" },
+];
+
+const filterTabs: { label: string; value: GuideTag | "all" }[] = [
+  { label: "All", value: "all" },
+  { label: "Getting Started", value: "getting-started" },
+  { label: "Applying", value: "applying" },
+  { label: "Negotiating", value: "negotiating" },
+];
+
+const groupLabels: Record<GuideTag, string> = {
+  "getting-started": "Getting Started",
+  "applying": "Applying",
+  "negotiating": "Negotiating",
+};
+
+function GuideCard({ guide }: { guide: Guide }) {
+  return (
+    <div className="relative bg-card rounded-xl shadow-[0_2px_8px_rgba(0,0,0,0.08)] p-6 flex flex-col justify-between transition-all duration-200 hover:-translate-y-0.5 hover:shadow-premium">
+      {guide.isNew && (
+        <span className="absolute top-3 right-3 bg-gold text-white text-[11px] font-bold px-2 py-0.5 rounded-full uppercase tracking-wide">
+          NEW
+        </span>
+      )}
+      <div>
+        <h4 className="text-base font-bold text-foreground mb-1">{guide.title}</h4>
+        <p className="text-muted-foreground text-sm leading-relaxed">{guide.description}</p>
+      </div>
+      <div className="flex gap-2 mt-4">
+        <Link
+          to={guide.enPath}
+          className="text-xs font-semibold px-3 py-1 rounded-full border border-gold text-gold hover:bg-gold hover:text-white transition-colors"
+        >
+          EN
+        </Link>
+        {guide.zhPath && (
+          <Link
+            to={guide.zhPath}
+            className="text-xs font-semibold px-3 py-1 rounded-full border border-gold text-gold hover:bg-gold hover:text-white transition-colors"
+          >
+            中文
+          </Link>
+        )}
+      </div>
+    </div>
+  );
+}
+
 export default function Dashboard() {
   const { user, isLoggedIn, isLoading, signOut } = useAuth();
+  const [activeFilter, setActiveFilter] = useState<GuideTag | "all">("all");
 
   if (isLoading) {
     return (
@@ -54,6 +127,17 @@ export default function Dashboard() {
     user?.user_metadata?.full_name?.split(" ")[0] ||
     user?.email?.split("@")[0] ||
     "there";
+
+  const filteredGuides = activeFilter === "all" ? guides : guides.filter((g) => g.tag === activeFilter);
+
+  // Group guides by tag for "All" view
+  const groupedGuides = activeFilter === "all"
+    ? (["getting-started", "applying", "negotiating"] as GuideTag[]).map((tag) => ({
+        tag,
+        label: groupLabels[tag],
+        items: guides.filter((g) => g.tag === tag),
+      }))
+    : null;
 
   return (
     <>
@@ -96,13 +180,11 @@ export default function Dashboard() {
       {/* Main Content */}
       <main className="bg-background min-h-[60vh]">
         <div className="max-w-[1200px] mx-auto px-4 md:px-8 py-8 md:py-12">
-          {/* Section Header */}
+          {/* Your Tools */}
           <h2 className="font-heading text-2xl md:text-3xl text-foreground mb-2">Your Tools</h2>
           <p className="text-muted-foreground text-sm md:text-base mb-8">
             Interactive tools built with real recruiting data. Use them as many times as you need.
           </p>
-
-          {/* Tool Cards Grid */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             {tools.map((tool) => (
               <Link
@@ -122,6 +204,51 @@ export default function Dashboard() {
                 </div>
               </Link>
             ))}
+          </div>
+
+          {/* Guides Section */}
+          <div className="mt-16">
+            <h2 className="font-heading text-2xl md:text-3xl text-foreground mb-2">Guides</h2>
+            <p className="text-muted-foreground text-sm md:text-base mb-6">
+              Step-by-step playbooks for every stage of your job search. Written by a recruiter, not a career blogger.
+            </p>
+
+            {/* Filter Tabs */}
+            <div className="flex gap-2 mb-8 overflow-x-auto pb-1 -mx-1 px-1">
+              {filterTabs.map((tab) => (
+                <button
+                  key={tab.value}
+                  onClick={() => setActiveFilter(tab.value)}
+                  className={`whitespace-nowrap text-sm font-medium px-4 py-1.5 rounded-full border transition-colors ${
+                    activeFilter === tab.value
+                      ? "bg-gold text-white border-gold"
+                      : "bg-card text-foreground border-border hover:border-gold/50"
+                  }`}
+                >
+                  {tab.label}
+                </button>
+              ))}
+            </div>
+
+            {/* Cards */}
+            {activeFilter === "all" && groupedGuides ? (
+              groupedGuides.map((group) => (
+                <div key={group.tag} className="mb-8">
+                  <p className="text-xs font-semibold uppercase tracking-widest text-muted-foreground mb-4">{group.label}</p>
+                  <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+                    {group.items.map((guide) => (
+                      <GuideCard key={guide.enPath} guide={guide} />
+                    ))}
+                  </div>
+                </div>
+              ))
+            ) : (
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+                {filteredGuides.map((guide) => (
+                  <GuideCard key={guide.enPath} guide={guide} />
+                ))}
+              </div>
+            )}
           </div>
         </div>
       </main>
