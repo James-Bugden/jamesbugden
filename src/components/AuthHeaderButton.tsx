@@ -51,7 +51,7 @@ export function AuthHeaderButton({ variant = "nav" }: AuthHeaderButtonProps) {
         >
           {initial}
         </span>
-        <span className="hidden sm:inline">{dashboardLabel}</span>
+        <span>{dashboardLabel}</span>
       </Link>
       <button
         onClick={signOut}
