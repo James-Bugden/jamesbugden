@@ -111,7 +111,7 @@ const RemaRaoReview = () => {
                 </li>
                 <li className="flex items-start gap-3">
                   <XCircle className="w-5 h-5 text-destructive mt-0.5 flex-shrink-0" />
-                  <span className="text-foreground"><strong>Geographic scope is understated.</strong> 19 markets across EMEA and APAC. M&A integration across Autocab, Careem, Trendyol/Getir. Multi-jurisdiction regulatory work. This is genuinely global scope that Director roles demand. Your summary should say this louder.</span>
+                  <span className="text-foreground"><strong>Geographic scope is understated.</strong> 19 markets across EMEA and APAC. M&A integration across Autocab, Careem, Trendyol/Getir. Multi-jurisdiction regulatory work.</span>
                 </li>
               </ul>
             </div>
