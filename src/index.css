@@ -494,13 +494,17 @@
   box-shadow: 0 4px 12px rgba(31, 43, 31, 0.25) !important;
 }
 
-/* ── Exception: CoachingCTA gold button on dark bg ── */
-.experiment #coaching .btn-gold {
+/* ── Exception: gold button on dark backgrounds ── */
+.experiment #coaching .btn-gold,
+.experiment [style*="background-color: rgb(27, 58, 47)"] .btn-gold,
+.experiment [style*="#1B3A2F"] .btn-gold {
   background: #D4930D !important;
   color: #FFFFFF !important;
   box-shadow: 0 2px 6px rgba(212, 147, 13, 0.25) !important;
 }
-.experiment #coaching .btn-gold:hover {
+.experiment #coaching .btn-gold:hover,
+.experiment [style*="background-color: rgb(27, 58, 47)"] .btn-gold:hover,
+.experiment [style*="#1B3A2F"] .btn-gold:hover {
   background: #B87D0A !important;
   box-shadow: 0 4px 12px rgba(212, 147, 13, 0.35) !important;
 }
