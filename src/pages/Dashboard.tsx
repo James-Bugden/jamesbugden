@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useAuth } from "@/contexts/AuthContext";
 import { Navigate, Link } from "react-router-dom";
 import LanguageToggle from "@/components/LanguageToggle";
@@ -163,16 +163,43 @@ const i18n = {
   },
 };
 
+/* ── Design tokens (experiment page guidelines) ── */
+const C = {
+  cream: '#FDFBF7',
+  white: '#FFFFFF',
+  darkGreen: '#2D3A2E',
+  gold: '#D4930D',
+  goldHover: '#E0A520',
+  text: '#1A1A1A',
+  textSecondary: '#6B6B6B',
+  cardShadow: '0 2px 8px rgba(0,0,0,0.06)',
+  cardHoverShadow: '0 8px 24px rgba(27,58,47,0.08)',
+  toolkitBg: '#F0EDE8',
+};
+
+const noiseOverlay = 'url("data:image/svg+xml,%3Csvg viewBox=\'0 0 256 256\' xmlns=\'http://www.w3.org/2000/svg\'%3E%3Cfilter id=\'noise\'%3E%3CfeTurbulence type=\'fractalNoise\' baseFrequency=\'0.65\' numOctaves=\'3\' stitchTiles=\'stitch\'/%3E%3C/filter%3E%3Crect width=\'100%25\' height=\'100%25\' filter=\'url(%23noise)\'/%3E%3C/svg%3E")';
+
 function GuideCard({ guide, lang }: { guide: Guide; lang: "en" | "zh" }) {
   const path = lang === "zh" && guide.zhPath ? guide.zhPath : guide.enPath;
   return (
-    <Link to={path} className="relative bg-card rounded-xl shadow-[0_2px_8px_rgba(0,0,0,0.08)] p-6 flex flex-col justify-between transition-all duration-200 hover:-translate-y-0.5 hover:shadow-premium">
+    <Link
+      to={path}
+      className="relative rounded-xl p-6 flex flex-col justify-between transition-all duration-200 hover:-translate-y-0.5"
+      style={{ backgroundColor: C.cream, boxShadow: C.cardShadow }}
+      onMouseEnter={e => (e.currentTarget.style.boxShadow = C.cardHoverShadow)}
+      onMouseLeave={e => (e.currentTarget.style.boxShadow = C.cardShadow)}
+    >
       {guide.isNew && (
-        <span className="absolute top-3 right-3 bg-gold text-white text-[11px] font-bold px-2 py-0.5 rounded-full uppercase tracking-wide">NEW</span>
+        <span
+          className="absolute top-3 right-3 text-[11px] font-bold px-2 py-0.5 rounded-full uppercase tracking-wide"
+          style={{ backgroundColor: C.gold, color: C.white }}
+        >
+          NEW
+        </span>
       )}
       <div>
-        <h4 className="text-base font-bold text-foreground mb-1">{guide.title[lang]}</h4>
-        <p className="text-muted-foreground text-sm leading-relaxed">{guide.description[lang]}</p>
+        <h4 className="text-base font-bold mb-1" style={{ color: C.text }}>{guide.title[lang]}</h4>
+        <p className="text-sm leading-relaxed" style={{ color: C.textSecondary }}>{guide.description[lang]}</p>
       </div>
     </Link>
   );
@@ -181,12 +208,19 @@ function GuideCard({ guide, lang }: { guide: Guide; lang: "en" | "zh" }) {
 export default function Dashboard({ lang = "en" }: { lang?: "en" | "zh" }) {
   const { user, isLoggedIn, isLoading, signOut } = useAuth();
   const [activeFilter, setActiveFilter] = useState<GuideTag | "all">("all");
+  const [scrolled, setScrolled] = useState(false);
   const t = i18n[lang];
+
+  useEffect(() => {
+    const onScroll = () => setScrolled(window.scrollY > 10);
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => window.removeEventListener("scroll", onScroll);
+  }, []);
 
   if (isLoading) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-background">
-        <div className="w-8 h-8 border-4 border-gold border-t-transparent rounded-full animate-spin" />
+      <div className="min-h-screen flex items-center justify-center" style={{ backgroundColor: C.cream }}>
+        <div className="w-8 h-8 border-4 rounded-full animate-spin" style={{ borderColor: C.gold, borderTopColor: 'transparent' }} />
       </div>
     );
   }
@@ -213,26 +247,35 @@ export default function Dashboard({ lang = "en" }: { lang?: "en" | "zh" }) {
       <PageSEO title={t.seoTitle} description={t.seoDesc} path={lang === "zh" ? "/zh-tw/dashboard" : "/dashboard"} />
 
       {/* Nav */}
-      <nav className="bg-executive text-cream-light sticky top-0 z-50">
+      <nav
+        className="sticky top-0 z-50 transition-shadow duration-300"
+        style={{
+          backgroundColor: C.cream,
+          boxShadow: scrolled ? '0 1px 8px rgba(0,0,0,0.08)' : 'none',
+        }}
+      >
         <div className="max-w-[1200px] mx-auto flex items-center justify-between px-4 md:px-8 h-14">
-          <Link to="/" className="font-heading text-lg tracking-wide text-white">JAMES BUGDEN</Link>
+          <Link to="/" className="font-heading text-lg tracking-wide" style={{ color: C.darkGreen }}>JAMES BUGDEN</Link>
           <div className="flex items-center gap-4 text-sm">
-            <span className="hidden sm:inline text-white/80">{t.hey} {firstName}</span>
-            <button onClick={signOut} className="text-white/70 hover:text-white transition-colors">{t.signOut}</button>
+            <span className="hidden sm:inline" style={{ color: C.textSecondary }}>{t.hey} {firstName}</span>
+            <button onClick={signOut} className="hover:opacity-80 transition-opacity" style={{ color: C.textSecondary }}>{t.signOut}</button>
             <LanguageToggle />
           </div>
         </div>
       </nav>
 
       {/* Welcome Banner */}
-      <section className="bg-executive">
+      <section style={{ backgroundColor: C.cream }}>
         <div className="max-w-[1200px] mx-auto px-4 md:px-8 py-8 md:py-10 flex flex-col md:flex-row md:items-center md:justify-between gap-4">
-          <h1 className="font-heading text-2xl md:text-3xl text-white">{t.welcomeBack} {firstName}.</h1>
-          <div className="bg-white/10 rounded-lg px-4 py-3 max-w-lg">
-            <p className="text-white/90 text-sm leading-relaxed">
+          <h1 className="font-heading text-2xl md:text-3xl" style={{ color: C.text }}>{t.welcomeBack} {firstName}.</h1>
+          <div
+            className="rounded-lg px-4 py-3 max-w-lg border"
+            style={{ borderColor: 'rgba(0,0,0,0.08)', backgroundColor: C.white }}
+          >
+            <p className="text-sm leading-relaxed" style={{ color: C.textSecondary }}>
               <span className="mr-1.5">🆕</span>
-              <span className="font-semibold text-white">{t.newBadge}</span> — {t.newBody}{" "}
-              <Link to={t.salaryKitLink} className="text-gold font-semibold hover:underline inline-flex items-center gap-0.5">
+              <span className="font-semibold" style={{ color: C.text }}>{t.newBadge}</span> — {t.newBody}{" "}
+              <Link to={t.salaryKitLink} className="font-semibold hover:underline inline-flex items-center gap-0.5" style={{ color: C.gold }}>
                 {t.checkItOut} <ArrowRight className="w-3.5 h-3.5" />
               </Link>
             </p>
@@ -241,25 +284,28 @@ export default function Dashboard({ lang = "en" }: { lang?: "en" | "zh" }) {
       </section>
 
       {/* Main Content */}
-      <main className="bg-background min-h-[60vh]">
+      <main className="min-h-[60vh]" style={{ backgroundColor: C.white }}>
         <div className="max-w-[1200px] mx-auto px-4 md:px-8 py-8 md:py-12">
           {/* Your Tools */}
-          <h2 className="font-heading text-2xl md:text-3xl text-foreground mb-2">{t.toolsHeading}</h2>
-          <p className="text-muted-foreground text-sm md:text-base mb-8">{t.toolsSub}</p>
+          <h2 className="font-heading text-2xl md:text-3xl mb-2" style={{ color: C.text }}>{t.toolsHeading}</h2>
+          <p className="text-sm md:text-base mb-8" style={{ color: C.textSecondary }}>{t.toolsSub}</p>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             {tools.map((tool) => (
               <Link
                 key={tool.path}
                 to={tool.path}
-                className="group bg-card rounded-xl shadow-[0_2px_8px_rgba(0,0,0,0.08)] border-l-[3px] border-l-gold p-6 min-h-[180px] flex flex-col justify-between transition-all duration-200 hover:-translate-y-0.5 hover:shadow-premium"
+                className="group rounded-xl border-l-[4px] p-6 min-h-[180px] flex flex-col justify-between transition-all duration-200 hover:-translate-y-0.5"
+                style={{ backgroundColor: C.cream, borderLeftColor: C.gold, boxShadow: C.cardShadow }}
+                onMouseEnter={e => (e.currentTarget.style.boxShadow = C.cardHoverShadow)}
+                onMouseLeave={e => (e.currentTarget.style.boxShadow = C.cardShadow)}
               >
                 <div>
                   <span className="text-2xl mb-3 block">{tool.emoji}</span>
-                  <h3 className="text-lg font-bold text-foreground mb-1">{tool.title[lang]}</h3>
-                  <p className="text-muted-foreground text-sm leading-relaxed">{tool.description[lang]}</p>
+                  <h3 className="text-lg font-bold mb-1" style={{ color: C.text }}>{tool.title[lang]}</h3>
+                  <p className="text-sm leading-relaxed" style={{ color: C.textSecondary }}>{tool.description[lang]}</p>
                 </div>
                 <div className="flex justify-end mt-4">
-                  <span className="inline-flex items-center gap-1 text-sm font-semibold text-gold group-hover:text-gold-dark transition-colors">
+                  <span className="inline-flex items-center gap-1 text-sm font-semibold transition-colors" style={{ color: C.gold }}>
                     {t.launch} <ArrowRight className="w-4 h-4" />
                   </span>
                 </div>
@@ -269,19 +315,20 @@ export default function Dashboard({ lang = "en" }: { lang?: "en" | "zh" }) {
 
           {/* Guides Section */}
           <div className="mt-16">
-            <h2 className="font-heading text-2xl md:text-3xl text-foreground mb-2">{t.guidesHeading}</h2>
-            <p className="text-muted-foreground text-sm md:text-base mb-6">{t.guidesSub}</p>
+            <h2 className="font-heading text-2xl md:text-3xl mb-2" style={{ color: C.text }}>{t.guidesHeading}</h2>
+            <p className="text-sm md:text-base mb-6" style={{ color: C.textSecondary }}>{t.guidesSub}</p>
 
             <div className="flex gap-2 mb-8 overflow-x-auto pb-1 -mx-1 px-1">
               {t.filterTabs.map((tab) => (
                 <button
                   key={tab.value}
                   onClick={() => setActiveFilter(tab.value)}
-                  className={`whitespace-nowrap text-sm font-medium px-4 py-1.5 rounded-full border transition-colors ${
+                  className="whitespace-nowrap text-sm font-medium px-4 py-1.5 rounded-full border transition-colors"
+                  style={
                     activeFilter === tab.value
-                      ? "bg-gold text-white border-gold"
-                      : "bg-card text-foreground border-border hover:border-gold/50"
-                  }`}
+                      ? { backgroundColor: C.gold, color: C.white, borderColor: C.gold }
+                      : { backgroundColor: C.white, color: C.text, borderColor: 'rgba(0,0,0,0.12)' }
+                  }
                 >
                   {tab.label}
                 </button>
@@ -291,7 +338,7 @@ export default function Dashboard({ lang = "en" }: { lang?: "en" | "zh" }) {
             {activeFilter === "all" && groupedGuides ? (
               groupedGuides.map((group) => (
                 <div key={group.tag} className="mb-8">
-                  <p className="text-xs font-semibold uppercase tracking-widest text-muted-foreground mb-4">{group.label}</p>
+                  <p className="text-xs font-semibold uppercase tracking-widest mb-4" style={{ color: C.textSecondary }}>{group.label}</p>
                   <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
                     {group.items.map((guide) => <GuideCard key={guide.enPath} guide={guide} lang={lang} />)}
                   </div>
@@ -307,17 +354,28 @@ export default function Dashboard({ lang = "en" }: { lang?: "en" | "zh" }) {
       </main>
 
       {/* Salary Negotiation Toolkit */}
-      <section className="bg-[hsl(39_20%_90%)]">
+      <section style={{ backgroundColor: C.toolkitBg }}>
         <div className="max-w-[1200px] mx-auto px-4 md:px-8 py-12 md:py-16">
-          <h2 className="font-heading text-2xl md:text-3xl text-foreground mb-2">{t.toolkitHeading}</h2>
-          <p className="text-muted-foreground text-sm md:text-base mb-8">{t.toolkitSub}</p>
+          <h2 className="font-heading text-2xl md:text-3xl mb-2" style={{ color: C.text }}>{t.toolkitHeading}</h2>
+          <p className="text-sm md:text-base mb-8" style={{ color: C.textSecondary }}>{t.toolkitSub}</p>
 
           {/* Featured Card */}
-          <Link to={t.toolkitIndexPath} className="relative block bg-card rounded-xl shadow-[0_2px_8px_rgba(0,0,0,0.08)] border-l-[4px] border-l-gold p-6 md:p-8 mb-6 transition-all duration-200 hover:-translate-y-0.5 hover:shadow-premium bg-gradient-to-r from-gold/5 to-transparent">
-            <span className="absolute top-4 right-4 bg-gold text-white text-[11px] font-bold px-2.5 py-0.5 rounded-full uppercase tracking-wide">{t.startHere}</span>
+          <Link
+            to={t.toolkitIndexPath}
+            className="relative block rounded-xl border-l-[4px] p-6 md:p-8 mb-6 transition-all duration-200 hover:-translate-y-0.5"
+            style={{ backgroundColor: C.cream, borderLeftColor: C.gold, boxShadow: C.cardShadow }}
+            onMouseEnter={e => (e.currentTarget.style.boxShadow = C.cardHoverShadow)}
+            onMouseLeave={e => (e.currentTarget.style.boxShadow = C.cardShadow)}
+          >
+            <span
+              className="absolute top-4 right-4 text-[11px] font-bold px-2.5 py-0.5 rounded-full uppercase tracking-wide"
+              style={{ backgroundColor: C.gold, color: C.white }}
+            >
+              {t.startHere}
+            </span>
             <span className="text-2xl mb-3 block">📖</span>
-            <h3 className="text-lg font-bold text-foreground mb-1">{t.toolkitIndex}</h3>
-            <p className="text-muted-foreground text-sm leading-relaxed">{t.toolkitIndexDesc}</p>
+            <h3 className="text-lg font-bold mb-1" style={{ color: C.text }}>{t.toolkitIndex}</h3>
+            <p className="text-sm leading-relaxed" style={{ color: C.textSecondary }}>{t.toolkitIndexDesc}</p>
           </Link>
 
           {/* Toolkit Grid */}
@@ -326,11 +384,14 @@ export default function Dashboard({ lang = "en" }: { lang?: "en" | "zh" }) {
               <Link
                 key={item.enPath}
                 to={lang === "zh" ? item.zhPath : item.enPath}
-                className="bg-card rounded-xl shadow-[0_2px_8px_rgba(0,0,0,0.08)] p-6 flex flex-col justify-between transition-all duration-200 hover:-translate-y-0.5 hover:shadow-premium"
+                className="rounded-xl p-6 flex flex-col justify-between transition-all duration-200 hover:-translate-y-0.5"
+                style={{ backgroundColor: C.cream, boxShadow: C.cardShadow }}
+                onMouseEnter={e => (e.currentTarget.style.boxShadow = C.cardHoverShadow)}
+                onMouseLeave={e => (e.currentTarget.style.boxShadow = C.cardShadow)}
               >
                 <div>
-                  <h4 className="text-base font-bold text-foreground mb-1">{item.title[lang]}</h4>
-                  <p className="text-muted-foreground text-sm leading-relaxed">{item.desc[lang]}</p>
+                  <h4 className="text-base font-bold mb-1" style={{ color: C.text }}>{item.title[lang]}</h4>
+                  <p className="text-sm leading-relaxed" style={{ color: C.textSecondary }}>{item.desc[lang]}</p>
                 </div>
               </Link>
             ))}
@@ -339,27 +400,41 @@ export default function Dashboard({ lang = "en" }: { lang?: "en" | "zh" }) {
       </section>
 
       {/* Coaching CTA */}
-      <section className="bg-executive">
-        <div className="max-w-[1200px] mx-auto px-4 md:px-8 py-16 md:py-20 text-center">
-          <h2 className="font-heading text-2xl md:text-3xl text-white mb-4">{t.ctaHeading}</h2>
-          <p className="text-white/85 text-base md:text-lg max-w-2xl mx-auto mb-8 leading-relaxed">{t.ctaBody}</p>
+      <section className="relative overflow-hidden" style={{ background: `linear-gradient(135deg, ${C.darkGreen} 0%, #232E24 100%)` }}>
+        <div className="absolute inset-0 opacity-[0.03]" style={{ backgroundImage: noiseOverlay, backgroundSize: '128px 128px' }} />
+        <div className="max-w-[1200px] mx-auto px-4 md:px-8 py-16 md:py-20 text-center relative z-10">
+          <h2
+            className="font-heading mb-4"
+            style={{ color: '#FBF7F0', fontSize: 'clamp(1.5rem, 3vw, 2.5rem)' }}
+          >
+            {t.ctaHeading}
+          </h2>
+          <p
+            className="text-base md:text-lg max-w-2xl mx-auto mb-8 leading-relaxed"
+            style={{ color: 'rgba(251,247,240,0.85)' }}
+          >
+            {t.ctaBody}
+          </p>
           <a
             href="https://calendly.com"
             target="_blank"
             rel="noopener noreferrer"
-            className="inline-flex items-center gap-1.5 bg-gold hover:bg-gold-dark text-white font-semibold px-8 py-3 rounded-lg transition-colors text-base"
+            className="inline-flex items-center gap-1.5 font-semibold px-8 py-3 rounded-lg transition-colors text-base"
+            style={{ backgroundColor: C.gold, color: C.white }}
+            onMouseEnter={e => (e.currentTarget.style.backgroundColor = C.goldHover)}
+            onMouseLeave={e => (e.currentTarget.style.backgroundColor = C.gold)}
           >
             {t.ctaButton} <ArrowRight className="w-4 h-4" />
           </a>
-          <p className="text-white/50 text-sm mt-4">{t.ctaTrust}</p>
+          <p className="text-sm mt-4" style={{ color: '#A8B5A9' }}>{t.ctaTrust}</p>
         </div>
       </section>
 
       {/* Footer */}
-      <footer className="bg-background py-10 text-center">
-        <p className="font-heading text-lg text-foreground/60 mb-1">JAMES BUGDEN</p>
-        <p className="text-muted-foreground text-sm mb-1">james.careers</p>
-        <p className="text-muted-foreground/60 text-xs">{t.footerCopyright}</p>
+      <footer className="py-10 text-center" style={{ backgroundColor: C.white }}>
+        <p className="font-heading text-lg mb-1" style={{ color: C.textSecondary }}>JAMES BUGDEN</p>
+        <p className="text-sm mb-1" style={{ color: C.textSecondary }}>james.careers</p>
+        <p className="text-xs" style={{ color: '#999' }}>{t.footerCopyright}</p>
       </footer>
     </>
   );
