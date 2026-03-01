@@ -1,4 +1,5 @@
 import React, { useRef, useState, useEffect } from "react";
+import DOMPurify from "dompurify";
 import { Mail, Phone, MapPin, Flag, FileText } from "lucide-react";
 import { CoverLetterData, CoverLetterCustomize } from "./types";
 
@@ -79,7 +80,7 @@ const A4LetterPage = React.memo(function A4LetterPage({ data, customize }: { dat
       <div
         className="mb-[8mm] [&_ul]:list-disc [&_ul]:pl-[5mm] [&_ol]:list-decimal [&_ol]:pl-[5mm] [&_p]:mb-[2mm]"
         style={{ fontSize: `${customize.fontSize}pt`, color: "#374151", lineHeight: customize.lineHeight }}
-        dangerouslySetInnerHTML={{ __html: body || "" }}
+        dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(body || "") }}
       />
 
       {/* Signature */}
