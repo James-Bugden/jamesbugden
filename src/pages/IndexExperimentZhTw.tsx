@@ -114,7 +114,7 @@ const IndexExperimentZhTw = () => {
             <div className="flex flex-col items-center text-center md:grid md:grid-cols-[1fr_auto] md:gap-16 md:items-center md:text-left">
               <div className="order-2 md:order-1 w-full">
                 {/* Photo — mobile only */}
-                <div className="flex justify-center mb-4 md:hidden">
+                <div className="flex justify-center mb-4 pt-4 md:hidden">
                   <div className="relative">
                     <div className="absolute -inset-3 rounded-full bg-gradient-to-br from-gold/20 via-transparent to-executive-green/10 blur-xl" />
                     <img src={jamesPhoto} alt="James Bugden" className="relative w-40 h-40 rounded-full object-cover hero-photo-shadow" style={{ border: '3px solid #D4930D' }} />
