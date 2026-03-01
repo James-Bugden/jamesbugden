@@ -67,11 +67,11 @@ export default function AboutSectionZhTw() {
             </h2>
 
             <p className="font-bold text-base md:text-lg mb-5" style={{ color: '#2b4734' }}>
-              Uber 台灣資深 HR · 職涯教練 · 講師
+              Uber 台灣資深 Recruiter · 職涯教練 · 講師
             </p>
 
             <p className="text-base md:text-lg mb-6 leading-relaxed" style={{ color: '#1A1A1A' }}>
-              我是 Uber 台灣的資深 HR。我知道他們怎麼面試、怎麼給薪，還有什麼讓你脫穎而出。
+              我是 Uber 台灣的資深 Recruiter。我知道他們怎麼面試、怎麼給薪，還有什麼讓你脫穎而出。
             </p>
 
             <p className="text-base leading-relaxed mb-4" style={{ color: '#6B6B6B' }}>
