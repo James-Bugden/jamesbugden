@@ -143,7 +143,7 @@ const IndexExperimentZhTw = () => {
                 </div>
 
                 <p className="mb-5" style={{ color: '#6B6B6B', fontSize: '0.8125rem', marginTop: '8px' }}>
-                  加入 2,000+ 位專業人士 · 永久免費 · 隨時取消訂閱
+                  加入 10,000+ 位專業人士 · 永久免費 · 隨時取消訂閱
                 </p>
 
                 <div className="flex flex-wrap justify-center md:justify-start gap-x-8 gap-y-3 pt-6 border-t border-border/60">
@@ -156,7 +156,7 @@ const IndexExperimentZhTw = () => {
                   </div>
                   <div className="flex flex-col items-center md:items-start">
                     <span className="text-xl font-bold flex items-center gap-1.5" style={{ color: '#1A1A1A' }}>
-                      <Briefcase className="w-5 h-5" style={{ color: '#2D3A2E', opacity: 0.7 }} />
+                      <Users className="w-5 h-5" style={{ color: '#2D3A2E', opacity: 0.7 }} />
                       750+
                     </span>
                     <span className="text-sm" style={{ color: '#6B6B6B' }}>人成功錄取</span>
@@ -266,6 +266,11 @@ const IndexExperimentZhTw = () => {
             </p>
           </div>
         </section>
+
+        {/* ── How It Works ── */}
+        <LazySection>
+          <SelfSegmentationExperimentZhTw />
+        </LazySection>
 
         {/* ── Salary Proof ── */}
         <LazySection>
