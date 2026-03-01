@@ -5,6 +5,7 @@ import { InstagramIcon, ThreadsIcon } from "@/components/SocialIcons";
 import GuideShareButtons from "@/components/GuideShareButtons";
 import PageSEO from "@/components/PageSEO";
 import { AuthHeaderButton } from "@/components/AuthHeaderButton";
+import { useTrackGuideProgress } from "@/hooks/useReadingProgress";
 
 /* ─── Reading Progress Bar ─── */
 const ReadingProgress = () => {
@@ -380,6 +381,7 @@ const BulletComparison = () => (
 
 /* ─── Main Page Component ─── */
 const ResumeGuideZhTw = () => {
+  useTrackGuideProgress("resume-guide");
   const navigate = useNavigate();
 
   return (

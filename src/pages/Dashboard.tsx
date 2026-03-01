@@ -1,13 +1,14 @@
-import { useState, useEffect, useRef, useCallback, useMemo, memo } from "react";
+import { useState, useEffect, useRef, useCallback, useMemo, memo, MouseEvent } from "react";
 import { useAuth } from "@/contexts/AuthContext";
 import { Navigate, Link } from "react-router-dom";
 import LanguageToggle from "@/components/LanguageToggle";
-import { ArrowRight, FileText, DollarSign, PenTool, ClipboardList, Search, X, Sparkles } from "lucide-react";
+import { ArrowRight, FileText, DollarSign, PenTool, ClipboardList, Search, X, Sparkles, Check } from "lucide-react";
 import PageSEO from "@/components/PageSEO";
 import LazySection from "@/components/LazySection";
 import { useRecentlyUsed, type RecentItem } from "@/hooks/useRecentlyUsed";
 import { getActiveJobs } from "@/lib/jobStore";
 import { useLocalStorage } from "@/hooks/useLocalStorage";
+import { useReadingProgress } from "@/hooks/useReadingProgress";
 
 type GuideTag = "getting-started" | "applying" | "negotiating";
 
@@ -178,6 +179,8 @@ const i18n = {
     recommended: "Recommended for You",
     lastScore: "Last score",
     activeApps: "active applications",
+    done: "Done",
+    read: "read",
   },
   zh: {
     seoTitle: "儀表板 — James Bugden",
@@ -217,6 +220,8 @@ const i18n = {
     recommended: "為你推薦",
     lastScore: "上次分數",
     activeApps: "個進行中的申請",
+    done: "已完成",
+    read: "已讀",
   },
 };
 
@@ -265,32 +270,66 @@ const GuideCard = memo(function GuideCard({ guide, lang, onTrack }: { guide: Gui
   const path = lang === "zh" && guide.zhPath ? guide.zhPath : guide.enPath;
   const tagColor = TAG_COLORS[guide.tag];
   const tagLabel = lang === "zh" ? groupLabelsZh[guide.tag] : groupLabelsEn[guide.tag];
+  const { getProgress, isComplete, toggleComplete } = useReadingProgress();
+  const t = i18n[lang];
+  const completed = isComplete(guide.id);
+  const progress = completed ? 100 : getProgress(guide.id);
+
+  const handleToggle = (e: MouseEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    toggleComplete(guide.id);
+  };
+
   return (
     <Link
       to={path}
       onClick={() => onTrack(guide.id)}
-      className="relative rounded-2xl p-6 md:p-7 flex flex-col justify-between transition-all duration-200 hover:-translate-y-0.5"
+      className="relative rounded-2xl p-6 md:p-7 flex flex-col justify-between transition-all duration-200 hover:-translate-y-0.5 overflow-hidden"
       style={{ backgroundColor: C.cream, boxShadow: C.cardShadow }}
       onMouseEnter={e => (e.currentTarget.style.boxShadow = C.cardHoverShadow)}
       onMouseLeave={e => (e.currentTarget.style.boxShadow = C.cardShadow)}
     >
-      {guide.isNew && (
-        <span
-          className="absolute top-3 right-3 text-[11px] font-bold px-2 py-0.5 rounded-full uppercase tracking-wide"
-          style={{ backgroundColor: C.gold, color: C.white }}
-        >
-          NEW
-        </span>
-      )}
+      {/* Done checkbox */}
+      <button
+        onClick={handleToggle}
+        className="absolute top-3 right-3 w-5 h-5 rounded border-2 flex items-center justify-center transition-colors z-10"
+        style={{
+          borderColor: completed ? C.gold : 'rgba(0,0,0,0.2)',
+          backgroundColor: completed ? C.gold : 'transparent',
+        }}
+        aria-label={completed ? t.done : "Mark as done"}
+      >
+        {completed && <Check className="w-3 h-3" style={{ color: C.white }} strokeWidth={3} />}
+      </button>
+
       <div>
-        <span
-          className="inline-block text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-full mb-3"
-          style={{ backgroundColor: `${tagColor}15`, color: tagColor }}
-        >
-          {tagLabel}
-        </span>
-        <h4 className="text-base font-bold mb-1" style={{ color: C.text }}>{guide.title[lang]}</h4>
+        <div className="flex items-center gap-2 mb-3">
+          <span
+            className="inline-block text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-full"
+            style={{ backgroundColor: `${tagColor}15`, color: tagColor }}
+          >
+            {tagLabel}
+          </span>
+          {progress > 0 && (
+            <span className="text-[10px] font-semibold" style={{ color: completed ? C.gold : C.textSecondary }}>
+              {completed ? t.done : `${progress}% ${t.read}`}
+            </span>
+          )}
+        </div>
+        <h4 className="text-base font-bold mb-1 pr-6" style={{ color: C.text }}>{guide.title[lang]}</h4>
         <p className="text-sm leading-relaxed" style={{ color: C.textSecondary }}>{guide.description[lang]}</p>
+      </div>
+
+      {/* Progress bar */}
+      <div
+        className="absolute bottom-0 left-0 right-0 h-[3px]"
+        style={{ backgroundColor: 'rgba(0,0,0,0.06)' }}
+      >
+        <div
+          className="h-full transition-all duration-500"
+          style={{ width: `${progress}%`, backgroundColor: C.gold }}
+        />
       </div>
     </Link>
   );

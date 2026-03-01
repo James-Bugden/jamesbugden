@@ -6,8 +6,10 @@ import { Button } from "@/components/ui/button";
 import { InstagramIcon, ThreadsIcon } from "@/components/SocialIcons";
 import GuideShareButtons from "@/components/GuideShareButtons";
 import GoldCheckBadge from "@/components/GoldCheckBadge";
+import { useTrackGuideProgress } from "@/hooks/useReadingProgress";
 
 const LinkedInBrandingGuide = () => {
+  useTrackGuideProgress("linkedin-brand");
 
   const handleDownload = () => {
     const link = document.createElement('a');

@@ -6,6 +6,7 @@ import { InstagramIcon, ThreadsIcon } from "@/components/SocialIcons";
 import GuideShareButtons from "@/components/GuideShareButtons";
 import PageSEO from "@/components/PageSEO";
 import { AuthHeaderButton } from "@/components/AuthHeaderButton";
+import { useTrackGuideProgress } from "@/hooks/useReadingProgress";
 
 const SectionNumber = ({ num }: { num: string }) => (
   <span className="text-gold/30 font-heading text-6xl md:text-7xl font-bold leading-none select-none">
@@ -14,6 +15,7 @@ const SectionNumber = ({ num }: { num: string }) => (
 );
 
 const ResumeQuickReferenceZhTw = () => {
+  useTrackGuideProgress("resume-ref");
   const navigate = useNavigate();
 
   return (

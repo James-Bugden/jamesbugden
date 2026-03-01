@@ -4,8 +4,10 @@ import LanguageToggle from "@/components/LanguageToggle";
 import { AuthHeaderButton } from "@/components/AuthHeaderButton";
 import { Button } from "@/components/ui/button";
 import GuideShareButtons from "@/components/GuideShareButtons";
+import { useTrackGuideProgress } from "@/hooks/useReadingProgress";
 
 const PivotMethodMiniGuide = () => {
+  useTrackGuideProgress("pivot-mini");
 
   return (
     <div className="min-h-screen bg-background">
