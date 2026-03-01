@@ -72,7 +72,7 @@ export default function AboutSection() {
 
             <p className="text-base md:text-lg mb-6 leading-relaxed" style={{ color: '#1A1A1A' }}>
               Helped 750+ people from multinational companies like Google, Uber, and Microsoft.
-              Free tools used by 10,000+ professionals. Speaker at career events across Taiwan.
+              Free tools used by 10,000+ professionals.
             </p>
 
             <p className="text-base leading-relaxed mb-4" style={{ color: '#6B6B6B' }}>
