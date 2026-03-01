@@ -15,7 +15,6 @@ export default function SalaryProofSection() {
 
           <div className="flex flex-col gap-14">
             {[
-              { num: "$12M+", desc: "Combined salary increases from professionals using these tools and strategies." },
               { num: "NT$80M+", desc: "The difference between accepting the first offer and negotiating strategically. Over a 30-year career." },
               { num: "10,000+", desc: "Downloads of free tools, templates, and guides." },
             ].map((stat) => (

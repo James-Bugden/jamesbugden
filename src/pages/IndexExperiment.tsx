@@ -13,7 +13,7 @@ import MailerLiteForm from "@/components/MailerLiteForm";
 import LazySection from "@/components/LazySection";
 
 const faqs = [
-  { q: "Is the free newsletter free? What's the catch?", a: "Yes, 100% free. I send useful tips every week. I also offer paid 1-on-1 coaching if you want personal help. The free tips stand on their own. No pressure, ever." },
+  { q: "Why are these free?", a: "It's my mission to make as many paid tools and information online free. I want to help as many people as I can to have the job and lifestyle they want." },
   { q: "I don't have the confidence to negotiate my salary. Will this help?", a: "This is the most common concern I hear. Here's the truth: you don't need to be pushy. You need to understand what the other side wants. I'll show you how HR thinks so you feel calm and ready, not scared." },
   { q: "I keep applying but never hear back. What am I doing wrong?", a: "Usually one of three things: your resume doesn't get past the computer filter, your title doesn't match the job, or your best work is hidden in the wrong place. My review finds what's wrong and tells you how to fix it." },
   { q: "I don't know how to deal with HR during the hiring process. They feel like gatekeepers.", a: "HR isn't your enemy. They want to fill the job. The problem is most people don't understand what HR cares about. I've been in HR. I'll show you what they look for at each step so you work together, not against each other." },
@@ -127,7 +127,7 @@ const IndexExperiment = () => {
                 <div className="flex items-center justify-center md:justify-start gap-2 mb-5">
                   <span className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full border" style={{ backgroundColor: 'rgba(45,58,46,0.06)', borderColor: 'rgba(45,58,46,0.12)', color: '#6B6B6B', fontSize: '0.9375rem' }}>
                     <Briefcase className="w-4 h-4" style={{ color: '#6B6B6B' }} />
-                    Senior Recruiter at Uber
+                    Senior HR at Uber
                   </span>
                 </div>
 
@@ -273,55 +273,6 @@ const IndexExperiment = () => {
           <FAQSection />
         </LazySection>
 
-        {/* ── Final CTA — dark green ── */}
-        <LazySection>
-          <section
-            id="coaching"
-            className="py-12 md:py-20 px-5 md:px-6 relative overflow-hidden"
-            style={{ background: 'linear-gradient(180deg, #2D3A2E 0%, #232E24 100%)' }}
-          >
-            <div
-              className="absolute inset-0 opacity-[0.03]"
-              style={{
-                backgroundImage: 'url("data:image/svg+xml,%3Csvg viewBox=\'0 0 256 256\' xmlns=\'http://www.w3.org/2000/svg\'%3E%3Cfilter id=\'noise\'%3E%3CfeTurbulence type=\'fractalNoise\' baseFrequency=\'0.65\' numOctaves=\'3\' stitchTiles=\'stitch\'/%3E%3C/filter%3E%3Crect width=\'100%25\' height=\'100%25\' filter=\'url(%23noise)\'/%3E%3C/svg%3E")',
-                backgroundSize: '128px 128px',
-              }}
-            />
-            <div className="container mx-auto max-w-2xl text-center relative z-10">
-              <h2 className="font-heading mb-4" style={{ color: '#FBF7F0', fontSize: 'clamp(2rem, 4vw, 2.625rem)' }}>
-                Stop leaving money on the table.
-              </h2>
-              <p className="mb-6" style={{ color: '#A8B5A9', fontSize: '1.0625rem' }}>
-                I take on a few clients each month. If you're serious about getting a great offer, let's talk.
-              </p>
-
-              <a
-                href="#about"
-                className="inline-flex items-center justify-center font-semibold"
-                style={{
-                  backgroundColor: '#D4930D',
-                  color: '#FFFFFF',
-                  padding: '16px 32px',
-                  borderRadius: '8px',
-                  fontSize: '1rem',
-                  fontWeight: 600,
-                  transition: 'background-color 0.2s ease',
-                }}
-                onMouseEnter={(e) => ((e.currentTarget as HTMLElement).style.backgroundColor = '#E0A520')}
-                onMouseLeave={(e) => ((e.currentTarget as HTMLElement).style.backgroundColor = '#D4930D')}
-              >
-                See If You're a Fit
-              </a>
-
-              <p style={{ color: '#A8B5A9', fontSize: '0.8125rem', marginTop: '8px' }}>
-                Free intro call · No commitment · No pressure
-              </p>
-              <p className="mt-4" style={{ color: '#6B6B6B', fontSize: '0.8125rem' }}>
-                Trusted by professionals from Google, Amazon, Meta, and 50+ companies
-              </p>
-            </div>
-          </section>
-        </LazySection>
       </main>
 
       {/* ── Footer ── */}
