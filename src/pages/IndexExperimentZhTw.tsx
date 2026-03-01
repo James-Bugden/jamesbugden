@@ -8,12 +8,12 @@ import PageSEO from "@/components/PageSEO";
 import HomepageTestimonialsExperimentZhTw from "@/components/HomepageTestimonialsExperimentZhTw";
 import LogoScrollExperimentZhTw from "@/components/LogoScrollExperimentZhTw";
 import SelfSegmentationExperimentZhTw from "@/components/SelfSegmentationExperimentZhTw";
-import CoachingCTAExperimentZhTw from "@/components/CoachingCTAExperimentZhTw";
+import SalaryProofSectionZhTw from "@/components/SalaryProofSectionZhTw";
 import MailerLiteForm from "@/components/MailerLiteForm";
 import LazySection from "@/components/LazySection";
 
 const faqs = [
-  { q: "免費電子報真的免費嗎？有什麼隱藏條件？", a: "100% 免費。我每週寄出實用技巧。我也提供付費一對一教練服務。免費的內容本身有價值，不會有壓力。" },
+  { q: "為什麼這些是免費的？", a: "我的使命是把盡可能多的付費工具和資訊免費開放。我想幫助更多人得到他們想要的工作和生活。" },
   { q: "我沒有自信談薪水。這會有幫助嗎？", a: "你不需要強勢。你需要了解對方要什麼。我讓你理解 HR 的思維方式，讓你感覺冷靜、準備好。" },
   { q: "我一直投履歷但都沒有回音。我做錯了什麼？", a: "通常三件事之一：履歷沒通過電腦篩選、職稱跟職缺不匹配、或最好的成果放在錯誤位置。我的審查會找出問題，告訴你怎麼改。" },
   { q: "我不知道在招募流程中怎麼跟 HR 溝通。他們感覺像守門員。", a: "HR 想把職缺填滿。大部分人不了解 HR 在意什麼。我做過 HR。我讓你知道他們每個階段看什麼，讓你們合作。" },
@@ -127,7 +127,7 @@ const IndexExperimentZhTw = () => {
                 <div className="flex items-center justify-center md:justify-start gap-2 mb-5">
                   <span className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full border" style={{ backgroundColor: 'rgba(45,58,46,0.06)', borderColor: 'rgba(45,58,46,0.12)', color: '#6B6B6B', fontSize: '0.9375rem' }}>
                     <Briefcase className="w-4 h-4" style={{ color: '#6B6B6B' }} />
-                    資深招募官 · 財星500大企業
+                    資深 HR · 財星500大企業
                   </span>
                 </div>
 
@@ -273,19 +273,14 @@ const IndexExperimentZhTw = () => {
           </div>
         </section>
 
-        {/* ── 3 Steps ── */}
+        {/* ── Salary Proof ── */}
         <LazySection>
-          <SelfSegmentationExperimentZhTw />
+          <SalaryProofSectionZhTw />
         </LazySection>
 
         {/* ── FAQ ── */}
         <LazySection>
           <FAQSection />
-        </LazySection>
-
-        {/* ── Final CTA ── */}
-        <LazySection>
-          <CoachingCTAExperimentZhTw />
         </LazySection>
       </main>
 
