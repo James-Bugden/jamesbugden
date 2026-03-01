@@ -1,7 +1,7 @@
 import { Linkedin } from "lucide-react";
 import { ThreadsIcon } from "@/components/SocialIcons";
 import aboutPhoto from "@/assets/james-cake-group.jpg";
-import uberLogo from "@/assets/logos/uber.svg";
+import workshopPhoto from "@/assets/james-cake-workshop.jpg";
 
 export default function AboutSection() {
   return (
@@ -9,12 +9,18 @@ export default function AboutSection() {
       <div className="container mx-auto max-w-6xl">
         <div className="flex flex-col md:flex-row gap-10 md:gap-16 items-center">
 
-          {/* Left — Photo */}
-          <div className="w-full md:w-1/2 flex-shrink-0">
+          {/* Left — Photos */}
+          <div className="w-full md:w-1/2 flex-shrink-0 flex flex-col gap-4">
             <img
               src={aboutPhoto}
-              alt="James Bugden speaking at a career event at Cake in Taiwan"
+              alt="James Bugden at a career event at Cake in Taiwan"
               className="w-full h-auto rounded-xl object-cover aspect-[4/3]"
+              loading="lazy"
+            />
+            <img
+              src={workshopPhoto}
+              alt="James Bugden leading a career workshop in Taiwan"
+              className="w-full h-auto rounded-xl object-cover aspect-[16/9]"
               loading="lazy"
             />
           </div>
@@ -48,30 +54,17 @@ export default function AboutSection() {
               Want personal help? I also coach 1-on-1.
             </p>
 
-            {/* Bottom logos row */}
-            <div className="flex flex-wrap items-center gap-6 md:gap-8">
-              {/* Uber */}
-              <img
-                src={uberLogo}
-                alt="Uber"
-                className="h-5 md:h-6 opacity-70"
-                style={{ filter: 'brightness(0) invert(1)' }}
-              />
-
-              {/* Cake */}
-              <span className="font-bold text-lg tracking-tight opacity-70" style={{ color: '#FFFFFF' }}>
-                🏠 Cake
-              </span>
-
+            {/* Bottom social row */}
+            <div className="flex flex-wrap items-center gap-8">
               {/* LinkedIn */}
               <a
                 href="https://www.linkedin.com/in/james-bugden/"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="flex items-center gap-1.5 hover:opacity-100 transition-opacity opacity-70"
+                className="flex items-center gap-2 hover:opacity-100 transition-opacity opacity-80"
               >
-                <Linkedin className="w-4 h-4" style={{ color: '#FFFFFF' }} />
-                <span className="text-sm font-medium" style={{ color: '#FFFFFF' }}>15K</span>
+                <Linkedin className="w-6 h-6" style={{ color: '#FFFFFF' }} />
+                <span className="text-base font-semibold" style={{ color: '#FFFFFF' }}>15K followers</span>
               </a>
 
               {/* Threads */}
@@ -79,10 +72,10 @@ export default function AboutSection() {
                 href="https://www.threads.com/@james.careers"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="flex items-center gap-1.5 hover:opacity-100 transition-opacity opacity-70"
+                className="flex items-center gap-2 hover:opacity-100 transition-opacity opacity-80"
               >
-                <ThreadsIcon className="w-4 h-4" style={{ color: '#FFFFFF' }} />
-                <span className="text-sm font-medium" style={{ color: '#FFFFFF' }}>12K</span>
+                <ThreadsIcon className="w-6 h-6" style={{ color: '#FFFFFF' }} />
+                <span className="text-base font-semibold" style={{ color: '#FFFFFF' }}>12K followers</span>
               </a>
             </div>
           </div>
