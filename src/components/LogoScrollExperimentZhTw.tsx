@@ -86,7 +86,7 @@ export default function LogoScrollExperimentZhTw() {
   return (
     <section className="py-4 overflow-hidden relative" style={{ backgroundColor: '#FDFBF7' }}>
       <p className="text-center px-5 mb-3 max-w-lg mx-auto leading-snug" style={{ fontSize: '0.9375rem', color: '#6B6B6B' }}>
-        這些專業人士總共談到超過 $12M 的薪資增幅
+        這些公司的專業人士都在使用
       </p>
 
       <div className="absolute left-0 top-0 bottom-0 w-12 z-10 pointer-events-none" style={{ background: 'linear-gradient(to right, #FDFBF7, transparent)' }} />
