@@ -120,7 +120,7 @@ export default function SalaryProofSection() {
           {/* CTA */}
           <div className="text-center">
             <a
-              href="/toolkit/calculator-interactive"
+              href="#about"
               className="inline-flex items-center justify-center font-semibold"
               style={{
                 backgroundColor: '#D4930D',
@@ -134,7 +134,7 @@ export default function SalaryProofSection() {
               onMouseEnter={(e) => ((e.currentTarget as HTMLElement).style.backgroundColor = '#E0A520')}
               onMouseLeave={(e) => ((e.currentTarget as HTMLElement).style.backgroundColor = '#D4930D')}
             >
-              → Try the Free Calculator With Your Own Salary
+              Send Me The Free Toolkit
             </a>
           </div>
         </div>
