@@ -37,7 +37,7 @@ export default function SalaryProofSection() {
       </section>
 
       {/* Part B — Salary Comparison */}
-      <section className="py-16 md:py-24 px-5 md:px-6" style={{ backgroundColor: '#2D3A2E' }}>
+      <section className="py-16 md:py-24 px-5 md:px-6" style={{ backgroundColor: '#1B3A2F' }}>
         <div className="container mx-auto max-w-3xl">
           <div className="text-center mb-10">
             <h2
