@@ -252,6 +252,83 @@ export default function Dashboard() {
           </div>
         </div>
       </main>
+
+      {/* Salary Negotiation Toolkit */}
+      <section className="bg-[hsl(39_20%_90%)]">
+        <div className="max-w-[1200px] mx-auto px-4 md:px-8 py-12 md:py-16">
+          <h2 className="font-heading text-2xl md:text-3xl text-foreground mb-2">Salary Negotiation Toolkit</h2>
+          <p className="text-muted-foreground text-sm md:text-base mb-8">
+            A complete system for negotiating your offer. Start with the index, then use each tool when you need it.
+          </p>
+
+          {/* Featured Card */}
+          <div className="relative bg-card rounded-xl shadow-[0_2px_8px_rgba(0,0,0,0.08)] border-l-[4px] border-l-gold p-6 md:p-8 mb-6 transition-all duration-200 hover:-translate-y-0.5 hover:shadow-premium bg-gradient-to-r from-gold/5 to-transparent">
+            <span className="absolute top-4 right-4 bg-gold text-white text-[11px] font-bold px-2.5 py-0.5 rounded-full uppercase tracking-wide">
+              START HERE
+            </span>
+            <span className="text-2xl mb-3 block">📖</span>
+            <h3 className="text-lg font-bold text-foreground mb-1">Toolkit Index</h3>
+            <p className="text-muted-foreground text-sm leading-relaxed mb-4">
+              The full overview of every tool in this kit. Read this first to know what to use and when.
+            </p>
+            <div className="flex gap-2">
+              <Link to="/toolkit" className="text-xs font-semibold px-3 py-1 rounded-full border border-gold text-gold hover:bg-gold hover:text-white transition-colors">EN</Link>
+              <Link to="/zh-tw/toolkit" className="text-xs font-semibold px-3 py-1 rounded-full border border-gold text-gold hover:bg-gold hover:text-white transition-colors">中文</Link>
+            </div>
+          </div>
+
+          {/* Toolkit Grid */}
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+            {[
+              { title: "Deflection Scripts", desc: "What to say when they ask your salary expectations too early. Word-for-word scripts.", en: "/toolkit/scripts", zh: "/zh-tw/toolkit/scripts" },
+              { title: "Offer Response", desc: "How to respond to an offer without accepting or rejecting. Buy time and negotiate better.", en: "/toolkit/offer-response", zh: "/zh-tw/toolkit/offer-response" },
+              { title: "Counteroffer Email", desc: "Copy-paste email templates for countering an offer professionally.", en: "/toolkit/counteroffer", zh: "/zh-tw/toolkit/counteroffer" },
+              { title: "Compensation Calculator", desc: "Calculate your total comp — base, bonus, stock, benefits — so you compare offers properly.", en: "/toolkit/calculator", zh: "/zh-tw/toolkit/calculator" },
+              { title: "Comp Calculator Interactive", desc: "The interactive version. Plug in two offers and see the real difference.", en: "/toolkit/calculator-interactive", zh: "/zh-tw/toolkit/calculator-interactive" },
+              { title: "Pushback Cheat Sheet", desc: "When they say 'this is our best offer' or 'the budget is fixed' — here's what to say back.", en: "/toolkit/pushback", zh: "/zh-tw/toolkit/pushback" },
+              { title: "Raise One-Pager", desc: "A one-page template to present your case for a raise to your manager. Data-backed, not emotional.", en: "/toolkit/raise", zh: "/zh-tw/toolkit/raise" },
+              { title: "Achievement Log", desc: "Track your wins weekly so when review time comes, you have the evidence ready.", en: "/toolkit/log", zh: "/zh-tw/toolkit/log" },
+            ].map((item) => (
+              <div key={item.en} className="bg-card rounded-xl shadow-[0_2px_8px_rgba(0,0,0,0.08)] p-6 flex flex-col justify-between transition-all duration-200 hover:-translate-y-0.5 hover:shadow-premium">
+                <div>
+                  <h4 className="text-base font-bold text-foreground mb-1">{item.title}</h4>
+                  <p className="text-muted-foreground text-sm leading-relaxed">{item.desc}</p>
+                </div>
+                <div className="flex gap-2 mt-4">
+                  <Link to={item.en} className="text-xs font-semibold px-3 py-1 rounded-full border border-gold text-gold hover:bg-gold hover:text-white transition-colors">EN</Link>
+                  <Link to={item.zh} className="text-xs font-semibold px-3 py-1 rounded-full border border-gold text-gold hover:bg-gold hover:text-white transition-colors">中文</Link>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Coaching CTA */}
+      <section className="bg-executive">
+        <div className="max-w-[1200px] mx-auto px-4 md:px-8 py-16 md:py-20 text-center">
+          <h2 className="font-heading text-2xl md:text-3xl text-white mb-4">Want 1-on-1 help?</h2>
+          <p className="text-white/85 text-base md:text-lg max-w-2xl mx-auto mb-8 leading-relaxed">
+            These tools get you 80% of the way. If you want someone to look at your specific situation — resume, interviews, salary negotiation — I work with a few people each month.
+          </p>
+          <a
+            href="https://calendly.com"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="inline-flex items-center gap-1.5 bg-gold hover:bg-gold-dark text-white font-semibold px-8 py-3 rounded-lg transition-colors text-base"
+          >
+            See If You're a Fit <ArrowRight className="w-4 h-4" />
+          </a>
+          <p className="text-white/50 text-sm mt-4">Free intro call · No commitment · No pressure</p>
+        </div>
+      </section>
+
+      {/* Footer */}
+      <footer className="bg-background py-10 text-center">
+        <p className="font-heading text-lg text-foreground/60 mb-1">JAMES BUGDEN</p>
+        <p className="text-muted-foreground text-sm mb-1">james.careers</p>
+        <p className="text-muted-foreground/60 text-xs">© 2026 All Rights Reserved</p>
+      </footer>
     </>
   );
 }
