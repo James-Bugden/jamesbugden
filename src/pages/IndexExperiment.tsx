@@ -140,7 +140,7 @@ const IndexExperiment = () => {
                 </div>
 
                 <p className="mb-5" style={{ color: '#6B6B6B', fontSize: '0.8125rem', marginTop: '8px' }}>
-                  Join 10,000+ professionals using my free tools · Free forever · Unsubscribe anytime
+                  Join 10,000+ professionals using my free tools · Unsubscribe anytime
                 </p>
 
                 <div className="flex flex-wrap justify-center md:justify-start gap-x-8 gap-y-3 pt-6 border-t border-border/60">
@@ -157,13 +157,6 @@ const IndexExperiment = () => {
                       750+
                     </span>
                     <span className="text-sm" style={{ color: '#6B6B6B' }}>people hired</span>
-                  </div>
-                  <div className="flex flex-col items-center md:items-start">
-                    <span className="text-xl font-bold flex items-center gap-1.5" style={{ color: '#1A1A1A' }}>
-                      <DollarSign className="w-5 h-5" style={{ color: '#2D3A2E', opacity: 0.7 }} />
-                      $12M+
-                    </span>
-                    <span className="text-sm" style={{ color: '#6B6B6B' }}>in combined salary increases</span>
                   </div>
                 </div>
               </div>
@@ -220,15 +213,9 @@ const IndexExperiment = () => {
               </p>
             </div>
 
-            <a
-              href="#about"
-              className="inline-flex items-center justify-center rounded-lg font-semibold transition-colors duration-200"
-              style={{ backgroundColor: '#2D3A2E', color: '#FFFFFF', padding: '16px 32px', borderRadius: '8px', fontSize: '1rem', fontWeight: 600 }}
-              onMouseEnter={(e) => ((e.currentTarget as HTMLElement).style.backgroundColor = '#3A4A3B')}
-              onMouseLeave={(e) => ((e.currentTarget as HTMLElement).style.backgroundColor = '#2D3A2E')}
-            >
-              Get My Free Recruiting Tips
-            </a>
+            <div className="max-w-md mx-auto">
+              <MailerLiteForm formId="sM1X80" className="ml-embedded" buttonText="Get My Free Recruiting Tips" />
+            </div>
             <p className="text-center mt-2" style={{ color: '#6B6B6B', fontSize: '0.8125rem' }}>
               No spam, no fluff. Insider recruiting strategies every week.
             </p>
@@ -268,9 +255,6 @@ const IndexExperiment = () => {
               </div>
             </div>
 
-            <p className="text-center text-sm" style={{ color: '#6B6B6B' }}>
-              This isn't advice from a blog. It's from someone who's done the hiring.
-            </p>
           </div>
         </section>
 
