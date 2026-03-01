@@ -1,15 +1,16 @@
 
 
-## Remove Duplicate Chinese Dashboard Route
+## Add Spacing Between Welcome Banner and Search Bar
 
-**What changes:**
-- In `src/App.tsx`, replace the `/zh/dashboard` route with a redirect to `/zh-tw/dashboard`
-- In `src/components/AuthHeaderButton.tsx`, update the `dashboardPath` logic to use `/zh-tw/dashboard` instead of `/zh/dashboard`
+**Problem:** The search bar section sits too close to the Welcome Banner above it, making the layout feel cramped.
 
-**Why `/zh-tw/dashboard` stays:**
-The entire site uses `/zh-tw/` as the Chinese prefix convention. `/zh/dashboard` is the only outlier. Keeping `/zh-tw/dashboard` and redirecting `/zh/dashboard` ensures consistency and preserves any bookmarked links.
+**Fix:** Add vertical spacing between the Welcome Banner section and the Search/Recently Used section by increasing the top padding on the search section from `pt-8 md:pt-10` to `pt-10 md:pt-12`, and optionally adding bottom padding to the Welcome Banner.
 
-**Technical details:**
-1. `src/App.tsx` line for `/zh/dashboard` changes from rendering `<DashboardZhTw />` to `<Navigate to="/zh-tw/dashboard" replace />`
-2. `src/components/AuthHeaderButton.tsx` changes `dashboardPath` from `/zh/dashboard` to `/zh-tw/dashboard`
+**File:** `src/pages/Dashboard.tsx`
+
+**Change (line 477):**
+- Current: `pt-8 md:pt-10`
+- New: `pt-10 md:pt-14`
+
+This adds roughly 8-16px more breathing room between the welcome banner and the search bar.
 
