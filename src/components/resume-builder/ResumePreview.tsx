@@ -1,4 +1,5 @@
 import React, { useRef, useState, useEffect, useMemo } from "react";
+import DOMPurify from "dompurify";
 import { Mail, Phone, MapPin, Flag, FileText } from "lucide-react";
 import { ResumeData } from "./types";
 import { cn } from "@/lib/utils";
@@ -29,7 +30,7 @@ function Html({ html }: { html: string }) {
     <div
       className="mt-[1mm] [&_ul]:list-disc [&_ul]:pl-[5mm] [&_ol]:list-decimal [&_ol]:pl-[5mm] [&_li]:mb-[0.5mm] [&_a]:text-blue-700 [&_a]:underline"
       style={{ fontSize: "9pt", lineHeight: 1.45, color: "#374151" }}
-      dangerouslySetInnerHTML={{ __html: html }}
+      dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(html) }}
     />
   );
 }
