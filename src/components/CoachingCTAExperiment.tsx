@@ -4,7 +4,7 @@ export default function CoachingCTAExperiment() {
       id="coaching"
       className="py-12 md:py-20 px-5 md:px-6 relative overflow-hidden"
       style={{
-        background: 'linear-gradient(180deg, #2D3A2E 0%, #232E24 100%)',
+        background: 'linear-gradient(180deg, #1B3A2F 0%, #152E1F 100%)',
       }}
     >
       {/* Subtle noise overlay */}

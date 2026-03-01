@@ -167,7 +167,7 @@ const i18n = {
 const C = {
   cream: '#FDFBF7',
   white: '#FFFFFF',
-  darkGreen: '#2D3A2E',
+  darkGreen: '#1B3A2F',
   gold: '#D4930D',
   goldHover: '#E0A520',
   text: '#1A1A1A',
@@ -400,7 +400,7 @@ export default function Dashboard({ lang = "en" }: { lang?: "en" | "zh" }) {
       </section>
 
       {/* Coaching CTA */}
-      <section className="relative overflow-hidden" style={{ background: `linear-gradient(135deg, ${C.darkGreen} 0%, #232E24 100%)` }}>
+      <section className="relative overflow-hidden" style={{ background: `linear-gradient(135deg, ${C.darkGreen} 0%, #152E1F 100%)` }}>
         <div className="absolute inset-0 opacity-[0.03]" style={{ backgroundImage: noiseOverlay, backgroundSize: '128px 128px' }} />
         <div className="max-w-[1200px] mx-auto px-4 md:px-8 py-16 md:py-20 text-center relative z-10">
           <h2

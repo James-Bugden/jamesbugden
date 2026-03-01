@@ -70,17 +70,17 @@ export default function ResumeAnalyzerCTAExperiment() {
             className="flex flex-col items-center justify-center gap-3 rounded-lg cursor-pointer transition-colors duration-200"
             style={{
               backgroundColor: "#FDFBF7",
-              border: `2px dashed ${dragging ? "#2D3A2E" : "#D5D5D5"}`,
+              border: `2px dashed ${dragging ? "#1B3A2F" : "#D5D5D5"}`,
               padding: "36px 20px",
             }}
           >
             <FileUp
               className="w-12 h-12"
-              style={{ color: "#2D3A2E" }}
+              style={{ color: "#1B3A2F" }}
               strokeWidth={1.5}
             />
             {file ? (
-              <p className="text-base font-medium" style={{ color: "#2D3A2E" }}>
+              <p className="text-base font-medium" style={{ color: "#1B3A2F" }}>
                 {file.name}
               </p>
             ) : (
@@ -120,12 +120,12 @@ export default function ResumeAnalyzerCTAExperiment() {
           <button
             type="submit"
             className="w-full rounded-lg transition-colors duration-200 mt-4"
-            style={{ backgroundColor: "#2D3A2E", color: "#FFFFFF", padding: '16px 32px', borderRadius: '8px', fontSize: '1rem', fontWeight: 600 }}
+            style={{ backgroundColor: "#1B3A2F", color: "#FFFFFF", padding: '16px 32px', borderRadius: '8px', fontSize: '1rem', fontWeight: 600 }}
             onMouseEnter={(e) =>
-              ((e.currentTarget as HTMLElement).style.backgroundColor = "#3A4A3B")
+              ((e.currentTarget as HTMLElement).style.backgroundColor = "#2A4A3B")
             }
             onMouseLeave={(e) =>
-              ((e.currentTarget as HTMLElement).style.backgroundColor = "#2D3A2E")
+              ((e.currentTarget as HTMLElement).style.backgroundColor = "#1B3A2F")
             }
           >
             Analyze My Resume
