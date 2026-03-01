@@ -248,9 +248,9 @@ const IndexExperiment = () => {
               </div>
               <div className="rounded-xl p-6 text-center md:text-left" style={{ backgroundColor: '#FDFBF7', borderTop: '3px solid #D4930D' }}>
                 <Building className="w-10 h-10 mx-auto md:mx-0 mb-4" style={{ color: '#2D3A2E' }} strokeWidth={1.5} />
-                <p className="font-bold text-[20px] mb-2" style={{ color: '#1A1A1A' }}>Fortune 500 Insider</p>
+                <p className="font-bold text-[20px] mb-2" style={{ color: '#1A1A1A' }}>Insider Knowledge</p>
                 <p className="text-base" style={{ color: '#1A1A1A' }}>
-                  Google, Amazon, Meta, Microsoft. I've hired for all of them. I know how they interview, how they pay, and what makes you stand out.
+                  I've hired over 750 people. I know how they interview, how they pay, and what makes you stand out.
                 </p>
               </div>
             </div>
