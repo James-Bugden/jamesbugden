@@ -7,8 +7,10 @@ import { Linkedin } from "lucide-react";
 import GuideShareButtons from "@/components/GuideShareButtons";
 import { InstagramIcon, ThreadsIcon } from "@/components/SocialIcons";
 import GoldCheckBadge from "@/components/GoldCheckBadge";
+import { useTrackGuideProgress } from "@/hooks/useReadingProgress";
 
 const InterviewPrepGuide = () => {
+  useTrackGuideProgress("interview-prep");
 
   const handleDownload = () => {
     const link = document.createElement('a');

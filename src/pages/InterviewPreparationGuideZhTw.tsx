@@ -6,8 +6,10 @@ import { InstagramIcon, ThreadsIcon } from "@/components/SocialIcons";
 import GuideShareButtons from "@/components/GuideShareButtons";
 import { AuthHeaderButton } from "@/components/AuthHeaderButton";
 import GoldCheckBadge from "@/components/GoldCheckBadge";
+import { useTrackGuideProgress } from "@/hooks/useReadingProgress";
 
 const InterviewPreparationGuideZhTw = () => {
+  useTrackGuideProgress("interview-full");
   const navigate = useNavigate();
 
   const handleDownload = () => {

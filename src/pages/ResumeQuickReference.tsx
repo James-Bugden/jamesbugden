@@ -7,6 +7,7 @@ import GuideShareButtons from "@/components/GuideShareButtons";
 import LanguageToggle from "@/components/LanguageToggle";
 import { AuthHeaderButton } from "@/components/AuthHeaderButton";
 import PageSEO from "@/components/PageSEO";
+import { useTrackGuideProgress } from "@/hooks/useReadingProgress";
 
 const SectionNumber = ({ num }: { num: string }) => (
   <span className="text-gold/30 font-heading text-6xl md:text-7xl font-bold leading-none select-none">
@@ -15,6 +16,7 @@ const SectionNumber = ({ num }: { num: string }) => (
 );
 
 const ResumeQuickReference = () => {
+  useTrackGuideProgress("resume-ref");
   return (
     <div className="min-h-screen bg-background">
       <PageSEO

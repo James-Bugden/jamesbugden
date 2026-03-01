@@ -3,8 +3,10 @@ import { Link, useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import GuideShareButtons from "@/components/GuideShareButtons";
 import { AuthHeaderButton } from "@/components/AuthHeaderButton";
+import { useTrackGuideProgress } from "@/hooks/useReadingProgress";
 
 const PivotMethodMiniGuideZhTw = () => {
+  useTrackGuideProgress("pivot-mini");
   const navigate = useNavigate();
   
   const toggleLanguage = () => {

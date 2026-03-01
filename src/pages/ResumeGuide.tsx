@@ -5,8 +5,10 @@ import GoldCheckBadge from "@/components/GoldCheckBadge";
 import { InstagramIcon, ThreadsIcon } from "@/components/SocialIcons";
 import GuideShareButtons from "@/components/GuideShareButtons";
 import { AuthHeaderButton } from "@/components/AuthHeaderButton";
+import { useTrackGuideProgress } from "@/hooks/useReadingProgress";
 
 const ResumeGuide = () => {
+  useTrackGuideProgress("resume-guide");
   return (
     <div className="min-h-screen bg-background">
       {/* Navigation */}

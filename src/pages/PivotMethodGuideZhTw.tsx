@@ -5,8 +5,10 @@ import { InstagramIcon, ThreadsIcon } from "@/components/SocialIcons";
 import GoldCheckBadge from "@/components/GoldCheckBadge";
 import GuideShareButtons from "@/components/GuideShareButtons";
 import { AuthHeaderButton } from "@/components/AuthHeaderButton";
+import { useTrackGuideProgress } from "@/hooks/useReadingProgress";
 
 const PivotMethodGuideZhTw = () => {
+  useTrackGuideProgress("pivot-guide");
   const navigate = useNavigate();
 
   const handleDownload = () => {
