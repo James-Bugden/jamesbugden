@@ -1,16 +1,21 @@
 
 
-## Add Spacing Between Welcome Banner and Search Bar
+## Make Experiment Pages the New Homepages
 
-**Problem:** The search bar section sits too close to the Welcome Banner above it, making the layout feel cramped.
+**What changes:**
+- `/` will show `IndexExperiment` (currently at `/experiment`)
+- `/zh-tw` will show `IndexExperimentZhTw` (currently at `/zh-tw/experiment`)
+- `/experiment` and `/zh-tw/experiment` will redirect to `/` and `/zh-tw` respectively (so old links still work)
+- The old `Index` and `IndexZhTw` homepage components remain in the codebase but are no longer routed
 
-**Fix:** Add vertical spacing between the Welcome Banner section and the Search/Recently Used section by increasing the top padding on the search section from `pt-8 md:pt-10` to `pt-10 md:pt-12`, and optionally adding bottom padding to the Welcome Banner.
+**File: `src/App.tsx` (lines 130-133)**
 
-**File:** `src/pages/Dashboard.tsx`
+Replace the four route lines with:
+```tsx
+<Route path="/" element={<IndexExperiment />} />
+<Route path="/zh-tw" element={<IndexExperimentZhTw />} />
+<Route path="/experiment" element={<Navigate to="/" replace />} />
+<Route path="/zh-tw/experiment" element={<Navigate to="/zh-tw" replace />} />
+```
 
-**Change (line 477):**
-- Current: `pt-8 md:pt-10`
-- New: `pt-10 md:pt-14`
-
-This adds roughly 8-16px more breathing room between the welcome banner and the search bar.
-
+This is a straightforward route swap -- no other files need to change.
