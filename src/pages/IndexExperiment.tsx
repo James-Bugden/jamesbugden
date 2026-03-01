@@ -1,6 +1,5 @@
-// Experimental copy of Index.tsx — safe to modify without affecting the live homepage
 import { useState, useEffect } from "react";
-import { Briefcase, Users, Linkedin, FileCheck, X, CheckCircle2, Eye, Building, Plus, Minus } from "lucide-react";
+import { Briefcase, Users, Linkedin, FileCheck, X, CheckCircle2, Eye, Building, Plus, Minus, DollarSign } from "lucide-react";
 import { InstagramIcon, ThreadsIcon } from "@/components/SocialIcons";
 import jamesPhoto from "@/assets/james-bugden.jpg";
 import LanguageToggle from "@/components/LanguageToggle";
@@ -9,18 +8,17 @@ import PageSEO from "@/components/PageSEO";
 import HomepageTestimonialsExperiment from "@/components/HomepageTestimonialsExperiment";
 import LogoScrollExperiment from "@/components/LogoScrollExperiment";
 import SelfSegmentationExperiment from "@/components/SelfSegmentationExperiment";
-import CoachingCTAExperiment from "@/components/CoachingCTAExperiment";
-import ResumeAnalyzerCTAExperiment from "@/components/ResumeAnalyzerCTAExperiment"; // kept for potential reuse
+import SalaryProofSection from "@/components/SalaryProofSection";
 import MailerLiteForm from "@/components/MailerLiteForm";
 import LazySection from "@/components/LazySection";
 
 const faqs = [
-  { q: "Is the free newsletter free? What's the catch?", a: "100% free. I send useful tips every week. I also offer paid 1-on-1 coaching if you want personal help. The free content stands on its own." },
-  { q: "I don't have the confidence to negotiate my salary. Will this help?", a: "You don't need to be pushy. You need to understand what the other side wants. I show you how HR thinks so you feel calm and ready." },
-  { q: "I keep applying but never hear back. What am I doing wrong?", a: "Usually one of three things: your resume fails the computer filter, your title doesn't match the job, or your best work is buried. My review finds the problem and tells you how to fix the problem." },
-  { q: "I don't know how to deal with HR during the hiring process. They feel like gatekeepers.", a: "HR wants to fill the role. Most people don't understand what HR cares about. I show you what they look for at each step so you work together." },
-  { q: "Why not use ChatGPT to fix my resume?", a: "AI is a good starting point. But AI doesn't know what a real recruiter looks for. AI won't tell you your best achievement is buried on page 2. 20,000+ resume reviews taught me what AI hasn't learned." },
-  { q: "How is your resume review different from other services?", a: "Most resume services fix spelling and move things around. I look at your resume like a recruiter and tell you what to change to get more interviews. You also get a reusable system for every application." },
+  { q: "Is the free newsletter free? What's the catch?", a: "Yes, 100% free. I send useful tips every week. I also offer paid 1-on-1 coaching if you want personal help. The free tips stand on their own. No pressure, ever." },
+  { q: "I don't have the confidence to negotiate my salary. Will this help?", a: "This is the most common concern I hear. Here's the truth: you don't need to be pushy. You need to understand what the other side wants. I'll show you how HR thinks so you feel calm and ready, not scared." },
+  { q: "I keep applying but never hear back. What am I doing wrong?", a: "Usually one of three things: your resume doesn't get past the computer filter, your title doesn't match the job, or your best work is hidden in the wrong place. My review finds what's wrong and tells you how to fix it." },
+  { q: "I don't know how to deal with HR during the hiring process. They feel like gatekeepers.", a: "HR isn't your enemy. They want to fill the job. The problem is most people don't understand what HR cares about. I've been in HR. I'll show you what they look for at each step so you work together, not against each other." },
+  { q: "Why not use ChatGPT to fix my resume?", a: "AI is a good start. But AI doesn't know what a real recruiter looks for. It won't tell you your best achievement is buried on page 2. Or the company you want cares more about X than Y. 20,000+ resume reviews taught me what AI hasn't learned." },
+  { q: "How is your resume review different from other services?", a: "Most resume services fix spelling and move things around. My review is different. I look at your resume like a recruiter. I tell you what to change to get more interviews. You also get a simple system you reuse every time you apply." },
 ];
 
 function FAQSection() {
@@ -35,7 +33,7 @@ function FAQSection() {
     <section className="py-12 md:py-20 px-5 md:px-6" style={{ backgroundColor: '#FFFFFF' }}>
       <div className="container mx-auto max-w-2xl">
         <h2 className="font-heading text-center mb-6" style={{ color: '#1A1A1A', fontSize: 'clamp(2rem, 4vw, 2.625rem)' }}>
-          Questions You Might Be Thinking
+          Is this actually free? Yes. Here's why.
         </h2>
         <div>
           {faqs.map((faq, i) => {
@@ -125,27 +123,24 @@ const IndexExperiment = () => {
                   Get a $200K+ Offer at Your Dream&nbsp;Company
                 </h1>
 
-                {/* Credential badge — below headline */}
+                {/* Credential badge */}
                 <div className="flex items-center justify-center md:justify-start gap-2 mb-5">
                   <span className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full border" style={{ backgroundColor: 'rgba(45,58,46,0.06)', borderColor: 'rgba(45,58,46,0.12)', color: '#6B6B6B', fontSize: '0.9375rem' }}>
                     <Briefcase className="w-4 h-4" style={{ color: '#6B6B6B' }} />
-                    Senior Recruiter · Fortune 500
+                    Senior Recruiter at Uber · Join 10,000+ professionals using my free tools
                   </span>
                 </div>
 
                 <p className="leading-relaxed max-w-xl mx-auto md:mx-0 mb-5" style={{ color: '#1A1A1A', fontSize: '1.0625rem' }}>
-                  You apply. You interview. Silence. Or worse, they lowball you.
-                </p>
-                <p className="leading-relaxed max-w-xl mx-auto md:mx-0 mb-5" style={{ color: '#1A1A1A', fontSize: '1.0625rem' }}>
-                  750+ people hired at Google, Uber, and Microsoft. Every week, I send you what I know. For free.
+                  Free tools, templates, and insider strategies from a recruiter who's helped 750+ people get hired at Google, Uber, and other MNCs.
                 </p>
 
                 <div className="mb-2 max-w-md mx-auto md:mx-0">
-                  <MailerLiteForm formId="sM1X80" className="ml-embedded" buttonText="Get My Free Recruiting Tips" />
+                  <MailerLiteForm formId="sM1X80" className="ml-embedded" buttonText="Send Me the Free Toolkit" />
                 </div>
 
                 <p className="mb-5" style={{ color: '#6B6B6B', fontSize: '0.8125rem', marginTop: '8px' }}>
-                  Join 2,000+ professionals · Free forever · Unsubscribe anytime
+                  Free forever · Unsubscribe anytime
                 </p>
 
                 <div className="flex flex-wrap justify-center md:justify-start gap-x-8 gap-y-3 pt-6 border-t border-border/60">
@@ -158,10 +153,17 @@ const IndexExperiment = () => {
                   </div>
                   <div className="flex flex-col items-center md:items-start">
                     <span className="text-xl font-bold flex items-center gap-1.5" style={{ color: '#1A1A1A' }}>
-                      <Briefcase className="w-5 h-5" style={{ color: '#2D3A2E', opacity: 0.7 }} />
+                      <Users className="w-5 h-5" style={{ color: '#2D3A2E', opacity: 0.7 }} />
                       750+
                     </span>
                     <span className="text-sm" style={{ color: '#6B6B6B' }}>people hired</span>
+                  </div>
+                  <div className="flex flex-col items-center md:items-start">
+                    <span className="text-xl font-bold flex items-center gap-1.5" style={{ color: '#1A1A1A' }}>
+                      <DollarSign className="w-5 h-5" style={{ color: '#2D3A2E', opacity: 0.7 }} />
+                      $12M+
+                    </span>
+                    <span className="text-sm" style={{ color: '#6B6B6B' }}>in combined salary increases</span>
                   </div>
                 </div>
               </div>
@@ -177,19 +179,7 @@ const IndexExperiment = () => {
           </div>
         </section>
 
-        {/* ── Logo Trust Bar — cream #FDFBF7 ── */}
-        <div style={{ backgroundColor: '#FDFBF7' }}>
-          <LogoScrollExperiment />
-        </div>
-
-        {/* ── Testimonials — white #FFFFFF ── */}
-        <LazySection>
-          <div style={{ backgroundColor: '#FFFFFF' }}>
-            <HomepageTestimonialsExperiment />
-          </div>
-        </LazySection>
-
-        {/* ── Pain-Point Section (NEW) — cream #FDFBF7 ── */}
+        {/* ── Pain-Point Section — cream #FDFBF7 ── */}
         <section className="py-12 md:py-20 px-5 md:px-6" style={{ backgroundColor: '#FDFBF7' }}>
           <div className="container mx-auto max-w-2xl text-center">
             <h2 className="font-heading mb-6" style={{ color: '#1A1A1A', fontSize: 'clamp(2rem, 4vw, 2.625rem)' }}>
@@ -199,22 +189,22 @@ const IndexExperiment = () => {
             <div className="flex flex-col gap-5 mb-8 text-left max-w-xl mx-auto">
               <div className="flex items-start gap-3">
                 <X className="w-5 h-5 flex-shrink-0 mt-0.5" style={{ color: '#C85A5A' }} strokeWidth={2.5} />
-                <p style={{ color: '#1A1A1A', fontSize: '1.125rem' }}>You apply to tons of jobs. You never hear back.</p>
+                <p style={{ color: '#1A1A1A', fontSize: '1.125rem' }}>You've applied to tons of jobs and never heard back.</p>
               </div>
               <div className="flex items-start gap-3">
                 <X className="w-5 h-5 flex-shrink-0 mt-0.5" style={{ color: '#C85A5A' }} strokeWidth={2.5} />
-                <p style={{ color: '#1A1A1A', fontSize: '1.125rem' }}>You make it to the final interview. Then nothing. No email. No call.</p>
+                <p style={{ color: '#1A1A1A', fontSize: '1.125rem' }}>You made it to the final interview... then nothing. No email. No call.</p>
               </div>
               <div className="flex items-start gap-3">
                 <X className="w-5 h-5 flex-shrink-0 mt-0.5" style={{ color: '#C85A5A' }} strokeWidth={2.5} />
-                <p style={{ color: '#1A1A1A', fontSize: '1.125rem' }}>You get a job offer. You have no idea if the pay is fair or if you should ask for more.</p>
+                <p style={{ color: '#1A1A1A', fontSize: '1.125rem' }}>You got a job offer, but you have no idea if the pay is fair or if you should ask for more.</p>
               </div>
             </div>
 
             <div className="flex items-start justify-center gap-2 mb-6">
               <CheckCircle2 className="w-5 h-5 flex-shrink-0 mt-0.5" style={{ color: '#2D3A2E' }} />
               <p style={{ color: '#6B6B6B', fontSize: '1rem' }}>
-                You don't need another job board. You need someone who sat on the other side of the table.
+                You don't need another job board. You need someone who's been on the other side of the table.
               </p>
             </div>
 
@@ -233,38 +223,35 @@ const IndexExperiment = () => {
           </div>
         </section>
 
-        {/* ── Why Work With an Insider — white #FFFFFF ── */}
+        {/* ── Credibility Section — white #FFFFFF ── */}
         <section className="py-12 md:py-20 px-5 md:px-6" style={{ backgroundColor: '#FFFFFF' }}>
           <div className="container mx-auto max-w-4xl">
             <div className="text-center mb-6">
               <h2 className="font-heading mb-3" style={{ color: '#1A1A1A', fontSize: 'clamp(2rem, 4vw, 2.625rem)' }}>
-                Why Work With an Insider?
+                Most career advice comes from people who've never hired anyone.
               </h2>
-              <p className="text-[17px] max-w-[600px] mx-auto" style={{ color: '#6B6B6B' }}>
-                Most career advice comes from people who never hired anyone. I hired hundreds.
-              </p>
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-6 mb-10">
               <div className="rounded-xl p-6 text-center md:text-left" style={{ backgroundColor: '#FDFBF7', borderTop: '3px solid #D4930D' }}>
                 <Eye className="w-10 h-10 mx-auto md:mx-0 mb-4" style={{ color: '#2D3A2E' }} strokeWidth={1.5} />
-                <p className="font-bold text-[20px] mb-2" style={{ color: '#1A1A1A' }}>20,000+ Resumes Reviewed</p>
+                <p className="font-bold text-[20px] mb-2" style={{ color: '#1A1A1A' }}>I've Read 20,000+ Resumes</p>
                 <p className="text-base" style={{ color: '#1A1A1A' }}>
-                  I know what makes a recruiter stop and read. I also know what gets your resume tossed in 6 seconds. No guessing. Thousands of reps.
+                  I know what makes a recruiter stop and read. I also know what gets your resume tossed in 6 seconds. No guessing. I've seen it thousands of times.
                 </p>
               </div>
               <div className="rounded-xl p-6 text-center md:text-left" style={{ backgroundColor: '#FDFBF7', borderTop: '3px solid #D4930D' }}>
                 <Users className="w-10 h-10 mx-auto md:mx-0 mb-4" style={{ color: '#2D3A2E' }} strokeWidth={1.5} />
-                <p className="font-bold text-[20px] mb-2" style={{ color: '#1A1A1A' }}>750+ People Hired</p>
+                <p className="font-bold text-[20px] mb-2" style={{ color: '#1A1A1A' }}>I've Hired 750+ People</p>
                 <p className="text-base" style={{ color: '#1A1A1A' }}>
-                  I sat in the room where they decide your offer. I know what HR thinks, what hiring managers care about, and where most people leave money on the table.
+                  I've sat in the room where they decide your offer. I know what HR thinks, what the hiring manager cares about, and where most people lose money.
                 </p>
               </div>
               <div className="rounded-xl p-6 text-center md:text-left" style={{ backgroundColor: '#FDFBF7', borderTop: '3px solid #D4930D' }}>
                 <Building className="w-10 h-10 mx-auto md:mx-0 mb-4" style={{ color: '#2D3A2E' }} strokeWidth={1.5} />
                 <p className="font-bold text-[20px] mb-2" style={{ color: '#1A1A1A' }}>Fortune 500 Insider</p>
                 <p className="text-base" style={{ color: '#1A1A1A' }}>
-                  Google, Amazon, Meta, Microsoft. Hired for all of them. I know how they interview, how they pay, and what makes you stand out.
+                  Google, Amazon, Meta, Microsoft. I've hired for all of them. I know how they interview, how they pay, and what makes you stand out.
                 </p>
               </div>
             </div>
@@ -275,19 +262,81 @@ const IndexExperiment = () => {
           </div>
         </section>
 
-        {/* ── "Find Your Path" — white #FFFFFF ── */}
+        {/* ── How It Works ── */}
         <LazySection>
           <SelfSegmentationExperiment />
         </LazySection>
 
-        {/* ── FAQ — white #FFFFFF ── */}
+        {/* ── Salary Calculator Proof ── */}
+        <LazySection>
+          <SalaryProofSection />
+        </LazySection>
+
+        {/* ── FAQ ── */}
         <LazySection>
           <FAQSection />
         </LazySection>
 
-        {/* ── Coaching CTA — dark green gradient ── */}
+        {/* ── Testimonials — white #FFFFFF ── */}
         <LazySection>
-          <CoachingCTAExperiment />
+          <div style={{ backgroundColor: '#FFFFFF' }}>
+            <HomepageTestimonialsExperiment />
+          </div>
+        </LazySection>
+
+        {/* ── Logo Trust Bar — cream #FDFBF7 ── */}
+        <div style={{ backgroundColor: '#FDFBF7' }}>
+          <LogoScrollExperiment />
+        </div>
+
+        {/* ── Final CTA — dark green ── */}
+        <LazySection>
+          <section
+            id="coaching"
+            className="py-12 md:py-20 px-5 md:px-6 relative overflow-hidden"
+            style={{ background: 'linear-gradient(180deg, #2D3A2E 0%, #232E24 100%)' }}
+          >
+            <div
+              className="absolute inset-0 opacity-[0.03]"
+              style={{
+                backgroundImage: 'url("data:image/svg+xml,%3Csvg viewBox=\'0 0 256 256\' xmlns=\'http://www.w3.org/2000/svg\'%3E%3Cfilter id=\'noise\'%3E%3CfeTurbulence type=\'fractalNoise\' baseFrequency=\'0.65\' numOctaves=\'3\' stitchTiles=\'stitch\'/%3E%3C/filter%3E%3Crect width=\'100%25\' height=\'100%25\' filter=\'url(%23noise)\'/%3E%3C/svg%3E")',
+                backgroundSize: '128px 128px',
+              }}
+            />
+            <div className="container mx-auto max-w-2xl text-center relative z-10">
+              <h2 className="font-heading mb-4" style={{ color: '#FBF7F0', fontSize: 'clamp(2rem, 4vw, 2.625rem)' }}>
+                Stop leaving money on the table.
+              </h2>
+              <p className="mb-6" style={{ color: '#A8B5A9', fontSize: '1.0625rem' }}>
+                I take on a few clients each month. If you're serious about getting a great offer, let's talk.
+              </p>
+
+              <a
+                href="#about"
+                className="inline-flex items-center justify-center font-semibold"
+                style={{
+                  backgroundColor: '#D4930D',
+                  color: '#FFFFFF',
+                  padding: '16px 32px',
+                  borderRadius: '8px',
+                  fontSize: '1rem',
+                  fontWeight: 600,
+                  transition: 'background-color 0.2s ease',
+                }}
+                onMouseEnter={(e) => ((e.currentTarget as HTMLElement).style.backgroundColor = '#E0A520')}
+                onMouseLeave={(e) => ((e.currentTarget as HTMLElement).style.backgroundColor = '#D4930D')}
+              >
+                See If You're a Fit
+              </a>
+
+              <p style={{ color: '#A8B5A9', fontSize: '0.8125rem', marginTop: '8px' }}>
+                Free intro call · No commitment · No pressure
+              </p>
+              <p className="mt-4" style={{ color: '#6B6B6B', fontSize: '0.8125rem' }}>
+                Trusted by professionals from Google, Amazon, Meta, and 50+ companies
+              </p>
+            </div>
+          </section>
         </LazySection>
       </main>
 

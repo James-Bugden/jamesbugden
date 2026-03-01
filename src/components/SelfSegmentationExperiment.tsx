@@ -29,7 +29,7 @@ export default function SelfSegmentationExperiment() {
           className="font-heading text-center mb-10 md:mb-14"
           style={{ color: '#1A1A1A', fontSize: 'clamp(2rem, 4vw, 2.625rem)' }}
         >
-          3 Steps to Your $200K+ Offer
+          Get your free resume score in 60 seconds.
         </h2>
 
         {/* Steps */}
