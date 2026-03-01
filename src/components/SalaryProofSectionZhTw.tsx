@@ -1,4 +1,5 @@
 import { X, CheckCircle2 } from "lucide-react";
+import MailerLiteForm from "@/components/MailerLiteForm";
 
 export default function SalaryProofSectionZhTw() {
   return (
@@ -118,24 +119,8 @@ export default function SalaryProofSectionZhTw() {
           </p>
 
           {/* CTA */}
-          <div className="text-center">
-            <a
-              href="#about"
-              className="inline-flex items-center justify-center font-semibold"
-              style={{
-                backgroundColor: '#D4930D',
-                color: '#FFFFFF',
-                padding: '16px 32px',
-                borderRadius: '8px',
-                fontSize: '1rem',
-                fontWeight: 600,
-                transition: 'background-color 0.2s ease',
-              }}
-              onMouseEnter={(e) => ((e.currentTarget as HTMLElement).style.backgroundColor = '#E0A520')}
-              onMouseLeave={(e) => ((e.currentTarget as HTMLElement).style.backgroundColor = '#D4930D')}
-            >
-              免費獲取工具包
-            </a>
+          <div className="max-w-md mx-auto">
+            <MailerLiteForm formId="sM1X80" className="ml-embedded" buttonText="免費獲取工具包" />
           </div>
         </div>
       </section>

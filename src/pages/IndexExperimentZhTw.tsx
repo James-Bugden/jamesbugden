@@ -139,7 +139,7 @@ const IndexExperimentZhTw = () => {
                 </p>
 
                 <div className="mb-2 max-w-md mx-auto md:mx-0">
-                  <MailerLiteForm formId="sM1X80" className="ml-embedded" buttonText="免費獲取招募內幕技巧" />
+                  <MailerLiteForm formId="sM1X80" className="ml-embedded" buttonText="免費獲取工具包" />
                 </div>
 
                 <p className="mb-5" style={{ color: '#6B6B6B', fontSize: '0.8125rem', marginTop: '8px' }}>
@@ -216,15 +216,9 @@ const IndexExperimentZhTw = () => {
               </p>
             </div>
 
-            <a
-              href="#about"
-              className="inline-flex items-center justify-center rounded-lg font-semibold transition-colors duration-200"
-              style={{ backgroundColor: '#2D3A2E', color: '#FFFFFF', padding: '16px 32px', borderRadius: '8px', fontSize: '1rem', fontWeight: 600 }}
-              onMouseEnter={(e) => ((e.currentTarget as HTMLElement).style.backgroundColor = '#3A4A3B')}
-              onMouseLeave={(e) => ((e.currentTarget as HTMLElement).style.backgroundColor = '#2D3A2E')}
-            >
-              免費獲取招募內幕技巧
-            </a>
+            <div className="max-w-md mx-auto">
+              <MailerLiteForm formId="sM1X80" className="ml-embedded" buttonText="免費獲取工具包" />
+            </div>
             <p className="text-center mt-2" style={{ color: '#6B6B6B', fontSize: '0.8125rem' }}>
               不灌水、不廢話。每週一則招募內幕策略。
             </p>
