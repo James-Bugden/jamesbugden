@@ -19,7 +19,7 @@ export function AuthHeaderButton({ variant = "nav" }: AuthHeaderButtonProps) {
 
   // Determine dashboard path based on current locale
   const isZhTw = location.pathname.startsWith("/zh-tw") || location.pathname.startsWith("/zh");
-  const dashboardPath = isZhTw ? "/zh/dashboard" : "/dashboard";
+  const dashboardPath = isZhTw ? "/zh-tw/dashboard" : "/dashboard";
 
   if (!isLoggedIn) {
     return (

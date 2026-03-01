@@ -229,7 +229,7 @@ const App = () => (
             <Route path="/reset-password" element={<ResetPassword />} />
             <Route path="/dashboard" element={<Dashboard />} />
             <Route path="/zh-tw/dashboard" element={<DashboardZhTw />} />
-            <Route path="/zh/dashboard" element={<DashboardZhTw />} />
+            <Route path="/zh/dashboard" element={<Navigate to="/zh-tw/dashboard" replace />} />
             {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
             <Route path="*" element={<NotFound />} />
           </Routes>
