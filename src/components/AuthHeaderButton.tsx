@@ -36,21 +36,27 @@ export function AuthHeaderButton({ variant = "nav" }: AuthHeaderButtonProps) {
 
   const initial = (user?.email?.[0] || "U").toUpperCase();
 
+  const dashboardLabel = isZhTw ? "我的工具" : "Dashboard";
+
   return (
-    <div className="flex items-center gap-2">
+    <div className="flex items-center gap-3">
       <Link
         to={dashboardPath}
-        className={`w-7 h-7 rounded-full flex items-center justify-center text-xs font-bold ${
-          isNav ? "bg-gold/20 text-gold" : "bg-accent/20 text-accent"
-        }`}
-        title="Dashboard"
+        className={`flex items-center gap-2 text-sm font-medium ${baseClass}`}
       >
-        {initial}
+        <span
+          className={`w-7 h-7 rounded-full flex items-center justify-center text-xs font-bold ${
+            isNav ? "bg-gold/20 text-gold" : "bg-accent/20 text-accent"
+          }`}
+        >
+          {initial}
+        </span>
+        <span className="hidden sm:inline">{dashboardLabel}</span>
       </Link>
       <button
         onClick={signOut}
         className={`flex items-center gap-1 text-sm ${baseClass}`}
-        title="Sign out"
+        title={isZhTw ? "登出" : "Sign out"}
       >
         <LogOut className="w-4 h-4" />
       </button>
