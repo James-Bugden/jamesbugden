@@ -40,7 +40,7 @@ export function AuthHeaderButton({ variant = "nav" }: AuthHeaderButtonProps) {
     <div className="flex items-center gap-3">
       <Link
         to={dashboardPath}
-        className={`text-sm font-medium ${baseClass}`}
+        className="text-sm font-semibold px-4 py-1.5 rounded-full border border-cream/30 text-cream hover:bg-cream/10 transition-colors"
       >
         {dashboardLabel}
       </Link>
