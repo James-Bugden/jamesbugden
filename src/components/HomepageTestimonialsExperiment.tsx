@@ -26,7 +26,7 @@ type Testimonial = {
 
 const tier1: Testimonial[] = [
   {
-    headline: "Way More Than Just a Resume Check",
+    headline: "\"It felt like a full career strategy session.\"",
     name: "Pin-Wei Wu",
     titleSource: "Career Changer · via Resume Review",
     photo: pinweiPhoto,
@@ -34,7 +34,7 @@ const tier1: Testimonial[] = [
     bold: "It felt more like a high-density career session than just a resume check.",
   },
   {
-    headline: "Full of Actionable Recommendations",
+    headline: "\"Every fix was specific. Nothing generic.\"",
     name: "Cynthia Chiang",
     titleSource: "Professional · via Resume Review",
     photo: cynthiaPhoto,
@@ -42,7 +42,7 @@ const tier1: Testimonial[] = [
     bold: "Full of actionable recommendations.",
   },
   {
-    headline: "First Time I Truly Understood What HR Cares About",
+    headline: "\"Finally understood how the hiring side thinks.\"",
     name: "Airu",
     titleSource: "Job Seeker · via Salary Coaching",
     photo: airuPhoto,
@@ -50,7 +50,7 @@ const tier1: Testimonial[] = [
     bold: "The first time I clearly understood what HR really cares about.",
   },
   {
-    headline: "A Confidence Boost for Cross-Industry Job Seekers",
+    headline: "\"Not just a resume fix — a confidence boost.\"",
     name: "Roy Tsai",
     titleSource: "Career Switcher · via Resume Review",
     photo: royPhoto,
@@ -58,7 +58,7 @@ const tier1: Testimonial[] = [
     bold: "This wasn't just a resume fix. It was a confidence boost.",
   },
   {
-    headline: "Now I Can Customize My Resume for Any Role",
+    headline: "\"I use the same framework for every application now.\"",
     name: "Monica",
     titleSource: "Professional · via Resume Review",
     photo: monicaPhoto,
@@ -66,7 +66,7 @@ const tier1: Testimonial[] = [
     bold: "I can use the same framework to customize my resume for any role.",
   },
   {
-    headline: "He Finds the Potential Hidden in Your Story",
+    headline: "\"He found potential I didn't know was there.\"",
     name: "Janelle Cheng",
     titleSource: "Professional · via Resume Review",
     photo: janellePhoto,
@@ -74,7 +74,7 @@ const tier1: Testimonial[] = [
     bold: "Dedicated to the details and the potential hidden in my plain description.",
   },
   {
-    headline: "Now I Know How HR Actually Thinks",
+    headline: "\"I walked into my next negotiation prepared.\"",
     name: "Peter Cho",
     titleSource: "Professional · via Salary Coaching",
     photo: peterPhoto,
@@ -85,7 +85,7 @@ const tier1: Testimonial[] = [
 
 const tier2: Testimonial[] = [
   {
-    headline: "Understand How Every Person in Hiring Thinks",
+    headline: "\"I stopped being scared of salary conversations.\"",
     name: "Anne Chen",
     titleSource: "Professional · via Salary Coaching",
     photo: annePhoto,
@@ -93,7 +93,7 @@ const tier2: Testimonial[] = [
     bold: "He broke down how recruiters, headhunters, and hiring teams each think differently.",
   },
   {
-    headline: "Prioritized Improvements I Could Act on Immediately",
+    headline: "\"I knew exactly what to fix first.\"",
     name: "Silvia Chen",
     titleSource: "Professional · via Resume Review",
     photo: silviaPhoto,
@@ -101,7 +101,7 @@ const tier2: Testimonial[] = [
     bold: "Prioritized improvement suggestions with optimized examples.",
   },
   {
-    headline: "Better Advice Than My HR and Headhunter Friends",
+    headline: "\"Advice my HR and headhunter friends couldn't give me.\"",
     name: "Sunny",
     titleSource: "Professional · via Resume Review",
     photo: sunnyPhoto,
@@ -109,7 +109,7 @@ const tier2: Testimonial[] = [
     bold: "The kind of advice that even my HR friends and headhunter connections couldn't give me.",
   },
   {
-    headline: "Genuinely Invested in Helping Me Succeed",
+    headline: "\"More clarity and confidence going into salary talks.\"",
     name: "Omar Li",
     titleSource: "Professional · via Salary Coaching",
     photo: omarPhoto,
@@ -120,7 +120,7 @@ const tier2: Testimonial[] = [
 
 const tier3: Testimonial[] = [
   {
-    headline: "A Professional Roadmap for My Applications",
+    headline: "\"I paired his feedback with AI and the quality jumped.\"",
     name: "Julie Huang",
     titleSource: "Professional · via Resume Review",
     photo: juliePhoto,
@@ -128,7 +128,7 @@ const tier3: Testimonial[] = [
     bold: "Direct and hit every point that mattered.",
   },
   {
-    headline: "Realized My Salary Has Room to Grow",
+    headline: "\"In 30 minutes I realized I was underpaid.\"",
     name: "Kiki",
     titleSource: "Professional · via Salary Coaching",
     photo: kikiPhoto,
@@ -136,7 +136,7 @@ const tier3: Testimonial[] = [
     bold: "Helped me realize my salary actually has room to grow.",
   },
   {
-    headline: "Customized Guidance, Not Generic Advice",
+    headline: "\"No generic advice. All about my situation.\"",
     name: "Rock Shih",
     titleSource: "Professional · via Salary Coaching",
     photo: rockPhoto,
@@ -230,7 +230,7 @@ export default function HomepageTestimonialsExperiment() {
     <section id="testimonials" className="py-12 md:py-20 px-5 md:px-6" style={{ backgroundColor: "#FFFFFF" }}>
       <div className="container mx-auto max-w-5xl">
         <h2 className="font-heading text-center mb-6" style={{ color: "#1A1A1A", fontSize: "clamp(2rem, 4vw, 2.625rem)" }}>
-          750+ Professionals Landed Their Dream Offers
+          Real feedback from real people.
         </h2>
 
         {/* Featured */}
