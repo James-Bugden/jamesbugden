@@ -127,12 +127,12 @@ const IndexExperiment = () => {
                 <div className="flex items-center justify-center md:justify-start gap-2 mb-5">
                   <span className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full border" style={{ backgroundColor: 'rgba(45,58,46,0.06)', borderColor: 'rgba(45,58,46,0.12)', color: '#6B6B6B', fontSize: '0.9375rem' }}>
                     <Briefcase className="w-4 h-4" style={{ color: '#6B6B6B' }} />
-                    Senior Recruiter at Uber · Join 10,000+ professionals using my free tools
+                    Senior Recruiter at Uber
                   </span>
                 </div>
 
                 <p className="leading-relaxed max-w-xl mx-auto md:mx-0 mb-5" style={{ color: '#1A1A1A', fontSize: '1.0625rem' }}>
-                  Free tools, templates, and insider strategies from a recruiter who's helped 750+ people get hired at Google, Uber, and other MNCs.
+                  Free tools, templates, and insider strategies from a recruiter who's helped 750+ people get hired.
                 </p>
 
                 <div className="mb-2 max-w-md mx-auto md:mx-0">
@@ -140,7 +140,7 @@ const IndexExperiment = () => {
                 </div>
 
                 <p className="mb-5" style={{ color: '#6B6B6B', fontSize: '0.8125rem', marginTop: '8px' }}>
-                  Free forever · Unsubscribe anytime
+                  Join 10,000+ professionals using my free tools · Free forever · Unsubscribe anytime
                 </p>
 
                 <div className="flex flex-wrap justify-center md:justify-start gap-x-8 gap-y-3 pt-6 border-t border-border/60">
@@ -178,6 +178,18 @@ const IndexExperiment = () => {
             </div>
           </div>
         </section>
+
+        {/* ── Logo Trust Bar — cream #FDFBF7 ── */}
+        <div style={{ backgroundColor: '#FDFBF7' }}>
+          <LogoScrollExperiment />
+        </div>
+
+        {/* ── Testimonials — white #FFFFFF ── */}
+        <LazySection>
+          <div style={{ backgroundColor: '#FFFFFF' }}>
+            <HomepageTestimonialsExperiment />
+          </div>
+        </LazySection>
 
         {/* ── Pain-Point Section — cream #FDFBF7 ── */}
         <section className="py-12 md:py-20 px-5 md:px-6" style={{ backgroundColor: '#FDFBF7' }}>
@@ -276,18 +288,6 @@ const IndexExperiment = () => {
         <LazySection>
           <FAQSection />
         </LazySection>
-
-        {/* ── Testimonials — white #FFFFFF ── */}
-        <LazySection>
-          <div style={{ backgroundColor: '#FFFFFF' }}>
-            <HomepageTestimonialsExperiment />
-          </div>
-        </LazySection>
-
-        {/* ── Logo Trust Bar — cream #FDFBF7 ── */}
-        <div style={{ backgroundColor: '#FDFBF7' }}>
-          <LogoScrollExperiment />
-        </div>
 
         {/* ── Final CTA — dark green ── */}
         <LazySection>
