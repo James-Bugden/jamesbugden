@@ -1,31 +1,28 @@
 
 
-## Align Chinese Hero Section with English Version
+## Align Chinese "Why Work With an Insider" Section with English
 
 ### Changes to `src/pages/IndexExperimentZhTw.tsx`
 
-**1. Credential badge** (line 130)
-- Current: `資深 HR · 財星500大企業`
-- Updated: `Uber 資深 HR`
+**1. Section heading** (lines 229-234)
+- Remove the subtitle paragraph
+- Change heading from "為什麼要找內部人？" to match English structure: "大部分的職涯建議來自沒招募過任何人的人"
+- Remove the separate `<p>` subtitle since the English version has no subtitle
 
-**2. Subhead copy** (lines 134-139)
-- Current: Two separate paragraphs with pain-point messaging
-- Updated: Single paragraph matching the English structure:
-  "免費工具、模板和內部策略，來自幫助 750 位以上求職者成功錄取的招募官。"
+**2. Card 3 — "Insider Knowledge"** (lines 252-258)
+- Title: Change "財星500大內部人" to "內部知識"
+- Body: Change from the Google/Amazon/Meta copy to match English: "我錄取過 750 位以上的人。我知道他們怎麼面試、怎麼給薪，還有什麼讓你脫穎而出。"
 
-**3. Stats numbers** (lines 153 and 160)
-- `20,000+` changed to `20,000 以上`
-- `750+` changed to `750 以上`
+**3. Remove bottom text** (lines 261-263)
+- Delete the line "這不是部落格上的建議。這來自親自做招募的人。" since the English version has no equivalent
 
-**4. Trust line** (line 146)
-- `10,000+` changed to `10,000 以上`
-
-### Summary of Differences Fixed
+### Summary
 
 | Element | English | Chinese (current) | Chinese (fixed) |
 |---|---|---|---|
-| Credential | Senior HR at Uber | 資深 HR · 財星500大企業 | Uber 資深 HR |
-| Subhead | Single paragraph, free tools focus | Two paragraphs, pain-point focus | Single paragraph, matching EN |
-| Stats | 20,000+ / 750+ | 20,000+ / 750+ | 20,000 以上 / 750 以上 |
-| Trust line | 10,000+ | 10,000+ | 10,000 以上 |
+| Heading | "Most career advice comes from people who've never hired anyone." | 為什麼要找內部人？ | 大部分的職涯建議來自沒招募過任何人的人 |
+| Subtitle | None | 大部分的職涯建議來自... | Removed |
+| Card 3 title | Insider Knowledge | 財星500大內部人 | 內部知識 |
+| Card 3 body | "I've hired over 750 people..." | Google/Amazon/Meta copy | 我錄取過 750 位以上的人... |
+| Bottom text | None | 這不是部落格上的建議... | Removed |
 
