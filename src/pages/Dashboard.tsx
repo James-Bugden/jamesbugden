@@ -76,14 +76,14 @@ const guides: Guide[] = [
 ];
 
 const toolkitItems: ToolkitItem[] = [
-  { title: { en: "Deflection Scripts", zh: "迴避話術腳本" }, desc: { en: "What to say when they ask your salary expectations too early. Word-for-word scripts.", zh: "當他們太早問你期望薪資時該怎麼說。逐字腳本。" }, enPath: "/toolkit/scripts", zhPath: "/zh-tw/toolkit/scripts" },
-  { title: { en: "Offer Response", zh: "Offer 回覆指南" }, desc: { en: "How to respond to an offer without accepting or rejecting. Buy time and negotiate better.", zh: "如何回覆 Offer 而不接受或拒絕。爭取時間，談出更好條件。" }, enPath: "/toolkit/offer-response", zhPath: "/zh-tw/toolkit/offer-response" },
-  { title: { en: "Counteroffer Email", zh: "還價信模板" }, desc: { en: "Copy-paste email templates for countering an offer professionally.", zh: "可直接複製貼上的專業還價信模板。" }, enPath: "/toolkit/counteroffer", zhPath: "/zh-tw/toolkit/counteroffer" },
-  { title: { en: "Compensation Calculator", zh: "薪資計算機" }, desc: { en: "Calculate your total comp — base, bonus, stock, benefits — so you compare offers properly.", zh: "計算你的總薪酬——底薪、獎金、股票、福利——正確比較 Offer。" }, enPath: "/toolkit/calculator", zhPath: "/zh-tw/toolkit/calculator" },
-  { title: { en: "Comp Calculator Interactive", zh: "互動式薪資計算機" }, desc: { en: "The interactive version. Plug in two offers and see the real difference.", zh: "互動版本。輸入兩個 Offer，看看真正的差異。" }, enPath: "/toolkit/calculator-interactive", zhPath: "/zh-tw/toolkit/calculator-interactive" },
-  { title: { en: "Pushback Cheat Sheet", zh: "反擊話術速查表" }, desc: { en: "When they say 'this is our best offer' or 'the budget is fixed' — here's what to say back.", zh: "當他們說「這是最好的條件」或「預算固定了」——你可以這樣回。" }, enPath: "/toolkit/pushback", zhPath: "/zh-tw/toolkit/pushback" },
-  { title: { en: "Raise One-Pager", zh: "加薪提案單頁" }, desc: { en: "A one-page template to present your case for a raise to your manager. Data-backed, not emotional.", zh: "一頁模板，用數據向主管提出加薪案。理性而非感性。" }, enPath: "/toolkit/raise", zhPath: "/zh-tw/toolkit/raise" },
-  { title: { en: "Achievement Log", zh: "成就紀錄表" }, desc: { en: "Track your wins weekly so when review time comes, you have the evidence ready.", zh: "每週記錄你的成就，績效考核時你就有現成的證據。" }, enPath: "/toolkit/log", zhPath: "/zh-tw/toolkit/log" },
+  { title: { en: "Deflection Scripts", zh: "轉移話題腳本" }, desc: { en: "What to say when they ask your salary expectations too early. Word-for-word scripts.", zh: "當他們太早問你薪資期望時該怎麼說。逐字腳本。" }, enPath: "/toolkit/scripts", zhPath: "/zh-tw/toolkit/scripts" },
+  { title: { en: "Offer Response", zh: "Offer 回覆範本" }, desc: { en: "How to respond to an offer without accepting or rejecting. Buy time and negotiate better.", zh: "怎麼回覆 offer 但不直接接受或拒絕。爭取時間，談出更好條件。" }, enPath: "/toolkit/offer-response", zhPath: "/zh-tw/toolkit/offer-response" },
+  { title: { en: "Counteroffer Email", zh: "還價信範本" }, desc: { en: "Copy-paste email templates for countering an offer professionally.", zh: "直接複製貼上的專業還價 email 模板。" }, enPath: "/toolkit/counteroffer", zhPath: "/zh-tw/toolkit/counteroffer" },
+  { title: { en: "Compensation Calculator", zh: "薪酬計算器" }, desc: { en: "Calculate your total comp — base, bonus, stock, benefits — so you compare offers properly.", zh: "計算你的完整薪酬 — 底薪、獎金、股票、福利 — 才能正確比較 offer。" }, enPath: "/toolkit/calculator", zhPath: "/zh-tw/toolkit/calculator" },
+  { title: { en: "Comp Calculator Interactive", zh: "薪酬互動計算器" }, desc: { en: "The interactive version. Plug in two offers and see the real difference.", zh: "互動版本。輸入兩個 offer，看清楚真正的差異。" }, enPath: "/toolkit/calculator-interactive", zhPath: "/zh-tw/toolkit/calculator-interactive" },
+  { title: { en: "Pushback Cheat Sheet", zh: "反駁話術速查" }, desc: { en: "When they say 'this is our best offer' or 'the budget is fixed' — here's what to say back.", zh: "當他們說『這是我們最好的 offer』或『預算就這樣了』— 你該怎麼回。" }, enPath: "/toolkit/pushback", zhPath: "/zh-tw/toolkit/pushback" },
+  { title: { en: "Raise One-Pager", zh: "加薪一頁報告" }, desc: { en: "A one-page template to present your case for a raise to your manager. Data-backed, not emotional.", zh: "一頁模板，用數據向主管提出加薪要求。用證據說話，不靠情緒。" }, enPath: "/toolkit/raise", zhPath: "/zh-tw/toolkit/raise" },
+  { title: { en: "Achievement Log", zh: "成就紀錄簿" }, desc: { en: "Track your wins weekly so when review time comes, you have the evidence ready.", zh: "每週記錄你的成果，等到績效考核時就有現成的證據。" }, enPath: "/toolkit/log", zhPath: "/zh-tw/toolkit/log" },
 ];
 
 const filterTabsEn = [
@@ -126,6 +126,7 @@ const i18n = {
     ctaBody: "These tools get you 80% of the way. If you want someone to look at your specific situation — resume, interviews, salary negotiation — I work with a few people each month.",
     ctaButton: "See If You're a Fit",
     ctaTrust: "Free intro call · No commitment · No pressure",
+    footerCopyright: "© 2026 All Rights Reserved",
     salaryKitLink: "/salary-starter-kit",
     toolkitIndexPath: "/toolkit",
     filterTabs: filterTabsEn,
@@ -146,14 +147,15 @@ const i18n = {
     guidesHeading: "指南",
     guidesSub: "求職每個階段的完整攻略。由招募官撰寫，不是職涯部落客。",
     toolkitHeading: "薪資談判工具包",
-    toolkitSub: "一套完整的談判系統。先從索引開始，需要時再使用各個工具。",
+    toolkitSub: "一套完整的談薪系統。從索引開始，需要時再使用各個工具。",
     toolkitIndex: "工具包索引",
-    toolkitIndexDesc: "這套工具包的完整概覽。先讀這篇，了解該用什麼、什麼時候用。",
+    toolkitIndexDesc: "這套工具包的完整概覽。先讀這篇，知道什麼時候用什麼。",
     startHere: "從這裡開始",
-    ctaHeading: "想要一對一協助？",
-    ctaBody: "這些工具能幫你完成 80%。如果你想要有人針對你的情況——履歷、面試、薪資談判——我每個月會和幾位夥伴合作。",
-    ctaButton: "看看是否適合你",
-    ctaTrust: "免費初次通話 · 無需承諾 · 無壓力",
+    ctaHeading: "需要一對一協助？",
+    ctaBody: "這些工具能幫你完成 80%。如果你想要有人針對你的具體狀況 — 履歷、面試、薪資談判 — 我每個月會接幾位客戶。",
+    ctaButton: "看看是否適合",
+    ctaTrust: "免費初次通話 · 沒有任何承諾 · 沒有壓力",
+    footerCopyright: "© 2026 版權所有",
     salaryKitLink: "/zh-tw/salary-starter-kit",
     toolkitIndexPath: "/zh-tw/toolkit",
     filterTabs: filterTabsZh,
@@ -357,7 +359,7 @@ export default function Dashboard({ lang = "en" }: { lang?: "en" | "zh" }) {
       <footer className="bg-background py-10 text-center">
         <p className="font-heading text-lg text-foreground/60 mb-1">JAMES BUGDEN</p>
         <p className="text-muted-foreground text-sm mb-1">james.careers</p>
-        <p className="text-muted-foreground/60 text-xs">© 2026 All Rights Reserved</p>
+        <p className="text-muted-foreground/60 text-xs">{t.footerCopyright}</p>
       </footer>
     </>
   );
