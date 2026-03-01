@@ -5,7 +5,7 @@ export default function SalaryProofSectionZhTw() {
   return (
     <>
       {/* Part A — Big Impact Numbers */}
-      <section className="py-16 md:py-24 px-5 md:px-6" style={{ backgroundColor: '#1B3A2F' }}>
+      <section className="py-16 md:py-24 px-5 md:px-6" style={{ backgroundColor: '#2b4734' }}>
         <div className="container mx-auto max-w-3xl text-center">
           <h2
             className="font-heading mb-14"
@@ -37,7 +37,7 @@ export default function SalaryProofSectionZhTw() {
       </section>
 
       {/* Part B — Salary Comparison */}
-      <section className="py-16 md:py-24 px-5 md:px-6" style={{ backgroundColor: '#1B3A2F' }}>
+      <section className="py-16 md:py-24 px-5 md:px-6" style={{ backgroundColor: '#2b4734' }}>
         <div className="container mx-auto max-w-3xl">
           <div className="text-center mb-10">
             <h2
