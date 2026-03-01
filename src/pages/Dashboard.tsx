@@ -2,11 +2,12 @@ import { useState, useEffect, useRef, useCallback, useMemo, memo } from "react";
 import { useAuth } from "@/contexts/AuthContext";
 import { Navigate, Link } from "react-router-dom";
 import LanguageToggle from "@/components/LanguageToggle";
-import { ArrowRight, FileText, DollarSign, PenTool, ClipboardList, Search } from "lucide-react";
+import { ArrowRight, FileText, DollarSign, PenTool, ClipboardList, Search, X, Sparkles } from "lucide-react";
 import PageSEO from "@/components/PageSEO";
 import LazySection from "@/components/LazySection";
 import { useRecentlyUsed, type RecentItem } from "@/hooks/useRecentlyUsed";
 import { getActiveJobs } from "@/lib/jobStore";
+import { useLocalStorage } from "@/hooks/useLocalStorage";
 
 type GuideTag = "getting-started" | "applying" | "negotiating";
 
@@ -304,6 +305,7 @@ export default function Dashboard({ lang = "en" }: { lang?: "en" | "zh" }) {
   const [activeSection, setActiveSection] = useState<string>("tools");
   const searchInputRef = useRef<HTMLInputElement>(null);
   const { recentItems, trackItem } = useRecentlyUsed();
+  const [bannerDismissed, setBannerDismissed] = useLocalStorage("dashboard_banner_dismissed_v1", false);
   const t = i18n[lang];
 
   // Scroll shadow
@@ -352,12 +354,46 @@ export default function Dashboard({ lang = "en" }: { lang?: "en" | "zh" }) {
   // Recently used / recommended
   const recentCards = useMemo(() => {
     if (recentItems.length === 0) {
-      // Recommended defaults
       const defaultIds = ["resume-analyzer", "pivot-guide", "salary-kit"];
       return defaultIds.map(id => allSearchable.find(s => s.id === id)!).filter(Boolean);
     }
     return recentItems.map(r => allSearchable.find(s => s.id === r.id)).filter(Boolean) as SearchableItem[];
   }, [recentItems, allSearchable]);
+
+  // Smart next-step recommendation
+  const nextStep = useMemo(() => {
+    const usedIds = new Set(recentItems.map(r => r.id));
+    if (usedIds.size === 0) return null; // show defaults instead
+    const hasResumeAnalyzer = usedIds.has("resume-analyzer");
+    const hasJobTracker = usedIds.has("job-tracker");
+    const hasSalaryKit = usedIds.has("salary-kit") || usedIds.has("tk-scripts") || usedIds.has("tk-counter") || usedIds.has("tk-offer");
+
+    if (!hasResumeAnalyzer) {
+      return {
+        path: "/resume-analyzer",
+        label: { en: "Suggested Next Step", zh: "建議的下一步" },
+        title: { en: "Start with your resume", zh: "從履歷開始" },
+        desc: { en: "Get a recruiter-level score and specific fixes in 60 seconds.", zh: "60 秒內拿到招募官等級的評分和具體修改建議。" },
+      };
+    }
+    if (!hasJobTracker) {
+      return {
+        path: "/jobs",
+        label: { en: "Suggested Next Step", zh: "建議的下一步" },
+        title: { en: "Track your applications", zh: "追蹤你的申請" },
+        desc: { en: "Organize every application, interview, and follow-up in one place.", zh: "在一個地方管理每一個申請、面試和後續跟進。" },
+      };
+    }
+    if (!hasSalaryKit) {
+      return {
+        path: lang === "zh" ? "/zh-tw/salary-starter-kit" : "/salary-starter-kit",
+        label: { en: "Suggested Next Step", zh: "建議的下一步" },
+        title: { en: "Prepare to negotiate", zh: "準備談薪水" },
+        desc: { en: "Scripts, templates, and the exact numbers for your next offer.", zh: "話術腳本、模板、還有下次 offer 需要的實際數字。" },
+      };
+    }
+    return null;
+  }, [recentItems, lang]);
 
   if (isLoading) {
     return (
@@ -428,7 +464,7 @@ export default function Dashboard({ lang = "en" }: { lang?: "en" | "zh" }) {
           </div>
 
           <div className="flex items-center gap-4 text-sm">
-            <span className="hidden sm:inline" style={{ color: C.textSecondary }}>{t.hey} {firstName}</span>
+            <span style={{ color: C.textSecondary }}>{t.hey} {firstName}</span>
             <button onClick={signOut} className="hover:opacity-80 transition-opacity" style={{ color: C.textSecondary }}>{t.signOut}</button>
             <LanguageToggle />
           </div>
@@ -457,18 +493,27 @@ export default function Dashboard({ lang = "en" }: { lang?: "en" | "zh" }) {
       <section style={{ backgroundColor: C.cream }}>
         <div className="max-w-[1200px] mx-auto px-4 md:px-8 py-8 md:py-10 flex flex-col md:flex-row md:items-center md:justify-between gap-4">
           <h1 className="font-heading text-2xl md:text-3xl" style={{ color: C.text }}>{t.welcomeBack} {firstName}.</h1>
-          <div
-            className="rounded-2xl px-4 py-3 max-w-lg border"
-            style={{ borderColor: 'rgba(0,0,0,0.08)', backgroundColor: C.white }}
-          >
-            <p className="text-sm leading-relaxed" style={{ color: C.textSecondary }}>
-              <span className="mr-1.5">🆕</span>
-              <span className="font-semibold" style={{ color: C.text }}>{t.newBadge}</span> — {t.newBody}{" "}
-              <Link to={t.salaryKitLink} className="font-semibold hover:underline inline-flex items-center gap-0.5" style={{ color: C.gold }}>
-                {t.checkItOut} <ArrowRight className="w-3.5 h-3.5" />
-              </Link>
-            </p>
-          </div>
+          {!bannerDismissed && (
+            <div
+              className="rounded-2xl px-4 py-3 max-w-lg border relative"
+              style={{ borderColor: 'rgba(0,0,0,0.08)', backgroundColor: C.white }}
+            >
+              <p className="text-sm leading-relaxed pr-6" style={{ color: C.textSecondary }}>
+                <span className="mr-1.5">🆕</span>
+                <span className="font-semibold" style={{ color: C.text }}>{t.newBadge}</span> — {t.newBody}{" "}
+                <Link to={t.salaryKitLink} className="font-semibold hover:underline inline-flex items-center gap-0.5" style={{ color: C.gold }}>
+                  {t.checkItOut} <ArrowRight className="w-3.5 h-3.5" />
+                </Link>
+              </p>
+              <button
+                onClick={() => setBannerDismissed(true)}
+                className="absolute top-2.5 right-2.5 p-1 rounded-full hover:bg-black/5 transition-colors"
+                aria-label="Dismiss"
+              >
+                <X className="w-3.5 h-3.5" style={{ color: C.textSecondary }} />
+              </button>
+            </div>
+          )}
         </div>
       </section>
 
@@ -526,6 +571,29 @@ export default function Dashboard({ lang = "en" }: { lang?: "en" | "zh" }) {
             </div>
           )}
 
+          {/* Smart Next Step */}
+          {!searchResults && nextStep && (
+            <div className="mb-6">
+              <Link
+                to={nextStep.path}
+                className="rounded-2xl border p-5 flex items-center gap-4 transition-all duration-200 hover:-translate-y-0.5"
+                style={{ backgroundColor: C.goldFaded, borderColor: C.gold, boxShadow: C.cardShadow }}
+                onMouseEnter={e => (e.currentTarget.style.boxShadow = C.cardHoverShadow)}
+                onMouseLeave={e => (e.currentTarget.style.boxShadow = C.cardShadow)}
+              >
+                <span className="w-10 h-10 rounded-full flex items-center justify-center shrink-0" style={{ backgroundColor: C.gold }}>
+                  <Sparkles className="w-5 h-5" style={{ color: C.white }} />
+                </span>
+                <div className="flex-1 min-w-0">
+                  <p className="text-xs font-bold uppercase tracking-wider mb-0.5" style={{ color: C.gold }}>{nextStep.label[lang]}</p>
+                  <h4 className="text-sm font-bold" style={{ color: C.text }}>{nextStep.title[lang]}</h4>
+                  <p className="text-xs mt-0.5" style={{ color: C.textSecondary }}>{nextStep.desc[lang]}</p>
+                </div>
+                <ArrowRight className="w-5 h-5 shrink-0" style={{ color: C.gold }} />
+              </Link>
+            </div>
+          )}
+
           {/* Recently Used / Recommended */}
           {!searchResults && recentCards.length > 0 && (
             <div className="mb-8">
@@ -533,22 +601,30 @@ export default function Dashboard({ lang = "en" }: { lang?: "en" | "zh" }) {
                 {recentItems.length > 0 ? t.recentlyUsed : t.recommended}
               </p>
               <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-                {recentCards.map(item => (
-                  <Link
-                    key={item.id}
-                    to={item.path}
-                    className="rounded-2xl border-l-[3px] p-4 transition-all duration-200 hover:-translate-y-0.5 flex items-center gap-3"
-                    style={{ backgroundColor: C.cream, borderLeftColor: C.gold, boxShadow: C.cardShadow }}
-                    onMouseEnter={e => (e.currentTarget.style.boxShadow = C.cardHoverShadow)}
-                    onMouseLeave={e => (e.currentTarget.style.boxShadow = C.cardShadow)}
-                  >
-                    <div>
-                      <h4 className="text-sm font-bold" style={{ color: C.text }}>{item.title[lang]}</h4>
-                      <p className="text-xs mt-0.5" style={{ color: C.textSecondary }}>{item.type === "tool" ? t.navTools : item.type === "guide" ? t.navGuides : t.navToolkit}</p>
-                    </div>
-                    <ArrowRight className="w-4 h-4 ml-auto shrink-0" style={{ color: C.gold }} />
-                  </Link>
-                ))}
+                {recentCards.map(item => {
+                  const badge = getProgressBadge(item.id, lang, t);
+                  return (
+                    <Link
+                      key={item.id}
+                      to={item.path}
+                      className="rounded-2xl border-l-[3px] p-4 transition-all duration-200 hover:-translate-y-0.5 flex items-center gap-3"
+                      style={{ backgroundColor: C.cream, borderLeftColor: C.gold, boxShadow: C.cardShadow }}
+                      onMouseEnter={e => (e.currentTarget.style.boxShadow = C.cardHoverShadow)}
+                      onMouseLeave={e => (e.currentTarget.style.boxShadow = C.cardShadow)}
+                    >
+                      <div className="min-w-0">
+                        <h4 className="text-sm font-bold" style={{ color: C.text }}>{item.title[lang]}</h4>
+                        <p className="text-xs mt-0.5" style={{ color: C.textSecondary }}>{item.type === "tool" ? t.navTools : item.type === "guide" ? t.navGuides : t.navToolkit}</p>
+                        {badge && (
+                          <span className="text-[10px] font-semibold mt-1 inline-block px-1.5 py-0.5 rounded-full" style={{ backgroundColor: C.goldFaded, color: C.gold }}>
+                            {badge}
+                          </span>
+                        )}
+                      </div>
+                      <ArrowRight className="w-4 h-4 ml-auto shrink-0" style={{ color: C.gold }} />
+                    </Link>
+                  );
+                })}
               </div>
             </div>
           )}
