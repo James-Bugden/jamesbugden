@@ -82,9 +82,9 @@ const IndexExperimentZhTw = () => {
   return (
     <div className="experiment min-h-screen overflow-x-hidden scroll-smooth" style={{ backgroundColor: '#FDFBF7' }}>
       <PageSEO
-        title="James Bugden — 實驗頁面"
-        description="實驗版首頁"
-        path="/zh-tw/experiment"
+        title="James Bugden — 免費職涯工具與履歷攻略"
+        description="免費工具、模板和內部策略，來自幫助 750 位以上求職者成功錄取的 Uber 資深招募官"
+        path="/zh-tw"
       />
 
       {/* ── Navigation ── */}
@@ -138,7 +138,7 @@ const IndexExperimentZhTw = () => {
                 </p>
 
                 <div className="mb-2 max-w-md mx-auto md:mx-0">
-                  <MailerLiteForm formId="sM1X80" className="ml-embedded" buttonText="免費獲取工具包" />
+                   <MailerLiteForm formId="sM1X80" className="ml-embedded" buttonText="免費索取攻略" />
                 </div>
 
                 <p className="mb-5" style={{ color: '#6B6B6B', fontSize: '0.8125rem', marginTop: '8px' }}>
@@ -216,7 +216,7 @@ const IndexExperimentZhTw = () => {
             </div>
 
             <div className="max-w-md mx-auto">
-              <MailerLiteForm formId="sM1X80" className="ml-embedded" buttonText="免費獲取工具包" />
+              <MailerLiteForm formId="sM1X80" className="ml-embedded" buttonText="免費索取攻略" />
             </div>
             <p className="text-center mt-2" style={{ color: '#6B6B6B', fontSize: '0.8125rem' }}>
               不灌水、不廢話。每週一則招募內幕策略。
@@ -236,14 +236,14 @@ const IndexExperimentZhTw = () => {
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-6 mb-10">
               <div className="rounded-xl p-6 text-center md:text-left" style={{ backgroundColor: '#FDFBF7', borderTop: '3px solid #D4930D' }}>
                 <Eye className="w-10 h-10 mx-auto md:mx-0 mb-4" style={{ color: '#2b4734' }} strokeWidth={1.5} />
-                <p className="font-bold text-[20px] mb-2" style={{ color: '#1A1A1A' }}>審閱過 20,000+ 份履歷</p>
+                <p className="font-bold text-[20px] mb-2" style={{ color: '#1A1A1A' }}>審閱過 20,000 以上份履歷</p>
                 <p className="text-base" style={{ color: '#1A1A1A' }}>
                   我知道什麼讓招募官停下來看。也知道什麼讓履歷 6 秒內被淘汰。不用猜，看過幾千次了。
                 </p>
               </div>
               <div className="rounded-xl p-6 text-center md:text-left" style={{ backgroundColor: '#FDFBF7', borderTop: '3px solid #D4930D' }}>
                 <Users className="w-10 h-10 mx-auto md:mx-0 mb-4" style={{ color: '#2b4734' }} strokeWidth={1.5} />
-                <p className="font-bold text-[20px] mb-2" style={{ color: '#1A1A1A' }}>錄取過 750+ 人</p>
+                <p className="font-bold text-[20px] mb-2" style={{ color: '#1A1A1A' }}>錄取過 750 以上人</p>
                 <p className="text-base" style={{ color: '#1A1A1A' }}>
                   我坐在決定你 Offer 的會議室裡。我知道 HR 怎麼想、用人主管在意什麼，還有大部分人在哪裡少拿了錢。
                 </p>

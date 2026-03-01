@@ -67,19 +67,19 @@ export default function AboutSectionZhTw() {
             </h2>
 
             <p className="font-bold text-base md:text-lg mb-5" style={{ color: '#2b4734' }}>
-              Uber 資深招募 · 職涯教練 · 講師
+              Uber 台灣資深 HR · 職涯教練 · 講師
             </p>
 
             <p className="text-base md:text-lg mb-6 leading-relaxed" style={{ color: '#1A1A1A' }}>
-              幫助超過 750 位來自 Google、Uber、Microsoft 等跨國企業的求職者。免費工具已被 10,000+ 專業人士使用。曾在台灣多場職涯活動擔任講者。
+              我是 Uber 台灣的資深 HR。我錄取過 750 位以上的人，審閱過超過 20,000 份履歷。我知道他們怎麼面試、怎麼給薪，還有什麼讓你脫穎而出。
             </p>
 
             <p className="text-base leading-relaxed mb-4" style={{ color: '#6B6B6B' }}>
-              我是英國人，大學畢業後搬到台灣，一待就是 13 年。我曾替全球最大的企業招募人才，我知道什麼有用、什麼沒用。
+              我不教理論，我教真正有用的東西。我在台灣當了好幾年英文老師，後來轉進科技業 HR。
             </p>
 
             <p className="text-base leading-relaxed mb-8" style={{ color: '#6B6B6B' }}>
-              現在我製作免費工具和指南，讓你擁有大多數人得不到的內部知識。想要個人化的幫助？我也提供 1 對 1 教練服務。
+              我想幫助更多人透過找到理想工作來實現目標。現在我製作免費工具和指南，讓你擁有大多數人得不到的內部知識。
             </p>
 
             {/* Social pills */}
