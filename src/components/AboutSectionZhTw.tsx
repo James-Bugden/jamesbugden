@@ -9,10 +9,6 @@ export default function AboutSectionZhTw() {
     <section className="py-16 md:py-24 px-5 md:px-6" style={{ backgroundColor: '#FDFBF7' }}>
       <div className="container mx-auto max-w-6xl">
 
-        {/* Gold divider at top */}
-        <div className="flex justify-center mb-12">
-          <div style={{ width: 60, height: 3, backgroundColor: '#D4930D', borderRadius: 2 }} />
-        </div>
 
         <div className="flex flex-col md:flex-row gap-8 md:gap-16 items-center">
 
