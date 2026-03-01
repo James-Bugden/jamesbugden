@@ -503,7 +503,7 @@ export default function Dashboard({ lang = "en" }: { lang?: "en" | "zh" }) {
           </div>
 
           <div className="flex items-center gap-4 text-sm">
-            <span style={{ color: C.textSecondary }}>{t.hey} {firstName}</span>
+            <span className="hidden sm:inline" style={{ color: C.textSecondary }}>{t.hey} {firstName}</span>
             <button onClick={signOut} className="hover:opacity-80 transition-opacity" style={{ color: C.textSecondary }}>{t.signOut}</button>
             <LanguageToggle />
           </div>
