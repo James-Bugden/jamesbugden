@@ -474,7 +474,7 @@ export default function Dashboard({ lang = "en" }: { lang?: "en" | "zh" }) {
 
       {/* Search + Recently Used */}
       <section style={{ backgroundColor: C.white }}>
-        <div className="max-w-[1200px] mx-auto px-4 md:px-8 pt-8 md:pt-10">
+        <div className="max-w-[1200px] mx-auto px-4 md:px-8 pt-10 md:pt-14">
           {/* Search */}
           <div className="relative mb-8">
             <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4.5 h-4.5" style={{ color: C.textSecondary }} />
