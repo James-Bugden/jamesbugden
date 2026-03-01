@@ -71,7 +71,7 @@ export default function AboutSectionZhTw() {
             </p>
 
             <p className="text-base md:text-lg mb-6 leading-relaxed" style={{ color: '#1A1A1A' }}>
-              我是 Uber 台灣的資深 HR。我錄取過 750 位以上的人，審閱過超過 20,000 份履歷。我知道他們怎麼面試、怎麼給薪，還有什麼讓你脫穎而出。
+              我是 Uber 台灣的資深 HR。我知道他們怎麼面試、怎麼給薪，還有什麼讓你脫穎而出。
             </p>
 
             <p className="text-base leading-relaxed mb-4" style={{ color: '#6B6B6B' }}>
