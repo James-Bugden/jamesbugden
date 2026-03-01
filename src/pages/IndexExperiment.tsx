@@ -94,7 +94,7 @@ const IndexExperiment = () => {
           style={{ backgroundColor: '#FDFBF7' }}
         >
           <div className="container mx-auto px-5 md:px-6 py-4 flex items-center justify-between">
-            <span className="font-heading text-lg md:text-xl font-bold tracking-tight" style={{ color: '#1B3A2F' }}>
+            <span className="font-heading text-lg md:text-xl font-bold tracking-tight" style={{ color: '#2b4734' }}>
               JAMES BUGDEN
             </span>
             <div className="flex items-center gap-4">
@@ -125,7 +125,7 @@ const IndexExperiment = () => {
 
                 {/* Credential badge */}
                 <div className="flex items-center justify-center md:justify-start gap-2 mb-5">
-                  <span className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full border" style={{ backgroundColor: 'rgba(45,58,46,0.06)', borderColor: 'rgba(45,58,46,0.12)', color: '#6B6B6B', fontSize: '0.9375rem' }}>
+                  <span className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full border" style={{ backgroundColor: 'rgba(43,71,52,0.06)', borderColor: 'rgba(43,71,52,0.12)', color: '#6B6B6B', fontSize: '0.9375rem' }}>
                     <Briefcase className="w-4 h-4" style={{ color: '#6B6B6B' }} />
                     Senior HR at Uber
                   </span>
@@ -146,14 +146,14 @@ const IndexExperiment = () => {
                 <div className="flex flex-wrap justify-center md:justify-start gap-x-8 gap-y-3 pt-6 border-t border-border/60">
                   <div className="flex flex-col items-center md:items-start">
                     <span className="text-xl font-bold flex items-center gap-1.5" style={{ color: '#1A1A1A' }}>
-                      <FileCheck className="w-5 h-5" style={{ color: '#1B3A2F', opacity: 0.7 }} />
+                      <FileCheck className="w-5 h-5" style={{ color: '#2b4734', opacity: 0.7 }} />
                       20,000+
                     </span>
                     <span className="text-sm" style={{ color: '#6B6B6B' }}>resumes reviewed</span>
                   </div>
                   <div className="flex flex-col items-center md:items-start">
                     <span className="text-xl font-bold flex items-center gap-1.5" style={{ color: '#1A1A1A' }}>
-                      <Users className="w-5 h-5" style={{ color: '#1B3A2F', opacity: 0.7 }} />
+                      <Users className="w-5 h-5" style={{ color: '#2b4734', opacity: 0.7 }} />
                       750+
                     </span>
                     <span className="text-sm" style={{ color: '#6B6B6B' }}>people hired</span>
@@ -207,7 +207,7 @@ const IndexExperiment = () => {
             </div>
 
             <div className="flex items-start justify-center gap-2 mb-6">
-              <CheckCircle2 className="w-5 h-5 flex-shrink-0 mt-0.5" style={{ color: '#1B3A2F' }} />
+              <CheckCircle2 className="w-5 h-5 flex-shrink-0 mt-0.5" style={{ color: '#2b4734' }} />
               <p style={{ color: '#6B6B6B', fontSize: '1rem' }}>
                 You don't need another job board. You need someone who's been on the other side of the table.
               </p>
@@ -233,21 +233,21 @@ const IndexExperiment = () => {
 
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-6 mb-10">
               <div className="rounded-xl p-6 text-center md:text-left" style={{ backgroundColor: '#FDFBF7', borderTop: '3px solid #D4930D' }}>
-                <Eye className="w-10 h-10 mx-auto md:mx-0 mb-4" style={{ color: '#1B3A2F' }} strokeWidth={1.5} />
+                <Eye className="w-10 h-10 mx-auto md:mx-0 mb-4" style={{ color: '#2b4734' }} strokeWidth={1.5} />
                 <p className="font-bold text-[20px] mb-2" style={{ color: '#1A1A1A' }}>I've Read 20,000+ Resumes</p>
                 <p className="text-base" style={{ color: '#1A1A1A' }}>
                   I know what makes a recruiter stop and read. I also know what gets your resume tossed in 6 seconds. No guessing. I've seen it thousands of times.
                 </p>
               </div>
               <div className="rounded-xl p-6 text-center md:text-left" style={{ backgroundColor: '#FDFBF7', borderTop: '3px solid #D4930D' }}>
-                <Users className="w-10 h-10 mx-auto md:mx-0 mb-4" style={{ color: '#1B3A2F' }} strokeWidth={1.5} />
+                <Users className="w-10 h-10 mx-auto md:mx-0 mb-4" style={{ color: '#2b4734' }} strokeWidth={1.5} />
                 <p className="font-bold text-[20px] mb-2" style={{ color: '#1A1A1A' }}>I've Hired 750+ People</p>
                 <p className="text-base" style={{ color: '#1A1A1A' }}>
                   I've sat in the room where they decide your offer. I know what HR thinks, what the hiring manager cares about, and where most people lose money.
                 </p>
               </div>
               <div className="rounded-xl p-6 text-center md:text-left" style={{ backgroundColor: '#FDFBF7', borderTop: '3px solid #D4930D' }}>
-                <Building className="w-10 h-10 mx-auto md:mx-0 mb-4" style={{ color: '#1B3A2F' }} strokeWidth={1.5} />
+                <Building className="w-10 h-10 mx-auto md:mx-0 mb-4" style={{ color: '#2b4734' }} strokeWidth={1.5} />
                 <p className="font-bold text-[20px] mb-2" style={{ color: '#1A1A1A' }}>Insider Knowledge</p>
                 <p className="text-base" style={{ color: '#1A1A1A' }}>
                   I've hired over 750 people. I know how they interview, how they pay, and what makes you stand out.
@@ -276,7 +276,7 @@ const IndexExperiment = () => {
       </main>
 
       {/* ── Footer ── */}
-      <footer className="py-8 md:py-10 px-5 md:px-6" style={{ backgroundColor: '#1B3A2F' }}>
+      <footer className="py-8 md:py-10 px-5 md:px-6" style={{ backgroundColor: '#2b4734' }}>
         <div className="container mx-auto max-w-5xl flex flex-col items-center gap-4">
           <div className="flex items-center gap-6">
             <a href="https://www.linkedin.com/in/james-bugden/" target="_blank" rel="noopener noreferrer" className="hover:opacity-70 transition-opacity" style={{ color: '#FFFFFF' }}>
