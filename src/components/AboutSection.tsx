@@ -5,7 +5,7 @@ import workshopPhoto from "@/assets/james-cake-workshop.jpg";
 
 export default function AboutSection() {
   return (
-    <section className="py-16 md:py-24 px-5 md:px-6" style={{ backgroundColor: '#2b4734' }}>
+    <section className="py-16 md:py-24 px-5 md:px-6" style={{ backgroundColor: '#FDFBF7' }}>
       <div className="container mx-auto max-w-6xl">
 
         {/* Gold divider at top */}
@@ -44,45 +44,45 @@ export default function AboutSection() {
 
             <h2
               className="font-heading mb-3"
-              style={{ color: '#FBF7F0', fontSize: 'clamp(2rem, 4vw, 2.75rem)' }}
+              style={{ color: '#1A1A1A', fontSize: 'clamp(2rem, 4vw, 2.75rem)' }}
             >
               James Bugden
             </h2>
 
-            <p className="font-bold text-base md:text-lg mb-5" style={{ color: '#D4930D' }}>
+            <p className="font-bold text-base md:text-lg mb-5" style={{ color: '#2b4734' }}>
               Senior Recruiter at Uber · Career Coach · Speaker
             </p>
 
-            <p className="text-base md:text-lg mb-6 leading-relaxed" style={{ color: '#A8B5A9' }}>
+            <p className="text-base md:text-lg mb-6 leading-relaxed" style={{ color: '#1A1A1A' }}>
               Helped 750+ people from multinational companies like Google, Uber, and Microsoft.
               Free tools used by 10,000+ professionals. Speaker at career events across Taiwan.
             </p>
 
-            <p className="text-base leading-relaxed mb-4" style={{ color: '#A8B5A9' }}>
+            <p className="text-base leading-relaxed mb-4" style={{ color: '#6B6B6B' }}>
               I'm British. Moved to Taiwan after uni and never left.
               13 years later, I've hired for some of the biggest companies in the world.
               I know what works. I know what doesn't.
             </p>
 
-            <p className="text-base leading-relaxed mb-8" style={{ color: '#A8B5A9' }}>
+            <p className="text-base leading-relaxed mb-8" style={{ color: '#6B6B6B' }}>
               Now I make free tools and guides that give you the insider knowledge most people never get.
               Want personal help? I also coach 1-on-1.
             </p>
 
             {/* Social pills */}
-            <div className="flex flex-wrap items-center gap-4 mb-8">
+            <div className="flex flex-wrap items-center gap-4">
               <a
                 href="https://www.linkedin.com/in/james-bugden/"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="inline-flex items-center gap-2.5 px-5 py-2.5 rounded-full transition-all duration-300 hover:scale-105"
                 style={{
-                  backgroundColor: 'rgba(255,255,255,0.08)',
-                  border: '1px solid rgba(255,255,255,0.12)',
-                  color: '#FFFFFF',
+                  backgroundColor: 'rgba(43,71,52,0.06)',
+                  border: '1px solid rgba(43,71,52,0.12)',
+                  color: '#1A1A1A',
                 }}
               >
-                <Linkedin className="w-5 h-5" />
+                <Linkedin className="w-5 h-5" style={{ color: '#2b4734' }} />
                 <span className="text-sm font-semibold">15K followers</span>
               </a>
 
@@ -92,12 +92,12 @@ export default function AboutSection() {
                 rel="noopener noreferrer"
                 className="inline-flex items-center gap-2.5 px-5 py-2.5 rounded-full transition-all duration-300 hover:scale-105"
                 style={{
-                  backgroundColor: 'rgba(255,255,255,0.08)',
-                  border: '1px solid rgba(255,255,255,0.12)',
-                  color: '#FFFFFF',
+                  backgroundColor: 'rgba(43,71,52,0.06)',
+                  border: '1px solid rgba(43,71,52,0.12)',
+                  color: '#1A1A1A',
                 }}
               >
-                <ThreadsIcon className="w-5 h-5" />
+                <ThreadsIcon className="w-5 h-5" style={{ color: '#2b4734' }} />
                 <span className="text-sm font-semibold">12K followers</span>
               </a>
             </div>
