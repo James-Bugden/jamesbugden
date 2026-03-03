@@ -1,3 +1,6 @@
+export type HeadingStyle = "plain" | "underline" | "full-underline" | "left-accent" | "background" | "left-border";
+export type HeadingSize = "s" | "m" | "l" | "xl";
+
 export interface CustomizeSettings {
   // Basics
   language: string;
@@ -7,22 +10,28 @@ export interface CustomizeSettings {
 
   // Layout & Spacing
   columns: "one" | "two" | "mix";
-  columnRatio: number;   // sidebar cols out of 12 (e.g. 4 = 4/12 sidebar, 8/12 main)
+  columnRatio: number;
   sectionOrder: string[];
-  fontSize: number;      // pt
+  fontSize: number;
   lineHeight: number;
-  marginX: number;       // mm
-  marginY: number;       // mm
-  sectionSpacing: number; // mm
+  marginX: number;
+  marginY: number;
+  sectionSpacing: number;
 
   // Design
   colorMode: "basic" | "advanced" | "border";
   colorType: "accent" | "multi" | "image";
-  accentColor: string;   // hex
+  accentColor: string;
   linkUnderline: boolean;
   linkBlue: boolean;
   linkIcon: boolean;
   linkIconStyle: "link" | "external";
+
+  // Section Headings
+  headingStyle: HeadingStyle;
+  headingSize: HeadingSize;
+  headingUppercase: boolean;
+  headingFont: string;
 
   // Header
   headerAlign: "left" | "center" | "right";
@@ -38,7 +47,6 @@ export interface CustomizeSettings {
 
   // Font
   bodyFont: string;
-  headingFont: string;
 
   // Footer
   showPageNumbers: boolean;
@@ -68,6 +76,11 @@ export const DEFAULT_CUSTOMIZE: CustomizeSettings = {
   linkIcon: false,
   linkIconStyle: "link",
 
+  headingStyle: "underline",
+  headingSize: "m",
+  headingUppercase: true,
+  headingFont: "'Source Sans 3', sans-serif",
+
   headerAlign: "center",
   headerArrangement: "stacked",
   contactSeparator: "icon",
@@ -80,7 +93,6 @@ export const DEFAULT_CUSTOMIZE: CustomizeSettings = {
   titleSameLine: false,
 
   bodyFont: "'Source Sans 3', sans-serif",
-  headingFont: "'Source Sans 3', sans-serif",
 
   showPageNumbers: false,
   showFooterSignature: false,

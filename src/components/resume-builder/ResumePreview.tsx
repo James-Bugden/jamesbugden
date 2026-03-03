@@ -38,16 +38,69 @@ function Html({ html }: { html: string }) {
 }
 
 /* ── Section heading ───────────────────────────────────────── */
-function SectionHeading({ title }: { title: string }) {
+const HEADING_SIZES: Record<string, string> = { s: "9pt", m: "10pt", l: "12pt", xl: "14pt" };
+
+function SectionHeading({ title, customize }: { title: string; customize?: CustomizeSettings }) {
+  const c = customize;
+  const style = c?.headingStyle || "underline";
+  const size = HEADING_SIZES[c?.headingSize || "m"];
+  const upper = c?.headingUppercase !== false;
+  const accent = c?.accentColor || "#1e293b";
+  const font = c?.headingFont || c?.bodyFont || "inherit";
+
+  const textStyle: React.CSSProperties = {
+    fontSize: size,
+    color: style === "background" ? "#ffffff" : "#111827",
+    textTransform: upper ? "uppercase" : "none",
+    fontFamily: font,
+  };
+
+  if (style === "plain") {
+    return (
+      <div className="mb-[2mm]">
+        <h2 className="font-bold tracking-[0.08em]" style={textStyle}>{title}</h2>
+      </div>
+    );
+  }
+
+  if (style === "underline") {
+    return (
+      <div className="mb-[2mm]">
+        <h2 className="font-bold tracking-[0.08em]" style={textStyle}>{title}</h2>
+        <div className="mt-[0.8mm] h-[0.4mm] w-full" style={{ backgroundColor: accent }} />
+      </div>
+    );
+  }
+
+  if (style === "full-underline") {
+    return (
+      <div className="mb-[2mm]">
+        <h2 className="font-bold tracking-[0.08em] pb-[1mm] border-b-[0.5mm]" style={{ ...textStyle, borderColor: accent }}>{title}</h2>
+      </div>
+    );
+  }
+
+  if (style === "left-accent") {
+    return (
+      <div className="mb-[2mm] flex items-center gap-[2mm]">
+        <div className="w-[1mm] h-[4mm] rounded-full" style={{ backgroundColor: accent }} />
+        <h2 className="font-bold tracking-[0.08em]" style={textStyle}>{title}</h2>
+      </div>
+    );
+  }
+
+  if (style === "background") {
+    return (
+      <div className="mb-[2mm]">
+        <h2 className="font-bold tracking-[0.08em] px-[2mm] py-[1mm] rounded-[0.5mm]" style={{ ...textStyle, backgroundColor: accent }}>{title}</h2>
+      </div>
+    );
+  }
+
+  // left-border
   return (
-    <div className="mb-[2mm]">
-      <h2
-        className="uppercase font-bold tracking-[0.08em]"
-        style={{ fontSize: "10pt", color: "#111827" }}
-      >
-        {title}
-      </h2>
-      <div className="mt-[0.8mm] h-[0.4mm] bg-gray-800 w-full" />
+    <div className="mb-[2mm] pl-[3mm] border-l-[0.8mm]" style={{ borderColor: accent }}>
+      <h2 className="font-bold tracking-[0.08em]" style={textStyle}>{title}</h2>
     </div>
   );
 }
@@ -104,7 +157,7 @@ const A4Page = React.memo(function A4Page({ data, customize }: { data: ResumeDat
     return (
       <div key={section.id} style={{ marginBottom: "var(--resume-section-spacing)" }}>
         {!hideHeading && (
-          <SectionHeading title={
+          <SectionHeading customize={c} title={
             section.type === "custom" && section.entries[0]?.fields.sectionTitle
               ? section.entries[0].fields.sectionTitle
               : section.title
