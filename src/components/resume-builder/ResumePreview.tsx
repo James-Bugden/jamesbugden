@@ -98,16 +98,22 @@ const A4Page = React.memo(function A4Page({ data, customize }: { data: ResumeDat
   const sidebarSections = isTwo ? sections.filter(s => sidebarTypes.has(s.type)) : [];
   const mainSections = isTwo ? sections.filter(s => !sidebarTypes.has(s.type)) : sections;
 
-  const renderSections = (secs: typeof sections) => secs.map((section) => (
-    <div key={section.id} style={{ marginBottom: "var(--resume-section-spacing)" }}>
-      <SectionHeading title={
-        section.type === "custom" && section.entries[0]?.fields.sectionTitle
-          ? section.entries[0].fields.sectionTitle
-          : section.title
-      } />
-      {renderSectionContent(section)}
-    </div>
-  ));
+  const renderSections = (secs: typeof sections) => secs.map((section) => {
+    // Hide heading for summary if showHeading is false
+    const hideHeading = section.type === "summary" && section.showHeading === false;
+    return (
+      <div key={section.id} style={{ marginBottom: "var(--resume-section-spacing)" }}>
+        {!hideHeading && (
+          <SectionHeading title={
+            section.type === "custom" && section.entries[0]?.fields.sectionTitle
+              ? section.entries[0].fields.sectionTitle
+              : section.title
+          } />
+        )}
+        {renderSectionContent(section)}
+      </div>
+    );
+  });
 
   return (
     <div
@@ -210,6 +216,22 @@ const A4Page = React.memo(function A4Page({ data, customize }: { data: ResumeDat
           const skills = section.entries[0].fields.skills.split(",").filter(Boolean).map(s => s.trim());
           const layout = section.layout || "bubble";
           const accent = c?.accentColor || "#1e293b";
+          const separator = section.separator || "bullet";
+          const levelIndicator = section.levelIndicator || "bar";
+          const subtitleStyle = section.subtitleStyle || "dash";
+
+          const LEVEL_TEXT: Record<number, string> = { 1: "Beginner", 2: "Elementary", 3: "Intermediate", 4: "Advanced", 5: "Expert" };
+
+          const formatLabel = (name: string, detail?: string) => {
+            if (!detail) return name;
+            switch (subtitleStyle) {
+              case "colon": return `${name}: ${detail}`;
+              case "bracket": return `${name} (${detail})`;
+              default: return `${name} — ${detail}`;
+            }
+          };
+
+          const sepChar = separator === "pipe" ? " | " : separator === "comma" ? ", " : separator === "newline" ? "\n" : "  ·  ";
 
           if (layout === "level") {
             return (
@@ -220,9 +242,21 @@ const A4Page = React.memo(function A4Page({ data, customize }: { data: ResumeDat
                   return (
                     <div key={i} className="flex items-center gap-[2mm]">
                       <span className="w-[25mm] text-right" style={{ fontSize: "8pt", color: "#374151" }}>{name}</span>
-                      <div className="flex-1 h-[1.5mm] bg-gray-200 rounded-full overflow-hidden">
-                        <div className="h-full rounded-full" style={{ width: `${level * 20}%`, backgroundColor: accent }} />
-                      </div>
+                      {levelIndicator === "bar" && (
+                        <div className="flex-1 h-[1.5mm] bg-gray-200 rounded-full overflow-hidden">
+                          <div className="h-full rounded-full" style={{ width: `${level * 20}%`, backgroundColor: accent }} />
+                        </div>
+                      )}
+                      {levelIndicator === "dots" && (
+                        <div className="flex gap-[0.8mm]">
+                          {[1,2,3,4,5].map(n => (
+                            <div key={n} className="w-[2mm] h-[2mm] rounded-full" style={{ backgroundColor: n <= level ? accent : "#e5e7eb" }} />
+                          ))}
+                        </div>
+                      )}
+                      {levelIndicator === "text" && (
+                        <span style={{ fontSize: "7.5pt", color: "#6B7280" }}>{LEVEL_TEXT[level] || "Intermediate"}</span>
+                      )}
                     </div>
                   );
                 })}
@@ -234,11 +268,11 @@ const A4Page = React.memo(function A4Page({ data, customize }: { data: ResumeDat
             return (
               <div className="grid grid-cols-2 gap-x-[6mm] gap-y-[1mm] mt-[1mm]">
                 {skills.map((s, i) => {
-                  const name = s.includes(":") ? s.split(":")[0].trim() : s;
+                  const [name, detail] = s.includes(":") ? s.split(":").map(x => x.trim()) : [s, undefined];
                   return (
                     <div key={i} className="flex items-center gap-[1.5mm]">
                       <div className="w-[1mm] h-[1mm] rounded-full bg-gray-600 flex-shrink-0" />
-                      <span style={{ fontSize: "8pt", color: "#374151" }}>{name}</span>
+                      <span style={{ fontSize: "8pt", color: "#374151" }}>{formatLabel(name, detail)}</span>
                     </div>
                   );
                 })}
@@ -247,9 +281,22 @@ const A4Page = React.memo(function A4Page({ data, customize }: { data: ResumeDat
           }
 
           if (layout === "compact") {
+            const items = skills.map(s => {
+              const [name, detail] = s.includes(":") ? s.split(":").map(x => x.trim()) : [s, undefined];
+              return formatLabel(name, detail);
+            });
+            if (separator === "newline") {
+              return (
+                <div className="mt-[1mm] space-y-[0.5mm]">
+                  {items.map((item, i) => (
+                    <p key={i} style={{ fontSize: "8pt", color: "#374151" }}>{item}</p>
+                  ))}
+                </div>
+              );
+            }
             return (
               <p className="mt-[1mm]" style={{ fontSize: "8pt", color: "#374151" }}>
-                {skills.map(s => s.includes(":") ? s.split(":")[0].trim() : s).join("  ·  ")}
+                {items.join(sepChar)}
               </p>
             );
           }
@@ -293,24 +340,51 @@ const A4Page = React.memo(function A4Page({ data, customize }: { data: ResumeDat
         {section.type === "languages" && (() => {
           const layout = section.layout || "compact";
           const accent = c?.accentColor || "#1e293b";
+          const separator = section.separator || "bullet";
+          const levelIndicator = section.levelIndicator || "dots";
+          const subtitleStyle = section.subtitleStyle || "dash";
           const profToLevel = (p: string) => {
             const map: Record<string, number> = { Native: 5, Fluent: 4, Advanced: 3, Intermediate: 2, Basic: 1 };
             return map[p] || 3;
           };
 
+          const formatLabel = (lang: string, prof?: string) => {
+            if (!prof) return lang;
+            switch (subtitleStyle) {
+              case "colon": return `${lang}: ${prof}`;
+              case "bracket": return `${lang} (${prof})`;
+              default: return `${lang} — ${prof}`;
+            }
+          };
+
+          const sepChar = separator === "pipe" ? " | " : separator === "comma" ? ", " : separator === "newline" ? "\n" : "  ·  ";
+
           if (layout === "level") {
             return (
               <div className="space-y-[1.5mm] mt-[1mm]">
-                {section.entries.map((entry) => (
-                  <div key={entry.id} className="flex items-center gap-[2mm]">
-                    <span className="w-[25mm] text-right" style={{ fontSize: "8pt", color: "#374151" }}>{entry.fields.language}</span>
-                    <div className="flex gap-[0.8mm]">
-                      {[1,2,3,4,5].map(n => (
-                        <div key={n} className="w-[2mm] h-[2mm] rounded-full" style={{ backgroundColor: n <= profToLevel(entry.fields.proficiency) ? accent : "#e5e7eb" }} />
-                      ))}
+                {section.entries.map((entry) => {
+                  const level = profToLevel(entry.fields.proficiency);
+                  return (
+                    <div key={entry.id} className="flex items-center gap-[2mm]">
+                      <span className="w-[25mm] text-right" style={{ fontSize: "8pt", color: "#374151" }}>{entry.fields.language}</span>
+                      {levelIndicator === "dots" && (
+                        <div className="flex gap-[0.8mm]">
+                          {[1,2,3,4,5].map(n => (
+                            <div key={n} className="w-[2mm] h-[2mm] rounded-full" style={{ backgroundColor: n <= level ? accent : "#e5e7eb" }} />
+                          ))}
+                        </div>
+                      )}
+                      {levelIndicator === "bar" && (
+                        <div className="flex-1 h-[1.5mm] bg-gray-200 rounded-full overflow-hidden">
+                          <div className="h-full rounded-full" style={{ width: `${level * 20}%`, backgroundColor: accent }} />
+                        </div>
+                      )}
+                      {levelIndicator === "text" && (
+                        <span style={{ fontSize: "7.5pt", color: "#6B7280" }}>{entry.fields.proficiency}</span>
+                      )}
                     </div>
-                  </div>
-                ))}
+                  );
+                })}
               </div>
             );
           }
@@ -320,14 +394,32 @@ const A4Page = React.memo(function A4Page({ data, customize }: { data: ResumeDat
               <div className="flex flex-wrap gap-[1.5mm] mt-[1mm]">
                 {section.entries.map((entry) => (
                   <span key={entry.id} className="px-[2.5mm] py-[0.8mm] rounded-full" style={{ fontSize: "8pt", color: "#374151", backgroundColor: `${accent}15`, border: `0.3mm solid ${accent}30` }}>
-                    {entry.fields.language}{entry.fields.proficiency ? ` — ${entry.fields.proficiency}` : ""}
+                    {formatLabel(entry.fields.language, entry.fields.proficiency)}
                   </span>
                 ))}
               </div>
             );
           }
 
-          // grid or compact (default)
+          if (layout === "compact") {
+            const items = section.entries.map(e => formatLabel(e.fields.language, e.fields.proficiency));
+            if (separator === "newline") {
+              return (
+                <div className="mt-[1mm] space-y-[0.5mm]">
+                  {items.map((item, i) => (
+                    <p key={i} style={{ fontSize: "8pt", color: "#374151" }}>{item}</p>
+                  ))}
+                </div>
+              );
+            }
+            return (
+              <p className="mt-[1mm]" style={{ fontSize: "8pt", color: "#374151" }}>
+                {items.join(sepChar)}
+              </p>
+            );
+          }
+
+          // grid
           return (
             <div className="grid grid-cols-2 gap-x-[6mm] gap-y-[2mm] mt-[1mm]">
               {section.entries.map((entry) => (

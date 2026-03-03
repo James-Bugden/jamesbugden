@@ -1,8 +1,8 @@
 import { useState } from "react";
-import { ChevronDown, ChevronUp, GripVertical, Trash2, Plus, Grid3X3, Circle, BarChart3, List } from "lucide-react";
+import { ChevronDown, ChevronUp, GripVertical, Trash2, Plus, Grid3X3, Circle, BarChart3, List, Minus as MinusIcon } from "lucide-react";
 import * as Icons from "lucide-react";
 import { Checkbox } from "@/components/ui/checkbox";
-import { ResumeSection, ResumeSectionEntry, SectionLayout, getDefaultFieldsForType, SECTION_TYPES, PROFICIENCY_LEVELS } from "./types";
+import { ResumeSection, ResumeSectionEntry, SectionLayout, SectionSeparator, LevelIndicator, SubtitleStyle, getDefaultFieldsForType, SECTION_TYPES, PROFICIENCY_LEVELS } from "./types";
 import { RichTextEditor } from "./RichTextEditor";
 import { MonthYearPicker } from "./MonthYearPicker";
 import { TagInput } from "./TagInput";
@@ -82,6 +82,92 @@ function LayoutSwitcher({ layout, onChange }: { layout: SectionLayout; onChange:
             )}
           >
             <opt.icon className="w-3.5 h-3.5" />
+            {opt.label}
+          </button>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+const SEPARATOR_OPTIONS: { value: SectionSeparator; label: string }[] = [
+  { value: "bullet", label: "Bullet ·" },
+  { value: "pipe", label: "Pipe |" },
+  { value: "comma", label: "Comma ," },
+  { value: "newline", label: "New Line" },
+];
+
+function SeparatorSwitcher({ separator, onChange }: { separator: SectionSeparator; onChange: (s: SectionSeparator) => void }) {
+  return (
+    <div>
+      <label className="block text-xs font-bold text-gray-700 mb-1.5">Separator</label>
+      <div className="flex gap-1 bg-gray-100 rounded-lg p-0.5">
+        {SEPARATOR_OPTIONS.map((opt) => (
+          <button
+            key={opt.value}
+            onClick={() => onChange(opt.value)}
+            className={cn(
+              "px-2.5 py-1.5 rounded-md text-xs font-semibold transition-colors",
+              separator === opt.value ? "bg-white text-gray-900 shadow-sm" : "text-gray-500 hover:text-gray-700"
+            )}
+          >
+            {opt.label}
+          </button>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+const LEVEL_INDICATOR_OPTIONS: { value: LevelIndicator; label: string }[] = [
+  { value: "bar", label: "Bar" },
+  { value: "dots", label: "Dots" },
+  { value: "text", label: "Text" },
+];
+
+function LevelIndicatorSwitcher({ indicator, onChange }: { indicator: LevelIndicator; onChange: (i: LevelIndicator) => void }) {
+  return (
+    <div>
+      <label className="block text-xs font-bold text-gray-700 mb-1.5">Level Indicator</label>
+      <div className="flex gap-1 bg-gray-100 rounded-lg p-0.5">
+        {LEVEL_INDICATOR_OPTIONS.map((opt) => (
+          <button
+            key={opt.value}
+            onClick={() => onChange(opt.value)}
+            className={cn(
+              "px-3 py-1.5 rounded-md text-xs font-semibold transition-colors",
+              indicator === opt.value ? "bg-white text-gray-900 shadow-sm" : "text-gray-500 hover:text-gray-700"
+            )}
+          >
+            {opt.label}
+          </button>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+const SUBTITLE_STYLE_OPTIONS: { value: SubtitleStyle; label: string; example: string }[] = [
+  { value: "dash", label: "Dash", example: "Skill — Detail" },
+  { value: "colon", label: "Colon", example: "Skill: Detail" },
+  { value: "bracket", label: "Bracket", example: "Skill (Detail)" },
+];
+
+function SubtitleStyleSwitcher({ style, onChange }: { style: SubtitleStyle; onChange: (s: SubtitleStyle) => void }) {
+  return (
+    <div>
+      <label className="block text-xs font-bold text-gray-700 mb-1.5">Subtitle Style</label>
+      <div className="flex gap-1 bg-gray-100 rounded-lg p-0.5">
+        {SUBTITLE_STYLE_OPTIONS.map((opt) => (
+          <button
+            key={opt.value}
+            onClick={() => onChange(opt.value)}
+            className={cn(
+              "px-2.5 py-1.5 rounded-md text-[10px] font-semibold transition-colors",
+              style === opt.value ? "bg-white text-gray-900 shadow-sm" : "text-gray-500 hover:text-gray-700"
+            )}
+            title={opt.example}
+          >
             {opt.label}
           </button>
         ))}
@@ -228,6 +314,13 @@ export function SectionCard({ section, onUpdate, onRemove }: SectionCardProps) {
         return (
           <div className="space-y-3">
             <LayoutSwitcher layout={section.layout || "bubble"} onChange={(l) => onUpdate({ layout: l })} />
+            {(section.layout === "compact" || section.layout === "grid") && (
+              <SeparatorSwitcher separator={section.separator || "bullet"} onChange={(s) => onUpdate({ separator: s })} />
+            )}
+            {section.layout === "level" && (
+              <LevelIndicatorSwitcher indicator={section.levelIndicator || "bar"} onChange={(i) => onUpdate({ levelIndicator: i })} />
+            )}
+            <SubtitleStyleSwitcher style={section.subtitleStyle || "dash"} onChange={(s) => onUpdate({ subtitleStyle: s })} />
             <label className="block text-xs font-bold text-gray-700 mb-1">Skills</label>
             <TagInput value={f.skills || ""} onChange={set("skills")} placeholder="Type a skill and press Enter" showLevel={section.layout === "level"} />
           </div>
@@ -245,6 +338,13 @@ export function SectionCard({ section, onUpdate, onRemove }: SectionCardProps) {
         return (
           <div className="space-y-3">
             <LayoutSwitcher layout={section.layout || "compact"} onChange={(l) => onUpdate({ layout: l })} />
+            {(section.layout === "compact" || section.layout === "grid") && (
+              <SeparatorSwitcher separator={section.separator || "bullet"} onChange={(s) => onUpdate({ separator: s })} />
+            )}
+            {section.layout === "level" && (
+              <LevelIndicatorSwitcher indicator={section.levelIndicator || "dots"} onChange={(i) => onUpdate({ levelIndicator: i })} />
+            )}
+            <SubtitleStyleSwitcher style={section.subtitleStyle || "dash"} onChange={(s) => onUpdate({ subtitleStyle: s })} />
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
               <SField label="Language" value={f.language} onChange={set("language")} />
               <div>
@@ -264,9 +364,15 @@ export function SectionCard({ section, onUpdate, onRemove }: SectionCardProps) {
 
       case "summary":
         return (
-          <div>
-            <label className="block text-xs font-bold text-gray-700 mb-1">Professional Summary</label>
-            <RichTextEditor value={f.description || ""} onChange={set("description")} placeholder="Write a brief professional summary..." />
+          <div className="space-y-3">
+            <label className="flex items-center gap-2 text-sm text-gray-700 cursor-pointer">
+              <Checkbox checked={section.showHeading !== false} onCheckedChange={(v) => onUpdate({ showHeading: !!v })} />
+              Show profile heading
+            </label>
+            <div>
+              <label className="block text-xs font-bold text-gray-700 mb-1">Professional Summary</label>
+              <RichTextEditor value={f.description || ""} onChange={set("description")} placeholder="Write a brief professional summary..." />
+            </div>
           </div>
         );
 

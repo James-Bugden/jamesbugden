@@ -145,7 +145,7 @@ export function CustomizePanel({ settings, onChange, sections }: CustomizePanelP
         {subTab === "Design" && <DesignTab settings={settings} onChange={onChange} />}
         {subTab === "Header" && <HeaderTab settings={settings} onChange={onChange} />}
         {subTab === "Footer" && <FooterTab settings={settings} onChange={onChange} />}
-        {subTab === "Sections" && <SectionsTab />}
+        {subTab === "Sections" && <SectionsTab sections={sections} />}
       </div>
     </div>
   );
@@ -526,12 +526,37 @@ function FooterTab({ settings, onChange }: { settings: CustomizeSettings; onChan
 }
 
 /* ── SECTIONS ───────────────────────────────────────────────── */
-function SectionsTab() {
+function SectionsTab({ sections }: { sections: ResumeData["sections"] }) {
+  const skillsSections = sections.filter(s => s.type === "skills" || s.type === "languages");
+  const summarySections = sections.filter(s => s.type === "summary");
+
   return (
-    <SettingCard title="Section Styling">
-      <p className="text-sm text-gray-400 py-4 text-center">
-        Per-section styling options coming soon — section heading style, divider style, and more.
-      </p>
-    </SettingCard>
+    <>
+      <SettingCard title="Section Styling">
+        <p className="text-xs text-gray-500 mb-2">
+          Configure layout variants for Skills and Languages sections in the <strong>Content</strong> tab by clicking on each section.
+        </p>
+        {skillsSections.length > 0 ? (
+          <div className="space-y-2">
+            {skillsSections.map(s => (
+              <div key={s.id} className="flex items-center gap-2 bg-[#F5F3EE] rounded-lg px-3 py-2">
+                <span className="text-xs font-semibold text-gray-700">{s.title}</span>
+                <span className="text-[10px] text-gray-400 ml-auto capitalize">{s.layout || "default"}</span>
+              </div>
+            ))}
+          </div>
+        ) : (
+          <p className="text-xs text-gray-400 py-2">Add Skills or Languages sections to configure their layout</p>
+        )}
+      </SettingCard>
+
+      {summarySections.length > 0 && (
+        <SettingCard title="Profile / Summary">
+          <p className="text-xs text-gray-500">
+            Toggle "Show profile heading" in the Content tab's Summary section to show or hide the section heading in the preview.
+          </p>
+        </SettingCard>
+      )}
+    </>
   );
 }
