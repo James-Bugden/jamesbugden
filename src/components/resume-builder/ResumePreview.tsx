@@ -325,7 +325,7 @@ export const ResumePreview = React.memo(function ResumePreview({ data, pdfTarget
     <div
       ref={containerRef}
       className="h-full overflow-y-auto relative"
-      style={{ backgroundColor: "#F0EDE6" }}
+      style={{ backgroundColor: "#f3f4f6" }}
     >
       {/* Scaled A4 page */}
       <div className="flex justify-center py-8 px-6">
@@ -340,10 +340,11 @@ export const ResumePreview = React.memo(function ResumePreview({ data, pdfTarget
           <div
             ref={pageRef}
             id={pdfTargetId}
-            className="shadow-2xl"
+            className="shadow-2xl rounded-sm"
             style={{
               width: `${A4_W}px`,
-              minHeight: `${A4_H}px`,
+              height: `${A4_H}px`,
+              overflow: "hidden",
             }}
           >
             <A4Page data={debouncedData} />

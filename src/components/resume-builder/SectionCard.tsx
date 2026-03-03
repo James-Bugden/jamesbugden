@@ -361,7 +361,7 @@ export function SectionCard({ section, onUpdate, onRemove }: SectionCardProps) {
   };
 
   return (
-    <div className="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
+    <div className="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden transition-transform duration-150 hover:scale-[1.02]">
       {/* Header — larger touch target */}
       <button
         onClick={toggleCollapse}
