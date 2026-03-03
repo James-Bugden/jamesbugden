@@ -1,6 +1,6 @@
-import React, { useRef, useState, useEffect, useMemo } from "react";
+import React, { useRef, useState, useEffect, useMemo, useCallback } from "react";
 import DOMPurify from "dompurify";
-import { Mail, Phone, MapPin, Flag, FileText } from "lucide-react";
+import { Mail, Phone, MapPin, Flag, FileText, Pencil } from "lucide-react";
 import { ResumeData } from "./types";
 import { CustomizeSettings } from "./customizeTypes";
 import { cn } from "@/lib/utils";
@@ -20,6 +20,48 @@ interface ResumePreviewProps {
   data: ResumeData;
   customize?: CustomizeSettings;
   pdfTargetId?: string;
+  onEditSection?: (sectionId: string) => void;
+}
+
+/* ── Empty state placeholder text ──────────────────────────── */
+const EMPTY_PLACEHOLDERS: Record<string, string> = {
+  experience: "ENTER JOB TITLE AT COMPANY",
+  education: "ENTER SCHOOL / UNIVERSITY",
+  summary: "Write a professional summary...",
+  skills: "Add your skills...",
+  languages: "Add languages...",
+  interests: "Add your interests...",
+  certificates: "Add a certificate...",
+  projects: "Add a project...",
+  courses: "Add a course...",
+  awards: "Add an award...",
+  organisations: "Add an organisation...",
+  publications: "Add a publication...",
+  references: "Add a reference...",
+  declaration: "Add your declaration...",
+  custom: "Add your content...",
+};
+
+function EmptyPlaceholder({ type }: { type: string }) {
+  return (
+    <p style={{ fontSize: "9pt", color: "#d1d5db", fontStyle: "italic" }}>
+      {EMPTY_PLACEHOLDERS[type] || "Add content..."}
+    </p>
+  );
+}
+
+/* ── Hover edit overlay for sections ───────────────────────── */
+function SectionEditOverlay({ sectionId, onEdit }: { sectionId: string; onEdit?: (id: string) => void }) {
+  if (!onEdit) return null;
+  return (
+    <button
+      onClick={(e) => { e.stopPropagation(); onEdit(sectionId); }}
+      className="absolute -right-[1mm] -top-[1mm] w-[5mm] h-[5mm] rounded-full flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity z-10"
+      style={{ backgroundColor: "#6366f1", color: "#fff", cursor: "pointer" }}
+    >
+      <Pencil style={{ width: "2.5mm", height: "2.5mm" }} />
+    </button>
+  );
 }
 
 /* ── helper: format date range ─────────────────────────────── */
@@ -113,7 +155,7 @@ const NAME_SIZES: Record<string, string> = { xs: "14pt", s: "20pt", m: "24pt", l
 const TITLE_SIZES: Record<string, string> = { s: "9pt", m: "11pt", l: "13pt" };
 
 /* ── The A4 page content ───────────────────────────────────── */
-const A4Page = React.memo(function A4Page({ data, customize }: { data: ResumeData; customize?: CustomizeSettings }) {
+const A4Page = React.memo(function A4Page({ data, customize, onEditSection }: { data: ResumeData; customize?: CustomizeSettings; onEditSection?: (id: string) => void }) {
   const { personalDetails: p, sections } = data;
   const c = customize;
   const dims = getPageDims(c?.pageFormat);
@@ -156,19 +198,45 @@ const A4Page = React.memo(function A4Page({ data, customize }: { data: ResumeDat
   const sidebarSections = isTwo ? sections.filter(s => sidebarTypes.has(s.type)) : [];
   const mainSections = isTwo ? sections.filter(s => !sidebarTypes.has(s.type)) : sections;
 
+  /* Check if a section has meaningful content */
+  const isSectionEmpty = (section: typeof sections[0]): boolean => {
+    if (section.entries.length === 0) return true;
+    const f = section.entries[0]?.fields;
+    if (!f) return true;
+    switch (section.type) {
+      case "summary": return !f.description || f.description === "<p></p>";
+      case "skills": return !f.skills;
+      case "interests": return !f.interests;
+      case "experience": return !f.company && !f.position;
+      case "education": return !f.institution && !f.degree;
+      case "languages": return !f.language;
+      default: return Object.values(f).every(v => !v);
+    }
+  };
+
   const renderSections = (secs: typeof sections) => secs.map((section) => {
-    // Hide heading for summary if showHeading is false
     const hideHeading = section.type === "summary" && section.showHeading === false;
+    const empty = isSectionEmpty(section);
     return (
-      <div key={section.id} style={{ marginBottom: "var(--resume-section-spacing)" }}>
-        {!hideHeading && (
-          <SectionHeading customize={c} title={
-            section.type === "custom" && section.entries[0]?.fields.sectionTitle
-              ? section.entries[0].fields.sectionTitle
-              : section.title
-          } />
-        )}
-        {renderSectionContent(section)}
+      <div
+        key={section.id}
+        className="group relative"
+        style={{ marginBottom: "var(--resume-section-spacing)", borderRadius: "0.5mm", transition: "outline 0.15s" }}
+      >
+        <SectionEditOverlay sectionId={section.id} onEdit={onEditSection} />
+        <div
+          className="group-hover:outline group-hover:outline-2 group-hover:outline-offset-[1mm] rounded-[0.5mm]"
+          style={{ outlineColor: "#6366f130" }}
+        >
+          {!hideHeading && (
+            <SectionHeading customize={c} title={
+              section.type === "custom" && section.entries[0]?.fields.sectionTitle
+                ? section.entries[0].fields.sectionTitle
+                : section.title
+            } />
+          )}
+          {empty ? <EmptyPlaceholder type={section.type} /> : renderSectionContent(section)}
+        </div>
       </div>
     );
   });
@@ -539,7 +607,7 @@ const A4Page = React.memo(function A4Page({ data, customize }: { data: ResumeDat
 /* ═══════════════════════════════════════════════════════════════
    Main Preview wrapper — handles scaling, multi-page, thumbnail
    ═══════════════════════════════════════════════════════════════ */
-export const ResumePreview = React.memo(function ResumePreview({ data, customize, pdfTargetId }: ResumePreviewProps) {
+export const ResumePreview = React.memo(function ResumePreview({ data, customize, pdfTargetId, onEditSection }: ResumePreviewProps) {
   const containerRef = useRef<HTMLDivElement>(null);
   const contentRef = useRef<HTMLDivElement>(null);
   const [scale, setScale] = useState(0.65);
@@ -640,7 +708,7 @@ export const ResumePreview = React.memo(function ResumePreview({ data, customize
                     transform: `translateY(${-i * dims.hPX}px)`,
                   }}
                 >
-                  <A4Page data={debouncedData} customize={customize} />
+                  <A4Page data={debouncedData} customize={customize} onEditSection={onEditSection} />
                 </div>
               </div>
             </React.Fragment>
