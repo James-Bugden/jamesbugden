@@ -332,7 +332,7 @@ const ResumeBuilder = () => {
               {editorContent}
             </div>
             <div className="flex-1 h-full">
-              <ResumePreview data={data} pdfTargetId="resume-pdf-target" />
+              <ResumePreview data={data} customize={customize} pdfTargetId="resume-pdf-target" />
             </div>
           </div>
 
@@ -355,7 +355,7 @@ const ResumeBuilder = () => {
           {/* Mobile preview overlay */}
           {isMobile && mobilePreview && (
             <MobilePreviewOverlay onClose={() => setMobilePreview(false)}>
-              <ResumePreview data={data} pdfTargetId="resume-pdf-target" />
+              <ResumePreview data={data} customize={customize} pdfTargetId="resume-pdf-target" />
             </MobilePreviewOverlay>
           )}
         </div>
