@@ -39,6 +39,10 @@ export interface CustomizeSettings {
   // Font
   bodyFont: string;
   headingFont: string;
+
+  // Footer
+  showPageNumbers: boolean;
+  showFooterSignature: boolean;
 }
 
 export const DEFAULT_CUSTOMIZE: CustomizeSettings = {
@@ -77,6 +81,9 @@ export const DEFAULT_CUSTOMIZE: CustomizeSettings = {
 
   bodyFont: "'Source Sans 3', sans-serif",
   headingFont: "'Source Sans 3', sans-serif",
+
+  showPageNumbers: false,
+  showFooterSignature: false,
 };
 
 export const ACCENT_COLORS = [

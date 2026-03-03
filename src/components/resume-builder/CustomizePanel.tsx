@@ -20,7 +20,7 @@ interface CustomizePanelProps {
   sections: ResumeData["sections"];
 }
 
-const SUB_TABS = ["Basics", "Layout & Spacing", "Design", "Header", "Sections"] as const;
+const SUB_TABS = ["Basics", "Layout & Spacing", "Design", "Header", "Footer", "Sections"] as const;
 
 /* ── Shared UI helpers ──────────────────────────────────────── */
 function SettingCard({ title, children }: { title: string; children: React.ReactNode }) {
@@ -144,6 +144,7 @@ export function CustomizePanel({ settings, onChange, sections }: CustomizePanelP
         {subTab === "Layout & Spacing" && <LayoutTab settings={settings} onChange={onChange} sections={sections} />}
         {subTab === "Design" && <DesignTab settings={settings} onChange={onChange} />}
         {subTab === "Header" && <HeaderTab settings={settings} onChange={onChange} />}
+        {subTab === "Footer" && <FooterTab settings={settings} onChange={onChange} />}
         {subTab === "Sections" && <SectionsTab />}
       </div>
     </div>
@@ -499,6 +500,26 @@ function HeaderTab({ settings, onChange }: { settings: CustomizeSettings; onChan
         <p className="text-sm text-gray-400 text-center py-4">
           Photo design options will appear here once you add a photo 📸
         </p>
+      </SettingCard>
+    </>
+  );
+}
+
+/* ── FOOTER ──────────────────────────────────────────────────── */
+function FooterTab({ settings, onChange }: { settings: CustomizeSettings; onChange: (u: Partial<CustomizeSettings>) => void }) {
+  return (
+    <>
+      <SettingCard title="Footer Options">
+        <div className="space-y-3">
+          <label className="flex items-center gap-2 text-sm text-gray-700 cursor-pointer">
+            <Checkbox checked={settings.showPageNumbers} onCheckedChange={(v) => onChange({ showPageNumbers: !!v })} />
+            Show page numbers
+          </label>
+          <label className="flex items-center gap-2 text-sm text-gray-700 cursor-pointer">
+            <Checkbox checked={settings.showFooterSignature} onCheckedChange={(v) => onChange({ showFooterSignature: !!v })} />
+            Show creator signature
+          </label>
+        </div>
       </SettingCard>
     </>
   );

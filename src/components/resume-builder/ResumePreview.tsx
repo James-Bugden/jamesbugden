@@ -52,6 +52,9 @@ function SectionHeading({ title }: { title: string }) {
   );
 }
 
+const NAME_SIZES: Record<string, string> = { xs: "14pt", s: "20pt", m: "24pt", l: "28pt", xl: "32pt" };
+const TITLE_SIZES: Record<string, string> = { s: "9pt", m: "11pt", l: "13pt" };
+
 /* ── The A4 page content ───────────────────────────────────── */
 const A4Page = React.memo(function A4Page({ data, customize }: { data: ResumeData; customize?: CustomizeSettings }) {
   const { personalDetails: p, sections } = data;
@@ -121,30 +124,44 @@ const A4Page = React.memo(function A4Page({ data, customize }: { data: ResumeDat
       }}
     >
       {/* ── Header ─────────────────────────────────────────── */}
-      <div className="text-center mb-[4mm]">
+      <div className="mb-[4mm]" style={{ textAlign: c?.headerAlign || "center" }}>
         <h1
           className="font-bold uppercase tracking-[0.12em]"
-          style={{ fontSize: "20pt", color: "#111827" }}
+          style={{
+            fontSize: NAME_SIZES[c?.nameSize || "s"],
+            color: "#111827",
+            fontWeight: c?.nameBold !== false ? 700 : 400,
+            fontFamily: c?.nameFont === "creative" ? (c?.headingFont || "inherit") : "inherit",
+          }}
         >
           {p.fullName || "YOUR NAME"}
         </h1>
         {p.professionalTitle && (
-          <p className="mt-[1mm]" style={{ fontSize: "11pt", color: "#6B7280" }}>
+          <p className="mt-[1mm]" style={{ fontSize: TITLE_SIZES[c?.titleSize || "m"], color: "#6B7280" }}>
             {p.professionalTitle}
           </p>
         )}
 
         {contactItems.length > 0 && (
           <div
-            className="flex items-center justify-center flex-wrap mt-[2.5mm] gap-x-[4mm] gap-y-[1mm]"
-            style={{ fontSize: "8pt", color: "#4B5563" }}
+            className="flex items-center flex-wrap mt-[2.5mm] gap-x-[4mm] gap-y-[1mm]"
+            style={{
+              fontSize: "8pt",
+              color: "#4B5563",
+              justifyContent: c?.headerAlign === "right" ? "flex-end" : c?.headerAlign === "left" ? "flex-start" : "center",
+            }}
           >
-            {contactItems.map((item, i) => (
-              <span key={i} className="flex items-center gap-[1mm]">
-                {item.icon}
-                {item.text}
-              </span>
-            ))}
+            {contactItems.map((item, i) => {
+              const sep = c?.contactSeparator || "icon";
+              return (
+                <span key={i} className="flex items-center gap-[1mm]">
+                  {i > 0 && sep === "bullet" && <span className="mx-[1mm]">·</span>}
+                  {i > 0 && sep === "bar" && <span className="mx-[1mm] text-gray-300">|</span>}
+                  {sep === "icon" && item.icon}
+                  {item.text}
+                </span>
+              );
+            })}
           </div>
         )}
       </div>
@@ -166,6 +183,18 @@ const A4Page = React.memo(function A4Page({ data, customize }: { data: ResumeDat
       {sections.length === 0 && !p.fullName && (
         <div className="text-center py-[30mm]" style={{ color: "#9CA3AF", fontSize: "11pt" }}>
           Add content to see your resume here
+        </div>
+      )}
+
+      {/* ── Footer ──────────────────────────────────────────── */}
+      {(c?.showPageNumbers || c?.showFooterSignature) && (
+        <div className="mt-auto pt-[5mm] flex items-center justify-between" style={{ fontSize: "7pt", color: "#9CA3AF" }}>
+          {c?.showFooterSignature ? (
+            <span>Built with james.careers</span>
+          ) : <span />}
+          {c?.showPageNumbers ? (
+            <span>1 / 1</span>
+          ) : <span />}
         </div>
       )}
     </div>
@@ -344,6 +373,7 @@ const A4Page = React.memo(function A4Page({ data, customize }: { data: ResumeDat
           const f = section.entries[0].fields;
           return (
             <div>
+              {f.signature && <img src={f.signature} alt="Signature" className="h-[12mm] mt-[2mm]" />}
               {f.fullName && <p className="font-semibold mt-[2mm]">{f.fullName}</p>}
               {(f.place || f.date) && <p style={{ color: "#6B7280" }}>{[f.place, f.date].filter(Boolean).join(", ")}</p>}
             </div>
