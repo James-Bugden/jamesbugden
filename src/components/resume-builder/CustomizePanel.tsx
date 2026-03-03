@@ -1,10 +1,11 @@
 import { useState } from "react";
 import { cn } from "@/lib/utils";
-import { Minus, Plus, Check, Link, ExternalLink, Smile, Circle, AlignLeft, AlignCenter, AlignRight, Type, Sparkles, GripVertical, Image } from "lucide-react";
+import { Minus, Plus, Check, Link, ExternalLink, Smile, Circle, AlignLeft, AlignCenter, AlignRight, Type, Sparkles, GripVertical, Image, Underline, PanelLeftClose, PaintBucket } from "lucide-react";
 import { Slider } from "@/components/ui/slider";
 import { Checkbox } from "@/components/ui/checkbox";
 import {
   CustomizeSettings,
+  HeadingStyle,
   ACCENT_COLORS,
   LANGUAGE_OPTIONS,
   DATE_FORMAT_OPTIONS,
@@ -268,6 +269,34 @@ function LayoutTab({ settings, onChange, sections }: { settings: CustomizeSettin
   );
 }
 
+/* ── Heading style thumbnails ─────────────────────────────── */
+const HEADING_STYLES: { id: HeadingStyle; label: string }[] = [
+  { id: "plain", label: "Plain" },
+  { id: "underline", label: "Underline" },
+  { id: "full-underline", label: "Full Line" },
+  { id: "left-accent", label: "Left Accent" },
+  { id: "background", label: "Background" },
+  { id: "left-border", label: "Left Border" },
+];
+
+function HeadingStyleThumb({ id, accent }: { id: HeadingStyle; accent: string }) {
+  const bar = accent;
+  switch (id) {
+    case "plain":
+      return <div className="w-full flex items-center"><div className="w-10 h-1.5 bg-gray-700 rounded-sm" /></div>;
+    case "underline":
+      return <div className="w-full"><div className="w-10 h-1.5 bg-gray-700 rounded-sm" /><div className="mt-0.5 w-full h-[2px] rounded-full" style={{ backgroundColor: bar }} /></div>;
+    case "full-underline":
+      return <div className="w-full"><div className="w-10 h-1.5 bg-gray-700 rounded-sm pb-0.5 border-b-2" style={{ borderColor: bar }} /></div>;
+    case "left-accent":
+      return <div className="flex items-center gap-1"><div className="w-[3px] h-3 rounded-full" style={{ backgroundColor: bar }} /><div className="w-8 h-1.5 bg-gray-700 rounded-sm" /></div>;
+    case "background":
+      return <div className="w-full px-1 py-0.5 rounded-sm" style={{ backgroundColor: bar }}><div className="w-8 h-1.5 bg-white/90 rounded-sm" /></div>;
+    case "left-border":
+      return <div className="w-full pl-1.5 border-l-2" style={{ borderColor: bar }}><div className="w-8 h-1.5 bg-gray-700 rounded-sm" /></div>;
+  }
+}
+
 /* ── DESIGN ─────────────────────────────────────────────────── */
 function DesignTab({ settings, onChange }: { settings: CustomizeSettings; onChange: (u: Partial<CustomizeSettings>) => void }) {
   return (
@@ -318,16 +347,62 @@ function DesignTab({ settings, onChange }: { settings: CustomizeSettings; onChan
         </div>
       </SettingCard>
 
-      <SettingCard title="Font">
+      {/* Section Headings */}
+      <SettingCard title="Section Headings">
+        <FieldLabel>Style</FieldLabel>
+        <div className="grid grid-cols-3 gap-2 mb-4">
+          {HEADING_STYLES.map((hs) => (
+            <button
+              key={hs.id}
+              onClick={() => onChange({ headingStyle: hs.id })}
+              className={cn(
+                "flex flex-col items-center gap-1.5 p-2.5 rounded-xl border-2 transition-colors",
+                settings.headingStyle === hs.id
+                  ? "border-purple-500 bg-purple-50"
+                  : "border-gray-200 bg-white hover:border-gray-300"
+              )}
+            >
+              <div className="w-14 h-5 flex items-center justify-center">
+                <HeadingStyleThumb id={hs.id} accent={settings.accentColor} />
+              </div>
+              <span className="text-[10px] font-medium text-gray-600">{hs.label}</span>
+            </button>
+          ))}
+        </div>
+
+        <FieldLabel>Size</FieldLabel>
+        <div className="mb-4">
+          <ToggleGroup
+            options={[
+              { value: "s", label: "S" },
+              { value: "m", label: "M" },
+              { value: "l", label: "L" },
+              { value: "xl", label: "XL" },
+            ]}
+            value={settings.headingSize || "m"}
+            onChange={(v) => onChange({ headingSize: v as any })}
+          />
+        </div>
+
+        <label className="flex items-center gap-2 text-sm text-gray-700 cursor-pointer mb-3">
+          <Checkbox checked={settings.headingUppercase !== false} onCheckedChange={(v) => onChange({ headingUppercase: !!v })} />
+          Uppercase headings
+        </label>
+
+        <FieldLabel>Heading font</FieldLabel>
+        <FontPicker selectedFont={settings.headingFont || settings.bodyFont} onSelect={(f) => onChange({ headingFont: f })} />
+      </SettingCard>
+
+      {/* Typography */}
+      <SettingCard title="Typography">
         <FieldLabel>Body font</FieldLabel>
         <div className="mb-4">
           <FontPicker selectedFont={settings.bodyFont} onSelect={(f) => onChange({ bodyFont: f })} />
         </div>
-        <FieldLabel>Heading font</FieldLabel>
-        <FontPicker selectedFont={settings.headingFont} onSelect={(f) => onChange({ headingFont: f })} />
       </SettingCard>
 
-      <SettingCard title="Link styling">
+      {/* Link styling */}
+      <SettingCard title="Link Styling">
         <div className="space-y-3">
           <label className="flex items-center gap-2 text-sm text-gray-700 cursor-pointer">
             <Checkbox checked={settings.linkUnderline} onCheckedChange={(v) => onChange({ linkUnderline: !!v })} />
@@ -339,7 +414,7 @@ function DesignTab({ settings, onChange }: { settings: CustomizeSettings; onChan
           </label>
           <label className="flex items-center gap-2 text-sm text-gray-700 cursor-pointer">
             <Checkbox checked={settings.linkIcon} onCheckedChange={(v) => onChange({ linkIcon: !!v })} />
-            Link icon
+            Show link icon
           </label>
           {settings.linkIcon && (
             <div className="flex gap-2 ml-6">
