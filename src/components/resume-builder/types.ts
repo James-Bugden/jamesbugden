@@ -15,6 +15,9 @@ export interface ResumeSectionEntry {
 }
 
 export type SectionLayout = "grid" | "bubble" | "level" | "compact";
+export type SectionSeparator = "bullet" | "pipe" | "newline" | "comma";
+export type LevelIndicator = "text" | "dots" | "bar";
+export type SubtitleStyle = "dash" | "colon" | "bracket";
 
 export interface ResumeSection {
   id: string;
@@ -23,6 +26,10 @@ export interface ResumeSection {
   entries: ResumeSectionEntry[];
   collapsed: boolean;
   layout?: SectionLayout;
+  separator?: SectionSeparator;
+  levelIndicator?: LevelIndicator;
+  subtitleStyle?: SubtitleStyle;
+  showHeading?: boolean; // for summary/profile section
 }
 
 export interface ResumeData {
