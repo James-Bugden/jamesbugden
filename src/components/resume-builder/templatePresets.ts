@@ -1,0 +1,177 @@
+import { CustomizeSettings, DEFAULT_CUSTOMIZE } from "./customizeTypes";
+
+/**
+ * Each template preset maps to a partial CustomizeSettings.
+ * When applied, it overrides design/layout fields but preserves user content.
+ */
+export const TEMPLATE_PRESETS: Record<string, Partial<CustomizeSettings>> = {
+  classic: {
+    columns: "one",
+    headingStyle: "underline",
+    headingSize: "m",
+    headingUppercase: true,
+    headerAlign: "center",
+    headerArrangement: "stacked",
+    contactSeparator: "icon",
+    headerIconStyle: "outline",
+    accentColor: "#1e293b",
+    nameSize: "s",
+    nameBold: true,
+    nameFont: "body",
+    bodyFont: "'Source Sans 3', sans-serif",
+    headingFont: "'Source Sans 3', sans-serif",
+    fontSize: 11,
+    lineHeight: 1.5,
+    marginX: 16,
+    marginY: 16,
+    sectionSpacing: 5,
+    colorMode: "basic",
+    nameColor: "#111827",
+    titleColor: "#6B7280",
+    headingsColor: "#111827",
+    a4Background: "#ffffff",
+  },
+
+  minimal: {
+    columns: "one",
+    headingStyle: "plain",
+    headingSize: "m",
+    headingUppercase: false,
+    headerAlign: "left",
+    headerArrangement: "stacked",
+    contactSeparator: "bar",
+    headerIconStyle: "none",
+    accentColor: "#6B7280",
+    nameSize: "m",
+    nameBold: true,
+    nameFont: "body",
+    bodyFont: "'Inter', sans-serif",
+    headingFont: "'Inter', sans-serif",
+    fontSize: 10.5,
+    lineHeight: 1.45,
+    marginX: 18,
+    marginY: 18,
+    sectionSpacing: 4,
+    colorMode: "basic",
+    nameColor: "#374151",
+    titleColor: "#9CA3AF",
+    headingsColor: "#374151",
+    a4Background: "#ffffff",
+  },
+
+  executive: {
+    columns: "one",
+    headingStyle: "full-underline",
+    headingSize: "m",
+    headingUppercase: true,
+    headerAlign: "center",
+    headerArrangement: "stacked",
+    contactSeparator: "bullet",
+    headerIconStyle: "none",
+    accentColor: "#1e293b",
+    nameSize: "l",
+    nameBold: true,
+    nameFont: "creative",
+    bodyFont: "'Georgia', 'Times New Roman', serif",
+    headingFont: "'Georgia', 'Times New Roman', serif",
+    fontSize: 11,
+    lineHeight: 1.5,
+    marginX: 20,
+    marginY: 20,
+    sectionSpacing: 6,
+    colorMode: "basic",
+    nameColor: "#1e293b",
+    titleColor: "#6B7280",
+    headingsColor: "#1e293b",
+    a4Background: "#ffffff",
+  },
+
+  "modern-sidebar": {
+    columns: "two",
+    columnRatio: 4,
+    headingStyle: "left-accent",
+    headingSize: "m",
+    headingUppercase: true,
+    headerAlign: "left",
+    headerArrangement: "stacked",
+    contactSeparator: "icon",
+    headerIconStyle: "outline",
+    accentColor: "#1e293b",
+    nameSize: "s",
+    nameBold: true,
+    nameFont: "body",
+    bodyFont: "'Source Sans 3', sans-serif",
+    headingFont: "'Source Sans 3', sans-serif",
+    fontSize: 10.5,
+    lineHeight: 1.45,
+    marginX: 14,
+    marginY: 14,
+    sectionSpacing: 5,
+    colorMode: "advanced",
+    nameColor: "#f1f5f9",
+    titleColor: "#94a3b8",
+    headingsColor: "#111827",
+    a4Background: "#ffffff",
+  },
+
+  "bold-creative": {
+    columns: "mix",
+    columnRatio: 4,
+    headingStyle: "background",
+    headingSize: "m",
+    headingUppercase: true,
+    headerAlign: "left",
+    headerArrangement: "stacked",
+    contactSeparator: "icon",
+    headerIconStyle: "filled",
+    accentColor: "#7c3aed",
+    nameSize: "m",
+    nameBold: true,
+    nameFont: "creative",
+    bodyFont: "'Source Sans 3', sans-serif",
+    headingFont: "'Poppins', sans-serif",
+    fontSize: 10.5,
+    lineHeight: 1.45,
+    marginX: 14,
+    marginY: 14,
+    sectionSpacing: 5,
+    colorMode: "advanced",
+    nameColor: "#7c3aed",
+    titleColor: "#6B7280",
+    headingsColor: "#ffffff",
+    a4Background: "#ffffff",
+  },
+};
+
+/**
+ * Apply a template preset: merges preset styling on top of current settings,
+ * preserving user content-related choices (language, dateFormat, pageFormat).
+ */
+export function applyTemplatePreset(
+  current: CustomizeSettings,
+  templateId: string
+): CustomizeSettings {
+  const preset = TEMPLATE_PRESETS[templateId];
+  if (!preset) return { ...current, template: templateId };
+
+  // Preserve user's document settings
+  const preserved = {
+    language: current.language,
+    dateFormat: current.dateFormat,
+    pageFormat: current.pageFormat,
+    shareAsTemplate: current.shareAsTemplate,
+    showPageNumbers: current.showPageNumbers,
+    showFooterSignature: current.showFooterSignature,
+    linkUnderline: current.linkUnderline,
+    linkBlue: current.linkBlue,
+    linkIcon: current.linkIcon,
+    linkIconStyle: current.linkIconStyle,
+  };
+
+  return {
+    ...DEFAULT_CUSTOMIZE,
+    ...preset,
+    ...preserved,
+    template: templateId,
+  };
+}

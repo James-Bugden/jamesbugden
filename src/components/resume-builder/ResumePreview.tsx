@@ -5,12 +5,16 @@ import { ResumeData } from "./types";
 import { CustomizeSettings } from "./customizeTypes";
 import { cn } from "@/lib/utils";
 
-/* ── A4 dimensions (mm → px at 96 DPI: 1mm ≈ 3.7795px) ──────── */
-const A4_W_MM = 210;
-const A4_H_MM = 297;
+/* ── Page dimensions (mm → px at 96 DPI: 1mm ≈ 3.7795px) ──────── */
 const PX_PER_MM = 3.7795;
-const A4_W = A4_W_MM * PX_PER_MM; // ~793.7
-const A4_H = A4_H_MM * PX_PER_MM; // ~1122.5
+const PAGE_DIMS: Record<string, { w: number; h: number }> = {
+  a4: { w: 210, h: 297 },
+  letter: { w: 215.9, h: 279.4 },
+};
+function getPageDims(format?: string) {
+  const d = PAGE_DIMS[format || "a4"] || PAGE_DIMS.a4;
+  return { wMM: d.w, hMM: d.h, wPX: d.w * PX_PER_MM, hPX: d.h * PX_PER_MM };
+}
 
 interface ResumePreviewProps {
   data: ResumeData;
@@ -112,6 +116,7 @@ const TITLE_SIZES: Record<string, string> = { s: "9pt", m: "11pt", l: "13pt" };
 const A4Page = React.memo(function A4Page({ data, customize }: { data: ResumeData; customize?: CustomizeSettings }) {
   const { personalDetails: p, sections } = data;
   const c = customize;
+  const dims = getPageDims(c?.pageFormat);
 
   const cssVars = useMemo(() => ({
     "--resume-font-size": `${c?.fontSize ?? 11}pt`,
@@ -173,8 +178,8 @@ const A4Page = React.memo(function A4Page({ data, customize }: { data: ResumeDat
       className="text-gray-900"
       style={{
         ...cssVars,
-        width: `${A4_W_MM}mm`,
-        minHeight: `${A4_H_MM}mm`,
+        width: `${dims.wMM}mm`,
+        minHeight: `${dims.hMM}mm`,
         padding: "var(--resume-margin-y) var(--resume-margin-x)",
         fontFamily: c?.bodyFont || "'Segoe UI', 'Helvetica Neue', system-ui, sans-serif",
         fontSize: "var(--resume-font-size)",
@@ -540,6 +545,7 @@ export const ResumePreview = React.memo(function ResumePreview({ data, customize
   const [scale, setScale] = useState(0.65);
   const [pageCount, setPageCount] = useState(1);
   const [showThumbnail, setShowThumbnail] = useState(true);
+  const dims = getPageDims(customize?.pageFormat);
 
   // Debounce data for preview rendering (100ms)
   const [debouncedData, setDebouncedData] = useState(data);
@@ -555,20 +561,20 @@ export const ResumePreview = React.memo(function ResumePreview({ data, customize
     const observer = new ResizeObserver((entries) => {
       for (const entry of entries) {
         const w = entry.contentRect.width;
-        const s = Math.min((w - 48) / A4_W, 0.85); // 48px padding
+        const s = Math.min((w - 48) / dims.wPX, 0.85);
         setScale(Math.max(s, 0.35));
       }
     });
     observer.observe(el);
     return () => observer.disconnect();
-  }, []);
+  }, [dims.wPX]);
 
   /* Estimate page count from rendered height */
   useEffect(() => {
     if (!pageRef.current) return;
     const h = pageRef.current.scrollHeight;
-    setPageCount(Math.max(1, Math.ceil(h / A4_H)));
-  }, [debouncedData]);
+    setPageCount(Math.max(1, Math.ceil(h / dims.hPX)));
+  }, [debouncedData, dims.hPX]);
 
   const thumbScale = 0.08;
 
@@ -582,10 +588,10 @@ export const ResumePreview = React.memo(function ResumePreview({ data, customize
       <div className="flex justify-center py-8 px-6">
         <div
           style={{
-            width: `${A4_W}px`,
+            width: `${dims.wPX}px`,
             transformOrigin: "top center",
             transform: `scale(${scale})`,
-            marginBottom: `${-(1 - scale) * A4_H}px`,
+            marginBottom: `${-(1 - scale) * dims.hPX}px`,
           }}
         >
           <div
@@ -593,8 +599,8 @@ export const ResumePreview = React.memo(function ResumePreview({ data, customize
             id={pdfTargetId}
             className="shadow-2xl rounded-sm"
             style={{
-              width: `${A4_W}px`,
-              height: `${A4_H}px`,
+              width: `${dims.wPX}px`,
+              height: `${dims.hPX}px`,
               overflow: "hidden",
             }}
           >
@@ -622,16 +628,16 @@ export const ResumePreview = React.memo(function ResumePreview({ data, customize
           <div
             className="bg-white rounded shadow-lg border border-gray-200 overflow-hidden group-hover:shadow-xl transition-shadow"
             style={{
-              width: `${A4_W * thumbScale}px`,
-              height: `${A4_H * thumbScale}px`,
+              width: `${dims.wPX * thumbScale}px`,
+              height: `${dims.hPX * thumbScale}px`,
             }}
           >
             <div
               style={{
                 transform: `scale(${thumbScale})`,
                 transformOrigin: "top left",
-                width: `${A4_W}px`,
-                height: `${A4_H}px`,
+                width: `${dims.wPX}px`,
+                height: `${dims.hPX}px`,
                 overflow: "hidden",
                 pointerEvents: "none",
               }}

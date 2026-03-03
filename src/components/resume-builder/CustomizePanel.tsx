@@ -14,6 +14,7 @@ import {
 import { ResumeData } from "./types";
 import { TemplateGalleryModal } from "./TemplateGalleryModal";
 import { FontPicker } from "./FontPicker";
+import { applyTemplatePreset } from "./templatePresets";
 
 interface CustomizePanelProps {
   settings: CustomizeSettings;
@@ -179,26 +180,56 @@ export function CustomizePanel({ settings, onChange, sections }: CustomizePanelP
 function BasicsTab({ settings, onChange }: { settings: CustomizeSettings; onChange: (u: Partial<CustomizeSettings>) => void }) {
   const [galleryOpen, setGalleryOpen] = useState(false);
 
+  const handleTemplateSelect = (templateId: string) => {
+    const newSettings = applyTemplatePreset(settings, templateId);
+    // Apply all settings at once
+    onChange(newSettings);
+  };
+
   return (
     <>
       <SettingCard title="Language & Region">
         <div className="flex gap-3">
           <SelectField label="Language" value={settings.language} options={LANGUAGE_OPTIONS} onChange={(v) => onChange({ language: v })} />
           <SelectField label="Date Format" value={settings.dateFormat} options={DATE_FORMAT_OPTIONS} onChange={(v) => onChange({ dateFormat: v })} />
-          <SelectField label="Page Format" value={settings.pageFormat} options={PAGE_FORMAT_OPTIONS} onChange={(v) => onChange({ pageFormat: v })} />
         </div>
+      </SettingCard>
+
+      <SettingCard title="Page Format">
+        <div className="flex gap-3">
+          {PAGE_FORMAT_OPTIONS.map((opt) => (
+            <ThumbOption
+              key={opt.value}
+              selected={settings.pageFormat === opt.value}
+              onClick={() => onChange({ pageFormat: opt.value })}
+              label={opt.label}
+            >
+              <div
+                className={cn(
+                  "border-2 border-current rounded-sm",
+                  opt.value === "a4" ? "w-8 h-[46px]" : "w-[34px] h-[44px]"
+                )}
+              />
+            </ThumbOption>
+          ))}
+        </div>
+        <p className="text-[10px] text-gray-400 mt-2">
+          {settings.pageFormat === "letter"
+            ? "US Letter: 215.9 × 279.4 mm (8.5 × 11 in)"
+            : "A4: 210 × 297 mm (8.27 × 11.69 in)"}
+        </p>
       </SettingCard>
 
       <SettingCard title="Apply a design template">
         <p className="text-xs text-gray-500 mb-3 flex items-center gap-1.5">
           <Sparkles className="w-3.5 h-3.5" />
-          Update your entire resume design with one click
+          Update your entire resume design with one click — your content stays intact
         </p>
         <div className="flex gap-3 overflow-x-auto pb-2 items-center">
           {["classic", "modern-sidebar", "minimal", "executive", "bold-creative"].map((t) => (
             <button
               key={t}
-              onClick={() => onChange({ template: t })}
+              onClick={() => handleTemplateSelect(t)}
               className={cn(
                 "flex-shrink-0 w-20 h-28 rounded-lg border-2 flex items-center justify-center text-[10px] font-semibold capitalize transition-colors",
                 settings.template === t
@@ -222,7 +253,7 @@ function BasicsTab({ settings, onChange }: { settings: CustomizeSettings; onChan
         open={galleryOpen}
         onClose={() => setGalleryOpen(false)}
         selected={settings.template}
-        onSelect={(t) => onChange({ template: t })}
+        onSelect={handleTemplateSelect}
       />
     </>
   );
