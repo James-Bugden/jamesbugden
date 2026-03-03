@@ -276,7 +276,7 @@ export function SectionCard({ section, onUpdate, onRemove }: SectionCardProps) {
             </div>
             <div>
               <label className="block text-xs font-bold text-gray-700 mb-1">Description</label>
-              <RichTextEditor value={f.description || ""} onChange={set("description")} placeholder="Describe your role..." />
+              <RichTextEditor value={f.description || ""} onChange={set("description")} placeholder="Describe your role..." showAiTools aiContext={`Role: ${f.position || "position"} at ${f.company || "company"}`} />
             </div>
           </div>
         );
@@ -305,7 +305,7 @@ export function SectionCard({ section, onUpdate, onRemove }: SectionCardProps) {
             </div>
             <div>
               <label className="block text-xs font-bold text-gray-700 mb-1">Description</label>
-              <RichTextEditor value={f.description || ""} onChange={set("description")} />
+              <RichTextEditor value={f.description || ""} onChange={set("description")} showAiTools aiContext={`Education: ${f.degree || "degree"} at ${f.institution || "institution"}`} />
             </div>
           </div>
         );
@@ -371,7 +371,7 @@ export function SectionCard({ section, onUpdate, onRemove }: SectionCardProps) {
             </label>
             <div>
               <label className="block text-xs font-bold text-gray-700 mb-1">Professional Summary</label>
-              <RichTextEditor value={f.description || ""} onChange={set("description")} placeholder="Write a brief professional summary..." />
+              <RichTextEditor value={f.description || ""} onChange={set("description")} placeholder="Write a brief professional summary..." showAiTools aiContext="Professional summary for a resume" />
             </div>
           </div>
         );
@@ -410,7 +410,7 @@ export function SectionCard({ section, onUpdate, onRemove }: SectionCardProps) {
             <SField label="URL" value={f.url || ""} onChange={set("url")} placeholder="https://..." />
             <div>
               <label className="block text-xs font-bold text-gray-700 mb-1">Description</label>
-              <RichTextEditor value={f.description || ""} onChange={set("description")} />
+              <RichTextEditor value={f.description || ""} onChange={set("description")} showAiTools aiContext={`Project: ${f.name || "project"}, Role: ${f.role || "contributor"}`} />
             </div>
           </div>
         );

@@ -6,18 +6,33 @@ import TextAlign from "@tiptap/extension-text-align";
 import {
   Bold, Italic, Underline as UnderlineIcon, List, ListOrdered,
   Link as LinkIcon, AlignLeft, AlignCenter, AlignRight, AlignJustify,
+  Sparkles, CheckCheck, Wand2, Loader2,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState, useCallback } from "react";
+import { supabase } from "@/integrations/supabase/client";
+import { toast } from "@/hooks/use-toast";
 
 interface RichTextEditorProps {
   value: string;
   onChange: (val: string) => void;
   placeholder?: string;
+  showAiTools?: boolean;
+  aiContext?: string;
 }
 
-export function RichTextEditor({ value, onChange, placeholder }: RichTextEditorProps) {
+async function callResumeAi(action: string, text: string, context?: string): Promise<string> {
+  const { data, error } = await supabase.functions.invoke("resume-ai", {
+    body: { action, text, context },
+  });
+  if (error) throw new Error(error.message || "AI request failed");
+  if (data?.error) throw new Error(data.error);
+  return data?.result || "";
+}
+
+export function RichTextEditor({ value, onChange, placeholder, showAiTools = false, aiContext }: RichTextEditorProps) {
   const skipUpdate = useRef(false);
+  const [aiLoading, setAiLoading] = useState<string | null>(null);
 
   const editor = useEditor({
     extensions: [
@@ -50,6 +65,25 @@ export function RichTextEditor({ value, onChange, placeholder }: RichTextEditorP
     }
   }, [value, editor]);
 
+  const handleAiAction = useCallback(async (action: string) => {
+    if (!editor || aiLoading) return;
+    setAiLoading(action);
+    try {
+      const currentText = editor.getHTML();
+      const result = await callResumeAi(action, currentText, aiContext);
+      if (result) {
+        editor.commands.setContent(result);
+        skipUpdate.current = true;
+        onChange(result);
+        toast({ title: "AI applied", description: `${action === "improve" ? "Writing improved" : action === "grammar" ? "Grammar checked" : "Content generated"}` });
+      }
+    } catch (e: any) {
+      toast({ title: "AI Error", description: e.message, variant: "destructive" });
+    } finally {
+      setAiLoading(null);
+    }
+  }, [editor, aiLoading, aiContext, onChange]);
+
   if (!editor) return null;
 
   const setLink = () => {
@@ -81,9 +115,36 @@ export function RichTextEditor({ value, onChange, placeholder }: RichTextEditorP
     </button>
   );
 
+  const AiBtn = ({ action, label, icon: Icon }: { action: string; label: string; icon: React.ElementType }) => (
+    <button
+      type="button"
+      onClick={() => handleAiAction(action)}
+      disabled={!!aiLoading}
+      className={cn(
+        "flex items-center gap-1 px-2.5 py-1 rounded-md text-[11px] font-semibold transition-colors",
+        "bg-purple-50 text-purple-700 hover:bg-purple-100 border border-purple-200",
+        aiLoading === action && "opacity-70"
+      )}
+    >
+      {aiLoading === action ? <Loader2 className="w-3 h-3 animate-spin" /> : <Icon className="w-3 h-3" />}
+      {label}
+    </button>
+  );
+
   return (
     <div className="rounded-lg border border-gray-200 bg-[#F5F3EE] overflow-hidden">
-      {/* Toolbar */}
+      {/* AI Toolbar */}
+      {showAiTools && (
+        <div className="flex items-center gap-1.5 px-2.5 py-1.5 bg-gradient-to-r from-purple-50 to-violet-50 border-b border-purple-100">
+          <Sparkles className="w-3.5 h-3.5 text-purple-500 flex-shrink-0" />
+          <span className="text-[10px] font-semibold text-purple-600 mr-1">AI</span>
+          <AiBtn action="improve" label="Improve Writing" icon={Wand2} />
+          <AiBtn action="grammar" label="Grammar Check" icon={CheckCheck} />
+          <AiBtn action="starter" label="Starter" icon={Sparkles} />
+        </div>
+      )}
+
+      {/* Formatting Toolbar */}
       <div className="flex items-center gap-0.5 px-2 py-1 border-b border-gray-200 bg-white/60 flex-wrap">
         <ToolBtn active={editor.isActive("bold")} onClick={() => editor.chain().focus().toggleBold().run()}>
           <Bold className="w-4 h-4" />
