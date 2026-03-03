@@ -139,7 +139,7 @@ export function CustomizePanel({ settings, onChange, sections }: CustomizePanelP
       </div>
 
       {/* Sub-tab content */}
-      <div className="flex-1 overflow-y-auto p-4 space-y-4" style={{ backgroundColor: "#F5F0E8" }}>
+      <div className="flex-1 overflow-y-auto p-4 space-y-4 bg-[#f3f4f6]">
         {subTab === "Basics" && <BasicsTab settings={settings} onChange={onChange} />}
         {subTab === "Layout & Spacing" && <LayoutTab settings={settings} onChange={onChange} sections={sections} />}
         {subTab === "Design" && <DesignTab settings={settings} onChange={onChange} />}
@@ -209,7 +209,7 @@ function LayoutTab({ settings, onChange, sections }: { settings: CustomizeSettin
     <>
       <SettingCard title="Layout">
         <FieldLabel>Columns</FieldLabel>
-        <div className="flex gap-3">
+        <div className="flex gap-3 mb-4">
           <ThumbOption selected={settings.columns === "one"} onClick={() => onChange({ columns: "one" })} label="One">
             <div className="w-10 h-14 border-2 border-current rounded-sm" />
           </ThumbOption>
@@ -224,6 +224,20 @@ function LayoutTab({ settings, onChange, sections }: { settings: CustomizeSettin
             </div>
           </ThumbOption>
         </div>
+
+        {(settings.columns === "two" || settings.columns === "mix") && (
+          <div className="mt-2">
+            <SliderRow
+              label="Sidebar Width"
+              value={settings.columnRatio}
+              min={3}
+              max={6}
+              step={1}
+              unit="/12"
+              onChange={(v) => onChange({ columnRatio: v })}
+            />
+          </div>
+        )}
       </SettingCard>
 
       <SettingCard title="Change Section Layout">
@@ -242,10 +256,11 @@ function LayoutTab({ settings, onChange, sections }: { settings: CustomizeSettin
 
       <SettingCard title="Spacing">
         <div className="space-y-5">
-          <SliderRow label="Font Size" value={settings.fontSize} min={8} max={14} step={0.5} unit="pt" onChange={(v) => onChange({ fontSize: v })} />
-          <SliderRow label="Line Height" value={settings.lineHeight} min={1} max={2.5} step={0.1} unit="" onChange={(v) => onChange({ lineHeight: Math.round(v * 10) / 10 })} />
-          <SliderRow label="Left & Right Margin" value={settings.marginX} min={8} max={30} step={1} unit="mm" onChange={(v) => onChange({ marginX: v })} />
-          <SliderRow label="Top & Bottom Margin" value={settings.marginY} min={8} max={30} step={1} unit="mm" onChange={(v) => onChange({ marginY: v })} />
+          <SliderRow label="Font Size" value={settings.fontSize} min={8} max={16} step={0.5} unit="pt" onChange={(v) => onChange({ fontSize: v })} />
+          <SliderRow label="Line Height" value={settings.lineHeight} min={1} max={2.2} step={0.1} unit="" onChange={(v) => onChange({ lineHeight: Math.round(v * 10) / 10 })} />
+          <SliderRow label="Left & Right Margin" value={settings.marginX} min={5} max={40} step={1} unit="mm" onChange={(v) => onChange({ marginX: v })} />
+          <SliderRow label="Top & Bottom Margin" value={settings.marginY} min={5} max={40} step={1} unit="mm" onChange={(v) => onChange({ marginY: v })} />
+          <SliderRow label="Section Spacing" value={settings.sectionSpacing} min={0} max={20} step={1} unit="mm" onChange={(v) => onChange({ sectionSpacing: v })} />
         </div>
       </SettingCard>
     </>

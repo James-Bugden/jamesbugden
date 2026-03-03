@@ -7,11 +7,13 @@ export interface CustomizeSettings {
 
   // Layout & Spacing
   columns: "one" | "two" | "mix";
+  columnRatio: number;   // sidebar cols out of 12 (e.g. 4 = 4/12 sidebar, 8/12 main)
   sectionOrder: string[];
   fontSize: number;      // pt
   lineHeight: number;
   marginX: number;       // mm
   marginY: number;       // mm
+  sectionSpacing: number; // mm
 
   // Design
   colorMode: "basic" | "advanced" | "border";
@@ -45,11 +47,13 @@ export const DEFAULT_CUSTOMIZE: CustomizeSettings = {
   template: "classic",
 
   columns: "one",
+  columnRatio: 4,
   sectionOrder: [],
   fontSize: 11,
   lineHeight: 1.5,
   marginX: 16,
   marginY: 16,
+  sectionSpacing: 5,
 
   colorMode: "basic",
   colorType: "accent",

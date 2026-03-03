@@ -2,6 +2,7 @@ import React, { useRef, useState, useEffect, useMemo } from "react";
 import DOMPurify from "dompurify";
 import { Mail, Phone, MapPin, Flag, FileText } from "lucide-react";
 import { ResumeData } from "./types";
+import { CustomizeSettings } from "./customizeTypes";
 import { cn } from "@/lib/utils";
 
 /* ── A4 dimensions (mm → px at 96 DPI: 1mm ≈ 3.7795px) ──────── */
@@ -13,6 +14,7 @@ const A4_H = A4_H_MM * PX_PER_MM; // ~1122.5
 
 interface ResumePreviewProps {
   data: ResumeData;
+  customize?: CustomizeSettings;
   pdfTargetId?: string;
 }
 
@@ -51,8 +53,21 @@ function SectionHeading({ title }: { title: string }) {
 }
 
 /* ── The A4 page content ───────────────────────────────────── */
-const A4Page = React.memo(function A4Page({ data }: { data: ResumeData }) {
+const A4Page = React.memo(function A4Page({ data, customize }: { data: ResumeData; customize?: CustomizeSettings }) {
   const { personalDetails: p, sections } = data;
+  const c = customize;
+
+  const cssVars = useMemo(() => ({
+    "--resume-font-size": `${c?.fontSize ?? 11}pt`,
+    "--resume-line-height": `${c?.lineHeight ?? 1.5}`,
+    "--resume-margin-x": `${c?.marginX ?? 16}mm`,
+    "--resume-margin-y": `${c?.marginY ?? 16}mm`,
+    "--resume-section-spacing": `${c?.sectionSpacing ?? 5}mm`,
+    "--resume-accent": c?.accentColor ?? "#1e293b",
+  } as React.CSSProperties), [c?.fontSize, c?.lineHeight, c?.marginX, c?.marginY, c?.sectionSpacing, c?.accentColor]);
+
+  const isTwo = c?.columns === "two" || c?.columns === "mix";
+  const sidebarCols = c?.columnRatio ?? 4;
 
   const contactItems = [
     p.email && { icon: <Mail className="w-[3mm] h-[3mm]" />, text: p.email },
@@ -66,16 +81,33 @@ const A4Page = React.memo(function A4Page({ data }: { data: ResumeData }) {
     })),
   ].filter(Boolean) as { icon: React.ReactNode; text: string }[];
 
+  /* Split sections for two-column layout */
+  const sidebarTypes = new Set(["skills", "languages", "interests", "certificates"]);
+  const sidebarSections = isTwo ? sections.filter(s => sidebarTypes.has(s.type)) : [];
+  const mainSections = isTwo ? sections.filter(s => !sidebarTypes.has(s.type)) : sections;
+
+  const renderSections = (secs: typeof sections) => secs.map((section) => (
+    <div key={section.id} style={{ marginBottom: "var(--resume-section-spacing)" }}>
+      <SectionHeading title={
+        section.type === "custom" && section.entries[0]?.fields.sectionTitle
+          ? section.entries[0].fields.sectionTitle
+          : section.title
+      } />
+      {renderSectionContent(section)}
+    </div>
+  ));
+
   return (
     <div
       className="bg-white text-gray-900"
       style={{
+        ...cssVars,
         width: `${A4_W_MM}mm`,
         minHeight: `${A4_H_MM}mm`,
-        padding: "15mm 18mm",
-        fontFamily: "'Segoe UI', 'Helvetica Neue', system-ui, sans-serif",
-        fontSize: "9.5pt",
-        lineHeight: 1.45,
+        padding: "var(--resume-margin-y) var(--resume-margin-x)",
+        fontFamily: c?.bodyFont || "'Segoe UI', 'Helvetica Neue', system-ui, sans-serif",
+        fontSize: "var(--resume-font-size)",
+        lineHeight: "var(--resume-line-height)",
         boxSizing: "border-box",
       }}
     >
@@ -112,163 +144,14 @@ const A4Page = React.memo(function A4Page({ data }: { data: ResumeData }) {
       <div className="h-[0.3mm] bg-gray-300 mb-[5mm]" />
 
       {/* ── Sections ───────────────────────────────────────── */}
-      {sections.map((section) => (
-        <div key={section.id} className="mb-[5mm]">
-          <SectionHeading
-            title={
-              section.type === "custom" && section.entries[0]?.fields.sectionTitle
-                ? section.entries[0].fields.sectionTitle
-                : section.title
-            }
-          />
-
-          {/* Summary */}
-          {section.type === "summary" && section.entries[0]?.fields.description && (
-            <Html html={section.entries[0].fields.description} />
-          )}
-
-          {/* Skills – rendered as pill chips */}
-          {section.type === "skills" && section.entries[0]?.fields.skills && (
-            <div className="flex flex-wrap gap-[1.5mm] mt-[1mm]">
-              {section.entries[0].fields.skills.split(",").filter(Boolean).map((s, i) => (
-                <span
-                  key={i}
-                  className="px-[2.5mm] py-[0.8mm] rounded-full border border-gray-300 bg-white"
-                  style={{ fontSize: "8pt", color: "#374151" }}
-                >
-                  {s.trim()}
-                </span>
-              ))}
-            </div>
-          )}
-
-          {/* Experience */}
-          {section.type === "experience" && section.entries.map((entry) => {
-            const f = entry.fields;
-            return (
-              <div key={entry.id} className="mb-[3mm]">
-                <div className="flex justify-between items-baseline">
-                  <div style={{ fontSize: "9.5pt" }}>
-                    <span className="font-bold" style={{ color: "#111827" }}>
-                      {f.company || ""}
-                    </span>
-                    {f.position && (
-                      <span className="italic text-gray-700">{f.company ? ", " : ""}{f.position}</span>
-                    )}
-                  </div>
-                  <div className="flex-shrink-0 text-right" style={{ fontSize: "8pt", color: "#6B7280" }}>
-                    {fmtDateRange(f)}
-                    {f.location && <>{fmtDateRange(f) ? " | " : ""}{f.location}</>}
-                  </div>
-                </div>
-                <Html html={f.description || ""} />
-              </div>
-            );
-          })}
-
-          {/* Education */}
-          {section.type === "education" && section.entries.map((entry) => {
-            const f = entry.fields;
-            return (
-              <div key={entry.id} className="mb-[3mm]">
-                <div className="flex justify-between items-baseline">
-                  <div style={{ fontSize: "9.5pt" }}>
-                    <span className="font-bold" style={{ color: "#111827" }}>{f.institution || ""}</span>
-                    {f.degree && <span className="italic text-gray-700">{f.institution ? ", " : ""}{f.degree}</span>}
-                  </div>
-                  <div className="flex-shrink-0 text-right" style={{ fontSize: "8pt", color: "#6B7280" }}>
-                    {fmtDateRange(f)}
-                    {f.location && <>{fmtDateRange(f) ? " | " : ""}{f.location}</>}
-                  </div>
-                </div>
-                <Html html={f.description || ""} />
-              </div>
-            );
-          })}
-
-          {/* Languages – two-column */}
-          {section.type === "languages" && (
-            <div className="grid grid-cols-2 gap-x-[6mm] gap-y-[2mm] mt-[1mm]">
-              {section.entries.map((entry) => (
-                <div key={entry.id}>
-                  <p className="font-semibold" style={{ fontSize: "9.5pt", color: "#111827" }}>
-                    {entry.fields.language}
-                  </p>
-                  <p style={{ fontSize: "8pt", color: "#6B7280" }}>{entry.fields.proficiency}</p>
-                </div>
-              ))}
-            </div>
-          )}
-
-          {/* Interests – inline dots */}
-          {section.type === "interests" && section.entries[0]?.fields.interests && (
-            <p className="mt-[1mm]" style={{ fontSize: "9pt", color: "#374151" }}>
-              {section.entries[0].fields.interests.split(",").filter(Boolean).map(s => s.trim()).join("  ·  ")}
-            </p>
-          )}
-
-          {/* Certificates / Courses / Awards / Projects / Organisations / Publications */}
-          {["certificates", "courses", "awards", "projects", "organisations", "publications"].includes(section.type) && section.entries.map((entry) => {
-            const f = entry.fields;
-            const dateStr = fmtDateRange(f) || f.date || "";
-            return (
-              <div key={entry.id} className="mb-[2.5mm]">
-                <div className="flex justify-between items-baseline">
-                  <span className="font-bold" style={{ fontSize: "9.5pt", color: "#111827" }}>
-                    {f.name || f.title || ""}
-                  </span>
-                  {dateStr && <span style={{ fontSize: "8pt", color: "#6B7280" }}>{dateStr}</span>}
-                </div>
-                {(f.issuer || f.institution || f.publisher || f.role) && (
-                  <p className="italic" style={{ fontSize: "8.5pt", color: "#6B7280" }}>
-                    {f.issuer || f.institution || f.publisher || f.role}
-                  </p>
-                )}
-                {f.url && (
-                  <p style={{ fontSize: "7.5pt", color: "#2563EB" }}>{f.url}</p>
-                )}
-                <Html html={f.description || ""} />
-              </div>
-            );
-          })}
-
-          {/* References */}
-          {section.type === "references" && section.entries.map((entry) => {
-            const f = entry.fields;
-            return (
-              <div key={entry.id} className="mb-[2mm]">
-                <span className="font-bold" style={{ fontSize: "9.5pt" }}>{f.name}</span>
-                {f.position && <span style={{ fontSize: "9pt", color: "#6B7280" }}> — {f.position}</span>}
-                {f.company && <span style={{ fontSize: "9pt", color: "#6B7280" }}>, {f.company}</span>}
-                {f.relationship && <span style={{ fontSize: "8pt", color: "#9CA3AF" }}> ({f.relationship})</span>}
-                {(f.email || f.phone) && (
-                  <p style={{ fontSize: "8pt", color: "#6B7280" }}>
-                    {[f.email, f.phone].filter(Boolean).join("  ·  ")}
-                  </p>
-                )}
-              </div>
-            );
-          })}
-
-          {/* Declaration */}
-          {section.type === "declaration" && section.entries[0] && (() => {
-            const f = section.entries[0].fields;
-            return (
-              <div style={{ fontSize: "9pt" }}>
-                {f.fullName && <p className="font-semibold mt-[2mm]">{f.fullName}</p>}
-                {(f.place || f.date) && (
-                  <p style={{ color: "#6B7280" }}>{[f.place, f.date].filter(Boolean).join(", ")}</p>
-                )}
-              </div>
-            );
-          })()}
-
-          {/* Custom */}
-          {section.type === "custom" && section.entries[0] && (
-            <Html html={section.entries[0].fields.description || ""} />
-          )}
+      {isTwo ? (
+        <div style={{ display: "grid", gridTemplateColumns: `${sidebarCols}fr ${12 - sidebarCols}fr`, gap: "var(--resume-section-spacing)" }}>
+          <div>{renderSections(sidebarSections)}</div>
+          <div>{renderSections(mainSections)}</div>
         </div>
-      ))}
+      ) : (
+        renderSections(mainSections)
+      )}
 
       {/* Empty state */}
       {sections.length === 0 && !p.fullName && (
@@ -278,12 +161,103 @@ const A4Page = React.memo(function A4Page({ data }: { data: ResumeData }) {
       )}
     </div>
   );
+
+  function renderSectionContent(section: typeof sections[0]) {
+    return (
+      <>
+        {section.type === "summary" && section.entries[0]?.fields.description && (
+          <Html html={section.entries[0].fields.description} />
+        )}
+        {section.type === "skills" && section.entries[0]?.fields.skills && (
+          <div className="flex flex-wrap gap-[1.5mm] mt-[1mm]">
+            {section.entries[0].fields.skills.split(",").filter(Boolean).map((s, i) => (
+              <span key={i} className="px-[2.5mm] py-[0.8mm] rounded-full border border-gray-300 bg-white" style={{ fontSize: "8pt", color: "#374151" }}>{s.trim()}</span>
+            ))}
+          </div>
+        )}
+        {section.type === "experience" && section.entries.map((entry) => {
+          const f = entry.fields;
+          return (
+            <div key={entry.id} className="mb-[3mm]">
+              <div className="flex justify-between items-baseline">
+                <div><span className="font-bold" style={{ color: "#111827" }}>{f.company || ""}</span>{f.position && <span className="italic text-gray-700">{f.company ? ", " : ""}{f.position}</span>}</div>
+                <div className="flex-shrink-0 text-right" style={{ fontSize: "8pt", color: "#6B7280" }}>{fmtDateRange(f)}{f.location && <>{fmtDateRange(f) ? " | " : ""}{f.location}</>}</div>
+              </div>
+              <Html html={f.description || ""} />
+            </div>
+          );
+        })}
+        {section.type === "education" && section.entries.map((entry) => {
+          const f = entry.fields;
+          return (
+            <div key={entry.id} className="mb-[3mm]">
+              <div className="flex justify-between items-baseline">
+                <div><span className="font-bold" style={{ color: "#111827" }}>{f.institution || ""}</span>{f.degree && <span className="italic text-gray-700">{f.institution ? ", " : ""}{f.degree}</span>}</div>
+                <div className="flex-shrink-0 text-right" style={{ fontSize: "8pt", color: "#6B7280" }}>{fmtDateRange(f)}{f.location && <>{fmtDateRange(f) ? " | " : ""}{f.location}</>}</div>
+              </div>
+              <Html html={f.description || ""} />
+            </div>
+          );
+        })}
+        {section.type === "languages" && (
+          <div className="grid grid-cols-2 gap-x-[6mm] gap-y-[2mm] mt-[1mm]">
+            {section.entries.map((entry) => (
+              <div key={entry.id}>
+                <p className="font-semibold" style={{ color: "#111827" }}>{entry.fields.language}</p>
+                <p style={{ fontSize: "8pt", color: "#6B7280" }}>{entry.fields.proficiency}</p>
+              </div>
+            ))}
+          </div>
+        )}
+        {section.type === "interests" && section.entries[0]?.fields.interests && (
+          <p className="mt-[1mm]" style={{ color: "#374151" }}>{section.entries[0].fields.interests.split(",").filter(Boolean).map(s => s.trim()).join("  ·  ")}</p>
+        )}
+        {["certificates", "courses", "awards", "projects", "organisations", "publications"].includes(section.type) && section.entries.map((entry) => {
+          const f = entry.fields;
+          const dateStr = fmtDateRange(f) || f.date || "";
+          return (
+            <div key={entry.id} className="mb-[2.5mm]">
+              <div className="flex justify-between items-baseline">
+                <span className="font-bold" style={{ color: "#111827" }}>{f.name || f.title || ""}</span>
+                {dateStr && <span style={{ fontSize: "8pt", color: "#6B7280" }}>{dateStr}</span>}
+              </div>
+              {(f.issuer || f.institution || f.publisher || f.role) && <p className="italic" style={{ fontSize: "8.5pt", color: "#6B7280" }}>{f.issuer || f.institution || f.publisher || f.role}</p>}
+              {f.url && <p style={{ fontSize: "7.5pt", color: "#2563EB" }}>{f.url}</p>}
+              <Html html={f.description || ""} />
+            </div>
+          );
+        })}
+        {section.type === "references" && section.entries.map((entry) => {
+          const f = entry.fields;
+          return (
+            <div key={entry.id} className="mb-[2mm]">
+              <span className="font-bold">{f.name}</span>
+              {f.position && <span style={{ color: "#6B7280" }}> — {f.position}</span>}
+              {f.company && <span style={{ color: "#6B7280" }}>, {f.company}</span>}
+              {f.relationship && <span style={{ fontSize: "8pt", color: "#9CA3AF" }}> ({f.relationship})</span>}
+              {(f.email || f.phone) && <p style={{ fontSize: "8pt", color: "#6B7280" }}>{[f.email, f.phone].filter(Boolean).join("  ·  ")}</p>}
+            </div>
+          );
+        })}
+        {section.type === "declaration" && section.entries[0] && (() => {
+          const f = section.entries[0].fields;
+          return (
+            <div>
+              {f.fullName && <p className="font-semibold mt-[2mm]">{f.fullName}</p>}
+              {(f.place || f.date) && <p style={{ color: "#6B7280" }}>{[f.place, f.date].filter(Boolean).join(", ")}</p>}
+            </div>
+          );
+        })()}
+        {section.type === "custom" && section.entries[0] && <Html html={section.entries[0].fields.description || ""} />}
+      </>
+    );
+  }
 });
 
 /* ═══════════════════════════════════════════════════════════════
    Main Preview wrapper — handles scaling, page indicator, thumbnail
    ═══════════════════════════════════════════════════════════════ */
-export const ResumePreview = React.memo(function ResumePreview({ data, pdfTargetId }: ResumePreviewProps) {
+export const ResumePreview = React.memo(function ResumePreview({ data, customize, pdfTargetId }: ResumePreviewProps) {
   const containerRef = useRef<HTMLDivElement>(null);
   const pageRef = useRef<HTMLDivElement>(null);
   const [scale, setScale] = useState(0.65);
@@ -347,7 +321,7 @@ export const ResumePreview = React.memo(function ResumePreview({ data, pdfTarget
               overflow: "hidden",
             }}
           >
-            <A4Page data={debouncedData} />
+            <A4Page data={debouncedData} customize={customize} />
           </div>
         </div>
       </div>
@@ -385,7 +359,7 @@ export const ResumePreview = React.memo(function ResumePreview({ data, pdfTarget
                 pointerEvents: "none",
               }}
             >
-              <A4Page data={debouncedData} />
+              <A4Page data={debouncedData} customize={customize} />
             </div>
           </div>
         </div>
