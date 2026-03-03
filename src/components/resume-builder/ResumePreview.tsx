@@ -69,16 +69,25 @@ const A4Page = React.memo(function A4Page({ data, customize }: { data: ResumeDat
   const isTwo = c?.columns === "two" || c?.columns === "mix";
   const sidebarCols = c?.columnRatio ?? 4;
 
-  const contactItems = [
-    p.email && { icon: <Mail className="w-[3mm] h-[3mm]" />, text: p.email },
-    p.phone && { icon: <Phone className="w-[3mm] h-[3mm]" />, text: p.phone },
-    p.location && { icon: <MapPin className="w-[3mm] h-[3mm]" />, text: p.location },
+  const showIcons = c?.headerIconStyle !== "none";
+  const iconFill = c?.headerIconStyle === "filled" ? "currentColor" : "none";
+  const iconProps = { className: "w-[3mm] h-[3mm]", ...(iconFill !== "none" ? { fill: iconFill } : {}) };
+
+  const contactItems = showIcons ? [
+    p.email && { icon: <Mail {...iconProps} />, text: p.email },
+    p.phone && { icon: <Phone {...iconProps} />, text: p.phone },
+    p.location && { icon: <MapPin {...iconProps} />, text: p.location },
     ...p.extras.map((e) => ({
       icon: e.type === "Nationality" || e.type === "Visa"
-        ? <Flag className="w-[3mm] h-[3mm]" />
-        : <FileText className="w-[3mm] h-[3mm]" />,
+        ? <Flag {...iconProps} />
+        : <FileText {...iconProps} />,
       text: e.value,
     })),
+  ].filter(Boolean) as { icon: React.ReactNode; text: string }[] : [
+    p.email && { icon: null, text: p.email },
+    p.phone && { icon: null, text: p.phone },
+    p.location && { icon: null, text: p.location },
+    ...p.extras.map((e) => ({ icon: null, text: e.value })),
   ].filter(Boolean) as { icon: React.ReactNode; text: string }[];
 
   /* Split sections for two-column layout */
@@ -168,13 +177,66 @@ const A4Page = React.memo(function A4Page({ data, customize }: { data: ResumeDat
         {section.type === "summary" && section.entries[0]?.fields.description && (
           <Html html={section.entries[0].fields.description} />
         )}
-        {section.type === "skills" && section.entries[0]?.fields.skills && (
-          <div className="flex flex-wrap gap-[1.5mm] mt-[1mm]">
-            {section.entries[0].fields.skills.split(",").filter(Boolean).map((s, i) => (
-              <span key={i} className="px-[2.5mm] py-[0.8mm] rounded-full border border-gray-300 bg-white" style={{ fontSize: "8pt", color: "#374151" }}>{s.trim()}</span>
-            ))}
-          </div>
-        )}
+        {section.type === "skills" && section.entries[0]?.fields.skills && (() => {
+          const skills = section.entries[0].fields.skills.split(",").filter(Boolean).map(s => s.trim());
+          const layout = section.layout || "bubble";
+          const accent = c?.accentColor || "#1e293b";
+
+          if (layout === "level") {
+            return (
+              <div className="space-y-[1.5mm] mt-[1mm]">
+                {skills.map((s, i) => {
+                  const [name, levelStr] = s.includes(":") ? s.split(":").map(x => x.trim()) : [s, "3"];
+                  const level = Math.min(5, Math.max(1, parseInt(levelStr) || 3));
+                  return (
+                    <div key={i} className="flex items-center gap-[2mm]">
+                      <span className="w-[25mm] text-right" style={{ fontSize: "8pt", color: "#374151" }}>{name}</span>
+                      <div className="flex-1 h-[1.5mm] bg-gray-200 rounded-full overflow-hidden">
+                        <div className="h-full rounded-full" style={{ width: `${level * 20}%`, backgroundColor: accent }} />
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
+            );
+          }
+
+          if (layout === "grid") {
+            return (
+              <div className="grid grid-cols-2 gap-x-[6mm] gap-y-[1mm] mt-[1mm]">
+                {skills.map((s, i) => {
+                  const name = s.includes(":") ? s.split(":")[0].trim() : s;
+                  return (
+                    <div key={i} className="flex items-center gap-[1.5mm]">
+                      <div className="w-[1mm] h-[1mm] rounded-full bg-gray-600 flex-shrink-0" />
+                      <span style={{ fontSize: "8pt", color: "#374151" }}>{name}</span>
+                    </div>
+                  );
+                })}
+              </div>
+            );
+          }
+
+          if (layout === "compact") {
+            return (
+              <p className="mt-[1mm]" style={{ fontSize: "8pt", color: "#374151" }}>
+                {skills.map(s => s.includes(":") ? s.split(":")[0].trim() : s).join("  ·  ")}
+              </p>
+            );
+          }
+
+          // bubble (default)
+          return (
+            <div className="flex flex-wrap gap-[1.5mm] mt-[1mm]">
+              {skills.map((s, i) => {
+                const name = s.includes(":") ? s.split(":")[0].trim() : s;
+                return (
+                  <span key={i} className="px-[2.5mm] py-[0.8mm] rounded-full" style={{ fontSize: "8pt", color: "#374151", backgroundColor: `${accent}15`, border: `0.3mm solid ${accent}30` }}>{name}</span>
+                );
+              })}
+            </div>
+          );
+        })()}
         {section.type === "experience" && section.entries.map((entry) => {
           const f = entry.fields;
           return (
@@ -199,16 +261,55 @@ const A4Page = React.memo(function A4Page({ data, customize }: { data: ResumeDat
             </div>
           );
         })}
-        {section.type === "languages" && (
-          <div className="grid grid-cols-2 gap-x-[6mm] gap-y-[2mm] mt-[1mm]">
-            {section.entries.map((entry) => (
-              <div key={entry.id}>
-                <p className="font-semibold" style={{ color: "#111827" }}>{entry.fields.language}</p>
-                <p style={{ fontSize: "8pt", color: "#6B7280" }}>{entry.fields.proficiency}</p>
+        {section.type === "languages" && (() => {
+          const layout = section.layout || "compact";
+          const accent = c?.accentColor || "#1e293b";
+          const profToLevel = (p: string) => {
+            const map: Record<string, number> = { Native: 5, Fluent: 4, Advanced: 3, Intermediate: 2, Basic: 1 };
+            return map[p] || 3;
+          };
+
+          if (layout === "level") {
+            return (
+              <div className="space-y-[1.5mm] mt-[1mm]">
+                {section.entries.map((entry) => (
+                  <div key={entry.id} className="flex items-center gap-[2mm]">
+                    <span className="w-[25mm] text-right" style={{ fontSize: "8pt", color: "#374151" }}>{entry.fields.language}</span>
+                    <div className="flex gap-[0.8mm]">
+                      {[1,2,3,4,5].map(n => (
+                        <div key={n} className="w-[2mm] h-[2mm] rounded-full" style={{ backgroundColor: n <= profToLevel(entry.fields.proficiency) ? accent : "#e5e7eb" }} />
+                      ))}
+                    </div>
+                  </div>
+                ))}
               </div>
-            ))}
-          </div>
-        )}
+            );
+          }
+
+          if (layout === "bubble") {
+            return (
+              <div className="flex flex-wrap gap-[1.5mm] mt-[1mm]">
+                {section.entries.map((entry) => (
+                  <span key={entry.id} className="px-[2.5mm] py-[0.8mm] rounded-full" style={{ fontSize: "8pt", color: "#374151", backgroundColor: `${accent}15`, border: `0.3mm solid ${accent}30` }}>
+                    {entry.fields.language}{entry.fields.proficiency ? ` — ${entry.fields.proficiency}` : ""}
+                  </span>
+                ))}
+              </div>
+            );
+          }
+
+          // grid or compact (default)
+          return (
+            <div className="grid grid-cols-2 gap-x-[6mm] gap-y-[2mm] mt-[1mm]">
+              {section.entries.map((entry) => (
+                <div key={entry.id}>
+                  <p className="font-semibold" style={{ color: "#111827" }}>{entry.fields.language}</p>
+                  <p style={{ fontSize: "8pt", color: "#6B7280" }}>{entry.fields.proficiency}</p>
+                </div>
+              ))}
+            </div>
+          );
+        })()}
         {section.type === "interests" && section.entries[0]?.fields.interests && (
           <p className="mt-[1mm]" style={{ color: "#374151" }}>{section.entries[0].fields.interests.split(",").filter(Boolean).map(s => s.trim()).join("  ·  ")}</p>
         )}

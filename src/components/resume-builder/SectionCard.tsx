@@ -1,8 +1,8 @@
 import { useState } from "react";
-import { ChevronDown, ChevronUp, GripVertical, Trash2, Plus } from "lucide-react";
+import { ChevronDown, ChevronUp, GripVertical, Trash2, Plus, Grid3X3, Circle, BarChart3, List } from "lucide-react";
 import * as Icons from "lucide-react";
 import { Checkbox } from "@/components/ui/checkbox";
-import { ResumeSection, ResumeSectionEntry, getDefaultFieldsForType, SECTION_TYPES, PROFICIENCY_LEVELS } from "./types";
+import { ResumeSection, ResumeSectionEntry, SectionLayout, getDefaultFieldsForType, SECTION_TYPES, PROFICIENCY_LEVELS } from "./types";
 import { RichTextEditor } from "./RichTextEditor";
 import { MonthYearPicker } from "./MonthYearPicker";
 import { TagInput } from "./TagInput";
@@ -57,6 +57,36 @@ function getEntrySummary(type: string, fields: Record<string, string>): string {
     default:
       return "New entry";
   }
+}
+
+const LAYOUT_OPTIONS: { value: SectionLayout; label: string; icon: React.ElementType }[] = [
+  { value: "grid", label: "Grid", icon: Grid3X3 },
+  { value: "bubble", label: "Bubble", icon: Circle },
+  { value: "level", label: "Level", icon: BarChart3 },
+  { value: "compact", label: "Compact", icon: List },
+];
+
+function LayoutSwitcher({ layout, onChange }: { layout: SectionLayout; onChange: (l: SectionLayout) => void }) {
+  return (
+    <div>
+      <label className="block text-xs font-bold text-gray-700 mb-1.5">Layout</label>
+      <div className="flex gap-1 bg-gray-100 rounded-lg p-0.5">
+        {LAYOUT_OPTIONS.map((opt) => (
+          <button
+            key={opt.value}
+            onClick={() => onChange(opt.value)}
+            className={cn(
+              "flex items-center gap-1.5 px-3 py-1.5 rounded-md text-xs font-semibold transition-colors",
+              layout === opt.value ? "bg-white text-gray-900 shadow-sm" : "text-gray-500 hover:text-gray-700"
+            )}
+          >
+            <opt.icon className="w-3.5 h-3.5" />
+            {opt.label}
+          </button>
+        ))}
+      </div>
+    </div>
+  );
 }
 
 export function SectionCard({ section, onUpdate, onRemove }: SectionCardProps) {
@@ -162,9 +192,10 @@ export function SectionCard({ section, onUpdate, onRemove }: SectionCardProps) {
 
       case "skills":
         return (
-          <div>
+          <div className="space-y-3">
+            <LayoutSwitcher layout={section.layout || "bubble"} onChange={(l) => onUpdate({ layout: l })} />
             <label className="block text-xs font-bold text-gray-700 mb-1">Skills</label>
-            <TagInput value={f.skills || ""} onChange={set("skills")} placeholder="Type a skill and press Enter" showLevel />
+            <TagInput value={f.skills || ""} onChange={set("skills")} placeholder="Type a skill and press Enter" showLevel={section.layout === "level"} />
           </div>
         );
 
@@ -178,18 +209,21 @@ export function SectionCard({ section, onUpdate, onRemove }: SectionCardProps) {
 
       case "languages":
         return (
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-            <SField label="Language" value={f.language} onChange={set("language")} />
-            <div>
-              <label className="block text-xs font-bold text-gray-700 mb-1">Proficiency</label>
-              <select
-                value={f.proficiency}
-                onChange={(e) => set("proficiency")(e.target.value)}
-                className="w-full h-11 md:h-10 rounded-lg bg-[#F5F3EE] px-3 text-sm border-0 outline-none focus:ring-2 focus:ring-pink-300 appearance-none cursor-pointer"
-              >
-                <option value="">Select level</option>
-                {PROFICIENCY_LEVELS.map((l) => (<option key={l} value={l}>{l}</option>))}
-              </select>
+          <div className="space-y-3">
+            <LayoutSwitcher layout={section.layout || "compact"} onChange={(l) => onUpdate({ layout: l })} />
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+              <SField label="Language" value={f.language} onChange={set("language")} />
+              <div>
+                <label className="block text-xs font-bold text-gray-700 mb-1">Proficiency</label>
+                <select
+                  value={f.proficiency}
+                  onChange={(e) => set("proficiency")(e.target.value)}
+                  className="w-full h-11 md:h-10 rounded-lg bg-[#F5F3EE] px-3 text-sm border-0 outline-none focus:ring-2 focus:ring-pink-300 appearance-none cursor-pointer"
+                >
+                  <option value="">Select level</option>
+                  {PROFICIENCY_LEVELS.map((l) => (<option key={l} value={l}>{l}</option>))}
+                </select>
+              </div>
             </div>
           </div>
         );
