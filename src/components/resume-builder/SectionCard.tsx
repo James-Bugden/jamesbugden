@@ -6,6 +6,7 @@ import { ResumeSection, ResumeSectionEntry, SectionLayout, getDefaultFieldsForTy
 import { RichTextEditor } from "./RichTextEditor";
 import { MonthYearPicker } from "./MonthYearPicker";
 import { TagInput } from "./TagInput";
+import { SignatureModal } from "./SignatureModal";
 import { cn } from "@/lib/utils";
 
 interface SectionCardProps {
@@ -85,6 +86,39 @@ function LayoutSwitcher({ layout, onChange }: { layout: SectionLayout; onChange:
           </button>
         ))}
       </div>
+    </div>
+  );
+}
+
+/* ── Declaration form with signature modal ──────────────── */
+function DeclarationForm({ entry, set }: { entry: ResumeSectionEntry; set: (field: string) => (val: string) => void }) {
+  const [sigOpen, setSigOpen] = useState(false);
+  const f = entry.fields;
+  return (
+    <div className="space-y-3">
+      <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+        <SField label="Full Name" value={f.fullName || ""} onChange={set("fullName")} />
+        <SField label="Place" value={f.place || ""} onChange={set("place")} />
+        <SField label="Date" value={f.date || ""} onChange={set("date")} placeholder="e.g. February 2026" />
+      </div>
+      <div>
+        <label className="block text-xs font-bold text-gray-700 mb-1">Signature</label>
+        {f.signature ? (
+          <div className="flex items-center gap-3">
+            <img src={f.signature} alt="Signature" className="h-12 border border-gray-200 rounded-lg bg-white p-1" />
+            <button onClick={() => setSigOpen(true)} className="text-xs text-purple-600 hover:text-purple-700 font-medium">Redraw</button>
+            <button onClick={() => set("signature")("")} className="text-xs text-gray-400 hover:text-red-500">Remove</button>
+          </div>
+        ) : (
+          <button
+            onClick={() => setSigOpen(true)}
+            className="h-11 md:h-10 px-4 rounded-lg bg-[#F5F3EE] text-sm text-gray-600 hover:bg-gray-200 transition-colors hover:scale-[1.02] active:scale-[0.98]"
+          >
+            + Draw or Upload Signature
+          </button>
+        )}
+      </div>
+      <SignatureModal open={sigOpen} onClose={() => setSigOpen(false)} onSave={(url) => set("signature")(url)} />
     </div>
   );
 }
@@ -363,19 +397,7 @@ export function SectionCard({ section, onUpdate, onRemove }: SectionCardProps) {
 
       case "declaration":
         return (
-          <div className="space-y-3">
-            <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
-              <SField label="Full Name" value={f.fullName || ""} onChange={set("fullName")} />
-              <SField label="Place" value={f.place || ""} onChange={set("place")} />
-              <SField label="Date" value={f.date || ""} onChange={set("date")} placeholder="e.g. February 2026" />
-            </div>
-            <div>
-              <label className="block text-xs font-bold text-gray-700 mb-1">Signature</label>
-              <button className="h-11 md:h-10 px-4 rounded-lg bg-[#F5F3EE] text-sm text-gray-600 hover:bg-gray-200 transition-colors">
-                + Create / Upload
-              </button>
-            </div>
-          </div>
+          <DeclarationForm entry={entry} set={set} />
         );
 
       case "custom":
