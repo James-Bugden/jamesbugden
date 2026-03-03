@@ -8,7 +8,6 @@ import { ResumePreview } from "@/components/resume-builder/ResumePreview";
 import { CustomizePanel } from "@/components/resume-builder/CustomizePanel";
 import { useResumeStore } from "@/components/resume-builder/useResumeStore";
 import { SECTION_TYPES, getDefaultFieldsForType, ResumeSection } from "@/components/resume-builder/types";
-import { ResizablePanelGroup, ResizablePanel, ResizableHandle } from "@/components/ui/resizable";
 import { CoverLetterBuilder } from "@/components/cover-letter/CoverLetterBuilder";
 import { DocumentDashboard } from "@/components/document-dashboard/DocumentDashboard";
 import { ImportModal } from "@/components/document-dashboard/ImportModal";
@@ -327,23 +326,18 @@ const ResumeBuilder = () => {
 
       {activeTab === "content" || activeTab === "customize" ? (
         <div className="flex-1 overflow-hidden">
-          {/* Desktop: resizable panels */}
-          <div className="hidden md:block h-full">
-            <ResizablePanelGroup direction="horizontal">
-              <ResizablePanel defaultSize={55} minSize={35}>
-                <div className="h-full overflow-y-auto" style={{ backgroundColor: "#F5F0E8" }}>
-                  {editorContent}
-                </div>
-              </ResizablePanel>
-              <ResizableHandle withHandle />
-              <ResizablePanel defaultSize={45} minSize={30}>
-                <ResumePreview data={data} pdfTargetId="resume-pdf-target" />
-              </ResizablePanel>
-            </ResizablePanelGroup>
+          {/* Desktop: fixed 40/60 split */}
+          <div className="hidden md:flex h-full">
+            <div className="w-[40%] min-w-[340px] max-w-[480px] flex-shrink-0 h-full overflow-y-auto bg-white border-r border-gray-200">
+              {editorContent}
+            </div>
+            <div className="flex-1 h-full">
+              <ResumePreview data={data} pdfTargetId="resume-pdf-target" />
+            </div>
           </div>
 
           {/* Mobile: editor only + floating preview button */}
-          <div className="md:hidden h-full overflow-y-auto" style={{ backgroundColor: "#F5F0E8" }}>
+          <div className="md:hidden h-full overflow-y-auto bg-white">
             {editorContent}
           </div>
 

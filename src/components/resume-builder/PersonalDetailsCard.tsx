@@ -47,7 +47,7 @@ export function PersonalDetailsCard({ details, onChange }: PersonalDetailsCardPr
   const availableExtras = EXTRA_DETAIL_OPTIONS.filter((t) => !usedTypes.has(t));
 
   return (
-    <div className="bg-white rounded-xl p-5 shadow-sm border border-gray-100 relative">
+    <div className="bg-white rounded-xl p-5 shadow-sm border border-gray-100 relative transition-transform duration-150 hover:scale-[1.02]">
       {/* Edit button */}
       <button
         onClick={() => setEditing(!editing)}
