@@ -423,8 +423,14 @@ export function SectionCard({ section, onUpdate, onRemove }: SectionCardProps) {
                         isEntryCollapsed ? "max-h-0 opacity-0" : "max-h-[3000px] opacity-100"
                       )}
                     >
-                      <div className="p-4">
+                      <div className="p-4 space-y-3">
                         {renderEntryForm(entry)}
+                        <button
+                          onClick={() => toggleEntryCollapse(entry.id)}
+                          className="w-full py-2.5 rounded-lg bg-gray-100 text-sm font-medium text-gray-700 hover:bg-gray-200 transition-colors hover:scale-[1.02] active:scale-[0.98]"
+                        >
+                          Done
+                        </button>
                       </div>
                     </div>
                   </div>
