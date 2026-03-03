@@ -14,12 +14,15 @@ export interface ResumeSectionEntry {
   collapsed?: boolean;
 }
 
+export type SectionLayout = "grid" | "bubble" | "level" | "compact";
+
 export interface ResumeSection {
   id: string;
   type: string;
   title: string;
   entries: ResumeSectionEntry[];
   collapsed: boolean;
+  layout?: SectionLayout;
 }
 
 export interface ResumeData {

@@ -411,6 +411,19 @@ function HeaderTab({ settings, onChange }: { settings: CustomizeSettings; onChan
           </ThumbOption>
         </div>
 
+        <FieldLabel>Header Icons</FieldLabel>
+        <div className="flex gap-3 mb-4">
+          <ThumbOption selected={settings.headerIconStyle === "outline"} onClick={() => onChange({ headerIconStyle: "outline" })} label="Outline">
+            <Circle className="w-5 h-5 text-gray-500" />
+          </ThumbOption>
+          <ThumbOption selected={settings.headerIconStyle === "filled"} onClick={() => onChange({ headerIconStyle: "filled" })} label="Filled">
+            <Circle className="w-5 h-5 text-gray-500" fill="currentColor" />
+          </ThumbOption>
+          <ThumbOption selected={settings.headerIconStyle === "none"} onClick={() => onChange({ headerIconStyle: "none" })} label="None">
+            <span className="text-xs text-gray-400">—</span>
+          </ThumbOption>
+        </div>
+
         <FieldLabel>Icon Style</FieldLabel>
         <div className="flex gap-1.5 flex-wrap">
           {[0,1,2,3,4,5,6,7].map((i) => (

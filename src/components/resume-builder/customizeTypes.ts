@@ -28,6 +28,7 @@ export interface CustomizeSettings {
   headerAlign: "left" | "center" | "right";
   headerArrangement: "stacked" | "inline";
   contactSeparator: "icon" | "bullet" | "bar";
+  headerIconStyle: "outline" | "filled" | "none";
   iconStyle: number;
   nameSize: "xs" | "s" | "m" | "l" | "xl";
   nameBold: boolean;
@@ -66,6 +67,7 @@ export const DEFAULT_CUSTOMIZE: CustomizeSettings = {
   headerAlign: "center",
   headerArrangement: "stacked",
   contactSeparator: "icon",
+  headerIconStyle: "outline",
   iconStyle: 0,
   nameSize: "s",
   nameBold: true,
