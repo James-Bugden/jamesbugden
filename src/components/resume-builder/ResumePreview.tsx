@@ -537,14 +537,13 @@ const A4Page = React.memo(function A4Page({ data, customize }: { data: ResumeDat
 });
 
 /* ═══════════════════════════════════════════════════════════════
-   Main Preview wrapper — handles scaling, page indicator, thumbnail
+   Main Preview wrapper — handles scaling, multi-page, thumbnail
    ═══════════════════════════════════════════════════════════════ */
 export const ResumePreview = React.memo(function ResumePreview({ data, customize, pdfTargetId }: ResumePreviewProps) {
   const containerRef = useRef<HTMLDivElement>(null);
-  const pageRef = useRef<HTMLDivElement>(null);
+  const contentRef = useRef<HTMLDivElement>(null);
   const [scale, setScale] = useState(0.65);
   const [pageCount, setPageCount] = useState(1);
-  const [showThumbnail, setShowThumbnail] = useState(true);
   const dims = getPageDims(customize?.pageFormat);
 
   // Debounce data for preview rendering (100ms)
@@ -569,13 +568,18 @@ export const ResumePreview = React.memo(function ResumePreview({ data, customize
     return () => observer.disconnect();
   }, [dims.wPX]);
 
-  /* Estimate page count from rendered height */
+  /* Calculate page count from rendered content height */
   useEffect(() => {
-    if (!pageRef.current) return;
-    const h = pageRef.current.scrollHeight;
-    setPageCount(Math.max(1, Math.ceil(h / dims.hPX)));
-  }, [debouncedData, dims.hPX]);
+    if (!contentRef.current) return;
+    const timer = setTimeout(() => {
+      if (!contentRef.current) return;
+      const h = contentRef.current.scrollHeight;
+      setPageCount(Math.max(1, Math.ceil(h / dims.hPX)));
+    }, 150);
+    return () => clearTimeout(timer);
+  }, [debouncedData, dims.hPX, customize]);
 
+  const totalScaledHeight = pageCount * dims.hPX + (pageCount - 1) * 40;
   const thumbScale = 0.08;
 
   return (
@@ -584,69 +588,100 @@ export const ResumePreview = React.memo(function ResumePreview({ data, customize
       className="h-full overflow-y-auto relative"
       style={{ backgroundColor: "#f3f4f6" }}
     >
-      {/* Scaled A4 page */}
+      {/* Scaled page(s) */}
       <div className="flex justify-center py-8 px-6">
         <div
           style={{
             width: `${dims.wPX}px`,
             transformOrigin: "top center",
             transform: `scale(${scale})`,
-            marginBottom: `${-(1 - scale) * dims.hPX}px`,
+            marginBottom: `${-(1 - scale) * totalScaledHeight}px`,
+          }}
+        >
+          {/* Hidden full-flow render for PDF capture */}
+          <div
+            ref={contentRef}
+            id={pdfTargetId}
+            style={{
+              position: "absolute",
+              width: `${dims.wPX}px`,
+              left: 0,
+              top: 0,
+              opacity: 0,
+              pointerEvents: "none",
+              zIndex: -1,
+            }}
+          >
+            <A4Page data={debouncedData} customize={customize} />
+          </div>
+
+          {/* Visible paginated pages */}
+          {Array.from({ length: pageCount }, (_, i) => (
+            <React.Fragment key={i}>
+              {i > 0 && (
+                <div style={{ display: "flex", alignItems: "center", justifyContent: "center", padding: "12px 0", gap: "8px" }}>
+                  <div style={{ flex: 1, height: "1px", backgroundColor: "#d1d5db" }} />
+                  <span style={{ fontSize: "10px", color: "#9ca3af", fontWeight: 500, whiteSpace: "nowrap" }}>Page Break</span>
+                  <div style={{ flex: 1, height: "1px", backgroundColor: "#d1d5db" }} />
+                </div>
+              )}
+              <div
+                className="shadow-2xl rounded-sm"
+                style={{
+                  width: `${dims.wPX}px`,
+                  height: `${dims.hPX}px`,
+                  overflow: "hidden",
+                  backgroundColor: customize?.a4Background || "#ffffff",
+                }}
+              >
+                <div
+                  style={{
+                    width: `${dims.wPX}px`,
+                    transform: `translateY(${-i * dims.hPX}px)`,
+                  }}
+                >
+                  <A4Page data={debouncedData} customize={customize} />
+                </div>
+              </div>
+            </React.Fragment>
+          ))}
+        </div>
+      </div>
+
+      {/* Page indicator */}
+      <div className="sticky bottom-4 flex justify-center pointer-events-none z-10">
+        <span className="bg-white/90 backdrop-blur-sm text-gray-600 text-xs font-medium px-3 py-1.5 rounded-full shadow-md border border-gray-200">
+          {pageCount} page{pageCount > 1 ? "s" : ""}
+        </span>
+      </div>
+
+      {/* Thumbnail navigator */}
+      <div
+        className="fixed bottom-6 right-6 z-20 cursor-pointer group"
+        onClick={() => containerRef.current?.scrollTo({ top: 0, behavior: "smooth" })}
+        title="Scroll to top"
+      >
+        <div
+          className="bg-white rounded shadow-lg border border-gray-200 overflow-hidden group-hover:shadow-xl transition-shadow"
+          style={{
+            width: `${dims.wPX * thumbScale}px`,
+            height: `${dims.hPX * thumbScale}px`,
           }}
         >
           <div
-            ref={pageRef}
-            id={pdfTargetId}
-            className="shadow-2xl rounded-sm"
             style={{
+              transform: `scale(${thumbScale})`,
+              transformOrigin: "top left",
               width: `${dims.wPX}px`,
               height: `${dims.hPX}px`,
               overflow: "hidden",
+              pointerEvents: "none",
             }}
           >
             <A4Page data={debouncedData} customize={customize} />
           </div>
         </div>
       </div>
-
-      {/* Page indicator */}
-      {pageCount >= 1 && (
-        <div className="sticky bottom-4 flex justify-center pointer-events-none z-10">
-          <span className="bg-white/90 backdrop-blur-sm text-gray-600 text-xs font-medium px-3 py-1.5 rounded-full shadow-md border border-gray-200">
-            1 / {pageCount}
-          </span>
-        </div>
-      )}
-
-      {/* Thumbnail navigator */}
-      {showThumbnail && (
-        <div
-          className="fixed bottom-6 right-6 z-20 cursor-pointer group"
-          onClick={() => containerRef.current?.scrollTo({ top: 0, behavior: "smooth" })}
-          title="Scroll to top"
-        >
-          <div
-            className="bg-white rounded shadow-lg border border-gray-200 overflow-hidden group-hover:shadow-xl transition-shadow"
-            style={{
-              width: `${dims.wPX * thumbScale}px`,
-              height: `${dims.hPX * thumbScale}px`,
-            }}
-          >
-            <div
-              style={{
-                transform: `scale(${thumbScale})`,
-                transformOrigin: "top left",
-                width: `${dims.wPX}px`,
-                height: `${dims.hPX}px`,
-                overflow: "hidden",
-                pointerEvents: "none",
-              }}
-            >
-              <A4Page data={debouncedData} customize={customize} />
-            </div>
-          </div>
-        </div>
-      )}
     </div>
   );
 });
