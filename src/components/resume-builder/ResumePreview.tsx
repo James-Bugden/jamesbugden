@@ -50,7 +50,7 @@ function SectionHeading({ title, customize }: { title: string; customize?: Custo
 
   const textStyle: React.CSSProperties = {
     fontSize: size,
-    color: style === "background" ? "#ffffff" : "#111827",
+    color: style === "background" ? "#ffffff" : (c?.headingsColor || "#111827"),
     textTransform: upper ? "uppercase" : "none",
     fontFamily: font,
   };
@@ -170,7 +170,7 @@ const A4Page = React.memo(function A4Page({ data, customize }: { data: ResumeDat
 
   return (
     <div
-      className="bg-white text-gray-900"
+      className="text-gray-900"
       style={{
         ...cssVars,
         width: `${A4_W_MM}mm`,
@@ -180,6 +180,7 @@ const A4Page = React.memo(function A4Page({ data, customize }: { data: ResumeDat
         fontSize: "var(--resume-font-size)",
         lineHeight: "var(--resume-line-height)",
         boxSizing: "border-box",
+        backgroundColor: c?.a4Background || "#ffffff",
       }}
     >
       {/* ── Header ─────────────────────────────────────────── */}
@@ -188,7 +189,7 @@ const A4Page = React.memo(function A4Page({ data, customize }: { data: ResumeDat
           className="font-bold uppercase tracking-[0.12em]"
           style={{
             fontSize: NAME_SIZES[c?.nameSize || "s"],
-            color: "#111827",
+            color: c?.nameColor || "#111827",
             fontWeight: c?.nameBold !== false ? 700 : 400,
             fontFamily: c?.nameFont === "creative" ? (c?.headingFont || "inherit") : "inherit",
           }}
@@ -196,7 +197,7 @@ const A4Page = React.memo(function A4Page({ data, customize }: { data: ResumeDat
           {p.fullName || "YOUR NAME"}
         </h1>
         {p.professionalTitle && (
-          <p className="mt-[1mm]" style={{ fontSize: TITLE_SIZES[c?.titleSize || "m"], color: "#6B7280" }}>
+          <p className="mt-[1mm]" style={{ fontSize: TITLE_SIZES[c?.titleSize || "m"], color: c?.titleColor || "#6B7280" }}>
             {p.professionalTitle}
           </p>
         )}
@@ -206,7 +207,7 @@ const A4Page = React.memo(function A4Page({ data, customize }: { data: ResumeDat
             className="flex items-center flex-wrap mt-[2.5mm] gap-x-[4mm] gap-y-[1mm]"
             style={{
               fontSize: "8pt",
-              color: "#4B5563",
+              color: c?.linkIconColor || "#4B5563",
               justifyContent: c?.headerAlign === "right" ? "flex-end" : c?.headerAlign === "left" ? "flex-start" : "center",
             }}
           >
@@ -371,8 +372,8 @@ const A4Page = React.memo(function A4Page({ data, customize }: { data: ResumeDat
           return (
             <div key={entry.id} className="mb-[3mm]">
               <div className="flex justify-between items-baseline">
-                <div><span className="font-bold" style={{ color: "#111827" }}>{f.company || ""}</span>{f.position && <span className="italic text-gray-700">{f.company ? ", " : ""}{f.position}</span>}</div>
-                <div className="flex-shrink-0 text-right" style={{ fontSize: "8pt", color: "#6B7280" }}>{fmtDateRange(f)}{f.location && <>{fmtDateRange(f) ? " | " : ""}{f.location}</>}</div>
+                <div><span className="font-bold" style={{ color: c?.nameColor || "#111827" }}>{f.company || ""}</span>{f.position && <span className="italic" style={{ color: c?.subtitleColor || "#374151" }}>{f.company ? ", " : ""}{f.position}</span>}</div>
+                <div className="flex-shrink-0 text-right" style={{ fontSize: "8pt", color: c?.datesColor || "#6B7280" }}>{fmtDateRange(f)}{f.location && <>{fmtDateRange(f) ? " | " : ""}{f.location}</>}</div>
               </div>
               <Html html={f.description || ""} />
             </div>
@@ -383,8 +384,8 @@ const A4Page = React.memo(function A4Page({ data, customize }: { data: ResumeDat
           return (
             <div key={entry.id} className="mb-[3mm]">
               <div className="flex justify-between items-baseline">
-                <div><span className="font-bold" style={{ color: "#111827" }}>{f.institution || ""}</span>{f.degree && <span className="italic text-gray-700">{f.institution ? ", " : ""}{f.degree}</span>}</div>
-                <div className="flex-shrink-0 text-right" style={{ fontSize: "8pt", color: "#6B7280" }}>{fmtDateRange(f)}{f.location && <>{fmtDateRange(f) ? " | " : ""}{f.location}</>}</div>
+                <div><span className="font-bold" style={{ color: c?.nameColor || "#111827" }}>{f.institution || ""}</span>{f.degree && <span className="italic" style={{ color: c?.subtitleColor || "#374151" }}>{f.institution ? ", " : ""}{f.degree}</span>}</div>
+                <div className="flex-shrink-0 text-right" style={{ fontSize: "8pt", color: c?.datesColor || "#6B7280" }}>{fmtDateRange(f)}{f.location && <>{fmtDateRange(f) ? " | " : ""}{f.location}</>}</div>
               </div>
               <Html html={f.description || ""} />
             </div>
@@ -493,10 +494,10 @@ const A4Page = React.memo(function A4Page({ data, customize }: { data: ResumeDat
           return (
             <div key={entry.id} className="mb-[2.5mm]">
               <div className="flex justify-between items-baseline">
-                <span className="font-bold" style={{ color: "#111827" }}>{f.name || f.title || ""}</span>
-                {dateStr && <span style={{ fontSize: "8pt", color: "#6B7280" }}>{dateStr}</span>}
+                <span className="font-bold" style={{ color: c?.nameColor || "#111827" }}>{f.name || f.title || ""}</span>
+                {dateStr && <span style={{ fontSize: "8pt", color: c?.datesColor || "#6B7280" }}>{dateStr}</span>}
               </div>
-              {(f.issuer || f.institution || f.publisher || f.role) && <p className="italic" style={{ fontSize: "8.5pt", color: "#6B7280" }}>{f.issuer || f.institution || f.publisher || f.role}</p>}
+              {(f.issuer || f.institution || f.publisher || f.role) && <p className="italic" style={{ fontSize: "8.5pt", color: c?.subtitleColor || "#6B7280" }}>{f.issuer || f.institution || f.publisher || f.role}</p>}
               {f.url && <p style={{ fontSize: "7.5pt", color: "#2563EB" }}>{f.url}</p>}
               <Html html={f.description || ""} />
             </div>

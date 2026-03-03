@@ -27,6 +27,15 @@ export interface CustomizeSettings {
   linkIcon: boolean;
   linkIconStyle: "link" | "external";
 
+  // Deep Color Map
+  nameColor: string;
+  titleColor: string;
+  headingsColor: string;
+  datesColor: string;
+  subtitleColor: string;
+  linkIconColor: string;
+  a4Background: string;
+
   // Section Headings
   headingStyle: HeadingStyle;
   headingSize: HeadingSize;
@@ -47,6 +56,9 @@ export interface CustomizeSettings {
 
   // Font
   bodyFont: string;
+
+  // Other
+  shareAsTemplate: boolean;
 
   // Footer
   showPageNumbers: boolean;
@@ -76,6 +88,14 @@ export const DEFAULT_CUSTOMIZE: CustomizeSettings = {
   linkIcon: false,
   linkIconStyle: "link",
 
+  nameColor: "#111827",
+  titleColor: "#6B7280",
+  headingsColor: "#111827",
+  datesColor: "#6B7280",
+  subtitleColor: "#6B7280",
+  linkIconColor: "#4B5563",
+  a4Background: "#ffffff",
+
   headingStyle: "underline",
   headingSize: "m",
   headingUppercase: true,
@@ -93,6 +113,8 @@ export const DEFAULT_CUSTOMIZE: CustomizeSettings = {
   titleSameLine: false,
 
   bodyFont: "'Source Sans 3', sans-serif",
+
+  shareAsTemplate: false,
 
   showPageNumbers: false,
   showFooterSignature: false,

@@ -21,7 +21,7 @@ interface CustomizePanelProps {
   sections: ResumeData["sections"];
 }
 
-const SUB_TABS = ["Basics", "Layout & Spacing", "Design", "Header", "Footer", "Sections"] as const;
+const SUB_TABS = ["Basics", "Layout & Spacing", "Design", "Header", "Footer", "Sections", "Other"] as const;
 
 /* ── Shared UI helpers ──────────────────────────────────────── */
 function SettingCard({ title, children }: { title: string; children: React.ReactNode }) {
@@ -115,6 +115,28 @@ function ToggleGroup({ options, value, onChange }: { options: { value: string; l
   );
 }
 
+function ColorPickerRow({ label, value, onChange }: { label: string; value: string; onChange: (v: string) => void }) {
+  return (
+    <div className="flex items-center justify-between gap-3">
+      <span className="text-xs font-semibold text-gray-600">{label}</span>
+      <div className="flex items-center gap-2">
+        <input
+          type="color"
+          value={value}
+          onChange={(e) => onChange(e.target.value)}
+          className="w-7 h-7 rounded-md border border-gray-200 cursor-pointer p-0.5"
+        />
+        <input
+          type="text"
+          value={value}
+          onChange={(e) => onChange(e.target.value)}
+          className="w-20 text-xs font-mono px-2 py-1 rounded-md bg-gray-50 border border-gray-200 text-gray-700"
+        />
+      </div>
+    </div>
+  );
+}
+
 /* ═══════════════════════════════════════════════════════════════
    Main Component
    ═══════════════════════════════════════════════════════════════ */
@@ -147,6 +169,7 @@ export function CustomizePanel({ settings, onChange, sections }: CustomizePanelP
         {subTab === "Header" && <HeaderTab settings={settings} onChange={onChange} />}
         {subTab === "Footer" && <FooterTab settings={settings} onChange={onChange} />}
         {subTab === "Sections" && <SectionsTab sections={sections} />}
+        {subTab === "Other" && <OtherTab settings={settings} onChange={onChange} />}
       </div>
     </div>
   );
@@ -401,6 +424,21 @@ function DesignTab({ settings, onChange }: { settings: CustomizeSettings; onChan
         </div>
       </SettingCard>
 
+      {/* Deep Color Mapping */}
+      <SettingCard title="Colors">
+        <div className="space-y-3">
+          <ColorPickerRow label="Name" value={settings.nameColor || "#111827"} onChange={(v) => onChange({ nameColor: v })} />
+          <ColorPickerRow label="Job Title" value={settings.titleColor || "#6B7280"} onChange={(v) => onChange({ titleColor: v })} />
+          <ColorPickerRow label="Headings" value={settings.headingsColor || "#111827"} onChange={(v) => onChange({ headingsColor: v })} />
+          <ColorPickerRow label="Dates / Bars / Bubbles" value={settings.datesColor || "#6B7280"} onChange={(v) => onChange({ datesColor: v })} />
+          <ColorPickerRow label="Entry Subtitle" value={settings.subtitleColor || "#6B7280"} onChange={(v) => onChange({ subtitleColor: v })} />
+          <ColorPickerRow label="Link Icons" value={settings.linkIconColor || "#4B5563"} onChange={(v) => onChange({ linkIconColor: v })} />
+          <div className="pt-2 border-t border-gray-100">
+            <ColorPickerRow label="A4 Background" value={settings.a4Background || "#ffffff"} onChange={(v) => onChange({ a4Background: v })} />
+          </div>
+          <ColorPickerRow label="Global Accent" value={settings.accentColor} onChange={(v) => onChange({ accentColor: v })} />
+        </div>
+      </SettingCard>
       {/* Link styling */}
       <SettingCard title="Link Styling">
         <div className="space-y-3">
@@ -632,6 +670,50 @@ function SectionsTab({ sections }: { sections: ResumeData["sections"] }) {
           </p>
         </SettingCard>
       )}
+    </>
+  );
+}
+
+/* ── OTHER ────────────────────────────────────────────────────── */
+function OtherTab({ settings, onChange }: { settings: CustomizeSettings; onChange: (u: Partial<CustomizeSettings>) => void }) {
+  const [feedback, setFeedback] = useState("");
+  const [feedbackSent, setFeedbackSent] = useState(false);
+
+  return (
+    <>
+      <SettingCard title="Share">
+        <label className="flex items-center gap-2 text-sm text-gray-700 cursor-pointer">
+          <Checkbox checked={settings.shareAsTemplate || false} onCheckedChange={(v) => onChange({ shareAsTemplate: !!v })} />
+          Share your design as a template
+        </label>
+        <p className="text-[10px] text-gray-400 mt-1.5 ml-6">
+          When enabled, your resume layout and styling will be available for other users to use as a starting template.
+        </p>
+      </SettingCard>
+
+      <SettingCard title="Missing something?">
+        <p className="text-xs text-gray-500 mb-2">
+          Let us know what features or options you'd like to see.
+        </p>
+        <textarea
+          value={feedback}
+          onChange={(e) => setFeedback(e.target.value)}
+          placeholder="Tell us what's missing..."
+          className="w-full h-24 rounded-lg bg-[#F5F3EE] px-3 py-2 text-sm border-0 outline-none focus:ring-2 focus:ring-purple-300 resize-none"
+        />
+        <button
+          onClick={() => { setFeedbackSent(true); setFeedback(""); }}
+          disabled={!feedback.trim() || feedbackSent}
+          className={cn(
+            "mt-2 px-4 py-2 rounded-lg text-xs font-semibold transition-colors",
+            feedbackSent
+              ? "bg-green-50 text-green-700 border border-green-200"
+              : "bg-purple-600 text-white hover:bg-purple-700 disabled:opacity-50"
+          )}
+        >
+          {feedbackSent ? "Thanks for your feedback! ✓" : "Send Feedback"}
+        </button>
+      </SettingCard>
     </>
   );
 }
