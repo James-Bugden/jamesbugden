@@ -245,6 +245,17 @@ const ResumeBuilder = () => {
     toast({ title: "Section added", description: `${meta?.title || "Custom"} section added.` });
   };
 
+  /* Scroll the editor sidebar to a section card when clicking "Edit" on the preview */
+  const editorScrollRef = useRef<HTMLDivElement>(null);
+  const handleEditSection = useCallback((sectionId: string) => {
+    setActiveTab("content");
+    // Small delay to let tab switch render
+    setTimeout(() => {
+      const el = document.getElementById(`section-card-${sectionId}`);
+      if (el) el.scrollIntoView({ behavior: "smooth", block: "start" });
+    }, 100);
+  }, []);
+
   if (viewMode === "dashboard") {
     return (
       <>
@@ -332,7 +343,7 @@ const ResumeBuilder = () => {
               {editorContent}
             </div>
             <div className="flex-1 h-full">
-              <ResumePreview data={data} customize={customize} pdfTargetId="resume-pdf-target" />
+              <ResumePreview data={data} customize={customize} pdfTargetId="resume-pdf-target" onEditSection={handleEditSection} />
             </div>
           </div>
 
@@ -355,7 +366,7 @@ const ResumeBuilder = () => {
           {/* Mobile preview overlay */}
           {isMobile && mobilePreview && (
             <MobilePreviewOverlay onClose={() => setMobilePreview(false)}>
-              <ResumePreview data={data} customize={customize} pdfTargetId="resume-pdf-target" />
+              <ResumePreview data={data} customize={customize} pdfTargetId="resume-pdf-target" onEditSection={handleEditSection} />
             </MobilePreviewOverlay>
           )}
         </div>

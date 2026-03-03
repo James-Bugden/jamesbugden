@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useRef, useCallback } from "react";
 import { ChevronDown, ChevronUp, GripVertical, Trash2, Plus, Grid3X3, Circle, BarChart3, List, Minus as MinusIcon } from "lucide-react";
 import * as Icons from "lucide-react";
 import { Checkbox } from "@/components/ui/checkbox";
@@ -206,6 +206,109 @@ function DeclarationForm({ entry, set }: { entry: ResumeSectionEntry; set: (fiel
       </div>
       <SignatureModal open={sigOpen} onClose={() => setSigOpen(false)} onSave={(url) => set("signature")(url)} />
     </div>
+  );
+}
+
+/* ── Drag-and-drop entry list ───────────────────────────── */
+function EntryList({
+  entries,
+  type,
+  renderEntryForm,
+  getEntrySummary: getSummary,
+  toggleEntryCollapse,
+  removeEntry,
+  onReorder,
+}: {
+  entries: ResumeSectionEntry[];
+  type: string;
+  renderEntryForm: (entry: ResumeSectionEntry) => React.ReactNode;
+  getEntrySummary: (type: string, fields: Record<string, string>) => string;
+  toggleEntryCollapse: (id: string) => void;
+  removeEntry: (id: string) => void;
+  onReorder: (entries: ResumeSectionEntry[]) => void;
+}) {
+  const dragIdx = useRef<number | null>(null);
+  const [overIdx, setOverIdx] = useState<number | null>(null);
+
+  const handleDragStart = (idx: number) => (e: React.DragEvent) => {
+    dragIdx.current = idx;
+    e.dataTransfer.effectAllowed = "move";
+  };
+
+  const handleDragOver = (idx: number) => (e: React.DragEvent) => {
+    e.preventDefault();
+    e.dataTransfer.dropEffect = "move";
+    setOverIdx(idx);
+  };
+
+  const handleDrop = (idx: number) => (e: React.DragEvent) => {
+    e.preventDefault();
+    const from = dragIdx.current;
+    if (from === null || from === idx) { setOverIdx(null); return; }
+    const updated = [...entries];
+    const [moved] = updated.splice(from, 1);
+    updated.splice(idx, 0, moved);
+    onReorder(updated);
+    dragIdx.current = null;
+    setOverIdx(null);
+  };
+
+  const handleDragEnd = () => { dragIdx.current = null; setOverIdx(null); };
+
+  return (
+    <>
+      {entries.map((entry, idx) => {
+        const isEntryCollapsed = entry.collapsed ?? false;
+        const isOver = overIdx === idx;
+        return (
+          <div
+            key={entry.id}
+            draggable
+            onDragStart={handleDragStart(idx)}
+            onDragOver={handleDragOver(idx)}
+            onDrop={handleDrop(idx)}
+            onDragEnd={handleDragEnd}
+            className={cn(
+              "rounded-lg border overflow-hidden transition-all duration-150",
+              isOver ? "border-purple-400 bg-purple-50/30" : "border-gray-100"
+            )}
+          >
+            <div
+              className="flex items-center gap-2 px-4 py-3 min-h-[48px] bg-gray-50/50 cursor-pointer"
+              onClick={() => toggleEntryCollapse(entry.id)}
+            >
+              <GripVertical className="w-3.5 h-3.5 text-gray-300 cursor-grab flex-shrink-0 hover:text-gray-500 active:text-gray-700" />
+              <span className="text-sm text-gray-700 flex-1 truncate">
+                {getSummary(type, entry.fields)}
+              </span>
+              <button
+                onClick={(e) => { e.stopPropagation(); removeEntry(entry.id); }}
+                className="p-2 text-gray-400 hover:text-red-500"
+              >
+                <Trash2 className="w-3.5 h-3.5" />
+              </button>
+              {isEntryCollapsed ? <ChevronDown className="w-4 h-4 text-gray-400" /> : <ChevronUp className="w-4 h-4 text-gray-400" />}
+            </div>
+            <div
+              className={cn(
+                "transition-all duration-200 ease-in-out overflow-hidden",
+                isEntryCollapsed ? "max-h-0 opacity-0" : "max-h-[3000px] opacity-100"
+              )}
+            >
+              <div className="p-4 space-y-3">
+                {renderEntryForm(entry)}
+                <button
+                  onClick={() => toggleEntryCollapse(entry.id)}
+                  className="w-full py-2.5 rounded-lg bg-gray-100 text-sm font-medium text-gray-700 hover:bg-gray-200 transition-colors hover:scale-[1.02] active:scale-[0.98]"
+                >
+                  Done
+                </button>
+              </div>
+            </div>
+          </div>
+        );
+      })}
+    </>
   );
 }
 
@@ -523,7 +626,7 @@ export function SectionCard({ section, onUpdate, onRemove }: SectionCardProps) {
   };
 
   return (
-    <div className="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden transition-transform duration-150 hover:scale-[1.02]">
+    <div id={`section-card-${section.id}`} className="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden transition-transform duration-150 hover:scale-[1.02]">
       {/* Header — larger touch target */}
       <button
         onClick={toggleCollapse}
@@ -558,47 +661,15 @@ export function SectionCard({ section, onUpdate, onRemove }: SectionCardProps) {
           {isSingleEntrySection ? (
             section.entries.length > 0 ? renderEntryForm(section.entries[0]) : null
           ) : (
-            <>
-              {section.entries.map((entry) => {
-                const isEntryCollapsed = entry.collapsed ?? false;
-                return (
-                  <div key={entry.id} className="rounded-lg border border-gray-100 overflow-hidden">
-                    <div
-                      className="flex items-center gap-2 px-4 py-3 min-h-[48px] bg-gray-50/50 cursor-pointer"
-                      onClick={() => toggleEntryCollapse(entry.id)}
-                    >
-                      <GripVertical className="w-3.5 h-3.5 text-gray-300 cursor-grab flex-shrink-0" />
-                      <span className="text-sm text-gray-700 flex-1 truncate">
-                        {getEntrySummary(section.type, entry.fields)}
-                      </span>
-                      <button
-                        onClick={(e) => { e.stopPropagation(); removeEntry(entry.id); }}
-                        className="p-2 text-gray-400 hover:text-red-500"
-                      >
-                        <Trash2 className="w-3.5 h-3.5" />
-                      </button>
-                      {isEntryCollapsed ? <ChevronDown className="w-4 h-4 text-gray-400" /> : <ChevronUp className="w-4 h-4 text-gray-400" />}
-                    </div>
-                    <div
-                      className={cn(
-                        "transition-all duration-200 ease-in-out overflow-hidden",
-                        isEntryCollapsed ? "max-h-0 opacity-0" : "max-h-[3000px] opacity-100"
-                      )}
-                    >
-                      <div className="p-4 space-y-3">
-                        {renderEntryForm(entry)}
-                        <button
-                          onClick={() => toggleEntryCollapse(entry.id)}
-                          className="w-full py-2.5 rounded-lg bg-gray-100 text-sm font-medium text-gray-700 hover:bg-gray-200 transition-colors hover:scale-[1.02] active:scale-[0.98]"
-                        >
-                          Done
-                        </button>
-                      </div>
-                    </div>
-                  </div>
-                );
-              })}
-            </>
+            <EntryList
+              entries={section.entries}
+              type={section.type}
+              renderEntryForm={renderEntryForm}
+              getEntrySummary={getEntrySummary}
+              toggleEntryCollapse={toggleEntryCollapse}
+              removeEntry={removeEntry}
+              onReorder={(entries) => onUpdate({ entries })}
+            />
           )}
 
           {!isSingleEntrySection && (
