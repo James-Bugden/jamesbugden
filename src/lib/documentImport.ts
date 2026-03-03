@@ -470,7 +470,18 @@ function parseEntries(lines: string[], isExperience: boolean) {
       const textWithoutLocation = location
         ? textWithoutDate.replace(location, "").replace(/[|,·•\-–—]\s*$/, "").trim()
         : textWithoutDate;
-      const parts = textWithoutLocation.split(/[|,·•–—]/).map((p) => p.trim()).filter(Boolean);
+      // Split on common delimiters; also try " at " for experience lines like "Software Engineer at Google"
+      let parts = textWithoutLocation.split(/[|·•–—]/).map((p) => p.trim()).filter(Boolean);
+      if (parts.length === 1 && isExperience && /\s+at\s+/i.test(parts[0])) {
+        parts = parts[0].split(/\s+at\s+/i).map((p) => p.trim()).filter(Boolean);
+      }
+      // Also try comma split if still single part (but not if it looks like "City, State")
+      if (parts.length === 1 && parts[0].includes(",")) {
+        const commaParts = parts[0].split(",").map((p) => p.trim()).filter(Boolean);
+        if (commaParts.length === 2 && commaParts[1].length > 3) {
+          parts = commaParts;
+        }
+      }
 
       currentEntry = {
         title: parts[0] || line,
