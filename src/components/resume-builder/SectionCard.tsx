@@ -225,7 +225,7 @@ function EntryList({
                 <button
                   onClick={() => toggleEntryCollapse(entry.id)}
                   className="w-full py-2 rounded-lg text-sm font-semibold text-white transition-colors"
-                  style={{ backgroundColor: "#e11d73" }}
+                  style={{ backgroundColor: "#2b4734" }}
                 >
                   Done
                 </button>
