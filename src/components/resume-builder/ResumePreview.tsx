@@ -1,9 +1,23 @@
-import React, { useRef, useState, useEffect, useMemo, useCallback } from "react";
+import React, { useEffect, useMemo, useRef, useState } from "react";
 import DOMPurify from "dompurify";
-import { Mail, Phone, MapPin, Flag, FileText, Pencil, ZoomIn, ZoomOut, RotateCcw, Scissors } from "lucide-react";
-import { ResumeData } from "./types";
+import {
+  Mail,
+  Phone,
+  MapPin,
+  Flag,
+  FileText,
+  Pencil,
+  ZoomIn,
+  ZoomOut,
+  RotateCcw,
+  Scissors,
+  Linkedin,
+  Globe,
+  IdCard,
+} from "lucide-react";
+import { ResumeData, ResumeSection } from "./types";
 import { CustomizeSettings } from "./customizeTypes";
-import { cn } from "@/lib/utils";
+import { GOOGLE_FONTS_URL } from "./fontData";
 
 /* ── Page dimensions (mm → px at 96 DPI: 1mm ≈ 3.7795px) ──────── */
 const PX_PER_MM = 3.7795;
@@ -11,6 +25,7 @@ const PAGE_DIMS: Record<string, { w: number; h: number }> = {
   a4: { w: 210, h: 297 },
   letter: { w: 215.9, h: 279.4 },
 };
+
 function getPageDims(format?: string) {
   const d = PAGE_DIMS[format || "a4"] || PAGE_DIMS.a4;
   return { wMM: d.w, hMM: d.h, wPX: d.w * PX_PER_MM, hPX: d.h * PX_PER_MM };
@@ -23,114 +38,111 @@ interface ResumePreviewProps {
   onEditSection?: (sectionId: string) => void;
 }
 
-/* ── Empty state placeholder text ──────────────────────────── */
-const EMPTY_PLACEHOLDERS: Record<string, string> = {
-  experience: "ENTER JOB TITLE AT COMPANY",
-  education: "ENTER SCHOOL / UNIVERSITY",
-  summary: "Write a professional summary...",
-  skills: "Add your skills...",
-  languages: "Add languages...",
-  interests: "Add your interests...",
-  certificates: "Add a certificate...",
-  projects: "Add a project...",
-  courses: "Add a course...",
-  awards: "Add an award...",
-  organisations: "Add an organisation...",
-  publications: "Add a publication...",
-  references: "Add a reference...",
-  declaration: "Add your declaration...",
-  custom: "Add your content...",
-};
+const NAME_SIZES: Record<string, string> = { xs: "14pt", s: "20pt", m: "24pt", l: "28pt", xl: "32pt" };
+const TITLE_SIZES: Record<string, string> = { s: "9pt", m: "11pt", l: "13pt" };
+const HEADING_SIZES: Record<string, string> = { s: "9pt", m: "10pt", l: "12pt", xl: "14pt" };
 
-function EmptyPlaceholder({ type }: { type: string }) {
+function safeData(data?: ResumeData): ResumeData {
+  return {
+    personalDetails: {
+      fullName: data?.personalDetails?.fullName ?? "",
+      professionalTitle: data?.personalDetails?.professionalTitle ?? "",
+      email: data?.personalDetails?.email ?? "",
+      phone: data?.personalDetails?.phone ?? "",
+      location: data?.personalDetails?.location ?? "",
+      photo: data?.personalDetails?.photo ?? "",
+      extras: Array.isArray(data?.personalDetails?.extras) ? data!.personalDetails.extras : [],
+    },
+    sections: Array.isArray(data?.sections) ? data!.sections : [],
+  };
+}
+
+function formatDateRange(fields: Record<string, string>) {
+  const start = [fields.startMonth?.slice(0, 3), fields.startYear].filter(Boolean).join(" ");
+  const end = fields.currentlyHere === "true"
+    ? "Present"
+    : [fields.endMonth?.slice(0, 3), fields.endYear].filter(Boolean).join(" ");
+  return [start, end].filter(Boolean).join(" – ");
+}
+
+function isMeaningfulHtml(html?: string) {
+  if (!html) return false;
+  const plain = html
+    .replace(/<br\s*\/?\s*>/gi, "")
+    .replace(/<[^>]+>/g, "")
+    .replace(/&nbsp;/g, " ")
+    .trim();
+  return plain.length > 0;
+}
+
+function HtmlBlock({ html, className }: { html?: string; className?: string }) {
+  if (!isMeaningfulHtml(html)) return null;
+
   return (
-    <p style={{ fontSize: "9pt", color: "#d1d5db", fontStyle: "italic" }}>
-      {EMPTY_PLACEHOLDERS[type] || "Add content..."}
-    </p>
+    <div
+      className={className}
+      style={{ fontSize: "9pt", lineHeight: 1.5, color: "var(--resume-body)" }}
+      dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(html || "") }}
+    />
   );
 }
 
-/* ── Hover edit overlay for sections ───────────────────────── */
 function SectionEditOverlay({ sectionId, onEdit }: { sectionId: string; onEdit?: (id: string) => void }) {
   if (!onEdit) return null;
+
   return (
     <button
-      onClick={(e) => { e.stopPropagation(); onEdit(sectionId); }}
+      onClick={(e) => {
+        e.stopPropagation();
+        onEdit(sectionId);
+      }}
       className="absolute -right-[1mm] -top-[1mm] w-[5mm] h-[5mm] rounded-full flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity z-10"
-      style={{ backgroundColor: "#6366f1", color: "#fff", cursor: "pointer" }}
+      style={{ backgroundColor: "var(--resume-accent)", color: "#fff", cursor: "pointer" }}
     >
       <Pencil style={{ width: "2.5mm", height: "2.5mm" }} />
     </button>
   );
 }
 
-/* ── helper: format date range ─────────────────────────────── */
-function fmtDateRange(f: Record<string, string>): string {
-  const s = [f.startMonth?.slice(0, 3), f.startYear].filter(Boolean).join(" ");
-  const e = f.currentlyHere === "true" ? "Present" : [f.endMonth?.slice(0, 3), f.endYear].filter(Boolean).join(" ");
-  return [s, e].filter(Boolean).join(" – ");
-}
-
-/* ── HTML content renderer ─────────────────────────────────── */
-function Html({ html }: { html: string }) {
-  if (!html || html === "<p></p>") return null;
-  return (
-    <div
-      className="mt-[1mm] [&_ul]:list-disc [&_ul]:pl-[5mm] [&_ol]:list-decimal [&_ol]:pl-[5mm] [&_li]:mb-[0.5mm] [&_a]:text-blue-700 [&_a]:underline"
-      style={{ fontSize: "9pt", lineHeight: 1.45, color: "#374151" }}
-      dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(html) }}
-    />
-  );
-}
-
-/* ── Section heading ───────────────────────────────────────── */
-const HEADING_SIZES: Record<string, string> = { s: "9pt", m: "10pt", l: "12pt", xl: "14pt" };
-
 function SectionHeading({ title, customize }: { title: string; customize?: CustomizeSettings }) {
-  const c = customize;
-  const style = c?.headingStyle || "underline";
-  const size = HEADING_SIZES[c?.headingSize || "m"];
-  const upper = c?.headingUppercase !== false;
-  const accent = c?.accentColor || "#1e293b";
-  const font = c?.headingFont || c?.bodyFont || "inherit";
+  const style = customize?.headingStyle || "underline";
+  const fontSize = HEADING_SIZES[customize?.headingSize || "m"];
+  const uppercase = customize?.headingUppercase !== false;
 
   const textStyle: React.CSSProperties = {
-    fontSize: size,
-    color: style === "background" ? "#ffffff" : (c?.headingsColor || "#111827"),
-    textTransform: upper ? "uppercase" : "none",
-    fontFamily: font,
+    fontSize,
+    color: style === "background" ? "#fff" : "var(--resume-headings)",
+    textTransform: uppercase ? "uppercase" : "none",
+    fontFamily: customize?.headingFont || customize?.bodyFont,
+    letterSpacing: "0.08em",
   };
 
   if (style === "plain") {
-    return (
-      <div className="mb-[2mm]">
-        <h2 className="font-bold tracking-[0.08em]" style={textStyle}>{title}</h2>
-      </div>
-    );
+    return <h2 className="font-bold mb-[2mm]" style={textStyle}>{title}</h2>;
   }
 
   if (style === "underline") {
     return (
       <div className="mb-[2mm]">
-        <h2 className="font-bold tracking-[0.08em]" style={textStyle}>{title}</h2>
-        <div className="mt-[0.8mm] h-[0.4mm] w-full" style={{ backgroundColor: accent }} />
+        <h2 className="font-bold" style={textStyle}>{title}</h2>
+        <div className="mt-[0.8mm] h-[0.4mm] w-full" style={{ backgroundColor: "var(--resume-accent)" }} />
       </div>
     );
   }
 
   if (style === "full-underline") {
     return (
-      <div className="mb-[2mm]">
-        <h2 className="font-bold tracking-[0.08em] pb-[1mm] border-b-[0.5mm]" style={{ ...textStyle, borderColor: accent }}>{title}</h2>
-      </div>
+      <h2 className="font-bold mb-[2mm] pb-[1mm] border-b-[0.5mm]" style={{ ...textStyle, borderColor: "var(--resume-accent)" }}>
+        {title}
+      </h2>
     );
   }
 
   if (style === "left-accent") {
     return (
       <div className="mb-[2mm] flex items-center gap-[2mm]">
-        <div className="w-[1mm] h-[4mm] rounded-full" style={{ backgroundColor: accent }} />
-        <h2 className="font-bold tracking-[0.08em]" style={textStyle}>{title}</h2>
+        <div className="w-[1mm] h-[4mm] rounded-full" style={{ backgroundColor: "var(--resume-accent)" }} />
+        <h2 className="font-bold" style={textStyle}>{title}</h2>
       </div>
     );
   }
@@ -138,528 +150,559 @@ function SectionHeading({ title, customize }: { title: string; customize?: Custo
   if (style === "background") {
     return (
       <div className="mb-[2mm]">
-        <h2 className="font-bold tracking-[0.08em] px-[2mm] py-[1mm] rounded-[0.5mm]" style={{ ...textStyle, backgroundColor: accent }}>{title}</h2>
+        <h2 className="font-bold px-[2mm] py-[1mm] rounded-[0.5mm]" style={{ ...textStyle, backgroundColor: "var(--resume-accent)" }}>
+          {title}
+        </h2>
       </div>
     );
   }
 
-  // left-border
   return (
-    <div className="mb-[2mm] pl-[3mm] border-l-[0.8mm]" style={{ borderColor: accent }}>
-      <h2 className="font-bold tracking-[0.08em]" style={textStyle}>{title}</h2>
+    <div className="mb-[2mm] pl-[3mm] border-l-[0.8mm]" style={{ borderColor: "var(--resume-accent)" }}>
+      <h2 className="font-bold" style={textStyle}>{title}</h2>
     </div>
   );
 }
 
-const NAME_SIZES: Record<string, string> = { xs: "14pt", s: "20pt", m: "24pt", l: "28pt", xl: "32pt" };
-const TITLE_SIZES: Record<string, string> = { s: "9pt", m: "11pt", l: "13pt" };
+function normalizeSectionOrder(sections: ResumeSection[], customize?: CustomizeSettings) {
+  const order = customize?.sectionOrder || [];
+  if (!order.length) return sections;
 
-/* ── The A4 page content ───────────────────────────────────── */
+  const rank = new Map<string, number>();
+  order.forEach((id, idx) => rank.set(id, idx));
+
+  return [...sections].sort((a, b) => {
+    const ra = rank.has(a.id) ? rank.get(a.id)! : Number.MAX_SAFE_INTEGER;
+    const rb = rank.has(b.id) ? rank.get(b.id)! : Number.MAX_SAFE_INTEGER;
+    return ra - rb;
+  });
+}
+
+function hasContent(section: ResumeSection): boolean {
+  if (!section.entries?.length) return false;
+
+  return section.entries.some((entry) => {
+    const fields = entry.fields || {};
+    return Object.values(fields).some((v) => {
+      if (!v) return false;
+      if (typeof v !== "string") return !!v;
+      if (v.includes("<")) return isMeaningfulHtml(v);
+      return v.trim().length > 0;
+    });
+  });
+}
+
+function renderSectionEntries(section: ResumeSection, customize?: CustomizeSettings) {
+  const c = customize;
+
+  if (section.type === "summary") {
+    return <HtmlBlock html={section.entries?.[0]?.fields?.description} className="mt-[1mm] [&_p]:mb-[1.2mm] [&_ul]:list-disc [&_ul]:pl-[5mm] [&_ol]:list-decimal [&_ol]:pl-[5mm]" />;
+  }
+
+  if (section.type === "skills") {
+    const raw = section.entries?.[0]?.fields?.skills || "";
+    const items = raw.split(",").map((s) => s.trim()).filter(Boolean);
+    if (!items.length) return null;
+
+    const layout = section.layout || "bubble";
+
+    if (layout === "grid") {
+      return (
+        <div className="grid grid-cols-2 gap-x-[6mm] gap-y-[1mm] mt-[1.2mm]">
+          {items.map((item, i) => (
+            <div key={`${item}-${i}`} className="flex items-center gap-[1.5mm]">
+              <span className="w-[1.1mm] h-[1.1mm] rounded-full" style={{ backgroundColor: "var(--resume-accent)" }} />
+              <span style={{ fontSize: "8.5pt", color: "var(--resume-body)" }}>{item}</span>
+            </div>
+          ))}
+        </div>
+      );
+    }
+
+    if (layout === "compact") {
+      const separator = section.separator === "pipe" ? " | " : section.separator === "comma" ? ", " : " · ";
+      return <p className="mt-[1.2mm]" style={{ fontSize: "8.5pt", color: "var(--resume-body)" }}>{items.join(separator)}</p>;
+    }
+
+    if (layout === "level") {
+      return (
+        <div className="space-y-[1.5mm] mt-[1.2mm]">
+          {items.map((item, i) => {
+            const [label, lvl] = item.includes(":") ? item.split(":").map((x) => x.trim()) : [item, "3"];
+            const level = Math.min(5, Math.max(1, parseInt(lvl || "3", 10)));
+
+            return (
+              <div key={`${label}-${i}`} className="flex items-center gap-[2mm]">
+                <span className="w-[26mm]" style={{ fontSize: "8pt", color: "var(--resume-body)" }}>{label}</span>
+                <div className="flex-1 h-[1.6mm] rounded-full overflow-hidden" style={{ backgroundColor: "#e5e7eb" }}>
+                  <div className="h-full rounded-full" style={{ width: `${level * 20}%`, backgroundColor: "var(--resume-accent)" }} />
+                </div>
+              </div>
+            );
+          })}
+        </div>
+      );
+    }
+
+    return (
+      <div className="flex flex-wrap gap-[1.6mm] mt-[1.2mm]">
+        {items.map((item, i) => (
+          <span
+            key={`${item}-${i}`}
+            className="px-[2.5mm] py-[0.8mm] rounded-full"
+            style={{
+              fontSize: "8.3pt",
+              color: "var(--resume-body)",
+              backgroundColor: "color-mix(in srgb, var(--resume-accent) 10%, white)",
+              border: "0.3mm solid color-mix(in srgb, var(--resume-accent) 25%, white)",
+            }}
+          >
+            {item}
+          </span>
+        ))}
+      </div>
+    );
+  }
+
+  if (section.type === "languages") {
+    return (
+      <div className="mt-[1mm] space-y-[1.4mm]">
+        {section.entries.map((entry) => {
+          const language = entry.fields.language?.trim();
+          const proficiency = entry.fields.proficiency?.trim();
+          if (!language && !proficiency) return null;
+
+          return (
+            <div key={entry.id} className="flex items-center justify-between gap-[3mm]">
+              <span style={{ fontSize: "9pt", color: "var(--resume-body)", fontWeight: 600 }}>{language || "Language"}</span>
+              <span style={{ fontSize: "8pt", color: "var(--resume-dates)" }}>{proficiency}</span>
+            </div>
+          );
+        })}
+      </div>
+    );
+  }
+
+  if (section.type === "references") {
+    return (
+      <div className="mt-[1mm] space-y-[2mm]">
+        {section.entries.map((entry) => {
+          const f = entry.fields;
+          if (!Object.values(f).some(Boolean)) return null;
+
+          return (
+            <div key={entry.id}>
+              <p style={{ fontSize: "9pt", fontWeight: 700, color: "var(--resume-name)" }}>
+                {f.name || "Reference"}
+              </p>
+              <p style={{ fontSize: "8pt", color: "var(--resume-subtitle)" }}>
+                {[f.position, f.company].filter(Boolean).join(" · ")}
+              </p>
+              <p style={{ fontSize: "8pt", color: "var(--resume-dates)" }}>
+                {[f.phone, f.email].filter(Boolean).join(" · ")}
+              </p>
+            </div>
+          );
+        })}
+      </div>
+    );
+  }
+
+  if (section.type === "declaration") {
+    const entry = section.entries?.[0];
+    if (!entry) return null;
+    const f = entry.fields;
+
+    return (
+      <div className="mt-[1mm]">
+        <HtmlBlock html={f.description} className="[&_p]:mb-[1mm] [&_ul]:list-disc [&_ul]:pl-[5mm]" />
+        {f.signature && <img src={f.signature} alt="Signature" className="h-[12mm] mt-[2mm]" />}
+        {(f.fullName || f.place || f.date) && (
+          <p style={{ fontSize: "8.5pt", color: "var(--resume-subtitle)", marginTop: "2mm" }}>
+            {[f.fullName, f.place, f.date].filter(Boolean).join(" · ")}
+          </p>
+        )}
+      </div>
+    );
+  }
+
+  if (section.type === "custom") {
+    return (
+      <div className="mt-[1mm] space-y-[2mm]">
+        {section.entries.map((entry) => (
+          <HtmlBlock
+            key={entry.id}
+            html={entry.fields.description}
+            className="[&_p]:mb-[1mm] [&_ul]:list-disc [&_ul]:pl-[5mm] [&_ol]:list-decimal [&_ol]:pl-[5mm]"
+          />
+        ))}
+      </div>
+    );
+  }
+
+  const patternedTypes = new Set([
+    "experience",
+    "education",
+    "courses",
+    "certificates",
+    "projects",
+    "awards",
+    "organisations",
+    "publications",
+  ]);
+
+  if (patternedTypes.has(section.type)) {
+    return (
+      <div className="mt-[1mm] space-y-[2.8mm]">
+        {section.entries.map((entry) => {
+          const f = entry.fields;
+          const hasAny = Object.values(f).some(Boolean);
+          if (!hasAny) return null;
+
+          const headlineLeft =
+            section.type === "education"
+              ? [f.degree, f.institution].filter(Boolean).join(" · ")
+              : section.type === "experience"
+                ? [f.position, f.company].filter(Boolean).join(" · ")
+                : [f.name || f.title, f.company || f.institution || f.issuer || f.publisher || f.role]
+                    .filter(Boolean)
+                    .join(" · ");
+
+          const date = formatDateRange(f) || f.date || "";
+
+          return (
+            <div key={entry.id}>
+              <div className="flex items-start justify-between gap-[4mm]">
+                <p style={{ fontSize: "9pt", fontWeight: 700, color: "var(--resume-name)" }}>
+                  {headlineLeft || "Entry"}
+                </p>
+                {date && (
+                  <p style={{ fontSize: "8pt", color: "var(--resume-dates)", whiteSpace: "nowrap" }}>{date}</p>
+                )}
+              </div>
+
+              {f.location && (
+                <p style={{ fontSize: "8pt", color: "var(--resume-subtitle)", marginTop: "0.7mm" }}>{f.location}</p>
+              )}
+
+              {(f.url || f.link) && (
+                <p style={{ fontSize: "8pt", color: "var(--resume-dates)", marginTop: "0.7mm" }}>
+                  {f.url || f.link}
+                </p>
+              )}
+
+              <HtmlBlock
+                html={f.description}
+                className="mt-[1mm] [&_p]:mb-[1mm] [&_ul]:list-disc [&_ul]:pl-[5mm] [&_ol]:list-decimal [&_ol]:pl-[5mm] [&_li]:mb-[0.4mm] [&_a]:underline"
+              />
+            </div>
+          );
+        })}
+      </div>
+    );
+  }
+
+  return null;
+}
+
 export { getPageDims };
-export const A4Page = React.memo(function A4Page({ data, customize, onEditSection }: { data: ResumeData; customize?: CustomizeSettings; onEditSection?: (id: string) => void }) {
-  const { personalDetails: p, sections } = data;
+
+export const A4Page = React.memo(function A4Page({
+  data,
+  customize,
+  onEditSection,
+}: {
+  data: ResumeData;
+  customize?: CustomizeSettings;
+  onEditSection?: (id: string) => void;
+}) {
+  const safe = safeData(data);
+  const p = safe.personalDetails;
   const c = customize;
   const dims = getPageDims(c?.pageFormat);
 
-  const cssVars = useMemo(() => ({
-    "--resume-font-size": `${c?.fontSize ?? 11}pt`,
-    "--resume-line-height": `${c?.lineHeight ?? 1.5}`,
-    "--resume-margin-x": `${c?.marginX ?? 16}mm`,
-    "--resume-margin-y": `${c?.marginY ?? 16}mm`,
-    "--resume-section-spacing": `${c?.sectionSpacing ?? 5}mm`,
-    "--resume-accent": c?.accentColor ?? "#1e293b",
-  } as React.CSSProperties), [c?.fontSize, c?.lineHeight, c?.marginX, c?.marginY, c?.sectionSpacing, c?.accentColor]);
+  const orderedSections = useMemo(() => normalizeSectionOrder(safe.sections, c), [safe.sections, c]);
+  const enabledSections = orderedSections.filter((s) => !s.collapsed);
 
-  const isTwo = c?.columns === "two" || c?.columns === "mix";
-  const sidebarCols = c?.columnRatio ?? 4;
-
-  const showIcons = c?.headerIconStyle !== "none";
-  const iconFill = c?.headerIconStyle === "filled" ? "currentColor" : "none";
-  const iconProps = { className: "w-[3mm] h-[3mm]", ...(iconFill !== "none" ? { fill: iconFill } : {}) };
-
-  const contactItems = showIcons ? [
-    p.email && { icon: <Mail {...iconProps} />, text: p.email },
-    p.phone && { icon: <Phone {...iconProps} />, text: p.phone },
-    p.location && { icon: <MapPin {...iconProps} />, text: p.location },
-    ...p.extras.map((e) => ({
-      icon: e.type === "Nationality" || e.type === "Visa"
-        ? <Flag {...iconProps} />
-        : <FileText {...iconProps} />,
-      text: e.value,
-    })),
-  ].filter(Boolean) as { icon: React.ReactNode; text: string }[] : [
-    p.email && { icon: null, text: p.email },
-    p.phone && { icon: null, text: p.phone },
-    p.location && { icon: null, text: p.location },
-    ...p.extras.map((e) => ({ icon: null, text: e.value })),
-  ].filter(Boolean) as { icon: React.ReactNode; text: string }[];
-
-  /* Split sections for two-column layout */
-  const sidebarTypes = new Set(["skills", "languages", "interests", "certificates"]);
-  const sidebarSections = isTwo ? sections.filter(s => sidebarTypes.has(s.type)) : [];
-  const mainSections = isTwo ? sections.filter(s => !sidebarTypes.has(s.type)) : sections;
-
-  /* Check if a section has meaningful content */
-  const isSectionEmpty = (section: typeof sections[0]): boolean => {
-    if (section.entries.length === 0) return true;
-    const f = section.entries[0]?.fields;
-    if (!f) return true;
-    switch (section.type) {
-      case "summary": return !f.description || f.description === "<p></p>";
-      case "skills": return !f.skills;
-      case "interests": return !f.interests;
-      case "experience": return !f.company && !f.position;
-      case "education": return !f.institution && !f.degree;
-      case "languages": return !f.language;
-      default: return Object.values(f).every(v => !v);
-    }
-  };
-
-  const renderSections = (secs: typeof sections) => secs.map((section) => {
-    const hideHeading = section.type === "summary" && section.showHeading === false;
-    const empty = isSectionEmpty(section);
-    return (
-      <div
-        key={section.id}
-        className="group relative"
-        style={{ marginBottom: "var(--resume-section-spacing)", borderRadius: "0.5mm", transition: "outline 0.15s" }}
-      >
-        <SectionEditOverlay sectionId={section.id} onEdit={onEditSection} />
-        <div
-          className="group-hover:outline group-hover:outline-2 group-hover:outline-offset-[1mm] rounded-[0.5mm]"
-          style={{ outlineColor: "#6366f130" }}
-        >
-          {!hideHeading && (
-            <SectionHeading customize={c} title={
-              section.type === "custom" && section.entries[0]?.fields.sectionTitle
-                ? section.entries[0].fields.sectionTitle
-                : section.title
-            } />
-          )}
-          {empty ? <EmptyPlaceholder type={section.type} /> : renderSectionContent(section)}
-        </div>
-      </div>
-    );
-  });
-
-  return (
-    <div
-      className="text-gray-900"
-      style={{
-        ...cssVars,
-        width: `${dims.wMM}mm`,
-        minHeight: `${dims.hMM}mm`,
-        padding: "var(--resume-margin-y) var(--resume-margin-x)",
-        fontFamily: c?.bodyFont || "'Segoe UI', 'Helvetica Neue', system-ui, sans-serif",
-        fontSize: "var(--resume-font-size)",
-        lineHeight: "var(--resume-line-height)",
-        boxSizing: "border-box",
-        backgroundColor: c?.a4Background || "#ffffff",
-      }}
-    >
-      {/* ── Header ─────────────────────────────────────────── */}
-      <div className="mb-[4mm]" style={{ textAlign: c?.headerAlign || "center" }}>
-        <h1
-          className="font-bold uppercase tracking-[0.12em]"
-          style={{
-            fontSize: NAME_SIZES[c?.nameSize || "s"],
-            color: c?.nameColor || "#111827",
-            fontWeight: c?.nameBold !== false ? 700 : 400,
-            fontFamily: c?.nameFont === "creative" ? (c?.headingFont || "inherit") : "inherit",
-          }}
-        >
-          {p.fullName || "YOUR NAME"}
-        </h1>
-        {p.professionalTitle && (
-          <p className="mt-[1mm]" style={{ fontSize: TITLE_SIZES[c?.titleSize || "m"], color: c?.titleColor || "#6B7280" }}>
-            {p.professionalTitle}
-          </p>
-        )}
-
-        {contactItems.length > 0 && (
-          <div
-            className="flex items-center flex-wrap mt-[2.5mm] gap-x-[4mm] gap-y-[1mm]"
-            style={{
-              fontSize: "8pt",
-              color: c?.linkIconColor || "#4B5563",
-              justifyContent: c?.headerAlign === "right" ? "flex-end" : c?.headerAlign === "left" ? "flex-start" : "center",
-            }}
-          >
-            {contactItems.map((item, i) => {
-              const sep = c?.contactSeparator || "icon";
-              return (
-                <span key={i} className="flex items-center gap-[1mm]">
-                  {i > 0 && sep === "bullet" && <span className="mx-[1mm]">·</span>}
-                  {i > 0 && sep === "bar" && <span className="mx-[1mm] text-gray-300">|</span>}
-                  {sep === "icon" && item.icon}
-                  {item.text}
-                </span>
-              );
-            })}
-          </div>
-        )}
-      </div>
-
-      {/* ── Divider ────────────────────────────────────────── */}
-      <div className="h-[0.3mm] bg-gray-300 mb-[5mm]" />
-
-      {/* ── Sections ───────────────────────────────────────── */}
-      {isTwo ? (
-        <div style={{ display: "grid", gridTemplateColumns: `${sidebarCols}fr ${12 - sidebarCols}fr`, gap: "var(--resume-section-spacing)" }}>
-          <div>{renderSections(sidebarSections)}</div>
-          <div>{renderSections(mainSections)}</div>
-        </div>
-      ) : (
-        renderSections(mainSections)
-      )}
-
-      {/* Empty state */}
-      {sections.length === 0 && !p.fullName && (
-        <div className="text-center py-[30mm]" style={{ color: "#9CA3AF", fontSize: "11pt" }}>
-          Add content to see your resume here
-        </div>
-      )}
-
-      {/* ── Footer ──────────────────────────────────────────── */}
-      {(c?.showPageNumbers || c?.showFooterSignature) && (
-        <div className="mt-auto pt-[5mm] flex items-center justify-between" style={{ fontSize: "7pt", color: "#9CA3AF" }}>
-          {c?.showFooterSignature ? (
-            <span>Built with james.careers</span>
-          ) : <span />}
-          {c?.showPageNumbers ? (
-            <span>1 / 1</span>
-          ) : <span />}
-        </div>
-      )}
-    </div>
+  const cssVars = useMemo(
+    () =>
+      ({
+        "--resume-font-size": `${c?.fontSize ?? 11}pt`,
+        "--resume-line-height": `${c?.lineHeight ?? 1.5}`,
+        "--resume-margin-x": `${c?.marginX ?? 16}mm`,
+        "--resume-margin-y": `${c?.marginY ?? 16}mm`,
+        "--resume-section-spacing": `${c?.sectionSpacing ?? 5}mm`,
+        "--resume-accent": c?.accentColor ?? "#1e293b",
+        "--resume-name": c?.nameColor ?? "#111827",
+        "--resume-title": c?.titleColor ?? "#6B7280",
+        "--resume-headings": c?.headingsColor ?? "#111827",
+        "--resume-dates": c?.datesColor ?? "#6B7280",
+        "--resume-subtitle": c?.subtitleColor ?? "#6B7280",
+        "--resume-body": c?.nameColor ?? "#374151",
+      }) as React.CSSProperties,
+    [c]
   );
 
-  function renderSectionContent(section: typeof sections[0]) {
-    return (
-      <>
-        {section.type === "summary" && section.entries[0]?.fields.description && (
-          <Html html={section.entries[0].fields.description} />
-        )}
-        {section.type === "skills" && section.entries[0]?.fields.skills && (() => {
-          const skills = section.entries[0].fields.skills.split(",").filter(Boolean).map(s => s.trim());
-          const layout = section.layout || "bubble";
-          const accent = c?.accentColor || "#1e293b";
-          const separator = section.separator || "bullet";
-          const levelIndicator = section.levelIndicator || "bar";
-          const subtitleStyle = section.subtitleStyle || "dash";
+  const iconProps = { className: "w-[3mm] h-[3mm]", strokeWidth: 1.8 };
 
-          const LEVEL_TEXT: Record<number, string> = { 1: "Beginner", 2: "Elementary", 3: "Intermediate", 4: "Advanced", 5: "Expert" };
+  const contactItems = useMemo(() => {
+    const extras = p.extras || [];
+    const normalizedExtras = extras
+      .map((x) => ({ type: (x.type || "").toLowerCase(), value: x.value || "" }))
+      .filter((x) => x.value.trim().length > 0);
 
-          const formatLabel = (name: string, detail?: string) => {
-            if (!detail) return name;
-            switch (subtitleStyle) {
-              case "colon": return `${name}: ${detail}`;
-              case "bracket": return `${name} (${detail})`;
-              default: return `${name} — ${detail}`;
-            }
-          };
+    const fromExtras = normalizedExtras.map((extra) => {
+      if (extra.type.includes("linkedin")) return { icon: <Linkedin {...iconProps} />, text: extra.value };
+      if (extra.type.includes("website")) return { icon: <Globe {...iconProps} />, text: extra.value };
+      if (extra.type.includes("nationality")) return { icon: <Flag {...iconProps} />, text: extra.value };
+      if (extra.type.includes("visa") || extra.type.includes("passport") || extra.type.includes("id")) {
+        return { icon: <IdCard {...iconProps} />, text: extra.value };
+      }
+      return { icon: <FileText {...iconProps} />, text: extra.value };
+    });
 
-          const sepChar = separator === "pipe" ? " | " : separator === "comma" ? ", " : separator === "newline" ? "\n" : "  ·  ";
+    return [
+      p.email ? { icon: <Mail {...iconProps} />, text: p.email } : null,
+      p.phone ? { icon: <Phone {...iconProps} />, text: p.phone } : null,
+      p.location ? { icon: <MapPin {...iconProps} />, text: p.location } : null,
+      ...fromExtras,
+    ].filter(Boolean) as { icon: React.ReactNode; text: string }[];
+  }, [p]);
 
-          if (layout === "level") {
-            return (
-              <div className="space-y-[1.5mm] mt-[1mm]">
-                {skills.map((s, i) => {
-                  const [name, levelStr] = s.includes(":") ? s.split(":").map(x => x.trim()) : [s, "3"];
-                  const level = Math.min(5, Math.max(1, parseInt(levelStr) || 3));
-                  return (
-                    <div key={i} className="flex items-center gap-[2mm]">
-                      <span className="w-[25mm] text-right" style={{ fontSize: "8pt", color: "#374151" }}>{name}</span>
-                      {levelIndicator === "bar" && (
-                        <div className="flex-1 h-[1.5mm] bg-gray-200 rounded-full overflow-hidden">
-                          <div className="h-full rounded-full" style={{ width: `${level * 20}%`, backgroundColor: accent }} />
-                        </div>
-                      )}
-                      {levelIndicator === "dots" && (
-                        <div className="flex gap-[0.8mm]">
-                          {[1,2,3,4,5].map(n => (
-                            <div key={n} className="w-[2mm] h-[2mm] rounded-full" style={{ backgroundColor: n <= level ? accent : "#e5e7eb" }} />
-                          ))}
-                        </div>
-                      )}
-                      {levelIndicator === "text" && (
-                        <span style={{ fontSize: "7.5pt", color: "#6B7280" }}>{LEVEL_TEXT[level] || "Intermediate"}</span>
-                      )}
-                    </div>
-                  );
-                })}
-              </div>
-            );
-          }
+  const isTwoColumn = c?.columns === "two" || c?.columns === "mix";
+  const ratio = Math.min(8, Math.max(3, c?.columnRatio || 4));
 
-          if (layout === "grid") {
-            return (
-              <div className="grid grid-cols-2 gap-x-[6mm] gap-y-[1mm] mt-[1mm]">
-                {skills.map((s, i) => {
-                  const [name, detail] = s.includes(":") ? s.split(":").map(x => x.trim()) : [s, undefined];
-                  return (
-                    <div key={i} className="flex items-center gap-[1.5mm]">
-                      <div className="w-[1mm] h-[1mm] rounded-full bg-gray-600 flex-shrink-0" />
-                      <span style={{ fontSize: "8pt", color: "#374151" }}>{formatLabel(name, detail)}</span>
-                    </div>
-                  );
-                })}
-              </div>
-            );
-          }
+  const sidebarTypes = new Set(["skills", "languages", "interests", "certificates", "courses", "awards"]);
+  const sidebarSections = isTwoColumn ? enabledSections.filter((s) => sidebarTypes.has(s.type)) : [];
+  const mainSections = isTwoColumn ? enabledSections.filter((s) => !sidebarTypes.has(s.type)) : enabledSections;
 
-          if (layout === "compact") {
-            const items = skills.map(s => {
-              const [name, detail] = s.includes(":") ? s.split(":").map(x => x.trim()) : [s, undefined];
-              return formatLabel(name, detail);
-            });
-            if (separator === "newline") {
-              return (
-                <div className="mt-[1mm] space-y-[0.5mm]">
-                  {items.map((item, i) => (
-                    <p key={i} style={{ fontSize: "8pt", color: "#374151" }}>{item}</p>
-                  ))}
-                </div>
-              );
-            }
-            return (
-              <p className="mt-[1mm]" style={{ fontSize: "8pt", color: "#374151" }}>
-                {items.join(sepChar)}
+  const titleSameLine = c?.titleSameLine === true && !!p.professionalTitle;
+  const hasRealContent =
+    !!p.fullName ||
+    !!p.professionalTitle ||
+    contactItems.length > 0 ||
+    enabledSections.some((s) => hasContent(s));
+
+  return (
+    <>
+      <link rel="stylesheet" href={GOOGLE_FONTS_URL} />
+      <div
+        className="text-gray-900"
+        style={{
+          ...cssVars,
+          width: `${dims.wMM}mm`,
+          minHeight: `${dims.hMM}mm`,
+          padding: "var(--resume-margin-y) var(--resume-margin-x)",
+          fontFamily: c?.bodyFont || "'Source Sans 3', sans-serif",
+          fontSize: "var(--resume-font-size)",
+          lineHeight: "var(--resume-line-height)",
+          boxSizing: "border-box",
+          backgroundColor: c?.a4Background || "#ffffff",
+          color: "var(--resume-body)",
+        }}
+      >
+        <header className="mb-[4.5mm]" style={{ textAlign: c?.headerAlign || "center" }}>
+          {titleSameLine ? (
+            <div
+              className="flex items-end gap-[3mm]"
+              style={{
+                justifyContent:
+                  c?.headerAlign === "left"
+                    ? "flex-start"
+                    : c?.headerAlign === "right"
+                      ? "flex-end"
+                      : "center",
+              }}
+            >
+              <h1
+                className="font-bold uppercase tracking-[0.1em]"
+                style={{
+                  fontSize: NAME_SIZES[c?.nameSize || "s"],
+                  color: "var(--resume-name)",
+                  fontWeight: c?.nameBold !== false ? 700 : 400,
+                  fontFamily: c?.nameFont === "creative" ? c?.headingFont || c?.bodyFont : c?.bodyFont,
+                }}
+              >
+                {p.fullName || "YOUR NAME"}
+              </h1>
+              <p style={{ fontSize: TITLE_SIZES[c?.titleSize || "m"], color: "var(--resume-title)" }}>
+                {p.professionalTitle}
               </p>
-            );
-          }
+            </div>
+          ) : (
+            <>
+              <h1
+                className="font-bold uppercase tracking-[0.1em]"
+                style={{
+                  fontSize: NAME_SIZES[c?.nameSize || "s"],
+                  color: "var(--resume-name)",
+                  fontWeight: c?.nameBold !== false ? 700 : 400,
+                  fontFamily: c?.nameFont === "creative" ? c?.headingFont || c?.bodyFont : c?.bodyFont,
+                }}
+              >
+                {p.fullName || "YOUR NAME"}
+              </h1>
+              {p.professionalTitle && (
+                <p className="mt-[1mm]" style={{ fontSize: TITLE_SIZES[c?.titleSize || "m"], color: "var(--resume-title)" }}>
+                  {p.professionalTitle}
+                </p>
+              )}
+            </>
+          )}
 
-          // bubble (default)
-          return (
-            <div className="flex flex-wrap gap-[1.5mm] mt-[1mm]">
-              {skills.map((s, i) => {
-                const name = s.includes(":") ? s.split(":")[0].trim() : s;
+          {contactItems.length > 0 && (
+            <div
+              className="flex items-center flex-wrap mt-[2.5mm] gap-x-[4mm] gap-y-[1mm]"
+              style={{
+                fontSize: "8pt",
+                color: c?.linkIconColor || "var(--resume-dates)",
+                justifyContent:
+                  c?.headerAlign === "right" ? "flex-end" : c?.headerAlign === "left" ? "flex-start" : "center",
+              }}
+            >
+              {contactItems.map((item, i) => {
+                const sep = c?.contactSeparator || "icon";
                 return (
-                  <span key={i} className="px-[2.5mm] py-[0.8mm] rounded-full" style={{ fontSize: "8pt", color: "#374151", backgroundColor: `${accent}15`, border: `0.3mm solid ${accent}30` }}>{name}</span>
+                  <span key={`${item.text}-${i}`} className="flex items-center gap-[1.1mm]">
+                    {i > 0 && sep === "bullet" && <span className="mx-[1mm]">·</span>}
+                    {i > 0 && sep === "bar" && <span className="mx-[1mm]">|</span>}
+                    {sep === "icon" && item.icon}
+                    {item.text}
+                  </span>
                 );
               })}
             </div>
-          );
-        })()}
-        {section.type === "experience" && section.entries.map((entry) => {
-          const f = entry.fields;
-          return (
-            <div key={entry.id} className="mb-[3mm]">
-              <div className="flex justify-between items-baseline">
-                <div><span className="font-bold" style={{ color: c?.nameColor || "#111827" }}>{f.company || ""}</span>{f.position && <span className="italic" style={{ color: c?.subtitleColor || "#374151" }}>{f.company ? ", " : ""}{f.position}</span>}</div>
-                <div className="flex-shrink-0 text-right" style={{ fontSize: "8pt", color: c?.datesColor || "#6B7280" }}>{fmtDateRange(f)}{f.location && <>{fmtDateRange(f) ? " | " : ""}{f.location}</>}</div>
-              </div>
-              <Html html={f.description || ""} />
-            </div>
-          );
-        })}
-        {section.type === "education" && section.entries.map((entry) => {
-          const f = entry.fields;
-          return (
-            <div key={entry.id} className="mb-[3mm]">
-              <div className="flex justify-between items-baseline">
-                <div><span className="font-bold" style={{ color: c?.nameColor || "#111827" }}>{f.institution || ""}</span>{f.degree && <span className="italic" style={{ color: c?.subtitleColor || "#374151" }}>{f.institution ? ", " : ""}{f.degree}</span>}</div>
-                <div className="flex-shrink-0 text-right" style={{ fontSize: "8pt", color: c?.datesColor || "#6B7280" }}>{fmtDateRange(f)}{f.location && <>{fmtDateRange(f) ? " | " : ""}{f.location}</>}</div>
-              </div>
-              <Html html={f.description || ""} />
-            </div>
-          );
-        })}
-        {section.type === "languages" && (() => {
-          const layout = section.layout || "compact";
-          const accent = c?.accentColor || "#1e293b";
-          const separator = section.separator || "bullet";
-          const levelIndicator = section.levelIndicator || "dots";
-          const subtitleStyle = section.subtitleStyle || "dash";
-          const profToLevel = (p: string) => {
-            const map: Record<string, number> = { Native: 5, Fluent: 4, Advanced: 3, Intermediate: 2, Basic: 1 };
-            return map[p] || 3;
-          };
+          )}
+        </header>
 
-          const formatLabel = (lang: string, prof?: string) => {
-            if (!prof) return lang;
-            switch (subtitleStyle) {
-              case "colon": return `${lang}: ${prof}`;
-              case "bracket": return `${lang} (${prof})`;
-              default: return `${lang} — ${prof}`;
-            }
-          };
+        <div className="h-[0.3mm] mb-[5mm]" style={{ backgroundColor: "color-mix(in srgb, var(--resume-accent) 20%, #d1d5db)" }} />
 
-          const sepChar = separator === "pipe" ? " | " : separator === "comma" ? ", " : separator === "newline" ? "\n" : "  ·  ";
-
-          if (layout === "level") {
-            return (
-              <div className="space-y-[1.5mm] mt-[1mm]">
-                {section.entries.map((entry) => {
-                  const level = profToLevel(entry.fields.proficiency);
-                  return (
-                    <div key={entry.id} className="flex items-center gap-[2mm]">
-                      <span className="w-[25mm] text-right" style={{ fontSize: "8pt", color: "#374151" }}>{entry.fields.language}</span>
-                      {levelIndicator === "dots" && (
-                        <div className="flex gap-[0.8mm]">
-                          {[1,2,3,4,5].map(n => (
-                            <div key={n} className="w-[2mm] h-[2mm] rounded-full" style={{ backgroundColor: n <= level ? accent : "#e5e7eb" }} />
-                          ))}
-                        </div>
-                      )}
-                      {levelIndicator === "bar" && (
-                        <div className="flex-1 h-[1.5mm] bg-gray-200 rounded-full overflow-hidden">
-                          <div className="h-full rounded-full" style={{ width: `${level * 20}%`, backgroundColor: accent }} />
-                        </div>
-                      )}
-                      {levelIndicator === "text" && (
-                        <span style={{ fontSize: "7.5pt", color: "#6B7280" }}>{entry.fields.proficiency}</span>
-                      )}
-                    </div>
-                  );
-                })}
-              </div>
-            );
-          }
-
-          if (layout === "bubble") {
-            return (
-              <div className="flex flex-wrap gap-[1.5mm] mt-[1mm]">
-                {section.entries.map((entry) => (
-                  <span key={entry.id} className="px-[2.5mm] py-[0.8mm] rounded-full" style={{ fontSize: "8pt", color: "#374151", backgroundColor: `${accent}15`, border: `0.3mm solid ${accent}30` }}>
-                    {formatLabel(entry.fields.language, entry.fields.proficiency)}
-                  </span>
-                ))}
-              </div>
-            );
-          }
-
-          if (layout === "compact") {
-            const items = section.entries.map(e => formatLabel(e.fields.language, e.fields.proficiency));
-            if (separator === "newline") {
-              return (
-                <div className="mt-[1mm] space-y-[0.5mm]">
-                  {items.map((item, i) => (
-                    <p key={i} style={{ fontSize: "8pt", color: "#374151" }}>{item}</p>
-                  ))}
-                </div>
-              );
-            }
-            return (
-              <p className="mt-[1mm]" style={{ fontSize: "8pt", color: "#374151" }}>
-                {items.join(sepChar)}
-              </p>
-            );
-          }
-
-          // grid
-          return (
-            <div className="grid grid-cols-2 gap-x-[6mm] gap-y-[2mm] mt-[1mm]">
-              {section.entries.map((entry) => (
-                <div key={entry.id}>
-                  <p className="font-semibold" style={{ color: "#111827" }}>{entry.fields.language}</p>
-                  <p style={{ fontSize: "8pt", color: "#6B7280" }}>{entry.fields.proficiency}</p>
-                </div>
-              ))}
-            </div>
-          );
-        })()}
-        {section.type === "interests" && section.entries[0]?.fields.interests && (
-          <p className="mt-[1mm]" style={{ color: "#374151" }}>{section.entries[0].fields.interests.split(",").filter(Boolean).map(s => s.trim()).join("  ·  ")}</p>
-        )}
-        {["certificates", "courses", "awards", "projects", "organisations", "publications"].includes(section.type) && section.entries.map((entry) => {
-          const f = entry.fields;
-          const dateStr = fmtDateRange(f) || f.date || "";
-          return (
-            <div key={entry.id} className="mb-[2.5mm]">
-              <div className="flex justify-between items-baseline">
-                <span className="font-bold" style={{ color: c?.nameColor || "#111827" }}>{f.name || f.title || ""}</span>
-                {dateStr && <span style={{ fontSize: "8pt", color: c?.datesColor || "#6B7280" }}>{dateStr}</span>}
-              </div>
-              {(f.issuer || f.institution || f.publisher || f.role) && <p className="italic" style={{ fontSize: "8.5pt", color: c?.subtitleColor || "#6B7280" }}>{f.issuer || f.institution || f.publisher || f.role}</p>}
-              {f.url && <p style={{ fontSize: "7.5pt", color: "#2563EB" }}>{f.url}</p>}
-              <Html html={f.description || ""} />
-            </div>
-          );
-        })}
-        {section.type === "references" && section.entries.map((entry) => {
-          const f = entry.fields;
-          return (
-            <div key={entry.id} className="mb-[2mm]">
-              <span className="font-bold">{f.name}</span>
-              {f.position && <span style={{ color: "#6B7280" }}> — {f.position}</span>}
-              {f.company && <span style={{ color: "#6B7280" }}>, {f.company}</span>}
-              {f.relationship && <span style={{ fontSize: "8pt", color: "#9CA3AF" }}> ({f.relationship})</span>}
-              {(f.email || f.phone) && <p style={{ fontSize: "8pt", color: "#6B7280" }}>{[f.email, f.phone].filter(Boolean).join("  ·  ")}</p>}
-            </div>
-          );
-        })}
-        {section.type === "declaration" && section.entries[0] && (() => {
-          const f = section.entries[0].fields;
-          return (
+        {isTwoColumn ? (
+          <div style={{ display: "grid", gridTemplateColumns: `${ratio}fr ${12 - ratio}fr`, gap: "var(--resume-section-spacing)" }}>
             <div>
-              {f.signature && <img src={f.signature} alt="Signature" className="h-[12mm] mt-[2mm]" />}
-              {f.fullName && <p className="font-semibold mt-[2mm]">{f.fullName}</p>}
-              {(f.place || f.date) && <p style={{ color: "#6B7280" }}>{[f.place, f.date].filter(Boolean).join(", ")}</p>}
+              {sidebarSections.map((section) => {
+                const title = section.type === "custom" && section.entries?.[0]?.fields?.sectionTitle
+                  ? section.entries[0].fields.sectionTitle
+                  : section.title;
+
+                return (
+                  <section key={section.id} className="group relative" style={{ marginBottom: "var(--resume-section-spacing)" }}>
+                    <SectionEditOverlay sectionId={section.id} onEdit={onEditSection} />
+                    {section.showHeading !== false && <SectionHeading title={title} customize={c} />}
+                    {renderSectionEntries(section, c)}
+                  </section>
+                );
+              })}
             </div>
-          );
-        })()}
-        {section.type === "custom" && section.entries[0] && <Html html={section.entries[0].fields.description || ""} />}
-      </>
-    );
-  }
+
+            <div>
+              {mainSections.map((section) => {
+                const title = section.type === "custom" && section.entries?.[0]?.fields?.sectionTitle
+                  ? section.entries[0].fields.sectionTitle
+                  : section.title;
+
+                return (
+                  <section key={section.id} className="group relative" style={{ marginBottom: "var(--resume-section-spacing)" }}>
+                    <SectionEditOverlay sectionId={section.id} onEdit={onEditSection} />
+                    {section.showHeading !== false && <SectionHeading title={title} customize={c} />}
+                    {renderSectionEntries(section, c)}
+                  </section>
+                );
+              })}
+            </div>
+          </div>
+        ) : (
+          <>
+            {mainSections.map((section) => {
+              const title = section.type === "custom" && section.entries?.[0]?.fields?.sectionTitle
+                ? section.entries[0].fields.sectionTitle
+                : section.title;
+
+              return (
+                <section key={section.id} className="group relative" style={{ marginBottom: "var(--resume-section-spacing)" }}>
+                  <SectionEditOverlay sectionId={section.id} onEdit={onEditSection} />
+                  {section.showHeading !== false && <SectionHeading title={title} customize={c} />}
+                  {renderSectionEntries(section, c)}
+                </section>
+              );
+            })}
+          </>
+        )}
+
+        {!hasRealContent && (
+          <div className="text-center py-[30mm]" style={{ color: "#9CA3AF", fontSize: "11pt" }}>
+            Add content to see your resume here
+          </div>
+        )}
+      </div>
+    </>
+  );
 });
 
-/* ═══════════════════════════════════════════════════════════════
-   Main Preview wrapper — handles scaling, multi-page, thumbnail
-   ═══════════════════════════════════════════════════════════════ */
-export const ResumePreview = React.memo(function ResumePreview({ data, customize, pdfTargetId, onEditSection }: ResumePreviewProps) {
+export const ResumePreview = React.memo(function ResumePreview({
+  data,
+  customize,
+  pdfTargetId,
+  onEditSection,
+}: ResumePreviewProps) {
   const containerRef = useRef<HTMLDivElement>(null);
-  const contentRef = useRef<HTMLDivElement>(null);
+  const hiddenFlowRef = useRef<HTMLDivElement>(null);
+
   const [autoScale, setAutoScale] = useState(0.65);
-  const [zoomOffset, setZoomOffset] = useState(0); // manual zoom adjustment
-  const scale = Math.max(0.2, Math.min(1.5, autoScale + zoomOffset));
+  const [zoomOffset, setZoomOffset] = useState(0);
   const [pageCount, setPageCount] = useState(1);
+  const [currentPage, setCurrentPage] = useState(1);
+
   const dims = getPageDims(customize?.pageFormat);
+  const scale = Math.max(0.2, Math.min(1.5, autoScale + zoomOffset));
 
-  // Debounce data for preview rendering (100ms)
-  const [debouncedData, setDebouncedData] = useState(data);
-  useEffect(() => {
-    const t = setTimeout(() => setDebouncedData(data), 100);
-    return () => clearTimeout(t);
-  }, [data]);
-
-  /* Responsive scaling: fit page to container width */
   useEffect(() => {
     const el = containerRef.current;
     if (!el) return;
-    const observer = new ResizeObserver((entries) => {
+
+    const ro = new ResizeObserver((entries) => {
       for (const entry of entries) {
         const w = entry.contentRect.width;
-        const s = Math.min((w - 48) / dims.wPX, 0.85);
-        setAutoScale(Math.max(s, 0.35));
+        const fit = Math.min((w - 48) / dims.wPX, 0.9);
+        setAutoScale(Math.max(0.3, fit));
       }
     });
-    observer.observe(el);
-    return () => observer.disconnect();
+
+    ro.observe(el);
+    return () => ro.disconnect();
   }, [dims.wPX]);
 
-  /* Calculate page count from rendered content height */
   useEffect(() => {
-    if (!contentRef.current) return;
-    const timer = setTimeout(() => {
-      if (!contentRef.current) return;
-      const h = contentRef.current.scrollHeight;
+    const measure = () => {
+      if (!hiddenFlowRef.current) return;
+      const h = hiddenFlowRef.current.scrollHeight;
       setPageCount(Math.max(1, Math.ceil(h / dims.hPX)));
-    }, 150);
-    return () => clearTimeout(timer);
-  }, [debouncedData, dims.hPX, customize]);
+    };
+
+    const t = setTimeout(measure, 0);
+    return () => clearTimeout(t);
+  }, [data, customize, dims.hPX]);
+
+  useEffect(() => {
+    const el = containerRef.current;
+    if (!el) return;
+
+    const onScroll = () => {
+      const visualTop = el.scrollTop / scale;
+      const pageWithGaps = dims.hPX + 40;
+      const page = Math.min(pageCount, Math.max(1, Math.floor(visualTop / pageWithGaps) + 1));
+      setCurrentPage(page);
+    };
+
+    el.addEventListener("scroll", onScroll, { passive: true });
+    onScroll();
+    return () => el.removeEventListener("scroll", onScroll);
+  }, [scale, dims.hPX, pageCount]);
 
   const totalScaledHeight = pageCount * dims.hPX + (pageCount - 1) * 40;
-  const thumbScale = 0.08;
 
   return (
-    <div
-      ref={containerRef}
-      className="h-full overflow-y-auto relative"
-      style={{ backgroundColor: "#f3f4f6" }}
-    >
-      {/* Scaled page(s) */}
+    <div ref={containerRef} className="h-full overflow-y-auto relative" style={{ backgroundColor: "#f3f4f6" }}>
       <div className="flex justify-center py-8 px-6">
         <div
           style={{
@@ -669,9 +712,8 @@ export const ResumePreview = React.memo(function ResumePreview({ data, customize
             marginBottom: `${-(1 - scale) * totalScaledHeight}px`,
           }}
         >
-          {/* Hidden full-flow render for PDF capture */}
           <div
-            ref={contentRef}
+            ref={hiddenFlowRef}
             id={pdfTargetId}
             style={{
               position: "absolute",
@@ -683,10 +725,9 @@ export const ResumePreview = React.memo(function ResumePreview({ data, customize
               zIndex: -1,
             }}
           >
-            <A4Page data={debouncedData} customize={customize} />
+            <A4Page data={data} customize={customize} />
           </div>
 
-          {/* Visible paginated pages */}
           {Array.from({ length: pageCount }, (_, i) => (
             <React.Fragment key={i}>
               {i > 0 && (
@@ -696,6 +737,7 @@ export const ResumePreview = React.memo(function ResumePreview({ data, customize
                   <div style={{ flex: 1, height: "1px", background: "repeating-linear-gradient(90deg, #d1d5db 0, #d1d5db 6px, transparent 6px, transparent 12px)" }} />
                 </div>
               )}
+
               <div
                 className="shadow-2xl rounded-sm"
                 style={{
@@ -705,13 +747,8 @@ export const ResumePreview = React.memo(function ResumePreview({ data, customize
                   backgroundColor: customize?.a4Background || "#ffffff",
                 }}
               >
-                <div
-                  style={{
-                    width: `${dims.wPX}px`,
-                    transform: `translateY(${-i * dims.hPX}px)`,
-                  }}
-                >
-                  <A4Page data={debouncedData} customize={customize} onEditSection={onEditSection} />
+                <div style={{ width: `${dims.wPX}px`, transform: `translateY(${-i * dims.hPX}px)` }}>
+                  <A4Page data={data} customize={customize} onEditSection={onEditSection} />
                 </div>
               </div>
             </React.Fragment>
@@ -719,7 +756,6 @@ export const ResumePreview = React.memo(function ResumePreview({ data, customize
         </div>
       </div>
 
-      {/* Zoom controls + page indicator */}
       <div className="sticky bottom-4 flex justify-center pointer-events-none z-10">
         <div className="pointer-events-auto flex items-center gap-1 bg-white/90 backdrop-blur-sm rounded-full shadow-md border border-gray-200 px-1.5 py-1">
           <button
@@ -729,9 +765,9 @@ export const ResumePreview = React.memo(function ResumePreview({ data, customize
           >
             <ZoomOut className="w-3.5 h-3.5" />
           </button>
-          <span className="text-xs font-medium text-gray-600 min-w-[40px] text-center">
-            {Math.round(scale * 100)}%
-          </span>
+
+          <span className="text-xs font-medium text-gray-600 min-w-[40px] text-center">{Math.round(scale * 100)}%</span>
+
           <button
             onClick={() => setZoomOffset((z) => Math.min(z + 0.1, 0.6))}
             className="w-7 h-7 rounded-full flex items-center justify-center text-gray-500 hover:bg-gray-100 transition-colors"
@@ -739,6 +775,7 @@ export const ResumePreview = React.memo(function ResumePreview({ data, customize
           >
             <ZoomIn className="w-3.5 h-3.5" />
           </button>
+
           {zoomOffset !== 0 && (
             <button
               onClick={() => setZoomOffset(0)}
@@ -748,38 +785,9 @@ export const ResumePreview = React.memo(function ResumePreview({ data, customize
               <RotateCcw className="w-3 h-3" />
             </button>
           )}
-          <div className="w-px h-4 bg-gray-200 mx-0.5" />
-          <span className="text-xs text-gray-500 px-1.5">
-            {pageCount} pg{pageCount > 1 ? "s" : ""}
-          </span>
-        </div>
-      </div>
 
-      {/* Thumbnail navigator */}
-      <div
-        className="fixed bottom-6 right-6 z-20 cursor-pointer group"
-        onClick={() => containerRef.current?.scrollTo({ top: 0, behavior: "smooth" })}
-        title="Scroll to top"
-      >
-        <div
-          className="bg-white rounded shadow-lg border border-gray-200 overflow-hidden group-hover:shadow-xl transition-shadow"
-          style={{
-            width: `${dims.wPX * thumbScale}px`,
-            height: `${dims.hPX * thumbScale}px`,
-          }}
-        >
-          <div
-            style={{
-              transform: `scale(${thumbScale})`,
-              transformOrigin: "top left",
-              width: `${dims.wPX}px`,
-              height: `${dims.hPX}px`,
-              overflow: "hidden",
-              pointerEvents: "none",
-            }}
-          >
-            <A4Page data={debouncedData} customize={customize} />
-          </div>
+          <div className="w-px h-4 bg-gray-200 mx-0.5" />
+          <span className="text-xs text-gray-500 px-1.5">Page {currentPage} of {pageCount}</span>
         </div>
       </div>
     </div>
