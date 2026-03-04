@@ -356,13 +356,13 @@ function renderSectionEntries(section: ResumeSection, customize?: CustomizeSetti
 
           return (
             <div key={entry.id}>
-              <p style={{ fontSize: "9pt", fontWeight: 700, color: "var(--resume-name)" }}>
+              <p style={{ fontSize: bodyPt(base), fontWeight: 700, color: "var(--resume-name)" }}>
                 {f.name || "Reference"}
               </p>
-              <p style={{ fontSize: "8pt", color: "var(--resume-subtitle)" }}>
+              <p style={{ fontSize: datePt(base), color: "var(--resume-subtitle)" }}>
                 {[f.position, f.company].filter(Boolean).join(" · ")}
               </p>
-              <p style={{ fontSize: "8pt", color: "var(--resume-dates)" }}>
+              <p style={{ fontSize: datePt(base), color: "var(--resume-dates)" }}>
                 {[f.phone, f.email].filter(Boolean).join(" · ")}
               </p>
             </div>
