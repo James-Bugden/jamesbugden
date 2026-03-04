@@ -865,8 +865,16 @@ export const ResumePreview = React.memo(function ResumePreview({
       setPageCount(Math.max(1, Math.ceil(h / dims.hPX)));
     };
 
-    const t = setTimeout(measure, 0);
-    return () => clearTimeout(t);
+    // Use double rAF to ensure layout is complete before measuring
+    let raf1: number;
+    let raf2: number;
+    raf1 = requestAnimationFrame(() => {
+      raf2 = requestAnimationFrame(measure);
+    });
+    return () => {
+      cancelAnimationFrame(raf1);
+      cancelAnimationFrame(raf2);
+    };
   }, [data, customize, dims.hPX]);
 
   useEffect(() => {
