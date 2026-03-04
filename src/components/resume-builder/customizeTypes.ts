@@ -87,6 +87,7 @@ export interface CustomizeSettings {
   languagesDisplay: "grid" | "level" | "compact" | "bubble";
   educationOrder: "degree-first" | "school-first";
   experienceOrder: "title-first" | "employer-first";
+  groupPromotions: boolean;
 }
 
 export const DEFAULT_CUSTOMIZE: CustomizeSettings = {
