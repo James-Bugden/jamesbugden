@@ -63,6 +63,30 @@ export interface CustomizeSettings {
   // Footer
   showPageNumbers: boolean;
   showFooterSignature: boolean;
+  showFooterEmail: boolean;
+  showFooterName: boolean;
+
+  // Entry layout
+  entryLayout: "stacked" | "inline" | "compact" | "academic";
+  titleSubtitleSize: "xs" | "s" | "m" | "l";
+  subtitleStyle: "normal" | "bold" | "italic";
+  subtitlePlacement: "same-line" | "next-line";
+  listStyle: "bullet" | "hyphen" | "none";
+
+  // Accent color application
+  accentApplyName: boolean;
+  accentApplyHeadings: boolean;
+  accentApplyDates: boolean;
+  accentApplyTitle: boolean;
+  accentApplyIcons: boolean;
+  accentApplySubtitle: boolean;
+  accentApplyLines: boolean;
+
+  // Per-section settings
+  skillsDisplay: "grid" | "level" | "compact" | "bubble";
+  languagesDisplay: "grid" | "level" | "compact" | "bubble";
+  educationOrder: "degree-first" | "school-first";
+  experienceOrder: "title-first" | "employer-first";
 }
 
 export const DEFAULT_CUSTOMIZE: CustomizeSettings = {
@@ -118,6 +142,27 @@ export const DEFAULT_CUSTOMIZE: CustomizeSettings = {
 
   showPageNumbers: false,
   showFooterSignature: false,
+  showFooterEmail: false,
+  showFooterName: false,
+
+  entryLayout: "stacked",
+  titleSubtitleSize: "m",
+  subtitleStyle: "normal",
+  subtitlePlacement: "next-line",
+  listStyle: "bullet",
+
+  accentApplyName: false,
+  accentApplyHeadings: true,
+  accentApplyDates: false,
+  accentApplyTitle: false,
+  accentApplyIcons: false,
+  accentApplySubtitle: false,
+  accentApplyLines: true,
+
+  skillsDisplay: "grid",
+  languagesDisplay: "grid",
+  educationOrder: "degree-first",
+  experienceOrder: "title-first",
 };
 
 export const ACCENT_COLORS = [
