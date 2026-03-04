@@ -122,7 +122,7 @@ function DeclarationForm({ entry, set }: { entry: ResumeSectionEntry; set: (fiel
         {f.signature ? (
           <div className="flex items-center gap-3">
             <img src={f.signature} alt="Signature" className="h-12 border border-gray-200 rounded-lg bg-white p-1" />
-            <button onClick={() => setSigOpen(true)} className="text-xs text-pink-600 hover:text-pink-700 font-medium">Redraw</button>
+            <button onClick={() => setSigOpen(true)} className="text-xs font-medium hover:opacity-80" style={{ color: "#2b4734" }}>Redraw</button>
             <button onClick={() => set("signature")("")} className="text-xs text-gray-400 hover:text-red-500">Remove</button>
           </div>
         ) : (

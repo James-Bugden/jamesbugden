@@ -250,7 +250,7 @@ export function PersonalDetailsCard({ details, onChange, collapsible }: Personal
             <button
               onClick={() => setEditing(false)}
               className="w-full py-2.5 rounded-lg text-sm font-semibold text-white transition-colors mt-2"
-              style={{ backgroundColor: "#e11d73" }}
+              style={{ backgroundColor: "#2b4734" }}
             >
               Done
             </button>
