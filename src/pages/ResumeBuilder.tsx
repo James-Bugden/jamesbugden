@@ -322,6 +322,12 @@ const ResumeBuilder = () => {
   // Undo/redo
   const historyRef = useRef<{ past: any[]; future: any[] }>({ past: [], future: [] });
 
+  const pushHistory = useCallback(() => {
+    historyRef.current.past.push(JSON.stringify(data));
+    if (historyRef.current.past.length > 30) historyRef.current.past.shift();
+    historyRef.current.future = [];
+  }, [data]);
+
   const handleDragEnd = useCallback((event: DragEndEvent) => {
     const { active, over } = event;
     if (!over || active.id === over.id) return;
