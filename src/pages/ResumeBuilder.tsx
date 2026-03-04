@@ -349,60 +349,73 @@ const ResumeBuilder = () => {
   const editorContent = loading ? (
     <EditorSkeleton />
   ) : activeTab === "content" ? (
-    <div className="max-w-2xl mx-auto p-4 md:p-6 space-y-4">
-      {/* Resume score removed for cleaner UX */}
-      <PersonalDetailsCard details={data.personalDetails} onChange={(u) => { pushHistory(); updatePersonalDetails(u); }} collapsible />
-      {data.sections.map((section, idx) => (
-        <div
-          key={section.id}
-          draggable
-          onDragStart={handleSectionDragStart(idx)}
-          onDragOver={handleSectionDragOver(idx)}
-          onDrop={handleSectionDrop(idx)}
-          onDragEnd={handleSectionDragEnd}
-          className={cn(
-            "transition-all duration-150",
-            sectionOverIdx === idx && "ring-2 ring-purple-400 ring-offset-2 rounded-xl"
-          )}
+    <div className="max-w-2xl mx-auto p-4 md:p-6 space-y-0">
+      {/* Personal Details */}
+      <PersonalDetailsCard details={data.personalDetails} onChange={(u) => { pushHistory(); updatePersonalDetails(u); }} />
+
+      {/* Section divider */}
+      {data.sections.length > 0 && <div className="border-t border-gray-100 my-4" />}
+
+      {/* Sections — separated by subtle dividers */}
+      <div className="bg-white rounded-xl px-5 py-2" style={{ boxShadow: "0 1px 3px rgba(0,0,0,0.04)" }}>
+        {data.sections.map((section, idx) => (
+          <div
+            key={section.id}
+            draggable
+            onDragStart={handleSectionDragStart(idx)}
+            onDragOver={handleSectionDragOver(idx)}
+            onDrop={handleSectionDrop(idx)}
+            onDragEnd={handleSectionDragEnd}
+            className={cn(
+              "transition-all duration-150",
+              idx > 0 && "border-t border-gray-100",
+              sectionOverIdx === idx && "bg-pink-50/30"
+            )}
+          >
+            <SectionCard
+              section={section}
+              onUpdate={(updates) => { pushHistory(); updateSection(section.id, updates); }}
+              onRemove={() => {
+                pushHistory();
+                const removed = section;
+                removeSection(section.id);
+                toast({
+                  title: "Section removed",
+                  description: `${removed.title} was deleted.`,
+                  action: (
+                    <button
+                      onClick={() => {
+                        const restored = [...data.sections];
+                        restored.splice(idx, 0, removed);
+                        setSections(restored);
+                      }}
+                      className="text-xs font-semibold text-pink-600 hover:text-pink-700 px-2 py-1 rounded bg-pink-50 hover:bg-pink-100"
+                    >
+                      Undo
+                    </button>
+                  ),
+                });
+              }}
+            />
+          </div>
+        ))}
+        {data.sections.length === 0 && (
+          <div className="text-center py-8">
+            <p className="text-gray-400 text-sm">Add sections to build your resume</p>
+          </div>
+        )}
+      </div>
+
+      {/* Add Content button */}
+      <div className="pt-4">
+        <button
+          onClick={() => setModalOpen(true)}
+          className="w-full flex items-center justify-center gap-2 py-3 rounded-xl text-white font-semibold text-sm transition-opacity active:scale-[0.98]"
+          style={{ backgroundColor: "#e11d73" }}
         >
-          <SectionCard
-            section={section}
-            onUpdate={(updates) => { pushHistory(); updateSection(section.id, updates); }}
-            onRemove={() => {
-              pushHistory();
-              const removed = section;
-              removeSection(section.id);
-              toast({
-                title: "Section removed",
-                description: `${removed.title} was deleted.`,
-                action: (
-                  <button
-                    onClick={() => {
-                      const restored = [...data.sections];
-                      restored.splice(idx, 0, removed);
-                      setSections(restored);
-                    }}
-                    className="text-xs font-semibold text-pink-600 hover:text-pink-700 px-2 py-1 rounded bg-pink-50 hover:bg-pink-100"
-                  >
-                    Undo
-                  </button>
-                ),
-              });
-            }}
-          />
-        </div>
-      ))}
-      <button
-        onClick={() => setModalOpen(true)}
-        className="w-full flex items-center justify-center gap-2 py-4 md:py-3.5 rounded-xl text-white font-semibold text-sm bg-gradient-to-r from-[#FF4B6E] to-[#FF6B8A] hover:opacity-90 transition-opacity shadow-md active:scale-[0.98]"
-      >
-        <Plus className="w-5 h-5" /> Add Content
-      </button>
-      {data.sections.length === 0 && (
-        <div className="text-center py-12">
-          <p className="text-gray-400 text-sm">Your resume is empty. Add sections to get started!</p>
-        </div>
-      )}
+          <Plus className="w-4.5 h-4.5" /> Add Content
+        </button>
+      </div>
     </div>
   ) : activeTab === "customize" ? (
     <CustomizePanel settings={customize} onChange={updateCustomize} sections={data.sections} />

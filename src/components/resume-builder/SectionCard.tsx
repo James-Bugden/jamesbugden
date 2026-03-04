@@ -1,5 +1,5 @@
 import { useState, useRef, useCallback } from "react";
-import { ChevronDown, ChevronUp, GripVertical, Trash2, Plus, Grid3X3, Circle, BarChart3, List, Minus as MinusIcon } from "lucide-react";
+import { ChevronDown, ChevronUp, GripVertical, Trash2, Plus, X, Pencil, Grid3X3, Circle, BarChart3, List } from "lucide-react";
 import * as Icons from "lucide-react";
 import { Checkbox } from "@/components/ui/checkbox";
 import { ResumeSection, ResumeSectionEntry, SectionLayout, SectionSeparator, LevelIndicator, SubtitleStyle, getDefaultFieldsForType, SECTION_TYPES, PROFICIENCY_LEVELS } from "./types";
@@ -9,30 +9,24 @@ import { TagInput } from "./TagInput";
 import { SignatureModal } from "./SignatureModal";
 import { cn } from "@/lib/utils";
 
-interface SectionCardProps {
-  section: ResumeSection;
-  onUpdate: (updates: Partial<ResumeSection>) => void;
-  onRemove: () => void;
-}
-
 function getIcon(iconName: string) {
   const Icon = (Icons as any)[iconName];
   return Icon || Icons.FileText;
 }
 
-/* Styled input matching FlowCV: light gray bg, no border, bold label */
+/* ── Clean input field ─────────────────────────────────── */
 function SField({ label, value, onChange, placeholder, className, type = "text" }: {
   label: string; value: string; onChange: (v: string) => void; placeholder?: string; className?: string; type?: string;
 }) {
   return (
     <div className={className}>
-      <label className="block text-xs font-bold text-gray-700 mb-1">{label}</label>
+      <label className="block text-[11px] font-medium text-gray-500 mb-1">{label}</label>
       <input
         type={type}
         value={value}
         onChange={(e) => onChange(e.target.value)}
         placeholder={placeholder || label}
-        className="w-full h-11 md:h-10 rounded-lg bg-[#F5F3EE] px-3 text-sm outline-none focus:ring-2 focus:ring-pink-300 border-0"
+        className="w-full h-10 rounded-lg bg-gray-50 px-3 text-sm text-gray-900 border border-gray-200 outline-none focus:border-gray-400 focus:ring-1 focus:ring-gray-200 transition-colors placeholder-gray-400"
       />
     </div>
   );
@@ -60,6 +54,7 @@ function getEntrySummary(type: string, fields: Record<string, string>): string {
   }
 }
 
+/* ── Layout / Separator / Level / Subtitle switchers ──── */
 const LAYOUT_OPTIONS: { value: SectionLayout; label: string; icon: React.ElementType }[] = [
   { value: "grid", label: "Grid", icon: Grid3X3 },
   { value: "bubble", label: "Bubble", icon: Circle },
@@ -67,21 +62,23 @@ const LAYOUT_OPTIONS: { value: SectionLayout; label: string; icon: React.Element
   { value: "compact", label: "Compact", icon: List },
 ];
 
-function LayoutSwitcher({ layout, onChange }: { layout: SectionLayout; onChange: (l: SectionLayout) => void }) {
+function PillSwitcher<T extends string>({ label, options, value, onChange }: {
+  label: string; options: { value: T; label: string; icon?: React.ElementType }[]; value: T; onChange: (v: T) => void;
+}) {
   return (
     <div>
-      <label className="block text-xs font-bold text-gray-700 mb-1.5">Layout</label>
+      <label className="block text-[11px] font-medium text-gray-500 mb-1.5">{label}</label>
       <div className="flex gap-1 bg-gray-100 rounded-lg p-0.5">
-        {LAYOUT_OPTIONS.map((opt) => (
+        {options.map((opt) => (
           <button
             key={opt.value}
             onClick={() => onChange(opt.value)}
             className={cn(
-              "flex items-center gap-1.5 px-3 py-1.5 rounded-md text-xs font-semibold transition-colors",
-              layout === opt.value ? "bg-white text-gray-900 shadow-sm" : "text-gray-500 hover:text-gray-700"
+              "flex items-center gap-1.5 px-2.5 py-1.5 rounded-md text-[11px] font-medium transition-colors",
+              value === opt.value ? "bg-white text-gray-900 shadow-sm" : "text-gray-500 hover:text-gray-700"
             )}
           >
-            <opt.icon className="w-3.5 h-3.5" />
+            {opt.icon && <opt.icon className="w-3 h-3" />}
             {opt.label}
           </button>
         ))}
@@ -97,86 +94,19 @@ const SEPARATOR_OPTIONS: { value: SectionSeparator; label: string }[] = [
   { value: "newline", label: "New Line" },
 ];
 
-function SeparatorSwitcher({ separator, onChange }: { separator: SectionSeparator; onChange: (s: SectionSeparator) => void }) {
-  return (
-    <div>
-      <label className="block text-xs font-bold text-gray-700 mb-1.5">Separator</label>
-      <div className="flex gap-1 bg-gray-100 rounded-lg p-0.5">
-        {SEPARATOR_OPTIONS.map((opt) => (
-          <button
-            key={opt.value}
-            onClick={() => onChange(opt.value)}
-            className={cn(
-              "px-2.5 py-1.5 rounded-md text-xs font-semibold transition-colors",
-              separator === opt.value ? "bg-white text-gray-900 shadow-sm" : "text-gray-500 hover:text-gray-700"
-            )}
-          >
-            {opt.label}
-          </button>
-        ))}
-      </div>
-    </div>
-  );
-}
-
 const LEVEL_INDICATOR_OPTIONS: { value: LevelIndicator; label: string }[] = [
   { value: "bar", label: "Bar" },
   { value: "dots", label: "Dots" },
   { value: "text", label: "Text" },
 ];
 
-function LevelIndicatorSwitcher({ indicator, onChange }: { indicator: LevelIndicator; onChange: (i: LevelIndicator) => void }) {
-  return (
-    <div>
-      <label className="block text-xs font-bold text-gray-700 mb-1.5">Level Indicator</label>
-      <div className="flex gap-1 bg-gray-100 rounded-lg p-0.5">
-        {LEVEL_INDICATOR_OPTIONS.map((opt) => (
-          <button
-            key={opt.value}
-            onClick={() => onChange(opt.value)}
-            className={cn(
-              "px-3 py-1.5 rounded-md text-xs font-semibold transition-colors",
-              indicator === opt.value ? "bg-white text-gray-900 shadow-sm" : "text-gray-500 hover:text-gray-700"
-            )}
-          >
-            {opt.label}
-          </button>
-        ))}
-      </div>
-    </div>
-  );
-}
-
-const SUBTITLE_STYLE_OPTIONS: { value: SubtitleStyle; label: string; example: string }[] = [
-  { value: "dash", label: "Dash", example: "Skill — Detail" },
-  { value: "colon", label: "Colon", example: "Skill: Detail" },
-  { value: "bracket", label: "Bracket", example: "Skill (Detail)" },
+const SUBTITLE_STYLE_OPTIONS: { value: SubtitleStyle; label: string }[] = [
+  { value: "dash", label: "Dash —" },
+  { value: "colon", label: "Colon :" },
+  { value: "bracket", label: "Bracket ()" },
 ];
 
-function SubtitleStyleSwitcher({ style, onChange }: { style: SubtitleStyle; onChange: (s: SubtitleStyle) => void }) {
-  return (
-    <div>
-      <label className="block text-xs font-bold text-gray-700 mb-1.5">Subtitle Style</label>
-      <div className="flex gap-1 bg-gray-100 rounded-lg p-0.5">
-        {SUBTITLE_STYLE_OPTIONS.map((opt) => (
-          <button
-            key={opt.value}
-            onClick={() => onChange(opt.value)}
-            className={cn(
-              "px-2.5 py-1.5 rounded-md text-[10px] font-semibold transition-colors",
-              style === opt.value ? "bg-white text-gray-900 shadow-sm" : "text-gray-500 hover:text-gray-700"
-            )}
-            title={opt.example}
-          >
-            {opt.label}
-          </button>
-        ))}
-      </div>
-    </div>
-  );
-}
-
-/* ── Declaration form with signature modal ──────────────── */
+/* ── Declaration form ───────────────────────────────────── */
 function DeclarationForm({ entry, set }: { entry: ResumeSectionEntry; set: (field: string) => (val: string) => void }) {
   const [sigOpen, setSigOpen] = useState(false);
   const f = entry.fields;
@@ -188,17 +118,17 @@ function DeclarationForm({ entry, set }: { entry: ResumeSectionEntry; set: (fiel
         <SField label="Date" value={f.date || ""} onChange={set("date")} placeholder="e.g. February 2026" />
       </div>
       <div>
-        <label className="block text-xs font-bold text-gray-700 mb-1">Signature</label>
+        <label className="block text-[11px] font-medium text-gray-500 mb-1">Signature</label>
         {f.signature ? (
           <div className="flex items-center gap-3">
             <img src={f.signature} alt="Signature" className="h-12 border border-gray-200 rounded-lg bg-white p-1" />
-            <button onClick={() => setSigOpen(true)} className="text-xs text-purple-600 hover:text-purple-700 font-medium">Redraw</button>
+            <button onClick={() => setSigOpen(true)} className="text-xs text-pink-600 hover:text-pink-700 font-medium">Redraw</button>
             <button onClick={() => set("signature")("")} className="text-xs text-gray-400 hover:text-red-500">Remove</button>
           </div>
         ) : (
           <button
             onClick={() => setSigOpen(true)}
-            className="h-11 md:h-10 px-4 rounded-lg bg-[#F5F3EE] text-sm text-gray-600 hover:bg-gray-200 transition-colors hover:scale-[1.02] active:scale-[0.98]"
+            className="h-10 px-4 rounded-lg bg-gray-50 border border-gray-200 text-sm text-gray-600 hover:bg-gray-100 transition-colors"
           >
             + Draw or Upload Signature
           </button>
@@ -209,20 +139,13 @@ function DeclarationForm({ entry, set }: { entry: ResumeSectionEntry; set: (fiel
   );
 }
 
-/* ── Drag-and-drop entry list ───────────────────────────── */
+/* ── Entry list ─────────────────────────────────────────── */
 function EntryList({
-  entries,
-  type,
-  renderEntryForm,
-  getEntrySummary: getSummary,
-  toggleEntryCollapse,
-  removeEntry,
-  onReorder,
+  entries, type, renderEntryForm, toggleEntryCollapse, removeEntry, onReorder,
 }: {
   entries: ResumeSectionEntry[];
   type: string;
   renderEntryForm: (entry: ResumeSectionEntry) => React.ReactNode;
-  getEntrySummary: (type: string, fields: Record<string, string>) => string;
   toggleEntryCollapse: (id: string) => void;
   removeEntry: (id: string) => void;
   onReorder: (entries: ResumeSectionEntry[]) => void;
@@ -234,13 +157,11 @@ function EntryList({
     dragIdx.current = idx;
     e.dataTransfer.effectAllowed = "move";
   };
-
   const handleDragOver = (idx: number) => (e: React.DragEvent) => {
     e.preventDefault();
     e.dataTransfer.dropEffect = "move";
     setOverIdx(idx);
   };
-
   const handleDrop = (idx: number) => (e: React.DragEvent) => {
     e.preventDefault();
     const from = dragIdx.current;
@@ -252,13 +173,12 @@ function EntryList({
     dragIdx.current = null;
     setOverIdx(null);
   };
-
   const handleDragEnd = () => { dragIdx.current = null; setOverIdx(null); };
 
   return (
-    <>
+    <div className="space-y-0">
       {entries.map((entry, idx) => {
-        const isEntryCollapsed = entry.collapsed ?? false;
+        const isCollapsed = entry.collapsed ?? false;
         const isOver = overIdx === idx;
         return (
           <div
@@ -269,37 +189,43 @@ function EntryList({
             onDrop={handleDrop(idx)}
             onDragEnd={handleDragEnd}
             className={cn(
-              "rounded-lg border overflow-hidden transition-all duration-150",
-              isOver ? "border-purple-400 bg-purple-50/30" : "border-gray-100"
+              "border-b border-gray-100 last:border-b-0 transition-colors",
+              isOver && "bg-pink-50/50"
             )}
           >
+            {/* Entry row */}
             <div
-              className="flex items-center gap-2 px-4 py-3 min-h-[48px] bg-gray-50/50 cursor-pointer"
+              className="flex items-center gap-2 px-1 py-2.5 cursor-pointer group"
               onClick={() => toggleEntryCollapse(entry.id)}
             >
-              <GripVertical className="w-3.5 h-3.5 text-gray-300 cursor-grab flex-shrink-0 hover:text-gray-500 active:text-gray-700" />
+              <GripVertical className="w-3.5 h-3.5 text-gray-300 cursor-grab flex-shrink-0 opacity-0 group-hover:opacity-100 transition-opacity" />
               <span className="text-sm text-gray-700 flex-1 truncate">
-                {getSummary(type, entry.fields)}
+                {getEntrySummary(type, entry.fields)}
               </span>
               <button
                 onClick={(e) => { e.stopPropagation(); removeEntry(entry.id); }}
-                className="p-2 text-gray-400 hover:text-red-500"
+                className="p-1.5 text-gray-300 hover:text-red-500 opacity-0 group-hover:opacity-100 transition-all"
               >
-                <Trash2 className="w-3.5 h-3.5" />
+                <X className="w-3.5 h-3.5" />
               </button>
-              {isEntryCollapsed ? <ChevronDown className="w-4 h-4 text-gray-400" /> : <ChevronUp className="w-4 h-4 text-gray-400" />}
-            </div>
-            <div
-              className={cn(
-                "transition-all duration-200 ease-in-out overflow-hidden",
-                isEntryCollapsed ? "max-h-0 opacity-0" : "max-h-[3000px] opacity-100"
+              {isCollapsed ? (
+                <ChevronDown className="w-4 h-4 text-gray-400 flex-shrink-0" />
+              ) : (
+                <ChevronUp className="w-4 h-4 text-gray-400 flex-shrink-0" />
               )}
-            >
-              <div className="p-4 space-y-3">
+            </div>
+
+            {/* Expanded form */}
+            <div className={cn(
+              "transition-all duration-200 ease-in-out overflow-hidden",
+              isCollapsed ? "max-h-0 opacity-0" : "max-h-[3000px] opacity-100"
+            )}>
+              <div className="px-1 pb-4 pt-1 space-y-3">
                 {renderEntryForm(entry)}
                 <button
                   onClick={() => toggleEntryCollapse(entry.id)}
-                  className="w-full py-2.5 rounded-lg bg-gray-100 text-sm font-medium text-gray-700 hover:bg-gray-200 transition-colors hover:scale-[1.02] active:scale-[0.98]"
+                  className="w-full py-2 rounded-lg text-sm font-semibold text-white transition-colors"
+                  style={{ backgroundColor: "#e11d73" }}
                 >
                   Done
                 </button>
@@ -308,13 +234,20 @@ function EntryList({
           </div>
         );
       })}
-    </>
+    </div>
   );
 }
 
-export function SectionCard({ section, onUpdate, onRemove }: SectionCardProps) {
+/* ── Main SectionCard ───────────────────────────────────── */
+export function SectionCard({ section, onUpdate, onRemove }: {
+  section: ResumeSection;
+  onUpdate: (updates: Partial<ResumeSection>) => void;
+  onRemove: () => void;
+}) {
   const sectionMeta = SECTION_TYPES.find((s) => s.type === section.type);
   const IconComponent = getIcon(sectionMeta?.icon || "FileText");
+  const [editingTitle, setEditingTitle] = useState(false);
+  const [titleValue, setTitleValue] = useState(section.title);
 
   const toggleCollapse = () => onUpdate({ collapsed: !section.collapsed });
 
@@ -360,25 +293,25 @@ export function SectionCard({ section, onUpdate, onRemove }: SectionCardProps) {
           <div className="space-y-3">
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
               <SField label="Job Title" value={f.position} onChange={set("position")} />
-              <SField label="Company Name" value={f.company} onChange={set("company")} />
+              <SField label="Employer" value={f.company} onChange={set("company")} />
             </div>
             <SField label="Location" value={f.location || ""} onChange={set("location")} />
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
               <div>
-                <label className="block text-xs font-bold text-gray-700 mb-1">Start Date</label>
+                <label className="block text-[11px] font-medium text-gray-500 mb-1">Start Date</label>
                 <MonthYearPicker monthValue={f.startMonth || ""} yearValue={f.startYear || ""} onMonthChange={set("startMonth")} onYearChange={set("startYear")} />
               </div>
               <div>
-                <label className="block text-xs font-bold text-gray-700 mb-1">End Date</label>
+                <label className="block text-[11px] font-medium text-gray-500 mb-1">End Date</label>
                 <MonthYearPicker monthValue={f.endMonth || ""} yearValue={f.endYear || ""} onMonthChange={set("endMonth")} onYearChange={set("endYear")} showPresent={isCurrently} />
               </div>
             </div>
-            <div className="flex items-center gap-2 min-h-[44px]">
+            <label className="flex items-center gap-2 text-sm text-gray-600 cursor-pointer py-1">
               <Checkbox checked={isCurrently} onCheckedChange={(v) => set("currentlyHere")(v ? "true" : "")} id={`currently-${entry.id}`} />
-              <label htmlFor={`currently-${entry.id}`} className="text-sm text-gray-600">Currently working here</label>
-            </div>
+              Currently working here
+            </label>
             <div>
-              <label className="block text-xs font-bold text-gray-700 mb-1">Description</label>
+              <label className="block text-[11px] font-medium text-gray-500 mb-1">Description</label>
               <RichTextEditor value={f.description || ""} onChange={set("description")} placeholder="Describe your role..." showAiTools aiContext={`Role: ${f.position || "position"} at ${f.company || "company"}`} />
             </div>
           </div>
@@ -394,20 +327,20 @@ export function SectionCard({ section, onUpdate, onRemove }: SectionCardProps) {
             <SField label="Location" value={f.location || ""} onChange={set("location")} />
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
               <div>
-                <label className="block text-xs font-bold text-gray-700 mb-1">Start Date</label>
+                <label className="block text-[11px] font-medium text-gray-500 mb-1">Start Date</label>
                 <MonthYearPicker monthValue={f.startMonth || ""} yearValue={f.startYear || ""} onMonthChange={set("startMonth")} onYearChange={set("startYear")} />
               </div>
               <div>
-                <label className="block text-xs font-bold text-gray-700 mb-1">End Date</label>
+                <label className="block text-[11px] font-medium text-gray-500 mb-1">End Date</label>
                 <MonthYearPicker monthValue={f.endMonth || ""} yearValue={f.endYear || ""} onMonthChange={set("endMonth")} onYearChange={set("endYear")} showPresent={f.currentlyHere === "true"} />
               </div>
             </div>
-            <div className="flex items-center gap-2 min-h-[44px]">
+            <label className="flex items-center gap-2 text-sm text-gray-600 cursor-pointer py-1">
               <Checkbox checked={f.currentlyHere === "true"} onCheckedChange={(v) => set("currentlyHere")(v ? "true" : "")} id={`edu-currently-${entry.id}`} />
-              <label htmlFor={`edu-currently-${entry.id}`} className="text-sm text-gray-600">Currently studying here</label>
-            </div>
+              Currently studying here
+            </label>
             <div>
-              <label className="block text-xs font-bold text-gray-700 mb-1">Description</label>
+              <label className="block text-[11px] font-medium text-gray-500 mb-1">Description</label>
               <RichTextEditor value={f.description || ""} onChange={set("description")} showAiTools aiContext={`Education: ${f.degree || "degree"} at ${f.institution || "institution"}`} />
             </div>
           </div>
@@ -416,23 +349,25 @@ export function SectionCard({ section, onUpdate, onRemove }: SectionCardProps) {
       case "skills":
         return (
           <div className="space-y-3">
-            <LayoutSwitcher layout={section.layout || "bubble"} onChange={(l) => onUpdate({ layout: l })} />
+            <PillSwitcher label="Layout" options={LAYOUT_OPTIONS} value={section.layout || "bubble"} onChange={(l) => onUpdate({ layout: l })} />
             {(section.layout === "compact" || section.layout === "grid") && (
-              <SeparatorSwitcher separator={section.separator || "bullet"} onChange={(s) => onUpdate({ separator: s })} />
+              <PillSwitcher label="Separator" options={SEPARATOR_OPTIONS} value={section.separator || "bullet"} onChange={(s) => onUpdate({ separator: s })} />
             )}
             {section.layout === "level" && (
-              <LevelIndicatorSwitcher indicator={section.levelIndicator || "bar"} onChange={(i) => onUpdate({ levelIndicator: i })} />
+              <PillSwitcher label="Level Indicator" options={LEVEL_INDICATOR_OPTIONS} value={section.levelIndicator || "bar"} onChange={(i) => onUpdate({ levelIndicator: i })} />
             )}
-            <SubtitleStyleSwitcher style={section.subtitleStyle || "dash"} onChange={(s) => onUpdate({ subtitleStyle: s })} />
-            <label className="block text-xs font-bold text-gray-700 mb-1">Skills</label>
-            <TagInput value={f.skills || ""} onChange={set("skills")} placeholder="Type a skill and press Enter" showLevel={section.layout === "level"} />
+            <PillSwitcher label="Subtitle Style" options={SUBTITLE_STYLE_OPTIONS} value={section.subtitleStyle || "dash"} onChange={(s) => onUpdate({ subtitleStyle: s })} />
+            <div>
+              <label className="block text-[11px] font-medium text-gray-500 mb-1">Skills</label>
+              <TagInput value={f.skills || ""} onChange={set("skills")} placeholder="Type a skill and press Enter" showLevel={section.layout === "level"} />
+            </div>
           </div>
         );
 
       case "interests":
         return (
           <div>
-            <label className="block text-xs font-bold text-gray-700 mb-1">Interests</label>
+            <label className="block text-[11px] font-medium text-gray-500 mb-1">Interests</label>
             <TagInput value={f.interests || ""} onChange={set("interests")} placeholder="Type an interest and press Enter" />
           </div>
         );
@@ -440,22 +375,22 @@ export function SectionCard({ section, onUpdate, onRemove }: SectionCardProps) {
       case "languages":
         return (
           <div className="space-y-3">
-            <LayoutSwitcher layout={section.layout || "compact"} onChange={(l) => onUpdate({ layout: l })} />
+            <PillSwitcher label="Layout" options={LAYOUT_OPTIONS} value={section.layout || "compact"} onChange={(l) => onUpdate({ layout: l })} />
             {(section.layout === "compact" || section.layout === "grid") && (
-              <SeparatorSwitcher separator={section.separator || "bullet"} onChange={(s) => onUpdate({ separator: s })} />
+              <PillSwitcher label="Separator" options={SEPARATOR_OPTIONS} value={section.separator || "bullet"} onChange={(s) => onUpdate({ separator: s })} />
             )}
             {section.layout === "level" && (
-              <LevelIndicatorSwitcher indicator={section.levelIndicator || "dots"} onChange={(i) => onUpdate({ levelIndicator: i })} />
+              <PillSwitcher label="Level Indicator" options={LEVEL_INDICATOR_OPTIONS} value={section.levelIndicator || "dots"} onChange={(i) => onUpdate({ levelIndicator: i })} />
             )}
-            <SubtitleStyleSwitcher style={section.subtitleStyle || "dash"} onChange={(s) => onUpdate({ subtitleStyle: s })} />
+            <PillSwitcher label="Subtitle Style" options={SUBTITLE_STYLE_OPTIONS} value={section.subtitleStyle || "dash"} onChange={(s) => onUpdate({ subtitleStyle: s })} />
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
               <SField label="Language" value={f.language} onChange={set("language")} />
               <div>
-                <label className="block text-xs font-bold text-gray-700 mb-1">Proficiency</label>
+                <label className="block text-[11px] font-medium text-gray-500 mb-1">Proficiency</label>
                 <select
                   value={f.proficiency}
                   onChange={(e) => set("proficiency")(e.target.value)}
-                  className="w-full h-11 md:h-10 rounded-lg bg-[#F5F3EE] px-3 text-sm border-0 outline-none focus:ring-2 focus:ring-pink-300 appearance-none cursor-pointer"
+                  className="w-full h-10 rounded-lg bg-gray-50 px-3 text-sm text-gray-900 border border-gray-200 outline-none focus:border-gray-400 cursor-pointer"
                 >
                   <option value="">Select level</option>
                   {PROFICIENCY_LEVELS.map((l) => (<option key={l} value={l}>{l}</option>))}
@@ -468,12 +403,12 @@ export function SectionCard({ section, onUpdate, onRemove }: SectionCardProps) {
       case "summary":
         return (
           <div className="space-y-3">
-            <label className="flex items-center gap-2 text-sm text-gray-700 cursor-pointer">
+            <label className="flex items-center gap-2 text-sm text-gray-600 cursor-pointer">
               <Checkbox checked={section.showHeading !== false} onCheckedChange={(v) => onUpdate({ showHeading: !!v })} />
-              Show profile heading
+              Show section heading
             </label>
             <div>
-              <label className="block text-xs font-bold text-gray-700 mb-1">Professional Summary</label>
+              <label className="block text-[11px] font-medium text-gray-500 mb-1">Professional Summary</label>
               <RichTextEditor value={f.description || ""} onChange={set("description")} placeholder="Write a brief professional summary..." showAiTools aiContext="Professional summary for a resume" />
             </div>
           </div>
@@ -502,17 +437,17 @@ export function SectionCard({ section, onUpdate, onRemove }: SectionCardProps) {
             </div>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
               <div>
-                <label className="block text-xs font-bold text-gray-700 mb-1">Start Date</label>
+                <label className="block text-[11px] font-medium text-gray-500 mb-1">Start Date</label>
                 <MonthYearPicker monthValue={f.startMonth || ""} yearValue={f.startYear || ""} onMonthChange={set("startMonth")} onYearChange={set("startYear")} />
               </div>
               <div>
-                <label className="block text-xs font-bold text-gray-700 mb-1">End Date</label>
+                <label className="block text-[11px] font-medium text-gray-500 mb-1">End Date</label>
                 <MonthYearPicker monthValue={f.endMonth || ""} yearValue={f.endYear || ""} onMonthChange={set("endMonth")} onYearChange={set("endYear")} />
               </div>
             </div>
             <SField label="URL" value={f.url || ""} onChange={set("url")} placeholder="https://..." />
             <div>
-              <label className="block text-xs font-bold text-gray-700 mb-1">Description</label>
+              <label className="block text-[11px] font-medium text-gray-500 mb-1">Description</label>
               <RichTextEditor value={f.description || ""} onChange={set("description")} showAiTools aiContext={`Project: ${f.name || "project"}, Role: ${f.role || "contributor"}`} />
             </div>
           </div>
@@ -538,7 +473,7 @@ export function SectionCard({ section, onUpdate, onRemove }: SectionCardProps) {
             </div>
             <SField label="Date" value={f.date} onChange={set("date")} placeholder="e.g. 2024" />
             <div>
-              <label className="block text-xs font-bold text-gray-700 mb-1">Description</label>
+              <label className="block text-[11px] font-medium text-gray-500 mb-1">Description</label>
               <RichTextEditor value={f.description || ""} onChange={set("description")} />
             </div>
           </div>
@@ -553,16 +488,16 @@ export function SectionCard({ section, onUpdate, onRemove }: SectionCardProps) {
             </div>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
               <div>
-                <label className="block text-xs font-bold text-gray-700 mb-1">Start Date</label>
+                <label className="block text-[11px] font-medium text-gray-500 mb-1">Start Date</label>
                 <MonthYearPicker monthValue={f.startMonth || ""} yearValue={f.startYear || ""} onMonthChange={set("startMonth")} onYearChange={set("startYear")} />
               </div>
               <div>
-                <label className="block text-xs font-bold text-gray-700 mb-1">End Date</label>
+                <label className="block text-[11px] font-medium text-gray-500 mb-1">End Date</label>
                 <MonthYearPicker monthValue={f.endMonth || ""} yearValue={f.endYear || ""} onMonthChange={set("endMonth")} onYearChange={set("endYear")} />
               </div>
             </div>
             <div>
-              <label className="block text-xs font-bold text-gray-700 mb-1">Description</label>
+              <label className="block text-[11px] font-medium text-gray-500 mb-1">Description</label>
               <RichTextEditor value={f.description || ""} onChange={set("description")} />
             </div>
           </div>
@@ -580,7 +515,7 @@ export function SectionCard({ section, onUpdate, onRemove }: SectionCardProps) {
               <SField label="URL" value={f.url || ""} onChange={set("url")} placeholder="https://..." />
             </div>
             <div>
-              <label className="block text-xs font-bold text-gray-700 mb-1">Description</label>
+              <label className="block text-[11px] font-medium text-gray-500 mb-1">Description</label>
               <RichTextEditor value={f.description || ""} onChange={set("description")} />
             </div>
           </div>
@@ -605,16 +540,14 @@ export function SectionCard({ section, onUpdate, onRemove }: SectionCardProps) {
         );
 
       case "declaration":
-        return (
-          <DeclarationForm entry={entry} set={set} />
-        );
+        return <DeclarationForm entry={entry} set={set} />;
 
       case "custom":
         return (
           <div className="space-y-3">
             <SField label="Section Title" value={f.sectionTitle || ""} onChange={set("sectionTitle")} placeholder="Custom section name" />
             <div>
-              <label className="block text-xs font-bold text-gray-700 mb-1">Content</label>
+              <label className="block text-[11px] font-medium text-gray-500 mb-1">Content</label>
               <RichTextEditor value={f.description || ""} onChange={set("description")} placeholder="Add your content..." />
             </div>
           </div>
@@ -625,47 +558,70 @@ export function SectionCard({ section, onUpdate, onRemove }: SectionCardProps) {
     }
   };
 
-  return (
-    <div id={`section-card-${section.id}`} className="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden transition-transform duration-150 hover:scale-[1.02]">
-      {/* Header — larger touch target */}
-      <button
-        onClick={toggleCollapse}
-        className="w-full flex items-center gap-3 px-5 py-4 min-h-[56px] hover:bg-gray-50 transition-colors"
-      >
-        <GripVertical className="w-4 h-4 text-gray-300 cursor-grab" />
-        <IconComponent className="w-5 h-5 text-gray-700" />
-        <span className="font-bold text-gray-900 uppercase tracking-wide text-sm flex-1 text-left">
-          {section.title}
-        </span>
-        <button
-          onClick={(e) => { e.stopPropagation(); onRemove(); }}
-          className="p-2 text-gray-400 hover:text-red-500"
-        >
-          <Trash2 className="w-4 h-4" />
-        </button>
-        {section.collapsed ? (
-          <ChevronDown className="w-5 h-5 text-gray-400" />
-        ) : (
-          <ChevronUp className="w-5 h-5 text-gray-400" />
-        )}
-      </button>
+  const handleTitleSave = () => {
+    if (titleValue.trim()) {
+      onUpdate({ title: titleValue.trim() });
+    }
+    setEditingTitle(false);
+  };
 
-      {/* Body — with collapse animation */}
-      <div
-        className={cn(
-          "transition-all duration-200 ease-in-out overflow-hidden",
-          section.collapsed ? "max-h-0 opacity-0" : "max-h-[5000px] opacity-100"
+  return (
+    <div id={`section-card-${section.id}`}>
+      {/* Section header — clean separator style */}
+      <div className="flex items-center gap-2 py-3 group">
+        <GripVertical className="w-4 h-4 text-gray-300 cursor-grab flex-shrink-0 opacity-0 group-hover:opacity-100 transition-opacity" />
+        <IconComponent className="w-4 h-4 text-gray-500 flex-shrink-0" />
+
+        {editingTitle ? (
+          <input
+            autoFocus
+            value={titleValue}
+            onChange={(e) => setTitleValue(e.target.value)}
+            onBlur={handleTitleSave}
+            onKeyDown={(e) => { if (e.key === "Enter") handleTitleSave(); if (e.key === "Escape") setEditingTitle(false); }}
+            className="text-sm font-semibold text-gray-900 bg-gray-50 border border-gray-200 rounded px-2 py-0.5 outline-none focus:border-gray-400 flex-1"
+          />
+        ) : (
+          <span className="text-sm font-semibold text-gray-900 flex-1 cursor-pointer" onClick={toggleCollapse}>
+            {section.title}
+          </span>
         )}
-      >
-        <div className="px-5 pb-5 space-y-3">
+
+        <button
+          onClick={() => { setTitleValue(section.title); setEditingTitle(true); }}
+          className="p-1 text-gray-300 hover:text-gray-500 opacity-0 group-hover:opacity-100 transition-all"
+          title="Edit heading"
+        >
+          <Pencil className="w-3 h-3" />
+        </button>
+        <button
+          onClick={onRemove}
+          className="p-1 text-gray-300 hover:text-red-500 opacity-0 group-hover:opacity-100 transition-all"
+        >
+          <Trash2 className="w-3.5 h-3.5" />
+        </button>
+        <button onClick={toggleCollapse} className="p-1 text-gray-400">
+          {section.collapsed ? <ChevronDown className="w-4 h-4" /> : <ChevronUp className="w-4 h-4" />}
+        </button>
+      </div>
+
+      {/* Body */}
+      <div className={cn(
+        "transition-all duration-200 ease-in-out overflow-hidden",
+        section.collapsed ? "max-h-0 opacity-0" : "max-h-[5000px] opacity-100"
+      )}>
+        <div className="pb-4 space-y-1">
           {isSingleEntrySection ? (
-            section.entries.length > 0 ? renderEntryForm(section.entries[0]) : null
+            section.entries.length > 0 ? (
+              <div className="space-y-3">
+                {renderEntryForm(section.entries[0])}
+              </div>
+            ) : null
           ) : (
             <EntryList
               entries={section.entries}
               type={section.type}
               renderEntryForm={renderEntryForm}
-              getEntrySummary={getEntrySummary}
               toggleEntryCollapse={toggleEntryCollapse}
               removeEntry={removeEntry}
               onReorder={(entries) => onUpdate({ entries })}
@@ -675,10 +631,10 @@ export function SectionCard({ section, onUpdate, onRemove }: SectionCardProps) {
           {!isSingleEntrySection && (
             <button
               onClick={addEntry}
-              className="flex items-center gap-1.5 text-sm font-medium text-gray-700 border border-gray-200 rounded-lg px-4 py-3 md:py-2 hover:bg-gray-50 transition-colors w-full sm:w-auto justify-center sm:justify-start"
+              className="flex items-center gap-1.5 text-sm font-medium text-gray-500 hover:text-gray-700 px-1 py-2 transition-colors"
             >
-              <Plus className="w-4 h-4" />
-              Add Entry
+              <Plus className="w-3.5 h-3.5" />
+              Add entry
             </button>
           )}
         </div>

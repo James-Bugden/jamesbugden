@@ -1,6 +1,5 @@
 import { useState, useRef } from "react";
-import { Pencil, Mail, Phone, MapPin, Camera, GripVertical, Trash2, ChevronDown, ChevronUp } from "lucide-react";
-import { Input } from "@/components/ui/input";
+import { Pencil, Mail, Phone, MapPin, Camera, Trash2, ChevronDown, Globe, User } from "lucide-react";
 import { PersonalDetails, EXTRA_DETAIL_OPTIONS } from "./types";
 import { compressImage } from "@/lib/imageCompression";
 import { cn } from "@/lib/utils";
@@ -11,9 +10,27 @@ interface PersonalDetailsCardProps {
   collapsible?: boolean;
 }
 
+/* Clean field component */
+function Field({ label, value, onChange, placeholder, type = "text", className }: {
+  label: string; value: string; onChange: (v: string) => void; placeholder?: string; type?: string; className?: string;
+}) {
+  return (
+    <div className={className}>
+      <label className="block text-[11px] font-medium text-gray-500 mb-1">{label}</label>
+      <input
+        type={type}
+        value={value}
+        onChange={(e) => onChange(e.target.value)}
+        placeholder={placeholder || label}
+        className="w-full h-10 rounded-lg bg-gray-50 px-3 text-sm text-gray-900 border border-gray-200 outline-none focus:border-gray-400 focus:ring-1 focus:ring-gray-200 transition-colors placeholder-gray-400"
+      />
+    </div>
+  );
+}
+
 export function PersonalDetailsCard({ details, onChange, collapsible }: PersonalDetailsCardProps) {
   const [editing, setEditing] = useState(false);
-  const [collapsed, setCollapsed] = useState(false);
+  const [showExtras, setShowExtras] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   const handlePhotoUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -49,110 +66,93 @@ export function PersonalDetailsCard({ details, onChange, collapsible }: Personal
   const availableExtras = EXTRA_DETAIL_OPTIONS.filter((t) => !usedTypes.has(t));
 
   return (
-    <div className="bg-white rounded-xl shadow-sm border border-gray-100 relative transition-transform duration-150 hover:scale-[1.02] overflow-hidden">
-      {/* Header with collapse toggle */}
-      {collapsible && (
-        <button
-          onClick={() => setCollapsed(!collapsed)}
-          className="w-full flex items-center gap-3 px-5 py-3 hover:bg-gray-50 transition-colors text-left"
-        >
-          <span className="font-bold text-gray-900 uppercase tracking-wide text-sm flex-1">Personal Details</span>
-          {collapsed ? (
-            <ChevronDown className="w-5 h-5 text-gray-400" />
-          ) : (
-            <ChevronUp className="w-5 h-5 text-gray-400" />
-          )}
-        </button>
-      )}
+    <div className="relative">
+      <input ref={fileInputRef} type="file" accept="image/*" onChange={handlePhotoUpload} className="hidden" />
 
-      {/* Edit button */}
-      {!collapsed && (
-        <button
-          onClick={() => setEditing(!editing)}
-          className="absolute top-4 right-4 w-9 h-9 rounded-full bg-pink-100 text-pink-600 flex items-center justify-center hover:bg-pink-200 transition-colors"
-          style={collapsible ? { top: "3rem" } : undefined}
-        >
-          <Pencil className="w-4 h-4" />
-        </button>
-      )}
-
-      <div className={cn(
-        "transition-all duration-200 ease-in-out overflow-hidden",
-        collapsed ? "max-h-0 opacity-0" : "max-h-[3000px] opacity-100"
-      )}>
-        <div className="p-5">{!editing ? (
-        /* View mode */
-        <div className="flex items-start gap-5">
-          <div className="flex-1 min-w-0">
-            <h2 className="text-xl font-bold tracking-wide text-gray-900 uppercase">
-              {details.fullName || "Your Name"}
-            </h2>
-            <p className="text-sm text-gray-500 mt-0.5">
-              {details.professionalTitle || "Professional Title"}
-            </p>
-            <div className="flex flex-wrap gap-x-4 gap-y-1 mt-3 text-sm text-gray-600">
-              {details.email && (
-                <span className="flex items-center gap-1.5">
-                  <Mail className="w-3.5 h-3.5 text-gray-400" />
-                  {details.email}
-                </span>
-              )}
-              {details.phone && (
-                <span className="flex items-center gap-1.5">
-                  <Phone className="w-3.5 h-3.5 text-gray-400" />
-                  {details.phone}
-                </span>
-              )}
-              {details.location && (
-                <span className="flex items-center gap-1.5">
-                  <MapPin className="w-3.5 h-3.5 text-gray-400" />
-                  {details.location}
-                </span>
-              )}
-            </div>
-            {details.extras.length > 0 && (
-              <div className="flex flex-wrap gap-x-4 gap-y-1 mt-1.5 text-sm text-gray-600">
-                {details.extras.map((e) => (
-                  <span key={e.id}>{e.type}: {e.value}</span>
-                ))}
-              </div>
-            )}
-          </div>
-          {/* Photo */}
+      {!editing ? (
+        /* ── Collapsed view ──────────────────────── */
+        <div className="bg-white rounded-xl px-5 py-4" style={{ boxShadow: "0 1px 3px rgba(0,0,0,0.04)" }}>
+          {/* Edit button */}
           <button
-            onClick={() => fileInputRef.current?.click()}
-            className="w-16 h-16 rounded-full bg-gray-100 flex items-center justify-center flex-shrink-0 overflow-hidden hover:ring-2 hover:ring-pink-300 transition-all cursor-pointer relative group"
+            onClick={() => setEditing(true)}
+            className="absolute top-4 right-4 w-8 h-8 rounded-full flex items-center justify-center text-gray-400 hover:text-gray-600 hover:bg-gray-100 transition-colors"
           >
-            {details.photo ? (
-              <img src={details.photo} className="w-full h-full object-cover" alt="" />
-            ) : (
-              <Camera className="w-6 h-6 text-gray-400" />
-            )}
-            <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity rounded-full flex items-center justify-center">
-              <Camera className="w-4 h-4 text-white" />
-            </div>
+            <Pencil className="w-3.5 h-3.5" />
           </button>
-          <input ref={fileInputRef} type="file" accept="image/*" onChange={handlePhotoUpload} className="hidden" />
-        </div>
-      ) : (
-        /* Edit mode */
-        <div className="space-y-3 pr-10">
-          {/* Photo upload in edit mode */}
-          <div className="flex items-center gap-3">
+
+          <div className="flex items-start gap-4">
+            {/* Photo */}
             <button
               onClick={() => fileInputRef.current?.click()}
-              className="w-14 h-14 rounded-full bg-gray-100 flex items-center justify-center flex-shrink-0 overflow-hidden hover:ring-2 hover:ring-pink-300 transition-all cursor-pointer relative group"
+              className="w-14 h-14 rounded-full bg-gray-100 flex items-center justify-center flex-shrink-0 overflow-hidden relative group cursor-pointer"
             >
               {details.photo ? (
                 <img src={details.photo} className="w-full h-full object-cover" alt="" />
               ) : (
                 <Camera className="w-5 h-5 text-gray-400" />
               )}
-              <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity rounded-full flex items-center justify-center">
-                <Camera className="w-4 h-4 text-white" />
+              <div className="absolute inset-0 bg-black/30 opacity-0 group-hover:opacity-100 transition-opacity rounded-full flex items-center justify-center">
+                <Camera className="w-3.5 h-3.5 text-white" />
               </div>
             </button>
-            <div className="flex flex-col gap-1">
+
+            <div className="flex-1 min-w-0 pr-8">
+              <h2 className="text-base font-bold text-gray-900 leading-tight">
+                {details.fullName || "Your Name"}
+              </h2>
+              <p className="text-sm text-gray-500 mt-0.5">
+                {details.professionalTitle || "Professional Title"}
+              </p>
+
+              {/* Contact row */}
+              <div className="flex flex-wrap gap-x-3 gap-y-1 mt-2.5">
+                {details.email && (
+                  <span className="flex items-center gap-1 text-xs text-gray-500">
+                    <Mail className="w-3 h-3 text-gray-400" />
+                    {details.email}
+                  </span>
+                )}
+                {details.phone && (
+                  <span className="flex items-center gap-1 text-xs text-gray-500">
+                    <Phone className="w-3 h-3 text-gray-400" />
+                    {details.phone}
+                  </span>
+                )}
+                {details.location && (
+                  <span className="flex items-center gap-1 text-xs text-gray-500">
+                    <MapPin className="w-3 h-3 text-gray-400" />
+                    {details.location}
+                  </span>
+                )}
+                {details.extras.map((e) => (
+                  <span key={e.id} className="flex items-center gap-1 text-xs text-gray-500">
+                    <Globe className="w-3 h-3 text-gray-400" />
+                    {e.value || e.type}
+                  </span>
+                ))}
+              </div>
+            </div>
+          </div>
+        </div>
+      ) : (
+        /* ── Edit mode ───────────────────────────── */
+        <div className="bg-white rounded-xl px-5 py-5" style={{ boxShadow: "0 1px 3px rgba(0,0,0,0.04)" }}>
+          {/* Photo upload */}
+          <div className="flex items-center gap-3 mb-5">
+            <button
+              onClick={() => fileInputRef.current?.click()}
+              className="w-14 h-14 rounded-full bg-gray-100 flex items-center justify-center flex-shrink-0 overflow-hidden relative group cursor-pointer"
+            >
+              {details.photo ? (
+                <img src={details.photo} className="w-full h-full object-cover" alt="" />
+              ) : (
+                <Camera className="w-5 h-5 text-gray-400" />
+              )}
+              <div className="absolute inset-0 bg-black/30 opacity-0 group-hover:opacity-100 transition-opacity rounded-full flex items-center justify-center">
+                <Camera className="w-3.5 h-3.5 text-white" />
+              </div>
+            </button>
+            <div className="flex flex-col gap-0.5">
               <button onClick={() => fileInputRef.current?.click()} className="text-xs font-medium text-pink-600 hover:text-pink-700">
                 {details.photo ? "Change photo" : "Upload photo"}
               </button>
@@ -163,88 +163,99 @@ export function PersonalDetailsCard({ details, onChange, collapsible }: Personal
               )}
             </div>
           </div>
-          <Input
-            placeholder="Enter your title, first- and last name"
-            value={details.fullName}
-            onChange={(e) => onChange({ fullName: e.target.value })}
-            className="bg-gray-50 border-gray-200"
-          />
-          <Input
-            placeholder="Target position or current role"
-            value={details.professionalTitle}
-            onChange={(e) => onChange({ professionalTitle: e.target.value })}
-            className="bg-gray-50 border-gray-200"
-          />
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-            <div className="flex items-center gap-2">
-              <Input
-                placeholder="Email"
+
+          <div className="space-y-3">
+            <Field
+              label="Full Name"
+              value={details.fullName}
+              onChange={(v) => onChange({ fullName: v })}
+              placeholder="Enter your full name"
+            />
+            <Field
+              label="Professional Title"
+              value={details.professionalTitle}
+              onChange={(v) => onChange({ professionalTitle: v })}
+              placeholder="e.g. Software Engineer"
+            />
+
+            <div className="grid grid-cols-2 gap-3">
+              <Field
+                label="Email"
                 value={details.email}
-                onChange={(e) => onChange({ email: e.target.value })}
-                className="bg-gray-50 border-gray-200"
+                onChange={(v) => onChange({ email: v })}
+                type="email"
               />
-              <GripVertical className="w-4 h-4 text-gray-300 flex-shrink-0" />
-            </div>
-            <div className="flex items-center gap-2">
-              <Input
-                placeholder="Phone"
+              <Field
+                label="Phone"
                 value={details.phone}
-                onChange={(e) => onChange({ phone: e.target.value })}
-                className="bg-gray-50 border-gray-200"
+                onChange={(v) => onChange({ phone: v })}
+                type="tel"
               />
-              <GripVertical className="w-4 h-4 text-gray-300 flex-shrink-0" />
             </div>
-            <div className="flex items-center gap-2">
-              <Input
-                placeholder="Location"
-                value={details.location}
-                onChange={(e) => onChange({ location: e.target.value })}
-                className="bg-gray-50 border-gray-200"
-              />
-              <GripVertical className="w-4 h-4 text-gray-300 flex-shrink-0" />
-            </div>
-          </div>
 
-          {/* Extra fields */}
-          {details.extras.map((extra) => (
-            <div key={extra.id} className="flex items-center gap-2">
-              <span className="text-xs text-gray-500 w-24 flex-shrink-0">{extra.type}</span>
-              <Input
-                placeholder={extra.type}
-                value={extra.value}
-                onChange={(e) => updateExtra(extra.id, e.target.value)}
-                className="bg-gray-50 border-gray-200"
-              />
-              <button
-                onClick={() => removeExtra(extra.id)}
-                className="text-gray-400 hover:text-red-500 text-xs flex-shrink-0"
-              >
-                ✕
-              </button>
-            </div>
-          ))}
+            <Field
+              label="Location"
+              value={details.location}
+              onChange={(v) => onChange({ location: v })}
+              placeholder="e.g. San Francisco, CA"
+            />
 
-          {/* Add detail chips */}
-          {availableExtras.length > 0 && (
-            <div className="pt-1">
-              <p className="text-xs text-gray-400 mb-1.5">Add details</p>
-              <div className="flex flex-wrap gap-1.5">
-                {availableExtras.map((type) => (
-                  <button
-                    key={type}
-                    onClick={() => addExtra(type)}
-                    className="text-xs px-2.5 py-1 rounded-full border border-gray-200 text-gray-600 hover:bg-gray-50 transition-colors"
-                  >
-                    + {type}
-                  </button>
-                ))}
+            {/* Extra fields */}
+            {details.extras.map((extra) => (
+              <div key={extra.id} className="flex items-end gap-2">
+                <Field
+                  label={extra.type}
+                  value={extra.value}
+                  onChange={(v) => updateExtra(extra.id, v)}
+                  placeholder={extra.type}
+                  className="flex-1"
+                />
+                <button
+                  onClick={() => removeExtra(extra.id)}
+                  className="h-10 w-10 flex items-center justify-center rounded-lg text-gray-400 hover:text-red-500 hover:bg-red-50 transition-colors flex-shrink-0"
+                >
+                  ✕
+                </button>
               </div>
-            </div>
-          )}
+            ))}
+
+            {/* Add details expandable */}
+            {availableExtras.length > 0 && (
+              <div>
+                <button
+                  onClick={() => setShowExtras(!showExtras)}
+                  className="flex items-center gap-1.5 text-xs font-medium text-gray-500 hover:text-gray-700 transition-colors py-1"
+                >
+                  <ChevronDown className={cn("w-3.5 h-3.5 transition-transform", showExtras && "rotate-180")} />
+                  Add more details
+                </button>
+                {showExtras && (
+                  <div className="flex flex-wrap gap-1.5 mt-2">
+                    {availableExtras.map((type) => (
+                      <button
+                        key={type}
+                        onClick={() => addExtra(type)}
+                        className="text-[11px] px-2.5 py-1.5 rounded-full border border-gray-200 text-gray-600 hover:bg-gray-50 hover:border-gray-300 transition-colors"
+                      >
+                        + {type}
+                      </button>
+                    ))}
+                  </div>
+                )}
+              </div>
+            )}
+
+            {/* Done button */}
+            <button
+              onClick={() => setEditing(false)}
+              className="w-full py-2.5 rounded-lg text-sm font-semibold text-white transition-colors mt-2"
+              style={{ backgroundColor: "#e11d73" }}
+            >
+              Done
+            </button>
+          </div>
         </div>
-        )}
-        </div>
-      </div>
+      )}
     </div>
   );
 }
