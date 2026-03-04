@@ -312,7 +312,7 @@ function renderSectionEntries(section: ResumeSection, customize?: CustomizeSetti
 
           if (langDisplay === "compact") {
             return (
-              <span key={entry.id} style={{ fontSize: "8.5pt", color: "var(--resume-body)" }}>
+              <span key={entry.id} style={{ fontSize: skillPt(base), color: "var(--resume-body)" }}>
                 {language}{proficiency ? ` (${proficiency})` : ""}
               </span>
             );
