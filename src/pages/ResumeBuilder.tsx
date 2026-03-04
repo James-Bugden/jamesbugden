@@ -552,48 +552,41 @@ const ResumeBuilder = () => {
         {/* Personal Details */}
         <PersonalDetailsCard details={data.personalDetails} onChange={(u) => { pushHistory(); updatePersonalDetails(u); }} />
 
-        {/* Sections — each as its own card */}
-        {data.sections.map((section, idx) => (
-          <div
-            key={section.id}
-            draggable
-            onDragStart={handleSectionDragStart(idx)}
-            onDragOver={handleSectionDragOver(idx)}
-            onDrop={handleSectionDrop(idx)}
-            onDragEnd={handleSectionDragEnd}
-            className={cn(
-              "bg-white rounded-xl shadow-sm transition-all duration-200",
-              sectionOverIdx === idx && "ring-2 ring-green-200"
-            )}
-          >
-            <SectionCard
-              section={section}
-              onUpdate={(updates) => { pushHistory(); updateSection(section.id, updates); }}
-              onRemove={() => {
-                pushHistory();
-                const removed = section;
-                removeSection(section.id);
-                toast({
-                  title: "Section removed",
-                  description: `${removed.title} was deleted.`,
-                  action: (
-                    <button
-                      onClick={() => {
-                        const restored = [...data.sections];
-                        restored.splice(idx, 0, removed);
-                        setSections(restored);
-                      }}
-                      className="text-xs font-semibold hover:opacity-80 px-2 py-1 rounded transition-opacity"
-                      style={{ color: BRAND.green, backgroundColor: BRAND.greenLight }}
-                    >
-                      Undo
-                    </button>
-                  ),
-                });
-              }}
-            />
-          </div>
-        ))}
+        {/* Sections — dnd-kit sortable */}
+        <DndContext sensors={sensors} collisionDetection={closestCenter} onDragEnd={handleDragEnd} modifiers={[restrictToVerticalAxis]}>
+          <SortableContext items={sectionIds} strategy={verticalListSortingStrategy}>
+            {data.sections.map((section, idx) => (
+              <SortableSectionCard key={section.id} id={section.id}>
+                <SectionCard
+                  section={section}
+                  onUpdate={(updates) => { pushHistory(); updateSection(section.id, updates); }}
+                  onRemove={() => {
+                    pushHistory();
+                    const removed = section;
+                    removeSection(section.id);
+                    toast({
+                      title: "Section removed",
+                      description: `${removed.title} was deleted.`,
+                      action: (
+                        <button
+                          onClick={() => {
+                            const restored = [...data.sections];
+                            restored.splice(idx, 0, removed);
+                            setSections(restored);
+                          }}
+                          className="text-xs font-semibold hover:opacity-80 px-2 py-1 rounded transition-opacity"
+                          style={{ color: BRAND.green, backgroundColor: BRAND.greenLight }}
+                        >
+                          Undo
+                        </button>
+                      ),
+                    });
+                  }}
+                />
+              </SortableSectionCard>
+            ))}
+          </SortableContext>
+        </DndContext>
         {data.sections.length === 0 && (
           <div className="bg-white rounded-xl shadow-sm text-center py-8">
             <p className="text-sm" style={{ color: BRAND.textSecondary }}>Add sections to build your resume</p>
