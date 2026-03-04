@@ -434,13 +434,120 @@ function renderSectionEntries(section: ResumeSection, customize?: CustomizeSetti
         ? "[&_ul]:list-none [&_ul]:pl-0"
         : "[&_ul]:list-none [&_ul]:pl-[5mm]";
 
-    // For hyphen style, we inject a scoped <style> since Tailwind can't handle ::before pseudo-elements reliably
     const hyphenStyleId = `hyphen-${section.id}`;
     const hyphenStyle = listSt === "hyphen" ? (
       <style>{`.${hyphenStyleId} ul li::before { content: "–  "; position: absolute; left: 0; } .${hyphenStyleId} ul li { position: relative; padding-left: 3mm; }`}</style>
     ) : null;
 
     const entryGap = layout === "compact" ? "1.6mm" : "2.8mm";
+
+    // --- Group Promotions logic for experience ---
+    if (section.type === "experience" && c?.groupPromotions) {
+      // Group consecutive entries with the same company
+      type EntryGroup = { company: string; entries: typeof section.entries };
+      const groups: EntryGroup[] = [];
+      for (const entry of section.entries) {
+        const f = entry.fields;
+        const hasAny = Object.values(f).some(Boolean);
+        if (!hasAny) continue;
+        const comp = (f.company || "").trim();
+        const last = groups[groups.length - 1];
+        if (last && last.company && last.company === comp) {
+          last.entries.push(entry);
+        } else {
+          groups.push({ company: comp, entries: [entry] });
+        }
+      }
+
+      return (
+        <div className={`mt-[1mm] ${listSt === "hyphen" ? hyphenStyleId : ""}`} style={{ display: "flex", flexDirection: "column", gap: entryGap }}>
+          {hyphenStyle}
+          {groups.map((group, gi) => {
+            if (group.entries.length === 1) {
+              // Single entry — render normally
+              const entry = group.entries[0];
+              const f = entry.fields;
+              const order = c?.experienceOrder ?? "title-first";
+              const primaryText = order === "title-first" ? (f.position || "") : (f.company || "");
+              const secondaryText = order === "title-first" ? (f.company || "") : (f.position || "");
+              const date = formatDateRange(f) || f.date || "";
+
+              return (
+                <div key={entry.id}>
+                  <div className="flex items-start justify-between gap-[4mm]">
+                    <div style={{ flex: 1 }}>
+                      {subPlace === "same-line" ? (
+                        <p style={{ fontSize: titleFontSize, fontWeight: 700, color: "var(--resume-name)" }}>
+                          {primaryText || "Entry"}
+                          {secondaryText && (
+                            <span style={{ fontWeight: subtitleFW, fontStyle: subtitleFS, color: "var(--resume-subtitle)", marginLeft: "2mm" }}>
+                              · {secondaryText}
+                            </span>
+                          )}
+                        </p>
+                      ) : (
+                        <>
+                          <p style={{ fontSize: titleFontSize, fontWeight: 700, color: "var(--resume-name)" }}>{primaryText || "Entry"}</p>
+                          {secondaryText && (
+                            <p style={{ fontSize: subtitleFontSize, color: "var(--resume-subtitle)", fontWeight: subtitleFW, fontStyle: subtitleFS, marginTop: "0.5mm" }}>{secondaryText}</p>
+                          )}
+                        </>
+                      )}
+                    </div>
+                    {date && <p style={{ fontSize: subtitleFontSize, color: "var(--resume-dates)", whiteSpace: "nowrap" }}>{date}</p>}
+                  </div>
+                  {f.location && <p style={{ fontSize: subtitleFontSize, color: "var(--resume-subtitle)", fontWeight: subtitleFW, fontStyle: subtitleFS, marginTop: "0.5mm" }}>{f.location}</p>}
+                  <HtmlBlock html={f.description} fontSize={bodyPt(base)} className={`mt-[1mm] [&_p]:mb-[1mm] ${listClass} [&_ol]:list-decimal [&_ol]:pl-[5mm] [&_li]:mb-[0.4mm] [&_a]:underline`} />
+                </div>
+              );
+            }
+
+            // Multi-entry group — grouped promotions
+            const allDates = group.entries.flatMap(e => {
+              const parts: string[] = [];
+              if (e.fields.startYear) parts.push(`${e.fields.startMonth?.slice(0, 3) || ""} ${e.fields.startYear}`.trim());
+              if (e.fields.currentlyHere === "true") parts.push("Present");
+              else if (e.fields.endYear) parts.push(`${e.fields.endMonth?.slice(0, 3) || ""} ${e.fields.endYear}`.trim());
+              return parts;
+            });
+            const firstEntry = group.entries[group.entries.length - 1];
+            const lastEntry = group.entries[0];
+            const groupStart = [firstEntry.fields.startMonth?.slice(0, 3), firstEntry.fields.startYear].filter(Boolean).join(" ");
+            const groupEnd = lastEntry.fields.currentlyHere === "true"
+              ? "Present"
+              : [lastEntry.fields.endMonth?.slice(0, 3), lastEntry.fields.endYear].filter(Boolean).join(" ");
+            const groupDateRange = [groupStart, groupEnd].filter(Boolean).join(" – ");
+
+            return (
+              <div key={`group-${gi}`}>
+                {/* Company heading */}
+                <div className="flex items-start justify-between gap-[4mm]">
+                  <p style={{ fontSize: titleFontSize, fontWeight: 700, color: "var(--resume-name)" }}>{group.company || "Company"}</p>
+                  <p style={{ fontSize: subtitleFontSize, color: "var(--resume-dates)", whiteSpace: "nowrap" }}>{groupDateRange}</p>
+                </div>
+                {/* Individual roles indented */}
+                <div style={{ paddingLeft: "4mm", marginTop: "1.5mm", display: "flex", flexDirection: "column", gap: "2mm" }}>
+                  {group.entries.map(entry => {
+                    const f = entry.fields;
+                    const roleDate = formatDateRange(f) || f.date || "";
+                    return (
+                      <div key={entry.id}>
+                        <div className="flex items-start justify-between gap-[4mm]">
+                          <p style={{ fontSize: subtitleFontSize, fontWeight: 600, color: "var(--resume-name)" }}>{f.position || "Role"}</p>
+                          {roleDate && <p style={{ fontSize: subtitleFontSize, color: "var(--resume-dates)", whiteSpace: "nowrap" }}>{roleDate}</p>}
+                        </div>
+                        {f.location && <p style={{ fontSize: subtitleFontSize, color: "var(--resume-subtitle)", fontStyle: subtitleFS, marginTop: "0.3mm" }}>{f.location}</p>}
+                        <HtmlBlock html={f.description} fontSize={bodyPt(base)} className={`mt-[1mm] [&_p]:mb-[1mm] ${listClass} [&_ol]:list-decimal [&_ol]:pl-[5mm] [&_li]:mb-[0.4mm] [&_a]:underline`} />
+                      </div>
+                    );
+                  })}
+                </div>
+              </div>
+            );
+          })}
+        </div>
+      );
+    }
 
     return (
       <div className={`mt-[1mm] ${listSt === "hyphen" ? hyphenStyleId : ""}`} style={{ display: "flex", flexDirection: "column", gap: entryGap }}>
@@ -450,26 +557,17 @@ function renderSectionEntries(section: ResumeSection, customize?: CustomizeSetti
           const hasAny = Object.values(f).some(Boolean);
           if (!hasAny) return null;
 
-          // Build headline parts respecting educationOrder / experienceOrder
           let primaryText: string;
           let secondaryText: string | undefined;
 
           if (section.type === "education") {
             const order = c?.educationOrder ?? "degree-first";
-            primaryText = order === "degree-first"
-              ? (f.degree || "")
-              : (f.institution || "");
-            secondaryText = order === "degree-first"
-              ? (f.institution || "")
-              : (f.degree || "");
+            primaryText = order === "degree-first" ? (f.degree || "") : (f.institution || "");
+            secondaryText = order === "degree-first" ? (f.institution || "") : (f.degree || "");
           } else if (section.type === "experience") {
             const order = c?.experienceOrder ?? "title-first";
-            primaryText = order === "title-first"
-              ? (f.position || "")
-              : (f.company || "");
-            secondaryText = order === "title-first"
-              ? (f.company || "")
-              : (f.position || "");
+            primaryText = order === "title-first" ? (f.position || "") : (f.company || "");
+            secondaryText = order === "title-first" ? (f.company || "") : (f.position || "");
           } else {
             primaryText = f.name || f.title || "";
             secondaryText = f.company || f.institution || f.issuer || f.publisher || f.role || "";
@@ -477,7 +575,6 @@ function renderSectionEntries(section: ResumeSection, customize?: CustomizeSetti
 
           const date = formatDateRange(f) || f.date || "";
 
-          // Inline layout: title · subtitle | date all on one line
           if (layout === "inline") {
             const headline = [primaryText, secondaryText].filter(Boolean).join(" · ");
             return (
@@ -496,7 +593,6 @@ function renderSectionEntries(section: ResumeSection, customize?: CustomizeSetti
             );
           }
 
-          // Academic layout: bold title, italic subtitle, compact
           if (layout === "academic") {
             return (
               <div key={entry.id}>
@@ -515,7 +611,6 @@ function renderSectionEntries(section: ResumeSection, customize?: CustomizeSetti
             );
           }
 
-          // Stacked (default) and Compact layouts
           return (
             <div key={entry.id}>
               <div className="flex items-start justify-between gap-[4mm]">
