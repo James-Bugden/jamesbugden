@@ -133,6 +133,18 @@ function SectionHeading({ title, customize, baseFontSize }: { title: string; cus
   const fontSize = headingSizePt(baseFontSize, customize?.headingSize || "m");
   const uppercase = customize?.headingUppercase !== false;
 
+  const textStyle: React.CSSProperties = {
+    fontSize,
+    color: style === "background" ? "#fff" : "var(--resume-headings)",
+    textTransform: uppercase ? "uppercase" : "none",
+    fontFamily: customize?.headingFont || customize?.bodyFont,
+    letterSpacing: "0.08em",
+  };
+
+  if (style === "plain") {
+    return <h2 className="font-bold mb-[2mm]" style={textStyle}>{title}</h2>;
+  }
+
   if (style === "underline") {
     return (
       <div className="mb-[2mm]">
