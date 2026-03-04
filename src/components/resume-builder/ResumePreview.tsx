@@ -731,7 +731,7 @@ export const ResumePreview = React.memo(function ResumePreview({
           {Array.from({ length: pageCount }, (_, i) => (
             <React.Fragment key={i}>
               {i > 0 && (
-                <div style={{ display: "flex", alignItems: "center", justifyContent: "center", padding: "12px 0", gap: "8px" }}>
+                <div style={{ display: "flex", alignItems: "center", justifyContent: "center", padding: "16px 0", gap: "8px", background: "#f3f4f6", position: "relative", zIndex: 2 }}>
                   <div style={{ flex: 1, height: "1px", background: "repeating-linear-gradient(90deg, #d1d5db 0, #d1d5db 6px, transparent 6px, transparent 12px)" }} />
                   <Scissors style={{ width: "14px", height: "14px", color: "#9ca3af", transform: "rotate(180deg)" }} />
                   <div style={{ flex: 1, height: "1px", background: "repeating-linear-gradient(90deg, #d1d5db 0, #d1d5db 6px, transparent 6px, transparent 12px)" }} />
