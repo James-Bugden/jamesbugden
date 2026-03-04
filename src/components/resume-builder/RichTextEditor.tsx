@@ -181,6 +181,25 @@ export function RichTextEditor({ value, onChange, placeholder, showAiTools = fal
         </ToolBtn>
       </div>
       <EditorContent editor={editor} />
+      {/* Word count */}
+      {(() => {
+        const text = editor.getText();
+        const words = text.trim() ? text.trim().split(/\s+/).length : 0;
+        const bullets = (editor.getHTML().match(/<li>/gi) || []).length;
+        const tooLong = words > 150;
+        const tooShort = words > 0 && words < 20;
+        return (
+          <div className={cn(
+            "flex items-center gap-2 px-3 py-1 text-[10px] border-t border-gray-100",
+            tooLong ? "text-amber-600 bg-amber-50" : tooShort ? "text-amber-500 bg-amber-50/50" : "text-gray-400"
+          )}>
+            <span>{words} word{words !== 1 ? "s" : ""}</span>
+            {bullets > 0 && <span>· {bullets} bullet{bullets !== 1 ? "s" : ""}</span>}
+            {tooLong && <span className="ml-auto font-medium">Consider shortening</span>}
+            {tooShort && <span className="ml-auto font-medium">Consider adding more detail</span>}
+          </div>
+        );
+      })()}
     </div>
   );
 }

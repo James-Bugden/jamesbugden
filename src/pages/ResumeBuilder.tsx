@@ -6,6 +6,8 @@ import { SectionCard } from "@/components/resume-builder/SectionCard";
 import { AddContentModal } from "@/components/resume-builder/AddContentModal";
 import { ResumePreview } from "@/components/resume-builder/ResumePreview";
 import { CustomizePanel } from "@/components/resume-builder/CustomizePanel";
+import { CompletenessScore } from "@/components/resume-builder/CompletenessScore";
+import { AiToolsPanel } from "@/components/resume-builder/AiToolsPanel";
 import { useResumeStore } from "@/components/resume-builder/useResumeStore";
 import { SECTION_TYPES, getDefaultFieldsForType, ResumeSection } from "@/components/resume-builder/types";
 import { CoverLetterBuilder } from "@/components/cover-letter/CoverLetterBuilder";
@@ -312,6 +314,7 @@ const ResumeBuilder = () => {
     <EditorSkeleton />
   ) : activeTab === "content" ? (
     <div className="max-w-2xl mx-auto p-4 md:p-6 space-y-4">
+      <CompletenessScore data={data} />
       <PersonalDetailsCard details={data.personalDetails} onChange={(u) => { pushHistory(); updatePersonalDetails(u); }} collapsible />
       {data.sections.map((section, idx) => (
         <div
@@ -365,8 +368,10 @@ const ResumeBuilder = () => {
         </div>
       )}
     </div>
-  ) : (
+  ) : activeTab === "customize" ? (
     <CustomizePanel settings={customize} onChange={updateCustomize} sections={data.sections} />
+  ) : (
+    <AiToolsPanel data={data} onUpdateData={(d) => { pushHistory(); store.setData(d); }} />
   );
 
   return (
@@ -390,7 +395,11 @@ const ResumeBuilder = () => {
         downloading={downloading}
       />
 
-      {activeTab === "content" || activeTab === "customize" ? (
+      {activeTab === "ai-tools" ? (
+        <div className="flex-1 overflow-y-auto bg-white">
+          {editorContent}
+        </div>
+      ) : (
         <div className="flex-1 overflow-hidden">
           {/* Desktop: fixed 40/60 split */}
           <div className="hidden md:flex h-full">
@@ -424,10 +433,6 @@ const ResumeBuilder = () => {
               <ResumePreview data={data} customize={customize} pdfTargetId="resume-pdf-target" onEditSection={handleEditSection} />
             </MobilePreviewOverlay>
           )}
-        </div>
-      ) : (
-        <div className="flex-1 flex items-center justify-center text-gray-400 text-lg">
-          {activeTab.charAt(0).toUpperCase() + activeTab.slice(1)} — Coming soon
         </div>
       )}
 
