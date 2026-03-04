@@ -1,18 +1,48 @@
 
 
-## Fixes for Resume Dashboard Cards
+## Resume Builder Feature Improvements
 
-### Issue 1: Three-dot menu doesn't open
-The dropdown menu is a custom implementation using state (`menuOpenId`). There's likely a click-outside handler or event propagation issue closing it immediately. Looking at the code, there's no `useEffect` to close on outside click for this menu — but the card's `onClick` handler (line 219) navigates to the document, which may be firing and navigating away before the menu renders. The `e.stopPropagation()` on line 260 should prevent this, but the menu `div` at line 267 also needs pointer-events handled correctly. The real issue is likely that a global click handler or the card's click is interfering. Will add a proper ref-based outside-click handler and ensure the dropdown uses a portal or z-index fix.
+### Priority 1: AI "Tailor to Job Description" Panel
+- Add a new tab or panel in the "AI Tools" section (which currently shows "Coming soon")
+- User pastes a job description → edge function analyzes keyword overlap with current resume
+- Returns: missing keywords, suggested bullet point rewrites, match percentage
+- Reuses existing `resume-ai` edge function with a new `action: "tailor"` mode
+- UI: Split panel with JD on left, suggestions on right, one-click "Apply" buttons
 
-### Issue 2: "View Resume" and "Duplicate" buttons too small
-Currently `text-[11px]` with `w-3 h-3` icons. Will increase to `text-sm` (~14px) with `w-4 h-4` icons and add padding/background for better click targets.
+### Priority 2: Resume Completeness Score Widget
+- Floating widget in the editor sidebar showing real-time completion percentage
+- Scoring rules: has summary (+10), has 2+ experience entries (+20), all entries have descriptions (+15), dates filled (+10), contact info complete (+15), skills section exists (+10), quantified achievements detected (+20)
+- Visual: circular progress ring with percentage, expandable checklist of what's missing
+- Lives above the "Add Content" button in the Content tab
+
+### Priority 3: Populate the "AI Tools" Tab
+- Currently renders "AI Tools — Coming soon" placeholder
+- Build out with: "Tailor to Job" (above), "Generate Summary from Experience", "Suggest Skills", "Optimize Bullet Points (batch)"
+- Each tool card shows a description, input area, and results
+
+### Priority 4: Real-time Word Count per Section
+- Add a small `<span>` below each `RichTextEditor` showing word count and bullet point count
+- Highlight in amber if too long (>150 words per entry) or too short (<20 words)
+- Lightweight: computed from the editor's text content on each change
+
+### Priority 5: Click-to-Edit on Preview (Inline Editing)
+- When user clicks text on the A4 preview, show a floating input/textarea positioned over the clicked element
+- On blur/enter, update the corresponding field in the data model
+- Start with simple fields only: job title, company name, degree, institution
+- More complex than other items; implement after the above
 
 ### Files to Edit
-- `src/components/document-dashboard/DocumentDashboard.tsx`
+- `src/pages/ResumeBuilder.tsx` — Add completeness widget, wire AI Tools tab
+- `src/components/resume-builder/ResumeTopNav.tsx` — No changes needed
+- `src/components/resume-builder/RichTextEditor.tsx` — Add word count display
+- `supabase/functions/resume-ai/index.ts` — Add `tailor` action for JD matching
+- New: `src/components/resume-builder/CompletenessScore.tsx` — Score widget component
+- New: `src/components/resume-builder/AiToolsPanel.tsx` — Full AI tools tab content
+- New: `src/components/resume-builder/TailorToJob.tsx` — JD tailoring panel
 
-### Changes
-1. **Three-dot menu fix**: Add a `useEffect` with a `mousedown` listener that closes the menu when clicking outside the menu ref. Ensure `e.stopPropagation()` is on all menu interactions.
-
-2. **Larger hover overlay buttons**: Change "View Resume" and "Duplicate" from `text-[11px]` to `text-sm`, icons from `w-3 h-3` to `w-4 h-4`, and add a semi-transparent background pill (`bg-white/20 px-4 py-2 rounded-full`) for better visibility and click targets.
+### Implementation Order
+1. Completeness score widget (standalone, no backend needed)
+2. Word count on RichTextEditor (small change)
+3. AI Tools tab with Tailor to Job (needs edge function update)
+4. Click-to-edit on preview (complex, last)
 

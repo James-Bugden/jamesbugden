@@ -128,7 +128,7 @@ function SegmentedControl({ options, value, onChange }: { options: { value: stri
           key={o.value}
           onClick={() => onChange(o.value)}
           className={cn(
-            "flex-1 px-3 py-1.5 rounded-md text-xs font-semibold transition-all",
+            "flex-1 px-2 py-1.5 rounded-md text-[11px] font-semibold transition-all whitespace-nowrap",
             value === o.value ? "text-white shadow-sm" : "hover:opacity-80"
           )}
           style={

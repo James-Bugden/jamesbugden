@@ -72,17 +72,17 @@ export function PersonalDetailsCard({ details, onChange, collapsible }: Personal
       {!editing ? (
         /* ── Collapsed view ──────────────────────── */
         <div className="bg-white rounded-xl px-5 py-4" style={{ boxShadow: "0 1px 3px rgba(0,0,0,0.04)" }}>
-          {/* Edit button */}
+          {/* Edit button - positioned above photo */}
           <button
             onClick={() => setEditing(true)}
-            className="absolute top-4 right-4 w-8 h-8 rounded-full flex items-center justify-center transition-colors"
-            style={{ color: "#D4930D", backgroundColor: "rgba(212,147,13,0.1)" }}
+            className="absolute top-3 right-3 w-7 h-7 rounded-full flex items-center justify-center transition-colors z-10"
+            style={{ color: "#D4930D", backgroundColor: "rgba(212,147,13,0.15)" }}
           >
-            <Pencil className="w-3.5 h-3.5" />
+            <Pencil className="w-3 h-3" />
           </button>
 
-          <div className="flex items-start gap-4">
-            <div className="flex-1 min-w-0 pr-8">
+          <div className="flex items-start gap-4 mt-1">
+            <div className="flex-1 min-w-0">
               <h2 className="text-base font-bold text-gray-900 leading-tight uppercase tracking-wide">
                 {details.fullName || "Your Name"}
               </h2>
