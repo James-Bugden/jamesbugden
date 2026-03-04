@@ -960,14 +960,17 @@ export const ResumePreview = React.memo(function ResumePreview({
     return () => ro.disconnect();
   }, [dims.wPX]);
 
+  const marginYPX = (customize?.marginY ?? 16) * PX_PER_MM;
+  const usablePerPage = dims.hPX - 2 * marginYPX;
+
   useEffect(() => {
     const measure = () => {
       if (!hiddenFlowRef.current) return;
       const h = hiddenFlowRef.current.scrollHeight;
-      setPageCount(Math.max(1, Math.ceil(h / dims.hPX)));
+      const contentH = h - 2 * marginYPX;
+      setPageCount(Math.max(1, Math.ceil(contentH / usablePerPage)));
     };
 
-    // Use double rAF to ensure layout is complete before measuring
     let raf1: number;
     let raf2: number;
     raf1 = requestAnimationFrame(() => {
@@ -977,7 +980,7 @@ export const ResumePreview = React.memo(function ResumePreview({
       cancelAnimationFrame(raf1);
       cancelAnimationFrame(raf2);
     };
-  }, [data, customize, dims.hPX]);
+  }, [data, customize, dims.hPX, marginYPX, usablePerPage]);
 
   useEffect(() => {
     const el = containerRef.current;
