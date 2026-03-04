@@ -808,7 +808,7 @@ export const A4Page = React.memo(function A4Page({
               display: "flex",
               justifyContent: "space-between",
               alignItems: "center",
-              fontSize: "7.5pt",
+              fontSize: smallPt(baseFontSize),
               color: "var(--resume-dates)",
             }}
           >
