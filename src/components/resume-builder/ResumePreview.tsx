@@ -443,7 +443,8 @@ function renderSectionEntries(section: ResumeSection, customize?: CustomizeSetti
     const entryGap = layout === "compact" ? "1.6mm" : "2.8mm";
 
     return (
-      <div className="mt-[1mm]" style={{ display: "flex", flexDirection: "column", gap: entryGap }}>
+      <div className={`mt-[1mm] ${listSt === "hyphen" ? hyphenStyleId : ""}`} style={{ display: "flex", flexDirection: "column", gap: entryGap }}>
+        {hyphenStyle}
         {section.entries.map((entry) => {
           const f = entry.fields;
           const hasAny = Object.values(f).some(Boolean);
