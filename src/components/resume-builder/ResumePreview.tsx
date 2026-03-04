@@ -324,7 +324,7 @@ function renderSectionEntries(section: ResumeSection, customize?: CustomizeSetti
                 key={entry.id}
                 className="inline-block px-[2.5mm] py-[0.8mm] rounded-full mr-[1.5mm]"
                 style={{
-                  fontSize: "8.3pt",
+                  fontSize: skillPt(base),
                   color: "var(--resume-body)",
                   backgroundColor: "color-mix(in srgb, var(--resume-accent) 10%, white)",
                   border: "0.3mm solid color-mix(in srgb, var(--resume-accent) 25%, white)",
