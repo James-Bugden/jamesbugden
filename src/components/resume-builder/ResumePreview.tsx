@@ -827,7 +827,8 @@ export const A4Page = React.memo(function A4Page({
               }}
             >
               {contactItems.map((item, i) => {
-                const sep = c?.contactSeparator || "icon";
+                const sep = c?.contactSeparator ?? "bar";
+                const showIcon = sep === "icon" || (headerIconStyle !== "none");
                 return (
                   <span key={`${item.text}-${i}`} className="flex items-center gap-[1.1mm]">
                     {i > 0 && sep === "bullet" && <span className="mx-[1mm]">·</span>}
