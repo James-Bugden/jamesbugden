@@ -245,7 +245,7 @@ function renderSectionEntries(section: ResumeSection, customize?: CustomizeSetti
 
     if (layout === "compact") {
       const separator = section.separator === "pipe" ? " | " : section.separator === "comma" ? ", " : " · ";
-      return <p className="mt-[1.2mm]" style={{ fontSize: "8.5pt", color: "var(--resume-body)" }}>{items.join(separator)}</p>;
+      return <p className="mt-[1.2mm]" style={{ fontSize: skillPt(base), color: "var(--resume-body)" }}>{items.join(separator)}</p>;
     }
 
     if (layout === "level") {
