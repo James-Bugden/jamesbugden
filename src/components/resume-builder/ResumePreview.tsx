@@ -1048,7 +1048,7 @@ export const ResumePreview = React.memo(function ResumePreview({
                   backgroundColor: customize?.a4Background || "#ffffff",
                 }}
               >
-                <div style={{ width: `${dims.wPX}px`, transform: `translateY(${-i * dims.hPX}px)` }}>
+                <div style={{ width: `${dims.wPX}px`, transform: `translateY(${-i * usablePerPage}px)` }}>
                   <A4Page data={data} customize={customize} onEditSection={onEditSection} />
                 </div>
               </div>
