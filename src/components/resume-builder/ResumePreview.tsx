@@ -352,48 +352,143 @@ function renderSectionEntries(section: ResumeSection, customize?: CustomizeSetti
   ]);
 
   if (patternedTypes.has(section.type)) {
+    const layout = c?.entryLayout ?? "stacked";
+    const tsSize = c?.titleSubtitleSize ?? "m";
+    const subStyle = c?.subtitleStyle ?? "normal";
+    const subPlace = c?.subtitlePlacement ?? "next-line";
+    const listSt = c?.listStyle ?? "bullet";
+
+    const titleFontSize = { xs: "8pt", s: "8.5pt", m: "9pt", l: "10pt" }[tsSize] ?? "9pt";
+    const subtitleFontSize = { xs: "7pt", s: "7.5pt", m: "8pt", l: "9pt" }[tsSize] ?? "8pt";
+
+    const subtitleFW = subStyle === "bold" ? 700 : 400;
+    const subtitleFS = subStyle === "italic" ? "italic" : "normal";
+
+    const listClass = listSt === "bullet"
+      ? "[&_ul]:list-disc [&_ul]:pl-[5mm]"
+      : listSt === "hyphen"
+        ? "[&_ul]:pl-[5mm] [&_ul_li]:before:content-['–_'] [&_ul]:list-none"
+        : "[&_ul]:list-none [&_ul]:pl-0";
+
+    const entryGap = layout === "compact" ? "1.6mm" : "2.8mm";
+
     return (
-      <div className="mt-[1mm] space-y-[2.8mm]">
+      <div className="mt-[1mm]" style={{ display: "flex", flexDirection: "column", gap: entryGap }}>
         {section.entries.map((entry) => {
           const f = entry.fields;
           const hasAny = Object.values(f).some(Boolean);
           if (!hasAny) return null;
 
-          const headlineLeft =
-            section.type === "education"
-              ? [f.degree, f.institution].filter(Boolean).join(" · ")
-              : section.type === "experience"
-                ? [f.position, f.company].filter(Boolean).join(" · ")
-                : [f.name || f.title, f.company || f.institution || f.issuer || f.publisher || f.role]
-                    .filter(Boolean)
-                    .join(" · ");
+          // Build headline parts respecting educationOrder / experienceOrder
+          let primaryText: string;
+          let secondaryText: string | undefined;
+
+          if (section.type === "education") {
+            const order = c?.educationOrder ?? "degree-first";
+            primaryText = order === "degree-first"
+              ? (f.degree || "")
+              : (f.institution || "");
+            secondaryText = order === "degree-first"
+              ? (f.institution || "")
+              : (f.degree || "");
+          } else if (section.type === "experience") {
+            const order = c?.experienceOrder ?? "title-first";
+            primaryText = order === "title-first"
+              ? (f.position || "")
+              : (f.company || "");
+            secondaryText = order === "title-first"
+              ? (f.company || "")
+              : (f.position || "");
+          } else {
+            primaryText = f.name || f.title || "";
+            secondaryText = f.company || f.institution || f.issuer || f.publisher || f.role || "";
+          }
 
           const date = formatDateRange(f) || f.date || "";
 
+          // Inline layout: title · subtitle | date all on one line
+          if (layout === "inline") {
+            const headline = [primaryText, secondaryText].filter(Boolean).join(" · ");
+            return (
+              <div key={entry.id}>
+                <div className="flex items-start justify-between gap-[4mm]">
+                  <p style={{ fontSize: titleFontSize, fontWeight: 700, color: "var(--resume-name)" }}>
+                    {headline || "Entry"}
+                    {date && <span style={{ fontSize: subtitleFontSize, fontWeight: 400, color: "var(--resume-dates)", marginLeft: "3mm" }}>{date}</span>}
+                  </p>
+                </div>
+                {f.location && (
+                  <p style={{ fontSize: subtitleFontSize, color: "var(--resume-subtitle)", fontWeight: subtitleFW, fontStyle: subtitleFS, marginTop: "0.5mm" }}>{f.location}</p>
+                )}
+                <HtmlBlock html={f.description} className={`mt-[1mm] [&_p]:mb-[1mm] ${listClass} [&_ol]:list-decimal [&_ol]:pl-[5mm] [&_li]:mb-[0.4mm] [&_a]:underline`} />
+              </div>
+            );
+          }
+
+          // Academic layout: bold title, italic subtitle, compact
+          if (layout === "academic") {
+            return (
+              <div key={entry.id}>
+                <p style={{ fontSize: titleFontSize, fontWeight: 700, color: "var(--resume-name)" }}>
+                  {primaryText || "Entry"}
+                  {date && <span style={{ fontSize: subtitleFontSize, fontWeight: 400, color: "var(--resume-dates)", marginLeft: "3mm" }}>{date}</span>}
+                </p>
+                {secondaryText && (
+                  <p style={{ fontSize: subtitleFontSize, color: "var(--resume-subtitle)", fontStyle: "italic", marginTop: "0.3mm" }}>{secondaryText}</p>
+                )}
+                {f.location && (
+                  <p style={{ fontSize: subtitleFontSize, color: "var(--resume-subtitle)", fontStyle: "italic", marginTop: "0.3mm" }}>{f.location}</p>
+                )}
+                <HtmlBlock html={f.description} className={`mt-[1mm] [&_p]:mb-[1mm] ${listClass} [&_ol]:list-decimal [&_ol]:pl-[5mm] [&_li]:mb-[0.4mm] [&_a]:underline`} />
+              </div>
+            );
+          }
+
+          // Stacked (default) and Compact layouts
           return (
             <div key={entry.id}>
               <div className="flex items-start justify-between gap-[4mm]">
-                <p style={{ fontSize: "9pt", fontWeight: 700, color: "var(--resume-name)" }}>
-                  {headlineLeft || "Entry"}
-                </p>
+                <div style={{ flex: 1 }}>
+                  {subPlace === "same-line" ? (
+                    <p style={{ fontSize: titleFontSize, fontWeight: 700, color: "var(--resume-name)" }}>
+                      {primaryText || "Entry"}
+                      {secondaryText && (
+                        <span style={{ fontWeight: subtitleFW, fontStyle: subtitleFS, color: "var(--resume-subtitle)", marginLeft: "2mm" }}>
+                          · {secondaryText}
+                        </span>
+                      )}
+                    </p>
+                  ) : (
+                    <>
+                      <p style={{ fontSize: titleFontSize, fontWeight: 700, color: "var(--resume-name)" }}>
+                        {primaryText || "Entry"}
+                      </p>
+                      {secondaryText && (
+                        <p style={{ fontSize: subtitleFontSize, color: "var(--resume-subtitle)", fontWeight: subtitleFW, fontStyle: subtitleFS, marginTop: "0.5mm" }}>
+                          {secondaryText}
+                        </p>
+                      )}
+                    </>
+                  )}
+                </div>
                 {date && (
-                  <p style={{ fontSize: "8pt", color: "var(--resume-dates)", whiteSpace: "nowrap" }}>{date}</p>
+                  <p style={{ fontSize: subtitleFontSize, color: "var(--resume-dates)", whiteSpace: "nowrap" }}>{date}</p>
                 )}
               </div>
 
               {f.location && (
-                <p style={{ fontSize: "8pt", color: "var(--resume-subtitle)", marginTop: "0.7mm" }}>{f.location}</p>
+                <p style={{ fontSize: subtitleFontSize, color: "var(--resume-subtitle)", fontWeight: subtitleFW, fontStyle: subtitleFS, marginTop: "0.5mm" }}>{f.location}</p>
               )}
 
               {(f.url || f.link) && (
-                <p style={{ fontSize: "8pt", color: "var(--resume-dates)", marginTop: "0.7mm" }}>
+                <p style={{ fontSize: subtitleFontSize, color: "var(--resume-dates)", marginTop: "0.5mm" }}>
                   {f.url || f.link}
                 </p>
               )}
 
               <HtmlBlock
                 html={f.description}
-                className="mt-[1mm] [&_p]:mb-[1mm] [&_ul]:list-disc [&_ul]:pl-[5mm] [&_ol]:list-decimal [&_ol]:pl-[5mm] [&_li]:mb-[0.4mm] [&_a]:underline"
+                className={`mt-[1mm] [&_p]:mb-[1mm] ${listClass} [&_ol]:list-decimal [&_ol]:pl-[5mm] [&_li]:mb-[0.4mm] [&_a]:underline`}
               />
             </div>
           );
