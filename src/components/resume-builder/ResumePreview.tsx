@@ -236,7 +236,7 @@ function renderSectionEntries(section: ResumeSection, customize?: CustomizeSetti
           {items.map((item, i) => (
             <div key={`${item}-${i}`} className="flex items-center gap-[1.5mm]">
               <span className="w-[1.1mm] h-[1.1mm] rounded-full" style={{ backgroundColor: "var(--resume-accent)" }} />
-              <span style={{ fontSize: "8.5pt", color: "var(--resume-body)" }}>{item}</span>
+              <span style={{ fontSize: skillPt(base), color: "var(--resume-body)" }}>{item}</span>
             </div>
           ))}
         </div>
