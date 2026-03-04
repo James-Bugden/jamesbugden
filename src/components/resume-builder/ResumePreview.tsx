@@ -204,7 +204,7 @@ function renderSectionEntries(section: ResumeSection, customize?: CustomizeSetti
     const items = raw.split(",").map((s) => s.trim()).filter(Boolean);
     if (!items.length) return null;
 
-    const layout = section.layout || "bubble";
+    const layout = c?.skillsDisplay || section.layout || "bubble";
 
     if (layout === "grid") {
       return (
