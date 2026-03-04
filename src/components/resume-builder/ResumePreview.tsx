@@ -628,6 +628,7 @@ export const A4Page = React.memo(function A4Page({
           width: `${dims.wMM}mm`,
           minHeight: `${dims.hMM}mm`,
           padding: "var(--resume-margin-y) var(--resume-margin-x)",
+          position: "relative",
           fontFamily: c?.bodyFont || "'Source Sans 3', sans-serif",
           fontSize: "var(--resume-font-size)",
           lineHeight: "var(--resume-line-height)",
