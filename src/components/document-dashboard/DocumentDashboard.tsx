@@ -260,7 +260,7 @@ export function DocumentDashboard({ onOpenDocument, onImport }: DocumentDashboar
             edited {formatDate(doc.updatedAt)} · {pageSize(doc.settings)}
           </p>
         </div>
-        <div className="relative flex-shrink-0 ml-1">
+        <div className="relative flex-shrink-0 ml-1" data-menu-container>
           <button
             onClick={(e) => { e.stopPropagation(); setMenuOpenId(menuOpenId === doc.id ? null : doc.id); }}
             className="p-1 rounded-md hover:bg-gray-100 transition-colors"
