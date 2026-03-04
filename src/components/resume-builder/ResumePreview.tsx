@@ -716,7 +716,7 @@ export const A4Page = React.memo(function A4Page({
             <div
               className="flex items-center flex-wrap mt-[2.5mm] gap-x-[4mm] gap-y-[1mm]"
               style={{
-                fontSize: "8pt",
+                fontSize: contactPt(baseFontSize),
                 color: c?.linkIconColor || "var(--resume-dates)",
                 justifyContent:
                   c?.headerAlign === "right" ? "flex-end" : c?.headerAlign === "left" ? "flex-start" : "center",
