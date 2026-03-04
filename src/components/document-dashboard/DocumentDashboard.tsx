@@ -219,7 +219,7 @@ export function DocumentDashboard({ onOpenDocument, onImport }: DocumentDashboar
   /* ── Resume Card ─────────────────────────────── */
   const ResumeCard = ({ doc }: { doc: SavedDocument }) => (
     <div
-      className="group bg-white rounded-lg overflow-hidden cursor-pointer relative hover:shadow-md transition-shadow duration-200"
+      className="group bg-white rounded-lg cursor-pointer relative hover:shadow-md transition-shadow duration-200"
       style={{ boxShadow: "0 1px 3px rgba(0,0,0,0.08)" }}
       onClick={() => onOpenDocument(doc)}
     >
