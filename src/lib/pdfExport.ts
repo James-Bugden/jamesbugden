@@ -9,13 +9,13 @@ interface ExportOptions {
 }
 
 const PAGE_DIMS = {
-  a4: { wMM: 210, hMM: 297 },
-  letter: { wMM: 215.9, hMM: 279.4 },
+  a4: { wMM: 210, hMM: 297, wPT: 595.28, hPT: 841.89 },
+  letter: { wMM: 215.9, hMM: 279.4, wPT: 612, hPT: 792 },
 };
 
 export async function exportToPdf({ elementId, fileName, pageFormat = "a4" }: ExportOptions) {
-  const element = document.getElementById(elementId);
-  if (!element) {
+  const container = document.getElementById(elementId);
+  if (!container) {
     toast({ title: "Export failed", description: "Could not find render target.", variant: "destructive" });
     return;
   }
@@ -23,53 +23,39 @@ export async function exportToPdf({ elementId, fileName, pageFormat = "a4" }: Ex
   try {
     const dims = PAGE_DIMS[pageFormat] || PAGE_DIMS.a4;
 
-    // Capture at 2x for high fidelity
-    const canvas = await html2canvas(element, {
-      scale: 2,
-      useCORS: true,
-      allowTaint: true,
-      backgroundColor: null,
-      logging: false,
-      // Render the full scrollable content, not just the visible area
-      height: element.scrollHeight,
-      windowHeight: element.scrollHeight,
-    });
+    // Find individual page elements (A4Page renders .resume-page elements)
+    const pages = container.querySelectorAll<HTMLElement>(".resume-page");
+    const targets = pages.length > 0 ? Array.from(pages) : [container];
 
-    const imgData = canvas.toDataURL("image/png");
     const pdf = new jsPDF({
       orientation: "portrait",
       unit: "mm",
       format: [dims.wMM, dims.hMM],
     });
 
-    const pdfW = dims.wMM;
-    const pdfH = dims.hMM;
+    for (let i = 0; i < targets.length; i++) {
+      if (i > 0) pdf.addPage([dims.wMM, dims.hMM]);
 
-    // Calculate how many pages the content spans
-    const contentHeightMM = (canvas.height / canvas.width) * pdfW;
-    const totalPages = Math.max(1, Math.ceil(contentHeightMM / pdfH));
+      const canvas = await html2canvas(targets[i], {
+        scale: 2,
+        useCORS: true,
+        allowTaint: true,
+        backgroundColor: "#ffffff",
+        logging: false,
+      });
 
-    for (let page = 0; page < totalPages; page++) {
-      if (page > 0) pdf.addPage([dims.wMM, dims.hMM]);
-
-      // Slice the canvas for this page
-      const srcY = page * (canvas.height / totalPages);
-      const srcH = canvas.height / totalPages;
-
-      const pageCanvas = document.createElement("canvas");
-      pageCanvas.width = canvas.width;
-      pageCanvas.height = srcH;
-      const ctx = pageCanvas.getContext("2d");
-      if (ctx) {
-        ctx.drawImage(canvas, 0, srcY, canvas.width, srcH, 0, 0, canvas.width, srcH);
-      }
-
-      const pageImg = pageCanvas.toDataURL("image/png");
-      pdf.addImage(pageImg, "PNG", 0, 0, pdfW, pdfH);
+      const imgData = canvas.toDataURL("image/png", 0.95);
+      pdf.addImage(imgData, "PNG", 0, 0, dims.wMM, dims.hMM);
     }
 
-    pdf.save(fileName);
-    toast({ title: "PDF downloaded!", description: `${totalPages} page${totalPages > 1 ? "s" : ""} saved as ${fileName}` });
+    const safeName = fileName.endsWith(".pdf") ? fileName : `${fileName}.pdf`;
+    pdf.save(safeName);
+
+    const pageCount = targets.length;
+    toast({
+      title: "Resume downloaded!",
+      description: `${pageCount} page${pageCount > 1 ? "s" : ""} saved as ${safeName}`,
+    });
   } catch (err) {
     console.error("PDF export error:", err);
     toast({ title: "Export failed", description: "Something went wrong generating the PDF.", variant: "destructive" });
