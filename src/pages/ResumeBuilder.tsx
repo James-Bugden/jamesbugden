@@ -461,11 +461,14 @@ const ResumeBuilder = () => {
 
   const handleImported = useCallback((doc: SavedDocument) => {
     if (doc.type === "resume") {
-      setPendingImportDocId(doc.id);
+      const classicSettings = applyTemplatePreset(doc.settings as any, "classic");
       store.setData(doc.data as any);
-      store.updateCustomize(doc.settings as any);
+      store.updateCustomize(classicSettings);
+      updateDocument(doc.id, { settings: classicSettings });
       setActiveDocId(doc.id);
-      setTemplatePickerOpen(true);
+      setViewMode("resume-editor");
+      setActiveTab("content");
+      historyRef.current = { past: [], future: [] };
     } else {
       handleOpenDocument(doc);
     }
