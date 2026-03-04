@@ -228,15 +228,15 @@ export function DocumentDashboard({ onOpenDocument, onImport }: DocumentDashboar
         <div className="absolute inset-0 bg-black/0 group-hover:bg-black/40 transition-all duration-200 flex flex-col items-center justify-center gap-3 opacity-0 group-hover:opacity-100">
           <button
             onClick={(e) => { e.stopPropagation(); onOpenDocument(doc); }}
-            className="flex items-center gap-1.5 text-white text-[11px] font-semibold tracking-wider uppercase hover:underline"
+            className="flex items-center gap-2 text-white text-sm font-semibold tracking-wider uppercase bg-white/20 backdrop-blur-sm px-5 py-2.5 rounded-full hover:bg-white/30 transition-colors"
           >
-            View Resume <ArrowRight className="w-3 h-3" />
+            View Resume <ArrowRight className="w-4 h-4" />
           </button>
           <button
             onClick={(e) => { e.stopPropagation(); handleDuplicate(doc.id); }}
-            className="flex items-center gap-1.5 text-white/80 text-[11px] font-medium tracking-wider uppercase hover:text-white hover:underline"
+            className="flex items-center gap-2 text-white/90 text-sm font-medium tracking-wider uppercase bg-white/10 backdrop-blur-sm px-5 py-2.5 rounded-full hover:bg-white/20 transition-colors"
           >
-            Duplicate <RotateCcw className="w-3 h-3" />
+            Duplicate <RotateCcw className="w-4 h-4" />
           </button>
         </div>
       </div>
