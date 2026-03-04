@@ -1,6 +1,6 @@
 import React, { useRef, useState, useEffect, useMemo, useCallback } from "react";
 import DOMPurify from "dompurify";
-import { Mail, Phone, MapPin, Flag, FileText, Pencil } from "lucide-react";
+import { Mail, Phone, MapPin, Flag, FileText, Pencil, ZoomIn, ZoomOut, RotateCcw, Scissors } from "lucide-react";
 import { ResumeData } from "./types";
 import { CustomizeSettings } from "./customizeTypes";
 import { cn } from "@/lib/utils";
@@ -610,7 +610,9 @@ const A4Page = React.memo(function A4Page({ data, customize, onEditSection }: { 
 export const ResumePreview = React.memo(function ResumePreview({ data, customize, pdfTargetId, onEditSection }: ResumePreviewProps) {
   const containerRef = useRef<HTMLDivElement>(null);
   const contentRef = useRef<HTMLDivElement>(null);
-  const [scale, setScale] = useState(0.65);
+  const [autoScale, setAutoScale] = useState(0.65);
+  const [zoomOffset, setZoomOffset] = useState(0); // manual zoom adjustment
+  const scale = Math.max(0.2, Math.min(1.5, autoScale + zoomOffset));
   const [pageCount, setPageCount] = useState(1);
   const dims = getPageDims(customize?.pageFormat);
 
@@ -629,7 +631,7 @@ export const ResumePreview = React.memo(function ResumePreview({ data, customize
       for (const entry of entries) {
         const w = entry.contentRect.width;
         const s = Math.min((w - 48) / dims.wPX, 0.85);
-        setScale(Math.max(s, 0.35));
+        setAutoScale(Math.max(s, 0.35));
       }
     });
     observer.observe(el);
@@ -688,9 +690,9 @@ export const ResumePreview = React.memo(function ResumePreview({ data, customize
             <React.Fragment key={i}>
               {i > 0 && (
                 <div style={{ display: "flex", alignItems: "center", justifyContent: "center", padding: "12px 0", gap: "8px" }}>
-                  <div style={{ flex: 1, height: "1px", backgroundColor: "#d1d5db" }} />
-                  <span style={{ fontSize: "10px", color: "#9ca3af", fontWeight: 500, whiteSpace: "nowrap" }}>Page Break</span>
-                  <div style={{ flex: 1, height: "1px", backgroundColor: "#d1d5db" }} />
+                  <div style={{ flex: 1, height: "1px", background: "repeating-linear-gradient(90deg, #d1d5db 0, #d1d5db 6px, transparent 6px, transparent 12px)" }} />
+                  <Scissors style={{ width: "14px", height: "14px", color: "#9ca3af", transform: "rotate(180deg)" }} />
+                  <div style={{ flex: 1, height: "1px", background: "repeating-linear-gradient(90deg, #d1d5db 0, #d1d5db 6px, transparent 6px, transparent 12px)" }} />
                 </div>
               )}
               <div
@@ -716,11 +718,40 @@ export const ResumePreview = React.memo(function ResumePreview({ data, customize
         </div>
       </div>
 
-      {/* Page indicator */}
+      {/* Zoom controls + page indicator */}
       <div className="sticky bottom-4 flex justify-center pointer-events-none z-10">
-        <span className="bg-white/90 backdrop-blur-sm text-gray-600 text-xs font-medium px-3 py-1.5 rounded-full shadow-md border border-gray-200">
-          {pageCount} page{pageCount > 1 ? "s" : ""}
-        </span>
+        <div className="pointer-events-auto flex items-center gap-1 bg-white/90 backdrop-blur-sm rounded-full shadow-md border border-gray-200 px-1.5 py-1">
+          <button
+            onClick={() => setZoomOffset((z) => Math.max(z - 0.1, -0.4))}
+            className="w-7 h-7 rounded-full flex items-center justify-center text-gray-500 hover:bg-gray-100 transition-colors"
+            title="Zoom out"
+          >
+            <ZoomOut className="w-3.5 h-3.5" />
+          </button>
+          <span className="text-xs font-medium text-gray-600 min-w-[40px] text-center">
+            {Math.round(scale * 100)}%
+          </span>
+          <button
+            onClick={() => setZoomOffset((z) => Math.min(z + 0.1, 0.6))}
+            className="w-7 h-7 rounded-full flex items-center justify-center text-gray-500 hover:bg-gray-100 transition-colors"
+            title="Zoom in"
+          >
+            <ZoomIn className="w-3.5 h-3.5" />
+          </button>
+          {zoomOffset !== 0 && (
+            <button
+              onClick={() => setZoomOffset(0)}
+              className="w-7 h-7 rounded-full flex items-center justify-center text-gray-400 hover:bg-gray-100 transition-colors"
+              title="Reset zoom"
+            >
+              <RotateCcw className="w-3 h-3" />
+            </button>
+          )}
+          <div className="w-px h-4 bg-gray-200 mx-0.5" />
+          <span className="text-xs text-gray-500 px-1.5">
+            {pageCount} pg{pageCount > 1 ? "s" : ""}
+          </span>
+        </div>
       </div>
 
       {/* Thumbnail navigator */}

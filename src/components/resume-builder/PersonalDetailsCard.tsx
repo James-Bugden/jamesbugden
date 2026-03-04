@@ -1,5 +1,5 @@
 import { useState, useRef } from "react";
-import { Pencil, Mail, Phone, MapPin, Camera, GripVertical, Trash2 } from "lucide-react";
+import { Pencil, Mail, Phone, MapPin, Camera, GripVertical, Trash2, ChevronDown, ChevronUp } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { PersonalDetails, EXTRA_DETAIL_OPTIONS } from "./types";
 import { compressImage } from "@/lib/imageCompression";
@@ -8,10 +8,12 @@ import { cn } from "@/lib/utils";
 interface PersonalDetailsCardProps {
   details: PersonalDetails;
   onChange: (updates: Partial<PersonalDetails>) => void;
+  collapsible?: boolean;
 }
 
-export function PersonalDetailsCard({ details, onChange }: PersonalDetailsCardProps) {
+export function PersonalDetailsCard({ details, onChange, collapsible }: PersonalDetailsCardProps) {
   const [editing, setEditing] = useState(false);
+  const [collapsed, setCollapsed] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   const handlePhotoUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -47,16 +49,38 @@ export function PersonalDetailsCard({ details, onChange }: PersonalDetailsCardPr
   const availableExtras = EXTRA_DETAIL_OPTIONS.filter((t) => !usedTypes.has(t));
 
   return (
-    <div className="bg-white rounded-xl p-5 shadow-sm border border-gray-100 relative transition-transform duration-150 hover:scale-[1.02]">
-      {/* Edit button */}
-      <button
-        onClick={() => setEditing(!editing)}
-        className="absolute top-4 right-4 w-9 h-9 rounded-full bg-pink-100 text-pink-600 flex items-center justify-center hover:bg-pink-200 transition-colors"
-      >
-        <Pencil className="w-4 h-4" />
-      </button>
+    <div className="bg-white rounded-xl shadow-sm border border-gray-100 relative transition-transform duration-150 hover:scale-[1.02] overflow-hidden">
+      {/* Header with collapse toggle */}
+      {collapsible && (
+        <button
+          onClick={() => setCollapsed(!collapsed)}
+          className="w-full flex items-center gap-3 px-5 py-3 hover:bg-gray-50 transition-colors text-left"
+        >
+          <span className="font-bold text-gray-900 uppercase tracking-wide text-sm flex-1">Personal Details</span>
+          {collapsed ? (
+            <ChevronDown className="w-5 h-5 text-gray-400" />
+          ) : (
+            <ChevronUp className="w-5 h-5 text-gray-400" />
+          )}
+        </button>
+      )}
 
-      {!editing ? (
+      {/* Edit button */}
+      {!collapsed && (
+        <button
+          onClick={() => setEditing(!editing)}
+          className="absolute top-4 right-4 w-9 h-9 rounded-full bg-pink-100 text-pink-600 flex items-center justify-center hover:bg-pink-200 transition-colors"
+          style={collapsible ? { top: "3rem" } : undefined}
+        >
+          <Pencil className="w-4 h-4" />
+        </button>
+      )}
+
+      <div className={cn(
+        "transition-all duration-200 ease-in-out overflow-hidden",
+        collapsed ? "max-h-0 opacity-0" : "max-h-[3000px] opacity-100"
+      )}>
+        <div className="p-5">{!editing ? (
         /* View mode */
         <div className="flex items-start gap-5">
           <div className="flex-1 min-w-0">
@@ -218,7 +242,9 @@ export function PersonalDetailsCard({ details, onChange }: PersonalDetailsCardPr
             </div>
           )}
         </div>
-      )}
+        )}
+        </div>
+      </div>
     </div>
   );
 }
