@@ -338,8 +338,8 @@ function renderSectionEntries(section: ResumeSection, customize?: CustomizeSetti
           // grid (default)
           return (
             <div key={entry.id} className="flex items-center justify-between gap-[3mm]">
-              <span style={{ fontSize: "9pt", color: "var(--resume-body)", fontWeight: 600 }}>{language || "Language"}</span>
-              <span style={{ fontSize: "8pt", color: "var(--resume-dates)" }}>{proficiency}</span>
+              <span style={{ fontSize: bodyPt(base), color: "var(--resume-body)", fontWeight: 600 }}>{language || "Language"}</span>
+              <span style={{ fontSize: datePt(base), color: "var(--resume-dates)" }}>{proficiency}</span>
             </div>
           );
         })}
