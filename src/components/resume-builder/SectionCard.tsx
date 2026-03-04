@@ -566,12 +566,12 @@ export function SectionCard({ section, onUpdate, onRemove }: {
   };
 
   return (
-    <div id={`section-card-${section.id}`}>
-      {/* Section header — clean separator style */}
-      <div className="flex items-center gap-2 py-3 group">
+    <div id={`section-card-${section.id}`} className="px-5">
+      {/* Section header */}
+      <div className="flex items-center gap-2.5 py-4 group cursor-pointer" onClick={toggleCollapse}>
         <GripVertical className="w-4 h-4 text-gray-300 cursor-grab flex-shrink-0 opacity-0 group-hover:opacity-100 transition-opacity" />
-        <IconComponent className="w-4 h-4 text-gray-500 flex-shrink-0" />
-
+        <IconComponent className="w-4.5 h-4.5 flex-shrink-0" style={{ color: "#2b4734" }} />
+        
         {editingTitle ? (
           <input
             autoFocus
@@ -579,30 +579,29 @@ export function SectionCard({ section, onUpdate, onRemove }: {
             onChange={(e) => setTitleValue(e.target.value)}
             onBlur={handleTitleSave}
             onKeyDown={(e) => { if (e.key === "Enter") handleTitleSave(); if (e.key === "Escape") setEditingTitle(false); }}
-            className="text-sm font-semibold text-gray-900 bg-gray-50 border border-gray-200 rounded px-2 py-0.5 outline-none focus:border-gray-400 flex-1"
+            onClick={(e) => e.stopPropagation()}
+            className="text-sm font-bold text-gray-900 bg-gray-50 border border-gray-200 rounded px-2 py-0.5 outline-none focus:border-gray-400 flex-1 uppercase tracking-wide"
           />
         ) : (
-          <span className="text-sm font-semibold text-gray-900 flex-1 cursor-pointer" onClick={toggleCollapse}>
+          <span className="text-sm font-bold flex-1 uppercase tracking-wide" style={{ color: "#1e293b" }}>
             {section.title}
           </span>
         )}
 
         <button
-          onClick={() => { setTitleValue(section.title); setEditingTitle(true); }}
+          onClick={(e) => { e.stopPropagation(); setTitleValue(section.title); setEditingTitle(true); }}
           className="p-1 text-gray-300 hover:text-gray-500 opacity-0 group-hover:opacity-100 transition-all"
           title="Edit heading"
         >
           <Pencil className="w-3 h-3" />
         </button>
         <button
-          onClick={onRemove}
+          onClick={(e) => { e.stopPropagation(); onRemove(); }}
           className="p-1 text-gray-300 hover:text-red-500 opacity-0 group-hover:opacity-100 transition-all"
         >
           <Trash2 className="w-3.5 h-3.5" />
         </button>
-        <button onClick={toggleCollapse} className="p-1 text-gray-400">
-          {section.collapsed ? <ChevronDown className="w-4 h-4" /> : <ChevronUp className="w-4 h-4" />}
-        </button>
+        <ChevronDown className={cn("w-4 h-4 text-gray-400 flex-shrink-0 transition-transform", !section.collapsed && "rotate-180")} />
       </div>
 
       {/* Body */}
