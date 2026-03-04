@@ -164,6 +164,7 @@ export const DEFAULT_CUSTOMIZE: CustomizeSettings = {
   languagesDisplay: "grid",
   educationOrder: "degree-first",
   experienceOrder: "title-first",
+  groupPromotions: false,
 };
 
 export const ACCENT_COLORS = [
