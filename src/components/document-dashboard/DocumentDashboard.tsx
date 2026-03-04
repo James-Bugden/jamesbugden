@@ -5,6 +5,9 @@ import { cn } from "@/lib/utils";
 import { useNavigate } from "react-router-dom";
 import { TemplateGalleryModal } from "@/components/resume-builder/TemplateGalleryModal";
 import { DEFAULT_CUSTOMIZE } from "@/components/resume-builder/customizeTypes";
+import { ResumeThumbnail } from "@/components/resume-builder/ResumeThumbnail";
+import { ResumeData } from "@/components/resume-builder/types";
+import { CustomizeSettings } from "@/components/resume-builder/customizeTypes";
 
 interface DocumentDashboardProps {
   onOpenDocument: (doc: SavedDocument) => void;
@@ -93,7 +96,10 @@ export function DocumentDashboard({ onOpenDocument, onImport }: DocumentDashboar
       {/* Thumbnail */}
       <div className="aspect-[210/297] bg-gray-50 rounded-t-xl flex items-center justify-center border-b border-gray-100 overflow-hidden relative">
         {doc.type === "resume" ? (
-          <FileText className="w-10 h-10 text-gray-300" />
+          <ResumeThumbnail
+            data={doc.data as ResumeData}
+            settings={doc.settings as CustomizeSettings}
+          />
         ) : (
           <Mail className="w-10 h-10 text-gray-300" />
         )}
