@@ -540,9 +540,9 @@ const ResumeBuilder = () => {
     <EditorSkeleton />
   ) : activeTab === "content" ? (
     <div className="animate-fade-in">
-      <div className="max-w-2xl mx-auto p-4 md:p-6 space-y-0">
+      <div className="max-w-2xl mx-auto p-4 md:p-6 space-y-3">
         {/* Import content link */}
-        <div className="flex items-center justify-end mb-3">
+        <div className="flex items-center justify-end mb-1">
           <button
             onClick={() => setEditorImportOpen(true)}
             className="flex items-center gap-1.5 text-xs font-medium transition-colors hover:opacity-80"
@@ -556,67 +556,60 @@ const ResumeBuilder = () => {
         {/* Personal Details */}
         <PersonalDetailsCard details={data.personalDetails} onChange={(u) => { pushHistory(); updatePersonalDetails(u); }} />
 
-        {/* Section divider */}
-        {data.sections.length > 0 && <div className="border-t my-4" style={{ borderColor: BRAND.border }} />}
+        {/* Sections — each as its own card */}
+        {data.sections.map((section, idx) => (
+          <div
+            key={section.id}
+            draggable
+            onDragStart={handleSectionDragStart(idx)}
+            onDragOver={handleSectionDragOver(idx)}
+            onDrop={handleSectionDrop(idx)}
+            onDragEnd={handleSectionDragEnd}
+            className={cn(
+              "bg-white rounded-xl shadow-sm transition-all duration-200",
+              sectionOverIdx === idx && "ring-2 ring-green-200"
+            )}
+          >
+            <SectionCard
+              section={section}
+              onUpdate={(updates) => { pushHistory(); updateSection(section.id, updates); }}
+              onRemove={() => {
+                pushHistory();
+                const removed = section;
+                removeSection(section.id);
+                toast({
+                  title: "Section removed",
+                  description: `${removed.title} was deleted.`,
+                  action: (
+                    <button
+                      onClick={() => {
+                        const restored = [...data.sections];
+                        restored.splice(idx, 0, removed);
+                        setSections(restored);
+                      }}
+                      className="text-xs font-semibold hover:opacity-80 px-2 py-1 rounded transition-opacity"
+                      style={{ color: BRAND.green, backgroundColor: BRAND.greenLight }}
+                    >
+                      Undo
+                    </button>
+                  ),
+                });
+              }}
+            />
+          </div>
+        ))}
+        {data.sections.length === 0 && (
+          <div className="bg-white rounded-xl shadow-sm text-center py-8">
+            <p className="text-sm" style={{ color: BRAND.textSecondary }}>Add sections to build your resume</p>
+          </div>
+        )}
 
-        {/* Sections */}
-        <div className="bg-white rounded-xl px-5 py-2" style={{ boxShadow: "0 1px 3px rgba(0,0,0,0.08)" }}>
-          {data.sections.map((section, idx) => (
-            <div
-              key={section.id}
-              draggable
-              onDragStart={handleSectionDragStart(idx)}
-              onDragOver={handleSectionDragOver(idx)}
-              onDrop={handleSectionDrop(idx)}
-              onDragEnd={handleSectionDragEnd}
-              className={cn(
-                "transition-all duration-200",
-                idx > 0 && "border-t",
-                sectionOverIdx === idx && "bg-green-50/30"
-              )}
-              style={idx > 0 ? { borderColor: BRAND.border } : undefined}
-            >
-              <SectionCard
-                section={section}
-                onUpdate={(updates) => { pushHistory(); updateSection(section.id, updates); }}
-                onRemove={() => {
-                  pushHistory();
-                  const removed = section;
-                  removeSection(section.id);
-                  toast({
-                    title: "Section removed",
-                    description: `${removed.title} was deleted.`,
-                    action: (
-                      <button
-                        onClick={() => {
-                          const restored = [...data.sections];
-                          restored.splice(idx, 0, removed);
-                          setSections(restored);
-                        }}
-                        className="text-xs font-semibold hover:opacity-80 px-2 py-1 rounded transition-opacity"
-                        style={{ color: BRAND.green, backgroundColor: BRAND.greenLight }}
-                      >
-                        Undo
-                      </button>
-                    ),
-                  });
-                }}
-              />
-            </div>
-          ))}
-          {data.sections.length === 0 && (
-            <div className="text-center py-8">
-              <p className="text-sm" style={{ color: BRAND.textSecondary }}>Add sections to build your resume</p>
-            </div>
-          )}
-        </div>
-
-        {/* Add Content button */}
-        <div className="pt-4">
+        {/* Add Content button — gradient pill */}
+        <div className="flex justify-center pt-2">
           <button
             onClick={() => setModalOpen(true)}
-            className="w-full flex items-center justify-center gap-2 py-3 rounded-xl text-white font-semibold text-sm transition-all hover:opacity-90 active:scale-[0.98]"
-            style={{ backgroundColor: BRAND.green }}
+            className="flex items-center justify-center gap-2 px-8 py-3 rounded-full text-white font-semibold text-sm transition-all hover:opacity-90 active:scale-[0.98] shadow-md"
+            style={{ background: "linear-gradient(135deg, #D4930D 0%, #e8a520 50%, #f0c060 100%)" }}
           >
             <Plus className="w-4.5 h-4.5" /> Add Content
           </button>
