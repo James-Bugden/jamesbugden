@@ -9,10 +9,7 @@ import {
   Trash2,
   Upload,
   Briefcase,
-  Clock,
   Search,
-  LayoutGrid,
-  List,
   ArrowRight,
   RotateCcw,
   User,
@@ -32,6 +29,7 @@ import { cn } from "@/lib/utils";
 import { useNavigate } from "react-router-dom";
 import { TemplateGalleryModal } from "@/components/resume-builder/TemplateGalleryModal";
 import { DEFAULT_CUSTOMIZE } from "@/components/resume-builder/customizeTypes";
+import { applyTemplatePreset } from "@/components/resume-builder/templatePresets";
 import { ResumeThumbnail } from "@/components/resume-builder/ResumeThumbnail";
 import { ResumeData } from "@/components/resume-builder/types";
 import { CustomizeSettings } from "@/components/resume-builder/customizeTypes";
@@ -69,8 +67,9 @@ export function DocumentDashboard({ onOpenDocument, onImport }: DocumentDashboar
   }, [menuOpenId]);
 
   const handleCreateFromTemplate = (templateId: string) => {
+    const appliedSettings = applyTemplatePreset(DEFAULT_CUSTOMIZE, templateId);
     const doc = createDocument("resume", undefined, {
-      settings: { ...DEFAULT_CUSTOMIZE, template: templateId },
+      settings: appliedSettings,
     });
     onOpenDocument(doc);
   };
