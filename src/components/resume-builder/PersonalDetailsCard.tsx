@@ -75,7 +75,8 @@ export function PersonalDetailsCard({ details, onChange, collapsible }: Personal
           {/* Edit button */}
           <button
             onClick={() => setEditing(true)}
-            className="absolute top-4 right-4 w-8 h-8 rounded-full flex items-center justify-center text-gray-400 hover:text-gray-600 hover:bg-gray-100 transition-colors"
+            className="absolute top-4 right-4 w-8 h-8 rounded-full flex items-center justify-center transition-colors"
+            style={{ color: "#D4930D", backgroundColor: "rgba(212,147,13,0.1)" }}
           >
             <Pencil className="w-3.5 h-3.5" />
           </button>
