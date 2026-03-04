@@ -769,6 +769,30 @@ export const A4Page = React.memo(function A4Page({
             Add content to see your resume here
           </div>
         )}
+
+        {/* Footer */}
+        {(c?.showPageNumbers || c?.showFooterEmail || c?.showFooterName) && (
+          <div
+            style={{
+              position: "absolute",
+              bottom: "var(--resume-margin-y)",
+              left: "var(--resume-margin-x)",
+              right: "var(--resume-margin-x)",
+              display: "flex",
+              justifyContent: "space-between",
+              alignItems: "center",
+              fontSize: "7.5pt",
+              color: "var(--resume-dates)",
+            }}
+          >
+            <span>{c?.showFooterName ? (p.fullName || "") : ""}</span>
+            <span>
+              {[
+                c?.showFooterEmail ? p.email : "",
+              ].filter(Boolean).join(" · ")}
+            </span>
+          </div>
+        )}
       </div>
     </>
   );
