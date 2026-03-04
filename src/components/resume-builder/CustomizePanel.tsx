@@ -1,6 +1,10 @@
-import { useState } from "react";
+import { useState, useCallback } from "react";
 import { cn } from "@/lib/utils";
-import { Minus, Plus, Check, Link, ExternalLink, Smile, Circle, AlignLeft, AlignCenter, AlignRight, GripVertical, Camera, ChevronUp, ChevronDown } from "lucide-react";
+import { Minus, Plus, Check, Link, ExternalLink, Smile, Circle, AlignLeft, AlignCenter, AlignRight, GripVertical, Camera } from "lucide-react";
+import { DndContext, closestCenter, PointerSensor, useSensor, useSensors, DragEndEvent } from "@dnd-kit/core";
+import { SortableContext, verticalListSortingStrategy, useSortable, arrayMove } from "@dnd-kit/sortable";
+import { CSS } from "@dnd-kit/utilities";
+import { restrictToVerticalAxis } from "@dnd-kit/modifiers";
 import { Slider } from "@/components/ui/slider";
 import { Switch } from "@/components/ui/switch";
 import { Checkbox } from "@/components/ui/checkbox";
@@ -955,54 +959,66 @@ function SectionReorderCard({ settings, onChange, sections }: { settings: Custom
     ? settings.sectionOrder.filter((id) => sections.some((s) => s.id === id))
     : sections.map((s) => s.id);
 
-  // Add any sections not yet in the order
   const allIds = sections.map((s) => s.id);
   const fullOrder = [...order, ...allIds.filter((id) => !order.includes(id))];
 
   const sectionMap = new Map(sections.map((s) => [s.id, s]));
 
-  const move = (idx: number, dir: -1 | 1) => {
-    const newOrder = [...fullOrder];
-    const targetIdx = idx + dir;
-    if (targetIdx < 0 || targetIdx >= newOrder.length) return;
-    [newOrder[idx], newOrder[targetIdx]] = [newOrder[targetIdx], newOrder[idx]];
-    onChange({ sectionOrder: newOrder });
-  };
+  const sensors = useSensors(useSensor(PointerSensor, { activationConstraint: { distance: 4 } }));
+
+  const handleDragEnd = useCallback((event: DragEndEvent) => {
+    const { active, over } = event;
+    if (!over || active.id === over.id) return;
+    const oldIndex = fullOrder.indexOf(active.id as string);
+    const newIndex = fullOrder.indexOf(over.id as string);
+    if (oldIndex === -1 || newIndex === -1) return;
+    onChange({ sectionOrder: arrayMove(fullOrder, oldIndex, newIndex) });
+  }, [fullOrder, onChange]);
 
   return (
     <SettingCard title="Change Section Layout">
-      <div className="space-y-1">
-        {fullOrder.length > 0 ? fullOrder.map((id, idx) => {
-          const s = sectionMap.get(id);
-          if (!s) return null;
-          return (
-            <div key={s.id} className="flex items-center gap-2 bg-gray-50 rounded-lg px-3 py-2 border border-gray-100">
-              <div className="flex flex-col gap-0.5">
-                <button
-                  onClick={() => move(idx, -1)}
-                  disabled={idx === 0}
-                  className="w-4 h-4 flex items-center justify-center rounded hover:bg-gray-200 transition-colors disabled:opacity-30"
-                >
-                  <ChevronUp className="w-3 h-3" style={{ color: B.textSec }} />
-                </button>
-                <button
-                  onClick={() => move(idx, 1)}
-                  disabled={idx === fullOrder.length - 1}
-                  className="w-4 h-4 flex items-center justify-center rounded hover:bg-gray-200 transition-colors disabled:opacity-30"
-                >
-                  <ChevronDown className="w-3 h-3" style={{ color: B.textSec }} />
-                </button>
-              </div>
-              <span className="text-xs font-semibold uppercase tracking-wide" style={{ color: B.text }}>{s.title}</span>
-              {(settings.columns === "two" || settings.columns === "mix") && (
-                <span className="ml-auto text-[10px] bg-gray-100 px-2 py-0.5 rounded-full" style={{ color: B.textSec }}>Main</span>
-              )}
+      {fullOrder.length > 0 ? (
+        <DndContext sensors={sensors} collisionDetection={closestCenter} modifiers={[restrictToVerticalAxis]} onDragEnd={handleDragEnd}>
+          <SortableContext items={fullOrder} strategy={verticalListSortingStrategy}>
+            <div className="space-y-1">
+              {fullOrder.map((id) => {
+                const s = sectionMap.get(id);
+                if (!s) return null;
+                return <SortableSectionItem key={s.id} id={s.id} title={s.title} columns={settings.columns} />;
+              })}
             </div>
-          );
-        }) : (
-          <p className="text-xs py-2" style={{ color: B.textSec }}>Add sections in the Content tab first</p>
-        )}
-      </div>
+          </SortableContext>
+        </DndContext>
+      ) : (
+        <p className="text-xs py-2" style={{ color: B.textSec }}>Add sections in the Content tab first</p>
+      )}
     </SettingCard>
+  );
+}
+
+function SortableSectionItem({ id, title, columns }: { id: string; title: string; columns: string }) {
+  const { attributes, listeners, setNodeRef, transform, transition, isDragging } = useSortable({ id });
+
+  const style: React.CSSProperties = {
+    transform: CSS.Transform.toString(transform),
+    transition,
+    opacity: isDragging ? 0.5 : 1,
+    zIndex: isDragging ? 10 : undefined,
+  };
+
+  return (
+    <div
+      ref={setNodeRef}
+      style={style}
+      className="flex items-center gap-2 bg-gray-50 rounded-lg px-3 py-2 border border-gray-100"
+    >
+      <div {...attributes} {...listeners} className="cursor-grab active:cursor-grabbing touch-none">
+        <GripVertical className="w-3.5 h-3.5" style={{ color: B.textSec }} />
+      </div>
+      <span className="text-xs font-semibold uppercase tracking-wide" style={{ color: B.text }}>{title}</span>
+      {(columns === "two" || columns === "mix") && (
+        <span className="ml-auto text-[10px] bg-gray-100 px-2 py-0.5 rounded-full" style={{ color: B.textSec }}>Main</span>
+      )}
+    </div>
   );
 }
