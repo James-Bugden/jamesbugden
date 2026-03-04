@@ -38,9 +38,33 @@ interface ResumePreviewProps {
   onEditSection?: (sectionId: string) => void;
 }
 
+/* ── Relative font-size helpers ──────────────────────────────── */
+// Every text size is derived from the base slider value (customize.fontSize, default 10.5pt).
+// Name/title sizes are absolute (user-controlled separately).
 const NAME_SIZES: Record<string, string> = { xs: "14pt", s: "20pt", m: "24pt", l: "28pt", xl: "32pt" };
 const TITLE_SIZES: Record<string, string> = { s: "9pt", m: "11pt", l: "13pt" };
-const HEADING_SIZES: Record<string, string> = { s: "9pt", m: "10pt", l: "12pt", xl: "14pt" };
+
+function headingSizePt(base: number, size: string): string {
+  const offsets: Record<string, number> = { s: -1.5, m: -0.5, l: 1.5, xl: 3.5 };
+  return `${base + (offsets[size] ?? -0.5)}pt`;
+}
+
+function bodyPt(base: number): string { return `${base - 1.5}pt`; }
+function datePt(base: number): string { return `${base - 2.5}pt`; }
+function contactPt(base: number): string { return `${base - 2.5}pt`; }
+
+function entryTitlePt(base: number, size: string): string {
+  const offsets: Record<string, number> = { xs: -2.5, s: -2, m: -1.5, l: -0.5 };
+  return `${base + (offsets[size] ?? -1.5)}pt`;
+}
+
+function entrySubtitlePt(base: number, size: string): string {
+  const offsets: Record<string, number> = { xs: -3.5, s: -3, m: -2.5, l: -1.5 };
+  return `${base + (offsets[size] ?? -2.5)}pt`;
+}
+
+function skillPt(base: number): string { return `${base - 2}pt`; }
+function smallPt(base: number): string { return `${base - 3}pt`; }
 
 function safeData(data?: ResumeData): ResumeData {
   return {
