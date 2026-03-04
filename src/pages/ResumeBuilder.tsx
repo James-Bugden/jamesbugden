@@ -1,28 +1,111 @@
 import { useState, useCallback, useEffect, useRef } from "react";
-import { Plus, Eye, Undo2, Redo2, Check, Loader2, GripVertical } from "lucide-react";
-import { ResumeTopNav } from "@/components/resume-builder/ResumeTopNav";
+import { Plus, Eye, Undo2, Redo2, Check, Loader2, Upload, ArrowLeft, FileText, Palette, Download, MoreVertical, ChevronDown } from "lucide-react";
 import { PersonalDetailsCard } from "@/components/resume-builder/PersonalDetailsCard";
 import { SectionCard } from "@/components/resume-builder/SectionCard";
 import { AddContentModal } from "@/components/resume-builder/AddContentModal";
 import { ResumePreview } from "@/components/resume-builder/ResumePreview";
 import { CustomizePanel } from "@/components/resume-builder/CustomizePanel";
-// CompletenessScore removed for cleaner UX
-import { AiToolsPanel } from "@/components/resume-builder/AiToolsPanel";
 import { useResumeStore } from "@/components/resume-builder/useResumeStore";
-import { SECTION_TYPES, getDefaultFieldsForType, ResumeSection } from "@/components/resume-builder/types";
+import { SECTION_TYPES, getDefaultFieldsForType, ResumeSection, DEFAULT_RESUME_DATA } from "@/components/resume-builder/types";
 import { CoverLetterBuilder } from "@/components/cover-letter/CoverLetterBuilder";
 import { DocumentDashboard } from "@/components/document-dashboard/DocumentDashboard";
 import { TemplatePickerOverlay } from "@/components/resume-builder/TemplatePickerOverlay";
 import { ImportModal } from "@/components/document-dashboard/ImportModal";
-import { SavedDocument, DocType, updateDocument, getAllDocuments } from "@/lib/documentStore";
+import { SavedDocument, DocType, updateDocument, getAllDocuments, renameDocument } from "@/lib/documentStore";
 import { applyTemplatePreset } from "@/components/resume-builder/templatePresets";
 import { exportToPdf } from "@/lib/pdfExport";
 import { useIsMobile } from "@/hooks/use-mobile";
 import { Skeleton } from "@/components/ui/skeleton";
 import { toast } from "@/hooks/use-toast";
 import { cn } from "@/lib/utils";
+import { Button } from "@/components/ui/button";
 
 type ViewMode = "dashboard" | "resume-editor" | "cover-letter-editor";
+
+/* ── Sample resume data for new resumes ──────────────── */
+const SAMPLE_RESUME_DATA = {
+  personalDetails: {
+    fullName: "Alex Chen",
+    professionalTitle: "Software Engineer",
+    email: "alex.chen@email.com",
+    phone: "+1 (555) 123-4567",
+    location: "San Francisco, CA",
+    photo: "",
+    extras: [{ id: "1", type: "LinkedIn", value: "linkedin.com/in/alexchen" }],
+  },
+  sections: [
+    {
+      id: "exp-1",
+      type: "experience",
+      title: "Professional Experience",
+      collapsed: false,
+      entries: [
+        {
+          id: "e1",
+          fields: {
+            position: "Senior Software Engineer",
+            company: "TechCorp Inc.",
+            location: "San Francisco, CA",
+            startMonth: "March",
+            startYear: "2022",
+            endMonth: "",
+            endYear: "",
+            currentlyHere: "true",
+            description: "<ul><li>Led development of a microservices architecture serving 2M+ daily active users, improving API response times by 40%</li><li>Mentored a team of 4 junior engineers and established code review best practices</li><li>Designed and implemented a real-time data pipeline processing 500K events/hour using Kafka and Redis</li></ul>",
+          },
+        },
+        {
+          id: "e2",
+          fields: {
+            position: "Software Engineer",
+            company: "StartupXYZ",
+            location: "San Francisco, CA",
+            startMonth: "June",
+            startYear: "2020",
+            endMonth: "February",
+            endYear: "2022",
+            currentlyHere: "",
+            description: "<ul><li>Built the core payment processing system handling $10M+ in monthly transactions</li><li>Implemented CI/CD pipelines reducing deployment time from 2 hours to 15 minutes</li><li>Developed a React-based dashboard used by 500+ enterprise customers</li></ul>",
+          },
+        },
+      ],
+    },
+    {
+      id: "edu-1",
+      type: "education",
+      title: "Education",
+      collapsed: false,
+      entries: [
+        {
+          id: "ed1",
+          fields: {
+            degree: "B.S. Computer Science",
+            institution: "University of California, Berkeley",
+            location: "Berkeley, CA",
+            startMonth: "August",
+            startYear: "2016",
+            endMonth: "May",
+            endYear: "2020",
+            currentlyHere: "",
+            description: "GPA: 3.8/4.0 · Dean's List · Teaching Assistant for Data Structures",
+          },
+        },
+      ],
+    },
+    {
+      id: "skills-1",
+      type: "skills",
+      title: "Skills",
+      collapsed: false,
+      entries: [
+        {
+          id: "s1",
+          fields: { skills: "TypeScript, React, Node.js, Python, PostgreSQL, Redis, Kafka, Docker, Kubernetes, AWS, CI/CD, System Design" },
+        },
+      ],
+    },
+  ],
+};
 
 /* ── Floating undo/redo ────────────────────────────────── */
 function UndoRedoBar({ onUndo, onRedo, canUndo, canRedo }: {
@@ -30,20 +113,10 @@ function UndoRedoBar({ onUndo, onRedo, canUndo, canRedo }: {
 }) {
   return (
     <div className="fixed bottom-6 left-1/2 -translate-x-1/2 z-40 flex items-center gap-1 bg-white rounded-full shadow-lg border border-gray-200 p-1">
-      <button
-        onClick={onUndo}
-        disabled={!canUndo}
-        className={cn("w-10 h-10 rounded-full flex items-center justify-center transition-colors", canUndo ? "hover:bg-gray-100 text-gray-700" : "text-gray-300 cursor-not-allowed")}
-        title="Undo (Cmd+Z)"
-      >
+      <button onClick={onUndo} disabled={!canUndo} className={cn("w-10 h-10 rounded-full flex items-center justify-center transition-colors", canUndo ? "hover:bg-gray-100 text-gray-700" : "text-gray-300 cursor-not-allowed")} title="Undo (Cmd+Z)">
         <Undo2 className="w-4.5 h-4.5" />
       </button>
-      <button
-        onClick={onRedo}
-        disabled={!canRedo}
-        className={cn("w-10 h-10 rounded-full flex items-center justify-center transition-colors", canRedo ? "hover:bg-gray-100 text-gray-700" : "text-gray-300 cursor-not-allowed")}
-        title="Redo (Cmd+Shift+Z)"
-      >
+      <button onClick={onRedo} disabled={!canRedo} className={cn("w-10 h-10 rounded-full flex items-center justify-center transition-colors", canRedo ? "hover:bg-gray-100 text-gray-700" : "text-gray-300 cursor-not-allowed")} title="Redo (Cmd+Shift+Z)">
         <Redo2 className="w-4.5 h-4.5" />
       </button>
     </div>
@@ -52,17 +125,27 @@ function UndoRedoBar({ onUndo, onRedo, canUndo, canRedo }: {
 
 /* ── Auto-save indicator ───────────────────────────────── */
 function SaveIndicator({ saving }: { saving: boolean }) {
+  const [pulse, setPulse] = useState(false);
+
+  useEffect(() => {
+    if (!saving) {
+      setPulse(true);
+      const t = setTimeout(() => setPulse(false), 1500);
+      return () => clearTimeout(t);
+    }
+  }, [saving]);
+
   return (
-    <div className="flex items-center gap-1.5 text-xs text-gray-400">
+    <div className={cn("flex items-center gap-1.5 text-xs transition-opacity duration-300", pulse ? "opacity-100" : "opacity-60")}>
       {saving ? (
         <>
-          <Loader2 className="w-3 h-3 animate-spin" />
-          <span>Saving...</span>
+          <Loader2 className="w-3 h-3 animate-spin text-gray-400" />
+          <span className="text-gray-400">Saving...</span>
         </>
       ) : (
         <>
-          <Check className="w-3 h-3 text-green-500" />
-          <span>All changes saved</span>
+          <Check className="w-3 h-3 text-emerald-500" />
+          <span className="text-gray-500">All changes saved</span>
         </>
       )}
     </div>
@@ -72,14 +155,12 @@ function SaveIndicator({ saving }: { saving: boolean }) {
 /* ── Mobile preview overlay ────────────────────────────── */
 function MobilePreviewOverlay({ children, onClose }: { children: React.ReactNode; onClose: () => void }) {
   return (
-    <div className="fixed inset-0 z-50 bg-white flex flex-col animate-in slide-in-from-bottom duration-300">
+    <div className="fixed inset-0 z-50 bg-white flex flex-col animate-fade-in">
       <div className="flex items-center justify-between px-4 py-3 border-b border-gray-200 bg-gray-50">
         <span className="text-sm font-semibold text-gray-700">Preview</span>
-        <button onClick={onClose} className="text-sm font-medium text-pink-600 hover:text-pink-700">Close</button>
+        <button onClick={onClose} className="text-sm font-medium text-[#d946ef] hover:opacity-80 transition-opacity">Close</button>
       </div>
-      <div className="flex-1 overflow-auto">
-        {children}
-      </div>
+      <div className="flex-1 overflow-auto">{children}</div>
     </div>
   );
 }
@@ -98,14 +179,14 @@ function EditorSkeleton() {
 /* ── Branding footer ───────────────────────────────────── */
 function BrandingFooter() {
   return (
-    <div className="py-3 px-4 text-center border-t border-gray-100 bg-white">
-      <p className="text-[11px] text-gray-400">
+    <div className="py-3 px-4 text-center border-t border-[#e5e7eb] bg-white">
+      <p className="text-[11px] text-[#6b7280]">
         Powered by{" "}
-        <a href="https://james.careers" target="_blank" rel="noopener noreferrer" className="text-pink-500 hover:text-pink-600 font-medium">
+        <a href="https://james.careers" target="_blank" rel="noopener noreferrer" className="text-[#d946ef] hover:opacity-80 font-medium transition-opacity">
           james.careers
         </a>
         {" · "}
-        <a href="https://james.careers" target="_blank" rel="noopener noreferrer" className="text-gray-500 hover:text-gray-600">
+        <a href="https://james.careers" target="_blank" rel="noopener noreferrer" className="text-[#6b7280] hover:text-[#1f2937] transition-colors">
           Need resume help? Get expert feedback →
         </a>
       </p>
@@ -113,6 +194,78 @@ function BrandingFooter() {
   );
 }
 
+/* ── Download dropdown ─────────────────────────────────── */
+function DownloadDropdown({ downloading, pageFormat, docName, onDownload }: {
+  downloading: boolean; pageFormat: string; docName: string; onDownload: (filename: string) => void;
+}) {
+  const [open, setOpen] = useState(false);
+  const [filename, setFilename] = useState("");
+  const ref = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    setFilename((docName || "Resume").replace(/\s+/g, "_") + "_Resume");
+  }, [docName]);
+
+  useEffect(() => {
+    if (!open) return;
+    const handler = (e: MouseEvent) => {
+      if (ref.current && !ref.current.contains(e.target as Node)) setOpen(false);
+    };
+    document.addEventListener("mousedown", handler);
+    return () => document.removeEventListener("mousedown", handler);
+  }, [open]);
+
+  return (
+    <div className="relative" ref={ref}>
+      <Button
+        size="sm"
+        className="bg-[#d946ef] hover:bg-[#c026d3] text-white gap-1.5 transition-colors"
+        onClick={() => { if (!downloading) setOpen(!open); }}
+        disabled={downloading}
+      >
+        {downloading ? <Loader2 className="w-4 h-4 animate-spin" /> : <Download className="w-4 h-4" />}
+        {downloading ? "Generating..." : "Download"}
+      </Button>
+
+      {open && !downloading && (
+        <div className="absolute right-0 top-full mt-2 bg-white rounded-xl shadow-xl border border-[#e5e7eb] z-30 w-[280px] p-4 animate-scale-in">
+          <div className="space-y-3">
+            <div>
+              <label className="block text-xs font-semibold text-[#6b7280] mb-1">Filename</label>
+              <div className="flex items-center">
+                <input
+                  type="text"
+                  value={filename}
+                  onChange={(e) => setFilename(e.target.value)}
+                  className="flex-1 px-3 py-2 text-sm border border-[#e5e7eb] rounded-l-lg outline-none focus:ring-2 focus:ring-[#d946ef]/30 focus:border-[#d946ef] bg-white text-[#1f2937]"
+                />
+                <span className="px-3 py-2 text-sm text-[#6b7280] bg-gray-50 border border-l-0 border-[#e5e7eb] rounded-r-lg">.pdf</span>
+              </div>
+            </div>
+            <div className="flex items-center justify-between py-2 px-3 bg-gray-50 rounded-lg">
+              <span className="text-xs font-medium text-[#6b7280]">Paper size</span>
+              <span className="text-xs font-semibold text-[#1f2937]">
+                {pageFormat === "letter" ? "US Letter" : "A4"}
+              </span>
+            </div>
+            <div className="text-[10px] text-[#6b7280] text-center">⌘S to save · ⌘P to download</div>
+            <Button
+              className="w-full bg-[#d946ef] hover:bg-[#c026d3] text-white transition-colors"
+              onClick={() => { setOpen(false); onDownload(filename); }}
+            >
+              <Download className="w-4 h-4 mr-2" />
+              Download PDF
+            </Button>
+          </div>
+        </div>
+      )}
+    </div>
+  );
+}
+
+/* ═════════════════════════════════════════════════════════════
+   Main Component
+   ═════════════════════════════════════════════════════════════ */
 const ResumeBuilder = () => {
   const store = useResumeStore();
   const { data, customize, updateCustomize, updatePersonalDetails, setSections, updateSection, removeSection } = store;
@@ -143,6 +296,7 @@ const ResumeBuilder = () => {
     setSectionOverIdx(null);
   };
   const handleSectionDragEnd = () => { sectionDragIdx.current = null; setSectionOverIdx(null); };
+
   const [activeTab, setActiveTab] = useState("content");
   const [modalOpen, setModalOpen] = useState(false);
   const [viewMode, setViewMode] = useState<ViewMode>("dashboard");
@@ -155,9 +309,12 @@ const ResumeBuilder = () => {
   const [mobilePreview, setMobilePreview] = useState(false);
   const [templatePickerOpen, setTemplatePickerOpen] = useState(false);
   const [pendingImportDocId, setPendingImportDocId] = useState<string | null>(null);
+  const [editingName, setEditingName] = useState(false);
+  const [nameValue, setNameValue] = useState("");
+  const [editorImportOpen, setEditorImportOpen] = useState(false);
   const isMobile = useIsMobile();
 
-  // Undo/redo via history stack
+  // Undo/redo
   const historyRef = useRef<{ past: any[]; future: any[] }>({ past: [], future: [] });
 
   const pushHistory = useCallback(() => {
@@ -182,7 +339,7 @@ const ResumeBuilder = () => {
     store.setData(next);
   }, [data, store]);
 
-  // Auto-save to multi-doc store
+  // Auto-save
   useEffect(() => {
     if (!activeDocId || viewMode !== "resume-editor") return;
     setSaving(true);
@@ -201,10 +358,8 @@ const ResumeBuilder = () => {
       if (mod && e.key === "z" && e.shiftKey) { e.preventDefault(); redo(); }
       if (mod && e.key === "s") {
         e.preventDefault();
-        if (activeDocId) {
-          updateDocument(activeDocId, { data, settings: customize });
-          toast({ title: "Saved", description: "Document saved." });
-        }
+        // Cmd+S opens download dropdown
+        handleDownload();
       }
       if (mod && e.key === "p") { e.preventDefault(); handleDownload(); }
     };
@@ -278,11 +433,9 @@ const ResumeBuilder = () => {
     toast({ title: "Section added", description: `${meta?.title || "Custom"} section added.` });
   };
 
-  /* Scroll the editor sidebar to a section card when clicking "Edit" on the preview */
   const editorScrollRef = useRef<HTMLDivElement>(null);
   const handleEditSection = useCallback((sectionId: string) => {
     setActiveTab("content");
-    // Small delay to let tab switch render
     setTimeout(() => {
       const el = document.getElementById(`section-card-${sectionId}`);
       if (el) el.scrollIntoView({ behavior: "smooth", block: "start" });
@@ -291,9 +444,7 @@ const ResumeBuilder = () => {
 
   const handleImported = useCallback((doc: SavedDocument) => {
     if (doc.type === "resume") {
-      // Show template picker before entering editor
       setPendingImportDocId(doc.id);
-      // Load the data into the store
       store.setData(doc.data as any);
       store.updateCustomize(doc.settings as any);
       setActiveDocId(doc.id);
@@ -316,6 +467,24 @@ const ResumeBuilder = () => {
     historyRef.current = { past: [], future: [] };
   }, [customize, store, pendingImportDocId]);
 
+  // Handle import into existing resume
+  const handleEditorImported = useCallback((doc: SavedDocument) => {
+    if (doc.type === "resume") {
+      pushHistory();
+      store.setData(doc.data as any);
+      toast({ title: "Content imported", description: "Your resume content has been replaced with the imported data." });
+    }
+    setEditorImportOpen(false);
+  }, [store, pushHistory]);
+
+  // Rename handler
+  const handleRenameSave = () => {
+    if (activeDocId && nameValue.trim()) {
+      renameDocument(activeDocId, nameValue.trim());
+    }
+    setEditingName(false);
+  };
+
   if (viewMode === "dashboard") {
     return (
       <>
@@ -332,10 +501,12 @@ const ResumeBuilder = () => {
 
   if (viewMode === "cover-letter-editor") {
     return (
-      <div className="h-screen flex flex-col bg-gray-50">
-        <div className="flex items-center gap-3 px-4 py-2 bg-gray-100 border-b border-gray-200">
-          <button onClick={handleBackToDashboard} className="text-sm text-gray-500 hover:text-gray-700">← Dashboard</button>
-          <span className="text-sm font-medium text-gray-700">{activeDoc?.name || "Cover Letter"}</span>
+      <div className="h-screen flex flex-col" style={{ backgroundColor: "#faf9f6" }}>
+        <div className="flex items-center gap-3 px-4 py-2 bg-white border-b border-[#e5e7eb]">
+          <button onClick={handleBackToDashboard} className="text-sm text-[#6b7280] hover:text-[#1f2937] transition-colors flex items-center gap-1">
+            <ArrowLeft className="w-3.5 h-3.5" /> Dashboard
+          </button>
+          <span className="text-sm font-medium text-[#1f2937]">{activeDoc?.name || "Cover Letter"}</span>
         </div>
         <div className="flex-1 overflow-hidden">
           <CoverLetterBuilder docId={activeDocId} />
@@ -346,147 +517,212 @@ const ResumeBuilder = () => {
   }
 
   // Resume editor
+  const currentDocName = activeDoc?.name || "Resume";
+
   const editorContent = loading ? (
     <EditorSkeleton />
   ) : activeTab === "content" ? (
-    <div className="max-w-2xl mx-auto p-4 md:p-6 space-y-0">
-      {/* Personal Details */}
-      <PersonalDetailsCard details={data.personalDetails} onChange={(u) => { pushHistory(); updatePersonalDetails(u); }} />
-
-      {/* Section divider */}
-      {data.sections.length > 0 && <div className="border-t border-gray-100 my-4" />}
-
-      {/* Sections — separated by subtle dividers */}
-      <div className="bg-white rounded-xl px-5 py-2" style={{ boxShadow: "0 1px 3px rgba(0,0,0,0.04)" }}>
-        {data.sections.map((section, idx) => (
-          <div
-            key={section.id}
-            draggable
-            onDragStart={handleSectionDragStart(idx)}
-            onDragOver={handleSectionDragOver(idx)}
-            onDrop={handleSectionDrop(idx)}
-            onDragEnd={handleSectionDragEnd}
-            className={cn(
-              "transition-all duration-150",
-              idx > 0 && "border-t border-gray-100",
-              sectionOverIdx === idx && "bg-pink-50/30"
-            )}
+    <div className="animate-fade-in">
+      <div className="max-w-2xl mx-auto p-4 md:p-6 space-y-0">
+        {/* Import content link */}
+        <div className="flex items-center justify-end mb-3">
+          <button
+            onClick={() => setEditorImportOpen(true)}
+            className="flex items-center gap-1.5 text-xs font-medium text-[#6b7280] hover:text-[#d946ef] transition-colors"
           >
-            <SectionCard
-              section={section}
-              onUpdate={(updates) => { pushHistory(); updateSection(section.id, updates); }}
-              onRemove={() => {
-                pushHistory();
-                const removed = section;
-                removeSection(section.id);
-                toast({
-                  title: "Section removed",
-                  description: `${removed.title} was deleted.`,
-                  action: (
-                    <button
-                      onClick={() => {
-                        const restored = [...data.sections];
-                        restored.splice(idx, 0, removed);
-                        setSections(restored);
-                      }}
-                      className="text-xs font-semibold text-pink-600 hover:text-pink-700 px-2 py-1 rounded bg-pink-50 hover:bg-pink-100"
-                    >
-                      Undo
-                    </button>
-                  ),
-                });
-              }}
-            />
-          </div>
-        ))}
-        {data.sections.length === 0 && (
-          <div className="text-center py-8">
-            <p className="text-gray-400 text-sm">Add sections to build your resume</p>
-          </div>
-        )}
-      </div>
+            <Upload className="w-3.5 h-3.5" />
+            Import content
+          </button>
+        </div>
 
-      {/* Add Content button */}
-      <div className="pt-4">
-        <button
-          onClick={() => setModalOpen(true)}
-          className="w-full flex items-center justify-center gap-2 py-3 rounded-xl text-white font-semibold text-sm transition-opacity active:scale-[0.98]"
-          style={{ backgroundColor: "#e11d73" }}
-        >
-          <Plus className="w-4.5 h-4.5" /> Add Content
-        </button>
+        {/* Personal Details */}
+        <PersonalDetailsCard details={data.personalDetails} onChange={(u) => { pushHistory(); updatePersonalDetails(u); }} />
+
+        {/* Section divider */}
+        {data.sections.length > 0 && <div className="border-t border-[#e5e7eb] my-4" />}
+
+        {/* Sections */}
+        <div className="bg-white rounded-xl px-5 py-2" style={{ boxShadow: "0 1px 3px rgba(0,0,0,0.08)" }}>
+          {data.sections.map((section, idx) => (
+            <div
+              key={section.id}
+              draggable
+              onDragStart={handleSectionDragStart(idx)}
+              onDragOver={handleSectionDragOver(idx)}
+              onDrop={handleSectionDrop(idx)}
+              onDragEnd={handleSectionDragEnd}
+              className={cn(
+                "transition-all duration-200",
+                idx > 0 && "border-t border-[#e5e7eb]",
+                sectionOverIdx === idx && "bg-purple-50/30"
+              )}
+            >
+              <SectionCard
+                section={section}
+                onUpdate={(updates) => { pushHistory(); updateSection(section.id, updates); }}
+                onRemove={() => {
+                  pushHistory();
+                  const removed = section;
+                  removeSection(section.id);
+                  toast({
+                    title: "Section removed",
+                    description: `${removed.title} was deleted.`,
+                    action: (
+                      <button
+                        onClick={() => {
+                          const restored = [...data.sections];
+                          restored.splice(idx, 0, removed);
+                          setSections(restored);
+                        }}
+                        className="text-xs font-semibold text-[#d946ef] hover:opacity-80 px-2 py-1 rounded bg-purple-50 transition-opacity"
+                      >
+                        Undo
+                      </button>
+                    ),
+                  });
+                }}
+              />
+            </div>
+          ))}
+          {data.sections.length === 0 && (
+            <div className="text-center py-8">
+              <p className="text-[#6b7280] text-sm">Add sections to build your resume</p>
+            </div>
+          )}
+        </div>
+
+        {/* Add Content button */}
+        <div className="pt-4">
+          <button
+            onClick={() => setModalOpen(true)}
+            className="w-full flex items-center justify-center gap-2 py-3 rounded-xl text-white font-semibold text-sm transition-all hover:opacity-90 active:scale-[0.98]"
+            style={{ backgroundColor: "#d946ef" }}
+          >
+            <Plus className="w-4.5 h-4.5" /> Add Content
+          </button>
+        </div>
       </div>
     </div>
   ) : activeTab === "customize" ? (
-    <CustomizePanel settings={customize} onChange={updateCustomize} sections={data.sections} resumeData={data} />
-  ) : (
-    <AiToolsPanel data={data} onUpdateData={(d) => { pushHistory(); store.setData(d); }} />
-  );
+    <div className="animate-fade-in">
+      <CustomizePanel settings={customize} onChange={updateCustomize} sections={data.sections} resumeData={data} />
+    </div>
+  ) : null;
 
   return (
-    <div className="h-screen flex flex-col bg-gray-50">
-      {/* Back bar */}
-      <div className="flex items-center justify-between px-4 py-2 bg-gray-100 border-b border-gray-200">
-        <div className="flex items-center gap-3">
-          <button onClick={handleBackToDashboard} className="text-sm text-gray-500 hover:text-gray-700">← Dashboard</button>
-          <span className="text-sm font-medium text-gray-700">{activeDoc?.name || "Resume"}</span>
-        </div>
-        <SaveIndicator saving={saving} />
-      </div>
-
-      <ResumeTopNav
-        activeTab={activeTab}
-        onTabChange={setActiveTab}
-        docName={activeDoc?.name || "Resume 1"}
-        allDocs={allDocs.filter((d) => d.type === "resume")}
-        onDocSwitch={handleDocSwitch}
-        onDownload={handleDownload}
-        downloading={downloading}
-        pageFormat={customize.pageFormat || "a4"}
-      />
-
-      {activeTab === "ai-tools" ? (
-        <div className="flex-1 overflow-y-auto bg-white">
-          {editorContent}
-        </div>
-      ) : (
-        <div className="flex-1 overflow-hidden">
-          {/* Desktop: fixed 40/60 split */}
-          <div className="hidden md:flex h-full">
-            <div className="w-[40%] min-w-[340px] max-w-[480px] flex-shrink-0 h-full overflow-y-auto bg-white border-r border-gray-200">
-              {editorContent}
-            </div>
-            <div className="flex-1 h-full">
-              <ResumePreview data={data} customize={customize} pdfTargetId="resume-pdf-target" onEditSection={handleEditSection} />
-            </div>
-          </div>
-
-          {/* Mobile: editor only + floating preview button */}
-          <div className="md:hidden h-full overflow-y-auto bg-white">
-            {editorContent}
-          </div>
-
-          {/* Mobile floating preview button */}
-          {isMobile && !mobilePreview && (
+    <div className="h-screen flex flex-col" style={{ backgroundColor: "#faf9f6" }}>
+      {/* ── Simplified top bar ─────────────────────────── */}
+      <div className="sticky top-0 z-30 flex items-center justify-between bg-white border-b border-[#e5e7eb] px-4 h-14">
+        {/* Left: Back + editable name */}
+        <div className="flex items-center gap-3 min-w-0">
+          <button
+            onClick={handleBackToDashboard}
+            className="flex items-center gap-1 text-sm text-[#6b7280] hover:text-[#1f2937] transition-colors flex-shrink-0"
+          >
+            <ArrowLeft className="w-3.5 h-3.5" />
+            <span className="hidden sm:inline">Dashboard</span>
+          </button>
+          <span className="text-gray-300">|</span>
+          {editingName ? (
+            <input
+              autoFocus
+              value={nameValue}
+              onChange={(e) => setNameValue(e.target.value)}
+              onBlur={handleRenameSave}
+              onKeyDown={(e) => { if (e.key === "Enter") handleRenameSave(); if (e.key === "Escape") setEditingName(false); }}
+              className="text-sm font-medium text-[#1f2937] bg-gray-50 border border-[#e5e7eb] rounded px-2 py-1 outline-none focus:border-[#d946ef] min-w-[120px]"
+            />
+          ) : (
             <button
-              onClick={() => setMobilePreview(true)}
-              className="md:hidden fixed bottom-20 right-4 z-40 w-14 h-14 rounded-full bg-white shadow-lg border border-gray-200 flex items-center justify-center text-gray-700 hover:shadow-xl active:scale-95 transition-all"
-              title="Preview"
+              onClick={() => { setEditingName(true); setNameValue(currentDocName); }}
+              className="text-sm font-medium text-[#1f2937] hover:text-[#d946ef] transition-colors truncate max-w-[160px]"
+              title="Click to rename"
             >
-              <Eye className="w-5 h-5" />
+              {currentDocName}
             </button>
           )}
-
-          {/* Mobile preview overlay */}
-          {isMobile && mobilePreview && (
-            <MobilePreviewOverlay onClose={() => setMobilePreview(false)}>
-              <ResumePreview data={data} customize={customize} pdfTargetId="resume-pdf-target" onEditSection={handleEditSection} />
-            </MobilePreviewOverlay>
-          )}
         </div>
-      )}
 
-      {/* Undo/Redo floating bar */}
+        {/* Center: Content | Customize toggle */}
+        <div className="flex items-center gap-0.5 bg-gray-100 rounded-lg p-0.5">
+          <button
+            onClick={() => setActiveTab("content")}
+            className={cn(
+              "flex items-center gap-1.5 px-4 py-1.5 rounded-md text-sm font-medium transition-all",
+              activeTab === "content"
+                ? "bg-white text-[#1f2937] shadow-sm"
+                : "text-[#6b7280] hover:text-[#1f2937]"
+            )}
+          >
+            <FileText className="w-3.5 h-3.5" />
+            Content
+          </button>
+          <button
+            onClick={() => setActiveTab("customize")}
+            className={cn(
+              "flex items-center gap-1.5 px-4 py-1.5 rounded-md text-sm font-medium transition-all",
+              activeTab === "customize"
+                ? "bg-white text-[#1f2937] shadow-sm"
+                : "text-[#6b7280] hover:text-[#1f2937]"
+            )}
+          >
+            <Palette className="w-3.5 h-3.5" />
+            Customize
+          </button>
+        </div>
+
+        {/* Right: Save indicator + Download */}
+        <div className="flex items-center gap-3">
+          <div className="hidden sm:block">
+            <SaveIndicator saving={saving} />
+          </div>
+          <DownloadDropdown
+            downloading={downloading}
+            pageFormat={customize.pageFormat || "a4"}
+            docName={currentDocName}
+            onDownload={handleDownload}
+          />
+        </div>
+      </div>
+
+      {/* ── Editor body ────────────────────────────────── */}
+      <div className="flex-1 overflow-hidden">
+        {/* Desktop: 40/60 split */}
+        <div className="hidden lg:flex h-full">
+          <div className="w-[40%] min-w-[340px] max-w-[480px] flex-shrink-0 h-full overflow-y-auto bg-white border-r border-[#e5e7eb]" ref={editorScrollRef}>
+            {editorContent}
+          </div>
+          <div className="flex-1 h-full">
+            <ResumePreview data={data} customize={customize} pdfTargetId="resume-pdf-target" onEditSection={handleEditSection} />
+          </div>
+        </div>
+
+        {/* Mobile/tablet: editor only */}
+        <div className="lg:hidden h-full overflow-y-auto bg-white">
+          {editorContent}
+        </div>
+
+        {/* Mobile floating preview button */}
+        {!mobilePreview && (
+          <button
+            onClick={() => setMobilePreview(true)}
+            className="lg:hidden fixed bottom-20 right-4 z-40 w-14 h-14 rounded-full shadow-lg border border-[#e5e7eb] flex items-center justify-center text-[#1f2937] hover:shadow-xl active:scale-95 transition-all"
+            style={{ backgroundColor: "#d946ef" }}
+            title="Preview"
+          >
+            <Eye className="w-5 h-5 text-white" />
+          </button>
+        )}
+
+        {/* Mobile preview overlay */}
+        {mobilePreview && (
+          <MobilePreviewOverlay onClose={() => setMobilePreview(false)}>
+            <ResumePreview data={data} customize={customize} pdfTargetId="resume-pdf-target" onEditSection={handleEditSection} />
+          </MobilePreviewOverlay>
+        )}
+      </div>
+
+      {/* Undo/Redo */}
       {viewMode === "resume-editor" && !isMobile && (
         <UndoRedoBar
           onUndo={undo}
@@ -499,6 +735,9 @@ const ResumeBuilder = () => {
       <BrandingFooter />
 
       <AddContentModal open={modalOpen} onClose={() => setModalOpen(false)} onAdd={addSection} existingTypes={data.sections.map((s) => s.type)} />
+
+      {/* Import into existing resume */}
+      <ImportModal open={editorImportOpen} onClose={() => setEditorImportOpen(false)} type="resume" onImported={handleEditorImported} />
     </div>
   );
 };
