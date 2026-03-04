@@ -243,15 +243,15 @@ const ResumeBuilder = () => {
   const activeDoc = activeDocId ? getAllDocuments().find((d) => d.id === activeDocId) : null;
   const allDocs = getAllDocuments();
 
-  const handleDownload = async () => {
+  const handleDownload = async (filename?: string) => {
     if (downloading) return;
     setDownloading(true);
-    const name = data.personalDetails.fullName || "Resume";
-    const pageFormat = (customize as any).pageFormat || "a4";
+    const pf = customize.pageFormat || "a4";
+    const fn = filename || (data.personalDetails.fullName || "Resume").replace(/\s+/g, "_") + "_Resume";
     await exportToPdf({
       elementId: "resume-pdf-target",
-      fileName: `${name.replace(/\s+/g, "_")}_Resume.pdf`,
-      pageFormat,
+      fileName: fn,
+      pageFormat: pf as "a4" | "letter",
     });
     setDownloading(false);
   };
@@ -442,6 +442,7 @@ const ResumeBuilder = () => {
         onDocSwitch={handleDocSwitch}
         onDownload={handleDownload}
         downloading={downloading}
+        pageFormat={customize.pageFormat || "a4"}
       />
 
       {activeTab === "ai-tools" ? (
