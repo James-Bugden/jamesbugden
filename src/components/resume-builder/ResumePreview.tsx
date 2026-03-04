@@ -942,7 +942,9 @@ export const ResumePreview = React.memo(function ResumePreview({
   }, [dims.wPX]);
 
   const marginYPX = (customize?.marginY ?? 16) * PX_PER_MM;
-  const usablePerPage = dims.hPX - 2 * marginYPX;
+  const showFooter = customize?.showPageNumbers || customize?.showFooterEmail || customize?.showFooterName;
+  const footerReservePX = showFooter ? 10 * PX_PER_MM : 0;
+  const usablePerPage = dims.hPX - 2 * marginYPX - footerReservePX;
 
   useEffect(() => {
     const measure = () => {
