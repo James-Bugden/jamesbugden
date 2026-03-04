@@ -1,48 +1,31 @@
 
 
-## Resume Builder Feature Improvements
+## Problem
 
-### Priority 1: AI "Tailor to Job Description" Panel
-- Add a new tab or panel in the "AI Tools" section (which currently shows "Coming soon")
-- User pastes a job description → edge function analyzes keyword overlap with current resume
-- Returns: missing keywords, suggested bullet point rewrites, match percentage
-- Reuses existing `resume-ai` edge function with a new `action: "tailor"` mode
-- UI: Split panel with JD on left, suggestions on right, one-click "Apply" buttons
+The hidden measurement div renders `A4Page` with `minHeight: 297mm` (CSS). The browser converts `mm` to `px` using its own DPI (typically `1mm = 3.78px` at 96 DPI, but may vary slightly). Meanwhile, the page calculation uses a hardcoded `PX_PER_MM = 3.7795`. Any sub-pixel mismatch causes `scrollHeight` to slightly exceed `dims.hPX`, making `contentH > usablePerPage` and thus showing 2 pages even when content fits on one.
 
-### Priority 2: Resume Completeness Score Widget
-- Floating widget in the editor sidebar showing real-time completion percentage
-- Scoring rules: has summary (+10), has 2+ experience entries (+20), all entries have descriptions (+15), dates filled (+10), contact info complete (+15), skills section exists (+10), quantified achievements detected (+20)
-- Visual: circular progress ring with percentage, expandable checklist of what's missing
-- Lives above the "Add Content" button in the Content tab
+## Fix — `ResumePreview.tsx`
 
-### Priority 3: Populate the "AI Tools" Tab
-- Currently renders "AI Tools — Coming soon" placeholder
-- Build out with: "Tailor to Job" (above), "Generate Summary from Experience", "Suggest Skills", "Optimize Bullet Points (batch)"
-- Each tool card shows a description, input area, and results
+**1. Add a small tolerance to the page count calculation (line ~974)**
 
-### Priority 4: Real-time Word Count per Section
-- Add a small `<span>` below each `RichTextEditor` showing word count and bullet point count
-- Highlight in amber if too long (>150 words per entry) or too short (<20 words)
-- Lightweight: computed from the editor's text content on each change
+Change:
+```typescript
+setPageCount(Math.max(1, Math.ceil(contentH / usablePerPage)));
+```
+To:
+```typescript
+const rawPages = contentH / usablePerPage;
+setPageCount(Math.max(1, rawPages <= 1.02 ? 1 : Math.ceil(rawPages)));
+```
 
-### Priority 5: Click-to-Edit on Preview (Inline Editing)
-- When user clicks text on the A4 preview, show a floating input/textarea positioned over the clicked element
-- On blur/enter, update the corresponding field in the data model
-- Start with simple fields only: job title, company name, degree, institution
-- More complex than other items; implement after the above
+This adds a 2% tolerance — if content is within 2% of one page, it stays as one page. Content only spills to page 2 when it genuinely overflows.
 
-### Files to Edit
-- `src/pages/ResumeBuilder.tsx` — Add completeness widget, wire AI Tools tab
-- `src/components/resume-builder/ResumeTopNav.tsx` — No changes needed
-- `src/components/resume-builder/RichTextEditor.tsx` — Add word count display
-- `supabase/functions/resume-ai/index.ts` — Add `tailor` action for JD matching
-- New: `src/components/resume-builder/CompletenessScore.tsx` — Score widget component
-- New: `src/components/resume-builder/AiToolsPanel.tsx` — Full AI tools tab content
-- New: `src/components/resume-builder/TailorToJob.tsx` — JD tailoring panel
+**2. Alternative/complementary: remove `minHeight` from A4Page for the hidden measurement div**
 
-### Implementation Order
-1. Completeness score widget (standalone, no backend needed)
-2. Word count on RichTextEditor (small change)
-3. AI Tools tab with Tailor to Job (needs edge function update)
-4. Click-to-edit on preview (complex, last)
+Instead of the hidden div rendering `A4Page` with its `minHeight`, strip the `minHeight` so `scrollHeight` reflects actual content height only. This can be done by passing a prop like `measureMode` to `A4Page` that omits `minHeight`, or by wrapping the hidden div's content and reading its `scrollHeight` directly.
+
+The simpler approach is fix #1 (tolerance). Both can be combined for robustness.
+
+### File to edit
+- `src/components/resume-builder/ResumePreview.tsx` — page count measurement logic (~line 974)
 
