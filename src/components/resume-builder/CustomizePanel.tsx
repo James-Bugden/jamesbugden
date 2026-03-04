@@ -328,21 +328,7 @@ function LayoutTab({ settings, onChange, sections }: { settings: CustomizeSettin
         )}
       </SettingCard>
 
-      <SettingCard title="Change Section Layout">
-        <div className="space-y-1">
-          {sections.length > 0 ? sections.map((s) => (
-            <div key={s.id} className="flex items-center gap-2 bg-gray-50 rounded-lg px-3 py-2 border border-gray-100">
-              <GripVertical className="w-4 h-4 text-gray-300 cursor-grab" />
-              <span className="text-xs font-semibold uppercase tracking-wide" style={{ color: B.text }}>{s.title}</span>
-              {(settings.columns === "two" || settings.columns === "mix") && (
-                <span className="ml-auto text-[10px] bg-gray-100 px-2 py-0.5 rounded-full" style={{ color: B.textSec }}>Main</span>
-              )}
-            </div>
-          )) : (
-            <p className="text-xs py-2" style={{ color: B.textSec }}>Add sections in the Content tab first</p>
-          )}
-        </div>
-      </SettingCard>
+      <SectionReorderCard settings={settings} onChange={onChange} sections={sections} />
 
       <SettingCard title="Spacing">
         <div className="space-y-5">

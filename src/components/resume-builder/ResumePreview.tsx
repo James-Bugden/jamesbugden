@@ -430,9 +430,15 @@ function renderSectionEntries(section: ResumeSection, customize?: CustomizeSetti
 
     const listClass = listSt === "bullet"
       ? "[&_ul]:list-disc [&_ul]:pl-[5mm]"
-      : listSt === "hyphen"
-        ? "[&_ul]:pl-[5mm] [&_ul_li]:before:content-['–_'] [&_ul]:list-none"
-        : "[&_ul]:list-none [&_ul]:pl-0";
+      : listSt === "none"
+        ? "[&_ul]:list-none [&_ul]:pl-0"
+        : "[&_ul]:list-none [&_ul]:pl-[5mm]";
+
+    // For hyphen style, we inject a scoped <style> since Tailwind can't handle ::before pseudo-elements reliably
+    const hyphenStyleId = `hyphen-${section.id}`;
+    const hyphenStyle = listSt === "hyphen" ? (
+      <style>{`.${hyphenStyleId} ul li::before { content: "–  "; position: absolute; left: 0; } .${hyphenStyleId} ul li { position: relative; padding-left: 3mm; }`}</style>
+    ) : null;
 
     const entryGap = layout === "compact" ? "1.6mm" : "2.8mm";
 
