@@ -2,8 +2,14 @@ import { useState, useEffect } from "react";
 import { cn } from "@/lib/utils";
 import { FontCategory, getFontsForCategory, GOOGLE_FONTS_URL } from "./fontData";
 
+const B = {
+  green: "#2b4734",
+  greenLighter: "#f2f7f4",
+  greenLight: "#e8f0eb",
+};
+
 interface FontPickerProps {
-  selectedFont: string; // font family string
+  selectedFont: string;
   onSelect: (family: string) => void;
 }
 
@@ -11,7 +17,6 @@ export function FontPicker({ selectedFont, onSelect }: FontPickerProps) {
   const [category, setCategory] = useState<FontCategory>("sans");
   const fonts = getFontsForCategory(category);
 
-  /* Load Google Fonts stylesheet once */
   useEffect(() => {
     const id = "resume-google-fonts";
     if (document.getElementById(id)) return;
@@ -39,19 +44,25 @@ export function FontPicker({ selectedFont, onSelect }: FontPickerProps) {
             className={cn(
               "flex-1 flex flex-col items-center gap-1 py-3 rounded-xl border-2 transition-colors",
               category === c.id
-                ? "border-purple-500 bg-purple-50"
+                ? ""
                 : "border-gray-200 bg-white hover:border-gray-300"
             )}
+            style={
+              category === c.id
+                ? { borderColor: B.green, backgroundColor: B.greenLighter }
+                : undefined
+            }
           >
             <span
               className="text-xl font-semibold text-gray-800"
               style={{
                 fontFamily: c.id === "serif" ? "Georgia, serif" : c.id === "mono" ? "'Courier New', monospace" : "system-ui, sans-serif",
+                color: category === c.id ? B.green : undefined,
               }}
             >
               {c.sample}
             </span>
-            <span className="text-[10px] font-medium text-gray-500">{c.label}</span>
+            <span className="text-[10px] font-medium" style={{ color: category === c.id ? B.green : "#6B6B6B" }}>{c.label}</span>
           </button>
         ))}
       </div>
@@ -65,10 +76,14 @@ export function FontPicker({ selectedFont, onSelect }: FontPickerProps) {
             className={cn(
               "px-3 py-2 rounded-lg border-2 text-xs text-center transition-colors truncate",
               selectedFont === f.family
-                ? "border-purple-500 bg-purple-50 text-purple-700 font-semibold"
+                ? "font-semibold"
                 : "border-gray-200 bg-white text-gray-700 hover:border-gray-300"
             )}
-            style={{ fontFamily: f.family }}
+            style={
+              selectedFont === f.family
+                ? { borderColor: B.green, backgroundColor: B.greenLighter, color: B.green }
+                : { fontFamily: f.family }
+            }
           >
             {f.name}
           </button>
