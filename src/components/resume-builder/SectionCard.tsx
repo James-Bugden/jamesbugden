@@ -609,7 +609,7 @@ export function SectionCard({ section, onUpdate, onRemove }: {
         "transition-all duration-200 ease-in-out overflow-hidden",
         section.collapsed ? "max-h-0 opacity-0" : "max-h-[5000px] opacity-100"
       )}>
-        <div className="pb-4 space-y-1">
+        <div className="pb-5 px-0 space-y-1">
           {isSingleEntrySection ? (
             section.entries.length > 0 ? (
               <div className="space-y-3">
