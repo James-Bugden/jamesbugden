@@ -216,7 +216,7 @@ function hasContent(section: ResumeSection): boolean {
   });
 }
 
-function renderSectionEntries(section: ResumeSection, customize?: CustomizeSettings) {
+function renderSectionEntries(section: ResumeSection, customize?: CustomizeSettings, base: number = 10.5) {
   const c = customize;
 
   if (section.type === "summary") {
