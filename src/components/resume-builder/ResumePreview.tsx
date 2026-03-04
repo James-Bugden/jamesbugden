@@ -971,7 +971,8 @@ export const ResumePreview = React.memo(function ResumePreview({
       if (!hiddenFlowRef.current) return;
       const h = hiddenFlowRef.current.scrollHeight;
       const contentH = h - 2 * marginYPX;
-      setPageCount(Math.max(1, Math.ceil(contentH / usablePerPage)));
+      const rawPages = contentH / usablePerPage;
+      setPageCount(Math.max(1, rawPages <= 1.02 ? 1 : Math.ceil(rawPages)));
     };
 
     let raf1: number;
