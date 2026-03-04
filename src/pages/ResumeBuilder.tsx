@@ -295,21 +295,12 @@ const ResumeBuilder = () => {
   const store = useResumeStore();
   const { data, customize, updateCustomize, updatePersonalDetails, setSections, updateSection, removeSection } = store;
 
-  /* ── Section drag-and-drop reordering (dnd-kit) ────────── */
+  /* ── dnd-kit sensors (defined early, used later after pushHistory) ── */
   const sensors = useSensors(
     useSensor(PointerSensor, { activationConstraint: { distance: 5 } }),
     useSensor(KeyboardSensor)
   );
   const sectionIds = useMemo(() => data.sections.map(s => s.id), [data.sections]);
-
-  const handleDragEnd = useCallback((event: DragEndEvent) => {
-    const { active, over } = event;
-    if (!over || active.id === over.id) return;
-    pushHistory();
-    const oldIndex = data.sections.findIndex(s => s.id === active.id);
-    const newIndex = data.sections.findIndex(s => s.id === over.id);
-    setSections(arrayMove(data.sections, oldIndex, newIndex));
-  }, [data.sections, pushHistory, setSections]);
 
   const [activeTab, setActiveTab] = useState("content");
   const [modalOpen, setModalOpen] = useState(false);
