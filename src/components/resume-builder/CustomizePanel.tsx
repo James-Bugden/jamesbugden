@@ -19,6 +19,19 @@ import { applyTemplatePreset, TEMPLATE_LIST, TEMPLATE_PRESETS } from "./template
 import { ResumeThumbnail } from "./ResumeThumbnail";
 import { DEFAULT_CUSTOMIZE } from "./customizeTypes";
 
+/* ── Brand colors ─────────────────────────────────────────── */
+const B = {
+  green: "#2b4734",
+  greenHover: "#1f3a28",
+  greenLight: "#e8f0eb",
+  greenLighter: "#f2f7f4",
+  gold: "#D4930D",
+  cream: "#FDFBF7",
+  text: "#1A1A1A",
+  textSec: "#6B6B6B",
+  border: "#e5e7eb",
+};
+
 interface CustomizePanelProps {
   settings: CustomizeSettings;
   onChange: (updates: Partial<CustomizeSettings>) => void;
@@ -32,14 +45,14 @@ const SUB_TABS = ["Basics", "Layout & Spacing", "Design", "Header", "Footer", "S
 function SettingCard({ title, children }: { title: string; children: React.ReactNode }) {
   return (
     <div className="bg-white rounded-xl p-5 shadow-sm">
-      <h3 className="text-sm font-bold text-gray-900 mb-4">{title}</h3>
+      <h3 className="text-sm font-bold mb-4" style={{ color: B.text }}>{title}</h3>
       {children}
     </div>
   );
 }
 
 function FieldLabel({ children }: { children: React.ReactNode }) {
-  return <label className="block text-xs font-semibold text-gray-600 mb-1.5">{children}</label>;
+  return <label className="block text-xs font-semibold mb-1.5" style={{ color: B.textSec }}>{children}</label>;
 }
 
 function SelectField({ label, value, options, onChange }: { label: string; value: string; options: { value: string; label: string }[]; onChange: (v: string) => void }) {
@@ -49,7 +62,8 @@ function SelectField({ label, value, options, onChange }: { label: string; value
       <select
         value={value}
         onChange={(e) => onChange(e.target.value)}
-        className="w-full px-3 py-2 rounded-lg text-sm bg-white text-gray-800 border border-gray-200 outline-none focus:ring-2 focus:ring-purple-300 focus:border-purple-400 appearance-none cursor-pointer"
+        className="w-full px-3 py-2 rounded-lg text-sm bg-white border outline-none appearance-none cursor-pointer"
+        style={{ color: B.text, borderColor: B.border }}
       >
         {options.map((o) => (
           <option key={o.value} value={o.value}>{o.label}</option>
@@ -65,11 +79,16 @@ function ThumbOption({ selected, onClick, children, label }: { selected: boolean
       onClick={onClick}
       className={cn(
         "flex flex-col items-center gap-1.5 p-3 rounded-xl border transition-all min-w-[72px]",
-        selected ? "border-purple-500 bg-purple-50 shadow-sm" : "border-gray-200 bg-white hover:border-gray-300"
+        selected ? "shadow-sm" : "bg-white hover:border-gray-300"
       )}
+      style={
+        selected
+          ? { borderColor: B.green, backgroundColor: B.greenLighter }
+          : { borderColor: B.border }
+      }
     >
       {children}
-      <span className="text-[10px] font-medium text-gray-600">{label}</span>
+      <span className="text-[10px] font-medium" style={{ color: B.textSec }}>{label}</span>
     </button>
   );
 }
@@ -78,13 +97,13 @@ function SliderRow({ label, value, min, max, step, unit, onChange }: { label: st
   return (
     <div className="space-y-2">
       <div className="flex items-center justify-between">
-        <span className="text-xs font-semibold text-gray-600">{label}</span>
+        <span className="text-xs font-semibold" style={{ color: B.textSec }}>{label}</span>
         <div className="flex items-center gap-1.5">
-          <button onClick={() => onChange(Math.max(min, +(value - step).toFixed(2)))} className="w-6 h-6 flex items-center justify-center rounded-md bg-gray-100 hover:bg-gray-200 text-gray-600 transition-colors">
+          <button onClick={() => onChange(Math.max(min, +(value - step).toFixed(2)))} className="w-6 h-6 flex items-center justify-center rounded-md bg-gray-100 hover:bg-gray-200 transition-colors" style={{ color: B.textSec }}>
             <Minus className="w-3 h-3" />
           </button>
-          <span className="text-xs font-mono w-14 text-center text-gray-800">{value}{unit}</span>
-          <button onClick={() => onChange(Math.min(max, +(value + step).toFixed(2)))} className="w-6 h-6 flex items-center justify-center rounded-md bg-gray-100 hover:bg-gray-200 text-gray-600 transition-colors">
+          <span className="text-xs font-mono w-14 text-center" style={{ color: B.text }}>{value}{unit}</span>
+          <button onClick={() => onChange(Math.min(max, +(value + step).toFixed(2)))} className="w-6 h-6 flex items-center justify-center rounded-md bg-gray-100 hover:bg-gray-200 transition-colors" style={{ color: B.textSec }}>
             <Plus className="w-3 h-3" />
           </button>
         </div>
@@ -95,7 +114,7 @@ function SliderRow({ label, value, min, max, step, unit, onChange }: { label: st
         max={max}
         step={step}
         onValueChange={([v]) => onChange(+(v).toFixed(2))}
-        className="[&_[role=slider]]:bg-purple-600 [&_[role=slider]]:border-purple-600 [&_[data-orientation=horizontal]>[data-orientation=horizontal]]:bg-purple-600"
+        className="[&_[role=slider]]:bg-[#2b4734] [&_[role=slider]]:border-[#2b4734] [&_[data-orientation=horizontal]>[data-orientation=horizontal]]:bg-[#2b4734]"
       />
     </div>
   );
@@ -110,8 +129,13 @@ function SegmentedControl({ options, value, onChange }: { options: { value: stri
           onClick={() => onChange(o.value)}
           className={cn(
             "flex-1 px-3 py-1.5 rounded-md text-xs font-semibold transition-all",
-            value === o.value ? "bg-purple-600 text-white shadow-sm" : "text-gray-600 hover:text-gray-900"
+            value === o.value ? "text-white shadow-sm" : "hover:opacity-80"
           )}
+          style={
+            value === o.value
+              ? { backgroundColor: B.green }
+              : { color: B.textSec }
+          }
         >
           {o.label}
         </button>
@@ -123,19 +147,21 @@ function SegmentedControl({ options, value, onChange }: { options: { value: stri
 function ColorPickerRow({ label, value, onChange }: { label: string; value: string; onChange: (v: string) => void }) {
   return (
     <div className="flex items-center justify-between gap-3">
-      <span className="text-xs font-semibold text-gray-600">{label}</span>
+      <span className="text-xs font-semibold" style={{ color: B.textSec }}>{label}</span>
       <div className="flex items-center gap-2">
         <input
           type="color"
           value={value}
           onChange={(e) => onChange(e.target.value)}
-          className="w-7 h-7 rounded-md border border-gray-200 cursor-pointer p-0.5"
+          className="w-7 h-7 rounded-md border cursor-pointer p-0.5"
+          style={{ borderColor: B.border }}
         />
         <input
           type="text"
           value={value}
           onChange={(e) => onChange(e.target.value)}
-          className="w-20 text-xs font-mono px-2 py-1 rounded-md bg-gray-50 border border-gray-200 text-gray-700"
+          className="w-20 text-xs font-mono px-2 py-1 rounded-md bg-gray-50 border"
+          style={{ color: B.text, borderColor: B.border }}
         />
       </div>
     </div>
@@ -145,7 +171,7 @@ function ColorPickerRow({ label, value, onChange }: { label: string; value: stri
 function SwitchRow({ label, checked, onChange }: { label: string; checked: boolean; onChange: (v: boolean) => void }) {
   return (
     <div className="flex items-center justify-between">
-      <span className="text-sm text-gray-700">{label}</span>
+      <span className="text-sm" style={{ color: B.text }}>{label}</span>
       <Switch checked={checked} onCheckedChange={onChange} />
     </div>
   );
@@ -167,8 +193,13 @@ export function CustomizePanel({ settings, onChange, sections, resumeData }: Cus
             onClick={() => setSubTab(tab)}
             className={cn(
               "px-3 py-1.5 text-xs font-semibold whitespace-nowrap rounded-lg transition-all",
-              subTab === tab ? "text-purple-700 bg-purple-50" : "text-gray-500 hover:text-gray-700 hover:bg-gray-50"
+              subTab === tab ? "" : "hover:bg-gray-50"
             )}
+            style={
+              subTab === tab
+                ? { color: B.green, backgroundColor: B.greenLighter }
+                : { color: B.textSec }
+            }
           >
             {tab}
           </button>
@@ -176,7 +207,7 @@ export function CustomizePanel({ settings, onChange, sections, resumeData }: Cus
       </div>
 
       {/* Sub-tab content */}
-      <div className="flex-1 overflow-y-auto p-4 space-y-4 bg-[#f5f5f3]">
+      <div className="flex-1 overflow-y-auto p-4 space-y-4" style={{ backgroundColor: "#f5f5f3" }}>
         {subTab === "Basics" && <BasicsTab settings={settings} onChange={onChange} resumeData={resumeData} />}
         {subTab === "Layout & Spacing" && <LayoutTab settings={settings} onChange={onChange} sections={sections} />}
         {subTab === "Design" && <DesignTab settings={settings} onChange={onChange} />}
@@ -199,7 +230,6 @@ function BasicsTab({ settings, onChange, resumeData }: { settings: CustomizeSett
 
   return (
     <>
-      {/* Language & Region – side by side */}
       <SettingCard title="Language & Region">
         <div className="flex gap-3">
           <SelectField label="Language" value={settings.language} options={LANGUAGE_OPTIONS} onChange={(v) => onChange({ language: v })} />
@@ -207,7 +237,6 @@ function BasicsTab({ settings, onChange, resumeData }: { settings: CustomizeSett
         </div>
       </SettingCard>
 
-      {/* Page Format – cleaner cards */}
       <SettingCard title="Page Format">
         <div className="flex gap-3">
           {PAGE_FORMAT_OPTIONS.map((opt) => (
@@ -216,21 +245,25 @@ function BasicsTab({ settings, onChange, resumeData }: { settings: CustomizeSett
               onClick={() => onChange({ pageFormat: opt.value })}
               className={cn(
                 "flex-1 flex flex-col items-center gap-2 py-4 rounded-xl border transition-all",
-                settings.pageFormat === opt.value
-                  ? "border-purple-500 bg-purple-50/60 shadow-sm"
-                  : "border-gray-200 bg-white hover:border-gray-300"
+                settings.pageFormat === opt.value ? "shadow-sm" : "bg-white hover:border-gray-300"
               )}
+              style={
+                settings.pageFormat === opt.value
+                  ? { borderColor: B.green, backgroundColor: B.greenLighter }
+                  : { borderColor: B.border }
+              }
             >
               <div
-                className={cn(
-                  "border rounded-sm",
-                  settings.pageFormat === opt.value ? "border-purple-400" : "border-gray-300",
-                  opt.value === "a4" ? "w-7 h-10" : "w-8 h-[38px]"
-                )}
+                className="border rounded-sm"
+                style={{
+                  borderColor: settings.pageFormat === opt.value ? B.green : "#d1d5db",
+                  width: opt.value === "a4" ? "28px" : "32px",
+                  height: opt.value === "a4" ? "40px" : "38px",
+                }}
               />
               <div className="text-center">
-                <p className="text-xs font-semibold text-gray-800">{opt.label}</p>
-                <p className="text-[10px] text-gray-400 mt-0.5">
+                <p className="text-xs font-semibold" style={{ color: B.text }}>{opt.label}</p>
+                <p className="text-[10px] mt-0.5" style={{ color: B.textSec }}>
                   {opt.value === "a4" ? "210 × 297mm" : "8.5 × 11in"}
                 </p>
               </div>
@@ -239,7 +272,6 @@ function BasicsTab({ settings, onChange, resumeData }: { settings: CustomizeSett
         </div>
       </SettingCard>
 
-      {/* Templates – mini thumbnails */}
       <SettingCard title="Apply a design template">
         <div className="grid grid-cols-2 gap-3 mb-3">
           {TEMPLATE_LIST.slice(0, 4).map((t) => {
@@ -251,21 +283,24 @@ function BasicsTab({ settings, onChange, resumeData }: { settings: CustomizeSett
                 onClick={() => handleTemplateSelect(t.id)}
                 className={cn(
                   "rounded-xl border overflow-hidden transition-all text-left",
-                  isSelected
-                    ? "border-purple-500 ring-2 ring-purple-200 shadow-sm"
-                    : "border-gray-200 hover:border-gray-300"
+                  isSelected ? "shadow-sm" : "hover:border-gray-300"
                 )}
+                style={
+                  isSelected
+                    ? { borderColor: B.green, boxShadow: `0 0 0 2px ${B.greenLight}` }
+                    : { borderColor: B.border }
+                }
               >
                 <div className="aspect-[210/297] bg-gray-50 relative overflow-hidden">
                   <ResumeThumbnail data={resumeData} settings={previewSettings} />
                   {isSelected && (
-                    <div className="absolute top-1.5 right-1.5 w-5 h-5 rounded-full bg-purple-600 flex items-center justify-center">
+                    <div className="absolute top-1.5 right-1.5 w-5 h-5 rounded-full flex items-center justify-center" style={{ backgroundColor: B.green }}>
                       <Check className="w-3 h-3 text-white" />
                     </div>
                   )}
                 </div>
                 <div className="px-2.5 py-2 bg-white border-t border-gray-100">
-                  <p className="text-[11px] font-semibold text-gray-800">{t.name}</p>
+                  <p className="text-[11px] font-semibold" style={{ color: B.text }}>{t.name}</p>
                 </div>
               </button>
             );
@@ -273,7 +308,8 @@ function BasicsTab({ settings, onChange, resumeData }: { settings: CustomizeSett
         </div>
         <button
           onClick={() => setGalleryOpen(true)}
-          className="w-full py-2.5 rounded-xl text-xs font-semibold text-purple-700 bg-purple-50 hover:bg-purple-100 border border-purple-200 transition-colors"
+          className="w-full py-2.5 rounded-xl text-xs font-semibold border transition-colors"
+          style={{ color: B.green, backgroundColor: B.greenLighter, borderColor: B.greenLight }}
         >
           Browse All Templates →
         </button>
@@ -321,24 +357,22 @@ function LayoutTab({ settings, onChange, sections }: { settings: CustomizeSettin
         )}
       </SettingCard>
 
-      {/* Section Layout – draggable pills */}
       <SettingCard title="Section Layout">
         <div className="space-y-1">
           {sections.length > 0 ? sections.map((s) => (
             <div key={s.id} className="flex items-center gap-2 bg-gray-50 rounded-lg px-3 py-2 border border-gray-100">
               <GripVertical className="w-4 h-4 text-gray-300 cursor-grab" />
-              <span className="text-xs font-semibold text-gray-700 capitalize">{s.title}</span>
+              <span className="text-xs font-semibold capitalize" style={{ color: B.text }}>{s.title}</span>
               {(settings.columns === "two" || settings.columns === "mix") && (
-                <span className="ml-auto text-[10px] text-gray-400 bg-gray-100 px-2 py-0.5 rounded-full">Main</span>
+                <span className="ml-auto text-[10px] bg-gray-100 px-2 py-0.5 rounded-full" style={{ color: B.textSec }}>Main</span>
               )}
             </div>
           )) : (
-            <p className="text-xs text-gray-400 py-2">Add sections in the Content tab first</p>
+            <p className="text-xs py-2" style={{ color: B.textSec }}>Add sections in the Content tab first</p>
           )}
         </div>
       </SettingCard>
 
-      {/* Spacing */}
       <SettingCard title="Spacing">
         <div className="space-y-5">
           <SliderRow label="Font Size" value={settings.fontSize} min={8} max={16} step={0.5} unit="pt" onChange={(v) => onChange({ fontSize: v })} />
@@ -349,7 +383,6 @@ function LayoutTab({ settings, onChange, sections }: { settings: CustomizeSettin
         </div>
       </SettingCard>
 
-      {/* Entry Layout */}
       <SettingCard title="Entry Layout">
         <div className="grid grid-cols-2 gap-2 mb-4">
           {([
@@ -363,13 +396,16 @@ function LayoutTab({ settings, onChange, sections }: { settings: CustomizeSettin
               onClick={() => onChange({ entryLayout: opt.val })}
               className={cn(
                 "p-3 rounded-xl border text-left transition-all",
-                settings.entryLayout === opt.val
-                  ? "border-purple-500 bg-purple-50 shadow-sm"
-                  : "border-gray-200 bg-white hover:border-gray-300"
+                settings.entryLayout === opt.val ? "shadow-sm" : "bg-white hover:border-gray-300"
               )}
+              style={
+                settings.entryLayout === opt.val
+                  ? { borderColor: B.green, backgroundColor: B.greenLighter }
+                  : { borderColor: B.border }
+              }
             >
-              <p className="text-xs font-semibold text-gray-800">{opt.label}</p>
-              <p className="text-[10px] text-gray-400 mt-0.5">{opt.desc}</p>
+              <p className="text-xs font-semibold" style={{ color: B.text }}>{opt.label}</p>
+              <p className="text-[10px] mt-0.5" style={{ color: B.textSec }}>{opt.desc}</p>
             </button>
           ))}
         </div>
@@ -459,7 +495,6 @@ function HeadingStyleThumb({ id, accent }: { id: HeadingStyle; accent: string })
 function DesignTab({ settings, onChange }: { settings: CustomizeSettings; onChange: (u: Partial<CustomizeSettings>) => void }) {
   return (
     <>
-      {/* Font – prominent at top */}
       <SettingCard title="Font">
         <FieldLabel>Body font</FieldLabel>
         <div className="mb-4">
@@ -469,7 +504,6 @@ function DesignTab({ settings, onChange }: { settings: CustomizeSettings; onChan
         <FontPicker selectedFont={settings.headingFont || settings.bodyFont} onSelect={(f) => onChange({ headingFont: f })} />
       </SettingCard>
 
-      {/* Color */}
       <SettingCard title="Color">
         <FieldLabel>Accent color</FieldLabel>
         <div className="grid grid-cols-10 gap-1.5 mb-4">
@@ -479,15 +513,18 @@ function DesignTab({ settings, onChange }: { settings: CustomizeSettings; onChan
               onClick={() => onChange({ accentColor: color })}
               className={cn(
                 "w-6 h-6 rounded-full border-2 transition-transform hover:scale-110",
-                settings.accentColor === color ? "border-purple-600 ring-2 ring-purple-300 scale-110" : "border-gray-200"
+                settings.accentColor === color ? "scale-110" : ""
               )}
-              style={{ backgroundColor: color }}
+              style={{
+                backgroundColor: color,
+                borderColor: settings.accentColor === color ? B.green : B.border,
+                boxShadow: settings.accentColor === color ? `0 0 0 2px ${B.greenLight}` : "none",
+              }}
             />
           ))}
-          <button className="w-6 h-6 rounded-full border-2 border-gray-200" style={{ background: "conic-gradient(red, yellow, lime, aqua, blue, magenta, red)" }} />
+          <button className="w-6 h-6 rounded-full border-2" style={{ background: "conic-gradient(red, yellow, lime, aqua, blue, magenta, red)", borderColor: B.border }} />
         </div>
 
-        {/* Apply accent color to */}
         <FieldLabel>Apply accent color to</FieldLabel>
         <div className="grid grid-cols-2 gap-2 mb-4">
           {([
@@ -499,7 +536,7 @@ function DesignTab({ settings, onChange }: { settings: CustomizeSettings; onChan
             { key: "accentApplySubtitle", label: "Subtitle" },
             { key: "accentApplyLines", label: "Lines" },
           ] as const).map((item) => (
-            <label key={item.key} className="flex items-center gap-2 text-xs text-gray-700 cursor-pointer">
+            <label key={item.key} className="flex items-center gap-2 text-xs cursor-pointer" style={{ color: B.text }}>
               <Checkbox
                 checked={(settings as any)[item.key] ?? false}
                 onCheckedChange={(v) => onChange({ [item.key]: !!v })}
@@ -509,7 +546,6 @@ function DesignTab({ settings, onChange }: { settings: CustomizeSettings; onChan
           ))}
         </div>
 
-        {/* Deep Color Mapping */}
         <FieldLabel>Custom colors</FieldLabel>
         <div className="space-y-2.5 mt-2">
           <ColorPickerRow label="Name" value={settings.nameColor || "#111827"} onChange={(v) => onChange({ nameColor: v })} />
@@ -524,7 +560,6 @@ function DesignTab({ settings, onChange }: { settings: CustomizeSettings; onChan
         </div>
       </SettingCard>
 
-      {/* Section Headings */}
       <SettingCard title="Section Headings">
         <FieldLabel>Style</FieldLabel>
         <div className="grid grid-cols-3 gap-2 mb-4">
@@ -534,15 +569,18 @@ function DesignTab({ settings, onChange }: { settings: CustomizeSettings; onChan
               onClick={() => onChange({ headingStyle: hs.id })}
               className={cn(
                 "flex flex-col items-center gap-1.5 p-2.5 rounded-xl border transition-all",
-                settings.headingStyle === hs.id
-                  ? "border-purple-500 bg-purple-50 shadow-sm"
-                  : "border-gray-200 bg-white hover:border-gray-300"
+                settings.headingStyle === hs.id ? "shadow-sm" : "bg-white hover:border-gray-300"
               )}
+              style={
+                settings.headingStyle === hs.id
+                  ? { borderColor: B.green, backgroundColor: B.greenLighter }
+                  : { borderColor: B.border }
+              }
             >
               <div className="w-14 h-5 flex items-center justify-center">
                 <HeadingStyleThumb id={hs.id} accent={settings.accentColor} />
               </div>
-              <span className="text-[10px] font-medium text-gray-600">{hs.label}</span>
+              <span className="text-[10px] font-medium" style={{ color: B.textSec }}>{hs.label}</span>
             </button>
           ))}
         </div>
@@ -561,24 +599,23 @@ function DesignTab({ settings, onChange }: { settings: CustomizeSettings; onChan
           />
         </div>
 
-        <label className="flex items-center gap-2 text-sm text-gray-700 cursor-pointer">
+        <label className="flex items-center gap-2 text-sm cursor-pointer" style={{ color: B.text }}>
           <Checkbox checked={settings.headingUppercase !== false} onCheckedChange={(v) => onChange({ headingUppercase: !!v })} />
           Uppercase headings
         </label>
       </SettingCard>
 
-      {/* Link styling */}
       <SettingCard title="Link Styling">
         <div className="space-y-3">
-          <label className="flex items-center gap-2 text-sm text-gray-700 cursor-pointer">
+          <label className="flex items-center gap-2 text-sm cursor-pointer" style={{ color: B.text }}>
             <Checkbox checked={settings.linkUnderline} onCheckedChange={(v) => onChange({ linkUnderline: !!v })} />
             Underline
           </label>
-          <label className="flex items-center gap-2 text-sm text-gray-700 cursor-pointer">
+          <label className="flex items-center gap-2 text-sm cursor-pointer" style={{ color: B.text }}>
             <Checkbox checked={settings.linkBlue} onCheckedChange={(v) => onChange({ linkBlue: !!v })} />
             Blue color
           </label>
-          <label className="flex items-center gap-2 text-sm text-gray-700 cursor-pointer">
+          <label className="flex items-center gap-2 text-sm cursor-pointer" style={{ color: B.text }}>
             <Checkbox checked={settings.linkIcon} onCheckedChange={(v) => onChange({ linkIcon: !!v })} />
             Show link icon
           </label>
@@ -586,15 +623,25 @@ function DesignTab({ settings, onChange }: { settings: CustomizeSettings; onChan
             <div className="flex gap-2 ml-6">
               <button
                 onClick={() => onChange({ linkIconStyle: "link" })}
-                className={cn("p-2 rounded-lg border", settings.linkIconStyle === "link" ? "border-purple-500 bg-purple-50" : "border-gray-200")}
+                className="p-2 rounded-lg border"
+                style={
+                  settings.linkIconStyle === "link"
+                    ? { borderColor: B.green, backgroundColor: B.greenLighter }
+                    : { borderColor: B.border }
+                }
               >
-                <Link className="w-4 h-4 text-gray-600" />
+                <Link className="w-4 h-4" style={{ color: B.textSec }} />
               </button>
               <button
                 onClick={() => onChange({ linkIconStyle: "external" })}
-                className={cn("p-2 rounded-lg border", settings.linkIconStyle === "external" ? "border-purple-500 bg-purple-50" : "border-gray-200")}
+                className="p-2 rounded-lg border"
+                style={
+                  settings.linkIconStyle === "external"
+                    ? { borderColor: B.green, backgroundColor: B.greenLighter }
+                    : { borderColor: B.border }
+                }
               >
-                <ExternalLink className="w-4 h-4 text-gray-600" />
+                <ExternalLink className="w-4 h-4" style={{ color: B.textSec }} />
               </button>
             </div>
           )}
@@ -612,13 +659,13 @@ function HeaderTab({ settings, onChange }: { settings: CustomizeSettings; onChan
         <FieldLabel>Align</FieldLabel>
         <div className="flex gap-3 mb-5">
           <ThumbOption selected={settings.headerAlign === "left"} onClick={() => onChange({ headerAlign: "left" })} label="Left">
-            <AlignLeft className="w-5 h-5 text-gray-500" />
+            <AlignLeft className="w-5 h-5" style={{ color: B.textSec }} />
           </ThumbOption>
           <ThumbOption selected={settings.headerAlign === "center"} onClick={() => onChange({ headerAlign: "center" })} label="Center">
-            <AlignCenter className="w-5 h-5 text-gray-500" />
+            <AlignCenter className="w-5 h-5" style={{ color: B.textSec }} />
           </ThumbOption>
           <ThumbOption selected={settings.headerAlign === "right"} onClick={() => onChange({ headerAlign: "right" })} label="Right">
-            <AlignRight className="w-5 h-5 text-gray-500" />
+            <AlignRight className="w-5 h-5" style={{ color: B.textSec }} />
           </ThumbOption>
         </div>
 
@@ -645,26 +692,26 @@ function HeaderTab({ settings, onChange }: { settings: CustomizeSettings; onChan
         <FieldLabel>Separator</FieldLabel>
         <div className="flex gap-3 mb-5">
           <ThumbOption selected={settings.contactSeparator === "icon"} onClick={() => onChange({ contactSeparator: "icon" })} label="Icon">
-            <Smile className="w-5 h-5 text-gray-500" />
+            <Smile className="w-5 h-5" style={{ color: B.textSec }} />
           </ThumbOption>
           <ThumbOption selected={settings.contactSeparator === "bullet"} onClick={() => onChange({ contactSeparator: "bullet" })} label="Bullet">
-            <span className="text-lg text-gray-500 font-bold">·</span>
+            <span className="text-lg font-bold" style={{ color: B.textSec }}>·</span>
           </ThumbOption>
           <ThumbOption selected={settings.contactSeparator === "bar"} onClick={() => onChange({ contactSeparator: "bar" })} label="Bar">
-            <span className="text-lg text-gray-500 font-bold">|</span>
+            <span className="text-lg font-bold" style={{ color: B.textSec }}>|</span>
           </ThumbOption>
         </div>
 
         <FieldLabel>Header Icons</FieldLabel>
         <div className="flex gap-3 mb-5">
           <ThumbOption selected={settings.headerIconStyle === "outline"} onClick={() => onChange({ headerIconStyle: "outline" })} label="Outline">
-            <Circle className="w-5 h-5 text-gray-500" />
+            <Circle className="w-5 h-5" style={{ color: B.textSec }} />
           </ThumbOption>
           <ThumbOption selected={settings.headerIconStyle === "filled"} onClick={() => onChange({ headerIconStyle: "filled" })} label="Filled">
-            <Circle className="w-5 h-5 text-gray-500" fill="currentColor" />
+            <Circle className="w-5 h-5" style={{ color: B.textSec }} fill="currentColor" />
           </ThumbOption>
           <ThumbOption selected={settings.headerIconStyle === "none"} onClick={() => onChange({ headerIconStyle: "none" })} label="None">
-            <span className="text-xs text-gray-400">—</span>
+            <span className="text-xs" style={{ color: B.textSec }}>—</span>
           </ThumbOption>
         </div>
 
@@ -674,10 +721,12 @@ function HeaderTab({ settings, onChange }: { settings: CustomizeSettings; onChan
             <button
               key={i}
               onClick={() => onChange({ iconStyle: i })}
-              className={cn(
-                "w-8 h-8 rounded-full border flex items-center justify-center transition-all",
-                settings.iconStyle === i ? "border-purple-500 bg-purple-50 shadow-sm" : "border-gray-200 bg-white hover:border-gray-300"
-              )}
+              className="w-8 h-8 rounded-full border flex items-center justify-center transition-all"
+              style={
+                settings.iconStyle === i
+                  ? { borderColor: B.green, backgroundColor: B.greenLighter, boxShadow: "0 1px 3px rgba(0,0,0,0.1)" }
+                  : { borderColor: B.border, backgroundColor: "#fff" }
+              }
             >
               <div className={cn("w-3.5 h-3.5 rounded-full", i % 2 === 0 ? "border border-gray-400" : "bg-gray-400")} />
             </button>
@@ -700,7 +749,7 @@ function HeaderTab({ settings, onChange }: { settings: CustomizeSettings; onChan
             onChange={(v) => onChange({ nameSize: v as CustomizeSettings["nameSize"] })}
           />
         </div>
-        <label className="flex items-center gap-2 text-sm text-gray-700 cursor-pointer mb-3">
+        <label className="flex items-center gap-2 text-sm cursor-pointer mb-3" style={{ color: B.text }}>
           <Checkbox checked={settings.nameBold} onCheckedChange={(v) => onChange({ nameBold: !!v })} />
           Bold
         </label>
@@ -740,7 +789,7 @@ function HeaderTab({ settings, onChange }: { settings: CustomizeSettings; onChan
       </SettingCard>
 
       <SettingCard title="Photo">
-        <div className="flex items-center gap-3 py-2 text-gray-400">
+        <div className="flex items-center gap-3 py-2" style={{ color: B.textSec }}>
           <div className="w-10 h-10 rounded-full bg-gray-100 flex items-center justify-center">
             <Camera className="w-5 h-5 text-gray-300" />
           </div>
@@ -780,7 +829,6 @@ function SectionsTab({ settings, onChange, sections }: { settings: CustomizeSett
 
   return (
     <>
-      {/* Skills */}
       <SettingCard title="Skills Display">
         {hasSkills ? (
           <div className="grid grid-cols-2 gap-2">
@@ -790,22 +838,24 @@ function SectionsTab({ settings, onChange, sections }: { settings: CustomizeSett
                 onClick={() => onChange({ skillsDisplay: opt.val })}
                 className={cn(
                   "p-3 rounded-xl border text-left transition-all",
-                  (settings.skillsDisplay || "grid") === opt.val
-                    ? "border-purple-500 bg-purple-50 shadow-sm"
-                    : "border-gray-200 bg-white hover:border-gray-300"
+                  (settings.skillsDisplay || "grid") === opt.val ? "shadow-sm" : "bg-white hover:border-gray-300"
                 )}
+                style={
+                  (settings.skillsDisplay || "grid") === opt.val
+                    ? { borderColor: B.green, backgroundColor: B.greenLighter }
+                    : { borderColor: B.border }
+                }
               >
-                <p className="text-xs font-semibold text-gray-800">{opt.label}</p>
-                <p className="text-[10px] text-gray-400 mt-0.5">{opt.desc}</p>
+                <p className="text-xs font-semibold" style={{ color: B.text }}>{opt.label}</p>
+                <p className="text-[10px] mt-0.5" style={{ color: B.textSec }}>{opt.desc}</p>
               </button>
             ))}
           </div>
         ) : (
-          <p className="text-xs text-gray-400">Add a Skills section first</p>
+          <p className="text-xs" style={{ color: B.textSec }}>Add a Skills section first</p>
         )}
       </SettingCard>
 
-      {/* Languages */}
       <SettingCard title="Languages Display">
         {hasLanguages ? (
           <div className="grid grid-cols-2 gap-2">
@@ -815,22 +865,24 @@ function SectionsTab({ settings, onChange, sections }: { settings: CustomizeSett
                 onClick={() => onChange({ languagesDisplay: opt.val })}
                 className={cn(
                   "p-3 rounded-xl border text-left transition-all",
-                  (settings.languagesDisplay || "grid") === opt.val
-                    ? "border-purple-500 bg-purple-50 shadow-sm"
-                    : "border-gray-200 bg-white hover:border-gray-300"
+                  (settings.languagesDisplay || "grid") === opt.val ? "shadow-sm" : "bg-white hover:border-gray-300"
                 )}
+                style={
+                  (settings.languagesDisplay || "grid") === opt.val
+                    ? { borderColor: B.green, backgroundColor: B.greenLighter }
+                    : { borderColor: B.border }
+                }
               >
-                <p className="text-xs font-semibold text-gray-800">{opt.label}</p>
-                <p className="text-[10px] text-gray-400 mt-0.5">{opt.desc}</p>
+                <p className="text-xs font-semibold" style={{ color: B.text }}>{opt.label}</p>
+                <p className="text-[10px] mt-0.5" style={{ color: B.textSec }}>{opt.desc}</p>
               </button>
             ))}
           </div>
         ) : (
-          <p className="text-xs text-gray-400">Add a Languages section first</p>
+          <p className="text-xs" style={{ color: B.textSec }}>Add a Languages section first</p>
         )}
       </SettingCard>
 
-      {/* Education Order */}
       <SettingCard title="Education">
         {hasEducation ? (
           <>
@@ -845,11 +897,10 @@ function SectionsTab({ settings, onChange, sections }: { settings: CustomizeSett
             />
           </>
         ) : (
-          <p className="text-xs text-gray-400">Add an Education section first</p>
+          <p className="text-xs" style={{ color: B.textSec }}>Add an Education section first</p>
         )}
       </SettingCard>
 
-      {/* Experience Order */}
       <SettingCard title="Experience">
         {hasExperience ? (
           <>
@@ -864,7 +915,7 @@ function SectionsTab({ settings, onChange, sections }: { settings: CustomizeSett
             />
           </>
         ) : (
-          <p className="text-xs text-gray-400">Add an Experience section first</p>
+          <p className="text-xs" style={{ color: B.textSec }}>Add an Experience section first</p>
         )}
       </SettingCard>
     </>
