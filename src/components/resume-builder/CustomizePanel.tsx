@@ -114,7 +114,7 @@ function SliderRow({ label, value, min, max, step, unit, onChange }: { label: st
         max={max}
         step={step}
         onValueChange={([v]) => onChange(+(v).toFixed(2))}
-        className="[&_[role=slider]]:bg-[#2b4734] [&_[role=slider]]:border-[#2b4734] [&_[data-orientation=horizontal]>[data-orientation=horizontal]]:bg-[#2b4734]"
+        className="[&_[role=slider]]:bg-[#2b4734] [&_[role=slider]]:border-[#2b4734] [&_span[data-orientation=horizontal]]:bg-[#2b4734]"
       />
     </div>
   );
