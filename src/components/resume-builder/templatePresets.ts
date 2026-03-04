@@ -1,10 +1,50 @@
 import { CustomizeSettings, DEFAULT_CUSTOMIZE } from "./customizeTypes";
 
-/**
- * Each template preset maps to a partial CustomizeSettings.
- * When applied, it overrides design/layout fields but preserves user content.
- */
+export interface TemplatePresetInfo {
+  id: string;
+  name: string;
+  desc: string;
+}
+
+export const TEMPLATE_LIST: TemplatePresetInfo[] = [
+  { id: "modern", name: "Modern", desc: "Clean sans-serif, teal accent, compact spacing" },
+  { id: "classic", name: "Classic", desc: "Centered header, serif-style, traditional layout" },
+  { id: "professional", name: "Professional", desc: "Navy accent, bar headings, bold subtitles" },
+  { id: "minimal", name: "Minimal", desc: "Maximum whitespace, all black/gray, sparse" },
+  { id: "two-column", name: "Two Column", desc: "Side-by-side layout, full-width header" },
+  { id: "sidebar", name: "Sidebar", desc: "Narrow left sidebar with skills & contact" },
+  { id: "executive", name: "Executive", desc: "Large name, uppercase headings, charcoal tones" },
+  { id: "creative", name: "Creative", desc: "Coral accent, bubble skills, playful spacing" },
+];
+
 export const TEMPLATE_PRESETS: Record<string, Partial<CustomizeSettings>> = {
+  modern: {
+    columns: "one",
+    headingStyle: "plain",
+    headingSize: "m",
+    headingUppercase: false,
+    headerAlign: "left",
+    headerArrangement: "stacked",
+    contactSeparator: "bar",
+    headerIconStyle: "none",
+    accentColor: "#0891b2",
+    nameSize: "m",
+    nameBold: true,
+    nameFont: "body",
+    bodyFont: "'Inter', sans-serif",
+    headingFont: "'Inter', sans-serif",
+    fontSize: 10.5,
+    lineHeight: 1.4,
+    marginX: 16,
+    marginY: 16,
+    sectionSpacing: 4,
+    colorMode: "basic",
+    nameColor: "#111827",
+    titleColor: "#6B7280",
+    headingsColor: "#0891b2",
+    a4Background: "#ffffff",
+  },
+
   classic: {
     columns: "one",
     headingStyle: "underline",
@@ -18,8 +58,8 @@ export const TEMPLATE_PRESETS: Record<string, Partial<CustomizeSettings>> = {
     nameSize: "s",
     nameBold: true,
     nameFont: "body",
-    bodyFont: "'Source Sans 3', sans-serif",
-    headingFont: "'Source Sans 3', sans-serif",
+    bodyFont: "'Lora', serif",
+    headingFont: "'Lora', serif",
     fontSize: 11,
     lineHeight: 1.5,
     marginX: 16,
@@ -32,6 +72,33 @@ export const TEMPLATE_PRESETS: Record<string, Partial<CustomizeSettings>> = {
     a4Background: "#ffffff",
   },
 
+  professional: {
+    columns: "one",
+    headingStyle: "left-accent",
+    headingSize: "m",
+    headingUppercase: true,
+    headerAlign: "left",
+    headerArrangement: "stacked",
+    contactSeparator: "bar",
+    headerIconStyle: "none",
+    accentColor: "#1e3a5f",
+    nameSize: "l",
+    nameBold: true,
+    nameFont: "body",
+    bodyFont: "'Source Serif 4', serif",
+    headingFont: "'Source Serif 4', serif",
+    fontSize: 11,
+    lineHeight: 1.5,
+    marginX: 18,
+    marginY: 18,
+    sectionSpacing: 5,
+    colorMode: "basic",
+    nameColor: "#1e3a5f",
+    titleColor: "#6B7280",
+    headingsColor: "#1e3a5f",
+    a4Background: "#ffffff",
+  },
+
   minimal: {
     columns: "one",
     headingStyle: "plain",
@@ -41,7 +108,7 @@ export const TEMPLATE_PRESETS: Record<string, Partial<CustomizeSettings>> = {
     headerArrangement: "stacked",
     contactSeparator: "bar",
     headerIconStyle: "none",
-    accentColor: "#6B7280",
+    accentColor: "#374151",
     nameSize: "m",
     nameBold: true,
     nameFont: "body",
@@ -49,9 +116,9 @@ export const TEMPLATE_PRESETS: Record<string, Partial<CustomizeSettings>> = {
     headingFont: "'Inter', sans-serif",
     fontSize: 10.5,
     lineHeight: 1.45,
-    marginX: 18,
-    marginY: 18,
-    sectionSpacing: 4,
+    marginX: 22,
+    marginY: 22,
+    sectionSpacing: 6,
     colorMode: "basic",
     nameColor: "#374151",
     titleColor: "#9CA3AF",
@@ -59,35 +126,36 @@ export const TEMPLATE_PRESETS: Record<string, Partial<CustomizeSettings>> = {
     a4Background: "#ffffff",
   },
 
-  executive: {
-    columns: "one",
-    headingStyle: "full-underline",
+  "two-column": {
+    columns: "two",
+    columnRatio: 5,
+    headingStyle: "underline",
     headingSize: "m",
     headingUppercase: true,
     headerAlign: "center",
     headerArrangement: "stacked",
     contactSeparator: "bullet",
     headerIconStyle: "none",
-    accentColor: "#1e293b",
-    nameSize: "l",
+    accentColor: "#374151",
+    nameSize: "m",
     nameBold: true,
-    nameFont: "creative",
-    bodyFont: "'Georgia', 'Times New Roman', serif",
-    headingFont: "'Georgia', 'Times New Roman', serif",
-    fontSize: 11,
-    lineHeight: 1.5,
-    marginX: 20,
-    marginY: 20,
-    sectionSpacing: 6,
+    nameFont: "body",
+    bodyFont: "'Mulish', sans-serif",
+    headingFont: "'Mulish', sans-serif",
+    fontSize: 10,
+    lineHeight: 1.4,
+    marginX: 14,
+    marginY: 14,
+    sectionSpacing: 4,
     colorMode: "basic",
-    nameColor: "#1e293b",
+    nameColor: "#111827",
     titleColor: "#6B7280",
-    headingsColor: "#1e293b",
+    headingsColor: "#374151",
     a4Background: "#ffffff",
   },
 
-  "modern-sidebar": {
-    columns: "two",
+  sidebar: {
+    columns: "mix",
     columnRatio: 4,
     headingStyle: "left-accent",
     headingSize: "m",
@@ -95,13 +163,13 @@ export const TEMPLATE_PRESETS: Record<string, Partial<CustomizeSettings>> = {
     headerAlign: "left",
     headerArrangement: "stacked",
     contactSeparator: "icon",
-    headerIconStyle: "outline",
-    accentColor: "#1e293b",
+    headerIconStyle: "filled",
+    accentColor: "#7c3aed",
     nameSize: "s",
     nameBold: true,
     nameFont: "body",
-    bodyFont: "'Source Sans 3', sans-serif",
-    headingFont: "'Source Sans 3', sans-serif",
+    bodyFont: "'Nunito', sans-serif",
+    headingFont: "'Nunito', sans-serif",
     fontSize: 10.5,
     lineHeight: 1.45,
     marginX: 14,
@@ -114,8 +182,35 @@ export const TEMPLATE_PRESETS: Record<string, Partial<CustomizeSettings>> = {
     a4Background: "#ffffff",
   },
 
-  "bold-creative": {
-    columns: "mix",
+  executive: {
+    columns: "one",
+    headingStyle: "full-underline",
+    headingSize: "l",
+    headingUppercase: true,
+    headerAlign: "center",
+    headerArrangement: "stacked",
+    contactSeparator: "bullet",
+    headerIconStyle: "none",
+    accentColor: "#1f2937",
+    nameSize: "xl",
+    nameBold: true,
+    nameFont: "creative",
+    bodyFont: "'Crimson Pro', serif",
+    headingFont: "'Crimson Pro', serif",
+    fontSize: 11,
+    lineHeight: 1.5,
+    marginX: 20,
+    marginY: 20,
+    sectionSpacing: 6,
+    colorMode: "basic",
+    nameColor: "#1f2937",
+    titleColor: "#6B7280",
+    headingsColor: "#1f2937",
+    a4Background: "#ffffff",
+  },
+
+  creative: {
+    columns: "two",
     columnRatio: 4,
     headingStyle: "background",
     headingSize: "m",
@@ -124,11 +219,11 @@ export const TEMPLATE_PRESETS: Record<string, Partial<CustomizeSettings>> = {
     headerArrangement: "stacked",
     contactSeparator: "icon",
     headerIconStyle: "filled",
-    accentColor: "#7c3aed",
+    accentColor: "#f97316",
     nameSize: "m",
     nameBold: true,
     nameFont: "creative",
-    bodyFont: "'Source Sans 3', sans-serif",
+    bodyFont: "'Nunito', sans-serif",
     headingFont: "'Poppins', sans-serif",
     fontSize: 10.5,
     lineHeight: 1.45,
@@ -136,7 +231,7 @@ export const TEMPLATE_PRESETS: Record<string, Partial<CustomizeSettings>> = {
     marginY: 14,
     sectionSpacing: 5,
     colorMode: "advanced",
-    nameColor: "#7c3aed",
+    nameColor: "#f97316",
     titleColor: "#6B7280",
     headingsColor: "#ffffff",
     a4Background: "#ffffff",
@@ -144,8 +239,8 @@ export const TEMPLATE_PRESETS: Record<string, Partial<CustomizeSettings>> = {
 };
 
 /**
- * Apply a template preset: merges preset styling on top of current settings,
- * preserving user content-related choices (language, dateFormat, pageFormat).
+ * Apply a template preset: merges preset styling on top of defaults,
+ * preserving user content-related choices.
  */
 export function applyTemplatePreset(
   current: CustomizeSettings,
@@ -154,7 +249,6 @@ export function applyTemplatePreset(
   const preset = TEMPLATE_PRESETS[templateId];
   if (!preset) return { ...current, template: templateId };
 
-  // Preserve user's document settings
   const preserved = {
     language: current.language,
     dateFormat: current.dateFormat,

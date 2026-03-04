@@ -12,8 +12,10 @@ import { useResumeStore } from "@/components/resume-builder/useResumeStore";
 import { SECTION_TYPES, getDefaultFieldsForType, ResumeSection } from "@/components/resume-builder/types";
 import { CoverLetterBuilder } from "@/components/cover-letter/CoverLetterBuilder";
 import { DocumentDashboard } from "@/components/document-dashboard/DocumentDashboard";
+import { TemplatePickerOverlay } from "@/components/resume-builder/TemplatePickerOverlay";
 import { ImportModal } from "@/components/document-dashboard/ImportModal";
 import { SavedDocument, DocType, updateDocument, getAllDocuments } from "@/lib/documentStore";
+import { applyTemplatePreset } from "@/components/resume-builder/templatePresets";
 import { exportToPdf } from "@/lib/pdfExport";
 import { useIsMobile } from "@/hooks/use-mobile";
 import { Skeleton } from "@/components/ui/skeleton";
@@ -151,6 +153,8 @@ const ResumeBuilder = () => {
   const [saving, setSaving] = useState(false);
   const [loading, setLoading] = useState(false);
   const [mobilePreview, setMobilePreview] = useState(false);
+  const [templatePickerOpen, setTemplatePickerOpen] = useState(false);
+  const [pendingImportDocId, setPendingImportDocId] = useState<string | null>(null);
   const isMobile = useIsMobile();
 
   // Undo/redo via history stack
@@ -285,11 +289,43 @@ const ResumeBuilder = () => {
     }, 100);
   }, []);
 
+  const handleImported = useCallback((doc: SavedDocument) => {
+    if (doc.type === "resume") {
+      // Show template picker before entering editor
+      setPendingImportDocId(doc.id);
+      // Load the data into the store
+      store.setData(doc.data as any);
+      store.updateCustomize(doc.settings as any);
+      setActiveDocId(doc.id);
+      setTemplatePickerOpen(true);
+    } else {
+      handleOpenDocument(doc);
+    }
+  }, [store, handleOpenDocument]);
+
+  const handleTemplatePickedAfterImport = useCallback((templateId: string) => {
+    const newSettings = applyTemplatePreset(customize, templateId);
+    store.updateCustomize(newSettings);
+    if (pendingImportDocId) {
+      updateDocument(pendingImportDocId, { settings: newSettings });
+    }
+    setTemplatePickerOpen(false);
+    setPendingImportDocId(null);
+    setViewMode("resume-editor");
+    setActiveTab("content");
+    historyRef.current = { past: [], future: [] };
+  }, [customize, store, pendingImportDocId]);
+
   if (viewMode === "dashboard") {
     return (
       <>
         <DocumentDashboard onOpenDocument={handleOpenDocument} onImport={handleImport} />
-        <ImportModal open={importing} onClose={() => setImporting(false)} type={importType} onImported={handleOpenDocument} />
+        <ImportModal open={importing} onClose={() => setImporting(false)} type={importType} onImported={handleImported} />
+        <TemplatePickerOverlay
+          open={templatePickerOpen}
+          onSelect={handleTemplatePickedAfterImport}
+          resumeData={data}
+        />
       </>
     );
   }
