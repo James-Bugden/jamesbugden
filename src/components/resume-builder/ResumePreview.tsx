@@ -302,7 +302,7 @@ function renderSectionEntries(section: ResumeSection, customize?: CustomizeSetti
             const lvl = proficiency ? Math.min(5, Math.max(1, ["beginner","elementary","intermediate","upper-intermediate","advanced","native"].indexOf(proficiency.toLowerCase()) + 1 || 3)) : 3;
             return (
               <div key={entry.id} className="flex items-center gap-[2mm]">
-                <span className="w-[26mm]" style={{ fontSize: "8pt", color: "var(--resume-body)", fontWeight: 600 }}>{language}</span>
+                <span className="w-[26mm]" style={{ fontSize: smallPt(base), color: "var(--resume-body)", fontWeight: 600 }}>{language}</span>
                 <div className="flex-1 h-[1.6mm] rounded-full overflow-hidden" style={{ backgroundColor: "#e5e7eb" }}>
                   <div className="h-full rounded-full" style={{ width: `${lvl * 20}%`, backgroundColor: "var(--resume-accent)" }} />
                 </div>
