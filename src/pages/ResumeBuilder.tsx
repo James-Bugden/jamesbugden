@@ -6,7 +6,7 @@ import { SectionCard } from "@/components/resume-builder/SectionCard";
 import { AddContentModal } from "@/components/resume-builder/AddContentModal";
 import { ResumePreview } from "@/components/resume-builder/ResumePreview";
 import { CustomizePanel } from "@/components/resume-builder/CustomizePanel";
-import { CompletenessScore } from "@/components/resume-builder/CompletenessScore";
+// CompletenessScore removed for cleaner UX
 import { AiToolsPanel } from "@/components/resume-builder/AiToolsPanel";
 import { useResumeStore } from "@/components/resume-builder/useResumeStore";
 import { SECTION_TYPES, getDefaultFieldsForType, ResumeSection } from "@/components/resume-builder/types";
@@ -314,7 +314,7 @@ const ResumeBuilder = () => {
     <EditorSkeleton />
   ) : activeTab === "content" ? (
     <div className="max-w-2xl mx-auto p-4 md:p-6 space-y-4">
-      <CompletenessScore data={data} />
+      {/* Resume score removed for cleaner UX */}
       <PersonalDetailsCard details={data.personalDetails} onChange={(u) => { pushHistory(); updatePersonalDetails(u); }} collapsible />
       {data.sections.map((section, idx) => (
         <div
