@@ -4,6 +4,16 @@ import { cn } from "@/lib/utils";
 import { SavedDocument } from "@/lib/documentStore";
 import { useState, useRef, useEffect } from "react";
 
+const BRAND = {
+  green: "#2b4734",
+  greenHover: "#1f3a28",
+  greenLight: "#e8f0eb",
+  greenLighter: "#f2f7f4",
+  text: "#1A1A1A",
+  textSec: "#6B6B6B",
+  border: "#e5e7eb",
+};
+
 interface ResumeTopNavProps {
   activeTab: string;
   onTabChange: (tab: string) => void;
@@ -18,7 +28,6 @@ interface ResumeTopNavProps {
 const tabs = [
   { id: "content", label: "Content", icon: FileText },
   { id: "customize", label: "Customize", icon: Palette },
-  { id: "ai-tools", label: "AI Tools", icon: Sparkles },
 ];
 
 export function ResumeTopNav({ activeTab, onTabChange, docName, allDocs, onDocSwitch, onDownload, downloading, pageFormat = "a4" }: ResumeTopNavProps) {
@@ -27,13 +36,11 @@ export function ResumeTopNav({ activeTab, onTabChange, docName, allDocs, onDocSw
   const [filename, setFilename] = useState("");
   const dlRef = useRef<HTMLDivElement>(null);
 
-  // Sync filename with docName
   useEffect(() => {
     const base = docName || "Resume";
     setFilename(base.replace(/\s+/g, "_") + "_Resume");
   }, [docName]);
 
-  // Close dropdown on outside click
   useEffect(() => {
     if (!dlDropdownOpen) return;
     const handler = (e: MouseEvent) => {
@@ -51,7 +58,7 @@ export function ResumeTopNav({ activeTab, onTabChange, docName, allDocs, onDocSw
   };
 
   return (
-    <div className="sticky top-0 z-30 flex items-center justify-between bg-white border-b border-gray-200 px-4 h-14">
+    <div className="sticky top-0 z-30 flex items-center justify-between bg-white border-b px-4 h-14" style={{ borderColor: BRAND.border }}>
       <div className="flex items-center gap-1">
         {tabs.map((tab) => {
           const active = activeTab === tab.id;
@@ -61,8 +68,13 @@ export function ResumeTopNav({ activeTab, onTabChange, docName, allDocs, onDocSw
               onClick={() => onTabChange(tab.id)}
               className={cn(
                 "flex items-center gap-2 px-4 py-2 rounded-full text-sm font-medium transition-colors",
-                active ? "bg-pink-50 text-pink-600" : "text-gray-500 hover:bg-gray-100"
+                active ? "" : "hover:bg-gray-100"
               )}
+              style={
+                active
+                  ? { backgroundColor: BRAND.greenLighter, color: BRAND.green }
+                  : { color: BRAND.textSec }
+              }
             >
               <tab.icon className="w-4 h-4" />
               <span className="hidden sm:inline">{tab.label}</span>
@@ -76,18 +88,20 @@ export function ResumeTopNav({ activeTab, onTabChange, docName, allDocs, onDocSw
         <div className="relative">
           <button
             onClick={() => setDropdownOpen(!dropdownOpen)}
-            className="flex items-center gap-1 px-3 py-1.5 text-sm text-gray-700 border border-gray-200 rounded-lg hover:bg-gray-50"
+            className="flex items-center gap-1 px-3 py-1.5 text-sm border rounded-lg hover:bg-gray-50"
+            style={{ color: BRAND.text, borderColor: BRAND.border }}
           >
             {docName || "Resume 1"}
             <ChevronDown className="w-3.5 h-3.5" />
           </button>
           {dropdownOpen && allDocs && allDocs.length > 0 && (
-            <div className="absolute right-0 top-full mt-1 bg-white rounded-lg shadow-lg border border-gray-100 py-1 z-20 min-w-[180px]">
+            <div className="absolute right-0 top-full mt-1 bg-white rounded-lg shadow-lg border py-1 z-20 min-w-[180px]" style={{ borderColor: BRAND.border }}>
               {allDocs.map((doc) => (
                 <button
                   key={doc.id}
                   onClick={() => { onDocSwitch?.(doc.id); setDropdownOpen(false); }}
-                  className="w-full text-left px-3 py-2 text-sm text-gray-700 hover:bg-gray-50 truncate"
+                  className="w-full text-left px-3 py-2 text-sm hover:bg-gray-50 truncate"
+                  style={{ color: BRAND.text }}
                 >
                   {doc.name}
                 </button>
@@ -100,7 +114,10 @@ export function ResumeTopNav({ activeTab, onTabChange, docName, allDocs, onDocSw
         <div className="relative" ref={dlRef}>
           <Button
             size="sm"
-            className="bg-purple-600 hover:bg-purple-700 text-white gap-1.5"
+            className="text-white gap-1.5"
+            style={{ backgroundColor: BRAND.green }}
+            onMouseEnter={(e) => (e.currentTarget.style.backgroundColor = BRAND.greenHover)}
+            onMouseLeave={(e) => (e.currentTarget.style.backgroundColor = BRAND.green)}
             onClick={() => {
               if (downloading) return;
               setDlDropdownOpen(!dlDropdownOpen);
@@ -112,33 +129,34 @@ export function ResumeTopNav({ activeTab, onTabChange, docName, allDocs, onDocSw
           </Button>
 
           {dlDropdownOpen && !downloading && (
-            <div className="absolute right-0 top-full mt-2 bg-white rounded-xl shadow-xl border border-gray-200 z-30 w-[280px] p-4">
+            <div className="absolute right-0 top-full mt-2 bg-white rounded-xl shadow-xl border z-30 w-[280px] p-4" style={{ borderColor: BRAND.border }}>
               <div className="space-y-3">
-                {/* Filename */}
                 <div>
-                  <label className="block text-xs font-semibold text-gray-600 mb-1">Filename</label>
+                  <label className="block text-xs font-semibold mb-1" style={{ color: BRAND.textSec }}>Filename</label>
                   <div className="flex items-center">
                     <input
                       type="text"
                       value={filename}
                       onChange={(e) => setFilename(e.target.value)}
-                      className="flex-1 px-3 py-2 text-sm border border-gray-200 rounded-l-lg outline-none focus:ring-2 focus:ring-purple-300 focus:border-purple-400 bg-white"
+                      className="flex-1 px-3 py-2 text-sm border rounded-l-lg outline-none bg-white"
+                      style={{ borderColor: BRAND.border, color: BRAND.text }}
                     />
-                    <span className="px-3 py-2 text-sm text-gray-400 bg-gray-50 border border-l-0 border-gray-200 rounded-r-lg">.pdf</span>
+                    <span className="px-3 py-2 text-sm bg-gray-50 border border-l-0 rounded-r-lg" style={{ color: BRAND.textSec, borderColor: BRAND.border }}>.pdf</span>
                   </div>
                 </div>
 
-                {/* Paper size display */}
                 <div className="flex items-center justify-between py-2 px-3 bg-gray-50 rounded-lg">
-                  <span className="text-xs font-medium text-gray-600">Paper size</span>
-                  <span className="text-xs font-semibold text-gray-800">
+                  <span className="text-xs font-medium" style={{ color: BRAND.textSec }}>Paper size</span>
+                  <span className="text-xs font-semibold" style={{ color: BRAND.text }}>
                     {pageFormat === "letter" ? "US Letter (8.5×11in)" : "A4 (210×297mm)"}
                   </span>
                 </div>
 
-                {/* Download button */}
                 <Button
-                  className="w-full bg-purple-600 hover:bg-purple-700 text-white"
+                  className="w-full text-white"
+                  style={{ backgroundColor: BRAND.green }}
+                  onMouseEnter={(e) => (e.currentTarget.style.backgroundColor = BRAND.greenHover)}
+                  onMouseLeave={(e) => (e.currentTarget.style.backgroundColor = BRAND.green)}
                   onClick={handleDownloadClick}
                 >
                   <Download className="w-4 h-4 mr-2" />
@@ -149,7 +167,7 @@ export function ResumeTopNav({ activeTab, onTabChange, docName, allDocs, onDocSw
           )}
         </div>
 
-        <button className="p-2 rounded-lg hover:bg-gray-100 text-gray-500">
+        <button className="p-2 rounded-lg hover:bg-gray-100" style={{ color: BRAND.textSec }}>
           <MoreVertical className="w-4 h-4" />
         </button>
       </div>
