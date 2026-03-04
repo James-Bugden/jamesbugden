@@ -223,7 +223,7 @@ export function DocumentDashboard({ onOpenDocument, onImport }: DocumentDashboar
       style={{ boxShadow: "0 1px 3px rgba(0,0,0,0.08)" }}
       onClick={() => onOpenDocument(doc)}
     >
-      <div className="aspect-[210/297] relative overflow-hidden" style={{ backgroundColor: BRAND.cream }}>
+      <div className="aspect-[210/297] relative overflow-hidden rounded-t-lg" style={{ backgroundColor: BRAND.cream }}>
         <ResumeThumbnail data={doc.data as ResumeData} settings={doc.settings as CustomizeSettings} />
         <div className="absolute inset-0 bg-black/0 group-hover:bg-black/40 transition-all duration-200 flex flex-col items-center justify-center gap-3 opacity-0 group-hover:opacity-100">
           <button
