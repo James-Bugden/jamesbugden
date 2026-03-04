@@ -491,7 +491,7 @@ function renderSectionEntries(section: ResumeSection, customize?: CustomizeSetti
                 {f.location && (
                   <p style={{ fontSize: subtitleFontSize, color: "var(--resume-subtitle)", fontStyle: "italic", marginTop: "0.3mm" }}>{f.location}</p>
                 )}
-                <HtmlBlock html={f.description} className={`mt-[1mm] [&_p]:mb-[1mm] ${listClass} [&_ol]:list-decimal [&_ol]:pl-[5mm] [&_li]:mb-[0.4mm] [&_a]:underline`} />
+                <HtmlBlock html={f.description} fontSize={bodyPt(base)} className={`mt-[1mm] [&_p]:mb-[1mm] ${listClass} [&_ol]:list-decimal [&_ol]:pl-[5mm] [&_li]:mb-[0.4mm] [&_a]:underline`} />
               </div>
             );
           }
