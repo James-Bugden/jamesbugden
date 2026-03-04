@@ -1,5 +1,5 @@
 import { useState, useCallback, useEffect, useRef } from "react";
-import { Plus, Eye, Undo2, Redo2, Check, Loader2 } from "lucide-react";
+import { Plus, Eye, Undo2, Redo2, Check, Loader2, GripVertical } from "lucide-react";
 import { ResumeTopNav } from "@/components/resume-builder/ResumeTopNav";
 import { PersonalDetailsCard } from "@/components/resume-builder/PersonalDetailsCard";
 import { SectionCard } from "@/components/resume-builder/SectionCard";
@@ -112,6 +112,33 @@ function BrandingFooter() {
 const ResumeBuilder = () => {
   const store = useResumeStore();
   const { data, customize, updateCustomize, updatePersonalDetails, setSections, updateSection, removeSection } = store;
+
+  /* ── Section drag-and-drop reordering ────────────────── */
+  const sectionDragIdx = useRef<number | null>(null);
+  const [sectionOverIdx, setSectionOverIdx] = useState<number | null>(null);
+
+  const handleSectionDragStart = (idx: number) => (e: React.DragEvent) => {
+    sectionDragIdx.current = idx;
+    e.dataTransfer.effectAllowed = "move";
+  };
+  const handleSectionDragOver = (idx: number) => (e: React.DragEvent) => {
+    e.preventDefault();
+    e.dataTransfer.dropEffect = "move";
+    setSectionOverIdx(idx);
+  };
+  const handleSectionDrop = (idx: number) => (e: React.DragEvent) => {
+    e.preventDefault();
+    const from = sectionDragIdx.current;
+    if (from === null || from === idx) { setSectionOverIdx(null); return; }
+    pushHistory();
+    const updated = [...data.sections];
+    const [moved] = updated.splice(from, 1);
+    updated.splice(idx, 0, moved);
+    setSections(updated);
+    sectionDragIdx.current = null;
+    setSectionOverIdx(null);
+  };
+  const handleSectionDragEnd = () => { sectionDragIdx.current = null; setSectionOverIdx(null); };
   const [activeTab, setActiveTab] = useState("content");
   const [modalOpen, setModalOpen] = useState(false);
   const [viewMode, setViewMode] = useState<ViewMode>("dashboard");
@@ -285,18 +312,46 @@ const ResumeBuilder = () => {
     <EditorSkeleton />
   ) : activeTab === "content" ? (
     <div className="max-w-2xl mx-auto p-4 md:p-6 space-y-4">
-      <PersonalDetailsCard details={data.personalDetails} onChange={(u) => { pushHistory(); updatePersonalDetails(u); }} />
-      {data.sections.map((section) => (
-        <SectionCard
+      <PersonalDetailsCard details={data.personalDetails} onChange={(u) => { pushHistory(); updatePersonalDetails(u); }} collapsible />
+      {data.sections.map((section, idx) => (
+        <div
           key={section.id}
-          section={section}
-          onUpdate={(updates) => { pushHistory(); updateSection(section.id, updates); }}
-          onRemove={() => {
-            pushHistory();
-            removeSection(section.id);
-            toast({ title: "Section removed" });
-          }}
-        />
+          draggable
+          onDragStart={handleSectionDragStart(idx)}
+          onDragOver={handleSectionDragOver(idx)}
+          onDrop={handleSectionDrop(idx)}
+          onDragEnd={handleSectionDragEnd}
+          className={cn(
+            "transition-all duration-150",
+            sectionOverIdx === idx && "ring-2 ring-purple-400 ring-offset-2 rounded-xl"
+          )}
+        >
+          <SectionCard
+            section={section}
+            onUpdate={(updates) => { pushHistory(); updateSection(section.id, updates); }}
+            onRemove={() => {
+              pushHistory();
+              const removed = section;
+              removeSection(section.id);
+              toast({
+                title: "Section removed",
+                description: `${removed.title} was deleted.`,
+                action: (
+                  <button
+                    onClick={() => {
+                      const restored = [...data.sections];
+                      restored.splice(idx, 0, removed);
+                      setSections(restored);
+                    }}
+                    className="text-xs font-semibold text-pink-600 hover:text-pink-700 px-2 py-1 rounded bg-pink-50 hover:bg-pink-100"
+                  >
+                    Undo
+                  </button>
+                ),
+              });
+            }}
+          />
+        </div>
       ))}
       <button
         onClick={() => setModalOpen(true)}

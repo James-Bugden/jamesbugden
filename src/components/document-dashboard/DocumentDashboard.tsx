@@ -73,6 +73,15 @@ export function DocumentDashboard({ onOpenDocument, onImport }: DocumentDashboar
 
   const formatDate = (iso: string) => {
     const d = new Date(iso);
+    const now = new Date();
+    const diffMs = now.getTime() - d.getTime();
+    const diffMins = Math.floor(diffMs / 60000);
+    const diffHours = Math.floor(diffMs / 3600000);
+    const diffDays = Math.floor(diffMs / 86400000);
+    if (diffMins < 1) return "Just now";
+    if (diffMins < 60) return `${diffMins}m ago`;
+    if (diffHours < 24) return `${diffHours}h ago`;
+    if (diffDays < 7) return `${diffDays}d ago`;
     return d.toLocaleDateString("en-GB", { day: "numeric", month: "short", year: "numeric" });
   };
 
@@ -191,6 +200,13 @@ export function DocumentDashboard({ onOpenDocument, onImport }: DocumentDashboar
               <span className="text-xs font-semibold">Import</span>
             </button>
           </div>
+          {resumes.length === 0 && (
+            <div className="text-center py-8">
+              <FileText className="w-12 h-12 text-gray-300 mx-auto mb-3" />
+              <p className="text-sm text-gray-500 font-medium">No resumes yet</p>
+              <p className="text-xs text-gray-400 mt-1">Create your first resume to get started!</p>
+            </div>
+          )}
         </section>
 
         {/* Cover Letters */}
