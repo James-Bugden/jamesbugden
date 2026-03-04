@@ -1,45 +1,48 @@
 
 
-## Diagnosis
+## Resume Builder Feature Improvements
 
-### 1. Section Reorder — Not Implemented
-The "Change Section Layout" card (CustomizePanel line 331-345) renders static rows with a `GripVertical` icon but has no drag-and-drop or move-up/move-down logic. The `sectionOrder` array in customize settings is never updated.
+### Priority 1: AI "Tailor to Job Description" Panel
+- Add a new tab or panel in the "AI Tools" section (which currently shows "Coming soon")
+- User pastes a job description → edge function analyzes keyword overlap with current resume
+- Returns: missing keywords, suggested bullet point rewrites, match percentage
+- Reuses existing `resume-ai` edge function with a new `action: "tailor"` mode
+- UI: Split panel with JD on left, suggestions on right, one-click "Apply" buttons
 
-### 2. Subtitle Style & Placement — Working in Code, But May Not Visually Distinguish
-Looking at the preview code (lines 419-536), subtitle style and placement ARE read from settings. However, there are two issues:
-- The `subtitleStyle` "italic" sets `fontStyle: "italic"` correctly, but "bold" sets `fontWeight: 700` while the subtitle text already inherits from a parent. The visual difference may be too subtle.
-- The "same-line" placement renders the subtitle after a " · " separator inside the same `<p>` tag — this works but the subtitle uses `var(--resume-subtitle)` color which may blend in if accent colors aren't applied.
+### Priority 2: Resume Completeness Score Widget
+- Floating widget in the editor sidebar showing real-time completion percentage
+- Scoring rules: has summary (+10), has 2+ experience entries (+20), all entries have descriptions (+15), dates filled (+10), contact info complete (+15), skills section exists (+10), quantified achievements detected (+20)
+- Visual: circular progress ring with percentage, expandable checklist of what's missing
+- Lives above the "Add Content" button in the Content tab
 
-After closer inspection, the code logic is correct. The issue is likely that the **accent color toggles aren't wired** (see #5 below), so subtitle color never changes, making style changes hard to see.
+### Priority 3: Populate the "AI Tools" Tab
+- Currently renders "AI Tools — Coming soon" placeholder
+- Build out with: "Tailor to Job" (above), "Generate Summary from Experience", "Suggest Skills", "Optimize Bullet Points (batch)"
+- Each tool card shows a description, input area, and results
 
-### 3. List Style — CSS Pseudo-Element Broken
-The hyphen list style uses `[&_ul_li]:before:content-['–_']` in a Tailwind class string. This complex nested arbitrary selector likely doesn't compile correctly in Tailwind JIT. The fix is to use inline styles or a `<style>` tag instead of Tailwind arbitrary selectors for the hyphen case.
+### Priority 4: Real-time Word Count per Section
+- Add a small `<span>` below each `RichTextEditor` showing word count and bullet point count
+- Highlight in amber if too long (>150 words per entry) or too short (<20 words)
+- Lightweight: computed from the editor's text content on each change
 
-### 4. Colors — Accent Apply Checkboxes Not Wired
-This is the biggest bug. The preview's `cssVars` (lines 588-604) always uses the explicit color values (`nameColor`, `headingsColor`, etc.) and **never checks** the `accentApply*` flags. For example:
-- `--resume-name` always = `nameColor` — should be `accentColor` when `accentApplyName` is true
-- `--resume-headings` always = `headingsColor` — should be `accentColor` when `accentApplyHeadings` is true  
-- Same for dates, title, subtitle, icons
-
-## Plan
-
-### Fix 1: Section Reorder (CustomizePanel.tsx)
-Add move-up / move-down arrow buttons to each section row. On click, update `sectionOrder` in customize settings. No external drag-and-drop library needed — simple array reorder with arrow buttons.
-
-### Fix 2: Wire Accent Color Application (ResumePreview.tsx)
-Update the `cssVars` computation to check each `accentApply*` flag:
-```
-"--resume-name": accentApplyName ? accentColor : nameColor
-"--resume-headings": accentApplyHeadings ? accentColor : headingsColor
-"--resume-dates": accentApplyDates ? accentColor : datesColor
-"--resume-title": accentApplyTitle ? accentColor : titleColor
-"--resume-subtitle": accentApplySubtitle ? accentColor : subtitleColor
-```
-
-### Fix 3: Fix List Style Rendering (ResumePreview.tsx)
-Replace the Tailwind arbitrary class approach for hyphen/none list styles with a scoped `<style>` tag or inline approach using a unique class name per section, ensuring the hyphen `::before` pseudo-element renders correctly.
+### Priority 5: Click-to-Edit on Preview (Inline Editing)
+- When user clicks text on the A4 preview, show a floating input/textarea positioned over the clicked element
+- On blur/enter, update the corresponding field in the data model
+- Start with simple fields only: job title, company name, degree, institution
+- More complex than other items; implement after the above
 
 ### Files to Edit
-- `src/components/resume-builder/CustomizePanel.tsx` — section reorder buttons
-- `src/components/resume-builder/ResumePreview.tsx` — accent color wiring + list style fix
+- `src/pages/ResumeBuilder.tsx` — Add completeness widget, wire AI Tools tab
+- `src/components/resume-builder/ResumeTopNav.tsx` — No changes needed
+- `src/components/resume-builder/RichTextEditor.tsx` — Add word count display
+- `supabase/functions/resume-ai/index.ts` — Add `tailor` action for JD matching
+- New: `src/components/resume-builder/CompletenessScore.tsx` — Score widget component
+- New: `src/components/resume-builder/AiToolsPanel.tsx` — Full AI tools tab content
+- New: `src/components/resume-builder/TailorToJob.tsx` — JD tailoring panel
+
+### Implementation Order
+1. Completeness score widget (standalone, no backend needed)
+2. Word count on RichTextEditor (small change)
+3. AI Tools tab with Tailor to Job (needs edge function update)
+4. Click-to-edit on preview (complex, last)
 

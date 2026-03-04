@@ -430,14 +430,21 @@ function renderSectionEntries(section: ResumeSection, customize?: CustomizeSetti
 
     const listClass = listSt === "bullet"
       ? "[&_ul]:list-disc [&_ul]:pl-[5mm]"
-      : listSt === "hyphen"
-        ? "[&_ul]:pl-[5mm] [&_ul_li]:before:content-['–_'] [&_ul]:list-none"
-        : "[&_ul]:list-none [&_ul]:pl-0";
+      : listSt === "none"
+        ? "[&_ul]:list-none [&_ul]:pl-0"
+        : "[&_ul]:list-none [&_ul]:pl-[5mm]";
+
+    // For hyphen style, we inject a scoped <style> since Tailwind can't handle ::before pseudo-elements reliably
+    const hyphenStyleId = `hyphen-${section.id}`;
+    const hyphenStyle = listSt === "hyphen" ? (
+      <style>{`.${hyphenStyleId} ul li::before { content: "–  "; position: absolute; left: 0; } .${hyphenStyleId} ul li { position: relative; padding-left: 3mm; }`}</style>
+    ) : null;
 
     const entryGap = layout === "compact" ? "1.6mm" : "2.8mm";
 
     return (
-      <div className="mt-[1mm]" style={{ display: "flex", flexDirection: "column", gap: entryGap }}>
+      <div className={`mt-[1mm] ${listSt === "hyphen" ? hyphenStyleId : ""}`} style={{ display: "flex", flexDirection: "column", gap: entryGap }}>
+        {hyphenStyle}
         {section.entries.map((entry) => {
           const f = entry.fields;
           const hasAny = Object.values(f).some(Boolean);
@@ -594,11 +601,11 @@ export const A4Page = React.memo(function A4Page({
         "--resume-margin-y": `${c?.marginY ?? 16}mm`,
         "--resume-section-spacing": `${c?.sectionSpacing ?? 5}mm`,
         "--resume-accent": c?.accentColor ?? "#1e293b",
-        "--resume-name": c?.nameColor ?? "#111827",
-        "--resume-title": c?.titleColor ?? "#6B7280",
-        "--resume-headings": c?.headingsColor ?? "#111827",
-        "--resume-dates": c?.datesColor ?? "#6B7280",
-        "--resume-subtitle": c?.subtitleColor ?? "#6B7280",
+        "--resume-name": c?.accentApplyName ? (c?.accentColor ?? "#1e293b") : (c?.nameColor ?? "#111827"),
+        "--resume-title": c?.accentApplyTitle ? (c?.accentColor ?? "#1e293b") : (c?.titleColor ?? "#6B7280"),
+        "--resume-headings": c?.accentApplyHeadings ? (c?.accentColor ?? "#1e293b") : (c?.headingsColor ?? "#111827"),
+        "--resume-dates": c?.accentApplyDates ? (c?.accentColor ?? "#1e293b") : (c?.datesColor ?? "#6B7280"),
+        "--resume-subtitle": c?.accentApplySubtitle ? (c?.accentColor ?? "#1e293b") : (c?.subtitleColor ?? "#6B7280"),
         "--resume-body": c?.nameColor ?? "#374151",
       }) as React.CSSProperties,
     [c]

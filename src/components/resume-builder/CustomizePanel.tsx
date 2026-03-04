@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { cn } from "@/lib/utils";
-import { Minus, Plus, Check, Link, ExternalLink, Smile, Circle, AlignLeft, AlignCenter, AlignRight, GripVertical, Camera } from "lucide-react";
+import { Minus, Plus, Check, Link, ExternalLink, Smile, Circle, AlignLeft, AlignCenter, AlignRight, GripVertical, Camera, ChevronUp, ChevronDown } from "lucide-react";
 import { Slider } from "@/components/ui/slider";
 import { Switch } from "@/components/ui/switch";
 import { Checkbox } from "@/components/ui/checkbox";
@@ -328,21 +328,7 @@ function LayoutTab({ settings, onChange, sections }: { settings: CustomizeSettin
         )}
       </SettingCard>
 
-      <SettingCard title="Change Section Layout">
-        <div className="space-y-1">
-          {sections.length > 0 ? sections.map((s) => (
-            <div key={s.id} className="flex items-center gap-2 bg-gray-50 rounded-lg px-3 py-2 border border-gray-100">
-              <GripVertical className="w-4 h-4 text-gray-300 cursor-grab" />
-              <span className="text-xs font-semibold uppercase tracking-wide" style={{ color: B.text }}>{s.title}</span>
-              {(settings.columns === "two" || settings.columns === "mix") && (
-                <span className="ml-auto text-[10px] bg-gray-100 px-2 py-0.5 rounded-full" style={{ color: B.textSec }}>Main</span>
-              )}
-            </div>
-          )) : (
-            <p className="text-xs py-2" style={{ color: B.textSec }}>Add sections in the Content tab first</p>
-          )}
-        </div>
-      </SettingCard>
+      <SectionReorderCard settings={settings} onChange={onChange} sections={sections} />
 
       <SettingCard title="Spacing">
         <div className="space-y-5">
@@ -959,5 +945,64 @@ function SectionsTab({ settings, onChange, sections }: { settings: CustomizeSett
         </div>
       </SettingCard>
     </>
+  );
+}
+
+/* ── Section Reorder Card ──────────────────────────────────── */
+function SectionReorderCard({ settings, onChange, sections }: { settings: CustomizeSettings; onChange: (u: Partial<CustomizeSettings>) => void; sections: ResumeData["sections"] }) {
+  // Build ordered list: use sectionOrder if set, otherwise section natural order
+  const order = settings.sectionOrder?.length
+    ? settings.sectionOrder.filter((id) => sections.some((s) => s.id === id))
+    : sections.map((s) => s.id);
+
+  // Add any sections not yet in the order
+  const allIds = sections.map((s) => s.id);
+  const fullOrder = [...order, ...allIds.filter((id) => !order.includes(id))];
+
+  const sectionMap = new Map(sections.map((s) => [s.id, s]));
+
+  const move = (idx: number, dir: -1 | 1) => {
+    const newOrder = [...fullOrder];
+    const targetIdx = idx + dir;
+    if (targetIdx < 0 || targetIdx >= newOrder.length) return;
+    [newOrder[idx], newOrder[targetIdx]] = [newOrder[targetIdx], newOrder[idx]];
+    onChange({ sectionOrder: newOrder });
+  };
+
+  return (
+    <SettingCard title="Change Section Layout">
+      <div className="space-y-1">
+        {fullOrder.length > 0 ? fullOrder.map((id, idx) => {
+          const s = sectionMap.get(id);
+          if (!s) return null;
+          return (
+            <div key={s.id} className="flex items-center gap-2 bg-gray-50 rounded-lg px-3 py-2 border border-gray-100">
+              <div className="flex flex-col gap-0.5">
+                <button
+                  onClick={() => move(idx, -1)}
+                  disabled={idx === 0}
+                  className="w-4 h-4 flex items-center justify-center rounded hover:bg-gray-200 transition-colors disabled:opacity-30"
+                >
+                  <ChevronUp className="w-3 h-3" style={{ color: B.textSec }} />
+                </button>
+                <button
+                  onClick={() => move(idx, 1)}
+                  disabled={idx === fullOrder.length - 1}
+                  className="w-4 h-4 flex items-center justify-center rounded hover:bg-gray-200 transition-colors disabled:opacity-30"
+                >
+                  <ChevronDown className="w-3 h-3" style={{ color: B.textSec }} />
+                </button>
+              </div>
+              <span className="text-xs font-semibold uppercase tracking-wide" style={{ color: B.text }}>{s.title}</span>
+              {(settings.columns === "two" || settings.columns === "mix") && (
+                <span className="ml-auto text-[10px] bg-gray-100 px-2 py-0.5 rounded-full" style={{ color: B.textSec }}>Main</span>
+              )}
+            </div>
+          );
+        }) : (
+          <p className="text-xs py-2" style={{ color: B.textSec }}>Add sections in the Content tab first</p>
+        )}
+      </div>
+    </SettingCard>
   );
 }
