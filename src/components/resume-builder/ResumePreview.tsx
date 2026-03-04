@@ -706,7 +706,9 @@ export const A4Page = React.memo(function A4Page({
     [c]
   );
 
-  const iconProps = { className: "w-[3mm] h-[3mm]", strokeWidth: 1.8 };
+  const headerIconStyle = c?.headerIconStyle || "none";
+  const iconFill = headerIconStyle === "filled" ? "currentColor" : "none";
+  const iconProps = { className: "w-[3mm] h-[3mm]", strokeWidth: 1.8, fill: iconFill };
 
   const contactItems = useMemo(() => {
     const extras = p.extras || [];
