@@ -102,7 +102,7 @@ function SliderRow({ label, value, min, max, step, unit, onChange }: { label: st
           <button onClick={() => onChange(Math.max(min, +(value - step).toFixed(2)))} className="w-6 h-6 flex items-center justify-center rounded-md bg-gray-100 hover:bg-gray-200 transition-colors" style={{ color: B.textSec }}>
             <Minus className="w-3 h-3" />
           </button>
-          <span className="text-xs font-mono w-14 text-center" style={{ color: B.text }}>{value}{unit}</span>
+          <span className="text-xs w-14 text-center" style={{ color: B.text }}>{value}{unit}</span>
           <button onClick={() => onChange(Math.min(max, +(value + step).toFixed(2)))} className="w-6 h-6 flex items-center justify-center rounded-md bg-gray-100 hover:bg-gray-200 transition-colors" style={{ color: B.textSec }}>
             <Plus className="w-3 h-3" />
           </button>
