@@ -295,32 +295,21 @@ const ResumeBuilder = () => {
   const store = useResumeStore();
   const { data, customize, updateCustomize, updatePersonalDetails, setSections, updateSection, removeSection } = store;
 
-  /* ── Section drag-and-drop reordering ────────────────── */
-  const sectionDragIdx = useRef<number | null>(null);
-  const [sectionOverIdx, setSectionOverIdx] = useState<number | null>(null);
+  /* ── Section drag-and-drop reordering (dnd-kit) ────────── */
+  const sensors = useSensors(
+    useSensor(PointerSensor, { activationConstraint: { distance: 5 } }),
+    useSensor(KeyboardSensor)
+  );
+  const sectionIds = useMemo(() => data.sections.map(s => s.id), [data.sections]);
 
-  const handleSectionDragStart = (idx: number) => (e: React.DragEvent) => {
-    sectionDragIdx.current = idx;
-    e.dataTransfer.effectAllowed = "move";
-  };
-  const handleSectionDragOver = (idx: number) => (e: React.DragEvent) => {
-    e.preventDefault();
-    e.dataTransfer.dropEffect = "move";
-    setSectionOverIdx(idx);
-  };
-  const handleSectionDrop = (idx: number) => (e: React.DragEvent) => {
-    e.preventDefault();
-    const from = sectionDragIdx.current;
-    if (from === null || from === idx) { setSectionOverIdx(null); return; }
+  const handleDragEnd = useCallback((event: DragEndEvent) => {
+    const { active, over } = event;
+    if (!over || active.id === over.id) return;
     pushHistory();
-    const updated = [...data.sections];
-    const [moved] = updated.splice(from, 1);
-    updated.splice(idx, 0, moved);
-    setSections(updated);
-    sectionDragIdx.current = null;
-    setSectionOverIdx(null);
-  };
-  const handleSectionDragEnd = () => { sectionDragIdx.current = null; setSectionOverIdx(null); };
+    const oldIndex = data.sections.findIndex(s => s.id === active.id);
+    const newIndex = data.sections.findIndex(s => s.id === over.id);
+    setSections(arrayMove(data.sections, oldIndex, newIndex));
+  }, [data.sections, pushHistory, setSections]);
 
   const [activeTab, setActiveTab] = useState("content");
   const [modalOpen, setModalOpen] = useState(false);
