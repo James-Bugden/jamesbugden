@@ -155,7 +155,8 @@ const NAME_SIZES: Record<string, string> = { xs: "14pt", s: "20pt", m: "24pt", l
 const TITLE_SIZES: Record<string, string> = { s: "9pt", m: "11pt", l: "13pt" };
 
 /* ── The A4 page content ───────────────────────────────────── */
-const A4Page = React.memo(function A4Page({ data, customize, onEditSection }: { data: ResumeData; customize?: CustomizeSettings; onEditSection?: (id: string) => void }) {
+export { getPageDims };
+export const A4Page = React.memo(function A4Page({ data, customize, onEditSection }: { data: ResumeData; customize?: CustomizeSettings; onEditSection?: (id: string) => void }) {
   const { personalDetails: p, sections } = data;
   const c = customize;
   const dims = getPageDims(c?.pageFormat);
