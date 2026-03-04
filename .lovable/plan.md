@@ -1,48 +1,33 @@
 
 
-## Resume Builder Feature Improvements
+## Fix: Page Break Margins and Per-Page Footer Spacing
 
-### Priority 1: AI "Tailor to Job Description" Panel
-- Add a new tab or panel in the "AI Tools" section (which currently shows "Coming soon")
-- User pastes a job description → edge function analyzes keyword overlap with current resume
-- Returns: missing keywords, suggested bullet point rewrites, match percentage
-- Reuses existing `resume-ai` edge function with a new `action: "tailor"` mode
-- UI: Split panel with JD on left, suggestions on right, one-click "Apply" buttons
+### Problem
+Content flows right up to the footer area because `usablePerPage` doesn't reserve space for the footer. On page 2+, content starts too close to the top. The reference image shows clear whitespace between content and footer on every page.
 
-### Priority 2: Resume Completeness Score Widget
-- Floating widget in the editor sidebar showing real-time completion percentage
-- Scoring rules: has summary (+10), has 2+ experience entries (+20), all entries have descriptions (+15), dates filled (+10), contact info complete (+15), skills section exists (+10), quantified achievements detected (+20)
-- Visual: circular progress ring with percentage, expandable checklist of what's missing
-- Lives above the "Add Content" button in the Content tab
+### Root Cause
+- `usablePerPage = dims.hPX - 2 * marginYPX` — this only accounts for top/bottom page margins but doesn't reserve space for the footer text line
+- The footer is absolutely positioned at `bottom: marginYPX`, but content can extend into that same space
+- Page 2+ gets `paddingTop: marginYPX` but has no bottom content cutoff adjustment
 
-### Priority 3: Populate the "AI Tools" Tab
-- Currently renders "AI Tools — Coming soon" placeholder
-- Build out with: "Tailor to Job" (above), "Generate Summary from Experience", "Suggest Skills", "Optimize Bullet Points (batch)"
-- Each tool card shows a description, input area, and results
+### Fix in `src/components/resume-builder/ResumePreview.tsx`
 
-### Priority 4: Real-time Word Count per Section
-- Add a small `<span>` below each `RichTextEditor` showing word count and bullet point count
-- Highlight in amber if too long (>150 words per entry) or too short (<20 words)
-- Lightweight: computed from the editor's text content on each change
+1. **Calculate footer reserve height** (~10mm ≈ 38px) when any footer option is enabled
+2. **Subtract footer reserve from `usablePerPage`** so content stops before the footer zone on every page
+3. **Adjust the page-slice `translateY` offset** for pages 2+ to account for the reduced usable area
+4. **Position footer lower** — move it to a fixed bottom position inside the page margin, below the content cutoff
 
-### Priority 5: Click-to-Edit on Preview (Inline Editing)
-- When user clicks text on the A4 preview, show a floating input/textarea positioned over the clicked element
-- On blur/enter, update the corresponding field in the data model
-- Start with simple fields only: job title, company name, degree, institution
-- More complex than other items; implement after the above
+### Key changes (single file):
 
-### Files to Edit
-- `src/pages/ResumeBuilder.tsx` — Add completeness widget, wire AI Tools tab
-- `src/components/resume-builder/ResumeTopNav.tsx` — No changes needed
-- `src/components/resume-builder/RichTextEditor.tsx` — Add word count display
-- `supabase/functions/resume-ai/index.ts` — Add `tailor` action for JD matching
-- New: `src/components/resume-builder/CompletenessScore.tsx` — Score widget component
-- New: `src/components/resume-builder/AiToolsPanel.tsx` — Full AI tools tab content
-- New: `src/components/resume-builder/TailorToJob.tsx` — JD tailoring panel
+```
+// Before:
+const usablePerPage = dims.hPX - 2 * marginYPX;
 
-### Implementation Order
-1. Completeness score widget (standalone, no backend needed)
-2. Word count on RichTextEditor (small change)
-3. AI Tools tab with Tailor to Job (needs edge function update)
-4. Click-to-edit on preview (complex, last)
+// After:
+const showFooter = customize?.showPageNumbers || customize?.showFooterEmail || customize?.showFooterName;
+const footerReservePX = showFooter ? 10 * PX_PER_MM : 0;
+const usablePerPage = dims.hPX - 2 * marginYPX - footerReservePX;
+```
+
+The footer stays absolutely positioned at the bottom margin. Content simply stops earlier on each page, creating the whitespace gap visible in the reference image.
 
