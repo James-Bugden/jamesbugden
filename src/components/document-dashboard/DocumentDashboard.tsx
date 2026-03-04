@@ -73,9 +73,14 @@ export function DocumentDashboard({ onOpenDocument, onImport }: DocumentDashboar
 
   useEffect(() => {
     if (!menuOpenId) return;
-    const handler = () => setMenuOpenId(null);
-    window.addEventListener("click", handler);
-    return () => window.removeEventListener("click", handler);
+    const handler = (e: MouseEvent) => {
+      const target = e.target as HTMLElement;
+      if (!target.closest('[data-menu-container]')) {
+        setMenuOpenId(null);
+      }
+    };
+    document.addEventListener("mousedown", handler);
+    return () => document.removeEventListener("mousedown", handler);
   }, [menuOpenId]);
 
   const handleCreateFromTemplate = (templateId: string) => {
