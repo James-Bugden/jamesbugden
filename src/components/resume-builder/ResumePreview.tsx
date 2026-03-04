@@ -422,8 +422,8 @@ function renderSectionEntries(section: ResumeSection, customize?: CustomizeSetti
     const subPlace = c?.subtitlePlacement ?? "next-line";
     const listSt = c?.listStyle ?? "bullet";
 
-    const titleFontSize = { xs: "8pt", s: "8.5pt", m: "9pt", l: "10pt" }[tsSize] ?? "9pt";
-    const subtitleFontSize = { xs: "7pt", s: "7.5pt", m: "8pt", l: "9pt" }[tsSize] ?? "8pt";
+    const titleFontSize = entryTitlePt(base, tsSize);
+    const subtitleFontSize = entrySubtitlePt(base, tsSize);
 
     const subtitleFW = subStyle === "bold" ? 700 : 400;
     const subtitleFS = subStyle === "italic" ? "italic" : "normal";
