@@ -929,7 +929,7 @@ function SectionsTab({ settings, onChange, sections }: { settings: CustomizeSett
               />
             </div>
             <FieldLabel>Employment History</FieldLabel>
-            <CheckboxRow label="Group promotions" checked={false} onChange={() => {}} />
+            <CheckboxRow label="Group promotions" checked={settings.groupPromotions ?? false} onChange={(v) => onChange({ groupPromotions: v })} />
           </>
         ) : (
           <p className="text-xs" style={{ color: B.textSec }}>Add an Experience section first</p>
