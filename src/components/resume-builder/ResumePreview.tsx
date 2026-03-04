@@ -257,7 +257,7 @@ function renderSectionEntries(section: ResumeSection, customize?: CustomizeSetti
 
             return (
               <div key={`${label}-${i}`} className="flex items-center gap-[2mm]">
-                <span className="w-[26mm]" style={{ fontSize: "8pt", color: "var(--resume-body)" }}>{label}</span>
+                <span className="w-[26mm]" style={{ fontSize: smallPt(base), color: "var(--resume-body)" }}>{label}</span>
                 <div className="flex-1 h-[1.6mm] rounded-full overflow-hidden" style={{ backgroundColor: "#e5e7eb" }}>
                   <div className="h-full rounded-full" style={{ width: `${level * 20}%`, backgroundColor: "var(--resume-accent)" }} />
                 </div>
