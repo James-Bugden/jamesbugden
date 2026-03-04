@@ -38,9 +38,33 @@ interface ResumePreviewProps {
   onEditSection?: (sectionId: string) => void;
 }
 
+/* ── Relative font-size helpers ──────────────────────────────── */
+// Every text size is derived from the base slider value (customize.fontSize, default 10.5pt).
+// Name/title sizes are absolute (user-controlled separately).
 const NAME_SIZES: Record<string, string> = { xs: "14pt", s: "20pt", m: "24pt", l: "28pt", xl: "32pt" };
 const TITLE_SIZES: Record<string, string> = { s: "9pt", m: "11pt", l: "13pt" };
-const HEADING_SIZES: Record<string, string> = { s: "9pt", m: "10pt", l: "12pt", xl: "14pt" };
+
+function headingSizePt(base: number, size: string): string {
+  const offsets: Record<string, number> = { s: -1.5, m: -0.5, l: 1.5, xl: 3.5 };
+  return `${base + (offsets[size] ?? -0.5)}pt`;
+}
+
+function bodyPt(base: number): string { return `${base - 1.5}pt`; }
+function datePt(base: number): string { return `${base - 2.5}pt`; }
+function contactPt(base: number): string { return `${base - 2.5}pt`; }
+
+function entryTitlePt(base: number, size: string): string {
+  const offsets: Record<string, number> = { xs: -2.5, s: -2, m: -1.5, l: -0.5 };
+  return `${base + (offsets[size] ?? -1.5)}pt`;
+}
+
+function entrySubtitlePt(base: number, size: string): string {
+  const offsets: Record<string, number> = { xs: -3.5, s: -3, m: -2.5, l: -1.5 };
+  return `${base + (offsets[size] ?? -2.5)}pt`;
+}
+
+function skillPt(base: number): string { return `${base - 2}pt`; }
+function smallPt(base: number): string { return `${base - 3}pt`; }
 
 function safeData(data?: ResumeData): ResumeData {
   return {
@@ -75,13 +99,13 @@ function isMeaningfulHtml(html?: string) {
   return plain.length > 0;
 }
 
-function HtmlBlock({ html, className }: { html?: string; className?: string }) {
+function HtmlBlock({ html, className, fontSize }: { html?: string; className?: string; fontSize?: string }) {
   if (!isMeaningfulHtml(html)) return null;
 
   return (
     <div
       className={className}
-      style={{ fontSize: "9pt", lineHeight: 1.5, color: "var(--resume-body)" }}
+      style={{ fontSize: fontSize || "inherit", lineHeight: 1.5, color: "var(--resume-body)" }}
       dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(html || "") }}
     />
   );
@@ -104,9 +128,9 @@ function SectionEditOverlay({ sectionId, onEdit }: { sectionId: string; onEdit?:
   );
 }
 
-function SectionHeading({ title, customize }: { title: string; customize?: CustomizeSettings }) {
+function SectionHeading({ title, customize, baseFontSize }: { title: string; customize?: CustomizeSettings; baseFontSize: number }) {
   const style = customize?.headingStyle || "underline";
-  const fontSize = HEADING_SIZES[customize?.headingSize || "m"];
+  const fontSize = headingSizePt(baseFontSize, customize?.headingSize || "m");
   const uppercase = customize?.headingUppercase !== false;
 
   const textStyle: React.CSSProperties = {
@@ -192,7 +216,7 @@ function hasContent(section: ResumeSection): boolean {
   });
 }
 
-function renderSectionEntries(section: ResumeSection, customize?: CustomizeSettings) {
+function renderSectionEntries(section: ResumeSection, customize?: CustomizeSettings, base: number = 10.5) {
   const c = customize;
 
   if (section.type === "summary") {
@@ -212,7 +236,7 @@ function renderSectionEntries(section: ResumeSection, customize?: CustomizeSetti
           {items.map((item, i) => (
             <div key={`${item}-${i}`} className="flex items-center gap-[1.5mm]">
               <span className="w-[1.1mm] h-[1.1mm] rounded-full" style={{ backgroundColor: "var(--resume-accent)" }} />
-              <span style={{ fontSize: "8.5pt", color: "var(--resume-body)" }}>{item}</span>
+              <span style={{ fontSize: skillPt(base), color: "var(--resume-body)" }}>{item}</span>
             </div>
           ))}
         </div>
@@ -221,7 +245,7 @@ function renderSectionEntries(section: ResumeSection, customize?: CustomizeSetti
 
     if (layout === "compact") {
       const separator = section.separator === "pipe" ? " | " : section.separator === "comma" ? ", " : " · ";
-      return <p className="mt-[1.2mm]" style={{ fontSize: "8.5pt", color: "var(--resume-body)" }}>{items.join(separator)}</p>;
+      return <p className="mt-[1.2mm]" style={{ fontSize: skillPt(base), color: "var(--resume-body)" }}>{items.join(separator)}</p>;
     }
 
     if (layout === "level") {
@@ -233,7 +257,7 @@ function renderSectionEntries(section: ResumeSection, customize?: CustomizeSetti
 
             return (
               <div key={`${label}-${i}`} className="flex items-center gap-[2mm]">
-                <span className="w-[26mm]" style={{ fontSize: "8pt", color: "var(--resume-body)" }}>{label}</span>
+                <span className="w-[26mm]" style={{ fontSize: smallPt(base), color: "var(--resume-body)" }}>{label}</span>
                 <div className="flex-1 h-[1.6mm] rounded-full overflow-hidden" style={{ backgroundColor: "#e5e7eb" }}>
                   <div className="h-full rounded-full" style={{ width: `${level * 20}%`, backgroundColor: "var(--resume-accent)" }} />
                 </div>
@@ -251,7 +275,7 @@ function renderSectionEntries(section: ResumeSection, customize?: CustomizeSetti
             key={`${item}-${i}`}
             className="px-[2.5mm] py-[0.8mm] rounded-full"
             style={{
-              fontSize: "8.3pt",
+              fontSize: skillPt(base),
               color: "var(--resume-body)",
               backgroundColor: "color-mix(in srgb, var(--resume-accent) 10%, white)",
               border: "0.3mm solid color-mix(in srgb, var(--resume-accent) 25%, white)",
@@ -278,7 +302,7 @@ function renderSectionEntries(section: ResumeSection, customize?: CustomizeSetti
             const lvl = proficiency ? Math.min(5, Math.max(1, ["beginner","elementary","intermediate","upper-intermediate","advanced","native"].indexOf(proficiency.toLowerCase()) + 1 || 3)) : 3;
             return (
               <div key={entry.id} className="flex items-center gap-[2mm]">
-                <span className="w-[26mm]" style={{ fontSize: "8pt", color: "var(--resume-body)", fontWeight: 600 }}>{language}</span>
+                <span className="w-[26mm]" style={{ fontSize: smallPt(base), color: "var(--resume-body)", fontWeight: 600 }}>{language}</span>
                 <div className="flex-1 h-[1.6mm] rounded-full overflow-hidden" style={{ backgroundColor: "#e5e7eb" }}>
                   <div className="h-full rounded-full" style={{ width: `${lvl * 20}%`, backgroundColor: "var(--resume-accent)" }} />
                 </div>
@@ -288,7 +312,7 @@ function renderSectionEntries(section: ResumeSection, customize?: CustomizeSetti
 
           if (langDisplay === "compact") {
             return (
-              <span key={entry.id} style={{ fontSize: "8.5pt", color: "var(--resume-body)" }}>
+              <span key={entry.id} style={{ fontSize: skillPt(base), color: "var(--resume-body)" }}>
                 {language}{proficiency ? ` (${proficiency})` : ""}
               </span>
             );
@@ -300,7 +324,7 @@ function renderSectionEntries(section: ResumeSection, customize?: CustomizeSetti
                 key={entry.id}
                 className="inline-block px-[2.5mm] py-[0.8mm] rounded-full mr-[1.5mm]"
                 style={{
-                  fontSize: "8.3pt",
+                  fontSize: skillPt(base),
                   color: "var(--resume-body)",
                   backgroundColor: "color-mix(in srgb, var(--resume-accent) 10%, white)",
                   border: "0.3mm solid color-mix(in srgb, var(--resume-accent) 25%, white)",
@@ -314,8 +338,8 @@ function renderSectionEntries(section: ResumeSection, customize?: CustomizeSetti
           // grid (default)
           return (
             <div key={entry.id} className="flex items-center justify-between gap-[3mm]">
-              <span style={{ fontSize: "9pt", color: "var(--resume-body)", fontWeight: 600 }}>{language || "Language"}</span>
-              <span style={{ fontSize: "8pt", color: "var(--resume-dates)" }}>{proficiency}</span>
+              <span style={{ fontSize: bodyPt(base), color: "var(--resume-body)", fontWeight: 600 }}>{language || "Language"}</span>
+              <span style={{ fontSize: datePt(base), color: "var(--resume-dates)" }}>{proficiency}</span>
             </div>
           );
         })}
@@ -332,13 +356,13 @@ function renderSectionEntries(section: ResumeSection, customize?: CustomizeSetti
 
           return (
             <div key={entry.id}>
-              <p style={{ fontSize: "9pt", fontWeight: 700, color: "var(--resume-name)" }}>
+              <p style={{ fontSize: bodyPt(base), fontWeight: 700, color: "var(--resume-name)" }}>
                 {f.name || "Reference"}
               </p>
-              <p style={{ fontSize: "8pt", color: "var(--resume-subtitle)" }}>
+              <p style={{ fontSize: datePt(base), color: "var(--resume-subtitle)" }}>
                 {[f.position, f.company].filter(Boolean).join(" · ")}
               </p>
-              <p style={{ fontSize: "8pt", color: "var(--resume-dates)" }}>
+              <p style={{ fontSize: datePt(base), color: "var(--resume-dates)" }}>
                 {[f.phone, f.email].filter(Boolean).join(" · ")}
               </p>
             </div>
@@ -358,7 +382,7 @@ function renderSectionEntries(section: ResumeSection, customize?: CustomizeSetti
         <HtmlBlock html={f.description} className="[&_p]:mb-[1mm] [&_ul]:list-disc [&_ul]:pl-[5mm]" />
         {f.signature && <img src={f.signature} alt="Signature" className="h-[12mm] mt-[2mm]" />}
         {(f.fullName || f.place || f.date) && (
-          <p style={{ fontSize: "8.5pt", color: "var(--resume-subtitle)", marginTop: "2mm" }}>
+          <p style={{ fontSize: skillPt(base), color: "var(--resume-subtitle)", marginTop: "2mm" }}>
             {[f.fullName, f.place, f.date].filter(Boolean).join(" · ")}
           </p>
         )}
@@ -398,8 +422,8 @@ function renderSectionEntries(section: ResumeSection, customize?: CustomizeSetti
     const subPlace = c?.subtitlePlacement ?? "next-line";
     const listSt = c?.listStyle ?? "bullet";
 
-    const titleFontSize = { xs: "8pt", s: "8.5pt", m: "9pt", l: "10pt" }[tsSize] ?? "9pt";
-    const subtitleFontSize = { xs: "7pt", s: "7.5pt", m: "8pt", l: "9pt" }[tsSize] ?? "8pt";
+    const titleFontSize = entryTitlePt(base, tsSize);
+    const subtitleFontSize = entrySubtitlePt(base, tsSize);
 
     const subtitleFW = subStyle === "bold" ? 700 : 400;
     const subtitleFS = subStyle === "italic" ? "italic" : "normal";
@@ -460,7 +484,7 @@ function renderSectionEntries(section: ResumeSection, customize?: CustomizeSetti
                 {f.location && (
                   <p style={{ fontSize: subtitleFontSize, color: "var(--resume-subtitle)", fontWeight: subtitleFW, fontStyle: subtitleFS, marginTop: "0.5mm" }}>{f.location}</p>
                 )}
-                <HtmlBlock html={f.description} className={`mt-[1mm] [&_p]:mb-[1mm] ${listClass} [&_ol]:list-decimal [&_ol]:pl-[5mm] [&_li]:mb-[0.4mm] [&_a]:underline`} />
+                <HtmlBlock html={f.description} fontSize={bodyPt(base)} className={`mt-[1mm] [&_p]:mb-[1mm] ${listClass} [&_ol]:list-decimal [&_ol]:pl-[5mm] [&_li]:mb-[0.4mm] [&_a]:underline`} />
               </div>
             );
           }
@@ -479,7 +503,7 @@ function renderSectionEntries(section: ResumeSection, customize?: CustomizeSetti
                 {f.location && (
                   <p style={{ fontSize: subtitleFontSize, color: "var(--resume-subtitle)", fontStyle: "italic", marginTop: "0.3mm" }}>{f.location}</p>
                 )}
-                <HtmlBlock html={f.description} className={`mt-[1mm] [&_p]:mb-[1mm] ${listClass} [&_ol]:list-decimal [&_ol]:pl-[5mm] [&_li]:mb-[0.4mm] [&_a]:underline`} />
+                <HtmlBlock html={f.description} fontSize={bodyPt(base)} className={`mt-[1mm] [&_p]:mb-[1mm] ${listClass} [&_ol]:list-decimal [&_ol]:pl-[5mm] [&_li]:mb-[0.4mm] [&_a]:underline`} />
               </div>
             );
           }
@@ -528,6 +552,7 @@ function renderSectionEntries(section: ResumeSection, customize?: CustomizeSetti
 
               <HtmlBlock
                 html={f.description}
+                fontSize={bodyPt(base)}
                 className={`mt-[1mm] [&_p]:mb-[1mm] ${listClass} [&_ol]:list-decimal [&_ol]:pl-[5mm] [&_li]:mb-[0.4mm] [&_a]:underline`}
               />
             </div>
@@ -555,6 +580,7 @@ export const A4Page = React.memo(function A4Page({
   const p = safe.personalDetails;
   const c = customize;
   const dims = getPageDims(c?.pageFormat);
+  const baseFontSize = c?.fontSize ?? 10.5;
 
   const orderedSections = useMemo(() => normalizeSectionOrder(safe.sections, c), [safe.sections, c]);
   const enabledSections = orderedSections.filter((s) => !s.collapsed);
@@ -690,7 +716,7 @@ export const A4Page = React.memo(function A4Page({
             <div
               className="flex items-center flex-wrap mt-[2.5mm] gap-x-[4mm] gap-y-[1mm]"
               style={{
-                fontSize: "8pt",
+                fontSize: contactPt(baseFontSize),
                 color: c?.linkIconColor || "var(--resume-dates)",
                 justifyContent:
                   c?.headerAlign === "right" ? "flex-end" : c?.headerAlign === "left" ? "flex-start" : "center",
@@ -724,8 +750,8 @@ export const A4Page = React.memo(function A4Page({
                 return (
                   <section key={section.id} className="group relative" style={{ marginBottom: "var(--resume-section-spacing)" }}>
                     <SectionEditOverlay sectionId={section.id} onEdit={onEditSection} />
-                    {section.showHeading !== false && <SectionHeading title={title} customize={c} />}
-                    {renderSectionEntries(section, c)}
+                    {section.showHeading !== false && <SectionHeading title={title} customize={c} baseFontSize={baseFontSize} />}
+                    {renderSectionEntries(section, c, baseFontSize)}
                   </section>
                 );
               })}
@@ -740,8 +766,8 @@ export const A4Page = React.memo(function A4Page({
                 return (
                   <section key={section.id} className="group relative" style={{ marginBottom: "var(--resume-section-spacing)" }}>
                     <SectionEditOverlay sectionId={section.id} onEdit={onEditSection} />
-                    {section.showHeading !== false && <SectionHeading title={title} customize={c} />}
-                    {renderSectionEntries(section, c)}
+                    {section.showHeading !== false && <SectionHeading title={title} customize={c} baseFontSize={baseFontSize} />}
+                    {renderSectionEntries(section, c, baseFontSize)}
                   </section>
                 );
               })}
@@ -757,8 +783,8 @@ export const A4Page = React.memo(function A4Page({
               return (
                 <section key={section.id} className="group relative" style={{ marginBottom: "var(--resume-section-spacing)" }}>
                   <SectionEditOverlay sectionId={section.id} onEdit={onEditSection} />
-                  {section.showHeading !== false && <SectionHeading title={title} customize={c} />}
-                  {renderSectionEntries(section, c)}
+                  {section.showHeading !== false && <SectionHeading title={title} customize={c} baseFontSize={baseFontSize} />}
+                  {renderSectionEntries(section, c, baseFontSize)}
                 </section>
               );
             })}
@@ -782,7 +808,7 @@ export const A4Page = React.memo(function A4Page({
               display: "flex",
               justifyContent: "space-between",
               alignItems: "center",
-              fontSize: "7.5pt",
+              fontSize: smallPt(baseFontSize),
               color: "var(--resume-dates)",
             }}
           >
@@ -839,8 +865,16 @@ export const ResumePreview = React.memo(function ResumePreview({
       setPageCount(Math.max(1, Math.ceil(h / dims.hPX)));
     };
 
-    const t = setTimeout(measure, 0);
-    return () => clearTimeout(t);
+    // Use double rAF to ensure layout is complete before measuring
+    let raf1: number;
+    let raf2: number;
+    raf1 = requestAnimationFrame(() => {
+      raf2 = requestAnimationFrame(measure);
+    });
+    return () => {
+      cancelAnimationFrame(raf1);
+      cancelAnimationFrame(raf2);
+    };
   }, [data, customize, dims.hPX]);
 
   useEffect(() => {
@@ -863,6 +897,23 @@ export const ResumePreview = React.memo(function ResumePreview({
 
   return (
     <div ref={containerRef} className="h-full overflow-y-auto relative" style={{ backgroundColor: "#f3f4f6" }}>
+      {/* Hidden measurement div — outside the scaled container for accurate height */}
+      <div
+        ref={hiddenFlowRef}
+        id={pdfTargetId}
+        style={{
+          position: "absolute",
+          width: `${dims.wPX}px`,
+          left: 0,
+          top: 0,
+          opacity: 0,
+          pointerEvents: "none",
+          zIndex: -1,
+        }}
+      >
+        <A4Page data={data} customize={customize} />
+      </div>
+
       <div className="flex justify-center py-8 px-6">
         <div
           style={{
@@ -872,21 +923,6 @@ export const ResumePreview = React.memo(function ResumePreview({
             marginBottom: `${-(1 - scale) * totalScaledHeight}px`,
           }}
         >
-          <div
-            ref={hiddenFlowRef}
-            id={pdfTargetId}
-            style={{
-              position: "absolute",
-              width: `${dims.wPX}px`,
-              left: 0,
-              top: 0,
-              opacity: 0,
-              pointerEvents: "none",
-              zIndex: -1,
-            }}
-          >
-            <A4Page data={data} customize={customize} />
-          </div>
 
           {Array.from({ length: pageCount }, (_, i) => (
             <React.Fragment key={i}>

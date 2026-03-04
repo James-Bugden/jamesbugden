@@ -1,35 +1,48 @@
 
 
-## Diagnosis
+## Resume Builder Feature Improvements
 
-### 1. Font Size Slider Not Working
-The `--resume-font-size` CSS variable is set correctly on the A4Page container (line 565, 633), but nearly every text element inside overrides it with hardcoded `pt` values:
-- `HtmlBlock` hardcodes `fontSize: "9pt"` (line 84)
-- Entry titles use fixed maps: `{ xs: "8pt", s: "8.5pt", m: "9pt", l: "10pt" }`
-- Subtitles, dates, contact info all use fixed `8pt`, `8.5pt`, etc.
-- Section headings use `HEADING_SIZES` with fixed values
+### Priority 1: AI "Tailor to Job Description" Panel
+- Add a new tab or panel in the "AI Tools" section (which currently shows "Coming soon")
+- User pastes a job description → edge function analyzes keyword overlap with current resume
+- Returns: missing keywords, suggested bullet point rewrites, match percentage
+- Reuses existing `resume-ai` edge function with a new `action: "tailor"` mode
+- UI: Split panel with JD on left, suggestions on right, one-click "Apply" buttons
 
-Result: moving the font size slider changes the CSS variable but almost no visible text uses it.
+### Priority 2: Resume Completeness Score Widget
+- Floating widget in the editor sidebar showing real-time completion percentage
+- Scoring rules: has summary (+10), has 2+ experience entries (+20), all entries have descriptions (+15), dates filled (+10), contact info complete (+15), skills section exists (+10), quantified achievements detected (+20)
+- Visual: circular progress ring with percentage, expandable checklist of what's missing
+- Lives above the "Add Content" button in the Content tab
 
-### 2. Page Break Not Working
-The page-count measurement (lines 835-843) uses a hidden absolutely-positioned div that renders one `A4Page` with no height constraint, then divides `scrollHeight` by `dims.hPX`. This approach is correct in principle, but:
-- The hidden div sits inside the scaled container and may not measure accurately due to layout context
-- The `setTimeout(measure, 0)` may fire before fonts load or before the browser has fully laid out the content
-- Each visible page re-renders an independent `<A4Page>` component (line 911), which is wasteful and can cause slight measurement differences
+### Priority 3: Populate the "AI Tools" Tab
+- Currently renders "AI Tools — Coming soon" placeholder
+- Build out with: "Tailor to Job" (above), "Generate Summary from Experience", "Suggest Skills", "Optimize Bullet Points (batch)"
+- Each tool card shows a description, input area, and results
 
-## Plan
+### Priority 4: Real-time Word Count per Section
+- Add a small `<span>` below each `RichTextEditor` showing word count and bullet point count
+- Highlight in amber if too long (>150 words per entry) or too short (<20 words)
+- Lightweight: computed from the editor's text content on each change
 
-### Fix 1: Make font sizes relative to the base font size
-- Define a base size from the slider value (e.g. `customize.fontSize = 10.5`)
-- Compute all other sizes as offsets from this base, so changing the slider scales everything proportionally
-- Update `HtmlBlock`, entry title/subtitle maps, heading sizes, contact font size to all derive from the base
-- Example: if base is `10.5pt`, headings = `base + 1.5pt`, body/descriptions = `base - 1.5pt`, dates = `base - 2.5pt`
+### Priority 5: Click-to-Edit on Preview (Inline Editing)
+- When user clicks text on the A4 preview, show a floating input/textarea positioned over the clicked element
+- On blur/enter, update the corresponding field in the data model
+- Start with simple fields only: job title, company name, degree, institution
+- More complex than other items; implement after the above
 
-### Fix 2: Fix page break measurement
-- Move the hidden measurement div outside the scaled container so CSS transforms don't affect it
-- Use `requestAnimationFrame` instead of `setTimeout(_, 0)` for more reliable post-layout measurement
-- Add a `MutationObserver` or re-trigger measurement when font loads complete
+### Files to Edit
+- `src/pages/ResumeBuilder.tsx` — Add completeness widget, wire AI Tools tab
+- `src/components/resume-builder/ResumeTopNav.tsx` — No changes needed
+- `src/components/resume-builder/RichTextEditor.tsx` — Add word count display
+- `supabase/functions/resume-ai/index.ts` — Add `tailor` action for JD matching
+- New: `src/components/resume-builder/CompletenessScore.tsx` — Score widget component
+- New: `src/components/resume-builder/AiToolsPanel.tsx` — Full AI tools tab content
+- New: `src/components/resume-builder/TailorToJob.tsx` — JD tailoring panel
 
-### Files to edit
-- `src/components/resume-builder/ResumePreview.tsx` — both fixes apply here
+### Implementation Order
+1. Completeness score widget (standalone, no backend needed)
+2. Word count on RichTextEditor (small change)
+3. AI Tools tab with Tailor to Job (needs edge function update)
+4. Click-to-edit on preview (complex, last)
 
