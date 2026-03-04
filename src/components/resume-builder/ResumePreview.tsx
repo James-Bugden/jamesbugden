@@ -750,8 +750,8 @@ export const A4Page = React.memo(function A4Page({
                 return (
                   <section key={section.id} className="group relative" style={{ marginBottom: "var(--resume-section-spacing)" }}>
                     <SectionEditOverlay sectionId={section.id} onEdit={onEditSection} />
-                    {section.showHeading !== false && <SectionHeading title={title} customize={c} />}
-                    {renderSectionEntries(section, c)}
+                    {section.showHeading !== false && <SectionHeading title={title} customize={c} baseFontSize={baseFontSize} />}
+                    {renderSectionEntries(section, c, baseFontSize)}
                   </section>
                 );
               })}
