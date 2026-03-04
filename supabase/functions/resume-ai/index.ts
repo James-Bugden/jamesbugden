@@ -29,6 +29,27 @@ serve(async (req) => {
         systemPrompt = "You are a professional resume writer. Generate 3-4 bullet points for a resume entry based on the context provided. Use strong action verbs and quantify achievements where possible. Return ONLY HTML bullet list, no explanation.";
         userPrompt = context || "Generate professional resume bullet points for a typical role.";
         break;
+      case "tailor":
+        systemPrompt = `You are a resume optimization expert. The user will provide their resume text and a job description (in context). Analyze the match and return HTML with:
+1. <h3>Match Score</h3> with an estimated percentage match
+2. <h3>Missing Keywords</h3> with a bullet list of important keywords/skills from the JD not found in the resume
+3. <h3>Suggested Improvements</h3> with specific bullet point rewrites that incorporate missing keywords naturally
+Keep it actionable and concise.`;
+        userPrompt = text;
+        if (context) userPrompt += "\n\n--- JOB DESCRIPTION ---\n" + context;
+        break;
+      case "summary":
+        systemPrompt = "You are a professional resume writer. Based on the resume content provided, generate a compelling 2-3 sentence professional summary. Return ONLY the summary text as a paragraph, no HTML tags, no explanation.";
+        userPrompt = text;
+        break;
+      case "skills":
+        systemPrompt = "You are a career advisor. Based on the resume content, suggest 10-15 relevant skills the candidate should add. Return as an HTML bullet list grouped by category (Technical, Soft Skills, Tools). No explanation.";
+        userPrompt = text;
+        break;
+      case "optimize":
+        systemPrompt = "You are a professional resume writer. Take all the experience bullet points from this resume and rewrite them to be more impactful using strong action verbs and quantified results. Return the improved bullets as HTML, grouped by role/company. Preserve the original meaning.";
+        userPrompt = text;
+        break;
       default:
         throw new Error("Unknown action: " + action);
     }
