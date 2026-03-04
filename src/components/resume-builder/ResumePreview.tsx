@@ -902,29 +902,7 @@ export const A4Page = React.memo(function A4Page({
           </div>
         )}
 
-        {/* Footer */}
-        {(c?.showPageNumbers || c?.showFooterEmail || c?.showFooterName) && (
-          <div
-            style={{
-              position: "absolute",
-              bottom: "var(--resume-margin-y)",
-              left: "var(--resume-margin-x)",
-              right: "var(--resume-margin-x)",
-              display: "flex",
-              justifyContent: "space-between",
-              alignItems: "center",
-              fontSize: smallPt(baseFontSize),
-              color: "var(--resume-dates)",
-            }}
-          >
-            <span>{c?.showFooterName ? (p.fullName || "") : ""}</span>
-            <span>
-              {[
-                c?.showFooterEmail ? p.email : "",
-              ].filter(Boolean).join(" · ")}
-            </span>
-          </div>
-        )}
+        {/* Footer is rendered per-page in the paginated view — not here */}
       </div>
     </>
   );
@@ -1050,11 +1028,44 @@ export const ResumePreview = React.memo(function ResumePreview({
                   height: `${dims.hPX}px`,
                   overflow: "hidden",
                   backgroundColor: customize?.a4Background || "#ffffff",
+                  position: "relative",
                 }}
               >
-                <div style={{ width: `${dims.wPX}px`, transform: `translateY(${-i * usablePerPage}px)` }}>
+                <div style={{
+                  width: `${dims.wPX}px`,
+                  transform: `translateY(${-i * usablePerPage}px)`,
+                  ...(i > 0 ? { paddingTop: `${marginYPX}px` } : {}),
+                }}>
                   <A4Page data={data} customize={customize} onEditSection={onEditSection} />
                 </div>
+
+                {/* Per-page footer */}
+                {(customize?.showPageNumbers || customize?.showFooterEmail || customize?.showFooterName) && (
+                  <div
+                    style={{
+                      position: "absolute",
+                      bottom: `${marginYPX}px`,
+                      left: `${(customize?.marginX ?? 16) * PX_PER_MM}px`,
+                      right: `${(customize?.marginX ?? 16) * PX_PER_MM}px`,
+                      display: "flex",
+                      justifyContent: "space-between",
+                      alignItems: "center",
+                      fontSize: `${(customize?.fontSize ?? 10.5) - 3}pt`,
+                      color: customize?.datesColor || "#6B7280",
+                      fontFamily: customize?.bodyFont || "'Source Sans 3', sans-serif",
+                      backgroundColor: customize?.a4Background || "#ffffff",
+                      zIndex: 5,
+                    }}
+                  >
+                    <span>{customize?.showFooterName ? (data.personalDetails?.fullName || "") : ""}</span>
+                    <span>
+                      {[
+                        customize?.showFooterEmail ? data.personalDetails?.email : "",
+                        customize?.showPageNumbers ? `Page ${i + 1} of ${pageCount}` : "",
+                      ].filter(Boolean).join(" · ")}
+                    </span>
+                  </div>
+                )}
               </div>
             </React.Fragment>
           ))}
