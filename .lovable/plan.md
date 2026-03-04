@@ -1,41 +1,55 @@
 
 
-## Optimize About Section and Move Above FAQ
+## UI/UX Improvement Plan for /resume
 
-### Position Change
-Move the About section from after the FAQ to between the Salary Proof section and the FAQ. New order:
-1. Salary Proof (dark green `#2b4734`)
-2. **About** (dark green `#2b4734`)
-3. FAQ (white `#FFFFFF`)
+After reviewing the full resume builder codebase, here are the most impactful improvements I'd recommend, grouped by area:
 
-Since Salary Proof and About are both dark green, they'll flow together seamlessly. The About section then transitions into the white FAQ, which transitions into the dark green footer -- a clean alternation.
+---
 
-### Visual Fixes
+### 1. Dashboard Polish
+- **Live thumbnail previews** on document cards instead of generic FileText/Mail icons. Render a tiny version of the actual resume content (similar to the existing thumbnail navigator) so users can visually distinguish documents at a glance.
+- **Empty state illustration** when no documents exist yet — a friendly message with a visual prompt to create their first resume, rather than just showing the "New Resume" button in a grid.
+- **Last-edited relative time** ("2 hours ago" instead of "4 Mar 2026") for recency context.
 
-**1. Match the brand color**
-- Change background from `#1B3A2F` to `#2b4734` to match Salary Proof and Footer
-- Change text colors to match the Salary Proof palette: `#FBF7F0` for headings, `#A8B5A9` for body text
+### 2. Editor Left Panel
+- **Section drag-and-drop reordering** — sections in the Content tab can't be reordered (entries within a section can, but entire sections cannot). Add drag handles to section cards so users can reorder Experience above/below Education.
+- **Collapsible personal details card** — currently always visible and takes significant vertical space. Let it collapse like section cards do.
+- **Progress/completeness indicator** — a subtle progress bar or checklist showing how many sections have content (e.g., "4/6 sections filled") to guide users.
+- **Keyboard shortcut hints** — show small `⌘Z` / `⌘⇧Z` labels on the undo/redo bar, and `⌘S` near the save indicator.
 
-**2. Add a thin gold divider**
-- Add a horizontal gold line (`#D4930D`, 60px wide, 3px tall) between the Salary Proof section and the About section to visually separate them while keeping the same background
+### 3. Preview Panel
+- **Zoom controls** — add +/- zoom buttons or a zoom slider near the page indicator so users can zoom in on specific areas, rather than relying solely on auto-fit.
+- **Fixed thumbnail navigator overlap** — the thumbnail in the bottom-right can overlap with the mobile preview button and the undo/redo bar. Add proper spacing/positioning.
+- **Smoother page break indicators** — replace the plain text "Page Break" divider with a scissor icon or dashed line for a more professional feel.
 
-**3. Add gold section label**
-- Add a small uppercase tracking-wide gold label "ABOUT" above the name, matching how other sections use gold accents
+### 4. Mobile Experience
+- **Swipeable tab bar** for Content/Customize/AI Tools — currently tiny tap targets on mobile.
+- **Bottom sheet for Add Content** — already uses a Drawer, but the section grid could benefit from larger touch targets (bigger cards, more padding).
+- **Sticky "Preview" FAB position** — ensure it doesn't overlap with the undo/redo bar or branding footer.
 
-**4. Upgrade social links to pill badges**
-- Wrap LinkedIn and Threads links in semi-transparent pill containers (`rgba(255,255,255,0.08)` background, subtle border)
-- This matches the premium card styling used elsewhere on the page
+### 5. Customize Panel
+- **Search/filter for settings** — with 7 sub-tabs and many options, a search box at the top would help users find specific settings quickly (e.g., typing "font" highlights the relevant controls).
+- **Live preview thumbnails in template switcher** — the template buttons currently just show text labels. Show actual mini-preview renders of each template style.
+- **Reset to default button** per setting card — let users quickly revert individual sections to defaults.
 
-**5. Add a CTA button**
-- Add a gold "Book a 1-on-1 Session" button below the social row, linking to coaching
-- Uses the existing `btn-gold` styling from the design system
+### 6. General Polish
+- **Onboarding tooltip tour** — on first visit, show 3-4 tooltips pointing to key areas (Add Content, Customize tab, Download button, Preview hover-to-edit).
+- **Confirmation dialog for destructive actions** — deleting a section or removing an entry currently happens instantly. Add a brief confirmation or undo toast.
+- **Download format options** — currently only PDF. Add a dropdown to also export as DOCX (even if basic), which is commonly requested by job applicants.
 
-**6. Photo treatment**
-- Add a subtle gold border (`2px solid rgba(212,147,13,0.3)`) to match the hero photo's gold ring treatment
-- Keep both photos but tighten spacing
+---
 
-### Files to Edit
-- `src/components/AboutSection.tsx` -- All visual updates
-- `src/components/AboutSectionZhTw.tsx` -- Same changes, Chinese text
-- `src/pages/IndexExperiment.tsx` -- Move About LazySection above FAQ
-- `src/pages/IndexExperimentZhTw.tsx` -- Same reorder
+### Recommended Priority (highest impact, lowest effort first)
+
+1. **Section drag-and-drop reordering** — high user value, moderate effort
+2. **Delete confirmation / undo toast** — quick win, prevents frustration
+3. **Zoom controls on preview** — small UI addition, big usability gain
+4. **Live document thumbnails on dashboard** — visual polish, moderate effort
+5. **Onboarding tooltips** — helps new users, moderate effort
+
+### Technical Approach
+- Section reordering: Add `draggable` handlers to `SectionCard` wrappers in `ResumeBuilder.tsx`, similar to the existing `EntryList` pattern in `SectionCard.tsx`
+- Undo toast for deletions: Wrap `removeSection` with a `toast` that includes an "Undo" action button, storing the removed section temporarily
+- Zoom controls: Add `+`/`-` buttons in `ResumePreview.tsx` that manually override the auto-calculated scale with a user preference
+- Thumbnails: Reuse the existing `A4Page` component at a tiny scale (like the thumbnail navigator already does) inside `DocCard`
+
