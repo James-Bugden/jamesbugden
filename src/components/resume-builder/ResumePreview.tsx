@@ -99,13 +99,13 @@ function isMeaningfulHtml(html?: string) {
   return plain.length > 0;
 }
 
-function HtmlBlock({ html, className }: { html?: string; className?: string }) {
+function HtmlBlock({ html, className, fontSize }: { html?: string; className?: string; fontSize?: string }) {
   if (!isMeaningfulHtml(html)) return null;
 
   return (
     <div
       className={className}
-      style={{ fontSize: "9pt", lineHeight: 1.5, color: "var(--resume-body)" }}
+      style={{ fontSize: fontSize || "inherit", lineHeight: 1.5, color: "var(--resume-body)" }}
       dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(html || "") }}
     />
   );
