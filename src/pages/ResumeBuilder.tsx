@@ -1,4 +1,8 @@
-import { useState, useCallback, useEffect, useRef } from "react";
+import { useState, useCallback, useEffect, useRef, useMemo } from "react";
+import { DndContext, closestCenter, KeyboardSensor, PointerSensor, useSensor, useSensors, DragEndEvent } from "@dnd-kit/core";
+import { SortableContext, verticalListSortingStrategy, arrayMove } from "@dnd-kit/sortable";
+import { restrictToVerticalAxis } from "@dnd-kit/modifiers" ;
+import { SortableSectionCard } from "@/components/resume-builder/SortableSectionCard";
 import { Plus, Eye, Undo2, Redo2, Check, Loader2, Upload, ArrowLeft, FileText, Palette, Download, MoreVertical, ChevronDown } from "lucide-react";
 import { PersonalDetailsCard } from "@/components/resume-builder/PersonalDetailsCard";
 import { SectionCard } from "@/components/resume-builder/SectionCard";
@@ -291,32 +295,12 @@ const ResumeBuilder = () => {
   const store = useResumeStore();
   const { data, customize, updateCustomize, updatePersonalDetails, setSections, updateSection, removeSection } = store;
 
-  /* ── Section drag-and-drop reordering ────────────────── */
-  const sectionDragIdx = useRef<number | null>(null);
-  const [sectionOverIdx, setSectionOverIdx] = useState<number | null>(null);
-
-  const handleSectionDragStart = (idx: number) => (e: React.DragEvent) => {
-    sectionDragIdx.current = idx;
-    e.dataTransfer.effectAllowed = "move";
-  };
-  const handleSectionDragOver = (idx: number) => (e: React.DragEvent) => {
-    e.preventDefault();
-    e.dataTransfer.dropEffect = "move";
-    setSectionOverIdx(idx);
-  };
-  const handleSectionDrop = (idx: number) => (e: React.DragEvent) => {
-    e.preventDefault();
-    const from = sectionDragIdx.current;
-    if (from === null || from === idx) { setSectionOverIdx(null); return; }
-    pushHistory();
-    const updated = [...data.sections];
-    const [moved] = updated.splice(from, 1);
-    updated.splice(idx, 0, moved);
-    setSections(updated);
-    sectionDragIdx.current = null;
-    setSectionOverIdx(null);
-  };
-  const handleSectionDragEnd = () => { sectionDragIdx.current = null; setSectionOverIdx(null); };
+  /* ── dnd-kit sensors (defined early, used later after pushHistory) ── */
+  const sensors = useSensors(
+    useSensor(PointerSensor, { activationConstraint: { distance: 5 } }),
+    useSensor(KeyboardSensor)
+  );
+  const sectionIds = useMemo(() => data.sections.map(s => s.id), [data.sections]);
 
   const [activeTab, setActiveTab] = useState("content");
   const [modalOpen, setModalOpen] = useState(false);
@@ -343,6 +327,15 @@ const ResumeBuilder = () => {
     if (historyRef.current.past.length > 30) historyRef.current.past.shift();
     historyRef.current.future = [];
   }, [data]);
+
+  const handleDragEnd = useCallback((event: DragEndEvent) => {
+    const { active, over } = event;
+    if (!over || active.id === over.id) return;
+    pushHistory();
+    const oldIndex = data.sections.findIndex(s => s.id === active.id);
+    const newIndex = data.sections.findIndex(s => s.id === over.id);
+    setSections(arrayMove(data.sections, oldIndex, newIndex));
+  }, [data.sections, pushHistory, setSections]);
 
   const undo = useCallback(() => {
     const { past, future } = historyRef.current;
@@ -559,48 +552,41 @@ const ResumeBuilder = () => {
         {/* Personal Details */}
         <PersonalDetailsCard details={data.personalDetails} onChange={(u) => { pushHistory(); updatePersonalDetails(u); }} />
 
-        {/* Sections — each as its own card */}
-        {data.sections.map((section, idx) => (
-          <div
-            key={section.id}
-            draggable
-            onDragStart={handleSectionDragStart(idx)}
-            onDragOver={handleSectionDragOver(idx)}
-            onDrop={handleSectionDrop(idx)}
-            onDragEnd={handleSectionDragEnd}
-            className={cn(
-              "bg-white rounded-xl shadow-sm transition-all duration-200",
-              sectionOverIdx === idx && "ring-2 ring-green-200"
-            )}
-          >
-            <SectionCard
-              section={section}
-              onUpdate={(updates) => { pushHistory(); updateSection(section.id, updates); }}
-              onRemove={() => {
-                pushHistory();
-                const removed = section;
-                removeSection(section.id);
-                toast({
-                  title: "Section removed",
-                  description: `${removed.title} was deleted.`,
-                  action: (
-                    <button
-                      onClick={() => {
-                        const restored = [...data.sections];
-                        restored.splice(idx, 0, removed);
-                        setSections(restored);
-                      }}
-                      className="text-xs font-semibold hover:opacity-80 px-2 py-1 rounded transition-opacity"
-                      style={{ color: BRAND.green, backgroundColor: BRAND.greenLight }}
-                    >
-                      Undo
-                    </button>
-                  ),
-                });
-              }}
-            />
-          </div>
-        ))}
+        {/* Sections — dnd-kit sortable */}
+        <DndContext sensors={sensors} collisionDetection={closestCenter} onDragEnd={handleDragEnd} modifiers={[restrictToVerticalAxis]}>
+          <SortableContext items={sectionIds} strategy={verticalListSortingStrategy}>
+            {data.sections.map((section, idx) => (
+              <SortableSectionCard key={section.id} id={section.id}>
+                <SectionCard
+                  section={section}
+                  onUpdate={(updates) => { pushHistory(); updateSection(section.id, updates); }}
+                  onRemove={() => {
+                    pushHistory();
+                    const removed = section;
+                    removeSection(section.id);
+                    toast({
+                      title: "Section removed",
+                      description: `${removed.title} was deleted.`,
+                      action: (
+                        <button
+                          onClick={() => {
+                            const restored = [...data.sections];
+                            restored.splice(idx, 0, removed);
+                            setSections(restored);
+                          }}
+                          className="text-xs font-semibold hover:opacity-80 px-2 py-1 rounded transition-opacity"
+                          style={{ color: BRAND.green, backgroundColor: BRAND.greenLight }}
+                        >
+                          Undo
+                        </button>
+                      ),
+                    });
+                  }}
+                />
+              </SortableSectionCard>
+            ))}
+          </SortableContext>
+        </DndContext>
         {data.sections.length === 0 && (
           <div className="bg-white rounded-xl shadow-sm text-center py-8">
             <p className="text-sm" style={{ color: BRAND.textSecondary }}>Add sections to build your resume</p>
