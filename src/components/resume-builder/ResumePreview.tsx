@@ -265,6 +265,8 @@ function renderSectionEntries(section: ResumeSection, customize?: CustomizeSetti
   }
 
   if (section.type === "languages") {
+    const langDisplay = c?.languagesDisplay || "grid";
+
     return (
       <div className="mt-[1mm] space-y-[1.4mm]">
         {section.entries.map((entry) => {
@@ -272,6 +274,44 @@ function renderSectionEntries(section: ResumeSection, customize?: CustomizeSetti
           const proficiency = entry.fields.proficiency?.trim();
           if (!language && !proficiency) return null;
 
+          if (langDisplay === "level") {
+            const lvl = proficiency ? Math.min(5, Math.max(1, ["beginner","elementary","intermediate","upper-intermediate","advanced","native"].indexOf(proficiency.toLowerCase()) + 1 || 3)) : 3;
+            return (
+              <div key={entry.id} className="flex items-center gap-[2mm]">
+                <span className="w-[26mm]" style={{ fontSize: "8pt", color: "var(--resume-body)", fontWeight: 600 }}>{language}</span>
+                <div className="flex-1 h-[1.6mm] rounded-full overflow-hidden" style={{ backgroundColor: "#e5e7eb" }}>
+                  <div className="h-full rounded-full" style={{ width: `${lvl * 20}%`, backgroundColor: "var(--resume-accent)" }} />
+                </div>
+              </div>
+            );
+          }
+
+          if (langDisplay === "compact") {
+            return (
+              <span key={entry.id} style={{ fontSize: "8.5pt", color: "var(--resume-body)" }}>
+                {language}{proficiency ? ` (${proficiency})` : ""}
+              </span>
+            );
+          }
+
+          if (langDisplay === "bubble") {
+            return (
+              <span
+                key={entry.id}
+                className="inline-block px-[2.5mm] py-[0.8mm] rounded-full mr-[1.5mm]"
+                style={{
+                  fontSize: "8.3pt",
+                  color: "var(--resume-body)",
+                  backgroundColor: "color-mix(in srgb, var(--resume-accent) 10%, white)",
+                  border: "0.3mm solid color-mix(in srgb, var(--resume-accent) 25%, white)",
+                }}
+              >
+                {language}{proficiency ? ` — ${proficiency}` : ""}
+              </span>
+            );
+          }
+
+          // grid (default)
           return (
             <div key={entry.id} className="flex items-center justify-between gap-[3mm]">
               <span style={{ fontSize: "9pt", color: "var(--resume-body)", fontWeight: 600 }}>{language || "Language"}</span>
