@@ -75,63 +75,64 @@ export function PersonalDetailsCard({ details, onChange, collapsible }: Personal
           {/* Edit button */}
           <button
             onClick={() => setEditing(true)}
-            className="absolute top-4 right-4 w-8 h-8 rounded-full flex items-center justify-center text-gray-400 hover:text-gray-600 hover:bg-gray-100 transition-colors"
+            className="absolute top-4 right-4 w-8 h-8 rounded-full flex items-center justify-center transition-colors"
+            style={{ color: "#D4930D", backgroundColor: "rgba(212,147,13,0.1)" }}
           >
             <Pencil className="w-3.5 h-3.5" />
           </button>
 
           <div className="flex items-start gap-4">
-            {/* Photo */}
-            <button
-              onClick={() => fileInputRef.current?.click()}
-              className="w-14 h-14 rounded-full bg-gray-100 flex items-center justify-center flex-shrink-0 overflow-hidden relative group cursor-pointer"
-            >
-              {details.photo ? (
-                <img src={details.photo} className="w-full h-full object-cover" alt="" />
-              ) : (
-                <Camera className="w-5 h-5 text-gray-400" />
-              )}
-              <div className="absolute inset-0 bg-black/30 opacity-0 group-hover:opacity-100 transition-opacity rounded-full flex items-center justify-center">
-                <Camera className="w-3.5 h-3.5 text-white" />
-              </div>
-            </button>
-
             <div className="flex-1 min-w-0 pr-8">
-              <h2 className="text-base font-bold text-gray-900 leading-tight">
+              <h2 className="text-base font-bold text-gray-900 leading-tight uppercase tracking-wide">
                 {details.fullName || "Your Name"}
               </h2>
               <p className="text-sm text-gray-500 mt-0.5">
                 {details.professionalTitle || "Professional Title"}
               </p>
 
-              {/* Contact row */}
-              <div className="flex flex-wrap gap-x-3 gap-y-1 mt-2.5">
+              {/* Contact column */}
+              <div className="flex flex-col gap-1.5 mt-3">
                 {details.email && (
-                  <span className="flex items-center gap-1 text-xs text-gray-500">
-                    <Mail className="w-3 h-3 text-gray-400" />
+                  <span className="flex items-center gap-2 text-xs text-gray-600">
+                    <Mail className="w-3.5 h-3.5 text-gray-400" />
                     {details.email}
                   </span>
                 )}
                 {details.phone && (
-                  <span className="flex items-center gap-1 text-xs text-gray-500">
-                    <Phone className="w-3 h-3 text-gray-400" />
+                  <span className="flex items-center gap-2 text-xs text-gray-600">
+                    <Phone className="w-3.5 h-3.5 text-gray-400" />
                     {details.phone}
                   </span>
                 )}
                 {details.location && (
-                  <span className="flex items-center gap-1 text-xs text-gray-500">
-                    <MapPin className="w-3 h-3 text-gray-400" />
+                  <span className="flex items-center gap-2 text-xs text-gray-600">
+                    <MapPin className="w-3.5 h-3.5 text-gray-400" />
                     {details.location}
                   </span>
                 )}
                 {details.extras.map((e) => (
-                  <span key={e.id} className="flex items-center gap-1 text-xs text-gray-500">
-                    <Globe className="w-3 h-3 text-gray-400" />
+                  <span key={e.id} className="flex items-center gap-2 text-xs text-gray-600">
+                    <Globe className="w-3.5 h-3.5 text-gray-400" />
                     {e.value || e.type}
                   </span>
                 ))}
               </div>
             </div>
+
+            {/* Photo on the right */}
+            <button
+              onClick={() => fileInputRef.current?.click()}
+              className="w-16 h-16 rounded-full bg-gray-100 flex items-center justify-center flex-shrink-0 overflow-hidden relative group cursor-pointer"
+            >
+              {details.photo ? (
+                <img src={details.photo} className="w-full h-full object-cover" alt="" />
+              ) : (
+                <Camera className="w-6 h-6 text-gray-300" />
+              )}
+              <div className="absolute inset-0 bg-black/30 opacity-0 group-hover:opacity-100 transition-opacity rounded-full flex items-center justify-center">
+                <Camera className="w-3.5 h-3.5 text-white" />
+              </div>
+            </button>
           </div>
         </div>
       ) : (
@@ -153,7 +154,7 @@ export function PersonalDetailsCard({ details, onChange, collapsible }: Personal
               </div>
             </button>
             <div className="flex flex-col gap-0.5">
-              <button onClick={() => fileInputRef.current?.click()} className="text-xs font-medium text-pink-600 hover:text-pink-700">
+              <button onClick={() => fileInputRef.current?.click()} className="text-xs font-medium hover:opacity-80" style={{ color: "#2b4734" }}>
                 {details.photo ? "Change photo" : "Upload photo"}
               </button>
               {details.photo && (
@@ -249,7 +250,7 @@ export function PersonalDetailsCard({ details, onChange, collapsible }: Personal
             <button
               onClick={() => setEditing(false)}
               className="w-full py-2.5 rounded-lg text-sm font-semibold text-white transition-colors mt-2"
-              style={{ backgroundColor: "#e11d73" }}
+              style={{ backgroundColor: "#2b4734" }}
             >
               Done
             </button>
