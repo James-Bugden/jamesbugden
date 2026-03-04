@@ -81,8 +81,8 @@ export function PersonalDetailsCard({ details, onChange, collapsible }: Personal
             <Pencil className="w-3 h-3" />
           </button>
 
-          <div className="flex items-start gap-4">
-            <div className="flex-1 min-w-0 pr-8">
+          <div className="flex items-start gap-4 mt-1">
+            <div className="flex-1 min-w-0">
               <h2 className="text-base font-bold text-gray-900 leading-tight uppercase tracking-wide">
                 {details.fullName || "Your Name"}
               </h2>
