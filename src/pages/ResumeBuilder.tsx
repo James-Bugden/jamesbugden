@@ -418,7 +418,7 @@ const ResumeBuilder = () => {
       </div>
     </div>
   ) : activeTab === "customize" ? (
-    <CustomizePanel settings={customize} onChange={updateCustomize} sections={data.sections} />
+    <CustomizePanel settings={customize} onChange={updateCustomize} sections={data.sections} resumeData={data} />
   ) : (
     <AiToolsPanel data={data} onUpdateData={(d) => { pushHistory(); store.setData(d); }} />
   );
