@@ -897,6 +897,23 @@ export const ResumePreview = React.memo(function ResumePreview({
 
   return (
     <div ref={containerRef} className="h-full overflow-y-auto relative" style={{ backgroundColor: "#f3f4f6" }}>
+      {/* Hidden measurement div — outside the scaled container for accurate height */}
+      <div
+        ref={hiddenFlowRef}
+        id={pdfTargetId}
+        style={{
+          position: "absolute",
+          width: `${dims.wPX}px`,
+          left: 0,
+          top: 0,
+          opacity: 0,
+          pointerEvents: "none",
+          zIndex: -1,
+        }}
+      >
+        <A4Page data={data} customize={customize} />
+      </div>
+
       <div className="flex justify-center py-8 px-6">
         <div
           style={{
@@ -906,21 +923,6 @@ export const ResumePreview = React.memo(function ResumePreview({
             marginBottom: `${-(1 - scale) * totalScaledHeight}px`,
           }}
         >
-          <div
-            ref={hiddenFlowRef}
-            id={pdfTargetId}
-            style={{
-              position: "absolute",
-              width: `${dims.wPX}px`,
-              left: 0,
-              top: 0,
-              opacity: 0,
-              pointerEvents: "none",
-              zIndex: -1,
-            }}
-          >
-            <A4Page data={data} customize={customize} />
-          </div>
 
           {Array.from({ length: pageCount }, (_, i) => (
             <React.Fragment key={i}>
