@@ -1,45 +1,48 @@
 
 
-## Fix Duplicate Bullets in Resume Import
+## Resume Builder Feature Improvements
 
-### Problem
-When importing a resume, bullet points get duplicated. This happens because:
+### Priority 1: AI "Tailor to Job Description" Panel
+- Add a new tab or panel in the "AI Tools" section (which currently shows "Coming soon")
+- User pastes a job description → edge function analyzes keyword overlap with current resume
+- Returns: missing keywords, suggested bullet point rewrites, match percentage
+- Reuses existing `resume-ai` edge function with a new `action: "tailor"` mode
+- UI: Split panel with JD on left, suggestions on right, one-click "Apply" buttons
 
-1. **Wrapped bullet lines**: PDF extraction often wraps a single long bullet across multiple lines. The first line starts with `•` and is correctly captured, but the continuation line (without a `•` prefix) falls through to line 638 and gets added as a **separate** bullet.
+### Priority 2: Resume Completeness Score Widget
+- Floating widget in the editor sidebar showing real-time completion percentage
+- Scoring rules: has summary (+10), has 2+ experience entries (+20), all entries have descriptions (+15), dates filled (+10), contact info complete (+15), skills section exists (+10), quantified achievements detected (+20)
+- Visual: circular progress ring with percentage, expandable checklist of what's missing
+- Lives above the "Add Content" button in the Content tab
 
-2. **Embedded bullet markers**: Some PDFs produce lines like `● Bullet text` with Unicode characters not in the current regex (e.g., `●` U+25CF, `○`, `◦`, `⦿`).
+### Priority 3: Populate the "AI Tools" Tab
+- Currently renders "AI Tools — Coming soon" placeholder
+- Build out with: "Tailor to Job" (above), "Generate Summary from Experience", "Suggest Skills", "Optimize Bullet Points (batch)"
+- Each tool card shows a description, input area, and results
 
-### Fix — `src/lib/documentImport.ts`
+### Priority 4: Real-time Word Count per Section
+- Add a small `<span>` below each `RichTextEditor` showing word count and bullet point count
+- Highlight in amber if too long (>150 words per entry) or too short (<20 words)
+- Lightweight: computed from the editor's text content on each change
 
-**1. Expand the bullet character regex** to catch more Unicode bullet variants:
-Change `/^[•\-\*·▪▸►→]/` → `/^[•\-\*·▪▸►→●○◦⦿◆◇■□❖➤➢✦✧∙]/`
+### Priority 5: Click-to-Edit on Preview (Inline Editing)
+- When user clicks text on the A4 preview, show a floating input/textarea positioned over the clicked element
+- On blur/enter, update the corresponding field in the data model
+- Start with simple fields only: job title, company name, degree, institution
+- More complex than other items; implement after the above
 
-Apply this in all 8+ places where this regex appears.
+### Files to Edit
+- `src/pages/ResumeBuilder.tsx` — Add completeness widget, wire AI Tools tab
+- `src/components/resume-builder/ResumeTopNav.tsx` — No changes needed
+- `src/components/resume-builder/RichTextEditor.tsx` — Add word count display
+- `supabase/functions/resume-ai/index.ts` — Add `tailor` action for JD matching
+- New: `src/components/resume-builder/CompletenessScore.tsx` — Score widget component
+- New: `src/components/resume-builder/AiToolsPanel.tsx` — Full AI tools tab content
+- New: `src/components/resume-builder/TailorToJob.tsx` — JD tailoring panel
 
-**2. Merge continuation lines into the previous bullet** instead of creating new bullets:
-At line 638 (the fallback `else` in the experience parser), if `current.bullets.length > 0` and the line doesn't look like a new entry (no dates, not a bullet marker, short-ish), **append** it to the last bullet instead of pushing a new one:
-
-```typescript
-} else {
-  // Continuation of previous bullet — merge instead of creating new
-  if (current.bullets.length > 0 && line.length < 120) {
-    current.bullets[current.bullets.length - 1] += " " + line.trim();
-  } else {
-    current.bullets.push(line);
-  }
-}
-```
-
-**3. Apply the same continuation-merge logic** in `parseEducationEntries` (around line 710+) and `parseProjectEntries` (around line 870+) which have identical fallback patterns.
-
-**4. Deduplicate bullets before flushing**: In `flush()`, deduplicate by checking if any bullet is a substring of another (handles cases where the same text appears both as a full bullet and a partial):
-
-```typescript
-const deduped = current.bullets.filter((b, i) =>
-  !current.bullets.some((other, j) => j !== i && other.includes(b) && other.length > b.length)
-);
-```
-
-### Files changed
-- `src/lib/documentImport.ts`
+### Implementation Order
+1. Completeness score widget (standalone, no backend needed)
+2. Word count on RichTextEditor (small change)
+3. AI Tools tab with Tailor to Job (needs edge function update)
+4. Click-to-edit on preview (complex, last)
 

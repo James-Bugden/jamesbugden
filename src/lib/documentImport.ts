@@ -575,8 +575,12 @@ function parseExperienceEntries(lines: string[]) {
 
   const flush = () => {
     if (!current) return;
-    const bulletHtml = current.bullets.length > 0
-      ? `<ul>${current.bullets.map((b) => `<li>${b}</li>`).join("")}</ul>`
+    // Deduplicate: remove bullets that are substrings of longer bullets
+    const deduped = current.bullets.filter((b, i) =>
+      !current!.bullets.some((other, j) => j !== i && other.includes(b) && other.length > b.length)
+    );
+    const bulletHtml = deduped.length > 0
+      ? `<ul>${deduped.map((b) => `<li>${b}</li>`).join("")}</ul>`
       : "";
     entries.push({
       id: crypto.randomUUID(),
@@ -595,10 +599,10 @@ function parseExperienceEntries(lines: string[]) {
   };
 
   for (const line of lines) {
-    const isBullet = /^[•\-\*·▪▸►→]/.test(line.trim());
+    const isBullet = /^[•\-\*·▪▸►→●○◦⦿◆◇■□❖➤➢✦✧∙]/.test(line.trim());
 
     if (isBullet && current) {
-      current.bullets.push(line.replace(/^[•\-\*·▪▸►→]\s*/, "").trim());
+      current.bullets.push(line.replace(/^[•\-\*·▪▸►→●○◦⦿◆◇■□❖➤➢✦✧∙]\s*/, "").trim());
       continue;
     }
 
@@ -627,7 +631,6 @@ function parseExperienceEntries(lines: string[]) {
         if (loc && !current.location) {
           current.location = loc;
         }
-        // If this continuation line looks more like a title than a company, swap
         if (looksLikeTitle(companyCandidate) > looksLikeCompany(companyCandidate) && !looksLikeTitle(current.position)) {
           current.company = current.position;
           current.position = companyCandidate;
@@ -635,7 +638,12 @@ function parseExperienceEntries(lines: string[]) {
           current.company = companyCandidate;
         }
       } else {
-        current.bullets.push(line);
+        // Merge continuation lines into previous bullet instead of creating duplicates
+        if (current.bullets.length > 0 && !isBullet && line.length < 120) {
+          current.bullets[current.bullets.length - 1] += " " + line.trim();
+        } else {
+          current.bullets.push(line);
+        }
       }
     } else {
       current = { position: line, company: "", location: "", dates: null, bullets: [] };
@@ -655,8 +663,11 @@ function parseEducationEntries(lines: string[]) {
 
   const flush = () => {
     if (!current) return;
-    const descHtml = current.bullets.length > 0
-      ? `<ul>${current.bullets.map((b) => `<li>${b}</li>`).join("")}</ul>`
+    const deduped = current.bullets.filter((b, i) =>
+      !current!.bullets.some((other, j) => j !== i && other.includes(b) && other.length > b.length)
+    );
+    const descHtml = deduped.length > 0
+      ? `<ul>${deduped.map((b) => `<li>${b}</li>`).join("")}</ul>`
       : "";
     entries.push({
       id: crypto.randomUUID(),
@@ -675,9 +686,9 @@ function parseEducationEntries(lines: string[]) {
   };
 
   for (const line of lines) {
-    const isBullet = /^[•\-\*·▪▸►→]/.test(line.trim());
+    const isBullet = /^[•\-\*·▪▸►→●○◦⦿◆◇■□❖➤➢✦✧∙]/.test(line.trim());
     if (isBullet && current) {
-      current.bullets.push(line.replace(/^[•\-\*·▪▸►→]\s*/, "").trim());
+      current.bullets.push(line.replace(/^[•\-\*·▪▸►→●○◦⦿◆◇■□❖➤➢✦✧∙]\s*/, "").trim());
       continue;
     }
 
@@ -694,7 +705,11 @@ function parseEducationEntries(lines: string[]) {
       if (current.bullets.length === 0 && !current.institution && line.length < 60) {
         current.institution = line;
       } else {
-        current.bullets.push(line);
+        if (current.bullets.length > 0 && !isBullet && line.length < 120) {
+          current.bullets[current.bullets.length - 1] += " " + line.trim();
+        } else {
+          current.bullets.push(line);
+        }
       }
     } else {
       current = { degree: line, institution: "", location: "", dates: null, bullets: [] };
@@ -714,7 +729,10 @@ function parseProjectEntries(lines: string[]) {
 
   const flush = () => {
     if (!current) return;
-    const descHtml = current.bullets.length > 0 ? `<ul>${current.bullets.map((b) => `<li>${b}</li>`).join("")}</ul>` : "";
+    const deduped = current.bullets.filter((b, i) =>
+      !current!.bullets.some((other, j) => j !== i && other.includes(b) && other.length > b.length)
+    );
+    const descHtml = deduped.length > 0 ? `<ul>${deduped.map((b) => `<li>${b}</li>`).join("")}</ul>` : "";
     entries.push({
       id: crypto.randomUUID(),
       fields: {
@@ -731,9 +749,9 @@ function parseProjectEntries(lines: string[]) {
   };
 
   for (const line of lines) {
-    const isBullet = /^[•\-\*·▪▸►→]/.test(line.trim());
+    const isBullet = /^[•\-\*·▪▸►→●○◦⦿◆◇■□❖➤➢✦✧∙]/.test(line.trim());
     if (isBullet && current) {
-      current.bullets.push(line.replace(/^[•\-\*·▪▸►→]\s*/, "").trim());
+      current.bullets.push(line.replace(/^[•\-\*·▪▸►→●○◦⦿◆◇■□❖➤➢✦✧∙]\s*/, "").trim());
       continue;
     }
 
@@ -747,7 +765,11 @@ function parseProjectEntries(lines: string[]) {
       const { primary, secondary } = splitTitleOrg(textClean, false);
       current = { name: primary, role: secondary, dates, url, bullets: [] };
     } else if (current) {
-      current.bullets.push(line);
+      if (current.bullets.length > 0 && !isBullet && line.length < 120) {
+        current.bullets[current.bullets.length - 1] += " " + line.trim();
+      } else {
+        current.bullets.push(line);
+      }
     }
   }
   flush();
@@ -762,7 +784,7 @@ function parseSkillsList(lines: string[]): string {
   // Flatten bullets and comma-separated items
   const items: string[] = [];
   for (const line of lines) {
-    const clean = line.replace(/^[•\-\*·▪▸►→]\s*/, "").trim();
+    const clean = line.replace(/^[•\-\*·▪▸►→●○◦⦿◆◇■□❖➤➢✦✧∙]\s*/, "").trim();
     if (!clean) continue;
     // Split on commas, semicolons, pipes
     const parts = clean.split(/[,;|]/).map((s) => s.trim()).filter(Boolean);
@@ -776,7 +798,7 @@ function parseLanguageEntries(lines: string[]) {
 
   const entries: any[] = [];
   for (const line of lines) {
-    const clean = line.replace(/^[•\-\*·▪▸►→]\s*/, "").trim();
+    const clean = line.replace(/^[•\-\*·▪▸►→●○◦⦿◆◇■□❖➤➢✦✧∙]\s*/, "").trim();
     if (!clean) continue;
 
     // Try "Language — Proficiency" or "Language: Proficiency" or "Language (Proficiency)"
@@ -818,7 +840,7 @@ function parseLanguageEntries(lines: string[]) {
     // Fallback: treat each line as a language
     return lines.filter(Boolean).map((l) => ({
       id: crypto.randomUUID(),
-      fields: { language: l.replace(/^[•\-\*·▪▸►→]\s*/, "").trim(), proficiency: "" },
+      fields: { language: l.replace(/^[•\-\*·▪▸►→●○◦⦿◆◇■□❖➤➢✦✧∙]\s*/, "").trim(), proficiency: "" },
     }));
   }
   return entries;
@@ -854,9 +876,9 @@ function parseSimpleEntries(lines: string[], type: string) {
   };
 
   for (const line of lines) {
-    const isBullet = /^[•\-\*·▪▸►→]/.test(line.trim());
+    const isBullet = /^[•\-\*·▪▸►→●○◦⦿◆◇■□❖➤➢✦✧∙]/.test(line.trim());
     if (isBullet && current) {
-      current.bullets.push(line.replace(/^[•\-\*·▪▸►→]\s*/, "").trim());
+      current.bullets.push(line.replace(/^[•\-\*·▪▸►→●○◦⦿◆◇■□❖➤➢✦✧∙]\s*/, "").trim());
       continue;
     }
 
@@ -892,7 +914,7 @@ function parseReferenceEntries(lines: string[]) {
   };
 
   for (const line of lines) {
-    const clean = line.replace(/^[•\-\*·▪▸►→]\s*/, "").trim();
+    const clean = line.replace(/^[•\-\*·▪▸►→●○◦⦿◆◇■□❖➤➢✦✧∙]\s*/, "").trim();
     if (!clean) { flush(); continue; }
 
     const emailMatch = clean.match(/[\w.+-]+@[\w-]+\.[\w.-]+/);
