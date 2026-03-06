@@ -985,7 +985,7 @@ export const ResumePreview = React.memo(function ResumePreview({
         });
 
         // Re-measure total height for page count
-        const totalH = root.scrollHeight - 2 * marginYPX;
+        const totalH = root.scrollHeight - 2 * marginYPX - headerReservePX - footerReservePX;
         const rawPages = totalH / usablePerPage;
         setPageCount(Math.max(1, rawPages <= 1.02 ? 1 : Math.ceil(rawPages)));
       });

@@ -63,6 +63,7 @@ export async function exportToPdf({ elementId, fileName, pageFormat = "a4" }: Ex
     const canvasPageHeightScaled = pageHeightPX * SCALE;
     const canvasUsableHeightScaled = usableHeightPX * SCALE;
     const canvasMarginYScaled = marginYPX * SCALE;
+    const canvasHeaderReserveScaled = headerReservePX * SCALE;
 
     for (let i = 0; i < pageCount; i++) {
       if (i > 0) pdf.addPage([dims.wMM, dims.hMM]);
