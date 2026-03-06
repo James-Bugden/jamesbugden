@@ -544,6 +544,27 @@ function smartSwap(primary: string, secondary: string): { primary: string; secon
   return { primary, secondary };
 }
 
+/** For education: swap so degree is primary and institution is secondary */
+function educationSmartSwap(primary: string, secondary: string): { primary: string; secondary: string } {
+  if (!secondary) {
+    // Single value — try to determine if it's an institution (swap to secondary)
+    if (INSTITUTION_INDICATORS.test(primary) && !DEGREE_INDICATORS.test(primary)) {
+      return { primary: "", secondary: primary };
+    }
+    return { primary, secondary };
+  }
+  const pIsInstitution = INSTITUTION_INDICATORS.test(primary);
+  const pIsDegree = DEGREE_INDICATORS.test(primary);
+  const sIsInstitution = INSTITUTION_INDICATORS.test(secondary);
+  const sIsDegree = DEGREE_INDICATORS.test(secondary);
+
+  // If primary looks like institution and secondary looks like degree, swap
+  if (pIsInstitution && !pIsDegree && (sIsDegree || !sIsInstitution)) {
+    return { primary: secondary, secondary: primary };
+  }
+  return { primary, secondary };
+}
+
 /* ════════════════════════════════════════════════════════════
    Entry parsers — mapped to the correct field names from types.ts
    getDefaultFieldsForType("experience") → { position, company, location, startMonth, startYear, endMonth, endYear, currentlyHere, description }
