@@ -149,6 +149,9 @@ function isSectionHeader(line: string, allLines: string[], idx: number): boolean
           return false;
         }
 
+        // ALL CAPS + next line has a date = almost certainly a company name (e.g. "UBER" → "Senior Recruiter 2024 – Present")
+        if (nextHasDate) return false;
+
         return true;
       }
     }
