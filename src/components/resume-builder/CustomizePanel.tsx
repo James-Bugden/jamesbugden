@@ -1,7 +1,8 @@
 import { useState, useCallback } from "react";
+import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible";
 import { Tooltip, TooltipTrigger, TooltipContent, TooltipProvider } from "@/components/ui/tooltip";
 import { cn } from "@/lib/utils";
-import { Minus, Plus, Check, Link, ExternalLink, Smile, Circle, AlignLeft, AlignCenter, AlignRight, GripVertical, Camera } from "lucide-react";
+import { Minus, Plus, Check, Link, ExternalLink, Smile, Circle, AlignLeft, AlignCenter, AlignRight, GripVertical, Camera, ChevronDown } from "lucide-react";
 import { DndContext, closestCenter, PointerSensor, useSensor, useSensors, DragEndEvent } from "@dnd-kit/core";
 import { SortableContext, verticalListSortingStrategy, useSortable, arrayMove } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
@@ -47,12 +48,24 @@ interface CustomizePanelProps {
 const SUB_TABS = ["Basics", "Layout & Spacing", "Design", "Header", "Sections"] as const;
 
 /* ── Shared UI helpers ──────────────────────────────────────── */
-function SettingCard({ title, children }: { title: string; children: React.ReactNode }) {
+function SettingCard({ title, children, defaultOpen = true }: { title: string; children: React.ReactNode; defaultOpen?: boolean }) {
+  const [open, setOpen] = useState(defaultOpen);
   return (
-    <div className="bg-white rounded-xl p-5 shadow-sm">
-      <h3 className="text-sm font-bold mb-4" style={{ color: B.text, fontFamily: "var(--font-heading)" }}>{title}</h3>
-      {children}
-    </div>
+    <Collapsible open={open} onOpenChange={setOpen}>
+      <div className="bg-white rounded-xl shadow-sm overflow-hidden">
+        <CollapsibleTrigger asChild>
+          <button className="w-full flex items-center justify-between px-5 py-3.5 hover:bg-gray-50/50 transition-colors">
+            <h3 className="text-sm font-bold" style={{ color: B.text, fontFamily: "var(--font-heading)" }}>{title}</h3>
+            <ChevronDown className={cn("w-4 h-4 transition-transform duration-200", open && "rotate-180")} style={{ color: B.textSec }} />
+          </button>
+        </CollapsibleTrigger>
+        <CollapsibleContent>
+          <div className="px-5 pb-5">
+            {children}
+          </div>
+        </CollapsibleContent>
+      </div>
+    </Collapsible>
   );
 }
 
