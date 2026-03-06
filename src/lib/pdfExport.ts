@@ -90,7 +90,7 @@ export async function exportToPdf({ elementId, fileName, pageFormat = "a4" }: Ex
           fullCanvas,
           0, srcY,                          // source x, y
           canvasPageWidthScaled, srcHeight,  // source w, h
-          0, canvasMarginYScaled,            // dest x, y (with top margin)
+          0, canvasMarginYScaled + canvasHeaderReserveScaled, // dest x, y (with top margin + header reserve)
           canvasPageWidthScaled, srcHeight   // dest w, h
         );
       }

@@ -1066,8 +1066,7 @@ export const ResumePreview = React.memo(function ResumePreview({
               >
                 <div style={{
                   width: `${dims.wPX}px`,
-                  transform: `translateY(${-i * usablePerPage}px)`,
-                  ...(i > 0 ? { paddingTop: `${marginYPX}px` } : {}),
+                  transform: `translateY(${headerReservePX - i * usablePerPage}px)`,
                 }}>
                   <A4Page data={data} customize={customize} onEditSection={onEditSection} />
                 </div>
