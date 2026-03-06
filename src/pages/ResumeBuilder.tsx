@@ -4,6 +4,7 @@ import { SortableContext, verticalListSortingStrategy, arrayMove } from "@dnd-ki
 import { restrictToVerticalAxis } from "@dnd-kit/modifiers" ;
 import { SortableSectionCard } from "@/components/resume-builder/SortableSectionCard";
 import { Plus, Eye, Undo2, Redo2, Check, Loader2, Upload, ArrowLeft, FileText, Palette, Download, MoreVertical, ChevronDown } from "lucide-react";
+import { Tooltip, TooltipTrigger, TooltipContent, TooltipProvider } from "@/components/ui/tooltip";
 import { PersonalDetailsCard } from "@/components/resume-builder/PersonalDetailsCard";
 import { SectionCard } from "@/components/resume-builder/SectionCard";
 import { AddContentModal } from "@/components/resume-builder/AddContentModal";
@@ -129,15 +130,29 @@ const SAMPLE_RESUME_DATA = {
 function UndoRedoBar({ onUndo, onRedo, canUndo, canRedo }: {
   onUndo: () => void; onRedo: () => void; canUndo: boolean; canRedo: boolean;
 }) {
+  const isMac = typeof navigator !== "undefined" && /Mac|iPod|iPhone|iPad/.test(navigator.userAgent);
+  const mod = isMac ? "⌘" : "Ctrl+";
   return (
-    <div className="fixed bottom-6 left-1/2 -translate-x-1/2 z-40 flex items-center gap-1 bg-white rounded-full shadow-lg border border-gray-200 p-1">
-      <button onClick={onUndo} disabled={!canUndo} className={cn("w-10 h-10 rounded-full flex items-center justify-center transition-colors", canUndo ? "hover:bg-gray-100 text-gray-700" : "text-gray-300 cursor-not-allowed")} title="Undo (Cmd+Z)">
-        <Undo2 className="w-4.5 h-4.5" />
-      </button>
-      <button onClick={onRedo} disabled={!canRedo} className={cn("w-10 h-10 rounded-full flex items-center justify-center transition-colors", canRedo ? "hover:bg-gray-100 text-gray-700" : "text-gray-300 cursor-not-allowed")} title="Redo (Cmd+Shift+Z)">
-        <Redo2 className="w-4.5 h-4.5" />
-      </button>
-    </div>
+    <TooltipProvider delayDuration={300}>
+      <div className="fixed bottom-6 left-1/2 -translate-x-1/2 z-40 flex items-center gap-1 bg-white rounded-full shadow-lg border border-gray-200 p-1">
+        <Tooltip>
+          <TooltipTrigger asChild>
+            <button onClick={onUndo} disabled={!canUndo} className={cn("w-10 h-10 rounded-full flex items-center justify-center transition-colors", canUndo ? "hover:bg-gray-100 text-gray-700" : "text-gray-300 cursor-not-allowed")}>
+              <Undo2 className="w-4.5 h-4.5" />
+            </button>
+          </TooltipTrigger>
+          <TooltipContent side="top" className="text-xs">Undo ({mod}Z)</TooltipContent>
+        </Tooltip>
+        <Tooltip>
+          <TooltipTrigger asChild>
+            <button onClick={onRedo} disabled={!canRedo} className={cn("w-10 h-10 rounded-full flex items-center justify-center transition-colors", canRedo ? "hover:bg-gray-100 text-gray-700" : "text-gray-300 cursor-not-allowed")}>
+              <Redo2 className="w-4.5 h-4.5" />
+            </button>
+          </TooltipTrigger>
+          <TooltipContent side="top" className="text-xs">Redo ({mod}⇧Z)</TooltipContent>
+        </Tooltip>
+      </div>
+    </TooltipProvider>
   );
 }
 
@@ -171,12 +186,25 @@ function SaveIndicator({ saving }: { saving: boolean }) {
 }
 
 /* ── Mobile preview overlay ────────────────────────────── */
-function MobilePreviewOverlay({ children, onClose }: { children: React.ReactNode; onClose: () => void }) {
+function MobilePreviewOverlay({ children, onClose, onDownload, downloading }: { children: React.ReactNode; onClose: () => void; onDownload?: () => void; downloading?: boolean }) {
   return (
     <div className="fixed inset-0 z-50 bg-white flex flex-col animate-fade-in">
       <div className="flex items-center justify-between px-4 py-3 border-b border-gray-200" style={{ backgroundColor: BRAND.cream }}>
         <span className="text-sm font-semibold" style={{ color: BRAND.text }}>Preview</span>
-        <button onClick={onClose} className="text-sm font-medium hover:opacity-80 transition-opacity" style={{ color: BRAND.gold }}>Close</button>
+        <div className="flex items-center gap-3">
+          {onDownload && (
+            <button
+              onClick={onDownload}
+              disabled={downloading}
+              className="flex items-center gap-1.5 text-sm font-medium hover:opacity-80 transition-opacity"
+              style={{ color: BRAND.green }}
+            >
+              {downloading ? <Loader2 className="w-4 h-4 animate-spin" /> : <Download className="w-4 h-4" />}
+              {downloading ? "..." : "Download"}
+            </button>
+          )}
+          <button onClick={onClose} className="text-sm font-medium hover:opacity-80 transition-opacity" style={{ color: BRAND.gold }}>Close</button>
+        </div>
       </div>
       <div className="flex-1 overflow-auto">{children}</div>
     </div>
@@ -377,6 +405,17 @@ const ResumeBuilder = () => {
     return () => window.removeEventListener("keydown", handler);
   }, [undo, redo, activeDocId, data, customize]);
 
+  // Unsaved work guard (beforeunload)
+  useEffect(() => {
+    if (viewMode !== "resume-editor") return;
+    const handler = (e: BeforeUnloadEvent) => {
+      e.preventDefault();
+      e.returnValue = "";
+    };
+    window.addEventListener("beforeunload", handler);
+    return () => window.removeEventListener("beforeunload", handler);
+  }, [viewMode]);
+
   const handleOpenDocument = useCallback((doc: SavedDocument) => {
     setLoading(true);
     setActiveDocId(doc.id);
@@ -448,7 +487,12 @@ const ResumeBuilder = () => {
     setActiveTab("content");
     setTimeout(() => {
       const el = document.getElementById(`section-card-${sectionId}`);
-      if (el) el.scrollIntoView({ behavior: "smooth", block: "start" });
+      if (el) {
+        el.scrollIntoView({ behavior: "smooth", block: "start" });
+        // Highlight flash
+        el.classList.add("ring-2", "ring-amber-400/70");
+        setTimeout(() => el.classList.remove("ring-2", "ring-amber-400/70"), 1200);
+      }
     }, 100);
   }, []);
 
@@ -539,14 +583,21 @@ const ResumeBuilder = () => {
       <div className="max-w-2xl mx-auto p-4 md:p-6 space-y-3">
         {/* Import content link */}
         <div className="flex items-center justify-end mb-1">
-          <button
-            onClick={() => setEditorImportOpen(true)}
-            className="flex items-center gap-1.5 text-xs font-medium transition-colors hover:opacity-80"
-            style={{ color: BRAND.textSecondary }}
-          >
-            <Upload className="w-3.5 h-3.5" />
-            Import content
-          </button>
+          <TooltipProvider delayDuration={300}>
+            <Tooltip>
+              <TooltipTrigger asChild>
+                <button
+                  onClick={() => setEditorImportOpen(true)}
+                  className="flex items-center gap-1.5 text-xs font-medium transition-colors hover:opacity-80"
+                  style={{ color: BRAND.textSecondary }}
+                >
+                  <Upload className="w-3.5 h-3.5" />
+                  Import content
+                </button>
+              </TooltipTrigger>
+              <TooltipContent side="bottom" className="text-xs">Import from file (PDF, DOCX)</TooltipContent>
+            </Tooltip>
+          </TooltipProvider>
         </div>
 
         {/* Personal Details */}
@@ -595,13 +646,20 @@ const ResumeBuilder = () => {
 
         {/* Add Content button — gradient pill */}
         <div className="flex justify-center pt-2">
-          <button
-            onClick={() => setModalOpen(true)}
-            className="flex items-center justify-center gap-2 px-8 py-3 rounded-full text-white font-semibold text-sm transition-all hover:opacity-90 active:scale-[0.98] shadow-md"
-            style={{ background: "linear-gradient(135deg, #D4930D 0%, #e8a520 50%, #f0c060 100%)" }}
-          >
-            <Plus className="w-4.5 h-4.5" /> Add Content
-          </button>
+          <TooltipProvider delayDuration={300}>
+            <Tooltip>
+              <TooltipTrigger asChild>
+                <button
+                  onClick={() => setModalOpen(true)}
+                  className="flex items-center justify-center gap-2 px-8 py-3 rounded-full text-white font-semibold text-sm transition-all hover:opacity-90 active:scale-[0.98] shadow-md"
+                  style={{ background: "linear-gradient(135deg, #D4930D 0%, #e8a520 50%, #f0c060 100%)" }}
+                >
+                  <Plus className="w-4.5 h-4.5" /> Add Content
+                </button>
+              </TooltipTrigger>
+              <TooltipContent side="bottom" className="text-xs">Add a new section</TooltipContent>
+            </Tooltip>
+          </TooltipProvider>
         </div>
       </div>
     </div>
@@ -617,14 +675,21 @@ const ResumeBuilder = () => {
       <div className="sticky top-0 z-30 flex items-center justify-between bg-white border-b px-4 h-14" style={{ borderColor: BRAND.border }}>
         {/* Left: Back + editable name */}
         <div className="flex items-center gap-3 min-w-0">
-          <button
-            onClick={handleBackToDashboard}
-            className="flex items-center gap-1 text-sm transition-colors flex-shrink-0 hover:opacity-80"
-            style={{ color: BRAND.textSecondary }}
-          >
-            <ArrowLeft className="w-3.5 h-3.5" />
-            <span className="hidden sm:inline">Dashboard</span>
-          </button>
+          <TooltipProvider delayDuration={300}>
+            <Tooltip>
+              <TooltipTrigger asChild>
+                <button
+                  onClick={handleBackToDashboard}
+                  className="flex items-center gap-1 text-sm transition-colors flex-shrink-0 hover:opacity-80"
+                  style={{ color: BRAND.textSecondary }}
+                >
+                  <ArrowLeft className="w-3.5 h-3.5" />
+                  <span className="hidden sm:inline">Dashboard</span>
+                </button>
+              </TooltipTrigger>
+              <TooltipContent side="bottom" className="text-xs">Back to dashboard</TooltipContent>
+            </Tooltip>
+          </TooltipProvider>
           <span className="text-gray-300">|</span>
           {editingName ? (
             <input
@@ -723,7 +788,7 @@ const ResumeBuilder = () => {
 
         {/* Mobile preview overlay */}
         {mobilePreview && (
-          <MobilePreviewOverlay onClose={() => setMobilePreview(false)}>
+          <MobilePreviewOverlay onClose={() => setMobilePreview(false)} onDownload={() => handleDownload()} downloading={downloading}>
             <ResumePreview data={data} customize={customize} pdfTargetId="resume-pdf-target" onEditSection={handleEditSection} />
           </MobilePreviewOverlay>
         )}

@@ -1,79 +1,48 @@
 
 
-## UX/UI Improvement Opportunities for the Resume Builder
+## Resume Builder Feature Improvements
 
-After reviewing the codebase thoroughly, here are actionable improvements organized by impact:
+### Priority 1: AI "Tailor to Job Description" Panel
+- Add a new tab or panel in the "AI Tools" section (which currently shows "Coming soon")
+- User pastes a job description → edge function analyzes keyword overlap with current resume
+- Returns: missing keywords, suggested bullet point rewrites, match percentage
+- Reuses existing `resume-ai` edge function with a new `action: "tailor"` mode
+- UI: Split panel with JD on left, suggestions on right, one-click "Apply" buttons
 
----
+### Priority 2: Resume Completeness Score Widget
+- Floating widget in the editor sidebar showing real-time completion percentage
+- Scoring rules: has summary (+10), has 2+ experience entries (+20), all entries have descriptions (+15), dates filled (+10), contact info complete (+15), skills section exists (+10), quantified achievements detected (+20)
+- Visual: circular progress ring with percentage, expandable checklist of what's missing
+- Lives above the "Add Content" button in the Content tab
 
-### 1. Keyboard Shortcut Hints & Tooltips
-Currently undo/redo and download have keyboard shortcuts (Cmd+Z, Cmd+S) but users have no way to discover them. Add tooltips to the undo/redo bar and download button showing shortcuts.
+### Priority 3: Populate the "AI Tools" Tab
+- Currently renders "AI Tools — Coming soon" placeholder
+- Build out with: "Tailor to Job" (above), "Generate Summary from Experience", "Suggest Skills", "Optimize Bullet Points (batch)"
+- Each tool card shows a description, input area, and results
 
-**Files:** `src/pages/ResumeBuilder.tsx` (UndoRedoBar, DownloadDropdown sections)
+### Priority 4: Real-time Word Count per Section
+- Add a small `<span>` below each `RichTextEditor` showing word count and bullet point count
+- Highlight in amber if too long (>150 words per entry) or too short (<20 words)
+- Lightweight: computed from the editor's text content on each change
 
----
+### Priority 5: Click-to-Edit on Preview (Inline Editing)
+- When user clicks text on the A4 preview, show a floating input/textarea positioned over the clicked element
+- On blur/enter, update the corresponding field in the data model
+- Start with simple fields only: job title, company name, degree, institution
+- More complex than other items; implement after the above
 
-### 2. Empty State for Customize Panel Sections Tab
-When section-specific settings have no applicable options, show a friendly empty state with guidance instead of a blank panel.
+### Files to Edit
+- `src/pages/ResumeBuilder.tsx` — Add completeness widget, wire AI Tools tab
+- `src/components/resume-builder/ResumeTopNav.tsx` — No changes needed
+- `src/components/resume-builder/RichTextEditor.tsx` — Add word count display
+- `supabase/functions/resume-ai/index.ts` — Add `tailor` action for JD matching
+- New: `src/components/resume-builder/CompletenessScore.tsx` — Score widget component
+- New: `src/components/resume-builder/AiToolsPanel.tsx` — Full AI tools tab content
+- New: `src/components/resume-builder/TailorToJob.tsx` — JD tailoring panel
 
-**File:** `src/components/resume-builder/CustomizePanel.tsx` (SectionsTab)
-
----
-
-### 3. Smooth Scroll-to-Section When Clicking Preview
-The `onEditSection` callback scrolls to a section card, but it's jarring. Add a highlight flash animation (brief green border pulse) on the target card after scrolling so the user knows where to look.
-
-**Files:** `src/pages/ResumeBuilder.tsx` (handleEditSection), `src/components/resume-builder/SectionCard.tsx`
-
----
-
-### 4. Mobile Preview Improvements
-The mobile preview overlay exists but lacks download capability. Add a floating download button inside the mobile preview overlay so users can export without closing it.
-
-**File:** `src/pages/ResumeBuilder.tsx` (MobilePreviewOverlay section)
-
----
-
-### 5. Confirmation Before Losing Unsaved Work
-No browser `beforeunload` guard exists. If a user navigates away from the editor with unsaved changes, they lose work silently. Add a `beforeunload` event listener.
-
-**File:** `src/pages/ResumeBuilder.tsx`
-
----
-
-### 6. Drag Handle Tooltip on Section Cards
-The newly added `GripVertical` icon is subtle. Add a tooltip ("Drag to reorder") on hover to make it discoverable.
-
-**File:** `src/components/resume-builder/SortableSectionCard.tsx`
-
----
-
-### 7. Section Card Collapse Memory
-Section collapse state resets when switching tabs. Persist collapse state in localStorage alongside the document data so it's restored.
-
-**File:** `src/components/resume-builder/SectionCard.tsx`, `src/lib/documentStore.ts`
-
----
-
-### 8. Better Color Picker with Preset Swatches
-The accent color picker is a raw `<input type="color">` + text input. Add preset color swatches (6-8 popular accent colors) above the custom picker for faster selection.
-
-**File:** `src/components/resume-builder/CustomizePanel.tsx` (ColorPickerRow / accent color section)
-
----
-
-### Summary of Priority
-
-| # | Improvement | Impact | Effort |
-|---|-------------|--------|--------|
-| 1 | Keyboard shortcut tooltips | Medium | Low |
-| 2 | Empty states | Low | Low |
-| 3 | Scroll highlight flash | High | Low |
-| 4 | Mobile preview download | Medium | Low |
-| 5 | Unsaved work guard | High | Low |
-| 6 | Drag handle tooltip | Low | Low |
-| 7 | Collapse state persistence | Medium | Medium |
-| 8 | Color preset swatches | Medium | Low |
-
-I'd recommend starting with items 3, 5, and 1 for maximum UX impact with minimal effort. Shall I implement all of them or a specific subset?
+### Implementation Order
+1. Completeness score widget (standalone, no backend needed)
+2. Word count on RichTextEditor (small change)
+3. AI Tools tab with Tailor to Job (needs edge function update)
+4. Click-to-edit on preview (complex, last)
 
