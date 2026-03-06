@@ -945,8 +945,9 @@ export const ResumePreview = React.memo(function ResumePreview({
 
   const marginYPX = (customize?.marginY ?? 16) * PX_PER_MM;
   const showFooter = customize?.showPageNumbers || customize?.showFooterEmail || customize?.showFooterName;
-  const footerReservePX = showFooter ? 10 * PX_PER_MM : 0;
-  const usablePerPage = dims.hPX - 2 * marginYPX - footerReservePX;
+  const headerReservePX = HEADER_SAFE_MM * PX_PER_MM;
+  const footerReservePX = FOOTER_SAFE_MM * PX_PER_MM;
+  const usablePerPage = dims.hPX - 2 * marginYPX - headerReservePX - footerReservePX;
 
   useEffect(() => {
     const root = hiddenFlowRef.current;

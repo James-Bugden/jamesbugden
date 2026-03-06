@@ -45,7 +45,9 @@ export async function exportToPdf({ elementId, fileName, pageFormat = "a4" }: Ex
 
     const pageWidthPX = dims.wMM * PX_PER_MM;
     const pageHeightPX = dims.hMM * PX_PER_MM;
-    const usableHeightPX = pageHeightPX - 2 * marginYPX;
+    const headerReservePX = HEADER_SAFE_MM * PX_PER_MM;
+    const footerReservePX = FOOTER_SAFE_MM * PX_PER_MM;
+    const usableHeightPX = pageHeightPX - 2 * marginYPX - headerReservePX - footerReservePX;
 
     // Total content height (excluding the top/bottom padding of A4Page)
     const fullContentHeightPX = (fullCanvas.height / SCALE) - 2 * marginYPX;
