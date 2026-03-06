@@ -567,14 +567,21 @@ const ResumeBuilder = () => {
       <div className="max-w-2xl mx-auto p-4 md:p-6 space-y-3">
         {/* Import content link */}
         <div className="flex items-center justify-end mb-1">
-          <button
-            onClick={() => setEditorImportOpen(true)}
-            className="flex items-center gap-1.5 text-xs font-medium transition-colors hover:opacity-80"
-            style={{ color: BRAND.textSecondary }}
-          >
-            <Upload className="w-3.5 h-3.5" />
-            Import content
-          </button>
+          <TooltipProvider delayDuration={300}>
+            <Tooltip>
+              <TooltipTrigger asChild>
+                <button
+                  onClick={() => setEditorImportOpen(true)}
+                  className="flex items-center gap-1.5 text-xs font-medium transition-colors hover:opacity-80"
+                  style={{ color: BRAND.textSecondary }}
+                >
+                  <Upload className="w-3.5 h-3.5" />
+                  Import content
+                </button>
+              </TooltipTrigger>
+              <TooltipContent side="bottom" className="text-xs">Import from file (PDF, DOCX)</TooltipContent>
+            </Tooltip>
+          </TooltipProvider>
         </div>
 
         {/* Personal Details */}
