@@ -729,7 +729,10 @@ function parseProjectEntries(lines: string[]) {
 
   const flush = () => {
     if (!current) return;
-    const descHtml = current.bullets.length > 0 ? `<ul>${current.bullets.map((b) => `<li>${b}</li>`).join("")}</ul>` : "";
+    const deduped = current.bullets.filter((b, i) =>
+      !current!.bullets.some((other, j) => j !== i && other.includes(b) && other.length > b.length)
+    );
+    const descHtml = deduped.length > 0 ? `<ul>${deduped.map((b) => `<li>${b}</li>`).join("")}</ul>` : "";
     entries.push({
       id: crypto.randomUUID(),
       fields: {
@@ -746,9 +749,9 @@ function parseProjectEntries(lines: string[]) {
   };
 
   for (const line of lines) {
-    const isBullet = /^[•\-\*·▪▸►→]/.test(line.trim());
+    const isBullet = /^[•\-\*·▪▸►→●○◦⦿◆◇■□❖➤➢✦✧∙]/.test(line.trim());
     if (isBullet && current) {
-      current.bullets.push(line.replace(/^[•\-\*·▪▸►→]\s*/, "").trim());
+      current.bullets.push(line.replace(/^[•\-\*·▪▸►→●○◦⦿◆◇■□❖➤➢✦✧∙]\s*/, "").trim());
       continue;
     }
 
@@ -762,7 +765,11 @@ function parseProjectEntries(lines: string[]) {
       const { primary, secondary } = splitTitleOrg(textClean, false);
       current = { name: primary, role: secondary, dates, url, bullets: [] };
     } else if (current) {
-      current.bullets.push(line);
+      if (current.bullets.length > 0 && !isBullet && line.length < 120) {
+        current.bullets[current.bullets.length - 1] += " " + line.trim();
+      } else {
+        current.bullets.push(line);
+      }
     }
   }
   flush();
