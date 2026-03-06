@@ -473,7 +473,7 @@ function renderSectionEntries(section: ResumeSection, customize?: CustomizeSetti
               const date = formatDateRange(f) || f.date || "";
 
               return (
-                <div key={entry.id}>
+                <div key={entry.id} data-page-item>
                   <div className="flex items-start justify-between gap-[4mm]">
                     <div style={{ flex: 1 }}>
                       {subPlace === "same-line" ? (
@@ -519,7 +519,7 @@ function renderSectionEntries(section: ResumeSection, customize?: CustomizeSetti
             const groupDateRange = [groupStart, groupEnd].filter(Boolean).join(" – ");
 
             return (
-              <div key={`group-${gi}`}>
+              <div key={`group-${gi}`} data-page-item>
                 {/* Company heading */}
                 <div className="flex items-start justify-between gap-[4mm]">
                   <p style={{ fontSize: titleFontSize, fontWeight: 700, color: "var(--resume-name)" }}>{group.company || "Company"}</p>
@@ -578,7 +578,7 @@ function renderSectionEntries(section: ResumeSection, customize?: CustomizeSetti
           if (layout === "inline") {
             const headline = [primaryText, secondaryText].filter(Boolean).join(" · ");
             return (
-              <div key={entry.id}>
+              <div key={entry.id} data-page-item>
                 <div className="flex items-start justify-between gap-[4mm]">
                   <p style={{ fontSize: titleFontSize, fontWeight: 700, color: "var(--resume-name)" }}>
                     {headline || "Entry"}
@@ -595,7 +595,7 @@ function renderSectionEntries(section: ResumeSection, customize?: CustomizeSetti
 
           if (layout === "academic") {
             return (
-              <div key={entry.id}>
+              <div key={entry.id} data-page-item>
                 <p style={{ fontSize: titleFontSize, fontWeight: 700, color: "var(--resume-name)" }}>
                   {primaryText || "Entry"}
                   {date && <span style={{ fontSize: subtitleFontSize, fontWeight: 400, color: "var(--resume-dates)", marginLeft: "3mm" }}>{date}</span>}
@@ -612,7 +612,7 @@ function renderSectionEntries(section: ResumeSection, customize?: CustomizeSetti
           }
 
           return (
-            <div key={entry.id}>
+            <div key={entry.id} data-page-item>
               <div className="flex items-start justify-between gap-[4mm]">
                 <div style={{ flex: 1 }}>
                   {subPlace === "same-line" ? (
@@ -853,7 +853,7 @@ export const A4Page = React.memo(function A4Page({
                   : section.title;
 
                 return (
-                  <section key={section.id} className="group relative" style={{ marginBottom: "var(--resume-section-spacing)" }}>
+                  <section key={section.id} data-page-item className="group relative" style={{ marginBottom: "var(--resume-section-spacing)" }}>
                     <SectionEditOverlay sectionId={section.id} onEdit={onEditSection} />
                     {section.showHeading !== false && <SectionHeading title={title} customize={c} baseFontSize={baseFontSize} />}
                     {renderSectionEntries(section, c, baseFontSize)}
@@ -869,7 +869,7 @@ export const A4Page = React.memo(function A4Page({
                   : section.title;
 
                 return (
-                  <section key={section.id} className="group relative" style={{ marginBottom: "var(--resume-section-spacing)" }}>
+                  <section key={section.id} data-page-item className="group relative" style={{ marginBottom: "var(--resume-section-spacing)" }}>
                     <SectionEditOverlay sectionId={section.id} onEdit={onEditSection} />
                     {section.showHeading !== false && <SectionHeading title={title} customize={c} baseFontSize={baseFontSize} />}
                     {renderSectionEntries(section, c, baseFontSize)}
@@ -886,7 +886,7 @@ export const A4Page = React.memo(function A4Page({
                 : section.title;
 
               return (
-                <section key={section.id} className="group relative" style={{ marginBottom: "var(--resume-section-spacing)" }}>
+                <section key={section.id} data-page-item className="group relative" style={{ marginBottom: "var(--resume-section-spacing)" }}>
                   <SectionEditOverlay sectionId={section.id} onEdit={onEditSection} />
                   {section.showHeading !== false && <SectionHeading title={title} customize={c} baseFontSize={baseFontSize} />}
                   {renderSectionEntries(section, c, baseFontSize)}
@@ -947,19 +947,47 @@ export const ResumePreview = React.memo(function ResumePreview({
   const usablePerPage = dims.hPX - 2 * marginYPX - footerReservePX;
 
   useEffect(() => {
-    const measure = () => {
-      if (!hiddenFlowRef.current) return;
-      const h = hiddenFlowRef.current.scrollHeight;
-      const contentH = h - 2 * marginYPX;
-      const rawPages = contentH / usablePerPage;
-      setPageCount(Math.max(1, rawPages <= 1.02 ? 1 : Math.ceil(rawPages)));
-    };
+    const root = hiddenFlowRef.current;
+    if (!root) return;
+
+    // Reset any previously applied spacers
+    root.querySelectorAll('[data-page-item]').forEach(el => {
+      (el as HTMLElement).style.marginTop = '';
+    });
 
     let raf1: number;
     let raf2: number;
     raf1 = requestAnimationFrame(() => {
-      raf2 = requestAnimationFrame(measure);
+      raf2 = requestAnimationFrame(() => {
+        const items = root.querySelectorAll('[data-page-item]');
+        const rootRect = root.getBoundingClientRect();
+        let addedSpace = 0;
+
+        items.forEach(el => {
+          const rect = el.getBoundingClientRect();
+          // Element top relative to content area (after top margin)
+          const elTop = rect.top - rootRect.top - marginYPX + addedSpace;
+          const elBottom = elTop + rect.height;
+
+          // Which page does this element start on?
+          const pageIndex = Math.floor(Math.max(0, elTop) / usablePerPage);
+          const pageBottom = (pageIndex + 1) * usablePerPage;
+
+          // If element crosses page boundary and fits on one page, push it down
+          if (elTop < pageBottom && elBottom > pageBottom + 2 && rect.height < usablePerPage * 0.95) {
+            const push = pageBottom - elTop + 1; // +1px buffer
+            (el as HTMLElement).style.marginTop = `${push}px`;
+            addedSpace += push;
+          }
+        });
+
+        // Re-measure total height for page count
+        const totalH = root.scrollHeight - 2 * marginYPX;
+        const rawPages = totalH / usablePerPage;
+        setPageCount(Math.max(1, rawPages <= 1.02 ? 1 : Math.ceil(rawPages)));
+      });
     });
+
     return () => {
       cancelAnimationFrame(raf1);
       cancelAnimationFrame(raf2);
