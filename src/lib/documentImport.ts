@@ -682,7 +682,7 @@ function parseExperienceEntries(lines: string[]) {
       // Continuation line
       if (current.bullets.length === 0 && !current.location && LOCATION_STANDALONE.test(line.trim())) {
         current.location = line.trim();
-      } else if (current.bullets.length === 0 && !current.company && line.length < 60) {
+      } else if (current.bullets.length === 0 && !current.company && line.length < 80) {
         const loc = extractLocation(line);
         const companyCandidate = loc ? line.replace(loc, "").replace(/[|,·•\-–—]\s*$/, "").trim() : line;
         if (loc && !current.location) {
