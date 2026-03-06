@@ -595,7 +595,7 @@ function renderSectionEntries(section: ResumeSection, customize?: CustomizeSetti
 
           if (layout === "academic") {
             return (
-              <div key={entry.id}>
+              <div key={entry.id} data-page-item>
                 <p style={{ fontSize: titleFontSize, fontWeight: 700, color: "var(--resume-name)" }}>
                   {primaryText || "Entry"}
                   {date && <span style={{ fontSize: subtitleFontSize, fontWeight: 400, color: "var(--resume-dates)", marginLeft: "3mm" }}>{date}</span>}
