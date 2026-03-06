@@ -840,7 +840,7 @@ function parseLanguageEntries(lines: string[]) {
     // Fallback: treat each line as a language
     return lines.filter(Boolean).map((l) => ({
       id: crypto.randomUUID(),
-      fields: { language: l.replace(/^[•\-\*·▪▸►→]\s*/, "").trim(), proficiency: "" },
+      fields: { language: l.replace(/^[•\-\*·▪▸►→●○◦⦿◆◇■□❖➤➢✦✧∙]\s*/, "").trim(), proficiency: "" },
     }));
   }
   return entries;
