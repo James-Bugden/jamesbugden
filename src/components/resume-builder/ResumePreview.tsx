@@ -947,19 +947,47 @@ export const ResumePreview = React.memo(function ResumePreview({
   const usablePerPage = dims.hPX - 2 * marginYPX - footerReservePX;
 
   useEffect(() => {
-    const measure = () => {
-      if (!hiddenFlowRef.current) return;
-      const h = hiddenFlowRef.current.scrollHeight;
-      const contentH = h - 2 * marginYPX;
-      const rawPages = contentH / usablePerPage;
-      setPageCount(Math.max(1, rawPages <= 1.02 ? 1 : Math.ceil(rawPages)));
-    };
+    const root = hiddenFlowRef.current;
+    if (!root) return;
+
+    // Reset any previously applied spacers
+    root.querySelectorAll('[data-page-item]').forEach(el => {
+      (el as HTMLElement).style.marginTop = '';
+    });
 
     let raf1: number;
     let raf2: number;
     raf1 = requestAnimationFrame(() => {
-      raf2 = requestAnimationFrame(measure);
+      raf2 = requestAnimationFrame(() => {
+        const items = root.querySelectorAll('[data-page-item]');
+        const rootRect = root.getBoundingClientRect();
+        let addedSpace = 0;
+
+        items.forEach(el => {
+          const rect = el.getBoundingClientRect();
+          // Element top relative to content area (after top margin)
+          const elTop = rect.top - rootRect.top - marginYPX + addedSpace;
+          const elBottom = elTop + rect.height;
+
+          // Which page does this element start on?
+          const pageIndex = Math.floor(Math.max(0, elTop) / usablePerPage);
+          const pageBottom = (pageIndex + 1) * usablePerPage;
+
+          // If element crosses page boundary and fits on one page, push it down
+          if (elTop < pageBottom && elBottom > pageBottom + 2 && rect.height < usablePerPage * 0.95) {
+            const push = pageBottom - elTop + 1; // +1px buffer
+            (el as HTMLElement).style.marginTop = `${push}px`;
+            addedSpace += push;
+          }
+        });
+
+        // Re-measure total height for page count
+        const totalH = root.scrollHeight - 2 * marginYPX;
+        const rawPages = totalH / usablePerPage;
+        setPageCount(Math.max(1, rawPages <= 1.02 ? 1 : Math.ceil(rawPages)));
+      });
     });
+
     return () => {
       cancelAnimationFrame(raf1);
       cancelAnimationFrame(raf2);
