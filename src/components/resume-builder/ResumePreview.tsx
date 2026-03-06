@@ -519,7 +519,7 @@ function renderSectionEntries(section: ResumeSection, customize?: CustomizeSetti
             const groupDateRange = [groupStart, groupEnd].filter(Boolean).join(" – ");
 
             return (
-              <div key={`group-${gi}`}>
+              <div key={`group-${gi}`} data-page-item>
                 {/* Company heading */}
                 <div className="flex items-start justify-between gap-[4mm]">
                   <p style={{ fontSize: titleFontSize, fontWeight: 700, color: "var(--resume-name)" }}>{group.company || "Company"}</p>
