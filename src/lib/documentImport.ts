@@ -651,6 +651,19 @@ function parseExperienceEntries(lines: string[]) {
     }
 
     const dates = extractDateRange(line);
+
+    // Date-only line: attach to current entry instead of starting a new one
+    if (dates && current) {
+      const textWithoutDate = line.replace(dates.dateStr, "").replace(/[|,·•\-–—]\s*$/, "").trim();
+      if (textWithoutDate.length < 3) {
+        // This is just a date line — attach to current entry if it has no dates yet
+        if (!current.dates) {
+          current.dates = dates;
+        }
+        continue;
+      }
+    }
+
     if (dates || (!current && !isBullet && line.length < 120)) {
       flush();
       const textWithoutDate = dates ? line.replace(dates.dateStr, "").replace(/[|,·•\-–—]\s*$/, "").trim() : line;
