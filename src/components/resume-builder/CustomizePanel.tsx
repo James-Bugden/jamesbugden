@@ -495,113 +495,18 @@ function DesignTab({ settings, onChange }: { settings: CustomizeSettings; onChan
       </SettingCard>
 
       <SettingCard title="Colors">
-        {/* Color mode */}
-        <div className="flex gap-3 mb-4">
-          {([
-            { val: "basic", label: "Basic", icon: (
-              <div className="w-10 h-10 rounded-full border-2" style={{ borderColor: settings.colorMode === "basic" ? B.green : "#d1d5db" }} />
-            )},
-            { val: "advanced", label: "Advanced", icon: (
-              <div className="w-10 h-10 rounded-full overflow-hidden border-2" style={{ borderColor: settings.colorMode === "advanced" ? B.green : "#d1d5db" }}>
-                <div className="w-full h-1/2 bg-gray-300" /><div className="w-full h-1/2 bg-gray-400" />
-              </div>
-            )},
-            { val: "border", label: "Border", icon: (
-              <div className="w-10 h-10 rounded-full border-2 bg-white flex items-center justify-center" style={{ borderColor: settings.colorMode === "border" ? B.green : "#d1d5db" }}>
-                <div className="w-6 h-6 rounded-full border-2 border-gray-300" />
-              </div>
-            )},
-          ] as const).map((m) => (
-            <button
-              key={m.val}
-              onClick={() => onChange({ colorMode: m.val })}
-              className="flex flex-col items-center gap-1.5"
-            >
-              {m.icon}
-              <span className="text-[10px] font-medium" style={{ color: B.textSec }}>{m.label}</span>
-            </button>
-          ))}
+        <div className="space-y-3">
+          <ColorPickerRow label="Accent / Lines" value={settings.accentColor || "#0891b2"} onChange={(v) => onChange({ accentColor: v })} />
+          <ColorPickerRow label="Name" value={settings.nameColor || "#111827"} onChange={(v) => onChange({ nameColor: v })} />
+          <ColorPickerRow label="Job Title" value={settings.titleColor || "#6B7280"} onChange={(v) => onChange({ titleColor: v })} />
+          <ColorPickerRow label="Headings" value={settings.headingsColor || "#111827"} onChange={(v) => onChange({ headingsColor: v })} />
+          <ColorPickerRow label="Dates" value={settings.datesColor || "#6B7280"} onChange={(v) => onChange({ datesColor: v })} />
+          <ColorPickerRow label="Entry Subtitle" value={settings.subtitleColor || "#6B7280"} onChange={(v) => onChange({ subtitleColor: v })} />
+          <ColorPickerRow label="Icons" value={settings.linkIconColor || "#4B5563"} onChange={(v) => onChange({ linkIconColor: v })} />
+          <div className="pt-2 border-t border-gray-100">
+            <ColorPickerRow label="Page Background" value={settings.a4Background || "#ffffff"} onChange={(v) => onChange({ a4Background: v })} />
+          </div>
         </div>
-
-        {/* Color type */}
-        <div className="flex gap-2 mb-4">
-          {([
-            { val: "accent", label: "Accent", icon: <div className="w-8 h-6 rounded" style={{ backgroundColor: settings.accentColor || B.green }}><Check className="w-3 h-3 text-white mx-auto mt-1.5" /></div> },
-            { val: "multi", label: "Multi", icon: <div className="w-8 h-6 rounded bg-gray-600 flex items-center justify-center"><span className="text-white text-[9px] font-bold">T</span><div className="w-2 h-4 bg-gray-800 ml-0.5" /></div> },
-            { val: "image", label: "Image", icon: <div className="w-8 h-6 rounded bg-gradient-to-br from-gray-300 to-gray-500" /> },
-          ] as const).map((ct) => (
-            <button
-              key={ct.val}
-              onClick={() => onChange({ colorType: ct.val })}
-              className={cn(
-                "flex flex-col items-center gap-1 p-2 rounded-xl border-2 transition-all flex-1",
-                settings.colorType === ct.val ? "shadow-sm" : "bg-white hover:border-gray-300"
-              )}
-              style={
-                settings.colorType === ct.val
-                  ? { borderColor: B.green, backgroundColor: B.greenLighter }
-                  : { borderColor: B.border }
-              }
-            >
-              {ct.icon}
-              <span className="text-[10px] font-medium" style={{ color: B.textSec }}>{ct.label}</span>
-            </button>
-          ))}
-        </div>
-
-        {/* Accent color swatches */}
-        <TooltipProvider delayDuration={200}>
-        <div className="grid grid-cols-10 gap-1.5 mb-4">
-          {ACCENT_COLORS.map((color) => (
-            <Tooltip key={color}>
-              <TooltipTrigger asChild>
-                <button
-                  onClick={() => onChange({ accentColor: color })}
-                  className={cn("w-6 h-6 rounded-full border-2 transition-transform hover:scale-110", settings.accentColor === color ? "scale-110" : "")}
-                  style={{
-                    backgroundColor: color,
-                    borderColor: settings.accentColor === color ? B.green : "transparent",
-                    boxShadow: settings.accentColor === color ? `0 0 0 2px ${B.greenLight}` : "none",
-                  }}
-                />
-              </TooltipTrigger>
-              <TooltipContent side="bottom" className="text-xs">{color}</TooltipContent>
-            </Tooltip>
-          ))}
-          <button className="w-6 h-6 rounded-full border-2" style={{ background: "conic-gradient(red, yellow, lime, aqua, blue, magenta, red)", borderColor: B.border }} />
-        </div>
-        </TooltipProvider>
-
-        {/* Apply accent color checkboxes */}
-        <FieldLabel>Apply accent color</FieldLabel>
-        <div className="grid grid-cols-2 gap-x-4 gap-y-2 mb-4">
-          <CheckboxRow label="Name" checked={settings.accentApplyName} onChange={(v) => onChange({ accentApplyName: v })} />
-          <CheckboxRow label="Dots/Bars/Bubbles" checked={settings.accentApplyIcons} onChange={(v) => onChange({ accentApplyIcons: v })} />
-          <CheckboxRow label="Job title" checked={settings.accentApplyTitle} onChange={(v) => onChange({ accentApplyTitle: v })} />
-          <CheckboxRow label="Dates" checked={settings.accentApplyDates} onChange={(v) => onChange({ accentApplyDates: v })} />
-          <CheckboxRow label="Headings" checked={settings.accentApplyHeadings} onChange={(v) => onChange({ accentApplyHeadings: v })} />
-          <CheckboxRow label="Entry subtitle" checked={settings.accentApplySubtitle} onChange={(v) => onChange({ accentApplySubtitle: v })} />
-          <CheckboxRow label="Headings Line" checked={settings.accentApplyLines} onChange={(v) => onChange({ accentApplyLines: v })} />
-          <CheckboxRow label="Link icons" checked={settings.accentApplyIcons} onChange={(v) => onChange({ accentApplyIcons: v })} />
-          <CheckboxRow label="Header icons" checked={settings.accentApplyIcons} onChange={(v) => onChange({ accentApplyIcons: v })} />
-        </div>
-
-        {settings.colorMode === "advanced" && (
-          <>
-            <FieldLabel>Custom colors</FieldLabel>
-            <div className="space-y-2.5 mt-2">
-              <ColorPickerRow label="Name" value={settings.nameColor || "#111827"} onChange={(v) => onChange({ nameColor: v })} />
-              <ColorPickerRow label="Job Title" value={settings.titleColor || "#6B7280"} onChange={(v) => onChange({ titleColor: v })} />
-              <ColorPickerRow label="Headings" value={settings.headingsColor || "#111827"} onChange={(v) => onChange({ headingsColor: v })} />
-              <ColorPickerRow label="Dates" value={settings.datesColor || "#6B7280"} onChange={(v) => onChange({ datesColor: v })} />
-              <ColorPickerRow label="Entry Subtitle" value={settings.subtitleColor || "#6B7280"} onChange={(v) => onChange({ subtitleColor: v })} />
-              <ColorPickerRow label="Link Icons" value={settings.linkIconColor || "#4B5563"} onChange={(v) => onChange({ linkIconColor: v })} />
-              <div className="pt-2 border-t border-gray-100">
-                <ColorPickerRow label="A4 Background" value={settings.a4Background || "#ffffff"} onChange={(v) => onChange({ a4Background: v })} />
-              </div>
-            </div>
-          </>
-        )}
       </SettingCard>
 
       <SettingCard title="Section Headings">

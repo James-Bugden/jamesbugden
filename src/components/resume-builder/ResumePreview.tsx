@@ -698,12 +698,12 @@ export const A4Page = React.memo(function A4Page({
         "--resume-margin-y": `${c?.marginY ?? 16}mm`,
         "--resume-section-spacing": `${c?.sectionSpacing ?? 5}mm`,
         "--resume-accent": c?.accentColor ?? "#1e293b",
-        "--resume-name": c?.accentApplyName ? (c?.accentColor ?? "#1e293b") : (c?.nameColor ?? "#111827"),
-        "--resume-title": c?.accentApplyTitle ? (c?.accentColor ?? "#1e293b") : (c?.titleColor ?? "#6B7280"),
-        "--resume-headings": c?.accentApplyHeadings ? (c?.accentColor ?? "#1e293b") : (c?.headingsColor ?? "#111827"),
-        "--resume-dates": c?.accentApplyDates ? (c?.accentColor ?? "#1e293b") : (c?.datesColor ?? "#6B7280"),
-        "--resume-subtitle": c?.accentApplySubtitle ? (c?.accentColor ?? "#1e293b") : (c?.subtitleColor ?? "#6B7280"),
-        "--resume-body": c?.nameColor ?? "#374151",
+        "--resume-name": c?.nameColor ?? "#111827",
+        "--resume-title": c?.titleColor ?? "#6B7280",
+        "--resume-headings": c?.headingsColor ?? "#111827",
+        "--resume-dates": c?.datesColor ?? "#6B7280",
+        "--resume-subtitle": c?.subtitleColor ?? "#6B7280",
+        "--resume-body": "#374151",
       }) as React.CSSProperties,
     [c]
   );
