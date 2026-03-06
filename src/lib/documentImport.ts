@@ -798,7 +798,7 @@ function parseLanguageEntries(lines: string[]) {
 
   const entries: any[] = [];
   for (const line of lines) {
-    const clean = line.replace(/^[•\-\*·▪▸►→]\s*/, "").trim();
+    const clean = line.replace(/^[•\-\*·▪▸►→●○◦⦿◆◇■□❖➤➢✦✧∙]\s*/, "").trim();
     if (!clean) continue;
 
     // Try "Language — Proficiency" or "Language: Proficiency" or "Language (Proficiency)"
