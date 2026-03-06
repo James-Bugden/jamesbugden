@@ -21,6 +21,8 @@ import { GOOGLE_FONTS_URL } from "./fontData";
 
 /* ── Page dimensions (mm → px at 96 DPI: 1mm ≈ 3.7795px) ──────── */
 const PX_PER_MM = 3.7795;
+const HEADER_SAFE_MM = 8;
+const FOOTER_SAFE_MM = 8;
 const PAGE_DIMS: Record<string, { w: number; h: number }> = {
   a4: { w: 210, h: 297 },
   letter: { w: 215.9, h: 279.4 },
@@ -942,9 +944,10 @@ export const ResumePreview = React.memo(function ResumePreview({
   }, [dims.wPX]);
 
   const marginYPX = (customize?.marginY ?? 16) * PX_PER_MM;
-  const showFooter = customize?.showPageNumbers || customize?.showFooterEmail || customize?.showFooterName;
-  const footerReservePX = showFooter ? 10 * PX_PER_MM : 0;
-  const usablePerPage = dims.hPX - 2 * marginYPX - footerReservePX;
+  
+  const headerReservePX = HEADER_SAFE_MM * PX_PER_MM;
+  const footerReservePX = FOOTER_SAFE_MM * PX_PER_MM;
+  const usablePerPage = dims.hPX - 2 * marginYPX - headerReservePX - footerReservePX;
 
   useEffect(() => {
     const root = hiddenFlowRef.current;
@@ -966,7 +969,7 @@ export const ResumePreview = React.memo(function ResumePreview({
         items.forEach(el => {
           const rect = el.getBoundingClientRect();
           // Element top relative to content area (after top margin)
-          const elTop = rect.top - rootRect.top - marginYPX + addedSpace;
+          const elTop = rect.top - rootRect.top - marginYPX - headerReservePX + addedSpace;
           const elBottom = elTop + rect.height;
 
           // Which page does this element start on?
@@ -982,7 +985,7 @@ export const ResumePreview = React.memo(function ResumePreview({
         });
 
         // Re-measure total height for page count
-        const totalH = root.scrollHeight - 2 * marginYPX;
+        const totalH = root.scrollHeight - 2 * marginYPX - headerReservePX - footerReservePX;
         const rawPages = totalH / usablePerPage;
         setPageCount(Math.max(1, rawPages <= 1.02 ? 1 : Math.ceil(rawPages)));
       });
@@ -992,7 +995,7 @@ export const ResumePreview = React.memo(function ResumePreview({
       cancelAnimationFrame(raf1);
       cancelAnimationFrame(raf2);
     };
-  }, [data, customize, dims.hPX, marginYPX, usablePerPage]);
+  }, [data, customize, dims.hPX, marginYPX, headerReservePX, footerReservePX, usablePerPage]);
 
   useEffect(() => {
     const el = containerRef.current;
@@ -1063,8 +1066,7 @@ export const ResumePreview = React.memo(function ResumePreview({
               >
                 <div style={{
                   width: `${dims.wPX}px`,
-                  transform: `translateY(${-i * usablePerPage}px)`,
-                  ...(i > 0 ? { paddingTop: `${marginYPX}px` } : {}),
+                  transform: `translateY(${headerReservePX - i * usablePerPage}px)`,
                 }}>
                   <A4Page data={data} customize={customize} onEditSection={onEditSection} />
                 </div>

@@ -14,6 +14,8 @@ const PAGE_DIMS = {
 };
 
 const PX_PER_MM = 3.7795;
+const HEADER_SAFE_MM = 8;
+const FOOTER_SAFE_MM = 8;
 
 export async function exportToPdf({ elementId, fileName, pageFormat = "a4" }: ExportOptions) {
   const container = document.getElementById(elementId);
@@ -43,10 +45,12 @@ export async function exportToPdf({ elementId, fileName, pageFormat = "a4" }: Ex
 
     const pageWidthPX = dims.wMM * PX_PER_MM;
     const pageHeightPX = dims.hMM * PX_PER_MM;
-    const usableHeightPX = pageHeightPX - 2 * marginYPX;
+    const headerReservePX = HEADER_SAFE_MM * PX_PER_MM;
+    const footerReservePX = FOOTER_SAFE_MM * PX_PER_MM;
+    const usableHeightPX = pageHeightPX - 2 * marginYPX - headerReservePX - footerReservePX;
 
     // Total content height (excluding the top/bottom padding of A4Page)
-    const fullContentHeightPX = (fullCanvas.height / SCALE) - 2 * marginYPX;
+    const fullContentHeightPX = (fullCanvas.height / SCALE) - 2 * marginYPX - headerReservePX - footerReservePX;
     const pageCount = Math.max(1, fullContentHeightPX <= usableHeightPX * 1.02 ? 1 : Math.ceil(fullContentHeightPX / usableHeightPX));
 
     const pdf = new jsPDF({
@@ -59,6 +63,7 @@ export async function exportToPdf({ elementId, fileName, pageFormat = "a4" }: Ex
     const canvasPageHeightScaled = pageHeightPX * SCALE;
     const canvasUsableHeightScaled = usableHeightPX * SCALE;
     const canvasMarginYScaled = marginYPX * SCALE;
+    const canvasHeaderReserveScaled = headerReservePX * SCALE;
 
     for (let i = 0; i < pageCount; i++) {
       if (i > 0) pdf.addPage([dims.wMM, dims.hMM]);
@@ -76,7 +81,7 @@ export async function exportToPdf({ elementId, fileName, pageFormat = "a4" }: Ex
       // Source: slice from the full canvas
       // Page 0: content starts at marginYPX (the A4Page's own padding)
       // Page N: content starts at marginYPX + N * usableHeightPX
-      const srcY = canvasMarginYScaled + i * canvasUsableHeightScaled;
+      const srcY = canvasMarginYScaled + canvasHeaderReserveScaled + i * canvasUsableHeightScaled;
       const srcHeight = Math.min(canvasUsableHeightScaled, fullCanvas.height - srcY);
 
       if (srcHeight > 0) {
@@ -85,7 +90,7 @@ export async function exportToPdf({ elementId, fileName, pageFormat = "a4" }: Ex
           fullCanvas,
           0, srcY,                          // source x, y
           canvasPageWidthScaled, srcHeight,  // source w, h
-          0, canvasMarginYScaled,            // dest x, y (with top margin)
+          0, canvasMarginYScaled + canvasHeaderReserveScaled, // dest x, y (with top margin + header reserve)
           canvasPageWidthScaled, srcHeight   // dest w, h
         );
       }
