@@ -29,7 +29,7 @@ function Field({ label, value, onChange, placeholder, type = "text", className }
 }
 
 export function PersonalDetailsCard({ details, onChange, collapsible }: PersonalDetailsCardProps) {
-  const [editing, setEditing] = useState(false);
+  const [editing, setEditing] = useState(true);
   const [showExtras, setShowExtras] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
