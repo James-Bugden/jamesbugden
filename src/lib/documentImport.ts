@@ -124,14 +124,33 @@ function detectSectionType(headerText: string): string | null {
   return null;
 }
 
-function isSectionHeader(line: string, _allLines: string[], _idx: number): boolean {
+function isSectionHeader(line: string, allLines: string[], idx: number): boolean {
+  // Exact keyword match always wins
   if (detectSectionType(line) !== null) return true;
+
   const clean = line.replace(/[^a-zA-Z\s&]/g, "").trim();
   if (clean.length > 0 && clean.length <= 50) {
     const words = clean.split(/\s+/);
     if (words.length <= 5) {
       const isAllCaps = clean === clean.toUpperCase() && clean.length > 2;
-      if (isAllCaps) return true;
+      if (isAllCaps) {
+        // Reject short acronyms (1 word, ≤3 chars) — likely company names like "IBM", "SAP"
+        if (words.length === 1 && clean.length <= 3) return false;
+
+        // Reject if it looks like a company or job title
+        if (COMPANY_INDICATORS.test(line) || TITLE_INDICATORS.test(line)) return false;
+
+        // Contextual: if next line is also a short non-bullet line, this is likely a title/company pair, not a header
+        const nextLine = idx + 1 < allLines.length ? allLines[idx + 1] : "";
+        const nextIsBullet = /^[•\-\*·▪▸►→●○◦⦿◆◇■□❖➤➢✦✧∙]/.test(nextLine.trim());
+        const nextHasDate = extractDateRange(nextLine) !== null;
+        if (nextLine && !nextIsBullet && !nextHasDate && nextLine.length < 80 && nextLine.length > 2) {
+          // Next line looks like a companion line (company/title pair) — not a section header
+          return false;
+        }
+
+        return true;
+      }
     }
   }
   const cjkOnly = line.replace(/[\s:：\-–—·•|]/g, "");
@@ -493,6 +512,9 @@ const COMPANY_INDICATORS = /\b(inc|corp|corporation|ltd|llc|llp|gmbh|co|company|
 
 const TITLE_INDICATORS = /\b(engineer|developer|manager|director|analyst|designer|architect|lead|senior|junior|intern|associate|vp|vice\s*president|president|ceo|cto|cfo|coo|cio|consultant|coordinator|specialist|administrator|officer|head|principal|staff|fellow|scientist|researcher|professor|teacher|editor|writer|accountant|advisor|strategist|recruiter|trainer|supervisor|technician|assistant|clerk|representative|executive)\b/i;
 
+const INSTITUTION_INDICATORS = /\b(university|college|institute|school|academy|polytechnic|conservatory|universität|université|universidad)\b/i;
+const DEGREE_INDICATORS = /\b(b\.?s\.?|b\.?a\.?|m\.?s\.?|m\.?a\.?|m\.?b\.?a\.?|ph\.?d|bachelor|master|doctor|diploma|associate|certificate|degree)\b/i;
+
 function looksLikeCompany(text: string): number {
   let score = 0;
   if (COMPANY_INDICATORS.test(text)) score += 2;
@@ -517,6 +539,27 @@ function smartSwap(primary: string, secondary: string): { primary: string; secon
   const sTitle = looksLikeTitle(secondary);
   // Swap if primary looks like a company and secondary looks like a title
   if (pCompany > pTitle && sTitle > sCompany) {
+    return { primary: secondary, secondary: primary };
+  }
+  return { primary, secondary };
+}
+
+/** For education: swap so degree is primary and institution is secondary */
+function educationSmartSwap(primary: string, secondary: string): { primary: string; secondary: string } {
+  if (!secondary) {
+    // Single value — try to determine if it's an institution (swap to secondary)
+    if (INSTITUTION_INDICATORS.test(primary) && !DEGREE_INDICATORS.test(primary)) {
+      return { primary: "", secondary: primary };
+    }
+    return { primary, secondary };
+  }
+  const pIsInstitution = INSTITUTION_INDICATORS.test(primary);
+  const pIsDegree = DEGREE_INDICATORS.test(primary);
+  const sIsInstitution = INSTITUTION_INDICATORS.test(secondary);
+  const sIsDegree = DEGREE_INDICATORS.test(secondary);
+
+  // If primary looks like institution and secondary looks like degree, swap
+  if (pIsInstitution && !pIsDegree && (sIsDegree || !sIsInstitution)) {
     return { primary: secondary, secondary: primary };
   }
   return { primary, secondary };
@@ -566,7 +609,8 @@ function splitTitleOrg(line: string, isExperience: boolean): { primary: string; 
   if (isExperience) {
     return smartSwap(result.primary, result.secondary);
   }
-  return result;
+  // For education: primary should be degree, secondary should be institution
+  return educationSmartSwap(result.primary, result.secondary);
 }
 
 function parseExperienceEntries(lines: string[]) {
@@ -607,6 +651,19 @@ function parseExperienceEntries(lines: string[]) {
     }
 
     const dates = extractDateRange(line);
+
+    // Date-only line: attach to current entry instead of starting a new one
+    if (dates && current) {
+      const textWithoutDate = line.replace(dates.dateStr, "").replace(/[|,·•\-–—]\s*$/, "").trim();
+      if (textWithoutDate.length < 3) {
+        // This is just a date line — attach to current entry if it has no dates yet
+        if (!current.dates) {
+          current.dates = dates;
+        }
+        continue;
+      }
+    }
+
     if (dates || (!current && !isBullet && line.length < 120)) {
       flush();
       const textWithoutDate = dates ? line.replace(dates.dateStr, "").replace(/[|,·•\-–—]\s*$/, "").trim() : line;
@@ -625,7 +682,7 @@ function parseExperienceEntries(lines: string[]) {
       // Continuation line
       if (current.bullets.length === 0 && !current.location && LOCATION_STANDALONE.test(line.trim())) {
         current.location = line.trim();
-      } else if (current.bullets.length === 0 && !current.company && line.length < 60) {
+      } else if (current.bullets.length === 0 && !current.company && line.length < 80) {
         const loc = extractLocation(line);
         const companyCandidate = loc ? line.replace(loc, "").replace(/[|,·•\-–—]\s*$/, "").trim() : line;
         if (loc && !current.location) {
@@ -693,6 +750,18 @@ function parseEducationEntries(lines: string[]) {
     }
 
     const dates = extractDateRange(line);
+
+    // Date-only line: attach to current entry instead of starting a new one
+    if (dates && current) {
+      const textWithoutDate = line.replace(dates.dateStr, "").replace(/[|,·•\-–—]\s*$/, "").trim();
+      if (textWithoutDate.length < 3) {
+        if (!current.dates) {
+          current.dates = dates;
+        }
+        continue;
+      }
+    }
+
     if (dates || (!current && !isBullet && line.length < 120)) {
       flush();
       const textWithoutDate = dates ? line.replace(dates.dateStr, "").replace(/[|,·•\-–—]\s*$/, "").trim() : line;
@@ -702,7 +771,7 @@ function parseEducationEntries(lines: string[]) {
 
       current = { degree: primary, institution: secondary, location: loc || "", dates, bullets: [] };
     } else if (current) {
-      if (current.bullets.length === 0 && !current.institution && line.length < 60) {
+      if (current.bullets.length === 0 && !current.institution && line.length < 80) {
         current.institution = line;
       } else {
         if (current.bullets.length > 0 && !isBullet && line.length < 120) {
