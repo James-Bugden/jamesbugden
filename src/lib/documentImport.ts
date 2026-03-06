@@ -750,6 +750,18 @@ function parseEducationEntries(lines: string[]) {
     }
 
     const dates = extractDateRange(line);
+
+    // Date-only line: attach to current entry instead of starting a new one
+    if (dates && current) {
+      const textWithoutDate = line.replace(dates.dateStr, "").replace(/[|,·•\-–—]\s*$/, "").trim();
+      if (textWithoutDate.length < 3) {
+        if (!current.dates) {
+          current.dates = dates;
+        }
+        continue;
+      }
+    }
+
     if (dates || (!current && !isBullet && line.length < 120)) {
       flush();
       const textWithoutDate = dates ? line.replace(dates.dateStr, "").replace(/[|,·•\-–—]\s*$/, "").trim() : line;
@@ -759,7 +771,7 @@ function parseEducationEntries(lines: string[]) {
 
       current = { degree: primary, institution: secondary, location: loc || "", dates, bullets: [] };
     } else if (current) {
-      if (current.bullets.length === 0 && !current.institution && line.length < 60) {
+      if (current.bullets.length === 0 && !current.institution && line.length < 80) {
         current.institution = line;
       } else {
         if (current.bullets.length > 0 && !isBullet && line.length < 120) {
