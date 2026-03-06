@@ -784,7 +784,7 @@ function parseSkillsList(lines: string[]): string {
   // Flatten bullets and comma-separated items
   const items: string[] = [];
   for (const line of lines) {
-    const clean = line.replace(/^[•\-\*·▪▸►→]\s*/, "").trim();
+    const clean = line.replace(/^[•\-\*·▪▸►→●○◦⦿◆◇■□❖➤➢✦✧∙]\s*/, "").trim();
     if (!clean) continue;
     // Split on commas, semicolons, pipes
     const parts = clean.split(/[,;|]/).map((s) => s.trim()).filter(Boolean);
