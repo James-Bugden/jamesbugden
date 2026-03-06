@@ -124,14 +124,33 @@ function detectSectionType(headerText: string): string | null {
   return null;
 }
 
-function isSectionHeader(line: string, _allLines: string[], _idx: number): boolean {
+function isSectionHeader(line: string, allLines: string[], idx: number): boolean {
+  // Exact keyword match always wins
   if (detectSectionType(line) !== null) return true;
+
   const clean = line.replace(/[^a-zA-Z\s&]/g, "").trim();
   if (clean.length > 0 && clean.length <= 50) {
     const words = clean.split(/\s+/);
     if (words.length <= 5) {
       const isAllCaps = clean === clean.toUpperCase() && clean.length > 2;
-      if (isAllCaps) return true;
+      if (isAllCaps) {
+        // Reject short acronyms (1 word, ≤3 chars) — likely company names like "IBM", "SAP"
+        if (words.length === 1 && clean.length <= 3) return false;
+
+        // Reject if it looks like a company or job title
+        if (COMPANY_INDICATORS.test(line) || TITLE_INDICATORS.test(line)) return false;
+
+        // Contextual: if next line is also a short non-bullet line, this is likely a title/company pair, not a header
+        const nextLine = idx + 1 < allLines.length ? allLines[idx + 1] : "";
+        const nextIsBullet = /^[•\-\*·▪▸►→●○◦⦿◆◇■□❖➤➢✦✧∙]/.test(nextLine.trim());
+        const nextHasDate = extractDateRange(nextLine) !== null;
+        if (nextLine && !nextIsBullet && !nextHasDate && nextLine.length < 80 && nextLine.length > 2) {
+          // Next line looks like a companion line (company/title pair) — not a section header
+          return false;
+        }
+
+        return true;
+      }
     }
   }
   const cjkOnly = line.replace(/[\s:：\-–—·•|]/g, "");
