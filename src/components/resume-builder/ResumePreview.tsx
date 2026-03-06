@@ -612,7 +612,7 @@ function renderSectionEntries(section: ResumeSection, customize?: CustomizeSetti
           }
 
           return (
-            <div key={entry.id}>
+            <div key={entry.id} data-page-item>
               <div className="flex items-start justify-between gap-[4mm]">
                 <div style={{ flex: 1 }}>
                   {subPlace === "same-line" ? (
