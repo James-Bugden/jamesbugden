@@ -2,6 +2,7 @@ import { useSortable } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
 import { cn } from "@/lib/utils";
 import { GripVertical } from "lucide-react";
+import { Tooltip, TooltipTrigger, TooltipContent, TooltipProvider } from "@/components/ui/tooltip";
 
 interface SortableSectionCardProps {
   id: string;
@@ -34,12 +35,19 @@ export function SortableSectionCard({ id, children }: SortableSectionCardProps) 
       )}
       {...attributes}
     >
-      <div
-        {...listeners}
-        className="flex items-center justify-center py-1.5 cursor-grab active:cursor-grabbing text-muted-foreground/40 hover:text-muted-foreground/70 transition-colors"
-      >
-        <GripVertical className="w-4 h-4" />
-      </div>
+      <TooltipProvider delayDuration={400}>
+        <Tooltip>
+          <TooltipTrigger asChild>
+            <div
+              {...listeners}
+              className="flex items-center justify-center py-1.5 cursor-grab active:cursor-grabbing text-muted-foreground/40 hover:text-muted-foreground/70 transition-colors"
+            >
+              <GripVertical className="w-4 h-4" />
+            </div>
+          </TooltipTrigger>
+          <TooltipContent side="top" className="text-xs">Drag to reorder</TooltipContent>
+        </Tooltip>
+      </TooltipProvider>
       {children}
     </div>
   );

@@ -148,13 +148,31 @@ function SegmentedControl({ options, value, onChange }: { options: { value: stri
   );
 }
 
+const COLOR_PRESETS = ["#2b4734", "#D4930D", "#1e40af", "#dc2626", "#7c3aed", "#0891b2", "#be185d", "#ea580c"];
+
 function ColorPickerRow({ label, value, onChange }: { label: string; value: string; onChange: (v: string) => void }) {
   return (
-    <div className="flex items-center justify-between gap-3">
-      <span className="text-xs font-semibold" style={{ color: B.textSec }}>{label}</span>
-      <div className="flex items-center gap-2">
-        <input type="color" value={value} onChange={(e) => onChange(e.target.value)} className="w-7 h-7 rounded-md border cursor-pointer p-0.5" style={{ borderColor: B.border }} />
-        <input type="text" value={value} onChange={(e) => onChange(e.target.value)} className="w-20 text-xs font-mono px-2 py-1 rounded-md bg-gray-50 border" style={{ color: B.text, borderColor: B.border }} />
+    <div className="space-y-1.5">
+      <div className="flex items-center justify-between gap-3">
+        <span className="text-xs font-semibold" style={{ color: B.textSec }}>{label}</span>
+        <div className="flex items-center gap-2">
+          <input type="color" value={value} onChange={(e) => onChange(e.target.value)} className="w-7 h-7 rounded-md border cursor-pointer p-0.5" style={{ borderColor: B.border }} />
+          <input type="text" value={value} onChange={(e) => onChange(e.target.value)} className="w-20 text-xs font-mono px-2 py-1 rounded-md bg-gray-50 border" style={{ color: B.text, borderColor: B.border }} />
+        </div>
+      </div>
+      <div className="flex gap-1">
+        {COLOR_PRESETS.map((c) => (
+          <button
+            key={c}
+            onClick={() => onChange(c)}
+            className="w-5 h-5 rounded-full border transition-transform hover:scale-110"
+            style={{
+              backgroundColor: c,
+              borderColor: value === c ? B.green : "transparent",
+              boxShadow: value === c ? `0 0 0 2px ${B.greenLight}` : "none",
+            }}
+          />
+        ))}
       </div>
     </div>
   );
