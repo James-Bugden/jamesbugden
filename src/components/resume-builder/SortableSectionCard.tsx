@@ -40,7 +40,7 @@ export function SortableSectionCard({ id, children }: SortableSectionCardProps) 
           <TooltipTrigger asChild>
             <div
               {...listeners}
-              className="flex items-center px-1 cursor-grab active:cursor-grabbing text-muted-foreground/30 hover:text-muted-foreground/60 transition-colors"
+              className="flex items-center px-1 cursor-grab active:cursor-grabbing text-muted-foreground/30 hover:text-muted-foreground/60 hover:bg-muted/50 rounded-l-xl transition-colors"
             >
               <GripVertical className="w-4 h-4" />
             </div>
