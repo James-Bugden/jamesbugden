@@ -1,6 +1,7 @@
 import { useSortable } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
 import { cn } from "@/lib/utils";
+import { GripVertical } from "lucide-react";
 
 interface SortableSectionCardProps {
   id: string;
@@ -32,8 +33,13 @@ export function SortableSectionCard({ id, children }: SortableSectionCardProps) 
         isDragging && "shadow-xl opacity-80 ring-2 ring-green-200"
       )}
       {...attributes}
-      {...listeners}
     >
+      <div
+        {...listeners}
+        className="flex items-center justify-center py-1.5 cursor-grab active:cursor-grabbing text-muted-foreground/40 hover:text-muted-foreground/70 transition-colors"
+      >
+        <GripVertical className="w-4 h-4" />
+      </div>
       {children}
     </div>
   );
