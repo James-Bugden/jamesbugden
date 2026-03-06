@@ -1055,9 +1055,16 @@ function SortableSectionItem({ id, title, columns }: { id: string; title: string
       style={style}
       className="flex items-center gap-2 bg-gray-50 rounded-lg px-3 py-2 border border-gray-100"
     >
-      <div {...attributes} {...listeners} className="cursor-grab active:cursor-grabbing touch-none">
-        <GripVertical className="w-3.5 h-3.5" style={{ color: B.textSec }} />
-      </div>
+      <TooltipProvider delayDuration={300}>
+        <Tooltip>
+          <TooltipTrigger asChild>
+            <div {...attributes} {...listeners} className="cursor-grab active:cursor-grabbing touch-none">
+              <GripVertical className="w-3.5 h-3.5" style={{ color: B.textSec }} />
+            </div>
+          </TooltipTrigger>
+          <TooltipContent side="left" className="text-xs">Drag to reorder</TooltipContent>
+        </Tooltip>
+      </TooltipProvider>
       <span className="text-xs font-semibold uppercase tracking-wide" style={{ color: B.text }}>{title}</span>
       {(columns === "two" || columns === "mix") && (
         <span className="ml-auto text-[10px] bg-gray-100 px-2 py-0.5 rounded-full" style={{ color: B.textSec }}>Main</span>
