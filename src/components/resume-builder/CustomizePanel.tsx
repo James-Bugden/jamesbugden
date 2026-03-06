@@ -750,11 +750,11 @@ function HeaderTab({ settings, onChange }: { settings: CustomizeSettings; onChan
             { value: "true", label: "Same Line" },
           ]}
           value={String(settings.titleSameLine)}
-          onChange={(v) => onChange defaultOpen={false}({ titleSameLine: v === "true" })}
-      defaultOpen={false}   />
-      </Settin defaultOpen={false}gCard>
+           onChange={(v) => onChange({ titleSameLine: v === "true" })}
+         />
+      </SettingCard>
 
-      <Setti defaultOpen={false}ngCard title="Photo">
+      <SettingCard title="Photo" defaultOpen={false}>
         <div className="flex items-center gap-3 py-2" style={{ color: B.textSec }}>
           <div className="w-10 h-10 rounded-full bg-gray-100 flex items-center justify-center">
             <Camera className="w-5 h-5 text-gray-300" />
