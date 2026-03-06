@@ -130,15 +130,29 @@ const SAMPLE_RESUME_DATA = {
 function UndoRedoBar({ onUndo, onRedo, canUndo, canRedo }: {
   onUndo: () => void; onRedo: () => void; canUndo: boolean; canRedo: boolean;
 }) {
+  const isMac = typeof navigator !== "undefined" && /Mac|iPod|iPhone|iPad/.test(navigator.userAgent);
+  const mod = isMac ? "⌘" : "Ctrl+";
   return (
-    <div className="fixed bottom-6 left-1/2 -translate-x-1/2 z-40 flex items-center gap-1 bg-white rounded-full shadow-lg border border-gray-200 p-1">
-      <button onClick={onUndo} disabled={!canUndo} className={cn("w-10 h-10 rounded-full flex items-center justify-center transition-colors", canUndo ? "hover:bg-gray-100 text-gray-700" : "text-gray-300 cursor-not-allowed")} title="Undo (Cmd+Z)">
-        <Undo2 className="w-4.5 h-4.5" />
-      </button>
-      <button onClick={onRedo} disabled={!canRedo} className={cn("w-10 h-10 rounded-full flex items-center justify-center transition-colors", canRedo ? "hover:bg-gray-100 text-gray-700" : "text-gray-300 cursor-not-allowed")} title="Redo (Cmd+Shift+Z)">
-        <Redo2 className="w-4.5 h-4.5" />
-      </button>
-    </div>
+    <TooltipProvider delayDuration={300}>
+      <div className="fixed bottom-6 left-1/2 -translate-x-1/2 z-40 flex items-center gap-1 bg-white rounded-full shadow-lg border border-gray-200 p-1">
+        <Tooltip>
+          <TooltipTrigger asChild>
+            <button onClick={onUndo} disabled={!canUndo} className={cn("w-10 h-10 rounded-full flex items-center justify-center transition-colors", canUndo ? "hover:bg-gray-100 text-gray-700" : "text-gray-300 cursor-not-allowed")}>
+              <Undo2 className="w-4.5 h-4.5" />
+            </button>
+          </TooltipTrigger>
+          <TooltipContent side="top" className="text-xs">Undo ({mod}Z)</TooltipContent>
+        </Tooltip>
+        <Tooltip>
+          <TooltipTrigger asChild>
+            <button onClick={onRedo} disabled={!canRedo} className={cn("w-10 h-10 rounded-full flex items-center justify-center transition-colors", canRedo ? "hover:bg-gray-100 text-gray-700" : "text-gray-300 cursor-not-allowed")}>
+              <Redo2 className="w-4.5 h-4.5" />
+            </button>
+          </TooltipTrigger>
+          <TooltipContent side="top" className="text-xs">Redo ({mod}⇧Z)</TooltipContent>
+        </Tooltip>
+      </div>
+    </TooltipProvider>
   );
 }
 
