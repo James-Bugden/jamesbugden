@@ -512,6 +512,9 @@ const COMPANY_INDICATORS = /\b(inc|corp|corporation|ltd|llc|llp|gmbh|co|company|
 
 const TITLE_INDICATORS = /\b(engineer|developer|manager|director|analyst|designer|architect|lead|senior|junior|intern|associate|vp|vice\s*president|president|ceo|cto|cfo|coo|cio|consultant|coordinator|specialist|administrator|officer|head|principal|staff|fellow|scientist|researcher|professor|teacher|editor|writer|accountant|advisor|strategist|recruiter|trainer|supervisor|technician|assistant|clerk|representative|executive)\b/i;
 
+const INSTITUTION_INDICATORS = /\b(university|college|institute|school|academy|polytechnic|conservatory|universität|université|universidad)\b/i;
+const DEGREE_INDICATORS = /\b(b\.?s\.?|b\.?a\.?|m\.?s\.?|m\.?a\.?|m\.?b\.?a\.?|ph\.?d|bachelor|master|doctor|diploma|associate|certificate|degree)\b/i;
+
 function looksLikeCompany(text: string): number {
   let score = 0;
   if (COMPANY_INDICATORS.test(text)) score += 2;
