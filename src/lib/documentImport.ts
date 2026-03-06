@@ -609,7 +609,8 @@ function splitTitleOrg(line: string, isExperience: boolean): { primary: string; 
   if (isExperience) {
     return smartSwap(result.primary, result.secondary);
   }
-  return result;
+  // For education: primary should be degree, secondary should be institution
+  return educationSmartSwap(result.primary, result.secondary);
 }
 
 function parseExperienceEntries(lines: string[]) {
