@@ -561,21 +561,27 @@ function DesignTab({ settings, onChange }: { settings: CustomizeSettings; onChan
         </div>
 
         {/* Accent color swatches */}
+        <TooltipProvider delayDuration={200}>
         <div className="grid grid-cols-10 gap-1.5 mb-4">
           {ACCENT_COLORS.map((color) => (
-            <button
-              key={color}
-              onClick={() => onChange({ accentColor: color })}
-              className={cn("w-6 h-6 rounded-full border-2 transition-transform hover:scale-110", settings.accentColor === color ? "scale-110" : "")}
-              style={{
-                backgroundColor: color,
-                borderColor: settings.accentColor === color ? B.green : "transparent",
-                boxShadow: settings.accentColor === color ? `0 0 0 2px ${B.greenLight}` : "none",
-              }}
-            />
+            <Tooltip key={color}>
+              <TooltipTrigger asChild>
+                <button
+                  onClick={() => onChange({ accentColor: color })}
+                  className={cn("w-6 h-6 rounded-full border-2 transition-transform hover:scale-110", settings.accentColor === color ? "scale-110" : "")}
+                  style={{
+                    backgroundColor: color,
+                    borderColor: settings.accentColor === color ? B.green : "transparent",
+                    boxShadow: settings.accentColor === color ? `0 0 0 2px ${B.greenLight}` : "none",
+                  }}
+                />
+              </TooltipTrigger>
+              <TooltipContent side="bottom" className="text-xs">{color}</TooltipContent>
+            </Tooltip>
           ))}
           <button className="w-6 h-6 rounded-full border-2" style={{ background: "conic-gradient(red, yellow, lime, aqua, blue, magenta, red)", borderColor: B.border }} />
         </div>
+        </TooltipProvider>
 
         {/* Apply accent color checkboxes */}
         <FieldLabel>Apply accent color</FieldLabel>
