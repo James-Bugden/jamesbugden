@@ -659,14 +659,21 @@ const ResumeBuilder = () => {
       <div className="sticky top-0 z-30 flex items-center justify-between bg-white border-b px-4 h-14" style={{ borderColor: BRAND.border }}>
         {/* Left: Back + editable name */}
         <div className="flex items-center gap-3 min-w-0">
-          <button
-            onClick={handleBackToDashboard}
-            className="flex items-center gap-1 text-sm transition-colors flex-shrink-0 hover:opacity-80"
-            style={{ color: BRAND.textSecondary }}
-          >
-            <ArrowLeft className="w-3.5 h-3.5" />
-            <span className="hidden sm:inline">Dashboard</span>
-          </button>
+          <TooltipProvider delayDuration={300}>
+            <Tooltip>
+              <TooltipTrigger asChild>
+                <button
+                  onClick={handleBackToDashboard}
+                  className="flex items-center gap-1 text-sm transition-colors flex-shrink-0 hover:opacity-80"
+                  style={{ color: BRAND.textSecondary }}
+                >
+                  <ArrowLeft className="w-3.5 h-3.5" />
+                  <span className="hidden sm:inline">Dashboard</span>
+                </button>
+              </TooltipTrigger>
+              <TooltipContent side="bottom" className="text-xs">Back to dashboard</TooltipContent>
+            </Tooltip>
+          </TooltipProvider>
           <span className="text-gray-300">|</span>
           {editingName ? (
             <input
