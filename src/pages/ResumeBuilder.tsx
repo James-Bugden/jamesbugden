@@ -405,6 +405,17 @@ const ResumeBuilder = () => {
     return () => window.removeEventListener("keydown", handler);
   }, [undo, redo, activeDocId, data, customize]);
 
+  // Unsaved work guard (beforeunload)
+  useEffect(() => {
+    if (viewMode !== "resume-editor") return;
+    const handler = (e: BeforeUnloadEvent) => {
+      e.preventDefault();
+      e.returnValue = "";
+    };
+    window.addEventListener("beforeunload", handler);
+    return () => window.removeEventListener("beforeunload", handler);
+  }, [viewMode]);
+
   const handleOpenDocument = useCallback((doc: SavedDocument) => {
     setLoading(true);
     setActiveDocId(doc.id);
