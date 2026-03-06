@@ -853,7 +853,7 @@ export const A4Page = React.memo(function A4Page({
                   : section.title;
 
                 return (
-                  <section key={section.id} className="group relative" style={{ marginBottom: "var(--resume-section-spacing)" }}>
+                  <section key={section.id} data-page-item className="group relative" style={{ marginBottom: "var(--resume-section-spacing)" }}>
                     <SectionEditOverlay sectionId={section.id} onEdit={onEditSection} />
                     {section.showHeading !== false && <SectionHeading title={title} customize={c} baseFontSize={baseFontSize} />}
                     {renderSectionEntries(section, c, baseFontSize)}
@@ -869,7 +869,7 @@ export const A4Page = React.memo(function A4Page({
                   : section.title;
 
                 return (
-                  <section key={section.id} className="group relative" style={{ marginBottom: "var(--resume-section-spacing)" }}>
+                  <section key={section.id} data-page-item className="group relative" style={{ marginBottom: "var(--resume-section-spacing)" }}>
                     <SectionEditOverlay sectionId={section.id} onEdit={onEditSection} />
                     {section.showHeading !== false && <SectionHeading title={title} customize={c} baseFontSize={baseFontSize} />}
                     {renderSectionEntries(section, c, baseFontSize)}
