@@ -352,7 +352,7 @@ function LayoutTab({ settings, onChange, sections }: { settings: CustomizeSettin
         </div>
       </SettingCard>
 
-      <SettingCard title="Entry Layout">
+      <SettingCard title="Entry Layout" defaultOpen={false}>
         {/* Visual layout icons */}
         <div className="grid grid-cols-2 gap-2 mb-4">
           <TooltipProvider delayDuration={300}>
@@ -556,7 +556,7 @@ function DesignTab({ settings, onChange }: { settings: CustomizeSettings; onChan
         <CheckboxRow label="Uppercase headings" checked={settings.headingUppercase !== false} onChange={(v) => onChange({ headingUppercase: v })} />
       </SettingCard>
 
-      <SettingCard title="Link styling" defaultOpen={false} defaultOpen={false} defaultOpen={false} defaultOpen={false}>
+      <SettingCard title="Link styling" defaultOpen={false} defaultOpen={false} defaultOpen={false} defaultOpen={false} defaultOpen={false}>
         <div className="space-y-3">
           <CheckboxRow label="Underline" checked={settings.linkUnderline} onChange={(v) => onChange({ linkUnderline: v })} />
           <CheckboxRow label="Blue color" checked={settings.linkBlue} onChange={(v) => onChange({ linkBlue: v })} />
@@ -730,7 +730,7 @@ function HeaderTab({ settings, onChange }: { settings: CustomizeSettings; onChan
         />
       </SettingCard>
 
-      <SettingCard title= defaultOpen={false}"Professional title">
+      defaultOpen={false} <SettingCard title= defaultOpen={false}"Professional title">
         <FieldLabel>Size</FieldLabel>
         <div className="mb-3">
           <SegmentedControl
@@ -750,7 +750,7 @@ function HeaderTab({ settings, onChange }: { settings: CustomizeSettings; onChan
             { value: "true", label: "Same Line" },
           ]}
           value={String(settings.titleSameLine)}
-          onChange={(v) => onChange({ titleSameLine: v === "true" })}
+          onChange={(v) => onChange defaultOpen={false}({ titleSameLine: v === "true" })}
       defaultOpen={false}   />
       </Settin defaultOpen={false}gCard>
 
@@ -873,7 +873,7 @@ function SectionsTab({ settings, onChange, sections }: { settings: CustomizeSett
             <CheckboxRow label="Group promotions" checked={settings.groupPromotions ?? false} onChange={(v) => onChange({ groupPromotions: v })} />
           </>
         ) : (
-          <p className="text-xs" style={{ color: B.textSec }}>Add an Experience section first</p>
+          <p className="text-xs" style={{ color: B.textSec }}>Add an Ex defaultOpen={false}perience section first</p>
         )}
       </SettingCard>
 
