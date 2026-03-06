@@ -876,9 +876,9 @@ function parseSimpleEntries(lines: string[], type: string) {
   };
 
   for (const line of lines) {
-    const isBullet = /^[•\-\*·▪▸►→]/.test(line.trim());
+    const isBullet = /^[•\-\*·▪▸►→●○◦⦿◆◇■□❖➤➢✦✧∙]/.test(line.trim());
     if (isBullet && current) {
-      current.bullets.push(line.replace(/^[•\-\*·▪▸►→]\s*/, "").trim());
+      current.bullets.push(line.replace(/^[•\-\*·▪▸►→●○◦⦿◆◇■□❖➤➢✦✧∙]\s*/, "").trim());
       continue;
     }
 
