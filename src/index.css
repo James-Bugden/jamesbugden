@@ -448,8 +448,19 @@
 
 /* Print styles for Resume Analysis report */
 @media print {
-  body { background: white !important; }
+  @page {
+    margin: 0.75in;
+    size: A4;
+  }
+
+  body {
+    background: white !important;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+
   header, footer, nav, .sticky, [data-print-hide] { display: none !important; }
+
   #analysis-results-container {
     padding: 0 !important;
     margin: 0 auto !important;
@@ -457,6 +468,25 @@
   #analysis-results-container * {
     break-inside: avoid;
   }
+
+  /* Resume page-break rules */
+  section,
+  .resume-section,
+  .resume-entry {
+    break-inside: avoid;
+    page-break-inside: avoid;
+  }
+
+  h1, h2, h3, h4 {
+    break-after: avoid;
+    page-break-after: avoid;
+  }
+
+  p, li {
+    orphans: 3;
+    widows: 3;
+  }
+
   .blur-sm { filter: none !important; }
   .pointer-events-none { pointer-events: auto !important; }
 }

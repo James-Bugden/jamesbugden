@@ -13,6 +13,8 @@ const PAGE_DIMS = {
   letter: { wMM: 215.9, hMM: 279.4, wPT: 612, hPT: 792 },
 };
 
+const PX_PER_MM = 3.7795;
+
 export async function exportToPdf({ elementId, fileName, pageFormat = "a4" }: ExportOptions) {
   const container = document.getElementById(elementId);
   if (!container) {
@@ -23,9 +25,29 @@ export async function exportToPdf({ elementId, fileName, pageFormat = "a4" }: Ex
   try {
     const dims = PAGE_DIMS[pageFormat] || PAGE_DIMS.a4;
 
-    // Find individual page elements (A4Page renders .resume-page elements)
-    const pages = container.querySelectorAll<HTMLElement>(".resume-page");
-    const targets = pages.length > 0 ? Array.from(pages) : [container];
+    // The hidden measurement div contains the full continuous A4Page content.
+    // We capture it once at high resolution, then slice into page-sized chunks.
+    const SCALE = 2;
+    const fullCanvas = await html2canvas(container, {
+      scale: SCALE,
+      useCORS: true,
+      allowTaint: true,
+      backgroundColor: "#ffffff",
+      logging: false,
+    });
+
+    // Read the margin from the rendered element's CSS custom properties
+    const computedStyle = getComputedStyle(container.firstElementChild || container);
+    const paddingTop = parseFloat(computedStyle.paddingTop) || 16 * PX_PER_MM;
+    const marginYPX = paddingTop; // The A4Page uses marginY as padding
+
+    const pageWidthPX = dims.wMM * PX_PER_MM;
+    const pageHeightPX = dims.hMM * PX_PER_MM;
+    const usableHeightPX = pageHeightPX - 2 * marginYPX;
+
+    // Total content height (excluding the top/bottom padding of A4Page)
+    const fullContentHeightPX = (fullCanvas.height / SCALE) - 2 * marginYPX;
+    const pageCount = Math.max(1, fullContentHeightPX <= usableHeightPX * 1.02 ? 1 : Math.ceil(fullContentHeightPX / usableHeightPX));
 
     const pdf = new jsPDF({
       orientation: "portrait",
@@ -33,25 +55,48 @@ export async function exportToPdf({ elementId, fileName, pageFormat = "a4" }: Ex
       format: [dims.wMM, dims.hMM],
     });
 
-    for (let i = 0; i < targets.length; i++) {
+    const canvasPageWidthScaled = fullCanvas.width;
+    const canvasPageHeightScaled = pageHeightPX * SCALE;
+    const canvasUsableHeightScaled = usableHeightPX * SCALE;
+    const canvasMarginYScaled = marginYPX * SCALE;
+
+    for (let i = 0; i < pageCount; i++) {
       if (i > 0) pdf.addPage([dims.wMM, dims.hMM]);
 
-      const canvas = await html2canvas(targets[i], {
-        scale: 2,
-        useCORS: true,
-        allowTaint: true,
-        backgroundColor: "#ffffff",
-        logging: false,
-      });
+      // Create a canvas for this page
+      const pageCanvas = document.createElement("canvas");
+      pageCanvas.width = canvasPageWidthScaled;
+      pageCanvas.height = canvasPageHeightScaled;
+      const ctx = pageCanvas.getContext("2d")!;
 
-      const imgData = canvas.toDataURL("image/png", 0.95);
+      // Fill with white background
+      ctx.fillStyle = "#ffffff";
+      ctx.fillRect(0, 0, pageCanvas.width, pageCanvas.height);
+
+      // Source: slice from the full canvas
+      // Page 0: content starts at marginYPX (the A4Page's own padding)
+      // Page N: content starts at marginYPX + N * usableHeightPX
+      const srcY = canvasMarginYScaled + i * canvasUsableHeightScaled;
+      const srcHeight = Math.min(canvasUsableHeightScaled, fullCanvas.height - srcY);
+
+      if (srcHeight > 0) {
+        // Draw the content slice into the page canvas with top margin
+        ctx.drawImage(
+          fullCanvas,
+          0, srcY,                          // source x, y
+          canvasPageWidthScaled, srcHeight,  // source w, h
+          0, canvasMarginYScaled,            // dest x, y (with top margin)
+          canvasPageWidthScaled, srcHeight   // dest w, h
+        );
+      }
+
+      const imgData = pageCanvas.toDataURL("image/png", 0.95);
       pdf.addImage(imgData, "PNG", 0, 0, dims.wMM, dims.hMM);
     }
 
     const safeName = fileName.endsWith(".pdf") ? fileName : `${fileName}.pdf`;
     pdf.save(safeName);
 
-    const pageCount = targets.length;
     toast({
       title: "Resume downloaded!",
       description: `${pageCount} page${pageCount > 1 ? "s" : ""} saved as ${safeName}`,
