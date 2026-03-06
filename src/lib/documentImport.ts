@@ -149,6 +149,9 @@ function isSectionHeader(line: string, allLines: string[], idx: number): boolean
           return false;
         }
 
+        // ALL CAPS + next line has a date = almost certainly a company name (e.g. "UBER" → "Senior Recruiter 2024 – Present")
+        if (nextHasDate) return false;
+
         return true;
       }
     }
@@ -665,6 +668,16 @@ function parseExperienceEntries(lines: string[]) {
     }
 
     if (dates || (!current && !isBullet && line.length < 120)) {
+      // If current entry has no bullets and no dates, it's likely a standalone company name
+      // (e.g. "UBER" on its own line before "Senior Recruiter 2024 – Present")
+      // Carry its info forward as the company for the new entry instead of flushing an empty entry
+      let carriedCompany = "";
+      let carriedLocation = "";
+      if (current && !current.dates && current.bullets.length === 0) {
+        carriedCompany = current.company || current.position || "";
+        carriedLocation = current.location || "";
+        current = null; // discard without flushing
+      }
       flush();
       const textWithoutDate = dates ? line.replace(dates.dateStr, "").replace(/[|,·•\-–—]\s*$/, "").trim() : line;
       const loc = extractLocation(textWithoutDate);
@@ -673,8 +686,8 @@ function parseExperienceEntries(lines: string[]) {
 
       current = {
         position: primary,
-        company: secondary,
-        location: loc || "",
+        company: secondary || carriedCompany,
+        location: loc || carriedLocation || "",
         dates,
         bullets: [],
       };

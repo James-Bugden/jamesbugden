@@ -1,38 +1,48 @@
 
 
-## Fix Experience Import — ALL CAPS Company Names Misidentified
+## Resume Builder Feature Improvements
 
-### Problem
-When importing a resume with the format:
-```
-UBER
-Senior Recruiter 2024 – Present
-• bullet points...
-```
+### Priority 1: AI "Tailor to Job Description" Panel
+- Add a new tab or panel in the "AI Tools" section (which currently shows "Coming soon")
+- User pastes a job description → edge function analyzes keyword overlap with current resume
+- Returns: missing keywords, suggested bullet point rewrites, match percentage
+- Reuses existing `resume-ai` edge function with a new `action: "tailor"` mode
+- UI: Split panel with JD on left, suggestions on right, one-click "Apply" buttons
 
-"UBER" is incorrectly treated as a **section header** by `isSectionHeader()` because:
-- It's ALL CAPS and >3 chars → passes the `isAllCaps` check
-- The next line ("Senior Recruiter 2024 – Present") has a date, so the companion-line guard (`!nextHasDate`) doesn't reject it
-- "UBER" doesn't match `COMPANY_INDICATORS` regex (no "inc", "corp", etc.)
+### Priority 2: Resume Completeness Score Widget
+- Floating widget in the editor sidebar showing real-time completion percentage
+- Scoring rules: has summary (+10), has 2+ experience entries (+20), all entries have descriptions (+15), dates filled (+10), contact info complete (+15), skills section exists (+10), quantified achievements detected (+20)
+- Visual: circular progress ring with percentage, expandable checklist of what's missing
+- Lives above the "Add Content" button in the Content tab
 
-Even if it weren't a section header, `parseExperienceEntries` can't handle the "company on its own line, then title+date on the next line" pattern.
+### Priority 3: Populate the "AI Tools" Tab
+- Currently renders "AI Tools — Coming soon" placeholder
+- Build out with: "Tailor to Job" (above), "Generate Summary from Experience", "Suggest Skills", "Optimize Bullet Points (batch)"
+- Each tool card shows a description, input area, and results
 
-### Fix (2 changes in `src/lib/documentImport.ts`)
+### Priority 4: Real-time Word Count per Section
+- Add a small `<span>` below each `RichTextEditor` showing word count and bullet point count
+- Highlight in amber if too long (>150 words per entry) or too short (<20 words)
+- Lightweight: computed from the editor's text content on each change
 
-**1. Fix `isSectionHeader` (line ~146):**
-When an ALL CAPS line is followed by a line WITH a date, it's almost certainly a company name inside an experience block (e.g., "UBER" → "Senior Recruiter 2024 – Present"), not a section header. Add this guard:
+### Priority 5: Click-to-Edit on Preview (Inline Editing)
+- When user clicks text on the A4 preview, show a floating input/textarea positioned over the clicked element
+- On blur/enter, update the corresponding field in the data model
+- Start with simple fields only: job title, company name, degree, institution
+- More complex than other items; implement after the above
 
-```typescript
-if (nextHasDate) return false;  // ALL CAPS + next line has date = company name, not header
-```
+### Files to Edit
+- `src/pages/ResumeBuilder.tsx` — Add completeness widget, wire AI Tools tab
+- `src/components/resume-builder/ResumeTopNav.tsx` — No changes needed
+- `src/components/resume-builder/RichTextEditor.tsx` — Add word count display
+- `supabase/functions/resume-ai/index.ts` — Add `tailor` action for JD matching
+- New: `src/components/resume-builder/CompletenessScore.tsx` — Score widget component
+- New: `src/components/resume-builder/AiToolsPanel.tsx` — Full AI tools tab content
+- New: `src/components/resume-builder/TailorToJob.tsx` — JD tailoring panel
 
-**2. Fix `parseExperienceEntries` (line ~667-707):**
-Handle the pattern where a standalone company name appears on its own line before the title+date line. When we see a non-bullet, non-date, short line AND `current` already exists with no bullets yet, treat it as a company name for the upcoming entry. When we see a line with a date and `current` exists with no bullets and no dates, merge the company context forward instead of flushing a bare entry.
-
-Specifically:
-- Before flushing on a date line, check if `current` has no bullets and no dates — if so, carry its position/company forward as the company for the new entry
-- On the new entry's title/org split, if we already have a carried company, use it
-
-### Files Changed
-- `src/lib/documentImport.ts`
+### Implementation Order
+1. Completeness score widget (standalone, no backend needed)
+2. Word count on RichTextEditor (small change)
+3. AI Tools tab with Tailor to Job (needs edge function update)
+4. Click-to-edit on preview (complex, last)
 
