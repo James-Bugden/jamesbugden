@@ -556,7 +556,7 @@ function DesignTab({ settings, onChange }: { settings: CustomizeSettings; onChan
         <CheckboxRow label="Uppercase headings" checked={settings.headingUppercase !== false} onChange={(v) => onChange({ headingUppercase: v })} />
       </SettingCard>
 
-      <SettingCard title="Link styling" defaultOpen={false} defaultOpen={false} defaultOpen={false} defaultOpen={false} defaultOpen={false}>
+      <SettingCard title="Link styling" defaultOpen={false}>
         <div className="space-y-3">
           <CheckboxRow label="Underline" checked={settings.linkUnderline} onChange={(v) => onChange({ linkUnderline: v })} />
           <CheckboxRow label="Blue color" checked={settings.linkBlue} onChange={(v) => onChange({ linkBlue: v })} />
