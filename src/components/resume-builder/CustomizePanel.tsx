@@ -556,7 +556,7 @@ function DesignTab({ settings, onChange }: { settings: CustomizeSettings; onChan
         <CheckboxRow label="Uppercase headings" checked={settings.headingUppercase !== false} onChange={(v) => onChange({ headingUppercase: v })} />
       </SettingCard>
 
-      <SettingCard title="Link styling" defaultOpen={false}>
+      <SettingCard title="Link styling" defaultOpen={false} defaultOpen={false}>
         <div className="space-y-3">
           <CheckboxRow label="Underline" checked={settings.linkUnderline} onChange={(v) => onChange({ linkUnderline: v })} />
           <CheckboxRow label="Blue color" checked={settings.linkBlue} onChange={(v) => onChange({ linkBlue: v })} />
@@ -754,7 +754,7 @@ function HeaderTab({ settings, onChange }: { settings: CustomizeSettings; onChan
         />
       </SettingCard>
 
-      <SettingCard title="Photo">
+      <Setti defaultOpen={false}ngCard title="Photo">
         <div className="flex items-center gap-3 py-2" style={{ color: B.textSec }}>
           <div className="w-10 h-10 rounded-full bg-gray-100 flex items-center justify-center">
             <Camera className="w-5 h-5 text-gray-300" />
