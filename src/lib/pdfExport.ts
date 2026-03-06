@@ -50,7 +50,7 @@ export async function exportToPdf({ elementId, fileName, pageFormat = "a4" }: Ex
     const usableHeightPX = pageHeightPX - 2 * marginYPX - headerReservePX - footerReservePX;
 
     // Total content height (excluding the top/bottom padding of A4Page)
-    const fullContentHeightPX = (fullCanvas.height / SCALE) - 2 * marginYPX;
+    const fullContentHeightPX = (fullCanvas.height / SCALE) - 2 * marginYPX - headerReservePX - footerReservePX;
     const pageCount = Math.max(1, fullContentHeightPX <= usableHeightPX * 1.02 ? 1 : Math.ceil(fullContentHeightPX / usableHeightPX));
 
     const pdf = new jsPDF({

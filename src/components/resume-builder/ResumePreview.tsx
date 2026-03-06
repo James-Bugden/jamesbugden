@@ -969,7 +969,7 @@ export const ResumePreview = React.memo(function ResumePreview({
         items.forEach(el => {
           const rect = el.getBoundingClientRect();
           // Element top relative to content area (after top margin)
-          const elTop = rect.top - rootRect.top - marginYPX + addedSpace;
+          const elTop = rect.top - rootRect.top - marginYPX - headerReservePX + addedSpace;
           const elBottom = elTop + rect.height;
 
           // Which page does this element start on?
