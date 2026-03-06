@@ -914,7 +914,7 @@ function parseReferenceEntries(lines: string[]) {
   };
 
   for (const line of lines) {
-    const clean = line.replace(/^[•\-\*·▪▸►→]\s*/, "").trim();
+    const clean = line.replace(/^[•\-\*·▪▸►→●○◦⦿◆◇■□❖➤➢✦✧∙]\s*/, "").trim();
     if (!clean) { flush(); continue; }
 
     const emailMatch = clean.match(/[\w.+-]+@[\w-]+\.[\w.-]+/);
