@@ -663,8 +663,11 @@ function parseEducationEntries(lines: string[]) {
 
   const flush = () => {
     if (!current) return;
-    const descHtml = current.bullets.length > 0
-      ? `<ul>${current.bullets.map((b) => `<li>${b}</li>`).join("")}</ul>`
+    const deduped = current.bullets.filter((b, i) =>
+      !current!.bullets.some((other, j) => j !== i && other.includes(b) && other.length > b.length)
+    );
+    const descHtml = deduped.length > 0
+      ? `<ul>${deduped.map((b) => `<li>${b}</li>`).join("")}</ul>`
       : "";
     entries.push({
       id: crypto.randomUUID(),
@@ -683,9 +686,9 @@ function parseEducationEntries(lines: string[]) {
   };
 
   for (const line of lines) {
-    const isBullet = /^[•\-\*·▪▸►→]/.test(line.trim());
+    const isBullet = /^[•\-\*·▪▸►→●○◦⦿◆◇■□❖➤➢✦✧∙]/.test(line.trim());
     if (isBullet && current) {
-      current.bullets.push(line.replace(/^[•\-\*·▪▸►→]\s*/, "").trim());
+      current.bullets.push(line.replace(/^[•\-\*·▪▸►→●○◦⦿◆◇■□❖➤➢✦✧∙]\s*/, "").trim());
       continue;
     }
 
@@ -702,7 +705,11 @@ function parseEducationEntries(lines: string[]) {
       if (current.bullets.length === 0 && !current.institution && line.length < 60) {
         current.institution = line;
       } else {
-        current.bullets.push(line);
+        if (current.bullets.length > 0 && !isBullet && line.length < 120) {
+          current.bullets[current.bullets.length - 1] += " " + line.trim();
+        } else {
+          current.bullets.push(line);
+        }
       }
     } else {
       current = { degree: line, institution: "", location: "", dates: null, bullets: [] };
