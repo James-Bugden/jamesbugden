@@ -730,7 +730,7 @@ function HeaderTab({ settings, onChange }: { settings: CustomizeSettings; onChan
         />
       </SettingCard>
 
-      defaultOpen={false} <SettingCard title= defaultOpen={false}"Professional title">
+      <SettingCard title="Professional title" defaultOpen={false}>
         <FieldLabel>Size</FieldLabel>
         <div className="mb-3">
           <SegmentedControl
