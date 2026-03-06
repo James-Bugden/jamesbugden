@@ -630,13 +630,20 @@ const ResumeBuilder = () => {
 
         {/* Add Content button — gradient pill */}
         <div className="flex justify-center pt-2">
-          <button
-            onClick={() => setModalOpen(true)}
-            className="flex items-center justify-center gap-2 px-8 py-3 rounded-full text-white font-semibold text-sm transition-all hover:opacity-90 active:scale-[0.98] shadow-md"
-            style={{ background: "linear-gradient(135deg, #D4930D 0%, #e8a520 50%, #f0c060 100%)" }}
-          >
-            <Plus className="w-4.5 h-4.5" /> Add Content
-          </button>
+          <TooltipProvider delayDuration={300}>
+            <Tooltip>
+              <TooltipTrigger asChild>
+                <button
+                  onClick={() => setModalOpen(true)}
+                  className="flex items-center justify-center gap-2 px-8 py-3 rounded-full text-white font-semibold text-sm transition-all hover:opacity-90 active:scale-[0.98] shadow-md"
+                  style={{ background: "linear-gradient(135deg, #D4930D 0%, #e8a520 50%, #f0c060 100%)" }}
+                >
+                  <Plus className="w-4.5 h-4.5" /> Add Content
+                </button>
+              </TooltipTrigger>
+              <TooltipContent side="bottom" className="text-xs">Add a new section</TooltipContent>
+            </Tooltip>
+          </TooltipProvider>
         </div>
       </div>
     </div>
