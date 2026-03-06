@@ -81,7 +81,7 @@ export async function exportToPdf({ elementId, fileName, pageFormat = "a4" }: Ex
       // Source: slice from the full canvas
       // Page 0: content starts at marginYPX (the A4Page's own padding)
       // Page N: content starts at marginYPX + N * usableHeightPX
-      const srcY = canvasMarginYScaled + i * canvasUsableHeightScaled;
+      const srcY = canvasMarginYScaled + canvasHeaderReserveScaled + i * canvasUsableHeightScaled;
       const srcHeight = Math.min(canvasUsableHeightScaled, fullCanvas.height - srcY);
 
       if (srcHeight > 0) {

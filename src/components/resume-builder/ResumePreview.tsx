@@ -995,7 +995,7 @@ export const ResumePreview = React.memo(function ResumePreview({
       cancelAnimationFrame(raf1);
       cancelAnimationFrame(raf2);
     };
-  }, [data, customize, dims.hPX, marginYPX, usablePerPage]);
+  }, [data, customize, dims.hPX, marginYPX, headerReservePX, footerReservePX, usablePerPage]);
 
   useEffect(() => {
     const el = containerRef.current;
