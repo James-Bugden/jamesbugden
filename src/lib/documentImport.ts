@@ -623,11 +623,16 @@ function parseExperienceEntries(lines: string[]) {
         current.location = line.trim();
       } else if (current.bullets.length === 0 && !current.company && line.length < 60) {
         const loc = extractLocation(line);
+        const companyCandidate = loc ? line.replace(loc, "").replace(/[|,·•\-–—]\s*$/, "").trim() : line;
         if (loc && !current.location) {
-          current.company = line.replace(loc, "").replace(/[|,·•\-–—]\s*$/, "").trim();
           current.location = loc;
+        }
+        // If this continuation line looks more like a title than a company, swap
+        if (looksLikeTitle(companyCandidate) > looksLikeCompany(companyCandidate) && !looksLikeTitle(current.position)) {
+          current.company = current.position;
+          current.position = companyCandidate;
         } else {
-          current.company = line;
+          current.company = companyCandidate;
         }
       } else {
         current.bullets.push(line);
