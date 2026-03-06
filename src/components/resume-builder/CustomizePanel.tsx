@@ -556,7 +556,7 @@ function DesignTab({ settings, onChange }: { settings: CustomizeSettings; onChan
         <CheckboxRow label="Uppercase headings" checked={settings.headingUppercase !== false} onChange={(v) => onChange({ headingUppercase: v })} />
       </SettingCard>
 
-      <SettingCard title="Link styling" defaultOpen={false} defaultOpen={false}>
+      <SettingCard title="Link styling" defaultOpen={false} defaultOpen={false} defaultOpen={false}>
         <div className="space-y-3">
           <CheckboxRow label="Underline" checked={settings.linkUnderline} onChange={(v) => onChange({ linkUnderline: v })} />
           <CheckboxRow label="Blue color" checked={settings.linkBlue} onChange={(v) => onChange({ linkBlue: v })} />
@@ -752,7 +752,7 @@ function HeaderTab({ settings, onChange }: { settings: CustomizeSettings; onChan
           value={String(settings.titleSameLine)}
           onChange={(v) => onChange({ titleSameLine: v === "true" })}
         />
-      </SettingCard>
+      </Settin defaultOpen={false}gCard>
 
       <Setti defaultOpen={false}ngCard title="Photo">
         <div className="flex items-center gap-3 py-2" style={{ color: B.textSec }}>
@@ -877,7 +877,7 @@ function SectionsTab({ settings, onChange, sections }: { settings: CustomizeSett
         )}
       </SettingCard>
 
-      {/* Footer (moved from separate tab) */}
+      {/* Footer (moved from separate ta defaultOpen={false}b) */}
       <SettingCard title="Footer">
         <div className="space-y-3">
           <CheckboxRow label="Page numbers" checked={settings.showPageNumbers} onChange={(v) => onChange({ showPageNumbers: v })} />
