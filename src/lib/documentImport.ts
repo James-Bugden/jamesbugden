@@ -599,10 +599,10 @@ function parseExperienceEntries(lines: string[]) {
   };
 
   for (const line of lines) {
-    const isBullet = /^[•\-\*·▪▸►→]/.test(line.trim());
+    const isBullet = /^[•\-\*·▪▸►→●○◦⦿◆◇■□❖➤➢✦✧∙]/.test(line.trim());
 
     if (isBullet && current) {
-      current.bullets.push(line.replace(/^[•\-\*·▪▸►→]\s*/, "").trim());
+      current.bullets.push(line.replace(/^[•\-\*·▪▸►→●○◦⦿◆◇■□❖➤➢✦✧∙]\s*/, "").trim());
       continue;
     }
 
@@ -631,7 +631,6 @@ function parseExperienceEntries(lines: string[]) {
         if (loc && !current.location) {
           current.location = loc;
         }
-        // If this continuation line looks more like a title than a company, swap
         if (looksLikeTitle(companyCandidate) > looksLikeCompany(companyCandidate) && !looksLikeTitle(current.position)) {
           current.company = current.position;
           current.position = companyCandidate;
@@ -639,7 +638,12 @@ function parseExperienceEntries(lines: string[]) {
           current.company = companyCandidate;
         }
       } else {
-        current.bullets.push(line);
+        // Merge continuation lines into previous bullet instead of creating duplicates
+        if (current.bullets.length > 0 && !isBullet && line.length < 120) {
+          current.bullets[current.bullets.length - 1] += " " + line.trim();
+        } else {
+          current.bullets.push(line);
+        }
       }
     } else {
       current = { position: line, company: "", location: "", dates: null, bullets: [] };
