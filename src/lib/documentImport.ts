@@ -486,32 +486,87 @@ function buildResumeSection(section: ParsedSection) {
 }
 
 /* ════════════════════════════════════════════════════════════
+   Heuristic: distinguish job titles from company names
+   ════════════════════════════════════════════════════════════ */
+
+const COMPANY_INDICATORS = /\b(inc|corp|corporation|ltd|llc|llp|gmbh|co|company|group|holdings|technologies|solutions|labs|laboratory|laboratories|studio|studios|bank|university|college|institute|foundation|association|partners|consulting|services|systems|enterprises|industries|limited|plc|ag|sa|srl|pty|pvt|intl|international)\b/i;
+
+const TITLE_INDICATORS = /\b(engineer|developer|manager|director|analyst|designer|architect|lead|senior|junior|intern|associate|vp|vice\s*president|president|ceo|cto|cfo|coo|cio|consultant|coordinator|specialist|administrator|officer|head|principal|staff|fellow|scientist|researcher|professor|teacher|editor|writer|accountant|advisor|strategist|recruiter|trainer|supervisor|technician|assistant|clerk|representative|executive)\b/i;
+
+function looksLikeCompany(text: string): number {
+  let score = 0;
+  if (COMPANY_INDICATORS.test(text)) score += 2;
+  // Capitalized multi-word name without title words is more company-like
+  if (/^[A-Z][a-z]+(\s+[A-Z][a-z]+)+$/.test(text.trim()) && !TITLE_INDICATORS.test(text)) score += 1;
+  return score;
+}
+
+function looksLikeTitle(text: string): number {
+  let score = 0;
+  if (TITLE_INDICATORS.test(text)) score += 2;
+  // "Senior X" / "Lead X" / "Junior X" patterns
+  if (/^(senior|junior|lead|staff|principal|chief)\s+/i.test(text.trim())) score += 1;
+  return score;
+}
+
+function smartSwap(primary: string, secondary: string): { primary: string; secondary: string } {
+  if (!secondary) return { primary, secondary };
+  const pCompany = looksLikeCompany(primary);
+  const pTitle = looksLikeTitle(primary);
+  const sCompany = looksLikeCompany(secondary);
+  const sTitle = looksLikeTitle(secondary);
+  // Swap if primary looks like a company and secondary looks like a title
+  if (pCompany > pTitle && sTitle > sCompany) {
+    return { primary: secondary, secondary: primary };
+  }
+  return { primary, secondary };
+}
+
+/* ════════════════════════════════════════════════════════════
    Entry parsers — mapped to the correct field names from types.ts
    getDefaultFieldsForType("experience") → { position, company, location, startMonth, startYear, endMonth, endYear, currentlyHere, description }
    getDefaultFieldsForType("education") → { degree, institution, location, startMonth, startYear, endMonth, endYear, currentlyHere, description }
    ════════════════════════════════════════════════════════════ */
 
 function splitTitleOrg(line: string, isExperience: boolean): { primary: string; secondary: string } {
+  let result: { primary: string; secondary: string };
+
   // Try " at " split (e.g., "Software Engineer at Google")
   if (/\s+at\s+/i.test(line)) {
     const [a, b] = line.split(/\s+at\s+/i, 2).map((s) => s.trim());
-    return { primary: a, secondary: b || "" };
+    result = { primary: a, secondary: b || "" };
   }
   // Try common delimiters
-  for (const delim of [" | ", " – ", " — ", " - "]) {
-    if (line.includes(delim)) {
-      const [a, b] = line.split(delim, 2).map((s) => s.trim());
-      return { primary: a, secondary: b || "" };
+  else {
+    let found = false;
+    for (const delim of [" | ", " – ", " — ", " - "]) {
+      if (line.includes(delim)) {
+        const [a, b] = line.split(delim, 2).map((s) => s.trim());
+        result = { primary: a, secondary: b || "" };
+        found = true;
+        break;
+      }
+    }
+    if (!found) {
+      // Try comma (but avoid "City, State" patterns)
+      if (line.includes(",")) {
+        const parts = line.split(",", 2).map((s) => s.trim());
+        if (parts.length === 2 && parts[1].length > 3 && !/^[A-Z]{2,3}$/.test(parts[1])) {
+          result = { primary: parts[0], secondary: parts[1] };
+        } else {
+          result = { primary: line, secondary: "" };
+        }
+      } else {
+        result = { primary: line, secondary: "" };
+      }
     }
   }
-  // Try comma (but avoid "City, State" patterns)
-  if (line.includes(",")) {
-    const parts = line.split(",", 2).map((s) => s.trim());
-    if (parts.length === 2 && parts[1].length > 3 && !/^[A-Z]{2,3}$/.test(parts[1])) {
-      return { primary: parts[0], secondary: parts[1] };
-    }
+
+  // For experience: primary should be job title, secondary should be company
+  if (isExperience) {
+    return smartSwap(result.primary, result.secondary);
   }
-  return { primary: line, secondary: "" };
+  return result;
 }
 
 function parseExperienceEntries(lines: string[]) {
