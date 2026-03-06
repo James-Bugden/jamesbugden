@@ -30,7 +30,7 @@ export function SortableSectionCard({ id, children }: SortableSectionCardProps) 
       ref={setNodeRef}
       style={style}
       className={cn(
-        "bg-white rounded-xl shadow-sm transition-shadow duration-200",
+        "flex flex-row items-stretch bg-white rounded-xl shadow-sm transition-shadow duration-200",
         isDragging && "shadow-xl opacity-80 ring-2 ring-green-200"
       )}
       {...attributes}
@@ -40,15 +40,15 @@ export function SortableSectionCard({ id, children }: SortableSectionCardProps) 
           <TooltipTrigger asChild>
             <div
               {...listeners}
-              className="flex items-center justify-center py-1.5 cursor-grab active:cursor-grabbing text-muted-foreground/40 hover:text-muted-foreground/70 transition-colors"
+              className="flex items-center px-1 cursor-grab active:cursor-grabbing text-muted-foreground/30 hover:text-muted-foreground/60 transition-colors"
             >
               <GripVertical className="w-4 h-4" />
             </div>
           </TooltipTrigger>
-          <TooltipContent side="top" className="text-xs">Drag to reorder</TooltipContent>
+          <TooltipContent side="left" className="text-xs">Drag to reorder</TooltipContent>
         </Tooltip>
       </TooltipProvider>
-      {children}
+      <div className="flex-1 min-w-0">{children}</div>
     </div>
   );
 }

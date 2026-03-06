@@ -569,7 +569,6 @@ export function SectionCard({ section, onUpdate, onRemove }: {
     <div id={`section-card-${section.id}`} className="px-5">
       {/* Section header */}
       <div className="flex items-center gap-2.5 py-4 group cursor-pointer" onClick={toggleCollapse}>
-        <GripVertical className="w-4 h-4 text-gray-300 cursor-grab flex-shrink-0 opacity-0 group-hover:opacity-100 transition-opacity" />
         <IconComponent className="w-4.5 h-4.5 flex-shrink-0" style={{ color: "#2b4734" }} />
         
         {editingTitle ? (
