@@ -352,7 +352,7 @@ function LayoutTab({ settings, onChange, sections }: { settings: CustomizeSettin
         </div>
       </SettingCard>
 
-      <SettingCard title="Entry Layout">
+      <SettingCard title="Entry Layout" defaultOpen={false}>
         {/* Visual layout icons */}
         <div className="grid grid-cols-2 gap-2 mb-4">
           <TooltipProvider delayDuration={300}>
@@ -556,7 +556,7 @@ function DesignTab({ settings, onChange }: { settings: CustomizeSettings; onChan
         <CheckboxRow label="Uppercase headings" checked={settings.headingUppercase !== false} onChange={(v) => onChange({ headingUppercase: v })} />
       </SettingCard>
 
-      <SettingCard title="Link styling">
+      <SettingCard title="Link styling" defaultOpen={false}>
         <div className="space-y-3">
           <CheckboxRow label="Underline" checked={settings.linkUnderline} onChange={(v) => onChange({ linkUnderline: v })} />
           <CheckboxRow label="Blue color" checked={settings.linkBlue} onChange={(v) => onChange({ linkBlue: v })} />
@@ -730,7 +730,7 @@ function HeaderTab({ settings, onChange }: { settings: CustomizeSettings; onChan
         />
       </SettingCard>
 
-      <SettingCard title="Professional title">
+      <SettingCard title="Professional title" defaultOpen={false}>
         <FieldLabel>Size</FieldLabel>
         <div className="mb-3">
           <SegmentedControl
@@ -750,11 +750,11 @@ function HeaderTab({ settings, onChange }: { settings: CustomizeSettings; onChan
             { value: "true", label: "Same Line" },
           ]}
           value={String(settings.titleSameLine)}
-          onChange={(v) => onChange({ titleSameLine: v === "true" })}
-        />
+           onChange={(v) => onChange({ titleSameLine: v === "true" })}
+         />
       </SettingCard>
 
-      <SettingCard title="Photo">
+      <SettingCard title="Photo" defaultOpen={false}>
         <div className="flex items-center gap-3 py-2" style={{ color: B.textSec }}>
           <div className="w-10 h-10 rounded-full bg-gray-100 flex items-center justify-center">
             <Camera className="w-5 h-5 text-gray-300" />
@@ -873,11 +873,11 @@ function SectionsTab({ settings, onChange, sections }: { settings: CustomizeSett
             <CheckboxRow label="Group promotions" checked={settings.groupPromotions ?? false} onChange={(v) => onChange({ groupPromotions: v })} />
           </>
         ) : (
-          <p className="text-xs" style={{ color: B.textSec }}>Add an Experience section first</p>
+          <p className="text-xs" style={{ color: B.textSec }}>Add an Ex defaultOpen={false}perience section first</p>
         )}
       </SettingCard>
 
-      {/* Footer (moved from separate tab) */}
+ defaultOpen={false}      {/* Footer (moved from separate ta defaultOpen={false}b) */}
       <SettingCard title="Footer">
         <div className="space-y-3">
           <CheckboxRow label="Page numbers" checked={settings.showPageNumbers} onChange={(v) => onChange({ showPageNumbers: v })} />
