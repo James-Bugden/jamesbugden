@@ -362,8 +362,11 @@ const ResumeBuilder = () => {
     pushHistory();
     const oldIndex = data.sections.findIndex(s => s.id === active.id);
     const newIndex = data.sections.findIndex(s => s.id === over.id);
-    setSections(arrayMove(data.sections, oldIndex, newIndex));
-  }, [data.sections, pushHistory, setSections]);
+    const reordered = arrayMove(data.sections, oldIndex, newIndex);
+    setSections(reordered);
+    // Sync customize sectionOrder so preview reflects the new order
+    store.updateCustomize({ sectionOrder: reordered.map(s => s.id) });
+  }, [data.sections, pushHistory, setSections, store]);
 
   const undo = useCallback(() => {
     const { past, future } = historyRef.current;
