@@ -575,8 +575,12 @@ function parseExperienceEntries(lines: string[]) {
 
   const flush = () => {
     if (!current) return;
-    const bulletHtml = current.bullets.length > 0
-      ? `<ul>${current.bullets.map((b) => `<li>${b}</li>`).join("")}</ul>`
+    // Deduplicate: remove bullets that are substrings of longer bullets
+    const deduped = current.bullets.filter((b, i) =>
+      !current!.bullets.some((other, j) => j !== i && other.includes(b) && other.length > b.length)
+    );
+    const bulletHtml = deduped.length > 0
+      ? `<ul>${deduped.map((b) => `<li>${b}</li>`).join("")}</ul>`
       : "";
     entries.push({
       id: crypto.randomUUID(),
