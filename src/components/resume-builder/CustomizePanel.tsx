@@ -606,25 +606,31 @@ function DesignTab({ settings, onChange }: { settings: CustomizeSettings; onChan
       <SettingCard title="Section Headings">
         <FieldLabel>Style</FieldLabel>
         <div className="grid grid-cols-4 gap-2 mb-4">
+          <TooltipProvider delayDuration={300}>
           {HEADING_STYLES.map((hs) => (
-            <button
-              key={hs.id}
-              onClick={() => onChange({ headingStyle: hs.id })}
-              className={cn(
-                "flex flex-col items-center gap-1.5 p-2.5 rounded-xl border-2 transition-all",
-                settings.headingStyle === hs.id ? "shadow-sm" : "bg-white hover:border-gray-300"
-              )}
-              style={
-                settings.headingStyle === hs.id
-                  ? { borderColor: B.green, backgroundColor: B.greenLighter }
-                  : { borderColor: B.border }
-              }
-            >
-              <div className="w-14 h-5 flex items-center justify-center">
-                <HeadingStyleThumb id={hs.id} accent={settings.accentColor} />
-              </div>
-            </button>
+            <Tooltip key={hs.id}>
+              <TooltipTrigger asChild>
+                <button
+                  onClick={() => onChange({ headingStyle: hs.id })}
+                  className={cn(
+                    "flex flex-col items-center gap-1.5 p-2.5 rounded-xl border-2 transition-all",
+                    settings.headingStyle === hs.id ? "shadow-sm" : "bg-white hover:border-gray-300"
+                  )}
+                  style={
+                    settings.headingStyle === hs.id
+                      ? { borderColor: B.green, backgroundColor: B.greenLighter }
+                      : { borderColor: B.border }
+                  }
+                >
+                  <div className="w-14 h-5 flex items-center justify-center">
+                    <HeadingStyleThumb id={hs.id} accent={settings.accentColor} />
+                  </div>
+                </button>
+              </TooltipTrigger>
+              <TooltipContent side="bottom" className="text-xs">{hs.label}</TooltipContent>
+            </Tooltip>
           ))}
+          </TooltipProvider>
         </div>
 
         <FieldLabel>Size</FieldLabel>
