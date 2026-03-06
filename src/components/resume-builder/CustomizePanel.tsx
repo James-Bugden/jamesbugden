@@ -366,27 +366,28 @@ function LayoutTab({ settings, onChange, sections }: { settings: CustomizeSettin
       <SettingCard title="Entry Layout">
         {/* Visual layout icons */}
         <div className="grid grid-cols-2 gap-2 mb-4">
+          <TooltipProvider delayDuration={300}>
           {([
-            { val: "stacked", icon: (
+            { val: "stacked", label: "Stacked", icon: (
               <div className="w-full h-10 flex flex-col gap-1 justify-center">
                 <div className="flex items-center gap-1"><div className="w-14 h-1.5 bg-gray-500 rounded-sm" /><div className="w-4 h-1 bg-gray-300 rounded-sm" /><div className="w-3 h-1 bg-gray-300 rounded-sm" /></div>
                 <div className="w-10 h-1 bg-gray-300 rounded-sm" />
                 <div className="flex gap-0.5"><div className="w-20 h-1 bg-gray-200 rounded-sm" /></div>
               </div>
             )},
-            { val: "inline", icon: (
+            { val: "inline", label: "Inline", icon: (
               <div className="w-full h-10 flex flex-col gap-1 justify-center">
                 <div className="flex items-center justify-between"><div className="flex items-center gap-1"><div className="w-8 h-1.5 bg-gray-500 rounded-sm" /><div className="w-4 h-1 bg-gray-300 rounded-sm" /></div><div className="w-6 h-1 bg-gray-300 rounded-sm" /></div>
                 <div className="flex gap-0.5"><div className="w-20 h-1 bg-gray-200 rounded-sm" /></div>
               </div>
             )},
-            { val: "compact", icon: (
+            { val: "compact", label: "Compact", icon: (
               <div className="w-full h-10 flex flex-col gap-0.5 justify-center">
                 <div className="flex items-center gap-1"><div className="w-12 h-1.5 bg-gray-500 rounded-sm" /><div className="w-6 h-1 bg-gray-300 rounded-sm" /></div>
                 <div className="w-16 h-1 bg-gray-200 rounded-sm" />
               </div>
             )},
-            { val: "academic", icon: (
+            { val: "academic", label: "Academic", icon: (
               <div className="w-full h-10 flex flex-col gap-1 justify-center">
                 <div className="flex items-center gap-1"><div className="w-14 h-1.5 bg-gray-500 rounded-sm" /><div className="w-6 h-1 bg-gray-300 rounded-sm" /></div>
                 <div className="w-10 h-1 bg-gray-300 rounded-sm italic" style={{ borderBottom: "1px solid #d1d5db" }} />
@@ -394,22 +395,27 @@ function LayoutTab({ settings, onChange, sections }: { settings: CustomizeSettin
               </div>
             )},
           ] as const).map((opt) => (
-            <button
-              key={opt.val}
-              onClick={() => onChange({ entryLayout: opt.val })}
-              className={cn(
-                "p-3 rounded-xl border-2 transition-all",
-                settings.entryLayout === opt.val ? "shadow-sm" : "bg-white hover:border-gray-300"
-              )}
-              style={
-                settings.entryLayout === opt.val
-                  ? { borderColor: B.green, backgroundColor: B.greenLighter }
-                  : { borderColor: B.border }
-              }
-            >
-              {opt.icon}
-            </button>
+            <Tooltip key={opt.val}>
+              <TooltipTrigger asChild>
+                <button
+                  onClick={() => onChange({ entryLayout: opt.val })}
+                  className={cn(
+                    "p-3 rounded-xl border-2 transition-all",
+                    settings.entryLayout === opt.val ? "shadow-sm" : "bg-white hover:border-gray-300"
+                  )}
+                  style={
+                    settings.entryLayout === opt.val
+                      ? { borderColor: B.green, backgroundColor: B.greenLighter }
+                      : { borderColor: B.border }
+                  }
+                >
+                  {opt.icon}
+                </button>
+              </TooltipTrigger>
+              <TooltipContent side="bottom" className="text-xs">{opt.label}</TooltipContent>
+            </Tooltip>
           ))}
+          </TooltipProvider>
         </div>
 
         <FieldLabel>Title & subtitle size</FieldLabel>
