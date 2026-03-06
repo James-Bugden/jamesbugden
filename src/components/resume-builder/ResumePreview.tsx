@@ -578,7 +578,7 @@ function renderSectionEntries(section: ResumeSection, customize?: CustomizeSetti
           if (layout === "inline") {
             const headline = [primaryText, secondaryText].filter(Boolean).join(" · ");
             return (
-              <div key={entry.id}>
+              <div key={entry.id} data-page-item>
                 <div className="flex items-start justify-between gap-[4mm]">
                   <p style={{ fontSize: titleFontSize, fontWeight: 700, color: "var(--resume-name)" }}>
                     {headline || "Entry"}
