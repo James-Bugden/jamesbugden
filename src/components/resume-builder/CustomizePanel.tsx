@@ -1,4 +1,5 @@
 import { useState, useCallback } from "react";
+import { Tooltip, TooltipTrigger, TooltipContent, TooltipProvider } from "@/components/ui/tooltip";
 import { cn } from "@/lib/utils";
 import { Minus, Plus, Check, Link, ExternalLink, Smile, Circle, AlignLeft, AlignCenter, AlignRight, GripVertical, Camera } from "lucide-react";
 import { DndContext, closestCenter, PointerSensor, useSensor, useSensors, DragEndEvent } from "@dnd-kit/core";
@@ -365,27 +366,28 @@ function LayoutTab({ settings, onChange, sections }: { settings: CustomizeSettin
       <SettingCard title="Entry Layout">
         {/* Visual layout icons */}
         <div className="grid grid-cols-2 gap-2 mb-4">
+          <TooltipProvider delayDuration={300}>
           {([
-            { val: "stacked", icon: (
+            { val: "stacked", label: "Stacked", icon: (
               <div className="w-full h-10 flex flex-col gap-1 justify-center">
                 <div className="flex items-center gap-1"><div className="w-14 h-1.5 bg-gray-500 rounded-sm" /><div className="w-4 h-1 bg-gray-300 rounded-sm" /><div className="w-3 h-1 bg-gray-300 rounded-sm" /></div>
                 <div className="w-10 h-1 bg-gray-300 rounded-sm" />
                 <div className="flex gap-0.5"><div className="w-20 h-1 bg-gray-200 rounded-sm" /></div>
               </div>
             )},
-            { val: "inline", icon: (
+            { val: "inline", label: "Inline", icon: (
               <div className="w-full h-10 flex flex-col gap-1 justify-center">
                 <div className="flex items-center justify-between"><div className="flex items-center gap-1"><div className="w-8 h-1.5 bg-gray-500 rounded-sm" /><div className="w-4 h-1 bg-gray-300 rounded-sm" /></div><div className="w-6 h-1 bg-gray-300 rounded-sm" /></div>
                 <div className="flex gap-0.5"><div className="w-20 h-1 bg-gray-200 rounded-sm" /></div>
               </div>
             )},
-            { val: "compact", icon: (
+            { val: "compact", label: "Compact", icon: (
               <div className="w-full h-10 flex flex-col gap-0.5 justify-center">
                 <div className="flex items-center gap-1"><div className="w-12 h-1.5 bg-gray-500 rounded-sm" /><div className="w-6 h-1 bg-gray-300 rounded-sm" /></div>
                 <div className="w-16 h-1 bg-gray-200 rounded-sm" />
               </div>
             )},
-            { val: "academic", icon: (
+            { val: "academic", label: "Academic", icon: (
               <div className="w-full h-10 flex flex-col gap-1 justify-center">
                 <div className="flex items-center gap-1"><div className="w-14 h-1.5 bg-gray-500 rounded-sm" /><div className="w-6 h-1 bg-gray-300 rounded-sm" /></div>
                 <div className="w-10 h-1 bg-gray-300 rounded-sm italic" style={{ borderBottom: "1px solid #d1d5db" }} />
@@ -393,22 +395,27 @@ function LayoutTab({ settings, onChange, sections }: { settings: CustomizeSettin
               </div>
             )},
           ] as const).map((opt) => (
-            <button
-              key={opt.val}
-              onClick={() => onChange({ entryLayout: opt.val })}
-              className={cn(
-                "p-3 rounded-xl border-2 transition-all",
-                settings.entryLayout === opt.val ? "shadow-sm" : "bg-white hover:border-gray-300"
-              )}
-              style={
-                settings.entryLayout === opt.val
-                  ? { borderColor: B.green, backgroundColor: B.greenLighter }
-                  : { borderColor: B.border }
-              }
-            >
-              {opt.icon}
-            </button>
+            <Tooltip key={opt.val}>
+              <TooltipTrigger asChild>
+                <button
+                  onClick={() => onChange({ entryLayout: opt.val })}
+                  className={cn(
+                    "p-3 rounded-xl border-2 transition-all",
+                    settings.entryLayout === opt.val ? "shadow-sm" : "bg-white hover:border-gray-300"
+                  )}
+                  style={
+                    settings.entryLayout === opt.val
+                      ? { borderColor: B.green, backgroundColor: B.greenLighter }
+                      : { borderColor: B.border }
+                  }
+                >
+                  {opt.icon}
+                </button>
+              </TooltipTrigger>
+              <TooltipContent side="bottom" className="text-xs">{opt.label}</TooltipContent>
+            </Tooltip>
           ))}
+          </TooltipProvider>
         </div>
 
         <FieldLabel>Title & subtitle size</FieldLabel>
@@ -554,21 +561,27 @@ function DesignTab({ settings, onChange }: { settings: CustomizeSettings; onChan
         </div>
 
         {/* Accent color swatches */}
+        <TooltipProvider delayDuration={200}>
         <div className="grid grid-cols-10 gap-1.5 mb-4">
           {ACCENT_COLORS.map((color) => (
-            <button
-              key={color}
-              onClick={() => onChange({ accentColor: color })}
-              className={cn("w-6 h-6 rounded-full border-2 transition-transform hover:scale-110", settings.accentColor === color ? "scale-110" : "")}
-              style={{
-                backgroundColor: color,
-                borderColor: settings.accentColor === color ? B.green : "transparent",
-                boxShadow: settings.accentColor === color ? `0 0 0 2px ${B.greenLight}` : "none",
-              }}
-            />
+            <Tooltip key={color}>
+              <TooltipTrigger asChild>
+                <button
+                  onClick={() => onChange({ accentColor: color })}
+                  className={cn("w-6 h-6 rounded-full border-2 transition-transform hover:scale-110", settings.accentColor === color ? "scale-110" : "")}
+                  style={{
+                    backgroundColor: color,
+                    borderColor: settings.accentColor === color ? B.green : "transparent",
+                    boxShadow: settings.accentColor === color ? `0 0 0 2px ${B.greenLight}` : "none",
+                  }}
+                />
+              </TooltipTrigger>
+              <TooltipContent side="bottom" className="text-xs">{color}</TooltipContent>
+            </Tooltip>
           ))}
           <button className="w-6 h-6 rounded-full border-2" style={{ background: "conic-gradient(red, yellow, lime, aqua, blue, magenta, red)", borderColor: B.border }} />
         </div>
+        </TooltipProvider>
 
         {/* Apply accent color checkboxes */}
         <FieldLabel>Apply accent color</FieldLabel>
@@ -605,25 +618,31 @@ function DesignTab({ settings, onChange }: { settings: CustomizeSettings; onChan
       <SettingCard title="Section Headings">
         <FieldLabel>Style</FieldLabel>
         <div className="grid grid-cols-4 gap-2 mb-4">
+          <TooltipProvider delayDuration={300}>
           {HEADING_STYLES.map((hs) => (
-            <button
-              key={hs.id}
-              onClick={() => onChange({ headingStyle: hs.id })}
-              className={cn(
-                "flex flex-col items-center gap-1.5 p-2.5 rounded-xl border-2 transition-all",
-                settings.headingStyle === hs.id ? "shadow-sm" : "bg-white hover:border-gray-300"
-              )}
-              style={
-                settings.headingStyle === hs.id
-                  ? { borderColor: B.green, backgroundColor: B.greenLighter }
-                  : { borderColor: B.border }
-              }
-            >
-              <div className="w-14 h-5 flex items-center justify-center">
-                <HeadingStyleThumb id={hs.id} accent={settings.accentColor} />
-              </div>
-            </button>
+            <Tooltip key={hs.id}>
+              <TooltipTrigger asChild>
+                <button
+                  onClick={() => onChange({ headingStyle: hs.id })}
+                  className={cn(
+                    "flex flex-col items-center gap-1.5 p-2.5 rounded-xl border-2 transition-all",
+                    settings.headingStyle === hs.id ? "shadow-sm" : "bg-white hover:border-gray-300"
+                  )}
+                  style={
+                    settings.headingStyle === hs.id
+                      ? { borderColor: B.green, backgroundColor: B.greenLighter }
+                      : { borderColor: B.border }
+                  }
+                >
+                  <div className="w-14 h-5 flex items-center justify-center">
+                    <HeadingStyleThumb id={hs.id} accent={settings.accentColor} />
+                  </div>
+                </button>
+              </TooltipTrigger>
+              <TooltipContent side="bottom" className="text-xs">{hs.label}</TooltipContent>
+            </Tooltip>
           ))}
+          </TooltipProvider>
         </div>
 
         <FieldLabel>Size</FieldLabel>
@@ -759,22 +778,28 @@ function HeaderTab({ settings, onChange }: { settings: CustomizeSettings; onChan
         </div>
 
         <FieldLabel>Icon Style</FieldLabel>
+        <TooltipProvider delayDuration={300}>
         <div className="flex gap-1.5 flex-wrap">
           {[0,1,2,3,4,5,6,7].map((i) => (
-            <button
-              key={i}
-              onClick={() => onChange({ iconStyle: i })}
-              className="w-8 h-8 rounded-full border-2 flex items-center justify-center transition-all"
-              style={
-                settings.iconStyle === i
-                  ? { borderColor: B.green, backgroundColor: B.greenLighter }
-                  : { borderColor: B.border, backgroundColor: "#fff" }
-              }
-            >
-              <div className={cn("w-3.5 h-3.5 rounded-full", i % 2 === 0 ? "border border-gray-400" : "bg-gray-400")} />
-            </button>
+            <Tooltip key={i}>
+              <TooltipTrigger asChild>
+                <button
+                  onClick={() => onChange({ iconStyle: i })}
+                  className="w-8 h-8 rounded-full border-2 flex items-center justify-center transition-all"
+                  style={
+                    settings.iconStyle === i
+                      ? { borderColor: B.green, backgroundColor: B.greenLighter }
+                      : { borderColor: B.border, backgroundColor: "#fff" }
+                  }
+                >
+                  <div className={cn("w-3.5 h-3.5 rounded-full", i % 2 === 0 ? "border border-gray-400" : "bg-gray-400")} />
+                </button>
+              </TooltipTrigger>
+              <TooltipContent side="bottom" className="text-xs">Style {i + 1}</TooltipContent>
+            </Tooltip>
           ))}
         </div>
+        </TooltipProvider>
       </SettingCard>
 
       <SettingCard title="Name">
@@ -1030,9 +1055,16 @@ function SortableSectionItem({ id, title, columns }: { id: string; title: string
       style={style}
       className="flex items-center gap-2 bg-gray-50 rounded-lg px-3 py-2 border border-gray-100"
     >
-      <div {...attributes} {...listeners} className="cursor-grab active:cursor-grabbing touch-none">
-        <GripVertical className="w-3.5 h-3.5" style={{ color: B.textSec }} />
-      </div>
+      <TooltipProvider delayDuration={300}>
+        <Tooltip>
+          <TooltipTrigger asChild>
+            <div {...attributes} {...listeners} className="cursor-grab active:cursor-grabbing touch-none">
+              <GripVertical className="w-3.5 h-3.5" style={{ color: B.textSec }} />
+            </div>
+          </TooltipTrigger>
+          <TooltipContent side="left" className="text-xs">Drag to reorder</TooltipContent>
+        </Tooltip>
+      </TooltipProvider>
       <span className="text-xs font-semibold uppercase tracking-wide" style={{ color: B.text }}>{title}</span>
       {(columns === "two" || columns === "mix") && (
         <span className="ml-auto text-[10px] bg-gray-100 px-2 py-0.5 rounded-full" style={{ color: B.textSec }}>Main</span>
