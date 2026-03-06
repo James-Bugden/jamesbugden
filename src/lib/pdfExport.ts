@@ -14,6 +14,8 @@ const PAGE_DIMS = {
 };
 
 const PX_PER_MM = 3.7795;
+const HEADER_SAFE_MM = 8;
+const FOOTER_SAFE_MM = 8;
 
 export async function exportToPdf({ elementId, fileName, pageFormat = "a4" }: ExportOptions) {
   const container = document.getElementById(elementId);

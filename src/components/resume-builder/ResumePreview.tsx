@@ -21,6 +21,8 @@ import { GOOGLE_FONTS_URL } from "./fontData";
 
 /* ── Page dimensions (mm → px at 96 DPI: 1mm ≈ 3.7795px) ──────── */
 const PX_PER_MM = 3.7795;
+const HEADER_SAFE_MM = 8;
+const FOOTER_SAFE_MM = 8;
 const PAGE_DIMS: Record<string, { w: number; h: number }> = {
   a4: { w: 210, h: 297 },
   letter: { w: 215.9, h: 279.4 },
