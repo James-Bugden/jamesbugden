@@ -670,6 +670,8 @@ function renderSectionEntries(section: ResumeSection, customize?: CustomizeSetti
 
               <HtmlBlock
                 html={f.description}
+                sectionId={section.id}
+                entryId={entry.id}
                 fontSize={bodyPt(base)}
                 className={`mt-[1mm] [&_p]:mb-[1mm] ${listClass} [&_ol]:list-decimal [&_ol]:pl-[5mm] [&_li]:mb-[0.4mm] [&_a]:underline`}
               />
