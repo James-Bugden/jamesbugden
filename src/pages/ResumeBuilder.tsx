@@ -321,7 +321,7 @@ function DownloadDropdown({ downloading, pageFormat, docName, onDownload }: {
    ═════════════════════════════════════════════════════════════ */
 const ResumeBuilder = () => {
   const store = useResumeStore();
-  const { data, customize, updateCustomize, updatePersonalDetails, setSections, updateSection, removeSection } = store;
+  const { data, setData, customize, updateCustomize, updatePersonalDetails, setSections, updateSection, removeSection } = store;
 
   /* ── dnd-kit sensors (defined early, used later after pushHistory) ── */
   const sensors = useSensors(
