@@ -20,6 +20,7 @@ import {
 } from "./customizeTypes";
 import { ResumeData } from "./types";
 import { applyTemplatePreset, TEMPLATE_LIST } from "./templatePresets";
+import { FontPicker } from "./FontPicker";
 import { ResumeThumbnail } from "./ResumeThumbnail";
 import { DEFAULT_CUSTOMIZE } from "./customizeTypes";
 
