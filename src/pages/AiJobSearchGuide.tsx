@@ -969,11 +969,13 @@ Generate a short, conversational response that asks them to do better, given my 
       </section>
 
       {/* ═══════════════ SECTION 7: AI MISTAKES ═══════════════ */}
-      <section id="mistakes" className="scroll-mt-24 pb-16 px-5 md:px-6">
-        <div className="container mx-auto max-w-3xl space-y-6">
-          <div className="flex items-end gap-4">
+      <section id="mistakes" className="py-14 md:py-20 scroll-mt-24">
+        <div className="space-y-6">
+          <div className="flex items-start gap-5 mb-8">
             <SectionNumber num="07" />
-            <h2 className="font-heading text-2xl md:text-3xl text-foreground">The 7 Biggest AI Job Search Mistakes</h2>
+            <div className="pt-3">
+              <h2 className="font-heading text-2xl md:text-3xl text-foreground">The 7 Biggest AI Job Search Mistakes</h2>
+            </div>
           </div>
 
           <p className="text-muted-foreground leading-relaxed">After helping hundreds of job seekers and reviewing thousands of applications, these are the AI-specific mistakes I see most often.</p>
