@@ -51,34 +51,46 @@ export default function SalaryProofSection() {
             </p>
           </div>
 
-          {/* Comparison Cards */}
-          <div className="flex flex-col gap-4 mb-8">
-            {/* Card 1 — Accept First Offer */}
-            <div
-              className="rounded-xl p-6"
-              style={{ backgroundColor: 'rgba(255,255,255,0.06)', border: '1px solid rgba(255,255,255,0.08)' }}
-            >
-              <div className="flex items-center gap-2 mb-3">
-                <X className="w-5 h-5" style={{ color: '#C85A5A' }} strokeWidth={2.5} />
-                <span className="font-bold" style={{ color: '#E8E8E8', fontSize: '1rem' }}>Accept First Offer</span>
+          {/* Bar Chart Comparison */}
+          <div className="flex justify-center items-end gap-8 md:gap-16 mb-8" style={{ height: '280px' }}>
+            {/* Bar 1 — Accept First Offer */}
+            <div className="flex flex-col items-center justify-end h-full">
+              <p className="font-bold mb-2" style={{ color: '#A8B5A9', fontSize: '1rem' }}>NT$73M</p>
+              <div
+                className="rounded-t-lg w-20 md:w-28"
+                style={{
+                  height: '47.6%',
+                  backgroundColor: 'rgba(255,255,255,0.12)',
+                  border: '1px solid rgba(255,255,255,0.15)',
+                }}
+              />
+              <div className="mt-4 text-center">
+                <div className="flex items-center justify-center gap-1.5 mb-1">
+                  <X className="w-4 h-4" style={{ color: '#C85A5A' }} strokeWidth={2.5} />
+                  <span className="font-bold" style={{ color: '#E8E8E8', fontSize: '0.875rem' }}>Accept First Offer</span>
+                </div>
+                <p style={{ color: '#A8B5A9', fontSize: '0.75rem' }}>15% raise per change</p>
               </div>
-              <p className="mb-1" style={{ color: '#A8B5A9', fontSize: '0.875rem' }}>15% raise per job change</p>
-              <p className="font-bold" style={{ color: '#E8E8E8', fontSize: '1.5rem' }}>NT$73,093,386</p>
-              <p style={{ color: '#A8B5A9', fontSize: '0.8125rem' }}>total over 30 years</p>
             </div>
 
-            {/* Card 2 — Negotiate Strategically */}
-            <div
-              className="rounded-xl p-6"
-              style={{ backgroundColor: 'rgba(45,58,46,0.5)', border: '2px solid #D4930D' }}
-            >
-              <div className="flex items-center gap-2 mb-3">
-                <CheckCircle2 className="w-5 h-5" style={{ color: '#4CAF50' }} />
-                <span className="font-bold" style={{ color: '#FBF7F0', fontSize: '1rem' }}>Negotiate Strategically</span>
+            {/* Bar 2 — Negotiate Strategically */}
+            <div className="flex flex-col items-center justify-end h-full">
+              <p className="font-bold mb-2" style={{ color: '#D4930D', fontSize: '1rem' }}>NT$153M</p>
+              <div
+                className="rounded-t-lg w-20 md:w-28"
+                style={{
+                  height: '100%',
+                  background: 'linear-gradient(to top, #D4930D, #E8A82E)',
+                  boxShadow: '0 0 20px rgba(212,147,13,0.25)',
+                }}
+              />
+              <div className="mt-4 text-center">
+                <div className="flex items-center justify-center gap-1.5 mb-1">
+                  <CheckCircle2 className="w-4 h-4" style={{ color: '#4CAF50' }} />
+                  <span className="font-bold" style={{ color: '#FBF7F0', fontSize: '0.875rem' }}>Negotiate Strategically</span>
+                </div>
+                <p style={{ color: '#A8B5A9', fontSize: '0.75rem' }}>30% raise per change</p>
               </div>
-              <p className="mb-1" style={{ color: '#A8B5A9', fontSize: '0.875rem' }}>30% raise per job change</p>
-              <p className="font-bold" style={{ color: '#D4930D', fontSize: '1.5rem' }}>NT$153,430,190</p>
-              <p style={{ color: '#A8B5A9', fontSize: '0.8125rem' }}>total over 30 years</p>
             </div>
           </div>
 
