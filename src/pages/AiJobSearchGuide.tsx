@@ -304,11 +304,11 @@ const AiJobSearchGuide = () => {
       {/* ═══════════════ SECTION 1: FIND YOUR PATH ═══════════════ */}
       <section id="find-path" className="py-14 md:py-20 scroll-mt-24">
         <div className="space-y-6">
-          <div className="flex items-end gap-4">
+          <div className="flex items-start gap-5 mb-8">
             <SectionNumber num="01" />
-            <div>
-              <h2 className="font-heading text-2xl md:text-3xl text-foreground">Find Your Path</h2>
-              <p className="text-sm text-muted-foreground flex items-center gap-1.5 mt-1"><Clock className="w-4 h-4" /> 45 minutes</p>
+            <div className="pt-3">
+              <h2 className="font-heading text-2xl md:text-3xl text-foreground mb-2">Find Your Path</h2>
+              <p className="text-sm text-muted-foreground flex items-center gap-1.5"><Clock className="w-4 h-4" /> 45 minutes</p>
             </div>
           </div>
 
