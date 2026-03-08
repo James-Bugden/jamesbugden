@@ -290,38 +290,7 @@ function LayoutTab({ settings, onChange, sections }: { settings: CustomizeSettin
   return (
     <>
       <SettingCard title="Layout">
-        <FieldLabel>Columns</FieldLabel>
-        <div className="flex gap-3 mb-4">
-          {([
-            { val: "one", label: "One", icon: (
-              <div className="w-12 h-16 border-2 border-current rounded-sm flex flex-col gap-0.5 p-1 items-center justify-center">
-                <div className="w-full h-1 bg-current rounded-sm opacity-60" />
-                <div className="w-full h-1 bg-current rounded-sm opacity-40" />
-                <div className="w-full h-1 bg-current rounded-sm opacity-40" />
-              </div>
-            )},
-            { val: "two", label: "Two", icon: (
-              <div className="w-12 h-16 border-2 border-current rounded-sm flex gap-0.5 p-1">
-                <div className="w-1/2 flex flex-col gap-0.5"><div className="w-full h-1 bg-current rounded-sm opacity-60" /><div className="w-full h-1 bg-current rounded-sm opacity-40" /></div>
-                <div className="w-1/2 flex flex-col gap-0.5"><div className="w-full h-1 bg-current rounded-sm opacity-60" /><div className="w-full h-1 bg-current rounded-sm opacity-40" /></div>
-              </div>
-            )},
-            { val: "mix", label: "Mix", icon: (
-              <div className="w-12 h-16 border-2 border-current rounded-sm flex gap-0.5 p-1">
-                <div className="w-1/3 flex flex-col gap-0.5"><div className="w-full h-1 bg-current rounded-sm opacity-60" /><div className="w-full h-1 bg-current rounded-sm opacity-40" /></div>
-                <div className="w-2/3 flex flex-col gap-0.5"><div className="w-full h-1 bg-current rounded-sm opacity-60" /><div className="w-full h-1 bg-current rounded-sm opacity-40" /></div>
-              </div>
-            )},
-          ] as const).map((c) => (
-            <ThumbOption key={c.val} selected={settings.columns === c.val} onClick={() => onChange({ columns: c.val as any })} label={c.label}>
-              {c.icon}
-            </ThumbOption>
-          ))}
-        </div>
-
-        {(settings.columns === "two" || settings.columns === "mix") && (
-          <SliderRow label="Column Width" value={settings.columnRatio} min={3} max={6} step={1} unit="/12" onChange={(v) => onChange({ columnRatio: v })} />
-        )}
+        <p className="text-xs text-gray-500">Single-column layout</p>
       </SettingCard>
 
       <SectionReorderCard settings={settings} onChange={onChange} sections={sections} />

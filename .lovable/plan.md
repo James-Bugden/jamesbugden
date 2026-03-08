@@ -1,26 +1,48 @@
 
 
-## Fix: Reduce whitespace by allowing content to split across pages
+## Resume Builder Feature Improvements
 
-### Problem
-The current pagination algorithm pushes entire entries to the next page when they straddle a page boundary. For long entries (like multi-bullet experience items), this creates large empty gaps at the bottom of pages — as shown in the screenshot.
+### Priority 1: AI "Tailor to Job Description" Panel
+- Add a new tab or panel in the "AI Tools" section (which currently shows "Coming soon")
+- User pastes a job description → edge function analyzes keyword overlap with current resume
+- Returns: missing keywords, suggested bullet point rewrites, match percentage
+- Reuses existing `resume-ai` edge function with a new `action: "tailor"` mode
+- UI: Split panel with JD on left, suggestions on right, one-click "Apply" buttons
 
-### Root cause
-In `ResumePreview.tsx` lines 1095-1119, the pagination logic has a threshold of `0.6 * usablePerPage` (~60% of page height). Any entry smaller than that gets pushed entirely to the next page. For entries larger than 60%, it does child-level splitting but still pushes individual `<li>` elements forward.
+### Priority 2: Resume Completeness Score Widget
+- Floating widget in the editor sidebar showing real-time completion percentage
+- Scoring rules: has summary (+10), has 2+ experience entries (+20), all entries have descriptions (+15), dates filled (+10), contact info complete (+15), skills section exists (+10), quantified achievements detected (+20)
+- Visual: circular progress ring with percentage, expandable checklist of what's missing
+- Lives above the "Add Content" button in the Content tab
 
-### Solution
-Reduce the threshold so only very small items (section headings, single-line entries) get pushed whole. Let larger entries split naturally across page boundaries, with only individual bullet points (`<li>`, `<p>`) being pushed when they straddle a boundary.
+### Priority 3: Populate the "AI Tools" Tab
+- Currently renders "AI Tools — Coming soon" placeholder
+- Build out with: "Tailor to Job" (above), "Generate Summary from Experience", "Suggest Skills", "Optimize Bullet Points (batch)"
+- Each tool card shows a description, input area, and results
 
-**File: `src/components/resume-builder/ResumePreview.tsx`**
+### Priority 4: Real-time Word Count per Section
+- Add a small `<span>` below each `RichTextEditor` showing word count and bullet point count
+- Highlight in amber if too long (>150 words per entry) or too short (<20 words)
+- Lightweight: computed from the editor's text content on each change
 
-1. **Lower the whole-entry push threshold** from `0.6` to `0.25` — only push entries shorter than ~25% of the page. Longer entries will flow across pages naturally via the child-level splitting logic.
+### Priority 5: Click-to-Edit on Preview (Inline Editing)
+- When user clicks text on the A4 preview, show a floating input/textarea positioned over the clicked element
+- On blur/enter, update the corresponding field in the data model
+- Start with simple fields only: job title, company name, degree, institution
+- More complex than other items; implement after the above
 
-2. **Tighten the child-block push threshold** from `0.5` to `0.3` — only push individual bullets/paragraphs if they're less than 30% of the page, preventing excessive spacer injection for large paragraphs.
+### Files to Edit
+- `src/pages/ResumeBuilder.tsx` — Add completeness widget, wire AI Tools tab
+- `src/components/resume-builder/ResumeTopNav.tsx` — No changes needed
+- `src/components/resume-builder/RichTextEditor.tsx` — Add word count display
+- `supabase/functions/resume-ai/index.ts` — Add `tailor` action for JD matching
+- New: `src/components/resume-builder/CompletenessScore.tsx` — Score widget component
+- New: `src/components/resume-builder/AiToolsPanel.tsx` — Full AI tools tab content
+- New: `src/components/resume-builder/TailorToJob.tsx` — JD tailoring panel
 
-3. **Add section-heading orphan protection** — if a section heading (`<h2>`) is the last thing on a page with no content below it, push it to the next page. This avoids orphaned headings without wasting space on full entries.
-
-### Changes summary
-- One file edited: `src/components/resume-builder/ResumePreview.tsx`
-- Two numeric threshold changes in the pagination convergence loop (~lines 1096 and 1111)
-- No structural or API changes
+### Implementation Order
+1. Completeness score widget (standalone, no backend needed)
+2. Word count on RichTextEditor (small change)
+3. AI Tools tab with Tailor to Job (needs edge function update)
+4. Click-to-edit on preview (complex, last)
 
