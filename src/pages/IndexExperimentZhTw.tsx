@@ -83,7 +83,7 @@ const IndexExperimentZhTw = () => {
     <div className="experiment min-h-screen overflow-x-hidden scroll-smooth" style={{ backgroundColor: '#FDFBF7' }}>
       <PageSEO
         title="James Bugden — 免費職涯工具與履歷攻略"
-        description="免費工具、模板和內部策略，來自幫助 750 位以上求職者成功錄取的 Career Coach"
+        description="免費工具、模板和內部策略，來自幫助 750 位以上求職者成功錄取的職涯教練"
         path="/zh-tw"
       />
 
