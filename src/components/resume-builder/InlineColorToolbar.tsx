@@ -104,15 +104,15 @@ export function InlineColorToolbar({
         zIndex: 999,
       }
     : {
-        position: "absolute",
+        position: "fixed",
         zIndex: 999,
-        left: Math.max(0, targetRect.left + targetRect.width / 2 - 180 - (containerRect?.left ?? 0)),
-        top: targetRect.top - (containerRect?.top ?? 0) - 56,
+        left: Math.max(0, targetRect.left + targetRect.width / 2 - 180),
+        top: targetRect.top - 56,
       };
 
   // Flip below if not enough space above
   if (!isMobile && style.top !== undefined && (style.top as number) < 0) {
-    style.top = targetRect.bottom - (containerRect?.top ?? 0) + 8;
+    style.top = targetRect.bottom + 8;
   }
 
   return (
