@@ -45,15 +45,33 @@ const BRAND = {
 /* ── Sample resume data for new resumes ──────────────── */
 const SAMPLE_RESUME_DATA = {
   personalDetails: {
-    fullName: "Alex Chen",
-    professionalTitle: "Software Engineer",
-    email: "alex.chen@email.com",
-    phone: "+1 (555) 123-4567",
-    location: "San Francisco, CA",
+    fullName: "James Bugden",
+    professionalTitle: "Senior Recruiter",
+    email: "jb.bugden@email.com",
+    phone: "+886 970 446 524",
+    location: "Taiwan",
     photo: "",
-    extras: [{ id: "1", type: "LinkedIn", value: "linkedin.com/in/alexchen" }],
+    extras: [
+      { id: "1", type: "LinkedIn", value: "linkedin.com/in/jamesbugden" },
+      { id: "2", type: "Nationality", value: "UK Citizen · Taiwan PR" },
+    ],
   },
   sections: [
+    {
+      id: "sum-1",
+      type: "summary",
+      title: "Summary",
+      collapsed: false,
+      showHeading: false,
+      entries: [
+        {
+          id: "su1",
+          fields: {
+            description: "Proactive, data-driven recruiter who loves the search and working with candidates. Builds strong relationships with hiring managers while seeking the best talent in the market. Experienced building candidate communities of 22K+ across Threads and LinkedIn.",
+          },
+        },
+      ],
+    },
     {
       id: "exp-1",
       type: "experience",
@@ -63,29 +81,43 @@ const SAMPLE_RESUME_DATA = {
         {
           id: "e1",
           fields: {
-            position: "Senior Software Engineer",
-            company: "TechCorp Inc.",
-            location: "San Francisco, CA",
-            startMonth: "March",
-            startYear: "2022",
+            position: "Senior Recruiter",
+            company: "Uber",
+            location: "Taiwan",
+            startMonth: "January",
+            startYear: "2024",
             endMonth: "",
             endYear: "",
             currentlyHere: "true",
-            description: "<ul><li>Led development of a microservices architecture serving 2M+ daily active users, improving API response times by 40%</li><li>Mentored a team of 4 junior engineers and established code review best practices</li><li>Designed and implemented a real-time data pipeline processing 500K events/hour using Kafka and Redis</li></ul>",
+            description: "<ul><li>Hire across North Asia with a focus on Taiwan for all business units including Operations, Sales, and Corporate roles — exceeded KPIs every year</li><li>#GoGetIt — Crisis hiring: solved high attrition in a key Delivery team by hiring 9 senior candidates (L3-6) in 2 months</li><li>Leading Project Tetris: expansion hiring for 60+ sales roles in 2 quarters with limited timeline and cross-functional coordination</li></ul>",
           },
         },
         {
           id: "e2",
           fields: {
-            position: "Software Engineer",
-            company: "StartupXYZ",
-            location: "San Francisco, CA",
-            startMonth: "June",
-            startYear: "2020",
-            endMonth: "February",
+            position: "Talent Acquisition Partner",
+            company: "Uber",
+            location: "Taiwan",
+            startMonth: "January",
+            startYear: "2022",
+            endMonth: "December",
+            endYear: "2023",
+            currentlyHere: "",
+            description: "<ul><li>Winner of Uber Superstar award — assessed hiring impact to determine if the team should continue targeting traditional candidate pools (Consultant vs Non-Consultant performance comparison), contributing to reduced time-to-hire</li><li>TA POC for Uber ↔ Foodpanda merger: long-term hiring project for non-exec board and general TA requisitions</li><li>Operational Excellence: sourcing and screening knowledge sharing, deep-dive analysis into source-of-hire success rates</li></ul>",
+          },
+        },
+        {
+          id: "e3",
+          fields: {
+            position: "Senior Talent Acquisition Partner",
+            company: "Netskope",
+            location: "Taipei, Taiwan",
+            startMonth: "January",
+            startYear: "2021",
+            endMonth: "December",
             endYear: "2022",
             currentlyHere: "",
-            description: "<ul><li>Built the core payment processing system handling $10M+ in monthly transactions</li><li>Implemented CI/CD pipelines reducing deployment time from 2 hours to 15 minutes</li><li>Developed a React-based dashboard used by 500+ enterprise customers</li></ul>",
+            description: "<ul><li>Hired to lead a team of 3 recruiters on-site in Taipei for cybersecurity software engineering roles (staff level to junior IC)</li><li>Increased long-term inbound applications by 30% over a year by leading university campus efforts to promote the brand</li><li>Sourced using a variety of channels: job fairs, LinkedIn Recruiter, referrals, and community events</li></ul>",
           },
         },
       ],
@@ -99,15 +131,15 @@ const SAMPLE_RESUME_DATA = {
         {
           id: "ed1",
           fields: {
-            degree: "B.S. Computer Science",
-            institution: "University of California, Berkeley",
-            location: "Berkeley, CA",
-            startMonth: "August",
-            startYear: "2016",
-            endMonth: "May",
-            endYear: "2020",
+            degree: "B.A. Philosophy",
+            institution: "University of East Anglia",
+            location: "United Kingdom",
+            startMonth: "",
+            startYear: "2010",
+            endMonth: "",
+            endYear: "2013",
             currentlyHere: "",
-            description: "GPA: 3.8/4.0 · Dean's List · Teaching Assistant for Data Structures",
+            description: "",
           },
         },
       ],
@@ -120,7 +152,35 @@ const SAMPLE_RESUME_DATA = {
       entries: [
         {
           id: "s1",
-          fields: { skills: "TypeScript, React, Node.js, Python, PostgreSQL, Redis, Kafka, Docker, Kubernetes, AWS, CI/CD, System Design" },
+          fields: { skills: "Global Tech Recruitment, Non-Tech Recruitment, Data-Driven Hiring, Greenhouse, iCIMS, Beamery, LinkedIn Recruiter, Stakeholder Management, Team Leadership, Campus Recruiting" },
+        },
+      ],
+    },
+    {
+      id: "lang-1",
+      type: "languages",
+      title: "Languages",
+      collapsed: false,
+      entries: [
+        {
+          id: "l1",
+          fields: { language: "English", proficiency: "Native or bilingual proficiency" },
+        },
+        {
+          id: "l2",
+          fields: { language: "Mandarin Chinese", proficiency: "Professional working proficiency" },
+        },
+      ],
+    },
+    {
+      id: "cert-1",
+      type: "certificates",
+      title: "Certificates",
+      collapsed: false,
+      entries: [
+        {
+          id: "c1",
+          fields: { name: "Certified Internet Recruiter (CIR)", issuer: "AIRS powered by ADP", date: "2023", url: "" },
         },
       ],
     },
