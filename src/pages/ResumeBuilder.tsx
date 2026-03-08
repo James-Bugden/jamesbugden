@@ -499,6 +499,17 @@ const ResumeBuilder = () => {
     }, 100);
   }, []);
 
+  const handleContentEdit = useCallback((sectionId: string, entryId: string, field: string, html: string) => {
+    setData(prev => ({
+      ...prev,
+      sections: prev.sections.map(s =>
+        s.id === sectionId
+          ? { ...s, entries: s.entries.map(e => e.id === entryId ? { ...e, fields: { ...e.fields, [field]: html } } : e) }
+          : s
+      ),
+    }));
+  }, [setData]);
+
   const handleImported = useCallback((doc: SavedDocument) => {
     if (doc.type === "resume") {
       const classicSettings = applyTemplatePreset(doc.settings as any, "classic");
