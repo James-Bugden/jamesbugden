@@ -223,6 +223,8 @@ const App = () => (
             <Route path="/reviews/rema-rao" element={<RemaRaoReview />} />
             <Route path="/resume-quick-reference" element={<ResumeQuickReference />} />
             <Route path="/zh-tw/resume-quick-reference" element={<ResumeQuickReferenceZhTw />} />
+            <Route path="/recruiter-screen-guide" element={<RecruiterScreenGuide />} />
+            <Route path="/zh-tw/recruiter-screen-guide" element={<RecruiterScreenGuideZhTw />} />
             <Route path="/resume-analyzer" element={<ResumeAnalyzer />} />
             <Route path="/resume" element={<ResumeBuilder />} />
             <Route path="/jobs" element={<JobTracker />} />
