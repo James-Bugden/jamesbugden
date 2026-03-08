@@ -1,48 +1,81 @@
 
+Goal: make resume import reliably map content into the correct sections/fields, with far fewer “wrong section” outcomes.
 
-## Resume Builder Feature Improvements
+What the deep dive found
+1) The current parser is heuristic-only (`src/lib/documentImport.ts`, ~1,000 lines): regex + score rules for headers, title/company swaps, date-driven boundaries.
+2) Most misclassification comes from structural ambiguity:
+   - Header detection (`isSectionHeader`) can still treat content lines as section breaks.
+   - Experience/Education entry starts are date-biased; resumes without consistent dates get merged/split incorrectly.
+   - `splitTitleOrg` and smart swaps are inherently brittle for unconventional formats.
+3) Import UI (`ImportModal.tsx`) is synchronous + single-pass, so there’s no quality gate/confidence check before creating the doc.
 
-### Priority 1: AI "Tailor to Job Description" Panel
-- Add a new tab or panel in the "AI Tools" section (which currently shows "Coming soon")
-- User pastes a job description → edge function analyzes keyword overlap with current resume
-- Returns: missing keywords, suggested bullet point rewrites, match percentage
-- Reuses existing `resume-ai` edge function with a new `action: "tailor"` mode
-- UI: Split panel with JD on left, suggestions on right, one-click "Apply" buttons
+Implementation plan
+1) Add AI-first structured parser in backend function
+   - File: `supabase/functions/resume-ai/index.ts`
+   - Add new `action: "parse_resume"`.
+   - Use tool-calling (not free-form JSON) to force schema-safe structured output:
+     - `personalDetails` (name/title/email/phone/location/linkedin/website)
+     - `sections[]` with strict section `type` enum and per-type entry fields matching `getDefaultFieldsForType`.
+   - Keep existing 429/402 handling and return a normalized payload (not HTML prose).
 
-### Priority 2: Resume Completeness Score Widget
-- Floating widget in the editor sidebar showing real-time completion percentage
-- Scoring rules: has summary (+10), has 2+ experience entries (+20), all entries have descriptions (+15), dates filled (+10), contact info complete (+15), skills section exists (+10), quantified achievements detected (+20)
-- Visual: circular progress ring with percentage, expandable checklist of what's missing
-- Lives above the "Add Content" button in the Content tab
+2) Add normalization + validation layer in import library
+   - File: `src/lib/documentImport.ts`
+   - Add `aiParseResume(text)` that invokes backend function.
+   - Add `normalizeParsedResume()` to:
+     - enforce known section types only
+     - coerce missing fields to defaults
+     - remove impossible combinations (e.g., empty section with no entries)
+     - sanitize/standardize description HTML structure
+   - Keep `mapTextToResumeSections` as fallback only.
 
-### Priority 3: Populate the "AI Tools" Tab
-- Currently renders "AI Tools — Coming soon" placeholder
-- Build out with: "Tailor to Job" (above), "Generate Summary from Experience", "Suggest Skills", "Optimize Bullet Points (batch)"
-- Each tool card shows a description, input area, and results
+3) Build hybrid parsing strategy (reliability over fragility)
+   - File: `src/lib/documentImport.ts`
+   - New orchestrator: `parseResumeWithFallback(text)`:
+     - Try AI parse first
+     - If AI fails/invalid -> fallback to heuristic parse
+     - If AI succeeds but quality is low (very few sections, suspicious empty core fields), run heuristic parse and pick best result via simple quality score.
+   - Return parse metadata (`source: "ai" | "heuristic" | "hybrid"`, `warnings[]`) for UI messaging.
 
-### Priority 4: Real-time Word Count per Section
-- Add a small `<span>` below each `RichTextEditor` showing word count and bullet point count
-- Highlight in amber if too long (>150 words per entry) or too short (<20 words)
-- Lightweight: computed from the editor's text content on each change
+4) Wire ImportModal to async parser pipeline
+   - File: `src/components/document-dashboard/ImportModal.tsx`
+   - Replace direct `mapTextToResumeSections` call with `parseResumeWithFallback`.
+   - Loading messages by stage:
+     - “Extracting text…”
+     - “Analyzing structure…”
+     - “Finalizing sections…”
+   - Toast behavior:
+     - success with source (“AI import” or “Fallback import”)
+     - warning toast when fallback was used
+   - Keep file/paste flows unchanged otherwise.
 
-### Priority 5: Click-to-Edit on Preview (Inline Editing)
-- When user clicks text on the A4 preview, show a floating input/textarea positioned over the clicked element
-- On blur/enter, update the corresponding field in the data model
-- Start with simple fields only: job title, company name, degree, institution
-- More complex than other items; implement after the above
+5) Add import-quality guardrails (practical fixes for common bad outcomes)
+   - File: `src/lib/documentImport.ts`
+   - Post-parse repair rules:
+     - if summary is huge and experience empty, attempt section redistribution
+     - if skills section contains sentence-like paragraphs, move to summary/custom
+     - if experience entries missing both company+position, demote to custom section
+   - These run after AI/fallback before document creation.
 
-### Files to Edit
-- `src/pages/ResumeBuilder.tsx` — Add completeness widget, wire AI Tools tab
-- `src/components/resume-builder/ResumeTopNav.tsx` — No changes needed
-- `src/components/resume-builder/RichTextEditor.tsx` — Add word count display
-- `supabase/functions/resume-ai/index.ts` — Add `tailor` action for JD matching
-- New: `src/components/resume-builder/CompletenessScore.tsx` — Score widget component
-- New: `src/components/resume-builder/AiToolsPanel.tsx` — Full AI tools tab content
-- New: `src/components/resume-builder/TailorToJob.tsx` — JD tailoring panel
+Technical details (implementation-specific)
+- Use existing model default (`google/gemini-3-flash-preview`) in backend.
+- For structured extraction, use tool/function schema in gateway payload instead of “return JSON” prompt text.
+- Keep client prompts out of frontend; all extraction prompts stay in backend function.
+- No database migration required.
+- No auth/RLS changes required for this feature.
 
-### Implementation Order
-1. Completeness score widget (standalone, no backend needed)
-2. Word count on RichTextEditor (small change)
-3. AI Tools tab with Tailor to Job (needs edge function update)
-4. Click-to-edit on preview (complex, last)
+Validation plan (deep-dive acceptance tests)
+1) Build a 15–20 resume fixture set (formats: chronological, functional, no dates, bilingual EN/ZH, PDF/DOCX).
+2) Compare before vs after:
+   - section accuracy (% entries in correct section)
+   - field accuracy for experience/education (title/company/degree/institution/date)
+3) Acceptance target:
+   - +30% relative reduction in wrong-section imports
+   - fallback rate visible and <20% on clean DOCX.
+4) Manual end-to-end checks:
+   - upload PDF/DOCX and paste-text paths
+   - import into dashboard and import-into-existing resume flow in editor.
 
+Files to update
+- `supabase/functions/resume-ai/index.ts`
+- `src/lib/documentImport.ts`
+- `src/components/document-dashboard/ImportModal.tsx`
