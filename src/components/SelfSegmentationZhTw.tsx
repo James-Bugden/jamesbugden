@@ -9,7 +9,7 @@ const stages = [
     icon: ClipboardList,
     label: "剛開始準備",
     quote: "我想進外商，但不知道從哪裡開始",
-    resource: "Career Coach 的履歷檢查清單",
+    resource: "職涯教練的履歷檢查清單",
     description: "當履歷送到我在 Uber 的桌上時，我在前 6 秒會看什麼。",
     cta: "取得清單",
   },
