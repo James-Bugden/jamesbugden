@@ -561,6 +561,46 @@ export const translations = {
     normal: "一般",
     bold: "粗體",
     italic: "斜體",
+
+    // AI Tools
+    aiTools: "AI 工具",
+    aiTailorTitle: "針對職缺描述調整",
+    aiTailorDesc: "貼上職缺描述，取得關鍵字差距分析與改善建議。",
+    aiTailorPlaceholder: "在此貼上完整的職缺描述...",
+    aiSummaryTitle: "自動產生摘要",
+    aiSummaryDesc: "根據你的工作經歷自動產生專業摘要。",
+    aiSkillsTitle: "技能建議",
+    aiSkillsDesc: "根據你的經歷與產業取得技能建議。",
+    aiOptimizeTitle: "優化所有要點",
+    aiOptimizeDesc: "批次改善所有工作經歷的條列要點，使用更有力的動詞。",
+    aiAnalyzing: "分析中...",
+    aiRun: "執行",
+    aiBackToTools: "← 返回工具",
+    aiAnalysisComplete: "AI 分析完成",
+    aiError: "AI 錯誤",
+    aiApplyToSummary: "套用至摘要區塊",
+    aiSummaryApplied: "摘要已套用至你的履歷",
+    aiNoSummarySection: "無摘要區塊",
+    aiAddSummaryFirst: "請先新增摘要區塊，再套用。",
+
+    // Dashboard extras
+    viewResumeAction: "檢視履歷",
+    duplicateAction: "複製",
+    newResumeAction: "新增履歷",
+    importAction: "匯入",
+    uploadExistingCvAction: "上傳你的現有履歷",
+    renameAction: "重新命名",
+    deleteAction: "刪除",
+    myAccountAction: "我的帳號",
+    clickToRename: "點擊重新命名",
+    sectionAddedDesc: "區塊已新增。",
+    sectionDeletedDesc: "已刪除。",
+    customSectionFallback: "自訂區塊",
+
+    // Date formatting
+    mAgo: "分鐘前",
+    hAgo: "小時前",
+    dAgo: "天前",
   },
 } as const;
 
