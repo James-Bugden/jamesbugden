@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useRef, useState } from "react";
+import React, { useEffect, useMemo, useRef, useState, useCallback } from "react";
 import DOMPurify from "dompurify";
 import {
   Mail,
@@ -18,6 +18,8 @@ import {
 import { ResumeData, ResumeSection } from "./types";
 import { CustomizeSettings } from "./customizeTypes";
 import { GOOGLE_FONTS_URL } from "./fontData";
+import { InlineColorToolbar, ROLE_TO_FIELD } from "./InlineColorToolbar";
+import { useIsMobile } from "@/hooks/use-mobile";
 
 /* ── Page dimensions (mm → px at 96 DPI: 1mm ≈ 3.7795px) ──────── */
 const PX_PER_MM = 3.7795;
@@ -38,11 +40,10 @@ interface ResumePreviewProps {
   customize?: CustomizeSettings;
   pdfTargetId?: string;
   onEditSection?: (sectionId: string) => void;
+  onColorChange?: (field: string, color: string) => void;
 }
 
 /* ── Relative font-size helpers ──────────────────────────────── */
-// Every text size is derived from the base slider value (customize.fontSize, default 10.5pt).
-// Name/title sizes are absolute (user-controlled separately).
 const NAME_SIZES: Record<string, string> = { xs: "14pt", s: "20pt", m: "24pt", l: "28pt", xl: "32pt" };
 const TITLE_SIZES: Record<string, string> = { s: "9pt", m: "11pt", l: "13pt" };
 
@@ -106,6 +107,7 @@ function HtmlBlock({ html, className, fontSize }: { html?: string; className?: s
 
   return (
     <div
+      data-color-role="body"
       className={className}
       style={{ fontSize: fontSize || "inherit", lineHeight: 1.5, color: "var(--resume-body)" }}
       dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(html || "") }}
@@ -144,21 +146,21 @@ function SectionHeading({ title, customize, baseFontSize }: { title: string; cus
   };
 
   if (style === "plain") {
-    return <h2 className="font-bold mb-[2mm]" style={textStyle}>{title}</h2>;
+    return <h2 data-color-role="headings" className="font-bold mb-[2mm]" style={textStyle}>{title}</h2>;
   }
 
   if (style === "underline") {
     return (
       <div className="mb-[2mm]">
-        <h2 className="font-bold" style={textStyle}>{title}</h2>
-        <div className="mt-[0.8mm] h-[0.4mm] w-full" style={{ backgroundColor: "var(--resume-accent)" }} />
+        <h2 data-color-role="headings" className="font-bold" style={textStyle}>{title}</h2>
+        <div data-color-role="accent" className="mt-[0.8mm] h-[0.4mm] w-full" style={{ backgroundColor: "var(--resume-accent)" }} />
       </div>
     );
   }
 
   if (style === "full-underline") {
     return (
-      <h2 className="font-bold mb-[2mm] pb-[1mm] border-b-[0.5mm]" style={{ ...textStyle, borderColor: "var(--resume-accent)" }}>
+      <h2 data-color-role="headings" className="font-bold mb-[2mm] pb-[1mm] border-b-[0.5mm]" style={{ ...textStyle, borderColor: "var(--resume-accent)" }}>
         {title}
       </h2>
     );
@@ -167,8 +169,8 @@ function SectionHeading({ title, customize, baseFontSize }: { title: string; cus
   if (style === "left-accent") {
     return (
       <div className="mb-[2mm] flex items-center gap-[2mm]">
-        <div className="w-[1mm] h-[4mm] rounded-full" style={{ backgroundColor: "var(--resume-accent)" }} />
-        <h2 className="font-bold" style={textStyle}>{title}</h2>
+        <div data-color-role="accent" className="w-[1mm] h-[4mm] rounded-full" style={{ backgroundColor: "var(--resume-accent)" }} />
+        <h2 data-color-role="headings" className="font-bold" style={textStyle}>{title}</h2>
       </div>
     );
   }
@@ -176,7 +178,7 @@ function SectionHeading({ title, customize, baseFontSize }: { title: string; cus
   if (style === "background") {
     return (
       <div className="mb-[2mm]">
-        <h2 className="font-bold px-[2mm] py-[1mm] rounded-[0.5mm]" style={{ ...textStyle, backgroundColor: "var(--resume-accent)" }}>
+        <h2 data-color-role="headings" className="font-bold px-[2mm] py-[1mm] rounded-[0.5mm]" style={{ ...textStyle, backgroundColor: "var(--resume-accent)" }}>
           {title}
         </h2>
       </div>
@@ -185,7 +187,7 @@ function SectionHeading({ title, customize, baseFontSize }: { title: string; cus
 
   return (
     <div className="mb-[2mm] pl-[3mm] border-l-[0.8mm]" style={{ borderColor: "var(--resume-accent)" }}>
-      <h2 className="font-bold" style={textStyle}>{title}</h2>
+      <h2 data-color-role="headings" className="font-bold" style={textStyle}>{title}</h2>
     </div>
   );
 }
@@ -234,7 +236,6 @@ function renderSectionEntries(section: ResumeSection, customize?: CustomizeSetti
     const sep = section.separator || "bullet";
     const subStyle = section.subtitleStyle || "dash";
 
-    // Helper: apply subtitle style to "Category: items" pattern
     const formatItem = (item: string) => {
       const colonIdx = item.indexOf(":");
       if (colonIdx === -1) return item;
@@ -355,13 +356,13 @@ function renderSectionEntries(section: ResumeSection, customize?: CustomizeSetti
       );
     }
 
-    // grid (default) — uses separator for proficiency display
+    // grid (default)
     return (
       <div className="mt-[1mm] space-y-[1.4mm]">
         {validEntries.map((entry) => (
           <div key={entry.id} className="flex items-center justify-between gap-[3mm]">
             <span style={{ fontSize: bodyPt(base), color: "var(--resume-body)", fontWeight: 600 }}>{entry.fields.language?.trim() || "Language"}</span>
-            <span style={{ fontSize: datePt(base), color: "var(--resume-dates)" }}>{entry.fields.proficiency?.trim()}</span>
+            <span data-color-role="dates" style={{ fontSize: datePt(base), color: "var(--resume-dates)" }}>{entry.fields.proficiency?.trim()}</span>
           </div>
         ))}
       </div>
@@ -377,13 +378,13 @@ function renderSectionEntries(section: ResumeSection, customize?: CustomizeSetti
 
           return (
             <div key={entry.id}>
-              <p style={{ fontSize: bodyPt(base), fontWeight: 700, color: "var(--resume-name)" }}>
+              <p data-color-role="entryTitle" style={{ fontSize: bodyPt(base), fontWeight: 700, color: "var(--resume-name)" }}>
                 {f.name || "Reference"}
               </p>
-              <p style={{ fontSize: datePt(base), color: "var(--resume-subtitle)" }}>
+              <p data-color-role="subtitle" style={{ fontSize: datePt(base), color: "var(--resume-subtitle)" }}>
                 {[f.position, f.company].filter(Boolean).join(" · ")}
               </p>
-              <p style={{ fontSize: datePt(base), color: "var(--resume-dates)" }}>
+              <p data-color-role="dates" style={{ fontSize: datePt(base), color: "var(--resume-dates)" }}>
                 {[f.phone, f.email].filter(Boolean).join(" · ")}
               </p>
             </div>
@@ -464,7 +465,6 @@ function renderSectionEntries(section: ResumeSection, customize?: CustomizeSetti
 
     // --- Group Promotions logic for experience ---
     if (section.type === "experience" && c?.groupPromotions) {
-      // Group consecutive entries with the same company
       type EntryGroup = { company: string; entries: typeof section.entries };
       const groups: EntryGroup[] = [];
       for (const entry of section.entries) {
@@ -485,7 +485,6 @@ function renderSectionEntries(section: ResumeSection, customize?: CustomizeSetti
           {hyphenStyle}
           {groups.map((group, gi) => {
             if (group.entries.length === 1) {
-              // Single entry — render normally
               const entry = group.entries[0];
               const f = entry.fields;
               const order = c?.experienceOrder ?? "title-first";
@@ -498,39 +497,31 @@ function renderSectionEntries(section: ResumeSection, customize?: CustomizeSetti
                   <div className="flex items-start justify-between gap-[4mm]">
                     <div style={{ flex: 1 }}>
                       {subPlace === "same-line" ? (
-                        <p style={{ fontSize: titleFontSize, fontWeight: 700, color: "var(--resume-name)" }}>
+                        <p data-color-role="entryTitle" style={{ fontSize: titleFontSize, fontWeight: 700, color: "var(--resume-name)" }}>
                           {primaryText || "Entry"}
                           {secondaryText && (
-                            <span style={{ fontWeight: subtitleFW, fontStyle: subtitleFS, color: "var(--resume-subtitle)", marginLeft: "2mm" }}>
+                            <span data-color-role="subtitle" style={{ fontWeight: subtitleFW, fontStyle: subtitleFS, color: "var(--resume-subtitle)", marginLeft: "2mm" }}>
                               · {secondaryText}
                             </span>
                           )}
                         </p>
                       ) : (
                         <>
-                          <p style={{ fontSize: titleFontSize, fontWeight: 700, color: "var(--resume-name)" }}>{primaryText || "Entry"}</p>
+                          <p data-color-role="entryTitle" style={{ fontSize: titleFontSize, fontWeight: 700, color: "var(--resume-name)" }}>{primaryText || "Entry"}</p>
                           {secondaryText && (
-                            <p style={{ fontSize: subtitleFontSize, color: "var(--resume-subtitle)", fontWeight: subtitleFW, fontStyle: subtitleFS, marginTop: "0.5mm" }}>{secondaryText}</p>
+                            <p data-color-role="subtitle" style={{ fontSize: subtitleFontSize, color: "var(--resume-subtitle)", fontWeight: subtitleFW, fontStyle: subtitleFS, marginTop: "0.5mm" }}>{secondaryText}</p>
                           )}
                         </>
                       )}
                     </div>
-                    {date && <p style={{ fontSize: subtitleFontSize, color: "var(--resume-dates)", whiteSpace: "nowrap" }}>{date}</p>}
+                    {date && <p data-color-role="dates" style={{ fontSize: subtitleFontSize, color: "var(--resume-dates)", whiteSpace: "nowrap" }}>{date}</p>}
                   </div>
-                  {f.location && <p style={{ fontSize: subtitleFontSize, color: "var(--resume-subtitle)", fontWeight: subtitleFW, fontStyle: subtitleFS, marginTop: "0.5mm" }}>{f.location}</p>}
+                  {f.location && <p data-color-role="subtitle" style={{ fontSize: subtitleFontSize, color: "var(--resume-subtitle)", fontWeight: subtitleFW, fontStyle: subtitleFS, marginTop: "0.5mm" }}>{f.location}</p>}
                   <HtmlBlock html={f.description} fontSize={bodyPt(base)} className={`mt-[1mm] [&_p]:mb-[1mm] ${listClass} [&_ol]:list-decimal [&_ol]:pl-[5mm] [&_li]:mb-[0.4mm] [&_a]:underline`} />
                 </div>
               );
             }
 
-            // Multi-entry group — grouped promotions
-            const allDates = group.entries.flatMap(e => {
-              const parts: string[] = [];
-              if (e.fields.startYear) parts.push(`${e.fields.startMonth?.slice(0, 3) || ""} ${e.fields.startYear}`.trim());
-              if (e.fields.currentlyHere === "true") parts.push("Present");
-              else if (e.fields.endYear) parts.push(`${e.fields.endMonth?.slice(0, 3) || ""} ${e.fields.endYear}`.trim());
-              return parts;
-            });
             const firstEntry = group.entries[group.entries.length - 1];
             const lastEntry = group.entries[0];
             const groupStart = [firstEntry.fields.startMonth?.slice(0, 3), firstEntry.fields.startYear].filter(Boolean).join(" ");
@@ -541,12 +532,10 @@ function renderSectionEntries(section: ResumeSection, customize?: CustomizeSetti
 
             return (
               <div key={`group-${gi}`} data-page-item>
-                {/* Company heading */}
                 <div className="flex items-start justify-between gap-[4mm]">
-                  <p style={{ fontSize: titleFontSize, fontWeight: 700, color: "var(--resume-name)" }}>{group.company || "Company"}</p>
-                  <p style={{ fontSize: subtitleFontSize, color: "var(--resume-dates)", whiteSpace: "nowrap" }}>{groupDateRange}</p>
+                  <p data-color-role="entryTitle" style={{ fontSize: titleFontSize, fontWeight: 700, color: "var(--resume-name)" }}>{group.company || "Company"}</p>
+                  <p data-color-role="dates" style={{ fontSize: subtitleFontSize, color: "var(--resume-dates)", whiteSpace: "nowrap" }}>{groupDateRange}</p>
                 </div>
-                {/* Individual roles indented */}
                 <div style={{ paddingLeft: "4mm", marginTop: "1.5mm", display: "flex", flexDirection: "column", gap: "2mm" }}>
                   {group.entries.map(entry => {
                     const f = entry.fields;
@@ -554,10 +543,10 @@ function renderSectionEntries(section: ResumeSection, customize?: CustomizeSetti
                     return (
                       <div key={entry.id}>
                         <div className="flex items-start justify-between gap-[4mm]">
-                          <p style={{ fontSize: subtitleFontSize, fontWeight: 600, color: "var(--resume-name)" }}>{f.position || "Role"}</p>
-                          {roleDate && <p style={{ fontSize: subtitleFontSize, color: "var(--resume-dates)", whiteSpace: "nowrap" }}>{roleDate}</p>}
+                          <p data-color-role="entryTitle" style={{ fontSize: subtitleFontSize, fontWeight: 600, color: "var(--resume-name)" }}>{f.position || "Role"}</p>
+                          {roleDate && <p data-color-role="dates" style={{ fontSize: subtitleFontSize, color: "var(--resume-dates)", whiteSpace: "nowrap" }}>{roleDate}</p>}
                         </div>
-                        {f.location && <p style={{ fontSize: subtitleFontSize, color: "var(--resume-subtitle)", fontStyle: subtitleFS, marginTop: "0.3mm" }}>{f.location}</p>}
+                        {f.location && <p data-color-role="subtitle" style={{ fontSize: subtitleFontSize, color: "var(--resume-subtitle)", fontStyle: subtitleFS, marginTop: "0.3mm" }}>{f.location}</p>}
                         <HtmlBlock html={f.description} fontSize={bodyPt(base)} className={`mt-[1mm] [&_p]:mb-[1mm] ${listClass} [&_ol]:list-decimal [&_ol]:pl-[5mm] [&_li]:mb-[0.4mm] [&_a]:underline`} />
                       </div>
                     );
@@ -601,13 +590,13 @@ function renderSectionEntries(section: ResumeSection, customize?: CustomizeSetti
             return (
               <div key={entry.id} data-page-item>
                 <div className="flex items-start justify-between gap-[4mm]">
-                  <p style={{ fontSize: titleFontSize, fontWeight: 700, color: "var(--resume-name)" }}>
+                  <p data-color-role="entryTitle" style={{ fontSize: titleFontSize, fontWeight: 700, color: "var(--resume-name)" }}>
                     {headline || "Entry"}
-                    {date && <span style={{ fontSize: subtitleFontSize, fontWeight: 400, color: "var(--resume-dates)", marginLeft: "3mm" }}>{date}</span>}
+                    {date && <span data-color-role="dates" style={{ fontSize: subtitleFontSize, fontWeight: 400, color: "var(--resume-dates)", marginLeft: "3mm" }}>{date}</span>}
                   </p>
                 </div>
                 {f.location && (
-                  <p style={{ fontSize: subtitleFontSize, color: "var(--resume-subtitle)", fontWeight: subtitleFW, fontStyle: subtitleFS, marginTop: "0.5mm" }}>{f.location}</p>
+                  <p data-color-role="subtitle" style={{ fontSize: subtitleFontSize, color: "var(--resume-subtitle)", fontWeight: subtitleFW, fontStyle: subtitleFS, marginTop: "0.5mm" }}>{f.location}</p>
                 )}
                 <HtmlBlock html={f.description} fontSize={bodyPt(base)} className={`mt-[1mm] [&_p]:mb-[1mm] ${listClass} [&_ol]:list-decimal [&_ol]:pl-[5mm] [&_li]:mb-[0.4mm] [&_a]:underline`} />
               </div>
@@ -617,15 +606,15 @@ function renderSectionEntries(section: ResumeSection, customize?: CustomizeSetti
           if (layout === "academic") {
             return (
               <div key={entry.id} data-page-item>
-                <p style={{ fontSize: titleFontSize, fontWeight: 700, color: "var(--resume-name)" }}>
+                <p data-color-role="entryTitle" style={{ fontSize: titleFontSize, fontWeight: 700, color: "var(--resume-name)" }}>
                   {primaryText || "Entry"}
-                  {date && <span style={{ fontSize: subtitleFontSize, fontWeight: 400, color: "var(--resume-dates)", marginLeft: "3mm" }}>{date}</span>}
+                  {date && <span data-color-role="dates" style={{ fontSize: subtitleFontSize, fontWeight: 400, color: "var(--resume-dates)", marginLeft: "3mm" }}>{date}</span>}
                 </p>
                 {secondaryText && (
-                  <p style={{ fontSize: subtitleFontSize, color: "var(--resume-subtitle)", fontStyle: "italic", marginTop: "0.3mm" }}>{secondaryText}</p>
+                  <p data-color-role="subtitle" style={{ fontSize: subtitleFontSize, color: "var(--resume-subtitle)", fontStyle: "italic", marginTop: "0.3mm" }}>{secondaryText}</p>
                 )}
                 {f.location && (
-                  <p style={{ fontSize: subtitleFontSize, color: "var(--resume-subtitle)", fontStyle: "italic", marginTop: "0.3mm" }}>{f.location}</p>
+                  <p data-color-role="subtitle" style={{ fontSize: subtitleFontSize, color: "var(--resume-subtitle)", fontStyle: "italic", marginTop: "0.3mm" }}>{f.location}</p>
                 )}
                 <HtmlBlock html={f.description} fontSize={bodyPt(base)} className={`mt-[1mm] [&_p]:mb-[1mm] ${listClass} [&_ol]:list-decimal [&_ol]:pl-[5mm] [&_li]:mb-[0.4mm] [&_a]:underline`} />
               </div>
@@ -637,21 +626,21 @@ function renderSectionEntries(section: ResumeSection, customize?: CustomizeSetti
               <div className="flex items-start justify-between gap-[4mm]">
                 <div style={{ flex: 1 }}>
                   {subPlace === "same-line" ? (
-                    <p style={{ fontSize: titleFontSize, fontWeight: 700, color: "var(--resume-name)" }}>
+                    <p data-color-role="entryTitle" style={{ fontSize: titleFontSize, fontWeight: 700, color: "var(--resume-name)" }}>
                       {primaryText || "Entry"}
                       {secondaryText && (
-                        <span style={{ fontWeight: subtitleFW, fontStyle: subtitleFS, color: "var(--resume-subtitle)", marginLeft: "2mm" }}>
+                        <span data-color-role="subtitle" style={{ fontWeight: subtitleFW, fontStyle: subtitleFS, color: "var(--resume-subtitle)", marginLeft: "2mm" }}>
                           · {secondaryText}
                         </span>
                       )}
                     </p>
                   ) : (
                     <>
-                      <p style={{ fontSize: titleFontSize, fontWeight: 700, color: "var(--resume-name)" }}>
+                      <p data-color-role="entryTitle" style={{ fontSize: titleFontSize, fontWeight: 700, color: "var(--resume-name)" }}>
                         {primaryText || "Entry"}
                       </p>
                       {secondaryText && (
-                        <p style={{ fontSize: subtitleFontSize, color: "var(--resume-subtitle)", fontWeight: subtitleFW, fontStyle: subtitleFS, marginTop: "0.5mm" }}>
+                        <p data-color-role="subtitle" style={{ fontSize: subtitleFontSize, color: "var(--resume-subtitle)", fontWeight: subtitleFW, fontStyle: subtitleFS, marginTop: "0.5mm" }}>
                           {secondaryText}
                         </p>
                       )}
@@ -659,12 +648,12 @@ function renderSectionEntries(section: ResumeSection, customize?: CustomizeSetti
                   )}
                 </div>
                 {date && (
-                  <p style={{ fontSize: subtitleFontSize, color: "var(--resume-dates)", whiteSpace: "nowrap" }}>{date}</p>
+                  <p data-color-role="dates" style={{ fontSize: subtitleFontSize, color: "var(--resume-dates)", whiteSpace: "nowrap" }}>{date}</p>
                 )}
               </div>
 
               {f.location && (
-                <p style={{ fontSize: subtitleFontSize, color: "var(--resume-subtitle)", fontWeight: subtitleFW, fontStyle: subtitleFS, marginTop: "0.5mm" }}>{f.location}</p>
+                <p data-color-role="subtitle" style={{ fontSize: subtitleFontSize, color: "var(--resume-subtitle)", fontWeight: subtitleFW, fontStyle: subtitleFS, marginTop: "0.5mm" }}>{f.location}</p>
               )}
 
               {(f.url || f.link) && (
@@ -730,7 +719,7 @@ export const A4Page = React.memo(function A4Page({
         "--resume-headings": c?.headingsColor ?? "#111827",
         "--resume-dates": c?.datesColor ?? "#6B7280",
         "--resume-subtitle": c?.subtitleColor ?? "#6B7280",
-        "--resume-body": "#374151",
+        "--resume-body": c?.bodyColor ?? "#374151",
       }) as React.CSSProperties,
     [c, topPadMM, bottomPadMM, marginYMM]
   );
@@ -781,6 +770,7 @@ export const A4Page = React.memo(function A4Page({
     <>
       <link rel="stylesheet" href={GOOGLE_FONTS_URL} />
       <div
+        data-color-role="background"
         className="text-gray-900"
         style={{
           ...cssVars,
@@ -812,6 +802,7 @@ export const A4Page = React.memo(function A4Page({
                 }}
               >
                 <h1
+                  data-color-role="name"
                   className="font-bold uppercase tracking-[0.1em]"
                   style={{
                     fontSize: NAME_SIZES[c?.nameSize || "s"],
@@ -822,13 +813,14 @@ export const A4Page = React.memo(function A4Page({
                 >
                   {p.fullName || "YOUR NAME"}
                 </h1>
-                <p style={{ fontSize: TITLE_SIZES[c?.titleSize || "m"], color: "var(--resume-title)" }}>
+                <p data-color-role="title" style={{ fontSize: TITLE_SIZES[c?.titleSize || "m"], color: "var(--resume-title)" }}>
                   {p.professionalTitle}
                 </p>
               </div>
             ) : (
               <>
                 <h1
+                  data-color-role="name"
                   className="font-bold uppercase tracking-[0.1em]"
                   style={{
                     fontSize: NAME_SIZES[c?.nameSize || "s"],
@@ -840,7 +832,7 @@ export const A4Page = React.memo(function A4Page({
                   {p.fullName || "YOUR NAME"}
                 </h1>
                 {p.professionalTitle && (
-                  <p className="mt-[1mm]" style={{ fontSize: TITLE_SIZES[c?.titleSize || "m"], color: "var(--resume-title)" }}>
+                  <p data-color-role="title" className="mt-[1mm]" style={{ fontSize: TITLE_SIZES[c?.titleSize || "m"], color: "var(--resume-title)" }}>
                     {p.professionalTitle}
                   </p>
                 )}
@@ -849,6 +841,7 @@ export const A4Page = React.memo(function A4Page({
 
             const contacts = contactItems.length > 0 ? (
               <div
+                data-color-role="contacts"
                 className="flex items-center flex-wrap mt-[2.5mm] gap-x-[4mm] gap-y-[1mm]"
                 style={{
                   fontSize: contactPt(baseFontSize),
@@ -910,7 +903,7 @@ export const A4Page = React.memo(function A4Page({
           })()}
         </header>
 
-        <div className="h-[0.3mm] mb-[5mm]" style={{ backgroundColor: "color-mix(in srgb, var(--resume-accent) 20%, #d1d5db)" }} />
+        <div data-color-role="accent" className="h-[0.3mm] mb-[5mm]" style={{ backgroundColor: "color-mix(in srgb, var(--resume-accent) 20%, #d1d5db)" }} />
 
         {isTwoColumn ? (
           <div style={{ display: "grid", gridTemplateColumns: `${ratio}fr ${12 - ratio}fr`, gap: "var(--resume-section-spacing)" }}>
@@ -969,18 +962,24 @@ export const A4Page = React.memo(function A4Page({
             Add content to see your resume here
           </div>
         )}
-
-        {/* Footer is rendered per-page in the paginated view — not here */}
       </div>
     </>
   );
 });
+
+/* ── Color field resolver ──────────────────────────────── */
+function getColorForRole(role: string, customize?: CustomizeSettings): string {
+  const field = ROLE_TO_FIELD[role];
+  if (!field || !customize) return "#000000";
+  return (customize as any)[field] ?? "#000000";
+}
 
 export const ResumePreview = React.memo(function ResumePreview({
   data,
   customize,
   pdfTargetId,
   onEditSection,
+  onColorChange,
 }: ResumePreviewProps) {
   const containerRef = useRef<HTMLDivElement>(null);
   const hiddenFlowRef = useRef<HTMLDivElement>(null);
@@ -989,6 +988,10 @@ export const ResumePreview = React.memo(function ResumePreview({
   const [zoomOffset, setZoomOffset] = useState(0);
   const [pageCount, setPageCount] = useState(1);
   const [currentPage, setCurrentPage] = useState(1);
+
+  // Inline color toolbar state
+  const [colorTarget, setColorTarget] = useState<{ rect: DOMRect; role: string } | null>(null);
+  const isMobile = useIsMobile();
 
   const dims = getPageDims(customize?.pageFormat);
   const scale = Math.max(0.2, Math.min(1.5, autoScale + zoomOffset));
@@ -1019,7 +1022,6 @@ export const ResumePreview = React.memo(function ResumePreview({
     const root = hiddenFlowRef.current;
     if (!root) return;
 
-    // Reset any previously applied spacers
     root.querySelectorAll('[data-page-item]').forEach(el => {
       (el as HTMLElement).style.marginTop = '';
     });
@@ -1035,27 +1037,21 @@ export const ResumePreview = React.memo(function ResumePreview({
         const items = root.querySelectorAll('[data-page-item]');
         const rootRect = root.getBoundingClientRect();
 
-        // Content origin: after top margin + header safe zone
         const contentOriginPX = marginYPX + headerReservePX;
 
         items.forEach(el => {
           const rect = el.getBoundingClientRect();
-          // getBoundingClientRect already reflects previous marginTop pushes,
-          // so no need for cumulative addedSpace tracking
           const elTop = rect.top - rootRect.top - contentOriginPX;
           const elBottom = elTop + rect.height;
 
           const pageIndex = Math.floor(Math.max(0, elTop) / usablePerPage);
           const pageBottom = (pageIndex + 1) * usablePerPage;
 
-          // Element crosses page boundary
           if (elTop < pageBottom && elBottom > pageBottom + 2) {
             if (rect.height < usablePerPage * 0.95) {
-              // Small enough to push to next page
               const push = pageBottom - elTop + 1;
               (el as HTMLElement).style.marginTop = `${push}px`;
             } else {
-              // Too large — find block-level children to break at a finer level
               const children = el.querySelectorAll('p, li, div:not([data-page-item]), h2, h3, h4, span.flex');
               children.forEach(child => {
                 const cr = child.getBoundingClientRect();
@@ -1074,7 +1070,6 @@ export const ResumePreview = React.memo(function ResumePreview({
           }
         });
 
-        // Re-measure total height for page count
         const totalH = root.scrollHeight - 2 * marginYPX - headerReservePX - footerReservePX;
         const rawPages = totalH / usablePerPage;
         setPageCount(Math.max(1, rawPages <= 1.02 ? 1 : Math.ceil(rawPages)));
@@ -1103,11 +1098,44 @@ export const ResumePreview = React.memo(function ResumePreview({
     return () => el.removeEventListener("scroll", onScroll);
   }, [scale, dims.hPX, pageCount]);
 
+  // Click handler for inline color editing
+  const handlePreviewClick = useCallback((e: React.MouseEvent) => {
+    if (!onColorChange) return;
+    const target = (e.target as HTMLElement).closest('[data-color-role]') as HTMLElement | null;
+    if (!target) return;
+    const role = target.getAttribute('data-color-role');
+    if (!role) return;
+    e.stopPropagation();
+    const rect = target.getBoundingClientRect();
+    setColorTarget({ rect, role });
+  }, [onColorChange]);
+
+  const handleColorChange = useCallback((field: string, color: string) => {
+    onColorChange?.(field, color);
+  }, [onColorChange]);
+
   const totalScaledHeight = pageCount * dims.hPX + (pageCount - 1) * 40;
 
   return (
     <div ref={containerRef} className="h-full overflow-y-auto relative" style={{ backgroundColor: "#f3f4f6" }}>
-      {/* Hidden measurement div — outside the scaled container for accurate height */}
+      {/* Hover CSS for colorable elements */}
+      {onColorChange && (
+        <style>{`
+          @media (hover: hover) {
+            [data-color-role] {
+              cursor: pointer;
+              transition: outline 0.15s;
+            }
+            [data-color-role]:hover {
+              outline: 1px dashed #7dd3fc;
+              outline-offset: 2px;
+              border-radius: 2px;
+            }
+          }
+        `}</style>
+      )}
+
+      {/* Hidden measurement div */}
       <div
         ref={hiddenFlowRef}
         id={pdfTargetId}
@@ -1123,7 +1151,7 @@ export const ResumePreview = React.memo(function ResumePreview({
         <A4Page data={data} customize={customize} />
       </div>
 
-      <div className="flex justify-center py-8 px-6">
+      <div className="flex justify-center py-8 px-6" onClick={handlePreviewClick}>
         <div
           style={{
             width: `${dims.wPX}px`,
@@ -1153,7 +1181,6 @@ export const ResumePreview = React.memo(function ResumePreview({
                   position: "relative",
                 }}
               >
-                {/* Content viewport: clips to exactly usablePerPage to prevent overlap */}
                 <div style={{
                   position: "absolute",
                   top: `${marginYPX + headerReservePX}px`,
@@ -1170,7 +1197,6 @@ export const ResumePreview = React.memo(function ResumePreview({
                   </div>
                 </div>
 
-                {/* Per-page footer */}
                 {(customize?.showPageNumbers || customize?.showFooterEmail || customize?.showFooterName) && (
                   <div
                     style={{
@@ -1202,6 +1228,19 @@ export const ResumePreview = React.memo(function ResumePreview({
           ))}
         </div>
       </div>
+
+      {/* Inline Color Toolbar */}
+      {colorTarget && onColorChange && (
+        <InlineColorToolbar
+          targetRect={colorTarget.rect}
+          currentColor={getColorForRole(colorTarget.role, customize)}
+          elementType={colorTarget.role}
+          onColorChange={handleColorChange}
+          onClose={() => setColorTarget(null)}
+          isMobile={isMobile}
+          containerRect={containerRef.current?.getBoundingClientRect()}
+        />
+      )}
 
       <div className="sticky bottom-4 flex justify-center pointer-events-none z-10">
         <div className="pointer-events-auto flex items-center gap-1 bg-white/90 backdrop-blur-sm rounded-full shadow-md border border-gray-200 px-1.5 py-1">

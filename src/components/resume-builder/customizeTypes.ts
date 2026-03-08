@@ -35,6 +35,7 @@ export interface CustomizeSettings {
   subtitleColor: string;
   linkIconColor: string;
   a4Background: string;
+  bodyColor: string;
 
   // Section Headings
   headingStyle: HeadingStyle;
@@ -125,6 +126,7 @@ export const DEFAULT_CUSTOMIZE: CustomizeSettings = {
   subtitleColor: "#6B7280",
   linkIconColor: "#4B5563",
   a4Background: "#ffffff",
+  bodyColor: "#374151",
 
   headingStyle: "plain",
   headingSize: "m",

@@ -478,20 +478,7 @@ function DesignTab({ settings, onChange }: { settings: CustomizeSettings; onChan
         <FontPicker selectedFont={settings.bodyFont} onSelect={(f) => onChange({ bodyFont: f })} />
       </SettingCard>
 
-      <SettingCard title="Colors">
-        <div className="space-y-3">
-          <ColorPickerRow label="Accent / Lines" value={settings.accentColor || "#0891b2"} onChange={(v) => onChange({ accentColor: v })} />
-          <ColorPickerRow label="Name" value={settings.nameColor || "#111827"} onChange={(v) => onChange({ nameColor: v })} />
-          <ColorPickerRow label="Job Title" value={settings.titleColor || "#6B7280"} onChange={(v) => onChange({ titleColor: v })} />
-          <ColorPickerRow label="Headings" value={settings.headingsColor || "#111827"} onChange={(v) => onChange({ headingsColor: v })} />
-          <ColorPickerRow label="Dates" value={settings.datesColor || "#6B7280"} onChange={(v) => onChange({ datesColor: v })} />
-          <ColorPickerRow label="Entry Subtitle" value={settings.subtitleColor || "#6B7280"} onChange={(v) => onChange({ subtitleColor: v })} />
-          <ColorPickerRow label="Icons" value={settings.linkIconColor || "#4B5563"} onChange={(v) => onChange({ linkIconColor: v })} />
-          <div className="pt-2 border-t border-gray-100">
-            <ColorPickerRow label="Page Background" value={settings.a4Background || "#ffffff"} onChange={(v) => onChange({ a4Background: v })} />
-          </div>
-        </div>
-      </SettingCard>
+
 
       <SettingCard title="Section Headings">
         <FieldLabel>Style</FieldLabel>
