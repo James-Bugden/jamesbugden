@@ -185,7 +185,8 @@ const RecruiterScreenGuideZhTw = () => {
       </section>
 
       {/* Introduction */}
-      <section className="py-14 md:py-20 px-5 md:px-6 bg-card border-b border-border">
+      <TableOfContentsZh />
+      <section id="intro" className="py-14 md:py-20 px-5 md:px-6 bg-card border-b border-border scroll-mt-24">
         <div className="container mx-auto max-w-3xl">
           <p className="text-foreground text-lg leading-relaxed mb-6">
             我審閱過超過 20,000 份履歷。我在頂尖國際企業完成了 500 次以上的錄用。我做過數千次電話篩選。
