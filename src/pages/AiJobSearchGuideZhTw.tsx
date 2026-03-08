@@ -151,6 +151,8 @@ const AiJobSearchGuideZhTw = () => {
       <PageSEO
         title="如何用 AI 掌控你的整個求職過程 — James Bugden"
         description="招募官的完整指南：從職涯方向到最終 Offer，每個階段都用 ChatGPT"
+        path="/zh-tw/ai-job-search-guide"
+        lang="zh-Hant-TW"
       />
 
       {/* Navigation */}
@@ -956,10 +958,7 @@ const AiJobSearchGuideZhTw = () => {
       {/* Share */}
       <section className="pb-12 px-5 md:px-6">
         <div className="container mx-auto max-w-3xl">
-          <GuideShareButtons
-            url="https://jamesbugden.lovable.app/zh-tw/ai-job-search-guide"
-            title="如何用 AI 掌控你的整個求職過程 — James Bugden"
-          />
+          <GuideShareButtons isZhTw />
         </div>
       </section>
 

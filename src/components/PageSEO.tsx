@@ -49,6 +49,7 @@ const BILINGUAL_PAIRS: [string, string][] = [
   ["/reviews/janelle-cheng", "/zh-tw/reviews/janelle-cheng"],
   ["/reviews/willy-lin", "/zh-tw/reviews/willy-lin"],
   ["/reviews/hope-chen", "/zh-tw/reviews/hope-chen"],
+  ["/ai-job-search-guide", "/zh-tw/ai-job-search-guide"],
 ];
 
 /** Look up index for fast matching */

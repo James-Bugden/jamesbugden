@@ -1,5 +1,5 @@
 import { Button } from "@/components/ui/button";
-import { Linkedin, ArrowLeft, FileText, Briefcase, MessageSquare, Users, Phone } from "lucide-react";
+import { Linkedin, ArrowLeft, FileText, Briefcase, MessageSquare, Users, Phone, Bot } from "lucide-react";
 import { Link } from "react-router-dom";
 import { InstagramIcon, ThreadsIcon } from "@/components/SocialIcons";
 import LanguageToggle from "@/components/LanguageToggle";
@@ -74,6 +74,14 @@ const guides: Guide[] = [
     href: "/zh-tw/recruiter-screen-guide",
     category: "面試準備",
   },
+  // AI 求職
+  {
+    icon: Bot,
+    title: "如何用 AI 管理你的整個求職流程",
+    description: "完整指南：從職涯探索到薪資談判，善用 ChatGPT 與 AI 工具提升求職每個階段的效率",
+    href: "/zh-tw/ai-job-search-guide",
+    category: "AI 求職",
+  },
 ];
 
 const categories = [
@@ -81,6 +89,7 @@ const categories = [
   { en: "履歷撰寫", zh: "履歷撰寫" },
   { en: "職涯轉型", zh: "職涯轉型" },
   { en: "面試準備", zh: "面試準備" },
+  { en: "AI 求職", zh: "AI 求職" },
 ];
 
 const GuidesPageZhTw = () => {
@@ -141,6 +150,7 @@ const GuidesPageZhTw = () => {
                 {category.zh === "職涯轉型" && <Briefcase className="w-6 h-6 text-gold" />}
                 {category.zh === "面試準備" && <MessageSquare className="w-6 h-6 text-gold" />}
                 {category.zh === "電話篩選" && <Phone className="w-6 h-6 text-gold" />}
+                {category.zh === "AI 求職" && <Bot className="w-6 h-6 text-gold" />}
                 {category.zh}
               </h2>
               

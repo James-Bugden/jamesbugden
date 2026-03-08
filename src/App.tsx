@@ -66,6 +66,8 @@ const Dashboard = lazy(() => import("./pages/Dashboard"));
 const DashboardZhTw = lazy(() => import("./pages/DashboardZhTw"));
 const RecruiterScreenGuide = lazy(() => import("./pages/RecruiterScreenGuide"));
 const RecruiterScreenGuideZhTw = lazy(() => import("./pages/RecruiterScreenGuideZhTw"));
+const AiJobSearchGuide = lazy(() => import("./pages/AiJobSearchGuide"));
+const AiJobSearchGuideZhTw = lazy(() => import("./pages/AiJobSearchGuideZhTw"));
 
 // Toolkit pages - English
 const ToolkitIndex = lazy(() => import("./pages/toolkit/ToolkitIndex"));
@@ -226,6 +228,8 @@ const App = () => (
             <Route path="/zh-tw/resume-quick-reference" element={<ResumeQuickReferenceZhTw />} />
             <Route path="/recruiter-screen-guide" element={<RecruiterScreenGuide />} />
             <Route path="/zh-tw/recruiter-screen-guide" element={<RecruiterScreenGuideZhTw />} />
+            <Route path="/ai-job-search-guide" element={<AiJobSearchGuide />} />
+            <Route path="/zh-tw/ai-job-search-guide" element={<AiJobSearchGuideZhTw />} />
             <Route path="/resume-analyzer" element={<ResumeAnalyzer />} />
             <Route path="/resume" element={<ResumeBuilder />} />
             <Route path="/zh-tw/resume" element={<ResumeBuilderZhTw />} />

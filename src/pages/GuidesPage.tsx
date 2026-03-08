@@ -1,5 +1,5 @@
 import { Button } from "@/components/ui/button";
-import { Linkedin, ArrowLeft, FileText, Briefcase, MessageSquare, Users, Phone } from "lucide-react";
+import { Linkedin, ArrowLeft, FileText, Briefcase, MessageSquare, Users, Phone, Bot } from "lucide-react";
 import { Link } from "react-router-dom";
 import { InstagramIcon, ThreadsIcon } from "@/components/SocialIcons";
 import LanguageToggle from "@/components/LanguageToggle";
@@ -74,9 +74,17 @@ const guides: Guide[] = [
     href: "/recruiter-screen-guide",
     category: "Interview Prep",
   },
+  // AI & Job Search
+  {
+    icon: Bot,
+    title: "How to Use AI to Run Your Entire Job Search",
+    description: "Complete guide to using ChatGPT and AI tools for every stage of your job search — from career discovery to salary negotiation",
+    href: "/ai-job-search-guide",
+    category: "AI & Job Search",
+  },
 ];
 
-const categories = ["LinkedIn", "Resume", "Career Change", "Interview Prep"];
+const categories = ["LinkedIn", "Resume", "Career Change", "Interview Prep", "AI & Job Search"];
 
 const GuidesPage = () => {
   return (
@@ -135,6 +143,7 @@ const GuidesPage = () => {
                 {category === "Resume" && <FileText className="w-6 h-6 text-gold" />}
                 {category === "Career Change" && <Briefcase className="w-6 h-6 text-gold" />}
                 {category === "Interview Prep" && <MessageSquare className="w-6 h-6 text-gold" />}
+                {category === "AI & Job Search" && <Bot className="w-6 h-6 text-gold" />}
                 {category}
               </h2>
               
