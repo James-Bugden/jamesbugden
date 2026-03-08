@@ -1,48 +1,27 @@
 
 
-## Resume Builder Feature Improvements
+## Show Uploaded Photo on Resume Preview
 
-### Priority 1: AI "Tailor to Job Description" Panel
-- Add a new tab or panel in the "AI Tools" section (which currently shows "Coming soon")
-- User pastes a job description → edge function analyzes keyword overlap with current resume
-- Returns: missing keywords, suggested bullet point rewrites, match percentage
-- Reuses existing `resume-ai` edge function with a new `action: "tailor"` mode
-- UI: Split panel with JD on left, suggestions on right, one-click "Apply" buttons
+The photo is uploaded and stored in `personalDetails.photo` (base64), but the `A4Page` header in `ResumePreview.tsx` never renders it. The `CustomizeSettings` also lacks any photo-related settings.
 
-### Priority 2: Resume Completeness Score Widget
-- Floating widget in the editor sidebar showing real-time completion percentage
-- Scoring rules: has summary (+10), has 2+ experience entries (+20), all entries have descriptions (+15), dates filled (+10), contact info complete (+15), skills section exists (+10), quantified achievements detected (+20)
-- Visual: circular progress ring with percentage, expandable checklist of what's missing
-- Lives above the "Add Content" button in the Content tab
+### Plan
 
-### Priority 3: Populate the "AI Tools" Tab
-- Currently renders "AI Tools — Coming soon" placeholder
-- Build out with: "Tailor to Job" (above), "Generate Summary from Experience", "Suggest Skills", "Optimize Bullet Points (batch)"
-- Each tool card shows a description, input area, and results
+**File: `src/components/resume-builder/customizeTypes.ts`**
+- Add photo settings to `CustomizeSettings`: `showPhoto: boolean`, `photoSize: "s" | "m" | "l"`, `photoShape: "circle" | "square" | "rounded"`
+- Add defaults: `showPhoto: true`, `photoSize: "m"`, `photoShape: "circle"`
 
-### Priority 4: Real-time Word Count per Section
-- Add a small `<span>` below each `RichTextEditor` showing word count and bullet point count
-- Highlight in amber if too long (>150 words per entry) or too short (<20 words)
-- Lightweight: computed from the editor's text content on each change
+**File: `src/components/resume-builder/ResumePreview.tsx`**
+- In the header section (~line 799), check if `p.photo` exists and `c?.showPhoto !== false`
+- Render the photo as an `<img>` element next to the name/title block
+- Size mapping: s=12mm, m=18mm, l=24mm; shape from `photoShape`
+- Wrap the header in a flex row when photo is present: photo on one side, name+title+contacts on the other
+- Respect `headerAlign` for positioning (left align = photo left, right align = photo right, center = photo above or left)
 
-### Priority 5: Click-to-Edit on Preview (Inline Editing)
-- When user clicks text on the A4 preview, show a floating input/textarea positioned over the clicked element
-- On blur/enter, update the corresponding field in the data model
-- Start with simple fields only: job title, company name, degree, institution
-- More complex than other items; implement after the above
+**File: `src/components/resume-builder/CustomizePanel.tsx`**
+- Add a "Photo" collapsible section with toggles for show/hide, size picker, and shape picker
 
-### Files to Edit
-- `src/pages/ResumeBuilder.tsx` — Add completeness widget, wire AI Tools tab
-- `src/components/resume-builder/ResumeTopNav.tsx` — No changes needed
-- `src/components/resume-builder/RichTextEditor.tsx` — Add word count display
-- `supabase/functions/resume-ai/index.ts` — Add `tailor` action for JD matching
-- New: `src/components/resume-builder/CompletenessScore.tsx` — Score widget component
-- New: `src/components/resume-builder/AiToolsPanel.tsx` — Full AI tools tab content
-- New: `src/components/resume-builder/TailorToJob.tsx` — JD tailoring panel
-
-### Implementation Order
-1. Completeness score widget (standalone, no backend needed)
-2. Word count on RichTextEditor (small change)
-3. AI Tools tab with Tailor to Job (needs edge function update)
-4. Click-to-edit on preview (complex, last)
+### Files to edit
+- `src/components/resume-builder/customizeTypes.ts`
+- `src/components/resume-builder/ResumePreview.tsx`
+- `src/components/resume-builder/CustomizePanel.tsx`
 
