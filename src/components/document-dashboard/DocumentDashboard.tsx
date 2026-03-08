@@ -365,7 +365,7 @@ export function DocumentDashboard({ onOpenDocument, onImport }: DocumentDashboar
               <div className="w-6 h-6 rounded-full bg-gray-200 flex items-center justify-center flex-shrink-0">
                 <User className="w-3.5 h-3.5" style={{ color: BRAND.textSecondary }} />
               </div>
-              <span className="font-medium">My account</span>
+              <span className="font-medium">{t("myAccountAction")}</span>
             </button>
           </div>
         </div>
