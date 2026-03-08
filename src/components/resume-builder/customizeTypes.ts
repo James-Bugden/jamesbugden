@@ -57,6 +57,11 @@ export interface CustomizeSettings {
   // Font
   bodyFont: string;
 
+  // Photo
+  showPhoto: boolean;
+  photoSize: "s" | "m" | "l";
+  photoShape: "circle" | "square" | "rounded";
+
   // Other
   shareAsTemplate: boolean;
 
