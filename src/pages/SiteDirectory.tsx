@@ -53,6 +53,7 @@ const sections: Section[] = [
       { label: "Pivot Method Mini Guide", en: "/pivot-method-mini-guide", zh: "/zh-tw/pivot-method-mini-guide" },
       { label: "Salary Starter Kit", en: "/salary-starter-kit", zh: "/zh-tw/salary-starter-kit" },
       { label: "Recruiter Screen Guide", en: "/recruiter-screen-guide", zh: "/zh-tw/recruiter-screen-guide" },
+      { label: "AI Job Search Guide", en: "/ai-job-search-guide", zh: "/zh-tw/ai-job-search-guide" },
     ],
   },
   {
