@@ -25,6 +25,7 @@ import { toast } from "@/hooks/use-toast";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import FeedbackBox from "@/components/FeedbackBox";
+import { useResumeBuilderLang, useT, getLocalizedSectionTypes, SAMPLE_RESUME_DATA_ZH_TW } from "@/components/resume-builder/i18n";
 
 type ViewMode = "dashboard" | "resume-editor" | "cover-letter-editor";
 
