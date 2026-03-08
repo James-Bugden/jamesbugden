@@ -233,7 +233,7 @@ const RecruiterScreenGuide = () => {
         </section>
 
         {/* Section 2: Before the Call */}
-        <section className="pb-14 md:pb-20">
+        <section id="before" className="pb-14 md:pb-20 scroll-mt-24">
           <div className="flex items-start gap-5 mb-8">
             <SectionNumber num="02" />
             <div className="pt-3">
