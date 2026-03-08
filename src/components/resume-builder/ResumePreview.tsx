@@ -318,7 +318,7 @@ function renderSectionEntries(section: ResumeSection, customize?: CustomizeSetti
       return `${lang}: ${prof}`;
     };
 
-    const sepChar = sep === "pipe" ? " | " : sep === "comma" ? ", " : " · ";
+    const sepChar = sep === "pipe" ? " | " : sep === "none" ? "  " : " · ";
 
     const validEntries = section.entries.filter((e) => e.fields.language?.trim() || e.fields.proficiency?.trim());
 
