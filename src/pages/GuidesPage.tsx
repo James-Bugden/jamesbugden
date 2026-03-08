@@ -44,6 +44,14 @@ const guides: Guide[] = [
     href: "/pivot-method-guide",
     category: "Career Change",
   },
+  // Resume
+  {
+    icon: FileText,
+    title: "Resume Guide: Get Recruiters to Pick You",
+    description: "Complete resume writing guide from a Fortune 100 recruiter",
+    href: "/resume-guide",
+    category: "Resume",
+  },
   // Interview Guides
   {
     icon: MessageSquare,
@@ -59,9 +67,16 @@ const guides: Guide[] = [
     href: "/interview-preparation-guide",
     category: "Interview Prep",
   },
+  {
+    icon: Phone,
+    title: "How to Pass the Recruiter Screen",
+    description: "A Senior Recruiter's end-to-end playbook for passing the screening call with word-for-word examples and salary scripts",
+    href: "/recruiter-screen-guide",
+    category: "Interview Prep",
+  },
 ];
 
-const categories = ["LinkedIn", "Career Change", "Interview Prep"];
+const categories = ["LinkedIn", "Resume", "Career Change", "Interview Prep"];
 
 const GuidesPage = () => {
   return (
