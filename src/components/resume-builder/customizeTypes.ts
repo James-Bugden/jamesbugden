@@ -90,9 +90,9 @@ export interface CustomizeSettings {
 
   // Per-section settings
   skillsDisplay: "grid" | "compact" | "bubble";
-  skillsSeparator: "bullet" | "pipe" | "newline" | "comma";
+  skillsSeparator: "bullet" | "pipe" | "newline" | "none";
   languagesDisplay: "grid" | "compact" | "bubble";
-  languagesSeparator: "bullet" | "pipe" | "newline" | "comma";
+  languagesSeparator: "bullet" | "pipe" | "newline" | "none";
   educationOrder: "degree-first" | "school-first";
   experienceOrder: "title-first" | "employer-first";
   groupPromotions: boolean;

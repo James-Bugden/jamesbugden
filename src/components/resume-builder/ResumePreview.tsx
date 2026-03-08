@@ -253,16 +253,16 @@ function renderSectionEntries(section: ResumeSection, customize?: CustomizeSetti
       return `${cat}: ${rest}`;
     };
 
-    const sepChar = sep === "pipe" ? " | " : sep === "comma" ? ", " : " · ";
+    const sepChar = sep === "pipe" ? " | " : sep === "none" ? "  " : " · ";
 
     if (layout === "grid") {
       return (
         <div className="grid grid-cols-3 gap-x-[3mm] gap-y-[1mm] mt-[1.2mm]">
           {items.map((item, i) => (
             <div key={`${item}-${i}`} className="flex items-center gap-[1.5mm]">
-              {sep !== "newline" && (
+              {sep !== "newline" && sep !== "none" && (
                 <span style={{ fontSize: skillPt(base), color: "var(--resume-accent)" }}>
-                  {sep === "pipe" ? "|" : sep === "comma" ? "," : "·"}
+                  {sep === "pipe" ? "|" : "·"}
                 </span>
               )}
               <span style={{ fontSize: skillPt(base), color: "var(--resume-body)" }}>{formatItem(item)}</span>
@@ -318,7 +318,7 @@ function renderSectionEntries(section: ResumeSection, customize?: CustomizeSetti
       return `${lang}: ${prof}`;
     };
 
-    const sepChar = sep === "pipe" ? " | " : sep === "comma" ? ", " : " · ";
+    const sepChar = sep === "pipe" ? " | " : sep === "none" ? "  " : " · ";
 
     const validEntries = section.entries.filter((e) => e.fields.language?.trim() || e.fields.proficiency?.trim());
 

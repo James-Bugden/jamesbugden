@@ -740,7 +740,7 @@ function SectionsTab({ settings, onChange, sections }: { settings: CustomizeSett
                   { value: "bullet", label: "• Bullet" },
                   { value: "pipe", label: "| Pipe" },
                   { value: "newline", label: "New Line" },
-                  { value: "comma", label: ", Comma" },
+                  { value: "none", label: "None" },
                 ]}
                 value={settings.skillsSeparator || "bullet"}
                 onChange={(v) => onChange({ skillsSeparator: v as any })}
