@@ -702,15 +702,6 @@ function HeaderTab({ settings, onChange }: { settings: CustomizeSettings; onChan
         <div className="mb-3">
           <CheckboxRow label="Name bold" checked={settings.nameBold} onChange={(v) => onChange({ nameBold: v })} />
         </div>
-        <FieldLabel>Font</FieldLabel>
-        <SegmentedControl
-          options={[
-            { value: "body", label: "Body Font" },
-            { value: "creative", label: "Creative" },
-          ]}
-          value={settings.nameFont}
-          onChange={(v) => onChange({ nameFont: v as "body" | "creative" })}
-        />
       </SettingCard>
 
       <SettingCard title="Professional title" defaultOpen={false}>
