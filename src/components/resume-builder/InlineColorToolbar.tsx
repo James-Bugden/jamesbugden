@@ -112,7 +112,7 @@ export function InlineColorToolbar({
 
   // Flip below if not enough space above
   if (!isMobile && style.top !== undefined && (style.top as number) < 0) {
-    style.top = targetRect.bottom - (containerRect?.top ?? 0) + 8;
+    style.top = targetRect.bottom + 8;
   }
 
   return (

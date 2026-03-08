@@ -35,7 +35,7 @@ export function InlineFormatToolbar({ rect, onFormat, onClose, containerRect }: 
     <div
       ref={ref}
       style={{
-        position: "absolute",
+        position: "fixed",
         left: Math.max(4, left),
         top,
         zIndex: 1000,
