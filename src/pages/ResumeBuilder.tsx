@@ -723,7 +723,7 @@ const ResumeBuilder = () => {
         </DndContext>
         {data.sections.length === 0 && (
           <div className="bg-white rounded-xl shadow-sm text-center py-8">
-            <p className="text-sm" style={{ color: BRAND.textSecondary }}>Add sections to build your resume</p>
+            <p className="text-sm" style={{ color: BRAND.textSecondary }}>{t("addSectionsPrompt")}</p>
           </div>
         )}
 
