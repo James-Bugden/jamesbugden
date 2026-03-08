@@ -248,7 +248,7 @@ const AiJobSearchGuide = () => {
       </section>
 
       {/* ═══════════════ INTRODUCTION ═══════════════ */}
-      <section id="intro" className="scroll-mt-24 pb-16 px-5 md:px-6">
+      <section id="intro" className="py-14 md:py-20 px-5 md:px-6 bg-card border-b border-border scroll-mt-24">
         <div className="container mx-auto max-w-3xl space-y-6">
           <h2 className="font-heading text-2xl md:text-3xl text-foreground flex items-end gap-4">Introduction: Why AI Changes Everything About Job Searching</h2>
 
