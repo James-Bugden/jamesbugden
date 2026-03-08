@@ -44,7 +44,7 @@ export function TemplateGalleryModal({
   const handleSelect = (id: string) => {
     onSelect(id);
     if (showToast) {
-      toast({ title: "Template applied!", description: `"${TEMPLATE_LIST.find(t => t.id === id)?.name}" style has been applied.` });
+      toast({ title: t("templateApplied"), description: `"${TEMPLATE_LIST.find(tpl => tpl.id === id)?.name}" ${t("styleApplied")}` });
     }
     onClose();
   };
