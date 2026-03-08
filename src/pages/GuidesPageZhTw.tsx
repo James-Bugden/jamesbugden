@@ -1,5 +1,5 @@
 import { Button } from "@/components/ui/button";
-import { Linkedin, ArrowLeft, FileText, Briefcase, MessageSquare, Users } from "lucide-react";
+import { Linkedin, ArrowLeft, FileText, Briefcase, MessageSquare, Users, Phone } from "lucide-react";
 import { Link } from "react-router-dom";
 import { InstagramIcon, ThreadsIcon } from "@/components/SocialIcons";
 import LanguageToggle from "@/components/LanguageToggle";
