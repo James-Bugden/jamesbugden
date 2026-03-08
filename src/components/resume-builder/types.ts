@@ -26,7 +26,6 @@ export interface ResumeSection {
   collapsed: boolean;
   layout?: SectionLayout;
   separator?: SectionSeparator;
-  levelIndicator?: LevelIndicator;
   subtitleStyle?: SubtitleStyle;
   showHeading?: boolean; // for summary/profile section
 }
