@@ -3,6 +3,7 @@ import { Pencil, Mail, Phone, MapPin, Camera, Trash2, ChevronDown, Globe, User }
 import { PersonalDetails, EXTRA_DETAIL_OPTIONS } from "./types";
 import { compressImage } from "@/lib/imageCompression";
 import { cn } from "@/lib/utils";
+import { useT } from "./i18n";
 
 interface PersonalDetailsCardProps {
   details: PersonalDetails;
