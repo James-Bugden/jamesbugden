@@ -66,6 +66,8 @@ const Dashboard = lazy(() => import("./pages/Dashboard"));
 const DashboardZhTw = lazy(() => import("./pages/DashboardZhTw"));
 const RecruiterScreenGuide = lazy(() => import("./pages/RecruiterScreenGuide"));
 const RecruiterScreenGuideZhTw = lazy(() => import("./pages/RecruiterScreenGuideZhTw"));
+const AiJobSearchGuide = lazy(() => import("./pages/AiJobSearchGuide"));
+const AiJobSearchGuideZhTw = lazy(() => import("./pages/AiJobSearchGuideZhTw"));
 
 // Toolkit pages - English
 const ToolkitIndex = lazy(() => import("./pages/toolkit/ToolkitIndex"));
