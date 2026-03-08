@@ -1,40 +1,48 @@
 
 
-## Problem
+## Resume Builder Feature Improvements
 
-The PDF export fails with "Export failed — Something went wrong generating the PDF" because the hidden measurement div (which doubles as the `resume-pdf-target` for `html2canvas`) is positioned at `left: -9999px`. While this was changed from `opacity: 0` to fix a previous issue, `html2canvas` still struggles to capture elements that are far off-screen — it can produce empty or errored canvases depending on browser clipping behavior.
+### Priority 1: AI "Tailor to Job Description" Panel
+- Add a new tab or panel in the "AI Tools" section (which currently shows "Coming soon")
+- User pastes a job description → edge function analyzes keyword overlap with current resume
+- Returns: missing keywords, suggested bullet point rewrites, match percentage
+- Reuses existing `resume-ai` edge function with a new `action: "tailor"` mode
+- UI: Split panel with JD on left, suggestions on right, one-click "Apply" buttons
 
-The root issue is that the same div serves two incompatible purposes:
-1. **Measurement** (for pagination spacer logic) — needs to be in the DOM flow but hidden
-2. **PDF capture target** (for html2canvas) — needs to be visually renderable
+### Priority 2: Resume Completeness Score Widget
+- Floating widget in the editor sidebar showing real-time completion percentage
+- Scoring rules: has summary (+10), has 2+ experience entries (+20), all entries have descriptions (+15), dates filled (+10), contact info complete (+15), skills section exists (+10), quantified achievements detected (+20)
+- Visual: circular progress ring with percentage, expandable checklist of what's missing
+- Lives above the "Add Content" button in the Content tab
 
-## Plan
+### Priority 3: Populate the "AI Tools" Tab
+- Currently renders "AI Tools — Coming soon" placeholder
+- Build out with: "Tailor to Job" (above), "Generate Summary from Experience", "Suggest Skills", "Optimize Bullet Points (batch)"
+- Each tool card shows a description, input area, and results
 
-**File: `src/components/resume-builder/ResumePreview.tsx`**
+### Priority 4: Real-time Word Count per Section
+- Add a small `<span>` below each `RichTextEditor` showing word count and bullet point count
+- Highlight in amber if too long (>150 words per entry) or too short (<20 words)
+- Lightweight: computed from the editor's text content on each change
 
-1. **Separate the PDF target from the hidden measurement div.** Keep the hidden measurement div (`hiddenFlowRef`) off-screen for pagination calculations, but **remove** the `pdfTargetId` from it.
+### Priority 5: Click-to-Edit on Preview (Inline Editing)
+- When user clicks text on the A4 preview, show a floating input/textarea positioned over the clicked element
+- On blur/enter, update the corresponding field in the data model
+- Start with simple fields only: job title, company name, degree, institution
+- More complex than other items; implement after the above
 
-2. **Add a dedicated PDF capture div** that is only made visible (moved on-screen) at export time. This div will:
-   - Live inside the scrollable container
-   - Default to `visibility: hidden; height: 0; overflow: hidden` (takes no space, doesn't interfere with layout)
-   - Have `id={pdfTargetId}` so `exportToPdf` can find it
+### Files to Edit
+- `src/pages/ResumeBuilder.tsx` — Add completeness widget, wire AI Tools tab
+- `src/components/resume-builder/ResumeTopNav.tsx` — No changes needed
+- `src/components/resume-builder/RichTextEditor.tsx` — Add word count display
+- `supabase/functions/resume-ai/index.ts` — Add `tailor` action for JD matching
+- New: `src/components/resume-builder/CompletenessScore.tsx` — Score widget component
+- New: `src/components/resume-builder/AiToolsPanel.tsx` — Full AI tools tab content
+- New: `src/components/resume-builder/TailorToJob.tsx` — JD tailoring panel
 
-3. **Expose an imperative method or use a state flag** so that when `exportToPdf` is called, the PDF target temporarily becomes visible (full size, on-screen) for `html2canvas` to capture, then hides again after.
-
-**Simpler alternative (preferred):** Instead of the above complexity, just move the hidden div back on-screen but use `visibility: hidden; position: absolute; overflow: hidden; height: 0` — this doesn't work for html2canvas either.
-
-**Simplest fix:** Move the PDF target div to use `position: fixed; left: 0; top: 0; opacity: 0.01; pointer-events: none; z-index: -9999` — keeping it technically "on-screen" and renderable by html2canvas while being invisible to the user. The key difference from `left: -9999px` is that the element remains within the browser's rendering viewport.
-
-**File: `src/lib/pdfExport.ts`**
-
-4. Add a temporary repositioning step before calling `html2canvas`:
-   - Before capture: move the target element to `position: fixed; left: 0; top: 0; z-index: -1; opacity: 1`
-   - Call `html2canvas`
-   - After capture (in finally block): restore original styles
-
-This approach is the most robust because it guarantees the element is fully rendered when captured, regardless of how it's hidden during normal use.
-
-### Summary of changes
-- `ResumePreview.tsx` — no changes needed (keep hidden div as-is for measurement)
-- `pdfExport.ts` — temporarily reposition the target element on-screen before `html2canvas` capture, then restore it afterward
+### Implementation Order
+1. Completeness score widget (standalone, no backend needed)
+2. Word count on RichTextEditor (small change)
+3. AI Tools tab with Tailor to Job (needs edge function update)
+4. Click-to-edit on preview (complex, last)
 

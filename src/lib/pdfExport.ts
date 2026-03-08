@@ -24,11 +24,23 @@ export async function exportToPdf({ elementId, fileName, pageFormat = "a4" }: Ex
     return;
   }
 
+  // Temporarily reposition the container on-screen so html2canvas can render it
+  const originalStyle = container.style.cssText;
+  container.style.cssText = `
+    position: fixed !important;
+    left: 0 !important;
+    top: 0 !important;
+    z-index: -9999 !important;
+    opacity: 1 !important;
+    pointer-events: none !important;
+    visibility: visible !important;
+    height: auto !important;
+    overflow: visible !important;
+  `;
+
   try {
     const dims = PAGE_DIMS[pageFormat] || PAGE_DIMS.a4;
 
-    // The hidden measurement div contains the full continuous A4Page content.
-    // We capture it once at high resolution, then slice into page-sized chunks.
     const SCALE = 2;
     const fullCanvas = await html2canvas(container, {
       scale: SCALE,
@@ -109,5 +121,8 @@ export async function exportToPdf({ elementId, fileName, pageFormat = "a4" }: Ex
   } catch (err) {
     console.error("PDF export error:", err);
     toast({ title: "Export failed", description: "Something went wrong generating the PDF.", variant: "destructive" });
+  } finally {
+    // Restore original hidden styles
+    container.style.cssText = originalStyle;
   }
 }
