@@ -546,12 +546,12 @@ const ResumeBuilder = () => {
     const newSection: ResumeSection = {
       id: crypto.randomUUID(),
       type,
-      title: meta?.title || "Custom Section",
+      title: meta?.title || t("customSectionFallback"),
       entries: [{ id: crypto.randomUUID(), fields: getDefaultFieldsForType(type) }],
       collapsed: false,
     };
     setSections([...data.sections, newSection]);
-    toast({ title: t("sectionAdded"), description: `${meta?.title || "Custom"} section added.` });
+    toast({ title: t("sectionAdded"), description: `${meta?.title || t("customSectionFallback")} ${t("sectionAddedDesc")}` });
   };
 
   const editorScrollRef = useRef<HTMLDivElement>(null);
