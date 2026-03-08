@@ -510,13 +510,13 @@ const AiJobSearchGuideZhTw = () => {
       </section>
 
       {/* ═══════════════ 第 3 章：履歷 ═══════════════ */}
-      <section id="resume" className="scroll-mt-24 pb-16 px-5 md:px-6">
-        <div className="container mx-auto max-w-3xl space-y-6">
-          <div className="flex items-end gap-4">
+      <section id="resume" className="py-14 md:py-20 scroll-mt-24">
+        <div className="space-y-6">
+          <div className="flex items-start gap-5 mb-8">
             <SectionNumber num="03" />
-            <div>
-              <h2 className="font-heading text-2xl md:text-3xl text-foreground">用履歷主動出擊</h2>
-              <p className="text-sm text-muted-foreground flex items-center gap-1.5 mt-1"><Clock className="w-4 h-4" /> 每個版本 90 分鐘</p>
+            <div className="pt-3">
+              <h2 className="font-heading text-2xl md:text-3xl text-foreground mb-2">用履歷主動出擊</h2>
+              <p className="text-sm text-muted-foreground flex items-center gap-1.5"><Clock className="w-4 h-4" /> 每個版本 90 分鐘</p>
             </div>
           </div>
 
