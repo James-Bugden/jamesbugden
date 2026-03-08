@@ -52,16 +52,17 @@ export default function SalaryProofSectionZhTw() {
           </div>
 
           {/* Bar Chart Comparison */}
-          <div className="flex justify-center items-end gap-8 md:gap-16 mb-8" style={{ height: '280px' }}>
+          <div className="flex justify-center items-end gap-8 md:gap-16 mb-8" style={{ height: '320px' }}>
             {/* Bar 1 — Accept First Offer */}
             <div className="flex flex-col items-center justify-end h-full">
               <p className="font-bold mb-2" style={{ color: '#A8B5A9', fontSize: '1rem' }}>7 千萬</p>
               <div
                 className="rounded-t-lg w-20 md:w-28"
                 style={{
-                  height: '47.6%',
-                  backgroundColor: 'rgba(255,255,255,0.12)',
-                  border: '1px solid rgba(255,255,255,0.15)',
+                  height: '38%',
+                  backgroundColor: 'rgba(255,255,255,0.22)',
+                  border: '1px solid rgba(255,255,255,0.30)',
+                  boxShadow: 'inset 0 0 0 1px rgba(255,255,255,0.08)',
                 }}
               />
               <div className="mt-4 text-center">
