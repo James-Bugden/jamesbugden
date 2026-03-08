@@ -805,7 +805,11 @@ export const A4Page = React.memo(function A4Page({
 
             const nameBlock = titleSameLine ? (
               <div
-                className="flex items-end gap-[3mm]"
+                className="flex items-baseline gap-[3mm]"
+                style={{
+                  justifyContent: align === "left" ? "flex-start" : align === "right" ? "flex-end" : "center",
+                  flexWrap: "nowrap",
+                }}
                 style={{
                   justifyContent: align === "left" ? "flex-start" : align === "right" ? "flex-end" : "center",
                 }}
