@@ -548,7 +548,7 @@ const RecruiterScreenGuide = () => {
       </section>
 
       {/* Section 4: Answer Frameworks */}
-      <section className="py-14 md:py-20 px-5 md:px-6 bg-background">
+      <section id="frameworks" className="py-14 md:py-20 px-5 md:px-6 bg-background scroll-mt-24">
         <div className="container mx-auto max-w-3xl">
           <div className="flex items-start gap-5 mb-8">
             <SectionNumber num="04" />
