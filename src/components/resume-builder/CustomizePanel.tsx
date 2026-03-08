@@ -752,7 +752,6 @@ function SectionsTab({ settings, onChange, sections }: { settings: CustomizeSett
             <SegmentedControl
               options={[
                 { value: "grid", label: "Grid" },
-                { value: "level", label: "Level" },
                 { value: "compact", label: "Compact" },
                 { value: "bubble", label: "Bubble" },
               ]}
@@ -767,8 +766,8 @@ function SectionsTab({ settings, onChange, sections }: { settings: CustomizeSett
                   { value: "newline", label: "New Line" },
                   { value: "comma", label: ", Comma" },
                 ]}
-                value={"bullet"}
-                onChange={() => {}}
+                value={settings.skillsSeparator || "bullet"}
+                onChange={(v) => onChange({ skillsSeparator: v as any })}
               />
             </div>
           </>

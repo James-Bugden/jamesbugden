@@ -233,7 +233,7 @@ function renderSectionEntries(section: ResumeSection, customize?: CustomizeSetti
     if (!items.length) return null;
 
     const layout = c?.skillsDisplay || section.layout || "bubble";
-    const sep = section.separator || "bullet";
+    const sep = c?.skillsSeparator || section.separator || "bullet";
     const subStyle = section.subtitleStyle || "dash";
 
     const formatItem = (item: string) => {
@@ -251,7 +251,7 @@ function renderSectionEntries(section: ResumeSection, customize?: CustomizeSetti
 
     if (layout === "grid") {
       return (
-        <div className="grid grid-cols-2 gap-x-[6mm] gap-y-[1mm] mt-[1.2mm]">
+        <div className="grid grid-cols-3 gap-x-[3mm] gap-y-[1mm] mt-[1.2mm]">
           {items.map((item, i) => (
             <div key={`${item}-${i}`} className="flex items-center gap-[1.5mm]">
               {sep !== "newline" && (
@@ -302,7 +302,7 @@ function renderSectionEntries(section: ResumeSection, customize?: CustomizeSetti
 
   if (section.type === "languages") {
     const langDisplay = c?.languagesDisplay || section.layout || "grid";
-    const sep = section.separator || "bullet";
+    const sep = c?.languagesSeparator || section.separator || "bullet";
     const subStyle = section.subtitleStyle || "dash";
 
     const formatLangLabel = (lang: string, prof: string) => {
