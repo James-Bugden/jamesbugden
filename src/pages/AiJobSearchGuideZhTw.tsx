@@ -880,11 +880,13 @@ const AiJobSearchGuideZhTw = () => {
       </section>
 
       {/* ═══════════════ 第 7 章：AI 錯誤 ═══════════════ */}
-      <section id="mistakes" className="scroll-mt-24 pb-16 px-5 md:px-6">
-        <div className="container mx-auto max-w-3xl space-y-6">
-          <div className="flex items-end gap-4">
+      <section id="mistakes" className="py-14 md:py-20 scroll-mt-24">
+        <div className="space-y-6">
+          <div className="flex items-start gap-5 mb-8">
             <SectionNumber num="07" />
-            <h2 className="font-heading text-2xl md:text-3xl text-foreground">AI 求職的 7 大錯誤</h2>
+            <div className="pt-3">
+              <h2 className="font-heading text-2xl md:text-3xl text-foreground">AI 求職的 7 大錯誤</h2>
+            </div>
           </div>
 
           <p className="text-muted-foreground leading-relaxed">在幫助數百位求職者和審閱數千份申請後，以下是我最常看到的 AI 相關求職錯誤。</p>
