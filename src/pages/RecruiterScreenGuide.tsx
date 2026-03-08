@@ -978,7 +978,7 @@ const RecruiterScreenGuide = () => {
       </section>
 
       {/* Section 10: Common Mistakes */}
-      <section className="py-14 md:py-20 px-5 md:px-6 bg-background">
+      <section id="mistakes" className="py-14 md:py-20 px-5 md:px-6 bg-background scroll-mt-24">
         <div className="container mx-auto max-w-3xl">
           <div className="flex items-start gap-5 mb-8">
             <SectionNumber num="10" />
