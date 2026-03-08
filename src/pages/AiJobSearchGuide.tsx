@@ -386,13 +386,13 @@ Qualifications: [INSERT SKILLS + CREDENTIALS]`}</AiPromptBlock>
       </section>
 
       {/* ═══════════════ SECTION 2: LINKEDIN DEFENSE ═══════════════ */}
-      <section id="linkedin" className="scroll-mt-24 pb-16 px-5 md:px-6">
-        <div className="container mx-auto max-w-3xl space-y-6">
-          <div className="flex items-end gap-4">
+      <section id="linkedin" className="py-14 md:py-20 scroll-mt-24">
+        <div className="space-y-6">
+          <div className="flex items-start gap-5 mb-8">
             <SectionNumber num="02" />
-            <div>
-              <h2 className="font-heading text-2xl md:text-3xl text-foreground">Build Your LinkedIn Defense</h2>
-              <p className="text-sm text-muted-foreground flex items-center gap-1.5 mt-1"><Clock className="w-4 h-4" /> 60 minutes</p>
+            <div className="pt-3">
+              <h2 className="font-heading text-2xl md:text-3xl text-foreground mb-2">Build Your LinkedIn Defense</h2>
+              <p className="text-sm text-muted-foreground flex items-center gap-1.5"><Clock className="w-4 h-4" /> 60 minutes</p>
             </div>
           </div>
 
