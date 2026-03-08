@@ -74,6 +74,14 @@ const guides: Guide[] = [
     href: "/zh-tw/recruiter-screen-guide",
     category: "面試準備",
   },
+  // AI 求職
+  {
+    icon: Bot,
+    title: "如何用 AI 管理你的整個求職流程",
+    description: "完整指南：從職涯探索到薪資談判，善用 ChatGPT 與 AI 工具提升求職每個階段的效率",
+    href: "/zh-tw/ai-job-search-guide",
+    category: "AI 求職",
+  },
 ];
 
 const categories = [
