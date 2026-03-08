@@ -1,4 +1,4 @@
-import { FileText, Clock, Linkedin, Bot, Target, Briefcase, Send, MessageSquare, DollarSign, AlertTriangle, CheckCircle2, XCircle, ArrowRight, ChevronDown, Menu, Search, Zap, BookOpen } from "lucide-react";
+import { FileText, Clock, Linkedin, Bot, Target, Briefcase, Send, MessageSquare, DollarSign, AlertTriangle, CheckCircle2, XCircle, ArrowRight, ChevronDown, Menu, Search, Zap, BookOpen, Copy, Check } from "lucide-react";
 import { Link } from "react-router-dom";
 import GoldCheckBadge from "@/components/GoldCheckBadge";
 import { InstagramIcon, ThreadsIcon } from "@/components/SocialIcons";
@@ -28,15 +28,30 @@ const Collapsible = ({ title, children }: { title: string; children: React.React
   );
 };
 
-const AiPromptBlock = ({ children }: { children: React.ReactNode }) => (
-  <div className="bg-muted/50 border border-border rounded-xl p-4 md:p-5 my-4">
-    <div className="flex items-center gap-2 mb-3">
-      <Bot className="w-5 h-5 text-gold" />
-      <span className="text-sm font-semibold text-gold">AI 提示詞</span>
+const AiPromptBlock = ({ children }: { children: React.ReactNode }) => {
+  const [copied, setCopied] = useState(false);
+  const handleCopy = () => {
+    const text = typeof children === "string" ? children : (children as any)?.toString?.() ?? "";
+    navigator.clipboard.writeText(text);
+    setCopied(true);
+    setTimeout(() => setCopied(false), 2000);
+  };
+  return (
+    <div className="bg-muted/50 border border-border rounded-xl p-4 md:p-5 my-4">
+      <div className="flex items-center justify-between mb-3">
+        <div className="flex items-center gap-2">
+          <Bot className="w-5 h-5 text-gold" />
+          <span className="text-sm font-semibold text-gold">AI 提示詞</span>
+        </div>
+        <button onClick={handleCopy} className="flex items-center gap-1.5 text-xs text-muted-foreground hover:text-foreground transition-colors px-2 py-1 rounded-md hover:bg-muted">
+          {copied ? <Check className="w-3.5 h-3.5 text-green-500" /> : <Copy className="w-3.5 h-3.5" />}
+          {copied ? "已複製" : "複製"}
+        </button>
+      </div>
+      <pre className="text-sm text-foreground whitespace-pre-wrap font-mono bg-background/50 rounded-lg p-4 overflow-x-auto">{children}</pre>
     </div>
-    <pre className="text-sm text-foreground whitespace-pre-wrap font-mono bg-background/50 rounded-lg p-4 overflow-x-auto">{children}</pre>
-  </div>
-);
+  );
+};
 
 const RecruiterCheck = ({ children }: { children: React.ReactNode }) => (
   <div className="bg-executive/5 border-l-4 border-gold rounded-r-xl p-4 md:p-5 my-4">
@@ -174,23 +189,23 @@ const AiJobSearchGuideZhTw = () => {
       <TableOfContents />
 
       {/* Hero */}
-      <section className="pt-28 md:pt-36 pb-12 md:pb-16 px-5 md:px-6 bg-background">
+      <section className="pt-28 md:pt-36 pb-12 md:pb-16 px-5 md:px-6 bg-nav-green">
         <div className="container mx-auto max-w-3xl">
           <div className="flex flex-col gap-4 mb-8">
-            <div className="flex flex-wrap items-center gap-3 text-sm text-muted-foreground">
+            <div className="flex flex-wrap items-center gap-3 text-sm text-cream-70">
               <span className="flex items-center gap-1.5"><Bot className="w-4 h-4 text-gold" /> AI 驅動</span>
-              <span className="w-1 h-1 rounded-full bg-border" />
+              <span className="w-1 h-1 rounded-full bg-cream-70/30" />
               <span className="flex items-center gap-1.5"><Clock className="w-4 h-4" /> 總計 4-6 小時</span>
-              <span className="w-1 h-1 rounded-full bg-border" />
+              <span className="w-1 h-1 rounded-full bg-cream-70/30" />
               <span className="flex items-center gap-1.5"><FileText className="w-4 h-4" /> 10 個章節</span>
             </div>
-            <h1 className="font-heading text-3xl md:text-4xl lg:text-5xl text-foreground leading-tight">
+            <h1 className="font-heading text-3xl md:text-4xl lg:text-5xl text-cream leading-tight">
               如何用 AI 掌控你的整個求職過程
             </h1>
-            <p className="text-lg md:text-xl text-muted-foreground leading-relaxed">
-              招募官的完整指南：從職涯方向到最終 Offer，每個階段都用 ChatGPT
+            <p className="text-lg md:text-xl text-cream-70 leading-relaxed">
+              從職涯方向到最終 Offer，每個階段都用 ChatGPT
             </p>
-            <p className="text-sm text-muted-foreground italic">
+            <p className="text-sm text-cream-70/70 italic">
               根據 Jeremy Schifeling 的《Career Coach GPT》撰寫 · 指南作者：James Bugden
             </p>
           </div>
