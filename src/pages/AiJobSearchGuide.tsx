@@ -173,6 +173,7 @@ const AiJobSearchGuide = () => {
       <PageSEO
         title="How to Use AI to Run Your Entire Job Search — James Bugden"
         description="A recruiter's complete guide to using ChatGPT at every stage of your job search: from career direction to final offer negotiation."
+        path="/ai-job-search-guide"
       />
 
       {/* Navigation */}
