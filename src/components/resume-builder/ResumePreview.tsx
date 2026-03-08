@@ -1024,9 +1024,8 @@ export const ResumePreview = React.memo(function ResumePreview({
         style={{
           position: "absolute",
           width: `${dims.wPX}px`,
-          left: 0,
+          left: "-9999px",
           top: 0,
-          opacity: 0,
           pointerEvents: "none",
           zIndex: -1,
         }}
