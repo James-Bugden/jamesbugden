@@ -912,11 +912,13 @@ const AiJobSearchGuideZhTw = () => {
       </section>
 
       {/* ═══════════════ 第 8 章：心態轉換 ═══════════════ */}
-      <section id="mindset" className="scroll-mt-24 pb-16 px-5 md:px-6">
-        <div className="container mx-auto max-w-3xl space-y-6">
-          <div className="flex items-end gap-4">
+      <section id="mindset" className="py-14 md:py-20 scroll-mt-24">
+        <div className="space-y-6">
+          <div className="flex items-start gap-5 mb-8">
             <SectionNumber num="08" />
-            <h2 className="font-heading text-2xl md:text-3xl text-foreground">心態轉換：舊思維 vs. 新思維</h2>
+            <div className="pt-3">
+              <h2 className="font-heading text-2xl md:text-3xl text-foreground">心態轉換：舊思維 vs. 新思維</h2>
+            </div>
           </div>
 
           <div className="overflow-x-auto">
