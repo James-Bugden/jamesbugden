@@ -278,22 +278,8 @@ function BasicsTab({ settings, onChange, resumeData }: { settings: CustomizeSett
             );
           })}
         </div>
-        <button
-          onClick={() => setGalleryOpen(true)}
-          className="w-full py-2.5 rounded-xl text-xs font-semibold border transition-colors"
-          style={{ color: B.green, backgroundColor: B.greenLighter, borderColor: B.greenLight }}
-        >
-          Browse Templates
-        </button>
       </SettingCard>
 
-      <TemplateGalleryModal
-        open={galleryOpen}
-        onClose={() => setGalleryOpen(false)}
-        selected={settings.template}
-        onSelect={handleTemplateSelect}
-        resumeData={resumeData}
-      />
     </>
   );
 }
