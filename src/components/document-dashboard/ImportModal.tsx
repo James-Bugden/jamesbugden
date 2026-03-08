@@ -1,7 +1,7 @@
 import { useState, useRef, useCallback } from "react";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from "@/components/ui/dialog";
 import { Upload, FileText, Loader2, ClipboardPaste, FileUp, X } from "lucide-react";
-import { extractTextFromDocx, extractTextFromPdf, mapTextToResumeSections } from "@/lib/documentImport";
+import { extractTextFromDocx, extractTextFromPdf, parseResumeWithFallback } from "@/lib/documentImport";
 import { createDocument, SavedDocument, DocType } from "@/lib/documentStore";
 import { DEFAULT_RESUME_DATA } from "@/components/resume-builder/types";
 import { toast } from "@/hooks/use-toast";
@@ -24,8 +24,8 @@ export function ImportModal({ open, onClose, type, onImported }: ImportModalProp
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const fileRef = useRef<HTMLInputElement>(null);
 
-  const buildDoc = useCallback((text: string, name: string) => {
-    const parsed = mapTextToResumeSections(text);
+  const buildDoc = useCallback(async (text: string, name: string) => {
+    const parsed = await parseResumeWithFallback(text, (msg) => setLoadingMessage(msg));
 
     // Build extras from linkedin/website
     const extras: { id: string; type: string; value: string }[] = [];
@@ -74,16 +74,24 @@ export function ImportModal({ open, onClose, type, onImported }: ImportModalProp
         return;
       }
 
-      setLoadingMessage("Parsing sections…");
-      const { doc, parsed } = buildDoc(text, file.name.replace(/\.[^.]+$/, ""));
+      setLoadingMessage("Analyzing structure…");
+      const { doc, parsed } = await buildDoc(text, file.name.replace(/\.[^.]+$/, ""));
       const sectionCount = parsed.sections.length;
 
+      const sourceLabel = parsed.source === "ai" ? "AI import" : "Heuristic import";
       toast({
         title: "Imported successfully",
         description: sectionCount > 0
-          ? `Found ${sectionCount} section${sectionCount > 1 ? "s" : ""}. Review and adjust as needed.`
+          ? `${sourceLabel}: found ${sectionCount} section${sectionCount > 1 ? "s" : ""}. Review and adjust as needed.`
           : "We imported what we could — you may need to adjust some sections manually.",
       });
+
+      if (parsed.warnings.length > 0) {
+        toast({
+          title: "Import note",
+          description: parsed.warnings[0],
+        });
+      }
 
       onImported(doc);
       handleClose();
@@ -96,7 +104,7 @@ export function ImportModal({ open, onClose, type, onImported }: ImportModalProp
     }
   };
 
-  const handlePaste = () => {
+  const handlePaste = async () => {
     const trimmed = pastedText.trim();
     if (!trimmed) {
       toast({ title: "Empty text", description: "Please paste your resume text first.", variant: "destructive" });
@@ -104,30 +112,35 @@ export function ImportModal({ open, onClose, type, onImported }: ImportModalProp
     }
 
     setLoading(true);
-    setLoadingMessage("Parsing sections…");
+    setLoadingMessage("Analyzing structure…");
 
-    // Use setTimeout to allow the loading state to render
-    setTimeout(() => {
-      try {
-        const { doc, parsed } = buildDoc(trimmed, "Imported Resume");
-        const sectionCount = parsed.sections.length;
+    try {
+      const { doc, parsed } = await buildDoc(trimmed, "Imported Resume");
+      const sectionCount = parsed.sections.length;
 
+      const sourceLabel = parsed.source === "ai" ? "AI import" : "Heuristic import";
+      toast({
+        title: "Imported successfully",
+        description: sectionCount > 0
+          ? `${sourceLabel}: found ${sectionCount} section${sectionCount > 1 ? "s" : ""}. Review and adjust as needed.`
+          : "We imported what we could — you may need to adjust some sections manually.",
+      });
+
+      if (parsed.warnings.length > 0) {
         toast({
-          title: "Imported successfully",
-          description: sectionCount > 0
-            ? `Found ${sectionCount} section${sectionCount > 1 ? "s" : ""}. Review and adjust as needed.`
-            : "We imported what we could — you may need to adjust some sections manually.",
+          title: "Import note",
+          description: parsed.warnings[0],
         });
-
-        onImported(doc);
-        handleClose();
-      } catch (err) {
-        console.error("Parse error:", err);
-        toast({ title: "Parse error", description: "Something went wrong parsing the text. Please try again.", variant: "destructive" });
-      } finally {
-        setLoading(false);
       }
-    }, 100);
+
+      onImported(doc);
+      handleClose();
+    } catch (err) {
+      console.error("Parse error:", err);
+      toast({ title: "Parse error", description: "Something went wrong parsing the text. Please try again.", variant: "destructive" });
+    } finally {
+      setLoading(false);
+    }
   };
 
   const handleClose = () => {
