@@ -674,8 +674,8 @@ const ResumeBuilder = () => {
                   className="flex items-center gap-1.5 text-xs font-medium transition-colors hover:opacity-80"
                   style={{ color: BRAND.textSecondary }}
                 >
-                  <Upload className="w-3.5 h-3.5" />
-                  Import content
+                   <Upload className="w-3.5 h-3.5" />
+                   {t("importContent")}
                 </button>
               </TooltipTrigger>
               <TooltipContent side="bottom" className="text-xs">Import from file (PDF, DOCX)</TooltipContent>
