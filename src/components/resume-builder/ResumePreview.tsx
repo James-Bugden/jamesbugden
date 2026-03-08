@@ -152,15 +152,15 @@ function SectionHeading({ title, customize, baseFontSize }: { title: string; cus
   if (style === "underline") {
     return (
       <div className="mb-[2mm]">
-        <h2 className="font-bold" style={textStyle}>{title}</h2>
-        <div className="mt-[0.8mm] h-[0.4mm] w-full" style={{ backgroundColor: "var(--resume-accent)" }} />
+        <h2 data-color-role="headings" className="font-bold" style={textStyle}>{title}</h2>
+        <div data-color-role="accent" className="mt-[0.8mm] h-[0.4mm] w-full" style={{ backgroundColor: "var(--resume-accent)" }} />
       </div>
     );
   }
 
   if (style === "full-underline") {
     return (
-      <h2 data-color-role="headings" data-color-role="headings" data-color-role="headings" data-color-role="headings" className="font-bold mb-[2mm] pb-[1mm] border-b-[0.5mm]" style={{ ...textStyle, borderColor: "var(--resume-accent)" }}>
+      <h2 data-color-role="headings" className="font-bold mb-[2mm] pb-[1mm] border-b-[0.5mm]" style={{ ...textStyle, borderColor: "var(--resume-accent)" }}>
         {title}
       </h2>
     );
@@ -169,16 +169,16 @@ function SectionHeading({ title, customize, baseFontSize }: { title: string; cus
   if (style === "left-accent") {
     return (
       <div className="mb-[2mm] flex items-center gap-[2mm]">
-        <div className="w-[1mm] h-[4mm] rounded-full" style={{ backgroundColor: "var(--resume-accent)" }} />
-        <h2 className="font-bold" style={textStyle}>{title}</h2>
+        <div data-color-role="accent" className="w-[1mm] h-[4mm] rounded-full" style={{ backgroundColor: "var(--resume-accent)" }} />
+        <h2 data-color-role="headings" className="font-bold" style={textStyle}>{title}</h2>
       </div>
     );
   }
 
   if (style === "background") {
-    data-color-role="headings" return (
-      <div classNadata-color-role="headings" me="mb-[2mm]">
-        <h2 className="font-bold px-[2mm] py-[1mm] rounded-[0.5mm]" style={{ ...textStyle, backgroundColor: "var(--resume-accent)" }}>
+    return (
+      <div className="mb-[2mm]">
+        <h2 data-color-role="headings" className="font-bold px-[2mm] py-[1mm] rounded-[0.5mm]" style={{ ...textStyle, backgroundColor: "var(--resume-accent)" }}>
           {title}
         </h2>
       </div>
@@ -187,7 +187,7 @@ function SectionHeading({ title, customize, baseFontSize }: { title: string; cus
 
   return (
     <div className="mb-[2mm] pl-[3mm] border-l-[0.8mm]" style={{ borderColor: "var(--resume-accent)" }}>
-      <h2 className="font-bold" style={textStyle}>{title}</h2>
+      <h2 data-color-role="headings" className="font-bold" style={textStyle}>{title}</h2>
     </div>
   );
 }
