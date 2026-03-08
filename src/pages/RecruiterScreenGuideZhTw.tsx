@@ -1,4 +1,4 @@
-import { FileText, Clock, Linkedin, Phone, Video, Users, AlertTriangle, CheckCircle2, XCircle, ArrowRight, MessageSquare, Target, Shield, Briefcase, ChevronDown } from "lucide-react";
+import { FileText, Clock, Linkedin, Phone, Video, Users, AlertTriangle, CheckCircle2, XCircle, ArrowRight, MessageSquare, Target, Shield, Briefcase, ChevronDown, Menu } from "lucide-react";
 import { Link, useNavigate } from "react-router-dom";
 import GoldCheckBadge from "@/components/GoldCheckBadge";
 import { InstagramIcon, ThreadsIcon } from "@/components/SocialIcons";
@@ -6,7 +6,7 @@ import GuideShareButtons from "@/components/GuideShareButtons";
 import { AuthHeaderButton } from "@/components/AuthHeaderButton";
 import PageSEO from "@/components/PageSEO";
 import { useTrackGuideProgress } from "@/hooks/useReadingProgress";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 const SectionNumber = ({ num }: { num: string }) => (
   <span className="text-gold/30 font-heading text-6xl md:text-7xl font-bold leading-none select-none">
@@ -24,6 +24,106 @@ const Collapsible = ({ title, children }: { title: string; children: React.React
       </button>
       {open && <div className="px-4 md:px-5 pb-4 md:pb-5 bg-card border-t border-border">{children}</div>}
     </div>
+  );
+};
+
+/* ─── Table of Contents ─── */
+const tocSectionsZh = [
+  { id: "intro", label: "前言" },
+  { id: "scorecard", label: "01 · 招募人員在做什麼" },
+  { id: "before", label: "02 · 電話前的準備" },
+  { id: "story", label: "03 · 掌握你的故事" },
+  { id: "frameworks", label: "04 · 回答框架" },
+  { id: "tough", label: "05 · 處理困難問題" },
+  { id: "salary", label: "06 · 薪資" },
+  { id: "setup", label: "07 · 設備和禮儀" },
+  { id: "questions", label: "08 · 該問的問題" },
+  { id: "redflags", label: "09 · 需要注意的警訊" },
+  { id: "mistakes", label: "10 · 常見錯誤" },
+  { id: "after", label: "11 · 通話結束後" },
+  { id: "levels", label: "12 · 依職涯階段區分" },
+  { id: "cheatsheet", label: "速查表" },
+];
+
+const TableOfContentsZh = () => {
+  const [active, setActive] = useState("");
+  const [open, setOpen] = useState(false);
+
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      (entries) => {
+        const visible = entries.filter((e) => e.isIntersecting);
+        if (visible.length > 0) setActive(visible[0].target.id);
+      },
+      { rootMargin: "-80px 0px -60% 0px", threshold: 0 }
+    );
+    tocSectionsZh.forEach(({ id }) => {
+      const el = document.getElementById(id);
+      if (el) observer.observe(el);
+    });
+    return () => observer.disconnect();
+  }, []);
+
+  return (
+    <>
+      <aside className="hidden xl:block fixed left-[max(1rem,calc((100vw-72rem)/2-14rem))] top-28 w-48 z-30">
+        <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wider mb-3">目錄</p>
+        <nav className="space-y-1">
+          {tocSectionsZh.map(({ id, label }) => (
+            <a
+              key={id}
+              href={`#${id}`}
+              onClick={(e) => {
+                e.preventDefault();
+                document.getElementById(id)?.scrollIntoView({ behavior: "smooth", block: "start" });
+              }}
+              className={`block text-sm py-1.5 pl-3 border-l-2 transition-all duration-200 ${
+                active === id
+                  ? "border-gold text-gold font-medium"
+                  : "border-transparent text-muted-foreground hover:text-foreground hover:border-border"
+              }`}
+            >
+              {label}
+            </a>
+          ))}
+        </nav>
+      </aside>
+
+      <div className="xl:hidden fixed bottom-6 left-6 z-50">
+        <button
+          onClick={() => setOpen(!open)}
+          className="w-11 h-11 rounded-full bg-executive-green text-cream shadow-lg flex items-center justify-center hover:scale-105 transition-transform"
+          aria-label="目錄"
+        >
+          <Menu className="w-5 h-5" />
+        </button>
+        {open && (
+          <div className="absolute bottom-14 left-0 bg-card border border-border rounded-xl shadow-2xl p-4 w-56 max-h-[70vh] overflow-y-auto">
+            <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wider mb-2">目錄</p>
+            <nav className="space-y-1">
+              {tocSectionsZh.map(({ id, label }) => (
+                <a
+                  key={id}
+                  href={`#${id}`}
+                  onClick={(e) => {
+                    e.preventDefault();
+                    document.getElementById(id)?.scrollIntoView({ behavior: "smooth", block: "start" });
+                    setOpen(false);
+                  }}
+                  className={`block text-sm py-1.5 pl-3 border-l-2 transition-all ${
+                    active === id
+                      ? "border-gold text-gold font-medium"
+                      : "border-transparent text-muted-foreground hover:text-foreground"
+                  }`}
+                >
+                  {label}
+                </a>
+              ))}
+            </nav>
+          </div>
+        )}
+      </div>
+    </>
   );
 };
 
@@ -85,7 +185,8 @@ const RecruiterScreenGuideZhTw = () => {
       </section>
 
       {/* Introduction */}
-      <section className="py-14 md:py-20 px-5 md:px-6 bg-card border-b border-border">
+      <TableOfContentsZh />
+      <section id="intro" className="py-14 md:py-20 px-5 md:px-6 bg-card border-b border-border scroll-mt-24">
         <div className="container mx-auto max-w-3xl">
           <p className="text-foreground text-lg leading-relaxed mb-6">
             我審閱過超過 20,000 份履歷。我在頂尖國際企業完成了 500 次以上的錄用。我做過數千次電話篩選。
@@ -127,7 +228,7 @@ const RecruiterScreenGuideZhTw = () => {
 
       {/* Section 1: The Scorecard */}
       <main className="container mx-auto px-5 md:px-6 pb-20 max-w-3xl">
-        <section className="py-14 md:py-20">
+        <section id="scorecard" className="py-14 md:py-20 scroll-mt-24">
           <div className="flex items-start gap-5 mb-8">
             <SectionNumber num="01" />
             <div className="pt-3">
@@ -232,7 +333,7 @@ const RecruiterScreenGuideZhTw = () => {
         </section>
 
         {/* Section 2: Before the Call */}
-        <section className="pb-14 md:pb-20">
+        <section id="before" className="pb-14 md:pb-20 scroll-mt-24">
           <div className="flex items-start gap-5 mb-8">
             <SectionNumber num="02" />
             <div className="pt-3">
@@ -334,7 +435,7 @@ const RecruiterScreenGuideZhTw = () => {
       </main>
 
       {/* Section 3: Know Your Story */}
-      <section className="py-14 md:py-20 px-5 md:px-6 bg-card border-y border-border">
+      <section id="story" className="py-14 md:py-20 px-5 md:px-6 bg-card border-y border-border scroll-mt-24">
         <div className="container mx-auto max-w-3xl">
           <div className="flex items-start gap-5 mb-8">
             <SectionNumber num="03" />
@@ -502,7 +603,7 @@ const RecruiterScreenGuideZhTw = () => {
       </section>
 
       {/* Section 4: Answer Frameworks */}
-      <section className="py-14 md:py-20 px-5 md:px-6 bg-background">
+      <section id="frameworks" className="py-14 md:py-20 px-5 md:px-6 bg-background scroll-mt-24">
         <div className="container mx-auto max-w-3xl">
           <div className="flex items-start gap-5 mb-8">
             <SectionNumber num="04" />
@@ -593,7 +694,7 @@ const RecruiterScreenGuideZhTw = () => {
       </section>
 
       {/* Section 5: Tough Questions */}
-      <section className="py-14 md:py-20 px-5 md:px-6 bg-card border-y border-border">
+      <section id="tough" className="py-14 md:py-20 px-5 md:px-6 bg-card border-y border-border scroll-mt-24">
         <div className="container mx-auto max-w-3xl">
           <div className="flex items-start gap-5 mb-8">
             <SectionNumber num="05" />
@@ -645,10 +746,11 @@ const RecruiterScreenGuideZhTw = () => {
               </div>
             </div>
 
-            <Collapsible title="「請告訴我一次你失敗的經驗。」">
-              <p className="text-muted-foreground text-sm mt-3 mb-3">這個問題在測試自我覺察和成長。表現不好的求職者要嘛聲稱自己從未失敗過，要嘛描述了一次失敗但沒有展示學到了什麼。</p>
+            <div className="bg-background border border-border rounded-xl p-5 md:p-6">
+              <h3 className="font-heading text-lg text-foreground mb-4">「請告訴我一次你失敗的經驗。」</h3>
+              <p className="text-muted-foreground text-sm mb-3">這個問題在測試自我覺察和成長。表現不好的求職者要嘛聲稱自己從未失敗過，要嘛描述了一次失敗但沒有展示學到了什麼。</p>
               <p className="text-foreground text-sm italic">「在我擔任團隊主管的第二年，我推動在用戶研究不夠充分的情況下發佈一個功能。我對自己的直覺很有信心，而且我想要達到季度目標。我們上線了，但採用率很低，接下來兩個月我們都在根據本來應該提前蒐集的回饋重新修改。延遲造成的時間成本比做研究還多。從那以後，我在每個功能計畫進入開發前都設立了最低限度的研究檢查點。我們之後發佈了四個重要功能。四個都在第一個月達到了採用目標。」</p>
-            </Collapsible>
+            </div>
 
             <Collapsible title="「你五年後的規劃是什麼？」">
               <p className="text-muted-foreground text-sm mt-3 mb-3">我不是在找一個詳細的職涯規劃。我在找的是合理的企圖心，與這個職缺相符，並且顯示你會留得夠久來產生影響。</p>
@@ -669,7 +771,7 @@ const RecruiterScreenGuideZhTw = () => {
       </section>
 
       {/* Section 6: Salary */}
-      <section className="py-14 md:py-20 px-5 md:px-6 bg-background">
+      <section id="salary" className="py-14 md:py-20 px-5 md:px-6 bg-background scroll-mt-24">
         <div className="container mx-auto max-w-3xl">
           <div className="flex items-start gap-5 mb-8">
             <SectionNumber num="06" />
@@ -748,7 +850,7 @@ const RecruiterScreenGuideZhTw = () => {
       </section>
 
       {/* Section 7: Setup & Etiquette */}
-      <section className="py-14 md:py-20 px-5 md:px-6 bg-card border-y border-border">
+      <section id="setup" className="py-14 md:py-20 px-5 md:px-6 bg-card border-y border-border scroll-mt-24">
         <div className="container mx-auto max-w-3xl">
           <div className="flex items-start gap-5 mb-8">
             <SectionNumber num="07" />
@@ -813,7 +915,7 @@ const RecruiterScreenGuideZhTw = () => {
       </section>
 
       {/* Section 8: Questions to Ask */}
-      <section className="py-14 md:py-20 px-5 md:px-6 bg-background">
+      <section id="questions" className="py-14 md:py-20 px-5 md:px-6 bg-background scroll-mt-24">
         <div className="container mx-auto max-w-3xl">
           <div className="flex items-start gap-5 mb-8">
             <SectionNumber num="08" />
@@ -860,7 +962,7 @@ const RecruiterScreenGuideZhTw = () => {
       </section>
 
       {/* Section 9: Red Flags */}
-      <section className="py-14 md:py-20 px-5 md:px-6 bg-card border-y border-border">
+      <section id="redflags" className="py-14 md:py-20 px-5 md:px-6 bg-card border-y border-border scroll-mt-24">
         <div className="container mx-auto max-w-3xl">
           <div className="flex items-start gap-5 mb-8">
             <SectionNumber num="09" />
@@ -901,7 +1003,7 @@ const RecruiterScreenGuideZhTw = () => {
       </section>
 
       {/* Section 10: Common Mistakes */}
-      <section className="py-14 md:py-20 px-5 md:px-6 bg-background">
+      <section id="mistakes" className="py-14 md:py-20 px-5 md:px-6 bg-background scroll-mt-24">
         <div className="container mx-auto max-w-3xl">
           <div className="flex items-start gap-5 mb-8">
             <SectionNumber num="10" />
@@ -940,7 +1042,7 @@ const RecruiterScreenGuideZhTw = () => {
       </section>
 
       {/* Section 11: After the Call */}
-      <section className="py-14 md:py-20 px-5 md:px-6 bg-card border-y border-border">
+      <section id="after" className="py-14 md:py-20 px-5 md:px-6 bg-card border-y border-border scroll-mt-24">
         <div className="container mx-auto max-w-3xl">
           <div className="flex items-start gap-5 mb-8">
             <SectionNumber num="11" />
@@ -1059,7 +1161,7 @@ const RecruiterScreenGuideZhTw = () => {
       </section>
 
       {/* Section 12: By Career Level */}
-      <section className="py-14 md:py-20 px-5 md:px-6 bg-background">
+      <section id="levels" className="py-14 md:py-20 px-5 md:px-6 bg-background scroll-mt-24">
         <div className="container mx-auto max-w-3xl">
           <div className="flex items-start gap-5 mb-8">
             <SectionNumber num="12" />
@@ -1144,7 +1246,7 @@ const RecruiterScreenGuideZhTw = () => {
       </section>
 
       {/* Quick Reference */}
-      <section className="py-14 md:py-20 px-5 md:px-6 bg-card border-y border-border">
+      <section id="cheatsheet" className="py-14 md:py-20 px-5 md:px-6 bg-card border-y border-border scroll-mt-24">
         <div className="container mx-auto max-w-3xl">
           <div className="flex items-start gap-5 mb-10">
             <span className="text-gold/30 font-heading text-6xl md:text-7xl font-bold leading-none select-none">★</span>

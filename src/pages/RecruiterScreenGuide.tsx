@@ -1,4 +1,4 @@
-import { FileText, Clock, Linkedin, Phone, Video, Users, AlertTriangle, CheckCircle2, XCircle, ArrowRight, MessageSquare, Target, Shield, Briefcase, ChevronDown } from "lucide-react";
+import { FileText, Clock, Linkedin, Phone, Video, Users, AlertTriangle, CheckCircle2, XCircle, ArrowRight, MessageSquare, Target, Shield, Briefcase, ChevronDown, Menu } from "lucide-react";
 import { Link } from "react-router-dom";
 import GoldCheckBadge from "@/components/GoldCheckBadge";
 import { InstagramIcon, ThreadsIcon } from "@/components/SocialIcons";
@@ -7,7 +7,7 @@ import LanguageToggle from "@/components/LanguageToggle";
 import { AuthHeaderButton } from "@/components/AuthHeaderButton";
 import PageSEO from "@/components/PageSEO";
 import { useTrackGuideProgress } from "@/hooks/useReadingProgress";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 const SectionNumber = ({ num }: { num: string }) => (
   <span className="text-gold/30 font-heading text-6xl md:text-7xl font-bold leading-none select-none">
@@ -25,6 +25,108 @@ const Collapsible = ({ title, children }: { title: string; children: React.React
       </button>
       {open && <div className="px-4 md:px-5 pb-4 md:pb-5 bg-card border-t border-border">{children}</div>}
     </div>
+  );
+};
+
+/* ─── Table of Contents ─── */
+const tocSections = [
+  { id: "intro", label: "Introduction" },
+  { id: "scorecard", label: "01 · The Scorecard" },
+  { id: "before", label: "02 · Before the Call" },
+  { id: "story", label: "03 · Know Your Story" },
+  { id: "frameworks", label: "04 · Answer Frameworks" },
+  { id: "tough", label: "05 · Tough Questions" },
+  { id: "salary", label: "06 · Salary" },
+  { id: "setup", label: "07 · Setup & Etiquette" },
+  { id: "questions", label: "08 · Questions to Ask" },
+  { id: "redflags", label: "09 · Red Flags" },
+  { id: "mistakes", label: "10 · Common Mistakes" },
+  { id: "after", label: "11 · After the Call" },
+  { id: "levels", label: "12 · By Career Level" },
+  { id: "cheatsheet", label: "Cheat Sheet" },
+];
+
+const TableOfContents = () => {
+  const [active, setActive] = useState("");
+  const [open, setOpen] = useState(false);
+
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      (entries) => {
+        const visible = entries.filter((e) => e.isIntersecting);
+        if (visible.length > 0) setActive(visible[0].target.id);
+      },
+      { rootMargin: "-80px 0px -60% 0px", threshold: 0 }
+    );
+    tocSections.forEach(({ id }) => {
+      const el = document.getElementById(id);
+      if (el) observer.observe(el);
+    });
+    return () => observer.disconnect();
+  }, []);
+
+  return (
+    <>
+      {/* Desktop sidebar */}
+      <aside className="hidden xl:block fixed left-[max(1rem,calc((100vw-72rem)/2-14rem))] top-28 w-48 z-30">
+        <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wider mb-3">Contents</p>
+        <nav className="space-y-1">
+          {tocSections.map(({ id, label }) => (
+            <a
+              key={id}
+              href={`#${id}`}
+              onClick={(e) => {
+                e.preventDefault();
+                document.getElementById(id)?.scrollIntoView({ behavior: "smooth", block: "start" });
+              }}
+              className={`block text-sm py-1.5 pl-3 border-l-2 transition-all duration-200 ${
+                active === id
+                  ? "border-gold text-gold font-medium"
+                  : "border-transparent text-muted-foreground hover:text-foreground hover:border-border"
+              }`}
+            >
+              {label}
+            </a>
+          ))}
+        </nav>
+      </aside>
+
+      {/* Mobile floating TOC */}
+      <div className="xl:hidden fixed bottom-6 left-6 z-50">
+        <button
+          onClick={() => setOpen(!open)}
+          className="w-11 h-11 rounded-full bg-executive-green text-cream shadow-lg flex items-center justify-center hover:scale-105 transition-transform"
+          aria-label="Table of contents"
+        >
+          <Menu className="w-5 h-5" />
+        </button>
+        {open && (
+          <div className="absolute bottom-14 left-0 bg-card border border-border rounded-xl shadow-2xl p-4 w-56 max-h-[70vh] overflow-y-auto">
+            <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wider mb-2">Contents</p>
+            <nav className="space-y-1">
+              {tocSections.map(({ id, label }) => (
+                <a
+                  key={id}
+                  href={`#${id}`}
+                  onClick={(e) => {
+                    e.preventDefault();
+                    document.getElementById(id)?.scrollIntoView({ behavior: "smooth", block: "start" });
+                    setOpen(false);
+                  }}
+                  className={`block text-sm py-1.5 pl-3 border-l-2 transition-all ${
+                    active === id
+                      ? "border-gold text-gold font-medium"
+                      : "border-transparent text-muted-foreground hover:text-foreground"
+                  }`}
+                >
+                  {label}
+                </a>
+              ))}
+            </nav>
+          </div>
+        )}
+      </div>
+    </>
   );
 };
 
@@ -79,7 +181,8 @@ const RecruiterScreenGuide = () => {
       </section>
 
       {/* Introduction */}
-      <section className="py-14 md:py-20 px-5 md:px-6 bg-card border-b border-border">
+      <TableOfContents />
+      <section id="intro" className="py-14 md:py-20 px-5 md:px-6 bg-card border-b border-border scroll-mt-24">
         <div className="container mx-auto max-w-3xl">
           <p className="text-foreground text-lg leading-relaxed mb-6">
             I've reviewed over 20,000 resumes. I've made 500+ hires at top international companies. I've done thousands of screening calls.
@@ -121,7 +224,7 @@ const RecruiterScreenGuide = () => {
 
       {/* Section 1: The Scorecard */}
       <main className="container mx-auto px-5 md:px-6 pb-20 max-w-3xl">
-        <section className="py-14 md:py-20">
+        <section id="scorecard" className="py-14 md:py-20 scroll-mt-24">
           <div className="flex items-start gap-5 mb-8">
             <SectionNumber num="01" />
             <div className="pt-3">
@@ -232,7 +335,7 @@ const RecruiterScreenGuide = () => {
         </section>
 
         {/* Section 2: Before the Call */}
-        <section className="pb-14 md:pb-20">
+        <section id="before" className="pb-14 md:pb-20 scroll-mt-24">
           <div className="flex items-start gap-5 mb-8">
             <SectionNumber num="02" />
             <div className="pt-3">
@@ -358,7 +461,7 @@ const RecruiterScreenGuide = () => {
       </main>
 
       {/* Section 3: Know Your Story - full width alternate bg */}
-      <section className="py-14 md:py-20 px-5 md:px-6 bg-card border-y border-border">
+      <section id="story" className="py-14 md:py-20 px-5 md:px-6 bg-card border-y border-border scroll-mt-24">
         <div className="container mx-auto max-w-3xl">
           <div className="flex items-start gap-5 mb-8">
             <SectionNumber num="03" />
@@ -547,7 +650,7 @@ const RecruiterScreenGuide = () => {
       </section>
 
       {/* Section 4: Answer Frameworks */}
-      <section className="py-14 md:py-20 px-5 md:px-6 bg-background">
+      <section id="frameworks" className="py-14 md:py-20 px-5 md:px-6 bg-background scroll-mt-24">
         <div className="container mx-auto max-w-3xl">
           <div className="flex items-start gap-5 mb-8">
             <SectionNumber num="04" />
@@ -649,7 +752,7 @@ const RecruiterScreenGuide = () => {
       </section>
 
       {/* Section 5: Tough Questions */}
-      <section className="py-14 md:py-20 px-5 md:px-6 bg-card border-y border-border">
+      <section id="tough" className="py-14 md:py-20 px-5 md:px-6 bg-card border-y border-border scroll-mt-24">
         <div className="container mx-auto max-w-3xl">
           <div className="flex items-start gap-5 mb-8">
             <SectionNumber num="05" />
@@ -707,10 +810,11 @@ const RecruiterScreenGuide = () => {
             </div>
 
             {/* Failure */}
-            <Collapsible title='"Tell me about a time you failed."'>
-              <p className="text-muted-foreground text-sm mt-3 mb-3">This question tests self-awareness and growth. The candidates who stumble either claim they've never failed, or they describe a failure without showing what they learned.</p>
+            <div className="bg-background border border-border rounded-xl p-5 md:p-6">
+              <h3 className="font-heading text-lg text-foreground mb-4">"Tell me about a time you failed."</h3>
+              <p className="text-muted-foreground text-sm mb-3">This question tests self-awareness and growth. The candidates who stumble either claim they've never failed, or they describe a failure without showing what they learned.</p>
               <p className="text-foreground text-sm italic">"In my second year as a team lead, I pushed to launch a feature before we had enough user research. I was confident in my instincts and I wanted to hit our quarterly target. We shipped it, adoption was low, and we spent the next two months reworking it based on feedback we should have gathered upfront. The delay cost us more time than the research would have. Since then, I build a minimum research checkpoint into every feature plan before anything goes into development. We've shipped four major features since then. All four hit adoption targets within the first month."</p>
-            </Collapsible>
+            </div>
 
             {/* Five years */}
             <div className="bg-background border border-border rounded-xl p-5 md:p-6">
@@ -741,7 +845,7 @@ const RecruiterScreenGuide = () => {
       </section>
 
       {/* Section 6: Salary */}
-      <section className="py-14 md:py-20 px-5 md:px-6 bg-background">
+      <section id="salary" className="py-14 md:py-20 px-5 md:px-6 bg-background scroll-mt-24">
         <div className="container mx-auto max-w-3xl">
           <div className="flex items-start gap-5 mb-8">
             <SectionNumber num="06" />
@@ -820,7 +924,7 @@ const RecruiterScreenGuide = () => {
       </section>
 
       {/* Section 7: Setup & Etiquette */}
-      <section className="py-14 md:py-20 px-5 md:px-6 bg-card border-y border-border">
+      <section id="setup" className="py-14 md:py-20 px-5 md:px-6 bg-card border-y border-border scroll-mt-24">
         <div className="container mx-auto max-w-3xl">
           <div className="flex items-start gap-5 mb-4">
             <SectionNumber num="07" />
@@ -886,7 +990,7 @@ const RecruiterScreenGuide = () => {
       </section>
 
       {/* Section 8: Questions to Ask */}
-      <section className="py-14 md:py-20 px-5 md:px-6 bg-background">
+      <section id="questions" className="py-14 md:py-20 px-5 md:px-6 bg-background scroll-mt-24">
         <div className="container mx-auto max-w-3xl">
           <div className="flex items-start gap-5 mb-8">
             <SectionNumber num="08" />
@@ -933,7 +1037,7 @@ const RecruiterScreenGuide = () => {
       </section>
 
       {/* Section 9: Red Flags */}
-      <section className="py-14 md:py-20 px-5 md:px-6 bg-card border-y border-border">
+      <section id="redflags" className="py-14 md:py-20 px-5 md:px-6 bg-card border-y border-border scroll-mt-24">
         <div className="container mx-auto max-w-3xl">
           <div className="flex items-start gap-5 mb-8">
             <SectionNumber num="09" />
@@ -976,7 +1080,7 @@ const RecruiterScreenGuide = () => {
       </section>
 
       {/* Section 10: Common Mistakes */}
-      <section className="py-14 md:py-20 px-5 md:px-6 bg-background">
+      <section id="mistakes" className="py-14 md:py-20 px-5 md:px-6 bg-background scroll-mt-24">
         <div className="container mx-auto max-w-3xl">
           <div className="flex items-start gap-5 mb-8">
             <SectionNumber num="10" />
@@ -1013,7 +1117,7 @@ const RecruiterScreenGuide = () => {
       </section>
 
       {/* Section 11: After the Call */}
-      <section className="py-14 md:py-20 px-5 md:px-6 bg-card border-y border-border">
+      <section id="after" className="py-14 md:py-20 px-5 md:px-6 bg-card border-y border-border scroll-mt-24">
         <div className="container mx-auto max-w-3xl">
           <div className="flex items-start gap-5 mb-8">
             <SectionNumber num="11" />
@@ -1130,7 +1234,7 @@ const RecruiterScreenGuide = () => {
       </section>
 
       {/* Section 12: By Career Level */}
-      <section className="py-14 md:py-20 px-5 md:px-6 bg-background">
+      <section id="levels" className="py-14 md:py-20 px-5 md:px-6 bg-background scroll-mt-24">
         <div className="container mx-auto max-w-3xl">
           <div className="flex items-start gap-5 mb-8">
             <SectionNumber num="12" />
@@ -1218,7 +1322,7 @@ const RecruiterScreenGuide = () => {
       </section>
 
       {/* Quick Reference Cheat Sheet */}
-      <section className="py-14 md:py-20 px-5 md:px-6 bg-card border-y border-border">
+      <section id="cheatsheet" className="py-14 md:py-20 px-5 md:px-6 bg-card border-y border-border scroll-mt-24">
         <div className="container mx-auto max-w-3xl">
           <div className="flex items-start gap-5 mb-10">
             <span className="text-gold/30 font-heading text-6xl md:text-7xl font-bold leading-none select-none">★</span>
