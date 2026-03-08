@@ -450,8 +450,8 @@ export function DocumentDashboard({ onOpenDocument, onImport }: DocumentDashboar
               <div className="w-20 h-20 mx-auto mb-4 rounded-full flex items-center justify-center" style={{ backgroundColor: BRAND.greenLight }}>
                 <FileText className="w-10 h-10" style={{ color: BRAND.green }} />
               </div>
-              <p className="text-lg font-semibold mb-1" style={{ color: BRAND.text }}>Create your first resume</p>
-              <p className="text-sm mb-6" style={{ color: BRAND.textSecondary }}>Start from scratch or import an existing CV</p>
+              <p className="text-lg font-semibold mb-1" style={{ color: BRAND.text }}>{t("createYourFirstResume")}</p>
+              <p className="text-sm mb-6" style={{ color: BRAND.textSecondary }}>{t("startFromScratch")}</p>
               <div className="flex items-center justify-center gap-3">
                 <button
                   onClick={() => handleCreate("resume")}
