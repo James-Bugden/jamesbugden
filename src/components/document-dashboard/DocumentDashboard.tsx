@@ -476,8 +476,8 @@ export function DocumentDashboard({ onOpenDocument, onImport }: DocumentDashboar
               <div className="w-20 h-20 mx-auto mb-4 rounded-full flex items-center justify-center" style={{ backgroundColor: BRAND.greenLight }}>
                 <Mail className="w-10 h-10" style={{ color: BRAND.green }} />
               </div>
-              <p className="text-lg font-semibold mb-1" style={{ color: BRAND.text }}>No cover letters yet</p>
-              <p className="text-sm" style={{ color: BRAND.textSecondary }}>Create your first cover letter to get started</p>
+              <p className="text-lg font-semibold mb-1" style={{ color: BRAND.text }}>{t("noCoverLettersYet")}</p>
+              <p className="text-sm" style={{ color: BRAND.textSecondary }}>{t("createFirstCoverLetter")}</p>
             </div>
           )}
         </div>
