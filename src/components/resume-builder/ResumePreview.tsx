@@ -233,7 +233,7 @@ function renderSectionEntries(section: ResumeSection, customize?: CustomizeSetti
     if (!items.length) return null;
 
     const layout = c?.skillsDisplay || section.layout || "bubble";
-    const sep = section.separator || "bullet";
+    const sep = c?.skillsSeparator || section.separator || "bullet";
     const subStyle = section.subtitleStyle || "dash";
 
     const formatItem = (item: string) => {
