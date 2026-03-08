@@ -126,18 +126,18 @@ export async function exportToPdf({ elementId, fileName, pageFormat = "a4" }: Ex
       ctx.fillRect(0, 0, pageCanvas.width, pageCanvas.height);
 
       // Source: slice from the full canvas
-      // Page 0: content starts at marginYPX (the A4Page's own padding)
-      // Page N: content starts at marginYPX + N * usableHeightPX
-      const srcY = canvasMarginYScaled + canvasHeaderReserveScaled + i * canvasUsableHeightScaled;
+      // Page 0: content starts at paddingTop (which includes header safe zone)
+      // Page N: content starts at paddingTop + N * usableHeight
+      const srcY = canvasPaddingTopScaled + i * canvasUsableHeightScaled;
       const srcHeight = Math.min(canvasUsableHeightScaled, fullCanvas.height - srcY);
 
       if (srcHeight > 0) {
-        // Draw the content slice into the page canvas with top margin
+        // Draw the content slice into the page canvas with top padding
         ctx.drawImage(
           fullCanvas,
           0, srcY,                          // source x, y
           canvasPageWidthScaled, srcHeight,  // source w, h
-          0, canvasMarginYScaled + canvasHeaderReserveScaled, // dest x, y (with top margin + header reserve)
+          0, canvasPaddingTopScaled,         // dest x, y (with top padding)
           canvasPageWidthScaled, srcHeight   // dest w, h
         );
       }
