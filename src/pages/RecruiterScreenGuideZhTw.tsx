@@ -962,7 +962,7 @@ const RecruiterScreenGuideZhTw = () => {
       </section>
 
       {/* Section 9: Red Flags */}
-      <section className="py-14 md:py-20 px-5 md:px-6 bg-card border-y border-border">
+      <section id="redflags" className="py-14 md:py-20 px-5 md:px-6 bg-card border-y border-border scroll-mt-24">
         <div className="container mx-auto max-w-3xl">
           <div className="flex items-start gap-5 mb-8">
             <SectionNumber num="09" />
