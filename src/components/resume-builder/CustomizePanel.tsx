@@ -19,7 +19,7 @@ import {
   PAGE_FORMAT_OPTIONS,
 } from "./customizeTypes";
 import { ResumeData } from "./types";
-latePreset, TEMPLATE_LIST } from "./templatePresets";
+import { applyTemplatePreset, TEMPLATE_LIST } from "./templatePresets";
 import { ResumeThumbnail } from "./ResumeThumbnail";
 import { DEFAULT_CUSTOMIZE } from "./customizeTypes";
 
