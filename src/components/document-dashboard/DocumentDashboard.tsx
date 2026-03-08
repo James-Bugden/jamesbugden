@@ -308,7 +308,7 @@ export function DocumentDashboard({ onOpenDocument, onImport }: DocumentDashboar
       </div>
       <div className="px-3 py-2.5">
         <p className="text-[13px] font-semibold truncate" style={{ color: BRAND.text }}>{doc.name}</p>
-        <p className="text-[11px] mt-0.5" style={{ color: BRAND.textSecondary }}>edited {formatDate(doc.updatedAt)}</p>
+        <p className="text-[11px] mt-0.5" style={{ color: BRAND.textSecondary }}>{t("edited")} {formatDate(doc.updatedAt)}</p>
       </div>
     </div>
   );
