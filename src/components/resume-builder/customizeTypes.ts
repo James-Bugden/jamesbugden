@@ -102,7 +102,7 @@ export const DEFAULT_CUSTOMIZE: CustomizeSettings = {
   language: "en-GB",
   dateFormat: "MMM YYYY",
   pageFormat: "a4",
-  template: "modern",
+  template: "classic",
 
   columns: "one",
   columnRatio: 4,
