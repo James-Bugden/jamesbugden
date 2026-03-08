@@ -35,6 +35,7 @@ export interface CustomizeSettings {
   subtitleColor: string;
   linkIconColor: string;
   a4Background: string;
+  bodyColor: string;
 
   // Section Headings
   headingStyle: HeadingStyle;
