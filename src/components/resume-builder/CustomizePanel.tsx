@@ -227,9 +227,9 @@ export function CustomizePanel({ settings, onChange, sections, resumeData }: Cus
 
 /* ── BASICS ─────────────────────────────────────────────────── */
 function BasicsTab({ settings, onChange, resumeData }: { settings: CustomizeSettings; onChange: (u: Partial<CustomizeSettings>) => void; resumeData?: ResumeData }) {
-  const [galleryOpen, setGalleryOpen] = useState(false);
 
-  cons const newSettings = applyTemplatePreset(settings, templateId);
+  const handleTemplateSelect = (templateId: string) => {
+    const newSettings = applyTemplatePreset(settings, templateId);
     onChange(newSettings);
   };
 
