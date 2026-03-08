@@ -746,10 +746,11 @@ const RecruiterScreenGuideZhTw = () => {
               </div>
             </div>
 
-            <Collapsible title="「請告訴我一次你失敗的經驗。」">
-              <p className="text-muted-foreground text-sm mt-3 mb-3">這個問題在測試自我覺察和成長。表現不好的求職者要嘛聲稱自己從未失敗過，要嘛描述了一次失敗但沒有展示學到了什麼。</p>
+            <div className="bg-background border border-border rounded-xl p-5 md:p-6">
+              <h3 className="font-heading text-lg text-foreground mb-4">「請告訴我一次你失敗的經驗。」</h3>
+              <p className="text-muted-foreground text-sm mb-3">這個問題在測試自我覺察和成長。表現不好的求職者要嘛聲稱自己從未失敗過，要嘛描述了一次失敗但沒有展示學到了什麼。</p>
               <p className="text-foreground text-sm italic">「在我擔任團隊主管的第二年，我推動在用戶研究不夠充分的情況下發佈一個功能。我對自己的直覺很有信心，而且我想要達到季度目標。我們上線了，但採用率很低，接下來兩個月我們都在根據本來應該提前蒐集的回饋重新修改。延遲造成的時間成本比做研究還多。從那以後，我在每個功能計畫進入開發前都設立了最低限度的研究檢查點。我們之後發佈了四個重要功能。四個都在第一個月達到了採用目標。」</p>
-            </Collapsible>
+            </div>
 
             <Collapsible title="「你五年後的規劃是什麼？」">
               <p className="text-muted-foreground text-sm mt-3 mb-3">我不是在找一個詳細的職涯規劃。我在找的是合理的企圖心，與這個職缺相符，並且顯示你會留得夠久來產生影響。</p>
