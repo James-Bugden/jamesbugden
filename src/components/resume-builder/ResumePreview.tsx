@@ -689,13 +689,21 @@ export const A4Page = React.memo(function A4Page({
   const orderedSections = useMemo(() => normalizeSectionOrder(safe.sections, c), [safe.sections, c]);
   const enabledSections = orderedSections;
 
+  const headerSafeMM = HEADER_SAFE_MM;
+  const footerSafeMM = FOOTER_SAFE_MM;
+  const marginYMM = c?.marginY ?? 16;
+  const topPadMM = marginYMM + headerSafeMM;
+  const bottomPadMM = marginYMM + footerSafeMM;
+
   const cssVars = useMemo(
     () =>
       ({
         "--resume-font-size": `${c?.fontSize ?? 11}pt`,
         "--resume-line-height": `${c?.lineHeight ?? 1.5}`,
         "--resume-margin-x": `${c?.marginX ?? 16}mm`,
-        "--resume-margin-y": `${c?.marginY ?? 16}mm`,
+        "--resume-margin-y": `${marginYMM}mm`,
+        "--resume-pad-top": `${topPadMM}mm`,
+        "--resume-pad-bottom": `${bottomPadMM}mm`,
         "--resume-section-spacing": `${c?.sectionSpacing ?? 5}mm`,
         "--resume-accent": c?.accentColor ?? "#1e293b",
         "--resume-name": c?.nameColor ?? "#111827",
@@ -705,7 +713,7 @@ export const A4Page = React.memo(function A4Page({
         "--resume-subtitle": c?.subtitleColor ?? "#6B7280",
         "--resume-body": "#374151",
       }) as React.CSSProperties,
-    [c]
+    [c, topPadMM, bottomPadMM, marginYMM]
   );
 
   const headerIconStyle = c?.headerIconStyle || "none";
