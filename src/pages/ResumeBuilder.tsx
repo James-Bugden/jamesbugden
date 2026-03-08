@@ -789,7 +789,7 @@ const ResumeBuilder = () => {
               onClick={() => { setEditingName(true); setNameValue(currentDocName); }}
               className="text-sm font-medium transition-colors truncate max-w-[160px] hover:opacity-70"
               style={{ color: BRAND.text }}
-              title="Click to rename"
+              title={t("clickToRename")}
             >
               {currentDocName}
             </button>
