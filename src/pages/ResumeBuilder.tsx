@@ -588,7 +588,7 @@ const ResumeBuilder = () => {
     if (doc.type === "resume") {
       pushHistory();
       store.setData(doc.data as any);
-      toast({ title: "Content imported", description: "Your resume content has been replaced with the imported data." });
+      toast({ title: t("contentImported"), description: t("contentImportedDesc") });
     }
     setEditorImportOpen(false);
   }, [store, pushHistory]);
