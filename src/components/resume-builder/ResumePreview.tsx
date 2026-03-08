@@ -1170,6 +1170,11 @@ export const ResumePreview = React.memo(function ResumePreview({
     };
   }, [data, customize, dims.hPX, marginYPX, headerReservePX, footerReservePX, usablePerPage, contentOriginPX]);
 
+  // Reset whitespace warning when content or settings change
+  useEffect(() => {
+    whitespaceWarningShown.current = false;
+  }, [data, customize]);
+
   /* ── Apply pagination mutations to visible pages ── */
   useEffect(() => {
     const muts = mutationsRef.current;
