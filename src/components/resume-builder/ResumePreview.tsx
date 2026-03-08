@@ -1147,6 +1147,7 @@ export const ResumePreview = React.memo(function ResumePreview({
 
         paginationGenRef.current += 1;
         mutationsRef.current = { ...muts, gen: paginationGenRef.current };
+        setMutationVersion(v => v + 1);
 
         const totalH = root.scrollHeight - contentOriginPX - (marginYPX + footerReservePX);
         const rawPages = totalH / usablePerPage;
