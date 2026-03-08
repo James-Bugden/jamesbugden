@@ -309,6 +309,7 @@ function BrandingFooter() {
 function DownloadDropdown({ downloading, pageFormat, docName, onDownload }: {
   downloading: boolean; pageFormat: string; docName: string; onDownload: (filename: string) => void;
 }) {
+  const t = useT();
   const [open, setOpen] = useState(false);
   const [filename, setFilename] = useState("");
   const ref = useRef<HTMLDivElement>(null);
@@ -338,14 +339,14 @@ function DownloadDropdown({ downloading, pageFormat, docName, onDownload }: {
         disabled={downloading}
       >
         {downloading ? <Loader2 className="w-4 h-4 animate-spin" /> : <Download className="w-4 h-4" />}
-        {downloading ? "Generating..." : "Download"}
+        {downloading ? t("generating") : t("download")}
       </Button>
 
       {open && !downloading && (
         <div className="absolute right-0 top-full mt-2 bg-white rounded-xl shadow-xl border z-30 w-[280px] p-4 animate-scale-in" style={{ borderColor: BRAND.border }}>
           <div className="space-y-3">
             <div>
-              <label className="block text-xs font-semibold mb-1" style={{ color: BRAND.textSecondary }}>Filename</label>
+              <label className="block text-xs font-semibold mb-1" style={{ color: BRAND.textSecondary }}>{t("filename")}</label>
               <div className="flex items-center">
                 <input
                   type="text"
@@ -358,9 +359,9 @@ function DownloadDropdown({ downloading, pageFormat, docName, onDownload }: {
               </div>
             </div>
             <div className="flex items-center justify-between py-2 px-3 bg-gray-50 rounded-lg">
-              <span className="text-xs font-medium" style={{ color: BRAND.textSecondary }}>Paper size</span>
+              <span className="text-xs font-medium" style={{ color: BRAND.textSecondary }}>{t("paperSize")}</span>
               <span className="text-xs font-semibold" style={{ color: BRAND.text }}>
-                {pageFormat === "letter" ? "US Letter" : "A4"}
+                {pageFormat === "letter" ? t("usLetter") : "A4"}
               </span>
             </div>
             <div className="text-[10px] text-center" style={{ color: BRAND.textSecondary }}>⌘S to save · ⌘P to download</div>
@@ -372,7 +373,7 @@ function DownloadDropdown({ downloading, pageFormat, docName, onDownload }: {
               onClick={() => { setOpen(false); onDownload(filename); }}
             >
               <Download className="w-4 h-4 mr-2" />
-              Download PDF
+              {t("downloadPdf")}
             </Button>
           </div>
         </div>
