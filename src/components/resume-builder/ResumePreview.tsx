@@ -424,6 +424,8 @@ function renderSectionEntries(section: ResumeSection, customize?: CustomizeSetti
           <HtmlBlock
             key={entry.id}
             html={entry.fields.description}
+            sectionId={section.id}
+            entryId={entry.id}
             className="[&_p]:mb-[1mm] [&_ul]:list-disc [&_ul]:pl-[5mm] [&_ol]:list-decimal [&_ol]:pl-[5mm]"
           />
         ))}
