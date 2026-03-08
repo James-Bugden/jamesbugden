@@ -56,6 +56,7 @@ const ResumeQuickReference = lazy(() => import("./pages/ResumeQuickReference"));
 const ResumeQuickReferenceZhTw = lazy(() => import("./pages/ResumeQuickReferenceZhTw"));
 const ResumeAnalyzer = lazy(() => import("./pages/ResumeAnalyzer"));
 const ResumeBuilder = lazy(() => import("./pages/ResumeBuilder"));
+const ResumeBuilderZhTw = lazy(() => import("./pages/ResumeBuilderZhTw"));
 const JobTracker = lazy(() => import("./pages/JobTracker"));
 const TrackerPage = lazy(() => import("./pages/TrackerPage"));
 const Login = lazy(() => import("./pages/Login"));
