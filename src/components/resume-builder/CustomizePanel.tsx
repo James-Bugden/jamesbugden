@@ -19,7 +19,7 @@ import {
   PAGE_FORMAT_OPTIONS,
 } from "./customizeTypes";
 import { ResumeData } from "./types";
-import { TemplateGalleryModal } from "./TemplateGalleryModal";
+
 import { FontPicker } from "./FontPicker";
 import { applyTemplatePreset, TEMPLATE_LIST } from "./templatePresets";
 import { ResumeThumbnail } from "./ResumeThumbnail";
