@@ -160,7 +160,7 @@ function SectionHeading({ title, customize, baseFontSize }: { title: string; cus
 
   if (style === "full-underline") {
     return (
-      <h2 data-color-role="headings" data-color-role="headings" className="font-bold mb-[2mm] pb-[1mm] border-b-[0.5mm]" style={{ ...textStyle, borderColor: "var(--resume-accent)" }}>
+      <h2 data-color-role="headings" data-color-role="headings" data-color-role="headings" className="font-bold mb-[2mm] pb-[1mm] border-b-[0.5mm]" style={{ ...textStyle, borderColor: "var(--resume-accent)" }}>
         {title}
       </h2>
     );
@@ -177,7 +177,7 @@ function SectionHeading({ title, customize, baseFontSize }: { title: string; cus
 
   if (style === "background") {
     return (
-      <div className="mb-[2mm]">
+      <div classNadata-color-role="headings" me="mb-[2mm]">
         <h2 className="font-bold px-[2mm] py-[1mm] rounded-[0.5mm]" style={{ ...textStyle, backgroundColor: "var(--resume-accent)" }}>
           {title}
         </h2>
