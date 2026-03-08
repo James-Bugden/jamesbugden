@@ -1146,7 +1146,22 @@ export const ResumePreview = React.memo(function ResumePreview({
 
         const totalH = root.scrollHeight - contentOriginPX - (marginYPX + footerReservePX);
         const rawPages = totalH / usablePerPage;
-        const pages = Math.max(1, rawPages <= 1.02 ? 1 : Math.ceil(rawPages));
+        let pages = Math.max(1, rawPages <= 1.02 ? 1 : Math.ceil(rawPages));
+
+        // Trim trailing empty pages: check if last page has any real content
+        if (pages >= 2) {
+          const rootRect = root.getBoundingClientRect();
+          const allItems = root.querySelectorAll('[data-page-item]');
+          let lastContentBottom = 0;
+          allItems.forEach(el => {
+            if (el.querySelector('[data-page-item]')) return; // skip containers
+            const rect = el.getBoundingClientRect();
+            const elBottom = rect.top - rootRect.top - contentOriginPX + rect.height;
+            if (rect.height > 0) lastContentBottom = Math.max(lastContentBottom, elBottom);
+          });
+          const neededPages = Math.max(1, lastContentBottom <= usablePerPage * 1.02 ? 1 : Math.ceil(lastContentBottom / usablePerPage));
+          pages = Math.min(pages, neededPages);
+        }
         setPageCount(pages);
 
         // Whitespace detection

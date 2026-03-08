@@ -1,36 +1,48 @@
 
 
-## Fix: Whitespace flicker between sections on text/color/bold changes
+## Resume Builder Feature Improvements
 
-### Root Cause
+### Priority 1: AI "Tailor to Job Description" Panel
+- Add a new tab or panel in the "AI Tools" section (which currently shows "Coming soon")
+- User pastes a job description → edge function analyzes keyword overlap with current resume
+- Returns: missing keywords, suggested bullet point rewrites, match percentage
+- Reuses existing `resume-ai` edge function with a new `action: "tailor"` mode
+- UI: Split panel with JD on left, suggestions on right, one-click "Apply" buttons
 
-When `data` or `customize` changes (from formatting, color picks, text edits), two effects fire:
+### Priority 2: Resume Completeness Score Widget
+- Floating widget in the editor sidebar showing real-time completion percentage
+- Scoring rules: has summary (+10), has 2+ experience entries (+20), all entries have descriptions (+15), dates filled (+10), contact info complete (+15), skills section exists (+10), quantified achievements detected (+20)
+- Visual: circular progress ring with percentage, expandable checklist of what's missing
+- Lives above the "Add Content" button in the Content tab
 
-1. **Pagination effect** (line 1060): Immediately resets all `marginTop` to `''` on the hidden flow, then recalculates after a **double-rAF** delay (~32ms)
-2. **Visible-page apply effect** (line 1179): Also resets all `marginTop` to `''` on visible pages before reapplying mutations — but runs with the **stale** `mutationsRef.current` during the gap before pagination finishes
+### Priority 3: Populate the "AI Tools" Tab
+- Currently renders "AI Tools — Coming soon" placeholder
+- Build out with: "Tailor to Job" (above), "Generate Summary from Experience", "Suggest Skills", "Optimize Bullet Points (batch)"
+- Each tool card shows a description, input area, and results
 
-This creates a visible flash: sections collapse together (margins removed) → wait ~32ms → new margins applied. Users see sections jumping/whitespace appearing.
+### Priority 4: Real-time Word Count per Section
+- Add a small `<span>` below each `RichTextEditor` showing word count and bullet point count
+- Highlight in amber if too long (>150 words per entry) or too short (<20 words)
+- Lightweight: computed from the editor's text content on each change
 
-### Fix
+### Priority 5: Click-to-Edit on Preview (Inline Editing)
+- When user clicks text on the A4 preview, show a floating input/textarea positioned over the clicked element
+- On blur/enter, update the corresponding field in the data model
+- Start with simple fields only: job title, company name, degree, institution
+- More complex than other items; implement after the above
 
-**1. Don't reset visible-page margins until new mutations are ready.** Remove the eager reset in the apply-mutations effect. Instead, only apply once pagination has actually completed by gating on a render cycle counter.
+### Files to Edit
+- `src/pages/ResumeBuilder.tsx` — Add completeness widget, wire AI Tools tab
+- `src/components/resume-builder/ResumeTopNav.tsx` — No changes needed
+- `src/components/resume-builder/RichTextEditor.tsx` — Add word count display
+- `supabase/functions/resume-ai/index.ts` — Add `tailor` action for JD matching
+- New: `src/components/resume-builder/CompletenessScore.tsx` — Score widget component
+- New: `src/components/resume-builder/AiToolsPanel.tsx` — Full AI tools tab content
+- New: `src/components/resume-builder/TailorToJob.tsx` — JD tailoring panel
 
-**2. Keep old mutations applied until new ones replace them.** Instead of clearing `marginTop` to `''` then re-setting, directly overwrite with new values.
-
-**3. Add a pagination-generation counter** to prevent the visible-page effect from using stale mutations.
-
-### Files to modify
-
-**`src/components/resume-builder/ResumePreview.tsx`**:
-
-- Add a `paginationGenRef` (number ref, increments each pagination pass)
-- In the pagination effect (line 1060), increment the gen counter after computing mutations
-- Store gen alongside mutations: `mutationsRef.current = { gen, items, children }`
-- In the visible-page apply effect (line 1179):
-  - Remove the blanket `marginTop = ''` reset (lines 1187-1189)
-  - Instead, iterate all items and set margin to `muts.items[idx] || 0` — this overwrites with 0 instead of removing, preventing layout shift
-  - Track last-applied gen to skip redundant applies
-- Remove the redundant `data-page-break-child` cleanup reset on the hidden flow — it's already handled by the per-item reset
-
-This eliminates the two-frame gap where margins are cleared but not yet recalculated, preventing the visible whitespace flicker.
+### Implementation Order
+1. Completeness score widget (standalone, no backend needed)
+2. Word count on RichTextEditor (small change)
+3. AI Tools tab with Tailor to Job (needs edge function update)
+4. Click-to-edit on preview (complex, last)
 
