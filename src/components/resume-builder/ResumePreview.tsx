@@ -1064,11 +1064,21 @@ export const ResumePreview = React.memo(function ResumePreview({
                   position: "relative",
                 }}
               >
+                {/* Content viewport: clips to exactly usablePerPage to prevent overlap */}
                 <div style={{
+                  position: "absolute",
+                  top: `${marginYPX + headerReservePX}px`,
+                  left: 0,
                   width: `${dims.wPX}px`,
-                  transform: `translateY(${headerReservePX - i * usablePerPage}px)`,
+                  height: `${usablePerPage}px`,
+                  overflow: "hidden",
                 }}>
-                  <A4Page data={data} customize={customize} onEditSection={onEditSection} />
+                  <div style={{
+                    width: `${dims.wPX}px`,
+                    transform: `translateY(${-(marginYPX + headerReservePX + i * usablePerPage)}px)`,
+                  }}>
+                    <A4Page data={data} customize={customize} onEditSection={onEditSection} />
+                  </div>
                 </div>
 
                 {/* Per-page footer */}
