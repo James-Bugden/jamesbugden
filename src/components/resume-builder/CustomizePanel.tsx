@@ -724,29 +724,16 @@ function SectionsTab({ settings, onChange, sections }: { settings: CustomizeSett
       {/* Skills */}
       <SettingCard title="Skills">
         {hasSkills ? (
-          <>
             <SegmentedControl
               options={[
-                { value: "grid", label: "Grid" },
-                { value: "compact", label: "Compact" },
-                { value: "bubble", label: "Bubble" },
+                { value: "bullet", label: "• Bullet" },
+                { value: "pipe", label: "| Pipe" },
+                { value: "newline", label: "New Line" },
+                { value: "none", label: "None" },
               ]}
-              value={settings.skillsDisplay || "grid"}
-              onChange={(v) => onChange({ skillsDisplay: v as any })}
+              value={settings.skillsSeparator || "bullet"}
+              onChange={(v) => onChange({ skillsSeparator: v as any })}
             />
-            <div className="mt-3">
-              <SegmentedControl
-                options={[
-                  { value: "bullet", label: "• Bullet" },
-                  { value: "pipe", label: "| Pipe" },
-                  { value: "newline", label: "New Line" },
-                  { value: "none", label: "None" },
-                ]}
-                value={settings.skillsSeparator || "bullet"}
-                onChange={(v) => onChange({ skillsSeparator: v as any })}
-              />
-            </div>
-          </>
         ) : (
           <p className="text-xs" style={{ color: B.textSec }}>Add a Skills section first</p>
         )}
