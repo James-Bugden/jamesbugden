@@ -708,10 +708,11 @@ const RecruiterScreenGuide = () => {
             </div>
 
             {/* Failure */}
-            <Collapsible title='"Tell me about a time you failed."'>
-              <p className="text-muted-foreground text-sm mt-3 mb-3">This question tests self-awareness and growth. The candidates who stumble either claim they've never failed, or they describe a failure without showing what they learned.</p>
+            <div className="bg-background border border-border rounded-xl p-5 md:p-6">
+              <h3 className="font-heading text-lg text-foreground mb-4">"Tell me about a time you failed."</h3>
+              <p className="text-muted-foreground text-sm mb-3">This question tests self-awareness and growth. The candidates who stumble either claim they've never failed, or they describe a failure without showing what they learned.</p>
               <p className="text-foreground text-sm italic">"In my second year as a team lead, I pushed to launch a feature before we had enough user research. I was confident in my instincts and I wanted to hit our quarterly target. We shipped it, adoption was low, and we spent the next two months reworking it based on feedback we should have gathered upfront. The delay cost us more time than the research would have. Since then, I build a minimum research checkpoint into every feature plan before anything goes into development. We've shipped four major features since then. All four hit adoption targets within the first month."</p>
-            </Collapsible>
+            </div>
 
             {/* Five years */}
             <div className="bg-background border border-border rounded-xl p-5 md:p-6">
