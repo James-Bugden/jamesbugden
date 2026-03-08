@@ -974,6 +974,31 @@ function getColorForRole(role: string, customize?: CustomizeSettings): string {
   return (customize as any)[field] ?? "#000000";
 }
 
+/* ── Atomic block traversal for pagination ──────────────── */
+const PAGINATION_BLOCK_TAGS = new Set(['li', 'p', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'blockquote', 'pre', 'tr']);
+
+function getAtomicBlocks(parent: Element): HTMLElement[] {
+  const blocks: HTMLElement[] = [];
+  function walk(node: Element) {
+    for (let i = 0; i < node.children.length; i++) {
+      const child = node.children[i] as HTMLElement;
+      if (child.hasAttribute('data-page-item')) continue;
+      if (PAGINATION_BLOCK_TAGS.has(child.tagName.toLowerCase())) {
+        blocks.push(child);
+      } else {
+        walk(child);
+      }
+    }
+  }
+  walk(parent);
+  return blocks;
+}
+
+interface PaginationMutations {
+  items: number[];
+  children: Map<number, { idx: number; mt: number }[]>;
+}
+
 export const ResumePreview = React.memo(function ResumePreview({
   data,
   customize,
@@ -983,13 +1008,14 @@ export const ResumePreview = React.memo(function ResumePreview({
 }: ResumePreviewProps) {
   const containerRef = useRef<HTMLDivElement>(null);
   const hiddenFlowRef = useRef<HTMLDivElement>(null);
+  const visiblePageRefs = useRef<(HTMLDivElement | null)[]>([]);
+  const mutationsRef = useRef<PaginationMutations | null>(null);
 
   const [autoScale, setAutoScale] = useState(0.65);
   const [zoomOffset, setZoomOffset] = useState(0);
   const [pageCount, setPageCount] = useState(1);
   const [currentPage, setCurrentPage] = useState(1);
 
-  // Inline color toolbar state
   const [colorTarget, setColorTarget] = useState<{ rect: DOMRect; role: string } | null>(null);
   const isMobile = useIsMobile();
 
@@ -1013,15 +1039,17 @@ export const ResumePreview = React.memo(function ResumePreview({
   }, [dims.wPX]);
 
   const marginYPX = (customize?.marginY ?? 16) * PX_PER_MM;
-  
   const headerReservePX = HEADER_SAFE_MM * PX_PER_MM;
   const footerReservePX = FOOTER_SAFE_MM * PX_PER_MM;
   const usablePerPage = dims.hPX - 2 * marginYPX - headerReservePX - footerReservePX;
+  const contentOriginPX = marginYPX + headerReservePX;
 
+  /* ── Pagination: measure hidden flow, collect mutations ── */
   useEffect(() => {
     const root = hiddenFlowRef.current;
     if (!root) return;
 
+    // Reset all previous mutations
     root.querySelectorAll('[data-page-item]').forEach(el => {
       (el as HTMLElement).style.marginTop = '';
     });
@@ -1034,56 +1062,74 @@ export const ResumePreview = React.memo(function ResumePreview({
     let raf2: number;
     raf1 = requestAnimationFrame(() => {
       raf2 = requestAnimationFrame(() => {
-        const items = root.querySelectorAll('[data-page-item]');
-        const rootRect = root.getBoundingClientRect();
-
-        const contentOriginPX = marginYPX + headerReservePX;
-
         const BOUNDARY_TOLERANCE = 4;
 
-        const runPass = () => {
-          const freshRootRect = root.getBoundingClientRect();
-          const freshItems = root.querySelectorAll('[data-page-item]');
+        const runPass = (): boolean => {
+          let changed = false;
+          const rootRect = root.getBoundingClientRect();
+          const items = root.querySelectorAll('[data-page-item]');
 
-          freshItems.forEach(el => {
+          items.forEach(el => {
             const rect = el.getBoundingClientRect();
-            const elTop = rect.top - freshRootRect.top - contentOriginPX;
+            const elTop = rect.top - rootRect.top - contentOriginPX;
             const elBottom = elTop + rect.height;
+            const pageIdx = Math.floor(Math.max(0, elTop) / usablePerPage);
+            const pageBottom = (pageIdx + 1) * usablePerPage;
 
-            const pageIndex = Math.floor(Math.max(0, elTop) / usablePerPage);
-            const pageBottom = (pageIndex + 1) * usablePerPage;
-
-            if (elTop < pageBottom && elBottom > pageBottom + BOUNDARY_TOLERANCE) {
+            if (elTop < pageBottom && elBottom >= pageBottom + BOUNDARY_TOLERANCE) {
               if (rect.height < usablePerPage * 0.8) {
-                // Whole entry fits on a single page — push it entirely
                 const push = pageBottom - elTop + 1;
-                (el as HTMLElement).style.marginTop = `${push}px`;
+                const existing = parseFloat((el as HTMLElement).style.marginTop) || 0;
+                (el as HTMLElement).style.marginTop = `${existing + push}px`;
+                changed = true;
               } else {
-                // Large entry — push individual children that straddle the boundary
-                const children = el.querySelectorAll('p, li, div:not([data-page-item]), h2, h3, h4, span.flex');
-                children.forEach(child => {
+                // Large entry — deep child traversal
+                const children = getAtomicBlocks(el);
+                for (const child of children) {
                   const cr = child.getBoundingClientRect();
-                  const childTop = cr.top - freshRootRect.top - contentOriginPX;
-                  const childBottom = childTop + cr.height;
-                  const childPageIndex = Math.floor(Math.max(0, childTop) / usablePerPage);
-                  const childPageBottom = (childPageIndex + 1) * usablePerPage;
+                  const cTop = cr.top - rootRect.top - contentOriginPX;
+                  const cBottom = cTop + cr.height;
+                  const cPageIdx = Math.floor(Math.max(0, cTop) / usablePerPage);
+                  const cPageBottom = (cPageIdx + 1) * usablePerPage;
 
-                  if (childTop < childPageBottom && childBottom > childPageBottom + BOUNDARY_TOLERANCE && cr.height < usablePerPage * 0.5) {
-                    const push = childPageBottom - childTop + 1;
-                    (child as HTMLElement).style.marginTop = `${push}px`;
-                    (child as HTMLElement).setAttribute('data-page-break-child', 'true');
+                  if (cTop < cPageBottom && cBottom >= cPageBottom + BOUNDARY_TOLERANCE && cr.height < usablePerPage * 0.5) {
+                    const push = cPageBottom - cTop + 1;
+                    const existing = parseFloat(child.style.marginTop) || 0;
+                    child.style.marginTop = `${existing + push}px`;
+                    child.setAttribute('data-page-break-child', 'true');
+                    changed = true;
                   }
-                });
+                }
               }
             }
           });
+
+          return changed;
         };
 
-        // Two passes to handle cascading breaks
-        runPass();
-        runPass();
+        // Convergence loop — up to 8 passes
+        for (let pass = 0; pass < 8; pass++) {
+          if (!runPass()) break;
+        }
 
-        const totalH = root.scrollHeight - 2 * marginYPX - headerReservePX - footerReservePX;
+        // Collect mutations for replication to visible pages
+        const items = root.querySelectorAll('[data-page-item]');
+        const muts: PaginationMutations = { items: [], children: new Map() };
+
+        items.forEach((el, idx) => {
+          muts.items[idx] = parseFloat((el as HTMLElement).style.marginTop) || 0;
+          const blocks = getAtomicBlocks(el);
+          const childMuts: { idx: number; mt: number }[] = [];
+          blocks.forEach((block, bidx) => {
+            const mt = parseFloat(block.style.marginTop) || 0;
+            if (mt) childMuts.push({ idx: bidx, mt });
+          });
+          if (childMuts.length) muts.children.set(idx, childMuts);
+        });
+
+        mutationsRef.current = muts;
+
+        const totalH = root.scrollHeight - contentOriginPX - (marginYPX + footerReservePX);
         const rawPages = totalH / usablePerPage;
         setPageCount(Math.max(1, rawPages <= 1.02 ? 1 : Math.ceil(rawPages)));
       });
@@ -1093,7 +1139,44 @@ export const ResumePreview = React.memo(function ResumePreview({
       cancelAnimationFrame(raf1);
       cancelAnimationFrame(raf2);
     };
-  }, [data, customize, dims.hPX, marginYPX, headerReservePX, footerReservePX, usablePerPage]);
+  }, [data, customize, dims.hPX, marginYPX, headerReservePX, footerReservePX, usablePerPage, contentOriginPX]);
+
+  /* ── Apply pagination mutations to visible pages ── */
+  useEffect(() => {
+    const muts = mutationsRef.current;
+    if (!muts) return;
+
+    const raf = requestAnimationFrame(() => {
+      visiblePageRefs.current.forEach(ref => {
+        if (!ref) return;
+
+        // Reset previous mutations on this visible page
+        ref.querySelectorAll('[data-page-item]').forEach(el => {
+          (el as HTMLElement).style.marginTop = '';
+        });
+
+        const items = ref.querySelectorAll('[data-page-item]');
+
+        muts.items.forEach((mt, idx) => {
+          if (items[idx]) {
+            (items[idx] as HTMLElement).style.marginTop = mt ? `${mt}px` : '';
+          }
+        });
+
+        muts.children.forEach((childMuts, parentIdx) => {
+          if (!items[parentIdx]) return;
+          const blocks = getAtomicBlocks(items[parentIdx]);
+          childMuts.forEach(({ idx, mt }) => {
+            if (blocks[idx]) {
+              blocks[idx].style.marginTop = `${mt}px`;
+            }
+          });
+        });
+      });
+    });
+
+    return () => cancelAnimationFrame(raf);
+  }, [pageCount, data, customize]);
 
   useEffect(() => {
     const el = containerRef.current;
@@ -1111,7 +1194,6 @@ export const ResumePreview = React.memo(function ResumePreview({
     return () => el.removeEventListener("scroll", onScroll);
   }, [scale, dims.hPX, pageCount]);
 
-  // Click handler for inline color editing
   const handlePreviewClick = useCallback((e: React.MouseEvent) => {
     if (!onColorChange) return;
     const target = (e.target as HTMLElement).closest('[data-color-role]') as HTMLElement | null;
@@ -1131,7 +1213,6 @@ export const ResumePreview = React.memo(function ResumePreview({
 
   return (
     <div ref={containerRef} className="h-full overflow-y-auto relative" style={{ backgroundColor: "#f3f4f6" }}>
-      {/* Hover CSS for colorable elements */}
       {onColorChange && (
         <style>{`
           @media (hover: hover) {
@@ -1202,10 +1283,13 @@ export const ResumePreview = React.memo(function ResumePreview({
                   height: `${usablePerPage}px`,
                   overflow: "hidden",
                 }}>
-                  <div style={{
-                    width: `${dims.wPX}px`,
-                    transform: `translateY(${-(marginYPX + headerReservePX + i * usablePerPage)}px)`,
-                  }}>
+                  <div
+                    ref={el => { visiblePageRefs.current[i] = el; }}
+                    style={{
+                      width: `${dims.wPX}px`,
+                      transform: `translateY(${-(marginYPX + headerReservePX + i * usablePerPage)}px)`,
+                    }}
+                  >
                     <A4Page data={data} customize={customize} onEditSection={onEditSection} />
                   </div>
                 </div>
@@ -1242,7 +1326,6 @@ export const ResumePreview = React.memo(function ResumePreview({
         </div>
       </div>
 
-      {/* Inline Color Toolbar */}
       {colorTarget && onColorChange && (
         <InlineColorToolbar
           targetRect={colorTarget.rect}
