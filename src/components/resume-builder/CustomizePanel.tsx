@@ -612,23 +612,6 @@ function HeaderTab({ settings, onChange }: { settings: CustomizeSettings; onChan
           ))}
         </div>
 
-        <FieldLabel>Arrangement</FieldLabel>
-        <div className="flex gap-3 mb-5">
-          <ThumbOption selected={settings.headerArrangement === "stacked"} onClick={() => onChange({ headerArrangement: "stacked" })} label="Stacked">
-            <div className="w-12 h-7 flex flex-col gap-0.5 items-center justify-center">
-              <div className="w-7 h-1 bg-gray-400 rounded" />
-              <div className="w-5 h-1 bg-gray-300 rounded" />
-              <div className="w-6 h-1 bg-gray-300 rounded" />
-            </div>
-          </ThumbOption>
-          <ThumbOption selected={settings.headerArrangement === "inline"} onClick={() => onChange({ headerArrangement: "inline" })} label="Inline">
-            <div className="w-12 h-7 flex items-center justify-center gap-0.5">
-              <div className="w-3 h-1.5 bg-gray-500 rounded" />
-              <div className="w-0.5 h-3 bg-gray-300" />
-              <div className="flex flex-col gap-0.5"><div className="w-5 h-1 bg-gray-300 rounded" /><div className="w-4 h-1 bg-gray-300 rounded" /></div>
-            </div>
-          </ThumbOption>
-        </div>
 
         {/* Contact separator */}
         <div className="flex gap-2 mb-5">
