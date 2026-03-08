@@ -107,6 +107,7 @@ function HtmlBlock({ html, className, fontSize }: { html?: string; className?: s
 
   return (
     <div
+      data-color-role="body"
       className={className}
       style={{ fontSize: fontSize || "inherit", lineHeight: 1.5, color: "var(--resume-body)" }}
       dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(html || "") }}
