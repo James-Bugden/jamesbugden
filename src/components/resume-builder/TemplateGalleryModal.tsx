@@ -6,6 +6,7 @@ import { ResumeThumbnail } from "./ResumeThumbnail";
 import { ResumeData, DEFAULT_RESUME_DATA } from "./types";
 import { CustomizeSettings, DEFAULT_CUSTOMIZE } from "./customizeTypes";
 import { toast } from "@/hooks/use-toast";
+import { useT } from "./i18n";
 
 interface TemplateGalleryModalProps {
   open: boolean;
