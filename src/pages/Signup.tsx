@@ -24,11 +24,12 @@ export default function Signup() {
 
   useEffect(() => {
     if (isLoggedIn) {
-      const redirectTo = location.state?.from || sessionStorage.getItem("auth_redirect") || "/";
+      const defaultDash = isZhTw ? "/zh-tw/dashboard" : "/dashboard";
+      const redirectTo = location.state?.from || sessionStorage.getItem("auth_redirect") || defaultDash;
       sessionStorage.removeItem("auth_redirect");
       navigate(redirectTo, { replace: true });
     }
-  }, [isLoggedIn, navigate, location.state]);
+  }, [isLoggedIn, navigate, location.state, isZhTw]);
 
   const handleSignup = async (e: React.FormEvent) => {
     e.preventDefault();
