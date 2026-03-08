@@ -1,8 +1,8 @@
 import { useState, useRef, useCallback } from "react";
-import { ChevronDown, ChevronUp, GripVertical, Trash2, Plus, X, Pencil, Grid3X3, Circle, BarChart3, List } from "lucide-react";
+import { ChevronDown, ChevronUp, GripVertical, Trash2, Plus, X, Pencil, Grid3X3, Circle, List } from "lucide-react";
 import * as Icons from "lucide-react";
 import { Checkbox } from "@/components/ui/checkbox";
-import { ResumeSection, ResumeSectionEntry, SectionLayout, SectionSeparator, LevelIndicator, SubtitleStyle, getDefaultFieldsForType, SECTION_TYPES, PROFICIENCY_LEVELS } from "./types";
+import { ResumeSection, ResumeSectionEntry, SectionLayout, SectionSeparator, SubtitleStyle, getDefaultFieldsForType, SECTION_TYPES, PROFICIENCY_LEVELS } from "./types";
 import { RichTextEditor } from "./RichTextEditor";
 import { MonthYearPicker } from "./MonthYearPicker";
 import { TagInput } from "./TagInput";
@@ -58,7 +58,6 @@ function getEntrySummary(type: string, fields: Record<string, string>): string {
 const LAYOUT_OPTIONS: { value: SectionLayout; label: string; icon: React.ElementType }[] = [
   { value: "grid", label: "Grid", icon: Grid3X3 },
   { value: "bubble", label: "Bubble", icon: Circle },
-  { value: "level", label: "Level", icon: BarChart3 },
   { value: "compact", label: "Compact", icon: List },
 ];
 
@@ -94,11 +93,6 @@ const SEPARATOR_OPTIONS: { value: SectionSeparator; label: string }[] = [
   { value: "newline", label: "New Line" },
 ];
 
-const LEVEL_INDICATOR_OPTIONS: { value: LevelIndicator; label: string }[] = [
-  { value: "bar", label: "Bar" },
-  { value: "dots", label: "Dots" },
-  { value: "text", label: "Text" },
-];
 
 const SUBTITLE_STYLE_OPTIONS: { value: SubtitleStyle; label: string }[] = [
   { value: "dash", label: "Dash —" },
@@ -353,13 +347,10 @@ export function SectionCard({ section, onUpdate, onRemove }: {
             {(section.layout === "compact" || section.layout === "grid") && (
               <PillSwitcher label="Separator" options={SEPARATOR_OPTIONS} value={section.separator || "bullet"} onChange={(s) => onUpdate({ separator: s })} />
             )}
-            {section.layout === "level" && (
-              <PillSwitcher label="Level Indicator" options={LEVEL_INDICATOR_OPTIONS} value={section.levelIndicator || "bar"} onChange={(i) => onUpdate({ levelIndicator: i })} />
-            )}
             <PillSwitcher label="Subtitle Style" options={SUBTITLE_STYLE_OPTIONS} value={section.subtitleStyle || "dash"} onChange={(s) => onUpdate({ subtitleStyle: s })} />
             <div>
               <label className="block text-[11px] font-medium text-gray-500 mb-1">Skills</label>
-              <TagInput value={f.skills || ""} onChange={set("skills")} placeholder="Type a skill and press Enter" showLevel={section.layout === "level"} />
+              <TagInput value={f.skills || ""} onChange={set("skills")} placeholder="Type a skill and press Enter" />
             </div>
           </div>
         );
@@ -378,9 +369,6 @@ export function SectionCard({ section, onUpdate, onRemove }: {
             <PillSwitcher label="Layout" options={LAYOUT_OPTIONS} value={section.layout || "compact"} onChange={(l) => onUpdate({ layout: l })} />
             {(section.layout === "compact" || section.layout === "grid") && (
               <PillSwitcher label="Separator" options={SEPARATOR_OPTIONS} value={section.separator || "bullet"} onChange={(s) => onUpdate({ separator: s })} />
-            )}
-            {section.layout === "level" && (
-              <PillSwitcher label="Level Indicator" options={LEVEL_INDICATOR_OPTIONS} value={section.levelIndicator || "dots"} onChange={(i) => onUpdate({ levelIndicator: i })} />
             )}
             <PillSwitcher label="Subtitle Style" options={SUBTITLE_STYLE_OPTIONS} value={section.subtitleStyle || "dash"} onChange={(s) => onUpdate({ subtitleStyle: s })} />
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
