@@ -126,6 +126,7 @@ export const DEFAULT_CUSTOMIZE: CustomizeSettings = {
   subtitleColor: "#6B7280",
   linkIconColor: "#4B5563",
   a4Background: "#ffffff",
+  bodyColor: "#374151",
 
   headingStyle: "plain",
   headingSize: "m",
