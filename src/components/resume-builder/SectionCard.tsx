@@ -352,13 +352,10 @@ export function SectionCard({ section, onUpdate, onRemove }: {
             {(section.layout === "compact" || section.layout === "grid") && (
               <PillSwitcher label="Separator" options={SEPARATOR_OPTIONS} value={section.separator || "bullet"} onChange={(s) => onUpdate({ separator: s })} />
             )}
-            {section.layout === "level" && (
-              <PillSwitcher label="Level Indicator" options={LEVEL_INDICATOR_OPTIONS} value={section.levelIndicator || "bar"} onChange={(i) => onUpdate({ levelIndicator: i })} />
-            )}
             <PillSwitcher label="Subtitle Style" options={SUBTITLE_STYLE_OPTIONS} value={section.subtitleStyle || "dash"} onChange={(s) => onUpdate({ subtitleStyle: s })} />
             <div>
               <label className="block text-[11px] font-medium text-gray-500 mb-1">Skills</label>
-              <TagInput value={f.skills || ""} onChange={set("skills")} placeholder="Type a skill and press Enter" showLevel={section.layout === "level"} />
+              <TagInput value={f.skills || ""} onChange={set("skills")} placeholder="Type a skill and press Enter" />
             </div>
           </div>
         );
