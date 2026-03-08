@@ -58,7 +58,6 @@ function getEntrySummary(type: string, fields: Record<string, string>): string {
 const LAYOUT_OPTIONS: { value: SectionLayout; label: string; icon: React.ElementType }[] = [
   { value: "grid", label: "Grid", icon: Grid3X3 },
   { value: "bubble", label: "Bubble", icon: Circle },
-  { value: "level", label: "Level", icon: BarChart3 },
   { value: "compact", label: "Compact", icon: List },
 ];
 
