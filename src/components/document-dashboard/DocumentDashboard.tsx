@@ -315,12 +315,12 @@ export function DocumentDashboard({ onOpenDocument, onImport }: DocumentDashboar
 
   /* ── Sidebar ──────────────────────────────────── */
   const sidebarItems: { id: SidebarTab; label: string; icon: React.ReactNode; count?: number }[] = [
-    { id: "resume", label: "Resume", icon: <FileText className="w-[18px] h-[18px]" />, count: resumes.length },
-    { id: "cover_letter", label: "Cover Letter", icon: <Mail className="w-[18px] h-[18px]" />, count: coverLetters.length },
-    { id: "job_tracker", label: "Job Tracker", icon: <Briefcase className="w-[18px] h-[18px]" /> },
+    { id: "resume", label: t("resume"), icon: <FileText className="w-[18px] h-[18px]" />, count: resumes.length },
+    { id: "cover_letter", label: t("coverLetter"), icon: <Mail className="w-[18px] h-[18px]" />, count: coverLetters.length },
+    { id: "job_tracker", label: t("jobTracker"), icon: <Briefcase className="w-[18px] h-[18px]" /> },
   ];
 
-  const mainTitle = activeTab === "resume" ? "My Resumes" : activeTab === "cover_letter" ? "My Cover Letters" : "Job Tracker";
+  const mainTitle = activeTab === "resume" ? t("myResumes") : activeTab === "cover_letter" ? t("myCoverLetters") : t("jobTracker");
 
   return (
     <div className="h-screen flex" style={{ backgroundColor: BRAND.cream }}>
