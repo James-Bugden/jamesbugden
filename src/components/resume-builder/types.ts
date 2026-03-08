@@ -58,7 +58,11 @@ export const EXTRA_DETAIL_OPTIONS = [
 ] as const;
 
 export const PROFICIENCY_LEVELS = [
-  "Native", "Fluent", "Advanced", "Intermediate", "Basic",
+  "Native or bilingual proficiency",
+  "Full professional proficiency",
+  "Professional working proficiency",
+  "Limited working proficiency",
+  "Elementary proficiency",
 ] as const;
 
 export const MONTHS = [
