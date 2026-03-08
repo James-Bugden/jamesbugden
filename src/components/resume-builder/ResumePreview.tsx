@@ -1096,8 +1096,8 @@ export const ResumePreview = React.memo(function ResumePreview({
               // Orphan heading protection: push section headings near page bottom
               const tagName = (el as HTMLElement).tagName?.toLowerCase();
               if (tagName === 'h2' || tagName === 'h3') {
-                const spaceBelow = pageBottom - elBottom;
-                if (spaceBelow < 40) {
+                const spaceRemaining = pageBottom - elTop;
+                if (spaceRemaining < 40) {
                   const push = pageBottom - elTop + 1;
                   const existing = parseFloat((el as HTMLElement).style.marginTop) || 0;
                   (el as HTMLElement).style.marginTop = `${existing + push}px`;
