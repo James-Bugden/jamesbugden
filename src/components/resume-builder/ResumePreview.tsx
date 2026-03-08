@@ -1021,7 +1021,7 @@ export const ResumePreview = React.memo(function ResumePreview({
   const hiddenFlowRef = useRef<HTMLDivElement>(null);
   const visiblePageRefs = useRef<(HTMLDivElement | null)[]>([]);
   const [mutations, setMutations] = useState<PaginationMutations | null>(null);
-  const whitespaceWarningShown = useRef(false);
+  
 
   const [autoScale, setAutoScale] = useState(0.65);
   const [zoomOffset, setZoomOffset] = useState(0);
