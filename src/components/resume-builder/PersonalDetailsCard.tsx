@@ -157,7 +157,7 @@ export function PersonalDetailsCard({ details, onChange, collapsible }: Personal
             </button>
             <div className="flex flex-col gap-0.5">
               <button onClick={() => fileInputRef.current?.click()} className="text-xs font-medium hover:opacity-80" style={{ color: "#2b4734" }}>
-                {details.photo ? "Change photo" : "Upload photo"}
+                {details.photo ? t("changePhoto") : t("uploadPhoto")}
               </button>
               {details.photo && (
                 <button onClick={() => onChange({ photo: "" })} className="text-xs text-gray-400 hover:text-red-500 flex items-center gap-1">
