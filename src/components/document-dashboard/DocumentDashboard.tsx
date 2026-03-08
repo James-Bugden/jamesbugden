@@ -238,7 +238,7 @@ export function DocumentDashboard({ onOpenDocument, onImport }: DocumentDashboar
             onClick={(e) => { e.stopPropagation(); handleDuplicate(doc.id); }}
             className="flex items-center gap-2 text-white/90 text-sm font-medium tracking-wider uppercase bg-white/10 backdrop-blur-sm px-5 py-2.5 rounded-full hover:bg-white/20 transition-colors"
           >
-            Duplicate <RotateCcw className="w-4 h-4" />
+            {t("duplicateAction")} <RotateCcw className="w-4 h-4" />
           </button>
         </div>
       </div>
