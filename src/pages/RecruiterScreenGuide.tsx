@@ -79,7 +79,8 @@ const RecruiterScreenGuide = () => {
       </section>
 
       {/* Introduction */}
-      <section className="py-14 md:py-20 px-5 md:px-6 bg-card border-b border-border">
+      <TableOfContents />
+      <section id="intro" className="py-14 md:py-20 px-5 md:px-6 bg-card border-b border-border scroll-mt-24">
         <div className="container mx-auto max-w-3xl">
           <p className="text-foreground text-lg leading-relaxed mb-6">
             I've reviewed over 20,000 resumes. I've made 500+ hires at top international companies. I've done thousands of screening calls.
