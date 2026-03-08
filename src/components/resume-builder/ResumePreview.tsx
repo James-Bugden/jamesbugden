@@ -251,7 +251,7 @@ function renderSectionEntries(section: ResumeSection, customize?: CustomizeSetti
 
     if (layout === "grid") {
       return (
-        <div className="grid grid-cols-2 gap-x-[6mm] gap-y-[1mm] mt-[1.2mm]">
+        <div className="grid grid-cols-3 gap-x-[3mm] gap-y-[1mm] mt-[1.2mm]">
           {items.map((item, i) => (
             <div key={`${item}-${i}`} className="flex items-center gap-[1.5mm]">
               {sep !== "newline" && (
