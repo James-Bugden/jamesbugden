@@ -1,5 +1,6 @@
 import React, { useEffect, useMemo, useRef, useState, useCallback } from "react";
 import DOMPurify from "dompurify";
+import { toast } from "sonner";
 import {
   Mail,
   Phone,
@@ -1019,6 +1020,7 @@ export const ResumePreview = React.memo(function ResumePreview({
   const hiddenFlowRef = useRef<HTMLDivElement>(null);
   const visiblePageRefs = useRef<(HTMLDivElement | null)[]>([]);
   const mutationsRef = useRef<PaginationMutations | null>(null);
+  const whitespaceWarningShown = useRef(false);
 
   const [autoScale, setAutoScale] = useState(0.65);
   const [zoomOffset, setZoomOffset] = useState(0);
@@ -1144,7 +1146,21 @@ export const ResumePreview = React.memo(function ResumePreview({
 
         const totalH = root.scrollHeight - contentOriginPX - (marginYPX + footerReservePX);
         const rawPages = totalH / usablePerPage;
-        setPageCount(Math.max(1, rawPages <= 1.02 ? 1 : Math.ceil(rawPages)));
+        const pages = Math.max(1, rawPages <= 1.02 ? 1 : Math.ceil(rawPages));
+        setPageCount(pages);
+
+        // Whitespace detection
+        if (pages >= 2 && !whitespaceWarningShown.current) {
+          const lastPageUsed = totalH - (pages - 1) * usablePerPage;
+          const lastPageRatio = lastPageUsed / usablePerPage;
+          if (lastPageRatio < 0.5) {
+            whitespaceWarningShown.current = true;
+            toast.info(`Page ${pages} has a lot of empty space`, {
+              description: "Try reducing margins, decreasing font size, or adjusting line spacing in the Customize tab.",
+              duration: 8000,
+            });
+          }
+        }
       });
     });
 
@@ -1153,6 +1169,11 @@ export const ResumePreview = React.memo(function ResumePreview({
       cancelAnimationFrame(raf2);
     };
   }, [data, customize, dims.hPX, marginYPX, headerReservePX, footerReservePX, usablePerPage, contentOriginPX]);
+
+  // Reset whitespace warning when content or settings change
+  useEffect(() => {
+    whitespaceWarningShown.current = false;
+  }, [data, customize]);
 
   /* ── Apply pagination mutations to visible pages ── */
   useEffect(() => {

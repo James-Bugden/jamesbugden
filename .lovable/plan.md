@@ -1,34 +1,48 @@
 
 
-## Auto-detect and notify about excessive whitespace
+## Resume Builder Feature Improvements
 
-### Problem
-After pagination pushes items to the next page, the last page can end with a large blank area (e.g. content fills only 40% of the final page). The user wants either an auto-fix or a helpful notification.
+### Priority 1: AI "Tailor to Job Description" Panel
+- Add a new tab or panel in the "AI Tools" section (which currently shows "Coming soon")
+- User pastes a job description → edge function analyzes keyword overlap with current resume
+- Returns: missing keywords, suggested bullet point rewrites, match percentage
+- Reuses existing `resume-ai` edge function with a new `action: "tailor"` mode
+- UI: Split panel with JD on left, suggestions on right, one-click "Apply" buttons
 
-### Approach: Whitespace detection + toast notification with actionable tips
+### Priority 2: Resume Completeness Score Widget
+- Floating widget in the editor sidebar showing real-time completion percentage
+- Scoring rules: has summary (+10), has 2+ experience entries (+20), all entries have descriptions (+15), dates filled (+10), contact info complete (+15), skills section exists (+10), quantified achievements detected (+20)
+- Visual: circular progress ring with percentage, expandable checklist of what's missing
+- Lives above the "Add Content" button in the Content tab
 
-After pagination runs (end of the convergence loop ~line 1147), calculate how much of the last page is actually used. If content fills less than ~50% of the last page AND there are 2+ pages, show a toast with tips.
+### Priority 3: Populate the "AI Tools" Tab
+- Currently renders "AI Tools — Coming soon" placeholder
+- Build out with: "Tailor to Job" (above), "Generate Summary from Experience", "Suggest Skills", "Optimize Bullet Points (batch)"
+- Each tool card shows a description, input area, and results
 
-**Detection logic** (inside the pagination useEffect, after `setPageCount`):
-```
-const lastPageUsed = totalH - (pages - 1) * usablePerPage;
-const lastPageRatio = lastPageUsed / usablePerPage;
-if (pages >= 2 && lastPageRatio < 0.5) → show notification
-```
+### Priority 4: Real-time Word Count per Section
+- Add a small `<span>` below each `RichTextEditor` showing word count and bullet point count
+- Highlight in amber if too long (>150 words per entry) or too short (<20 words)
+- Lightweight: computed from the editor's text content on each change
 
-**Notification**: A non-blocking toast (using the existing sonner toast) with:
-- "Your resume has a lot of empty space on page {N}."
-- Tips: "Try reducing margins, decreasing font size, or adjusting line spacing in the Customize tab."
-- Show once per data/customize change cycle (debounced, don't spam)
+### Priority 5: Click-to-Edit on Preview (Inline Editing)
+- When user clicks text on the A4 preview, show a floating input/textarea positioned over the clicked element
+- On blur/enter, update the corresponding field in the data model
+- Start with simple fields only: job title, company name, degree, institution
+- More complex than other items; implement after the above
 
-**Why not auto-fix**: Auto-adjusting margins/font would override user preferences unexpectedly. A notification respects user control while surfacing the issue.
+### Files to Edit
+- `src/pages/ResumeBuilder.tsx` — Add completeness widget, wire AI Tools tab
+- `src/components/resume-builder/ResumeTopNav.tsx` — No changes needed
+- `src/components/resume-builder/RichTextEditor.tsx` — Add word count display
+- `supabase/functions/resume-ai/index.ts` — Add `tailor` action for JD matching
+- New: `src/components/resume-builder/CompletenessScore.tsx` — Score widget component
+- New: `src/components/resume-builder/AiToolsPanel.tsx` — Full AI tools tab content
+- New: `src/components/resume-builder/TailorToJob.tsx` — JD tailoring panel
 
-### Files to modify
-- **`src/components/resume-builder/ResumePreview.tsx`**: After pagination completes, calculate last-page fill ratio and call an `onWhitespaceWarning` callback or show toast directly
-- Add a ref to track whether the warning was already shown for the current content state to avoid repeated toasts
-
-### Implementation detail
-- Add a `whitespaceWarningShown` ref (boolean) that resets when `data` or `customize` changes
-- After `setPageCount`, if pages >= 2 and lastPageRatio < 0.5 and warning not yet shown, call `toast()` with the message and set the ref to true
-- Import `toast` from `sonner` in ResumePreview
+### Implementation Order
+1. Completeness score widget (standalone, no backend needed)
+2. Word count on RichTextEditor (small change)
+3. AI Tools tab with Tailor to Job (needs edge function update)
+4. Click-to-edit on preview (complex, last)
 
