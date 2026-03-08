@@ -87,19 +87,18 @@ export async function exportToPdf({ elementId, fileName, pageFormat = "a4" }: Ex
       },
     });
 
-    // Read the margin from the rendered element's CSS custom properties
+    // Read padding from the A4Page — it now includes header/footer safe zones
     const computedStyle = getComputedStyle(container.firstElementChild || container);
-    const paddingTop = parseFloat(computedStyle.paddingTop) || 16 * PX_PER_MM;
-    const marginYPX = paddingTop; // The A4Page uses marginY as padding
+    const paddingTopPX = parseFloat(computedStyle.paddingTop) || (16 + HEADER_SAFE_MM) * PX_PER_MM;
+    const paddingBottomPX = parseFloat(computedStyle.paddingBottom) || (16 + FOOTER_SAFE_MM) * PX_PER_MM;
 
     const pageWidthPX = dims.wMM * PX_PER_MM;
     const pageHeightPX = dims.hMM * PX_PER_MM;
-    const headerReservePX = HEADER_SAFE_MM * PX_PER_MM;
-    const footerReservePX = FOOTER_SAFE_MM * PX_PER_MM;
-    const usableHeightPX = pageHeightPX - 2 * marginYPX - headerReservePX - footerReservePX;
+    // Usable content height = page height minus top and bottom padding (which already includes safe zones)
+    const usableHeightPX = pageHeightPX - paddingTopPX - paddingBottomPX;
 
-    // Total content height (excluding the top/bottom padding of A4Page)
-    const fullContentHeightPX = (fullCanvas.height / SCALE) - 2 * marginYPX - headerReservePX - footerReservePX;
+    // Total content height (excluding the padding)
+    const fullContentHeightPX = (fullCanvas.height / SCALE) - paddingTopPX - paddingBottomPX;
     const pageCount = Math.max(1, fullContentHeightPX <= usableHeightPX * 1.02 ? 1 : Math.ceil(fullContentHeightPX / usableHeightPX));
 
     const pdf = new jsPDF({
@@ -111,8 +110,7 @@ export async function exportToPdf({ elementId, fileName, pageFormat = "a4" }: Ex
     const canvasPageWidthScaled = fullCanvas.width;
     const canvasPageHeightScaled = pageHeightPX * SCALE;
     const canvasUsableHeightScaled = usableHeightPX * SCALE;
-    const canvasMarginYScaled = marginYPX * SCALE;
-    const canvasHeaderReserveScaled = headerReservePX * SCALE;
+    const canvasPaddingTopScaled = paddingTopPX * SCALE;
 
     for (let i = 0; i < pageCount; i++) {
       if (i > 0) pdf.addPage([dims.wMM, dims.hMM]);
