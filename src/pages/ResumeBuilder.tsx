@@ -24,6 +24,7 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { toast } from "@/hooks/use-toast";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
+import FeedbackBox from "@/components/FeedbackBox";
 
 type ViewMode = "dashboard" | "resume-editor" | "cover-letter-editor";
 
@@ -778,9 +779,11 @@ const ResumeBuilder = () => {
           <div className="w-[40%] min-w-[340px] max-w-[480px] flex-shrink-0 h-full overflow-y-auto bg-white border-r" style={{ borderColor: BRAND.border }} ref={editorScrollRef}>
             {editorContent}
           </div>
-          <div className="flex-1 h-full">
+          <div className="flex-1 h-full relative">
             <ResumePreview data={data} customize={customize} pdfTargetId="resume-pdf-target" onEditSection={handleEditSection} onColorChange={(f, c) => updateCustomize({ [f]: c } as any)} onContentEdit={handleContentEdit} />
-
+            <div className="absolute bottom-4 left-4 z-20">
+              <FeedbackBox subject="Resume Builder Feedback" />
+            </div>
           </div>
         </div>
 
@@ -805,6 +808,9 @@ const ResumeBuilder = () => {
         {mobilePreview && (
           <MobilePreviewOverlay onClose={() => setMobilePreview(false)} onDownload={() => handleDownload()} downloading={downloading}>
             <ResumePreview data={data} customize={customize} pdfTargetId="resume-pdf-target" onEditSection={handleEditSection} onColorChange={(f, c) => updateCustomize({ [f]: c } as any)} onContentEdit={handleContentEdit} />
+            <div className="absolute bottom-4 left-4 z-20">
+              <FeedbackBox subject="Resume Builder Feedback" />
+            </div>
           </MobilePreviewOverlay>
         )}
       </div>

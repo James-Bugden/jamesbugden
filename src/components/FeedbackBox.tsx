@@ -6,6 +6,7 @@ import { useToast } from "@/hooks/use-toast";
 
 interface FeedbackBoxProps {
   locale?: "en" | "zh-tw";
+  subject?: string;
 }
 
 const LABELS = {
@@ -27,7 +28,7 @@ const LABELS = {
   },
 };
 
-export default function FeedbackBox({ locale = "en" }: FeedbackBoxProps) {
+export default function FeedbackBox({ locale = "en", subject: customSubject }: FeedbackBoxProps) {
   const [open, setOpen] = useState(false);
   const [text, setText] = useState("");
   const { toast } = useToast();
@@ -35,7 +36,7 @@ export default function FeedbackBox({ locale = "en" }: FeedbackBoxProps) {
 
   const handleSend = () => {
     if (!text.trim()) return;
-    const subject = locale === "zh-tw" ? "Offer Calculator 意見回饋" : "Offer Calculator Feedback";
+    const subject = customSubject ?? (locale === "zh-tw" ? "Offer Calculator 意見回饋" : "Offer Calculator Feedback");
     window.location.href = `mailto:james@jamesbugden.com?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(text.trim())}`;
     toast({ title: t.success, description: t.successDesc });
     setText("");
