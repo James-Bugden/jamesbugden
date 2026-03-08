@@ -1016,11 +1016,10 @@ const AiJobSearchGuideZhTw = () => {
       </section>
 
       {/* Share */}
-      <section className="pb-12 px-5 md:px-6">
-        <div className="container mx-auto max-w-3xl">
+      <section className="pb-12">
           <GuideShareButtons isZhTw />
-        </div>
       </section>
+      </main>
 
       {/* Footer */}
       <footer className="py-8 md:py-10 px-5 md:px-6 bg-card border-t border-border">
