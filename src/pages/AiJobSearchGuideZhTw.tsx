@@ -189,23 +189,23 @@ const AiJobSearchGuideZhTw = () => {
       <TableOfContents />
 
       {/* Hero */}
-      <section className="pt-28 md:pt-36 pb-12 md:pb-16 px-5 md:px-6 bg-background">
+      <section className="pt-28 md:pt-36 pb-12 md:pb-16 px-5 md:px-6 bg-nav-green">
         <div className="container mx-auto max-w-3xl">
           <div className="flex flex-col gap-4 mb-8">
-            <div className="flex flex-wrap items-center gap-3 text-sm text-muted-foreground">
+            <div className="flex flex-wrap items-center gap-3 text-sm text-cream-70">
               <span className="flex items-center gap-1.5"><Bot className="w-4 h-4 text-gold" /> AI 驅動</span>
-              <span className="w-1 h-1 rounded-full bg-border" />
+              <span className="w-1 h-1 rounded-full bg-cream-70/30" />
               <span className="flex items-center gap-1.5"><Clock className="w-4 h-4" /> 總計 4-6 小時</span>
-              <span className="w-1 h-1 rounded-full bg-border" />
+              <span className="w-1 h-1 rounded-full bg-cream-70/30" />
               <span className="flex items-center gap-1.5"><FileText className="w-4 h-4" /> 10 個章節</span>
             </div>
-            <h1 className="font-heading text-3xl md:text-4xl lg:text-5xl text-foreground leading-tight">
+            <h1 className="font-heading text-3xl md:text-4xl lg:text-5xl text-cream leading-tight">
               如何用 AI 掌控你的整個求職過程
             </h1>
-            <p className="text-lg md:text-xl text-muted-foreground leading-relaxed">
-              招募官的完整指南：從職涯方向到最終 Offer，每個階段都用 ChatGPT
+            <p className="text-lg md:text-xl text-cream-70 leading-relaxed">
+              從職涯方向到最終 Offer，每個階段都用 ChatGPT
             </p>
-            <p className="text-sm text-muted-foreground italic">
+            <p className="text-sm text-cream-70/70 italic">
               根據 Jeremy Schifeling 的《Career Coach GPT》撰寫 · 指南作者：James Bugden
             </p>
           </div>

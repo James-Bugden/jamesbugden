@@ -226,7 +226,7 @@ const AiJobSearchGuide = () => {
             <p className="text-lg md:text-xl text-cream-70 leading-relaxed">
               Using ChatGPT at Every Stage: From Career Direction to Final Offer
             </p>
-            <p className="text-sm text-muted-foreground italic">
+            <p className="text-sm text-cream-70/70 italic">
               Based on <em>Career Coach GPT</em> by Jeremy Schifeling · Guide written by James Bugden
             </p>
           </div>
