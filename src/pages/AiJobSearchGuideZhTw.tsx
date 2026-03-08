@@ -151,6 +151,8 @@ const AiJobSearchGuideZhTw = () => {
       <PageSEO
         title="如何用 AI 掌控你的整個求職過程 — James Bugden"
         description="招募官的完整指南：從職涯方向到最終 Offer，每個階段都用 ChatGPT"
+        path="/zh-tw/ai-job-search-guide"
+        lang="zh-Hant-TW"
       />
 
       {/* Navigation */}
