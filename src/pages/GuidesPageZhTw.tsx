@@ -67,6 +67,13 @@ const guides: Guide[] = [
     href: "/zh-tw/interview-preparation-guide",
     category: "面試準備",
   },
+  {
+    icon: Phone,
+    title: "如何通過招募人員的電話篩選",
+    description: "資深招募官的完整實戰手冊，含逐字範例與薪資話術",
+    href: "/zh-tw/recruiter-screen-guide",
+    category: "面試準備",
+  },
 ];
 
 const categories = [
