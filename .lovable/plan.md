@@ -1,48 +1,39 @@
 
 
-## Resume Builder Feature Improvements
+## Fix: Excessive Whitespace Between Resume Sections
 
-### Priority 1: AI "Tailor to Job Description" Panel
-- Add a new tab or panel in the "AI Tools" section (which currently shows "Coming soon")
-- User pastes a job description → edge function analyzes keyword overlap with current resume
-- Returns: missing keywords, suggested bullet point rewrites, match percentage
-- Reuses existing `resume-ai` edge function with a new `action: "tailor"` mode
-- UI: Split panel with JD on left, suggestions on right, one-click "Apply" buttons
+### Root Cause
 
-### Priority 2: Resume Completeness Score Widget
-- Floating widget in the editor sidebar showing real-time completion percentage
-- Scoring rules: has summary (+10), has 2+ experience entries (+20), all entries have descriptions (+15), dates filled (+10), contact info complete (+15), skills section exists (+10), quantified achievements detected (+20)
-- Visual: circular progress ring with percentage, expandable checklist of what's missing
-- Lives above the "Add Content" button in the Content tab
+The pagination algorithm treats `<section data-page-item>` wrappers the same as individual entry `<div data-page-item>` elements. When a section (e.g., Experience) straddles a page boundary and its total height is less than 80% of the usable page height, the **entire section** gets pushed to the next page — leaving a massive gap on the current page.
 
-### Priority 3: Populate the "AI Tools" Tab
-- Currently renders "AI Tools — Coming soon" placeholder
-- Build out with: "Tailor to Job" (above), "Generate Summary from Experience", "Suggest Skills", "Optimize Bullet Points (batch)"
-- Each tool card shows a description, input area, and results
+This happens because `querySelectorAll('[data-page-item]')` returns both section-level AND entry-level items. A section with only 2-3 entries can be under the 80% threshold and get pushed as a whole block, even though it would be better to let it start on the current page and break at individual entries.
 
-### Priority 4: Real-time Word Count per Section
-- Add a small `<span>` below each `RichTextEditor` showing word count and bullet point count
-- Highlight in amber if too long (>150 words per entry) or too short (<20 words)
-- Lightweight: computed from the editor's text content on each change
+Additionally, `getAtomicBlocks()` skips children with `data-page-item`, so when a section IS over the 80% threshold and deep traversal runs, it finds **no children** to break — the entry-level `data-page-item` divs are invisible to it.
 
-### Priority 5: Click-to-Edit on Preview (Inline Editing)
-- When user clicks text on the A4 preview, show a floating input/textarea positioned over the clicked element
-- On blur/enter, update the corresponding field in the data model
-- Start with simple fields only: job title, company name, degree, institution
-- More complex than other items; implement after the above
+### Fix (single file: `ResumePreview.tsx`)
 
-### Files to Edit
-- `src/pages/ResumeBuilder.tsx` — Add completeness widget, wire AI Tools tab
-- `src/components/resume-builder/ResumeTopNav.tsx` — No changes needed
-- `src/components/resume-builder/RichTextEditor.tsx` — Add word count display
-- `supabase/functions/resume-ai/index.ts` — Add `tailor` action for JD matching
-- New: `src/components/resume-builder/CompletenessScore.tsx` — Score widget component
-- New: `src/components/resume-builder/AiToolsPanel.tsx` — Full AI tools tab content
-- New: `src/components/resume-builder/TailorToJob.tsx` — JD tailoring panel
+**A. Skip section-level containers pagination — only process leaf items**
 
-### Implementation Order
-1. Completeness score widget (standalone, no backend needed)
-2. Word count on RichTextEditor (small change)
-3. AI Tools tab with Tailor to Job (needs edge function update)
-4. Click-to-edit on preview (complex, last)
+In `runPass()`, skip any `[data-page-item]` element that **contains** other `[data-page-item]` children. This ensures only the innermost items (individual entries) are candidates for pushing. Section wrappers flow naturally.
+
+```typescript
+items.forEach(el => {
+  // Skip container-level items that have nested data-page-items
+  if (el.querySelector('[data-page-item]')) return;
+  // ... rest of push logic
+});
+```
+
+**B. Update `getAtomicBlocks` to traverse INTO data-page-item children**
+
+Since section-level items are now skipped, the deep traversal for large individual entries should still work. But also ensure that if an entry is large, its internal `li`/`p` elements are found correctly (they already are since entries don't contain nested `data-page-item`).
+
+**C. Reduce whole-entry push threshold**
+
+Lower from `0.8` to `0.6` — if a single entry takes more than 60% of a page, break at its children rather than pushing the whole thing.
+
+### Result
+- Sections start where they naturally flow — no more full-section pushes creating huge gaps
+- Individual entries that straddle boundaries get pushed or broken at children
+- Preview and PDF stay synchronized
 
