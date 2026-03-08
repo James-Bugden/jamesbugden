@@ -1093,7 +1093,7 @@ export const ResumePreview = React.memo(function ResumePreview({
             const pageBottom = (pageIdx + 1) * usablePerPage;
 
             if (elTop < pageBottom && elBottom >= pageBottom + BOUNDARY_TOLERANCE) {
-              if (rect.height < usablePerPage * 0.25) {
+              if (rect.height < usablePerPage * 0.255) {
                 const push = pageBottom - elTop + 1;
                 const existing = parseFloat((el as HTMLElement).style.marginTop) || 0;
                 (el as HTMLElement).style.marginTop = `${existing + push}px`;
@@ -1108,7 +1108,7 @@ export const ResumePreview = React.memo(function ResumePreview({
                   const cPageIdx = Math.floor(Math.max(0, cTop) / usablePerPage);
                   const cPageBottom = (cPageIdx + 1) * usablePerPage;
 
-                  if (cTop < cPageBottom && cBottom >= cPageBottom + BOUNDARY_TOLERANCE && cr.height < usablePerPage * 0.5) {
+                  if (cTop < cPageBottom && cBottom >= cPageBottom + BOUNDARY_TOLERANCE && cr.height < usablePerPage * 035) {
                     const push = cPageBottom - cTop + 1;
                     const existing = parseFloat(child.style.marginTop) || 0;
                     child.style.marginTop = `${existing + push}px`;
