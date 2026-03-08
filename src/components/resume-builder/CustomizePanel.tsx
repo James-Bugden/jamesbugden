@@ -623,30 +623,6 @@ function HeaderTab({ settings, onChange }: { settings: CustomizeSettings; onChan
             </button>
           ))}
         </div>
-
-        <FieldLabel>Icon Style</FieldLabel>
-        <TooltipProvider delayDuration={300}>
-        <div className="flex gap-1.5 flex-wrap">
-          {[0,1,2,3,4,5,6,7].map((i) => (
-            <Tooltip key={i}>
-              <TooltipTrigger asChild>
-                <button
-                  onClick={() => onChange({ iconStyle: i })}
-                  className="w-8 h-8 rounded-full border-2 flex items-center justify-center transition-all"
-                  style={
-                    settings.iconStyle === i
-                      ? { borderColor: B.green, backgroundColor: B.greenLighter }
-                      : { borderColor: B.border, backgroundColor: "#fff" }
-                  }
-                >
-                  <div className={cn("w-3.5 h-3.5 rounded-full", i % 2 === 0 ? "border border-gray-400" : "bg-gray-400")} />
-                </button>
-              </TooltipTrigger>
-              <TooltipContent side="bottom" className="text-xs">Style {i + 1}</TooltipContent>
-            </Tooltip>
-          ))}
-        </div>
-        </TooltipProvider>
       </SettingCard>
 
       <SettingCard title="Name">
