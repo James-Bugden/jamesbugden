@@ -28,15 +28,30 @@ const Collapsible = ({ title, children }: { title: string; children: React.React
   );
 };
 
-const AiPromptBlock = ({ children }: { children: React.ReactNode }) => (
-  <div className="bg-muted/50 border border-border rounded-xl p-4 md:p-5 my-4">
-    <div className="flex items-center gap-2 mb-3">
-      <Bot className="w-5 h-5 text-gold" />
-      <span className="text-sm font-semibold text-gold">AI 提示詞</span>
+const AiPromptBlock = ({ children }: { children: React.ReactNode }) => {
+  const [copied, setCopied] = useState(false);
+  const handleCopy = () => {
+    const text = typeof children === "string" ? children : (children as any)?.toString?.() ?? "";
+    navigator.clipboard.writeText(text);
+    setCopied(true);
+    setTimeout(() => setCopied(false), 2000);
+  };
+  return (
+    <div className="bg-muted/50 border border-border rounded-xl p-4 md:p-5 my-4">
+      <div className="flex items-center justify-between mb-3">
+        <div className="flex items-center gap-2">
+          <Bot className="w-5 h-5 text-gold" />
+          <span className="text-sm font-semibold text-gold">AI 提示詞</span>
+        </div>
+        <button onClick={handleCopy} className="flex items-center gap-1.5 text-xs text-muted-foreground hover:text-foreground transition-colors px-2 py-1 rounded-md hover:bg-muted">
+          {copied ? <Check className="w-3.5 h-3.5 text-green-500" /> : <Copy className="w-3.5 h-3.5" />}
+          {copied ? "已複製" : "複製"}
+        </button>
+      </div>
+      <pre className="text-sm text-foreground whitespace-pre-wrap font-mono bg-background/50 rounded-lg p-4 overflow-x-auto">{children}</pre>
     </div>
-    <pre className="text-sm text-foreground whitespace-pre-wrap font-mono bg-background/50 rounded-lg p-4 overflow-x-auto">{children}</pre>
-  </div>
-);
+  );
+};
 
 const RecruiterCheck = ({ children }: { children: React.ReactNode }) => (
   <div className="bg-executive/5 border-l-4 border-gold rounded-r-xl p-4 md:p-5 my-4">
