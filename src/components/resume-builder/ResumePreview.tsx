@@ -232,8 +232,8 @@ function renderSectionEntries(section: ResumeSection, customize?: CustomizeSetti
     const items = raw.split(",").map((s) => s.trim()).filter(Boolean);
     if (!items.length) return null;
 
-    const layout = c?.skillsDisplay || section.layout || "bubble";
-    const sep = c?.skillsSeparator || section.separator || "bullet";
+    const layout = section.layout || c?.skillsDisplay || "bubble";
+    const sep = section.separator || c?.skillsSeparator || "bullet";
     const subStyle = section.subtitleStyle || "dash";
 
     const formatItem = (item: string) => {
