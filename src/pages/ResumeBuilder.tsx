@@ -24,6 +24,7 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { toast } from "@/hooks/use-toast";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
+import FeedbackBox from "@/components/FeedbackBox";
 
 type ViewMode = "dashboard" | "resume-editor" | "cover-letter-editor";
 
