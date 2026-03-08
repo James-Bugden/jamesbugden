@@ -1311,6 +1311,7 @@ export const ResumePreview = React.memo(function ResumePreview({
       <div
         ref={hiddenFlowRef}
         id={pdfTargetId}
+        data-hidden-flow
         style={{
           position: "absolute",
           width: `${dims.wPX}px`,
