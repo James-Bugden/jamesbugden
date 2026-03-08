@@ -1,4 +1,4 @@
-import { FileText, Clock, Linkedin, Bot, Target, Briefcase, Send, MessageSquare, DollarSign, AlertTriangle, CheckCircle2, XCircle, ArrowRight, ChevronDown, Menu, Search, Zap, BookOpen } from "lucide-react";
+import { FileText, Clock, Linkedin, Bot, Target, Briefcase, Send, MessageSquare, DollarSign, AlertTriangle, CheckCircle2, XCircle, ArrowRight, ChevronDown, Menu, Search, Zap, BookOpen, Copy, Check } from "lucide-react";
 import { Link } from "react-router-dom";
 import GoldCheckBadge from "@/components/GoldCheckBadge";
 import { InstagramIcon, ThreadsIcon } from "@/components/SocialIcons";
