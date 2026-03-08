@@ -732,7 +732,7 @@ export const A4Page = React.memo(function A4Page({
         "--resume-headings": c?.headingsColor ?? "#111827",
         "--resume-dates": c?.datesColor ?? "#6B7280",
         "--resume-subtitle": c?.subtitleColor ?? "#6B7280",
-        "--resume-body": "#374151",
+        "--resume-body": c?.bodyColor ?? "#374151",
       }) as React.CSSProperties,
     [c, topPadMM, bottomPadMM, marginYMM]
   );
