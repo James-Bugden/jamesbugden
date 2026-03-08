@@ -254,7 +254,7 @@ export function PersonalDetailsCard({ details, onChange, collapsible }: Personal
               className="w-full py-2.5 rounded-lg text-sm font-semibold text-white transition-colors mt-2"
               style={{ backgroundColor: "#2b4734" }}
             >
-              Done
+              {t("done")}
             </button>
           </div>
         </div>
