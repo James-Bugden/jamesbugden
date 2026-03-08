@@ -253,7 +253,7 @@ function renderSectionEntries(section: ResumeSection, customize?: CustomizeSetti
       return `${cat}: ${rest}`;
     };
 
-    const sepChar = sep === "pipe" ? " | " : sep === "comma" ? ", " : " · ";
+    const sepChar = sep === "pipe" ? " | " : sep === "none" ? "  " : " · ";
 
     if (layout === "grid") {
       return (
