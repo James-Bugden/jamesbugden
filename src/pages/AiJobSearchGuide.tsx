@@ -210,21 +210,21 @@ const AiJobSearchGuide = () => {
       <TableOfContents />
 
       {/* Hero */}
-      <section className="pt-28 md:pt-36 pb-12 md:pb-16 px-5 md:px-6 bg-background">
+      <section className="pt-28 md:pt-36 pb-12 md:pb-16 px-5 md:px-6 bg-nav-green">
         <div className="container mx-auto max-w-3xl">
           <div className="flex flex-col gap-4 mb-8">
-            <div className="flex flex-wrap items-center gap-3 text-sm text-muted-foreground">
+            <div className="flex flex-wrap items-center gap-3 text-sm text-cream-70">
               <span className="flex items-center gap-1.5"><Bot className="w-4 h-4 text-gold" /> AI-Powered</span>
-              <span className="w-1 h-1 rounded-full bg-border" />
+              <span className="w-1 h-1 rounded-full bg-cream-70/30" />
               <span className="flex items-center gap-1.5"><Clock className="w-4 h-4" /> 4-6 hours total</span>
-              <span className="w-1 h-1 rounded-full bg-border" />
+              <span className="w-1 h-1 rounded-full bg-cream-70/30" />
               <span className="flex items-center gap-1.5"><FileText className="w-4 h-4" /> 10 Sections</span>
             </div>
-            <h1 className="font-heading text-3xl md:text-4xl lg:text-5xl text-foreground leading-tight">
+            <h1 className="font-heading text-3xl md:text-4xl lg:text-5xl text-cream leading-tight">
               How to Use AI to Run Your Entire Job Search
             </h1>
-            <p className="text-lg md:text-xl text-muted-foreground leading-relaxed">
-              A Recruiter's Guide to Using ChatGPT at Every Stage: From Career Direction to Final Offer
+            <p className="text-lg md:text-xl text-cream-70 leading-relaxed">
+              Using ChatGPT at Every Stage: From Career Direction to Final Offer
             </p>
             <p className="text-sm text-muted-foreground italic">
               Based on <em>Career Coach GPT</em> by Jeremy Schifeling · Guide written by James Bugden
