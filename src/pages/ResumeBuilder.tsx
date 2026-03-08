@@ -388,30 +388,9 @@ function DownloadDropdown({ downloading, pageFormat, docName, onDownload }: {
 const ResumeBuilder = () => {
   const store = useResumeStore();
   const { data, setData, customize, updateCustomize, updatePersonalDetails, setSections, updateSection, removeSection } = store;
-
-  /* ── dnd-kit sensors (defined early, used later after pushHistory) ── */
-  const sensors = useSensors(
-    useSensor(PointerSensor, { activationConstraint: { distance: 5 } }),
-    useSensor(KeyboardSensor)
-  );
-  const sectionIds = useMemo(() => data.sections.map(s => s.id), [data.sections]);
-
-  const [activeTab, setActiveTab] = useState("content");
-  const [modalOpen, setModalOpen] = useState(false);
-  const [viewMode, setViewMode] = useState<ViewMode>("dashboard");
-  const [activeDocId, setActiveDocId] = useState<string | null>(null);
-  const [importing, setImporting] = useState(false);
-  const [importType, setImportType] = useState<DocType>("resume");
-  const [downloading, setDownloading] = useState(false);
-  const [saving, setSaving] = useState(false);
-  const [loading, setLoading] = useState(false);
-  const [mobilePreview, setMobilePreview] = useState(false);
-  const [templatePickerOpen, setTemplatePickerOpen] = useState(false);
-  const [pendingImportDocId, setPendingImportDocId] = useState<string | null>(null);
-  const [editingName, setEditingName] = useState(false);
-  const [nameValue, setNameValue] = useState("");
-  const [editorImportOpen, setEditorImportOpen] = useState(false);
-  const isMobile = useIsMobile();
+  const lang = useResumeBuilderLang();
+  const t = useT();
+  const localizedSectionTypes = useMemo(() => getLocalizedSectionTypes(lang), [lang]);
 
   // Undo/redo
   const historyRef = useRef<{ past: any[]; future: any[] }>({ past: [], future: [] });
