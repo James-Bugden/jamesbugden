@@ -968,11 +968,15 @@ export const ResumePreview = React.memo(function ResumePreview({
       raf2 = requestAnimationFrame(() => {
         const items = root.querySelectorAll('[data-page-item]');
         const rootRect = root.getBoundingClientRect();
-        let addedSpace = 0;
+
+        // Content origin: after top margin + header safe zone
+        const contentOriginPX = marginYPX + headerReservePX;
 
         items.forEach(el => {
           const rect = el.getBoundingClientRect();
-          const elTop = rect.top - rootRect.top - marginYPX - headerReservePX + addedSpace;
+          // getBoundingClientRect already reflects previous marginTop pushes,
+          // so no need for cumulative addedSpace tracking
+          const elTop = rect.top - rootRect.top - contentOriginPX;
           const elBottom = elTop + rect.height;
 
           const pageIndex = Math.floor(Math.max(0, elTop) / usablePerPage);
@@ -984,13 +988,12 @@ export const ResumePreview = React.memo(function ResumePreview({
               // Small enough to push to next page
               const push = pageBottom - elTop + 1;
               (el as HTMLElement).style.marginTop = `${push}px`;
-              addedSpace += push;
             } else {
               // Too large — find block-level children to break at a finer level
               const children = el.querySelectorAll('p, li, div:not([data-page-item]), h2, h3, h4, span.flex');
               children.forEach(child => {
                 const cr = child.getBoundingClientRect();
-                const childTop = cr.top - rootRect.top - marginYPX - headerReservePX + addedSpace;
+                const childTop = cr.top - rootRect.top - contentOriginPX;
                 const childBottom = childTop + cr.height;
                 const childPageIndex = Math.floor(Math.max(0, childTop) / usablePerPage);
                 const childPageBottom = (childPageIndex + 1) * usablePerPage;
@@ -999,7 +1002,6 @@ export const ResumePreview = React.memo(function ResumePreview({
                   const push = childPageBottom - childTop + 1;
                   (child as HTMLElement).style.marginTop = `${push}px`;
                   (child as HTMLElement).setAttribute('data-page-break-child', 'true');
-                  addedSpace += push;
                 }
               });
             }
