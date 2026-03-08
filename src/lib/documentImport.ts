@@ -1023,3 +1023,198 @@ function parseReferenceEntries(lines: string[]) {
   }
   return entries;
 }
+
+/* ════════════════════════════════════════════════════════════
+   AI-powered resume parsing (calls resume-ai edge function)
+   ════════════════════════════════════════════════════════════ */
+
+import { supabase } from "@/integrations/supabase/client";
+import { getDefaultFieldsForType } from "@/components/resume-builder/types";
+
+const VALID_SECTION_TYPES = new Set([
+  "experience", "education", "skills", "languages", "summary",
+  "certificates", "interests", "projects", "courses", "awards",
+  "organisations", "publications", "references", "declaration", "custom",
+]);
+
+interface AiParsedResume {
+  personalDetails: {
+    fullName: string;
+    professionalTitle: string;
+    email: string;
+    phone: string;
+    location: string;
+    linkedin?: string;
+    website?: string;
+  };
+  sections: Array<{
+    type: string;
+    title: string;
+    entries: Array<{ fields: Record<string, string> }>;
+  }>;
+}
+
+async function aiParseResume(text: string): Promise<AiParsedResume> {
+  const { data, error } = await supabase.functions.invoke("resume-ai", {
+    body: { action: "parse_resume", text },
+  });
+
+  if (error) throw new Error(error.message || "AI parse request failed");
+  if (data?.error) throw new Error(data.error);
+  if (!data?.result?.personalDetails || !data?.result?.sections) {
+    throw new Error("AI returned incomplete data");
+  }
+
+  return data.result as AiParsedResume;
+}
+
+function normalizeParsedResume(ai: AiParsedResume) {
+  const pd = ai.personalDetails;
+
+  // Normalize sections
+  const sections = ai.sections
+    .filter((s) => s.entries && s.entries.length > 0)
+    .map((s) => {
+      const type = VALID_SECTION_TYPES.has(s.type) ? s.type : "custom";
+      const defaults = getDefaultFieldsForType(type);
+
+      const entries = s.entries.map((e) => {
+        // Merge with defaults so all expected fields exist
+        const fields: Record<string, string> = { ...defaults };
+        for (const [k, v] of Object.entries(e.fields || {})) {
+          if (typeof v === "string") fields[k] = v;
+        }
+        return { id: crypto.randomUUID(), fields };
+      });
+
+      return {
+        id: crypto.randomUUID(),
+        type,
+        title: s.title || type.charAt(0).toUpperCase() + type.slice(1),
+        entries,
+        collapsed: false,
+        ...(type === "summary" ? { showHeading: true } : {}),
+      };
+    });
+
+  // Post-parse quality repairs
+  repairSections(sections);
+
+  return {
+    fullName: pd.fullName || "",
+    professionalTitle: pd.professionalTitle || "",
+    email: pd.email || "",
+    phone: pd.phone || "",
+    location: pd.location || "",
+    linkedin: pd.linkedin || "",
+    website: pd.website || "",
+    sections,
+  };
+}
+
+function repairSections(sections: any[]) {
+  // If summary is very long (>500 chars) and there's no experience section, something likely went wrong
+  const summaryIdx = sections.findIndex((s) => s.type === "summary");
+  const hasExperience = sections.some((s) => s.type === "experience");
+
+  if (summaryIdx >= 0 && !hasExperience) {
+    const summaryText = sections[summaryIdx].entries?.[0]?.fields?.description || "";
+    if (summaryText.length > 500) {
+      // Likely experience content dumped into summary — keep it but flag as custom
+      // Don't redistribute automatically as AI should have handled this
+    }
+  }
+
+  // If skills section has long sentences (>100 chars per "skill"), it's probably not skills
+  for (let i = sections.length - 1; i >= 0; i--) {
+    const s = sections[i];
+    if (s.type === "skills") {
+      const skillsStr = s.entries?.[0]?.fields?.skills || "";
+      const items = skillsStr.split(",").map((x: string) => x.trim()).filter(Boolean);
+      if (items.length <= 2 && skillsStr.length > 100) {
+        // Convert to custom section
+        s.type = "custom";
+        s.entries = [{
+          id: crypto.randomUUID(),
+          fields: { sectionTitle: s.title, description: `<p>${skillsStr}</p>` },
+        }];
+      }
+    }
+  }
+
+  // Experience entries missing both company and position → demote to custom
+  for (const s of sections) {
+    if (s.type === "experience") {
+      const validEntries = s.entries.filter((e: any) => e.fields.position || e.fields.company);
+      if (validEntries.length === 0 && s.entries.length > 0) {
+        s.type = "custom";
+        s.entries = [{
+          id: crypto.randomUUID(),
+          fields: {
+            sectionTitle: s.title,
+            description: s.entries.map((e: any) => e.fields.description || "").join(""),
+          },
+        }];
+      }
+    }
+  }
+}
+
+function qualityScore(parsed: { sections: any[] }): number {
+  let score = 0;
+  for (const s of parsed.sections) {
+    score += 1; // each section counts
+    if (s.type === "experience" || s.type === "education") {
+      for (const e of s.entries || []) {
+        const fields = e.fields || {};
+        const filledFields = Object.values(fields).filter((v) => typeof v === "string" && v.trim()).length;
+        score += filledFields * 0.5;
+      }
+    }
+  }
+  return score;
+}
+
+export type ParseSource = "ai" | "heuristic";
+
+export interface ParseResult {
+  fullName: string;
+  professionalTitle: string;
+  email: string;
+  phone: string;
+  location: string;
+  linkedin: string;
+  website: string;
+  sections: any[];
+  source: ParseSource;
+  warnings: string[];
+}
+
+export async function parseResumeWithFallback(
+  text: string,
+  onProgress?: (msg: string) => void,
+): Promise<ParseResult> {
+  const warnings: string[] = [];
+
+  // Try AI first
+  try {
+    onProgress?.("Analyzing structure with AI…");
+    const aiResult = await aiParseResume(text);
+    onProgress?.("Finalizing sections…");
+    const normalized = normalizeParsedResume(aiResult);
+
+    if (normalized.sections.length > 0) {
+      return { ...normalized, source: "ai", warnings };
+    }
+
+    warnings.push("AI returned empty sections, falling back to heuristic parser.");
+  } catch (err) {
+    console.warn("AI parse failed, falling back to heuristic:", err);
+    warnings.push("AI parsing unavailable, using heuristic parser.");
+  }
+
+  // Fallback to heuristic
+  onProgress?.("Parsing with heuristic engine…");
+  const heuristic = mapTextToResumeSections(text);
+  return { ...heuristic, source: "heuristic", warnings };
+}
