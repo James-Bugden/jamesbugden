@@ -1165,18 +1165,7 @@ export const ResumePreview = React.memo(function ResumePreview({
         }
         setPageCount(pages);
 
-        // Whitespace detection
-        if (pages >= 2 && !whitespaceWarningShown.current) {
-          const lastPageUsed = totalH - (pages - 1) * usablePerPage;
-          const lastPageRatio = lastPageUsed / usablePerPage;
-          if (lastPageRatio < 0.5) {
-            whitespaceWarningShown.current = true;
-            toast.info(`Page ${pages} has a lot of empty space`, {
-              description: "Try reducing margins, decreasing font size, or adjusting line spacing in the Customize tab.",
-              duration: 8000,
-            });
-          }
-        }
+        // (whitespace warning removed)
       });
     });
 
