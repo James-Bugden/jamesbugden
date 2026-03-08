@@ -415,8 +415,8 @@ export function DocumentDashboard({ onOpenDocument, onImport }: DocumentDashboar
               >
                 <Upload className="w-7 h-7" strokeWidth={1.5} />
                 <div className="text-center">
-                  <span className="text-[12px] font-medium block">Import</span>
-                  <span className="text-[10px] mt-0.5 block" style={{ color: BRAND.textSecondary }}>Upload your existing CV</span>
+                  <span className="text-[12px] font-medium block">{t("importAction")}</span>
+                  <span className="text-[10px] mt-0.5 block" style={{ color: BRAND.textSecondary }}>{t("uploadExistingCvAction")}</span>
                 </div>
               </button>
 
