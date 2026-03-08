@@ -1,48 +1,49 @@
 
 
-## Resume Builder Feature Improvements
+## Fix: Persistent whitespace between sections on formatting changes
 
-### Priority 1: AI "Tailor to Job Description" Panel
-- Add a new tab or panel in the "AI Tools" section (which currently shows "Coming soon")
-- User pastes a job description → edge function analyzes keyword overlap with current resume
-- Returns: missing keywords, suggested bullet point rewrites, match percentage
-- Reuses existing `resume-ai` edge function with a new `action: "tailor"` mode
-- UI: Split panel with JD on left, suggestions on right, one-click "Apply" buttons
+### Root Cause
 
-### Priority 2: Resume Completeness Score Widget
-- Floating widget in the editor sidebar showing real-time completion percentage
-- Scoring rules: has summary (+10), has 2+ experience entries (+20), all entries have descriptions (+15), dates filled (+10), contact info complete (+15), skills section exists (+10), quantified achievements detected (+20)
-- Visual: circular progress ring with percentage, expandable checklist of what's missing
-- Lives above the "Add Content" button in the Content tab
+The architecture uses a hidden DOM for measurement and then replicates computed `marginTop` mutations to visible pages via DOM manipulation. The core problem:
 
-### Priority 3: Populate the "AI Tools" Tab
-- Currently renders "AI Tools — Coming soon" placeholder
-- Build out with: "Tailor to Job" (above), "Generate Summary from Experience", "Suggest Skills", "Optimize Bullet Points (batch)"
-- Each tool card shows a description, input area, and results
+1. When `data`/`customize` changes (color, bold, font size), React re-renders visible A4Page components. Because React reconciles using stable keys (`section.id`, `entry.id`), DOM elements are **reused in place** — old `marginTop` values set by previous DOM manipulation survive the re-render.
 
-### Priority 4: Real-time Word Count per Section
-- Add a small `<span>` below each `RichTextEditor` showing word count and bullet point count
-- Highlight in amber if too long (>150 words per entry) or too short (<20 words)
-- Lightweight: computed from the editor's text content on each change
+2. The pagination effect fires but waits **~32ms** (double rAF) before computing new mutations and calling `setMutationVersion`. During this gap, stale margins persist on visible pages.
 
-### Priority 5: Click-to-Edit on Preview (Inline Editing)
-- When user clicks text on the A4 preview, show a floating input/textarea positioned over the clicked element
-- On blur/enter, update the corresponding field in the data model
-- Start with simple fields only: job title, company name, degree, institution
-- More complex than other items; implement after the above
+3. The apply effect depends on `[mutationVersion, pageCount]`. After a `data`/`customize` change but before pagination completes, the effect either:
+   - Doesn't run (mutationVersion hasn't changed yet), leaving stale margins
+   - Runs but skips via the generation guard (`muts.gen === lastAppliedGenRef.current`)
 
-### Files to Edit
-- `src/pages/ResumeBuilder.tsx` — Add completeness widget, wire AI Tools tab
-- `src/components/resume-builder/ResumeTopNav.tsx` — No changes needed
-- `src/components/resume-builder/RichTextEditor.tsx` — Add word count display
-- `supabase/functions/resume-ai/index.ts` — Add `tailor` action for JD matching
-- New: `src/components/resume-builder/CompletenessScore.tsx` — Score widget component
-- New: `src/components/resume-builder/AiToolsPanel.tsx` — Full AI tools tab content
-- New: `src/components/resume-builder/TailorToJob.tsx` — JD tailoring panel
+4. For layout-neutral changes (color, bold), the stale margins happen to match the new ones, so no visible issue. But for **any case where content reflows** (font size, line height, or even if React reorders/adds/removes DOM nodes during reconciliation), the stale margins create visible whitespace gaps that persist until the rAF-delayed pagination catches up — and sometimes the index mapping between hidden and visible DOMs gets out of sync, making the gap permanent.
 
-### Implementation Order
-1. Completeness score widget (standalone, no backend needed)
-2. Word count on RichTextEditor (small change)
-3. AI Tools tab with Tailor to Job (needs edge function update)
-4. Click-to-edit on preview (complex, last)
+### The Fix
+
+**Replace the fragile ref+rAF mutation replication with React-synchronized state.**
+
+1. **Store mutations as React state** instead of a ref — change `mutationsRef` to `const [mutations, setMutations] = useState<PaginationMutations | null>(null)`.
+
+2. **Clear mutations immediately when deps change** — add a synchronous effect on `[data, customize]` that clears all visible-page margins to `''`. This prevents stale margins from surviving React re-render.
+
+3. **Remove the generation guard and rAF wrapper from the apply effect** — apply mutations synchronously in a `useLayoutEffect` triggered by `[mutations, pageCount]`. Using `useLayoutEffect` ensures margins are applied before paint, eliminating the flash entirely.
+
+4. **Remove `mutationVersion`, `paginationGenRef`, `lastAppliedGenRef`** — no longer needed since mutations flow through state.
+
+### Implementation Details
+
+**File: `src/components/resume-builder/ResumePreview.tsx`**
+
+- Remove: `paginationGenRef`, `lastAppliedGenRef`, `mutationVersion` state
+- Change: `mutationsRef` → `const [mutations, setMutations] = useState<PaginationMutations | null>(null)`
+- In pagination effect (line 1064): after convergence loop, call `setMutations(muts)` instead of updating ref + incrementing version. Keep `setPageCount` call.
+- Add new effect: `useEffect(() => { /* clear all visible-page margins to '' */ }, [data, customize])` — runs before pagination completes, prevents stale margins from showing
+- Replace apply effect (line 1200) with `useLayoutEffect` depending on `[mutations, pageCount]`:
+  - No generation guard needed
+  - No rAF wrapper needed (useLayoutEffect runs synchronously before paint)
+  - Same margin-application logic: iterate `[data-page-item]`, apply `mutations.items[idx]`, apply child mutations
+- Import `useLayoutEffect` alongside existing hooks
+
+This eliminates:
+- The 2-frame gap where stale margins are visible
+- The ref-vs-state synchronization mismatch
+- The generation counter complexity
 
