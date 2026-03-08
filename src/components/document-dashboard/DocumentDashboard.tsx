@@ -465,7 +465,7 @@ export function DocumentDashboard({ onOpenDocument, onImport }: DocumentDashboar
                   className="px-5 py-2.5 rounded-lg text-sm font-semibold border bg-white hover:opacity-80 transition-colors"
                   style={{ color: BRAND.green, borderColor: BRAND.green }}
                 >
-                  Import Existing CV
+                  {t("importExistingCv")}
                 </button>
               </div>
             </div>
