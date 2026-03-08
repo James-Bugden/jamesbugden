@@ -797,7 +797,6 @@ function SectionsTab({ settings, onChange, sections }: { settings: CustomizeSett
             <SegmentedControl
               options={[
                 { value: "grid", label: "Grid" },
-                { value: "level", label: "Level" },
                 { value: "compact", label: "Compact" },
                 { value: "bubble", label: "Bubble" },
               ]}
