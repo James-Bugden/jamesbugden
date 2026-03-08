@@ -89,8 +89,10 @@ export interface CustomizeSettings {
   accentApplyLines: boolean;
 
   // Per-section settings
-  skillsDisplay: "grid" | "level" | "compact" | "bubble";
-  languagesDisplay: "grid" | "level" | "compact" | "bubble";
+  skillsDisplay: "grid" | "compact" | "bubble";
+  skillsSeparator: "bullet" | "pipe" | "newline" | "comma";
+  languagesDisplay: "grid" | "compact" | "bubble";
+  languagesSeparator: "bullet" | "pipe" | "newline" | "comma";
   educationOrder: "degree-first" | "school-first";
   experienceOrder: "title-first" | "employer-first";
   groupPromotions: boolean;
