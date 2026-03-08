@@ -161,7 +161,7 @@ export function PersonalDetailsCard({ details, onChange, collapsible }: Personal
               </button>
               {details.photo && (
                 <button onClick={() => onChange({ photo: "" })} className="text-xs text-gray-400 hover:text-red-500 flex items-center gap-1">
-                  <Trash2 className="w-3 h-3" /> Remove
+                  <Trash2 className="w-3 h-3" /> {t("remove")}
                 </button>
               )}
             </div>
