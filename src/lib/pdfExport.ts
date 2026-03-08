@@ -50,21 +50,46 @@ export async function exportToPdf({ elementId, fileName, pageFormat = "a4" }: Ex
       logging: false,
       onclone: (_doc: Document, clone: HTMLElement) => {
         // Modern browsers output color(srgb ...) which html2canvas can't parse.
-        // Convert all color-related styles to rgb fallbacks.
+        // Convert ALL color-related styles to safe rgb() fallbacks.
         const allEls = [clone, ...Array.from(clone.querySelectorAll("*"))] as HTMLElement[];
-        const colorProps = ["color", "background-color", "border-color", "border-top-color", "border-right-color", "border-bottom-color", "border-left-color", "outline-color", "text-decoration-color", "fill", "stroke"];
+        const colorProps = ["color", "background-color", "border-color", "border-top-color", "border-right-color", "border-bottom-color", "border-left-color", "outline-color", "text-decoration-color", "fill", "stroke", "caret-color", "column-rule-color", "text-emphasis-color"];
         const canvas = document.createElement("canvas");
+        canvas.width = 1;
+        canvas.height = 1;
         const ctx2d = canvas.getContext("2d")!;
+
+        const safeResolve = (raw: string): string | null => {
+          if (!raw || raw === "transparent" || raw === "inherit" || raw === "currentcolor" || raw === "none") return null;
+          // If it's already rgb/rgba, leave it
+          if (raw.startsWith("rgb")) return null;
+          // Try canvas 2d for conversion
+          ctx2d.clearRect(0, 0, 1, 1);
+          ctx2d.fillStyle = "#000000";
+          ctx2d.fillStyle = raw;
+          const resolved = ctx2d.fillStyle;
+          // If canvas understood it, use that
+          if (resolved !== "#000000" || raw === "#000000" || raw === "black") return resolved;
+          // Manual parse for color(srgb r g b / a) or color(srgb r g b)
+          const srgbMatch = raw.match(/color\(\s*srgb\s+([\d.]+)\s+([\d.]+)\s+([\d.]+)(?:\s*\/\s*([\d.]+))?\s*\)/);
+          if (srgbMatch) {
+            const r = Math.round(parseFloat(srgbMatch[1]) * 255);
+            const g = Math.round(parseFloat(srgbMatch[2]) * 255);
+            const b = Math.round(parseFloat(srgbMatch[3]) * 255);
+            const a = srgbMatch[4] !== undefined ? parseFloat(srgbMatch[4]) : 1;
+            return a < 1 ? `rgba(${r},${g},${b},${a})` : `rgb(${r},${g},${b})`;
+          }
+          // If it contains "color(" at all, fall back to transparent to avoid crash
+          if (raw.includes("color(")) return "transparent";
+          return null;
+        };
+
         for (const el of allEls) {
           const cs = getComputedStyle(el);
           for (const prop of colorProps) {
             const val = cs.getPropertyValue(prop);
-            if (val && val.startsWith("color(")) {
-              // Use canvas 2d context to convert to rgba
-              ctx2d.fillStyle = "rgba(0,0,0,1)";
-              ctx2d.fillStyle = val;
-              const resolved = ctx2d.fillStyle;
-              el.style.setProperty(prop, resolved);
+            const safe = safeResolve(val);
+            if (safe !== null) {
+              el.style.setProperty(prop, safe, "important");
             }
           }
         }
