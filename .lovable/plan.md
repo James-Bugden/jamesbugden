@@ -1,48 +1,37 @@
 
+Goal: fix the whitespace gap bug that appears after changing text size in the Resume Builder preview.
 
-## Resume Builder Feature Improvements
+What I found
+- The pagination engine computes page-break margin mutations into `mutationsRef`.
+- The visible-page apply effect currently runs on `[pageCount, data, customize]`.
+- On font-size changes where `pageCount` does not change, the apply effect can run before new mutations are ready, then never rerun after mutations are updated (because refs don’t trigger re-renders).  
+- Result: stale margins remain applied, creating persistent white space between sections.
 
-### Priority 1: AI "Tailor to Job Description" Panel
-- Add a new tab or panel in the "AI Tools" section (which currently shows "Coming soon")
-- User pastes a job description → edge function analyzes keyword overlap with current resume
-- Returns: missing keywords, suggested bullet point rewrites, match percentage
-- Reuses existing `resume-ai` edge function with a new `action: "tailor"` mode
-- UI: Split panel with JD on left, suggestions on right, one-click "Apply" buttons
+Implementation plan
 
-### Priority 2: Resume Completeness Score Widget
-- Floating widget in the editor sidebar showing real-time completion percentage
-- Scoring rules: has summary (+10), has 2+ experience entries (+20), all entries have descriptions (+15), dates filled (+10), contact info complete (+15), skills section exists (+10), quantified achievements detected (+20)
-- Visual: circular progress ring with percentage, expandable checklist of what's missing
-- Lives above the "Add Content" button in the Content tab
+1) Add a render-trigger for fresh pagination mutations
+- File: `src/components/resume-builder/ResumePreview.tsx`
+- Add a lightweight state like `mutationVersion` (number).
+- After pagination finishes and `mutationsRef.current` is updated with a new generation, increment `mutationVersion`.
 
-### Priority 3: Populate the "AI Tools" Tab
-- Currently renders "AI Tools — Coming soon" placeholder
-- Build out with: "Tailor to Job" (above), "Generate Summary from Experience", "Suggest Skills", "Optimize Bullet Points (batch)"
-- Each tool card shows a description, input area, and results
+2) Rewire visible mutation application to run only when fresh mutations are ready
+- Update the apply effect dependencies to include `mutationVersion` (and keep `pageCount` as needed for ref availability), removing reliance on `data/customize` timing.
+- Keep generation guard (`lastAppliedGenRef`) so each mutation generation is applied exactly once.
 
-### Priority 4: Real-time Word Count per Section
-- Add a small `<span>` below each `RichTextEditor` showing word count and bullet point count
-- Highlight in amber if too long (>150 words per entry) or too short (<20 words)
-- Lightweight: computed from the editor's text content on each change
+3) Prevent stale spacing when content structure changes
+- In apply effect, continue overwriting `marginTop` for every current `[data-page-item]` (`mt ? px : ''`) and clearing child block margins before applying child mutations.
+- This ensures removed/changed entries don’t keep old spacer offsets.
 
-### Priority 5: Click-to-Edit on Preview (Inline Editing)
-- When user clicks text on the A4 preview, show a floating input/textarea positioned over the clicked element
-- On blur/enter, update the corresponding field in the data model
-- Start with simple fields only: job title, company name, degree, institution
-- More complex than other items; implement after the above
+4) Keep pagination/trim behavior intact
+- Preserve the existing trailing-empty-page trimming logic and convergence loop.
+- Do not change section rendering semantics; only synchronize when mutations are applied.
 
-### Files to Edit
-- `src/pages/ResumeBuilder.tsx` — Add completeness widget, wire AI Tools tab
-- `src/components/resume-builder/ResumeTopNav.tsx` — No changes needed
-- `src/components/resume-builder/RichTextEditor.tsx` — Add word count display
-- `supabase/functions/resume-ai/index.ts` — Add `tailor` action for JD matching
-- New: `src/components/resume-builder/CompletenessScore.tsx` — Score widget component
-- New: `src/components/resume-builder/AiToolsPanel.tsx` — Full AI tools tab content
-- New: `src/components/resume-builder/TailorToJob.tsx` — JD tailoring panel
+Validation checklist
+- Reproduce with font size slider: increase/decrease repeatedly; confirm no phantom gaps between sections.
+- Reproduce with line-height and margin sliders; confirm spacing updates smoothly.
+- Re-test text formatting edits (bold/color) to confirm no flicker regression.
+- Verify multi-page resumes: page breaks still avoid splitting entries and no extra trailing blank page appears.
 
-### Implementation Order
-1. Completeness score widget (standalone, no backend needed)
-2. Word count on RichTextEditor (small change)
-3. AI Tools tab with Tailor to Job (needs edge function update)
-4. Click-to-edit on preview (complex, last)
-
+Technical details
+- Root cause is a synchronization issue between ref-updated pagination mutations and effect timing, not the spacing math itself.
+- Fix strategy is event-ordering: apply mutations only after pagination publishes a new generation via state-triggered rerender.
