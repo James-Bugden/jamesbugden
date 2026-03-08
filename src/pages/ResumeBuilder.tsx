@@ -699,7 +699,7 @@ const ResumeBuilder = () => {
                     const removed = section;
                     removeSection(section.id);
                     toast({
-                      title: "Section removed",
+                      title: t("sectionRemoved"),
                       description: `${removed.title} was deleted.`,
                       action: (
                         <button
@@ -711,7 +711,7 @@ const ResumeBuilder = () => {
                           className="text-xs font-semibold hover:opacity-80 px-2 py-1 rounded transition-opacity"
                           style={{ color: BRAND.green, backgroundColor: BRAND.greenLight }}
                         >
-                          Undo
+                          {t("undo")}
                         </button>
                       ),
                     });
