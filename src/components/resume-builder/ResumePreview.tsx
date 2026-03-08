@@ -1417,6 +1417,15 @@ export const ResumePreview = React.memo(function ResumePreview({
         />
       )}
 
+      {formatToolbar && onContentEdit && (
+        <InlineFormatToolbar
+          rect={formatToolbar.rect}
+          onFormat={handleFormat}
+          onClose={() => setFormatToolbar(null)}
+          containerRect={containerRef.current?.getBoundingClientRect()}
+        />
+      )}
+
       <div className="sticky bottom-4 flex justify-center pointer-events-none z-10">
         <div className="pointer-events-auto flex items-center gap-1 bg-white/90 backdrop-blur-sm rounded-full shadow-md border border-gray-200 px-1.5 py-1">
           <button
