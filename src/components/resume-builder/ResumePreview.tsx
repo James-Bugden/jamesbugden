@@ -300,60 +300,70 @@ function renderSectionEntries(section: ResumeSection, customize?: CustomizeSetti
   }
 
   if (section.type === "languages") {
-    const langDisplay = c?.languagesDisplay || "grid";
+    const langDisplay = c?.languagesDisplay || section.layout || "grid";
+    const sep = section.separator || "bullet";
+    const subStyle = section.subtitleStyle || "dash";
 
+    const formatLangLabel = (lang: string, prof: string) => {
+      if (!prof) return lang;
+      if (subStyle === "dash") return `${lang} — ${prof}`;
+      if (subStyle === "bracket") return `${lang} (${prof})`;
+      return `${lang}: ${prof}`;
+    };
+
+    const sepChar = sep === "pipe" ? " | " : sep === "comma" ? ", " : " · ";
+
+    const validEntries = section.entries.filter((e) => e.fields.language?.trim() || e.fields.proficiency?.trim());
+
+    if (langDisplay === "compact") {
+      if (sep === "newline") {
+        return (
+          <div className="mt-[1mm] flex flex-col gap-[0.8mm]">
+            {validEntries.map((entry) => (
+              <span key={entry.id} style={{ fontSize: skillPt(base), color: "var(--resume-body)" }}>
+                {formatLangLabel(entry.fields.language?.trim() || "", entry.fields.proficiency?.trim() || "")}
+              </span>
+            ))}
+          </div>
+        );
+      }
+      return (
+        <p className="mt-[1mm]" style={{ fontSize: skillPt(base), color: "var(--resume-body)" }}>
+          {validEntries.map((e) => formatLangLabel(e.fields.language?.trim() || "", e.fields.proficiency?.trim() || "")).join(sepChar)}
+        </p>
+      );
+    }
+
+    if (langDisplay === "bubble") {
+      return (
+        <div className="flex flex-wrap gap-[1.6mm] mt-[1mm]">
+          {validEntries.map((entry) => (
+            <span
+              key={entry.id}
+              className="px-[2.5mm] py-[0.8mm] rounded-full"
+              style={{
+                fontSize: skillPt(base),
+                color: "var(--resume-body)",
+                backgroundColor: "color-mix(in srgb, var(--resume-accent) 10%, white)",
+                border: "0.3mm solid color-mix(in srgb, var(--resume-accent) 25%, white)",
+              }}
+            >
+              {formatLangLabel(entry.fields.language?.trim() || "", entry.fields.proficiency?.trim() || "")}
+            </span>
+          ))}
+        </div>
+      );
+    }
+
+    // grid (default) — uses separator for proficiency display
     return (
       <div className="mt-[1mm] space-y-[1.4mm]">
-        {section.entries.map((entry) => {
-          const language = entry.fields.language?.trim();
-          const proficiency = entry.fields.proficiency?.trim();
-          if (!language && !proficiency) return null;
-
-          if (langDisplay === "level") {
-            const lvl = proficiency ? Math.min(5, Math.max(1, ["beginner","elementary","intermediate","upper-intermediate","advanced","native"].indexOf(proficiency.toLowerCase()) + 1 || 3)) : 3;
-            return (
-              <div key={entry.id} className="flex items-center gap-[2mm]">
-                <span className="w-[26mm]" style={{ fontSize: smallPt(base), color: "var(--resume-body)", fontWeight: 600 }}>{language}</span>
-                <div className="flex-1 h-[1.6mm] rounded-full overflow-hidden" style={{ backgroundColor: "#e5e7eb" }}>
-                  <div className="h-full rounded-full" style={{ width: `${lvl * 20}%`, backgroundColor: "var(--resume-accent)" }} />
-                </div>
-              </div>
-            );
-          }
-
-          if (langDisplay === "compact") {
-            return (
-              <span key={entry.id} style={{ fontSize: skillPt(base), color: "var(--resume-body)" }}>
-                {language}{proficiency ? ` (${proficiency})` : ""}
-              </span>
-            );
-          }
-
-          if (langDisplay === "bubble") {
-            return (
-              <span
-                key={entry.id}
-                className="inline-block px-[2.5mm] py-[0.8mm] rounded-full mr-[1.5mm]"
-                style={{
-                  fontSize: skillPt(base),
-                  color: "var(--resume-body)",
-                  backgroundColor: "color-mix(in srgb, var(--resume-accent) 10%, white)",
-                  border: "0.3mm solid color-mix(in srgb, var(--resume-accent) 25%, white)",
-                }}
-              >
-                {language}{proficiency ? ` — ${proficiency}` : ""}
-              </span>
-            );
-          }
-
-          // grid (default)
-          return (
-            <div key={entry.id} className="flex items-center justify-between gap-[3mm]">
-              <span style={{ fontSize: bodyPt(base), color: "var(--resume-body)", fontWeight: 600 }}>{language || "Language"}</span>
-              <span style={{ fontSize: datePt(base), color: "var(--resume-dates)" }}>{proficiency}</span>
-            </div>
-          );
-        })}
+        {validEntries.map((entry) => (
+          <div key={entry.id} className="flex items-center justify-between gap-[3mm]">
+            <span style={{ fontSize: bodyPt(base), color: "var(--resume-body)", fontWeight: 600 }}>{entry.fields.language?.trim() || "Language"}</span>
+            <span style={{ fontSize: datePt(base), color: "var(--resume-dates)" }}>{entry.fields.proficiency?.trim()}</span>
+          </div>
+        ))}
       </div>
     );
   }
