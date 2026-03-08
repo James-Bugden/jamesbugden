@@ -66,7 +66,7 @@ const IndexZhTw = () => {
                 </div>
 
                 <h1 className="font-heading text-[1.875rem] md:text-[3.5rem] lg:text-[4rem] text-foreground leading-[1.12] tracking-tight mb-4 max-w-2xl mx-auto md:mx-0">
-                  拿到年薪 300 萬以上的外商&nbsp;Offer
+                  拿到年薪 <span style={{ fontFamily: 'system-ui, sans-serif', position: 'relative', top: '-0.05em' }}>300</span> 萬以上的外商&nbsp;Offer
                 </h1>
 
                 <p className="text-[0.9375rem] md:text-lg text-foreground/85 leading-relaxed max-w-xl mx-auto md:mx-0 mb-5">
