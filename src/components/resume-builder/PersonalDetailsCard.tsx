@@ -169,16 +169,16 @@ export function PersonalDetailsCard({ details, onChange, collapsible }: Personal
 
           <div className="space-y-3">
             <Field
-              label="Full Name"
+              label={t("fullName")}
               value={details.fullName}
               onChange={(v) => onChange({ fullName: v })}
-              placeholder="Enter your full name"
+              placeholder={t("enterFullName")}
             />
             <Field
-              label="Professional Title"
+              label={t("professionalTitle")}
               value={details.professionalTitle}
               onChange={(v) => onChange({ professionalTitle: v })}
-              placeholder="e.g. Software Engineer"
+              placeholder={t("egSoftwareEngineer")}
             />
 
             <div className="grid grid-cols-2 gap-3">
