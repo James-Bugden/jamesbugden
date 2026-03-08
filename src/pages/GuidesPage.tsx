@@ -74,6 +74,14 @@ const guides: Guide[] = [
     href: "/recruiter-screen-guide",
     category: "Interview Prep",
   },
+  // AI & Job Search
+  {
+    icon: Bot,
+    title: "How to Use AI to Run Your Entire Job Search",
+    description: "Complete guide to using ChatGPT and AI tools for every stage of your job search — from career discovery to salary negotiation",
+    href: "/ai-job-search-guide",
+    category: "AI & Job Search",
+  },
 ];
 
 const categories = ["LinkedIn", "Resume", "Career Change", "Interview Prep"];
