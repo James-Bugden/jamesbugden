@@ -93,11 +93,6 @@ const SEPARATOR_OPTIONS: { value: SectionSeparator; label: string }[] = [
   { value: "newline", label: "New Line" },
 ];
 
-const LEVEL_INDICATOR_OPTIONS: { value: LevelIndicator; label: string }[] = [
-  { value: "bar", label: "Bar" },
-  { value: "dots", label: "Dots" },
-  { value: "text", label: "Text" },
-];
 
 const SUBTITLE_STYLE_OPTIONS: { value: SubtitleStyle; label: string }[] = [
   { value: "dash", label: "Dash —" },
