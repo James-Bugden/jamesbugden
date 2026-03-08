@@ -28,7 +28,7 @@ const LABELS = {
   },
 };
 
-export default function FeedbackBox({ locale = "en" }: FeedbackBoxProps) {
+export default function FeedbackBox({ locale = "en", subject: customSubject }: FeedbackBoxProps) {
   const [open, setOpen] = useState(false);
   const [text, setText] = useState("");
   const { toast } = useToast();
