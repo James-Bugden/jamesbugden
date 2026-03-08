@@ -231,14 +231,34 @@ function renderSectionEntries(section: ResumeSection, customize?: CustomizeSetti
     if (!items.length) return null;
 
     const layout = c?.skillsDisplay || section.layout || "bubble";
+    const sep = section.separator || "bullet";
+    const subStyle = section.subtitleStyle || "dash";
+
+    // Helper: apply subtitle style to "Category: items" pattern
+    const formatItem = (item: string) => {
+      const colonIdx = item.indexOf(":");
+      if (colonIdx === -1) return item;
+      const cat = item.slice(0, colonIdx).trim();
+      const rest = item.slice(colonIdx + 1).trim();
+      if (!rest) return item;
+      if (subStyle === "dash") return `${cat} — ${rest}`;
+      if (subStyle === "bracket") return `${cat} (${rest})`;
+      return `${cat}: ${rest}`;
+    };
+
+    const sepChar = sep === "pipe" ? " | " : sep === "comma" ? ", " : " · ";
 
     if (layout === "grid") {
       return (
         <div className="grid grid-cols-2 gap-x-[6mm] gap-y-[1mm] mt-[1.2mm]">
           {items.map((item, i) => (
             <div key={`${item}-${i}`} className="flex items-center gap-[1.5mm]">
-              <span className="w-[1.1mm] h-[1.1mm] rounded-full" style={{ backgroundColor: "var(--resume-accent)" }} />
-              <span style={{ fontSize: skillPt(base), color: "var(--resume-body)" }}>{item}</span>
+              {sep !== "newline" && (
+                <span style={{ fontSize: skillPt(base), color: "var(--resume-accent)" }}>
+                  {sep === "pipe" ? "|" : sep === "comma" ? "," : "·"}
+                </span>
+              )}
+              <span style={{ fontSize: skillPt(base), color: "var(--resume-body)" }}>{formatItem(item)}</span>
             </div>
           ))}
         </div>
@@ -246,30 +266,19 @@ function renderSectionEntries(section: ResumeSection, customize?: CustomizeSetti
     }
 
     if (layout === "compact") {
-      const separator = section.separator === "pipe" ? " | " : section.separator === "comma" ? ", " : " · ";
-      return <p className="mt-[1.2mm]" style={{ fontSize: skillPt(base), color: "var(--resume-body)" }}>{items.join(separator)}</p>;
+      if (sep === "newline") {
+        return (
+          <div className="mt-[1.2mm] flex flex-col gap-[0.8mm]">
+            {items.map((item, i) => (
+              <span key={`${item}-${i}`} style={{ fontSize: skillPt(base), color: "var(--resume-body)" }}>{formatItem(item)}</span>
+            ))}
+          </div>
+        );
+      }
+      return <p className="mt-[1.2mm]" style={{ fontSize: skillPt(base), color: "var(--resume-body)" }}>{items.map(formatItem).join(sepChar)}</p>;
     }
 
-    if (layout === "level") {
-      return (
-        <div className="space-y-[1.5mm] mt-[1.2mm]">
-          {items.map((item, i) => {
-            const [label, lvl] = item.includes(":") ? item.split(":").map((x) => x.trim()) : [item, "3"];
-            const level = Math.min(5, Math.max(1, parseInt(lvl || "3", 10)));
-
-            return (
-              <div key={`${label}-${i}`} className="flex items-center gap-[2mm]">
-                <span className="w-[26mm]" style={{ fontSize: smallPt(base), color: "var(--resume-body)" }}>{label}</span>
-                <div className="flex-1 h-[1.6mm] rounded-full overflow-hidden" style={{ backgroundColor: "#e5e7eb" }}>
-                  <div className="h-full rounded-full" style={{ width: `${level * 20}%`, backgroundColor: "var(--resume-accent)" }} />
-                </div>
-              </div>
-            );
-          })}
-        </div>
-      );
-    }
-
+    // bubble (default)
     return (
       <div className="flex flex-wrap gap-[1.6mm] mt-[1.2mm]">
         {items.map((item, i) => (
@@ -283,7 +292,7 @@ function renderSectionEntries(section: ResumeSection, customize?: CustomizeSetti
               border: "0.3mm solid color-mix(in srgb, var(--resume-accent) 25%, white)",
             }}
           >
-            {item}
+            {formatItem(item)}
           </span>
         ))}
       </div>
