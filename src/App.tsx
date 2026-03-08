@@ -63,6 +63,8 @@ const Signup = lazy(() => import("./pages/Signup"));
 const ResetPassword = lazy(() => import("./pages/ResetPassword"));
 const Dashboard = lazy(() => import("./pages/Dashboard"));
 const DashboardZhTw = lazy(() => import("./pages/DashboardZhTw"));
+const RecruiterScreenGuide = lazy(() => import("./pages/RecruiterScreenGuide"));
+const RecruiterScreenGuideZhTw = lazy(() => import("./pages/RecruiterScreenGuideZhTw"));
 
 // Toolkit pages - English
 const ToolkitIndex = lazy(() => import("./pages/toolkit/ToolkitIndex"));
@@ -221,6 +223,8 @@ const App = () => (
             <Route path="/reviews/rema-rao" element={<RemaRaoReview />} />
             <Route path="/resume-quick-reference" element={<ResumeQuickReference />} />
             <Route path="/zh-tw/resume-quick-reference" element={<ResumeQuickReferenceZhTw />} />
+            <Route path="/recruiter-screen-guide" element={<RecruiterScreenGuide />} />
+            <Route path="/zh-tw/recruiter-screen-guide" element={<RecruiterScreenGuideZhTw />} />
             <Route path="/resume-analyzer" element={<ResumeAnalyzer />} />
             <Route path="/resume" element={<ResumeBuilder />} />
             <Route path="/jobs" element={<JobTracker />} />
