@@ -259,7 +259,7 @@ export function DocumentDashboard({ onOpenDocument, onImport }: DocumentDashboar
             <p className="text-[13px] font-semibold truncate" style={{ color: BRAND.text }}>{doc.name}</p>
           )}
           <p className="text-[11px] mt-0.5" style={{ color: BRAND.textSecondary }}>
-            edited {formatDate(doc.updatedAt)} · {pageSize(doc.settings)}
+            {t("edited")} {formatDate(doc.updatedAt)} · {pageSize(doc.settings)}
           </p>
         </div>
         <div className="relative flex-shrink-0 ml-1" data-menu-container>
