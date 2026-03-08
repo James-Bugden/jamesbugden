@@ -809,7 +809,7 @@ const ResumeBuilder = () => {
             style={{ color: activeTab === "content" ? BRAND.text : BRAND.textSecondary }}
           >
             <FileText className="w-3.5 h-3.5" />
-            Content
+            {t("content")}
           </button>
           <button
             onClick={() => setActiveTab("customize")}
@@ -822,7 +822,7 @@ const ResumeBuilder = () => {
             style={{ color: activeTab === "customize" ? BRAND.text : BRAND.textSecondary }}
           >
             <Palette className="w-3.5 h-3.5" />
-            Customize
+            {t("customize")}
           </button>
         </div>
 
