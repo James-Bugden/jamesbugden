@@ -1220,7 +1220,7 @@ const RecruiterScreenGuide = () => {
       </section>
 
       {/* Quick Reference Cheat Sheet */}
-      <section className="py-14 md:py-20 px-5 md:px-6 bg-card border-y border-border">
+      <section id="cheatsheet" className="py-14 md:py-20 px-5 md:px-6 bg-card border-y border-border scroll-mt-24">
         <div className="container mx-auto max-w-3xl">
           <div className="flex items-start gap-5 mb-10">
             <span className="text-gold/30 font-heading text-6xl md:text-7xl font-bold leading-none select-none">★</span>
