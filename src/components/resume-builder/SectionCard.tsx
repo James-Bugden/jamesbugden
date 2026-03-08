@@ -373,17 +373,7 @@ export function SectionCard({ section, onUpdate, onRemove }: {
             <PillSwitcher label="Subtitle Style" options={SUBTITLE_STYLE_OPTIONS} value={section.subtitleStyle || "dash"} onChange={(s) => onUpdate({ subtitleStyle: s })} />
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
               <SField label="Language" value={f.language} onChange={set("language")} />
-              <div>
-                <label className="block text-[11px] font-medium text-gray-500 mb-1">Proficiency</label>
-                <select
-                  value={f.proficiency}
-                  onChange={(e) => set("proficiency")(e.target.value)}
-                  className="w-full h-10 rounded-lg bg-gray-50 px-3 text-sm text-gray-900 border border-gray-200 outline-none focus:border-gray-400 cursor-pointer"
-                >
-                  <option value="">Select level</option>
-                  {PROFICIENCY_LEVELS.map((l) => (<option key={l} value={l}>{l}</option>))}
-                </select>
-              </div>
+              <SField label="Proficiency" value={f.proficiency} onChange={set("proficiency")} placeholder="e.g. Native, Fluent, B2" />
             </div>
           </div>
         );
