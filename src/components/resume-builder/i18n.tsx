@@ -288,6 +288,46 @@ export const translations = {
     normal: "Normal",
     bold: "Bold",
     italic: "Italic",
+
+    // AI Tools
+    aiTools: "AI Tools",
+    aiTailorTitle: "Tailor to Job Description",
+    aiTailorDesc: "Paste a job description to get keyword gap analysis and suggestions to improve your match rate.",
+    aiTailorPlaceholder: "Paste the full job description here...",
+    aiSummaryTitle: "Generate Summary",
+    aiSummaryDesc: "Auto-generate a professional summary based on your experience sections.",
+    aiSkillsTitle: "Suggest Skills",
+    aiSkillsDesc: "Get skill suggestions based on your experience and industry.",
+    aiOptimizeTitle: "Optimize All Bullets",
+    aiOptimizeDesc: "Batch-improve all bullet points across your experience sections with stronger action verbs.",
+    aiAnalyzing: "Analyzing...",
+    aiRun: "Run",
+    aiBackToTools: "← Back to tools",
+    aiAnalysisComplete: "AI analysis complete",
+    aiError: "AI Error",
+    aiApplyToSummary: "Apply to Summary Section",
+    aiSummaryApplied: "Summary applied to your resume",
+    aiNoSummarySection: "No summary section",
+    aiAddSummaryFirst: "Add a Summary section first, then apply.",
+
+    // Dashboard extras
+    viewResumeAction: "View Resume",
+    duplicateAction: "Duplicate",
+    newResumeAction: "New resume",
+    importAction: "Import",
+    uploadExistingCvAction: "Upload your existing CV",
+    renameAction: "Rename",
+    deleteAction: "Delete",
+    myAccountAction: "My account",
+    clickToRename: "Click to rename",
+    sectionAddedDesc: "section added.",
+    sectionDeletedDesc: "was deleted.",
+    customSectionFallback: "Custom Section",
+
+    // Date formatting
+    mAgo: "m ago",
+    hAgo: "h ago",
+    dAgo: "d ago",
   },
 
   "zh-tw": {
