@@ -210,25 +210,27 @@ const AiJobSearchGuide = () => {
       <TableOfContents />
 
       {/* Hero */}
-      <section className="pt-28 md:pt-36 pb-12 md:pb-16 px-5 md:px-6 bg-nav-green">
-        <div className="container mx-auto max-w-3xl">
-          <div className="flex flex-col gap-4 mb-8">
-            <div className="flex flex-wrap items-center gap-3 text-sm text-cream-70">
-              <span className="flex items-center gap-1.5"><Bot className="w-4 h-4 text-gold" /> AI-Powered</span>
-              <span className="w-1 h-1 rounded-full bg-cream-70/30" />
-              <span className="flex items-center gap-1.5"><Clock className="w-4 h-4" /> 4-6 hours total</span>
-              <span className="w-1 h-1 rounded-full bg-cream-70/30" />
-              <span className="flex items-center gap-1.5"><FileText className="w-4 h-4" /> 10 Sections</span>
-            </div>
-            <h1 className="font-heading text-3xl md:text-4xl lg:text-5xl text-cream leading-tight">
-              How to Use AI to Run Your Entire Job Search
-            </h1>
-            <p className="text-lg md:text-xl text-cream-70 leading-relaxed">
-              Using ChatGPT at Every Stage: From Career Direction to Final Offer
+      <section className="pt-28 md:pt-36 pb-14 md:pb-20 px-5 md:px-6 bg-executive-green">
+        <div className="container mx-auto max-w-4xl text-center">
+          <div className="inline-flex items-center gap-2 px-4 py-2 bg-cream/10 border border-cream/20 rounded-full mb-6">
+            <Bot className="w-4 h-4 text-gold" />
+            <span className="text-sm text-cream/80">AI-Powered Guide</span>
+          </div>
+          <h1 className="font-heading text-3xl md:text-5xl lg:text-6xl text-cream leading-tight mb-4" style={{ lineHeight: 1.2 }}>
+            How to Use AI to Run Your<br className="hidden sm:block" /> Entire Job Search
+          </h1>
+          <p className="text-lg md:text-xl text-cream/80 mb-3">
+            Using ChatGPT at Every Stage: From Career Direction to Final Offer
+          </p>
+          <div className="flex flex-col sm:flex-row items-center justify-center gap-2 sm:gap-4 mb-6">
+            <p className="text-base text-cream/60 italic">
+              Based on <em>Career Coach GPT</em> by Jeremy Schifeling · Guide by James Bugden
             </p>
-            <p className="text-sm text-cream-70/70 italic">
-              Based on <em>Career Coach GPT</em> by Jeremy Schifeling · Guide written by James Bugden
-            </p>
+          </div>
+          <div className="flex items-center justify-center gap-6 text-sm text-cream/50">
+            <span className="flex items-center gap-1.5"><Clock className="w-4 h-4" /> 4-6 hours total</span>
+            <span className="w-1 h-1 rounded-full bg-cream/20" />
+            <span className="flex items-center gap-1.5"><FileText className="w-4 h-4" /> 10 Sections</span>
           </div>
         </div>
       </section>
