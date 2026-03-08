@@ -1019,9 +1019,10 @@ export const ResumePreview = React.memo(function ResumePreview({
   const containerRef = useRef<HTMLDivElement>(null);
   const hiddenFlowRef = useRef<HTMLDivElement>(null);
   const visiblePageRefs = useRef<(HTMLDivElement | null)[]>([]);
-  const mutationsRef = useRef<PaginationMutations & { gen?: number } | null>(null);
-  const paginationGenRef = useRef(0);
-  const lastAppliedGenRef = useRef(-1);
+   const mutationsRef = useRef<PaginationMutations & { gen?: number } | null>(null);
+   const paginationGenRef = useRef(0);
+   const lastAppliedGenRef = useRef(-1);
+   const [mutationVersion, setMutationVersion] = useState(0);
   const whitespaceWarningShown = useRef(false);
 
   const [autoScale, setAutoScale] = useState(0.65);
@@ -1146,6 +1147,7 @@ export const ResumePreview = React.memo(function ResumePreview({
 
         paginationGenRef.current += 1;
         mutationsRef.current = { ...muts, gen: paginationGenRef.current };
+        setMutationVersion(v => v + 1);
 
         const totalH = root.scrollHeight - contentOriginPX - (marginYPX + footerReservePX);
         const rawPages = totalH / usablePerPage;
@@ -1229,7 +1231,7 @@ export const ResumePreview = React.memo(function ResumePreview({
     });
 
     return () => cancelAnimationFrame(raf);
-  }, [pageCount, data, customize]);
+  }, [mutationVersion, pageCount]);
 
   useEffect(() => {
     const el = containerRef.current;
