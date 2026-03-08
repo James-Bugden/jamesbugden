@@ -7,8 +7,8 @@ export interface TemplatePresetInfo {
 }
 
 export const TEMPLATE_LIST: TemplatePresetInfo[] = [
-  { id: "modern", name: "Modern", desc: "Clean sans-serif, teal accent, compact spacing" },
   { id: "classic", name: "Classic", desc: "Centered header, serif-style, traditional layout" },
+  { id: "modern", name: "Modern", desc: "Clean sans-serif, teal accent, compact spacing" },
   { id: "professional", name: "Professional", desc: "Navy accent, bar headings, bold subtitles" },
   { id: "minimal", name: "Minimal", desc: "Maximum whitespace, all black/gray, sparse" },
   { id: "executive", name: "Executive", desc: "Large name, uppercase headings, charcoal tones" },
