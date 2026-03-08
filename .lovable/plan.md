@@ -1,48 +1,60 @@
 
 
-## Resume Builder Feature Improvements
+## Inline Text Color Editor
 
-### Priority 1: AI "Tailor to Job Description" Panel
-- Add a new tab or panel in the "AI Tools" section (which currently shows "Coming soon")
-- User pastes a job description → edge function analyzes keyword overlap with current resume
-- Returns: missing keywords, suggested bullet point rewrites, match percentage
-- Reuses existing `resume-ai` edge function with a new `action: "tailor"` mode
-- UI: Split panel with JD on left, suggestions on right, one-click "Apply" buttons
+This is a significant feature that replaces the sidebar Colors panel with click-to-edit color picking directly on the resume preview.
 
-### Priority 2: Resume Completeness Score Widget
-- Floating widget in the editor sidebar showing real-time completion percentage
-- Scoring rules: has summary (+10), has 2+ experience entries (+20), all entries have descriptions (+15), dates filled (+10), contact info complete (+15), skills section exists (+10), quantified achievements detected (+20)
-- Visual: circular progress ring with percentage, expandable checklist of what's missing
-- Lives above the "Add Content" button in the Content tab
+### Files to create
 
-### Priority 3: Populate the "AI Tools" Tab
-- Currently renders "AI Tools — Coming soon" placeholder
-- Build out with: "Tailor to Job" (above), "Generate Summary from Experience", "Suggest Skills", "Optimize Bullet Points (batch)"
-- Each tool card shows a description, input area, and results
+**`src/components/resume-builder/InlineColorToolbar.tsx`**
+- Floating toolbar component with 10 preset color swatches (28px circles) + rainbow custom picker circle
+- Props: `targetRect`, `currentColor`, `elementType` (label), `onColorChange`, `onClose`, `isMobile`
+- Positioning: centered above target element with 8px gap; flips below if no space above; mobile: fixed bottom
+- Styling: white bg, `border: 1px solid #e5e7eb`, `border-radius: 12px`, `box-shadow: 0 4px 16px rgba(0,0,0,0.12)`, `padding: 8px 12px`, z-index 999
+- Animations: fade + scale 0.95→1.0 on enter (150ms), fade on exit (100ms)
+- Selected swatch: 2px dark ring
+- Checkmark feedback: green check icon 300ms after selection, then dismiss
+- Custom picker: last circle is rainbow gradient; clicking opens native `<input type="color">`; after picking, replaces rainbow with chosen color for session
+- Dismiss: click outside or "x" button
+- Preset swatches: `#111827, #374151, #6B7280, #9CA3AF, #0891b2, #2563eb, #7c3aed, #dc2626, #16a34a, #D4930D`
 
-### Priority 4: Real-time Word Count per Section
-- Add a small `<span>` below each `RichTextEditor` showing word count and bullet point count
-- Highlight in amber if too long (>150 words per entry) or too short (<20 words)
-- Lightweight: computed from the editor's text content on each change
+### Files to modify
 
-### Priority 5: Click-to-Edit on Preview (Inline Editing)
-- When user clicks text on the A4 preview, show a floating input/textarea positioned over the clicked element
-- On blur/enter, update the corresponding field in the data model
-- Start with simple fields only: job title, company name, degree, institution
-- More complex than other items; implement after the above
+**`src/components/resume-builder/customizeTypes.ts`**
+- Add `bodyColor: string` field to `CustomizeSettings` (default `"#374151"`)
 
-### Files to Edit
-- `src/pages/ResumeBuilder.tsx` — Add completeness widget, wire AI Tools tab
-- `src/components/resume-builder/ResumeTopNav.tsx` — No changes needed
-- `src/components/resume-builder/RichTextEditor.tsx` — Add word count display
-- `supabase/functions/resume-ai/index.ts` — Add `tailor` action for JD matching
-- New: `src/components/resume-builder/CompletenessScore.tsx` — Score widget component
-- New: `src/components/resume-builder/AiToolsPanel.tsx` — Full AI tools tab content
-- New: `src/components/resume-builder/TailorToJob.tsx` — JD tailoring panel
+**`src/components/resume-builder/ResumePreview.tsx`**
+- Add `data-color-role` attributes to all colorable elements in `A4Page`:
+  - Name h1 → `data-color-role="name"` → maps to `nameColor`
+  - Title p → `data-color-role="title"` → `titleColor`
+  - Contact container → `data-color-role="contacts"` → `linkIconColor`
+  - Section headings h2 → `data-color-role="headings"` → `headingsColor`
+  - Date elements → `data-color-role="dates"` → `datesColor`
+  - Entry titles → `data-color-role="entryTitle"` → `nameColor`
+  - Entry subtitles → `data-color-role="subtitle"` → `subtitleColor`
+  - HtmlBlock body text → `data-color-role="body"` → `bodyColor`
+  - Accent lines/dividers → `data-color-role="accent"` → `accentColor`
+  - Page background div → `data-color-role="background"` → `a4Background`
+- Update `cssVars` to use `bodyColor` from settings: `"--resume-body": c?.bodyColor ?? "#374151"`
+- Add `onColorChange` prop to `ResumePreviewProps` and `A4Page`
+- In the outer `ResumePreview` component: add click handler on the page container that detects clicks on `[data-color-role]` elements, captures element rect (adjusted for scale), and shows `InlineColorToolbar`
+- Add CSS hover state: `[data-color-role]` elements get `1px dashed lightblue` outline with `4px` padding on hover (desktop only, via a `<style>` tag)
+- Map `data-color-role` values to customize field names in a lookup object
 
-### Implementation Order
-1. Completeness score widget (standalone, no backend needed)
-2. Word count on RichTextEditor (small change)
-3. AI Tools tab with Tailor to Job (needs edge function update)
-4. Click-to-edit on preview (complex, last)
+**`src/components/resume-builder/CustomizePanel.tsx`**
+- Delete the entire Colors `SettingCard` block (lines 481-494)
+
+**`src/pages/ResumeBuilder.tsx`**
+- Pass `onColorChange` callback to `ResumePreview` that calls `updateCustomize` with the mapped field
+
+### Interaction flow
+1. User hovers over text on preview → dashed outline appears
+2. User clicks → `InlineColorToolbar` appears above the element
+3. User picks a swatch → checkmark flash → toolbar dismisses → color updates in real-time via `updateCustomize`
+4. Custom picker: click rainbow circle → native color input opens → selection applies same way
+
+### Mobile behavior
+- Toolbar fixed to bottom of viewport (above zoom bar)
+- Swatches horizontally scrollable
+- No hover outlines; tap opens toolbar directly
 
