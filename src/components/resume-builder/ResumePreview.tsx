@@ -532,21 +532,20 @@ function renderSectionEntries(section: ResumeSection, customize?: CustomizeSetti
 
             return (
               <div key={`group-${gi}`} data-page-item>
-                <div className="flex items-start justify-between gap-[4mm]">
-                  <p data-color-role="entryTitle" style={{ fontSize: titleFontSize, fontWeight: 700, color: "var(--resume-name)" }}>{group.company || "Company"}</p>
-                  <p data-color-role="dates" style={{ fontSize: subtitleFontSize, color: "var(--resume-dates)", whiteSpace: "nowrap" }}>{groupDateRange}</p>
-                </div>
-                <div style={{ paddingLeft: "4mm", marginTop: "1.5mm", display: "flex", flexDirection: "column", gap: "2mm" }}>
+                <p data-color-role="entryTitle" style={{ fontSize: titleFontSize, fontWeight: 700, color: "var(--resume-name)" }}>{group.company || "Company"}</p>
+                <div style={{ marginTop: "1.5mm", display: "flex", flexDirection: "column", gap: "2mm" }}>
                   {group.entries.map(entry => {
                     const f = entry.fields;
                     const roleDate = formatDateRange(f) || f.date || "";
                     return (
                       <div key={entry.id}>
                         <div className="flex items-start justify-between gap-[4mm]">
-                          <p data-color-role="entryTitle" style={{ fontSize: subtitleFontSize, fontWeight: 600, color: "var(--resume-name)" }}>{f.position || "Role"}</p>
-                          {roleDate && <p data-color-role="dates" style={{ fontSize: subtitleFontSize, color: "var(--resume-dates)", whiteSpace: "nowrap" }}>{roleDate}</p>}
+                          <p data-color-role="entryTitle" style={{ fontSize: subtitleFontSize, fontWeight: 600, fontStyle: "italic", color: "var(--resume-name)" }}>{f.position || "Role"}</p>
+                          <div style={{ textAlign: "right", flexShrink: 0 }}>
+                            {roleDate && <p data-color-role="dates" style={{ fontSize: subtitleFontSize, color: "var(--resume-dates)", whiteSpace: "nowrap" }}>{roleDate}</p>}
+                            {f.location && <p data-color-role="subtitle" style={{ fontSize: subtitleFontSize, color: "var(--resume-subtitle)", whiteSpace: "nowrap" }}>{f.location}</p>}
+                          </div>
                         </div>
-                        {f.location && <p data-color-role="subtitle" style={{ fontSize: subtitleFontSize, color: "var(--resume-subtitle)", fontStyle: subtitleFS, marginTop: "0.3mm" }}>{f.location}</p>}
                         <HtmlBlock html={f.description} fontSize={bodyPt(base)} className={`mt-[1mm] [&_p]:mb-[1mm] ${listClass} [&_ol]:list-decimal [&_ol]:pl-[5mm] [&_li]:mb-[0.4mm] [&_a]:underline`} />
                       </div>
                     );
