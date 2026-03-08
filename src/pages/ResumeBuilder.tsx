@@ -737,10 +737,10 @@ const ResumeBuilder = () => {
                   className="flex items-center justify-center gap-2 px-8 py-3 rounded-full text-white font-semibold text-sm transition-all hover:opacity-90 active:scale-[0.98] shadow-md"
                   style={{ background: "linear-gradient(135deg, #D4930D 0%, #e8a520 50%, #f0c060 100%)" }}
                 >
-                  <Plus className="w-4.5 h-4.5" /> Add Content
+                  <Plus className="w-4.5 h-4.5" /> {t("addContent")}
                 </button>
               </TooltipTrigger>
-              <TooltipContent side="bottom" className="text-xs">Add a new section</TooltipContent>
+              <TooltipContent side="bottom" className="text-xs">{t("addContent")}</TooltipContent>
             </Tooltip>
           </TooltipProvider>
         </div>
