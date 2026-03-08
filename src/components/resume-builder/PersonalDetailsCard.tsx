@@ -230,7 +230,7 @@ export function PersonalDetailsCard({ details, onChange, collapsible }: Personal
                   className="flex items-center gap-1.5 text-xs font-medium text-gray-500 hover:text-gray-700 transition-colors py-1"
                 >
                   <ChevronDown className={cn("w-3.5 h-3.5 transition-transform", showExtras && "rotate-180")} />
-                  Add more details
+                  {t("addMoreDetails")}
                 </button>
                 {showExtras && (
                   <div className="flex flex-wrap gap-1.5 mt-2">
