@@ -6,6 +6,7 @@ import { useToast } from "@/hooks/use-toast";
 
 interface FeedbackBoxProps {
   locale?: "en" | "zh-tw";
+  subject?: string;
 }
 
 const LABELS = {
