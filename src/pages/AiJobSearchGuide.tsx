@@ -1148,10 +1148,7 @@ Generate a short, conversational response that asks them to do better, given my 
       {/* Share */}
       <section className="pb-12 px-5 md:px-6">
         <div className="container mx-auto max-w-3xl">
-          <GuideShareButtons
-            url="https://jamesbugden.lovable.app/ai-job-search-guide"
-            title="How to Use AI to Run Your Entire Job Search — James Bugden"
-          />
+          <GuideShareButtons />
         </div>
       </section>
 
