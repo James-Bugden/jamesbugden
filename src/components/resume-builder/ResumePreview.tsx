@@ -957,6 +957,10 @@ export const ResumePreview = React.memo(function ResumePreview({
     root.querySelectorAll('[data-page-item]').forEach(el => {
       (el as HTMLElement).style.marginTop = '';
     });
+    root.querySelectorAll('[data-page-break-child]').forEach(el => {
+      (el as HTMLElement).style.marginTop = '';
+      el.removeAttribute('data-page-break-child');
+    });
 
     let raf1: number;
     let raf2: number;
@@ -968,19 +972,37 @@ export const ResumePreview = React.memo(function ResumePreview({
 
         items.forEach(el => {
           const rect = el.getBoundingClientRect();
-          // Element top relative to content area (after top margin)
           const elTop = rect.top - rootRect.top - marginYPX - headerReservePX + addedSpace;
           const elBottom = elTop + rect.height;
 
-          // Which page does this element start on?
           const pageIndex = Math.floor(Math.max(0, elTop) / usablePerPage);
           const pageBottom = (pageIndex + 1) * usablePerPage;
 
-          // If element crosses page boundary and fits on one page, push it down
-          if (elTop < pageBottom && elBottom > pageBottom + 2 && rect.height < usablePerPage * 0.95) {
-            const push = pageBottom - elTop + 1; // +1px buffer
-            (el as HTMLElement).style.marginTop = `${push}px`;
-            addedSpace += push;
+          // Element crosses page boundary
+          if (elTop < pageBottom && elBottom > pageBottom + 2) {
+            if (rect.height < usablePerPage * 0.95) {
+              // Small enough to push to next page
+              const push = pageBottom - elTop + 1;
+              (el as HTMLElement).style.marginTop = `${push}px`;
+              addedSpace += push;
+            } else {
+              // Too large — find block-level children to break at a finer level
+              const children = el.querySelectorAll('p, li, div:not([data-page-item]), h2, h3, h4, span.flex');
+              children.forEach(child => {
+                const cr = child.getBoundingClientRect();
+                const childTop = cr.top - rootRect.top - marginYPX - headerReservePX + addedSpace;
+                const childBottom = childTop + cr.height;
+                const childPageIndex = Math.floor(Math.max(0, childTop) / usablePerPage);
+                const childPageBottom = (childPageIndex + 1) * usablePerPage;
+
+                if (childTop < childPageBottom && childBottom > childPageBottom + 2 && cr.height < usablePerPage * 0.5) {
+                  const push = childPageBottom - childTop + 1;
+                  (child as HTMLElement).style.marginTop = `${push}px`;
+                  (child as HTMLElement).setAttribute('data-page-break-child', 'true');
+                  addedSpace += push;
+                }
+              });
+            }
           }
         });
 
