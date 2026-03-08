@@ -25,11 +25,11 @@ export function InlineFormatToolbar({ rect, onFormat, onClose, containerRect }: 
     return () => document.removeEventListener("mousedown", handler);
   }, [onClose]);
 
-  const cLeft = containerRect?.left ?? 0;
-  const cTop = containerRect?.top ?? 0;
-  const left = rect.left + rect.width / 2 - 90 - cLeft;
-  let top = rect.top - cTop - 48;
-  if (top < 0) top = rect.bottom - cTop + 8;
+  // Use fixed positioning with screen coordinates (the preview is CSS-scaled,
+  // so container-relative offsets don't match screen coords).
+  const left = rect.left + rect.width / 2 - 90;
+  let top = rect.top - 48;
+  if (top < 0) top = rect.bottom + 8;
 
   return (
     <div
