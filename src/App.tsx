@@ -232,6 +232,8 @@ const App = () => (
             <Route path="/zh-tw/recruiter-screen-guide" element={<RecruiterScreenGuideZhTw />} />
             <Route path="/ai-job-search-guide" element={<AiJobSearchGuide />} />
             <Route path="/zh-tw/ai-job-search-guide" element={<AiJobSearchGuideZhTw />} />
+            <Route path="/job-offer-guide" element={<JobOfferGuide />} />
+            <Route path="/zh-tw/job-offer-guide" element={<JobOfferGuideZhTw />} />
             <Route path="/resume-analyzer" element={<ResumeAnalyzer />} />
             <Route path="/resume" element={<ResumeBuilder />} />
             <Route path="/zh-tw/resume" element={<ResumeBuilderZhTw />} />
