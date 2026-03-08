@@ -56,6 +56,7 @@ const ResumeQuickReference = lazy(() => import("./pages/ResumeQuickReference"));
 const ResumeQuickReferenceZhTw = lazy(() => import("./pages/ResumeQuickReferenceZhTw"));
 const ResumeAnalyzer = lazy(() => import("./pages/ResumeAnalyzer"));
 const ResumeBuilder = lazy(() => import("./pages/ResumeBuilder"));
+const ResumeBuilderZhTw = lazy(() => import("./pages/ResumeBuilderZhTw"));
 const JobTracker = lazy(() => import("./pages/JobTracker"));
 const TrackerPage = lazy(() => import("./pages/TrackerPage"));
 const Login = lazy(() => import("./pages/Login"));
@@ -227,6 +228,7 @@ const App = () => (
             <Route path="/zh-tw/recruiter-screen-guide" element={<RecruiterScreenGuideZhTw />} />
             <Route path="/resume-analyzer" element={<ResumeAnalyzer />} />
             <Route path="/resume" element={<ResumeBuilder />} />
+            <Route path="/zh-tw/resume" element={<ResumeBuilderZhTw />} />
             <Route path="/jobs" element={<JobTracker />} />
             <Route path="/tracker" element={<TrackerPage />} />
             <Route path="/site-directory" element={<SiteDirectory />} />
