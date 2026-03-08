@@ -57,6 +57,11 @@ export interface CustomizeSettings {
   // Font
   bodyFont: string;
 
+  // Photo
+  showPhoto: boolean;
+  photoSize: "s" | "m" | "l";
+  photoShape: "circle" | "square" | "rounded";
+
   // Other
   shareAsTemplate: boolean;
 
@@ -138,6 +143,10 @@ export const DEFAULT_CUSTOMIZE: CustomizeSettings = {
   titleSameLine: false,
 
   bodyFont: "'Inter', sans-serif",
+
+  showPhoto: true,
+  photoSize: "m",
+  photoShape: "circle",
 
   shareAsTemplate: false,
 

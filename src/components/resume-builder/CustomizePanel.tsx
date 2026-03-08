@@ -755,11 +755,36 @@ function HeaderTab({ settings, onChange }: { settings: CustomizeSettings; onChan
       </SettingCard>
 
       <SettingCard title="Photo" defaultOpen={false}>
-        <div className="flex items-center gap-3 py-2" style={{ color: B.textSec }}>
-          <div className="w-10 h-10 rounded-full bg-gray-100 flex items-center justify-center">
-            <Camera className="w-5 h-5 text-gray-300" />
-          </div>
-          <p className="text-xs">Add a photo in the Content tab to enable photo styling options</p>
+        <div className="space-y-4">
+          <SwitchRow label="Show photo" checked={settings.showPhoto !== false} onChange={(v) => onChange({ showPhoto: v })} />
+          {settings.showPhoto !== false && (
+            <>
+              <div>
+                <FieldLabel>Size</FieldLabel>
+                <SegmentedControl
+                  options={[
+                    { value: "s", label: "Small" },
+                    { value: "m", label: "Medium" },
+                    { value: "l", label: "Large" },
+                  ]}
+                  value={settings.photoSize || "m"}
+                  onChange={(v) => onChange({ photoSize: v as "s" | "m" | "l" })}
+                />
+              </div>
+              <div>
+                <FieldLabel>Shape</FieldLabel>
+                <SegmentedControl
+                  options={[
+                    { value: "circle", label: "Circle" },
+                    { value: "rounded", label: "Rounded" },
+                    { value: "square", label: "Square" },
+                  ]}
+                  value={settings.photoShape || "circle"}
+                  onChange={(v) => onChange({ photoShape: v as "circle" | "square" | "rounded" })}
+                />
+              </div>
+            </>
+          )}
         </div>
       </SettingCard>
     </>

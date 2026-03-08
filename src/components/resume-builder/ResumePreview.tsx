@@ -797,78 +797,117 @@ export const A4Page = React.memo(function A4Page({
         }}
       >
         <header className="mb-[4.5mm]" style={{ textAlign: c?.headerAlign || "center" }}>
-          {titleSameLine ? (
-            <div
-              className="flex items-end gap-[3mm]"
-              style={{
-                justifyContent:
-                  c?.headerAlign === "left"
-                    ? "flex-start"
-                    : c?.headerAlign === "right"
-                      ? "flex-end"
-                      : "center",
-              }}
-            >
-              <h1
-                className="font-bold uppercase tracking-[0.1em]"
+          {(() => {
+            const showPhoto = p.photo && c?.showPhoto !== false;
+            const photoSizeMM = { s: 12, m: 18, l: 24 }[c?.photoSize || "m"] || 18;
+            const photoShape = c?.photoShape || "circle";
+            const photoBorderRadius = photoShape === "circle" ? "50%" : photoShape === "rounded" ? "2mm" : "0";
+            const align = c?.headerAlign || "center";
+
+            const nameBlock = titleSameLine ? (
+              <div
+                className="flex items-end gap-[3mm]"
                 style={{
-                  fontSize: NAME_SIZES[c?.nameSize || "s"],
-                  color: "var(--resume-name)",
-                  fontWeight: c?.nameBold !== false ? 700 : 400,
-                  fontFamily: c?.nameFont === "creative" ? c?.headingFont || c?.bodyFont : c?.bodyFont,
+                  justifyContent: align === "left" ? "flex-start" : align === "right" ? "flex-end" : "center",
                 }}
               >
-                {p.fullName || "YOUR NAME"}
-              </h1>
-              <p style={{ fontSize: TITLE_SIZES[c?.titleSize || "m"], color: "var(--resume-title)" }}>
-                {p.professionalTitle}
-              </p>
-            </div>
-          ) : (
-            <>
-              <h1
-                className="font-bold uppercase tracking-[0.1em]"
-                style={{
-                  fontSize: NAME_SIZES[c?.nameSize || "s"],
-                  color: "var(--resume-name)",
-                  fontWeight: c?.nameBold !== false ? 700 : 400,
-                  fontFamily: c?.nameFont === "creative" ? c?.headingFont || c?.bodyFont : c?.bodyFont,
-                }}
-              >
-                {p.fullName || "YOUR NAME"}
-              </h1>
-              {p.professionalTitle && (
-                <p className="mt-[1mm]" style={{ fontSize: TITLE_SIZES[c?.titleSize || "m"], color: "var(--resume-title)" }}>
+                <h1
+                  className="font-bold uppercase tracking-[0.1em]"
+                  style={{
+                    fontSize: NAME_SIZES[c?.nameSize || "s"],
+                    color: "var(--resume-name)",
+                    fontWeight: c?.nameBold !== false ? 700 : 400,
+                    fontFamily: c?.nameFont === "creative" ? c?.headingFont || c?.bodyFont : c?.bodyFont,
+                  }}
+                >
+                  {p.fullName || "YOUR NAME"}
+                </h1>
+                <p style={{ fontSize: TITLE_SIZES[c?.titleSize || "m"], color: "var(--resume-title)" }}>
                   {p.professionalTitle}
                 </p>
-              )}
-            </>
-          )}
+              </div>
+            ) : (
+              <>
+                <h1
+                  className="font-bold uppercase tracking-[0.1em]"
+                  style={{
+                    fontSize: NAME_SIZES[c?.nameSize || "s"],
+                    color: "var(--resume-name)",
+                    fontWeight: c?.nameBold !== false ? 700 : 400,
+                    fontFamily: c?.nameFont === "creative" ? c?.headingFont || c?.bodyFont : c?.bodyFont,
+                  }}
+                >
+                  {p.fullName || "YOUR NAME"}
+                </h1>
+                {p.professionalTitle && (
+                  <p className="mt-[1mm]" style={{ fontSize: TITLE_SIZES[c?.titleSize || "m"], color: "var(--resume-title)" }}>
+                    {p.professionalTitle}
+                  </p>
+                )}
+              </>
+            );
 
-          {contactItems.length > 0 && (
-            <div
-              className="flex items-center flex-wrap mt-[2.5mm] gap-x-[4mm] gap-y-[1mm]"
-              style={{
-                fontSize: contactPt(baseFontSize),
-                color: c?.linkIconColor || "var(--resume-dates)",
-                justifyContent:
-                  c?.headerAlign === "right" ? "flex-end" : c?.headerAlign === "left" ? "flex-start" : "center",
-              }}
-            >
-              {contactItems.map((item, i) => {
-                const sep = c?.contactSeparator ?? "bar";
-                const showIcon = sep === "icon" || (headerIconStyle !== "none");
-                return (
-                  <span key={`${item.text}-${i}`} className="flex items-center gap-[1.1mm]">
-                    {i > 0 && sep === "bullet" && <span className="mx-[1mm]">·</span>}
-                    {i > 0 && sep === "bar" && <span className="mx-[1mm]">|</span>}
-                    {sep === "icon" && item.icon}
-                    {item.text}
-                  </span>
-                );
-              })}
-            </div>
-          )}
+            const contacts = contactItems.length > 0 ? (
+              <div
+                className="flex items-center flex-wrap mt-[2.5mm] gap-x-[4mm] gap-y-[1mm]"
+                style={{
+                  fontSize: contactPt(baseFontSize),
+                  color: c?.linkIconColor || "var(--resume-dates)",
+                  justifyContent: align === "right" ? "flex-end" : align === "left" ? "flex-start" : "center",
+                }}
+              >
+                {contactItems.map((item, i) => {
+                  const sep = c?.contactSeparator ?? "bar";
+                  const showIcon = sep === "icon" || (headerIconStyle !== "none");
+                  return (
+                    <span key={`${item.text}-${i}`} className="flex items-center gap-[1.1mm]">
+                      {i > 0 && sep === "bullet" && <span className="mx-[1mm]">·</span>}
+                      {i > 0 && sep === "bar" && <span className="mx-[1mm]">|</span>}
+                      {sep === "icon" && item.icon}
+                      {item.text}
+                    </span>
+                  );
+                })}
+              </div>
+            ) : null;
+
+            if (!showPhoto) {
+              return <>{nameBlock}{contacts}</>;
+            }
+
+            const photoEl = (
+              <img
+                src={p.photo}
+                alt=""
+                style={{
+                  width: `${photoSizeMM}mm`,
+                  height: `${photoSizeMM}mm`,
+                  borderRadius: photoBorderRadius,
+                  objectFit: "cover",
+                  flexShrink: 0,
+                }}
+              />
+            );
+
+            return (
+              <div
+                style={{
+                  display: "flex",
+                  alignItems: "center",
+                  gap: "4mm",
+                  flexDirection: align === "right" ? "row-reverse" : "row",
+                  justifyContent: align === "center" ? "center" : "flex-start",
+                  textAlign: align,
+                }}
+              >
+                {photoEl}
+                <div style={{ flex: 1, minWidth: 0 }}>
+                  {nameBlock}
+                  {contacts}
+                </div>
+              </div>
+            );
+          })()}
         </header>
 
         <div className="h-[0.3mm] mb-[5mm]" style={{ backgroundColor: "color-mix(in srgb, var(--resume-accent) 20%, #d1d5db)" }} />
