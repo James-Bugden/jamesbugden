@@ -6,6 +6,11 @@
     <priority>1.0</priority>
   </url>
   <url>
+    <loc>https://jamesbugden.lovable.app/ai-job-search-guide</loc>
+    <lastmod>2026-03-08</lastmod>
+    <priority>0.6</priority>
+  </url>
+  <url>
     <loc>https://jamesbugden.lovable.app/dashboard</loc>
     <lastmod>2026-03-08</lastmod>
     <priority>0.6</priority>
@@ -64,6 +69,11 @@
     <loc>https://jamesbugden.lovable.app/quiz</loc>
     <lastmod>2026-03-08</lastmod>
     <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://jamesbugden.lovable.app/recruiter-screen-guide</loc>
+    <lastmod>2026-03-08</lastmod>
+    <priority>0.6</priority>
   </url>
   <url>
     <loc>https://jamesbugden.lovable.app/resume</loc>
@@ -221,6 +231,11 @@
     <priority>0.9</priority>
   </url>
   <url>
+    <loc>https://jamesbugden.lovable.app/zh-tw/ai-job-search-guide</loc>
+    <lastmod>2026-03-08</lastmod>
+    <priority>0.6</priority>
+  </url>
+  <url>
     <loc>https://jamesbugden.lovable.app/zh-tw/dashboard</loc>
     <lastmod>2026-03-08</lastmod>
     <priority>0.6</priority>
@@ -269,6 +284,16 @@
     <loc>https://jamesbugden.lovable.app/zh-tw/quiz</loc>
     <lastmod>2026-03-08</lastmod>
     <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://jamesbugden.lovable.app/zh-tw/recruiter-screen-guide</loc>
+    <lastmod>2026-03-08</lastmod>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://jamesbugden.lovable.app/zh-tw/resume</loc>
+    <lastmod>2026-03-08</lastmod>
+    <priority>0.6</priority>
   </url>
   <url>
     <loc>https://jamesbugden.lovable.app/zh-tw/resume-guide</loc>
