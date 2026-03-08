@@ -56,6 +56,7 @@ interface DocumentDashboardProps {
 type SidebarTab = "resume" | "cover_letter" | "job_tracker";
 
 export function DocumentDashboard({ onOpenDocument, onImport }: DocumentDashboardProps) {
+  const t = useT();
   const [documents, setDocuments] = useState<SavedDocument[]>([]);
   const [menuOpenId, setMenuOpenId] = useState<string | null>(null);
   const [renamingId, setRenamingId] = useState<string | null>(null);
