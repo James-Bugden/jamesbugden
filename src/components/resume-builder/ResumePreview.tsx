@@ -1231,7 +1231,7 @@ export const ResumePreview = React.memo(function ResumePreview({
     });
 
     return () => cancelAnimationFrame(raf);
-  }, [pageCount, data, customize]);
+  }, [mutationVersion, pageCount]);
 
   useEffect(() => {
     const el = containerRef.current;
