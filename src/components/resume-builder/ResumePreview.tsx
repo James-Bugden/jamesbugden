@@ -19,6 +19,7 @@ import { ResumeData, ResumeSection } from "./types";
 import { CustomizeSettings } from "./customizeTypes";
 import { GOOGLE_FONTS_URL } from "./fontData";
 import { InlineColorToolbar, ROLE_TO_FIELD } from "./InlineColorToolbar";
+import { InlineFormatToolbar } from "./InlineFormatToolbar";
 import { useIsMobile } from "@/hooks/use-mobile";
 
 /* ── Page dimensions (mm → px at 96 DPI: 1mm ≈ 3.7795px) ──────── */
