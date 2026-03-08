@@ -1191,43 +1191,46 @@ export const ResumePreview = React.memo(function ResumePreview({
     whitespaceWarningShown.current = false;
   }, [data, customize]);
 
-  /* ── Apply pagination mutations to visible pages ── */
+  /* ── Clear stale margins immediately when data/customize changes ── */
   useEffect(() => {
-    const muts = mutationsRef.current;
-    if (!muts || muts.gen === undefined) return;
-    // Skip if we already applied this generation
-    if (muts.gen === lastAppliedGenRef.current) return;
+    visiblePageRefs.current.forEach(ref => {
+      if (!ref) return;
+      ref.querySelectorAll('[data-page-item]').forEach(el => {
+        (el as HTMLElement).style.marginTop = '';
+      });
+      ref.querySelectorAll('[data-page-break-child]').forEach(el => {
+        (el as HTMLElement).style.marginTop = '';
+      });
+    });
+  }, [data, customize]);
 
-    const raf = requestAnimationFrame(() => {
-      lastAppliedGenRef.current = muts.gen!;
-      visiblePageRefs.current.forEach(ref => {
-        if (!ref) return;
+  /* ── Apply pagination mutations to visible pages (sync before paint) ── */
+  useLayoutEffect(() => {
+    if (!mutations) return;
 
-        const items = ref.querySelectorAll('[data-page-item]');
+    visiblePageRefs.current.forEach(ref => {
+      if (!ref) return;
 
-        // Overwrite all items directly — no blanket reset
-        items.forEach((el, idx) => {
-          const mt = muts.items[idx] || 0;
-          (el as HTMLElement).style.marginTop = mt ? `${mt}px` : '';
-          // Also clear any stale child mutations
-          const blocks = getAtomicBlocks(el);
-          blocks.forEach(block => { block.style.marginTop = ''; });
-        });
+      const items = ref.querySelectorAll('[data-page-item]');
 
-        muts.children.forEach((childMuts, parentIdx) => {
-          if (!items[parentIdx]) return;
-          const blocks = getAtomicBlocks(items[parentIdx]);
-          childMuts.forEach(({ idx, mt }) => {
-            if (blocks[idx]) {
-              blocks[idx].style.marginTop = `${mt}px`;
-            }
-          });
+      items.forEach((el, idx) => {
+        const mt = mutations.items[idx] || 0;
+        (el as HTMLElement).style.marginTop = mt ? `${mt}px` : '';
+        const blocks = getAtomicBlocks(el);
+        blocks.forEach(block => { block.style.marginTop = ''; });
+      });
+
+      mutations.children.forEach((childMuts, parentIdx) => {
+        if (!items[parentIdx]) return;
+        const blocks = getAtomicBlocks(items[parentIdx]);
+        childMuts.forEach(({ idx, mt }) => {
+          if (blocks[idx]) {
+            blocks[idx].style.marginTop = `${mt}px`;
+          }
         });
       });
     });
-
-    return () => cancelAnimationFrame(raf);
-  }, [mutationVersion, pageCount]);
+  }, [mutations, pageCount]);
 
   useEffect(() => {
     const el = containerRef.current;
