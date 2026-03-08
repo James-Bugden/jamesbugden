@@ -150,6 +150,7 @@ const GuidesPageZhTw = () => {
                 {category.zh === "職涯轉型" && <Briefcase className="w-6 h-6 text-gold" />}
                 {category.zh === "面試準備" && <MessageSquare className="w-6 h-6 text-gold" />}
                 {category.zh === "電話篩選" && <Phone className="w-6 h-6 text-gold" />}
+                {category.zh === "AI 求職" && <Bot className="w-6 h-6 text-gold" />}
                 {category.zh}
               </h2>
               

@@ -143,6 +143,7 @@ const GuidesPage = () => {
                 {category === "Resume" && <FileText className="w-6 h-6 text-gold" />}
                 {category === "Career Change" && <Briefcase className="w-6 h-6 text-gold" />}
                 {category === "Interview Prep" && <MessageSquare className="w-6 h-6 text-gold" />}
+                {category === "AI & Job Search" && <Bot className="w-6 h-6 text-gold" />}
                 {category}
               </h2>
               
