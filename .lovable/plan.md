@@ -1,29 +1,48 @@
 
 
-## Fix: Title "Position" toggle (Below Name / Same Line) is broken
+## Resume Builder Feature Improvements
 
-### What I found
+### Priority 1: AI "Tailor to Job Description" Panel
+- Add a new tab or panel in the "AI Tools" section (which currently shows "Coming soon")
+- User pastes a job description → edge function analyzes keyword overlap with current resume
+- Returns: missing keywords, suggested bullet point rewrites, match percentage
+- Reuses existing `resume-ai` edge function with a new `action: "tailor"` mode
+- UI: Split panel with JD on left, suggestions on right, one-click "Apply" buttons
 
-The toggle in CustomizePanel (line 666-674) correctly sets `titleSameLine` as a boolean. The preview code at line 771 checks:
-```ts
-const titleSameLine = c?.titleSameLine === true && !!p.professionalTitle;
-```
+### Priority 2: Resume Completeness Score Widget
+- Floating widget in the editor sidebar showing real-time completion percentage
+- Scoring rules: has summary (+10), has 2+ experience entries (+20), all entries have descriptions (+15), dates filled (+10), contact info complete (+15), skills section exists (+10), quantified achievements detected (+20)
+- Visual: circular progress ring with percentage, expandable checklist of what's missing
+- Lives above the "Add Content" button in the Content tab
 
-And at line 806-828, it renders either a flex row (same line) or stacked layout. The logic appears correct at first glance, but the issue is likely one of these:
+### Priority 3: Populate the "AI Tools" Tab
+- Currently renders "AI Tools — Coming soon" placeholder
+- Build out with: "Tailor to Job" (above), "Generate Summary from Experience", "Suggest Skills", "Optimize Bullet Points (batch)"
+- Each tool card shows a description, input area, and results
 
-1. **The `titleSameLine` flex container doesn't work with the header's `textAlign` style** — the header at line 798 applies `textAlign` which doesn't affect flex items, but the flex container itself uses `justifyContent` correctly. However, when `headerArrangement` is `"stacked"` and no photo is shown, the `nameBlock` is rendered directly inside the header `<div>` which has `textAlign` set — a flex container ignores `textAlign` but the parent might interfere with layout.
+### Priority 4: Real-time Word Count per Section
+- Add a small `<span>` below each `RichTextEditor` showing word count and bullet point count
+- Highlight in amber if too long (>150 words per entry) or too short (<20 words)
+- Lightweight: computed from the editor's text content on each change
 
-2. **The `items-end` baseline alignment causes the title to appear below** when the name font size is very large relative to the title — making it look like it's still on a separate line when it actually wraps.
+### Priority 5: Click-to-Edit on Preview (Inline Editing)
+- When user clicks text on the A4 preview, show a floating input/textarea positioned over the clicked element
+- On blur/enter, update the corresponding field in the data model
+- Start with simple fields only: job title, company name, degree, institution
+- More complex than other items; implement after the above
 
-3. **The flex container doesn't have `flex-wrap: nowrap`** — with large names or small viewport widths, the title wraps to the next line, making it look identical to "Below Name."
+### Files to Edit
+- `src/pages/ResumeBuilder.tsx` — Add completeness widget, wire AI Tools tab
+- `src/components/resume-builder/ResumeTopNav.tsx` — No changes needed
+- `src/components/resume-builder/RichTextEditor.tsx` — Add word count display
+- `supabase/functions/resume-ai/index.ts` — Add `tailor` action for JD matching
+- New: `src/components/resume-builder/CompletenessScore.tsx` — Score widget component
+- New: `src/components/resume-builder/AiToolsPanel.tsx` — Full AI tools tab content
+- New: `src/components/resume-builder/TailorToJob.tsx` — JD tailoring panel
 
-### Fix plan
-
-**File: `src/components/resume-builder/ResumePreview.tsx`**
-
-1. Add `flexWrap: "nowrap"` and `whiteSpace: "nowrap"` to the same-line flex container (line 808) to prevent wrapping that makes it look like stacked layout
-2. Add `alignItems: "baseline"` instead of `items-end` for better text alignment between different font sizes
-3. If the name + title exceeds available width, allow the title to truncate with ellipsis rather than wrap (which would defeat the purpose of "same line")
-
-**Verification**: Toggle between "Below Name" and "Same Line" — the title should visibly move beside the name on the same horizontal line versus appearing on its own line below.
+### Implementation Order
+1. Completeness score widget (standalone, no backend needed)
+2. Word count on RichTextEditor (small change)
+3. AI Tools tab with Tailor to Job (needs edge function update)
+4. Click-to-edit on preview (complex, last)
 
