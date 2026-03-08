@@ -61,9 +61,9 @@ export function TemplateGalleryModal({
         {/* Header */}
         <div className="flex items-center justify-between px-6 py-4 border-b border-gray-100 flex-shrink-0">
           <div>
-            <h2 className="text-lg font-bold text-gray-900">Choose a Template</h2>
+            <h2 className="text-lg font-bold text-gray-900">{t("chooseTemplate")}</h2>
             <p className="text-xs text-gray-500 mt-0.5">
-              Your content stays the same — only the design changes
+              {t("contentStaysSame")}
             </p>
           </div>
           <button
