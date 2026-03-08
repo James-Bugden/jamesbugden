@@ -42,6 +42,7 @@ interface ResumePreviewProps {
   pdfTargetId?: string;
   onEditSection?: (sectionId: string) => void;
   onColorChange?: (field: string, color: string) => void;
+  onContentEdit?: (sectionId: string, entryId: string, field: string, html: string) => void;
 }
 
 /* ── Relative font-size helpers ──────────────────────────────── */
