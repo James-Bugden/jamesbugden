@@ -144,6 +144,10 @@ export const DEFAULT_CUSTOMIZE: CustomizeSettings = {
 
   bodyFont: "'Inter', sans-serif",
 
+  showPhoto: true,
+  photoSize: "m",
+  photoShape: "circle",
+
   shareAsTemplate: false,
 
   showPageNumbers: false,
