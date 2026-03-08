@@ -770,7 +770,7 @@ const ResumeBuilder = () => {
                    <span className="hidden sm:inline">{t("dashboard")}</span>
                 </button>
               </TooltipTrigger>
-              <TooltipContent side="bottom" className="text-xs">Back to dashboard</TooltipContent>
+              <TooltipContent side="bottom" className="text-xs">{t("dashboard")}</TooltipContent>
             </Tooltip>
           </TooltipProvider>
           <span className="text-gray-300">|</span>
