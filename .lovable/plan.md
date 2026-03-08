@@ -1,48 +1,28 @@
 
 
-## Resume Builder Feature Improvements
+## Fix: Prevent Text Cut-off at Page Boundaries
 
-### Priority 1: AI "Tailor to Job Description" Panel
-- Add a new tab or panel in the "AI Tools" section (which currently shows "Coming soon")
-- User pastes a job description → edge function analyzes keyword overlap with current resume
-- Returns: missing keywords, suggested bullet point rewrites, match percentage
-- Reuses existing `resume-ai` edge function with a new `action: "tailor"` mode
-- UI: Split panel with JD on left, suggestions on right, one-click "Apply" buttons
+### Problem
+Bullet point text (`li` elements) that wraps to multiple lines gets visually clipped at the page boundary. The current pagination logic has two tiers:
+1. **Whole entry push**: if a `data-page-item` straddles a page and is <95% of page height, push it entirely
+2. **Child-level push**: if the entry is too large, push individual children (`p`, `li`, etc.)
 
-### Priority 2: Resume Completeness Score Widget
-- Floating widget in the editor sidebar showing real-time completion percentage
-- Scoring rules: has summary (+10), has 2+ experience entries (+20), all entries have descriptions (+15), dates filled (+10), contact info complete (+15), skills section exists (+10), quantified achievements detected (+20)
-- Visual: circular progress ring with percentage, expandable checklist of what's missing
-- Lives above the "Add Content" button in the Content tab
+The issue is that tier 2 only activates for very large entries (>95% page height). For normal-sized entries that simply happen to straddle the boundary, the whole entry is pushed — but if the entry is *just* large enough that pushing it would exceed the next page too, neither tier handles it well. Additionally, the child selector doesn't recurse deeply enough into `dangerouslySetInnerHTML` content.
 
-### Priority 3: Populate the "AI Tools" Tab
-- Currently renders "AI Tools — Coming soon" placeholder
-- Build out with: "Tailor to Job" (above), "Generate Summary from Experience", "Suggest Skills", "Optimize Bullet Points (batch)"
-- Each tool card shows a description, input area, and results
+### Fix in `src/components/resume-builder/ResumePreview.tsx`
 
-### Priority 4: Real-time Word Count per Section
-- Add a small `<span>` below each `RichTextEditor` showing word count and bullet point count
-- Highlight in amber if too long (>150 words per entry) or too short (<20 words)
-- Lightweight: computed from the editor's text content on each change
+**Change the pagination logic** (lines ~1042-1070) to:
 
-### Priority 5: Click-to-Edit on Preview (Inline Editing)
-- When user clicks text on the A4 preview, show a floating input/textarea positioned over the clicked element
-- On blur/enter, update the corresponding field in the data model
-- Start with simple fields only: job title, company name, degree, institution
-- More complex than other items; implement after the above
+1. **Lower the threshold** for whole-entry push from 95% to ~80% of usable page height — entries that fit on a single page should always be pushed whole
+2. **For larger entries**, run child-level break prevention on ALL nested elements including deeply nested `li` items inside HtmlBlock rendered content
+3. **Add a safety margin** (~4px) so lines aren't clipped right at the boundary — push if the bottom of any child is within 4px of the page edge
+4. **Run multiple passes** (2 iterations) so that pushing one child doesn't cause the next child to now straddle a boundary
 
-### Files to Edit
-- `src/pages/ResumeBuilder.tsx` — Add completeness widget, wire AI Tools tab
-- `src/components/resume-builder/ResumeTopNav.tsx` — No changes needed
-- `src/components/resume-builder/RichTextEditor.tsx` — Add word count display
-- `supabase/functions/resume-ai/index.ts` — Add `tailor` action for JD matching
-- New: `src/components/resume-builder/CompletenessScore.tsx` — Score widget component
-- New: `src/components/resume-builder/AiToolsPanel.tsx` — Full AI tools tab content
-- New: `src/components/resume-builder/TailorToJob.tsx` — JD tailoring panel
+### Specific changes
 
-### Implementation Order
-1. Completeness score widget (standalone, no backend needed)
-2. Word count on RichTextEditor (small change)
-3. AI Tools tab with Tailor to Job (needs edge function update)
-4. Click-to-edit on preview (complex, last)
+In the pagination `useEffect`:
+- Change `usablePerPage * 0.95` → `usablePerPage * 0.8` for the whole-entry push threshold
+- Change the tolerance from `+ 2` to `+ 4` for boundary detection  
+- After pushing children, do a second measurement pass to catch cascading breaks
+- Ensure the `querySelectorAll` selector also targets `li` elements nested inside `div` containers (already does, but verify it works with the HtmlBlock wrapper)
 
