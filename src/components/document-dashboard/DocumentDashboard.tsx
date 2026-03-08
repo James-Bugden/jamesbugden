@@ -381,7 +381,7 @@ export function DocumentDashboard({ onOpenDocument, onImport }: DocumentDashboar
                 <Search className="absolute left-2.5 top-1/2 -translate-y-1/2 w-3.5 h-3.5" style={{ color: BRAND.textSecondary }} />
                 <input
                   type="text"
-                  placeholder="Search…"
+                  placeholder={t("search")}
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
                   className="pl-8 pr-3 py-1.5 text-[12px] bg-white border rounded-md w-[160px] focus:outline-none placeholder-gray-400"
