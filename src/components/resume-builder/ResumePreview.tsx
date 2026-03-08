@@ -689,13 +689,21 @@ export const A4Page = React.memo(function A4Page({
   const orderedSections = useMemo(() => normalizeSectionOrder(safe.sections, c), [safe.sections, c]);
   const enabledSections = orderedSections;
 
+  const headerSafeMM = HEADER_SAFE_MM;
+  const footerSafeMM = FOOTER_SAFE_MM;
+  const marginYMM = c?.marginY ?? 16;
+  const topPadMM = marginYMM + headerSafeMM;
+  const bottomPadMM = marginYMM + footerSafeMM;
+
   const cssVars = useMemo(
     () =>
       ({
         "--resume-font-size": `${c?.fontSize ?? 11}pt`,
         "--resume-line-height": `${c?.lineHeight ?? 1.5}`,
         "--resume-margin-x": `${c?.marginX ?? 16}mm`,
-        "--resume-margin-y": `${c?.marginY ?? 16}mm`,
+        "--resume-margin-y": `${marginYMM}mm`,
+        "--resume-pad-top": `${topPadMM}mm`,
+        "--resume-pad-bottom": `${bottomPadMM}mm`,
         "--resume-section-spacing": `${c?.sectionSpacing ?? 5}mm`,
         "--resume-accent": c?.accentColor ?? "#1e293b",
         "--resume-name": c?.nameColor ?? "#111827",
@@ -705,7 +713,7 @@ export const A4Page = React.memo(function A4Page({
         "--resume-subtitle": c?.subtitleColor ?? "#6B7280",
         "--resume-body": "#374151",
       }) as React.CSSProperties,
-    [c]
+    [c, topPadMM, bottomPadMM, marginYMM]
   );
 
   const headerIconStyle = c?.headerIconStyle || "none";
@@ -759,7 +767,7 @@ export const A4Page = React.memo(function A4Page({
           ...cssVars,
           width: `${dims.wMM}mm`,
           minHeight: `${dims.hMM}mm`,
-          padding: "var(--resume-margin-y) var(--resume-margin-x)",
+          padding: "var(--resume-pad-top) var(--resume-margin-x) var(--resume-pad-bottom)",
           position: "relative",
           fontFamily: c?.bodyFont || "'Source Sans 3', sans-serif",
           fontSize: "var(--resume-font-size)",
@@ -968,11 +976,15 @@ export const ResumePreview = React.memo(function ResumePreview({
       raf2 = requestAnimationFrame(() => {
         const items = root.querySelectorAll('[data-page-item]');
         const rootRect = root.getBoundingClientRect();
-        let addedSpace = 0;
+
+        // Content origin: after top margin + header safe zone
+        const contentOriginPX = marginYPX + headerReservePX;
 
         items.forEach(el => {
           const rect = el.getBoundingClientRect();
-          const elTop = rect.top - rootRect.top - marginYPX - headerReservePX + addedSpace;
+          // getBoundingClientRect already reflects previous marginTop pushes,
+          // so no need for cumulative addedSpace tracking
+          const elTop = rect.top - rootRect.top - contentOriginPX;
           const elBottom = elTop + rect.height;
 
           const pageIndex = Math.floor(Math.max(0, elTop) / usablePerPage);
@@ -984,13 +996,12 @@ export const ResumePreview = React.memo(function ResumePreview({
               // Small enough to push to next page
               const push = pageBottom - elTop + 1;
               (el as HTMLElement).style.marginTop = `${push}px`;
-              addedSpace += push;
             } else {
               // Too large — find block-level children to break at a finer level
               const children = el.querySelectorAll('p, li, div:not([data-page-item]), h2, h3, h4, span.flex');
               children.forEach(child => {
                 const cr = child.getBoundingClientRect();
-                const childTop = cr.top - rootRect.top - marginYPX - headerReservePX + addedSpace;
+                const childTop = cr.top - rootRect.top - contentOriginPX;
                 const childBottom = childTop + cr.height;
                 const childPageIndex = Math.floor(Math.max(0, childTop) / usablePerPage);
                 const childPageBottom = (childPageIndex + 1) * usablePerPage;
@@ -999,7 +1010,6 @@ export const ResumePreview = React.memo(function ResumePreview({
                   const push = childPageBottom - childTop + 1;
                   (child as HTMLElement).style.marginTop = `${push}px`;
                   (child as HTMLElement).setAttribute('data-page-break-child', 'true');
-                  addedSpace += push;
                 }
               });
             }
