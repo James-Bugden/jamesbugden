@@ -5,6 +5,68 @@ const corsHeaders = {
   "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type",
 };
 
+const SECTION_TYPES = [
+  "experience", "education", "skills", "languages", "summary",
+  "certificates", "interests", "projects", "courses", "awards",
+  "organisations", "publications", "references", "declaration", "custom",
+];
+
+const parseResumeTool = {
+  type: "function" as const,
+  function: {
+    name: "parsed_resume",
+    description: "Return the structured resume data extracted from the text.",
+    parameters: {
+      type: "object",
+      properties: {
+        personalDetails: {
+          type: "object",
+          properties: {
+            fullName: { type: "string" },
+            professionalTitle: { type: "string" },
+            email: { type: "string" },
+            phone: { type: "string" },
+            location: { type: "string" },
+            linkedin: { type: "string" },
+            website: { type: "string" },
+          },
+          required: ["fullName", "professionalTitle", "email", "phone", "location"],
+          additionalProperties: false,
+        },
+        sections: {
+          type: "array",
+          items: {
+            type: "object",
+            properties: {
+              type: { type: "string", enum: SECTION_TYPES },
+              title: { type: "string", description: "The section heading as shown on the resume" },
+              entries: {
+                type: "array",
+                items: {
+                  type: "object",
+                  properties: {
+                    fields: {
+                      type: "object",
+                      description: "Key-value pairs. Keys depend on section type. experience: position,company,location,startMonth,startYear,endMonth,endYear,currentlyHere,description. education: degree,institution,location,startMonth,startYear,endMonth,endYear,currentlyHere,description. skills: skills (comma-separated string). languages: language,proficiency. summary: description. certificates: name,issuer,date,url. interests: interests (comma-separated). projects: name,role,startMonth,startYear,endMonth,endYear,url,description. courses: name,institution,date. awards: name,issuer,date,description. organisations: name,role,startMonth,startYear,endMonth,endYear,description. publications: title,publisher,date,url,description. references: name,position,company,email,phone,relationship. declaration: fullName,place,date,signature. custom: sectionTitle,description.",
+                      additionalProperties: { type: "string" },
+                    },
+                  },
+                  required: ["fields"],
+                  additionalProperties: false,
+                },
+              },
+            },
+            required: ["type", "title", "entries"],
+            additionalProperties: false,
+          },
+        },
+      },
+      required: ["personalDetails", "sections"],
+      additionalProperties: false,
+    },
+  },
+};
+
 serve(async (req) => {
   if (req.method === "OPTIONS") return new Response(null, { headers: corsHeaders });
 
@@ -15,8 +77,31 @@ serve(async (req) => {
 
     let systemPrompt = "";
     let userPrompt = "";
+    let tools: any[] | undefined;
+    let tool_choice: any | undefined;
 
     switch (action) {
+      case "parse_resume": {
+        systemPrompt = `You are a resume parser. Given raw resume text, extract ALL content into structured sections.
+
+Rules:
+- Identify the person's name, title, email, phone, location, LinkedIn, and website from the header area.
+- Map each section to the correct type: experience, education, skills, languages, summary, certificates, interests, projects, courses, awards, organisations, publications, references, declaration, or custom.
+- For experience entries: position = job title, company = employer name, description = bullet points as HTML (<ul><li>...</li></ul>).
+- For education entries: degree = degree/qualification, institution = school name, description = any additional details as HTML.
+- For skills/interests: provide a single comma-separated string of all items.
+- For languages: each language is a separate entry with proficiency level (Native, Fluent, Advanced, Intermediate, Basic).
+- Month names should be full English: January, February, etc.
+- If an entry says "Present", "Current", or "Now" for end date, set currentlyHere to "true" and leave endMonth/endYear empty.
+- Do NOT skip any content. Every piece of information should appear in some section.
+- If a section doesn't match any known type, use "custom".
+- description fields should use HTML: <p> for paragraphs, <ul><li> for bullets.
+- Preserve the original section ordering from the resume.`;
+        userPrompt = text;
+        tools = [parseResumeTool];
+        tool_choice = { type: "function", function: { name: "parsed_resume" } };
+        break;
+      }
       case "improve":
         systemPrompt = "You are a professional resume writer. Improve the following text to be more impactful, concise, and use strong action verbs. Keep bullet points if present. Return ONLY the improved text in the same HTML format, no explanation.";
         userPrompt = text;
@@ -54,20 +139,27 @@ Keep it actionable and concise.`;
         throw new Error("Unknown action: " + action);
     }
 
+    const body: any = {
+      model: "google/gemini-3-flash-preview",
+      messages: [
+        { role: "system", content: systemPrompt },
+        { role: "user", content: userPrompt },
+      ],
+      stream: false,
+    };
+
+    if (tools) {
+      body.tools = tools;
+      body.tool_choice = tool_choice;
+    }
+
     const response = await fetch("https://ai.gateway.lovable.dev/v1/chat/completions", {
       method: "POST",
       headers: {
         Authorization: `Bearer ${LOVABLE_API_KEY}`,
         "Content-Type": "application/json",
       },
-      body: JSON.stringify({
-        model: "google/gemini-3-flash-preview",
-        messages: [
-          { role: "system", content: systemPrompt },
-          { role: "user", content: userPrompt },
-        ],
-        stream: false,
-      }),
+      body: JSON.stringify(body),
     });
 
     if (!response.ok) {
@@ -92,8 +184,43 @@ Keep it actionable and concise.`;
     }
 
     const data = await response.json();
-    const result = data.choices?.[0]?.message?.content || "";
 
+    // Handle tool-call response for parse_resume
+    if (action === "parse_resume") {
+      const toolCall = data.choices?.[0]?.message?.tool_calls?.[0];
+      if (toolCall?.function?.arguments) {
+        try {
+          const parsed = typeof toolCall.function.arguments === "string"
+            ? JSON.parse(toolCall.function.arguments)
+            : toolCall.function.arguments;
+          return new Response(JSON.stringify({ result: parsed }), {
+            headers: { ...corsHeaders, "Content-Type": "application/json" },
+          });
+        } catch (parseErr) {
+          console.error("Failed to parse tool call arguments:", parseErr);
+          return new Response(JSON.stringify({ error: "Failed to parse AI structured output" }), {
+            status: 500,
+            headers: { ...corsHeaders, "Content-Type": "application/json" },
+          });
+        }
+      }
+      // Fallback: try content as JSON
+      const content = data.choices?.[0]?.message?.content || "";
+      try {
+        const parsed = JSON.parse(content);
+        return new Response(JSON.stringify({ result: parsed }), {
+          headers: { ...corsHeaders, "Content-Type": "application/json" },
+        });
+      } catch {
+        console.error("AI did not return structured output for parse_resume");
+        return new Response(JSON.stringify({ error: "AI did not return structured data" }), {
+          status: 500,
+          headers: { ...corsHeaders, "Content-Type": "application/json" },
+        });
+      }
+    }
+
+    const result = data.choices?.[0]?.message?.content || "";
     return new Response(JSON.stringify({ result }), {
       headers: { ...corsHeaders, "Content-Type": "application/json" },
     });
