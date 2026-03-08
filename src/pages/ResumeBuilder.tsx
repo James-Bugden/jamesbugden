@@ -518,7 +518,7 @@ const ResumeBuilder = () => {
 
   const addSection = (type: string) => {
     pushHistory();
-    const meta = SECTION_TYPES.find((s) => s.type === type);
+    const meta = localizedSectionTypes.find((s) => s.type === type);
     const newSection: ResumeSection = {
       id: crypto.randomUUID(),
       type,
@@ -527,7 +527,7 @@ const ResumeBuilder = () => {
       collapsed: false,
     };
     setSections([...data.sections, newSection]);
-    toast({ title: "Section added", description: `${meta?.title || "Custom"} section added.` });
+    toast({ title: t("sectionAdded"), description: `${meta?.title || "Custom"} section added.` });
   };
 
   const editorScrollRef = useRef<HTMLDivElement>(null);
