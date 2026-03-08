@@ -27,6 +27,106 @@ const Collapsible = ({ title, children }: { title: string; children: React.React
   );
 };
 
+/* ─── Table of Contents ─── */
+const tocSectionsZh = [
+  { id: "intro", label: "前言" },
+  { id: "scorecard", label: "01 · 招募人員在做什麼" },
+  { id: "before", label: "02 · 電話前的準備" },
+  { id: "story", label: "03 · 掌握你的故事" },
+  { id: "frameworks", label: "04 · 回答框架" },
+  { id: "tough", label: "05 · 處理困難問題" },
+  { id: "salary", label: "06 · 薪資" },
+  { id: "setup", label: "07 · 設備和禮儀" },
+  { id: "questions", label: "08 · 該問的問題" },
+  { id: "redflags", label: "09 · 需要注意的警訊" },
+  { id: "mistakes", label: "10 · 常見錯誤" },
+  { id: "after", label: "11 · 通話結束後" },
+  { id: "levels", label: "12 · 依職涯階段區分" },
+  { id: "cheatsheet", label: "速查表" },
+];
+
+const TableOfContentsZh = () => {
+  const [active, setActive] = useState("");
+  const [open, setOpen] = useState(false);
+
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      (entries) => {
+        const visible = entries.filter((e) => e.isIntersecting);
+        if (visible.length > 0) setActive(visible[0].target.id);
+      },
+      { rootMargin: "-80px 0px -60% 0px", threshold: 0 }
+    );
+    tocSectionsZh.forEach(({ id }) => {
+      const el = document.getElementById(id);
+      if (el) observer.observe(el);
+    });
+    return () => observer.disconnect();
+  }, []);
+
+  return (
+    <>
+      <aside className="hidden xl:block fixed left-[max(1rem,calc((100vw-72rem)/2-14rem))] top-28 w-48 z-30">
+        <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wider mb-3">目錄</p>
+        <nav className="space-y-1">
+          {tocSectionsZh.map(({ id, label }) => (
+            <a
+              key={id}
+              href={`#${id}`}
+              onClick={(e) => {
+                e.preventDefault();
+                document.getElementById(id)?.scrollIntoView({ behavior: "smooth", block: "start" });
+              }}
+              className={`block text-sm py-1.5 pl-3 border-l-2 transition-all duration-200 ${
+                active === id
+                  ? "border-gold text-gold font-medium"
+                  : "border-transparent text-muted-foreground hover:text-foreground hover:border-border"
+              }`}
+            >
+              {label}
+            </a>
+          ))}
+        </nav>
+      </aside>
+
+      <div className="xl:hidden fixed bottom-6 left-6 z-50">
+        <button
+          onClick={() => setOpen(!open)}
+          className="w-11 h-11 rounded-full bg-executive-green text-cream shadow-lg flex items-center justify-center hover:scale-105 transition-transform"
+          aria-label="目錄"
+        >
+          <Menu className="w-5 h-5" />
+        </button>
+        {open && (
+          <div className="absolute bottom-14 left-0 bg-card border border-border rounded-xl shadow-2xl p-4 w-56 max-h-[70vh] overflow-y-auto">
+            <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wider mb-2">目錄</p>
+            <nav className="space-y-1">
+              {tocSectionsZh.map(({ id, label }) => (
+                <a
+                  key={id}
+                  href={`#${id}`}
+                  onClick={(e) => {
+                    e.preventDefault();
+                    document.getElementById(id)?.scrollIntoView({ behavior: "smooth", block: "start" });
+                    setOpen(false);
+                  }}
+                  className={`block text-sm py-1.5 pl-3 border-l-2 transition-all ${
+                    active === id
+                      ? "border-gold text-gold font-medium"
+                      : "border-transparent text-muted-foreground hover:text-foreground"
+                  }`}
+                >
+                  {label}
+                </a>
+              ))}
+            </nav>
+          </div>
+        )}
+      </div>
+    </>
+  );
+};
+
 const RecruiterScreenGuideZhTw = () => {
   useTrackGuideProgress("recruiter-screen");
   const navigate = useNavigate();
