@@ -1,44 +1,48 @@
 
 
-## Audit Results — Resume Builder Issues Found
+## Resume Builder Feature Improvements
 
-### 1. **BUG: Orphan heading protection logic is inverted** (ResumePreview.tsx ~line 1099)
-The condition `spaceBelow = pageBottom - elBottom` computes a **negative** value when the heading straddles the page boundary (since `elBottom > pageBottom` by definition in that code branch). This means `spaceBelow < 40` is **always true** for any straddling heading, causing ALL h2/h3 elements that cross a page boundary to be pushed — even ones with plenty of room. The check never reaches the normal entry-splitting logic for headings.
+### Priority 1: AI "Tailor to Job Description" Panel
+- Add a new tab or panel in the "AI Tools" section (which currently shows "Coming soon")
+- User pastes a job description → edge function analyzes keyword overlap with current resume
+- Returns: missing keywords, suggested bullet point rewrites, match percentage
+- Reuses existing `resume-ai` edge function with a new `action: "tailor"` mode
+- UI: Split panel with JD on left, suggestions on right, one-click "Apply" buttons
 
-**Fix:** The orphan check should look at how much space is left *above* the heading on the current page, not below. Replace `spaceBelow` with something like `const spaceRemaining = pageBottom - elTop;` and only push if the heading is near the very bottom (e.g., `spaceRemaining < 40`).
+### Priority 2: Resume Completeness Score Widget
+- Floating widget in the editor sidebar showing real-time completion percentage
+- Scoring rules: has summary (+10), has 2+ experience entries (+20), all entries have descriptions (+15), dates filled (+10), contact info complete (+15), skills section exists (+10), quantified achievements detected (+20)
+- Visual: circular progress ring with percentage, expandable checklist of what's missing
+- Lives above the "Add Content" button in the Content tab
 
----
+### Priority 3: Populate the "AI Tools" Tab
+- Currently renders "AI Tools — Coming soon" placeholder
+- Build out with: "Tailor to Job" (above), "Generate Summary from Experience", "Suggest Skills", "Optimize Bullet Points (batch)"
+- Each tool card shows a description, input area, and results
 
-### 2. **BUG: "Two Column" and "Sidebar" templates still available but columns UI removed**
-The template picker in `CustomizePanel.tsx` shows all 8 templates including "Two Column" and "Sidebar" (`TEMPLATE_LIST` lines 14-15 in templatePresets.ts). Selecting these applies `columns: "two"` or `columns: "mix"` to the settings. However, the column layout UI controls were removed, so users can't adjust or understand why the layout changed, and `ResumePreview.tsx` still has two-column rendering logic (`isTwoColumn` at line 764) that may produce unexpected results.
+### Priority 4: Real-time Word Count per Section
+- Add a small `<span>` below each `RichTextEditor` showing word count and bullet point count
+- Highlight in amber if too long (>150 words per entry) or too short (<20 words)
+- Lightweight: computed from the editor's text content on each change
 
-**Fix:** Either remove the two-column/sidebar templates from `TEMPLATE_LIST`, or force `columns: "one"` in `applyTemplatePreset` regardless of the template's preset value.
+### Priority 5: Click-to-Edit on Preview (Inline Editing)
+- When user clicks text on the A4 preview, show a floating input/textarea positioned over the clicked element
+- On blur/enter, update the corresponding field in the data model
+- Start with simple fields only: job title, company name, degree, institution
+- More complex than other items; implement after the above
 
----
+### Files to Edit
+- `src/pages/ResumeBuilder.tsx` — Add completeness widget, wire AI Tools tab
+- `src/components/resume-builder/ResumeTopNav.tsx` — No changes needed
+- `src/components/resume-builder/RichTextEditor.tsx` — Add word count display
+- `supabase/functions/resume-ai/index.ts` — Add `tailor` action for JD matching
+- New: `src/components/resume-builder/CompletenessScore.tsx` — Score widget component
+- New: `src/components/resume-builder/AiToolsPanel.tsx` — Full AI tools tab content
+- New: `src/components/resume-builder/TailorToJob.tsx` — JD tailoring panel
 
-### 3. **Minor: Dead `whitespaceWarningShown` ref** (ResumePreview.tsx lines 1024, 1192-1194)
-The `whitespaceWarningShown` ref and its reset effect are leftover from the removed toast warning. They're harmless but dead code.
-
-**Fix:** Remove the ref declaration and the associated `useEffect`.
-
----
-
-### 4. **No other breaking issues found**
-- Routing, lazy loading, and all page routes are correctly configured
-- Document store (localStorage) CRUD operations are sound
-- Undo/redo (manual history in ResumeBuilder.tsx) works correctly
-- Auto-save to document store triggers properly
-- AI tools panel calls edge function correctly
-- PDF export pipeline is intact
-- DnD section reordering syncs with customize sectionOrder
-- Cover letter builder loads/saves independently
-- All type definitions are consistent
-
-### Summary of fixes needed
-
-| # | Severity | Issue | File |
-|---|----------|-------|------|
-| 1 | **High** | Orphan heading logic always triggers (inverted condition) | ResumePreview.tsx |
-| 2 | **Medium** | Two-column templates still selectable after column UI removal | templatePresets.ts / CustomizePanel.tsx |
-| 3 | **Low** | Dead `whitespaceWarningShown` ref | ResumePreview.tsx |
+### Implementation Order
+1. Completeness score widget (standalone, no backend needed)
+2. Word count on RichTextEditor (small change)
+3. AI Tools tab with Tailor to Job (needs edge function update)
+4. Click-to-edit on preview (complex, last)
 

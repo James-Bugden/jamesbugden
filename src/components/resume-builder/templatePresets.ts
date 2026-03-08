@@ -11,10 +11,7 @@ export const TEMPLATE_LIST: TemplatePresetInfo[] = [
   { id: "classic", name: "Classic", desc: "Centered header, serif-style, traditional layout" },
   { id: "professional", name: "Professional", desc: "Navy accent, bar headings, bold subtitles" },
   { id: "minimal", name: "Minimal", desc: "Maximum whitespace, all black/gray, sparse" },
-  { id: "two-column", name: "Two Column", desc: "Side-by-side layout, full-width header" },
-  { id: "sidebar", name: "Sidebar", desc: "Narrow left sidebar with skills & contact" },
   { id: "executive", name: "Executive", desc: "Large name, uppercase headings, charcoal tones" },
-  { id: "creative", name: "Creative", desc: "Coral accent, bubble skills, playful spacing" },
 ];
 
 export const TEMPLATE_PRESETS: Record<string, Partial<CustomizeSettings>> = {

@@ -1021,7 +1021,7 @@ export const ResumePreview = React.memo(function ResumePreview({
   const hiddenFlowRef = useRef<HTMLDivElement>(null);
   const visiblePageRefs = useRef<(HTMLDivElement | null)[]>([]);
   const [mutations, setMutations] = useState<PaginationMutations | null>(null);
-  const whitespaceWarningShown = useRef(false);
+  
 
   const [autoScale, setAutoScale] = useState(0.65);
   const [zoomOffset, setZoomOffset] = useState(0);
@@ -1096,8 +1096,8 @@ export const ResumePreview = React.memo(function ResumePreview({
               // Orphan heading protection: push section headings near page bottom
               const tagName = (el as HTMLElement).tagName?.toLowerCase();
               if (tagName === 'h2' || tagName === 'h3') {
-                const spaceBelow = pageBottom - elBottom;
-                if (spaceBelow < 40) {
+                const spaceRemaining = pageBottom - elTop;
+                if (spaceRemaining < 40) {
                   const push = pageBottom - elTop + 1;
                   const existing = parseFloat((el as HTMLElement).style.marginTop) || 0;
                   (el as HTMLElement).style.marginTop = `${existing + push}px`;
@@ -1188,10 +1188,6 @@ export const ResumePreview = React.memo(function ResumePreview({
     };
   }, [data, customize, dims.hPX, marginYPX, headerReservePX, footerReservePX, usablePerPage, contentOriginPX]);
 
-  // Reset whitespace warning when content or settings change
-  useEffect(() => {
-    whitespaceWarningShown.current = false;
-  }, [data, customize]);
 
   /* ── Clear stale margins immediately when data/customize changes ── */
   useEffect(() => {
