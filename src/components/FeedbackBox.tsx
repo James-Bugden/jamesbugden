@@ -36,7 +36,7 @@ export default function FeedbackBox({ locale = "en", subject: customSubject }: F
 
   const handleSend = () => {
     if (!text.trim()) return;
-    const subject = locale === "zh-tw" ? "Offer Calculator 意見回饋" : "Offer Calculator Feedback";
+    const subject = customSubject ?? (locale === "zh-tw" ? "Offer Calculator 意見回饋" : "Offer Calculator Feedback");
     window.location.href = `mailto:james@jamesbugden.com?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(text.trim())}`;
     toast({ title: t.success, description: t.successDesc });
     setText("");
