@@ -1,48 +1,45 @@
 
 
-## Resume Builder Feature Improvements
+## Inline Text Formatting Toolbar on Selection
 
-### Priority 1: AI "Tailor to Job Description" Panel
-- Add a new tab or panel in the "AI Tools" section (which currently shows "Coming soon")
-- User pastes a job description → edge function analyzes keyword overlap with current resume
-- Returns: missing keywords, suggested bullet point rewrites, match percentage
-- Reuses existing `resume-ai` edge function with a new `action: "tailor"` mode
-- UI: Split panel with JD on left, suggestions on right, one-click "Apply" buttons
+### What it does now
+Clicking any element in the preview opens a color picker that changes the color for the **entire role** (e.g., all headings, all dates). No per-selection formatting exists.
 
-### Priority 2: Resume Completeness Score Widget
-- Floating widget in the editor sidebar showing real-time completion percentage
-- Scoring rules: has summary (+10), has 2+ experience entries (+20), all entries have descriptions (+15), dates filled (+10), contact info complete (+15), skills section exists (+10), quantified achievements detected (+20)
-- Visual: circular progress ring with percentage, expandable checklist of what's missing
-- Lives above the "Add Content" button in the Content tab
+### What the user wants
+Select any text in the preview → a floating toolbar appears with **Bold, Italic, Underline, Color** options → applies formatting to just the selected text. This works across all sections freely.
 
-### Priority 3: Populate the "AI Tools" Tab
-- Currently renders "AI Tools — Coming soon" placeholder
-- Build out with: "Tailor to Job" (above), "Generate Summary from Experience", "Suggest Skills", "Optimize Bullet Points (batch)"
-- Each tool card shows a description, input area, and results
+### How to implement
 
-### Priority 4: Real-time Word Count per Section
-- Add a small `<span>` below each `RichTextEditor` showing word count and bullet point count
-- Highlight in amber if too long (>150 words per entry) or too short (<20 words)
-- Lightweight: computed from the editor's text content on each change
+**1. Make preview text selectable and editable**
+- The resume content is rendered via `dangerouslySetInnerHTML` in `HtmlBlock` and hardcoded `<p>`/`<span>` elements. To allow inline formatting, the page content area needs to respond to text selection.
+- The simplest approach: listen for `selectionchange` / `mouseup` events on the preview container. When a selection exists (non-collapsed), show a floating toolbar near the selection.
 
-### Priority 5: Click-to-Edit on Preview (Inline Editing)
-- When user clicks text on the A4 preview, show a floating input/textarea positioned over the clicked element
-- On blur/enter, update the corresponding field in the data model
-- Start with simple fields only: job title, company name, degree, institution
-- More complex than other items; implement after the above
+**2. Create a new `InlineFormatToolbar` component**
+- Appears above/below the text selection anchor
+- Buttons: **Bold** (`<strong>`), **Italic** (`<em>`), **Underline** (`<u>`), **Color picker** (wraps selection in `<span style="color:...">`)
+- Uses `document.execCommand` or the Selection/Range API to wrap the selected text with formatting tags
+- The toolbar positions itself using `selection.getRangeAt(0).getBoundingClientRect()`
 
-### Files to Edit
-- `src/pages/ResumeBuilder.tsx` — Add completeness widget, wire AI Tools tab
-- `src/components/resume-builder/ResumeTopNav.tsx` — No changes needed
-- `src/components/resume-builder/RichTextEditor.tsx` — Add word count display
-- `supabase/functions/resume-ai/index.ts` — Add `tailor` action for JD matching
-- New: `src/components/resume-builder/CompletenessScore.tsx` — Score widget component
-- New: `src/components/resume-builder/AiToolsPanel.tsx` — Full AI tools tab content
-- New: `src/components/resume-builder/TailorToJob.tsx` — JD tailoring panel
+**3. Propagate changes back to the resume data store**
+- After formatting is applied, read the updated `innerHTML` of the closest content block (identified by a `data-section-id` + `data-entry-id` attribute) and call `onChange` to persist the change back into `useResumeStore`
+- This requires adding `contentEditable="true"` to editable text blocks (descriptions, titles, etc.) or alternatively using the Range API to modify the underlying HTML string in the store
 
-### Implementation Order
-1. Completeness score widget (standalone, no backend needed)
-2. Word count on RichTextEditor (small change)
-3. AI Tools tab with Tailor to Job (needs edge function update)
-4. Click-to-edit on preview (complex, last)
+**4. Architectural approach — `contentEditable` on key text elements**
+- Add `contentEditable="true"` to `HtmlBlock` (descriptions) and entry title/subtitle `<p>` elements
+- On `input` event, read back the innerHTML and update the store
+- On `mouseup`/`selectionchange`, if there's a selection inside an editable element, show `InlineFormatToolbar`
+- Use `document.execCommand('bold')`, `execCommand('italic')`, `execCommand('underline')`, and for color: `execCommand('foreColor', false, color)` — these work on contentEditable elements and are the simplest path
+
+**5. Changes to existing code**
+- **`ResumePreview.tsx`**: Add `contentEditable` to `HtmlBlock` and key text elements. Add selection listener. Render `InlineFormatToolbar` when selection is active.
+- **New file `InlineFormatToolbar.tsx`**: Floating toolbar with Bold, Italic, Underline, Color buttons. Positioned at selection rect. Uses `execCommand` for formatting.
+- **`HtmlBlock` component**: Add `onInput` handler to sync changes back, add `contentEditable="true"`, suppress React hydration warning.
+- **Keep existing `data-color-role` click behavior** as-is for whole-role color changes — the new toolbar is additive.
+
+**6. DOMPurify configuration**
+- Update sanitize config to allow `style` attributes (for inline color spans) and tags like `<u>`, `<span>`, `<strong>`, `<em>`.
+
+### Files to create/modify
+- **Create**: `src/components/resume-builder/InlineFormatToolbar.tsx`
+- **Modify**: `src/components/resume-builder/ResumePreview.tsx` — add contentEditable, selection listeners, render toolbar
 
