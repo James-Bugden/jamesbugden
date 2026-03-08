@@ -116,7 +116,7 @@ function HtmlBlock({ html, className, fontSize, sectionId, entryId }: { html?: s
       data-entry-id={entryId}
       className={className}
       style={{ fontSize: fontSize || "inherit", lineHeight: 1.5, color: "var(--resume-body)" }}
-      dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(html || "", { ADD_ATTR: ['style'] }) }}
+      dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(html || "", { ADD_TAGS: ['font'], ADD_ATTR: ['style', 'color'] }) }}
     />
   );
 }
