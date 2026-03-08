@@ -25,6 +25,7 @@ export function TemplateGalleryModal({
   resumeData,
   showToast = true,
 }: TemplateGalleryModalProps) {
+  const t = useT();
   const [hoveredId, setHoveredId] = useState<string | null>(null);
 
   // Build settings for each template so thumbnails show user data in that style
