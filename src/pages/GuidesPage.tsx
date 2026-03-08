@@ -84,7 +84,7 @@ const guides: Guide[] = [
   },
 ];
 
-const categories = ["LinkedIn", "Resume", "Career Change", "Interview Prep"];
+const categories = ["LinkedIn", "Resume", "Career Change", "Interview Prep", "AI & Job Search"];
 
 const GuidesPage = () => {
   return (
