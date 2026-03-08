@@ -810,9 +810,6 @@ export const A4Page = React.memo(function A4Page({
                   justifyContent: align === "left" ? "flex-start" : align === "right" ? "flex-end" : "center",
                   flexWrap: "nowrap",
                 }}
-                style={{
-                  justifyContent: align === "left" ? "flex-start" : align === "right" ? "flex-end" : "center",
-                }}
               >
                 <h1
                   data-color-role="name"
