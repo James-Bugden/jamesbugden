@@ -1093,7 +1093,20 @@ export const ResumePreview = React.memo(function ResumePreview({
             const pageBottom = (pageIdx + 1) * usablePerPage;
 
             if (elTop < pageBottom && elBottom >= pageBottom + BOUNDARY_TOLERANCE) {
-              if (rect.height < usablePerPage * 0.255) {
+              // Orphan heading protection: push section headings near page bottom
+              const tagName = (el as HTMLElement).tagName?.toLowerCase();
+              if (tagName === 'h2' || tagName === 'h3') {
+                const spaceBelow = pageBottom - elBottom;
+                if (spaceBelow < 40) {
+                  const push = pageBottom - elTop + 1;
+                  const existing = parseFloat((el as HTMLElement).style.marginTop) || 0;
+                  (el as HTMLElement).style.marginTop = `${existing + push}px`;
+                  changed = true;
+                  return;
+                }
+              }
+
+              if (rect.height < usablePerPage * 0.25) {
                 const push = pageBottom - elTop + 1;
                 const existing = parseFloat((el as HTMLElement).style.marginTop) || 0;
                 (el as HTMLElement).style.marginTop = `${existing + push}px`;
