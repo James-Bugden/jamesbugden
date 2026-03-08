@@ -634,7 +634,6 @@ function HeaderTab({ settings, onChange }: { settings: CustomizeSettings; onChan
         <div className="flex gap-2 mb-5">
           {([
             { val: "icon", label: "Icon", content: <Smile className="w-4 h-4" style={{ color: B.textSec }} /> },
-            { val: "bullet", label: "• Bullet", content: <span className="text-sm font-bold" style={{ color: B.textSec }}>• Bullet</span> },
             { val: "bar", label: "| Bar", content: <span className="text-sm font-bold" style={{ color: B.textSec }}>| Bar</span> },
           ] as const).map((s) => (
             <button
