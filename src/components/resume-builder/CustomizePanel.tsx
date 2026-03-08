@@ -19,9 +19,7 @@ import {
   PAGE_FORMAT_OPTIONS,
 } from "./customizeTypes";
 import { ResumeData } from "./types";
-
-import { FontPicker } from "./FontPicker";
-import { applyTemplatePreset, TEMPLATE_LIST } from "./templatePresets";
+latePreset, TEMPLATE_LIST } from "./templatePresets";
 import { ResumeThumbnail } from "./ResumeThumbnail";
 import { DEFAULT_CUSTOMIZE } from "./customizeTypes";
 
@@ -231,8 +229,7 @@ export function CustomizePanel({ settings, onChange, sections, resumeData }: Cus
 function BasicsTab({ settings, onChange, resumeData }: { settings: CustomizeSettings; onChange: (u: Partial<CustomizeSettings>) => void; resumeData?: ResumeData }) {
   const [galleryOpen, setGalleryOpen] = useState(false);
 
-  const handleTemplateSelect = (templateId: string) => {
-    const newSettings = applyTemplatePreset(settings, templateId);
+  cons const newSettings = applyTemplatePreset(settings, templateId);
     onChange(newSettings);
   };
 
