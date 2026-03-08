@@ -104,15 +104,18 @@ function isMeaningfulHtml(html?: string) {
   return plain.length > 0;
 }
 
-function HtmlBlock({ html, className, fontSize }: { html?: string; className?: string; fontSize?: string }) {
+function HtmlBlock({ html, className, fontSize, sectionId, entryId }: { html?: string; className?: string; fontSize?: string; sectionId?: string; entryId?: string }) {
   if (!isMeaningfulHtml(html)) return null;
 
   return (
     <div
       data-color-role="body"
+      data-field="description"
+      data-section-id={sectionId}
+      data-entry-id={entryId}
       className={className}
       style={{ fontSize: fontSize || "inherit", lineHeight: 1.5, color: "var(--resume-body)" }}
-      dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(html || "") }}
+      dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(html || "", { ADD_ATTR: ['style'] }) }}
     />
   );
 }
