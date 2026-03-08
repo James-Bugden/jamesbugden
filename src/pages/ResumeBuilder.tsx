@@ -767,7 +767,7 @@ const ResumeBuilder = () => {
                   style={{ color: BRAND.textSecondary }}
                 >
                   <ArrowLeft className="w-3.5 h-3.5" />
-                  <span className="hidden sm:inline">Dashboard</span>
+                   <span className="hidden sm:inline">{t("dashboard")}</span>
                 </button>
               </TooltipTrigger>
               <TooltipContent side="bottom" className="text-xs">Back to dashboard</TooltipContent>
