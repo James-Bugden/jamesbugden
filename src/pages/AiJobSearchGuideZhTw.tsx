@@ -670,13 +670,13 @@ const AiJobSearchGuideZhTw = () => {
       </section>
 
       {/* ═══════════════ 第 4 章：投遞 ═══════════════ */}
-      <section id="apply" className="scroll-mt-24 pb-16 px-5 md:px-6">
-        <div className="container mx-auto max-w-3xl space-y-6">
-          <div className="flex items-end gap-4">
+      <section id="apply" className="py-14 md:py-20 scroll-mt-24">
+        <div className="space-y-6">
+          <div className="flex items-start gap-5 mb-8">
             <SectionNumber num="04" />
-            <div>
-              <h2 className="font-heading text-2xl md:text-3xl text-foreground">自動化你的求職投遞</h2>
-              <p className="text-sm text-muted-foreground flex items-center gap-1.5 mt-1"><Clock className="w-4 h-4" /> 30 分鐘設定，之後每天 15 分鐘</p>
+            <div className="pt-3">
+              <h2 className="font-heading text-2xl md:text-3xl text-foreground mb-2">自動化你的求職投遞</h2>
+              <p className="text-sm text-muted-foreground flex items-center gap-1.5"><Clock className="w-4 h-4" /> 30 分鐘設定，之後每天 15 分鐘</p>
             </div>
           </div>
 
