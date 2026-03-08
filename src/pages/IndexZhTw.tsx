@@ -27,7 +27,7 @@ const IndexZhTw = () => {
     <div className="min-h-screen bg-background overflow-x-hidden scroll-smooth">
       <PageSEO
         title="James Bugden — 拿到年薪200萬+外商Offer"
-        description="財富500大資深招募官分享內部策略，協助750+候選人進入Google、Uber、Microsoft等頂尖企業。"
+        description="Career Coach 分享內部策略，協助750+候選人進入Google、Uber、Microsoft等頂尖企業。"
         path="/zh-tw"
         lang="zh-Hant-TW"
       />
