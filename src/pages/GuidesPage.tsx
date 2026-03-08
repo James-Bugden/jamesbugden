@@ -1,5 +1,5 @@
 import { Button } from "@/components/ui/button";
-import { Linkedin, ArrowLeft, FileText, Briefcase, MessageSquare, Users } from "lucide-react";
+import { Linkedin, ArrowLeft, FileText, Briefcase, MessageSquare, Users, Phone } from "lucide-react";
 import { Link } from "react-router-dom";
 import { InstagramIcon, ThreadsIcon } from "@/components/SocialIcons";
 import LanguageToggle from "@/components/LanguageToggle";
@@ -44,6 +44,14 @@ const guides: Guide[] = [
     href: "/pivot-method-guide",
     category: "Career Change",
   },
+  // Resume
+  {
+    icon: FileText,
+    title: "Resume Guide: Get Recruiters to Pick You",
+    description: "Complete resume writing guide from a Fortune 100 recruiter",
+    href: "/resume-guide",
+    category: "Resume",
+  },
   // Interview Guides
   {
     icon: MessageSquare,
@@ -59,9 +67,16 @@ const guides: Guide[] = [
     href: "/interview-preparation-guide",
     category: "Interview Prep",
   },
+  {
+    icon: Phone,
+    title: "How to Pass the Recruiter Screen",
+    description: "A Senior Recruiter's end-to-end playbook for passing the screening call with word-for-word examples and salary scripts",
+    href: "/recruiter-screen-guide",
+    category: "Interview Prep",
+  },
 ];
 
-const categories = ["LinkedIn", "Career Change", "Interview Prep"];
+const categories = ["LinkedIn", "Resume", "Career Change", "Interview Prep"];
 
 const GuidesPage = () => {
   return (
@@ -117,6 +132,7 @@ const GuidesPage = () => {
             <div key={category} className="mb-12 last:mb-0">
               <h2 className="font-heading text-2xl md:text-3xl text-foreground mb-6 flex items-center gap-3">
                 {category === "LinkedIn" && <Linkedin className="w-6 h-6 text-gold" />}
+                {category === "Resume" && <FileText className="w-6 h-6 text-gold" />}
                 {category === "Career Change" && <Briefcase className="w-6 h-6 text-gold" />}
                 {category === "Interview Prep" && <MessageSquare className="w-6 h-6 text-gold" />}
                 {category}

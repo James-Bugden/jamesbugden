@@ -1,5 +1,5 @@
 import { Button } from "@/components/ui/button";
-import { Linkedin, ArrowLeft, FileText, Briefcase, MessageSquare, Users } from "lucide-react";
+import { Linkedin, ArrowLeft, FileText, Briefcase, MessageSquare, Users, Phone } from "lucide-react";
 import { Link } from "react-router-dom";
 import { InstagramIcon, ThreadsIcon } from "@/components/SocialIcons";
 import LanguageToggle from "@/components/LanguageToggle";
@@ -65,6 +65,13 @@ const guides: Guide[] = [
     title: "完整面試準備指南",
     description: "涵蓋面試準備所有面向的完整指南",
     href: "/zh-tw/interview-preparation-guide",
+    category: "面試準備",
+  },
+  {
+    icon: Phone,
+    title: "如何通過招募人員的電話篩選",
+    description: "資深招募官的完整實戰手冊，含逐字範例與薪資話術",
+    href: "/zh-tw/recruiter-screen-guide",
     category: "面試準備",
   },
 ];
@@ -133,6 +140,7 @@ const GuidesPageZhTw = () => {
                 {category.zh === "履歷撰寫" && <FileText className="w-6 h-6 text-gold" />}
                 {category.zh === "職涯轉型" && <Briefcase className="w-6 h-6 text-gold" />}
                 {category.zh === "面試準備" && <MessageSquare className="w-6 h-6 text-gold" />}
+                {category.zh === "電話篩選" && <Phone className="w-6 h-6 text-gold" />}
                 {category.zh}
               </h2>
               
