@@ -86,10 +86,10 @@ export function PersonalDetailsCard({ details, onChange, collapsible }: Personal
           <div className="flex items-start gap-4 mt-1">
             <div className="flex-1 min-w-0">
               <h2 className="text-base font-bold text-gray-900 leading-tight uppercase tracking-wide">
-                {details.fullName || "Your Name"}
+                {details.fullName || t("yourName")}
               </h2>
               <p className="text-sm text-gray-500 mt-0.5">
-                {details.professionalTitle || "Professional Title"}
+                {details.professionalTitle || t("professionalTitle")}
               </p>
 
               {/* Contact column */}
