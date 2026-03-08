@@ -406,7 +406,7 @@ function renderSectionEntries(section: ResumeSection, customize?: CustomizeSetti
 
     return (
       <div className="mt-[1mm]">
-        <HtmlBlock html={f.description} className="[&_p]:mb-[1mm] [&_ul]:list-disc [&_ul]:pl-[5mm]" />
+        <HtmlBlock html={f.description} sectionId={section.id} entryId={entry.id} className="[&_p]:mb-[1mm] [&_ul]:list-disc [&_ul]:pl-[5mm]" />
         {f.signature && <img src={f.signature} alt="Signature" className="h-[12mm] mt-[2mm]" />}
         {(f.fullName || f.place || f.date) && (
           <p style={{ fontSize: skillPt(base), color: "var(--resume-subtitle)", marginTop: "2mm" }}>
