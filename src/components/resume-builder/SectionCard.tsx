@@ -2,7 +2,7 @@ import { useState, useRef, useCallback } from "react";
 import { ChevronDown, ChevronUp, GripVertical, Trash2, Plus, X, Pencil, Grid3X3, Circle, BarChart3, List } from "lucide-react";
 import * as Icons from "lucide-react";
 import { Checkbox } from "@/components/ui/checkbox";
-import { ResumeSection, ResumeSectionEntry, SectionLayout, SectionSeparator, LevelIndicator, SubtitleStyle, getDefaultFieldsForType, SECTION_TYPES, PROFICIENCY_LEVELS } from "./types";
+import { ResumeSection, ResumeSectionEntry, SectionLayout, SectionSeparator, SubtitleStyle, getDefaultFieldsForType, SECTION_TYPES, PROFICIENCY_LEVELS } from "./types";
 import { RichTextEditor } from "./RichTextEditor";
 import { MonthYearPicker } from "./MonthYearPicker";
 import { TagInput } from "./TagInput";
