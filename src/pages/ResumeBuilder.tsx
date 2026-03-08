@@ -700,7 +700,7 @@ const ResumeBuilder = () => {
                     removeSection(section.id);
                     toast({
                       title: t("sectionRemoved"),
-                      description: `${removed.title} was deleted.`,
+                      description: `${removed.title} ${t("sectionDeletedDesc")}`,
                       action: (
                         <button
                           onClick={() => {
