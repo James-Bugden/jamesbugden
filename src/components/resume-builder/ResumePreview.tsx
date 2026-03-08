@@ -981,7 +981,7 @@ function getAtomicBlocks(parent: Element): HTMLElement[] {
   function walk(node: Element) {
     for (let i = 0; i < node.children.length; i++) {
       const child = node.children[i] as HTMLElement;
-      if (child.hasAttribute('data-page-item')) continue;
+      // Don't skip data-page-item children — traverse into them
       if (PAGINATION_BLOCK_TAGS.has(child.tagName.toLowerCase())) {
         blocks.push(child);
       } else {
