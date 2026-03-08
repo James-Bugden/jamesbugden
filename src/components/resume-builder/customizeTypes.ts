@@ -174,7 +174,9 @@ export const DEFAULT_CUSTOMIZE: CustomizeSettings = {
   accentApplyLines: true,
 
   skillsDisplay: "grid",
+  skillsSeparator: "bullet",
   languagesDisplay: "grid",
+  languagesSeparator: "bullet",
   educationOrder: "degree-first",
   experienceOrder: "title-first",
   groupPromotions: false,

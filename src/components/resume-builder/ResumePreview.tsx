@@ -302,7 +302,7 @@ function renderSectionEntries(section: ResumeSection, customize?: CustomizeSetti
 
   if (section.type === "languages") {
     const langDisplay = c?.languagesDisplay || section.layout || "grid";
-    const sep = section.separator || "bullet";
+    const sep = c?.languagesSeparator || section.separator || "bullet";
     const subStyle = section.subtitleStyle || "dash";
 
     const formatLangLabel = (lang: string, prof: string) => {
