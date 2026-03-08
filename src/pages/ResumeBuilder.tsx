@@ -321,7 +321,7 @@ function DownloadDropdown({ downloading, pageFormat, docName, onDownload }: {
    ═════════════════════════════════════════════════════════════ */
 const ResumeBuilder = () => {
   const store = useResumeStore();
-  const { data, customize, updateCustomize, updatePersonalDetails, setSections, updateSection, removeSection } = store;
+  const { data, setData, customize, updateCustomize, updatePersonalDetails, setSections, updateSection, removeSection } = store;
 
   /* ── dnd-kit sensors (defined early, used later after pushHistory) ── */
   const sensors = useSensors(
@@ -498,6 +498,17 @@ const ResumeBuilder = () => {
       }
     }, 100);
   }, []);
+
+  const handleContentEdit = useCallback((sectionId: string, entryId: string, field: string, html: string) => {
+    setData(prev => ({
+      ...prev,
+      sections: prev.sections.map(s =>
+        s.id === sectionId
+          ? { ...s, entries: s.entries.map(e => e.id === entryId ? { ...e, fields: { ...e.fields, [field]: html } } : e) }
+          : s
+      ),
+    }));
+  }, [setData]);
 
   const handleImported = useCallback((doc: SavedDocument) => {
     if (doc.type === "resume") {
@@ -768,7 +779,7 @@ const ResumeBuilder = () => {
             {editorContent}
           </div>
           <div className="flex-1 h-full">
-            <ResumePreview data={data} customize={customize} pdfTargetId="resume-pdf-target" onEditSection={handleEditSection} onColorChange={(f, c) => updateCustomize({ [f]: c } as any)} />
+            <ResumePreview data={data} customize={customize} pdfTargetId="resume-pdf-target" onEditSection={handleEditSection} onColorChange={(f, c) => updateCustomize({ [f]: c } as any)} onContentEdit={handleContentEdit} />
 
           </div>
         </div>
@@ -793,7 +804,7 @@ const ResumeBuilder = () => {
         {/* Mobile preview overlay */}
         {mobilePreview && (
           <MobilePreviewOverlay onClose={() => setMobilePreview(false)} onDownload={() => handleDownload()} downloading={downloading}>
-            <ResumePreview data={data} customize={customize} pdfTargetId="resume-pdf-target" onEditSection={handleEditSection} onColorChange={(f, c) => updateCustomize({ [f]: c } as any)} />
+            <ResumePreview data={data} customize={customize} pdfTargetId="resume-pdf-target" onEditSection={handleEditSection} onColorChange={(f, c) => updateCustomize({ [f]: c } as any)} onContentEdit={handleContentEdit} />
           </MobilePreviewOverlay>
         )}
       </div>

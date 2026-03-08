@@ -19,6 +19,7 @@ import { ResumeData, ResumeSection } from "./types";
 import { CustomizeSettings } from "./customizeTypes";
 import { GOOGLE_FONTS_URL } from "./fontData";
 import { InlineColorToolbar, ROLE_TO_FIELD } from "./InlineColorToolbar";
+import { InlineFormatToolbar } from "./InlineFormatToolbar";
 import { useIsMobile } from "@/hooks/use-mobile";
 
 /* ── Page dimensions (mm → px at 96 DPI: 1mm ≈ 3.7795px) ──────── */
@@ -41,6 +42,7 @@ interface ResumePreviewProps {
   pdfTargetId?: string;
   onEditSection?: (sectionId: string) => void;
   onColorChange?: (field: string, color: string) => void;
+  onContentEdit?: (sectionId: string, entryId: string, field: string, html: string) => void;
 }
 
 /* ── Relative font-size helpers ──────────────────────────────── */
@@ -102,15 +104,18 @@ function isMeaningfulHtml(html?: string) {
   return plain.length > 0;
 }
 
-function HtmlBlock({ html, className, fontSize }: { html?: string; className?: string; fontSize?: string }) {
+function HtmlBlock({ html, className, fontSize, sectionId, entryId }: { html?: string; className?: string; fontSize?: string; sectionId?: string; entryId?: string }) {
   if (!isMeaningfulHtml(html)) return null;
 
   return (
     <div
       data-color-role="body"
+      data-field="description"
+      data-section-id={sectionId}
+      data-entry-id={entryId}
       className={className}
       style={{ fontSize: fontSize || "inherit", lineHeight: 1.5, color: "var(--resume-body)" }}
-      dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(html || "") }}
+      dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(html || "", { ADD_ATTR: ['style'] }) }}
     />
   );
 }
@@ -224,7 +229,7 @@ function renderSectionEntries(section: ResumeSection, customize?: CustomizeSetti
   const c = customize;
 
   if (section.type === "summary") {
-    return <HtmlBlock html={section.entries?.[0]?.fields?.description} className="mt-[1mm] [&_p]:mb-[1.2mm] [&_ul]:list-disc [&_ul]:pl-[5mm] [&_ol]:list-decimal [&_ol]:pl-[5mm]" />;
+    return <HtmlBlock html={section.entries?.[0]?.fields?.description} sectionId={section.id} entryId={section.entries?.[0]?.id} className="mt-[1mm] [&_p]:mb-[1.2mm] [&_ul]:list-disc [&_ul]:pl-[5mm] [&_ol]:list-decimal [&_ol]:pl-[5mm]" />;
   }
 
   if (section.type === "skills") {
@@ -401,7 +406,7 @@ function renderSectionEntries(section: ResumeSection, customize?: CustomizeSetti
 
     return (
       <div className="mt-[1mm]">
-        <HtmlBlock html={f.description} className="[&_p]:mb-[1mm] [&_ul]:list-disc [&_ul]:pl-[5mm]" />
+        <HtmlBlock html={f.description} sectionId={section.id} entryId={entry.id} className="[&_p]:mb-[1mm] [&_ul]:list-disc [&_ul]:pl-[5mm]" />
         {f.signature && <img src={f.signature} alt="Signature" className="h-[12mm] mt-[2mm]" />}
         {(f.fullName || f.place || f.date) && (
           <p style={{ fontSize: skillPt(base), color: "var(--resume-subtitle)", marginTop: "2mm" }}>
@@ -419,6 +424,8 @@ function renderSectionEntries(section: ResumeSection, customize?: CustomizeSetti
           <HtmlBlock
             key={entry.id}
             html={entry.fields.description}
+            sectionId={section.id}
+            entryId={entry.id}
             className="[&_p]:mb-[1mm] [&_ul]:list-disc [&_ul]:pl-[5mm] [&_ol]:list-decimal [&_ol]:pl-[5mm]"
           />
         ))}
@@ -517,7 +524,7 @@ function renderSectionEntries(section: ResumeSection, customize?: CustomizeSetti
                     {date && <p data-color-role="dates" style={{ fontSize: subtitleFontSize, color: "var(--resume-dates)", whiteSpace: "nowrap" }}>{date}</p>}
                   </div>
                   {f.location && <p data-color-role="subtitle" style={{ fontSize: subtitleFontSize, color: "var(--resume-subtitle)", fontWeight: subtitleFW, fontStyle: subtitleFS, marginTop: "0.5mm" }}>{f.location}</p>}
-                  <HtmlBlock html={f.description} fontSize={bodyPt(base)} className={`mt-[1mm] [&_p]:mb-[1mm] ${listClass} [&_ol]:list-decimal [&_ol]:pl-[5mm] [&_li]:mb-[0.4mm] [&_a]:underline`} />
+                  <HtmlBlock html={f.description} sectionId={section.id} entryId={entry.id} fontSize={bodyPt(base)} className={`mt-[1mm] [&_p]:mb-[1mm] ${listClass} [&_ol]:list-decimal [&_ol]:pl-[5mm] [&_li]:mb-[0.4mm] [&_a]:underline`} />
                 </div>
               );
             }
@@ -546,7 +553,7 @@ function renderSectionEntries(section: ResumeSection, customize?: CustomizeSetti
                             {f.location && <p data-color-role="subtitle" style={{ fontSize: subtitleFontSize, color: "var(--resume-subtitle)", whiteSpace: "nowrap" }}>{f.location}</p>}
                           </div>
                         </div>
-                        <HtmlBlock html={f.description} fontSize={bodyPt(base)} className={`mt-[1mm] [&_p]:mb-[1mm] ${listClass} [&_ol]:list-decimal [&_ol]:pl-[5mm] [&_li]:mb-[0.4mm] [&_a]:underline`} />
+                        <HtmlBlock html={f.description} sectionId={section.id} entryId={entry.id} fontSize={bodyPt(base)} className={`mt-[1mm] [&_p]:mb-[1mm] ${listClass} [&_ol]:list-decimal [&_ol]:pl-[5mm] [&_li]:mb-[0.4mm] [&_a]:underline`} />
                       </div>
                     );
                   })}
@@ -597,7 +604,7 @@ function renderSectionEntries(section: ResumeSection, customize?: CustomizeSetti
                 {f.location && (
                   <p data-color-role="subtitle" style={{ fontSize: subtitleFontSize, color: "var(--resume-subtitle)", fontWeight: subtitleFW, fontStyle: subtitleFS, marginTop: "0.5mm" }}>{f.location}</p>
                 )}
-                <HtmlBlock html={f.description} fontSize={bodyPt(base)} className={`mt-[1mm] [&_p]:mb-[1mm] ${listClass} [&_ol]:list-decimal [&_ol]:pl-[5mm] [&_li]:mb-[0.4mm] [&_a]:underline`} />
+                <HtmlBlock html={f.description} sectionId={section.id} entryId={entry.id} fontSize={bodyPt(base)} className={`mt-[1mm] [&_p]:mb-[1mm] ${listClass} [&_ol]:list-decimal [&_ol]:pl-[5mm] [&_li]:mb-[0.4mm] [&_a]:underline`} />
               </div>
             );
           }
@@ -615,7 +622,7 @@ function renderSectionEntries(section: ResumeSection, customize?: CustomizeSetti
                 {f.location && (
                   <p data-color-role="subtitle" style={{ fontSize: subtitleFontSize, color: "var(--resume-subtitle)", fontStyle: "italic", marginTop: "0.3mm" }}>{f.location}</p>
                 )}
-                <HtmlBlock html={f.description} fontSize={bodyPt(base)} className={`mt-[1mm] [&_p]:mb-[1mm] ${listClass} [&_ol]:list-decimal [&_ol]:pl-[5mm] [&_li]:mb-[0.4mm] [&_a]:underline`} />
+                <HtmlBlock html={f.description} sectionId={section.id} entryId={entry.id} fontSize={bodyPt(base)} className={`mt-[1mm] [&_p]:mb-[1mm] ${listClass} [&_ol]:list-decimal [&_ol]:pl-[5mm] [&_li]:mb-[0.4mm] [&_a]:underline`} />
               </div>
             );
           }
@@ -663,6 +670,8 @@ function renderSectionEntries(section: ResumeSection, customize?: CustomizeSetti
 
               <HtmlBlock
                 html={f.description}
+                sectionId={section.id}
+                entryId={entry.id}
                 fontSize={bodyPt(base)}
                 className={`mt-[1mm] [&_p]:mb-[1mm] ${listClass} [&_ol]:list-decimal [&_ol]:pl-[5mm] [&_li]:mb-[0.4mm] [&_a]:underline`}
               />
@@ -1004,6 +1013,7 @@ export const ResumePreview = React.memo(function ResumePreview({
   pdfTargetId,
   onEditSection,
   onColorChange,
+  onContentEdit,
 }: ResumePreviewProps) {
   const containerRef = useRef<HTMLDivElement>(null);
   const hiddenFlowRef = useRef<HTMLDivElement>(null);
@@ -1016,6 +1026,7 @@ export const ResumePreview = React.memo(function ResumePreview({
   const [currentPage, setCurrentPage] = useState(1);
 
   const [colorTarget, setColorTarget] = useState<{ rect: DOMRect; role: string } | null>(null);
+  const [formatToolbar, setFormatToolbar] = useState<{ rect: DOMRect } | null>(null);
   const isMobile = useIsMobile();
 
   const dims = getPageDims(customize?.pageFormat);
@@ -1197,6 +1208,10 @@ export const ResumePreview = React.memo(function ResumePreview({
   }, [scale, dims.hPX, pageCount]);
 
   const handlePreviewClick = useCallback((e: React.MouseEvent) => {
+    const sel = window.getSelection();
+    if (sel && !sel.isCollapsed) return;
+    setFormatToolbar(null);
+
     if (!onColorChange) return;
     const target = (e.target as HTMLElement).closest('[data-color-role]') as HTMLElement | null;
     if (!target) return;
@@ -1210,6 +1225,67 @@ export const ResumePreview = React.memo(function ResumePreview({
   const handleColorChange = useCallback((field: string, color: string) => {
     onColorChange?.(field, color);
   }, [onColorChange]);
+
+  /* ── Selection listener for inline formatting toolbar ── */
+  useEffect(() => {
+    const container = containerRef.current;
+    if (!container || !onContentEdit) return;
+
+    const handleMouseUp = () => {
+      setTimeout(() => {
+        const sel = window.getSelection();
+        if (!sel || sel.isCollapsed || sel.rangeCount === 0) return;
+
+        const range = sel.getRangeAt(0);
+        const node = range.commonAncestorContainer;
+        const ancestor = node instanceof HTMLElement ? node : node.parentElement;
+        if (!ancestor || !container.contains(ancestor)) return;
+
+        // Skip hidden measurement div
+        if (ancestor.closest('[data-hidden-flow]')) return;
+
+        // Only show toolbar if selection is inside a formattable field
+        const fieldEl = ancestor.closest('[data-field]');
+        if (!fieldEl) return;
+
+        const rect = range.getBoundingClientRect();
+        setFormatToolbar({ rect });
+      }, 10);
+    };
+
+    container.addEventListener("mouseup", handleMouseUp);
+    return () => container.removeEventListener("mouseup", handleMouseUp);
+  }, [onContentEdit]);
+
+  const handleFormat = useCallback((command: string, value?: string) => {
+    const sel = window.getSelection();
+    if (!sel || sel.isCollapsed || !onContentEdit) return;
+
+    const range = sel.getRangeAt(0);
+    const node = range.commonAncestorContainer;
+    const ancestor = node instanceof HTMLElement ? node : node.parentElement;
+    if (!ancestor) return;
+
+    const fieldEl = ancestor.closest('[data-field]') as HTMLElement;
+    if (!fieldEl) return;
+
+    const sectionId = fieldEl.getAttribute('data-section-id');
+    const entryId = fieldEl.getAttribute('data-entry-id');
+    const field = fieldEl.getAttribute('data-field') || 'description';
+    if (!sectionId || !entryId) return;
+
+    // Temporarily make contentEditable, apply formatting, read result
+    fieldEl.contentEditable = 'true';
+    sel.removeAllRanges();
+    sel.addRange(range);
+    document.execCommand(command, false, value);
+
+    const newHtml = fieldEl.innerHTML;
+    fieldEl.removeAttribute('contenteditable');
+
+    onContentEdit(sectionId, entryId, field, newHtml);
+    setFormatToolbar(null);
+  }, [onContentEdit]);
 
   const totalScaledHeight = pageCount * dims.hPX + (pageCount - 1) * 40;
 
@@ -1235,6 +1311,7 @@ export const ResumePreview = React.memo(function ResumePreview({
       <div
         ref={hiddenFlowRef}
         id={pdfTargetId}
+        data-hidden-flow
         style={{
           position: "absolute",
           width: `${dims.wPX}px`,
@@ -1336,6 +1413,15 @@ export const ResumePreview = React.memo(function ResumePreview({
           onColorChange={handleColorChange}
           onClose={() => setColorTarget(null)}
           isMobile={isMobile}
+          containerRect={containerRef.current?.getBoundingClientRect()}
+        />
+      )}
+
+      {formatToolbar && onContentEdit && (
+        <InlineFormatToolbar
+          rect={formatToolbar.rect}
+          onFormat={handleFormat}
+          onClose={() => setFormatToolbar(null)}
           containerRect={containerRef.current?.getBoundingClientRect()}
         />
       )}
