@@ -1069,6 +1069,9 @@ export const ResumePreview = React.memo(function ResumePreview({
           const items = root.querySelectorAll('[data-page-item]');
 
           items.forEach(el => {
+            // Skip container-level items that have nested data-page-items
+            if (el.querySelector('[data-page-item]')) return;
+
             const rect = el.getBoundingClientRect();
             const elTop = rect.top - rootRect.top - contentOriginPX;
             const elBottom = elTop + rect.height;
@@ -1076,7 +1079,7 @@ export const ResumePreview = React.memo(function ResumePreview({
             const pageBottom = (pageIdx + 1) * usablePerPage;
 
             if (elTop < pageBottom && elBottom >= pageBottom + BOUNDARY_TOLERANCE) {
-              if (rect.height < usablePerPage * 0.8) {
+              if (rect.height < usablePerPage * 0.6) {
                 const push = pageBottom - elTop + 1;
                 const existing = parseFloat((el as HTMLElement).style.marginTop) || 0;
                 (el as HTMLElement).style.marginTop = `${existing + push}px`;
