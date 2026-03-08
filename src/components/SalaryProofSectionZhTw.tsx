@@ -16,8 +16,8 @@ export default function SalaryProofSectionZhTw() {
 
           <div className="flex flex-col gap-14">
             {[
-              { num: "8,000 萬以上", desc: "接受第一個 Offer 和策略性談判之間的差距。30 年職涯計算。" },
-              { num: "10,000 以上", desc: "免費工具、模板和指南的下載次數。" },
+              { num: "8 千萬以上", desc: "接受第一個 Offer 和策略性談判之間的差距。30 年職涯計算。" },
+              { num: "1 萬以上", desc: "免費工具、模板和指南的下載次數。" },
             ].map((stat) => (
               <div key={stat.num} className="flex flex-col items-center">
                 <span
