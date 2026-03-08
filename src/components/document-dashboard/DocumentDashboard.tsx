@@ -273,13 +273,13 @@ export function DocumentDashboard({ onOpenDocument, onImport }: DocumentDashboar
           {menuOpenId === doc.id && (
             <div className="absolute right-0 top-7 bg-white rounded-lg shadow-lg border py-1 z-20 min-w-[130px]" style={{ borderColor: BRAND.border }} onClick={(e) => e.stopPropagation()}>
               <button onClick={() => handleRenameStart(doc)} className="w-full flex items-center gap-2 px-3 py-1.5 text-[12px] hover:bg-gray-50" style={{ color: BRAND.text }}>
-                <Pencil className="w-3 h-3" /> Rename
+                <Pencil className="w-3 h-3" /> {t("renameAction")}
               </button>
               <button onClick={() => handleDuplicate(doc.id)} className="w-full flex items-center gap-2 px-3 py-1.5 text-[12px] hover:bg-gray-50" style={{ color: BRAND.text }}>
-                <Copy className="w-3 h-3" /> Duplicate
+                <Copy className="w-3 h-3" /> {t("duplicateAction")}
               </button>
               <button onClick={() => handleDelete(doc.id)} className="w-full flex items-center gap-2 px-3 py-1.5 text-[12px] text-red-600 hover:bg-red-50">
-                <Trash2 className="w-3 h-3" /> Delete
+                <Trash2 className="w-3 h-3" /> {t("deleteAction")}
               </button>
             </div>
           )}
