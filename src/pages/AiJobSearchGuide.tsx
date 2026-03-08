@@ -1153,11 +1153,13 @@ Generate a short, conversational response that asks them to do better, given my 
       </section>
 
       {/* ═══════════════ SECTION 10: RESOURCES ═══════════════ */}
-      <section id="resources" className="scroll-mt-24 pb-16 px-5 md:px-6">
-        <div className="container mx-auto max-w-3xl space-y-6">
-          <div className="flex items-end gap-4">
+      <section id="resources" className="py-14 md:py-20 scroll-mt-24">
+        <div className="space-y-6">
+          <div className="flex items-start gap-5 mb-8">
             <SectionNumber num="10" />
-            <h2 className="font-heading text-2xl md:text-3xl text-foreground">Additional Resources</h2>
+            <div className="pt-3">
+              <h2 className="font-heading text-2xl md:text-3xl text-foreground">Additional Resources</h2>
+            </div>
           </div>
 
           <div className="bg-card border border-border rounded-xl p-5 space-y-4">
