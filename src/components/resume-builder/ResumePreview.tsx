@@ -1019,9 +1019,10 @@ export const ResumePreview = React.memo(function ResumePreview({
   const containerRef = useRef<HTMLDivElement>(null);
   const hiddenFlowRef = useRef<HTMLDivElement>(null);
   const visiblePageRefs = useRef<(HTMLDivElement | null)[]>([]);
-  const mutationsRef = useRef<PaginationMutations & { gen?: number } | null>(null);
-  const paginationGenRef = useRef(0);
-  const lastAppliedGenRef = useRef(-1);
+   const mutationsRef = useRef<PaginationMutations & { gen?: number } | null>(null);
+   const paginationGenRef = useRef(0);
+   const lastAppliedGenRef = useRef(-1);
+   const [mutationVersion, setMutationVersion] = useState(0);
   const whitespaceWarningShown = useRef(false);
 
   const [autoScale, setAutoScale] = useState(0.65);
