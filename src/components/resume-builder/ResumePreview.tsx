@@ -1208,6 +1208,10 @@ export const ResumePreview = React.memo(function ResumePreview({
   }, [scale, dims.hPX, pageCount]);
 
   const handlePreviewClick = useCallback((e: React.MouseEvent) => {
+    const sel = window.getSelection();
+    if (sel && !sel.isCollapsed) return;
+    setFormatToolbar(null);
+
     if (!onColorChange) return;
     const target = (e.target as HTMLElement).closest('[data-color-role]') as HTMLElement | null;
     if (!target) return;
@@ -1221,6 +1225,67 @@ export const ResumePreview = React.memo(function ResumePreview({
   const handleColorChange = useCallback((field: string, color: string) => {
     onColorChange?.(field, color);
   }, [onColorChange]);
+
+  /* ── Selection listener for inline formatting toolbar ── */
+  useEffect(() => {
+    const container = containerRef.current;
+    if (!container || !onContentEdit) return;
+
+    const handleMouseUp = () => {
+      setTimeout(() => {
+        const sel = window.getSelection();
+        if (!sel || sel.isCollapsed || sel.rangeCount === 0) return;
+
+        const range = sel.getRangeAt(0);
+        const node = range.commonAncestorContainer;
+        const ancestor = node instanceof HTMLElement ? node : node.parentElement;
+        if (!ancestor || !container.contains(ancestor)) return;
+
+        // Skip hidden measurement div
+        if (ancestor.closest('[data-hidden-flow]')) return;
+
+        // Only show toolbar if selection is inside a formattable field
+        const fieldEl = ancestor.closest('[data-field]');
+        if (!fieldEl) return;
+
+        const rect = range.getBoundingClientRect();
+        setFormatToolbar({ rect });
+      }, 10);
+    };
+
+    container.addEventListener("mouseup", handleMouseUp);
+    return () => container.removeEventListener("mouseup", handleMouseUp);
+  }, [onContentEdit]);
+
+  const handleFormat = useCallback((command: string, value?: string) => {
+    const sel = window.getSelection();
+    if (!sel || sel.isCollapsed || !onContentEdit) return;
+
+    const range = sel.getRangeAt(0);
+    const node = range.commonAncestorContainer;
+    const ancestor = node instanceof HTMLElement ? node : node.parentElement;
+    if (!ancestor) return;
+
+    const fieldEl = ancestor.closest('[data-field]') as HTMLElement;
+    if (!fieldEl) return;
+
+    const sectionId = fieldEl.getAttribute('data-section-id');
+    const entryId = fieldEl.getAttribute('data-entry-id');
+    const field = fieldEl.getAttribute('data-field') || 'description';
+    if (!sectionId || !entryId) return;
+
+    // Temporarily make contentEditable, apply formatting, read result
+    fieldEl.contentEditable = 'true';
+    sel.removeAllRanges();
+    sel.addRange(range);
+    document.execCommand(command, false, value);
+
+    const newHtml = fieldEl.innerHTML;
+    fieldEl.removeAttribute('contenteditable');
+
+    onContentEdit(sectionId, entryId, field, newHtml);
+    setFormatToolbar(null);
+  }, [onContentEdit]);
 
   const totalScaledHeight = pageCount * dims.hPX + (pageCount - 1) * 40;
 
