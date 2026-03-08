@@ -1013,6 +1013,7 @@ export const ResumePreview = React.memo(function ResumePreview({
   pdfTargetId,
   onEditSection,
   onColorChange,
+  onContentEdit,
 }: ResumePreviewProps) {
   const containerRef = useRef<HTMLDivElement>(null);
   const hiddenFlowRef = useRef<HTMLDivElement>(null);
@@ -1025,6 +1026,7 @@ export const ResumePreview = React.memo(function ResumePreview({
   const [currentPage, setCurrentPage] = useState(1);
 
   const [colorTarget, setColorTarget] = useState<{ rect: DOMRect; role: string } | null>(null);
+  const [formatToolbar, setFormatToolbar] = useState<{ rect: DOMRect } | null>(null);
   const isMobile = useIsMobile();
 
   const dims = getPageDims(customize?.pageFormat);
