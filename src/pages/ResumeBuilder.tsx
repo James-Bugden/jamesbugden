@@ -250,10 +250,11 @@ function SaveIndicator({ saving }: { saving: boolean }) {
 
 /* ── Mobile preview overlay ────────────────────────────── */
 function MobilePreviewOverlay({ children, onClose, onDownload, downloading }: { children: React.ReactNode; onClose: () => void; onDownload?: () => void; downloading?: boolean }) {
+  const t = useT();
   return (
     <div className="fixed inset-0 z-50 bg-white flex flex-col animate-fade-in">
       <div className="flex items-center justify-between px-4 py-3 border-b border-gray-200" style={{ backgroundColor: BRAND.cream }}>
-        <span className="text-sm font-semibold" style={{ color: BRAND.text }}>Preview</span>
+        <span className="text-sm font-semibold" style={{ color: BRAND.text }}>{t("preview")}</span>
         <div className="flex items-center gap-3">
           {onDownload && (
             <button
@@ -263,10 +264,10 @@ function MobilePreviewOverlay({ children, onClose, onDownload, downloading }: { 
               style={{ color: BRAND.green }}
             >
               {downloading ? <Loader2 className="w-4 h-4 animate-spin" /> : <Download className="w-4 h-4" />}
-              {downloading ? "..." : "Download"}
+              {downloading ? "..." : t("download")}
             </button>
           )}
-          <button onClick={onClose} className="text-sm font-medium hover:opacity-80 transition-opacity" style={{ color: BRAND.gold }}>Close</button>
+          <button onClick={onClose} className="text-sm font-medium hover:opacity-80 transition-opacity" style={{ color: BRAND.gold }}>{t("close")}</button>
         </div>
       </div>
       <div className="flex-1 overflow-auto">{children}</div>
