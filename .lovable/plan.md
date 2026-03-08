@@ -1,28 +1,48 @@
 
 
-## Plan: Match AI Job Search Guide to Recruiter Screen Guide Design
+## Resume Builder Feature Improvements
 
-### Key Differences Found
+### Priority 1: AI "Tailor to Job Description" Panel
+- Add a new tab or panel in the "AI Tools" section (which currently shows "Coming soon")
+- User pastes a job description → edge function analyzes keyword overlap with current resume
+- Returns: missing keywords, suggested bullet point rewrites, match percentage
+- Reuses existing `resume-ai` edge function with a new `action: "tailor"` mode
+- UI: Split panel with JD on left, suggestions on right, one-click "Apply" buttons
 
-After comparing the two guides, here are the structural/visual mismatches:
+### Priority 2: Resume Completeness Score Widget
+- Floating widget in the editor sidebar showing real-time completion percentage
+- Scoring rules: has summary (+10), has 2+ experience entries (+20), all entries have descriptions (+15), dates filled (+10), contact info complete (+15), skills section exists (+10), quantified achievements detected (+20)
+- Visual: circular progress ring with percentage, expandable checklist of what's missing
+- Lives above the "Add Content" button in the Content tab
 
-1. **Introduction section**: Recruiter guide uses `bg-card border-b border-border` on the intro section, giving it a distinct card-like background. AI guide has no background differentiation — it's plain.
+### Priority 3: Populate the "AI Tools" Tab
+- Currently renders "AI Tools — Coming soon" placeholder
+- Build out with: "Tailor to Job" (above), "Generate Summary from Experience", "Suggest Skills", "Optimize Bullet Points (batch)"
+- Each tool card shows a description, input area, and results
 
-2. **Content wrapper**: Recruiter guide wraps all numbered sections inside a single `<main className="container mx-auto px-5 md:px-6 pb-20 max-w-3xl">` tag. AI guide uses individual `<section>` tags each with their own container — no shared `<main>` wrapper.
+### Priority 4: Real-time Word Count per Section
+- Add a small `<span>` below each `RichTextEditor` showing word count and bullet point count
+- Highlight in amber if too long (>150 words per entry) or too short (<20 words)
+- Lightweight: computed from the editor's text content on each change
 
-3. **Section spacing**: Recruiter guide sections use `pb-14 md:pb-20` inside the main wrapper. AI guide uses `pb-16` with separate px/container per section.
+### Priority 5: Click-to-Edit on Preview (Inline Editing)
+- When user clicks text on the A4 preview, show a floating input/textarea positioned over the clicked element
+- On blur/enter, update the corresponding field in the data model
+- Start with simple fields only: job title, company name, degree, institution
+- More complex than other items; implement after the above
 
-4. **Section header layout**: Recruiter guide uses `flex items-start gap-5 mb-8` with `pt-3` on the text div. AI guide uses `flex items-end gap-4` with no pt offset.
+### Files to Edit
+- `src/pages/ResumeBuilder.tsx` — Add completeness widget, wire AI Tools tab
+- `src/components/resume-builder/ResumeTopNav.tsx` — No changes needed
+- `src/components/resume-builder/RichTextEditor.tsx` — Add word count display
+- `supabase/functions/resume-ai/index.ts` — Add `tailor` action for JD matching
+- New: `src/components/resume-builder/CompletenessScore.tsx` — Score widget component
+- New: `src/components/resume-builder/AiToolsPanel.tsx` — Full AI tools tab content
+- New: `src/components/resume-builder/TailorToJob.tsx` — JD tailoring panel
 
-### Changes (both EN + ZH-TW files)
-
-1. **Intro section**: Add `bg-card border-b border-border` and matching padding (`py-14 md:py-20`) to the intro `<section>` element — same as Recruiter guide line 185.
-
-2. **Wrap numbered sections in `<main>`**: After the intro section, open a `<main className="container mx-auto px-5 md:px-6 pb-20 max-w-3xl">` that wraps all remaining content sections (find-path through resources + share/footer). Remove per-section `px-5 md:px-6` and `container mx-auto max-w-3xl` since the parent `<main>` handles it.
-
-3. **Section headers**: Change from `flex items-end gap-4` to `flex items-start gap-5 mb-8` with `pt-3` on the text container — matching the Recruiter guide's visual weight.
-
-4. **Section spacing**: Change section padding from `pb-16` to `pb-14 md:pb-20 scroll-mt-24` to match Recruiter guide rhythm.
-
-These are purely structural/class changes — no content modifications needed.
+### Implementation Order
+1. Completeness score widget (standalone, no backend needed)
+2. Word count on RichTextEditor (small change)
+3. AI Tools tab with Tailor to Job (needs edge function update)
+4. Click-to-edit on preview (complex, last)
 

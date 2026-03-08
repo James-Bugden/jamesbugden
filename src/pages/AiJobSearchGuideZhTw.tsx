@@ -249,7 +249,7 @@ const AiJobSearchGuideZhTw = () => {
       </section>
 
       {/* ═══════════════ 前言 ═══════════════ */}
-      <section id="intro" className="scroll-mt-24 pb-16 px-5 md:px-6">
+      <section id="intro" className="py-14 md:py-20 px-5 md:px-6 bg-card border-b border-border scroll-mt-24">
         <div className="container mx-auto max-w-3xl space-y-6">
           <h2 className="font-heading text-2xl md:text-3xl text-foreground">前言：為什麼 AI 改變了求職的一切</h2>
 
@@ -297,14 +297,15 @@ const AiJobSearchGuideZhTw = () => {
         </div>
       </section>
 
+      <main className="container mx-auto px-5 md:px-6 pb-20 max-w-3xl">
       {/* ═══════════════ 第 1 章：找到方向 ═══════════════ */}
-      <section id="find-path" className="scroll-mt-24 pb-16 px-5 md:px-6">
-        <div className="container mx-auto max-w-3xl space-y-6">
-          <div className="flex items-end gap-4">
+      <section id="find-path" className="py-14 md:py-20 scroll-mt-24">
+        <div className="space-y-6">
+          <div className="flex items-start gap-5 mb-8">
             <SectionNumber num="01" />
-            <div>
-              <h2 className="font-heading text-2xl md:text-3xl text-foreground">找到你的方向</h2>
-              <p className="text-sm text-muted-foreground flex items-center gap-1.5 mt-1"><Clock className="w-4 h-4" /> 45 分鐘</p>
+            <div className="pt-3">
+              <h2 className="font-heading text-2xl md:text-3xl text-foreground mb-2">找到你的方向</h2>
+              <p className="text-sm text-muted-foreground flex items-center gap-1.5"><Clock className="w-4 h-4" /> 45 分鐘</p>
             </div>
           </div>
 
@@ -377,13 +378,13 @@ const AiJobSearchGuideZhTw = () => {
       </section>
 
       {/* ═══════════════ 第 2 章：LinkedIn 防線 ═══════════════ */}
-      <section id="linkedin" className="scroll-mt-24 pb-16 px-5 md:px-6">
-        <div className="container mx-auto max-w-3xl space-y-6">
-          <div className="flex items-end gap-4">
+      <section id="linkedin" className="py-14 md:py-20 scroll-mt-24">
+        <div className="space-y-6">
+          <div className="flex items-start gap-5 mb-8">
             <SectionNumber num="02" />
-            <div>
-              <h2 className="font-heading text-2xl md:text-3xl text-foreground">建立你的 LinkedIn 防線</h2>
-              <p className="text-sm text-muted-foreground flex items-center gap-1.5 mt-1"><Clock className="w-4 h-4" /> 60 分鐘</p>
+            <div className="pt-3">
+              <h2 className="font-heading text-2xl md:text-3xl text-foreground mb-2">建立你的 LinkedIn 防線</h2>
+              <p className="text-sm text-muted-foreground flex items-center gap-1.5"><Clock className="w-4 h-4" /> 60 分鐘</p>
             </div>
           </div>
 
@@ -509,13 +510,13 @@ const AiJobSearchGuideZhTw = () => {
       </section>
 
       {/* ═══════════════ 第 3 章：履歷 ═══════════════ */}
-      <section id="resume" className="scroll-mt-24 pb-16 px-5 md:px-6">
-        <div className="container mx-auto max-w-3xl space-y-6">
-          <div className="flex items-end gap-4">
+      <section id="resume" className="py-14 md:py-20 scroll-mt-24">
+        <div className="space-y-6">
+          <div className="flex items-start gap-5 mb-8">
             <SectionNumber num="03" />
-            <div>
-              <h2 className="font-heading text-2xl md:text-3xl text-foreground">用履歷主動出擊</h2>
-              <p className="text-sm text-muted-foreground flex items-center gap-1.5 mt-1"><Clock className="w-4 h-4" /> 每個版本 90 分鐘</p>
+            <div className="pt-3">
+              <h2 className="font-heading text-2xl md:text-3xl text-foreground mb-2">用履歷主動出擊</h2>
+              <p className="text-sm text-muted-foreground flex items-center gap-1.5"><Clock className="w-4 h-4" /> 每個版本 90 分鐘</p>
             </div>
           </div>
 
@@ -669,13 +670,13 @@ const AiJobSearchGuideZhTw = () => {
       </section>
 
       {/* ═══════════════ 第 4 章：投遞 ═══════════════ */}
-      <section id="apply" className="scroll-mt-24 pb-16 px-5 md:px-6">
-        <div className="container mx-auto max-w-3xl space-y-6">
-          <div className="flex items-end gap-4">
+      <section id="apply" className="py-14 md:py-20 scroll-mt-24">
+        <div className="space-y-6">
+          <div className="flex items-start gap-5 mb-8">
             <SectionNumber num="04" />
-            <div>
-              <h2 className="font-heading text-2xl md:text-3xl text-foreground">自動化你的求職投遞</h2>
-              <p className="text-sm text-muted-foreground flex items-center gap-1.5 mt-1"><Clock className="w-4 h-4" /> 30 分鐘設定，之後每天 15 分鐘</p>
+            <div className="pt-3">
+              <h2 className="font-heading text-2xl md:text-3xl text-foreground mb-2">自動化你的求職投遞</h2>
+              <p className="text-sm text-muted-foreground flex items-center gap-1.5"><Clock className="w-4 h-4" /> 30 分鐘設定，之後每天 15 分鐘</p>
             </div>
           </div>
 
@@ -747,13 +748,13 @@ const AiJobSearchGuideZhTw = () => {
       </section>
 
       {/* ═══════════════ 第 5 章：面試 ═══════════════ */}
-      <section id="interview" className="scroll-mt-24 pb-16 px-5 md:px-6">
-        <div className="container mx-auto max-w-3xl space-y-6">
-          <div className="flex items-end gap-4">
+      <section id="interview" className="py-14 md:py-20 scroll-mt-24">
+        <div className="space-y-6">
+          <div className="flex items-start gap-5 mb-8">
             <SectionNumber num="05" />
-            <div>
-              <h2 className="font-heading text-2xl md:text-3xl text-foreground">準備完勝面試</h2>
-              <p className="text-sm text-muted-foreground flex items-center gap-1.5 mt-1"><Clock className="w-4 h-4" /> 每家公司 2-3 小時</p>
+            <div className="pt-3">
+              <h2 className="font-heading text-2xl md:text-3xl text-foreground mb-2">準備完勝面試</h2>
+              <p className="text-sm text-muted-foreground flex items-center gap-1.5"><Clock className="w-4 h-4" /> 每家公司 2-3 小時</p>
             </div>
           </div>
 
@@ -799,13 +800,13 @@ const AiJobSearchGuideZhTw = () => {
       </section>
 
       {/* ═══════════════ 第 6 章：談判 ═══════════════ */}
-      <section id="negotiate" className="scroll-mt-24 pb-16 px-5 md:px-6">
-        <div className="container mx-auto max-w-3xl space-y-6">
-          <div className="flex items-end gap-4">
+      <section id="negotiate" className="py-14 md:py-20 scroll-mt-24">
+        <div className="space-y-6">
+          <div className="flex items-start gap-5 mb-8">
             <SectionNumber num="06" />
-            <div>
-              <h2 className="font-heading text-2xl md:text-3xl text-foreground">像機器人一樣談判</h2>
-              <p className="text-sm text-muted-foreground flex items-center gap-1.5 mt-1"><Clock className="w-4 h-4" /> 每輪 30 分鐘</p>
+            <div className="pt-3">
+              <h2 className="font-heading text-2xl md:text-3xl text-foreground mb-2">像機器人一樣談判</h2>
+              <p className="text-sm text-muted-foreground flex items-center gap-1.5"><Clock className="w-4 h-4" /> 每輪 30 分鐘</p>
             </div>
           </div>
 
@@ -879,11 +880,13 @@ const AiJobSearchGuideZhTw = () => {
       </section>
 
       {/* ═══════════════ 第 7 章：AI 錯誤 ═══════════════ */}
-      <section id="mistakes" className="scroll-mt-24 pb-16 px-5 md:px-6">
-        <div className="container mx-auto max-w-3xl space-y-6">
-          <div className="flex items-end gap-4">
+      <section id="mistakes" className="py-14 md:py-20 scroll-mt-24">
+        <div className="space-y-6">
+          <div className="flex items-start gap-5 mb-8">
             <SectionNumber num="07" />
-            <h2 className="font-heading text-2xl md:text-3xl text-foreground">AI 求職的 7 大錯誤</h2>
+            <div className="pt-3">
+              <h2 className="font-heading text-2xl md:text-3xl text-foreground">AI 求職的 7 大錯誤</h2>
+            </div>
           </div>
 
           <p className="text-muted-foreground leading-relaxed">在幫助數百位求職者和審閱數千份申請後，以下是我最常看到的 AI 相關求職錯誤。</p>
@@ -909,11 +912,13 @@ const AiJobSearchGuideZhTw = () => {
       </section>
 
       {/* ═══════════════ 第 8 章：心態轉換 ═══════════════ */}
-      <section id="mindset" className="scroll-mt-24 pb-16 px-5 md:px-6">
-        <div className="container mx-auto max-w-3xl space-y-6">
-          <div className="flex items-end gap-4">
+      <section id="mindset" className="py-14 md:py-20 scroll-mt-24">
+        <div className="space-y-6">
+          <div className="flex items-start gap-5 mb-8">
             <SectionNumber num="08" />
-            <h2 className="font-heading text-2xl md:text-3xl text-foreground">心態轉換：舊思維 vs. 新思維</h2>
+            <div className="pt-3">
+              <h2 className="font-heading text-2xl md:text-3xl text-foreground">心態轉換：舊思維 vs. 新思維</h2>
+            </div>
           </div>
 
           <div className="overflow-x-auto">
@@ -947,11 +952,13 @@ const AiJobSearchGuideZhTw = () => {
       </section>
 
       {/* ═══════════════ 第 9 章：檢核表 ═══════════════ */}
-      <section id="checklist" className="scroll-mt-24 pb-16 px-5 md:px-6">
-        <div className="container mx-auto max-w-3xl space-y-6">
-          <div className="flex items-end gap-4">
+      <section id="checklist" className="py-14 md:py-20 scroll-mt-24">
+        <div className="space-y-6">
+          <div className="flex items-start gap-5 mb-8">
             <SectionNumber num="09" />
-            <h2 className="font-heading text-2xl md:text-3xl text-foreground">快速參考：完整的 AI 求職檢核表</h2>
+            <div className="pt-3">
+              <h2 className="font-heading text-2xl md:text-3xl text-foreground">快速參考：完整的 AI 求職檢核表</h2>
+            </div>
           </div>
 
           {[
@@ -978,11 +985,13 @@ const AiJobSearchGuideZhTw = () => {
       </section>
 
       {/* ═══════════════ 第 10 章：資源 ═══════════════ */}
-      <section id="resources" className="scroll-mt-24 pb-16 px-5 md:px-6">
-        <div className="container mx-auto max-w-3xl space-y-6">
-          <div className="flex items-end gap-4">
+      <section id="resources" className="py-14 md:py-20 scroll-mt-24">
+        <div className="space-y-6">
+          <div className="flex items-start gap-5 mb-8">
             <SectionNumber num="10" />
-            <h2 className="font-heading text-2xl md:text-3xl text-foreground">額外資源</h2>
+            <div className="pt-3">
+              <h2 className="font-heading text-2xl md:text-3xl text-foreground">額外資源</h2>
+            </div>
           </div>
 
           <div className="bg-card border border-border rounded-xl p-5 space-y-4">
@@ -1007,11 +1016,10 @@ const AiJobSearchGuideZhTw = () => {
       </section>
 
       {/* Share */}
-      <section className="pb-12 px-5 md:px-6">
-        <div className="container mx-auto max-w-3xl">
+      <section className="pb-12">
           <GuideShareButtons isZhTw />
-        </div>
       </section>
+      </main>
 
       {/* Footer */}
       <footer className="py-8 md:py-10 px-5 md:px-6 bg-card border-t border-border">

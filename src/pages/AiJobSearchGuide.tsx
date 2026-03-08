@@ -248,7 +248,7 @@ const AiJobSearchGuide = () => {
       </section>
 
       {/* ═══════════════ INTRODUCTION ═══════════════ */}
-      <section id="intro" className="scroll-mt-24 pb-16 px-5 md:px-6">
+      <section id="intro" className="py-14 md:py-20 px-5 md:px-6 bg-card border-b border-border scroll-mt-24">
         <div className="container mx-auto max-w-3xl space-y-6">
           <h2 className="font-heading text-2xl md:text-3xl text-foreground flex items-end gap-4">Introduction: Why AI Changes Everything About Job Searching</h2>
 
@@ -300,14 +300,15 @@ const AiJobSearchGuide = () => {
         </div>
       </section>
 
+      <main className="container mx-auto px-5 md:px-6 pb-20 max-w-3xl">
       {/* ═══════════════ SECTION 1: FIND YOUR PATH ═══════════════ */}
-      <section id="find-path" className="scroll-mt-24 pb-16 px-5 md:px-6">
-        <div className="container mx-auto max-w-3xl space-y-6">
-          <div className="flex items-end gap-4">
+      <section id="find-path" className="py-14 md:py-20 scroll-mt-24">
+        <div className="space-y-6">
+          <div className="flex items-start gap-5 mb-8">
             <SectionNumber num="01" />
-            <div>
-              <h2 className="font-heading text-2xl md:text-3xl text-foreground">Find Your Path</h2>
-              <p className="text-sm text-muted-foreground flex items-center gap-1.5 mt-1"><Clock className="w-4 h-4" /> 45 minutes</p>
+            <div className="pt-3">
+              <h2 className="font-heading text-2xl md:text-3xl text-foreground mb-2">Find Your Path</h2>
+              <p className="text-sm text-muted-foreground flex items-center gap-1.5"><Clock className="w-4 h-4" /> 45 minutes</p>
             </div>
           </div>
 
@@ -385,13 +386,13 @@ Qualifications: [INSERT SKILLS + CREDENTIALS]`}</AiPromptBlock>
       </section>
 
       {/* ═══════════════ SECTION 2: LINKEDIN DEFENSE ═══════════════ */}
-      <section id="linkedin" className="scroll-mt-24 pb-16 px-5 md:px-6">
-        <div className="container mx-auto max-w-3xl space-y-6">
-          <div className="flex items-end gap-4">
+      <section id="linkedin" className="py-14 md:py-20 scroll-mt-24">
+        <div className="space-y-6">
+          <div className="flex items-start gap-5 mb-8">
             <SectionNumber num="02" />
-            <div>
-              <h2 className="font-heading text-2xl md:text-3xl text-foreground">Build Your LinkedIn Defense</h2>
-              <p className="text-sm text-muted-foreground flex items-center gap-1.5 mt-1"><Clock className="w-4 h-4" /> 60 minutes</p>
+            <div className="pt-3">
+              <h2 className="font-heading text-2xl md:text-3xl text-foreground mb-2">Build Your LinkedIn Defense</h2>
+              <p className="text-sm text-muted-foreground flex items-center gap-1.5"><Clock className="w-4 h-4" /> 60 minutes</p>
             </div>
           </div>
 
@@ -531,13 +532,13 @@ And here's the resume: ____`}</AiPromptBlock>
       </section>
 
       {/* ═══════════════ SECTION 3: RESUME ═══════════════ */}
-      <section id="resume" className="scroll-mt-24 pb-16 px-5 md:px-6">
-        <div className="container mx-auto max-w-3xl space-y-6">
-          <div className="flex items-end gap-4">
+      <section id="resume" className="py-14 md:py-20 scroll-mt-24">
+        <div className="space-y-6">
+          <div className="flex items-start gap-5 mb-8">
             <SectionNumber num="03" />
-            <div>
-              <h2 className="font-heading text-2xl md:text-3xl text-foreground">Go on the Offense with Your Resume</h2>
-              <p className="text-sm text-muted-foreground flex items-center gap-1.5 mt-1"><Clock className="w-4 h-4" /> 90 minutes per version</p>
+            <div className="pt-3">
+              <h2 className="font-heading text-2xl md:text-3xl text-foreground mb-2">Go on the Offense with Your Resume</h2>
+              <p className="text-sm text-muted-foreground flex items-center gap-1.5"><Clock className="w-4 h-4" /> 90 minutes per version</p>
             </div>
           </div>
 
@@ -724,13 +725,13 @@ And suggest specific ideas to improve it, if possible:
       </section>
 
       {/* ═══════════════ SECTION 4: FIND AND APPLY ═══════════════ */}
-      <section id="apply" className="scroll-mt-24 pb-16 px-5 md:px-6">
-        <div className="container mx-auto max-w-3xl space-y-6">
-          <div className="flex items-end gap-4">
+      <section id="apply" className="py-14 md:py-20 scroll-mt-24">
+        <div className="space-y-6">
+          <div className="flex items-start gap-5 mb-8">
             <SectionNumber num="04" />
-            <div>
-              <h2 className="font-heading text-2xl md:text-3xl text-foreground">Find and Apply on Autopilot</h2>
-              <p className="text-sm text-muted-foreground flex items-center gap-1.5 mt-1"><Clock className="w-4 h-4" /> 30 min setup, then 15 min/day</p>
+            <div className="pt-3">
+              <h2 className="font-heading text-2xl md:text-3xl text-foreground mb-2">Find and Apply on Autopilot</h2>
+              <p className="text-sm text-muted-foreground flex items-center gap-1.5"><Clock className="w-4 h-4" /> 30 min setup, then 15 min/day</p>
             </div>
           </div>
 
@@ -814,13 +815,13 @@ And suggest specific ideas to improve it, if possible:
       </section>
 
       {/* ═══════════════ SECTION 5: INTERVIEWS ═══════════════ */}
-      <section id="interview" className="scroll-mt-24 pb-16 px-5 md:px-6">
-        <div className="container mx-auto max-w-3xl space-y-6">
-          <div className="flex items-end gap-4">
+      <section id="interview" className="py-14 md:py-20 scroll-mt-24">
+        <div className="space-y-6">
+          <div className="flex items-start gap-5 mb-8">
             <SectionNumber num="05" />
-            <div>
-              <h2 className="font-heading text-2xl md:text-3xl text-foreground">Prepare to Crush Your Interviews</h2>
-              <p className="text-sm text-muted-foreground flex items-center gap-1.5 mt-1"><Clock className="w-4 h-4" /> 2-3 hours per company</p>
+            <div className="pt-3">
+              <h2 className="font-heading text-2xl md:text-3xl text-foreground mb-2">Prepare to Crush Your Interviews</h2>
+              <p className="text-sm text-muted-foreground flex items-center gap-1.5"><Clock className="w-4 h-4" /> 2-3 hours per company</p>
             </div>
           </div>
 
@@ -874,13 +875,13 @@ Here is the job description: [JOB DESCRIPTION]`}</AiPromptBlock>
       </section>
 
       {/* ═══════════════ SECTION 6: NEGOTIATE ═══════════════ */}
-      <section id="negotiate" className="scroll-mt-24 pb-16 px-5 md:px-6">
-        <div className="container mx-auto max-w-3xl space-y-6">
-          <div className="flex items-end gap-4">
+      <section id="negotiate" className="py-14 md:py-20 scroll-mt-24">
+        <div className="space-y-6">
+          <div className="flex items-start gap-5 mb-8">
             <SectionNumber num="06" />
-            <div>
-              <h2 className="font-heading text-2xl md:text-3xl text-foreground">Negotiate Like a Robot</h2>
-              <p className="text-sm text-muted-foreground flex items-center gap-1.5 mt-1"><Clock className="w-4 h-4" /> 30 min per round</p>
+            <div className="pt-3">
+              <h2 className="font-heading text-2xl md:text-3xl text-foreground mb-2">Negotiate Like a Robot</h2>
+              <p className="text-sm text-muted-foreground flex items-center gap-1.5"><Clock className="w-4 h-4" /> 30 min per round</p>
             </div>
           </div>
 
@@ -968,11 +969,13 @@ Generate a short, conversational response that asks them to do better, given my 
       </section>
 
       {/* ═══════════════ SECTION 7: AI MISTAKES ═══════════════ */}
-      <section id="mistakes" className="scroll-mt-24 pb-16 px-5 md:px-6">
-        <div className="container mx-auto max-w-3xl space-y-6">
-          <div className="flex items-end gap-4">
+      <section id="mistakes" className="py-14 md:py-20 scroll-mt-24">
+        <div className="space-y-6">
+          <div className="flex items-start gap-5 mb-8">
             <SectionNumber num="07" />
-            <h2 className="font-heading text-2xl md:text-3xl text-foreground">The 7 Biggest AI Job Search Mistakes</h2>
+            <div className="pt-3">
+              <h2 className="font-heading text-2xl md:text-3xl text-foreground">The 7 Biggest AI Job Search Mistakes</h2>
+            </div>
           </div>
 
           <p className="text-muted-foreground leading-relaxed">After helping hundreds of job seekers and reviewing thousands of applications, these are the AI-specific mistakes I see most often.</p>
@@ -998,11 +1001,13 @@ Generate a short, conversational response that asks them to do better, given my 
       </section>
 
       {/* ═══════════════ SECTION 8: MINDSET SHIFTS ═══════════════ */}
-      <section id="mindset" className="scroll-mt-24 pb-16 px-5 md:px-6">
-        <div className="container mx-auto max-w-3xl space-y-6">
-          <div className="flex items-end gap-4">
+      <section id="mindset" className="py-14 md:py-20 scroll-mt-24">
+        <div className="space-y-6">
+          <div className="flex items-start gap-5 mb-8">
             <SectionNumber num="08" />
-            <h2 className="font-heading text-2xl md:text-3xl text-foreground">Mindset Shifts: Old Thinking vs. New Thinking</h2>
+            <div className="pt-3">
+              <h2 className="font-heading text-2xl md:text-3xl text-foreground">Mindset Shifts: Old Thinking vs. New Thinking</h2>
+            </div>
           </div>
 
           <div className="overflow-x-auto">
@@ -1036,11 +1041,13 @@ Generate a short, conversational response that asks them to do better, given my 
       </section>
 
       {/* ═══════════════ SECTION 9: CHECKLIST ═══════════════ */}
-      <section id="checklist" className="scroll-mt-24 pb-16 px-5 md:px-6">
-        <div className="container mx-auto max-w-3xl space-y-6">
-          <div className="flex items-end gap-4">
+      <section id="checklist" className="py-14 md:py-20 scroll-mt-24">
+        <div className="space-y-6">
+          <div className="flex items-start gap-5 mb-8">
             <SectionNumber num="09" />
-            <h2 className="font-heading text-2xl md:text-3xl text-foreground">Quick Reference: The Complete AI Job Search Checklist</h2>
+            <div className="pt-3">
+              <h2 className="font-heading text-2xl md:text-3xl text-foreground">Quick Reference: The Complete AI Job Search Checklist</h2>
+            </div>
           </div>
 
           {[
@@ -1146,11 +1153,13 @@ Generate a short, conversational response that asks them to do better, given my 
       </section>
 
       {/* ═══════════════ SECTION 10: RESOURCES ═══════════════ */}
-      <section id="resources" className="scroll-mt-24 pb-16 px-5 md:px-6">
-        <div className="container mx-auto max-w-3xl space-y-6">
-          <div className="flex items-end gap-4">
+      <section id="resources" className="py-14 md:py-20 scroll-mt-24">
+        <div className="space-y-6">
+          <div className="flex items-start gap-5 mb-8">
             <SectionNumber num="10" />
-            <h2 className="font-heading text-2xl md:text-3xl text-foreground">Additional Resources</h2>
+            <div className="pt-3">
+              <h2 className="font-heading text-2xl md:text-3xl text-foreground">Additional Resources</h2>
+            </div>
           </div>
 
           <div className="bg-card border border-border rounded-xl p-5 space-y-4">
@@ -1175,11 +1184,10 @@ Generate a short, conversational response that asks them to do better, given my 
       </section>
 
       {/* Share */}
-      <section className="pb-12 px-5 md:px-6">
-        <div className="container mx-auto max-w-3xl">
+      <section className="pb-12">
           <GuideShareButtons />
-        </div>
       </section>
+      </main>
 
       {/* Footer */}
       <footer className="py-8 md:py-10 px-5 md:px-6 bg-card border-t border-border">
