@@ -1,48 +1,52 @@
 
+Goal: Fix the Resume Builder preview pagination bug where page N+1 repeats/overlaps content from page N around the cut line/footer zone.
 
-## Resume Builder Feature Improvements
+What I found
+1. The issue is in preview only (confirmed), not necessarily download export.
+2. `ResumePreview.tsx` currently slices pages by shifting each page by `usablePerPage`, but each page still shows a full page-height viewport (`dims.hPX`), which creates a built-in overlap band between pages.
+3. Previous fixes likely focused on spacer thresholds, but the core bug is architectural:
+   - break calculations happen in hidden flow
+   - visible pages are rendered with a different viewport model
+   - so boundary math and rendered slices can diverge
 
-### Priority 1: AI "Tailor to Job Description" Panel
-- Add a new tab or panel in the "AI Tools" section (which currently shows "Coming soon")
-- User pastes a job description → edge function analyzes keyword overlap with current resume
-- Returns: missing keywords, suggested bullet point rewrites, match percentage
-- Reuses existing `resume-ai` edge function with a new `action: "tailor"` mode
-- UI: Split panel with JD on left, suggestions on right, one-click "Apply" buttons
+Why previous fixes kept failing
+- Tweaking `push` logic / tolerances cannot fully solve this because the visible renderer is not clipping to the same “usable content window” used by the paginator.
 
-### Priority 2: Resume Completeness Score Widget
-- Floating widget in the editor sidebar showing real-time completion percentage
-- Scoring rules: has summary (+10), has 2+ experience entries (+20), all entries have descriptions (+15), dates filled (+10), contact info complete (+15), skills section exists (+10), quantified achievements detected (+20)
-- Visual: circular progress ring with percentage, expandable checklist of what's missing
-- Lives above the "Add Content" button in the Content tab
+Implementation plan
 
-### Priority 3: Populate the "AI Tools" Tab
-- Currently renders "AI Tools — Coming soon" placeholder
-- Build out with: "Tailor to Job" (above), "Generate Summary from Experience", "Suggest Skills", "Optimize Bullet Points (batch)"
-- Each tool card shows a description, input area, and results
+1) Refactor preview page slicing to a strict usable-window viewport  
+File: `src/components/resume-builder/ResumePreview.tsx`
+- Keep page container at full page size.
+- Inside each page, add a dedicated content viewport:
+  - `top = marginYPX + headerReservePX`
+  - `height = usablePerPage`
+  - `overflow: hidden`
+- Render `A4Page` inside that viewport with:
+  - `translateY(-(marginYPX + headerReservePX + i * usablePerPage))`
+- Keep footer absolutely positioned in reserved bottom area.
+Result: each page shows only one non-overlapping content slice.
 
-### Priority 4: Real-time Word Count per Section
-- Add a small `<span>` below each `RichTextEditor` showing word count and bullet point count
-- Highlight in amber if too long (>150 words per entry) or too short (<20 words)
-- Lightweight: computed from the editor's text content on each change
+2) Align visual and measurement models
+File: `src/components/resume-builder/ResumePreview.tsx`
+- Reuse the exact same offsets/constants already used in measurement (`marginY/header/footer reserves`) for page viewport positioning.
+- Ensure page count logic still measures hidden flow but visual slicing now matches the same coordinate system.
 
-### Priority 5: Click-to-Edit on Preview (Inline Editing)
-- When user clicks text on the A4 preview, show a floating input/textarea positioned over the clicked element
-- On blur/enter, update the corresponding field in the data model
-- Start with simple fields only: job title, company name, degree, institution
-- More complex than other items; implement after the above
+3) Stabilize boundary behavior for near-edge elements
+File: `src/components/resume-builder/ResumePreview.tsx`
+- Keep current “push to next page” logic for straddling items.
+- Add a small consistent epsilon constant (instead of inline magic numbers) so boundary checks are deterministic and easier to tune.
 
-### Files to Edit
-- `src/pages/ResumeBuilder.tsx` — Add completeness widget, wire AI Tools tab
-- `src/components/resume-builder/ResumeTopNav.tsx` — No changes needed
-- `src/components/resume-builder/RichTextEditor.tsx` — Add word count display
-- `supabase/functions/resume-ai/index.ts` — Add `tailor` action for JD matching
-- New: `src/components/resume-builder/CompletenessScore.tsx` — Score widget component
-- New: `src/components/resume-builder/AiToolsPanel.tsx` — Full AI tools tab content
-- New: `src/components/resume-builder/TailorToJob.tsx` — JD tailoring panel
+Technical details (for implementation)
+- Current overlap comes from rendering `dims.hPX` while shifting by `usablePerPage` (`dims.hPX - reserved`), which inherently overlaps by reserved height.
+- New model renders only `usablePerPage` content area per page; top/bottom reserved areas remain blank/safe zones for print-like behavior and footer.
+- No backend/db changes needed; frontend-only fix.
 
-### Implementation Order
-1. Completeness score widget (standalone, no backend needed)
-2. Word count on RichTextEditor (small change)
-3. AI Tools tab with Tailor to Job (needs edge function update)
-4. Click-to-edit on preview (complex, last)
-
+Validation plan
+1. Import the problematic resume and verify no repeated lines at page boundaries.
+2. Check page footer remains visible and does not collide with body text.
+3. Test with:
+   - A4 and Letter
+   - one-page and multi-page resumes
+   - zoom in/out
+   - two-column and one-column layouts
+4. Confirm PDF export still matches preview page breaks closely.
