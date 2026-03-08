@@ -678,7 +678,7 @@ const ResumeBuilder = () => {
                    {t("importContent")}
                 </button>
               </TooltipTrigger>
-              <TooltipContent side="bottom" className="text-xs">Import from file (PDF, DOCX)</TooltipContent>
+              <TooltipContent side="bottom" className="text-xs">{t("importFromFile")}</TooltipContent>
             </Tooltip>
           </TooltipProvider>
         </div>
