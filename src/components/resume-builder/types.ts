@@ -14,9 +14,8 @@ export interface ResumeSectionEntry {
   collapsed?: boolean;
 }
 
-export type SectionLayout = "grid" | "bubble" | "level" | "compact";
+export type SectionLayout = "grid" | "bubble" | "compact";
 export type SectionSeparator = "bullet" | "pipe" | "newline" | "comma";
-export type LevelIndicator = "text" | "dots" | "bar";
 export type SubtitleStyle = "dash" | "colon" | "bracket";
 
 export interface ResumeSection {
