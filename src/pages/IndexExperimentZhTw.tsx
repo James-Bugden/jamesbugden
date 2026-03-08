@@ -19,8 +19,8 @@ const faqs = [
   { q: "我沒有自信談薪水。這會有幫助嗎？", a: "你不需要強勢。你需要了解對方要什麼。我讓你理解 HR 的思維方式，讓你感覺冷靜、準備好。" },
   { q: "我一直投履歷但都沒有回音。我做錯了什麼？", a: "通常三件事之一：履歷沒通過電腦篩選、職稱跟職缺不匹配、或最好的成果放在錯誤位置。我的審查會找出問題，告訴你怎麼改。" },
   { q: "我不知道在招募流程中怎麼跟 HR 溝通。他們感覺像守門員。", a: "HR 想把職缺填滿。大部分人不了解 HR 在意什麼。我做過 HR。我讓你知道他們每個階段看什麼，讓你們合作。" },
-  { q: "為什麼不用 ChatGPT 改履歷就好？", a: "AI 是好的起點。但 AI 不知道招募官在找什麼。AI 不會告訴你最好的成就被埋在第二頁。審閱過 20,000+ 份履歷教會我 AI 還沒學到的事。" },
-  { q: "你的履歷健檢跟其他服務有什麼不同？", a: "大部分履歷服務修改錯字、調整排版。我用招募官的角度看你的履歷，告訴你怎麼改才能拿到更多面試。你還會得到一套可重複使用的系統。" },
+  { q: "為什麼不用 ChatGPT 改履歷就好？", a: "AI 是好的起點。但 AI 不知道面試官在找什麼。AI 不會告訴你最好的成就被埋在第二頁。審閱過 20,000+ 份履歷教會我 AI 還沒學到的事。" },
+  { q: "你的履歷健檢跟其他服務有什麼不同？", a: "大部分履歷服務修改錯字、調整排版。我用專業的角度看你的履歷，告訴你怎麼改才能拿到更多面試。你還會得到一套可重複使用的系統。" },
 ];
 
 function FAQSection() {
@@ -83,7 +83,7 @@ const IndexExperimentZhTw = () => {
     <div className="experiment min-h-screen overflow-x-hidden scroll-smooth" style={{ backgroundColor: '#FDFBF7' }}>
       <PageSEO
         title="James Bugden — 免費職涯工具與履歷攻略"
-        description="免費工具、模板和內部策略，來自幫助 750 位以上求職者成功錄取的 Uber 資深招募官"
+        description="免費工具、模板和內部策略，來自幫助 750 位以上求職者成功錄取的 Career Coach"
         path="/zh-tw"
       />
 
@@ -122,7 +122,7 @@ const IndexExperimentZhTw = () => {
                 </div>
 
                 <h1 className="font-heading leading-[1.12] tracking-tight mb-3 max-w-3xl mx-auto md:mx-0" style={{ color: '#1A1A1A', fontSize: 'clamp(2.25rem, 5vw, 3.5rem)', lineHeight: 1.2 }}>
-                  在夢想公司拿到年薪兩百萬以上的&nbsp;Offer
+                  在夢想公司拿到年薪3百萬以上的&nbsp;Offer
                 </h1>
 
                 {/* Credential badge */}
@@ -134,7 +134,7 @@ const IndexExperimentZhTw = () => {
                 </div>
 
                 <p className="leading-relaxed max-w-xl mx-auto md:mx-0 mb-5" style={{ color: '#1A1A1A', fontSize: '1.0625rem' }}>
-                  免費工具、模板和內部策略，來自幫助 750 位以上求職者成功錄取的招募官。
+                  免費工具、模板和內部策略，來自幫助 750 位以上求職者成功錄取的 Career Coach。
                 </p>
 
                 <div className="mb-2 max-w-md mx-auto md:mx-0">
@@ -238,7 +238,7 @@ const IndexExperimentZhTw = () => {
                 <Eye className="w-10 h-10 mx-auto md:mx-0 mb-4" style={{ color: '#2b4734' }} strokeWidth={1.5} />
                 <p className="font-bold text-[20px] mb-2" style={{ color: '#1A1A1A' }}>審閱過 20,000 以上份履歷</p>
                 <p className="text-base" style={{ color: '#1A1A1A' }}>
-                  我知道什麼讓招募官停下來看。也知道什麼讓履歷 6 秒內被淘汰。不用猜，看過幾千次了。
+                  我知道什麼讓面試官停下來看。也知道什麼讓履歷 6 秒內被淘汰。不用猜，看過幾千次了。
                 </p>
               </div>
               <div className="rounded-xl p-6 text-center md:text-left" style={{ backgroundColor: '#FDFBF7', borderTop: '3px solid #D4930D' }}>

@@ -26,8 +26,8 @@ const IndexZhTw = () => {
   return (
     <div className="min-h-screen bg-background overflow-x-hidden scroll-smooth">
       <PageSEO
-        title="James Bugden — 拿到年薪200萬+外商Offer"
-        description="財富500大資深招募官分享內部策略，協助750+候選人進入Google、Uber、Microsoft等頂尖企業。"
+        title="James Bugden — 拿到年薪300萬以上外商Offer"
+        description="Career Coach 分享內部策略，協助750+候選人進入Google、Uber、Microsoft等頂尖企業。"
         path="/zh-tw"
         lang="zh-Hant-TW"
       />
@@ -65,18 +65,17 @@ const IndexZhTw = () => {
                   </div>
                 </div>
 
-
                 <h1 className="font-heading text-[1.875rem] md:text-[3.5rem] lg:text-[4rem] text-foreground leading-[1.12] tracking-tight mb-4 max-w-2xl mx-auto md:mx-0">
-                  拿到年薪 200 萬+ 的外商&nbsp;Offer
+                  拿到年薪 300 萬以上的外商&nbsp;Offer
                 </h1>
 
                 <p className="text-[0.9375rem] md:text-lg text-foreground/85 leading-relaxed max-w-xl mx-auto md:mx-0 mb-5">
-                  我在 Google、Uber、Microsoft 等企業成功錄取超過 750 位候選人的內部招募策略
+                  我在 Google、Uber、Microsoft 等企業成功錄取超過 750 位候選人的內部求職策略
                 </p>
 
                 <div className="flex items-center justify-center md:justify-start gap-2 text-xs md:text-sm text-muted-foreground mb-4">
                   <Users className="w-4 h-4 text-gold flex-shrink-0" />
-                  <span>加入 2,000+ 位專業人士，每週收到來自招募官的內部求職情報</span>
+                  <span>加入 2,000+ 位專業人士，每週收到來自 Career Coach 的內部求職情報</span>
                 </div>
 
                 <div className="mb-2 max-w-md mx-auto md:mx-0">
