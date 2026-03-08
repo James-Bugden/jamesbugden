@@ -220,6 +220,7 @@ function UndoRedoBar({ onUndo, onRedo, canUndo, canRedo }: {
 
 /* ── Auto-save indicator ───────────────────────────────── */
 function SaveIndicator({ saving }: { saving: boolean }) {
+  const t = useT();
   const [pulse, setPulse] = useState(false);
 
   useEffect(() => {
@@ -235,12 +236,12 @@ function SaveIndicator({ saving }: { saving: boolean }) {
       {saving ? (
         <>
           <Loader2 className="w-3 h-3 animate-spin text-gray-400" />
-          <span className="text-gray-400">Saving...</span>
+          <span className="text-gray-400">{t("saving")}</span>
         </>
       ) : (
         <>
           <Check className="w-3 h-3" style={{ color: BRAND.green }} />
-          <span className="text-gray-500">All changes saved</span>
+          <span className="text-gray-500">{t("allChangesSaved")}</span>
         </>
       )}
     </div>
