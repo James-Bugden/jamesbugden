@@ -48,25 +48,41 @@ export async function exportToPdf({ elementId, fileName, pageFormat = "a4" }: Ex
       allowTaint: true,
       backgroundColor: "#ffffff",
       logging: false,
-      onclone: (_doc: Document, clone: HTMLElement) => {
+      onclone: (clonedDoc: Document) => {
         // Modern browsers output color(srgb ...) which html2canvas can't parse.
-        // Convert all color-related styles to rgb fallbacks.
-        const allEls = [clone, ...Array.from(clone.querySelectorAll("*"))] as HTMLElement[];
-        const colorProps = ["color", "background-color", "border-color", "border-top-color", "border-right-color", "border-bottom-color", "border-left-color", "outline-color", "text-decoration-color", "fill", "stroke"];
-        const canvas = document.createElement("canvas");
-        const ctx2d = canvas.getContext("2d")!;
-        for (const el of allEls) {
-          const cs = getComputedStyle(el);
-          for (const prop of colorProps) {
-            const val = cs.getPropertyValue(prop);
-            if (val && val.startsWith("color(")) {
-              // Use canvas 2d context to convert to rgba
-              ctx2d.fillStyle = "rgba(0,0,0,1)";
-              ctx2d.fillStyle = val;
-              const resolved = ctx2d.fillStyle;
-              el.style.setProperty(prop, resolved);
-            }
+        // Fix ALL elements in the cloned document, not just the target.
+        const allEls = Array.from(clonedDoc.querySelectorAll("*")) as HTMLElement[];
+        allEls.push(clonedDoc.documentElement, clonedDoc.body);
+        const colorProps = ["color", "background-color", "border-color", "border-top-color", "border-right-color", "border-bottom-color", "border-left-color", "outline-color", "text-decoration-color", "fill", "stroke", "caret-color", "column-rule-color", "text-emphasis-color"];
+
+        const safeResolve = (raw: string): string | null => {
+          if (!raw || raw === "transparent" || raw === "inherit" || raw === "currentcolor" || raw === "none") return null;
+          if (raw.startsWith("rgb") || raw.startsWith("#")) return null;
+          // Manual parse for color(srgb r g b / a) or color(srgb r g b)
+          const srgbMatch = raw.match(/color\(\s*srgb\s+([\d.e+-]+)\s+([\d.e+-]+)\s+([\d.e+-]+)(?:\s*\/\s*([\d.e+-]+))?\s*\)/);
+          if (srgbMatch) {
+            const r = Math.round(Math.min(1, Math.max(0, parseFloat(srgbMatch[1]))) * 255);
+            const g = Math.round(Math.min(1, Math.max(0, parseFloat(srgbMatch[2]))) * 255);
+            const b = Math.round(Math.min(1, Math.max(0, parseFloat(srgbMatch[3]))) * 255);
+            const a = srgbMatch[4] !== undefined ? parseFloat(srgbMatch[4]) : 1;
+            return a < 1 ? `rgba(${r},${g},${b},${a})` : `rgb(${r},${g},${b})`;
           }
+          // Any color() function → transparent to prevent crash
+          if (raw.includes("color(")) return "transparent";
+          return null;
+        };
+
+        for (const el of allEls) {
+          try {
+            const cs = clonedDoc.defaultView?.getComputedStyle(el) || getComputedStyle(el);
+            for (const prop of colorProps) {
+              const val = cs.getPropertyValue(prop);
+              const safe = safeResolve(val);
+              if (safe !== null) {
+                el.style.setProperty(prop, safe, "important");
+              }
+            }
+          } catch { /* skip elements that can't be styled */ }
         }
       },
     });

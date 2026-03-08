@@ -1,26 +1,48 @@
 
 
-## Status: Already Implemented
+## Resume Builder Feature Improvements
 
-The AI-powered resume import feature discussed in the earlier plan has **already been fully built and deployed**. Here's what exists:
+### Priority 1: AI "Tailor to Job Description" Panel
+- Add a new tab or panel in the "AI Tools" section (which currently shows "Coming soon")
+- User pastes a job description → edge function analyzes keyword overlap with current resume
+- Returns: missing keywords, suggested bullet point rewrites, match percentage
+- Reuses existing `resume-ai` edge function with a new `action: "tailor"` mode
+- UI: Split panel with JD on left, suggestions on right, one-click "Apply" buttons
 
-### What's already in place
+### Priority 2: Resume Completeness Score Widget
+- Floating widget in the editor sidebar showing real-time completion percentage
+- Scoring rules: has summary (+10), has 2+ experience entries (+20), all entries have descriptions (+15), dates filled (+10), contact info complete (+15), skills section exists (+10), quantified achievements detected (+20)
+- Visual: circular progress ring with percentage, expandable checklist of what's missing
+- Lives above the "Add Content" button in the Content tab
 
-1. **Edge function** (`supabase/functions/resume-ai/index.ts`): Has a `parse_resume` action using Gemini tool-calling with a strict schema that returns structured `personalDetails` + `sections[]` data. I just tested it — it correctly parses experience, education, skills, and personal details.
+### Priority 3: Populate the "AI Tools" Tab
+- Currently renders "AI Tools — Coming soon" placeholder
+- Build out with: "Tailor to Job" (above), "Generate Summary from Experience", "Suggest Skills", "Optimize Bullet Points (batch)"
+- Each tool card shows a description, input area, and results
 
-2. **Client-side orchestrator** (`src/lib/documentImport.ts`):
-   - `aiParseResume(text)` — calls the edge function
-   - `normalizeParsedResume()` — validates types, fills default fields, runs quality repairs
-   - `parseResumeWithFallback()` — tries AI first, falls back to heuristics on failure
-   - Quality repairs: demotes empty experience to custom, redistributes oversized summaries
+### Priority 4: Real-time Word Count per Section
+- Add a small `<span>` below each `RichTextEditor` showing word count and bullet point count
+- Highlight in amber if too long (>150 words per entry) or too short (<20 words)
+- Lightweight: computed from the editor's text content on each change
 
-3. **Import UI** (`src/components/document-dashboard/ImportModal.tsx`): Already wired to call `parseResumeWithFallback` with progress messages ("Analyzing structure with AI…", "Finalizing sections…") and reports the import source (AI vs Heuristic) in toast messages.
+### Priority 5: Click-to-Edit on Preview (Inline Editing)
+- When user clicks text on the A4 preview, show a floating input/textarea positioned over the clicked element
+- On blur/enter, update the corresponding field in the data model
+- Start with simple fields only: job title, company name, degree, institution
+- More complex than other items; implement after the above
 
-### Verified working
+### Files to Edit
+- `src/pages/ResumeBuilder.tsx` — Add completeness widget, wire AI Tools tab
+- `src/components/resume-builder/ResumeTopNav.tsx` — No changes needed
+- `src/components/resume-builder/RichTextEditor.tsx` — Add word count display
+- `supabase/functions/resume-ai/index.ts` — Add `tailor` action for JD matching
+- New: `src/components/resume-builder/CompletenessScore.tsx` — Score widget component
+- New: `src/components/resume-builder/AiToolsPanel.tsx` — Full AI tools tab content
+- New: `src/components/resume-builder/TailorToJob.tsx` — JD tailoring panel
 
-I tested the edge function with a sample resume and it returned a 200 with correctly structured sections — experience entries had proper `position`/`company` fields, education had `degree`/`institution`, skills were comma-separated.
-
-### Recommendation
-
-No code changes are needed. To verify it works end-to-end, try importing a resume via the UI (upload PDF/DOCX or paste text) and check that sections are correctly mapped. If you're seeing specific issues with certain resume formats, share an example and I can investigate further.
+### Implementation Order
+1. Completeness score widget (standalone, no backend needed)
+2. Word count on RichTextEditor (small change)
+3. AI Tools tab with Tailor to Job (needs edge function update)
+4. Click-to-edit on preview (complex, last)
 
