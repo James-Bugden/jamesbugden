@@ -141,38 +141,50 @@ const TableOfContents = () => {
                 e.preventDefault();
                 document.getElementById(id)?.scrollIntoView({ behavior: "smooth", block: "start" });
               }}
-              className={`block text-xs py-1 transition-colors ${active === id ? "text-gold font-medium" : "text-muted-foreground hover:text-foreground"}`}
+              className={`block text-sm py-1.5 pl-3 border-l-2 transition-all duration-200 ${
+                active === id
+                  ? "border-gold text-gold font-medium"
+                  : "border-transparent text-muted-foreground hover:text-foreground hover:border-border"
+              }`}
             >
               {label}
             </a>
           ))}
         </nav>
       </aside>
-      {/* Mobile floating button */}
-      <div className="xl:hidden fixed bottom-6 left-4 z-50">
+
+      {/* Mobile floating TOC */}
+      <div className="xl:hidden fixed bottom-6 left-6 z-50">
         <button
           onClick={() => setOpen(!open)}
-          className="w-11 h-11 rounded-full bg-gold text-white shadow-lg flex items-center justify-center"
+          className="w-11 h-11 rounded-full bg-executive-green text-cream shadow-lg flex items-center justify-center hover:scale-105 transition-transform"
+          aria-label="Table of contents"
         >
           <Menu className="w-5 h-5" />
         </button>
         {open && (
-          <div className="absolute bottom-14 left-0 w-56 bg-card border border-border rounded-xl shadow-xl p-3 max-h-[60vh] overflow-y-auto">
+          <div className="absolute bottom-14 left-0 bg-card border border-border rounded-xl shadow-2xl p-4 w-56 max-h-[70vh] overflow-y-auto">
             <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wider mb-2">Contents</p>
-            {tocSections.map(({ id, label }) => (
-              <a
-                key={id}
-                href={`#${id}`}
-                onClick={(e) => {
-                  e.preventDefault();
-                  setOpen(false);
-                  document.getElementById(id)?.scrollIntoView({ behavior: "smooth", block: "start" });
-                }}
-                className={`block text-sm py-1.5 ${active === id ? "text-gold font-medium" : "text-muted-foreground"}`}
-              >
-                {label}
-              </a>
-            ))}
+            <nav className="space-y-1">
+              {tocSections.map(({ id, label }) => (
+                <a
+                  key={id}
+                  href={`#${id}`}
+                  onClick={(e) => {
+                    e.preventDefault();
+                    document.getElementById(id)?.scrollIntoView({ behavior: "smooth", block: "start" });
+                    setOpen(false);
+                  }}
+                  className={`block text-sm py-1.5 pl-3 border-l-2 transition-all ${
+                    active === id
+                      ? "border-gold text-gold font-medium"
+                      : "border-transparent text-muted-foreground hover:text-foreground"
+                  }`}
+                >
+                  {label}
+                </a>
+              ))}
+            </nav>
           </div>
         )}
       </div>
