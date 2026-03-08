@@ -436,7 +436,7 @@ export function DocumentDashboard({ onOpenDocument, onImport }: DocumentDashboar
                 onMouseLeave={(e) => { e.currentTarget.style.borderColor = BRAND.border; e.currentTarget.style.color = BRAND.textSecondary; }}
               >
                 <Plus className="w-7 h-7" strokeWidth={1.5} />
-                <span className="text-[12px] font-medium">New cover letter</span>
+                <span className="text-[12px] font-medium">{t("newCoverLetter")}</span>
               </button>
               {filteredCoverLetters.map((doc) => (
                 <CoverLetterCard key={doc.id} doc={doc} />
