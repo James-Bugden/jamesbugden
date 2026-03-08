@@ -25,6 +25,7 @@ import { toast } from "@/hooks/use-toast";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import FeedbackBox from "@/components/FeedbackBox";
+import { useResumeBuilderLang, useT, getLocalizedSectionTypes, SAMPLE_RESUME_DATA_ZH_TW } from "@/components/resume-builder/i18n";
 
 type ViewMode = "dashboard" | "resume-editor" | "cover-letter-editor";
 
@@ -219,6 +220,7 @@ function UndoRedoBar({ onUndo, onRedo, canUndo, canRedo }: {
 
 /* ── Auto-save indicator ───────────────────────────────── */
 function SaveIndicator({ saving }: { saving: boolean }) {
+  const t = useT();
   const [pulse, setPulse] = useState(false);
 
   useEffect(() => {
@@ -234,12 +236,12 @@ function SaveIndicator({ saving }: { saving: boolean }) {
       {saving ? (
         <>
           <Loader2 className="w-3 h-3 animate-spin text-gray-400" />
-          <span className="text-gray-400">Saving...</span>
+          <span className="text-gray-400">{t("saving")}</span>
         </>
       ) : (
         <>
           <Check className="w-3 h-3" style={{ color: BRAND.green }} />
-          <span className="text-gray-500">All changes saved</span>
+          <span className="text-gray-500">{t("allChangesSaved")}</span>
         </>
       )}
     </div>
@@ -248,10 +250,11 @@ function SaveIndicator({ saving }: { saving: boolean }) {
 
 /* ── Mobile preview overlay ────────────────────────────── */
 function MobilePreviewOverlay({ children, onClose, onDownload, downloading }: { children: React.ReactNode; onClose: () => void; onDownload?: () => void; downloading?: boolean }) {
+  const t = useT();
   return (
     <div className="fixed inset-0 z-50 bg-white flex flex-col animate-fade-in">
       <div className="flex items-center justify-between px-4 py-3 border-b border-gray-200" style={{ backgroundColor: BRAND.cream }}>
-        <span className="text-sm font-semibold" style={{ color: BRAND.text }}>Preview</span>
+        <span className="text-sm font-semibold" style={{ color: BRAND.text }}>{t("preview")}</span>
         <div className="flex items-center gap-3">
           {onDownload && (
             <button
@@ -261,10 +264,10 @@ function MobilePreviewOverlay({ children, onClose, onDownload, downloading }: { 
               style={{ color: BRAND.green }}
             >
               {downloading ? <Loader2 className="w-4 h-4 animate-spin" /> : <Download className="w-4 h-4" />}
-              {downloading ? "..." : "Download"}
+              {downloading ? "..." : t("download")}
             </button>
           )}
-          <button onClick={onClose} className="text-sm font-medium hover:opacity-80 transition-opacity" style={{ color: BRAND.gold }}>Close</button>
+          <button onClick={onClose} className="text-sm font-medium hover:opacity-80 transition-opacity" style={{ color: BRAND.gold }}>{t("close")}</button>
         </div>
       </div>
       <div className="flex-1 overflow-auto">{children}</div>
@@ -285,16 +288,17 @@ function EditorSkeleton() {
 
 /* ── Branding footer ───────────────────────────────────── */
 function BrandingFooter() {
+  const t = useT();
   return (
     <div className="py-3 px-4 text-center border-t bg-white" style={{ borderColor: BRAND.border }}>
       <p className="text-[11px]" style={{ color: BRAND.textSecondary }}>
-        Powered by{" "}
+        {t("poweredBy")}{" "}
         <a href="https://james.careers" target="_blank" rel="noopener noreferrer" className="hover:opacity-80 font-medium transition-opacity" style={{ color: BRAND.gold }}>
           james.careers
         </a>
         {" · "}
         <a href="https://james.careers" target="_blank" rel="noopener noreferrer" className="hover:opacity-80 transition-colors" style={{ color: BRAND.textSecondary }}>
-          Need resume help? Get expert feedback →
+          {t("needResumeHelp")}
         </a>
       </p>
     </div>
@@ -305,6 +309,7 @@ function BrandingFooter() {
 function DownloadDropdown({ downloading, pageFormat, docName, onDownload }: {
   downloading: boolean; pageFormat: string; docName: string; onDownload: (filename: string) => void;
 }) {
+  const t = useT();
   const [open, setOpen] = useState(false);
   const [filename, setFilename] = useState("");
   const ref = useRef<HTMLDivElement>(null);
@@ -334,14 +339,14 @@ function DownloadDropdown({ downloading, pageFormat, docName, onDownload }: {
         disabled={downloading}
       >
         {downloading ? <Loader2 className="w-4 h-4 animate-spin" /> : <Download className="w-4 h-4" />}
-        {downloading ? "Generating..." : "Download"}
+        {downloading ? t("generating") : t("download")}
       </Button>
 
       {open && !downloading && (
         <div className="absolute right-0 top-full mt-2 bg-white rounded-xl shadow-xl border z-30 w-[280px] p-4 animate-scale-in" style={{ borderColor: BRAND.border }}>
           <div className="space-y-3">
             <div>
-              <label className="block text-xs font-semibold mb-1" style={{ color: BRAND.textSecondary }}>Filename</label>
+              <label className="block text-xs font-semibold mb-1" style={{ color: BRAND.textSecondary }}>{t("filename")}</label>
               <div className="flex items-center">
                 <input
                   type="text"
@@ -354,9 +359,9 @@ function DownloadDropdown({ downloading, pageFormat, docName, onDownload }: {
               </div>
             </div>
             <div className="flex items-center justify-between py-2 px-3 bg-gray-50 rounded-lg">
-              <span className="text-xs font-medium" style={{ color: BRAND.textSecondary }}>Paper size</span>
+              <span className="text-xs font-medium" style={{ color: BRAND.textSecondary }}>{t("paperSize")}</span>
               <span className="text-xs font-semibold" style={{ color: BRAND.text }}>
-                {pageFormat === "letter" ? "US Letter" : "A4"}
+                {pageFormat === "letter" ? t("usLetter") : "A4"}
               </span>
             </div>
             <div className="text-[10px] text-center" style={{ color: BRAND.textSecondary }}>⌘S to save · ⌘P to download</div>
@@ -368,7 +373,7 @@ function DownloadDropdown({ downloading, pageFormat, docName, onDownload }: {
               onClick={() => { setOpen(false); onDownload(filename); }}
             >
               <Download className="w-4 h-4 mr-2" />
-              Download PDF
+              {t("downloadPdf")}
             </Button>
           </div>
         </div>
@@ -383,6 +388,9 @@ function DownloadDropdown({ downloading, pageFormat, docName, onDownload }: {
 const ResumeBuilder = () => {
   const store = useResumeStore();
   const { data, setData, customize, updateCustomize, updatePersonalDetails, setSections, updateSection, removeSection } = store;
+  const lang = useResumeBuilderLang();
+  const t = useT();
+  const localizedSectionTypes = useMemo(() => getLocalizedSectionTypes(lang), [lang]);
 
   /* ── dnd-kit sensors (defined early, used later after pushHistory) ── */
   const sensors = useSensors(
@@ -534,7 +542,7 @@ const ResumeBuilder = () => {
 
   const addSection = (type: string) => {
     pushHistory();
-    const meta = SECTION_TYPES.find((s) => s.type === type);
+    const meta = localizedSectionTypes.find((s) => s.type === type);
     const newSection: ResumeSection = {
       id: crypto.randomUUID(),
       type,
@@ -543,7 +551,7 @@ const ResumeBuilder = () => {
       collapsed: false,
     };
     setSections([...data.sections, newSection]);
-    toast({ title: "Section added", description: `${meta?.title || "Custom"} section added.` });
+    toast({ title: t("sectionAdded"), description: `${meta?.title || "Custom"} section added.` });
   };
 
   const editorScrollRef = useRef<HTMLDivElement>(null);
@@ -604,7 +612,7 @@ const ResumeBuilder = () => {
     if (doc.type === "resume") {
       pushHistory();
       store.setData(doc.data as any);
-      toast({ title: "Content imported", description: "Your resume content has been replaced with the imported data." });
+      toast({ title: t("contentImported"), description: t("contentImportedDesc") });
     }
     setEditorImportOpen(false);
   }, [store, pushHistory]);
@@ -636,7 +644,7 @@ const ResumeBuilder = () => {
       <div className="h-screen flex flex-col" style={{ backgroundColor: BRAND.cream }}>
         <div className="flex items-center gap-3 px-4 py-2 bg-white border-b" style={{ borderColor: BRAND.border }}>
           <button onClick={handleBackToDashboard} className="text-sm hover:opacity-80 transition-colors flex items-center gap-1" style={{ color: BRAND.textSecondary }}>
-            <ArrowLeft className="w-3.5 h-3.5" /> Dashboard
+            <ArrowLeft className="w-3.5 h-3.5" /> {t("dashboard")}
           </button>
           <span className="text-sm font-medium" style={{ color: BRAND.text }}>{activeDoc?.name || "Cover Letter"}</span>
         </div>
@@ -666,11 +674,11 @@ const ResumeBuilder = () => {
                   className="flex items-center gap-1.5 text-xs font-medium transition-colors hover:opacity-80"
                   style={{ color: BRAND.textSecondary }}
                 >
-                  <Upload className="w-3.5 h-3.5" />
-                  Import content
+                   <Upload className="w-3.5 h-3.5" />
+                   {t("importContent")}
                 </button>
               </TooltipTrigger>
-              <TooltipContent side="bottom" className="text-xs">Import from file (PDF, DOCX)</TooltipContent>
+              <TooltipContent side="bottom" className="text-xs">{t("importFromFile")}</TooltipContent>
             </Tooltip>
           </TooltipProvider>
         </div>
@@ -691,7 +699,7 @@ const ResumeBuilder = () => {
                     const removed = section;
                     removeSection(section.id);
                     toast({
-                      title: "Section removed",
+                      title: t("sectionRemoved"),
                       description: `${removed.title} was deleted.`,
                       action: (
                         <button
@@ -703,7 +711,7 @@ const ResumeBuilder = () => {
                           className="text-xs font-semibold hover:opacity-80 px-2 py-1 rounded transition-opacity"
                           style={{ color: BRAND.green, backgroundColor: BRAND.greenLight }}
                         >
-                          Undo
+                          {t("undo")}
                         </button>
                       ),
                     });
@@ -715,7 +723,7 @@ const ResumeBuilder = () => {
         </DndContext>
         {data.sections.length === 0 && (
           <div className="bg-white rounded-xl shadow-sm text-center py-8">
-            <p className="text-sm" style={{ color: BRAND.textSecondary }}>Add sections to build your resume</p>
+            <p className="text-sm" style={{ color: BRAND.textSecondary }}>{t("addSectionsPrompt")}</p>
           </div>
         )}
 
@@ -729,10 +737,10 @@ const ResumeBuilder = () => {
                   className="flex items-center justify-center gap-2 px-8 py-3 rounded-full text-white font-semibold text-sm transition-all hover:opacity-90 active:scale-[0.98] shadow-md"
                   style={{ background: "linear-gradient(135deg, #D4930D 0%, #e8a520 50%, #f0c060 100%)" }}
                 >
-                  <Plus className="w-4.5 h-4.5" /> Add Content
+                  <Plus className="w-4.5 h-4.5" /> {t("addContent")}
                 </button>
               </TooltipTrigger>
-              <TooltipContent side="bottom" className="text-xs">Add a new section</TooltipContent>
+              <TooltipContent side="bottom" className="text-xs">{t("addContent")}</TooltipContent>
             </Tooltip>
           </TooltipProvider>
         </div>
@@ -759,10 +767,10 @@ const ResumeBuilder = () => {
                   style={{ color: BRAND.textSecondary }}
                 >
                   <ArrowLeft className="w-3.5 h-3.5" />
-                  <span className="hidden sm:inline">Dashboard</span>
+                   <span className="hidden sm:inline">{t("dashboard")}</span>
                 </button>
               </TooltipTrigger>
-              <TooltipContent side="bottom" className="text-xs">Back to dashboard</TooltipContent>
+              <TooltipContent side="bottom" className="text-xs">{t("dashboard")}</TooltipContent>
             </Tooltip>
           </TooltipProvider>
           <span className="text-gray-300">|</span>
@@ -801,7 +809,7 @@ const ResumeBuilder = () => {
             style={{ color: activeTab === "content" ? BRAND.text : BRAND.textSecondary }}
           >
             <FileText className="w-3.5 h-3.5" />
-            Content
+            {t("content")}
           </button>
           <button
             onClick={() => setActiveTab("customize")}
@@ -814,7 +822,7 @@ const ResumeBuilder = () => {
             style={{ color: activeTab === "customize" ? BRAND.text : BRAND.textSecondary }}
           >
             <Palette className="w-3.5 h-3.5" />
-            Customize
+            {t("customize")}
           </button>
         </div>
 

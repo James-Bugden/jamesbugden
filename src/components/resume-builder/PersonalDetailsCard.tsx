@@ -3,6 +3,7 @@ import { Pencil, Mail, Phone, MapPin, Camera, Trash2, ChevronDown, Globe, User }
 import { PersonalDetails, EXTRA_DETAIL_OPTIONS } from "./types";
 import { compressImage } from "@/lib/imageCompression";
 import { cn } from "@/lib/utils";
+import { useT } from "./i18n";
 
 interface PersonalDetailsCardProps {
   details: PersonalDetails;
@@ -29,6 +30,7 @@ function Field({ label, value, onChange, placeholder, type = "text", className }
 }
 
 export function PersonalDetailsCard({ details, onChange, collapsible }: PersonalDetailsCardProps) {
+  const t = useT();
   const [editing, setEditing] = useState(true);
   const [showExtras, setShowExtras] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
@@ -84,10 +86,10 @@ export function PersonalDetailsCard({ details, onChange, collapsible }: Personal
           <div className="flex items-start gap-4 mt-1">
             <div className="flex-1 min-w-0">
               <h2 className="text-base font-bold text-gray-900 leading-tight uppercase tracking-wide">
-                {details.fullName || "Your Name"}
+                {details.fullName || t("yourName")}
               </h2>
               <p className="text-sm text-gray-500 mt-0.5">
-                {details.professionalTitle || "Professional Title"}
+                {details.professionalTitle || t("professionalTitle")}
               </p>
 
               {/* Contact column */}
@@ -155,11 +157,11 @@ export function PersonalDetailsCard({ details, onChange, collapsible }: Personal
             </button>
             <div className="flex flex-col gap-0.5">
               <button onClick={() => fileInputRef.current?.click()} className="text-xs font-medium hover:opacity-80" style={{ color: "#2b4734" }}>
-                {details.photo ? "Change photo" : "Upload photo"}
+                {details.photo ? t("changePhoto") : t("uploadPhoto")}
               </button>
               {details.photo && (
                 <button onClick={() => onChange({ photo: "" })} className="text-xs text-gray-400 hover:text-red-500 flex items-center gap-1">
-                  <Trash2 className="w-3 h-3" /> Remove
+                  <Trash2 className="w-3 h-3" /> {t("remove")}
                 </button>
               )}
             </div>
@@ -167,16 +169,16 @@ export function PersonalDetailsCard({ details, onChange, collapsible }: Personal
 
           <div className="space-y-3">
             <Field
-              label="Full Name"
+              label={t("fullName")}
               value={details.fullName}
               onChange={(v) => onChange({ fullName: v })}
-              placeholder="Enter your full name"
+              placeholder={t("enterFullName")}
             />
             <Field
-              label="Professional Title"
+              label={t("professionalTitle")}
               value={details.professionalTitle}
               onChange={(v) => onChange({ professionalTitle: v })}
-              placeholder="e.g. Software Engineer"
+              placeholder={t("egSoftwareEngineer")}
             />
 
             <div className="grid grid-cols-2 gap-3">
@@ -228,7 +230,7 @@ export function PersonalDetailsCard({ details, onChange, collapsible }: Personal
                   className="flex items-center gap-1.5 text-xs font-medium text-gray-500 hover:text-gray-700 transition-colors py-1"
                 >
                   <ChevronDown className={cn("w-3.5 h-3.5 transition-transform", showExtras && "rotate-180")} />
-                  Add more details
+                  {t("addMoreDetails")}
                 </button>
                 {showExtras && (
                   <div className="flex flex-wrap gap-1.5 mt-2">
@@ -252,7 +254,7 @@ export function PersonalDetailsCard({ details, onChange, collapsible }: Personal
               className="w-full py-2.5 rounded-lg text-sm font-semibold text-white transition-colors mt-2"
               style={{ backgroundColor: "#2b4734" }}
             >
-              Done
+              {t("done")}
             </button>
           </div>
         </div>
