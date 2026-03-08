@@ -6,6 +6,7 @@ import { ResumeThumbnail } from "./ResumeThumbnail";
 import { ResumeData, DEFAULT_RESUME_DATA } from "./types";
 import { CustomizeSettings, DEFAULT_CUSTOMIZE } from "./customizeTypes";
 import { toast } from "@/hooks/use-toast";
+import { useT } from "./i18n";
 
 interface TemplateGalleryModalProps {
   open: boolean;
@@ -24,6 +25,7 @@ export function TemplateGalleryModal({
   resumeData,
   showToast = true,
 }: TemplateGalleryModalProps) {
+  const t = useT();
   const [hoveredId, setHoveredId] = useState<string | null>(null);
 
   // Build settings for each template so thumbnails show user data in that style
@@ -42,7 +44,7 @@ export function TemplateGalleryModal({
   const handleSelect = (id: string) => {
     onSelect(id);
     if (showToast) {
-      toast({ title: "Template applied!", description: `"${TEMPLATE_LIST.find(t => t.id === id)?.name}" style has been applied.` });
+      toast({ title: t("templateApplied"), description: `"${TEMPLATE_LIST.find(tpl => tpl.id === id)?.name}" ${t("styleApplied")}` });
     }
     onClose();
   };
@@ -59,9 +61,9 @@ export function TemplateGalleryModal({
         {/* Header */}
         <div className="flex items-center justify-between px-6 py-4 border-b border-gray-100 flex-shrink-0">
           <div>
-            <h2 className="text-lg font-bold text-gray-900">Choose a Template</h2>
+            <h2 className="text-lg font-bold text-gray-900">{t("chooseTemplate")}</h2>
             <p className="text-xs text-gray-500 mt-0.5">
-              Your content stays the same — only the design changes
+              {t("contentStaysSame")}
             </p>
           </div>
           <button

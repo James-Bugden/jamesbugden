@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/button";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "@/hooks/use-toast";
 import { cn } from "@/lib/utils";
+import { useT } from "./i18n";
 
 interface AiToolsPanelProps {
   data: ResumeData;
@@ -44,46 +45,22 @@ type ToolId = "tailor" | "summary" | "skills" | "optimize";
 
 interface ToolCard {
   id: ToolId;
-  title: string;
-  description: string;
+  titleKey: string;
+  descKey: string;
   icon: React.ElementType;
   needsInput: boolean;
-  inputPlaceholder?: string;
+  placeholderKey?: string;
 }
 
 const TOOLS: ToolCard[] = [
-  {
-    id: "tailor",
-    title: "Tailor to Job Description",
-    description: "Paste a job description to get keyword gap analysis and suggestions to improve your match rate.",
-    icon: Target,
-    needsInput: true,
-    inputPlaceholder: "Paste the full job description here...",
-  },
-  {
-    id: "summary",
-    title: "Generate Summary",
-    description: "Auto-generate a professional summary based on your experience sections.",
-    icon: AlignLeft,
-    needsInput: false,
-  },
-  {
-    id: "skills",
-    title: "Suggest Skills",
-    description: "Get skill suggestions based on your experience and industry.",
-    icon: Wrench,
-    needsInput: false,
-  },
-  {
-    id: "optimize",
-    title: "Optimize All Bullets",
-    description: "Batch-improve all bullet points across your experience sections with stronger action verbs.",
-    icon: Zap,
-    needsInput: false,
-  },
+  { id: "tailor", titleKey: "aiTailorTitle", descKey: "aiTailorDesc", icon: Target, needsInput: true, placeholderKey: "aiTailorPlaceholder" },
+  { id: "summary", titleKey: "aiSummaryTitle", descKey: "aiSummaryDesc", icon: AlignLeft, needsInput: false },
+  { id: "skills", titleKey: "aiSkillsTitle", descKey: "aiSkillsDesc", icon: Wrench, needsInput: false },
+  { id: "optimize", titleKey: "aiOptimizeTitle", descKey: "aiOptimizeDesc", icon: Zap, needsInput: false },
 ];
 
 export function AiToolsPanel({ data, onUpdateData }: AiToolsPanelProps) {
+  const t = useT();
   const [activeTool, setActiveTool] = useState<ToolId | null>(null);
   const [input, setInput] = useState("");
   const [loading, setLoading] = useState(false);
@@ -111,13 +88,13 @@ export function AiToolsPanel({ data, onUpdateData }: AiToolsPanelProps) {
           break;
       }
       setResult(res);
-      toast({ title: "AI analysis complete" });
+      toast({ title: t("aiAnalysisComplete") });
     } catch (e: any) {
-      toast({ title: "AI Error", description: e.message, variant: "destructive" });
+      toast({ title: t("aiError"), description: e.message, variant: "destructive" });
     } finally {
       setLoading(false);
     }
-  }, [resumeText, input]);
+  }, [resumeText, input, t]);
 
   const handleApplySummary = useCallback(() => {
     if (!result) return;
@@ -129,17 +106,19 @@ export function AiToolsPanel({ data, onUpdateData }: AiToolsPanelProps) {
           : s
       );
       onUpdateData({ ...data, sections: updated });
-      toast({ title: "Summary applied to your resume" });
+      toast({ title: t("aiSummaryApplied") });
     } else {
-      toast({ title: "No summary section", description: "Add a Summary section first, then apply.", variant: "destructive" });
+      toast({ title: t("aiNoSummarySection"), description: t("aiAddSummaryFirst"), variant: "destructive" });
     }
-  }, [result, data, onUpdateData]);
+  }, [result, data, onUpdateData, t]);
+
+  const currentTool = TOOLS.find((tool) => tool.id === activeTool);
 
   return (
     <div className="max-w-2xl mx-auto p-4 md:p-6 space-y-3">
       <div className="flex items-center gap-2 mb-2">
         <Sparkles className="w-5 h-5 text-purple-500" />
-        <h2 className="text-lg font-semibold text-gray-800">AI Tools</h2>
+        <h2 className="text-lg font-semibold text-gray-800">{t("aiTools")}</h2>
       </div>
 
       {!activeTool ? (
@@ -154,8 +133,8 @@ export function AiToolsPanel({ data, onUpdateData }: AiToolsPanelProps) {
                 <tool.icon className="w-4.5 h-4.5 text-purple-600" />
               </div>
               <div>
-                <p className="text-sm font-semibold text-gray-800">{tool.title}</p>
-                <p className="text-xs text-gray-500 mt-0.5">{tool.description}</p>
+                <p className="text-sm font-semibold text-gray-800">{t(tool.titleKey as any)}</p>
+                <p className="text-xs text-gray-500 mt-0.5">{t(tool.descKey as any)}</p>
               </div>
             </button>
           ))}
@@ -166,21 +145,21 @@ export function AiToolsPanel({ data, onUpdateData }: AiToolsPanelProps) {
             onClick={() => { setActiveTool(null); setResult(null); }}
             className="text-sm text-gray-500 hover:text-gray-700"
           >
-            ← Back to tools
+            {t("aiBackToTools")}
           </button>
 
           <div className="flex items-center gap-2">
             <Sparkles className="w-4 h-4 text-purple-500" />
             <h3 className="text-sm font-semibold text-gray-800">
-              {TOOLS.find((t) => t.id === activeTool)?.title}
+              {currentTool ? t(currentTool.titleKey as any) : ""}
             </h3>
           </div>
 
-          {TOOLS.find((t) => t.id === activeTool)?.needsInput && (
+          {currentTool?.needsInput && (
             <Textarea
               value={input}
               onChange={(e) => setInput(e.target.value)}
-              placeholder={TOOLS.find((t) => t.id === activeTool)?.inputPlaceholder}
+              placeholder={currentTool.placeholderKey ? t(currentTool.placeholderKey as any) : ""}
               className="min-h-[120px] text-sm"
             />
           )}
@@ -191,7 +170,7 @@ export function AiToolsPanel({ data, onUpdateData }: AiToolsPanelProps) {
             className="bg-gradient-to-r from-purple-600 to-violet-600 hover:opacity-90 text-white"
           >
             {loading ? <Loader2 className="w-4 h-4 animate-spin mr-2" /> : <Sparkles className="w-4 h-4 mr-2" />}
-            {loading ? "Analyzing..." : "Run"}
+            {loading ? t("aiAnalyzing") : t("aiRun")}
           </Button>
 
           {result && (
@@ -202,7 +181,7 @@ export function AiToolsPanel({ data, onUpdateData }: AiToolsPanelProps) {
               />
               {activeTool === "summary" && (
                 <Button size="sm" variant="outline" onClick={handleApplySummary}>
-                  Apply to Summary Section
+                  {t("aiApplyToSummary")}
                 </Button>
               )}
             </div>

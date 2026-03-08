@@ -546,12 +546,12 @@ const ResumeBuilder = () => {
     const newSection: ResumeSection = {
       id: crypto.randomUUID(),
       type,
-      title: meta?.title || "Custom Section",
+      title: meta?.title || t("customSectionFallback"),
       entries: [{ id: crypto.randomUUID(), fields: getDefaultFieldsForType(type) }],
       collapsed: false,
     };
     setSections([...data.sections, newSection]);
-    toast({ title: t("sectionAdded"), description: `${meta?.title || "Custom"} section added.` });
+    toast({ title: t("sectionAdded"), description: `${meta?.title || t("customSectionFallback")} ${t("sectionAddedDesc")}` });
   };
 
   const editorScrollRef = useRef<HTMLDivElement>(null);
@@ -700,7 +700,7 @@ const ResumeBuilder = () => {
                     removeSection(section.id);
                     toast({
                       title: t("sectionRemoved"),
-                      description: `${removed.title} was deleted.`,
+                      description: `${removed.title} ${t("sectionDeletedDesc")}`,
                       action: (
                         <button
                           onClick={() => {
@@ -789,7 +789,7 @@ const ResumeBuilder = () => {
               onClick={() => { setEditingName(true); setNameValue(currentDocName); }}
               className="text-sm font-medium transition-colors truncate max-w-[160px] hover:opacity-70"
               style={{ color: BRAND.text }}
-              title="Click to rename"
+              title={t("clickToRename")}
             >
               {currentDocName}
             </button>

@@ -27,6 +27,7 @@ import {
 } from "@/lib/documentStore";
 import { cn } from "@/lib/utils";
 import { useNavigate } from "react-router-dom";
+import { useT } from "@/components/resume-builder/i18n";
 import { TemplateGalleryModal } from "@/components/resume-builder/TemplateGalleryModal";
 import { DEFAULT_CUSTOMIZE } from "@/components/resume-builder/customizeTypes";
 import { applyTemplatePreset } from "@/components/resume-builder/templatePresets";
@@ -55,6 +56,7 @@ interface DocumentDashboardProps {
 type SidebarTab = "resume" | "cover_letter" | "job_tracker";
 
 export function DocumentDashboard({ onOpenDocument, onImport }: DocumentDashboardProps) {
+  const t = useT();
   const [documents, setDocuments] = useState<SavedDocument[]>([]);
   const [menuOpenId, setMenuOpenId] = useState<string | null>(null);
   const [renamingId, setRenamingId] = useState<string | null>(null);
@@ -204,10 +206,10 @@ export function DocumentDashboard({ onOpenDocument, onImport }: DocumentDashboar
     const diffMins = Math.floor(diffMs / 60000);
     const diffHours = Math.floor(diffMs / 3600000);
     const diffDays = Math.floor(diffMs / 86400000);
-    if (diffMins < 1) return "Just now";
-    if (diffMins < 60) return `${diffMins}m ago`;
-    if (diffHours < 24) return `${diffHours}h ago`;
-    if (diffDays < 7) return `${diffDays}d ago`;
+    if (diffMins < 1) return t("justNow");
+    if (diffMins < 60) return `${diffMins}${t("mAgo")}`;
+    if (diffHours < 24) return `${diffHours}${t("hAgo")}`;
+    if (diffDays < 7) return `${diffDays}${t("dAgo")}`;
     return d.toLocaleDateString("en-GB", { day: "numeric", month: "short", year: "numeric" });
   };
 
@@ -230,13 +232,13 @@ export function DocumentDashboard({ onOpenDocument, onImport }: DocumentDashboar
             onClick={(e) => { e.stopPropagation(); onOpenDocument(doc); }}
             className="flex items-center gap-2 text-white text-sm font-semibold tracking-wider uppercase bg-white/20 backdrop-blur-sm px-5 py-2.5 rounded-full hover:bg-white/30 transition-colors"
           >
-            View Resume <ArrowRight className="w-4 h-4" />
+            {t("viewResumeAction")} <ArrowRight className="w-4 h-4" />
           </button>
           <button
             onClick={(e) => { e.stopPropagation(); handleDuplicate(doc.id); }}
             className="flex items-center gap-2 text-white/90 text-sm font-medium tracking-wider uppercase bg-white/10 backdrop-blur-sm px-5 py-2.5 rounded-full hover:bg-white/20 transition-colors"
           >
-            Duplicate <RotateCcw className="w-4 h-4" />
+            {t("duplicateAction")} <RotateCcw className="w-4 h-4" />
           </button>
         </div>
       </div>
@@ -257,7 +259,7 @@ export function DocumentDashboard({ onOpenDocument, onImport }: DocumentDashboar
             <p className="text-[13px] font-semibold truncate" style={{ color: BRAND.text }}>{doc.name}</p>
           )}
           <p className="text-[11px] mt-0.5" style={{ color: BRAND.textSecondary }}>
-            edited {formatDate(doc.updatedAt)} · {pageSize(doc.settings)}
+            {t("edited")} {formatDate(doc.updatedAt)} · {pageSize(doc.settings)}
           </p>
         </div>
         <div className="relative flex-shrink-0 ml-1" data-menu-container>
@@ -271,13 +273,13 @@ export function DocumentDashboard({ onOpenDocument, onImport }: DocumentDashboar
           {menuOpenId === doc.id && (
             <div className="absolute right-0 top-7 bg-white rounded-lg shadow-lg border py-1 z-20 min-w-[130px]" style={{ borderColor: BRAND.border }} onClick={(e) => e.stopPropagation()}>
               <button onClick={() => handleRenameStart(doc)} className="w-full flex items-center gap-2 px-3 py-1.5 text-[12px] hover:bg-gray-50" style={{ color: BRAND.text }}>
-                <Pencil className="w-3 h-3" /> Rename
+                <Pencil className="w-3 h-3" /> {t("renameAction")}
               </button>
               <button onClick={() => handleDuplicate(doc.id)} className="w-full flex items-center gap-2 px-3 py-1.5 text-[12px] hover:bg-gray-50" style={{ color: BRAND.text }}>
-                <Copy className="w-3 h-3" /> Duplicate
+                <Copy className="w-3 h-3" /> {t("duplicateAction")}
               </button>
               <button onClick={() => handleDelete(doc.id)} className="w-full flex items-center gap-2 px-3 py-1.5 text-[12px] text-red-600 hover:bg-red-50">
-                <Trash2 className="w-3 h-3" /> Delete
+                <Trash2 className="w-3 h-3" /> {t("deleteAction")}
               </button>
             </div>
           )}
@@ -300,25 +302,25 @@ export function DocumentDashboard({ onOpenDocument, onImport }: DocumentDashboar
             onClick={(e) => { e.stopPropagation(); onOpenDocument(doc); }}
             className="flex items-center gap-1.5 text-white text-[11px] font-semibold tracking-wider uppercase hover:underline"
           >
-            View Letter <ArrowRight className="w-3 h-3" />
+            {t("viewLetter")} <ArrowRight className="w-3 h-3" />
           </button>
         </div>
       </div>
       <div className="px-3 py-2.5">
         <p className="text-[13px] font-semibold truncate" style={{ color: BRAND.text }}>{doc.name}</p>
-        <p className="text-[11px] mt-0.5" style={{ color: BRAND.textSecondary }}>edited {formatDate(doc.updatedAt)}</p>
+        <p className="text-[11px] mt-0.5" style={{ color: BRAND.textSecondary }}>{t("edited")} {formatDate(doc.updatedAt)}</p>
       </div>
     </div>
   );
 
   /* ── Sidebar ──────────────────────────────────── */
   const sidebarItems: { id: SidebarTab; label: string; icon: React.ReactNode; count?: number }[] = [
-    { id: "resume", label: "Resume", icon: <FileText className="w-[18px] h-[18px]" />, count: resumes.length },
-    { id: "cover_letter", label: "Cover Letter", icon: <Mail className="w-[18px] h-[18px]" />, count: coverLetters.length },
-    { id: "job_tracker", label: "Job Tracker", icon: <Briefcase className="w-[18px] h-[18px]" /> },
+    { id: "resume", label: t("resume"), icon: <FileText className="w-[18px] h-[18px]" />, count: resumes.length },
+    { id: "cover_letter", label: t("coverLetter"), icon: <Mail className="w-[18px] h-[18px]" />, count: coverLetters.length },
+    { id: "job_tracker", label: t("jobTracker"), icon: <Briefcase className="w-[18px] h-[18px]" /> },
   ];
 
-  const mainTitle = activeTab === "resume" ? "My Resumes" : activeTab === "cover_letter" ? "My Cover Letters" : "Job Tracker";
+  const mainTitle = activeTab === "resume" ? t("myResumes") : activeTab === "cover_letter" ? t("myCoverLetters") : t("jobTracker");
 
   return (
     <div className="h-screen flex" style={{ backgroundColor: BRAND.cream }}>
@@ -363,7 +365,7 @@ export function DocumentDashboard({ onOpenDocument, onImport }: DocumentDashboar
               <div className="w-6 h-6 rounded-full bg-gray-200 flex items-center justify-center flex-shrink-0">
                 <User className="w-3.5 h-3.5" style={{ color: BRAND.textSecondary }} />
               </div>
-              <span className="font-medium">My account</span>
+              <span className="font-medium">{t("myAccountAction")}</span>
             </button>
           </div>
         </div>
@@ -379,7 +381,7 @@ export function DocumentDashboard({ onOpenDocument, onImport }: DocumentDashboar
                 <Search className="absolute left-2.5 top-1/2 -translate-y-1/2 w-3.5 h-3.5" style={{ color: BRAND.textSecondary }} />
                 <input
                   type="text"
-                  placeholder="Search…"
+                  placeholder={t("search")}
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
                   className="pl-8 pr-3 py-1.5 text-[12px] bg-white border rounded-md w-[160px] focus:outline-none placeholder-gray-400"
@@ -400,7 +402,7 @@ export function DocumentDashboard({ onOpenDocument, onImport }: DocumentDashboar
                 onMouseLeave={(e) => { e.currentTarget.style.borderColor = BRAND.border; e.currentTarget.style.color = BRAND.textSecondary; }}
               >
                 <Plus className="w-7 h-7" strokeWidth={1.5} />
-                <span className="text-[12px] font-medium">New resume</span>
+                <span className="text-[12px] font-medium">{t("newResumeAction")}</span>
               </button>
 
               {/* Import */}
@@ -413,8 +415,8 @@ export function DocumentDashboard({ onOpenDocument, onImport }: DocumentDashboar
               >
                 <Upload className="w-7 h-7" strokeWidth={1.5} />
                 <div className="text-center">
-                  <span className="text-[12px] font-medium block">Import</span>
-                  <span className="text-[10px] mt-0.5 block" style={{ color: BRAND.textSecondary }}>Upload your existing CV</span>
+                  <span className="text-[12px] font-medium block">{t("importAction")}</span>
+                  <span className="text-[10px] mt-0.5 block" style={{ color: BRAND.textSecondary }}>{t("uploadExistingCvAction")}</span>
                 </div>
               </button>
 
@@ -434,7 +436,7 @@ export function DocumentDashboard({ onOpenDocument, onImport }: DocumentDashboar
                 onMouseLeave={(e) => { e.currentTarget.style.borderColor = BRAND.border; e.currentTarget.style.color = BRAND.textSecondary; }}
               >
                 <Plus className="w-7 h-7" strokeWidth={1.5} />
-                <span className="text-[12px] font-medium">New cover letter</span>
+                <span className="text-[12px] font-medium">{t("newCoverLetter")}</span>
               </button>
               {filteredCoverLetters.map((doc) => (
                 <CoverLetterCard key={doc.id} doc={doc} />
@@ -448,22 +450,22 @@ export function DocumentDashboard({ onOpenDocument, onImport }: DocumentDashboar
               <div className="w-20 h-20 mx-auto mb-4 rounded-full flex items-center justify-center" style={{ backgroundColor: BRAND.greenLight }}>
                 <FileText className="w-10 h-10" style={{ color: BRAND.green }} />
               </div>
-              <p className="text-lg font-semibold mb-1" style={{ color: BRAND.text }}>Create your first resume</p>
-              <p className="text-sm mb-6" style={{ color: BRAND.textSecondary }}>Start from scratch or import an existing CV</p>
+              <p className="text-lg font-semibold mb-1" style={{ color: BRAND.text }}>{t("createYourFirstResume")}</p>
+              <p className="text-sm mb-6" style={{ color: BRAND.textSecondary }}>{t("startFromScratch")}</p>
               <div className="flex items-center justify-center gap-3">
                 <button
                   onClick={() => handleCreate("resume")}
                   className="px-5 py-2.5 rounded-lg text-sm font-semibold text-white transition-opacity hover:opacity-90"
                   style={{ backgroundColor: BRAND.green }}
                 >
-                  Create Resume
+                  {t("createResume")}
                 </button>
                 <button
                   onClick={() => onImport("resume")}
                   className="px-5 py-2.5 rounded-lg text-sm font-semibold border bg-white hover:opacity-80 transition-colors"
                   style={{ color: BRAND.green, borderColor: BRAND.green }}
                 >
-                  Import Existing CV
+                  {t("importExistingCv")}
                 </button>
               </div>
             </div>
@@ -474,8 +476,8 @@ export function DocumentDashboard({ onOpenDocument, onImport }: DocumentDashboar
               <div className="w-20 h-20 mx-auto mb-4 rounded-full flex items-center justify-center" style={{ backgroundColor: BRAND.greenLight }}>
                 <Mail className="w-10 h-10" style={{ color: BRAND.green }} />
               </div>
-              <p className="text-lg font-semibold mb-1" style={{ color: BRAND.text }}>No cover letters yet</p>
-              <p className="text-sm" style={{ color: BRAND.textSecondary }}>Create your first cover letter to get started</p>
+              <p className="text-lg font-semibold mb-1" style={{ color: BRAND.text }}>{t("noCoverLettersYet")}</p>
+              <p className="text-sm" style={{ color: BRAND.textSecondary }}>{t("createFirstCoverLetter")}</p>
             </div>
           )}
         </div>
