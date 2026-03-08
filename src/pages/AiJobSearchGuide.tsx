@@ -300,9 +300,10 @@ const AiJobSearchGuide = () => {
         </div>
       </section>
 
+      <main className="container mx-auto px-5 md:px-6 pb-20 max-w-3xl">
       {/* ═══════════════ SECTION 1: FIND YOUR PATH ═══════════════ */}
-      <section id="find-path" className="scroll-mt-24 pb-16 px-5 md:px-6">
-        <div className="container mx-auto max-w-3xl space-y-6">
+      <section id="find-path" className="py-14 md:py-20 scroll-mt-24">
+        <div className="space-y-6">
           <div className="flex items-end gap-4">
             <SectionNumber num="01" />
             <div>
