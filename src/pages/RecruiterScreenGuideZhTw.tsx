@@ -1,4 +1,4 @@
-import { FileText, Clock, Linkedin, Phone, Video, Users, AlertTriangle, CheckCircle2, XCircle, ArrowRight, MessageSquare, Target, Shield, Briefcase, ChevronDown } from "lucide-react";
+import { FileText, Clock, Linkedin, Phone, Video, Users, AlertTriangle, CheckCircle2, XCircle, ArrowRight, MessageSquare, Target, Shield, Briefcase, ChevronDown, Menu } from "lucide-react";
 import { Link, useNavigate } from "react-router-dom";
 import GoldCheckBadge from "@/components/GoldCheckBadge";
 import { InstagramIcon, ThreadsIcon } from "@/components/SocialIcons";
@@ -6,7 +6,7 @@ import GuideShareButtons from "@/components/GuideShareButtons";
 import { AuthHeaderButton } from "@/components/AuthHeaderButton";
 import PageSEO from "@/components/PageSEO";
 import { useTrackGuideProgress } from "@/hooks/useReadingProgress";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 const SectionNumber = ({ num }: { num: string }) => (
   <span className="text-gold/30 font-heading text-6xl md:text-7xl font-bold leading-none select-none">
