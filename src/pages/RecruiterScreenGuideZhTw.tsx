@@ -228,7 +228,7 @@ const RecruiterScreenGuideZhTw = () => {
 
       {/* Section 1: The Scorecard */}
       <main className="container mx-auto px-5 md:px-6 pb-20 max-w-3xl">
-        <section className="py-14 md:py-20">
+        <section id="scorecard" className="py-14 md:py-20 scroll-mt-24">
           <div className="flex items-start gap-5 mb-8">
             <SectionNumber num="01" />
             <div className="pt-3">
