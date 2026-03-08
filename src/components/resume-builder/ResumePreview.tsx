@@ -1196,23 +1196,24 @@ export const ResumePreview = React.memo(function ResumePreview({
   /* ── Apply pagination mutations to visible pages ── */
   useEffect(() => {
     const muts = mutationsRef.current;
-    if (!muts) return;
+    if (!muts || muts.gen === undefined) return;
+    // Skip if we already applied this generation
+    if (muts.gen === lastAppliedGenRef.current) return;
 
     const raf = requestAnimationFrame(() => {
+      lastAppliedGenRef.current = muts.gen!;
       visiblePageRefs.current.forEach(ref => {
         if (!ref) return;
 
-        // Reset previous mutations on this visible page
-        ref.querySelectorAll('[data-page-item]').forEach(el => {
-          (el as HTMLElement).style.marginTop = '';
-        });
-
         const items = ref.querySelectorAll('[data-page-item]');
 
-        muts.items.forEach((mt, idx) => {
-          if (items[idx]) {
-            (items[idx] as HTMLElement).style.marginTop = mt ? `${mt}px` : '';
-          }
+        // Overwrite all items directly — no blanket reset
+        items.forEach((el, idx) => {
+          const mt = muts.items[idx] || 0;
+          (el as HTMLElement).style.marginTop = mt ? `${mt}px` : '';
+          // Also clear any stale child mutations
+          const blocks = getAtomicBlocks(el);
+          blocks.forEach(block => { block.style.marginTop = ''; });
         });
 
         muts.children.forEach((childMuts, parentIdx) => {
