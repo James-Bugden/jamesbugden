@@ -28,6 +28,108 @@ const Collapsible = ({ title, children }: { title: string; children: React.React
   );
 };
 
+/* ─── Table of Contents ─── */
+const tocSections = [
+  { id: "intro", label: "Introduction" },
+  { id: "scorecard", label: "01 · The Scorecard" },
+  { id: "before", label: "02 · Before the Call" },
+  { id: "story", label: "03 · Know Your Story" },
+  { id: "frameworks", label: "04 · Answer Frameworks" },
+  { id: "tough", label: "05 · Tough Questions" },
+  { id: "salary", label: "06 · Salary" },
+  { id: "setup", label: "07 · Setup & Etiquette" },
+  { id: "questions", label: "08 · Questions to Ask" },
+  { id: "redflags", label: "09 · Red Flags" },
+  { id: "mistakes", label: "10 · Common Mistakes" },
+  { id: "after", label: "11 · After the Call" },
+  { id: "levels", label: "12 · By Career Level" },
+  { id: "cheatsheet", label: "Cheat Sheet" },
+];
+
+const TableOfContents = () => {
+  const [active, setActive] = useState("");
+  const [open, setOpen] = useState(false);
+
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      (entries) => {
+        const visible = entries.filter((e) => e.isIntersecting);
+        if (visible.length > 0) setActive(visible[0].target.id);
+      },
+      { rootMargin: "-80px 0px -60% 0px", threshold: 0 }
+    );
+    tocSections.forEach(({ id }) => {
+      const el = document.getElementById(id);
+      if (el) observer.observe(el);
+    });
+    return () => observer.disconnect();
+  }, []);
+
+  return (
+    <>
+      {/* Desktop sidebar */}
+      <aside className="hidden xl:block fixed left-[max(1rem,calc((100vw-72rem)/2-14rem))] top-28 w-48 z-30">
+        <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wider mb-3">Contents</p>
+        <nav className="space-y-1">
+          {tocSections.map(({ id, label }) => (
+            <a
+              key={id}
+              href={`#${id}`}
+              onClick={(e) => {
+                e.preventDefault();
+                document.getElementById(id)?.scrollIntoView({ behavior: "smooth", block: "start" });
+              }}
+              className={`block text-sm py-1.5 pl-3 border-l-2 transition-all duration-200 ${
+                active === id
+                  ? "border-gold text-gold font-medium"
+                  : "border-transparent text-muted-foreground hover:text-foreground hover:border-border"
+              }`}
+            >
+              {label}
+            </a>
+          ))}
+        </nav>
+      </aside>
+
+      {/* Mobile floating TOC */}
+      <div className="xl:hidden fixed bottom-6 left-6 z-50">
+        <button
+          onClick={() => setOpen(!open)}
+          className="w-11 h-11 rounded-full bg-executive-green text-cream shadow-lg flex items-center justify-center hover:scale-105 transition-transform"
+          aria-label="Table of contents"
+        >
+          <Menu className="w-5 h-5" />
+        </button>
+        {open && (
+          <div className="absolute bottom-14 left-0 bg-card border border-border rounded-xl shadow-2xl p-4 w-56 max-h-[70vh] overflow-y-auto">
+            <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wider mb-2">Contents</p>
+            <nav className="space-y-1">
+              {tocSections.map(({ id, label }) => (
+                <a
+                  key={id}
+                  href={`#${id}`}
+                  onClick={(e) => {
+                    e.preventDefault();
+                    document.getElementById(id)?.scrollIntoView({ behavior: "smooth", block: "start" });
+                    setOpen(false);
+                  }}
+                  className={`block text-sm py-1.5 pl-3 border-l-2 transition-all ${
+                    active === id
+                      ? "border-gold text-gold font-medium"
+                      : "border-transparent text-muted-foreground hover:text-foreground"
+                  }`}
+                >
+                  {label}
+                </a>
+              ))}
+            </nav>
+          </div>
+        )}
+      </div>
+    </>
+  );
+};
+
 const RecruiterScreenGuide = () => {
   useTrackGuideProgress("recruiter-screen");
 
