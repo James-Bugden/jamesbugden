@@ -89,6 +89,7 @@ const categories = [
   { en: "履歷撰寫", zh: "履歷撰寫" },
   { en: "職涯轉型", zh: "職涯轉型" },
   { en: "面試準備", zh: "面試準備" },
+  { en: "AI 求職", zh: "AI 求職" },
 ];
 
 const GuidesPageZhTw = () => {
