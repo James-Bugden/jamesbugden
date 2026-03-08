@@ -48,6 +48,27 @@ export async function exportToPdf({ elementId, fileName, pageFormat = "a4" }: Ex
       allowTaint: true,
       backgroundColor: "#ffffff",
       logging: false,
+      onclone: (_doc: Document, clone: HTMLElement) => {
+        // Modern browsers output color(srgb ...) which html2canvas can't parse.
+        // Convert all color-related styles to rgb fallbacks.
+        const allEls = [clone, ...Array.from(clone.querySelectorAll("*"))] as HTMLElement[];
+        const colorProps = ["color", "background-color", "border-color", "border-top-color", "border-right-color", "border-bottom-color", "border-left-color", "outline-color", "text-decoration-color", "fill", "stroke"];
+        const canvas = document.createElement("canvas");
+        const ctx2d = canvas.getContext("2d")!;
+        for (const el of allEls) {
+          const cs = getComputedStyle(el);
+          for (const prop of colorProps) {
+            const val = cs.getPropertyValue(prop);
+            if (val && val.startsWith("color(")) {
+              // Use canvas 2d context to convert to rgba
+              ctx2d.fillStyle = "rgba(0,0,0,1)";
+              ctx2d.fillStyle = val;
+              const resolved = ctx2d.fillStyle;
+              el.style.setProperty(prop, resolved);
+            }
+          }
+        }
+      },
     });
 
     // Read the margin from the rendered element's CSS custom properties
