@@ -302,7 +302,7 @@ export function DocumentDashboard({ onOpenDocument, onImport }: DocumentDashboar
             onClick={(e) => { e.stopPropagation(); onOpenDocument(doc); }}
             className="flex items-center gap-1.5 text-white text-[11px] font-semibold tracking-wider uppercase hover:underline"
           >
-            View Letter <ArrowRight className="w-3 h-3" />
+            {t("viewLetter")} <ArrowRight className="w-3 h-3" />
           </button>
         </div>
       </div>
