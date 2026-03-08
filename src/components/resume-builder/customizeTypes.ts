@@ -146,7 +146,7 @@ export const DEFAULT_CUSTOMIZE: CustomizeSettings = {
   titleSize: "m",
   titleSameLine: false,
 
-  bodyFont: "'Inter', sans-serif",
+  bodyFont: "'Lora', serif",
 
   showPhoto: true,
   photoSize: "m",
