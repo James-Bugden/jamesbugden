@@ -132,6 +132,7 @@ const GuidesPage = () => {
             <div key={category} className="mb-12 last:mb-0">
               <h2 className="font-heading text-2xl md:text-3xl text-foreground mb-6 flex items-center gap-3">
                 {category === "LinkedIn" && <Linkedin className="w-6 h-6 text-gold" />}
+                {category === "Resume" && <FileText className="w-6 h-6 text-gold" />}
                 {category === "Career Change" && <Briefcase className="w-6 h-6 text-gold" />}
                 {category === "Interview Prep" && <MessageSquare className="w-6 h-6 text-gold" />}
                 {category}
