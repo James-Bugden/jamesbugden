@@ -27,6 +27,7 @@ import {
 } from "@/lib/documentStore";
 import { cn } from "@/lib/utils";
 import { useNavigate } from "react-router-dom";
+import { useT } from "@/components/resume-builder/i18n";
 import { TemplateGalleryModal } from "@/components/resume-builder/TemplateGalleryModal";
 import { DEFAULT_CUSTOMIZE } from "@/components/resume-builder/customizeTypes";
 import { applyTemplatePreset } from "@/components/resume-builder/templatePresets";
