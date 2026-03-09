@@ -4,7 +4,7 @@ import { Navigate, Link } from "react-router-dom";
 import { Linkedin } from "lucide-react";
 import { InstagramIcon, ThreadsIcon } from "@/components/SocialIcons";
 import LanguageToggle from "@/components/LanguageToggle";
-import { ArrowRight, FileText, DollarSign, PenTool, ClipboardList, Search, X, Sparkles, Check } from "lucide-react";
+import { ArrowRight, FileText, DollarSign, PenTool, Search, X, Sparkles, Check } from "lucide-react";
 import PageSEO from "@/components/PageSEO";
 import LazySection from "@/components/LazySection";
 import { useRecentlyUsed, type RecentItem } from "@/hooks/useRecentlyUsed";
