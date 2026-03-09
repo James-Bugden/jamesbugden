@@ -524,59 +524,59 @@ const ProblemSolvingGuideZhTw = () => {
 
             <p className="text-muted-foreground leading-relaxed mb-6"><strong className="text-foreground">是非樹</strong>根據是或否的問題，把人或事物分到不同的桶子裡。每個答案通向一個桶子（解釋）或另一個問題。</p>
 
-            <div className="bg-card border border-border rounded-xl p-5 md:p-6">
-              <p className="text-xs font-bold text-gold uppercase tracking-wider mb-5">是非樹：蘑菇戀人演唱會出席</p>
-              <div className="flex flex-col items-center gap-0">
-                <div className="bg-executive-green text-cream text-xs font-semibold px-5 py-3 rounded-lg text-center">全校 500 位<br />師生</div>
-                <div className="w-px h-4 bg-gold/40" />
-                <div className="border border-border rounded-lg px-4 py-2 text-center text-sm text-foreground font-medium bg-muted/50">他們知道演唱會的事嗎？</div>
-                <div className="flex items-start w-full max-w-md mt-0">
+            <div className="bg-card border border-border rounded-xl p-6 md:p-8">
+              <p className="text-xs font-bold text-gold uppercase tracking-wider mb-6">是非樹：蘑菇戀人演唱會出席</p>
+              <div className="flex flex-col items-center">
+                <div className="bg-executive-green text-cream text-sm font-semibold px-6 py-3.5 rounded-xl text-center">全校 500 位<br />師生</div>
+                <div className="w-px h-8 bg-gold/40" />
+                <div className="border border-border rounded-xl px-5 py-3 text-center text-sm text-foreground font-medium bg-muted/50">他們知道演唱會的事嗎？</div>
+                <div className="flex w-full max-w-md mt-0">
                   <div className="flex-1 flex flex-col items-center">
-                    <div className="w-px h-4 bg-gold/40" />
-                    <span className="text-xs font-bold text-green-500 mb-1">是</span>
-                    <div className="w-px h-3 bg-gold/40" />
+                    <div className="w-px h-6 bg-gold/40" />
+                    <span className="text-sm font-bold text-green-600 mb-2">是</span>
+                    <div className="w-px h-6 bg-gold/40" />
                   </div>
                   <div className="flex-1 flex flex-col items-center">
-                    <div className="w-px h-4 bg-gold/40" />
-                    <span className="text-xs font-bold text-destructive mb-1">否</span>
-                    <div className="bg-destructive/10 border border-destructive/20 rounded-lg px-3 py-2 text-center">
+                    <div className="w-px h-6 bg-gold/40" />
+                    <span className="text-sm font-bold text-destructive mb-2">否</span>
+                    <div className="bg-destructive/10 border border-destructive/20 rounded-xl px-4 py-3 text-center">
                       <p className="text-foreground text-sm font-bold">350 人 <span className="text-muted-foreground font-normal">(70%)</span></p>
-                      <p className="text-muted-foreground text-xs">「不知道」</p>
+                      <p className="text-muted-foreground text-xs mt-0.5">「不知道」</p>
                     </div>
                   </div>
                 </div>
-                <div className="border border-border rounded-lg px-4 py-2 text-center text-sm text-foreground font-medium bg-muted/50 -mt-1">他們有來過嗎？</div>
-                <div className="flex items-start w-full max-w-md mt-0">
+                <div className="border border-border rounded-xl px-5 py-3 text-center text-sm text-foreground font-medium bg-muted/50 mt-2">他們有來過嗎？</div>
+                <div className="flex w-full max-w-md mt-0">
                   <div className="flex-1 flex flex-col items-center">
-                    <div className="w-px h-4 bg-gold/40" />
-                    <span className="text-xs font-bold text-green-500 mb-1">是</span>
-                    <div className="w-px h-3 bg-gold/40" />
+                    <div className="w-px h-6 bg-gold/40" />
+                    <span className="text-sm font-bold text-green-600 mb-2">是</span>
+                    <div className="w-px h-6 bg-gold/40" />
                   </div>
                   <div className="flex-1 flex flex-col items-center">
-                    <div className="w-px h-4 bg-gold/40" />
-                    <span className="text-xs font-bold text-destructive mb-1">否</span>
-                    <div className="bg-destructive/10 border border-destructive/20 rounded-lg px-3 py-2 text-center">
+                    <div className="w-px h-6 bg-gold/40" />
+                    <span className="text-sm font-bold text-destructive mb-2">否</span>
+                    <div className="bg-destructive/10 border border-destructive/20 rounded-xl px-4 py-3 text-center">
                       <p className="text-foreground text-sm font-bold">135 人 <span className="text-muted-foreground font-normal">(27%)</span></p>
-                      <p className="text-muted-foreground text-xs">「知道但從沒來過」</p>
+                      <p className="text-muted-foreground text-xs mt-0.5">「知道但從沒來過」</p>
                     </div>
                   </div>
                 </div>
-                <div className="border border-border rounded-lg px-4 py-2 text-center text-sm text-foreground font-medium bg-muted/50 -mt-1">他們固定來嗎？</div>
-                <div className="flex items-start w-full max-w-md mt-0">
+                <div className="border border-border rounded-xl px-5 py-3 text-center text-sm text-foreground font-medium bg-muted/50 mt-2">他們固定來嗎？</div>
+                <div className="flex w-full max-w-md mt-0">
                   <div className="flex-1 flex flex-col items-center">
-                    <div className="w-px h-4 bg-gold/40" />
-                    <span className="text-xs font-bold text-green-500 mb-1">是</span>
-                    <div className="bg-green-500/10 border border-green-500/20 rounded-lg px-3 py-2 text-center">
+                    <div className="w-px h-6 bg-gold/40" />
+                    <span className="text-sm font-bold text-green-600 mb-2">是</span>
+                    <div className="bg-green-500/10 border border-green-500/20 rounded-xl px-4 py-3 text-center">
                       <p className="text-foreground text-sm font-bold">12 人 <span className="text-muted-foreground font-normal">(2%)</span></p>
-                      <p className="text-muted-foreground text-xs">「忠實粉絲」</p>
+                      <p className="text-muted-foreground text-xs mt-0.5">「忠實粉絲」</p>
                     </div>
                   </div>
                   <div className="flex-1 flex flex-col items-center">
-                    <div className="w-px h-4 bg-gold/40" />
-                    <span className="text-xs font-bold text-destructive mb-1">否</span>
-                    <div className="bg-destructive/10 border border-destructive/20 rounded-lg px-3 py-2 text-center">
+                    <div className="w-px h-6 bg-gold/40" />
+                    <span className="text-sm font-bold text-destructive mb-2">否</span>
+                    <div className="bg-destructive/10 border border-destructive/20 rounded-xl px-4 py-3 text-center">
                       <p className="text-foreground text-sm font-bold">3 人 <span className="text-muted-foreground font-normal">(1%)</span></p>
-                      <p className="text-muted-foreground text-xs">「來過一次就不來了」</p>
+                      <p className="text-muted-foreground text-xs mt-0.5">「來過一次就不來了」</p>
                     </div>
                   </div>
                 </div>
