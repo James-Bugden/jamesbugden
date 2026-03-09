@@ -1,48 +1,27 @@
 
 
-## Resume Builder Feature Improvements
+## Changes to Dashboard
 
-### Priority 1: AI "Tailor to Job Description" Panel
-- Add a new tab or panel in the "AI Tools" section (which currently shows "Coming soon")
-- User pastes a job description → edge function analyzes keyword overlap with current resume
-- Returns: missing keywords, suggested bullet point rewrites, match percentage
-- Reuses existing `resume-ai` edge function with a new `action: "tailor"` mode
-- UI: Split panel with JD on left, suggestions on right, one-click "Apply" buttons
+### 1. Remove Job Tracker from tools array (lines 89-96)
+Delete the `job-tracker` entry from the `tools` array.
 
-### Priority 2: Resume Completeness Score Widget
-- Floating widget in the editor sidebar showing real-time completion percentage
-- Scoring rules: has summary (+10), has 2+ experience entries (+20), all entries have descriptions (+15), dates filled (+10), contact info complete (+15), skills section exists (+10), quantified achievements detected (+20)
-- Visual: circular progress ring with percentage, expandable checklist of what's missing
-- Lives above the "Add Content" button in the Content tab
+### 2. Remove Job Tracker references throughout
+- **Line 11**: Remove `getActiveJobs` import
+- **Lines 262-266**: Remove `job-tracker` branch from `getProgressBadge`
+- **Lines 426, 437-444**: Remove `hasJobTracker` logic and the "Track your applications" recommendation from `nextStep`
 
-### Priority 3: Populate the "AI Tools" Tab
-- Currently renders "AI Tools — Coming soon" placeholder
-- Build out with: "Tailor to Job" (above), "Generate Summary from Experience", "Suggest Skills", "Optimize Bullet Points (batch)"
-- Each tool card shows a description, input area, and results
+### 3. Add "Beta" badge to Resume Analyzer, Resume Builder, and Offer Calculator
+In the tool card rendering (line 728), append a `Beta` tag next to the tool title for IDs `resume-analyzer`, `resume-builder`, and `offer-calculator`:
 
-### Priority 4: Real-time Word Count per Section
-- Add a small `<span>` below each `RichTextEditor` showing word count and bullet point count
-- Highlight in amber if too long (>150 words per entry) or too short (<20 words)
-- Lightweight: computed from the editor's text content on each change
+```tsx
+<h3 className="text-lg font-bold mb-1" style={{ color: C.text }}>
+  {tool.title[lang]}
+  {["resume-analyzer", "resume-builder", "offer-calculator"].includes(tool.id) && (
+    <span className="ml-2 text-[10px] font-semibold uppercase tracking-wide px-1.5 py-0.5 rounded-full align-middle"
+      style={{ backgroundColor: C.goldFaded, color: C.gold }}>Beta</span>
+  )}
+</h3>
+```
 
-### Priority 5: Click-to-Edit on Preview (Inline Editing)
-- When user clicks text on the A4 preview, show a floating input/textarea positioned over the clicked element
-- On blur/enter, update the corresponding field in the data model
-- Start with simple fields only: job title, company name, degree, institution
-- More complex than other items; implement after the above
-
-### Files to Edit
-- `src/pages/ResumeBuilder.tsx` — Add completeness widget, wire AI Tools tab
-- `src/components/resume-builder/ResumeTopNav.tsx` — No changes needed
-- `src/components/resume-builder/RichTextEditor.tsx` — Add word count display
-- `supabase/functions/resume-ai/index.ts` — Add `tailor` action for JD matching
-- New: `src/components/resume-builder/CompletenessScore.tsx` — Score widget component
-- New: `src/components/resume-builder/AiToolsPanel.tsx` — Full AI tools tab content
-- New: `src/components/resume-builder/TailorToJob.tsx` — JD tailoring panel
-
-### Implementation Order
-1. Completeness score widget (standalone, no backend needed)
-2. Word count on RichTextEditor (small change)
-3. AI Tools tab with Tailor to Job (needs edge function update)
-4. Click-to-edit on preview (complex, last)
+All changes are in `src/pages/Dashboard.tsx` only. The Job Tracker remains in `SiteDirectory` and the router.
 
