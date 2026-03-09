@@ -774,6 +774,8 @@ export default function Dashboard({ lang = "en" }: { lang?: "en" | "zh" }) {
         </div>
       </main>
 
+      <div className="h-6" />
+
       {/* Salary Negotiation Toolkit */}
       <LazySection minHeight="400px" id="toolkit" style={{ scrollMarginTop: '80px' }}>
       <section style={{ backgroundColor: C.toolkitBg }}>
