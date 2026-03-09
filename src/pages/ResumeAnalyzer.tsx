@@ -409,8 +409,8 @@ export default function ResumeAnalyzer() {
 
                   {/* Mock score header */}
                   <div className="flex flex-col items-center mb-6">
-                    <div className="w-20 h-20 rounded-full flex items-center justify-center mb-2" style={{ border: '5px solid #2b4734' }}>
-                      <span className="font-heading text-2xl font-bold" style={{ color: '#2b4734' }}>B</span>
+                    <div className="w-20 h-20 rounded-full flex items-center justify-center mb-2" style={{ border: '5px solid #22c55e' }}>
+                      <span className="font-heading text-2xl font-bold" style={{ color: '#22c55e' }}>B</span>
                     </div>
                     <p className="font-heading text-lg font-bold" style={{ color: '#1A1A1A' }}>74 <span className="text-sm font-normal" style={{ color: '#6B6B6B' }}>/100</span></p>
                     <p className="text-xs" style={{ color: '#6B6B6B' }}>{t(lang, "Overall Resume Score", "整體履歷評分")}</p>
