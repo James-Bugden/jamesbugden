@@ -86,14 +86,8 @@ const tools: ToolItem[] = [
     description: { en: "Build a recruiter-approved resume from scratch using proven templates.", zh: "用實戰驗證的模板，從頭打造一份讓 Recruiter 點頭的履歷。" },
     path: "/resume",
   },
-  {
-    id: "job-tracker",
-    icon: <ClipboardList className="w-5 h-5" />,
-    iconBg: "#F0F9FF",
-    title: { en: "Job Tracker", zh: "求職進度追蹤" },
-    description: { en: "Track every application, interview, and follow-up in one place. Stop losing opportunities.", zh: "所有投遞、面試、後續跟進，一個地方搞定。不再漏掉任何機會。" },
-    path: "/jobs",
-  },
+
+
   {
     id: "offer-calculator",
     icon: <DollarSign className="w-5 h-5" />,
