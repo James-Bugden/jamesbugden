@@ -413,7 +413,6 @@ export default function Dashboard({ lang = "en" }: { lang?: "en" | "zh" }) {
     const usedIds = new Set(recentItems.map(r => r.id));
     if (usedIds.size === 0) return null; // show defaults instead
     const hasResumeAnalyzer = usedIds.has("resume-analyzer");
-    const hasJobTracker = usedIds.has("job-tracker");
     const hasSalaryKit = usedIds.has("salary-kit") || usedIds.has("tk-scripts") || usedIds.has("tk-counter") || usedIds.has("tk-offer");
 
     if (!hasResumeAnalyzer) {
@@ -422,14 +421,6 @@ export default function Dashboard({ lang = "en" }: { lang?: "en" | "zh" }) {
         label: { en: "Suggested Next Step", zh: "建議下一步" },
         title: { en: "Start with your resume", zh: "先從履歷開始" },
         desc: { en: "Get a recruiter-level score and specific fixes in 60 seconds.", zh: "60 秒拿到 Recruiter 視角的評分與改善建議。" },
-      };
-    }
-    if (!hasJobTracker) {
-      return {
-        path: "/jobs",
-        label: { en: "Suggested Next Step", zh: "建議下一步" },
-        title: { en: "Track your applications", zh: "開始追蹤你的投遞" },
-        desc: { en: "Organize every application, interview, and follow-up in one place.", zh: "所有投遞、面試、跟進，一個地方搞定。" },
       };
     }
     if (!hasSalaryKit) {
