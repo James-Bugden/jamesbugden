@@ -217,15 +217,26 @@ const ProblemSolvingGuideZhTw = () => {
 
             <p className="text-muted-foreground leading-relaxed mb-6">渡邊健介在書中介紹了五種角色類型。每一種代表一種不同的解決問題方式。我每個禮拜都會在面試中看到這五種人。</p>
 
-            <CodeBlock>{`  五種面試者類型
-  ==============
-
-  冷凍人        「我不知道……」              --> 未錄取
-  抱怨者        「我老闆很糟糕……」          --> 未錄取
-  夢想家        「我想要創造影響力……」      --> 未錄取
-  衝衝衝        「所以我馬上就做了……」      --> 未錄取
-  問題解決者    「首先，我找出了              --> 錄取
-                 根本原因……」`}</CodeBlock>
+            <div className="grid gap-3">
+              {[
+                { type: "冷凍人", quote: "「我不知道……」", result: "未錄取", icon: "❄️", color: "border-destructive/30 bg-destructive/5" },
+                { type: "抱怨者", quote: "「我老闆很糟糕……」", result: "未錄取", icon: "😤", color: "border-destructive/30 bg-destructive/5" },
+                { type: "夢想家", quote: "「我想要創造影響力……」", result: "未錄取", icon: "💭", color: "border-destructive/30 bg-destructive/5" },
+                { type: "衝衝衝", quote: "「所以我馬上就做了……」", result: "未錄取", icon: "🏃", color: "border-destructive/30 bg-destructive/5" },
+                { type: "問題解決者", quote: "「首先，我找出了根本原因……」", result: "錄取", icon: "🧠", color: "border-green-500/30 bg-green-500/5" },
+              ].map((item) => (
+                <div key={item.type} className={`flex items-center gap-4 rounded-xl border p-4 ${item.color}`}>
+                  <span className="text-2xl shrink-0">{item.icon}</span>
+                  <div className="flex-1 min-w-0">
+                    <p className="text-foreground font-semibold text-sm">{item.type}</p>
+                    <p className="text-muted-foreground text-sm italic truncate">{item.quote}</p>
+                  </div>
+                  <span className={`shrink-0 text-xs font-bold uppercase px-3 py-1 rounded-full ${item.result === "錄取" ? "bg-green-500/20 text-green-600" : "bg-destructive/20 text-destructive"}`}>
+                    {item.result}
+                  </span>
+                </div>
+              ))}
+            </div>
 
             <p className="text-muted-foreground leading-relaxed mt-6 mb-6">以下是從書中翻譯到面試間的版本。</p>
 
