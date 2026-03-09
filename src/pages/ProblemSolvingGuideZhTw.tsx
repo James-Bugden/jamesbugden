@@ -307,15 +307,27 @@ const ProblemSolvingGuideZhTw = () => {
               <p className="text-muted-foreground text-sm mt-3">那個回答有診斷、根本原因、計畫、執行和帶數字的結果。那就是拿到錄取通知的回答。</p>
             </div>
 
-            <CodeBlock>{`  同一個問題，五種不同的回答：
-  「跟我說一個你解決困難問題的經驗。」
-
-  冷凍人：    「我想不到一個。」
-  抱怨者：    「沒有人給我資源來解決它。」
-  夢想家：    「我構想了一個更好的系統。」
-  衝衝衝：    「我更努力工作直到解決了。」
-  問題解決者：「我診斷了根本原因，制定了計畫，
-               執行它，然後衡量了結果。」`}</CodeBlock>
+            <div className="bg-card border border-border rounded-xl overflow-hidden">
+              <div className="bg-muted/50 px-5 py-3 border-b border-border">
+                <p className="text-foreground text-sm font-semibold">同一個問題，五種不同的回答</p>
+                <p className="text-muted-foreground text-xs italic">「跟我說一個你解決困難問題的經驗。」</p>
+              </div>
+              <div className="divide-y divide-border">
+                {[
+                  { type: "冷凍人", answer: "「我想不到一個。」", bad: true },
+                  { type: "抱怨者", answer: "「沒有人給我資源來解決它。」", bad: true },
+                  { type: "夢想家", answer: "「我構想了一個更好的系統。」", bad: true },
+                  { type: "衝衝衝", answer: "「我更努力工作直到解決了。」", bad: true },
+                  { type: "問題解決者", answer: "「我診斷了根本原因，制定了計畫，執行它，然後衡量了結果。」", bad: false },
+                ].map((item) => (
+                  <div key={item.type} className={`flex items-center gap-3 px-5 py-3 ${item.bad ? "" : "bg-green-500/5"}`}>
+                    {item.bad ? <XCircle className="w-4 h-4 text-destructive shrink-0" /> : <CheckCircle2 className="w-4 h-4 text-green-500 shrink-0" />}
+                    <span className="text-foreground text-sm font-medium w-24 shrink-0">{item.type}</span>
+                    <span className="text-muted-foreground text-sm italic">{item.answer}</span>
+                  </div>
+                ))}
+              </div>
+            </div>
 
             <div className="bg-card border border-gold/30 rounded-xl p-5 mt-6">
               <p className="text-muted-foreground text-sm leading-relaxed"><strong className="text-gold">以我的經驗來說：</strong>你大概是這些類型的混合。這是正常的。目標是在你給出的每一個回答中，讓自己更接近<strong className="text-foreground">第五型。</strong>這份指南的其餘部分會告訴你具體怎麼做。</p>
