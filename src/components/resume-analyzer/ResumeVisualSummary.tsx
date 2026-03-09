@@ -28,34 +28,40 @@ function matchRegion(sectionName: string) {
   return null; // e.g. "Formatting & ATS" — no spatial region
 }
 
+function getScoreColor(score: number) {
+  if (score <= 3) return "#dc2626";
+  if (score <= 5) return "#ea580c";
+  if (score <= 7) return "#d97706";
+  return "#16a34a";
+}
+
 function bandColor(score: number) {
-  if (score >= 8) return "bg-green-500/20 border-green-500/40";
-  if (score >= 5) return "bg-yellow-500/20 border-yellow-500/40";
-  return "bg-red-500/20 border-red-500/40";
+  const c = getScoreColor(score);
+  return { backgroundColor: `${c}20`, borderColor: `${c}40` };
 }
 
 function bandColorStrong(score: number) {
-  if (score >= 8) return "bg-green-500/35 border-green-500/60";
-  if (score >= 5) return "bg-yellow-500/35 border-yellow-500/60";
-  return "bg-red-500/35 border-red-500/60";
+  const c = getScoreColor(score);
+  return { backgroundColor: `${c}38`, borderColor: `${c}60` };
 }
 
 function badgeBg(score: number) {
-  if (score >= 8) return "bg-green-600";
-  if (score >= 5) return "bg-yellow-500";
-  return "bg-red-500";
+  return { backgroundColor: getScoreColor(score) };
 }
 
 function statusIcon(score: number) {
-  if (score >= 8) return <CheckCircle className="w-4 h-4 text-executive-green shrink-0" />;
-  if (score >= 5) return <AlertTriangle className="w-4 h-4 text-yellow-500 shrink-0" />;
-  return <XCircle className="w-4 h-4 text-destructive shrink-0" />;
+  const c = getScoreColor(score);
+  if (score >= 8) return <CheckCircle className="w-4 h-4 shrink-0" style={{ color: c }} />;
+  if (score >= 6) return <AlertTriangle className="w-4 h-4 shrink-0" style={{ color: c }} />;
+  return <XCircle className="w-4 h-4 shrink-0" style={{ color: c }} />;
 }
 
 function statusLabel(score: number, lang: Language) {
-  if (score >= 8) return <span className="text-xs font-semibold text-executive-green">{t(lang, "Strong", "良好")}</span>;
-  if (score >= 5) return <span className="text-xs font-semibold text-yellow-600">{t(lang, "Needs Work", "待改善")}</span>;
-  return <span className="text-xs font-semibold text-destructive">{t(lang, "Critical", "需修正")}</span>;
+  const c = getScoreColor(score);
+  if (score >= 8) return <span className="text-xs font-semibold" style={{ color: c }}>{t(lang, "Strong", "良好")}</span>;
+  if (score >= 6) return <span className="text-xs font-semibold" style={{ color: c }}>{t(lang, "Needs Work", "待改善")}</span>;
+  if (score >= 4) return <span className="text-xs font-semibold" style={{ color: c }}>{t(lang, "Poor", "較差")}</span>;
+  return <span className="text-xs font-semibold" style={{ color: c }}>{t(lang, "Critical", "需修正")}</span>;
 }
 
 export default function ResumeVisualSummary({
@@ -121,19 +127,19 @@ export default function ResumeVisualSummary({
                 return (
                   <div
                     key={idx}
-                    className={`absolute left-0 w-full border-y transition-all duration-200 cursor-pointer ${
-                      isHovered ? bandColorStrong(score) : bandColor(score)
-                    }`}
+                    className="absolute left-0 w-full border-y transition-all duration-200 cursor-pointer"
                     style={{
                       top: `${region.top}%`,
                       height: `${region.height}%`,
+                      ...(isHovered ? bandColorStrong(score) : bandColor(score)),
                     }}
                     onMouseEnter={() => setHoveredIdx(idx)}
                     onMouseLeave={() => setHoveredIdx(null)}
                   >
                     {/* Score badge */}
                     <div
-                      className={`absolute -left-1 top-1 w-5 h-5 rounded-full ${badgeBg(score)} text-white text-[10px] font-bold flex items-center justify-center shadow-md z-10`}
+                      className="absolute -left-1 top-1 w-5 h-5 rounded-full text-white text-[10px] font-bold flex items-center justify-center shadow-md z-10"
+                      style={badgeBg(score)}
                     >
                       {score}
                     </div>
@@ -157,7 +163,7 @@ export default function ResumeVisualSummary({
           </h3>
           <div className="space-y-3">
             {sections.map((section, i) => {
-              const barColor = section.score >= 8 ? "bg-executive-green" : section.score >= 5 ? "bg-yellow-500" : "bg-destructive";
+              const sectionBarColor = getScoreColor(section.score);
               const isHovered = hoveredIdx === i;
               return (
                 <div
@@ -180,8 +186,8 @@ export default function ResumeVisualSummary({
                   </div>
                   <div className="w-full h-1.5 bg-muted rounded-full overflow-hidden">
                     <div
-                      className={`h-full rounded-full ${barColor} transition-all duration-700`}
-                      style={{ width: `${section.score * 10}%` }}
+                      className="h-full rounded-full transition-all duration-700"
+                      style={{ width: `${section.score * 10}%`, backgroundColor: sectionBarColor }}
                     />
                   </div>
                 </div>
