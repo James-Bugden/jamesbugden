@@ -427,17 +427,42 @@ const ProblemSolvingGuideZhTw = () => {
 
             <p className="text-muted-foreground leading-relaxed mb-6"><strong className="text-foreground">分解樹</strong>是一個視覺工具，幫助你把大問題拆成小塊。你從左邊一個問題開始，往右邊分出分支，從寬泛到具體。</p>
 
-            <CodeBlock>{`  分解樹：胡椒罐
-  ================
-
-  如何讓一次搖        ┌─── 增加頂面的面積
-  出更多胡椒？  ─────┤
-                      ├─── 增加表面積搖出    ┌── 每個面積更多孔
-                      │    的胡椒量      ─────┤
-                      │                       └── 更大的孔
-                      │
-                      └─── 讓胡椒更容易   ─────── 更小的胡椒粒
-                           出來`}</CodeBlock>
+            <div className="bg-card border border-border rounded-xl p-5 md:p-6 overflow-x-auto">
+              <p className="text-xs font-bold text-gold uppercase tracking-wider mb-4">分解樹：胡椒罐</p>
+              <div className="flex items-stretch gap-0 min-w-[500px]">
+                <div className="flex items-center shrink-0">
+                  <div className="bg-executive-green text-cream text-xs font-semibold px-4 py-3 rounded-lg text-center leading-snug">
+                    如何讓一次搖<br />出更多胡椒？
+                  </div>
+                  <div className="w-6 h-px bg-gold/40" />
+                </div>
+                <div className="flex flex-col justify-center gap-2">
+                  <div className="flex items-center gap-0">
+                    <div className="w-4 border-t border-l border-gold/30 h-6 rounded-tl-lg" />
+                    <div className="bg-muted border border-border rounded-lg px-3 py-2 text-xs text-foreground font-medium">增加頂面的面積</div>
+                  </div>
+                  <div className="flex items-center gap-0">
+                    <div className="w-4 border-t border-gold/30" />
+                    <div className="flex items-center gap-0">
+                      <div className="bg-muted border border-border rounded-lg px-3 py-2 text-xs text-foreground font-medium">增加表面積搖出的胡椒量</div>
+                      <div className="w-4 h-px bg-gold/30" />
+                      <div className="flex flex-col gap-1">
+                        <div className="bg-gold/10 border border-gold/20 rounded px-2 py-1 text-xs text-foreground">每個面積更多孔</div>
+                        <div className="bg-gold/10 border border-gold/20 rounded px-2 py-1 text-xs text-foreground">更大的孔</div>
+                      </div>
+                    </div>
+                  </div>
+                  <div className="flex items-center gap-0">
+                    <div className="w-4 border-t border-b border-l border-gold/30 h-6 rounded-bl-lg" />
+                    <div className="flex items-center gap-0">
+                      <div className="bg-muted border border-border rounded-lg px-3 py-2 text-xs text-foreground font-medium">讓胡椒更容易出來</div>
+                      <div className="w-4 h-px bg-gold/30" />
+                      <div className="bg-gold/10 border border-gold/20 rounded px-2 py-1 text-xs text-foreground">更小的胡椒粒</div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
 
             <p className="text-muted-foreground leading-relaxed mt-6 mb-6">一個問題產生四個不同的解決方案。「搖更大力」根本不在清單上。這就是分解樹的力量。</p>
 
