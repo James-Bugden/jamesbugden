@@ -1,6 +1,8 @@
 import { useState, useEffect, useRef, useCallback, useMemo, memo, MouseEvent } from "react";
 import { useAuth } from "@/contexts/AuthContext";
 import { Navigate, Link } from "react-router-dom";
+import { Linkedin } from "lucide-react";
+import { InstagramIcon, ThreadsIcon } from "@/components/SocialIcons";
 import LanguageToggle from "@/components/LanguageToggle";
 import { ArrowRight, FileText, DollarSign, PenTool, ClipboardList, Search, X, Sparkles, Check } from "lucide-react";
 import PageSEO from "@/components/PageSEO";
