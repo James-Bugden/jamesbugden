@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { ChevronDown, CheckCircle, AlertTriangle, XCircle, ExternalLink, ArrowRight, RotateCcw, Download, Lock, ArrowDown, Mail } from "lucide-react";
+import { ChevronDown, CheckCircle, AlertTriangle, XCircle, ExternalLink, ArrowRight, RotateCcw, Download, Lock, ArrowDown, Mail, Briefcase, GraduationCap, Building2, Target, Clock } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
 import type { AnalysisResult } from "./types";
@@ -25,7 +25,6 @@ function useAnimatedCounter(target: number, duration = 1200) {
     const tick = (now: number) => {
       const elapsed = now - startTime;
       const progress = Math.min(elapsed / duration, 1);
-      // ease-out
       const eased = 1 - Math.pow(1 - progress, 3);
       setValue(Math.round(eased * target));
       if (progress < 1) requestAnimationFrame(tick);
@@ -42,7 +41,7 @@ function ScoreHero({ score, lang }: { score: number; lang: Language }) {
   const radius = (size - 14) / 2;
   const circumference = 2 * Math.PI * radius;
   const offset = circumference - (animatedScore / 100) * circumference;
-  const color = score >= 90 ? "hsl(142 60% 35%)" : score >= 75 ? "hsl(142 50% 45%)" : score >= 65 ? "hsl(45 80% 50%)" : score >= 50 ? "hsl(30 80% 50%)" : "hsl(0 70% 50%)";
+  const color = score >= 90 ? "#2b4734" : score >= 75 ? "#2b4734" : score >= 65 ? "#D4930D" : score >= 50 ? "#c4700a" : "#b91c1c";
   const grade = score >= 90 ? "A+" : score >= 80 ? "A" : score >= 70 ? "B" : score >= 60 ? "C" : score >= 50 ? "D" : "F";
 
   const verdictText = (s: number) => {
@@ -62,7 +61,7 @@ function ScoreHero({ score, lang }: { score: number; lang: Language }) {
     >
       <div className="relative inline-flex items-center justify-center">
         <svg width={size} height={size} className="-rotate-90">
-          <circle cx={size / 2} cy={size / 2} r={radius} fill="none" stroke="hsl(var(--border))" strokeWidth="10" />
+          <circle cx={size / 2} cy={size / 2} r={radius} fill="none" stroke="rgba(43,71,52,0.1)" strokeWidth="10" />
           <circle
             cx={size / 2} cy={size / 2} r={radius} fill="none"
             stroke={color} strokeWidth="10" strokeLinecap="round"
@@ -76,65 +75,144 @@ function ScoreHero({ score, lang }: { score: number; lang: Language }) {
       </div>
 
       <div className="flex items-baseline gap-1">
-        <span className="font-heading text-3xl font-bold text-foreground">{animatedScore}</span>
-        <span className="text-base text-muted-foreground font-medium">/100</span>
+        <span className="font-heading text-3xl font-bold" style={{ color: '#1A1A1A' }}>{animatedScore}</span>
+        <span className="text-base font-medium" style={{ color: '#6B6B6B' }}>/100</span>
       </div>
 
-      <p className="text-sm text-muted-foreground">{t(lang, "Overall Resume Score", "整體履歷分數")}</p>
+      <p className="text-sm" style={{ color: '#6B6B6B' }}>{t(lang, "Overall Resume Score", "整體履歷分數")}</p>
 
-      <p className="text-base text-foreground mt-2 max-w-lg mx-auto text-center leading-relaxed">
+      <p className="text-base mt-2 max-w-lg mx-auto text-center leading-relaxed" style={{ color: '#1A1A1A' }}>
         {verdictText(score)}
       </p>
     </motion.div>
   );
 }
 
+/* ──────────────────── Findings Summary Bar ──────────────────── */
+function FindingsSummary({ sections, lang }: { sections: AnalysisResult["sections"]; lang: Language }) {
+  let strengths = 0, warnings = 0, criticals = 0;
+  sections.forEach(s => s.findings.forEach(f => {
+    if (f.type === "strength") strengths++;
+    else if (f.type === "warning") warnings++;
+    else criticals++;
+  }));
+  const total = strengths + warnings + criticals;
+  if (total === 0) return null;
+
+  return (
+    <div className="rounded-xl p-5" style={{ backgroundColor: '#FFFFFF', border: '1px solid rgba(43,71,52,0.1)', boxShadow: '0 2px 8px rgba(0,0,0,0.04)' }}>
+      <h3 className="font-heading text-base font-semibold mb-3" style={{ color: '#1A1A1A' }}>
+        {t(lang, "Findings Overview", "分析總覽")}
+      </h3>
+      <div className="flex gap-4 mb-3">
+        <div className="flex items-center gap-2">
+          <CheckCircle className="w-4 h-4" style={{ color: '#2b4734' }} />
+          <span className="text-sm font-medium" style={{ color: '#2b4734' }}>{strengths} {t(lang, "strengths", "優勢")}</span>
+        </div>
+        <div className="flex items-center gap-2">
+          <AlertTriangle className="w-4 h-4 text-yellow-500" />
+          <span className="text-sm font-medium text-yellow-600">{warnings} {t(lang, "warnings", "警告")}</span>
+        </div>
+        <div className="flex items-center gap-2">
+          <XCircle className="w-4 h-4 text-destructive" />
+          <span className="text-sm font-medium text-destructive">{criticals} {t(lang, "critical", "需修正")}</span>
+        </div>
+      </div>
+      {/* Stacked bar */}
+      <div className="w-full h-2.5 rounded-full overflow-hidden flex" style={{ backgroundColor: 'rgba(43,71,52,0.08)' }}>
+        {strengths > 0 && <div className="h-full" style={{ width: `${(strengths / total) * 100}%`, backgroundColor: '#2b4734' }} />}
+        {warnings > 0 && <div className="h-full bg-yellow-500" style={{ width: `${(warnings / total) * 100}%` }} />}
+        {criticals > 0 && <div className="h-full bg-destructive" style={{ width: `${(criticals / total) * 100}%` }} />}
+      </div>
+    </div>
+  );
+}
+
+/* ──────────────────── Segmentation Profile ──────────────────── */
+function SegmentationProfile({ segmentation, lang }: { segmentation: AnalysisResult["segmentation"]; lang: Language }) {
+  if (!segmentation) return null;
+
+  const items = [
+    { icon: Clock, label: t(lang, "Experience", "經驗"), value: segmentation.years_experience },
+    { icon: Briefcase, label: t(lang, "Seniority", "資歷"), value: segmentation.seniority_level },
+    { icon: Building2, label: t(lang, "Industry", "產業"), value: segmentation.industry },
+    { icon: GraduationCap, label: t(lang, "Company Type", "公司類型"), value: segmentation.current_company_type },
+    { icon: Target, label: t(lang, "Readiness", "準備度"), value: segmentation.target_readiness },
+  ].filter(item => item.value);
+
+  if (items.length === 0) return null;
+
+  return (
+    <div className="rounded-xl p-5" style={{ backgroundColor: '#FFFFFF', border: '1px solid rgba(43,71,52,0.1)', boxShadow: '0 2px 8px rgba(0,0,0,0.04)' }}>
+      <h3 className="font-heading text-base font-semibold mb-4" style={{ color: '#1A1A1A' }}>
+        {t(lang, "Your Profile", "你的背景")}
+      </h3>
+      <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
+        {items.map((item, i) => (
+          <div key={i} className="flex items-start gap-2.5 p-3 rounded-lg" style={{ backgroundColor: '#FDFBF7' }}>
+            <item.icon className="w-4 h-4 mt-0.5 shrink-0" style={{ color: '#D4930D' }} />
+            <div>
+              <p className="text-[11px] font-medium uppercase tracking-wider" style={{ color: '#6B6B6B' }}>{item.label}</p>
+              <p className="text-sm font-semibold" style={{ color: '#1A1A1A' }}>{item.value}</p>
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}
+
 /* ──────────────────── Section Card ──────────────────── */
 function SectionCard({ section, lang, defaultOpen, locked }: { section: AnalysisResult["sections"][0]; lang: Language; defaultOpen?: boolean; locked?: boolean }) {
   const [open, setOpen] = useState(locked ? false : (defaultOpen || false));
-  const scoreColor = section.score >= 8 ? "border-l-executive-green" : section.score >= 6 ? "border-l-gold" : section.score >= 4 ? "border-l-yellow-500" : "border-l-destructive";
-  const bgTint = section.score >= 8 ? "" : section.score >= 6 ? "" : section.score < 4 ? "bg-destructive/[0.02]" : "";
-  const barColor = section.score >= 7 ? "bg-executive-green" : section.score >= 5 ? "bg-yellow-500" : "bg-destructive";
-  const barWidth = `${section.score * 10}%`;
-  const headerColor = section.score >= 7 ? "text-executive-green" : section.score >= 5 ? "text-yellow-600" : "text-destructive";
+  const scoreColor = section.score >= 8 ? "#2b4734" : section.score >= 6 ? "#D4930D" : section.score >= 4 ? "#c4700a" : "#b91c1c";
+  const barColor = section.score >= 7 ? "#2b4734" : section.score >= 5 ? "#eab308" : "#b91c1c";
 
   return (
-    <div className={`bg-card border border-border border-l-4 ${scoreColor} rounded-xl overflow-hidden ${bgTint}`}>
-      <button onClick={() => !locked && setOpen(!open)} className={`w-full flex items-center gap-4 p-5 text-left transition-colors ${locked ? "cursor-default" : "hover:bg-muted/30"}`}>
+    <div
+      className="rounded-xl overflow-hidden"
+      style={{
+        backgroundColor: '#FFFFFF',
+        border: '1px solid rgba(43,71,52,0.1)',
+        borderLeft: `4px solid ${scoreColor}`,
+        boxShadow: '0 2px 8px rgba(0,0,0,0.04)',
+      }}
+    >
+      <button onClick={() => !locked && setOpen(!open)} className={`w-full flex items-center gap-4 p-5 text-left transition-colors ${locked ? "cursor-default" : "hover:bg-[#FDFBF7]"}`}>
         <div className="flex-1 min-w-0">
           <div className="flex items-center gap-3 mb-1">
-            <h3 className={`font-semibold text-sm ${headerColor}`}>{section.name}</h3>
-            <span className={`text-xs font-bold ${headerColor}`}>{section.score}/10</span>
+            <h3 className="font-semibold text-sm" style={{ color: scoreColor }}>{section.name}</h3>
+            <span className="text-xs font-bold" style={{ color: scoreColor }}>{section.score}/10</span>
           </div>
-          <div className="w-full h-1.5 bg-muted rounded-full overflow-hidden">
-            <div className={`h-full rounded-full ${barColor} transition-all duration-500`} style={{ width: barWidth }} />
+          <div className="w-full h-1.5 rounded-full overflow-hidden" style={{ backgroundColor: 'rgba(43,71,52,0.08)' }}>
+            <div className="h-full rounded-full transition-all duration-500" style={{ width: `${section.score * 10}%`, backgroundColor: barColor }} />
           </div>
-          <p className="text-xs text-muted-foreground mt-1.5 line-clamp-1">{section.summary}</p>
+          <p className="text-xs mt-1.5 line-clamp-1" style={{ color: '#6B6B6B' }}>{section.summary}</p>
         </div>
         {locked ? (
-          <Lock className="w-4 h-4 text-muted-foreground/50 shrink-0" />
+          <Lock className="w-4 h-4 shrink-0" style={{ color: 'rgba(107,107,107,0.5)' }} />
         ) : (
-          <ChevronDown className={`w-4 h-4 text-muted-foreground shrink-0 transition-transform ${open ? "rotate-180" : ""}`} />
+          <ChevronDown className={`w-4 h-4 shrink-0 transition-transform ${open ? "rotate-180" : ""}`} style={{ color: '#6B6B6B' }} />
         )}
       </button>
 
       {open && (
-        <div className="px-5 pb-5 space-y-3 border-t border-border pt-4">
+        <div className="px-5 pb-5 space-y-3 pt-4" style={{ borderTop: '1px solid rgba(43,71,52,0.08)' }}>
           {section.findings.map((f, i) => (
             <div key={i} className="flex gap-2.5">
               {f.type === "strength" ? (
-                <CheckCircle className="w-4 h-4 text-executive-green shrink-0 mt-0.5" />
+                <CheckCircle className="w-4 h-4 shrink-0 mt-0.5" style={{ color: '#2b4734' }} />
               ) : f.type === "critical" ? (
                 <XCircle className="w-4 h-4 text-destructive shrink-0 mt-0.5" />
               ) : (
                 <AlertTriangle className="w-4 h-4 text-yellow-500 shrink-0 mt-0.5" />
               )}
               <div className="text-sm">
-                <p className="text-foreground">
-                  <strong className="text-foreground">{f.principle}:</strong> {f.text}
+                <p style={{ color: '#1A1A1A' }}>
+                  <strong>{f.principle}:</strong> {f.text}
                 </p>
                 {f.evidence && (
-                  <p className="text-xs text-muted-foreground mt-1 italic">"{f.evidence}"</p>
+                  <p className="text-xs mt-1 italic" style={{ color: '#6B6B6B' }}>"{f.evidence}"</p>
                 )}
               </div>
             </div>
@@ -148,15 +226,15 @@ function SectionCard({ section, lang, defaultOpen, locked }: { section: Analysis
 /* ──────────────────── Locked Overlay ──────────────────── */
 function LockedOverlay({ lang, currentPath }: { lang: Language; currentPath: string }) {
   return (
-    <div className="absolute inset-0 z-10 flex flex-col items-center justify-start pt-16 bg-background/60 backdrop-blur-[6px] rounded-xl">
-      <div className="bg-card border border-border rounded-2xl shadow-xl p-8 max-w-sm text-center">
-        <div className="w-12 h-12 rounded-full bg-gold/10 flex items-center justify-center mx-auto mb-4">
-          <Lock className="w-6 h-6 text-gold" />
+    <div className="absolute inset-0 z-10 flex flex-col items-center justify-start pt-16 rounded-xl" style={{ backgroundColor: 'rgba(253,251,247,0.6)', backdropFilter: 'blur(6px)' }}>
+      <div className="rounded-2xl shadow-xl p-8 max-w-sm text-center" style={{ backgroundColor: '#FFFFFF', border: '1px solid rgba(43,71,52,0.1)' }}>
+        <div className="w-12 h-12 rounded-full flex items-center justify-center mx-auto mb-4" style={{ backgroundColor: 'rgba(212,147,13,0.1)' }}>
+          <Lock className="w-6 h-6" style={{ color: '#D4930D' }} />
         </div>
-        <h3 className="font-heading text-lg font-bold text-foreground mb-2">
+        <h3 className="font-heading text-lg font-bold mb-2" style={{ color: '#1A1A1A' }}>
           {t(lang, "Create a Free Account", "建立免費帳號")}
         </h3>
-        <p className="text-sm text-muted-foreground mb-5">
+        <p className="text-sm mb-5" style={{ color: '#6B6B6B' }}>
           {t(lang,
             "Sign up to unlock your full report — detailed findings, bullet rewrites, and top priorities.",
             "註冊即可解鎖完整報告 — 詳細分析、履歷描述改寫和優先改善建議。"
@@ -165,14 +243,15 @@ function LockedOverlay({ lang, currentPath }: { lang: Language; currentPath: str
         <Link
           to="/signup"
           state={{ from: currentPath }}
-          className="inline-flex items-center gap-2 px-6 py-3 rounded-lg bg-gold text-[#1B3A2F] text-sm font-bold hover:bg-gold/90 transition-colors"
+          className="inline-flex items-center gap-2 px-6 py-3 rounded-lg text-sm font-bold transition-colors text-white"
+          style={{ backgroundColor: '#D4930D' }}
         >
           {t(lang, "Sign Up Free", "免費註冊")}
           <ArrowRight className="w-4 h-4" />
         </Link>
-        <p className="text-xs text-muted-foreground mt-3">
+        <p className="text-xs mt-3" style={{ color: '#6B6B6B' }}>
           {t(lang, "Already have an account?", "已有帳號？")}{" "}
-          <Link to="/login" state={{ from: currentPath }} className="text-gold hover:underline font-medium">
+          <Link to="/login" state={{ from: currentPath }} className="font-medium hover:underline" style={{ color: '#D4930D' }}>
             {t(lang, "Sign in", "登入")}
           </Link>
         </p>
@@ -197,7 +276,7 @@ function ShareSection({ lang }: { lang: Language }) {
   };
 
   return (
-    <div className="bg-[#1B3A2F] rounded-2xl p-8 text-center">
+    <div className="rounded-2xl p-8 text-center" style={{ backgroundColor: '#2b4734' }}>
       <h2 className="font-heading text-xl text-white mb-2">
         {t(lang, "Know someone who needs resume help?", "認識需要履歷幫助的人？")}
       </h2>
@@ -226,6 +305,59 @@ function ShareSection({ lang }: { lang: Language }) {
   );
 }
 
+/* ──────────────────── Actionable Next Steps ──────────────────── */
+function ActionableNextSteps({ priorities, lang }: { priorities: AnalysisResult["top_priorities"]; lang: Language }) {
+  const guideLinks = [
+    { key: "resume", label: t(lang, "Resume Writing Guide", "履歷撰寫指南"), en: "/resume-guide", zh: "/zh-tw/resume-guide" },
+    { key: "interview", label: t(lang, "Interview Prep Guide", "面試準備指南"), en: "/interview-preparation-guide", zh: "/zh-tw/interview-preparation-guide" },
+    { key: "linkedin", label: t(lang, "LinkedIn Branding Guide", "LinkedIn 個人品牌指南"), en: "/linkedin-personal-branding-guide", zh: "/zh-tw/linkedin-personal-branding-guide" },
+  ];
+
+  return (
+    <div className="rounded-xl p-6" style={{ backgroundColor: '#FFFFFF', border: '1px solid rgba(43,71,52,0.1)', boxShadow: '0 2px 8px rgba(0,0,0,0.04)' }}>
+      <h2 className="font-heading text-xl font-semibold mb-1" style={{ color: '#1A1A1A' }}>
+        {t(lang, "Your Action Plan", "你的行動計劃")}
+      </h2>
+      <p className="text-sm mb-5" style={{ color: '#6B6B6B' }}>
+        {t(lang, "Follow these steps in order for maximum impact", "按照順序執行這些步驟，效果最大化")}
+      </p>
+      <div className="space-y-3">
+        {priorities.map((p, i) => (
+          <div key={p.priority} className="flex gap-3 items-start">
+            <div className="w-7 h-7 rounded-full flex items-center justify-center shrink-0 text-white text-xs font-bold" style={{ backgroundColor: '#2b4734' }}>
+              {i + 1}
+            </div>
+            <div>
+              <p className="text-sm font-semibold" style={{ color: '#1A1A1A' }}>{p.title}</p>
+              <p className="text-sm mt-0.5" style={{ color: '#6B6B6B' }}>{p.description}</p>
+            </div>
+          </div>
+        ))}
+      </div>
+
+      {/* Related Guides */}
+      <div className="mt-6 pt-5" style={{ borderTop: '1px solid rgba(43,71,52,0.08)' }}>
+        <p className="text-xs font-semibold uppercase tracking-wider mb-3" style={{ color: '#6B6B6B' }}>
+          {t(lang, "Recommended Guides", "推薦指南")}
+        </p>
+        <div className="flex flex-wrap gap-2">
+          {guideLinks.map(g => (
+            <a
+              key={g.key}
+              href={lang === "zh-TW" ? g.zh : g.en}
+              className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium transition-colors"
+              style={{ backgroundColor: 'rgba(43,71,52,0.05)', color: '#2b4734', border: '1px solid rgba(43,71,52,0.1)' }}
+            >
+              {g.label}
+              <ArrowRight className="w-3 h-3" />
+            </a>
+          ))}
+        </div>
+      </div>
+    </div>
+  );
+}
+
 /* ──────────────────── Main Results Component ──────────────────── */
 
 export default function ResumeResults({
@@ -245,7 +377,7 @@ export default function ResumeResults({
   const needsWork = analysis.sections.filter(s => s.score < 7).length;
 
   return (
-    <div className="py-12 md:py-20 px-5" id="analysis-results-container">
+    <div className="py-12 md:py-20 px-5" id="analysis-results-container" style={{ backgroundColor: '#FDFBF7' }}>
       <div className="container mx-auto max-w-3xl space-y-10">
 
         {/* Action bar */}
@@ -256,6 +388,7 @@ export default function ResumeResults({
               size="sm"
               onClick={onReset}
               className="gap-2"
+              style={{ borderColor: 'rgba(43,71,52,0.2)', color: '#2b4734' }}
             >
               <RotateCcw className="w-4 h-4" />
               {t(lang, "Scan Another Resume", "掃描另一份履歷")}
@@ -264,7 +397,8 @@ export default function ResumeResults({
           {isUnlocked && (
             <button
               onClick={() => window.print()}
-              className="inline-flex items-center gap-2 text-sm font-medium text-muted-foreground hover:text-foreground transition-colors ml-auto"
+              className="inline-flex items-center gap-2 text-sm font-medium transition-colors ml-auto hover:opacity-70"
+              style={{ color: '#6B6B6B' }}
             >
               <Download className="w-4 h-4" />
               {t(lang, "Download PDF", "下載 PDF")}
@@ -276,6 +410,12 @@ export default function ResumeResults({
         <div className="text-center">
           <ScoreHero score={analysis.overall_score} lang={lang} />
         </div>
+
+        {/* Segmentation Profile — always visible */}
+        <SegmentationProfile segmentation={analysis.segmentation} lang={lang} />
+
+        {/* Findings Summary — always visible */}
+        <FindingsSummary sections={analysis.sections} lang={lang} />
 
         {/* Locked sections wrapper — everything after score */}
         <div className="relative">
@@ -292,7 +432,7 @@ export default function ResumeResults({
             {/* Section Breakdown */}
             <div>
               <div className="flex items-center justify-between mb-4">
-                <h2 className="font-heading text-2xl text-foreground">
+                <h2 className="font-heading text-2xl" style={{ color: '#1A1A1A' }}>
                   {t(lang, "Section-by-Section Breakdown", "逐項分析")}
                 </h2>
                 {needsWork > 0 && (
@@ -303,63 +443,72 @@ export default function ResumeResults({
               </div>
               <div className="space-y-3">
                 {analysis.sections.map((section, i) => (
-                  <SectionCard key={i} section={section} lang={lang} defaultOpen={isUnlocked && (i === 0 || section.score < 6)} locked={!isUnlocked} />
+                  <SectionCard
+                    key={i}
+                    section={section}
+                    lang={lang}
+                    defaultOpen={isUnlocked ? true : (i === 0 || section.score < 6)}
+                    locked={!isUnlocked}
+                  />
                 ))}
               </div>
             </div>
 
             {/* Bullet Rewrite */}
-            <div className="bg-card border-2 border-gold/30 rounded-xl p-6">
-              <h2 className="font-heading text-xl text-foreground mb-4">
+            <div className="rounded-xl p-6" style={{ backgroundColor: '#FFFFFF', border: '2px solid rgba(212,147,13,0.3)', boxShadow: '0 2px 8px rgba(0,0,0,0.04)' }}>
+              <h2 className="font-heading text-xl mb-4" style={{ color: '#1A1A1A' }}>
                 {t(lang, "Example: How to Transform Your Resume Bullets", "範例：如何改造你的履歷描述")}
               </h2>
               <div className="space-y-2">
                 <div>
                   <p className="text-xs font-semibold text-destructive uppercase mb-1">{t(lang, "Before", "修改前")}</p>
-                  <p className="text-sm text-muted-foreground bg-muted rounded-lg p-3 italic">"{analysis.bullet_rewrite.original}"</p>
+                  <p className="text-sm rounded-lg p-3 italic" style={{ backgroundColor: '#FDFBF7', color: '#6B6B6B' }}>"{analysis.bullet_rewrite.original}"</p>
                 </div>
-                {/* Visual arrow */}
                 <div className="flex justify-center py-1">
-                  <div className="flex flex-col items-center text-gold">
+                  <div className="flex flex-col items-center" style={{ color: '#D4930D' }}>
                     <ArrowDown className="w-5 h-5" />
                   </div>
                 </div>
                 <div>
-                  <p className="text-xs font-semibold text-executive-green uppercase mb-1">{t(lang, "After", "修改後")}</p>
-                  <p className="text-sm text-foreground bg-executive-green/10 rounded-lg p-3 font-medium">"{analysis.bullet_rewrite.improved}"</p>
+                  <p className="text-xs font-semibold uppercase mb-1" style={{ color: '#2b4734' }}>{t(lang, "After", "修改後")}</p>
+                  <p className="text-sm rounded-lg p-3 font-medium" style={{ backgroundColor: 'rgba(43,71,52,0.05)', color: '#1A1A1A' }}>"{analysis.bullet_rewrite.improved}"</p>
                 </div>
                 <div className="pt-2">
-                  <p className="text-xs font-semibold text-muted-foreground uppercase mb-2">{t(lang, "What changed", "改了什麼")}</p>
+                  <p className="text-xs font-semibold uppercase mb-2" style={{ color: '#6B6B6B' }}>{t(lang, "What changed", "改了什麼")}</p>
                   <ul className="space-y-1">
                     {analysis.bullet_rewrite.changes.map((c, i) => (
-                      <li key={i} className="text-xs text-muted-foreground flex gap-2">
-                        <span className="text-gold">•</span> {c}
+                      <li key={i} className="text-xs flex gap-2" style={{ color: '#6B6B6B' }}>
+                        <span style={{ color: '#D4930D' }}>•</span> {c}
                       </li>
                     ))}
                   </ul>
                 </div>
               </div>
-              <p className="text-xs text-muted-foreground mt-4 italic">
+              <p className="text-xs mt-4 italic" style={{ color: '#6B6B6B' }}>
                 {t(lang, "This is just one example. A full resume review transforms every bullet this way.", "這只是一個範例。完整的履歷審查會將每一條描述都這樣改善。")}
               </p>
             </div>
 
             {/* Top 3 Priorities */}
             <div>
-              <h2 className="font-heading text-2xl text-foreground mb-1">
+              <h2 className="font-heading text-2xl mb-1" style={{ color: '#1A1A1A' }}>
                 {t(lang, "Your Top 3 Priorities", "你的前 3 項優先改善")}
               </h2>
-              <p className="text-sm text-muted-foreground mb-4">
+              <p className="text-sm mb-4" style={{ color: '#6B6B6B' }}>
                 {t(lang, "Fix these first for maximum impact", "先修正這些以獲得最大效果")}
               </p>
               <div className="space-y-3">
                 {analysis.top_priorities.map((p) => (
-                  <div key={p.priority} className="bg-card border border-border rounded-xl p-5 border-l-4 border-l-destructive">
+                  <div
+                    key={p.priority}
+                    className="rounded-xl p-5"
+                    style={{ backgroundColor: '#FFFFFF', border: '1px solid rgba(43,71,52,0.1)', borderLeft: '4px solid #b91c1c', boxShadow: '0 2px 8px rgba(0,0,0,0.04)' }}
+                  >
                     <div className="flex items-start gap-3">
                       <span className="text-lg">🔴</span>
                       <div>
-                        <p className="font-semibold text-foreground text-sm mb-1">{p.principle}: {p.title}</p>
-                        <p className="text-sm text-muted-foreground">{p.description}</p>
+                        <p className="font-semibold text-sm mb-1" style={{ color: '#1A1A1A' }}>{p.principle}: {p.title}</p>
+                        <p className="text-sm" style={{ color: '#6B6B6B' }}>{p.description}</p>
                       </div>
                     </div>
                   </div>
@@ -367,8 +516,11 @@ export default function ResumeResults({
               </div>
             </div>
 
+            {/* Actionable Next Steps */}
+            <ActionableNextSteps priorities={analysis.top_priorities} lang={lang} />
+
             {/* Coaching CTA */}
-            <div className="border-2 border-gold/40 rounded-2xl p-6 md:p-8 text-center" style={{ background: 'radial-gradient(ellipse at center, hsl(153 38% 17%) 0%, hsl(153 42% 13%) 100%)' }}>
+            <div className="rounded-2xl p-6 md:p-8 text-center" style={{ background: 'radial-gradient(ellipse at center, #2b4734 0%, #1f3a28 100%)', border: '2px solid rgba(212,147,13,0.4)' }}>
               <h2 className="font-heading text-xl md:text-2xl text-cream mb-2">
                 {t(lang, "Want a Recruiter to Fix All of This For You?", "想讓招募官幫你全部改好？")}
               </h2>
@@ -383,7 +535,8 @@ export default function ResumeResults({
               </p>
               <a
                 href={lang === "zh-TW" ? "/zh-tw#coaching" : "/#coaching"}
-                className="inline-flex items-center gap-2 px-6 py-3 rounded-lg bg-gold text-[#1B3A2F] text-sm font-bold hover:bg-gold/90 transition-colors"
+                className="inline-flex items-center gap-2 px-6 py-3 rounded-lg text-sm font-bold transition-colors"
+                style={{ backgroundColor: '#D4930D', color: '#1A1A1A' }}
               >
                 {t(lang, "See If You're a Fit", "查看是否適合你")}
                 <ArrowRight className="w-4 h-4" />
@@ -394,11 +547,11 @@ export default function ResumeResults({
         </div>{/* end relative wrapper */}
 
         {/* Free Templates */}
-        <div className="bg-card border border-border rounded-xl p-6">
-          <h2 className="font-heading text-xl text-foreground mb-2">
+        <div className="rounded-xl p-6" style={{ backgroundColor: '#FFFFFF', border: '1px solid rgba(43,71,52,0.1)', boxShadow: '0 2px 8px rgba(0,0,0,0.04)' }}>
+          <h2 className="font-heading text-xl mb-2" style={{ color: '#1A1A1A' }}>
             {t(lang, "Download Free Resume Templates", "下載免費履歷模板")}
           </h2>
-          <p className="text-sm text-muted-foreground mb-5">
+          <p className="text-sm mb-5" style={{ color: '#6B6B6B' }}>
             {t(lang, "Battle-tested formats that pass ATS screening at top companies.", "經過實戰驗證，能通過頂尖企業 ATS 篩選的格式。")}
           </p>
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
@@ -407,31 +560,42 @@ export default function ResumeResults({
               { label: t(lang, "Chinese Resume Template", "中文履歷模板"), url: "https://docs.google.com/document/d/1U14BS5yISb17ejgVIX5IyeaVZKiww33hpJNOnEy4Wy0/edit?usp=sharing" },
             ].map((tmpl) => (
               <a key={tmpl.label} href={tmpl.url} target="_blank" rel="noopener noreferrer"
-                className="flex items-center justify-between p-4 rounded-lg border border-border hover:border-gold/50 hover:bg-gold/5 transition-all"
+                className="flex items-center justify-between p-4 rounded-lg transition-all"
+                style={{ border: '1px solid rgba(43,71,52,0.1)' }}
+                onMouseEnter={(e) => { e.currentTarget.style.borderColor = 'rgba(212,147,13,0.5)'; e.currentTarget.style.backgroundColor = 'rgba(212,147,13,0.03)'; }}
+                onMouseLeave={(e) => { e.currentTarget.style.borderColor = 'rgba(43,71,52,0.1)'; e.currentTarget.style.backgroundColor = 'transparent'; }}
               >
                 <div>
-                  <p className="text-sm font-semibold text-foreground">{tmpl.label}</p>
-                  <p className="text-xs text-muted-foreground">{t(lang, "Google Docs — make a copy to edit", "Google Docs — 建立副本後即可編輯")}</p>
+                  <p className="text-sm font-semibold" style={{ color: '#1A1A1A' }}>{tmpl.label}</p>
+                  <p className="text-xs" style={{ color: '#6B6B6B' }}>{t(lang, "Google Docs — make a copy to edit", "Google Docs — 建立副本後即可編輯")}</p>
                 </div>
-                <ExternalLink className="w-4 h-4 text-gold shrink-0" />
+                <ExternalLink className="w-4 h-4 shrink-0" style={{ color: '#D4930D' }} />
               </a>
             ))}
           </div>
         </div>
 
         {/* Next Steps */}
-        <div className="bg-card border border-border rounded-xl p-6 text-center">
-          <h2 className="font-heading text-xl text-foreground mb-2">
+        <div className="rounded-xl p-6 text-center" style={{ backgroundColor: '#FFFFFF', border: '1px solid rgba(43,71,52,0.1)', boxShadow: '0 2px 8px rgba(0,0,0,0.04)' }}>
+          <h2 className="font-heading text-xl mb-2" style={{ color: '#1A1A1A' }}>
             {t(lang, "Keep improving", "繼續提升")}
           </h2>
-          <p className="text-sm text-muted-foreground mb-5">
+          <p className="text-sm mb-5" style={{ color: '#6B6B6B' }}>
             {t(lang, "Resources to strengthen your job search", "幫助你加強求職的資源")}
           </p>
           <div className="flex flex-col sm:flex-row gap-3 justify-center">
-            <a href={lang === "zh-TW" ? "/zh-tw/guides" : "/guides"} className="inline-flex items-center justify-center gap-2 px-5 py-2.5 rounded-lg bg-[#1B3A2F] text-white text-sm font-semibold hover:bg-[#152E25] transition-colors">
+            <a
+              href={lang === "zh-TW" ? "/zh-tw/guides" : "/guides"}
+              className="inline-flex items-center justify-center gap-2 px-5 py-2.5 rounded-lg text-white text-sm font-semibold transition-colors"
+              style={{ backgroundColor: '#2b4734' }}
+            >
               {t(lang, "Free Career Guides", "免費職涯指南")}
             </a>
-            <a href={lang === "zh-TW" ? "/zh-tw/salary-starter-kit" : "/salary-starter-kit"} className="inline-flex items-center justify-center gap-2 px-5 py-2.5 rounded-lg border border-border text-sm font-semibold text-foreground hover:bg-muted transition-colors">
+            <a
+              href={lang === "zh-TW" ? "/zh-tw/salary-starter-kit" : "/salary-starter-kit"}
+              className="inline-flex items-center justify-center gap-2 px-5 py-2.5 rounded-lg text-sm font-semibold transition-colors"
+              style={{ border: '1px solid rgba(43,71,52,0.2)', color: '#1A1A1A' }}
+            >
               {t(lang, "Salary Negotiation Toolkit", "薪資談判工具包")}
             </a>
           </div>
