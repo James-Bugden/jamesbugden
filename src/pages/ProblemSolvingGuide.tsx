@@ -307,15 +307,27 @@ const ProblemSolvingGuide = () => {
               <p className="text-muted-foreground text-sm mt-3">That answer has diagnosis, root cause, a plan, execution, and results with numbers. That is the answer that gets the offer.</p>
             </div>
 
-            <CodeBlock>{`  SAME QUESTION, 5 DIFFERENT ANSWERS:
-  "Tell me about a time you solved a difficult problem."
-
-  Freezer:     "I can't think of one."
-  Complainer:  "Nobody gave me the resources to fix it."
-  Dreamer:     "I envisioned a better system."
-  Rusher:      "I worked harder until it was fixed."
-  Problem      "I diagnosed the root cause, built a plan,
-   Solver:      executed it, and measured the results."`}</CodeBlock>
+            <div className="bg-card border border-border rounded-xl overflow-hidden">
+              <div className="bg-muted/50 px-5 py-3 border-b border-border">
+                <p className="text-foreground text-sm font-semibold">Same Question, 5 Different Answers</p>
+                <p className="text-muted-foreground text-xs italic">"Tell me about a time you solved a difficult problem."</p>
+              </div>
+              <div className="divide-y divide-border">
+                {[
+                  { type: "Freezer", answer: '"I can\'t think of one."', bad: true },
+                  { type: "Complainer", answer: '"Nobody gave me the resources to fix it."', bad: true },
+                  { type: "Dreamer", answer: '"I envisioned a better system."', bad: true },
+                  { type: "Rusher", answer: '"I worked harder until it was fixed."', bad: true },
+                  { type: "Problem Solver", answer: '"I diagnosed the root cause, built a plan, executed it, and measured the results."', bad: false },
+                ].map((item) => (
+                  <div key={item.type} className={`flex items-center gap-3 px-5 py-3 ${item.bad ? "" : "bg-green-500/5"}`}>
+                    {item.bad ? <XCircle className="w-4 h-4 text-destructive shrink-0" /> : <CheckCircle2 className="w-4 h-4 text-green-500 shrink-0" />}
+                    <span className="text-foreground text-sm font-medium w-28 shrink-0">{item.type}</span>
+                    <span className="text-muted-foreground text-sm italic">{item.answer}</span>
+                  </div>
+                ))}
+              </div>
+            </div>
 
             <div className="bg-card border border-gold/30 rounded-xl p-5 mt-6">
               <p className="text-muted-foreground text-sm leading-relaxed"><strong className="text-gold">From my experience:</strong> You are probably a mix of these types. That is normal. The goal is to move yourself closer to <strong className="text-foreground">Type 5</strong> in every answer you give. The rest of this guide shows you exactly how.</p>
