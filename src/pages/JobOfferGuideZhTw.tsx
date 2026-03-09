@@ -132,10 +132,6 @@ const JobOfferGuideZhTw = () => {
       {/* Hero */}
       <section className="pt-28 md:pt-36 pb-14 md:pb-20 px-5 md:px-6 bg-executive-green">
         <div className="container mx-auto max-w-4xl text-center">
-          <div className="inline-flex items-center gap-2 px-4 py-2 bg-cream/10 border border-cream/20 rounded-full mb-6">
-            <Briefcase className="w-4 h-4 text-gold" />
-            <span className="text-sm text-cream/80">免費職涯資源</span>
-          </div>
           <h1 className="font-heading text-3xl md:text-5xl lg:text-6xl text-cream leading-tight mb-4" style={{ lineHeight: 1.2 }}>
             收到錄取通知？<br className="hidden sm:block" />如何做出不後悔的決定
           </h1>
