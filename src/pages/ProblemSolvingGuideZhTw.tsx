@@ -1088,25 +1088,42 @@ const ProblemSolvingGuideZhTw = () => {
 
             <div className="bg-background border border-border rounded-xl p-5 md:p-6">
               <h3 className="font-heading text-lg text-gold mb-4">下次面試前：檢查清單</h3>
-              <CodeBlock>{`  準備
-  [ ] 我有 3 個按照四步驟框架準備的故事。
-  [ ] 每個故事都有具體數字（前後對比、%、$、時間）。
-  [ ] 我用真實來源研究了這家公司。
-  [ ] 我知道我的「為什麼選這家公司？」回答，有 3 個加權標準。
-  [ ] 我知道我的「為什麼在找工作？」回答，框架為差距分析。
-
-  面試中
-  [ ] 我會在回答前暫停。需要時釐清。
-  [ ] 我會在解決問題之前先分類。
-  [ ] 我會陳述我的假設並解釋如何測試。
-  [ ] 被問到「你會怎麼……？」時我會展示 2-3 個選項。
-  [ ] 我會在每個回答中使用數字。不要模糊的宣稱。
-  [ ] 我會用學到的教訓結束每個故事。
-
-  面試後
-  [ ] 我會寫下每一個被問到的問題。
-  [ ] 我會用四步驟框架為我的回答打分。
-  [ ] 我會找出我漏掉的步驟並練習它。`}</CodeBlock>
+              <div className="space-y-5">
+                {[
+                  { heading: "準備", items: [
+                    "我有 3 個按照四步驟框架準備的故事。",
+                    "每個故事都有具體數字（前後對比、%、$、時間）。",
+                    "我用真實來源研究了這家公司。",
+                    "我知道我的「為什麼選這家公司？」回答，有 3 個加權標準。",
+                    "我知道我的「為什麼在找工作？」回答，框架為差距分析。",
+                  ]},
+                  { heading: "面試中", items: [
+                    "我會在回答前暫停。需要時釐清。",
+                    "我會在解決問題之前先分類。",
+                    "我會陳述我的假設並解釋如何測試。",
+                    "被問到「你會怎麼……？」時我會展示 2-3 個選項。",
+                    "我會在每個回答中使用數字。不要模糊的宣稱。",
+                    "我會用學到的教訓結束每個故事。",
+                  ]},
+                  { heading: "面試後", items: [
+                    "我會寫下每一個被問到的問題。",
+                    "我會用四步驟框架為我的回答打分。",
+                    "我會找出我漏掉的步驟並練習它。",
+                  ]},
+                ].map((section) => (
+                  <div key={section.heading}>
+                    <p className="text-gold text-xs font-bold uppercase tracking-wider mb-2">{section.heading}</p>
+                    <div className="space-y-1.5">
+                      {section.items.map((item, i) => (
+                        <div key={i} className="flex items-start gap-3 bg-background border border-border rounded-lg px-4 py-2.5">
+                          <div className="w-4 h-4 mt-0.5 rounded border-2 border-gold/40 shrink-0" />
+                          <span className="text-foreground text-sm">{item}</span>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                ))}
+              </div>
             </div>
           </div>
         </section>
