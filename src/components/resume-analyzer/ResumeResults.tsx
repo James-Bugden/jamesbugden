@@ -41,7 +41,7 @@ function ScoreHero({ score, lang }: { score: number; lang: Language }) {
   const radius = (size - 14) / 2;
   const circumference = 2 * Math.PI * radius;
   const offset = circumference - (animatedScore / 100) * circumference;
-  const color = score >= 80 ? "#16a34a" : score >= 60 ? "#d97706" : score >= 40 ? "#ea580c" : "#dc2626";
+  const color = score >= 80 ? "#22c55e" : score >= 60 ? "#d97706" : score >= 40 ? "#ea580c" : "#dc2626";
   const grade = score >= 90 ? "A+" : score >= 80 ? "A" : score >= 70 ? "B" : score >= 60 ? "C" : score >= 50 ? "D" : "F";
 
   const verdictText = (s: number) => {
@@ -165,8 +165,8 @@ function SegmentationProfile({ segmentation, lang }: { segmentation: AnalysisRes
 /* ──────────────────── Section Card ──────────────────── */
 function SectionCard({ section, lang, defaultOpen, locked }: { section: AnalysisResult["sections"][0]; lang: Language; defaultOpen?: boolean; locked?: boolean }) {
   const [open, setOpen] = useState(locked ? false : (defaultOpen || false));
-  const scoreColor = section.score >= 8 ? "#16a34a" : section.score >= 6 ? "#d97706" : section.score >= 4 ? "#ea580c" : "#dc2626";
-  const barColor = section.score >= 8 ? "#16a34a" : section.score >= 6 ? "#d97706" : section.score >= 4 ? "#ea580c" : "#dc2626";
+  const scoreColor = section.score >= 8 ? "#22c55e" : section.score >= 6 ? "#d97706" : section.score >= 4 ? "#ea580c" : "#dc2626";
+  const barColor = section.score >= 8 ? "#22c55e" : section.score >= 6 ? "#d97706" : section.score >= 4 ? "#ea580c" : "#dc2626";
 
   return (
     <div
