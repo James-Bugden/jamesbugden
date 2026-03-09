@@ -28,9 +28,6 @@ const Collapsible = ({ title, children }: { title: string; children: React.React
   );
 };
 
-const CodeBlock = ({ children }: { children: string }) => (
-  <pre className="bg-muted/50 border border-border rounded-xl p-4 md:p-5 overflow-x-auto text-xs md:text-sm leading-relaxed font-mono text-muted-foreground whitespace-pre">{children}</pre>
-);
 
 const tocSections = [
   { id: "intro", label: "前言" },
