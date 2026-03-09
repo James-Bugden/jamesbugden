@@ -610,8 +610,8 @@ export default function Dashboard({ lang = "en" }: { lang?: "en" | "zh" }) {
           )}
 
           {/* Smart Next Step */}
-          {!searchResults && nextStep && (
-            <div className="mb-6">
+          {!searchResults && nextStep && !nextStepDismissed && (
+            <div className="mb-6 relative">
               <Link
                 to={nextStep.path}
                 className="rounded-2xl border p-5 flex items-center gap-4 transition-all duration-200 hover:-translate-y-0.5"
@@ -629,6 +629,13 @@ export default function Dashboard({ lang = "en" }: { lang?: "en" | "zh" }) {
                 </div>
                 <ArrowRight className="w-5 h-5 shrink-0" style={{ color: C.gold }} />
               </Link>
+              <button
+                onClick={(e) => { e.preventDefault(); setNextStepDismissed(true); }}
+                className="absolute top-2 right-2 p-1 rounded-full transition-colors hover:bg-black/5"
+                aria-label="Dismiss"
+              >
+                <X className="w-3.5 h-3.5" style={{ color: C.textSecondary }} />
+              </button>
             </div>
           )}
 
