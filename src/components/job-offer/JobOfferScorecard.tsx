@@ -56,8 +56,8 @@ export default function JobOfferScorecard({ categories, locale = "en" }: Scoreca
 
   return (
     <div className="space-y-4">
-      {/* Header row */}
-      <div className="grid grid-cols-[1fr_80px_80px_80px] gap-2 text-xs font-semibold text-muted-foreground uppercase tracking-wider px-1">
+      {/* Header row — desktop only */}
+      <div className="hidden md:grid grid-cols-[1fr_80px_80px_80px] gap-2 text-xs font-semibold text-muted-foreground uppercase tracking-wider px-1">
         <span>{locale === "zh-tw" ? "類別" : "Category"}</span>
         <span className="text-center">{weightLabel}</span>
         <span className="text-center">{scoreLabel}</span>
@@ -71,7 +71,8 @@ export default function JobOfferScorecard({ categories, locale = "en" }: Scoreca
         const weighted = s > 0 ? w * s : 0;
         return (
           <div key={cat.key}>
-            <div className="grid grid-cols-[1fr_80px_80px_80px] gap-2 items-center bg-card border border-border rounded-xl p-3 md:p-4">
+            {/* Desktop row */}
+            <div className="hidden md:grid grid-cols-[1fr_80px_80px_80px] gap-2 items-center bg-card border border-border rounded-xl p-3 md:p-4">
               <button 
                 onClick={() => setShowQuestions(showQuestions === cat.key ? null : cat.key)} 
                 className="text-left text-foreground font-medium text-sm hover:text-gold transition-colors"
@@ -121,6 +122,63 @@ export default function JobOfferScorecard({ categories, locale = "en" }: Scoreca
                 <span className={`font-bold text-sm ${weighted > 0 ? "text-gold" : "text-muted-foreground"}`}>
                   {weighted > 0 ? weighted : "—"}
                 </span>
+              </div>
+            </div>
+
+            {/* Mobile card */}
+            <div className="md:hidden bg-card border border-border rounded-xl p-4 space-y-3">
+              <div className="flex items-center justify-between">
+                <button 
+                  onClick={() => setShowQuestions(showQuestions === cat.key ? null : cat.key)} 
+                  className="text-left text-foreground font-medium text-sm hover:text-gold transition-colors"
+                >
+                  {cat.label}
+                  <span className="text-muted-foreground text-xs ml-1">▾</span>
+                </button>
+                <span className={`font-bold text-sm ${weighted > 0 ? "text-gold" : "text-muted-foreground"}`}>
+                  {weighted > 0 ? weighted : "—"}
+                </span>
+              </div>
+
+              <div className="flex items-center justify-between gap-3">
+                <div>
+                  <p className="text-[10px] text-muted-foreground uppercase tracking-wider mb-1">{weightLabel}</p>
+                  <div className="flex gap-1">
+                    {WEIGHT_OPTIONS.map(v => (
+                      <button
+                        key={v}
+                        onClick={() => setWeights(prev => ({ ...prev, [cat.key]: v }))}
+                        className={`w-8 h-8 rounded-lg text-xs font-bold transition-all ${
+                          w === v 
+                            ? "bg-gold text-executive-green" 
+                            : "bg-muted/50 text-muted-foreground hover:bg-muted"
+                        }`}
+                      >
+                        {v}
+                      </button>
+                    ))}
+                  </div>
+                </div>
+                <div>
+                  <p className="text-[10px] text-muted-foreground uppercase tracking-wider mb-1">{scoreLabel}</p>
+                  <div className="flex gap-1">
+                    {SCORE_OPTIONS.map(v => (
+                      <button
+                        key={v}
+                        onClick={() => setScores(prev => ({ ...prev, [cat.key]: v }))}
+                        className={`w-8 h-8 rounded-lg text-xs font-bold transition-all ${
+                          s === v 
+                            ? "bg-gold text-executive-green" 
+                            : s > 0 && v <= s 
+                              ? "bg-gold/30 text-gold" 
+                              : "bg-muted/50 text-muted-foreground hover:bg-muted"
+                        }`}
+                      >
+                        {v}
+                      </button>
+                    ))}
+                  </div>
+                </div>
               </div>
             </div>
 
