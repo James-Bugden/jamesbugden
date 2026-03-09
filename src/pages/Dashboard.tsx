@@ -253,12 +253,8 @@ function getProgressBadge(toolId: string, lang: "en" | "zh", t: typeof i18n.en) 
       }
     } catch { /* ignore */ }
   }
-  if (toolId === "job-tracker") {
-    try {
-      const count = getActiveJobs().length;
-      if (count > 0) return `${count} ${t.activeApps}`;
-    } catch { /* ignore */ }
-  }
+
+
   return null;
 }
 
