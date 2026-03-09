@@ -901,27 +901,83 @@ const OfficePoliticsGuide = () => {
           <h3 className="font-heading text-lg text-foreground mb-4">Step 1: Find Your Starting Point</h3>
           <p className="text-muted-foreground leading-relaxed mb-4">Use the decision tree below. Start at the top. Follow the path matching your situation.</p>
 
-          <div className="bg-background border border-border rounded-xl p-5 md:p-6 mb-8">
-            <div className="space-y-4 text-sm">
-              <p className="text-foreground font-bold">Are you in political trouble right now?</p>
-              <p className="text-muted-foreground">(Warning signs from Section 7: boss is distant, assignments going elsewhere, HR checking in)</p>
-              <div className="pl-4 border-l-2 border-gold/30 space-y-3">
-                <div>
-                  <p className="text-foreground font-semibold">YES → Do you think you're seen as "The Problem"?</p>
-                  <div className="pl-4 border-l-2 border-border space-y-2 mt-2">
-                    <p className="text-gold font-semibold">YES → PATH A: Emergency Repair</p>
-                    <p className="text-foreground font-semibold">NO → Is a specific person blocking your goals?</p>
-                    <div className="pl-4 border-l-2 border-border space-y-2 mt-2">
-                      <p className="text-gold font-semibold">YES → PATH B: Adversary Management</p>
-                      <p className="text-gold font-semibold">NO → PATH C: Energy Redirect</p>
+          <div className="bg-card border border-border rounded-xl p-5 md:p-6 mb-8">
+            <p className="text-xs font-bold text-gold uppercase tracking-wider mb-5">Decision Tree: Find Your Starting Point</p>
+            <div className="flex flex-col items-center gap-0">
+              {/* Q1 */}
+              <div className="bg-executive-green text-cream text-sm font-semibold px-6 py-3 rounded-lg text-center max-w-sm leading-snug">
+                Are you in political trouble right now?
+              </div>
+              <p className="text-muted-foreground text-xs text-center max-w-xs mt-1 mb-1">(Boss is distant, assignments going elsewhere, HR checking in)</p>
+              <div className="w-px h-3 bg-gold/40" />
+              <div className="flex w-full max-w-lg">
+                {/* YES branch */}
+                <div className="flex-1 flex flex-col items-center">
+                  <span className="text-xs font-bold text-green-500 mb-1">YES</span>
+                  <div className="w-px h-3 bg-gold/40" />
+                  <div className="border border-border rounded-lg px-4 py-2 text-center text-sm text-foreground font-medium bg-muted/50 max-w-[200px]">
+                    Are you seen as<br />"The Problem"?
+                  </div>
+                  <div className="w-px h-3 bg-gold/40" />
+                  <div className="flex w-full max-w-xs">
+                    {/* YES-YES */}
+                    <div className="flex-1 flex flex-col items-center">
+                      <span className="text-xs font-bold text-green-500 mb-1">YES</span>
+                      <div className="bg-gold/15 border border-gold/30 rounded-lg px-3 py-2 text-center">
+                        <p className="text-gold text-xs font-bold">PATH A</p>
+                        <p className="text-foreground text-xs">Emergency Repair</p>
+                      </div>
+                    </div>
+                    {/* YES-NO */}
+                    <div className="flex-1 flex flex-col items-center">
+                      <span className="text-xs font-bold text-destructive mb-1">NO</span>
+                      <div className="w-px h-2 bg-gold/40" />
+                      <div className="border border-border rounded-lg px-3 py-2 text-center text-xs text-foreground font-medium bg-muted/50">
+                        Is someone<br />blocking you?
+                      </div>
+                      <div className="w-px h-3 bg-gold/40" />
+                      <div className="flex gap-2">
+                        <div className="flex flex-col items-center">
+                          <span className="text-xs font-bold text-green-500 mb-1">YES</span>
+                          <div className="bg-gold/15 border border-gold/30 rounded-lg px-2 py-1.5 text-center">
+                            <p className="text-gold text-xs font-bold">PATH B</p>
+                            <p className="text-foreground text-[10px]">Adversary Mgmt</p>
+                          </div>
+                        </div>
+                        <div className="flex flex-col items-center">
+                          <span className="text-xs font-bold text-destructive mb-1">NO</span>
+                          <div className="bg-gold/15 border border-gold/30 rounded-lg px-2 py-1.5 text-center">
+                            <p className="text-gold text-xs font-bold">PATH C</p>
+                            <p className="text-foreground text-[10px]">Energy Redirect</p>
+                          </div>
+                        </div>
+                      </div>
                     </div>
                   </div>
                 </div>
-                <div>
-                  <p className="text-foreground font-semibold">NO → Do you know what you want from your career?</p>
-                  <div className="pl-4 border-l-2 border-border space-y-2 mt-2">
-                    <p className="text-gold font-semibold">NO → PATH D: Goal Clarity</p>
-                    <p className="text-gold font-semibold">YES → PATH E: Build Political Power</p>
+                {/* NO branch */}
+                <div className="flex-1 flex flex-col items-center">
+                  <span className="text-xs font-bold text-destructive mb-1">NO</span>
+                  <div className="w-px h-3 bg-gold/40" />
+                  <div className="border border-border rounded-lg px-4 py-2 text-center text-sm text-foreground font-medium bg-muted/50 max-w-[200px]">
+                    Do you know what you<br />want from your career?
+                  </div>
+                  <div className="w-px h-3 bg-gold/40" />
+                  <div className="flex w-full max-w-xs justify-center gap-4">
+                    <div className="flex flex-col items-center">
+                      <span className="text-xs font-bold text-destructive mb-1">NO</span>
+                      <div className="bg-gold/15 border border-gold/30 rounded-lg px-3 py-2 text-center">
+                        <p className="text-gold text-xs font-bold">PATH D</p>
+                        <p className="text-foreground text-xs">Goal Clarity</p>
+                      </div>
+                    </div>
+                    <div className="flex flex-col items-center">
+                      <span className="text-xs font-bold text-green-500 mb-1">YES</span>
+                      <div className="bg-gold/15 border border-gold/30 rounded-lg px-3 py-2 text-center">
+                        <p className="text-gold text-xs font-bold">PATH E</p>
+                        <p className="text-foreground text-xs">Build Political Power</p>
+                      </div>
+                    </div>
                   </div>
                 </div>
               </div>
