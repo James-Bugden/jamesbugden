@@ -28,9 +28,6 @@ const Collapsible = ({ title, children }: { title: string; children: React.React
   );
 };
 
-const CodeBlock = ({ children }: { children: string }) => (
-  <pre className="bg-muted/50 border border-border rounded-xl p-4 md:p-5 overflow-x-auto text-xs md:text-sm leading-relaxed font-mono text-muted-foreground whitespace-pre">{children}</pre>
-);
 
 const tocSections = [
   { id: "intro", label: "Introduction" },
@@ -217,15 +214,26 @@ const ProblemSolvingGuide = () => {
 
             <p className="text-muted-foreground leading-relaxed mb-6">Watanabe introduces five character types in his book. Each one represents a different approach to solving problems. I see all five show up in interviews every single week.</p>
 
-            <CodeBlock>{`  THE 5 INTERVIEW TYPES
-  =====================
-
-  The Freezer       "I don't know..."          --> No Offer
-  The Complainer    "My boss was terrible..."   --> No Offer
-  The Dreamer       "I want to make impact..."  --> No Offer
-  The Rusher        "So I immediately did..."   --> No Offer
-  The Problem       "First, I figured out       --> OFFER
-    Solver           the root cause..."`}</CodeBlock>
+            <div className="grid gap-3">
+              {[
+                { type: "The Freezer", quote: '"I don\'t know..."', result: "No Offer", icon: "❄️", color: "border-destructive/30 bg-destructive/5" },
+                { type: "The Complainer", quote: '"My boss was terrible..."', result: "No Offer", icon: "😤", color: "border-destructive/30 bg-destructive/5" },
+                { type: "The Dreamer", quote: '"I want to make impact..."', result: "No Offer", icon: "💭", color: "border-destructive/30 bg-destructive/5" },
+                { type: "The Rusher", quote: '"So I immediately did..."', result: "No Offer", icon: "🏃", color: "border-destructive/30 bg-destructive/5" },
+                { type: "The Problem Solver", quote: '"First, I figured out the root cause..."', result: "OFFER", icon: "🧠", color: "border-green-500/30 bg-green-500/5" },
+              ].map((item) => (
+                <div key={item.type} className={`flex items-center gap-4 rounded-xl border p-4 ${item.color}`}>
+                  <span className="text-2xl shrink-0">{item.icon}</span>
+                  <div className="flex-1 min-w-0">
+                    <p className="text-foreground font-semibold text-sm">{item.type}</p>
+                    <p className="text-muted-foreground text-sm italic truncate">{item.quote}</p>
+                  </div>
+                  <span className={`shrink-0 text-xs font-bold uppercase px-3 py-1 rounded-full ${item.result === "OFFER" ? "bg-green-500/20 text-green-600" : "bg-destructive/20 text-destructive"}`}>
+                    {item.result}
+                  </span>
+                </div>
+              ))}
+            </div>
 
             <p className="text-muted-foreground leading-relaxed mt-6 mb-6">Here they are, translated from the book to the interview room.</p>
 
@@ -296,15 +304,27 @@ const ProblemSolvingGuide = () => {
               <p className="text-muted-foreground text-sm mt-3">That answer has diagnosis, root cause, a plan, execution, and results with numbers. That is the answer that gets the offer.</p>
             </div>
 
-            <CodeBlock>{`  SAME QUESTION, 5 DIFFERENT ANSWERS:
-  "Tell me about a time you solved a difficult problem."
-
-  Freezer:     "I can't think of one."
-  Complainer:  "Nobody gave me the resources to fix it."
-  Dreamer:     "I envisioned a better system."
-  Rusher:      "I worked harder until it was fixed."
-  Problem      "I diagnosed the root cause, built a plan,
-   Solver:      executed it, and measured the results."`}</CodeBlock>
+            <div className="bg-card border border-border rounded-xl overflow-hidden">
+              <div className="bg-muted/50 px-5 py-3 border-b border-border">
+                <p className="text-foreground text-sm font-semibold">Same Question, 5 Different Answers</p>
+                <p className="text-muted-foreground text-xs italic">"Tell me about a time you solved a difficult problem."</p>
+              </div>
+              <div className="divide-y divide-border">
+                {[
+                  { type: "Freezer", answer: '"I can\'t think of one."', bad: true },
+                  { type: "Complainer", answer: '"Nobody gave me the resources to fix it."', bad: true },
+                  { type: "Dreamer", answer: '"I envisioned a better system."', bad: true },
+                  { type: "Rusher", answer: '"I worked harder until it was fixed."', bad: true },
+                  { type: "Problem Solver", answer: '"I diagnosed the root cause, built a plan, executed it, and measured the results."', bad: false },
+                ].map((item) => (
+                  <div key={item.type} className={`flex items-center gap-3 px-5 py-3 ${item.bad ? "" : "bg-green-500/5"}`}>
+                    {item.bad ? <XCircle className="w-4 h-4 text-destructive shrink-0" /> : <CheckCircle2 className="w-4 h-4 text-green-500 shrink-0" />}
+                    <span className="text-foreground text-sm font-medium w-28 shrink-0">{item.type}</span>
+                    <span className="text-muted-foreground text-sm italic">{item.answer}</span>
+                  </div>
+                ))}
+              </div>
+            </div>
 
             <div className="bg-card border border-gold/30 rounded-xl p-5 mt-6">
               <p className="text-muted-foreground text-sm leading-relaxed"><strong className="text-gold">From my experience:</strong> You are probably a mix of these types. That is normal. The goal is to move yourself closer to <strong className="text-foreground">Type 5</strong> in every answer you give. The rest of this guide shows you exactly how.</p>
@@ -404,17 +424,44 @@ const ProblemSolvingGuide = () => {
 
             <p className="text-muted-foreground leading-relaxed mb-6">A <strong className="text-foreground">logic tree</strong> is a visual tool that helps you break a big problem into smaller pieces. You start with one question on the left and split it into branches on the right, going from broad to specific.</p>
 
-            <CodeBlock>{`  LOGIC TREE: THE PEPPER SHAKER
-  ==============================
-
-  How to get more       ┌─── Increase the area of the top surface
-  pepper out of    ─────┤
-  one shake?            ├─── Increase the pepper     ┌── More holes per area
-                        │    from the surface    ─────┤
-                        │    area                     └── Bigger holes
-                        │
-                        └─── Make it easier for  ─────── Smaller pepper grains
-                             pepper to come out`}</CodeBlock>
+            <div className="bg-card border border-border rounded-xl p-5 md:p-6 overflow-x-auto">
+              <p className="text-xs font-bold text-gold uppercase tracking-wider mb-4">Logic Tree: The Pepper Shaker</p>
+              <div className="flex items-stretch gap-0 min-w-[500px]">
+                {/* Root */}
+                <div className="flex items-center shrink-0">
+                  <div className="bg-executive-green text-cream text-xs font-semibold px-4 py-3 rounded-lg text-center leading-snug">
+                    How to get more<br />pepper out of<br />one shake?
+                  </div>
+                  <div className="w-6 h-px bg-gold/40" />
+                </div>
+                {/* Branches */}
+                <div className="flex flex-col justify-center gap-2">
+                  <div className="flex items-center gap-0">
+                    <div className="w-4 border-t border-l border-gold/30 h-6 rounded-tl-lg" />
+                    <div className="bg-muted border border-border rounded-lg px-3 py-2 text-xs text-foreground font-medium">Increase the area of the top surface</div>
+                  </div>
+                  <div className="flex items-center gap-0">
+                    <div className="w-4 border-t border-gold/30" />
+                    <div className="flex items-center gap-0">
+                      <div className="bg-muted border border-border rounded-lg px-3 py-2 text-xs text-foreground font-medium">Increase pepper from the surface area</div>
+                      <div className="w-4 h-px bg-gold/30" />
+                      <div className="flex flex-col gap-1">
+                        <div className="bg-gold/10 border border-gold/20 rounded px-2 py-1 text-xs text-foreground">More holes per area</div>
+                        <div className="bg-gold/10 border border-gold/20 rounded px-2 py-1 text-xs text-foreground">Bigger holes</div>
+                      </div>
+                    </div>
+                  </div>
+                  <div className="flex items-center gap-0">
+                    <div className="w-4 border-t border-b border-l border-gold/30 h-6 rounded-bl-lg" />
+                    <div className="flex items-center gap-0">
+                      <div className="bg-muted border border-border rounded-lg px-3 py-2 text-xs text-foreground font-medium">Make it easier for pepper to come out</div>
+                      <div className="w-4 h-px bg-gold/30" />
+                      <div className="bg-gold/10 border border-gold/20 rounded px-2 py-1 text-xs text-foreground">Smaller pepper grains</div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
 
             <p className="text-muted-foreground leading-relaxed mt-6 mb-6">Four different solutions from one question. "Shake harder" isn't even on the list. That is the power of a logic tree.</p>
 
@@ -479,33 +526,68 @@ const ProblemSolvingGuide = () => {
 
             <p className="text-muted-foreground leading-relaxed mb-6">A <strong className="text-foreground">yes/no tree</strong> puts people or things into buckets based on yes or no questions. Each answer leads to either a bucket (explanation) or another question.</p>
 
-            <CodeBlock>{`  YES/NO TREE: MUSHROOM LOVERS CONCERT ATTENDANCE
-  =================================================
-
-  All 500 students
-  and teachers
-       │
-       ▼
-  Do they know about    NO ───> 350 people (70%)
-  the concerts? ────────┐       "Not aware"
-                        │
-                       YES
-                        │
-                        ▼
-  Have they ever        NO ───> 135 people (27%)
-  attended? ────────────┐       "Aware but never came"
-                        │
-                       YES
-                        │
-                        ▼
-  Do they attend        NO ───>   3 people (1%)
-  regularly? ───────────┐       "Came once, stopped"
-                        │
-                       YES
-                        │
-                        ▼
-                       12 people (2%)
-                       "Loyal fans"`}</CodeBlock>
+            <div className="bg-card border border-border rounded-xl p-5 md:p-6">
+              <p className="text-xs font-bold text-gold uppercase tracking-wider mb-5">Yes/No Tree: Mushroom Lovers Concert Attendance</p>
+              <div className="flex flex-col items-center gap-0">
+                {/* Start node */}
+                <div className="bg-executive-green text-cream text-xs font-semibold px-5 py-3 rounded-lg text-center">All 500 students<br />and teachers</div>
+                <div className="w-px h-4 bg-gold/40" />
+                {/* Question 1 */}
+                <div className="border border-border rounded-lg px-4 py-2 text-center text-sm text-foreground font-medium bg-muted/50">Do they know about the concerts?</div>
+                <div className="flex items-start w-full max-w-md mt-0">
+                  <div className="flex-1 flex flex-col items-center">
+                    <div className="w-px h-4 bg-gold/40" />
+                    <span className="text-xs font-bold text-green-500 mb-1">YES</span>
+                    <div className="w-px h-3 bg-gold/40" />
+                  </div>
+                  <div className="flex-1 flex flex-col items-center">
+                    <div className="w-px h-4 bg-gold/40" />
+                    <span className="text-xs font-bold text-destructive mb-1">NO</span>
+                    <div className="bg-destructive/10 border border-destructive/20 rounded-lg px-3 py-2 text-center">
+                      <p className="text-foreground text-sm font-bold">350 people <span className="text-muted-foreground font-normal">(70%)</span></p>
+                      <p className="text-muted-foreground text-xs">"Not aware"</p>
+                    </div>
+                  </div>
+                </div>
+                {/* Question 2 */}
+                <div className="border border-border rounded-lg px-4 py-2 text-center text-sm text-foreground font-medium bg-muted/50 -mt-1">Have they ever attended?</div>
+                <div className="flex items-start w-full max-w-md mt-0">
+                  <div className="flex-1 flex flex-col items-center">
+                    <div className="w-px h-4 bg-gold/40" />
+                    <span className="text-xs font-bold text-green-500 mb-1">YES</span>
+                    <div className="w-px h-3 bg-gold/40" />
+                  </div>
+                  <div className="flex-1 flex flex-col items-center">
+                    <div className="w-px h-4 bg-gold/40" />
+                    <span className="text-xs font-bold text-destructive mb-1">NO</span>
+                    <div className="bg-destructive/10 border border-destructive/20 rounded-lg px-3 py-2 text-center">
+                      <p className="text-foreground text-sm font-bold">135 people <span className="text-muted-foreground font-normal">(27%)</span></p>
+                      <p className="text-muted-foreground text-xs">"Aware but never came"</p>
+                    </div>
+                  </div>
+                </div>
+                {/* Question 3 */}
+                <div className="border border-border rounded-lg px-4 py-2 text-center text-sm text-foreground font-medium bg-muted/50 -mt-1">Do they attend regularly?</div>
+                <div className="flex items-start w-full max-w-md mt-0">
+                  <div className="flex-1 flex flex-col items-center">
+                    <div className="w-px h-4 bg-gold/40" />
+                    <span className="text-xs font-bold text-green-500 mb-1">YES</span>
+                    <div className="bg-green-500/10 border border-green-500/20 rounded-lg px-3 py-2 text-center">
+                      <p className="text-foreground text-sm font-bold">12 people <span className="text-muted-foreground font-normal">(2%)</span></p>
+                      <p className="text-muted-foreground text-xs">"Loyal fans"</p>
+                    </div>
+                  </div>
+                  <div className="flex-1 flex flex-col items-center">
+                    <div className="w-px h-4 bg-gold/40" />
+                    <span className="text-xs font-bold text-destructive mb-1">NO</span>
+                    <div className="bg-destructive/10 border border-destructive/20 rounded-lg px-3 py-2 text-center">
+                      <p className="text-foreground text-sm font-bold">3 people <span className="text-muted-foreground font-normal">(1%)</span></p>
+                      <p className="text-muted-foreground text-xs">"Came once, stopped"</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
 
             <p className="text-muted-foreground leading-relaxed mt-6 mb-6">This helped them pinpoint exactly where the problem was. Not awareness (they assumed). <strong className="text-foreground">Conversion</strong> (the real issue). 90% of people who knew about the concerts never came. That is the bucket to fix.</p>
 
@@ -695,26 +777,24 @@ const ProblemSolvingGuide = () => {
             <h3 className="font-heading text-lg text-foreground mb-4">The Mushroom Lovers Principle for All Interview Answers</h3>
             <p className="text-muted-foreground leading-relaxed mb-4">Even if you are not doing a formal case study, the principle applies to every behavioral answer: <strong className="text-foreground">bring data.</strong></p>
 
-            <CodeBlock>{`  VAGUE vs. SPECIFIC ANSWERS
-  ============================
-
-  VAGUE                          SPECIFIC
-  ─────────────────────────      ─────────────────────────
-  "I improved the process."      "I reduced processing time
-                                  from 5 days to 2 days."
-
-  "We grew the team."            "We went from 4 to 12
-                                  people in 8 months."
-
-  "Customer satisfaction          "NPS went from 32 to 61
-   improved."                     in one quarter."
-
-  "I increased sales."           "I grew pipeline by 35%
-                                  and closed $2.1M in Q4."
-
-  "I saved the company            "I renegotiated 3 vendor
-   money."                        contracts, saving $180K
-                                  per year."`}</CodeBlock>
+            <div className="bg-card border border-border rounded-xl overflow-hidden">
+              <div className="grid grid-cols-2 text-xs font-bold uppercase tracking-wider">
+                <div className="px-5 py-3 bg-destructive/10 text-destructive border-b border-border">❌ Vague</div>
+                <div className="px-5 py-3 bg-green-500/10 text-green-600 border-b border-l border-border">✅ Specific</div>
+              </div>
+              {[
+                { vague: '"I improved the process."', specific: '"I reduced processing time from 5 days to 2 days."' },
+                { vague: '"We grew the team."', specific: '"We went from 4 to 12 people in 8 months."' },
+                { vague: '"Customer satisfaction improved."', specific: '"NPS went from 32 to 61 in one quarter."' },
+                { vague: '"I increased sales."', specific: '"I grew pipeline by 35% and closed $2.1M in Q4."' },
+                { vague: '"I saved the company money."', specific: '"I renegotiated 3 vendor contracts, saving $180K per year."' },
+              ].map((row, i) => (
+                <div key={i} className="grid grid-cols-2 border-b border-border last:border-b-0">
+                  <div className="px-5 py-3 text-muted-foreground text-sm italic">{row.vague}</div>
+                  <div className="px-5 py-3 text-foreground text-sm font-medium border-l border-border">{row.specific}</div>
+                </div>
+              ))}
+            </div>
 
             <div className="bg-card border border-gold/30 rounded-xl p-5 mt-6">
               <p className="text-muted-foreground text-sm leading-relaxed"><strong className="text-gold">From my experience:</strong> I keep a mental scorecard during every interview. When a candidate uses specific numbers, I circle their answer in my notes. Candidates who use <strong className="text-foreground">3 or more specific metrics</strong> in an interview get recommended at <strong className="text-foreground">double the rate</strong> of those who use none. That is not a guess. That is what I have seen across 500+ hires.</p>
@@ -987,42 +1067,66 @@ const ProblemSolvingGuide = () => {
 
             <div className="bg-background border border-border rounded-xl p-5 md:p-6 mb-6">
               <h3 className="font-heading text-lg text-gold mb-4">The Practice Scorecard</h3>
-              <CodeBlock>{`  PRACTICE SCORECARD
-  ====================
-
-  Did I clarify before answering?          YES / NO
-  Did I identify a root cause?             YES / NO
-  Did I show 2+ options?                   YES / NO
-  Did I use specific numbers?              YES / NO
-  Did I share what I learned?              YES / NO
-  Did I stay under 2 minutes?              YES / NO
-
-  SCORE: ___/6
-
-  Goal: Hit 5/6 consistently before your interview.`}</CodeBlock>
+              <div className="space-y-2">
+                {[
+                  "Did I clarify before answering?",
+                  "Did I identify a root cause?",
+                  "Did I show 2+ options?",
+                  "Did I use specific numbers?",
+                  "Did I share what I learned?",
+                  "Did I stay under 2 minutes?",
+                ].map((item, i) => (
+                  <div key={i} className="flex items-center gap-3 bg-background border border-border rounded-lg px-4 py-2.5">
+                    <div className="w-5 h-5 rounded border-2 border-gold/40 shrink-0" />
+                    <span className="text-foreground text-sm flex-1">{item}</span>
+                    <span className="text-muted-foreground text-xs">YES / NO</span>
+                  </div>
+                ))}
+                <div className="flex items-center justify-between mt-3 px-1">
+                  <p className="text-foreground text-sm font-semibold">Score: ___/6</p>
+                  <p className="text-gold text-sm font-medium">Goal: Hit 5/6 consistently before your interview.</p>
+                </div>
+              </div>
             </div>
 
             <div className="bg-background border border-border rounded-xl p-5 md:p-6">
               <h3 className="font-heading text-lg text-gold mb-4">Before Your Next Interview: Checklist</h3>
-              <CodeBlock>{`  PREPARATION
-  [ ] I have 3 stories ready that follow the 4-step framework.
-  [ ] Each story has specific numbers (before/after, %, $, time).
-  [ ] I have researched the company using real sources.
-  [ ] I know my "Why this company?" answer with 3 weighted criteria.
-  [ ] I know my "Why are you looking?" answer framed as a gap analysis.
-
-  DURING THE INTERVIEW
-  [ ] I will pause before answering. Clarify if needed.
-  [ ] I will break problems into categories before solving them.
-  [ ] I will state my hypothesis and explain how I'd test it.
-  [ ] I will show 2-3 options when asked "How would you...?"
-  [ ] I will use numbers in every answer. No vague claims.
-  [ ] I will close every story with what I learned.
-
-  AFTER THE INTERVIEW
-  [ ] I will write down every question I was asked.
-  [ ] I will score my answers against the 4-step framework.
-  [ ] I will identify which step I missed and practice it.`}</CodeBlock>
+              <div className="space-y-5">
+                {[
+                  { heading: "Preparation", items: [
+                    "I have 3 stories ready that follow the 4-step framework.",
+                    "Each story has specific numbers (before/after, %, $, time).",
+                    "I have researched the company using real sources.",
+                    'I know my "Why this company?" answer with 3 weighted criteria.',
+                    'I know my "Why are you looking?" answer framed as a gap analysis.',
+                  ]},
+                  { heading: "During the Interview", items: [
+                    "I will pause before answering. Clarify if needed.",
+                    "I will break problems into categories before solving them.",
+                    "I will state my hypothesis and explain how I'd test it.",
+                    'I will show 2-3 options when asked "How would you...?"',
+                    "I will use numbers in every answer. No vague claims.",
+                    "I will close every story with what I learned.",
+                  ]},
+                  { heading: "After the Interview", items: [
+                    "I will write down every question I was asked.",
+                    "I will score my answers against the 4-step framework.",
+                    "I will identify which step I missed and practice it.",
+                  ]},
+                ].map((section) => (
+                  <div key={section.heading}>
+                    <p className="text-gold text-xs font-bold uppercase tracking-wider mb-2">{section.heading}</p>
+                    <div className="space-y-1.5">
+                      {section.items.map((item, i) => (
+                        <div key={i} className="flex items-start gap-3 bg-background border border-border rounded-lg px-4 py-2.5">
+                          <div className="w-4 h-4 mt-0.5 rounded border-2 border-gold/40 shrink-0" />
+                          <span className="text-foreground text-sm">{item}</span>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                ))}
+              </div>
             </div>
           </div>
         </section>

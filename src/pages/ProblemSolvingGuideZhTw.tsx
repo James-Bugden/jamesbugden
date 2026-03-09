@@ -28,9 +28,6 @@ const Collapsible = ({ title, children }: { title: string; children: React.React
   );
 };
 
-const CodeBlock = ({ children }: { children: string }) => (
-  <pre className="bg-muted/50 border border-border rounded-xl p-4 md:p-5 overflow-x-auto text-xs md:text-sm leading-relaxed font-mono text-muted-foreground whitespace-pre">{children}</pre>
-);
 
 const tocSections = [
   { id: "intro", label: "前言" },
@@ -217,15 +214,26 @@ const ProblemSolvingGuideZhTw = () => {
 
             <p className="text-muted-foreground leading-relaxed mb-6">渡邊健介在書中介紹了五種角色類型。每一種代表一種不同的解決問題方式。我每個禮拜都會在面試中看到這五種人。</p>
 
-            <CodeBlock>{`  五種面試者類型
-  ==============
-
-  冷凍人        「我不知道……」              --> 未錄取
-  抱怨者        「我老闆很糟糕……」          --> 未錄取
-  夢想家        「我想要創造影響力……」      --> 未錄取
-  衝衝衝        「所以我馬上就做了……」      --> 未錄取
-  問題解決者    「首先，我找出了              --> 錄取
-                 根本原因……」`}</CodeBlock>
+            <div className="grid gap-3">
+              {[
+                { type: "冷凍人", quote: "「我不知道……」", result: "未錄取", icon: "❄️", color: "border-destructive/30 bg-destructive/5" },
+                { type: "抱怨者", quote: "「我老闆很糟糕……」", result: "未錄取", icon: "😤", color: "border-destructive/30 bg-destructive/5" },
+                { type: "夢想家", quote: "「我想要創造影響力……」", result: "未錄取", icon: "💭", color: "border-destructive/30 bg-destructive/5" },
+                { type: "衝衝衝", quote: "「所以我馬上就做了……」", result: "未錄取", icon: "🏃", color: "border-destructive/30 bg-destructive/5" },
+                { type: "問題解決者", quote: "「首先，我找出了根本原因……」", result: "錄取", icon: "🧠", color: "border-green-500/30 bg-green-500/5" },
+              ].map((item) => (
+                <div key={item.type} className={`flex items-center gap-4 rounded-xl border p-4 ${item.color}`}>
+                  <span className="text-2xl shrink-0">{item.icon}</span>
+                  <div className="flex-1 min-w-0">
+                    <p className="text-foreground font-semibold text-sm">{item.type}</p>
+                    <p className="text-muted-foreground text-sm italic truncate">{item.quote}</p>
+                  </div>
+                  <span className={`shrink-0 text-xs font-bold uppercase px-3 py-1 rounded-full ${item.result === "錄取" ? "bg-green-500/20 text-green-600" : "bg-destructive/20 text-destructive"}`}>
+                    {item.result}
+                  </span>
+                </div>
+              ))}
+            </div>
 
             <p className="text-muted-foreground leading-relaxed mt-6 mb-6">以下是從書中翻譯到面試間的版本。</p>
 
@@ -296,15 +304,27 @@ const ProblemSolvingGuideZhTw = () => {
               <p className="text-muted-foreground text-sm mt-3">那個回答有診斷、根本原因、計畫、執行和帶數字的結果。那就是拿到錄取通知的回答。</p>
             </div>
 
-            <CodeBlock>{`  同一個問題，五種不同的回答：
-  「跟我說一個你解決困難問題的經驗。」
-
-  冷凍人：    「我想不到一個。」
-  抱怨者：    「沒有人給我資源來解決它。」
-  夢想家：    「我構想了一個更好的系統。」
-  衝衝衝：    「我更努力工作直到解決了。」
-  問題解決者：「我診斷了根本原因，制定了計畫，
-               執行它，然後衡量了結果。」`}</CodeBlock>
+            <div className="bg-card border border-border rounded-xl overflow-hidden">
+              <div className="bg-muted/50 px-5 py-3 border-b border-border">
+                <p className="text-foreground text-sm font-semibold">同一個問題，五種不同的回答</p>
+                <p className="text-muted-foreground text-xs italic">「跟我說一個你解決困難問題的經驗。」</p>
+              </div>
+              <div className="divide-y divide-border">
+                {[
+                  { type: "冷凍人", answer: "「我想不到一個。」", bad: true },
+                  { type: "抱怨者", answer: "「沒有人給我資源來解決它。」", bad: true },
+                  { type: "夢想家", answer: "「我構想了一個更好的系統。」", bad: true },
+                  { type: "衝衝衝", answer: "「我更努力工作直到解決了。」", bad: true },
+                  { type: "問題解決者", answer: "「我診斷了根本原因，制定了計畫，執行它，然後衡量了結果。」", bad: false },
+                ].map((item) => (
+                  <div key={item.type} className={`flex items-center gap-3 px-5 py-3 ${item.bad ? "" : "bg-green-500/5"}`}>
+                    {item.bad ? <XCircle className="w-4 h-4 text-destructive shrink-0" /> : <CheckCircle2 className="w-4 h-4 text-green-500 shrink-0" />}
+                    <span className="text-foreground text-sm font-medium w-24 shrink-0">{item.type}</span>
+                    <span className="text-muted-foreground text-sm italic">{item.answer}</span>
+                  </div>
+                ))}
+              </div>
+            </div>
 
             <div className="bg-card border border-gold/30 rounded-xl p-5 mt-6">
               <p className="text-muted-foreground text-sm leading-relaxed"><strong className="text-gold">以我的經驗來說：</strong>你大概是這些類型的混合。這是正常的。目標是在你給出的每一個回答中，讓自己更接近<strong className="text-foreground">第五型。</strong>這份指南的其餘部分會告訴你具體怎麼做。</p>
@@ -404,17 +424,42 @@ const ProblemSolvingGuideZhTw = () => {
 
             <p className="text-muted-foreground leading-relaxed mb-6"><strong className="text-foreground">分解樹</strong>是一個視覺工具，幫助你把大問題拆成小塊。你從左邊一個問題開始，往右邊分出分支，從寬泛到具體。</p>
 
-            <CodeBlock>{`  分解樹：胡椒罐
-  ================
-
-  如何讓一次搖        ┌─── 增加頂面的面積
-  出更多胡椒？  ─────┤
-                      ├─── 增加表面積搖出    ┌── 每個面積更多孔
-                      │    的胡椒量      ─────┤
-                      │                       └── 更大的孔
-                      │
-                      └─── 讓胡椒更容易   ─────── 更小的胡椒粒
-                           出來`}</CodeBlock>
+            <div className="bg-card border border-border rounded-xl p-5 md:p-6 overflow-x-auto">
+              <p className="text-xs font-bold text-gold uppercase tracking-wider mb-4">分解樹：胡椒罐</p>
+              <div className="flex items-stretch gap-0 min-w-[500px]">
+                <div className="flex items-center shrink-0">
+                  <div className="bg-executive-green text-cream text-xs font-semibold px-4 py-3 rounded-lg text-center leading-snug">
+                    如何讓一次搖<br />出更多胡椒？
+                  </div>
+                  <div className="w-6 h-px bg-gold/40" />
+                </div>
+                <div className="flex flex-col justify-center gap-2">
+                  <div className="flex items-center gap-0">
+                    <div className="w-4 border-t border-l border-gold/30 h-6 rounded-tl-lg" />
+                    <div className="bg-muted border border-border rounded-lg px-3 py-2 text-xs text-foreground font-medium">增加頂面的面積</div>
+                  </div>
+                  <div className="flex items-center gap-0">
+                    <div className="w-4 border-t border-gold/30" />
+                    <div className="flex items-center gap-0">
+                      <div className="bg-muted border border-border rounded-lg px-3 py-2 text-xs text-foreground font-medium">增加表面積搖出的胡椒量</div>
+                      <div className="w-4 h-px bg-gold/30" />
+                      <div className="flex flex-col gap-1">
+                        <div className="bg-gold/10 border border-gold/20 rounded px-2 py-1 text-xs text-foreground">每個面積更多孔</div>
+                        <div className="bg-gold/10 border border-gold/20 rounded px-2 py-1 text-xs text-foreground">更大的孔</div>
+                      </div>
+                    </div>
+                  </div>
+                  <div className="flex items-center gap-0">
+                    <div className="w-4 border-t border-b border-l border-gold/30 h-6 rounded-bl-lg" />
+                    <div className="flex items-center gap-0">
+                      <div className="bg-muted border border-border rounded-lg px-3 py-2 text-xs text-foreground font-medium">讓胡椒更容易出來</div>
+                      <div className="w-4 h-px bg-gold/30" />
+                      <div className="bg-gold/10 border border-gold/20 rounded px-2 py-1 text-xs text-foreground">更小的胡椒粒</div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
 
             <p className="text-muted-foreground leading-relaxed mt-6 mb-6">一個問題產生四個不同的解決方案。「搖更大力」根本不在清單上。這就是分解樹的力量。</p>
 
@@ -479,33 +524,64 @@ const ProblemSolvingGuideZhTw = () => {
 
             <p className="text-muted-foreground leading-relaxed mb-6"><strong className="text-foreground">是非樹</strong>根據是或否的問題，把人或事物分到不同的桶子裡。每個答案通向一個桶子（解釋）或另一個問題。</p>
 
-            <CodeBlock>{`  是非樹：蘑菇戀人演唱會出席
-  ============================
-
-  全校 500 位
-  師生
-       │
-       ▼
-  他們知道演唱         否 ───> 350 人 (70%)
-  會的事嗎？ ──────────┐       「不知道」
-                       │
-                      是
-                       │
-                       ▼
-  他們有來過           否 ───> 135 人 (27%)
-  嗎？ ───────────────┐       「知道但從沒來過」
-                       │
-                      是
-                       │
-                       ▼
-  他們固定來           否 ───>   3 人 (1%)
-  嗎？ ───────────────┐       「來過一次就不來了」
-                       │
-                      是
-                       │
-                       ▼
-                      12 人 (2%)
-                      「忠實粉絲」`}</CodeBlock>
+            <div className="bg-card border border-border rounded-xl p-5 md:p-6">
+              <p className="text-xs font-bold text-gold uppercase tracking-wider mb-5">是非樹：蘑菇戀人演唱會出席</p>
+              <div className="flex flex-col items-center gap-0">
+                <div className="bg-executive-green text-cream text-xs font-semibold px-5 py-3 rounded-lg text-center">全校 500 位<br />師生</div>
+                <div className="w-px h-4 bg-gold/40" />
+                <div className="border border-border rounded-lg px-4 py-2 text-center text-sm text-foreground font-medium bg-muted/50">他們知道演唱會的事嗎？</div>
+                <div className="flex items-start w-full max-w-md mt-0">
+                  <div className="flex-1 flex flex-col items-center">
+                    <div className="w-px h-4 bg-gold/40" />
+                    <span className="text-xs font-bold text-green-500 mb-1">是</span>
+                    <div className="w-px h-3 bg-gold/40" />
+                  </div>
+                  <div className="flex-1 flex flex-col items-center">
+                    <div className="w-px h-4 bg-gold/40" />
+                    <span className="text-xs font-bold text-destructive mb-1">否</span>
+                    <div className="bg-destructive/10 border border-destructive/20 rounded-lg px-3 py-2 text-center">
+                      <p className="text-foreground text-sm font-bold">350 人 <span className="text-muted-foreground font-normal">(70%)</span></p>
+                      <p className="text-muted-foreground text-xs">「不知道」</p>
+                    </div>
+                  </div>
+                </div>
+                <div className="border border-border rounded-lg px-4 py-2 text-center text-sm text-foreground font-medium bg-muted/50 -mt-1">他們有來過嗎？</div>
+                <div className="flex items-start w-full max-w-md mt-0">
+                  <div className="flex-1 flex flex-col items-center">
+                    <div className="w-px h-4 bg-gold/40" />
+                    <span className="text-xs font-bold text-green-500 mb-1">是</span>
+                    <div className="w-px h-3 bg-gold/40" />
+                  </div>
+                  <div className="flex-1 flex flex-col items-center">
+                    <div className="w-px h-4 bg-gold/40" />
+                    <span className="text-xs font-bold text-destructive mb-1">否</span>
+                    <div className="bg-destructive/10 border border-destructive/20 rounded-lg px-3 py-2 text-center">
+                      <p className="text-foreground text-sm font-bold">135 人 <span className="text-muted-foreground font-normal">(27%)</span></p>
+                      <p className="text-muted-foreground text-xs">「知道但從沒來過」</p>
+                    </div>
+                  </div>
+                </div>
+                <div className="border border-border rounded-lg px-4 py-2 text-center text-sm text-foreground font-medium bg-muted/50 -mt-1">他們固定來嗎？</div>
+                <div className="flex items-start w-full max-w-md mt-0">
+                  <div className="flex-1 flex flex-col items-center">
+                    <div className="w-px h-4 bg-gold/40" />
+                    <span className="text-xs font-bold text-green-500 mb-1">是</span>
+                    <div className="bg-green-500/10 border border-green-500/20 rounded-lg px-3 py-2 text-center">
+                      <p className="text-foreground text-sm font-bold">12 人 <span className="text-muted-foreground font-normal">(2%)</span></p>
+                      <p className="text-muted-foreground text-xs">「忠實粉絲」</p>
+                    </div>
+                  </div>
+                  <div className="flex-1 flex flex-col items-center">
+                    <div className="w-px h-4 bg-gold/40" />
+                    <span className="text-xs font-bold text-destructive mb-1">否</span>
+                    <div className="bg-destructive/10 border border-destructive/20 rounded-lg px-3 py-2 text-center">
+                      <p className="text-foreground text-sm font-bold">3 人 <span className="text-muted-foreground font-normal">(1%)</span></p>
+                      <p className="text-muted-foreground text-xs">「來過一次就不來了」</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
 
             <p className="text-muted-foreground leading-relaxed mt-6 mb-6">這幫助他們精確定位問題出在哪裡。不是知名度（他們假設的）。<strong className="text-foreground">是轉換率</strong>（真正的問題）。知道演唱會的人中有 90% 從來沒去過。那才是要修的桶子。</p>
 
@@ -695,27 +771,24 @@ const ProblemSolvingGuideZhTw = () => {
             <h3 className="font-heading text-lg text-foreground mb-4">蘑菇戀人原則適用於所有面試回答</h3>
             <p className="text-muted-foreground leading-relaxed mb-4">即使你不是在做正式的案例研究，這個原則適用於每一個行為面試回答：<strong className="text-foreground">帶上數據。</strong></p>
 
-            <CodeBlock>{`  模糊 vs. 具體的回答
-  =====================
-
-  模糊                          具體
-  ─────────────────────────    ─────────────────────────
-  「我改善了流程。」            「我把處理時間從 5 天
-                                 降到 2 天。」
-
-  「我們擴大了團隊。」          「我們在 8 個月內
-                                 從 4 人增加到 12 人。」
-
-  「客戶滿意度                  「NPS 在一個季度內
-   提高了。」                    從 32 上升到 61。」
-
-  「我增加了業績。」            「我把銷售管道增加了
-                                 35%，第四季成交 210 萬
-                                 美元。」
-
-  「我為公司省了                「我重新談判了 3 份供應
-   錢。」                        商合約，每年節省 18 萬
-                                 美元。」`}</CodeBlock>
+            <div className="bg-card border border-border rounded-xl overflow-hidden">
+              <div className="grid grid-cols-2 text-xs font-bold uppercase tracking-wider">
+                <div className="px-5 py-3 bg-destructive/10 text-destructive border-b border-border">❌ 模糊</div>
+                <div className="px-5 py-3 bg-green-500/10 text-green-600 border-b border-l border-border">✅ 具體</div>
+              </div>
+              {[
+                { vague: "「我改善了流程。」", specific: "「我把處理時間從 5 天降到 2 天。」" },
+                { vague: "「我們擴大了團隊。」", specific: "「我們在 8 個月內從 4 人增加到 12 人。」" },
+                { vague: "「客戶滿意度提高了。」", specific: "「NPS 在一個季度內從 32 上升到 61。」" },
+                { vague: "「我增加了業績。」", specific: "「我把銷售管道增加了 35%，第四季成交 210 萬美元。」" },
+                { vague: "「我為公司省了錢。」", specific: "「我重新談判了 3 份供應商合約，每年節省 18 萬美元。」" },
+              ].map((row, i) => (
+                <div key={i} className="grid grid-cols-2 border-b border-border last:border-b-0">
+                  <div className="px-5 py-3 text-muted-foreground text-sm italic">{row.vague}</div>
+                  <div className="px-5 py-3 text-foreground text-sm font-medium border-l border-border">{row.specific}</div>
+                </div>
+              ))}
+            </div>
 
             <div className="bg-card border border-gold/30 rounded-xl p-5 mt-6">
               <p className="text-muted-foreground text-sm leading-relaxed"><strong className="text-gold">以我的經驗來說：</strong>我在每場面試中都保持一個心理記分卡。當求職者使用具體數字時，我會在筆記中圈出那個回答。在面試中使用 <strong className="text-foreground">3 個或更多具體指標</strong>的求職者被推薦的比率是那些一個都沒用的求職者的<strong className="text-foreground">兩倍。</strong>這不是猜測。這是我在 500 次以上錄用中觀察到的。</p>
@@ -988,42 +1061,66 @@ const ProblemSolvingGuideZhTw = () => {
 
             <div className="bg-background border border-border rounded-xl p-5 md:p-6 mb-6">
               <h3 className="font-heading text-lg text-gold mb-4">練習記分卡</h3>
-              <CodeBlock>{`  練習記分卡
-  ===========
-
-  我有在回答前釐清嗎？              是 / 否
-  我有找到根本原因嗎？              是 / 否
-  我有展示 2 個以上的選項嗎？        是 / 否
-  我有使用具體數字嗎？              是 / 否
-  我有分享學到的教訓嗎？            是 / 否
-  我有控制在 2 分鐘以內嗎？          是 / 否
-
-  分數：___/6
-
-  目標：在面試前穩定達到 5/6。`}</CodeBlock>
+              <div className="space-y-2">
+                {[
+                  "我有在回答前釐清嗎？",
+                  "我有找到根本原因嗎？",
+                  "我有展示 2 個以上的選項嗎？",
+                  "我有使用具體數字嗎？",
+                  "我有分享學到的教訓嗎？",
+                  "我有控制在 2 分鐘以內嗎？",
+                ].map((item, i) => (
+                  <div key={i} className="flex items-center gap-3 bg-background border border-border rounded-lg px-4 py-2.5">
+                    <div className="w-5 h-5 rounded border-2 border-gold/40 shrink-0" />
+                    <span className="text-foreground text-sm flex-1">{item}</span>
+                    <span className="text-muted-foreground text-xs">是 / 否</span>
+                  </div>
+                ))}
+                <div className="flex items-center justify-between mt-3 px-1">
+                  <p className="text-foreground text-sm font-semibold">分數：___/6</p>
+                  <p className="text-gold text-sm font-medium">目標：在面試前穩定達到 5/6。</p>
+                </div>
+              </div>
             </div>
 
             <div className="bg-background border border-border rounded-xl p-5 md:p-6">
               <h3 className="font-heading text-lg text-gold mb-4">下次面試前：檢查清單</h3>
-              <CodeBlock>{`  準備
-  [ ] 我有 3 個按照四步驟框架準備的故事。
-  [ ] 每個故事都有具體數字（前後對比、%、$、時間）。
-  [ ] 我用真實來源研究了這家公司。
-  [ ] 我知道我的「為什麼選這家公司？」回答，有 3 個加權標準。
-  [ ] 我知道我的「為什麼在找工作？」回答，框架為差距分析。
-
-  面試中
-  [ ] 我會在回答前暫停。需要時釐清。
-  [ ] 我會在解決問題之前先分類。
-  [ ] 我會陳述我的假設並解釋如何測試。
-  [ ] 被問到「你會怎麼……？」時我會展示 2-3 個選項。
-  [ ] 我會在每個回答中使用數字。不要模糊的宣稱。
-  [ ] 我會用學到的教訓結束每個故事。
-
-  面試後
-  [ ] 我會寫下每一個被問到的問題。
-  [ ] 我會用四步驟框架為我的回答打分。
-  [ ] 我會找出我漏掉的步驟並練習它。`}</CodeBlock>
+              <div className="space-y-5">
+                {[
+                  { heading: "準備", items: [
+                    "我有 3 個按照四步驟框架準備的故事。",
+                    "每個故事都有具體數字（前後對比、%、$、時間）。",
+                    "我用真實來源研究了這家公司。",
+                    "我知道我的「為什麼選這家公司？」回答，有 3 個加權標準。",
+                    "我知道我的「為什麼在找工作？」回答，框架為差距分析。",
+                  ]},
+                  { heading: "面試中", items: [
+                    "我會在回答前暫停。需要時釐清。",
+                    "我會在解決問題之前先分類。",
+                    "我會陳述我的假設並解釋如何測試。",
+                    "被問到「你會怎麼……？」時我會展示 2-3 個選項。",
+                    "我會在每個回答中使用數字。不要模糊的宣稱。",
+                    "我會用學到的教訓結束每個故事。",
+                  ]},
+                  { heading: "面試後", items: [
+                    "我會寫下每一個被問到的問題。",
+                    "我會用四步驟框架為我的回答打分。",
+                    "我會找出我漏掉的步驟並練習它。",
+                  ]},
+                ].map((section) => (
+                  <div key={section.heading}>
+                    <p className="text-gold text-xs font-bold uppercase tracking-wider mb-2">{section.heading}</p>
+                    <div className="space-y-1.5">
+                      {section.items.map((item, i) => (
+                        <div key={i} className="flex items-start gap-3 bg-background border border-border rounded-lg px-4 py-2.5">
+                          <div className="w-4 h-4 mt-0.5 rounded border-2 border-gold/40 shrink-0" />
+                          <span className="text-foreground text-sm">{item}</span>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                ))}
+              </div>
             </div>
           </div>
         </section>
