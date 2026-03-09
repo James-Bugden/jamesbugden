@@ -780,26 +780,24 @@ const ProblemSolvingGuide = () => {
             <h3 className="font-heading text-lg text-foreground mb-4">The Mushroom Lovers Principle for All Interview Answers</h3>
             <p className="text-muted-foreground leading-relaxed mb-4">Even if you are not doing a formal case study, the principle applies to every behavioral answer: <strong className="text-foreground">bring data.</strong></p>
 
-            <CodeBlock>{`  VAGUE vs. SPECIFIC ANSWERS
-  ============================
-
-  VAGUE                          SPECIFIC
-  ─────────────────────────      ─────────────────────────
-  "I improved the process."      "I reduced processing time
-                                  from 5 days to 2 days."
-
-  "We grew the team."            "We went from 4 to 12
-                                  people in 8 months."
-
-  "Customer satisfaction          "NPS went from 32 to 61
-   improved."                     in one quarter."
-
-  "I increased sales."           "I grew pipeline by 35%
-                                  and closed $2.1M in Q4."
-
-  "I saved the company            "I renegotiated 3 vendor
-   money."                        contracts, saving $180K
-                                  per year."`}</CodeBlock>
+            <div className="bg-card border border-border rounded-xl overflow-hidden">
+              <div className="grid grid-cols-2 text-xs font-bold uppercase tracking-wider">
+                <div className="px-5 py-3 bg-destructive/10 text-destructive border-b border-border">❌ Vague</div>
+                <div className="px-5 py-3 bg-green-500/10 text-green-600 border-b border-l border-border">✅ Specific</div>
+              </div>
+              {[
+                { vague: '"I improved the process."', specific: '"I reduced processing time from 5 days to 2 days."' },
+                { vague: '"We grew the team."', specific: '"We went from 4 to 12 people in 8 months."' },
+                { vague: '"Customer satisfaction improved."', specific: '"NPS went from 32 to 61 in one quarter."' },
+                { vague: '"I increased sales."', specific: '"I grew pipeline by 35% and closed $2.1M in Q4."' },
+                { vague: '"I saved the company money."', specific: '"I renegotiated 3 vendor contracts, saving $180K per year."' },
+              ].map((row, i) => (
+                <div key={i} className="grid grid-cols-2 border-b border-border last:border-b-0">
+                  <div className="px-5 py-3 text-muted-foreground text-sm italic">{row.vague}</div>
+                  <div className="px-5 py-3 text-foreground text-sm font-medium border-l border-border">{row.specific}</div>
+                </div>
+              ))}
+            </div>
 
             <div className="bg-card border border-gold/30 rounded-xl p-5 mt-6">
               <p className="text-muted-foreground text-sm leading-relaxed"><strong className="text-gold">From my experience:</strong> I keep a mental scorecard during every interview. When a candidate uses specific numbers, I circle their answer in my notes. Candidates who use <strong className="text-foreground">3 or more specific metrics</strong> in an interview get recommended at <strong className="text-foreground">double the rate</strong> of those who use none. That is not a guess. That is what I have seen across 500+ hires.</p>
