@@ -442,7 +442,7 @@ export default function ResumeAnalyzer() {
                         <div className="h-1.5 rounded-full overflow-hidden" style={{ backgroundColor: 'rgba(43,71,52,0.08)' }}>
                           <div
                             className={`h-full rounded-full transition-all ${s.status === "critical" ? "bg-destructive" : s.status === "warning" ? "bg-yellow-500" : ""}`}
-                            style={{ width: `${s.score * 10}%`, ...(s.status === "strong" ? { backgroundColor: '#22c55e' } : {}) }}
+                            style={{ width: `${s.score * 10}%`, ...(s.status === "strong" ? { backgroundColor: '#16a34a' } : {}) }}
                           />
                         </div>
                       </div>
