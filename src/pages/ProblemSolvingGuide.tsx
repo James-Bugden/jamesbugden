@@ -1070,19 +1070,26 @@ const ProblemSolvingGuide = () => {
 
             <div className="bg-background border border-border rounded-xl p-5 md:p-6 mb-6">
               <h3 className="font-heading text-lg text-gold mb-4">The Practice Scorecard</h3>
-              <CodeBlock>{`  PRACTICE SCORECARD
-  ====================
-
-  Did I clarify before answering?          YES / NO
-  Did I identify a root cause?             YES / NO
-  Did I show 2+ options?                   YES / NO
-  Did I use specific numbers?              YES / NO
-  Did I share what I learned?              YES / NO
-  Did I stay under 2 minutes?              YES / NO
-
-  SCORE: ___/6
-
-  Goal: Hit 5/6 consistently before your interview.`}</CodeBlock>
+              <div className="space-y-2">
+                {[
+                  "Did I clarify before answering?",
+                  "Did I identify a root cause?",
+                  "Did I show 2+ options?",
+                  "Did I use specific numbers?",
+                  "Did I share what I learned?",
+                  "Did I stay under 2 minutes?",
+                ].map((item, i) => (
+                  <div key={i} className="flex items-center gap-3 bg-background border border-border rounded-lg px-4 py-2.5">
+                    <div className="w-5 h-5 rounded border-2 border-gold/40 shrink-0" />
+                    <span className="text-foreground text-sm flex-1">{item}</span>
+                    <span className="text-muted-foreground text-xs">YES / NO</span>
+                  </div>
+                ))}
+                <div className="flex items-center justify-between mt-3 px-1">
+                  <p className="text-foreground text-sm font-semibold">Score: ___/6</p>
+                  <p className="text-gold text-sm font-medium">Goal: Hit 5/6 consistently before your interview.</p>
+                </div>
+              </div>
             </div>
 
             <div className="bg-background border border-border rounded-xl p-5 md:p-6">
