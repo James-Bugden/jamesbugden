@@ -1064,19 +1064,26 @@ const ProblemSolvingGuideZhTw = () => {
 
             <div className="bg-background border border-border rounded-xl p-5 md:p-6 mb-6">
               <h3 className="font-heading text-lg text-gold mb-4">練習記分卡</h3>
-              <CodeBlock>{`  練習記分卡
-  ===========
-
-  我有在回答前釐清嗎？              是 / 否
-  我有找到根本原因嗎？              是 / 否
-  我有展示 2 個以上的選項嗎？        是 / 否
-  我有使用具體數字嗎？              是 / 否
-  我有分享學到的教訓嗎？            是 / 否
-  我有控制在 2 分鐘以內嗎？          是 / 否
-
-  分數：___/6
-
-  目標：在面試前穩定達到 5/6。`}</CodeBlock>
+              <div className="space-y-2">
+                {[
+                  "我有在回答前釐清嗎？",
+                  "我有找到根本原因嗎？",
+                  "我有展示 2 個以上的選項嗎？",
+                  "我有使用具體數字嗎？",
+                  "我有分享學到的教訓嗎？",
+                  "我有控制在 2 分鐘以內嗎？",
+                ].map((item, i) => (
+                  <div key={i} className="flex items-center gap-3 bg-background border border-border rounded-lg px-4 py-2.5">
+                    <div className="w-5 h-5 rounded border-2 border-gold/40 shrink-0" />
+                    <span className="text-foreground text-sm flex-1">{item}</span>
+                    <span className="text-muted-foreground text-xs">是 / 否</span>
+                  </div>
+                ))}
+                <div className="flex items-center justify-between mt-3 px-1">
+                  <p className="text-foreground text-sm font-semibold">分數：___/6</p>
+                  <p className="text-gold text-sm font-medium">目標：在面試前穩定達到 5/6。</p>
+                </div>
+              </div>
             </div>
 
             <div className="bg-background border border-border rounded-xl p-5 md:p-6">
