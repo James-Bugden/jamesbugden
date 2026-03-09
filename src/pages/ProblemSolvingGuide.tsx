@@ -217,15 +217,26 @@ const ProblemSolvingGuide = () => {
 
             <p className="text-muted-foreground leading-relaxed mb-6">Watanabe introduces five character types in his book. Each one represents a different approach to solving problems. I see all five show up in interviews every single week.</p>
 
-            <CodeBlock>{`  THE 5 INTERVIEW TYPES
-  =====================
-
-  The Freezer       "I don't know..."          --> No Offer
-  The Complainer    "My boss was terrible..."   --> No Offer
-  The Dreamer       "I want to make impact..."  --> No Offer
-  The Rusher        "So I immediately did..."   --> No Offer
-  The Problem       "First, I figured out       --> OFFER
-    Solver           the root cause..."`}</CodeBlock>
+            <div className="grid gap-3">
+              {[
+                { type: "The Freezer", quote: '"I don\'t know..."', result: "No Offer", icon: "❄️", color: "border-destructive/30 bg-destructive/5" },
+                { type: "The Complainer", quote: '"My boss was terrible..."', result: "No Offer", icon: "😤", color: "border-destructive/30 bg-destructive/5" },
+                { type: "The Dreamer", quote: '"I want to make impact..."', result: "No Offer", icon: "💭", color: "border-destructive/30 bg-destructive/5" },
+                { type: "The Rusher", quote: '"So I immediately did..."', result: "No Offer", icon: "🏃", color: "border-destructive/30 bg-destructive/5" },
+                { type: "The Problem Solver", quote: '"First, I figured out the root cause..."', result: "OFFER", icon: "🧠", color: "border-green-500/30 bg-green-500/5" },
+              ].map((item) => (
+                <div key={item.type} className={`flex items-center gap-4 rounded-xl border p-4 ${item.color}`}>
+                  <span className="text-2xl shrink-0">{item.icon}</span>
+                  <div className="flex-1 min-w-0">
+                    <p className="text-foreground font-semibold text-sm">{item.type}</p>
+                    <p className="text-muted-foreground text-sm italic truncate">{item.quote}</p>
+                  </div>
+                  <span className={`shrink-0 text-xs font-bold uppercase px-3 py-1 rounded-full ${item.result === "OFFER" ? "bg-green-500/20 text-green-600" : "bg-destructive/20 text-destructive"}`}>
+                    {item.result}
+                  </span>
+                </div>
+              ))}
+            </div>
 
             <p className="text-muted-foreground leading-relaxed mt-6 mb-6">Here they are, translated from the book to the interview room.</p>
 
