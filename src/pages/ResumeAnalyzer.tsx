@@ -429,7 +429,7 @@ export default function ResumeAnalyzer() {
                         <div className="flex items-center justify-between text-xs mb-1">
                           <div className="flex items-center gap-2">
                             {s.status === "strong" ? (
-                              <Check className="w-3.5 h-3.5" style={{ color: '#2b4734' }} />
+                              <Check className="w-3.5 h-3.5" style={{ color: '#22c55e' }} />
                             ) : s.status === "critical" ? (
                               <X className="w-3.5 h-3.5 text-destructive" />
                             ) : (
