@@ -186,8 +186,8 @@ export default function ResumeVisualSummary({
                   </div>
                   <div className="w-full h-1.5 bg-muted rounded-full overflow-hidden">
                     <div
-                      className={`h-full rounded-full ${barColor} transition-all duration-700`}
-                      style={{ width: `${section.score * 10}%` }}
+                      className="h-full rounded-full transition-all duration-700"
+                      style={{ width: `${section.score * 10}%`, backgroundColor: sectionBarColor }}
                     />
                   </div>
                 </div>
