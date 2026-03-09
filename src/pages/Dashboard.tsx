@@ -335,7 +335,7 @@ const GuideCard = memo(function GuideCard({ guide, lang, onTrack }: { guide: Gui
             className="inline-flex items-center gap-1 mt-3 text-xs font-medium transition-colors hover:opacity-80"
             style={{ color: C.gold }}
           >
-            ⚡ {lang === "zh" ? `懶人包 · ${miniGuide.title.zh}` : `Mini guide · ${miniGuide.title.en}`}
+            {lang === "zh" ? "想看精簡版？點這裡 →" : "Want the mini guide version? Click here →"}
           </Link>
         )}
       </div>
