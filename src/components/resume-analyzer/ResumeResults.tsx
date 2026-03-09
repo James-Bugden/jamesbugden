@@ -106,8 +106,8 @@ function FindingsSummary({ sections, lang }: { sections: AnalysisResult["section
       </h3>
       <div className="flex gap-4 mb-3">
         <div className="flex items-center gap-2">
-          <CheckCircle className="w-4 h-4" style={{ color: '#22c55e' }} />
-          <span className="text-sm font-medium" style={{ color: '#22c55e' }}>{strengths} {t(lang, "strengths", "優勢")}</span>
+          <CheckCircle className="w-4 h-4" style={{ color: '#16a34a' }} />
+          <span className="text-sm font-medium" style={{ color: '#16a34a' }}>{strengths} {t(lang, "strengths", "優勢")}</span>
         </div>
         <div className="flex items-center gap-2">
           <AlertTriangle className="w-4 h-4 text-yellow-500" />
