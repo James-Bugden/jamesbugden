@@ -1094,25 +1094,42 @@ const ProblemSolvingGuide = () => {
 
             <div className="bg-background border border-border rounded-xl p-5 md:p-6">
               <h3 className="font-heading text-lg text-gold mb-4">Before Your Next Interview: Checklist</h3>
-              <CodeBlock>{`  PREPARATION
-  [ ] I have 3 stories ready that follow the 4-step framework.
-  [ ] Each story has specific numbers (before/after, %, $, time).
-  [ ] I have researched the company using real sources.
-  [ ] I know my "Why this company?" answer with 3 weighted criteria.
-  [ ] I know my "Why are you looking?" answer framed as a gap analysis.
-
-  DURING THE INTERVIEW
-  [ ] I will pause before answering. Clarify if needed.
-  [ ] I will break problems into categories before solving them.
-  [ ] I will state my hypothesis and explain how I'd test it.
-  [ ] I will show 2-3 options when asked "How would you...?"
-  [ ] I will use numbers in every answer. No vague claims.
-  [ ] I will close every story with what I learned.
-
-  AFTER THE INTERVIEW
-  [ ] I will write down every question I was asked.
-  [ ] I will score my answers against the 4-step framework.
-  [ ] I will identify which step I missed and practice it.`}</CodeBlock>
+              <div className="space-y-5">
+                {[
+                  { heading: "Preparation", items: [
+                    "I have 3 stories ready that follow the 4-step framework.",
+                    "Each story has specific numbers (before/after, %, $, time).",
+                    "I have researched the company using real sources.",
+                    'I know my "Why this company?" answer with 3 weighted criteria.',
+                    'I know my "Why are you looking?" answer framed as a gap analysis.',
+                  ]},
+                  { heading: "During the Interview", items: [
+                    "I will pause before answering. Clarify if needed.",
+                    "I will break problems into categories before solving them.",
+                    "I will state my hypothesis and explain how I'd test it.",
+                    'I will show 2-3 options when asked "How would you...?"',
+                    "I will use numbers in every answer. No vague claims.",
+                    "I will close every story with what I learned.",
+                  ]},
+                  { heading: "After the Interview", items: [
+                    "I will write down every question I was asked.",
+                    "I will score my answers against the 4-step framework.",
+                    "I will identify which step I missed and practice it.",
+                  ]},
+                ].map((section) => (
+                  <div key={section.heading}>
+                    <p className="text-gold text-xs font-bold uppercase tracking-wider mb-2">{section.heading}</p>
+                    <div className="space-y-1.5">
+                      {section.items.map((item, i) => (
+                        <div key={i} className="flex items-start gap-3 bg-background border border-border rounded-lg px-4 py-2.5">
+                          <div className="w-4 h-4 mt-0.5 rounded border-2 border-gold/40 shrink-0" />
+                          <span className="text-foreground text-sm">{item}</span>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                ))}
+              </div>
             </div>
           </div>
         </section>
