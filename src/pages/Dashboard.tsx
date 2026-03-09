@@ -22,6 +22,7 @@ interface Guide {
   zhPath?: string;
   tag: GuideTag;
   isNew?: boolean;
+  miniOf?: string;
 }
 
 interface ToolkitItem {
