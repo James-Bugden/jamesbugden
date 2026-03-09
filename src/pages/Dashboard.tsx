@@ -4,11 +4,11 @@ import { Navigate, Link } from "react-router-dom";
 import { Linkedin } from "lucide-react";
 import { InstagramIcon, ThreadsIcon } from "@/components/SocialIcons";
 import LanguageToggle from "@/components/LanguageToggle";
-import { ArrowRight, FileText, DollarSign, PenTool, ClipboardList, Search, X, Sparkles, Check } from "lucide-react";
+import { ArrowRight, FileText, DollarSign, PenTool, Search, X, Sparkles, Check } from "lucide-react";
 import PageSEO from "@/components/PageSEO";
 import LazySection from "@/components/LazySection";
 import { useRecentlyUsed, type RecentItem } from "@/hooks/useRecentlyUsed";
-import { getActiveJobs } from "@/lib/jobStore";
+
 import { useLocalStorage } from "@/hooks/useLocalStorage";
 import { useReadingProgress } from "@/hooks/useReadingProgress";
 
@@ -86,14 +86,8 @@ const tools: ToolItem[] = [
     description: { en: "Build a recruiter-approved resume from scratch using proven templates.", zh: "用實戰驗證的模板，從頭打造一份讓 Recruiter 點頭的履歷。" },
     path: "/resume",
   },
-  {
-    id: "job-tracker",
-    icon: <ClipboardList className="w-5 h-5" />,
-    iconBg: "#F0F9FF",
-    title: { en: "Job Tracker", zh: "求職進度追蹤" },
-    description: { en: "Track every application, interview, and follow-up in one place. Stop losing opportunities.", zh: "所有投遞、面試、後續跟進，一個地方搞定。不再漏掉任何機會。" },
-    path: "/jobs",
-  },
+
+
   {
     id: "offer-calculator",
     icon: <DollarSign className="w-5 h-5" />,
@@ -259,12 +253,8 @@ function getProgressBadge(toolId: string, lang: "en" | "zh", t: typeof i18n.en) 
       }
     } catch { /* ignore */ }
   }
-  if (toolId === "job-tracker") {
-    try {
-      const count = getActiveJobs().length;
-      if (count > 0) return `${count} ${t.activeApps}`;
-    } catch { /* ignore */ }
-  }
+
+
   return null;
 }
 
@@ -423,7 +413,6 @@ export default function Dashboard({ lang = "en" }: { lang?: "en" | "zh" }) {
     const usedIds = new Set(recentItems.map(r => r.id));
     if (usedIds.size === 0) return null; // show defaults instead
     const hasResumeAnalyzer = usedIds.has("resume-analyzer");
-    const hasJobTracker = usedIds.has("job-tracker");
     const hasSalaryKit = usedIds.has("salary-kit") || usedIds.has("tk-scripts") || usedIds.has("tk-counter") || usedIds.has("tk-offer");
 
     if (!hasResumeAnalyzer) {
@@ -432,14 +421,6 @@ export default function Dashboard({ lang = "en" }: { lang?: "en" | "zh" }) {
         label: { en: "Suggested Next Step", zh: "建議下一步" },
         title: { en: "Start with your resume", zh: "先從履歷開始" },
         desc: { en: "Get a recruiter-level score and specific fixes in 60 seconds.", zh: "60 秒拿到 Recruiter 視角的評分與改善建議。" },
-      };
-    }
-    if (!hasJobTracker) {
-      return {
-        path: "/jobs",
-        label: { en: "Suggested Next Step", zh: "建議下一步" },
-        title: { en: "Track your applications", zh: "開始追蹤你的投遞" },
-        desc: { en: "Organize every application, interview, and follow-up in one place.", zh: "所有投遞、面試、跟進，一個地方搞定。" },
       };
     }
     if (!hasSalaryKit) {
@@ -725,7 +706,13 @@ export default function Dashboard({ lang = "en" }: { lang?: "en" | "zh" }) {
                           </span>
                         )}
                       </div>
-                      <h3 className="text-lg font-bold mb-1" style={{ color: C.text }}>{tool.title[lang]}</h3>
+                      <h3 className="text-lg font-bold mb-1" style={{ color: C.text }}>
+                        {tool.title[lang]}
+                        {["resume-analyzer", "resume-builder", "offer-calculator"].includes(tool.id) && (
+                          <span className="ml-2 text-[10px] font-semibold uppercase tracking-wide px-1.5 py-0.5 rounded-full align-middle"
+                            style={{ backgroundColor: C.goldFaded, color: C.gold }}>Beta</span>
+                        )}
+                      </h3>
                       <p className="text-sm leading-relaxed" style={{ color: C.textSecondary }}>{tool.description[lang]}</p>
                     </div>
                     <div className="flex justify-end mt-4">
