@@ -409,8 +409,8 @@ export default function ResumeAnalyzer() {
 
                   {/* Mock score header */}
                   <div className="flex flex-col items-center mb-6">
-                    <div className="w-20 h-20 rounded-full flex items-center justify-center mb-2" style={{ border: '5px solid #22c55e' }}>
-                      <span className="font-heading text-2xl font-bold" style={{ color: '#22c55e' }}>B</span>
+                    <div className="w-20 h-20 rounded-full flex items-center justify-center mb-2" style={{ border: '5px solid #16a34a' }}>
+                      <span className="font-heading text-2xl font-bold" style={{ color: '#16a34a' }}>B</span>
                     </div>
                     <p className="font-heading text-lg font-bold" style={{ color: '#1A1A1A' }}>74 <span className="text-sm font-normal" style={{ color: '#6B6B6B' }}>/100</span></p>
                     <p className="text-xs" style={{ color: '#6B6B6B' }}>{t(lang, "Overall Resume Score", "整體履歷評分")}</p>
@@ -429,7 +429,7 @@ export default function ResumeAnalyzer() {
                         <div className="flex items-center justify-between text-xs mb-1">
                           <div className="flex items-center gap-2">
                             {s.status === "strong" ? (
-                              <Check className="w-3.5 h-3.5" style={{ color: '#22c55e' }} />
+                              <Check className="w-3.5 h-3.5" style={{ color: '#16a34a' }} />
                             ) : s.status === "critical" ? (
                               <X className="w-3.5 h-3.5 text-destructive" />
                             ) : (
@@ -437,12 +437,12 @@ export default function ResumeAnalyzer() {
                             )}
                             <span className="font-medium" style={{ color: '#1A1A1A' }}>{s.label}</span>
                           </div>
-                          <span className={`font-semibold ${s.status === "strong" ? "" : s.status === "critical" ? "text-destructive" : "text-yellow-600"}`} style={s.status === "strong" ? { color: '#22c55e' } : undefined}>{s.score}/10</span>
+                          <span className={`font-semibold ${s.status === "strong" ? "" : s.status === "critical" ? "text-destructive" : "text-yellow-600"}`} style={s.status === "strong" ? { color: '#16a34a' } : undefined}>{s.score}/10</span>
                         </div>
                         <div className="h-1.5 rounded-full overflow-hidden" style={{ backgroundColor: 'rgba(43,71,52,0.08)' }}>
                           <div
                             className={`h-full rounded-full transition-all ${s.status === "critical" ? "bg-destructive" : s.status === "warning" ? "bg-yellow-500" : ""}`}
-                            style={{ width: `${s.score * 10}%`, ...(s.status === "strong" ? { backgroundColor: '#22c55e' } : {}) }}
+                            style={{ width: `${s.score * 10}%`, ...(s.status === "strong" ? { backgroundColor: '#16a34a' } : {}) }}
                           />
                         </div>
                       </div>
