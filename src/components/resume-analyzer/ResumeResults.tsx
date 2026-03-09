@@ -165,8 +165,8 @@ function SegmentationProfile({ segmentation, lang }: { segmentation: AnalysisRes
 /* ──────────────────── Section Card ──────────────────── */
 function SectionCard({ section, lang, defaultOpen, locked }: { section: AnalysisResult["sections"][0]; lang: Language; defaultOpen?: boolean; locked?: boolean }) {
   const [open, setOpen] = useState(locked ? false : (defaultOpen || false));
-  const scoreColor = section.score >= 8 ? "#2b4734" : section.score >= 6 ? "#D4930D" : section.score >= 4 ? "#c4700a" : "#b91c1c";
-  const barColor = section.score >= 7 ? "#2b4734" : section.score >= 5 ? "#eab308" : "#b91c1c";
+  const scoreColor = section.score >= 8 ? "#16a34a" : section.score >= 6 ? "#d97706" : section.score >= 4 ? "#ea580c" : "#dc2626";
+  const barColor = section.score >= 8 ? "#16a34a" : section.score >= 6 ? "#d97706" : section.score >= 4 ? "#ea580c" : "#dc2626";
 
   return (
     <div
