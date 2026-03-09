@@ -41,7 +41,7 @@ function ScoreHero({ score, lang }: { score: number; lang: Language }) {
   const radius = (size - 14) / 2;
   const circumference = 2 * Math.PI * radius;
   const offset = circumference - (animatedScore / 100) * circumference;
-  const color = score >= 90 ? "#2b4734" : score >= 75 ? "#2b4734" : score >= 65 ? "#D4930D" : score >= 50 ? "#c4700a" : "#b91c1c";
+  const color = score >= 80 ? "#16a34a" : score >= 60 ? "#d97706" : score >= 40 ? "#ea580c" : "#dc2626";
   const grade = score >= 90 ? "A+" : score >= 80 ? "A" : score >= 70 ? "B" : score >= 60 ? "C" : score >= 50 ? "D" : "F";
 
   const verdictText = (s: number) => {
