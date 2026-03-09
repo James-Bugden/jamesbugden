@@ -412,25 +412,25 @@ export default function Dashboard({ lang = "en" }: { lang?: "en" | "zh" }) {
     if (!hasResumeAnalyzer) {
       return {
         path: "/resume-analyzer",
-        label: { en: "Suggested Next Step", zh: "建議的下一步" },
-        title: { en: "Start with your resume", zh: "從履歷開始" },
-        desc: { en: "Get a recruiter-level score and specific fixes in 60 seconds.", zh: "60 秒內拿到招募官等級的評分和具體修改建議。" },
+        label: { en: "Suggested Next Step", zh: "建議下一步" },
+        title: { en: "Start with your resume", zh: "先從履歷開始" },
+        desc: { en: "Get a recruiter-level score and specific fixes in 60 seconds.", zh: "60 秒拿到 Recruiter 視角的評分與改善建議。" },
       };
     }
     if (!hasJobTracker) {
       return {
         path: "/jobs",
-        label: { en: "Suggested Next Step", zh: "建議的下一步" },
-        title: { en: "Track your applications", zh: "追蹤你的申請" },
-        desc: { en: "Organize every application, interview, and follow-up in one place.", zh: "在一個地方管理每一個申請、面試和後續跟進。" },
+        label: { en: "Suggested Next Step", zh: "建議下一步" },
+        title: { en: "Track your applications", zh: "開始追蹤你的投遞" },
+        desc: { en: "Organize every application, interview, and follow-up in one place.", zh: "所有投遞、面試、跟進，一個地方搞定。" },
       };
     }
     if (!hasSalaryKit) {
       return {
         path: lang === "zh" ? "/zh-tw/salary-starter-kit" : "/salary-starter-kit",
-        label: { en: "Suggested Next Step", zh: "建議的下一步" },
-        title: { en: "Prepare to negotiate", zh: "準備談薪水" },
-        desc: { en: "Scripts, templates, and the exact numbers for your next offer.", zh: "話術腳本、模板、還有下次 offer 需要的實際數字。" },
+        label: { en: "Suggested Next Step", zh: "建議下一步" },
+        title: { en: "Prepare to negotiate", zh: "準備談薪" },
+        desc: { en: "Scripts, templates, and the exact numbers for your next offer.", zh: "話術、範本、還有你下個 Offer 需要的實際數字。" },
       };
     }
     return null;
