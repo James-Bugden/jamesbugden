@@ -146,7 +146,7 @@ const OfficePoliticsGuide = () => {
             Let me be direct. The #1 reason talented people stall at work is not skill. Politics.
           </p>
           <p className="text-foreground text-lg leading-relaxed mb-6">
-            I've reviewed 20,000+ resumes. Made 500+ hires at Uber and Netskope. And I've seen this pattern over and over: a smart, hard-working person gets passed over, pushed out, or stuck. Not because they lacked ability. Because they lacked political awareness.
+            I've seen this pattern over and over: a smart, hard-working person gets passed over, pushed out, or stuck. Not because they lacked ability. Because they lacked political awareness.
           </p>
           <p className="text-muted-foreground leading-relaxed mb-6">
             Most people hear "office politics" and think backstabbing. Sucking up. Scheming.
