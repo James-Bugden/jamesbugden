@@ -8,7 +8,7 @@ import { ArrowRight, FileText, DollarSign, PenTool, ClipboardList, Search, X, Sp
 import PageSEO from "@/components/PageSEO";
 import LazySection from "@/components/LazySection";
 import { useRecentlyUsed, type RecentItem } from "@/hooks/useRecentlyUsed";
-import { getActiveJobs } from "@/lib/jobStore";
+
 import { useLocalStorage } from "@/hooks/useLocalStorage";
 import { useReadingProgress } from "@/hooks/useReadingProgress";
 
