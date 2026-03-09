@@ -22,6 +22,7 @@ interface Guide {
   zhPath?: string;
   tag: GuideTag;
   isNew?: boolean;
+  miniOf?: string;
 }
 
 interface ToolkitItem {
@@ -105,11 +106,11 @@ const tools: ToolItem[] = [
 
 const guides: Guide[] = [
   { id: "pivot-guide", title: { en: "Pivot Method Guide", zh: "轉職攻略" }, description: { en: "The complete 5-stage framework for changing careers without starting over.", zh: "完整 5 階段架構，讓你換跑道不必砍掉重練。" }, enPath: "/pivot-method-guide", zhPath: "/zh-tw/pivot-method-guide", tag: "getting-started" },
-  { id: "pivot-mini", title: { en: "Pivot Method Mini Guide", zh: "轉職攻略精華版" }, description: { en: "The same framework in 8 minutes. For when you need the short version.", zh: "同一套架構，8 分鐘讀完。趕時間的你適用。" }, enPath: "/pivot-method-mini-guide", zhPath: "/zh-tw/pivot-method-mini-guide", tag: "getting-started" },
+  { id: "pivot-mini", title: { en: "Pivot Method Mini Guide", zh: "轉職攻略精華版" }, description: { en: "The same framework in 8 minutes. For when you need the short version.", zh: "同一套架構，8 分鐘讀完。趕時間的你適用。" }, enPath: "/pivot-method-mini-guide", zhPath: "/zh-tw/pivot-method-mini-guide", tag: "getting-started", miniOf: "pivot-guide" },
   { id: "linkedin-guide", title: { en: "LinkedIn Guide", zh: "LinkedIn 優化指南" }, description: { en: "How to optimize your LinkedIn so recruiters actually find you.", zh: "怎麼調整 LinkedIn，讓 Recruiter 主動來找你。" }, enPath: "/linkedin-guide", zhPath: "/zh-tw/linkedin-guide", tag: "getting-started" },
   { id: "linkedin-brand", title: { en: "LinkedIn Branding Guide", zh: "LinkedIn 個人品牌指南" }, description: { en: "Build a personal brand that gets you inbound opportunities. Not just a profile update.", zh: "打造個人品牌，讓機會主動找上門。不只是改個大頭照。" }, enPath: "/linkedin-branding-guide", zhPath: "/zh-tw/linkedin-branding-guide", tag: "getting-started" },
   { id: "resume-guide", title: { en: "Resume Guide", zh: "履歷撰寫指南" }, description: { en: "The complete guide to writing a resume that passes the 6-second recruiter scan.", zh: "完整教學，寫出能通過 Recruiter 6 秒掃描的履歷。" }, enPath: "/resume-guide", tag: "applying" },
-  { id: "resume-ref", title: { en: "Resume Quick Reference", zh: "履歷速查表" }, description: { en: "One-page cheat sheet. The rules I check every resume against.", zh: "一頁濃縮。我審履歷時會看的所有重點。" }, enPath: "/resume-quick-reference", zhPath: "/zh-tw/resume-quick-reference", tag: "applying" },
+  { id: "resume-ref", title: { en: "Resume Quick Reference", zh: "履歷速查表" }, description: { en: "One-page cheat sheet. The rules I check every resume against.", zh: "一頁濃縮。我審履歷時會看的所有重點。" }, enPath: "/resume-quick-reference", zhPath: "/zh-tw/resume-quick-reference", tag: "applying", miniOf: "resume-guide" },
   { id: "interview-prep", title: { en: "Interview Prep Guide", zh: "面試準備指南" }, description: { en: "How to prepare for interviews at foreign companies in Taiwan. What they actually ask and why.", zh: "在台灣準備外商面試的完整攻略。他們問什麼、為什麼這樣問。" }, enPath: "/interview-prep-guide", zhPath: "/zh-tw/interview-prep-guide", tag: "applying" },
   { id: "interview-full", title: { en: "Interview Preparation Guide", zh: "面試完整準備手冊" }, description: { en: "The extended version with practice questions, frameworks, and recruiter-insider tips.", zh: "進階版：附練習題、回答框架、Recruiter 內部觀點。" }, enPath: "/interview-preparation-guide", zhPath: "/zh-tw/interview-preparation-guide", tag: "applying" },
   { id: "salary-kit", title: { en: "Salary Starter Kit", zh: "談薪入門懶人包" }, description: { en: "Everything you need before your next salary conversation. Scripts, data, templates.", zh: "下次談薪前你需要的一切：話術、數據、範本。" }, enPath: "/salary-starter-kit", zhPath: "/zh-tw/salary-starter-kit", tag: "negotiating" },
@@ -277,6 +278,10 @@ const GuideCard = memo(function GuideCard({ guide, lang, onTrack }: { guide: Gui
   const completed = isComplete(guide.id);
   const progress = completed ? 100 : getProgress(guide.id);
 
+  // Find linked mini guide
+  const miniGuide = guides.find(g => g.miniOf === guide.id);
+  const miniPath = miniGuide ? (lang === "zh" && miniGuide.zhPath ? miniGuide.zhPath : miniGuide.enPath) : null;
+
   const handleToggle = (e: MouseEvent) => {
     e.preventDefault();
     e.stopPropagation();
@@ -321,6 +326,18 @@ const GuideCard = memo(function GuideCard({ guide, lang, onTrack }: { guide: Gui
         </div>
         <h4 className="text-base font-bold mb-1 pr-6" style={{ color: C.text }}>{guide.title[lang]}</h4>
         <p className="text-sm leading-relaxed" style={{ color: C.textSecondary }}>{guide.description[lang]}</p>
+
+        {/* Mini guide quick link */}
+        {miniGuide && miniPath && (
+          <Link
+            to={miniPath}
+            onClick={(e) => { e.stopPropagation(); onTrack(miniGuide.id); }}
+            className="inline-flex items-center gap-1 mt-3 text-xs font-medium transition-colors hover:opacity-80"
+            style={{ color: C.gold }}
+          >
+            ⚡ {lang === "zh" ? `精華版 · ${miniGuide.title.zh}` : `Quick version · ${miniGuide.title.en}`}
+          </Link>
+        )}
       </div>
 
       {/* Progress bar */}
@@ -451,13 +468,14 @@ export default function Dashboard({ lang = "en" }: { lang?: "en" | "zh" }) {
     user?.email?.split("@")[0] ||
     (lang === "zh" ? "你" : "there");
 
-  const filteredGuides = activeFilter === "all" ? guides : guides.filter((g) => g.tag === activeFilter);
+  const primaryGuides = guides.filter(g => !g.miniOf);
+  const filteredGuides = activeFilter === "all" ? primaryGuides : primaryGuides.filter((g) => g.tag === activeFilter);
 
   const groupedGuides = activeFilter === "all"
     ? (["getting-started", "applying", "negotiating"] as GuideTag[]).map((tag) => ({
         tag,
         label: t.groupLabels[tag],
-        items: guides.filter((g) => g.tag === tag),
+        items: primaryGuides.filter((g) => g.tag === tag),
       }))
     : null;
 

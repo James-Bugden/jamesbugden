@@ -1,41 +1,48 @@
 
 
-## Plan: Prioritize Full Guides Over Mini Guides on Dashboard
+## Resume Builder Feature Improvements
 
-### Problem
-Currently, full guides and mini guides are listed sequentially at the same visual weight. Mini guides (Pivot Mini, Resume Quick Reference) sit right next to their full counterparts, making it unclear which to read first.
+### Priority 1: AI "Tailor to Job Description" Panel
+- Add a new tab or panel in the "AI Tools" section (which currently shows "Coming soon")
+- User pastes a job description → edge function analyzes keyword overlap with current resume
+- Returns: missing keywords, suggested bullet point rewrites, match percentage
+- Reuses existing `resume-ai` edge function with a new `action: "tailor"` mode
+- UI: Split panel with JD on left, suggestions on right, one-click "Apply" buttons
 
-### Approach: Pair Full + Mini with Visual Hierarchy
+### Priority 2: Resume Completeness Score Widget
+- Floating widget in the editor sidebar showing real-time completion percentage
+- Scoring rules: has summary (+10), has 2+ experience entries (+20), all entries have descriptions (+15), dates filled (+10), contact info complete (+15), skills section exists (+10), quantified achievements detected (+20)
+- Visual: circular progress ring with percentage, expandable checklist of what's missing
+- Lives above the "Add Content" button in the Content tab
 
-For each topic that has both a full and mini version, show the **full guide as the primary card** and nest a subtle "Quick version" link inside or below it. This keeps mini guides accessible without competing for attention.
+### Priority 3: Populate the "AI Tools" Tab
+- Currently renders "AI Tools — Coming soon" placeholder
+- Build out with: "Tailor to Job" (above), "Generate Summary from Experience", "Suggest Skills", "Optimize Bullet Points (batch)"
+- Each tool card shows a description, input area, and results
 
-**Specifically:**
-1. Add a `miniOf?: string` field to the `Guide` interface pointing to the parent guide's `id`
-2. Mark `pivot-mini` as `miniOf: "pivot-guide"` and `resume-ref` as `miniOf: "resume-guide"`
-3. Filter mini guides out of the main grid rendering
-4. In `GuideCard`, if a guide has linked minis, render a small secondary link below the description — e.g. "⚡ 8-min version" / "⚡ 精華版" — that links to the mini guide's path
-5. The mini link uses `e.stopPropagation()` so clicking it navigates to the mini, while clicking the card goes to the full guide
+### Priority 4: Real-time Word Count per Section
+- Add a small `<span>` below each `RichTextEditor` showing word count and bullet point count
+- Highlight in amber if too long (>150 words per entry) or too short (<20 words)
+- Lightweight: computed from the editor's text content on each change
 
-### Visual Result
-Each card with a mini version gets a subtle inline link:
+### Priority 5: Click-to-Edit on Preview (Inline Editing)
+- When user clicks text on the A4 preview, show a floating input/textarea positioned over the clicked element
+- On blur/enter, update the corresponding field in the data model
+- Start with simple fields only: job title, company name, degree, institution
+- More complex than other items; implement after the above
 
-```text
-┌──────────────────────────────┐
-│ GETTING STARTED              │
-│ Pivot Method Guide           │
-│ Complete 5-stage framework…  │
-│                              │
-│ ⚡ 8-min quick version       │
-│ ▃▃▃▃▃▃▃▃▃▃▃▃▃▃▃▃▃▃ 0%      │
-└──────────────────────────────┘
-```
+### Files to Edit
+- `src/pages/ResumeBuilder.tsx` — Add completeness widget, wire AI Tools tab
+- `src/components/resume-builder/ResumeTopNav.tsx` — No changes needed
+- `src/components/resume-builder/RichTextEditor.tsx` — Add word count display
+- `supabase/functions/resume-ai/index.ts` — Add `tailor` action for JD matching
+- New: `src/components/resume-builder/CompletenessScore.tsx` — Score widget component
+- New: `src/components/resume-builder/AiToolsPanel.tsx` — Full AI tools tab content
+- New: `src/components/resume-builder/TailorToJob.tsx` — JD tailoring panel
 
-This removes 2 cards from the grid (less clutter), prioritizes full guides, and keeps minis one click away.
-
-### Files Changed
-- **`src/pages/Dashboard.tsx`** only:
-  - `Guide` interface: add `miniOf?: string`
-  - Guides array: add `miniOf` to `pivot-mini` and `resume-ref`
-  - Rendering: filter out guides where `miniOf` is set from the main grid
-  - `GuideCard`: look up any mini guide linked to the current guide, render a small secondary link
+### Implementation Order
+1. Completeness score widget (standalone, no backend needed)
+2. Word count on RichTextEditor (small change)
+3. AI Tools tab with Tailor to Job (needs edge function update)
+4. Click-to-edit on preview (complex, last)
 
