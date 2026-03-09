@@ -163,7 +163,7 @@ export default function ResumeVisualSummary({
           </h3>
           <div className="space-y-3">
             {sections.map((section, i) => {
-              const barColor = section.score >= 8 ? "bg-executive-green" : section.score >= 5 ? "bg-yellow-500" : "bg-destructive";
+              const sectionBarColor = getScoreColor(section.score);
               const isHovered = hoveredIdx === i;
               return (
                 <div
