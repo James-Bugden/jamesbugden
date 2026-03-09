@@ -120,7 +120,7 @@ function FindingsSummary({ sections, lang }: { sections: AnalysisResult["section
       </div>
       {/* Stacked bar */}
       <div className="w-full h-2.5 rounded-full overflow-hidden flex" style={{ backgroundColor: 'rgba(43,71,52,0.08)' }}>
-        {strengths > 0 && <div className="h-full" style={{ width: `${(strengths / total) * 100}%`, backgroundColor: '#2b4734' }} />}
+        {strengths > 0 && <div className="h-full" style={{ width: `${(strengths / total) * 100}%`, backgroundColor: '#22c55e' }} />}
         {warnings > 0 && <div className="h-full bg-yellow-500" style={{ width: `${(warnings / total) * 100}%` }} />}
         {criticals > 0 && <div className="h-full bg-destructive" style={{ width: `${(criticals / total) * 100}%` }} />}
       </div>
