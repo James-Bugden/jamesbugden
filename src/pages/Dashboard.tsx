@@ -468,13 +468,14 @@ export default function Dashboard({ lang = "en" }: { lang?: "en" | "zh" }) {
     user?.email?.split("@")[0] ||
     (lang === "zh" ? "你" : "there");
 
-  const filteredGuides = activeFilter === "all" ? guides : guides.filter((g) => g.tag === activeFilter);
+  const primaryGuides = guides.filter(g => !g.miniOf);
+  const filteredGuides = activeFilter === "all" ? primaryGuides : primaryGuides.filter((g) => g.tag === activeFilter);
 
   const groupedGuides = activeFilter === "all"
     ? (["getting-started", "applying", "negotiating"] as GuideTag[]).map((tag) => ({
         tag,
         label: t.groupLabels[tag],
-        items: guides.filter((g) => g.tag === tag),
+        items: primaryGuides.filter((g) => g.tag === tag),
       }))
     : null;
 
