@@ -437,7 +437,7 @@ export default function ResumeAnalyzer() {
                             )}
                             <span className="font-medium" style={{ color: '#1A1A1A' }}>{s.label}</span>
                           </div>
-                          <span className={`font-semibold ${s.status === "strong" ? "" : s.status === "critical" ? "text-destructive" : "text-yellow-600"}`} style={s.status === "strong" ? { color: '#2b4734' } : undefined}>{s.score}/10</span>
+                          <span className={`font-semibold ${s.status === "strong" ? "" : s.status === "critical" ? "text-destructive" : "text-yellow-600"}`} style={s.status === "strong" ? { color: '#22c55e' } : undefined}>{s.score}/10</span>
                         </div>
                         <div className="h-1.5 rounded-full overflow-hidden" style={{ backgroundColor: 'rgba(43,71,52,0.08)' }}>
                           <div
