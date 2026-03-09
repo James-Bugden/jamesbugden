@@ -72,6 +72,7 @@ const JobOfferGuide = lazy(() => import("./pages/JobOfferGuide"));
 const JobOfferGuideZhTw = lazy(() => import("./pages/JobOfferGuideZhTw"));
 const ProblemSolvingGuide = lazy(() => import("./pages/ProblemSolvingGuide"));
 const ProblemSolvingGuideZhTw = lazy(() => import("./pages/ProblemSolvingGuideZhTw"));
+const OfficePoliticsGuide = lazy(() => import("./pages/OfficePoliticsGuide"));
 
 // Toolkit pages - English
 const ToolkitIndex = lazy(() => import("./pages/toolkit/ToolkitIndex"));
