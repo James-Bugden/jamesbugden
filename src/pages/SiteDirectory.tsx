@@ -56,6 +56,7 @@ const sections: Section[] = [
       { label: "AI Job Search Guide", en: "/ai-job-search-guide", zh: "/zh-tw/ai-job-search-guide" },
       { label: "Job Offer Guide", en: "/job-offer-guide", zh: "/zh-tw/job-offer-guide" },
       { label: "Problem Solving 101 Guide", en: "/problem-solving-guide", zh: "/zh-tw/problem-solving-guide" },
+      { label: "Office Politics Guide", en: "/office-politics-guide" },
     ],
   },
   {
