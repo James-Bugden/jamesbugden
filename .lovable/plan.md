@@ -1,48 +1,33 @@
 
 
-## Resume Builder Feature Improvements
+## Plan: Upgrade Problem Solving Guide Graphics
 
-### Priority 1: AI "Tailor to Job Description" Panel
-- Add a new tab or panel in the "AI Tools" section (which currently shows "Coming soon")
-- User pastes a job description → edge function analyzes keyword overlap with current resume
-- Returns: missing keywords, suggested bullet point rewrites, match percentage
-- Reuses existing `resume-ai` edge function with a new `action: "tailor"` mode
-- UI: Split panel with JD on left, suggestions on right, one-click "Apply" buttons
+### Problem
+The Problem Solving Guide uses plain monospace ASCII art (`CodeBlock` / `<pre>` blocks) for all diagrams and visual elements. These look basic and don't match the premium executive design system used elsewhere. There are ~8 ASCII diagrams that need upgrading.
 
-### Priority 2: Resume Completeness Score Widget
-- Floating widget in the editor sidebar showing real-time completion percentage
-- Scoring rules: has summary (+10), has 2+ experience entries (+20), all entries have descriptions (+15), dates filled (+10), contact info complete (+15), skills section exists (+10), quantified achievements detected (+20)
-- Visual: circular progress ring with percentage, expandable checklist of what's missing
-- Lives above the "Add Content" button in the Content tab
+### Approach
+Replace each `CodeBlock` usage with a purpose-built responsive HTML/CSS infographic component, using the executive color palette (forest green, gold, cream) and the design patterns from the memory (cards, gradients, badges).
 
-### Priority 3: Populate the "AI Tools" Tab
-- Currently renders "AI Tools — Coming soon" placeholder
-- Build out with: "Tailor to Job" (above), "Generate Summary from Experience", "Suggest Skills", "Optimize Bullet Points (batch)"
-- Each tool card shows a description, input area, and results
+### Specific Graphics to Upgrade
 
-### Priority 4: Real-time Word Count per Section
-- Add a small `<span>` below each `RichTextEditor` showing word count and bullet point count
-- Highlight in amber if too long (>150 words per entry) or too short (<20 words)
-- Lightweight: computed from the editor's text content on each change
+1. **"The 5 Interview Types" table** (line ~220) — Replace with styled cards showing each type with icon, quote, and result badge (red "No Offer" / green "Offer").
 
-### Priority 5: Click-to-Edit on Preview (Inline Editing)
-- When user clicks text on the A4 preview, show a floating input/textarea positioned over the clicked element
-- On blur/enter, update the corresponding field in the data model
-- Start with simple fields only: job title, company name, degree, institution
-- More complex than other items; implement after the above
+2. **"Same Question, 5 Different Answers" comparison** (line ~299) — Replace with a stacked visual comparison with color-coded rows (4 red, 1 green).
 
-### Files to Edit
-- `src/pages/ResumeBuilder.tsx` — Add completeness widget, wire AI Tools tab
-- `src/components/resume-builder/ResumeTopNav.tsx` — No changes needed
-- `src/components/resume-builder/RichTextEditor.tsx` — Add word count display
-- `supabase/functions/resume-ai/index.ts` — Add `tailor` action for JD matching
-- New: `src/components/resume-builder/CompletenessScore.tsx` — Score widget component
-- New: `src/components/resume-builder/AiToolsPanel.tsx` — Full AI tools tab content
-- New: `src/components/resume-builder/TailorToJob.tsx` — JD tailoring panel
+3. **"Logic Tree: The Pepper Shaker"** (line ~407) — Replace with a responsive tree diagram using CSS borders/connectors, nodes as cards with gold accents.
 
-### Implementation Order
-1. Completeness score widget (standalone, no backend needed)
-2. Word count on RichTextEditor (small change)
-3. AI Tools tab with Tailor to Job (needs edge function update)
-4. Click-to-edit on preview (complex, last)
+4. **"Yes/No Tree: Mushroom Lovers Concert"** (line ~482) — Replace with a flowchart-style diagram using cards, arrows (CSS), and data callout badges showing percentages.
+
+5. **"Vague vs. Specific Answers"** (line ~698) — Replace with a side-by-side comparison grid with red (bad) / green (good) highlighting.
+
+6. **"Practice Scorecard"** (line ~990) — Replace with an interactive-looking checklist card with gold styling.
+
+7. **"Before Your Next Interview: Checklist"** (line ~1007) — Replace with a styled checklist with section headers and checkbox styling.
+
+### Technical Details
+- All changes in `src/pages/ProblemSolvingGuide.tsx` only (and mirrored to `ProblemSolvingGuideZhTw.tsx`)
+- Remove the generic `CodeBlock` component if no longer used
+- Use existing Tailwind tokens: `bg-executive-green`, `text-gold`, `text-cream`, `border-gold/30`, etc.
+- Responsive: stack vertically on mobile, use grid on desktop
+- No external dependencies needed — pure HTML/CSS components
 
