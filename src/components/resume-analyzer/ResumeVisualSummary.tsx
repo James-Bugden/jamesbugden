@@ -127,19 +127,19 @@ export default function ResumeVisualSummary({
                 return (
                   <div
                     key={idx}
-                    className={`absolute left-0 w-full border-y transition-all duration-200 cursor-pointer ${
-                      isHovered ? bandColorStrong(score) : bandColor(score)
-                    }`}
+                    className="absolute left-0 w-full border-y transition-all duration-200 cursor-pointer"
                     style={{
                       top: `${region.top}%`,
                       height: `${region.height}%`,
+                      ...(isHovered ? bandColorStrong(score) : bandColor(score)),
                     }}
                     onMouseEnter={() => setHoveredIdx(idx)}
                     onMouseLeave={() => setHoveredIdx(null)}
                   >
                     {/* Score badge */}
                     <div
-                      className={`absolute -left-1 top-1 w-5 h-5 rounded-full ${badgeBg(score)} text-white text-[10px] font-bold flex items-center justify-center shadow-md z-10`}
+                      className="absolute -left-1 top-1 w-5 h-5 rounded-full text-white text-[10px] font-bold flex items-center justify-center shadow-md z-10"
+                      style={badgeBg(score)}
                     >
                       {score}
                     </div>
