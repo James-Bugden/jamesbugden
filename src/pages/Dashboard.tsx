@@ -351,6 +351,7 @@ export default function Dashboard({ lang = "en" }: { lang?: "en" | "zh" }) {
   const [scrolled, setScrolled] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
   const [activeSection, setActiveSection] = useState<string>("tools");
+  const [nextStepDismissed, setNextStepDismissed] = useState(false);
   const searchInputRef = useRef<HTMLInputElement>(null);
   const { recentItems, trackItem } = useRecentlyUsed();
   const [bannerDismissed, setBannerDismissed] = useLocalStorage("dashboard_banner_dismissed_v1", false);
