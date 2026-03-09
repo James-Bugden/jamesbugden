@@ -54,6 +54,7 @@ const sections: Section[] = [
       { label: "Salary Starter Kit", en: "/salary-starter-kit", zh: "/zh-tw/salary-starter-kit" },
       { label: "Recruiter Screen Guide", en: "/recruiter-screen-guide", zh: "/zh-tw/recruiter-screen-guide" },
       { label: "AI Job Search Guide", en: "/ai-job-search-guide", zh: "/zh-tw/ai-job-search-guide" },
+      { label: "Job Offer Guide", en: "/job-offer-guide", zh: "/zh-tw/job-offer-guide" },
     ],
   },
   {
