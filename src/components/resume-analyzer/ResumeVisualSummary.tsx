@@ -32,7 +32,7 @@ function getScoreColor(score: number) {
   if (score <= 3) return "#dc2626";
   if (score <= 5) return "#ea580c";
   if (score <= 7) return "#d97706";
-  return "#16a34a";
+  return "#22c55e";
 }
 
 function bandColor(score: number) {
