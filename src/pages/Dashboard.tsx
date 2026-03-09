@@ -706,7 +706,13 @@ export default function Dashboard({ lang = "en" }: { lang?: "en" | "zh" }) {
                           </span>
                         )}
                       </div>
-                      <h3 className="text-lg font-bold mb-1" style={{ color: C.text }}>{tool.title[lang]}</h3>
+                      <h3 className="text-lg font-bold mb-1" style={{ color: C.text }}>
+                        {tool.title[lang]}
+                        {["resume-analyzer", "resume-builder", "offer-calculator"].includes(tool.id) && (
+                          <span className="ml-2 text-[10px] font-semibold uppercase tracking-wide px-1.5 py-0.5 rounded-full align-middle"
+                            style={{ backgroundColor: C.goldFaded, color: C.gold }}>Beta</span>
+                        )}
+                      </h3>
                       <p className="text-sm leading-relaxed" style={{ color: C.textSecondary }}>{tool.description[lang]}</p>
                     </div>
                     <div className="flex justify-end mt-4">
