@@ -1,43 +1,48 @@
-## Plan: Restyle Resume Analyzer + Make Output More Comprehensive
 
-### 1. Restyle Upload Page to Match Homepage
 
-**ResumeAnalyzer.tsx** changes:
+## Resume Builder Feature Improvements
 
-- **Header**: Change from `bg-background/95 backdrop-blur` to cream nav (`backgroundColor: '#FDFBF7'`) with green brand text (`color: '#2b4734'`), matching the homepage nav pattern
-- **Page background**: Wrap in `experiment` class, set `backgroundColor: '#FDFBF7'` on the outer container
-- **Hero text**: Use inline `style` with `color: '#1A1A1A'`, `fontSize: 'clamp(...)'` for heading, `color: '#6B6B6B'` for subtext — same as homepage
-- **Upload card**: Use `backgroundColor: '#FFFFFF'` with `boxShadow: '0 4px 24px rgba(0,0,0,0.08)'` instead of current Tailwind card tokens
-- **CTA button**: Change from `bg-[#1B3A2F]` to `backgroundColor: '#2b4734'` inline style with hover `#3a5a45`, matching homepage buttons
-- **"How It Works" icons**: Keep gold accent (`#D4930D`)
-- **Language toggle**: Match the gold-bordered pill style from homepage
-- **Analyzing screen**: Cream background, gold progress ring
+### Priority 1: AI "Tailor to Job Description" Panel
+- Add a new tab or panel in the "AI Tools" section (which currently shows "Coming soon")
+- User pastes a job description → edge function analyzes keyword overlap with current resume
+- Returns: missing keywords, suggested bullet point rewrites, match percentage
+- Reuses existing `resume-ai` edge function with a new `action: "tailor"` mode
+- UI: Split panel with JD on left, suggestions on right, one-click "Apply" buttons
 
-### 2. Restyle Results Page to Match Homepage
+### Priority 2: Resume Completeness Score Widget
+- Floating widget in the editor sidebar showing real-time completion percentage
+- Scoring rules: has summary (+10), has 2+ experience entries (+20), all entries have descriptions (+15), dates filled (+10), contact info complete (+15), skills section exists (+10), quantified achievements detected (+20)
+- Visual: circular progress ring with percentage, expandable checklist of what's missing
+- Lives above the "Add Content" button in the Content tab
 
-**ResumeResults.tsx** changes:
+### Priority 3: Populate the "AI Tools" Tab
+- Currently renders "AI Tools — Coming soon" placeholder
+- Build out with: "Tailor to Job" (above), "Generate Summary from Experience", "Suggest Skills", "Optimize Bullet Points (batch)"
+- Each tool card shows a description, input area, and results
 
-- **Score hero background**: Add a cream section wrapper with the homepage's cream/white alternating pattern
-- **Section cards**: Use `backgroundColor: '#FFFFFF'` with homepage shadow style instead of Tailwind `bg-card`
-- **Bullet rewrite card**: Gold border using `#D4930D` inline, white background
-- **Coaching CTA**: Keep the dark green gradient, but ensure gold button uses `#D4930D`
-- **Share section**: Keep dark green style, consistent with homepage
-- **Typography**: All headings use inline `color: '#1A1A1A'`, subtext `color: '#6B6B6B'`
+### Priority 4: Real-time Word Count per Section
+- Add a small `<span>` below each `RichTextEditor` showing word count and bullet point count
+- Highlight in amber if too long (>150 words per entry) or too short (<20 words)
+- Lightweight: computed from the editor's text content on each change
 
-### 3. Make Output More Comprehensive
+### Priority 5: Click-to-Edit on Preview (Inline Editing)
+- When user clicks text on the A4 preview, show a floating input/textarea positioned over the clicked element
+- On blur/enter, update the corresponding field in the data model
+- Start with simple fields only: job title, company name, degree, institution
+- More complex than other items; implement after the above
 
-**Add new sections to ResumeResults.tsx** (after existing content):
+### Files to Edit
+- `src/pages/ResumeBuilder.tsx` — Add completeness widget, wire AI Tools tab
+- `src/components/resume-builder/ResumeTopNav.tsx` — No changes needed
+- `src/components/resume-builder/RichTextEditor.tsx` — Add word count display
+- `supabase/functions/resume-ai/index.ts` — Add `tailor` action for JD matching
+- New: `src/components/resume-builder/CompletenessScore.tsx` — Score widget component
+- New: `src/components/resume-builder/AiToolsPanel.tsx` — Full AI tools tab content
+- New: `src/components/resume-builder/TailorToJob.tsx` — JD tailoring panel
 
-- **Segmentation Profile**: Display the `analysis.segmentation` data (years experience, seniority, industry, company type, target readiness) as a compact profile card — this data is returned by the AI but currently hidden
-- **Detailed Findings Count**: Show total strengths vs warnings vs critical findings across all sections as a summary bar
-- **Section-by-section**: Auto-expand all sections for logged-in users (currently only first + low-scoring ones open)
-- **Actionable Next Steps**: Add numbered action items derived from top priorities, with direct links to relevant guides (resume guide, interview prep, etc.)
-- make sure to add all the imporvemnt points for all parts of the experience section 
-- for the summary keep it to 2-3 sentences max 
+### Implementation Order
+1. Completeness score widget (standalone, no backend needed)
+2. Word count on RichTextEditor (small change)
+3. AI Tools tab with Tailor to Job (needs edge function update)
+4. Click-to-edit on preview (complex, last)
 
-### 4. Files to Change
-
-1. `src/pages/ResumeAnalyzer.tsx` — Restyle header, hero, upload area, analyzing screen to homepage colors
-2. `src/components/resume-analyzer/ResumeResults.tsx` — Restyle results + add Four Tests, Segmentation Profile, and enhanced next steps sections
-
-No new files needed. No database changes.
