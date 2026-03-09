@@ -427,17 +427,44 @@ const ProblemSolvingGuide = () => {
 
             <p className="text-muted-foreground leading-relaxed mb-6">A <strong className="text-foreground">logic tree</strong> is a visual tool that helps you break a big problem into smaller pieces. You start with one question on the left and split it into branches on the right, going from broad to specific.</p>
 
-            <CodeBlock>{`  LOGIC TREE: THE PEPPER SHAKER
-  ==============================
-
-  How to get more       ┌─── Increase the area of the top surface
-  pepper out of    ─────┤
-  one shake?            ├─── Increase the pepper     ┌── More holes per area
-                        │    from the surface    ─────┤
-                        │    area                     └── Bigger holes
-                        │
-                        └─── Make it easier for  ─────── Smaller pepper grains
-                             pepper to come out`}</CodeBlock>
+            <div className="bg-card border border-border rounded-xl p-5 md:p-6 overflow-x-auto">
+              <p className="text-xs font-bold text-gold uppercase tracking-wider mb-4">Logic Tree: The Pepper Shaker</p>
+              <div className="flex items-stretch gap-0 min-w-[500px]">
+                {/* Root */}
+                <div className="flex items-center shrink-0">
+                  <div className="bg-executive-green text-cream text-xs font-semibold px-4 py-3 rounded-lg text-center leading-snug">
+                    How to get more<br />pepper out of<br />one shake?
+                  </div>
+                  <div className="w-6 h-px bg-gold/40" />
+                </div>
+                {/* Branches */}
+                <div className="flex flex-col justify-center gap-2">
+                  <div className="flex items-center gap-0">
+                    <div className="w-4 border-t border-l border-gold/30 h-6 rounded-tl-lg" />
+                    <div className="bg-muted border border-border rounded-lg px-3 py-2 text-xs text-foreground font-medium">Increase the area of the top surface</div>
+                  </div>
+                  <div className="flex items-center gap-0">
+                    <div className="w-4 border-t border-gold/30" />
+                    <div className="flex items-center gap-0">
+                      <div className="bg-muted border border-border rounded-lg px-3 py-2 text-xs text-foreground font-medium">Increase pepper from the surface area</div>
+                      <div className="w-4 h-px bg-gold/30" />
+                      <div className="flex flex-col gap-1">
+                        <div className="bg-gold/10 border border-gold/20 rounded px-2 py-1 text-xs text-foreground">More holes per area</div>
+                        <div className="bg-gold/10 border border-gold/20 rounded px-2 py-1 text-xs text-foreground">Bigger holes</div>
+                      </div>
+                    </div>
+                  </div>
+                  <div className="flex items-center gap-0">
+                    <div className="w-4 border-t border-b border-l border-gold/30 h-6 rounded-bl-lg" />
+                    <div className="flex items-center gap-0">
+                      <div className="bg-muted border border-border rounded-lg px-3 py-2 text-xs text-foreground font-medium">Make it easier for pepper to come out</div>
+                      <div className="w-4 h-px bg-gold/30" />
+                      <div className="bg-gold/10 border border-gold/20 rounded px-2 py-1 text-xs text-foreground">Smaller pepper grains</div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
 
             <p className="text-muted-foreground leading-relaxed mt-6 mb-6">Four different solutions from one question. "Shake harder" isn't even on the list. That is the power of a logic tree.</p>
 
