@@ -1,6 +1,8 @@
 import { useState, useEffect, useRef, useCallback, useMemo, memo, MouseEvent } from "react";
 import { useAuth } from "@/contexts/AuthContext";
 import { Navigate, Link } from "react-router-dom";
+import { Linkedin } from "lucide-react";
+import { InstagramIcon, ThreadsIcon } from "@/components/SocialIcons";
 import LanguageToggle from "@/components/LanguageToggle";
 import { ArrowRight, FileText, DollarSign, PenTool, ClipboardList, Search, X, Sparkles, Check } from "lucide-react";
 import PageSEO from "@/components/PageSEO";
@@ -471,17 +473,15 @@ export default function Dashboard({ lang = "en" }: { lang?: "en" | "zh" }) {
 
       {/* Nav */}
       <nav
-        className="sticky top-0 z-50 transition-shadow duration-300"
-        style={{
-          backgroundColor: C.cream,
-          boxShadow: scrolled ? '0 1px 8px rgba(0,0,0,0.08)' : 'none',
-        }}
+        className={`sticky top-0 z-50 bg-executive-green transition-shadow duration-300 ${
+          scrolled ? 'shadow-lg shadow-black/20' : ''
+        }`}
       >
         <div className="max-w-[1200px] mx-auto flex items-center justify-between px-4 md:px-8 h-14">
           <div className="flex items-center gap-3">
-            <Link to="/" className="font-heading text-lg tracking-wide" style={{ color: C.darkGreen }}>JAMES BUGDEN</Link>
-            <span style={{ color: C.textSecondary }} className="text-sm hidden sm:inline">/</span>
-            <span className="text-sm font-semibold hidden sm:inline" style={{ color: C.text }}>{t.dashboard}</span>
+            <Link to="/" className="font-heading text-lg tracking-wide text-cream">JAMES BUGDEN</Link>
+            <span className="text-cream/40 text-sm hidden sm:inline">/</span>
+            <span className="text-sm font-semibold hidden sm:inline text-cream/80">{t.dashboard}</span>
           </div>
 
           {/* Section nav pills (desktop) */}
@@ -493,8 +493,8 @@ export default function Dashboard({ lang = "en" }: { lang?: "en" | "zh" }) {
                 className="text-sm font-medium px-3 py-1 rounded-full transition-colors"
                 style={
                   activeSection === sec.id
-                    ? { backgroundColor: C.goldFaded, color: C.gold }
-                    : { color: C.textSecondary }
+                    ? { backgroundColor: 'rgba(212,147,13,0.2)', color: C.gold }
+                    : { color: 'rgba(253,251,247,0.65)' }
                 }
               >
                 {sec.label}
@@ -503,14 +503,14 @@ export default function Dashboard({ lang = "en" }: { lang?: "en" | "zh" }) {
           </div>
 
           <div className="flex items-center gap-4 text-sm">
-            <span className="hidden sm:inline" style={{ color: C.textSecondary }}>{t.hey} {firstName}</span>
-            <button onClick={signOut} className="hover:opacity-80 transition-opacity" style={{ color: C.textSecondary }}>{t.signOut}</button>
-            <LanguageToggle />
+            <span className="hidden sm:inline text-cream/60">{t.hey} {firstName}</span>
+            <button onClick={signOut} className="hover:opacity-80 transition-opacity text-cream/60">{t.signOut}</button>
+            <LanguageToggle variant="nav" />
           </div>
         </div>
 
         {/* Mobile section nav */}
-        <div className="md:hidden border-t flex overflow-x-auto px-4 gap-1" style={{ borderColor: 'rgba(0,0,0,0.06)' }}>
+        <div className="md:hidden border-t border-white/10 flex overflow-x-auto px-4 gap-1">
           {sectionNavItems.map((sec) => (
             <button
               key={sec.id}
@@ -519,7 +519,7 @@ export default function Dashboard({ lang = "en" }: { lang?: "en" | "zh" }) {
               style={
                 activeSection === sec.id
                   ? { color: C.gold, borderBottom: `2px solid ${C.gold}` }
-                  : { color: C.textSecondary, borderBottom: '2px solid transparent' }
+                  : { color: 'rgba(253,251,247,0.5)', borderBottom: '2px solid transparent' }
               }
             >
               {sec.label}
@@ -851,10 +851,23 @@ export default function Dashboard({ lang = "en" }: { lang?: "en" | "zh" }) {
       </LazySection>
 
       {/* Footer */}
-      <footer className="py-10 text-center" style={{ backgroundColor: C.white }}>
-        <p className="font-heading text-lg mb-1" style={{ color: C.textSecondary }}>JAMES BUGDEN</p>
-        <p className="text-sm mb-1" style={{ color: C.textSecondary }}>james.careers</p>
-        <p className="text-xs" style={{ color: '#999' }}>{t.footerCopyright}</p>
+      <footer className="py-8 md:py-10 px-5 md:px-6 bg-card border-t border-border">
+        <div className="container mx-auto max-w-5xl flex flex-col items-center gap-4">
+          <div className="flex items-center gap-6">
+            <a href="https://www.linkedin.com/in/james-bugden/" target="_blank" rel="noopener noreferrer" className="text-muted-foreground hover:text-foreground transition-colors">
+              <Linkedin className="w-5 h-5" />
+            </a>
+            <a href="https://www.instagram.com/james.careers/" target="_blank" rel="noopener noreferrer" className="text-muted-foreground hover:text-foreground transition-colors">
+              <InstagramIcon className="w-5 h-5" />
+            </a>
+            <a href="https://www.threads.com/@james.careers" target="_blank" rel="noopener noreferrer" className="text-muted-foreground hover:text-foreground transition-colors">
+              <ThreadsIcon className="w-5 h-5" />
+            </a>
+          </div>
+          <span className="text-sm text-muted-foreground text-center w-full">
+            {t.footerCopyright}
+          </span>
+        </div>
       </footer>
     </>
   );
