@@ -526,63 +526,63 @@ const ProblemSolvingGuide = () => {
 
             <p className="text-muted-foreground leading-relaxed mb-6">A <strong className="text-foreground">yes/no tree</strong> puts people or things into buckets based on yes or no questions. Each answer leads to either a bucket (explanation) or another question.</p>
 
-            <div className="bg-card border border-border rounded-xl p-5 md:p-6">
-              <p className="text-xs font-bold text-gold uppercase tracking-wider mb-5">Yes/No Tree: Mushroom Lovers Concert Attendance</p>
-              <div className="flex flex-col items-center gap-0">
+            <div className="bg-card border border-border rounded-xl p-6 md:p-8">
+              <p className="text-xs font-bold text-gold uppercase tracking-wider mb-6">Yes/No Tree: Mushroom Lovers Concert Attendance</p>
+              <div className="flex flex-col items-center">
                 {/* Start node */}
-                <div className="bg-executive-green text-cream text-xs font-semibold px-5 py-3 rounded-lg text-center">All 500 students<br />and teachers</div>
-                <div className="w-px h-4 bg-gold/40" />
+                <div className="bg-executive-green text-cream text-sm font-semibold px-6 py-3.5 rounded-xl text-center">All 500 students<br />and teachers</div>
+                <div className="w-px h-8 bg-gold/40" />
                 {/* Question 1 */}
-                <div className="border border-border rounded-lg px-4 py-2 text-center text-sm text-foreground font-medium bg-muted/50">Do they know about the concerts?</div>
-                <div className="flex items-start w-full max-w-md mt-0">
+                <div className="border border-border rounded-xl px-5 py-3 text-center text-sm text-foreground font-medium bg-muted/50">Do they know about the concerts?</div>
+                <div className="flex w-full max-w-md mt-0">
                   <div className="flex-1 flex flex-col items-center">
-                    <div className="w-px h-4 bg-gold/40" />
-                    <span className="text-xs font-bold text-green-500 mb-1">YES</span>
-                    <div className="w-px h-3 bg-gold/40" />
+                    <div className="w-px h-6 bg-gold/40" />
+                    <span className="text-sm font-bold text-green-600 mb-2">YES</span>
+                    <div className="w-px h-6 bg-gold/40" />
                   </div>
                   <div className="flex-1 flex flex-col items-center">
-                    <div className="w-px h-4 bg-gold/40" />
-                    <span className="text-xs font-bold text-destructive mb-1">NO</span>
-                    <div className="bg-destructive/10 border border-destructive/20 rounded-lg px-3 py-2 text-center">
+                    <div className="w-px h-6 bg-gold/40" />
+                    <span className="text-sm font-bold text-destructive mb-2">NO</span>
+                    <div className="bg-destructive/10 border border-destructive/20 rounded-xl px-4 py-3 text-center">
                       <p className="text-foreground text-sm font-bold">350 people <span className="text-muted-foreground font-normal">(70%)</span></p>
-                      <p className="text-muted-foreground text-xs">"Not aware"</p>
+                      <p className="text-muted-foreground text-xs mt-0.5">"Not aware"</p>
                     </div>
                   </div>
                 </div>
                 {/* Question 2 */}
-                <div className="border border-border rounded-lg px-4 py-2 text-center text-sm text-foreground font-medium bg-muted/50 -mt-1">Have they ever attended?</div>
-                <div className="flex items-start w-full max-w-md mt-0">
+                <div className="border border-border rounded-xl px-5 py-3 text-center text-sm text-foreground font-medium bg-muted/50 mt-2">Have they ever attended?</div>
+                <div className="flex w-full max-w-md mt-0">
                   <div className="flex-1 flex flex-col items-center">
-                    <div className="w-px h-4 bg-gold/40" />
-                    <span className="text-xs font-bold text-green-500 mb-1">YES</span>
-                    <div className="w-px h-3 bg-gold/40" />
+                    <div className="w-px h-6 bg-gold/40" />
+                    <span className="text-sm font-bold text-green-600 mb-2">YES</span>
+                    <div className="w-px h-6 bg-gold/40" />
                   </div>
                   <div className="flex-1 flex flex-col items-center">
-                    <div className="w-px h-4 bg-gold/40" />
-                    <span className="text-xs font-bold text-destructive mb-1">NO</span>
-                    <div className="bg-destructive/10 border border-destructive/20 rounded-lg px-3 py-2 text-center">
+                    <div className="w-px h-6 bg-gold/40" />
+                    <span className="text-sm font-bold text-destructive mb-2">NO</span>
+                    <div className="bg-destructive/10 border border-destructive/20 rounded-xl px-4 py-3 text-center">
                       <p className="text-foreground text-sm font-bold">135 people <span className="text-muted-foreground font-normal">(27%)</span></p>
-                      <p className="text-muted-foreground text-xs">"Aware but never came"</p>
+                      <p className="text-muted-foreground text-xs mt-0.5">"Aware but never came"</p>
                     </div>
                   </div>
                 </div>
                 {/* Question 3 */}
-                <div className="border border-border rounded-lg px-4 py-2 text-center text-sm text-foreground font-medium bg-muted/50 -mt-1">Do they attend regularly?</div>
-                <div className="flex items-start w-full max-w-md mt-0">
+                <div className="border border-border rounded-xl px-5 py-3 text-center text-sm text-foreground font-medium bg-muted/50 mt-2">Do they attend regularly?</div>
+                <div className="flex w-full max-w-md mt-0">
                   <div className="flex-1 flex flex-col items-center">
-                    <div className="w-px h-4 bg-gold/40" />
-                    <span className="text-xs font-bold text-green-500 mb-1">YES</span>
-                    <div className="bg-green-500/10 border border-green-500/20 rounded-lg px-3 py-2 text-center">
+                    <div className="w-px h-6 bg-gold/40" />
+                    <span className="text-sm font-bold text-green-600 mb-2">YES</span>
+                    <div className="bg-green-500/10 border border-green-500/20 rounded-xl px-4 py-3 text-center">
                       <p className="text-foreground text-sm font-bold">12 people <span className="text-muted-foreground font-normal">(2%)</span></p>
-                      <p className="text-muted-foreground text-xs">"Loyal fans"</p>
+                      <p className="text-muted-foreground text-xs mt-0.5">"Loyal fans"</p>
                     </div>
                   </div>
                   <div className="flex-1 flex flex-col items-center">
-                    <div className="w-px h-4 bg-gold/40" />
-                    <span className="text-xs font-bold text-destructive mb-1">NO</span>
-                    <div className="bg-destructive/10 border border-destructive/20 rounded-lg px-3 py-2 text-center">
+                    <div className="w-px h-6 bg-gold/40" />
+                    <span className="text-sm font-bold text-destructive mb-2">NO</span>
+                    <div className="bg-destructive/10 border border-destructive/20 rounded-xl px-4 py-3 text-center">
                       <p className="text-foreground text-sm font-bold">3 people <span className="text-muted-foreground font-normal">(1%)</span></p>
-                      <p className="text-muted-foreground text-xs">"Came once, stopped"</p>
+                      <p className="text-muted-foreground text-xs mt-0.5">"Came once, stopped"</p>
                     </div>
                   </div>
                 </div>
