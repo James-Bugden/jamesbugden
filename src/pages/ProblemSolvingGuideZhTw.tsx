@@ -774,27 +774,24 @@ const ProblemSolvingGuideZhTw = () => {
             <h3 className="font-heading text-lg text-foreground mb-4">蘑菇戀人原則適用於所有面試回答</h3>
             <p className="text-muted-foreground leading-relaxed mb-4">即使你不是在做正式的案例研究，這個原則適用於每一個行為面試回答：<strong className="text-foreground">帶上數據。</strong></p>
 
-            <CodeBlock>{`  模糊 vs. 具體的回答
-  =====================
-
-  模糊                          具體
-  ─────────────────────────    ─────────────────────────
-  「我改善了流程。」            「我把處理時間從 5 天
-                                 降到 2 天。」
-
-  「我們擴大了團隊。」          「我們在 8 個月內
-                                 從 4 人增加到 12 人。」
-
-  「客戶滿意度                  「NPS 在一個季度內
-   提高了。」                    從 32 上升到 61。」
-
-  「我增加了業績。」            「我把銷售管道增加了
-                                 35%，第四季成交 210 萬
-                                 美元。」
-
-  「我為公司省了                「我重新談判了 3 份供應
-   錢。」                        商合約，每年節省 18 萬
-                                 美元。」`}</CodeBlock>
+            <div className="bg-card border border-border rounded-xl overflow-hidden">
+              <div className="grid grid-cols-2 text-xs font-bold uppercase tracking-wider">
+                <div className="px-5 py-3 bg-destructive/10 text-destructive border-b border-border">❌ 模糊</div>
+                <div className="px-5 py-3 bg-green-500/10 text-green-600 border-b border-l border-border">✅ 具體</div>
+              </div>
+              {[
+                { vague: "「我改善了流程。」", specific: "「我把處理時間從 5 天降到 2 天。」" },
+                { vague: "「我們擴大了團隊。」", specific: "「我們在 8 個月內從 4 人增加到 12 人。」" },
+                { vague: "「客戶滿意度提高了。」", specific: "「NPS 在一個季度內從 32 上升到 61。」" },
+                { vague: "「我增加了業績。」", specific: "「我把銷售管道增加了 35%，第四季成交 210 萬美元。」" },
+                { vague: "「我為公司省了錢。」", specific: "「我重新談判了 3 份供應商合約，每年節省 18 萬美元。」" },
+              ].map((row, i) => (
+                <div key={i} className="grid grid-cols-2 border-b border-border last:border-b-0">
+                  <div className="px-5 py-3 text-muted-foreground text-sm italic">{row.vague}</div>
+                  <div className="px-5 py-3 text-foreground text-sm font-medium border-l border-border">{row.specific}</div>
+                </div>
+              ))}
+            </div>
 
             <div className="bg-card border border-gold/30 rounded-xl p-5 mt-6">
               <p className="text-muted-foreground text-sm leading-relaxed"><strong className="text-gold">以我的經驗來說：</strong>我在每場面試中都保持一個心理記分卡。當求職者使用具體數字時，我會在筆記中圈出那個回答。在面試中使用 <strong className="text-foreground">3 個或更多具體指標</strong>的求職者被推薦的比率是那些一個都沒用的求職者的<strong className="text-foreground">兩倍。</strong>這不是猜測。這是我在 500 次以上錄用中觀察到的。</p>
