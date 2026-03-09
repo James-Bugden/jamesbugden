@@ -278,6 +278,10 @@ const GuideCard = memo(function GuideCard({ guide, lang, onTrack }: { guide: Gui
   const completed = isComplete(guide.id);
   const progress = completed ? 100 : getProgress(guide.id);
 
+  // Find linked mini guide
+  const miniGuide = guides.find(g => g.miniOf === guide.id);
+  const miniPath = miniGuide ? (lang === "zh" && miniGuide.zhPath ? miniGuide.zhPath : miniGuide.enPath) : null;
+
   const handleToggle = (e: MouseEvent) => {
     e.preventDefault();
     e.stopPropagation();
@@ -322,6 +326,18 @@ const GuideCard = memo(function GuideCard({ guide, lang, onTrack }: { guide: Gui
         </div>
         <h4 className="text-base font-bold mb-1 pr-6" style={{ color: C.text }}>{guide.title[lang]}</h4>
         <p className="text-sm leading-relaxed" style={{ color: C.textSecondary }}>{guide.description[lang]}</p>
+
+        {/* Mini guide quick link */}
+        {miniGuide && miniPath && (
+          <Link
+            to={miniPath}
+            onClick={(e) => { e.stopPropagation(); onTrack(miniGuide.id); }}
+            className="inline-flex items-center gap-1 mt-3 text-xs font-medium transition-colors hover:opacity-80"
+            style={{ color: C.gold }}
+          >
+            ⚡ {lang === "zh" ? `精華版 · ${miniGuide.title.zh}` : `Quick version · ${miniGuide.title.en}`}
+          </Link>
+        )}
       </div>
 
       {/* Progress bar */}
