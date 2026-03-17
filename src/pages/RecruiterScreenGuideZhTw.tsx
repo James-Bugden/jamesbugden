@@ -134,7 +134,7 @@ const RecruiterScreenGuideZhTw = () => {
   return (
     <div className="min-h-screen bg-background">
       <PageSEO
-        title="如何通過招募人員的電話篩選 | James Bugden"
+        title="如何通過HR面試關 | James Bugden"
         description="資深招募官的完整實戰手冊。逐字範例、薪資話術、以及招募人員使用的評分表。"
         path="/zh-tw/recruiter-screen-guide"
         lang="zh-Hant-TW"
@@ -166,7 +166,7 @@ const RecruiterScreenGuideZhTw = () => {
             <span className="text-sm text-cream/80">免費職涯資源</span>
           </div>
           <h1 className="font-heading text-3xl md:text-5xl lg:text-6xl text-cream leading-tight mb-4" style={{ lineHeight: 1.2 }}>
-            如何通過招募人員的<br className="hidden sm:block" />電話篩選
+            如何通過HR面試關
           </h1>
           <p className="text-lg md:text-xl text-cream/80 mb-3">
             資深招募官的完整實戰手冊
