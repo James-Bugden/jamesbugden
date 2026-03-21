@@ -286,7 +286,7 @@ export default function InterviewQuestionBank({ lang: initialLang }: { lang: Lan
     if (!count || count === 0) return;
 
     const randomOffset = Math.floor(Math.random() * count);
-    let query = supabase.from("interview_questions").select("*");
+    let query = (supabase as any).from("interview_questions").select("*");
     if (debouncedSearch) {
       query = query.or(
         `question_en.ilike.%${debouncedSearch}%,question_zh.ilike.%${debouncedSearch}%${sanitized ? `,tags.cs.{${sanitized}}` : ""}`

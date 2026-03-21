@@ -69,7 +69,7 @@ export default function AmIUnderpaidTab({ lang }: { lang: SalaryLang }) {
     const key = `${jobTitle}|${role}|${sector}|${exp}|${salaryNum}`;
     if (savedRef.current === key) return;
     savedRef.current = key;
-    supabase.from("salary_checks").insert({
+    (supabase as any).from("salary_checks").insert({
       job_title: jobTitle.trim(),
       role,
       sector: sector || null,
