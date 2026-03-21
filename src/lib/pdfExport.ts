@@ -1,6 +1,4 @@
 import { toast } from "@/hooks/use-toast";
-import html2canvas from "html2canvas";
-import jsPDF from "jspdf";
 
 interface ExportOptions {
   elementId: string;
@@ -8,15 +6,10 @@ interface ExportOptions {
   pageFormat: "a4" | "letter";
 }
 
-const PAGE_DIMS = {
-  a4: { wMM: 210, hMM: 297, wPT: 595.28, hPT: 841.89 },
-  letter: { wMM: 215.9, hMM: 279.4, wPT: 612, hPT: 792 },
-};
-
-const PX_PER_MM = 3.7795;
-const HEADER_SAFE_MM = 4;
-const FOOTER_SAFE_MM = 4;
-
+/**
+ * Export an element to PDF using the browser's native print dialog.
+ * This avoids vulnerable third-party PDF libraries (jsPDF, html2pdf).
+ */
 export async function exportToPdf({ elementId, fileName, pageFormat = "a4" }: ExportOptions) {
   const container = document.getElementById(elementId);
   if (!container) {
@@ -24,140 +17,56 @@ export async function exportToPdf({ elementId, fileName, pageFormat = "a4" }: Ex
     return;
   }
 
-  // Temporarily reposition the container on-screen so html2canvas can render it
-  const originalStyle = container.style.cssText;
-  container.style.cssText = `
-    position: fixed !important;
-    left: 0 !important;
-    top: 0 !important;
-    z-index: -9999 !important;
-    opacity: 1 !important;
-    pointer-events: none !important;
-    visibility: visible !important;
-    height: auto !important;
-    overflow: visible !important;
+  // Inject print-only styles
+  const styleId = "__pdf-export-print-styles";
+  let styleEl = document.getElementById(styleId) as HTMLStyleElement | null;
+  if (!styleEl) {
+    styleEl = document.createElement("style");
+    styleEl.id = styleId;
+    document.head.appendChild(styleEl);
+  }
+
+  const size = pageFormat === "letter" ? "letter" : "A4";
+
+  styleEl.textContent = `
+    @media print {
+      @page {
+        size: ${size} portrait;
+        margin: 0;
+      }
+      body * {
+        visibility: hidden !important;
+      }
+      #${CSS.escape(elementId)},
+      #${CSS.escape(elementId)} * {
+        visibility: visible !important;
+      }
+      #${CSS.escape(elementId)} {
+        position: fixed !important;
+        left: 0 !important;
+        top: 0 !important;
+        width: 100% !important;
+        z-index: 999999 !important;
+        background: white !important;
+        -webkit-print-color-adjust: exact !important;
+        print-color-adjust: exact !important;
+      }
+    }
   `;
 
-  try {
-    const dims = PAGE_DIMS[pageFormat] || PAGE_DIMS.a4;
+  // Set document title so the browser suggests it as the filename
+  const originalTitle = document.title;
+  document.title = fileName.replace(/\.pdf$/i, "");
 
-    const SCALE = 2;
-    const fullCanvas = await html2canvas(container, {
-      scale: SCALE,
-      useCORS: true,
-      allowTaint: true,
-      backgroundColor: "#ffffff",
-      logging: false,
-      onclone: (clonedDoc: Document) => {
-        // Modern browsers output color(srgb ...) which html2canvas can't parse.
-        // Fix ALL elements in the cloned document, not just the target.
-        const allEls = Array.from(clonedDoc.querySelectorAll("*")) as HTMLElement[];
-        allEls.push(clonedDoc.documentElement, clonedDoc.body);
-        const colorProps = ["color", "background-color", "border-color", "border-top-color", "border-right-color", "border-bottom-color", "border-left-color", "outline-color", "text-decoration-color", "fill", "stroke", "caret-color", "column-rule-color", "text-emphasis-color"];
+  window.print();
 
-        const safeResolve = (raw: string): string | null => {
-          if (!raw || raw === "transparent" || raw === "inherit" || raw === "currentcolor" || raw === "none") return null;
-          if (raw.startsWith("rgb") || raw.startsWith("#")) return null;
-          // Manual parse for color(srgb r g b / a) or color(srgb r g b)
-          const srgbMatch = raw.match(/color\(\s*srgb\s+([\d.e+-]+)\s+([\d.e+-]+)\s+([\d.e+-]+)(?:\s*\/\s*([\d.e+-]+))?\s*\)/);
-          if (srgbMatch) {
-            const r = Math.round(Math.min(1, Math.max(0, parseFloat(srgbMatch[1]))) * 255);
-            const g = Math.round(Math.min(1, Math.max(0, parseFloat(srgbMatch[2]))) * 255);
-            const b = Math.round(Math.min(1, Math.max(0, parseFloat(srgbMatch[3]))) * 255);
-            const a = srgbMatch[4] !== undefined ? parseFloat(srgbMatch[4]) : 1;
-            return a < 1 ? `rgba(${r},${g},${b},${a})` : `rgb(${r},${g},${b})`;
-          }
-          // Any color() function → transparent to prevent crash
-          if (raw.includes("color(")) return "transparent";
-          return null;
-        };
+  // Restore title after a short delay (print dialog is async)
+  setTimeout(() => {
+    document.title = originalTitle;
+  }, 1000);
 
-        for (const el of allEls) {
-          try {
-            const cs = clonedDoc.defaultView?.getComputedStyle(el) || getComputedStyle(el);
-            for (const prop of colorProps) {
-              const val = cs.getPropertyValue(prop);
-              const safe = safeResolve(val);
-              if (safe !== null) {
-                el.style.setProperty(prop, safe, "important");
-              }
-            }
-          } catch { /* skip elements that can't be styled */ }
-        }
-      },
-    });
-
-    // Read padding from the A4Page — it now includes header/footer safe zones
-    const computedStyle = getComputedStyle(container.firstElementChild || container);
-    const paddingTopPX = parseFloat(computedStyle.paddingTop) || (16 + HEADER_SAFE_MM) * PX_PER_MM;
-    const paddingBottomPX = parseFloat(computedStyle.paddingBottom) || (16 + FOOTER_SAFE_MM) * PX_PER_MM;
-
-    const pageWidthPX = dims.wMM * PX_PER_MM;
-    const pageHeightPX = dims.hMM * PX_PER_MM;
-    // Usable content height = page height minus top and bottom padding (which already includes safe zones)
-    const usableHeightPX = pageHeightPX - paddingTopPX - paddingBottomPX;
-
-    // Total content height (excluding the padding)
-    const fullContentHeightPX = (fullCanvas.height / SCALE) - paddingTopPX - paddingBottomPX;
-    const pageCount = Math.max(1, fullContentHeightPX <= usableHeightPX * 1.02 ? 1 : Math.ceil(fullContentHeightPX / usableHeightPX));
-
-    const pdf = new jsPDF({
-      orientation: "portrait",
-      unit: "mm",
-      format: [dims.wMM, dims.hMM],
-    });
-
-    const canvasPageWidthScaled = fullCanvas.width;
-    const canvasPageHeightScaled = pageHeightPX * SCALE;
-    const canvasUsableHeightScaled = usableHeightPX * SCALE;
-    const canvasPaddingTopScaled = paddingTopPX * SCALE;
-
-    for (let i = 0; i < pageCount; i++) {
-      if (i > 0) pdf.addPage([dims.wMM, dims.hMM]);
-
-      // Create a canvas for this page
-      const pageCanvas = document.createElement("canvas");
-      pageCanvas.width = canvasPageWidthScaled;
-      pageCanvas.height = canvasPageHeightScaled;
-      const ctx = pageCanvas.getContext("2d")!;
-
-      // Fill with white background
-      ctx.fillStyle = "#ffffff";
-      ctx.fillRect(0, 0, pageCanvas.width, pageCanvas.height);
-
-      // Source: slice from the full canvas
-      // Page 0: content starts at paddingTop (which includes header safe zone)
-      // Page N: content starts at paddingTop + N * usableHeight
-      const srcY = canvasPaddingTopScaled + i * canvasUsableHeightScaled;
-      const srcHeight = Math.min(canvasUsableHeightScaled, fullCanvas.height - srcY);
-
-      if (srcHeight > 0) {
-        // Draw the content slice into the page canvas with top padding
-        ctx.drawImage(
-          fullCanvas,
-          0, srcY,                          // source x, y
-          canvasPageWidthScaled, srcHeight,  // source w, h
-          0, canvasPaddingTopScaled,         // dest x, y (with top padding)
-          canvasPageWidthScaled, srcHeight   // dest w, h
-        );
-      }
-
-      const imgData = pageCanvas.toDataURL("image/png", 0.95);
-      pdf.addImage(imgData, "PNG", 0, 0, dims.wMM, dims.hMM);
-    }
-
-    const safeName = fileName.endsWith(".pdf") ? fileName : `${fileName}.pdf`;
-    pdf.save(safeName);
-
-    toast({
-      title: "Resume downloaded!",
-      description: `${pageCount} page${pageCount > 1 ? "s" : ""} saved as ${safeName}`,
-    });
-  } catch (err) {
-    console.error("PDF export error:", err);
-    toast({ title: "Export failed", description: "Something went wrong generating the PDF.", variant: "destructive" });
-  } finally {
-    // Restore original hidden styles
-    container.style.cssText = originalStyle;
-  }
+  toast({
+    title: "Print dialog opened",
+    description: 'Select "Save as PDF" to download your document.',
+  });
 }
