@@ -321,7 +321,7 @@ export default function Dashboard({ lang = "en" }: { lang?: "en" | "zh" }) {
           {!bannerDismissed && (
             <div className="rounded-2xl px-4 py-3 max-w-lg border border-border relative bg-card">
               <p className="text-sm leading-relaxed pr-6 text-muted-foreground">
-                <span className="mr-1.5">🆕</span>
+                
                 <span className="font-semibold text-foreground">{t.newBadge}</span> — {t.newBody}{" "}
                 <Link to={t.salaryKitLink} className="font-semibold hover:underline inline-flex items-center gap-0.5 text-gold">
                   {t.checkItOut} <ArrowRight className="w-3.5 h-3.5" />
