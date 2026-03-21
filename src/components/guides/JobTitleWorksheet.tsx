@@ -1,5 +1,5 @@
 import { useState, useMemo, useCallback } from "react";
-import { Plus, Trash2, AlertTriangle, Download, Copy, Check, ChevronDown, X, ArrowUpDown, Bot, Sparkles, Pencil } from "lucide-react";
+import { Plus, Trash2, AlertTriangle, Download, Copy, Check, ChevronDown, X, ArrowUpDown, Bot, Sparkles, Pencil, Search, FileText, Briefcase, Target } from "lucide-react";
 import { useGuideStorage } from "@/hooks/useGuideStorage";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -28,22 +28,22 @@ const emptyRow = (): WorksheetRow => ({
 const createTab = (title = ""): WorksheetTab => ({
   id: crypto.randomUUID?.() ?? Math.random().toString(36).slice(2),
   title,
-  rows: Array.from({ length: 20 }, emptyRow),
+  rows: Array.from({ length: 5 }, emptyRow),
 });
 
 /* ─── i18n Labels ─── */
 const LABELS = {
   en: {
-    title: "Interactive Resume Workbook",
-    subtitle: "Plan your resume keyword by keyword. Each tab = one target job title.",
-    skills: "Skills",
-    count: "Count",
+    title: "Job Title Keyword Worksheet",
+    subtitle: "Turn job description keywords into resume bullet points. One tab per target role.",
+    skills: "Skill",
+    count: "#",
     experience: "Experience",
     achievement: "Achievement",
     keywords: "Keywords",
-    bulletPoint: "Bullet Point",
+    bulletPoint: "Resume Bullet",
     addRow: "Add Row",
-    addRows: "Add 3 Rows (New Experience)",
+    addRows: "Add 3 Rows",
     exportCsv: "Export CSV",
     clearAll: "Clear All",
     clearConfirm: "Are you sure? This will erase all data in this tab.",
@@ -56,41 +56,52 @@ const LABELS = {
     deleteTab: "Delete Tab",
     deleteTabConfirm: "Delete this tab and all its data?",
     enterTitle: "Enter job title...",
-    emptyState: "Start by entering your target job title above, then add 20 skills from job descriptions.",
+    emptyState: "Enter your target job title to get started",
+    emptyStateHint: "e.g. Product Manager, Data Analyst, UX Designer",
+    getStarted: "Get Started",
     generateAi: "Generate with AI",
     matchAi: "Match with AI",
     buildBullet: "Build bullet with AI",
     getIdeas: "Get ideas with AI",
     copyPrompt: "Copy prompt",
     copied: "Copied!",
-    howToUse: "How to use this workbook",
     target: "Target: 50%",
     sortByCount: "Sort by count",
     copyBullet: "Copy",
     selectKeywords: "Select keywords...",
-    instructions: [
-      { title: "Step 1: Skills Column", body: 'List the 20 most common skills from job descriptions for your target role.\nUse AI prompt: "Generate the 20 most important keywords from across [ROLE] job descriptions."' },
-      { title: "Step 2: Count Column", body: "Record how many times each skill appears across job postings to identify priority skills." },
-      { title: "Step 3: Experience Column", body: "Enter your relevant work experiences or company names." },
-      { title: "Step 4: Achievement Column", body: 'Add specific, quantifiable achievements for each experience (e.g., "Increased sales 25%").' },
-      { title: "Step 5: Keywords Column", body: 'Fill in the keywords that best match each achievement (from the Skills column).\nUse AI prompt: "Which of these keywords best match this achievement?"' },
-      { title: "Step 6: Bullet Point Column", body: 'Use AI to combine achievement + keywords into a complete resume bullet.\nPrompt: "Please combine this achievement and these keywords to make a great resume bullet."' },
-      { title: "Step 7: Repeat + Select", body: "Repeat for all experiences and skills, then select the best bullets for your final resume." },
-    ],
-    goal: "Goal: Build a keyword-optimized, achievement-driven resume for each target job title.",
+    // Phase stepper
+    phase1Title: "Research the Job",
+    phase1Desc: "List 5–20 skills from job descriptions. Use AI to extract keywords.",
+    phase2Title: "Map Your Background",
+    phase2Desc: "Add your experiences and achievements that match those skills.",
+    phase3Title: "Build Bullet Points",
+    phase3Desc: "Tag keywords and generate optimized resume bullets.",
+    // Column groups
+    groupJob: "The Job",
+    groupYou: "Your Background",
+    groupMatch: "The Match",
+    // Mobile phases
+    phaseJob: "Job Skills",
+    phaseBackground: "Your Background",
+    phaseOutput: "Resume Output",
     credit: "Based on the Career Coach GPT system by Jeremy Schifeling, adapted by James Bugden.",
+    // Placeholders
+    phSkill: "e.g. Project Management",
+    phExperience: "e.g. Led product launch at Acme Corp",
+    phAchievement: "e.g. Increased user retention by 35%",
+    phBullet: "e.g. Spearheaded product launch driving 35% retention increase",
   },
   zh: {
-    title: "互動式履歷工作手冊",
-    subtitle: "逐個關鍵字規劃你的履歷。每個分頁 = 一個目標職稱。",
+    title: "職稱關鍵字工作表",
+    subtitle: "將職缺描述中的關鍵字轉化為履歷條列句。每個分頁對應一個目標職位。",
     skills: "技能",
-    count: "次數",
+    count: "#",
     experience: "經歷",
     achievement: "成就",
     keywords: "關鍵字",
-    bulletPoint: "條列句",
+    bulletPoint: "履歷條列句",
     addRow: "新增列",
-    addRows: "新增 3 列（新經歷）",
+    addRows: "新增 3 列",
     exportCsv: "匯出 CSV",
     clearAll: "全部清除",
     clearConfirm: "確定要清除嗎？這將刪除此分頁所有資料。",
@@ -103,29 +114,36 @@ const LABELS = {
     deleteTab: "刪除分頁",
     deleteTabConfirm: "刪除此分頁及所有資料？",
     enterTitle: "輸入職稱...",
-    emptyState: "先在上方輸入你的目標職稱，然後從職缺描述中加入 20 個技能。",
+    emptyState: "輸入你的目標職稱即可開始",
+    emptyStateHint: "例如：產品經理、資料分析師、UX 設計師",
+    getStarted: "開始",
     generateAi: "AI 產生",
     matchAi: "AI 配對",
     buildBullet: "AI 生成條列句",
     getIdeas: "AI 提供靈感",
     copyPrompt: "複製提示詞",
     copied: "已複製！",
-    howToUse: "如何使用此工作手冊",
     target: "目標：50%",
     sortByCount: "依次數排序",
     copyBullet: "複製",
     selectKeywords: "選擇關鍵字...",
-    instructions: [
-      { title: "步驟 1：技能欄", body: "列出該職缺說明中 20 個最常出現的關鍵技能。\n使用 AI 指令：「根據 _____ 職位的職缺說明，產生 20 個最重要的關鍵字。」" },
-      { title: "步驟 2：次數欄", body: "記錄每個技能在職缺中出現的次數，以辨識優先技能。" },
-      { title: "步驟 3：經歷欄", body: "輸入相關工作經歷或公司名稱。" },
-      { title: "步驟 4：成就欄", body: "為每段經歷加入具體且可量化的成果（例：「提升銷售 25%」）。" },
-      { title: "步驟 5：關鍵字欄", body: "填入與該成果最匹配的關鍵字（取自技能欄）。\n可用 AI 指令：「哪些關鍵字最適合這項成就？」" },
-      { title: "步驟 6：條列句欄", body: "請 AI 將成就與關鍵字結合成完整履歷條列句。\n指令：「請將這個成就與這些關鍵字結合成履歷條列句。」" },
-      { title: "步驟 7：重複並選擇", body: "對所有經歷與技能重複以上步驟，最後將最佳條列句放入你的最終履歷中。" },
-    ],
-    goal: "目標：為每個目標職稱打造一份關鍵字優化、以成就為導向的履歷。",
+    phase1Title: "研究職缺",
+    phase1Desc: "從職缺描述中列出 5–20 個關鍵技能。可用 AI 擷取關鍵字。",
+    phase2Title: "對應你的背景",
+    phase2Desc: "加入與這些技能相關的經歷和成就。",
+    phase3Title: "產生條列句",
+    phase3Desc: "標記關鍵字並生成優化的履歷條列句。",
+    groupJob: "職缺需求",
+    groupYou: "你的背景",
+    groupMatch: "最終產出",
+    phaseJob: "職缺技能",
+    phaseBackground: "你的背景",
+    phaseOutput: "履歷產出",
     credit: "基於 Jeremy Schifeling 的 Career Coach GPT 系統，由 James Bugden 改編。",
+    phSkill: "例如：專案管理",
+    phExperience: "例如：在 Acme 公司主導產品上線",
+    phAchievement: "例如：提升用戶留存率 35%",
+    phBullet: "例如：主導產品上線，帶動留存率提升 35%",
   },
 } as const;
 
@@ -272,11 +290,173 @@ const MatchTracker = ({ rows, lang }: { rows: WorksheetRow[]; lang: "en" | "zh" 
       </div>
       <div className="relative h-3 bg-muted rounded-full overflow-hidden">
         <div className={`h-full ${barColor} rounded-full transition-all duration-500`} style={{ width: `${Math.min(pct, 100)}%` }} />
-        {/* Target line at 50% */}
         <div className="absolute top-0 bottom-0 left-1/2 w-0.5 bg-foreground/30" />
       </div>
       <div className="flex justify-end">
         <span className="text-xs text-muted-foreground">{t.target}</span>
+      </div>
+    </div>
+  );
+};
+
+/* ─── Phase Stepper ─── */
+const PhaseStepper = ({ lang, jobTitle }: { lang: "en" | "zh"; jobTitle: string }) => {
+  const t = LABELS[lang];
+  const phases = [
+    { icon: Search, title: t.phase1Title, desc: t.phase1Desc, color: "bg-blue-500/10 text-blue-600 border-blue-500/20" },
+    { icon: Briefcase, title: t.phase2Title, desc: t.phase2Desc, color: "bg-amber-500/10 text-amber-600 border-amber-500/20" },
+    { icon: Target, title: t.phase3Title, desc: t.phase3Desc, color: "bg-green-500/10 text-green-600 border-green-500/20" },
+  ];
+
+  return (
+    <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
+      {phases.map((phase, i) => (
+        <div key={i} className={`rounded-xl border p-3 md:p-4 ${phase.color}`}>
+          <div className="flex items-center gap-2 mb-1.5">
+            <div className="flex items-center justify-center w-6 h-6 rounded-full bg-current/10 text-xs font-bold">{i + 1}</div>
+            <phase.icon className="w-4 h-4" />
+            <span className="text-sm font-semibold">{phase.title}</span>
+          </div>
+          <p className="text-xs leading-relaxed opacity-80">{phase.desc}</p>
+          {i === 0 && jobTitle && (
+            <div className="mt-2">
+              <AiPromptHelper prompt={getSkillsPrompt(jobTitle, lang)} label={t.generateAi} lang={lang} />
+            </div>
+          )}
+        </div>
+      ))}
+    </div>
+  );
+};
+
+/* ─── Mobile Card with Phases ─── */
+const MobileCard = ({ row, index, allSkills, lang, updateCell }: {
+  row: WorksheetRow;
+  index: number;
+  allSkills: string[];
+  lang: "en" | "zh";
+  updateCell: (rowIdx: number, col: keyof WorksheetRow, value: any) => void;
+}) => {
+  const t = LABELS[lang];
+  const [expandedPhase, setExpandedPhase] = useState<number | null>(row.skill ? null : 0);
+  const hasContent = row.skill || row.experience || row.bulletPoint;
+  const completeness = [row.skill, row.experience, row.achievement, row.keywords.length > 0 ? "y" : "", row.bulletPoint].filter(Boolean).length;
+
+  return (
+    <div className="border border-border rounded-xl bg-card overflow-hidden">
+      {/* Card header */}
+      <div className="flex items-center justify-between px-3 py-2.5 bg-muted/30 border-b border-border">
+        <div className="flex items-center gap-2">
+          <span className="text-xs font-medium text-muted-foreground">#{index + 1}</span>
+          {row.skill ? (
+            <span className="text-sm font-medium text-foreground">{row.skill}</span>
+          ) : (
+            <span className="text-sm italic text-muted-foreground/50">{t.phSkill}</span>
+          )}
+        </div>
+        <div className="flex items-center gap-1">
+          {[0, 1, 2, 3, 4].map(i => (
+            <div key={i} className={`w-1.5 h-1.5 rounded-full ${i < completeness ? "bg-gold" : "bg-muted-foreground/20"}`} />
+          ))}
+        </div>
+      </div>
+
+      {/* Phase 1: Job Skills */}
+      <div className="border-b border-border">
+        <button
+          onClick={() => setExpandedPhase(expandedPhase === 0 ? null : 0)}
+          className="w-full flex items-center justify-between px-3 py-2 text-left hover:bg-muted/20 transition-colors"
+        >
+          <span className="text-xs font-semibold text-blue-600 flex items-center gap-1.5">
+            <Search className="w-3 h-3" /> {t.phaseJob}
+          </span>
+          <ChevronDown className={`w-3.5 h-3.5 text-muted-foreground transition-transform ${expandedPhase === 0 ? "rotate-180" : ""}`} />
+        </button>
+        {expandedPhase === 0 && (
+          <div className="px-3 pb-3 space-y-2">
+            <div>
+              <label className="text-xs text-muted-foreground">{t.skills}</label>
+              <Input type="text" value={row.skill} onChange={e => updateCell(index, "skill", e.target.value)} className="h-8 text-sm mt-0.5" placeholder={t.phSkill} />
+            </div>
+            <div>
+              <label className="text-xs text-muted-foreground">{t.count}</label>
+              <Input type="number" min="1" value={row.count} onChange={e => updateCell(index, "count", e.target.value)} className="h-8 text-sm mt-0.5" />
+            </div>
+          </div>
+        )}
+      </div>
+
+      {/* Phase 2: Your Background */}
+      <div className="border-b border-border">
+        <button
+          onClick={() => setExpandedPhase(expandedPhase === 1 ? null : 1)}
+          className="w-full flex items-center justify-between px-3 py-2 text-left hover:bg-muted/20 transition-colors"
+        >
+          <span className="text-xs font-semibold text-amber-600 flex items-center gap-1.5">
+            <Briefcase className="w-3 h-3" /> {t.phaseBackground}
+          </span>
+          <ChevronDown className={`w-3.5 h-3.5 text-muted-foreground transition-transform ${expandedPhase === 1 ? "rotate-180" : ""}`} />
+        </button>
+        {expandedPhase === 1 && (
+          <div className="px-3 pb-3 space-y-2">
+            <div>
+              <div className="flex items-center justify-between">
+                <label className="text-xs text-muted-foreground">{t.experience}</label>
+                {row.experience && <AiPromptHelper prompt={getIdeasPrompt(row.experience, lang)} label={t.getIdeas} lang={lang} />}
+              </div>
+              <Input type="text" value={row.experience} onChange={e => updateCell(index, "experience", e.target.value)} className="h-8 text-sm mt-0.5" placeholder={t.phExperience} />
+            </div>
+            <div>
+              <label className="text-xs text-muted-foreground">{t.achievement}</label>
+              <textarea value={row.achievement} onChange={e => updateCell(index, "achievement", e.target.value)}
+                className="w-full border border-input rounded-md px-3 py-1.5 text-sm bg-background text-foreground mt-0.5 resize-none"
+                placeholder={t.phAchievement} rows={2} />
+            </div>
+          </div>
+        )}
+      </div>
+
+      {/* Phase 3: Resume Output */}
+      <div>
+        <button
+          onClick={() => setExpandedPhase(expandedPhase === 2 ? null : 2)}
+          className="w-full flex items-center justify-between px-3 py-2 text-left hover:bg-muted/20 transition-colors"
+        >
+          <span className="text-xs font-semibold text-green-600 flex items-center gap-1.5">
+            <Target className="w-3 h-3" /> {t.phaseOutput}
+          </span>
+          <ChevronDown className={`w-3.5 h-3.5 text-muted-foreground transition-transform ${expandedPhase === 2 ? "rotate-180" : ""}`} />
+        </button>
+        {expandedPhase === 2 && (
+          <div className="px-3 pb-3 space-y-2">
+            <div>
+              <div className="flex items-center justify-between">
+                <label className="text-xs text-muted-foreground">{t.keywords}</label>
+                {row.achievement && <AiPromptHelper prompt={getMatchPrompt(allSkills, row.achievement, lang)} label={t.matchAi} lang={lang} />}
+              </div>
+              <KeywordSelector
+                selected={row.keywords}
+                allSkills={allSkills}
+                onChange={kw => updateCell(index, "keywords", kw)}
+                placeholder={t.selectKeywords}
+              />
+            </div>
+            <div>
+              <div className="flex items-center justify-between">
+                <label className="text-xs text-muted-foreground">{t.bulletPoint}</label>
+                {row.achievement && row.keywords.length > 0 && (
+                  <AiPromptHelper prompt={getBulletPrompt(row.achievement, row.keywords, lang)} label={t.buildBullet} lang={lang} />
+                )}
+              </div>
+              <div className="flex items-start gap-1">
+                <textarea value={row.bulletPoint} onChange={e => updateCell(index, "bulletPoint", e.target.value)}
+                  className="flex-1 border border-input rounded-md px-3 py-1.5 text-sm bg-background text-foreground mt-0.5 resize-none"
+                  placeholder={t.phBullet} rows={2} />
+                {row.bulletPoint && <CopyButton text={row.bulletPoint} label={t.copyBullet} />}
+              </div>
+            </div>
+          </div>
+        )}
       </div>
     </div>
   );
@@ -289,12 +469,11 @@ export default function JobTitleWorksheet({ lang }: { lang: "en" | "zh" }) {
   const [activeTabId, setActiveTabId] = useState(() => tabs[0]?.id ?? "");
   const [showClearConfirm, setShowClearConfirm] = useState(false);
   const [editingTabId, setEditingTabId] = useState<string | null>(null);
-  const [showInstructions, setShowInstructions] = useState(true);
   const [showDeleteConfirm, setShowDeleteConfirm] = useState<string | null>(null);
+  const [titleInput, setTitleInput] = useState("");
 
   const t = LABELS[lang];
 
-  // Ensure activeTabId is valid
   const activeTab = tabs.find(t => t.id === activeTabId) ?? tabs[0];
   const rows = activeTab?.rows ?? [];
   const allSkills = useMemo(() => rows.map(r => r.skill.trim()).filter(Boolean), [rows]);
@@ -344,7 +523,7 @@ export default function JobTitleWorksheet({ lang }: { lang: "en" | "zh" }) {
   };
 
   const clearAll = () => {
-    updateActiveRows(() => Array.from({ length: 20 }, emptyRow));
+    updateActiveRows(() => Array.from({ length: 5 }, emptyRow));
     setShowClearConfirm(false);
   };
 
@@ -364,10 +543,26 @@ export default function JobTitleWorksheet({ lang }: { lang: "en" | "zh" }) {
     URL.revokeObjectURL(url);
   };
 
+  const handleGetStarted = () => {
+    if (titleInput.trim()) {
+      renameTab(activeTab?.id ?? "", titleInput.trim());
+      setTitleInput("");
+    }
+  };
+
   const jobTitle = activeTab?.title || "";
 
   return (
     <div className="space-y-5">
+      {/* ─── Header ─── */}
+      <div className="text-center space-y-1">
+        <h3 className="text-lg font-bold text-foreground flex items-center justify-center gap-2">
+          <FileText className="w-5 h-5 text-gold" />
+          {t.title}
+        </h3>
+        <p className="text-sm text-muted-foreground">{t.subtitle}</p>
+      </div>
+
       {/* ─── Tab Bar ─── */}
       <div className="flex items-center gap-1 overflow-x-auto pb-1 border-b border-border">
         {tabs.map(tab => (
@@ -421,7 +616,7 @@ export default function JobTitleWorksheet({ lang }: { lang: "en" | "zh" }) {
         <button onClick={addTab} className="px-2.5 py-2 text-muted-foreground hover:text-gold transition-colors" title={t.newTab}>
           <Plus className="w-4 h-4" />
         </button>
-        {activeTab && editingTabId !== activeTab.id && (
+        {activeTab && editingTabId !== activeTab.id && jobTitle && (
           <button
             onClick={() => setEditingTabId(activeTab.id)}
             className="ml-auto px-2 py-1 text-xs text-muted-foreground hover:text-foreground transition-colors flex items-center gap-1"
@@ -431,110 +626,100 @@ export default function JobTitleWorksheet({ lang }: { lang: "en" | "zh" }) {
         )}
       </div>
 
-      {/* ─── Instructions ─── */}
-      <div className="border border-gold/20 rounded-xl overflow-hidden bg-gold/5">
-        <button
-          onClick={() => setShowInstructions(!showInstructions)}
-          className="w-full flex items-center justify-between p-3 md:p-4 text-left hover:bg-gold/10 transition-colors"
-        >
-          <span className="text-sm font-semibold text-gold flex items-center gap-2">
-            <Sparkles className="w-4 h-4" /> {t.howToUse}
-          </span>
-          <ChevronDown className={`w-4 h-4 text-gold transition-transform ${showInstructions ? "rotate-180" : ""}`} />
-        </button>
-        {showInstructions && (
-          <div className="px-3 md:px-4 pb-3 md:pb-4 border-t border-gold/20 space-y-2">
-            <ol className="space-y-2 mt-2">
-              {t.instructions.map((step, i) => (
-                <li key={i} className="text-sm">
-                  <span className="font-semibold text-foreground">{step.title}</span>
-                  <p className="text-muted-foreground whitespace-pre-line mt-0.5 text-xs leading-relaxed">{step.body}</p>
-                </li>
-              ))}
-            </ol>
-            <p className="text-xs text-gold font-medium pt-1">{t.goal}</p>
-          </div>
-        )}
-      </div>
-
-      {/* ─── Empty state ─── */}
+      {/* ─── Empty state: Get Started card ─── */}
       {!jobTitle && (
-        <div className="text-center py-8 text-muted-foreground space-y-3">
-          <p className="text-sm">{t.emptyState}</p>
-          <AiPromptHelper prompt={getSkillsPrompt(jobTitle, lang)} label={t.generateAi} lang={lang} />
+        <div className="border-2 border-dashed border-gold/30 rounded-2xl bg-gold/5 p-6 md:p-8 text-center space-y-4">
+          <div className="w-12 h-12 mx-auto rounded-full bg-gold/10 flex items-center justify-center">
+            <Search className="w-6 h-6 text-gold" />
+          </div>
+          <div className="space-y-1">
+            <p className="text-base font-semibold text-foreground">{t.emptyState}</p>
+            <p className="text-sm text-muted-foreground">{t.emptyStateHint}</p>
+          </div>
+          <div className="flex flex-col sm:flex-row items-center justify-center gap-2 max-w-sm mx-auto">
+            <Input
+              value={titleInput}
+              onChange={e => setTitleInput(e.target.value)}
+              onKeyDown={e => { if (e.key === "Enter") handleGetStarted(); }}
+              placeholder={t.enterTitle}
+              className="h-10 text-sm"
+            />
+            <Button onClick={handleGetStarted} disabled={!titleInput.trim()} className="gap-1.5 bg-gold hover:bg-gold/90 text-background whitespace-nowrap">
+              <Sparkles className="w-4 h-4" /> {t.getStarted}
+            </Button>
+          </div>
         </div>
       )}
 
-      {/* ─── AI Prompt Helpers Row ─── */}
-      {jobTitle && (
-        <div className="flex flex-wrap items-center gap-3">
-          <AiPromptHelper prompt={getSkillsPrompt(jobTitle, lang)} label={t.generateAi} lang={lang} />
-        </div>
-      )}
+      {/* ─── Phase Stepper (show when job title exists) ─── */}
+      {jobTitle && <PhaseStepper lang={lang} jobTitle={jobTitle} />}
 
       {/* ─── Desktop Table ─── */}
-      <div className="hidden lg:block overflow-x-auto border border-border rounded-xl">
-        <table className="w-full text-sm">
-          <thead>
-            <tr className="bg-executive-green text-cream">
-              <th className="px-2 py-2.5 text-left font-medium w-8">#</th>
-              <th className="px-2 py-2.5 text-left font-medium min-w-[140px]">
-                <div className="flex items-center gap-2">
-                  {t.skills}
-                </div>
-              </th>
-              <th className="px-2 py-2.5 text-left font-medium w-20">
-                <div className="flex items-center gap-1">
-                  {t.count}
-                  <button onClick={sortByCount} className="text-cream/60 hover:text-cream" title={t.sortByCount}>
-                    <ArrowUpDown className="w-3 h-3" />
-                  </button>
-                </div>
-              </th>
-              <th className="px-2 py-2.5 text-left font-medium min-w-[140px]">
-                <div className="flex items-center gap-2">
-                  {t.experience}
-                  <AiPromptHelper prompt={getIdeasPrompt("", lang)} label={t.getIdeas} lang={lang} />
-                </div>
-              </th>
-              <th className="px-2 py-2.5 text-left font-medium min-w-[180px]">{t.achievement}</th>
-              <th className="px-2 py-2.5 text-left font-medium min-w-[160px]">
-                <div className="flex items-center gap-2">
-                  {t.keywords}
-                </div>
-              </th>
-              <th className="px-2 py-2.5 text-left font-medium min-w-[200px]">{t.bulletPoint}</th>
-            </tr>
-          </thead>
-          <tbody>
-            {rows.map((row, i) => {
-              const isGroupStart = i % 3 === 0;
-              return (
+      {jobTitle && (
+        <div className="hidden lg:block overflow-x-auto border border-border rounded-xl">
+          <table className="w-full text-sm">
+            <thead>
+              {/* Column group headers */}
+              <tr className="bg-executive-green/90 text-cream">
+                <th className="px-2 py-1.5" />
+                <th colSpan={2} className="px-2 py-1.5 text-center text-xs font-semibold border-l border-cream/20">
+                  <span className="flex items-center justify-center gap-1"><Search className="w-3 h-3" /> {t.groupJob}</span>
+                </th>
+                <th colSpan={2} className="px-2 py-1.5 text-center text-xs font-semibold border-l border-cream/20">
+                  <span className="flex items-center justify-center gap-1"><Briefcase className="w-3 h-3" /> {t.groupYou}</span>
+                </th>
+                <th colSpan={2} className="px-2 py-1.5 text-center text-xs font-semibold border-l border-cream/20">
+                  <span className="flex items-center justify-center gap-1"><Target className="w-3 h-3" /> {t.groupMatch}</span>
+                </th>
+              </tr>
+              {/* Column headers */}
+              <tr className="bg-executive-green text-cream">
+                <th className="px-2 py-2.5 text-left font-medium w-8">#</th>
+                <th className="px-2 py-2.5 text-left font-medium min-w-[140px] border-l border-cream/10">{t.skills}</th>
+                <th className="px-2 py-2.5 text-left font-medium w-16">
+                  <div className="flex items-center gap-1">
+                    {t.count}
+                    <button onClick={sortByCount} className="text-cream/60 hover:text-cream" title={t.sortByCount}>
+                      <ArrowUpDown className="w-3 h-3" />
+                    </button>
+                  </div>
+                </th>
+                <th className="px-2 py-2.5 text-left font-medium min-w-[140px] border-l border-cream/10">{t.experience}</th>
+                <th className="px-2 py-2.5 text-left font-medium min-w-[180px]">{t.achievement}</th>
+                <th className="px-2 py-2.5 text-left font-medium min-w-[160px] border-l border-cream/10">{t.keywords}</th>
+                <th className="px-2 py-2.5 text-left font-medium min-w-[200px]">{t.bulletPoint}</th>
+              </tr>
+            </thead>
+            <tbody>
+              {rows.map((row, i) => (
                 <tr
                   key={i}
-                  className={`border-b border-border/50 hover:bg-muted/20 transition-colors ${i % 2 === 0 ? "bg-background" : "bg-muted/10"} ${isGroupStart ? "border-l-2 border-l-gold/40" : ""}`}
+                  className={`border-b border-border/50 hover:bg-muted/20 transition-colors ${i % 2 === 0 ? "bg-background" : "bg-muted/10"}`}
                 >
                   <td className="px-2 py-1 text-muted-foreground text-xs">{i + 1}</td>
-                  <td className="px-1 py-1">
+                  {/* The Job columns */}
+                  <td className="px-1 py-1 border-l border-border/30">
                     <input type="text" value={row.skill} onChange={e => updateCell(i, "skill", e.target.value)}
                       className="w-full bg-transparent border-0 focus:ring-1 focus:ring-gold/30 rounded px-1.5 py-1 text-sm text-foreground placeholder:text-muted-foreground/40 outline-none"
-                      placeholder="—" />
+                      placeholder={i === 0 ? t.phSkill : "—"} />
                   </td>
                   <td className="px-1 py-1">
                     <input type="number" min="1" value={row.count} onChange={e => updateCell(i, "count", e.target.value)}
                       className="w-full bg-transparent border-0 focus:ring-1 focus:ring-gold/30 rounded px-1.5 py-1 text-sm text-foreground outline-none" />
                   </td>
-                  <td className="px-1 py-1">
+                  {/* Your Background columns */}
+                  <td className="px-1 py-1 border-l border-border/30">
                     <input type="text" value={row.experience} onChange={e => updateCell(i, "experience", e.target.value)}
                       className="w-full bg-transparent border-0 focus:ring-1 focus:ring-gold/30 rounded px-1.5 py-1 text-sm text-foreground placeholder:text-muted-foreground/40 outline-none"
-                      placeholder="—" />
+                      placeholder={i === 0 ? t.phExperience : "—"} />
                   </td>
                   <td className="px-1 py-1">
                     <textarea value={row.achievement} onChange={e => updateCell(i, "achievement", e.target.value)}
                       className="w-full bg-transparent border-0 focus:ring-1 focus:ring-gold/30 rounded px-1.5 py-1 text-sm text-foreground placeholder:text-muted-foreground/40 outline-none resize-none min-h-[28px]"
-                      placeholder="—" rows={1} />
+                      placeholder={i === 0 ? t.phAchievement : "—"} rows={1} />
                   </td>
-                  <td className="px-1 py-1">
+                  {/* The Match columns */}
+                  <td className="px-1 py-1 border-l border-border/30">
                     <KeywordSelector
                       selected={row.keywords}
                       allSkills={allSkills}
@@ -546,106 +731,71 @@ export default function JobTitleWorksheet({ lang }: { lang: "en" | "zh" }) {
                     <div className="flex items-start gap-1">
                       <textarea value={row.bulletPoint} onChange={e => updateCell(i, "bulletPoint", e.target.value)}
                         className="flex-1 bg-transparent border-0 focus:ring-1 focus:ring-gold/30 rounded px-1.5 py-1 text-sm text-foreground placeholder:text-muted-foreground/40 outline-none resize-none min-h-[28px]"
-                        placeholder="—" rows={1} />
+                        placeholder={i === 0 ? t.phBullet : "—"} rows={1} />
                       {row.bulletPoint && (
                         <CopyButton text={row.bulletPoint} label={t.copyBullet} />
                       )}
                     </div>
                   </td>
                 </tr>
-              );
-            })}
-          </tbody>
-        </table>
-      </div>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      )}
 
       {/* ─── Mobile Cards ─── */}
-      <div className="lg:hidden space-y-3">
-        {rows.map((row, i) => (
-          <div key={i} className={`border border-border rounded-xl p-3 bg-card space-y-2 ${i % 3 === 0 ? "border-l-2 border-l-gold/40" : ""}`}>
-            <div className="flex items-center justify-between">
-              <p className="text-xs font-medium text-muted-foreground">{t.row} {i + 1}</p>
-              <div className="flex gap-2">
-                {row.achievement && (
-                  <AiPromptHelper prompt={getMatchPrompt(allSkills, row.achievement, lang)} label={t.matchAi} lang={lang} />
-                )}
-                {row.achievement && row.keywords.length > 0 && (
-                  <AiPromptHelper prompt={getBulletPrompt(row.achievement, row.keywords, lang)} label={t.buildBullet} lang={lang} />
-                )}
-              </div>
-            </div>
-            <div>
-              <label className="text-xs text-muted-foreground">{t.skills}</label>
-              <Input type="text" value={row.skill} onChange={e => updateCell(i, "skill", e.target.value)} className="h-8 text-sm mt-0.5" placeholder="—" />
-            </div>
-            <div>
-              <label className="text-xs text-muted-foreground">{t.count}</label>
-              <Input type="number" min="1" value={row.count} onChange={e => updateCell(i, "count", e.target.value)} className="h-8 text-sm mt-0.5" />
-            </div>
-            <div>
-              <label className="text-xs text-muted-foreground">{t.experience}</label>
-              <Input type="text" value={row.experience} onChange={e => updateCell(i, "experience", e.target.value)} className="h-8 text-sm mt-0.5" placeholder="—" />
-            </div>
-            <div>
-              <label className="text-xs text-muted-foreground">{t.achievement}</label>
-              <textarea value={row.achievement} onChange={e => updateCell(i, "achievement", e.target.value)}
-                className="w-full border border-border rounded-md px-3 py-1.5 text-sm bg-background text-foreground mt-0.5 resize-none"
-                placeholder="—" rows={2} />
-            </div>
-            <div>
-              <label className="text-xs text-muted-foreground">{t.keywords}</label>
-              <KeywordSelector
-                selected={row.keywords}
-                allSkills={allSkills}
-                onChange={kw => updateCell(i, "keywords", kw)}
-                placeholder={t.selectKeywords}
-              />
-            </div>
-            <div>
-              <label className="text-xs text-muted-foreground">{t.bulletPoint}</label>
-              <div className="flex items-start gap-1">
-                <textarea value={row.bulletPoint} onChange={e => updateCell(i, "bulletPoint", e.target.value)}
-                  className="flex-1 border border-border rounded-md px-3 py-1.5 text-sm bg-background text-foreground mt-0.5 resize-none"
-                  placeholder="—" rows={2} />
-                {row.bulletPoint && <CopyButton text={row.bulletPoint} label={t.copyBullet} />}
-              </div>
-            </div>
-          </div>
-        ))}
-      </div>
+      {jobTitle && (
+        <div className="lg:hidden space-y-3">
+          {rows.map((row, i) => (
+            <MobileCard
+              key={i}
+              row={row}
+              index={i}
+              allSkills={allSkills}
+              lang={lang}
+              updateCell={updateCell}
+            />
+          ))}
+        </div>
+      )}
 
-      {/* ─── Keyword Match Tracker (sticky on mobile) ─── */}
-      <div className="sticky bottom-0 z-20 lg:relative">
-        <MatchTracker rows={rows} lang={lang} />
-      </div>
+      {/* ─── Keyword Match Tracker ─── */}
+      {jobTitle && (
+        <div className="sticky bottom-0 z-20 lg:relative">
+          <MatchTracker rows={rows} lang={lang} />
+        </div>
+      )}
 
       {/* ─── Footer Actions ─── */}
-      <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 pt-2">
-        <div className="flex items-center gap-2 flex-wrap">
-          <Button variant="outline" size="sm" onClick={() => addRows(1)} className="gap-1.5">
-            <Plus className="w-3.5 h-3.5" /> {t.addRow}
-          </Button>
-          <Button variant="outline" size="sm" onClick={() => addRows(3)} className="gap-1.5">
-            <Plus className="w-3.5 h-3.5" /> {t.addRows}
-          </Button>
-          <Button variant="outline" size="sm" onClick={exportCsv} className="gap-1.5">
-            <Download className="w-3.5 h-3.5" /> {t.exportCsv}
-          </Button>
-        </div>
-        <div className="flex items-center gap-2">
-          {showClearConfirm ? (
-            <div className="flex items-center gap-2">
-              <span className="text-xs text-destructive flex items-center gap-1"><AlertTriangle className="w-3.5 h-3.5" /> {t.clearConfirm}</span>
-              <Button variant="destructive" size="sm" onClick={clearAll}>✓</Button>
-              <Button variant="ghost" size="sm" onClick={() => setShowClearConfirm(false)}>✕</Button>
-            </div>
-          ) : (
-            <Button variant="ghost" size="sm" onClick={() => setShowClearConfirm(true)} className="text-muted-foreground gap-1.5">
-              <Trash2 className="w-3.5 h-3.5" /> {t.clearAll}
+      {jobTitle && (
+        <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 pt-2">
+          <div className="flex items-center gap-2 flex-wrap">
+            <Button variant="outline" size="sm" onClick={() => addRows(1)} className="gap-1.5">
+              <Plus className="w-3.5 h-3.5" /> {t.addRow}
             </Button>
-          )}
+            <Button variant="outline" size="sm" onClick={() => addRows(3)} className="gap-1.5">
+              <Plus className="w-3.5 h-3.5" /> {t.addRows}
+            </Button>
+            <Button variant="outline" size="sm" onClick={exportCsv} className="gap-1.5">
+              <Download className="w-3.5 h-3.5" /> {t.exportCsv}
+            </Button>
+          </div>
+          <div className="flex items-center gap-2">
+            {showClearConfirm ? (
+              <div className="flex items-center gap-2">
+                <span className="text-xs text-destructive flex items-center gap-1"><AlertTriangle className="w-3.5 h-3.5" /> {t.clearConfirm}</span>
+                <Button variant="destructive" size="sm" onClick={clearAll}>✓</Button>
+                <Button variant="ghost" size="sm" onClick={() => setShowClearConfirm(false)}>✕</Button>
+              </div>
+            ) : (
+              <Button variant="ghost" size="sm" onClick={() => setShowClearConfirm(true)} className="text-muted-foreground gap-1.5">
+                <Trash2 className="w-3.5 h-3.5" /> {t.clearAll}
+              </Button>
+            )}
+          </div>
         </div>
-      </div>
+      )}
 
       {/* ─── Credit ─── */}
       <p className="text-xs text-muted-foreground/60 text-center pt-2">{t.credit}</p>
