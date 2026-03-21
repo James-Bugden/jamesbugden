@@ -61,20 +61,24 @@ export default {
   				'accent-foreground': 'hsl(var(--sidebar-accent-foreground))',
   				border: 'hsl(var(--sidebar-border))',
   				ring: 'hsl(var(--sidebar-ring))'
-  			},
-  			gold: {
-  				DEFAULT: 'hsl(42 52% 56%)',
-  				dark: 'hsl(42 48% 47%)',
-  				light: 'hsl(42 60% 70%)'
-  			},
-  			cream: {
-  				DEFAULT: 'hsl(39 47% 96%)',
-  				light: 'hsl(39 47% 98%)'
-  			},
-  			executive: {
-  				DEFAULT: 'hsl(153 38% 17%)',
-  				light: 'hsl(153 30% 23%)'
-  			}
+			},
+			gold: {
+				DEFAULT: 'hsl(42 52% 56%)',
+				dark: 'hsl(42 48% 47%)',
+				light: 'hsl(42 60% 70%)'
+			},
+			cream: {
+				DEFAULT: 'hsl(39 47% 96%)',
+				light: 'hsl(39 47% 98%)',
+				'70': 'hsla(39, 47%, 96%, 0.7)',
+				'90': 'hsla(39, 47%, 96%, 0.9)'
+			},
+			executive: {
+				DEFAULT: 'hsl(153 38% 17%)',
+				light: 'hsl(153 30% 23%)',
+				green: 'hsl(153 38% 17%)'
+			},
+			'executive-green': 'hsl(153 38% 17%)',
   		},
   		fontFamily: {
   			heading: [

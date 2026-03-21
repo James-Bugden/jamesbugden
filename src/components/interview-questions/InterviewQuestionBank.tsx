@@ -140,7 +140,7 @@ export default function InterviewQuestionBank({ lang: initialLang }: { lang: Lan
   // Fetch category counts once on mount
   useEffect(() => {
     const fetchCounts = async () => {
-      const { data } = await supabase
+      const { data } = await (supabase as any)
         .from("interview_questions")
         .select("category");
       if (data) {
@@ -183,7 +183,7 @@ export default function InterviewQuestionBank({ lang: initialLang }: { lang: Lan
     const fetchQuestions = async () => {
       setLoading(true);
       const sanitized = sanitizeForArrayContains(debouncedSearch);
-      let query = supabase
+      let query = (supabase as any)
         .from("interview_questions")
         .select("*", { count: "exact" });
 
@@ -271,7 +271,7 @@ export default function InterviewQuestionBank({ lang: initialLang }: { lang: Lan
   // Optimized random: fetch count first, then pick one with offset
   const handleRandomQuestion = async () => {
     const sanitized = sanitizeForArrayContains(debouncedSearch);
-    let countQuery = supabase.from("interview_questions").select("*", { count: "exact", head: true });
+    let countQuery = (supabase as any).from("interview_questions").select("*", { count: "exact", head: true });
     if (debouncedSearch) {
       countQuery = countQuery.or(
         `question_en.ilike.%${debouncedSearch}%,question_zh.ilike.%${debouncedSearch}%${sanitized ? `,tags.cs.{${sanitized}}` : ""}`
@@ -286,7 +286,7 @@ export default function InterviewQuestionBank({ lang: initialLang }: { lang: Lan
     if (!count || count === 0) return;
 
     const randomOffset = Math.floor(Math.random() * count);
-    let query = supabase.from("interview_questions").select("*");
+    let query = (supabase as any).from("interview_questions").select("*");
     if (debouncedSearch) {
       query = query.or(
         `question_en.ilike.%${debouncedSearch}%,question_zh.ilike.%${debouncedSearch}%${sanitized ? `,tags.cs.{${sanitized}}` : ""}`
