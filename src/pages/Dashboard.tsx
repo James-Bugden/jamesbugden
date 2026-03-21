@@ -56,19 +56,21 @@ const tools: ToolItem[] = [
 ];
 
 const journeyItems: JourneyItem[] = [
-  // ── Getting Started ──
-  { id: "ai-job-search", title: { en: "AI Job Search Guide", zh: "AI 求職完整指南" }, description: { en: "How to use ChatGPT at every stage of your job search — from career direction to final offer.", zh: "從職涯方向到最終 Offer，每個階段都用 ChatGPT 的完整指南。" }, enPath: "/ai-job-search-guide", zhPath: "/zh-tw/ai-job-search-guide", tag: "getting-started", contentType: "guide", isNew: true },
-  { id: "pivot-guide", title: { en: "Pivot Method Guide", zh: "轉職攻略" }, description: { en: "The complete 5-stage framework for changing careers without starting over.", zh: "完整 5 階段架構，讓你換跑道不必砍掉重練。" }, enPath: "/pivot-method-guide", zhPath: "/zh-tw/pivot-method-guide", tag: "getting-started", contentType: "guide" },
-  { id: "pivot-mini", title: { en: "Pivot Method Mini Guide", zh: "轉職攻略精華版" }, description: { en: "The same framework in 8 minutes. For when you need the short version.", zh: "同一套架構，8 分鐘讀完。趕時間的你適用。" }, enPath: "/pivot-method-mini-guide", zhPath: "/zh-tw/pivot-method-mini-guide", tag: "getting-started", contentType: "guide", miniOf: "pivot-guide" },
-  { id: "linkedin-guide", title: { en: "LinkedIn for Job Search", zh: "LinkedIn 求職攻略" }, description: { en: "How to optimize your LinkedIn so recruiters actually find you.", zh: "怎麼調整 LinkedIn，讓 Recruiter 主動來找你。" }, enPath: "/linkedin-guide", zhPath: "/zh-tw/linkedin-guide", tag: "getting-started", contentType: "guide", miniOf: "linkedin-brand" },
-  { id: "linkedin-brand", title: { en: "LinkedIn for Job Seekers: Stop Applying, Start Getting Found", zh: "LinkedIn 求職者指南：別再海投，讓機會來找你" }, description: { en: "Build a personal brand that gets you inbound opportunities. Not just a profile update.", zh: "打造個人品牌，讓機會主動找上門。不只是改個大頭照。" }, enPath: "/linkedin-branding-guide", zhPath: "/zh-tw/linkedin-branding-guide", tag: "getting-started", contentType: "guide" },
+  // ── End to End Guides ──
+  { id: "ai-job-search", title: { en: "AI Job Search Guide", zh: "AI 求職完整指南" }, description: { en: "How to use ChatGPT at every stage of your job search — from career direction to final offer.", zh: "從職涯方向到最終 Offer，每個階段都用 ChatGPT 的完整指南。" }, enPath: "/ai-job-search-guide", zhPath: "/zh-tw/ai-job-search-guide", tag: "end-to-end", contentType: "guide", isNew: true },
+  { id: "pivot-guide", title: { en: "Pivot Method Guide", zh: "轉職攻略" }, description: { en: "The complete 5-stage framework for changing careers without starting over.", zh: "完整 5 階段架構，讓你換跑道不必砍掉重練。" }, enPath: "/pivot-method-guide", zhPath: "/zh-tw/pivot-method-guide", tag: "end-to-end", contentType: "guide" },
+  { id: "pivot-mini", title: { en: "Pivot Method Mini Guide", zh: "轉職攻略精華版" }, description: { en: "The same framework in 8 minutes. For when you need the short version.", zh: "同一套架構，8 分鐘讀完。趕時間的你適用。" }, enPath: "/pivot-method-mini-guide", zhPath: "/zh-tw/pivot-method-mini-guide", tag: "end-to-end", contentType: "guide", miniOf: "pivot-guide" },
+  { id: "linkedin-guide", title: { en: "LinkedIn for Job Search", zh: "LinkedIn 求職攻略" }, description: { en: "How to optimize your LinkedIn so recruiters actually find you.", zh: "怎麼調整 LinkedIn，讓 Recruiter 主動來找你。" }, enPath: "/linkedin-guide", zhPath: "/zh-tw/linkedin-guide", tag: "end-to-end", contentType: "guide", miniOf: "linkedin-brand" },
+  { id: "linkedin-brand", title: { en: "LinkedIn for Job Seekers: Stop Applying, Start Getting Found", zh: "LinkedIn 求職者指南：別再海投，讓機會來找你" }, description: { en: "Build a personal brand that gets you inbound opportunities. Not just a profile update.", zh: "打造個人品牌，讓機會主動找上門。不只是改個大頭照。" }, enPath: "/linkedin-branding-guide", zhPath: "/zh-tw/linkedin-branding-guide", tag: "end-to-end", contentType: "guide" },
 
   // ── Applying ──
   { id: "resume-guide", title: { en: "Resume Guide", zh: "履歷撰寫指南" }, description: { en: "The complete guide to writing a resume that passes the 6-second recruiter scan.", zh: "完整教學，寫出能通過 Recruiter 6 秒掃描的履歷。" }, enPath: "/resume-guide", tag: "applying", contentType: "guide" },
   { id: "resume-ref", title: { en: "Resume Quick Reference", zh: "履歷速查表" }, description: { en: "One-page cheat sheet. The rules I check every resume against.", zh: "一頁濃縮。我審履歷時會看的所有重點。" }, enPath: "/resume-quick-reference", zhPath: "/zh-tw/resume-quick-reference", tag: "applying", contentType: "guide", miniOf: "resume-guide" },
-  { id: "interview-prep", title: { en: "Interview Prep Guide", zh: "面試準備指南" }, description: { en: "How to prepare for interviews at foreign companies in Taiwan. What they actually ask and why.", zh: "在台灣準備外商面試的完整攻略。他們問什麼、為什麼這樣問。" }, enPath: "/interview-prep-guide", zhPath: "/zh-tw/interview-prep-guide", tag: "applying", contentType: "guide", miniOf: "interview-full" },
-  { id: "interview-full", title: { en: "Interview Preparation Guide", zh: "面試完整準備手冊" }, description: { en: "The extended version with practice questions, frameworks, and recruiter-insider tips.", zh: "進階版：附練習題、回答框架、Recruiter 內部觀點。" }, enPath: "/interview-preparation-guide", zhPath: "/zh-tw/interview-preparation-guide", tag: "applying", contentType: "guide" },
-  { id: "hr-screen", title: { en: "Recruiter Screen Guide", zh: "招募官電話面試指南" }, description: { en: "How to pass the recruiter phone screen and advance to the hiring manager round.", zh: "如何通過招募官電話面試，順利進到用人主管面試。" }, enPath: "/hr-interview-guide", zhPath: "/zh-tw/hr-interview-guide", tag: "applying", contentType: "guide" },
+
+  // ── Interviewing ──
+  { id: "interview-full", title: { en: "Interview Preparation Guide", zh: "面試完整準備手冊" }, description: { en: "The extended version with practice questions, frameworks, and recruiter-insider tips.", zh: "進階版：附練習題、回答框架、Recruiter 內部觀點。" }, enPath: "/interview-preparation-guide", zhPath: "/zh-tw/interview-preparation-guide", tag: "interviewing", contentType: "guide" },
+  { id: "interview-prep", title: { en: "Interview Prep Guide", zh: "面試準備指南" }, description: { en: "How to prepare for interviews at foreign companies in Taiwan. What they actually ask and why.", zh: "在台灣準備外商面試的完整攻略。他們問什麼、為什麼這樣問。" }, enPath: "/interview-prep-guide", zhPath: "/zh-tw/interview-prep-guide", tag: "interviewing", contentType: "guide", miniOf: "interview-full" },
+  { id: "hr-screen", title: { en: "Recruiter Screen Guide", zh: "招募官電話面試指南" }, description: { en: "How to pass the recruiter phone screen and advance to the hiring manager round.", zh: "如何通過招募官電話面試，順利進到用人主管面試。" }, enPath: "/hr-interview-guide", zhPath: "/zh-tw/hr-interview-guide", tag: "interviewing", contentType: "guide" },
 
   // ── Negotiating ──
   { id: "tk-index", title: { en: "Salary Negotiation Toolkit", zh: "談薪工具包總覽" }, description: { en: "The full overview of every tool in this kit. Read this first to know what to use and when.", zh: "所有工具的完整介紹。先讀這篇，搞清楚什麼時候用什麼。" }, enPath: "/toolkit", zhPath: "/zh-tw/toolkit", tag: "negotiating", contentType: "guide", pinned: true, pinnedLabel: { en: "START HERE", zh: "從這開始" } },
@@ -84,8 +86,9 @@ const journeyItems: JourneyItem[] = [
 ];
 
 const JOURNEY_META: { tag: GuideTag; emoji: string; color: string; label: { en: string; zh: string } }[] = [
-  { tag: "getting-started", emoji: "📍", color: "hsl(var(--executive-green))", label: { en: "Getting Started", zh: "起步準備" } },
+  { tag: "end-to-end", emoji: "🧭", color: "hsl(var(--executive-green))", label: { en: "End to End Guides", zh: "完整指南" } },
   { tag: "applying", emoji: "📝", color: "#1D4ED8", label: { en: "Applying", zh: "投遞申請" } },
+  { tag: "interviewing", emoji: "🎤", color: "#7C3AED", label: { en: "Interviewing", zh: "面試準備" } },
   { tag: "negotiating", emoji: "💰", color: "hsl(var(--gold-dark))", label: { en: "Negotiating", zh: "薪資談判" } },
 ];
 
