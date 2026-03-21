@@ -590,24 +590,6 @@ And here's the resume: ____`}</AiPromptBlock>
             </div>
           </Collapsible>
 
-          {/* 3.1b */}
-          <div className="bg-gold/5 border border-gold/20 rounded-xl p-5 space-y-3">
-            <h4 className="font-heading text-lg text-gold font-semibold">3.1b Open the Interactive Resume Workbook</h4>
-            <p className="text-muted-foreground text-sm leading-relaxed">This workbook is your planning tool for the rest of Section 3. Every step from keywords to bullets happens here. Open it in another tab and keep it next to this guide as you work.</p>
-            <a href="#worksheet" className="inline-flex items-center gap-1.5 text-sm text-gold hover:underline font-medium">
-              Open the Resume Workbook →
-            </a>
-            <p className="text-sm text-muted-foreground leading-relaxed mt-2">You will use this workbook to:</p>
-            <ul className="text-sm text-muted-foreground space-y-1 list-disc list-inside">
-              <li>Enter the 20 keywords for your target role (Step 3.9)</li>
-              <li>Track which keywords appear most often across job postings</li>
-              <li>Record your achievements for each experience (Step 3.11)</li>
-              <li>Match keywords to achievements (Step 3.12)</li>
-              <li>Build and store your final bullet points (Step 3.13)</li>
-              <li>Watch your keyword match rate hit 50% in real time (Step 3.15)</li>
-            </ul>
-            <p className="text-xs text-muted-foreground">Each tab in the workbook represents one target job title. If you are targeting multiple titles from Section 1, create a separate tab for each.</p>
-          </div>
 
           {/* 3.2 */}
           <Collapsible title="3.2 Create Different Versions for Each Job Title">
