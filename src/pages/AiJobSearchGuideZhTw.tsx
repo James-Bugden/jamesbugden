@@ -1095,19 +1095,6 @@ const AiJobSearchGuideZhTw = () => {
         </div>
       </section>
 
-      {/* ═══════════════ 第 12 章：職稱工作表 ═══════════════ */}
-      <section id="worksheet" className="py-14 md:py-20 px-5 md:px-6 bg-card border-y border-border scroll-mt-24">
-        <div className="container mx-auto max-w-3xl space-y-6">
-          <div className="flex items-start gap-5 mb-8">
-            <SectionNumber num="12" />
-            <div className="pt-3">
-              <h2 className="font-heading text-2xl md:text-3xl text-foreground">職稱關鍵字工作表</h2>
-              <p className="text-muted-foreground mt-2 text-sm">針對每個目標職位，列出職缺說明中最常出現的 20 個關鍵技能，然後對應你的經歷、成就與關鍵字，建立優化的履歷條列句。你的進度會自動儲存。</p>
-            </div>
-          </div>
-          <JobTitleWorksheet lang="zh" />
-        </div>
-      </section>
 
 
       <section id="resources" className="py-14 md:py-20 px-5 md:px-6 bg-card border-y border-border scroll-mt-24">
