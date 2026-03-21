@@ -29,12 +29,12 @@ function OnboardingChecklistInner({ lang = "en" }: { lang?: "en" | "zh" }) {
         if (count && count > 0) setCloudHasAnalysis(true);
       });
     // Check guide_progress
-    (supabase as any)
+    supabase
       .from("guide_progress")
       .select("id", { count: "exact", head: true })
       .eq("user_id", user.id)
       .limit(1)
-      .then(({ count }: { count: number | null }) => {
+      .then(({ count }) => {
         if (count && count > 0) setCloudHasGuide(true);
       });
   }, [user]);
