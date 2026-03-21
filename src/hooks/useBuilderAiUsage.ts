@@ -42,7 +42,7 @@ export function useBuilderAiUsage() {
 
   const recordAiTool = useCallback(async () => {
     if (!user) return;
-    await supabase.from("ai_usage_log" as any).insert({ user_id: user.id, usage_type: "ai_tool" });
+    await supabase.from("ai_usage_log").insert({ user_id: user.id, usage_type: "ai_tool" });
     setAiToolCount((c) => c + 1);
   }, [user]);
 

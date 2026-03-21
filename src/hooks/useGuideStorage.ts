@@ -71,8 +71,8 @@ export function useGuideStorage<T>(guideKey: string, initialValue: T) {
     clearTimeout(debounceRef.current);
     debounceRef.current = setTimeout(async () => {
       try {
-        await (supabase as any).from("guide_progress").upsert(
-          { user_id: user.id, guide_key: guideKey, data: value as any, updated_at: new Date().toISOString() },
+        await supabase.from("guide_progress").upsert(
+          { user_id: user.id, guide_key: guideKey, data: value, updated_at: new Date().toISOString() },
           { onConflict: "user_id,guide_key" }
         );
       } catch (e) {

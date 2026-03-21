@@ -192,8 +192,8 @@ export default function AdminDashboard() {
 
   const fetchChecks = async () => {
     setChecksLoading(true);
-    const { data } = await (supabase as any).from("salary_checks").select("*").order("created_at", { ascending: false }).limit(500);
-    if (data) setChecks(data as any);
+    const { data } = await supabase.from("salary_checks").select("*").order("created_at", { ascending: false }).limit(500);
+    if (data) setChecks(data);
     setChecksLoading(false);
   };
 

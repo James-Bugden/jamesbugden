@@ -69,7 +69,7 @@ export default function AmIUnderpaidTab({ lang }: { lang: SalaryLang }) {
     const key = `${jobTitle}|${role}|${sector}|${exp}|${salaryNum}`;
     if (savedRef.current === key) return;
     savedRef.current = key;
-    (supabase as any).from("salary_checks").insert({
+    supabase.from("salary_checks").insert({
       job_title: jobTitle.trim(),
       role,
       sector: sector || null,
@@ -78,7 +78,7 @@ export default function AmIUnderpaidTab({ lang }: { lang: SalaryLang }) {
       verdict: zone.zone,
       median: result.med,
       lang: lang === "zh" ? "zh" : "en",
-    } as any).then(() => {});
+    }).then(() => {});
   }, [showResult, zone, result, jobTitle, role, sector, exp, salaryNum, lang]);
 
   const verdictText = () => {

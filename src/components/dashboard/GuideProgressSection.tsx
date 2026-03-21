@@ -41,7 +41,7 @@ export default function GuideProgressSection({ lang, compact = false }: GuidePro
     if (!isLoggedIn || !user) return;
     (async () => {
       try {
-        const { data } = await (supabase as any)
+        const { data } = await supabase
           .from("guide_progress")
           .select("guide_key, data")
           .eq("user_id", user.id);
