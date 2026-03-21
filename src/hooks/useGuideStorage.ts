@@ -52,7 +52,7 @@ export function useGuideStorage<T>(guideKey: string, initialValue: T) {
           const local = localStorage.getItem(lsKey);
           if (local && local !== JSON.stringify(initialValue)) {
             await supabase.from("guide_progress").upsert(
-              { user_id: user.id, guide_key: guideKey, data: JSON.parse(local), updated_at: new Date().toISOString() },
+              { user_id: user.id, guide_key: guideKey, data: JSON.parse(local) as Json, updated_at: new Date().toISOString() },
               { onConflict: "user_id,guide_key" }
             );
           }
