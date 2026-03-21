@@ -271,7 +271,7 @@ export default function InterviewQuestionBank({ lang: initialLang }: { lang: Lan
   // Optimized random: fetch count first, then pick one with offset
   const handleRandomQuestion = async () => {
     const sanitized = sanitizeForArrayContains(debouncedSearch);
-    let countQuery = (supabase as any).from("interview_questions").select("*", { count: "exact", head: true });
+    let countQuery = supabase.from("interview_questions").select("*", { count: "exact", head: true });
     if (debouncedSearch) {
       countQuery = countQuery.or(
         `question_en.ilike.%${debouncedSearch}%,question_zh.ilike.%${debouncedSearch}%${sanitized ? `,tags.cs.{${sanitized}}` : ""}`
