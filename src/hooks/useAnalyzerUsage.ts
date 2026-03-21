@@ -15,7 +15,7 @@ export function useAnalyzerUsage() {
       return;
     }
     try {
-      const { count, error } = await (supabase as any)
+      const { count, error } = await supabase
         .from("resume_analyses")
         .select("id", { count: "exact", head: true })
         .eq("user_id", user.id)
