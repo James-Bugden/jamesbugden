@@ -18,8 +18,8 @@ export function useBuilderAiUsage() {
     }
     try {
       const [importRes, toolRes] = await Promise.all([
-        (supabase as any).rpc("count_ai_usage_this_month", { p_user_id: user.id, p_usage_type: "import" }),
-        (supabase as any).rpc("count_ai_usage_this_month", { p_user_id: user.id, p_usage_type: "ai_tool" }),
+        supabase.rpc("count_ai_usage_this_month", { p_user_id: user.id, p_usage_type: "import" }),
+        supabase.rpc("count_ai_usage_this_month", { p_user_id: user.id, p_usage_type: "ai_tool" }),
       ]);
       setImportCount(importRes.data ?? 0);
       setAiToolCount(toolRes.data ?? 0);
