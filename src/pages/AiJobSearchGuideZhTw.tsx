@@ -1,5 +1,5 @@
 import { FileText, Clock, Linkedin, Bot, Target, Briefcase, Send, MessageSquare, DollarSign, AlertTriangle, CheckCircle2, XCircle, ArrowRight, ChevronDown, Menu, Search, Zap, BookOpen, Copy, Check } from "lucide-react";
-import JobTitleWorksheet from "@/components/guides/JobTitleWorksheet";
+
 import { AI_GUIDE_PROMPTS } from "@/data/aiGuidePrompts";
 import { Link } from "react-router-dom";
 import GoldCheckBadge from "@/components/GoldCheckBadge";
