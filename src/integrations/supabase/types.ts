@@ -35,6 +35,27 @@ export type Database = {
         }
         Relationships: []
       }
+      ai_usage_log: {
+        Row: {
+          created_at: string
+          id: string
+          usage_type: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          usage_type: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          usage_type?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       client_reviews: {
         Row: {
           client_name: string
@@ -80,6 +101,69 @@ export type Database = {
           email?: string
           id?: string
           source?: string | null
+        }
+        Relationships: []
+      }
+      guide_progress: {
+        Row: {
+          data: Json
+          guide_key: string
+          id: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          data?: Json
+          guide_key: string
+          id?: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          data?: Json
+          guide_key?: string
+          id?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      interview_questions: {
+        Row: {
+          answer_en: string | null
+          answer_zh: string | null
+          audience: string[] | null
+          category: string
+          difficulty: number
+          id: number
+          question_en: string
+          question_zh: string
+          source: string | null
+          tags: string[] | null
+        }
+        Insert: {
+          answer_en?: string | null
+          answer_zh?: string | null
+          audience?: string[] | null
+          category: string
+          difficulty?: number
+          id: number
+          question_en: string
+          question_zh: string
+          source?: string | null
+          tags?: string[] | null
+        }
+        Update: {
+          answer_en?: string | null
+          answer_zh?: string | null
+          audience?: string[] | null
+          category?: string
+          difficulty?: number
+          id?: number
+          question_en?: string
+          question_zh?: string
+          source?: string | null
+          tags?: string[] | null
         }
         Relationships: []
       }
@@ -140,12 +224,55 @@ export type Database = {
         }
         Relationships: []
       }
+      salary_checks: {
+        Row: {
+          created_at: string
+          experience: string | null
+          id: string
+          job_title: string
+          lang: string | null
+          median: number | null
+          role: string
+          salary: number
+          sector: string | null
+          verdict: string | null
+        }
+        Insert: {
+          created_at?: string
+          experience?: string | null
+          id?: string
+          job_title: string
+          lang?: string | null
+          median?: number | null
+          role: string
+          salary: number
+          sector?: string | null
+          verdict?: string | null
+        }
+        Update: {
+          created_at?: string
+          experience?: string | null
+          id?: string
+          job_title?: string
+          lang?: string | null
+          median?: number | null
+          role?: string
+          salary?: number
+          sector?: string | null
+          verdict?: string | null
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
     }
     Functions: {
       check_email_gate: { Args: { p_email: string }; Returns: boolean }
+      count_ai_usage_this_month: {
+        Args: { p_usage_type: string; p_user_id: string }
+        Returns: number
+      }
       count_resume_analyses_this_month: {
         Args: { p_email: string }
         Returns: number
