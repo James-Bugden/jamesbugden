@@ -1,48 +1,31 @@
 
 
-## Resume Builder Feature Improvements
+## Reorganize Dashboard Guide Categories
 
-### Priority 1: AI "Tailor to Job Description" Panel
-- Add a new tab or panel in the "AI Tools" section (which currently shows "Coming soon")
-- User pastes a job description → edge function analyzes keyword overlap with current resume
-- Returns: missing keywords, suggested bullet point rewrites, match percentage
-- Reuses existing `resume-ai` edge function with a new `action: "tailor"` mode
-- UI: Split panel with JD on left, suggestions on right, one-click "Apply" buttons
+Currently the dashboard groups guides into 3 sections: **Getting Started**, **Applying**, **Negotiating**. The user wants 4 sections: **End to End Guides**, **Applying**, **Interviewing**, **Negotiating**.
 
-### Priority 2: Resume Completeness Score Widget
-- Floating widget in the editor sidebar showing real-time completion percentage
-- Scoring rules: has summary (+10), has 2+ experience entries (+20), all entries have descriptions (+15), dates filled (+10), contact info complete (+15), skills section exists (+10), quantified achievements detected (+20)
-- Visual: circular progress ring with percentage, expandable checklist of what's missing
-- Lives above the "Add Content" button in the Content tab
+### Changes
 
-### Priority 3: Populate the "AI Tools" Tab
-- Currently renders "AI Tools — Coming soon" placeholder
-- Build out with: "Tailor to Job" (above), "Generate Summary from Experience", "Suggest Skills", "Optimize Bullet Points (batch)"
-- Each tool card shows a description, input area, and results
+**1. Update the `GuideTag` type** (`JourneySection.tsx`)
+- Change from `"getting-started" | "applying" | "negotiating" | "leveling-up"` to `"end-to-end" | "applying" | "interviewing" | "negotiating"`
 
-### Priority 4: Real-time Word Count per Section
-- Add a small `<span>` below each `RichTextEditor` showing word count and bullet point count
-- Highlight in amber if too long (>150 words per entry) or too short (<20 words)
-- Lightweight: computed from the editor's text content on each change
+**2. Update `JOURNEY_META`** (`Dashboard.tsx`)
+- Rename "Getting Started" → "End to End Guides" / "完整指南" with tag `"end-to-end"`
+- Add new "Interviewing" / "面試準備" section with tag `"interviewing"` (emoji: 🎤, color: purple/teal)
+- Keep "Applying" and "Negotiating"
 
-### Priority 5: Click-to-Edit on Preview (Inline Editing)
-- When user clicks text on the A4 preview, show a floating input/textarea positioned over the clicked element
-- On blur/enter, update the corresponding field in the data model
-- Start with simple fields only: job title, company name, degree, institution
-- More complex than other items; implement after the above
+**3. Re-tag journey items** (`Dashboard.tsx`)
+- **End to End Guides** (`end-to-end`): AI Job Search Guide, Pivot Method Guide (+ mini), LinkedIn guides — these are comprehensive cross-stage guides
+- **Applying** (`applying`): Resume Guide (+ quick ref)
+- **Interviewing** (`interviewing`): Interview Preparation Guide (+ prep mini), Recruiter Screen Guide
+- **Negotiating** (`negotiating`): unchanged
 
-### Files to Edit
-- `src/pages/ResumeBuilder.tsx` — Add completeness widget, wire AI Tools tab
-- `src/components/resume-builder/ResumeTopNav.tsx` — No changes needed
-- `src/components/resume-builder/RichTextEditor.tsx` — Add word count display
-- `supabase/functions/resume-ai/index.ts` — Add `tailor` action for JD matching
-- New: `src/components/resume-builder/CompletenessScore.tsx` — Score widget component
-- New: `src/components/resume-builder/AiToolsPanel.tsx` — Full AI tools tab content
-- New: `src/components/resume-builder/TailorToJob.tsx` — JD tailoring panel
+**4. Update `DashboardZhTw.tsx`** with matching changes (same tag reassignments and meta).
 
-### Implementation Order
-1. Completeness score widget (standalone, no backend needed)
-2. Word count on RichTextEditor (small change)
-3. AI Tools tab with Tailor to Job (needs edge function update)
-4. Click-to-edit on preview (complex, last)
+**5. Update localStorage key** for collapsed state — the old `journey_collapsed_getting-started` key becomes `journey_collapsed_end-to-end` (happens automatically via the tag change).
+
+### Files Modified
+- `src/components/dashboard/JourneySection.tsx` — update `GuideTag` type
+- `src/pages/Dashboard.tsx` — update `JOURNEY_META` and item tags
+- `src/pages/DashboardZhTw.tsx` — same changes for ZH version
 
