@@ -36,7 +36,7 @@ export function useBuilderAiUsage() {
 
   const recordImport = useCallback(async () => {
     if (!user) return;
-    await supabase.from("ai_usage_log" as any).insert({ user_id: user.id, usage_type: "import" });
+    await supabase.from("ai_usage_log").insert({ user_id: user.id, usage_type: "import" });
     setImportCount((c) => c + 1);
   }, [user]);
 
