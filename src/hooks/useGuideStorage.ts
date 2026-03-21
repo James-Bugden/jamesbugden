@@ -37,7 +37,7 @@ export function useGuideStorage<T>(guideKey: string, initialValue: T) {
 
     (async () => {
       try {
-        const { data } = await (supabase as any)
+        const { data } = await supabase
           .from("guide_progress")
           .select("data, updated_at")
           .eq("user_id", user.id)
