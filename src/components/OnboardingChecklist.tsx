@@ -20,7 +20,7 @@ function OnboardingChecklistInner({ lang = "en" }: { lang?: "en" | "zh" }) {
   useEffect(() => {
     if (!user) return;
     // Check resume_analyses
-    (supabase as any)
+    supabase
       .from("resume_analyses")
       .select("id", { count: "exact", head: true })
       .eq("user_id", user.id)

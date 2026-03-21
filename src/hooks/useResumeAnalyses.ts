@@ -18,7 +18,7 @@ export function useResumeAnalyses() {
 
   const fetchAll = useCallback(async () => {
     if (!user) { setLoading(false); return; }
-    const { data } = await (supabase as any)
+    const { data } = await supabase
       .from("resume_analyses")
       .select("id, overall_score, analysis_result, language, created_at")
       .eq("user_id", user.id)
@@ -38,7 +38,7 @@ export function useResumeAnalyses() {
     language: string;
   }) => {
     if (!user) return;
-    await (supabase as any).from("resume_analyses").insert({
+    await supabase.from("resume_analyses").insert({
       user_id: user.id,
       overall_score: params.overall_score,
       analysis_result: params.analysis_result,

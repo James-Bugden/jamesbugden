@@ -167,6 +167,36 @@ export type Database = {
         }
         Relationships: []
       }
+      resume_analyses: {
+        Row: {
+          analysis_result: Json | null
+          created_at: string
+          id: string
+          language: string | null
+          overall_score: number | null
+          resume_text: string | null
+          user_id: string
+        }
+        Insert: {
+          analysis_result?: Json | null
+          created_at?: string
+          id?: string
+          language?: string | null
+          overall_score?: number | null
+          resume_text?: string | null
+          user_id: string
+        }
+        Update: {
+          analysis_result?: Json | null
+          created_at?: string
+          id?: string
+          language?: string | null
+          overall_score?: number | null
+          resume_text?: string | null
+          user_id?: string
+        }
+        Relationships: []
+      }
       resume_leads: {
         Row: {
           analysis_result: Json | null
