@@ -1117,7 +1117,7 @@ Generate a short, conversational response that asks them to do better, given my 
             ]},
             { title: "Stage 3: Build Your Resume", anchor: "#resume", items: [
               "Download a clean, ATS-friendly template → 3.1",
-              "Open the Resume Workbook and create a tab for each target job title → 3.1b",
+              
               "Create a separate version for each target job title → 3.2",
               "Add desired job title at the top → 3.3",
               "Update location to target city → 3.4",
