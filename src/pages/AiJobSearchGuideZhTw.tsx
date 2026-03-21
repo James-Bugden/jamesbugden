@@ -567,24 +567,6 @@ const AiJobSearchGuideZhTw = () => {
             </div>
           </Collapsible>
 
-          {/* 3.1b */}
-          <div className="bg-gold/5 border border-gold/20 rounded-xl p-5 space-y-3">
-            <h4 className="font-heading text-lg text-gold font-semibold">3.1b 打開互動式履歷工作手冊</h4>
-            <p className="text-muted-foreground text-sm leading-relaxed">這份工作手冊是你完成第 3 章剩餘部分的規劃工具。從關鍵字到要點的每一步都在這裡完成。在另一個分頁打開它，跟這份指南一起使用。</p>
-            <a href="#worksheet" className="inline-flex items-center gap-1.5 text-sm text-gold hover:underline font-medium">
-              打開履歷工作手冊 →
-            </a>
-            <p className="text-sm text-muted-foreground leading-relaxed mt-2">你會用這份工作手冊來：</p>
-            <ul className="text-sm text-muted-foreground space-y-1 list-disc list-inside">
-              <li>輸入你目標角色的 20 個關鍵字（步驟 3.9）</li>
-              <li>追蹤哪些關鍵字在不同職缺中出現最多次</li>
-              <li>記錄每段經歷的成就（步驟 3.11）</li>
-              <li>把關鍵字和成就配對（步驟 3.12）</li>
-              <li>建立並儲存你的最終要點（步驟 3.13）</li>
-              <li>即時觀看你的關鍵字匹配率達到 50%（步驟 3.15）</li>
-            </ul>
-            <p className="text-xs text-muted-foreground">工作手冊中的每個分頁代表一個目標職稱。如果你從第 1 章中瞄準了多個職稱，為每個建立一個獨立分頁。</p>
-          </div>
 
           <Collapsible title="3.2 為每個職稱建立不同版本">
             <p className="text-muted-foreground leading-relaxed text-sm mb-3">每個職稱代表不同的技能、成就和關鍵字組合。因為招募官用特定的角色用語搜尋，用同一份履歷投不同職稱會讓你對每個職稱看起來都不夠格。</p>
