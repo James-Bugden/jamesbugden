@@ -140,7 +140,7 @@ export default function InterviewQuestionBank({ lang: initialLang }: { lang: Lan
   // Fetch category counts once on mount
   useEffect(() => {
     const fetchCounts = async () => {
-      const { data } = await (supabase as any)
+      const { data } = await supabase
         .from("interview_questions")
         .select("category");
       if (data) {
