@@ -169,7 +169,7 @@ export default function AdminDashboard() {
   const fetchCounts = async () => {
     const [r1, r2, r3, r4] = await Promise.all([
       supabase.from("client_reviews").select("*", { count: "exact", head: true }),
-      (supabase as any).from("salary_checks").select("*", { count: "exact", head: true }),
+      supabase.from("salary_checks").select("*", { count: "exact", head: true }),
       supabase.from("resume_leads").select("*", { count: "exact", head: true }),
       supabase.from("email_gate_leads").select("*", { count: "exact", head: true }),
     ]);
