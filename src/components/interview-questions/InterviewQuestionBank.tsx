@@ -909,7 +909,7 @@ export default function InterviewQuestionBank({ lang: initialLang }: { lang: Lan
                           onClick={(e) => { e.stopPropagation(); handleTagClick(tag); }}
                           className="text-[10px] px-1.5 py-0.5 rounded bg-accent/10 text-accent-foreground/70 hover:bg-accent/20 transition-colors cursor-pointer"
                         >
-                          {tag}
+                          {lang === "zh" ? (TAG_ZH[tag] || tag.replace(/_/g, " ")) : tag.replace(/_/g, " ")}
                         </button>
                       ))}
                     </div>
