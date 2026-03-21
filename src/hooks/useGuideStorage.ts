@@ -51,7 +51,7 @@ export function useGuideStorage<T>(guideKey: string, initialValue: T) {
           // No cloud data — push local to cloud if non-empty
           const local = localStorage.getItem(lsKey);
           if (local && local !== JSON.stringify(initialValue)) {
-            await (supabase as any).from("guide_progress").upsert(
+            await supabase.from("guide_progress").upsert(
               { user_id: user.id, guide_key: guideKey, data: JSON.parse(local), updated_at: new Date().toISOString() },
               { onConflict: "user_id,guide_key" }
             );
