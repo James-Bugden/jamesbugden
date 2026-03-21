@@ -183,7 +183,7 @@ export default function InterviewQuestionBank({ lang: initialLang }: { lang: Lan
     const fetchQuestions = async () => {
       setLoading(true);
       const sanitized = sanitizeForArrayContains(debouncedSearch);
-      let query = supabase
+      let query = (supabase as any)
         .from("interview_questions")
         .select("*", { count: "exact" });
 
