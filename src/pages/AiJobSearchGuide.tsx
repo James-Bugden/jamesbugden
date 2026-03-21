@@ -1237,19 +1237,6 @@ Generate a short, conversational response that asks them to do better, given my 
         </div>
       </section>
 
-      {/* ═══════════════ SECTION 12: JOB TITLE WORKSHEET ═══════════════ */}
-      <section id="worksheet" className="py-14 md:py-20 px-5 md:px-6 bg-card border-y border-border scroll-mt-24">
-        <div className="container mx-auto max-w-3xl space-y-6">
-          <div className="flex items-start gap-5 mb-8">
-            <SectionNumber num="12" />
-            <div className="pt-3">
-              <h2 className="font-heading text-2xl md:text-3xl text-foreground">Job Title Keyword Worksheet</h2>
-              <p className="text-muted-foreground mt-2 text-sm">For each target role, list the top 20 keywords from job descriptions, then map your experience, achievements, and keywords to build optimized resume bullets. Your progress is saved automatically.</p>
-            </div>
-          </div>
-          <JobTitleWorksheet lang="en" />
-        </div>
-      </section>
 
 
       <section id="resources" className="py-14 md:py-20 px-5 md:px-6 bg-card border-y border-border scroll-mt-24">
