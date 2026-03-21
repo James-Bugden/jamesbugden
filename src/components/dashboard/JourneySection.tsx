@@ -13,7 +13,7 @@ export function useSeenNewItems() {
   return { markSeen, hasSeen };
 }
 
-export type GuideTag = "getting-started" | "applying" | "negotiating" | "leveling-up";
+export type GuideTag = "end-to-end" | "applying" | "interviewing" | "negotiating";
 
 export interface JourneyItem {
   id: string;
