@@ -1,4 +1,5 @@
-import { ArrowLeft, Download, Users, Target, FileText, MessageSquare, Search, CheckCircle2, Calendar, Linkedin, TrendingUp, Briefcase, Award, Eye, Zap, BarChart3, UserPlus, Settings, HelpCircle, BookOpen, Rocket } from "lucide-react";
+import { ArrowLeft, Users, Target, FileText, MessageSquare, Search, CheckCircle2, Calendar, Linkedin, TrendingUp, Briefcase, Award, Eye, Zap, BarChart3, UserPlus, Settings, HelpCircle, BookOpen, Rocket, Clock } from "lucide-react";
+import { InteractiveChecklist } from "@/components/guides/InteractiveChecklist";
 import { Link, useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { InstagramIcon, ThreadsIcon } from "@/components/SocialIcons";
@@ -6,19 +7,12 @@ import GoldCheckBadge from "@/components/GoldCheckBadge";
 import GuideShareButtons from "@/components/GuideShareButtons";
 import { AuthHeaderButton } from "@/components/AuthHeaderButton";
 import { useTrackGuideProgress } from "@/hooks/useReadingProgress";
+import GuideSignInBanner from "@/components/guides/GuideSignInBanner";
 
 const LinkedInBrandingGuideZhTw = () => {
   useTrackGuideProgress("linkedin-brand");
   const navigate = useNavigate();
 
-  const handleDownload = () => {
-    const link = document.createElement('a');
-    link.href = '/downloads/ZH_LinkedIn_Personal_Branding_Tactical_Guide.pdf';
-    link.download = 'ZH_LinkedIn_Personal_Branding_Tactical_Guide.pdf';
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
-  };
 
   return (
     <div className="min-h-screen bg-background">
@@ -58,18 +52,17 @@ const LinkedInBrandingGuideZhTw = () => {
           <p className="text-lg md:text-xl text-cream/80 mb-2">
             招募人員的戰術指南
           </p>
-          <p className="text-base text-cream/60 mb-6">
+          <p className="text-base text-cream/60 mb-2">
             作者：James Bugden，資深招募顧問
           </p>
-          <Button 
-            onClick={handleDownload}
-            className="bg-gold hover:bg-gold/90 text-executive-green font-semibold px-6 py-3 rounded-lg shadow-lg hover:shadow-xl transition-all duration-300"
-          >
-            <Download className="w-5 h-5 mr-2" />
-            下載 PDF 指南
-          </Button>
+          <div className="flex items-center justify-center gap-1.5 text-cream/60 mb-6">
+            <Clock className="w-4 h-4" />
+            <span className="text-sm">30 分鐘閱讀</span>
+          </div>
         </div>
       </section>
+
+      <GuideSignInBanner lang="zh" />
 
       {/* Framework Note / Foreword */}
       <section className="py-8 px-5 md:px-6 bg-card border-b border-border">
@@ -306,7 +299,7 @@ const LinkedInBrandingGuideZhTw = () => {
       </section>
 
       {/* Personal Brand Framework - Expanded */}
-      <section className="py-12 md:py-16 px-5 md:px-6 bg-card border-y border-border">
+      <section id="brand" className="py-12 md:py-16 px-5 md:px-6 bg-card border-y border-border scroll-mt-24">
         <div className="container mx-auto max-w-3xl">
           <div className="flex items-center gap-3 mb-8">
             <div className="w-12 h-12 rounded-full bg-gold/20 flex items-center justify-center">
@@ -380,7 +373,7 @@ const LinkedInBrandingGuideZhTw = () => {
       </section>
 
       {/* Profile Sections - Expanded */}
-      <section className="py-12 md:py-16 px-5 md:px-6 bg-background">
+      <section id="profile" className="py-12 md:py-16 px-5 md:px-6 bg-background scroll-mt-24">
         <div className="container mx-auto max-w-3xl">
           <div className="flex items-center gap-3 mb-8">
             <div className="w-12 h-12 rounded-full bg-gold/20 flex items-center justify-center">
@@ -810,7 +803,7 @@ const LinkedInBrandingGuideZhTw = () => {
       </section>
 
       {/* Content Strategy - Expanded */}
-      <section className="py-12 md:py-16 px-5 md:px-6 bg-card border-y border-border">
+      <section id="content" className="py-12 md:py-16 px-5 md:px-6 bg-card border-y border-border scroll-mt-24">
         <div className="container mx-auto max-w-3xl">
           <div className="flex items-center gap-3 mb-8">
             <div className="w-12 h-12 rounded-full bg-gold/20 flex items-center justify-center">
@@ -1051,7 +1044,7 @@ const LinkedInBrandingGuideZhTw = () => {
       </section>
 
       {/* Algorithm & Visibility */}
-      <section className="py-12 md:py-16 px-5 md:px-6 bg-background">
+      <section id="algorithm" className="py-12 md:py-16 px-5 md:px-6 bg-background scroll-mt-24">
         <div className="container mx-auto max-w-3xl">
           <div className="flex items-center gap-3 mb-8">
             <div className="w-12 h-12 rounded-full bg-gold/20 flex items-center justify-center">
@@ -1261,7 +1254,7 @@ const LinkedInBrandingGuideZhTw = () => {
       </section>
 
       {/* Common Mistakes - Expanded to 8 */}
-      <section className="py-12 md:py-16 px-5 md:px-6 bg-card border-y border-border">
+      <section id="mistakes" className="py-12 md:py-16 px-5 md:px-6 bg-card border-y border-border scroll-mt-24">
         <div className="container mx-auto max-w-3xl">
           <h2 className="font-heading text-2xl md:text-3xl text-foreground mb-8 text-center">
             常見的 LinkedIn 錯誤（以及如何避免它們）
@@ -1428,7 +1421,7 @@ const LinkedInBrandingGuideZhTw = () => {
       </section>
 
       {/* 90-Day Plan - Expanded */}
-      <section className="py-12 md:py-16 px-5 md:px-6 bg-executive-green">
+      <section id="plan" className="py-12 md:py-16 px-5 md:px-6 bg-executive-green scroll-mt-24">
         <div className="container mx-auto max-w-3xl">
           <div className="flex items-center gap-3 mb-8">
             <div className="w-12 h-12 rounded-full bg-gold/20 flex items-center justify-center">
@@ -1441,69 +1434,93 @@ const LinkedInBrandingGuideZhTw = () => {
             <div className="bg-white/10 backdrop-blur-sm rounded-lg p-6">
               <h3 className="font-heading text-xl text-gold mb-4">第 1-2 週：基礎</h3>
               <p className="text-cream/80 text-sm mb-2"><strong>第 1-3 天：審計和策略</strong></p>
-              <ul className="space-y-1 text-cream/90 text-sm mb-3">
-                <li>☐ 對照本指南中的框架檢視目前的個人檔案</li>
-                <li>☐ 定義你的目標受眾和目標</li>
-                <li>☐ 識別你的獨特價值主張</li>
-                <li>☐ 列出 SEO 優化的關鍵字</li>
-              </ul>
-              <p className="text-cream/80 text-sm mb-2"><strong>第 4-7 天：個人檔案改造 - 第 1 部分</strong></p>
-              <ul className="space-y-1 text-cream/90 text-sm mb-3">
-                <li>☐ 更新個人檔案照片和背景橫幅</li>
-                <li>☐ 重寫標題（創建 5 個選項，與同事一起測試）</li>
-                <li>☐ 起草新的關於區塊（使用說故事框架）</li>
-                <li>☐ 更新前 2-3 個職位的經歷區塊</li>
-              </ul>
-              <p className="text-cream/80 text-sm mb-2"><strong>第 8-14 天：個人檔案改造 - 第 2 部分</strong></p>
-              <ul className="space-y-1 text-cream/90 text-sm">
-                <li>☐ 完成剩餘的經歷區塊</li>
-                <li>☐ 加入或更新教育、證書、技能</li>
-                <li>☐ 策展精選區塊（3-6 個項目）</li>
-                <li>☐ 向關鍵人物請求 5 個推薦</li>
-              </ul>
+              <InteractiveChecklist
+                guideKey="li_brand_week1_audit_zh"
+                lang="zh"
+                items={[
+                  { label: "對照本指南中的框架檢視目前的個人檔案", href: "#brand" },
+                  { label: "定義你的目標受眾和目標" },
+                  { label: "識別你的獨特價值主張" },
+                  { label: "列出 SEO 優化的關鍵字" },
+                ]}
+              />
+              <p className="text-cream/80 text-sm mb-2 mt-4"><strong>第 4-7 天：個人檔案改造 - 第 1 部分</strong></p>
+              <InteractiveChecklist
+                guideKey="li_brand_week1_makeover1_zh"
+                lang="zh"
+                items={[
+                  { label: "更新個人檔案照片和背景橫幅", href: "#profile" },
+                  { label: "重寫標題（創建 5 個選項，與同事一起測試）", href: "#profile" },
+                  { label: "起草新的關於區塊（使用說故事框架）", href: "#profile" },
+                  { label: "更新前 2-3 個職位的經歷區塊", href: "#profile" },
+                ]}
+              />
+              <p className="text-cream/80 text-sm mb-2 mt-4"><strong>第 8-14 天：個人檔案改造 - 第 2 部分</strong></p>
+              <InteractiveChecklist
+                guideKey="li_brand_week1_makeover2_zh"
+                lang="zh"
+                items={[
+                  { label: "完成剩餘的經歷區塊" },
+                  { label: "加入或更新教育、證書、技能" },
+                  { label: "策展精選區塊（3-6 個項目）", href: "#profile" },
+                  { label: "向關鍵人物請求 5 個推薦", href: "#profile" },
+                ]}
+              />
             </div>
 
             <div className="bg-white/10 backdrop-blur-sm rounded-lg p-6">
               <h3 className="font-heading text-xl text-gold mb-4">第 3-4 週：內容啟動</h3>
-              <ul className="space-y-2 text-cream/90">
-                <li>☐ 使用框架腦力激盪 20 個內容想法</li>
-                <li>☐ 創建內容日曆（每週 2-3 篇貼文）</li>
-                <li>☐ 提前寫下前 5 篇貼文</li>
-                <li>☐ 設置分析追蹤</li>
-                <li>☐ 發布第一篇內容</li>
-                <li>☐ 每天參與 10-15 篇貼文</li>
-                <li>☐ 每天在 5-7 篇貼文上留下深思熟慮的評論</li>
-                <li>☐ 發送 10 個個性化的聯繫請求</li>
-              </ul>
+              <InteractiveChecklist
+                guideKey="li_brand_week3_content_zh"
+                lang="zh"
+                items={[
+                  { label: "使用框架腦力激盪 20 個內容想法", href: "#content" },
+                  { label: "創建內容日曆（每週 2-3 篇貼文）", href: "#content" },
+                  { label: "提前寫下前 5 篇貼文" },
+                  { label: "設置分析追蹤" },
+                  { label: "發布第一篇內容" },
+                  { label: "每天參與 10-15 篇貼文" },
+                  { label: "每天在 5-7 篇貼文上留下深思熟慮的評論" },
+                  { label: "發送 10 個個性化的聯繫請求" },
+                ]}
+              />
             </div>
 
             <div className="bg-white/10 backdrop-blur-sm rounded-lg p-6">
               <h3 className="font-heading text-xl text-gold mb-4">第 5-8 週：一致性和優化</h3>
-              <ul className="space-y-2 text-cream/90">
-                <li>☐ 按計劃每週發文 2-3 次</li>
-                <li>☐ 在 1 小時內回應所有評論</li>
-                <li>☐ 每日參與例行公事（15-20 分鐘）</li>
-                <li>☐ 每週追蹤分析</li>
-                <li>☐ 向策略目標發送 20 個聯繫請求</li>
-                <li>☐ 加入 3-5 個相關的 LinkedIn 群組</li>
-                <li>☐ 創建第一個影片貼文</li>
-                <li>☐ 撰寫第一篇 LinkedIn 文章</li>
-                <li>☐ 檢視個人檔案查看、追隨者成長、參與指標</li>
-              </ul>
+              <InteractiveChecklist
+                guideKey="li_brand_week5_optimize_zh"
+                lang="zh"
+                items={[
+                  { label: "按計劃每週發文 2-3 次" },
+                  { label: "在 1 小時內回應所有評論" },
+                  { label: "每日參與例行公事（15-20 分鐘）", href: "#content" },
+                  { label: "每週追蹤分析" },
+                  { label: "向策略目標發送 20 個聯繫請求" },
+                  { label: "加入 3-5 個相關的 LinkedIn 群組" },
+                  { label: "創建第一個影片貼文", href: "#content" },
+                  { label: "撰寫第一篇 LinkedIn 文章" },
+                  { label: "檢視個人檔案查看、追隨者成長、參與指標", href: "#metrics" },
+                ]}
+              />
             </div>
 
             <div className="bg-white/10 backdrop-blur-sm rounded-lg p-6">
               <h3 className="font-heading text-xl text-gold mb-4">第 9-12 週：擴展和進階策略</h3>
-              <ul className="space-y-2 text-cream/90">
-                <li>☐ 與產業影響者互動</li>
-                <li>☐ 創建回應趨勢的內容</li>
-                <li>☐ 向參與的聯繫人發送個性化訊息</li>
-                <li>☐ 提供價值（介紹、資源、見解）</li>
-                <li>☐ 安排 2-3 次咖啡聊天或電話</li>
-                <li>☐ 向 10 個溫暖潛在客戶/目標公司聯繫</li>
-                <li>☐ 檢視 90 天進展並計劃下一個 90 天</li>
-                <li>☐ 記錄有效的內容並創建模板</li>
-              </ul>
+              <InteractiveChecklist
+                guideKey="li_brand_week9_scale_zh"
+                lang="zh"
+                items={[
+                  { label: "與產業影響者互動" },
+                  { label: "創建回應趨勢的內容" },
+                  { label: "向參與的聯繫人發送個性化訊息" },
+                  { label: "提供價值（介紹、資源、見解）" },
+                  { label: "安排 2-3 次咖啡聊天或電話" },
+                  { label: "向 10 個溫暖潛在客戶/目標公司聯繫" },
+                  { label: "檢視 90 天進展並計劃下一個 90 天" },
+                  { label: "記錄有效的內容並創建模板" },
+                ]}
+              />
             </div>
 
             <div className="bg-white/10 backdrop-blur-sm rounded-lg p-6">
@@ -1548,7 +1565,7 @@ const LinkedInBrandingGuideZhTw = () => {
       </section>
 
       {/* Success Metrics - Expanded */}
-      <section className="py-12 md:py-16 px-5 md:px-6 bg-background">
+      <section id="metrics" className="py-12 md:py-16 px-5 md:px-6 bg-background scroll-mt-24">
         <div className="container mx-auto max-w-3xl">
           <div className="flex items-center gap-3 mb-8">
             <div className="w-12 h-12 rounded-full bg-gold/20 flex items-center justify-center">

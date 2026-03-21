@@ -1125,16 +1125,6 @@ const PeihuaYehReviewZhTw = () => {
           </div>
         </section>
 
-        {/* 1-on-1 Services */}
-        <section className="mb-16">
-          <div className="bg-muted/30 rounded-xl p-6 border border-border">
-            <p className="text-foreground">我每月與少數專業人士進行 1 對 1 合作——從修改履歷到準備面試到談判 offer。</p>
-            <p className="text-muted-foreground mt-2">完整套餐：履歷優化、LinkedIn 策略、面試準備和薪資談判。從頭到尾。</p>
-            <p className="text-muted-foreground mt-2">我每月只接受 5 位新客戶，因為我仍在 Uber 全職招聘。</p>
-            <p className="text-gold mt-4 font-semibold">如果您想了解詳情，請回覆「有興趣」。</p>
-            <p className="text-muted-foreground mt-2">我在這裡幫助您成功。</p>
-          </div>
-        </section>
 
       </main>
 

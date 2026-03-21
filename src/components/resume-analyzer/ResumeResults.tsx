@@ -1,11 +1,14 @@
 import { useState, useEffect } from "react";
-import { ChevronDown, CheckCircle, AlertTriangle, XCircle, ExternalLink, ArrowRight, RotateCcw, Download, Lock, ArrowDown, Mail, Briefcase, GraduationCap, Building2, Target, Clock } from "lucide-react";
+import { ChevronDown, CheckCircle, AlertTriangle, XCircle, ExternalLink, ArrowRight, RotateCcw, Download, Lock, ArrowDown, Mail, Briefcase, GraduationCap, Building2, Target, Clock, Share2, Copy, FileEdit, CheckCircle2 } from "lucide-react";
+import { useAuth } from "@/contexts/AuthContext";
 import { Button } from "@/components/ui/button";
 
 import type { AnalysisResult } from "./types";
-import { Link, useLocation } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
 import ResumeVisualSummary from "./ResumeVisualSummary";
+import { toast } from "@/hooks/use-toast";
+import { useIsMobile } from "@/hooks/use-mobile";
 
 type Language = "en" | "zh-TW";
 const t = (lang: Language, en: string, zh: string) => lang === "en" ? en : zh;
@@ -52,36 +55,39 @@ function ScoreHero({ score, lang }: { score: number; lang: Language }) {
     return t(lang, "Your resume needs significant improvements before it will be competitive.", "你的履歷需要大幅改善才能具有競爭力。");
   };
 
+  const ringSize = 220;
+  const ringRadius = (ringSize - 16) / 2;
+  const ringCircumference = 2 * Math.PI * ringRadius;
+  const ringOffset = ringCircumference - (animatedScore / 100) * ringCircumference;
+
   return (
     <motion.div
-      className="flex flex-col items-center gap-2"
+      className="flex flex-col items-center gap-3"
       initial={{ opacity: 0, scale: 0.9 }}
       animate={{ opacity: 1, scale: 1 }}
       transition={{ duration: 0.6, ease: "easeOut" }}
     >
-      <div className="relative inline-flex items-center justify-center">
-        <svg width={size} height={size} className="-rotate-90">
-          <circle cx={size / 2} cy={size / 2} r={radius} fill="none" stroke="rgba(43,71,52,0.1)" strokeWidth="10" />
-          <circle
-            cx={size / 2} cy={size / 2} r={radius} fill="none"
-            stroke={color} strokeWidth="10" strokeLinecap="round"
-            strokeDasharray={circumference} strokeDashoffset={offset}
-            className="transition-all duration-1000 ease-out"
-          />
-        </svg>
-        <div className="absolute inset-0 flex flex-col items-center justify-center">
-          <span className="font-heading text-5xl md:text-6xl font-bold" style={{ color }}>{grade}</span>
+      <div className="rounded-2xl border border-border bg-card px-10 py-8 flex flex-col items-center gap-3 shadow-lg">
+        <div className="relative inline-flex items-center justify-center">
+          <svg width={ringSize} height={ringSize} className="-rotate-90">
+            <circle cx={ringSize / 2} cy={ringSize / 2} r={ringRadius} fill="none" stroke="rgba(43,71,52,0.1)" strokeWidth="14" />
+            <circle
+              cx={ringSize / 2} cy={ringSize / 2} r={ringRadius} fill="none"
+              stroke={color} strokeWidth="14" strokeLinecap="round"
+              strokeDasharray={ringCircumference} strokeDashoffset={ringOffset}
+              className="transition-all duration-1000 ease-out"
+            />
+          </svg>
+          <div className="absolute inset-0 flex flex-col items-center justify-center">
+            <span className="font-heading text-5xl md:text-6xl font-bold" style={{ color }}>{grade}</span>
+            <span className="font-heading text-3xl font-bold mt-1" style={{ color }}>{animatedScore}<span className="text-lg font-medium text-muted-foreground">/100</span></span>
+          </div>
         </div>
+
+        <p className="text-lg font-semibold text-foreground">{t(lang, "Overall Resume Score", "整體履歷分數")}</p>
       </div>
 
-      <div className="flex items-baseline gap-1">
-        <span className="font-heading text-3xl font-bold" style={{ color: '#1A1A1A' }}>{animatedScore}</span>
-        <span className="text-base font-medium" style={{ color: '#6B6B6B' }}>/100</span>
-      </div>
-
-      <p className="text-sm" style={{ color: '#6B6B6B' }}>{t(lang, "Overall Resume Score", "整體履歷分數")}</p>
-
-      <p className="text-base mt-2 max-w-lg mx-auto text-center leading-relaxed" style={{ color: '#1A1A1A' }}>
+      <p className="text-base mt-1 max-w-lg mx-auto text-center leading-relaxed text-foreground">
         {verdictText(score)}
       </p>
     </motion.div>
@@ -241,7 +247,7 @@ function LockedOverlay({ lang, currentPath }: { lang: Language; currentPath: str
           )}
         </p>
         <Link
-          to="/signup"
+          to="/join"
           state={{ from: currentPath }}
           className="inline-flex items-center gap-2 px-6 py-3 rounded-lg text-sm font-bold transition-colors text-white"
           style={{ backgroundColor: '#D4930D' }}
@@ -261,18 +267,30 @@ function LockedOverlay({ lang, currentPath }: { lang: Language; currentPath: str
 }
 
 /* ──────────────────── Share Section ──────────────────── */
-function ShareSection({ lang }: { lang: Language }) {
+function ShareSection({ lang, score }: { lang: Language; score?: number }) {
   const isZhTw = lang === "zh-TW";
+  const analyzerUrl = `${window.location.origin}/resume-analyzer`;
+  
   const handleEmailShare = () => {
     const subject = encodeURIComponent(isZhTw ? "推薦給你的免費履歷分析工具" : "Free resume analyzer I found helpful");
     const body = encodeURIComponent(
-      `${isZhTw ? "我發現了這個免費履歷分析工具，分享給你：" : "I found this free resume analyzer and wanted to share it with you:"}\n\n${window.location.origin}/resume-analyzer`
+      `${isZhTw ? "我發現了這個免費履歷分析工具，分享給你：" : "I found this free resume analyzer and wanted to share it with you:"}\n\n${analyzerUrl}`
     );
     window.open(`mailto:?subject=${subject}&body=${body}`, "_self");
   };
   const handleLineShare = () => {
-    const url = `${window.location.origin}/resume-analyzer`;
-    window.location.href = `https://line.me/R/share?text=${encodeURIComponent(url)}`;
+    window.location.href = `https://line.me/R/msg/text/?${encodeURIComponent(analyzerUrl)}`;
+  };
+  const handleCopyLink = async () => {
+    await navigator.clipboard.writeText(analyzerUrl);
+    toast({ title: isZhTw ? "已複製連結" : "Link copied!", description: isZhTw ? "分享給你的朋友吧" : "Share it with your friends" });
+  };
+  const handleShareScore = async () => {
+    const msg = score
+      ? (isZhTw ? `我的履歷分數：${score}/100 ✨ 免費試試看 → ${analyzerUrl}` : `My resume score: ${score}/100 ✨ Try it free → ${analyzerUrl}`)
+      : analyzerUrl;
+    await navigator.clipboard.writeText(msg);
+    toast({ title: isZhTw ? "已複製分享訊息" : "Score message copied!" });
   };
 
   return (
@@ -283,25 +301,147 @@ function ShareSection({ lang }: { lang: Language }) {
       <p className="text-white/70 text-sm mb-5">
         {t(lang, "Send them this free tool — it takes 30 seconds.", "把這個免費工具分享給他們——只要 30 秒。")}
       </p>
-      <div className="flex items-center justify-center gap-3">
-        <button
-          onClick={handleEmailShare}
-          className="inline-flex items-center gap-2 px-5 py-2.5 rounded-lg border border-white/20 bg-white/10 text-white hover:bg-white/20 transition-colors text-sm font-medium"
-          aria-label="Share via Email"
-        >
-          <Mail className="w-5 h-5" />
-          Email
+      <div className="flex flex-wrap items-center justify-center gap-3">
+        <button onClick={handleEmailShare} className="inline-flex items-center gap-2 px-5 py-2.5 rounded-lg border border-white/20 bg-white/10 text-white hover:bg-white/20 transition-colors text-sm font-medium">
+          <Mail className="w-5 h-5" /> Email
         </button>
-        <button
-          onClick={handleLineShare}
-          className="inline-flex items-center gap-2 px-5 py-2.5 rounded-lg bg-[#06C755] text-white hover:bg-[#05b34d] transition-colors text-sm font-medium"
-          aria-label="Share via LINE"
-        >
-          <LineIcon />
-          LINE
+        <button onClick={handleLineShare} className="inline-flex items-center gap-2 px-5 py-2.5 rounded-lg bg-[#06C755] text-white hover:bg-[#05b34d] transition-colors text-sm font-medium">
+          <LineIcon /> LINE
+        </button>
+        <button onClick={handleCopyLink} className="inline-flex items-center gap-2 px-5 py-2.5 rounded-lg border border-white/20 bg-white/10 text-white hover:bg-white/20 transition-colors text-sm font-medium">
+          <Copy className="w-4 h-4" /> {t(lang, "Copy Link", "複製連結")}
         </button>
       </div>
+      {score && (
+        <button onClick={handleShareScore} className="mt-4 inline-flex items-center gap-2 text-xs text-white/60 hover:text-white/90 transition-colors">
+          <Share2 className="w-3.5 h-3.5" />
+          {t(lang, "Share your score", "分享你的分數")}
+        </button>
+      )}
     </div>
+  );
+}
+
+/* ──────────────────── Shared build handler ──────────────────── */
+function useBuildHandler(lang: Language, resumeText?: string, analysis?: AnalysisResult) {
+  const navigate = useNavigate();
+  return () => {
+    if (resumeText) sessionStorage.setItem("analyzer-resume-text", resumeText);
+    if (analysis) sessionStorage.setItem("analyzer-analysis-result", JSON.stringify(analysis));
+    navigate(lang === "zh-TW" ? "/zh-tw/resume?from=analyzer" : "/resume?from=analyzer");
+  };
+}
+
+/* ──────────────────── Inline Top CTA (after score) ──────────────────── */
+function InlineBuilderCTA({ lang, resumeText, analysis }: { lang: Language; resumeText?: string; analysis?: AnalysisResult }) {
+  const handleBuild = useBuildHandler(lang, resumeText, analysis);
+  if (!resumeText) return null;
+  return (
+    <div className="flex flex-col items-center gap-1.5" data-print-hide>
+      <button
+        onClick={handleBuild}
+        className="inline-flex items-center gap-2 px-6 py-3 rounded-lg text-sm font-bold transition-colors text-white"
+        style={{ backgroundColor: '#D4930D' }}
+        onMouseEnter={(e) => (e.currentTarget.style.backgroundColor = '#b87d0b')}
+        onMouseLeave={(e) => (e.currentTarget.style.backgroundColor = '#D4930D')}
+      >
+        <FileEdit className="w-4 h-4" />
+        {t(lang, "Build My Resume", "建立我的履歷")}
+        <ArrowRight className="w-4 h-4" />
+      </button>
+      <p className="text-xs" style={{ color: '#6B6B6B' }}>
+        {t(lang, "Import your content into a clean, ATS-friendly template", "將你的內容匯入乾淨的 ATS 友善模板")}
+      </p>
+    </div>
+  );
+}
+
+/* ──────────────────── Sticky Mobile Bottom Bar ──────────────────── */
+function StickyBuilderBar({ lang, resumeText, analysis }: { lang: Language; resumeText?: string; analysis?: AnalysisResult }) {
+  const isMobile = useIsMobile();
+  const handleBuild = useBuildHandler(lang, resumeText, analysis);
+  if (!isMobile || !resumeText) return null;
+  return (
+    <div className="fixed bottom-0 left-0 right-0 z-50 px-4 py-3 border-t border-border bg-background" data-print-hide>
+      <button
+        onClick={handleBuild}
+        className="w-full flex items-center justify-center gap-2 py-3 rounded-lg text-sm font-bold text-white"
+        style={{ backgroundColor: '#D4930D' }}
+      >
+        <FileEdit className="w-4 h-4" />
+        {t(lang, "Build My Resume", "建立我的履歷")}
+        <ArrowRight className="w-4 h-4" />
+      </button>
+    </div>
+  );
+}
+
+/* ──────────────────── Build My Resume CTA ──────────────────── */
+function BuildResumeCTA({ lang, resumeText, analysis }: { lang: Language; resumeText?: string; analysis?: AnalysisResult }) {
+  const handleBuild = useBuildHandler(lang, resumeText, analysis);
+
+  return (
+    <div className="rounded-2xl p-6 md:p-8 text-center" style={{ backgroundColor: '#FFFFFF', border: '2px solid rgba(212,147,13,0.4)', boxShadow: '0 4px 24px rgba(212,147,13,0.1)' }}>
+      <div className="w-14 h-14 rounded-full flex items-center justify-center mx-auto mb-4" style={{ backgroundColor: 'rgba(212,147,13,0.1)' }}>
+        <FileEdit className="w-7 h-7" style={{ color: '#D4930D' }} />
+      </div>
+      <h2 className="font-heading text-xl font-bold mb-2" style={{ color: '#1A1A1A' }}>
+        {t(lang, "Build Your Improved Resume Now", "立即打造你的改善版履歷")}
+      </h2>
+      <p className="text-sm mb-5 max-w-md mx-auto" style={{ color: '#6B6B6B' }}>
+        {t(lang,
+          "We'll import your resume content into our builder with a clean, ATS-friendly template — ready to edit and download.",
+          "我們會將你的履歷內容匯入建構器，套用乾淨的 ATS 友善模板——隨時可以編輯和下載。"
+        )}
+      </p>
+      <button
+        onClick={handleBuild}
+        className="inline-flex items-center gap-2 px-6 py-3 rounded-lg text-sm font-bold transition-colors text-white"
+        style={{ backgroundColor: '#D4930D' }}
+        onMouseEnter={(e) => (e.currentTarget.style.backgroundColor = '#b87d0b')}
+        onMouseLeave={(e) => (e.currentTarget.style.backgroundColor = '#D4930D')}
+      >
+        <FileEdit className="w-4 h-4" />
+        {t(lang, "Build My Resume", "建立我的履歷")}
+        <ArrowRight className="w-4 h-4" />
+      </button>
+      <p className="text-xs mt-3" style={{ color: '#6B6B6B' }}>
+        {t(lang, "Free · No signup required · Classic template", "免費 · 無需註冊 · 經典模板")}
+      </p>
+    </div>
+  );
+}
+
+/* ──────────────────── Floating Share FAB (mobile) ──────────────────── */
+function FloatingShareFAB({ lang, score }: { lang: Language; score?: number }) {
+  const isMobile = useIsMobile();
+  if (!isMobile) return null;
+
+  const handleShare = async () => {
+    const url = `${window.location.origin}/resume-analyzer`;
+    const text = score
+      ? (lang === "zh-TW" ? `我的履歷拿到了 ${score}/100 分！` : `My resume scored ${score}/100!`)
+      : (lang === "zh-TW" ? "免費履歷分析工具" : "Free resume analyzer");
+    
+    if (navigator.share) {
+      try {
+        await navigator.share({ title: text, url });
+        return;
+      } catch {}
+    }
+    await navigator.clipboard.writeText(url);
+    toast({ title: lang === "zh-TW" ? "已複製連結" : "Link copied!" });
+  };
+
+  return (
+    <button
+      onClick={handleShare}
+      className="fixed bottom-20 right-4 z-40 w-12 h-12 rounded-full shadow-lg flex items-center justify-center text-white transition-transform hover:scale-110"
+      style={{ backgroundColor: '#D4930D' }}
+      aria-label="Share"
+    >
+      <Share2 className="w-5 h-5" />
+    </button>
   );
 }
 
@@ -366,50 +506,77 @@ export default function ResumeResults({
   onReset,
   isUnlocked = true,
   resumeImageUrl,
+  resumeText,
 }: {
   analysis: AnalysisResult;
   lang: Language;
   onReset?: () => void;
   isUnlocked?: boolean;
   resumeImageUrl?: string | null;
+  resumeText?: string;
 }) {
+  const isMobile = useIsMobile();
   const location = useLocation();
+  const { isLoggedIn } = useAuth();
   const needsWork = analysis.sections.filter(s => s.score < 7).length;
 
   return (
-    <div className="py-12 md:py-20 px-5" id="analysis-results-container" style={{ backgroundColor: '#FDFBF7' }}>
+    <div className={`py-12 md:py-20 px-5 ${isMobile && resumeText ? "pb-24" : ""}`} id="analysis-results-container" style={{ backgroundColor: '#FDFBF7' }}>
       <div className="container mx-auto max-w-3xl space-y-10">
 
         {/* Action bar */}
-        <div className="flex items-center justify-between gap-3" data-print-hide>
-          {onReset && (
+        {isUnlocked && (
+          <div className="flex justify-center gap-3" data-print-hide>
             <Button
-              variant="outline"
-              size="sm"
-              onClick={onReset}
-              className="gap-2"
-              style={{ borderColor: 'rgba(43,71,52,0.2)', color: '#2b4734' }}
-            >
-              <RotateCcw className="w-4 h-4" />
-              {t(lang, "Scan Another Resume", "掃描另一份履歷")}
-            </Button>
-          )}
-          {isUnlocked && (
-            <button
               onClick={() => window.print()}
-              className="inline-flex items-center gap-2 text-sm font-medium transition-colors ml-auto hover:opacity-70"
-              style={{ color: '#6B6B6B' }}
+              size="lg"
+              className="gap-2 text-white font-bold px-8 py-3 text-base rounded-lg shadow-md"
+              style={{ backgroundColor: '#2b4734' }}
+              onMouseEnter={(e) => (e.currentTarget.style.backgroundColor = '#1b3a2f')}
+              onMouseLeave={(e) => (e.currentTarget.style.backgroundColor = '#2b4734')}
             >
-              <Download className="w-4 h-4" />
-              {t(lang, "Download PDF", "下載 PDF")}
-            </button>
-          )}
-        </div>
+              <Download className="w-5 h-5" />
+              {t(lang, "Download PDF Report", "下載 PDF 報告")}
+            </Button>
+            {onReset && (
+              <Button
+                onClick={onReset}
+                size="lg"
+                variant="outline"
+                className="gap-2 font-bold px-6 py-3 text-base rounded-lg"
+              >
+                <RotateCcw className="w-4 h-4" />
+                {t(lang, "Re-analyze", "重新分析")}
+              </Button>
+            )}
+          </div>
+        )}
 
         {/* Overall Score */}
         <div className="text-center">
           <ScoreHero score={analysis.overall_score} lang={lang} />
         </div>
+
+        {/* Saved report banner for logged-in users */}
+        {isLoggedIn && (
+          <div className="flex items-start gap-3 rounded-xl p-4" style={{ backgroundColor: 'rgba(43,71,52,0.06)', border: '1px solid rgba(43,71,52,0.12)' }}>
+            <CheckCircle2 className="w-5 h-5 shrink-0 mt-0.5" style={{ color: '#2b4734' }} />
+            <div>
+              <p className="text-sm font-semibold" style={{ color: '#1A1A1A' }}>
+                {t(lang, "Report saved to your dashboard", "報告已儲存至你的儀表板")}
+              </p>
+              <p className="text-xs mt-0.5" style={{ color: '#6B6B6B' }}>
+                {t(lang,
+                  "When you open your resume in the Builder, you'll see AI suggestions to apply.",
+                  "當你在建構器中開啟履歷時，會看到 AI 改進建議。"
+                )}
+              </p>
+            </div>
+          </div>
+        )}
+
+        {/* Top Build CTA — right after score */}
+        <InlineBuilderCTA lang={lang} resumeText={resumeText} analysis={analysis} />
 
         {/* Segmentation Profile — always visible */}
         <SegmentationProfile segmentation={analysis.segmentation} lang={lang} />
@@ -454,40 +621,123 @@ export default function ResumeResults({
               </div>
             </div>
 
-            {/* Bullet Rewrite */}
-            <div className="rounded-xl p-6" style={{ backgroundColor: '#FFFFFF', border: '2px solid rgba(212,147,13,0.3)', boxShadow: '0 2px 8px rgba(0,0,0,0.04)' }}>
-              <h2 className="font-heading text-xl mb-4" style={{ color: '#1A1A1A' }}>
-                {t(lang, "Example: How to Transform Your Resume Bullets", "範例：如何改造你的履歷描述")}
-              </h2>
-              <div className="space-y-2">
-                <div>
-                  <p className="text-xs font-semibold text-destructive uppercase mb-1">{t(lang, "Before", "修改前")}</p>
-                  <p className="text-sm rounded-lg p-3 italic" style={{ backgroundColor: '#FDFBF7', color: '#6B6B6B' }}>"{analysis.bullet_rewrite.original}"</p>
+            {/* Summary Rewrite */}
+            {analysis.summary_rewrite && (
+              <div className="rounded-xl p-6" style={{ backgroundColor: '#FFFFFF', border: '2px solid rgba(43,71,52,0.2)', boxShadow: '0 2px 8px rgba(0,0,0,0.04)' }}>
+                <div className="flex items-center gap-2 mb-4">
+                  <FileEdit className="w-5 h-5" style={{ color: '#2b4734' }} />
+                  <h2 className="font-heading text-xl" style={{ color: '#1A1A1A' }}>
+                    {analysis.summary_rewrite.original
+                      ? t(lang, "Professional Summary — Rewritten", "專業摘要 — 改寫版")
+                      : t(lang, "Your Resume Is Missing a Summary — Here's One", "你的履歷缺少摘要 — 這是我們幫你寫的")
+                    }
+                  </h2>
                 </div>
-                <div className="flex justify-center py-1">
-                  <div className="flex flex-col items-center" style={{ color: '#D4930D' }}>
-                    <ArrowDown className="w-5 h-5" />
+                {analysis.summary_rewrite.original ? (
+                  <div className="space-y-2">
+                    <div>
+                      <p className="text-xs font-semibold text-destructive uppercase mb-1">{t(lang, "Current", "目前版本")}</p>
+                      <p className="text-sm rounded-lg p-3 italic" style={{ backgroundColor: '#FDFBF7', color: '#6B6B6B' }}>"{analysis.summary_rewrite.original}"</p>
+                    </div>
+                    <div className="flex justify-center py-1">
+                      <ArrowDown className="w-5 h-5" style={{ color: '#D4930D' }} />
+                    </div>
+                    <div>
+                      <p className="text-xs font-semibold uppercase mb-1" style={{ color: '#2b4734' }}>{t(lang, "Improved", "改善版")}</p>
+                      <p className="text-sm rounded-lg p-3 font-medium" style={{ backgroundColor: 'rgba(43,71,52,0.05)', color: '#1A1A1A' }}>"{analysis.summary_rewrite.improved}"</p>
+                    </div>
                   </div>
-                </div>
-                <div>
-                  <p className="text-xs font-semibold uppercase mb-1" style={{ color: '#2b4734' }}>{t(lang, "After", "修改後")}</p>
-                  <p className="text-sm rounded-lg p-3 font-medium" style={{ backgroundColor: 'rgba(43,71,52,0.05)', color: '#1A1A1A' }}>"{analysis.bullet_rewrite.improved}"</p>
-                </div>
-                <div className="pt-2">
-                  <p className="text-xs font-semibold uppercase mb-2" style={{ color: '#6B6B6B' }}>{t(lang, "What changed", "改了什麼")}</p>
-                  <ul className="space-y-1">
-                    {analysis.bullet_rewrite.changes.map((c, i) => (
-                      <li key={i} className="text-xs flex gap-2" style={{ color: '#6B6B6B' }}>
-                        <span style={{ color: '#D4930D' }}>•</span> {c}
-                      </li>
-                    ))}
-                  </ul>
-                </div>
+                ) : (
+                  <div>
+                    <p className="text-xs font-semibold uppercase mb-1" style={{ color: '#2b4734' }}>{t(lang, "Suggested Summary", "建議摘要")}</p>
+                    <p className="text-sm rounded-lg p-3 font-medium" style={{ backgroundColor: 'rgba(43,71,52,0.05)', color: '#1A1A1A' }}>"{analysis.summary_rewrite.improved}"</p>
+                  </div>
+                )}
+                <p className="text-sm mt-3" style={{ color: '#6B6B6B' }}>
+                  <strong>{t(lang, "Why:", "原因：")}</strong> {analysis.summary_rewrite.explanation}
+                </p>
               </div>
-              <p className="text-xs mt-4 italic" style={{ color: '#6B6B6B' }}>
-                {t(lang, "This is just one example. A full resume review transforms every bullet this way.", "這只是一個範例。完整的履歷審查會將每一條描述都這樣改善。")}
-              </p>
-            </div>
+            )}
+
+            {/* Bullet Rewrites — All Weak Bullets */}
+            {(() => {
+              const rewrites = analysis.bullet_rewrites && analysis.bullet_rewrites.length > 0
+                ? analysis.bullet_rewrites
+                : null;
+              const fallback = !rewrites && analysis.bullet_rewrite;
+
+              return (
+                <div className="rounded-xl p-6" style={{ backgroundColor: '#FFFFFF', border: '2px solid rgba(212,147,13,0.3)', boxShadow: '0 2px 8px rgba(0,0,0,0.04)' }}>
+                  <div className="flex items-center justify-between mb-4">
+                    <h2 className="font-heading text-xl" style={{ color: '#1A1A1A' }}>
+                      {t(lang, "Bullet-by-Bullet Fixes", "逐條修正建議")}
+                    </h2>
+                    {rewrites && (
+                      <span className="text-xs font-bold px-3 py-1 rounded-full" style={{ backgroundColor: 'rgba(212,147,13,0.1)', color: '#D4930D' }}>
+                        {rewrites.length} {t(lang, rewrites.length === 1 ? "bullet needs work" : "bullets need work", "條需改善")}
+                      </span>
+                    )}
+                  </div>
+
+                  {rewrites ? (
+                    <div className="space-y-5">
+                      {rewrites.map((rw, i) => (
+                        <div key={i} className="rounded-lg overflow-hidden" style={{ border: '1px solid rgba(43,71,52,0.1)' }}>
+                          <div className="p-4 space-y-2">
+                            <div className="flex items-start gap-2">
+                              <XCircle className="w-4 h-4 text-destructive shrink-0 mt-0.5" />
+                              <div className="flex-1">
+                                <p className="text-xs font-semibold text-destructive uppercase mb-1">{t(lang, "Before", "修改前")}</p>
+                                <p className="text-sm italic" style={{ color: '#6B6B6B' }}>"{rw.original}"</p>
+                              </div>
+                            </div>
+                            <div className="flex justify-center py-0.5">
+                              <ArrowDown className="w-4 h-4" style={{ color: '#D4930D' }} />
+                            </div>
+                            <div className="flex items-start gap-2">
+                              <CheckCircle className="w-4 h-4 shrink-0 mt-0.5" style={{ color: '#2b4734' }} />
+                              <div className="flex-1">
+                                <p className="text-xs font-semibold uppercase mb-1" style={{ color: '#2b4734' }}>{t(lang, "After", "修改後")}</p>
+                                <p className="text-sm font-medium" style={{ color: '#1A1A1A' }}>"{rw.improved}"</p>
+                              </div>
+                            </div>
+                          </div>
+                          <div className="px-4 py-3" style={{ backgroundColor: '#FDFBF7', borderTop: '1px solid rgba(43,71,52,0.08)' }}>
+                            <p className="text-xs" style={{ color: '#6B6B6B' }}>
+                              <strong>{t(lang, "Why:", "原因：")}</strong> {rw.explanation}
+                            </p>
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  ) : fallback ? (
+                    <div className="space-y-2">
+                      <div>
+                        <p className="text-xs font-semibold text-destructive uppercase mb-1">{t(lang, "Before", "修改前")}</p>
+                        <p className="text-sm rounded-lg p-3 italic" style={{ backgroundColor: '#FDFBF7', color: '#6B6B6B' }}>"{analysis.bullet_rewrite.original}"</p>
+                      </div>
+                      <div className="flex justify-center py-1">
+                        <ArrowDown className="w-5 h-5" style={{ color: '#D4930D' }} />
+                      </div>
+                      <div>
+                        <p className="text-xs font-semibold uppercase mb-1" style={{ color: '#2b4734' }}>{t(lang, "After", "修改後")}</p>
+                        <p className="text-sm rounded-lg p-3 font-medium" style={{ backgroundColor: 'rgba(43,71,52,0.05)', color: '#1A1A1A' }}>"{analysis.bullet_rewrite.improved}"</p>
+                      </div>
+                      <div className="pt-2">
+                        <p className="text-xs font-semibold uppercase mb-2" style={{ color: '#6B6B6B' }}>{t(lang, "What changed", "改了什麼")}</p>
+                        <ul className="space-y-1">
+                          {analysis.bullet_rewrite.changes.map((c, i) => (
+                            <li key={i} className="text-xs flex gap-2" style={{ color: '#6B6B6B' }}>
+                              <span style={{ color: '#D4930D' }}>•</span> {c}
+                            </li>
+                          ))}
+                        </ul>
+                      </div>
+                    </div>
+                  ) : null}
+                </div>
+              );
+            })()}
 
             {/* Top 3 Priorities */}
             <div>
@@ -519,90 +769,53 @@ export default function ResumeResults({
             {/* Actionable Next Steps */}
             <ActionableNextSteps priorities={analysis.top_priorities} lang={lang} />
 
-            {/* Coaching CTA */}
-            <div className="rounded-2xl p-6 md:p-8 text-center" style={{ background: 'radial-gradient(ellipse at center, #2b4734 0%, #1f3a28 100%)', border: '2px solid rgba(212,147,13,0.4)' }}>
-              <h2 className="font-heading text-xl md:text-2xl text-cream mb-2">
-                {t(lang, "Want a Recruiter to Fix All of This For You?", "想讓招募官幫你全部改好？")}
-              </h2>
-              <p className="text-sm text-cream/70 mb-2 max-w-md mx-auto leading-relaxed">
-                {t(lang,
-                  "I personally review and rewrite resumes for a small number of clients each month. See real before-and-after examples.",
-                  "我每月為少數客戶親自審閱並改寫履歷。查看真實的修改前後範例。"
-                )}
-              </p>
-              <p className="text-xs text-cream/50 mb-5">
-                {t(lang, "Join 500+ professionals who improved their resumes", "加入超過 500 位已改善履歷的專業人士")}
-              </p>
-              <a
-                href={lang === "zh-TW" ? "/zh-tw#coaching" : "/#coaching"}
-                className="inline-flex items-center gap-2 px-6 py-3 rounded-lg text-sm font-bold transition-colors"
-                style={{ backgroundColor: '#D4930D', color: '#1A1A1A' }}
-              >
-                {t(lang, "See If You're a Fit", "查看是否適合你")}
-                <ArrowRight className="w-4 h-4" />
-              </a>
-            </div>
+            {/* Build My Resume CTA */}
+            {resumeText && <BuildResumeCTA lang={lang} resumeText={resumeText} analysis={analysis} />}
+
+            {/* Save report nudge for non-logged-in users */}
+            {!isLoggedIn && (
+              <div className="text-center py-2">
+                <p className="text-sm" style={{ color: '#6B6B6B' }}>
+                  {t(lang,
+                    "Create a free account to save this report and access it from any device.",
+                    "建立免費帳號，儲存報告並從任何裝置查看。"
+                  )}{" "}
+                  <Link to="/join" state={{ from: location.pathname + location.search }} className="font-semibold hover:underline" style={{ color: '#D4930D' }}>
+                    {t(lang, "Sign up free →", "免費註冊 →")}
+                  </Link>
+                </p>
+              </div>
+            )}
+
 
           </div>{/* end blur wrapper */}
         </div>{/* end relative wrapper */}
 
-        {/* Free Templates */}
-        <div className="rounded-xl p-6" style={{ backgroundColor: '#FFFFFF', border: '1px solid rgba(43,71,52,0.1)', boxShadow: '0 2px 8px rgba(0,0,0,0.04)' }}>
-          <h2 className="font-heading text-xl mb-2" style={{ color: '#1A1A1A' }}>
-            {t(lang, "Download Free Resume Templates", "下載免費履歷模板")}
-          </h2>
-          <p className="text-sm mb-5" style={{ color: '#6B6B6B' }}>
-            {t(lang, "Battle-tested formats that pass ATS screening at top companies.", "經過實戰驗證，能通過頂尖企業 ATS 篩選的格式。")}
-          </p>
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-            {[
-              { label: t(lang, "English Resume Template", "英文履歷模板"), url: "https://docs.google.com/document/d/1BAkVHZ57JsLzL0hk1AUvFBu4bsx8ymMA7tPJKuJROIM/edit?usp=sharing" },
-              { label: t(lang, "Chinese Resume Template", "中文履歷模板"), url: "https://docs.google.com/document/d/1U14BS5yISb17ejgVIX5IyeaVZKiww33hpJNOnEy4Wy0/edit?usp=sharing" },
-            ].map((tmpl) => (
-              <a key={tmpl.label} href={tmpl.url} target="_blank" rel="noopener noreferrer"
-                className="flex items-center justify-between p-4 rounded-lg transition-all"
-                style={{ border: '1px solid rgba(43,71,52,0.1)' }}
-                onMouseEnter={(e) => { e.currentTarget.style.borderColor = 'rgba(212,147,13,0.5)'; e.currentTarget.style.backgroundColor = 'rgba(212,147,13,0.03)'; }}
-                onMouseLeave={(e) => { e.currentTarget.style.borderColor = 'rgba(43,71,52,0.1)'; e.currentTarget.style.backgroundColor = 'transparent'; }}
-              >
-                <div>
-                  <p className="text-sm font-semibold" style={{ color: '#1A1A1A' }}>{tmpl.label}</p>
-                  <p className="text-xs" style={{ color: '#6B6B6B' }}>{t(lang, "Google Docs — make a copy to edit", "Google Docs — 建立副本後即可編輯")}</p>
-                </div>
-                <ExternalLink className="w-4 h-4 shrink-0" style={{ color: '#D4930D' }} />
-              </a>
-            ))}
-          </div>
-        </div>
-
-        {/* Next Steps */}
-        <div className="rounded-xl p-6 text-center" style={{ backgroundColor: '#FFFFFF', border: '1px solid rgba(43,71,52,0.1)', boxShadow: '0 2px 8px rgba(0,0,0,0.04)' }}>
-          <h2 className="font-heading text-xl mb-2" style={{ color: '#1A1A1A' }}>
-            {t(lang, "Keep improving", "繼續提升")}
-          </h2>
-          <p className="text-sm mb-5" style={{ color: '#6B6B6B' }}>
-            {t(lang, "Resources to strengthen your job search", "幫助你加強求職的資源")}
-          </p>
-          <div className="flex flex-col sm:flex-row gap-3 justify-center">
-            <a
-              href={lang === "zh-TW" ? "/zh-tw/guides" : "/guides"}
-              className="inline-flex items-center justify-center gap-2 px-5 py-2.5 rounded-lg text-white text-sm font-semibold transition-colors"
+        {/* Download PDF — bottom */}
+        {isUnlocked && (
+          <div className="flex justify-center" data-print-hide>
+            <Button
+              onClick={() => window.print()}
+              size="lg"
+              className="gap-2 text-white font-bold px-8 py-3 text-base rounded-lg shadow-md"
               style={{ backgroundColor: '#2b4734' }}
+              onMouseEnter={(e) => (e.currentTarget.style.backgroundColor = '#1b3a2f')}
+              onMouseLeave={(e) => (e.currentTarget.style.backgroundColor = '#2b4734')}
             >
-              {t(lang, "Free Career Guides", "免費職涯指南")}
-            </a>
-            <a
-              href={lang === "zh-TW" ? "/zh-tw/salary-starter-kit" : "/salary-starter-kit"}
-              className="inline-flex items-center justify-center gap-2 px-5 py-2.5 rounded-lg text-sm font-semibold transition-colors"
-              style={{ border: '1px solid rgba(43,71,52,0.2)', color: '#1A1A1A' }}
-            >
-              {t(lang, "Salary Negotiation Toolkit", "薪資談判工具包")}
-            </a>
+              <Download className="w-5 h-5" />
+              {t(lang, "Download PDF Report", "下載 PDF 報告")}
+            </Button>
           </div>
-        </div>
+        )}
 
         {/* Share */}
-        <ShareSection lang={lang} />
+        <ShareSection lang={lang} score={analysis.overall_score} />
+
+        {/* Floating Share FAB */}
+        <FloatingShareFAB lang={lang} score={analysis.overall_score} />
+
+        {/* Sticky mobile Build CTA */}
+        <StickyBuilderBar lang={lang} resumeText={resumeText} analysis={analysis} />
       </div>
     </div>
   );

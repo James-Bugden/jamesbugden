@@ -1,4 +1,6 @@
 import { FileText, Clock, Linkedin, Bot, Target, Briefcase, Send, MessageSquare, DollarSign, AlertTriangle, CheckCircle2, XCircle, ArrowRight, ChevronDown, Menu, Search, Zap, BookOpen, Copy, Check } from "lucide-react";
+import JobTitleWorksheet from "@/components/guides/JobTitleWorksheet";
+import { AI_GUIDE_PROMPTS } from "@/data/aiGuidePrompts";
 import { Link } from "react-router-dom";
 import GoldCheckBadge from "@/components/GoldCheckBadge";
 import { InstagramIcon, ThreadsIcon } from "@/components/SocialIcons";
@@ -7,6 +9,7 @@ import LanguageToggle from "@/components/LanguageToggle";
 import { AuthHeaderButton } from "@/components/AuthHeaderButton";
 import PageSEO from "@/components/PageSEO";
 import { useTrackGuideProgress } from "@/hooks/useReadingProgress";
+import GuideSignInBanner from "@/components/guides/GuideSignInBanner";
 import { useState, useEffect } from "react";
 
 const SectionNumber = ({ num }: { num: string }) => (
@@ -50,6 +53,25 @@ const AiPromptBlock = ({ children }: { children: React.ReactNode }) => {
       </div>
       <pre className="text-sm text-foreground whitespace-pre-wrap font-mono bg-background/50 rounded-lg p-4 overflow-x-auto">{children}</pre>
     </div>
+  );
+};
+
+const CopyAllPromptsButton = ({ lang }: { lang: "en" | "zh" }) => {
+  const [copied, setCopied] = useState(false);
+  const handleCopyAll = () => {
+    const allText = AI_GUIDE_PROMPTS.map(stage =>
+      `--- Stage ${stage.stage}: ${lang === "en" ? stage.titleEn : stage.titleZh} ---\n\n` +
+      stage.prompts.map(p => `[${lang === "en" ? p.step : p.stepZh}]\n${lang === "en" ? p.promptEn : p.promptZh}`).join("\n\n")
+    ).join("\n\n\n");
+    navigator.clipboard.writeText(allText);
+    setCopied(true);
+    setTimeout(() => setCopied(false), 2500);
+  };
+  return (
+    <button onClick={handleCopyAll} className="flex items-center gap-2 text-sm font-medium text-gold hover:text-gold/80 transition-colors px-4 py-2.5 rounded-lg border border-gold/30 hover:bg-gold/5">
+      {copied ? <Check className="w-4 h-4" /> : <Copy className="w-4 h-4" />}
+      {copied ? "All prompts copied!" : "Copy All Prompts"}
+    </button>
   );
 };
 
@@ -194,6 +216,14 @@ const TableOfContents = () => {
 
 const AiJobSearchGuide = () => {
   useTrackGuideProgress("ai-job-search-guide");
+  const [checklistState, setChecklistState] = useState<Record<number, boolean[]>>({});
+  const toggleChecklist = (stageIndex: number, itemIndex: number) => {
+    setChecklistState(prev => {
+      const stage = [...(prev[stageIndex] || [])];
+      stage[itemIndex] = !stage[itemIndex];
+      return { ...prev, [stageIndex]: stage };
+    });
+  };
 
   return (
     <div className="min-h-screen bg-background">
@@ -224,10 +254,7 @@ const AiJobSearchGuide = () => {
       {/* Hero */}
       <section className="pt-28 md:pt-36 pb-14 md:pb-20 px-5 md:px-6 bg-executive-green">
         <div className="container mx-auto max-w-4xl text-center">
-          <div className="inline-flex items-center gap-2 px-4 py-2 bg-cream/10 border border-cream/20 rounded-full mb-6">
-            <Bot className="w-4 h-4 text-gold" />
-            <span className="text-sm text-cream/80">AI-Powered Guide</span>
-          </div>
+          
           <h1 className="font-heading text-3xl md:text-5xl lg:text-6xl text-cream leading-tight mb-4" style={{ lineHeight: 1.2 }}>
             How to Use AI to Run Your<br className="hidden sm:block" /> Entire Job Search
           </h1>
@@ -246,6 +273,8 @@ const AiJobSearchGuide = () => {
           </div>
         </div>
       </section>
+
+      <GuideSignInBanner lang="en" />
 
       {/* ═══════════════ INTRODUCTION ═══════════════ */}
       <section id="intro" className="py-14 md:py-20 px-5 md:px-6 bg-card border-b border-border scroll-mt-24">
@@ -300,10 +329,9 @@ const AiJobSearchGuide = () => {
         </div>
       </section>
 
-      <main className="container mx-auto px-5 md:px-6 pb-20 max-w-3xl">
       {/* ═══════════════ SECTION 1: FIND YOUR PATH ═══════════════ */}
-      <section id="find-path" className="py-14 md:py-20 scroll-mt-24">
-        <div className="space-y-6">
+      <section id="find-path" className="py-14 md:py-20 px-5 md:px-6 bg-background scroll-mt-24">
+        <div className="container mx-auto max-w-3xl space-y-6">
           <div className="flex items-start gap-5 mb-8">
             <SectionNumber num="01" />
             <div className="pt-3">
@@ -386,8 +414,8 @@ Qualifications: [INSERT SKILLS + CREDENTIALS]`}</AiPromptBlock>
       </section>
 
       {/* ═══════════════ SECTION 2: LINKEDIN DEFENSE ═══════════════ */}
-      <section id="linkedin" className="py-14 md:py-20 scroll-mt-24">
-        <div className="space-y-6">
+      <section id="linkedin" className="py-14 md:py-20 px-5 md:px-6 bg-card border-y border-border scroll-mt-24">
+        <div className="container mx-auto max-w-3xl space-y-6">
           <div className="flex items-start gap-5 mb-8">
             <SectionNumber num="02" />
             <div className="pt-3">
@@ -532,8 +560,8 @@ And here's the resume: ____`}</AiPromptBlock>
       </section>
 
       {/* ═══════════════ SECTION 3: RESUME ═══════════════ */}
-      <section id="resume" className="py-14 md:py-20 scroll-mt-24">
-        <div className="space-y-6">
+      <section id="resume" className="py-14 md:py-20 px-5 md:px-6 bg-background scroll-mt-24">
+        <div className="container mx-auto max-w-3xl space-y-6">
           <div className="flex items-start gap-5 mb-8">
             <SectionNumber num="03" />
             <div className="pt-3">
@@ -552,7 +580,34 @@ And here's the resume: ____`}</AiPromptBlock>
             <p className="text-muted-foreground leading-relaxed text-sm mb-3">A strong resume starts with a strong structure. A clean, recruiter-tested template removes all the guesswork around layout, keywords, sections, and hierarchy. All you need to focus on is the content.</p>
             <ActionStep>Download a clean, single-column resume template. Avoid templates with graphics, icons, headshots, or multiple columns. These look nice but break when parsed by ATS (Applicant Tracking Systems).</ActionStep>
             <RecruiterCheck>I've reviewed thousands of resumes that were mangled by ATS software because the candidate used a fancy two-column template. The system couldn't read it, so it showed me scrambled text. If I can't read your resume in the first three seconds, I move on. Simple beats pretty.</RecruiterCheck>
+            <div className="flex flex-wrap gap-3 mt-4">
+              <Link to="/resume" className="inline-flex items-center gap-1.5 text-sm text-gold hover:underline font-medium">
+                Open Resume Builder →
+              </Link>
+              <Link to="/resume-guide" className="inline-flex items-center gap-1.5 text-sm text-gold hover:underline font-medium">
+                Read Resume Guide →
+              </Link>
+            </div>
           </Collapsible>
+
+          {/* 3.1b */}
+          <div className="bg-gold/5 border border-gold/20 rounded-xl p-5 space-y-3">
+            <h4 className="font-heading text-lg text-gold font-semibold">3.1b Open the Interactive Resume Workbook</h4>
+            <p className="text-muted-foreground text-sm leading-relaxed">This workbook is your planning tool for the rest of Section 3. Every step from keywords to bullets happens here. Open it in another tab and keep it next to this guide as you work.</p>
+            <a href="#worksheet" className="inline-flex items-center gap-1.5 text-sm text-gold hover:underline font-medium">
+              Open the Resume Workbook →
+            </a>
+            <p className="text-sm text-muted-foreground leading-relaxed mt-2">You will use this workbook to:</p>
+            <ul className="text-sm text-muted-foreground space-y-1 list-disc list-inside">
+              <li>Enter the 20 keywords for your target role (Step 3.9)</li>
+              <li>Track which keywords appear most often across job postings</li>
+              <li>Record your achievements for each experience (Step 3.11)</li>
+              <li>Match keywords to achievements (Step 3.12)</li>
+              <li>Build and store your final bullet points (Step 3.13)</li>
+              <li>Watch your keyword match rate hit 50% in real time (Step 3.15)</li>
+            </ul>
+            <p className="text-xs text-muted-foreground">Each tab in the workbook represents one target job title. If you are targeting multiple titles from Section 1, create a separate tab for each.</p>
+          </div>
 
           {/* 3.2 */}
           <Collapsible title="3.2 Create Different Versions for Each Job Title">
@@ -671,6 +726,11 @@ And suggest specific ideas to improve them, if possible:
           <h3 className="font-heading text-xl text-foreground font-semibold pt-4">3.15 Aim for ~50% Keyword Match</h3>
           <p className="text-muted-foreground leading-relaxed text-sm">You don't need to include every keyword from the job description. But you need enough of the important ones so the system recognizes you as a strong fit.</p>
           <p className="text-muted-foreground leading-relaxed text-sm">Why 50%? Below 30%, ATS might not surface you at all. Above 70%, your resume starts to read like keyword stuffing. 50% is the sweet spot.</p>
+          <div className="flex flex-wrap gap-3 mt-3 mb-4">
+            <Link to="/resume-analyzer" className="inline-flex items-center gap-1.5 text-sm text-gold hover:underline font-medium">
+              Check your keyword match with our Resume Analyzer →
+            </Link>
+          </div>
           <AiPromptBlock>{`Suggest a revision of this resume bullet to add these keywords: [KEYWORDS]
 
 [RESUME BULLET]`}</AiPromptBlock>
@@ -725,8 +785,8 @@ And suggest specific ideas to improve it, if possible:
       </section>
 
       {/* ═══════════════ SECTION 4: FIND AND APPLY ═══════════════ */}
-      <section id="apply" className="py-14 md:py-20 scroll-mt-24">
-        <div className="space-y-6">
+      <section id="apply" className="py-14 md:py-20 px-5 md:px-6 bg-card border-y border-border scroll-mt-24">
+        <div className="container mx-auto max-w-3xl space-y-6">
           <div className="flex items-start gap-5 mb-8">
             <SectionNumber num="04" />
             <div className="pt-3">
@@ -815,8 +875,8 @@ And suggest specific ideas to improve it, if possible:
       </section>
 
       {/* ═══════════════ SECTION 5: INTERVIEWS ═══════════════ */}
-      <section id="interview" className="py-14 md:py-20 scroll-mt-24">
-        <div className="space-y-6">
+      <section id="interview" className="py-14 md:py-20 px-5 md:px-6 bg-background scroll-mt-24">
+        <div className="container mx-auto max-w-3xl space-y-6">
           <div className="flex items-start gap-5 mb-8">
             <SectionNumber num="05" />
             <div className="pt-3">
@@ -875,8 +935,8 @@ Here is the job description: [JOB DESCRIPTION]`}</AiPromptBlock>
       </section>
 
       {/* ═══════════════ SECTION 6: NEGOTIATE ═══════════════ */}
-      <section id="negotiate" className="py-14 md:py-20 scroll-mt-24">
-        <div className="space-y-6">
+      <section id="negotiate" className="py-14 md:py-20 px-5 md:px-6 bg-card border-y border-border scroll-mt-24">
+        <div className="container mx-auto max-w-3xl space-y-6">
           <div className="flex items-start gap-5 mb-8">
             <SectionNumber num="06" />
             <div className="pt-3">
@@ -969,8 +1029,8 @@ Generate a short, conversational response that asks them to do better, given my 
       </section>
 
       {/* ═══════════════ SECTION 7: AI MISTAKES ═══════════════ */}
-      <section id="mistakes" className="py-14 md:py-20 scroll-mt-24">
-        <div className="space-y-6">
+      <section id="mistakes" className="py-14 md:py-20 px-5 md:px-6 bg-background scroll-mt-24">
+        <div className="container mx-auto max-w-3xl space-y-6">
           <div className="flex items-start gap-5 mb-8">
             <SectionNumber num="07" />
             <div className="pt-3">
@@ -1001,8 +1061,8 @@ Generate a short, conversational response that asks them to do better, given my 
       </section>
 
       {/* ═══════════════ SECTION 8: MINDSET SHIFTS ═══════════════ */}
-      <section id="mindset" className="py-14 md:py-20 scroll-mt-24">
-        <div className="space-y-6">
+      <section id="mindset" className="py-14 md:py-20 px-5 md:px-6 bg-card border-y border-border scroll-mt-24">
+        <div className="container mx-auto max-w-3xl space-y-6">
           <div className="flex items-start gap-5 mb-8">
             <SectionNumber num="08" />
             <div className="pt-3">
@@ -1041,8 +1101,8 @@ Generate a short, conversational response that asks them to do better, given my 
       </section>
 
       {/* ═══════════════ SECTION 9: CHECKLIST ═══════════════ */}
-      <section id="checklist" className="py-14 md:py-20 scroll-mt-24">
-        <div className="space-y-6">
+      <section id="checklist" className="py-14 md:py-20 px-5 md:px-6 bg-background scroll-mt-24">
+        <div className="container mx-auto max-w-3xl space-y-6">
           <div className="flex items-start gap-5 mb-8">
             <SectionNumber num="09" />
             <div className="pt-3">
@@ -1051,110 +1111,149 @@ Generate a short, conversational response that asks them to do better, given my 
           </div>
 
           {[
-            {
-              title: "Stage 1: Find Your Path",
-              items: [
-                "Generate 10 potential job titles based on your skills and interests → 1.1",
-                "Explore a typical day for each role → 1.2",
-                "Rank roles based on goals and qualifications → 1.3",
-                "Test your fit with three experiments per role → 1.4",
-                "Connect with alumni in your target roles → 1.5",
-              ],
-            },
-            {
-              title: "Stage 2: Build Your LinkedIn Defense",
-              items: [
-                "Write a keyword-rich headline (220 characters max) → 2.1",
-                "Set location to where you want to work → 2.2",
-                "Add the top 20 skills for your target role → 2.3",
-                "Embed keywords in experience bullet points → 2.4",
-                "Write a structured About section (2,000 characters) → 2.5",
-                "Identify and start building any missing skills → 2.6",
-                'Turn on "Open to Work" (Recruiters Only) → 2.7',
-                "Grow network to 500+ connections → 2.8",
-                "Follow target companies → 2.9",
-                "Upload a professional profile photo → 2.10",
-                "Request two to three recommendations → 2.11",
-                "Add a cover photo → 2.12",
-                "Respond to all InMails → 2.13",
-              ],
-            },
-            {
-              title: "Stage 3: Build Your Resume",
-              items: [
-                "Download a clean, ATS-friendly template → 3.1",
-                "Create a separate version for each target job title → 3.2",
-                "Add desired job title at the top → 3.3",
-                "Update location to target city → 3.4",
-                "Include relevant non-work experience → 3.5",
-                "Use year dates for short stints → 3.6",
-                "Add organizational context for unknown companies → 3.7",
-                "Clarify vague internal job titles → 3.8",
-                "Pull top 20 keywords from job descriptions → 3.9",
-                "Write 3 achievement-based bullets per role → 3.10",
-                "Match keywords to achievements → 3.12",
-                "Build complete, polished bullets → 3.13",
-                "Review and rate bullet quality → 3.14",
-                "Aim for 50% keyword match rate → 3.15",
-                "Add education bullets → 3.16",
-                "Review and rate education bullet quality → 3.17",
-                "Complete and categorize skills section → 3.18",
-                "Write a focused summary → 3.19",
-              ],
-            },
-            {
-              title: "Stage 4: Find and Apply",
-              items: [
-                "Set up daily job alerts for target and alternative titles → 4.1",
-                "Apply same-day when new roles match → 4.2",
-                "Write a cover letter (when needed) → 4.3",
-                "Customize cover letter for each employer → 4.5",
-                "Find and request a referral for every application → 4.6",
-              ],
-            },
-            {
-              title: "Stage 5: Crush Your Interviews",
-              items: [
-                "Generate the 10 most likely interview questions → 5.1",
-                "Write CAR-format answers for each → 5.1",
-                "Practice answering in writing with AI feedback → 5.2",
-                "Practice answering out loud (aim for 60-90 seconds per answer) → 5.3",
-                "Research the company's top 5 challenges → 5.4",
-                "Prepare a 90-day action plan for the role → 5.4",
-                "Prepare thoughtful questions to ask the interviewer → 5.4",
-              ],
-            },
-            {
-              title: "Stage 6: Negotiate Like a Robot",
-              items: [
-                "Evaluate offers against career goals → 6.1",
-                "Background check your future boss → 6.2",
-                "Frame the negotiation early (share competing offers) → 6.3",
-                "Reanchor with compensation data → 6.4",
-                "Rebut the second offer if needed → 6.5",
-                "Shift focus to non-salary items if base is fixed → 6.6",
-                "Close with a conditional acceptance → 6.7",
-              ],
-            },
-          ].map((stage, i) => (
-            <div key={i} className="bg-card border border-border rounded-xl p-5 space-y-3">
-              <h3 className="font-heading text-lg text-gold font-semibold">{stage.title}</h3>
+            { title: "Stage 1: Find Your Path", anchor: "#find-path", items: [
+              "Generate 10 potential job titles based on your skills and interests → 1.1",
+              "Explore a typical day for each role → 1.2",
+              "Rank roles based on goals and qualifications → 1.3",
+              "Test your fit with three experiments per role → 1.4",
+              "Connect with alumni in your target roles → 1.5",
+            ]},
+            { title: "Stage 2: Build Your LinkedIn Defense", anchor: "#linkedin", items: [
+              "Write a keyword-rich headline (220 characters max) → 2.1",
+              "Set location to where you want to work → 2.2",
+              "Add the top 20 skills for your target role → 2.3",
+              "Embed keywords in experience bullet points → 2.4",
+              "Write a structured About section (2,000 characters) → 2.5",
+              "Identify and start building any missing skills → 2.6",
+              'Turn on "Open to Work" (Recruiters Only) → 2.7',
+              "Grow network to 500+ connections → 2.8",
+              "Follow target companies → 2.9",
+              "Upload a professional profile photo → 2.10",
+              "Request two to three recommendations → 2.11",
+              "Add a cover photo → 2.12",
+              "Respond to all InMails → 2.13",
+            ]},
+            { title: "Stage 3: Build Your Resume", anchor: "#resume", items: [
+              "Download a clean, ATS-friendly template → 3.1",
+              "Open the Resume Workbook and create a tab for each target job title → 3.1b",
+              "Create a separate version for each target job title → 3.2",
+              "Add desired job title at the top → 3.3",
+              "Update location to target city → 3.4",
+              "Include relevant non-work experience → 3.5",
+              "Use year dates for short stints → 3.6",
+              "Add organizational context for unknown companies → 3.7",
+              "Clarify vague internal job titles → 3.8",
+              "Pull top 20 keywords from job descriptions → 3.9",
+              "Write 3 achievement-based bullets per role → 3.10",
+              "Match keywords to achievements → 3.12",
+              "Build complete, polished bullets → 3.13",
+              "Review and rate bullet quality → 3.14",
+              "Aim for 50% keyword match rate → 3.15",
+              "Add education bullets → 3.16",
+              "Review and rate education bullet quality → 3.17",
+              "Complete and categorize skills section → 3.18",
+              "Write a focused summary → 3.19",
+            ]},
+            { title: "Stage 4: Find and Apply", anchor: "#apply", items: [
+              "Set up daily job alerts for target and alternative titles → 4.1",
+              "Apply same-day when new roles match → 4.2",
+              "Write a cover letter (when needed) → 4.3",
+              "Customize cover letter for each employer → 4.5",
+              "Find and request a referral for every application → 4.6",
+            ]},
+            { title: "Stage 5: Crush Your Interviews", anchor: "#interview", items: [
+              "Generate the 10 most likely interview questions → 5.1",
+              "Write CAR-format answers for each → 5.1",
+              "Practice answering in writing with AI feedback → 5.2",
+              "Practice answering out loud (aim for 60-90 seconds per answer) → 5.3",
+              "Research the company's top 5 challenges → 5.4",
+              "Prepare a 90-day action plan for the role → 5.4",
+              "Prepare thoughtful questions to ask the interviewer → 5.4",
+            ]},
+            { title: "Stage 6: Negotiate Like a Robot", anchor: "#negotiate", items: [
+              "Evaluate offers against career goals → 6.1",
+              "Background check your future boss → 6.2",
+              "Frame the negotiation early (share competing offers) → 6.3",
+              "Reanchor with compensation data → 6.4",
+              "Rebut the second offer if needed → 6.5",
+              "Shift focus to non-salary items if base is fixed → 6.6",
+              "Close with a conditional acceptance → 6.7",
+            ]},
+          ].map((stage, si) => (
+            <div key={si} className="bg-card border border-border rounded-xl p-5 space-y-3">
+              <h3 className="font-heading text-lg text-gold font-semibold">
+                <a href={stage.anchor} className="hover:underline underline-offset-2 transition-colors">{stage.title}</a>
+              </h3>
               <ul className="space-y-2">
-                {stage.items.map((item, j) => (
-                  <li key={j} className="flex items-start gap-2 text-sm text-muted-foreground">
-                    <span className="w-4 h-4 rounded border border-border flex-shrink-0 mt-0.5" />
-                    {item}
-                  </li>
-                ))}
+                {stage.items.map((item, j) => {
+                  const refMatch = item.match(/→\s*(\d+)\.\d+$/);
+                  const isChecked = checklistState[si]?.[j] ?? false;
+                  return (
+                    <li key={j} onClick={() => toggleChecklist(si, j)} className={`flex items-start gap-2 text-sm cursor-pointer group transition-opacity ${isChecked ? "opacity-60" : ""}`}>
+                      <span className={`w-5 h-5 rounded border-2 flex-shrink-0 mt-0.5 flex items-center justify-center transition-colors ${isChecked ? "bg-gold border-gold text-background" : "border-border group-hover:border-gold/60"}`}>
+                        {isChecked && <Check className="w-3 h-3" />}
+                      </span>
+                      <span className={isChecked ? "line-through text-muted-foreground" : "text-muted-foreground"}>
+                        {refMatch ? (
+                          <>{item.replace(/→\s*\d+\.\d+$/, "")} <a href={stage.anchor} onClick={e => e.stopPropagation()} className="text-gold hover:underline transition-colors">→ {refMatch[0].replace("→ ", "")}</a></>
+                        ) : item}
+                      </span>
+                    </li>
+                  );
+                })}
               </ul>
             </div>
           ))}
         </div>
       </section>
 
-      {/* ═══════════════ SECTION 10: RESOURCES ═══════════════ */}
-      <section id="resources" className="py-14 md:py-20 scroll-mt-24">
-        <div className="space-y-6">
+      {/* ═══════════════ SECTION 11: PROMPT LIBRARY ═══════════════ */}
+      <section id="prompt-library" className="py-14 md:py-20 px-5 md:px-6 scroll-mt-24">
+        <div className="container mx-auto max-w-3xl space-y-6">
+          <div className="flex items-start gap-5 mb-8">
+            <SectionNumber num="11" />
+            <div className="pt-3">
+              <h2 className="font-heading text-2xl md:text-3xl text-foreground">Complete Prompt Library</h2>
+              <p className="text-muted-foreground mt-2 text-sm">Every AI prompt from this guide in one place. Expand a stage, then copy any prompt directly into ChatGPT.</p>
+            </div>
+          </div>
+
+          <CopyAllPromptsButton lang="en" />
+
+          <div className="space-y-3">
+            {AI_GUIDE_PROMPTS.map(stage => (
+              <Collapsible key={stage.stage} title={`Stage ${stage.stage}: ${stage.titleEn}`}>
+                <div className="space-y-1 pt-2">
+                  {stage.prompts.map((p, i) => (
+                    <div key={i}>
+                      <p className="text-xs font-semibold text-muted-foreground mb-1">{p.step}</p>
+                      <AiPromptBlock>{p.promptEn}</AiPromptBlock>
+                    </div>
+                  ))}
+                </div>
+              </Collapsible>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* ═══════════════ SECTION 12: JOB TITLE WORKSHEET ═══════════════ */}
+      <section id="worksheet" className="py-14 md:py-20 px-5 md:px-6 bg-card border-y border-border scroll-mt-24">
+        <div className="container mx-auto max-w-3xl space-y-6">
+          <div className="flex items-start gap-5 mb-8">
+            <SectionNumber num="12" />
+            <div className="pt-3">
+              <h2 className="font-heading text-2xl md:text-3xl text-foreground">Job Title Keyword Worksheet</h2>
+              <p className="text-muted-foreground mt-2 text-sm">For each target role, list the top 20 keywords from job descriptions, then map your experience, achievements, and keywords to build optimized resume bullets. Your progress is saved automatically.</p>
+            </div>
+          </div>
+          <JobTitleWorksheet lang="en" />
+        </div>
+      </section>
+
+
+      <section id="resources" className="py-14 md:py-20 px-5 md:px-6 bg-card border-y border-border scroll-mt-24">
+        <div className="container mx-auto max-w-3xl space-y-6">
           <div className="flex items-start gap-5 mb-8">
             <SectionNumber num="10" />
             <div className="pt-3">
@@ -1167,7 +1266,11 @@ Generate a short, conversational response that asks them to do better, given my 
             <ul className="space-y-3 text-sm text-muted-foreground">
               <li><Link to="/resume-guide" className="text-gold hover:underline font-medium">Resume Guide:</Link> How to write a resume that passes every test (based on Dan Clay's framework)</li>
               <li><Link to="/interview-preparation-guide" className="text-gold hover:underline font-medium">Interview Playbook:</Link> A recruiter's complete guide to winning interviews (based on Thea Kelley's system)</li>
-              <li><Link to="/recruiter-screen-guide" className="text-gold hover:underline font-medium">Recruiter Screening Guide:</Link> How to pass the recruiter phone screen and advance to the hiring manager</li>
+              <li><Link to="/hr-interview-guide" className="text-gold hover:underline font-medium">Recruiter Screening Guide:</Link> How to pass the recruiter phone screen and advance to the hiring manager</li>
+              <li><Link to="/linkedin-guide" className="text-gold hover:underline font-medium">LinkedIn Guide:</Link> Optimize your profile so recruiters find you first</li>
+              <li><Link to="/pivot-method-guide" className="text-gold hover:underline font-medium">Pivot Method Guide:</Link> A structured framework for career transitions</li>
+              <li><Link to="/resume-analyzer" className="text-gold hover:underline font-medium">Resume Analyzer:</Link> Get instant AI-powered feedback on your resume</li>
+              <li><Link to="/salary-starter-kit" className="text-gold hover:underline font-medium">Salary Starter Kit:</Link> Research compensation data before you negotiate</li>
             </ul>
           </div>
 
@@ -1183,11 +1286,11 @@ Generate a short, conversational response that asks them to do better, given my 
         </div>
       </section>
 
-      {/* Share */}
-      <section className="pb-12">
+      <section className="py-12 px-5 md:px-6">
+        <div className="container mx-auto max-w-3xl">
           <GuideShareButtons />
+        </div>
       </section>
-      </main>
 
       {/* Footer */}
       <footer className="py-8 md:py-10 px-5 md:px-6 bg-card border-t border-border">

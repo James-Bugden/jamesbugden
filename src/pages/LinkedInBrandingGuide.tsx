@@ -1,4 +1,5 @@
-import { ArrowLeft, Download, Users, Target, FileText, MessageSquare, Search, CheckCircle2, Calendar, Linkedin, TrendingUp, Briefcase, Award, Eye, Zap, BarChart3 } from "lucide-react";
+import { ArrowLeft, Users, Target, FileText, MessageSquare, Search, CheckCircle2, Calendar, Linkedin, TrendingUp, Briefcase, Award, Eye, Zap, BarChart3, Clock } from "lucide-react";
+import { InteractiveChecklist } from "@/components/guides/InteractiveChecklist";
 import { Link } from "react-router-dom";
 import LanguageToggle from "@/components/LanguageToggle";
 import { AuthHeaderButton } from "@/components/AuthHeaderButton";
@@ -7,18 +8,11 @@ import { InstagramIcon, ThreadsIcon } from "@/components/SocialIcons";
 import GuideShareButtons from "@/components/GuideShareButtons";
 import GoldCheckBadge from "@/components/GoldCheckBadge";
 import { useTrackGuideProgress } from "@/hooks/useReadingProgress";
+import GuideSignInBanner from "@/components/guides/GuideSignInBanner";
 
 const LinkedInBrandingGuide = () => {
   useTrackGuideProgress("linkedin-brand");
 
-  const handleDownload = () => {
-    const link = document.createElement('a');
-    link.href = '/downloads/LinkedIn_Personal_Branding_Tactical_Guide.pdf';
-    link.download = 'LinkedIn_Personal_Branding_Tactical_Guide.pdf';
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
-  };
 
   return (
     <div className="min-h-screen bg-background">
@@ -53,18 +47,17 @@ const LinkedInBrandingGuide = () => {
           <p className="text-lg md:text-xl text-cream/80 mb-2">
             A Recruiter's Tactical Guide
           </p>
-          <p className="text-base text-cream/60 mb-6">
+          <p className="text-base text-cream/60 mb-2">
             By James Bugden, Senior Recruiter
           </p>
-          <Button 
-            onClick={handleDownload}
-            className="bg-gold hover:bg-gold/90 text-executive-green font-semibold px-6 py-3 rounded-lg shadow-lg hover:shadow-xl transition-all duration-300"
-          >
-            <Download className="w-5 h-5 mr-2" />
-            Download PDF Guide
-          </Button>
+          <div className="flex items-center justify-center gap-1.5 text-cream/60 mb-6">
+            <Clock className="w-4 h-4" />
+            <span className="text-sm">30 min read</span>
+          </div>
         </div>
       </section>
+
+      <GuideSignInBanner lang="en" />
 
       {/* Framework Note */}
       <section className="py-8 px-5 md:px-6 bg-card border-b border-border">
@@ -178,7 +171,7 @@ const LinkedInBrandingGuide = () => {
       </section>
 
       {/* Personal Brand Framework */}
-      <section className="py-12 md:py-16 px-5 md:px-6 bg-card border-y border-border">
+      <section id="brand" className="py-12 md:py-16 px-5 md:px-6 bg-card border-y border-border scroll-mt-24">
         <div className="container mx-auto max-w-3xl">
           <div className="flex items-center gap-3 mb-8">
             <div className="w-12 h-12 rounded-full bg-gold/20 flex items-center justify-center">
@@ -212,7 +205,7 @@ const LinkedInBrandingGuide = () => {
       </section>
 
       {/* Profile Sections */}
-      <section className="py-12 md:py-16 px-5 md:px-6 bg-background">
+      <section id="profile" className="py-12 md:py-16 px-5 md:px-6 bg-background scroll-mt-24">
         <div className="container mx-auto max-w-3xl">
           <div className="flex items-center gap-3 mb-8">
             <div className="w-12 h-12 rounded-full bg-gold/20 flex items-center justify-center">
@@ -459,7 +452,7 @@ const LinkedInBrandingGuide = () => {
       </section>
 
       {/* Content Strategy */}
-      <section className="py-12 md:py-16 px-5 md:px-6 bg-card border-y border-border">
+      <section id="content" className="py-12 md:py-16 px-5 md:px-6 bg-card border-y border-border scroll-mt-24">
         <div className="container mx-auto max-w-3xl">
           <div className="flex items-center gap-3 mb-8">
             <div className="w-12 h-12 rounded-full bg-gold/20 flex items-center justify-center">
@@ -604,7 +597,7 @@ const LinkedInBrandingGuide = () => {
       </section>
 
       {/* Algorithm & Visibility */}
-      <section className="py-12 md:py-16 px-5 md:px-6 bg-background">
+      <section id="algorithm" className="py-12 md:py-16 px-5 md:px-6 bg-background scroll-mt-24">
         <div className="container mx-auto max-w-3xl">
           <div className="flex items-center gap-3 mb-8">
             <div className="w-12 h-12 rounded-full bg-gold/20 flex items-center justify-center">
@@ -653,7 +646,7 @@ const LinkedInBrandingGuide = () => {
       </section>
 
       {/* Common Mistakes */}
-      <section className="py-12 md:py-16 px-5 md:px-6 bg-card border-y border-border">
+      <section id="mistakes" className="py-12 md:py-16 px-5 md:px-6 bg-card border-y border-border scroll-mt-24">
         <div className="container mx-auto max-w-3xl">
           <h2 className="font-heading text-2xl md:text-3xl text-foreground mb-8 text-center">
             Common LinkedIn Mistakes (And How to Avoid Them)
@@ -685,7 +678,7 @@ const LinkedInBrandingGuide = () => {
       </section>
 
       {/* 90-Day Plan */}
-      <section className="py-12 md:py-16 px-5 md:px-6 bg-executive-green">
+      <section id="plan" className="py-12 md:py-16 px-5 md:px-6 bg-executive-green scroll-mt-24">
         <div className="container mx-auto max-w-3xl">
           <div className="flex items-center gap-3 mb-8">
             <div className="w-12 h-12 rounded-full bg-gold/20 flex items-center justify-center">
@@ -697,55 +690,67 @@ const LinkedInBrandingGuide = () => {
           <div className="space-y-6">
             <div className="bg-white/10 backdrop-blur-sm rounded-lg p-6">
               <h3 className="font-heading text-xl text-gold mb-4">Weeks 1-2: Foundation</h3>
-              <ul className="space-y-2 text-cream/90">
-                <li>☐ Audit current profile against frameworks in this guide</li>
-                <li>☐ Define your target audience and goals</li>
-                <li>☐ Update profile photo and background banner</li>
-                <li>☐ Rewrite headline and About section</li>
-                <li>☐ Update Experience section for top 2-3 roles</li>
-              </ul>
+              <InteractiveChecklist
+                guideKey="linkedin_branding_wk12_en"
+                items={[
+                  { label: "Audit current profile against frameworks in this guide", href: "#brand" },
+                  { label: "Define your target audience and goals" },
+                  { label: "Update profile photo and background banner", href: "#profile" },
+                  { label: "Rewrite headline and About section", href: "#profile" },
+                  { label: "Update Experience section for top 2-3 roles", href: "#profile" },
+                ]}
+              />
             </div>
 
             <div className="bg-white/10 backdrop-blur-sm rounded-lg p-6">
               <h3 className="font-heading text-xl text-gold mb-4">Weeks 3-4: Content Launch</h3>
-              <ul className="space-y-2 text-cream/90">
-                <li>☐ Brainstorm 20 content ideas using the 5 sources framework</li>
-                <li>☐ Create content calendar (2-3 posts per week)</li>
-                <li>☐ Publish first content piece</li>
-                <li>☐ Start daily engagement routine (15-20 min)</li>
-                <li>☐ Send 10 personalized connection requests</li>
-                <li>☐ Request 5 recommendations from key people</li>
-              </ul>
+              <InteractiveChecklist
+                guideKey="linkedin_branding_wk34_en"
+                items={[
+                  { label: "Brainstorm 20 content ideas using the 5 sources framework", href: "#content" },
+                  { label: "Create content calendar (2-3 posts per week)", href: "#content" },
+                  { label: "Publish first content piece" },
+                  { label: "Start daily engagement routine (15-20 min)", href: "#content" },
+                  { label: "Send 10 personalized connection requests" },
+                  { label: "Request 5 recommendations from key people", href: "#profile" },
+                ]}
+              />
             </div>
 
             <div className="bg-white/10 backdrop-blur-sm rounded-lg p-6">
               <h3 className="font-heading text-xl text-gold mb-4">Weeks 5-8: Consistency & Optimization</h3>
-              <ul className="space-y-2 text-cream/90">
-                <li>☐ Post 2-3 times per week as planned</li>
-                <li>☐ Send 20 connection requests to strategic targets</li>
-                <li>☐ Join 5-10 relevant LinkedIn groups</li>
-                <li>☐ Create first video post</li>
-                <li>☐ Write first LinkedIn article</li>
-                <li>☐ Check SSI score at linkedin.com/sales/ssi</li>
-              </ul>
+              <InteractiveChecklist
+                guideKey="linkedin_branding_wk58_en"
+                items={[
+                  { label: "Post 2-3 times per week as planned" },
+                  { label: "Send 20 connection requests to strategic targets" },
+                  { label: "Join 5-10 relevant LinkedIn groups" },
+                  { label: "Create first video post", href: "#content" },
+                  { label: "Write first LinkedIn article" },
+                  { label: "Check SSI score at linkedin.com/sales/ssi", href: "#algorithm" },
+                ]}
+              />
             </div>
 
             <div className="bg-white/10 backdrop-blur-sm rounded-lg p-6">
               <h3 className="font-heading text-xl text-gold mb-4">Weeks 9-12: Scaling & Advanced Strategies</h3>
-              <ul className="space-y-2 text-cream/90">
-                <li>☐ Engage with industry influencers</li>
-                <li>☐ Send personalized messages to engaged connections</li>
-                <li>☐ Schedule coffee chats or calls</li>
-                <li>☐ Analyze content performance, double down on what works</li>
-                <li>☐ Review 90-day progress and plan next 90 days</li>
-              </ul>
+              <InteractiveChecklist
+                guideKey="linkedin_branding_wk912_en"
+                items={[
+                  { label: "Engage with industry influencers" },
+                  { label: "Send personalized messages to engaged connections" },
+                  { label: "Schedule coffee chats or calls" },
+                  { label: "Analyze content performance, double down on what works", href: "#metrics" },
+                  { label: "Review 90-day progress and plan next 90 days" },
+                ]}
+              />
             </div>
           </div>
         </div>
       </section>
 
       {/* Success Metrics */}
-      <section className="py-12 md:py-16 px-5 md:px-6 bg-background">
+      <section id="metrics" className="py-12 md:py-16 px-5 md:px-6 bg-background scroll-mt-24">
         <div className="container mx-auto max-w-3xl">
           <div className="flex items-center gap-3 mb-8">
             <div className="w-12 h-12 rounded-full bg-gold/20 flex items-center justify-center">

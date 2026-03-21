@@ -511,25 +511,6 @@ export default function QuizZhTw() {
           ))}
         </div>
 
-        {/* Section 4 — Coaching CTA */}
-        <div className="rounded-2xl p-8 md:p-10 text-center mb-10" style={{ backgroundColor: "#1B3A2F" }}>
-          <h3 className="font-heading text-xl md:text-2xl font-bold mb-3" style={{ color: "#FBF7F0" }}>
-            想要招募官的真實評估？
-          </h3>
-          <p className="text-sm mb-6" style={{ color: "#FBF7F0", opacity: 0.8, fontFamily: "'DM Sans', sans-serif" }}>
-            我每月只與少數專業人士合作，提供外商準備——履歷、面試和薪資談判。
-          </p>
-          <a
-            href="/zh-tw#coaching"
-            className="inline-flex h-12 px-8 items-center justify-center rounded-lg font-semibold text-base transition-transform hover:scale-[1.02]"
-            style={{ backgroundColor: "#C9A961", color: "#1B3A2F" }}
-          >
-            了解是否適合你
-          </a>
-          <p className="text-xs mt-3" style={{ color: "#FBF7F0", opacity: 0.5 }}>
-            免費諮詢電話 · 無需承諾
-          </p>
-        </div>
 
         {/* Section 5 — Share */}
         <div className="flex items-center justify-center gap-3">

@@ -620,34 +620,6 @@ const CompCalculatorInteractiveZhTw = () => {
       {/* Results Panel */}
       <ResultsPanelZhTw offers={offers} results={results} cascadeInsight={cascadeInsight} mobileSelectedIndex={activeOfferIndex} isUnlocked={isUnlocked} onUnlock={unlock} />
 
-      {/* Coaching CTA */}
-      <section className="px-5 md:px-6 py-8 print:hidden">
-        <div className="mx-auto max-w-[1200px]">
-          <div className="bg-foreground rounded-xl p-8 md:p-10">
-            <div className="w-10 h-1 rounded-full bg-gold mb-5" />
-            <h3 className="font-heading text-xl md:text-2xl font-bold text-background mb-3">
-              大多數人在談判中少拿了 10–20%。
-            </h3>
-            <p className="text-muted mb-6 text-sm md:text-base max-w-xl">
-              我協助過 Google、Uber、Meta 的專業人士談出更好的 offer。如果你正在比較 offer，我可以告訴你哪些是合理的 — 以及可以爭取什麼。
-            </p>
-            <a
-              href="https://james.careers/#coaching"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="inline-flex h-11 px-6 items-center justify-center rounded-lg font-semibold text-sm transition-transform hover:scale-[1.02]"
-              style={{ backgroundColor: "#C9A961", color: "#1B3A2F" }}
-            >
-              預約免費策略通話
-            </a>
-            <p className="mt-3">
-              <a href="https://james.careers" target="_blank" rel="noopener noreferrer" className="text-xs text-muted-foreground hover:text-gold transition-colors">
-                探索更多 → james.careers
-              </a>
-            </p>
-          </div>
-        </div>
-      </section>
 
       {/* Reference Sections */}
       <section className="px-5 md:px-6 py-8">

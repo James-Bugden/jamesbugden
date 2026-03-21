@@ -518,25 +518,6 @@ export default function Quiz() {
           ))}
         </div>
 
-        {/* Section 4 — Coaching CTA */}
-        <div className="rounded-2xl p-8 md:p-10 text-center mb-10" style={{ backgroundColor: "#1B3A2F" }}>
-          <h3 className="font-heading text-xl md:text-2xl font-bold mb-3" style={{ color: "#FBF7F0" }}>
-            Want a recruiter's honest assessment?
-          </h3>
-          <p className="text-sm mb-6" style={{ color: "#FBF7F0", opacity: 0.8, fontFamily: "'DM Sans', sans-serif" }}>
-            I work with a small number of professionals each month on 外商 preparation — resume, interview, and negotiation.
-          </p>
-          <a
-            href="/#coaching"
-            className="inline-flex h-12 px-8 items-center justify-center rounded-lg font-semibold text-base transition-transform hover:scale-[1.02]"
-            style={{ backgroundColor: "#C9A961", color: "#1B3A2F" }}
-          >
-            See If You're a Fit
-          </a>
-          <p className="text-xs mt-3" style={{ color: "#FBF7F0", opacity: 0.5 }}>
-            Free intro call · No commitment
-          </p>
-        </div>
 
         {/* Section 5 — Share */}
         <div className="flex items-center justify-center gap-3">

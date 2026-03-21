@@ -1,10 +1,12 @@
 import { useState, useRef, useCallback } from "react";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from "@/components/ui/dialog";
-import { Upload, FileText, Loader2, ClipboardPaste, FileUp, X } from "lucide-react";
+import { Upload, FileText, Loader2, ClipboardPaste, FileUp, X, Heart, AlertTriangle } from "lucide-react";
 import { extractTextFromDocx, extractTextFromPdf, parseResumeWithFallback } from "@/lib/documentImport";
 import { createDocument, SavedDocument, DocType } from "@/lib/documentStore";
 import { DEFAULT_RESUME_DATA } from "@/components/resume-builder/types";
 import { toast } from "@/hooks/use-toast";
+import { useBuilderAiUsage } from "@/hooks/useBuilderAiUsage";
+import { useResumeBuilderLang } from "@/components/resume-builder/i18n";
 
 interface ImportModalProps {
   open: boolean;
@@ -15,7 +17,11 @@ interface ImportModalProps {
 
 type ImportTab = "upload" | "paste";
 
+const tl = (lang: string, en: string, zh: string) => lang === "zh-tw" ? zh : en;
+
 export function ImportModal({ open, onClose, type, onImported }: ImportModalProps) {
+  const lang = useResumeBuilderLang();
+  const { importCount, importLimit, importLimitReached, loading: usageLoading } = useBuilderAiUsage();
   const [loading, setLoading] = useState(false);
   const [loadingMessage, setLoadingMessage] = useState("Extracting text…");
   const [tab, setTab] = useState<ImportTab>("upload");
@@ -225,7 +231,36 @@ export function ImportModal({ open, onClose, type, onImported }: ImportModalProp
         />
 
         <div className="px-6 pt-4 pb-6">
-          {tab === "upload" ? (
+          {importLimitReached ? (
+            /* ── Limit reached state ─────────────────── */
+            <div className="space-y-4">
+              <div className="rounded-xl p-4 space-y-3" style={{ backgroundColor: "rgba(220,38,38,0.04)", border: "1px solid rgba(220,38,38,0.15)" }}>
+                <div className="flex items-start gap-2.5">
+                  <AlertTriangle className="w-5 h-5 shrink-0 mt-0.5" style={{ color: "#dc2626" }} />
+                  <div>
+                    <p className="text-sm font-semibold" style={{ color: "#1A1A1A" }}>
+                      {tl(lang, "Monthly import limit reached", "本月匯入額度已用完")}
+                    </p>
+                    <p className="text-xs mt-1 leading-relaxed" style={{ color: "#6B6B6B" }}>
+                      {tl(lang,
+                        `You've used all ${importLimit} free AI imports this month. Your limit resets at the start of next month.`,
+                        `你已使用完本月 ${importLimit} 次免費 AI 匯入額度。額度將於下月初重置。`
+                      )}
+                    </p>
+                  </div>
+                </div>
+              </div>
+              <div className="flex items-start gap-2 pt-1" style={{ borderTop: "1px solid rgba(0,0,0,0.06)" }}>
+                <Heart className="w-3.5 h-3.5 shrink-0 mt-0.5" style={{ color: "#D4930D" }} />
+                <p className="text-xs leading-relaxed" style={{ color: "#6B6B6B" }}>
+                  {tl(lang,
+                    "I built this tool by myself as a solo creator. Every import uses AI which costs real money, plus hosting and development costs. These limits help me keep the tool free for everyone. Thank you for understanding! 🙏",
+                    "這個工具是我一個人獨力開發的。每次匯入都會使用 AI，產生實際費用，加上主機和開發成本。設定使用上限是為了讓這個工具能繼續免費提供給大家。感謝你的體諒！🙏"
+                  )}
+                </p>
+              </div>
+            </div>
+          ) : tab === "upload" ? (
             loading ? (
               <div className="flex flex-col items-center gap-3 py-12">
                 <Loader2 className="w-7 h-7 animate-spin text-gray-400" />
@@ -312,6 +347,29 @@ export function ImportModal({ open, onClose, type, onImported }: ImportModalProp
                   </div>
                 </>
               )}
+            </div>
+          )}
+
+          {/* ── Usage footer (shown when not limit-reached) ── */}
+          {!importLimitReached && !loading && !usageLoading && (
+            <div className="mt-4 space-y-2.5 pt-3" style={{ borderTop: "1px solid rgba(0,0,0,0.06)" }}>
+              <div className="flex items-center justify-between">
+                <span className="text-[11px] font-medium" style={{ color: "#6B6B6B" }}>
+                  {tl(lang,
+                    `${Math.max(0, importLimit - importCount)} of ${importLimit} free AI imports remaining this month`,
+                    `本月還剩 ${Math.max(0, importLimit - importCount)}/${importLimit} 次免費 AI 匯入`
+                  )}
+                </span>
+              </div>
+              <div className="flex items-start gap-2">
+                <Heart className="w-3.5 h-3.5 shrink-0 mt-0.5" style={{ color: "#D4930D" }} />
+                <p className="text-[11px] leading-relaxed" style={{ color: "#9CA3AF" }}>
+                  {tl(lang,
+                    "I built this tool by myself. Every import uses AI which costs real money. These limits help me keep it free for everyone. 🙏",
+                    "這個工具是我一個人開發的。每次匯入都會使用 AI，產生實際費用。設定上限是為了讓工具能繼續免費。🙏"
+                  )}
+                </p>
+              </div>
             </div>
           )}
         </div>

@@ -72,6 +72,8 @@ function LogoItem({ company }: { company: Company }) {
         />
       ) : (
         <span
+          role="img"
+          aria-label={company.name}
           className="text-base md:text-lg font-bold tracking-tight"
           style={{ color: company.color, opacity: 0.8 }}
         >
@@ -85,10 +87,7 @@ function LogoItem({ company }: { company: Company }) {
 export default function LogoScrollExperimentZhTw() {
   return (
     <section className="py-4 overflow-hidden relative" style={{ backgroundColor: '#FDFBF7' }}>
-      <p className="text-center px-5 mb-3 max-w-lg mx-auto leading-snug" style={{ fontSize: '0.9375rem', color: '#6B6B6B' }}>
-        這些公司的專業人士都在使用
-      </p>
-
+      <p className="text-center text-sm text-muted-foreground mb-3 px-4">我曾與來自這些公司的求職者合作</p>
       <div className="absolute left-0 top-0 bottom-0 w-12 z-10 pointer-events-none" style={{ background: 'linear-gradient(to right, #FDFBF7, transparent)' }} />
       <div className="absolute right-0 top-0 bottom-0 w-12 z-10 pointer-events-none" style={{ background: 'linear-gradient(to left, #FDFBF7, transparent)' }} />
 

@@ -7,6 +7,7 @@ import LanguageToggle from "@/components/LanguageToggle";
 import { AuthHeaderButton } from "@/components/AuthHeaderButton";
 import PageSEO from "@/components/PageSEO";
 import { useTrackGuideProgress } from "@/hooks/useReadingProgress";
+import GuideSignInBanner from "@/components/guides/GuideSignInBanner";
 import { useState, useEffect } from "react";
 
 const SectionNumber = ({ num }: { num: string }) => (
@@ -136,9 +137,9 @@ const RecruiterScreenGuide = () => {
   return (
     <div className="min-h-screen bg-background">
       <PageSEO
-        title="How to Pass the Recruiter Screen | James Bugden"
+        title="How to Pass the First Interview With HR | James Bugden"
         description="A Senior Recruiter's end-to-end playbook for passing the screening call. Word-for-word examples, salary scripts, and the exact scorecard recruiters use."
-        path="/recruiter-screen-guide"
+        path="/hr-interview-guide"
       />
 
       {/* Navigation */}
@@ -157,12 +158,8 @@ const RecruiterScreenGuide = () => {
       {/* Hero */}
       <section className="pt-28 md:pt-36 pb-14 md:pb-20 px-5 md:px-6 bg-executive-green">
         <div className="container mx-auto max-w-4xl text-center">
-          <div className="inline-flex items-center gap-2 px-4 py-2 bg-cream/10 border border-cream/20 rounded-full mb-6">
-            <Phone className="w-4 h-4 text-gold" />
-            <span className="text-sm text-cream/80">Free Career Resource</span>
-          </div>
           <h1 className="font-heading text-3xl md:text-5xl lg:text-6xl text-cream leading-tight mb-4" style={{ lineHeight: 1.2 }}>
-            How to Pass the<br className="hidden sm:block" /> Recruiter Screen
+            How to Pass the<br className="hidden sm:block" /> First Interview With HR
           </h1>
           <p className="text-lg md:text-xl text-cream/80 mb-3">
             A Senior Recruiter's End-to-End Playbook
@@ -179,6 +176,8 @@ const RecruiterScreenGuide = () => {
           </div>
         </div>
       </section>
+
+      <GuideSignInBanner lang="en" />
 
       {/* Introduction */}
       <TableOfContents />
@@ -1341,19 +1340,19 @@ const RecruiterScreenGuide = () => {
               </h3>
               <ul className="space-y-3">
                 {[
-                  "Research the company (30-60 minutes)",
-                  "Look up the recruiter on LinkedIn",
-                  "Decode the JD (must-haves vs nice-to-haves)",
-                  "Map experience to each key requirement",
-                  "Prepare your Present-Past-Future pitch",
-                  "Prepare top 3 reasons you want this role",
-                  "Build 5-7 STAR stories",
-                  "Build your one-page cheat sheet",
-                  "Be ready to speak to every skill on your resume",
+                  { text: "Research the company (30-60 minutes)" },
+                  { text: "Look up the recruiter on LinkedIn" },
+                  { text: "Decode the JD (must-haves vs nice-to-haves)" },
+                  { text: "Map experience to each key requirement" },
+                  { text: <>Prepare your <a href="#story" className="text-gold underline underline-offset-2 hover:text-gold/80 transition-colors">Present-Past-Future pitch</a></> },
+                  { text: "Prepare top 3 reasons you want this role" },
+                  { text: <>Build 5-7 <a href="#frameworks" className="text-gold underline underline-offset-2 hover:text-gold/80 transition-colors">STAR stories</a></> },
+                  { text: "Build your one-page cheat sheet" },
+                  { text: "Be ready to speak to every skill on your resume" },
                 ].map((item, i) => (
                   <li key={i} className="flex items-start gap-3">
                     <GoldCheckBadge />
-                    <span className="text-foreground text-sm">{item}</span>
+                    <span className="text-foreground text-sm">{item.text}</span>
                   </li>
                 ))}
               </ul>
@@ -1366,16 +1365,16 @@ const RecruiterScreenGuide = () => {
               </h3>
               <ul className="space-y-3">
                 {[
-                  "Stand up (phone) or camera at eye level (video)",
-                  "Present-Past-Future for 'Tell me about yourself' (60-90s)",
-                  "STAR or CAR for behavioral questions",
-                  "Three-level deflection for salary",
-                  "Ask 1-2 sharp questions about the role",
-                  "Ask about next steps before hanging up",
+                  { text: "Stand up (phone) or camera at eye level (video)" },
+                  { text: <><a href="#story" className="text-gold underline underline-offset-2 hover:text-gold/80 transition-colors">Present-Past-Future</a> for "Tell me about yourself" (60-90s)</> },
+                  { text: <><a href="#frameworks" className="text-gold underline underline-offset-2 hover:text-gold/80 transition-colors">STAR or CAR</a> for behavioral questions</> },
+                  { text: <><a href="#salary" className="text-gold underline underline-offset-2 hover:text-gold/80 transition-colors">Three-level deflection</a> for salary</> },
+                  { text: "Ask 1-2 sharp questions about the role" },
+                  { text: "Ask about next steps before hanging up" },
                 ].map((item, i) => (
                   <li key={i} className="flex items-start gap-3">
                     <GoldCheckBadge />
-                    <span className="text-foreground text-sm">{item}</span>
+                    <span className="text-foreground text-sm">{item.text}</span>
                   </li>
                 ))}
               </ul>
@@ -1436,7 +1435,7 @@ const RecruiterScreenGuide = () => {
                 ].map((item, i) => (
                   <li key={i} className="flex items-start gap-3">
                     <GoldCheckBadge />
-                    <span className="text-foreground text-sm">{item}</span>
+                    <span className="text-foreground text-sm"><a href="#redflags" className="hover:text-gold transition-colors">{item}</a></span>
                   </li>
                 ))}
               </ul>
@@ -1480,7 +1479,7 @@ const RecruiterScreenGuide = () => {
       <footer className="py-8 md:py-10 px-5 md:px-6 bg-card border-t border-border">
         <div className="container mx-auto max-w-5xl">
           <div className="flex flex-col md:flex-row justify-between items-center gap-4">
-            <span className="text-sm text-muted-foreground">© 2024 James Bugden. All rights reserved.</span>
+            <span className="text-sm text-muted-foreground">© 2026 James Bugden. All rights reserved.</span>
             <div className="flex items-center gap-6">
               <a href="https://www.linkedin.com/in/james-bugden/" target="_blank" rel="noopener noreferrer" className="text-muted-foreground hover:text-foreground transition-colors"><Linkedin className="w-5 h-5" /></a>
               <a href="https://www.instagram.com/james.careers/" target="_blank" rel="noopener noreferrer" className="text-muted-foreground hover:text-foreground transition-colors"><InstagramIcon className="w-5 h-5" /></a>

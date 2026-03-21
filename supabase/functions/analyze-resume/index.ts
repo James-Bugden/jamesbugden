@@ -9,6 +9,13 @@ const systemPrompt = `You are an expert resume analyst and senior technical recr
 
 You must analyze the provided resume and return a JSON object with your assessment. Be specific, cite evidence from the resume, and provide actionable feedback. Every finding and recommendation must reference a specific named principle (listed below).
 
+## CRITICAL: EXPLAIN EVERY PRINCIPLE YOU REFERENCE
+When you reference any named principle or framework in your findings, you MUST include a brief 1-sentence explanation of what it means so the user understands. For example:
+- "The XYZ Framework (write bullets as 'Accomplished [X] as measured by [Y] by doing [Z]'): Your bullet lacks the [Y] measurement component..."
+- "The Three R Model (every bullet should be Relevant, Relative, and Results-oriented): This bullet describes a duty but not a result..."
+- "The 5 for 5 Rule (max 5 bullets per role within 5 years, max 3 for older roles): You have 8 bullets for this position..."
+- "The Hell Yea! Test (does reading this make you say 'Hell Yea!'? If not, it needs more energy): This summary reads flat..."
+
 ## NAMED PRINCIPLES LIBRARY
 
 ### The Four Tests
@@ -70,7 +77,9 @@ Overall = (Header*0.10 + Summary*0.15 + Skills*0.10 + Experience*0.35 + Educatio
 
 ## FOUR TESTS: Determine pass/fail for Keyword, Scan, Qualifications, and Fit tests.
 
-## BULLET REWRITE: Find the weakest bullet, rewrite using Three R Model + XYZ framework. Add plausible metrics with [X] placeholders if none exist.
+## BULLET REWRITES: Find ALL weak bullets in the resume. For EACH weak bullet, provide the original text, an improved version using the Three R Model + XYZ framework, and a brief explanation of what was changed and why. Add plausible metrics with [X] placeholders if none exist. Return these as an array called "bullet_rewrites". Also keep a single "bullet_rewrite" with the weakest one for backward compatibility.
+
+## SUMMARY REWRITE: If the resume has a professional summary, rewrite it to be more impactful. If it does NOT have a summary, write one based on the candidate's experience. Include the original (or empty string if missing), the improved version, and an explanation. Return as "summary_rewrite".
 
 ## TOP 3 PRIORITIES: All marked critical/warning. Each references a named principle with evidence.
 
@@ -99,7 +108,7 @@ Count total bullets, count weak-pattern bullets, count bullets with metrics. Rep
         {
           "type": "strength" | "warning" | "critical",
           "principle": "string",
-          "text": "string",
+          "text": "string (MUST include a brief explanation of the principle being referenced)",
           "evidence": "string"
         }
       ]
@@ -109,6 +118,18 @@ Count total bullets, count weak-pattern bullets, count bullets with metrics. Rep
     "original": "string",
     "improved": "string",
     "changes": ["string"]
+  },
+  "bullet_rewrites": [
+    {
+      "original": "string",
+      "improved": "string",
+      "explanation": "string"
+    }
+  ],
+  "summary_rewrite": {
+    "original": "string (empty string if resume has no summary)",
+    "improved": "string",
+    "explanation": "string"
   },
   "top_priorities": [
     {
@@ -128,12 +149,54 @@ Count total bullets, count weak-pattern bullets, count bullets with metrics. Rep
   }
 }`;
 
+import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
+
+const MONTHLY_LIMIT = 3;
+
 Deno.serve(async (req) => {
   if (req.method === 'OPTIONS') {
     return new Response(null, { headers: corsHeaders });
   }
 
   try {
+    // --- Auth check ---
+    const authHeader = req.headers.get('Authorization');
+    if (!authHeader?.startsWith('Bearer ')) {
+      return new Response(
+        JSON.stringify({ error: 'Unauthorized' }),
+        { status: 401, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+      );
+    }
+
+    const supabase = createClient(
+      Deno.env.get('SUPABASE_URL')!,
+      Deno.env.get('SUPABASE_ANON_KEY')!,
+      { global: { headers: { Authorization: authHeader } } }
+    );
+
+    const token = authHeader.replace('Bearer ', '');
+    const { data: claimsData, error: claimsError } = await supabase.auth.getClaims(token);
+    if (claimsError || !claimsData?.claims) {
+      return new Response(
+        JSON.stringify({ error: 'Unauthorized' }),
+        { status: 401, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+      );
+    }
+    const userId = claimsData.claims.sub;
+
+    // --- Server-side usage limit ---
+    const { data: usageCount, error: usageError } = await supabase.rpc(
+      'count_resume_analyses_by_user',
+      { p_user_id: userId }
+    );
+
+    if (!usageError && typeof usageCount === 'number' && usageCount >= MONTHLY_LIMIT) {
+      return new Response(
+        JSON.stringify({ error: 'Monthly analysis limit reached', limit: MONTHLY_LIMIT, used: usageCount }),
+        { status: 429, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+      );
+    }
+
     const { resumeText, language } = await req.json();
 
     if (!resumeText || resumeText.length < 100) {
@@ -160,7 +223,7 @@ Deno.serve(async (req) => {
       },
       body: JSON.stringify({
         model: 'google/gemini-2.5-flash',
-        max_tokens: 8192,
+        max_tokens: 16384,
         temperature: 0,
         response_format: { type: 'json_object' },
         messages: [

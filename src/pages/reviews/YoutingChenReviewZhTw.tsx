@@ -1107,12 +1107,6 @@ const YoutingChenReviewZhTw = () => {
               <p className="text-muted-foreground mt-2">對任何建議有問題或需要澄清？歡迎聯繫。我在這裡幫助您成功。</p>
             </div>
 
-            <div className="bg-gold/10 rounded-lg p-4 border border-gold/20">
-              <p className="text-foreground">我每月與少數專業人士進行一對一合作——從修改履歷到面試準備到談判 offer。</p>
-              <p className="text-foreground mt-2">完整配套：履歷優化、LinkedIn 策略、面試準備和薪資談判。從頭到尾。</p>
-              <p className="text-foreground mt-2">我每月只接受 5 位新客戶，因為我仍在 Uber 全職招聘。</p>
-              <p className="text-gold font-semibold mt-3">如果您想要詳細資訊，請回覆「有興趣」。</p>
-            </div>
 
             <p className="text-gold font-semibold mt-6">祝您申請順利！</p>
             <p className="text-muted-foreground mt-2">我在這裡幫助您成功。</p>

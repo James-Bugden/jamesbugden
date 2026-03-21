@@ -1,11 +1,14 @@
 import { useState, useEffect, useRef } from "react";
-import { ArrowLeft, ArrowUp, FileText, Linkedin, ChevronRight, ChevronDown, CheckCircle2, X, Menu } from "lucide-react";
+import { ArrowLeft, ArrowUp, FileText, Linkedin, ChevronRight, ChevronDown, CheckCircle2, X, Menu, Clock } from "lucide-react";
+import { InteractiveChecklist } from "@/components/guides/InteractiveChecklist";
 import { Link, useNavigate } from "react-router-dom";
 import { InstagramIcon, ThreadsIcon } from "@/components/SocialIcons";
 import GuideShareButtons from "@/components/GuideShareButtons";
+import LanguageToggle from "@/components/LanguageToggle";
 import PageSEO from "@/components/PageSEO";
 import { AuthHeaderButton } from "@/components/AuthHeaderButton";
 import { useTrackGuideProgress } from "@/hooks/useReadingProgress";
+import GuideSignInBanner from "@/components/guides/GuideSignInBanner";
 
 /* ─── Reading Progress Bar ─── */
 const ReadingProgress = () => {
@@ -401,12 +404,7 @@ const ResumeGuideZhTw = () => {
           </Link>
           <div className="flex items-center gap-3 md:gap-4">
             <AuthHeaderButton variant="nav" />
-            <button
-              onClick={() => navigate("/resume-guide")}
-              className="px-3 py-1.5 text-sm font-semibold bg-gold/20 hover:bg-gold/30 text-gold border border-gold/40 rounded-md transition-all duration-200 hover:scale-105"
-            >
-              EN
-            </button>
+            <LanguageToggle variant="nav" />
           </div>
         </div>
       </nav>
@@ -429,11 +427,17 @@ const ResumeGuideZhTw = () => {
           <p className="text-lg md:text-xl text-cream/80 mb-2">
             讓你獲得理想公司面試機會的招募官指南
           </p>
-          <p className="text-base text-cream/60">
+          <p className="text-base text-cream/60 mb-2">
             基於 Dan Clay 所著《How to Write the Perfect Resume》
           </p>
+          <div className="flex items-center justify-center gap-1.5 text-cream/60">
+            <Clock className="w-4 h-4" />
+            <span className="text-sm">15 分鐘閱讀</span>
+          </div>
         </div>
       </section>
+
+      <GuideSignInBanner lang="zh" />
 
       {/* Guide Overview */}
       <section className="py-8 px-5 md:px-6 bg-card border-b border-border">
@@ -1052,12 +1056,16 @@ const ResumeGuideZhTw = () => {
                 <span className="w-6 h-6 rounded bg-gold/15 flex items-center justify-center text-gold text-xs font-bold">1</span>
                 規劃
               </h4>
-              <ul className="space-y-3 text-foreground text-sm leading-relaxed">
-                <li className="flex items-start gap-3"><span className="text-muted-foreground mt-0.5">☐</span> 確認目標公司和職位</li>
-                <li className="flex items-start gap-3"><span className="text-muted-foreground mt-0.5">☐</span> 從 3-5 個職位描述中提取關鍵字</li>
-                <li className="flex items-start gap-3"><span className="text-muted-foreground mt-0.5">☐</span> 用 7 個問題腦力激盪成就</li>
-                <li className="flex items-start gap-3"><span className="text-muted-foreground mt-0.5">☐</span> 將成就對應到職位描述關鍵字</li>
-              </ul>
+              <InteractiveChecklist
+                guideKey="resume_checklist_plan_zh"
+                lang="zh"
+                items={[
+                  { label: "確認目標公司和職位" },
+                  { label: "從 3-5 個職位描述中提取關鍵字" },
+                  { label: "用 7 個問題腦力激盪成就" },
+                  { label: "將成就對應到職位描述關鍵字" },
+                ]}
+              />
             </div>
 
             <div className="bg-card border border-border rounded-xl p-5 md:p-6">
@@ -1065,15 +1073,19 @@ const ResumeGuideZhTw = () => {
                 <span className="w-6 h-6 rounded bg-gold/15 flex items-center justify-center text-gold text-xs font-bold">2</span>
                 格式
               </h4>
-              <ul className="space-y-3 text-foreground text-sm leading-relaxed">
-                <li className="flex items-start gap-3"><span className="text-muted-foreground mt-0.5">☐</span> 正好一頁，填滿整頁</li>
-                <li className="flex items-start gap-3"><span className="text-muted-foreground mt-0.5">☐</span> 內容密度在 30-50% 之間</li>
-                <li className="flex items-start gap-3"><span className="text-muted-foreground mt-0.5">☐</span> 全程使用一種字型</li>
-                <li className="flex items-start gap-3"><span className="text-muted-foreground mt-0.5">☐</span> 正確的邊距（側邊 0.5-1 英吋，頂部 1 英吋）</li>
-                <li className="flex items-start gap-3"><span className="text-muted-foreground mt-0.5">☐</span> 標題靠左對齊</li>
-                <li className="flex items-start gap-3"><span className="text-muted-foreground mt-0.5">☐</span> 行距在 1.0-1.15 之間</li>
-                <li className="flex items-start gap-3"><span className="text-muted-foreground mt-0.5">☐</span> 不用顏色、不用圖片、不用圖形</li>
-              </ul>
+              <InteractiveChecklist
+                guideKey="resume_checklist_format_zh"
+                lang="zh"
+                items={[
+                  { label: "正好一頁，填滿整頁" },
+                  { label: "內容密度在 30-50% 之間" },
+                  { label: "全程使用一種字型" },
+                  { label: "正確的邊距（側邊 0.5-1 英吋，頂部 1 英吋）" },
+                  { label: "標題靠左對齊" },
+                  { label: "行距在 1.0-1.15 之間" },
+                  { label: "不用顏色、不用圖片、不用圖形" },
+                ]}
+              />
             </div>
 
             <div className="bg-card border border-border rounded-xl p-5 md:p-6">
@@ -1081,20 +1093,24 @@ const ResumeGuideZhTw = () => {
                 <span className="w-6 h-6 rounded bg-gold/15 flex items-center justify-center text-gold text-xs font-bold">3</span>
                 內容
               </h4>
-              <ul className="space-y-3 text-foreground text-sm leading-relaxed">
-                <li className="flex items-start gap-3"><span className="text-muted-foreground mt-0.5">☐</span> 名字是最顯眼的元素</li>
-                <li className="flex items-start gap-3"><span className="text-muted-foreground mt-0.5">☐</span> 聯絡資訊乾淨（專業 email、一個電話號碼、城市/州）</li>
-                <li className="flex items-start gap-3"><span className="text-muted-foreground mt-0.5">☐</span> 簡介/摘要針對目標職位寫（不放目標陳述）</li>
-                <li className="flex items-start gap-3"><span className="text-muted-foreground mt-0.5">☐</span> 工作經歷按時間倒序排列</li>
-                <li className="flex items-start gap-3"><span className="text-muted-foreground mt-0.5">☐</span> 每個條目以強而有力的動詞開頭</li>
-                <li className="flex items-start gap-3"><span className="text-muted-foreground mt-0.5">☐</span> 每個條目聚焦成果，而非職責</li>
-                <li className="flex items-start gap-3"><span className="text-muted-foreground mt-0.5">☐</span> 條目盡可能包含數字、百分比或金額</li>
-                <li className="flex items-start gap-3"><span className="text-muted-foreground mt-0.5">☐</span> 「5 對 5」法則已套用（近期職位最多 5 個條目，較早職位最多 3 個）</li>
-                <li className="flex items-start gap-3"><span className="text-muted-foreground mt-0.5">☐</span> 每個職位內的條目按相關性排列</li>
-                <li className="flex items-start gap-3"><span className="text-muted-foreground mt-0.5">☐</span> 技能段落只包含相關的、不是一看就知道的技能</li>
-                <li className="flex items-start gap-3"><span className="text-muted-foreground mt-0.5">☐</span> 學歷格式與工作經歷一致</li>
-                <li className="flex items-start gap-3"><span className="text-muted-foreground mt-0.5">☐</span> 沒有放「絕對不要放」清單中的任何內容</li>
-              </ul>
+              <InteractiveChecklist
+                guideKey="resume_checklist_content_zh"
+                lang="zh"
+                items={[
+                  { label: "名字是最顯眼的元素" },
+                  { label: "聯絡資訊乾淨（專業 email、一個電話號碼、城市/州）" },
+                  { label: "簡介/摘要針對目標職位寫（不放目標陳述）" },
+                  { label: "工作經歷按時間倒序排列" },
+                  { label: "每個條目以強而有力的動詞開頭" },
+                  { label: "每個條目聚焦成果，而非職責" },
+                  { label: "條目盡可能包含數字、百分比或金額" },
+                  { label: "「5 對 5」法則已套用（近期職位最多 5 個條目，較早職位最多 3 個）" },
+                  { label: "每個職位內的條目按相關性排列" },
+                  { label: "技能段落只包含相關的、不是一看就知道的技能" },
+                  { label: "學歷格式與工作經歷一致" },
+                  { label: "沒有放「絕對不要放」清單中的任何內容" },
+                ]}
+              />
             </div>
 
             <div className="bg-card border border-border rounded-xl p-5 md:p-6">
@@ -1102,15 +1118,19 @@ const ResumeGuideZhTw = () => {
                 <span className="w-6 h-6 rounded bg-gold/15 flex items-center justify-center text-gold text-xs font-bold">4</span>
                 潤飾
               </h4>
-              <ul className="space-y-3 text-foreground text-sm leading-relaxed">
-                <li className="flex items-start gap-3"><span className="text-muted-foreground mt-0.5">☐</span> 零拼寫錯誤（拼寫檢查 + 第二雙眼睛）</li>
-                <li className="flex items-start gap-3"><span className="text-muted-foreground mt-0.5">☐</span> 零文法錯誤</li>
-                <li className="flex items-start gap-3"><span className="text-muted-foreground mt-0.5">☐</span> 時態一致（過去職位用過去式，只有目前職位用現在式）</li>
-                <li className="flex items-start gap-3"><span className="text-muted-foreground mt-0.5">☐</span> 全程格式一致（粗體、斜體、日期、間距、條目符號）</li>
-                <li className="flex items-start gap-3"><span className="text-muted-foreground mt-0.5">☐</span> 檔案存為 PDF</li>
-                <li className="flex items-start gap-3"><span className="text-muted-foreground mt-0.5">☐</span> 檔名格式：「[你的名字] Resume_[月份 年份]_[公司名稱]」</li>
-                <li className="flex items-start gap-3"><span className="text-muted-foreground mt-0.5">☐</span> 列印版已檢查排版、邊距和墨漬</li>
-              </ul>
+              <InteractiveChecklist
+                guideKey="resume_checklist_polish_zh"
+                lang="zh"
+                items={[
+                  { label: "零拼寫錯誤（拼寫檢查 + 第二雙眼睛）" },
+                  { label: "零文法錯誤" },
+                  { label: "時態一致（過去職位用過去式，只有目前職位用現在式）" },
+                  { label: "全程格式一致（粗體、斜體、日期、間距、條目符號）" },
+                  { label: "檔案存為 PDF" },
+                  { label: "檔名格式：「[你的名字] Resume_[月份 年份]_[公司名稱]」" },
+                  { label: "列印版已檢查排版、邊距和墨漬" },
+                ]}
+              />
             </div>
           </div>
         </section>
@@ -1147,7 +1167,7 @@ const ResumeGuideZhTw = () => {
         <div className="container mx-auto max-w-5xl">
           <div className="flex flex-col md:flex-row justify-between items-center gap-4">
             <span className="text-sm text-muted-foreground">
-              © 2024 James Bugden. 版權所有。
+              © 2026 James Bugden. 版權所有。
             </span>
             <div className="flex items-center gap-6">
               <a href="https://www.linkedin.com/in/james-bugden/" target="_blank" rel="noopener noreferrer" className="text-muted-foreground hover:text-foreground transition-colors">

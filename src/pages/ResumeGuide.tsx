@@ -4,8 +4,10 @@ import { Button } from "@/components/ui/button";
 import GoldCheckBadge from "@/components/GoldCheckBadge";
 import { InstagramIcon, ThreadsIcon } from "@/components/SocialIcons";
 import GuideShareButtons from "@/components/GuideShareButtons";
+import LanguageToggle from "@/components/LanguageToggle";
 import { AuthHeaderButton } from "@/components/AuthHeaderButton";
 import { useTrackGuideProgress } from "@/hooks/useReadingProgress";
+import GuideSignInBanner from "@/components/guides/GuideSignInBanner";
 
 const ResumeGuide = () => {
   useTrackGuideProgress("resume-guide");
@@ -19,6 +21,7 @@ const ResumeGuide = () => {
           </Link>
           <div className="flex items-center gap-3 md:gap-4">
             <AuthHeaderButton variant="nav" />
+            <LanguageToggle variant="nav" />
             <Link to="/" className="text-sm text-cream-70 hover:text-cream transition-colors flex items-center gap-2">
               <ArrowLeft className="w-4 h-4" />
               Back to Home
@@ -30,18 +33,20 @@ const ResumeGuide = () => {
       {/* Hero Section */}
       <section className="pt-32 md:pt-40 pb-16 md:pb-20 px-5 md:px-6 bg-background">
         <div className="container mx-auto max-w-3xl text-center">
-          <div className="inline-flex items-center gap-2 px-4 py-2 bg-card border border-border rounded-full mb-8">
-            <FileText className="w-4 h-4 text-gold" />
-            <span className="text-sm text-muted-foreground">Free Career Resource</span>
-          </div>
           <h1 className="font-heading text-4xl md:text-5xl lg:text-6xl text-foreground leading-tight mb-6">
             The Job-Winning Resume Guide
           </h1>
-          <p className="text-lg md:text-xl text-muted-foreground leading-relaxed max-w-2xl mx-auto">
+          <p className="text-lg md:text-xl text-muted-foreground leading-relaxed max-w-2xl mx-auto mb-4">
             I've reviewed 20,000+ resumes and hired 500+ people. Here's exactly what separates the resumes that get interviews from the ones that get ignored.
           </p>
+          <div className="flex items-center justify-center gap-1.5 text-muted-foreground">
+            <Clock className="w-4 h-4" />
+            <span className="text-sm">15 min read</span>
+          </div>
         </div>
       </section>
+
+      <GuideSignInBanner lang="en" />
 
       <main className="container mx-auto px-5 md:px-6 pb-20 max-w-3xl">
         

@@ -7,6 +7,7 @@ import LanguageToggle from "@/components/LanguageToggle";
 import { AuthHeaderButton } from "@/components/AuthHeaderButton";
 import PageSEO from "@/components/PageSEO";
 import { useTrackGuideProgress } from "@/hooks/useReadingProgress";
+import GuideSignInBanner from "@/components/guides/GuideSignInBanner";
 import { useState, useEffect } from "react";
 import JobOfferScorecard from "@/components/job-offer/JobOfferScorecard";
 
@@ -147,6 +148,8 @@ const JobOfferGuideZhTw = () => {
           <p className="text-sm text-cream/50 italic">根據 13 篇《哈佛商業評論》關於工作機會、談判與職涯轉換的文章整理</p>
         </div>
       </section>
+
+      <GuideSignInBanner lang="zh" />
 
       <TableOfContents />
 
@@ -343,11 +346,33 @@ const JobOfferGuideZhTw = () => {
               ))}
             </div>
             <Collapsible title="大多數人忽略的算術">
-              <div className="mt-3 text-sm text-muted-foreground space-y-3">
-                <p><strong className="text-foreground">工作機會 A：</strong> 年薪 NT$1,650,000。7 天特休。僅法定 6% 勞退提撥。無專業發展預算。每週 5 天進辦公室。</p>
-                <p><strong className="text-foreground">工作機會 B：</strong> 年薪 NT$1,500,000。20 天特休。法定 6% 勞退提撥加上雇主額外自願提撥 3%（每年多 NT$45,000）。NT$30,000 專業發展預算。每週 2 天遠端。</p>
-                <p>工作機會 B 的價值更高。額外的特休本身有現金價值（多 13 天乘以你的日薪 ≈ NT$75,000）。加上額外的勞退提撥和發展預算。整體薪酬價值約 NT$1,650,000，和 A 相當。但你還獲得每週兩天遠端工作的彈性。</p>
-                <p className="font-semibold text-foreground">計算整體價值，不要只看帳面數字。</p>
+              <div className="mt-3 text-sm text-muted-foreground space-y-4">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                  <div className="rounded-lg border border-border bg-muted/30 p-4 space-y-2">
+                    <p className="font-semibold text-foreground">工作機會 A</p>
+                    <ul className="space-y-1 text-sm">
+                      <li>年薪 NT$1,650,000</li>
+                      <li>7 天特休</li>
+                      <li>僅法定 6% 勞退提撥</li>
+                      <li>無專業發展預算</li>
+                      <li>每週 5 天進辦公室</li>
+                    </ul>
+                  </div>
+                  <div className="rounded-lg border border-gold/30 bg-gold/5 p-4 space-y-2">
+                    <p className="font-semibold text-gold">工作機會 B ✦</p>
+                    <ul className="space-y-1 text-sm">
+                      <li>年薪 NT$1,500,000</li>
+                      <li>20 天特休</li>
+                      <li>法定 6% + 雇主自願提撥 3%（+NT$45,000/年）</li>
+                      <li>NT$30,000 專業發展預算</li>
+                      <li>每週 2 天遠端</li>
+                    </ul>
+                  </div>
+                </div>
+                <div className="rounded-lg border border-border bg-muted/20 p-4 space-y-2 text-sm">
+                  <p><strong className="text-foreground">工作機會 B 的價值更高。</strong>額外的特休有現金價值（多 13 天 × 日薪 ≈ NT$75,000），加上額外勞退提撥和發展預算，整體薪酬價值約 NT$1,650,000，和 A 相當——但你還獲得每週兩天遠端工作的彈性。</p>
+                  <p className="font-semibold text-foreground">→ 計算整體價值，不要只看帳面數字。</p>
+                </div>
               </div>
             </Collapsible>
           </div>
@@ -770,7 +795,7 @@ const JobOfferGuideZhTw = () => {
               <p className="text-cream font-semibold mb-2 group-hover:text-gold transition-colors">比較你的 Offer</p>
               <span className="text-gold text-sm font-medium">Offer 計算機 →</span>
             </Link>
-            <Link to="/zh-tw/recruiter-screen-guide" className="group bg-cream/5 border border-cream/10 rounded-xl p-6 text-center hover:bg-cream/10 transition-all">
+            <Link to="/zh-tw/hr-interview-guide" className="group bg-cream/5 border border-cream/10 rounded-xl p-6 text-center hover:bg-cream/10 transition-all">
               <p className="text-cream font-semibold mb-2 group-hover:text-gold transition-colors">通過招募電話</p>
               <span className="text-gold text-sm font-medium">招募電話攻略 →</span>
             </Link>
@@ -784,7 +809,7 @@ const JobOfferGuideZhTw = () => {
       <footer className="py-8 md:py-10 px-5 md:px-6 bg-card border-t border-border">
         <div className="container mx-auto max-w-5xl">
           <div className="flex flex-col md:flex-row justify-between items-center gap-4">
-            <span className="text-sm text-muted-foreground">© 2024 James Bugden. All rights reserved.</span>
+            <span className="text-sm text-muted-foreground">© 2026 James Bugden. All rights reserved.</span>
             <div className="flex items-center gap-6">
               <a href="https://www.linkedin.com/in/james-bugden/" target="_blank" rel="noopener noreferrer" className="text-muted-foreground hover:text-foreground transition-colors"><Linkedin className="w-5 h-5" /></a>
               <a href="https://www.instagram.com/james.careers/" target="_blank" rel="noopener noreferrer" className="text-muted-foreground hover:text-foreground transition-colors"><InstagramIcon className="w-5 h-5" /></a>

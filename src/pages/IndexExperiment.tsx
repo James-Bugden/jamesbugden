@@ -1,6 +1,7 @@
-import "@/styles/experiment.css";
+import "@/styles/experiment.css"; // force HMR refresh
 import { useState, useEffect } from "react";
-import { Briefcase, Users, Linkedin, FileCheck, X, CheckCircle2, Eye, Building, Plus, Minus, DollarSign } from "lucide-react";
+import { Link } from "react-router-dom";
+import { Briefcase, Users, Linkedin, FileCheck, X, CheckCircle2, Eye, Building, Plus, Minus, DollarSign, BookOpen, FileText, TrendingUp } from "lucide-react";
 import { InstagramIcon, ThreadsIcon } from "@/components/SocialIcons";
 import jamesPhoto from "@/assets/james-bugden.jpg";
 import LanguageToggle from "@/components/LanguageToggle";
@@ -13,6 +14,9 @@ import SalaryProofSection from "@/components/SalaryProofSection";
 import MailerLiteForm from "@/components/MailerLiteForm";
 import LazySection from "@/components/LazySection";
 import AboutSection from "@/components/AboutSection";
+import ExitIntentPopup from "@/components/ExitIntentPopup";
+import PromoBanner from "@/components/PromoBanner";
+import { useAuth } from "@/contexts/AuthContext";
 
 const faqs = [
   { q: "Why are these free?", a: "It's my mission to make as many paid tools and information online free. I want to help as many people as I can to have the job and lifestyle they want." },
@@ -32,32 +36,37 @@ function FAQSection() {
   });
 
   return (
-    <section className="py-12 md:py-20 px-5 md:px-6" style={{ backgroundColor: '#FFFFFF' }}>
+    <section className="py-12 md:py-20 px-5 md:px-6 bg-background">
       <div className="container mx-auto max-w-2xl">
-        <h2 className="font-heading text-center mb-6" style={{ color: '#1A1A1A', fontSize: 'clamp(2rem, 4vw, 2.625rem)' }}>
+        <h2 className="font-heading text-center mb-6 text-foreground" style={{ fontSize: 'clamp(2rem, 4vw, 2.625rem)' }}>
           Is this actually free? Yes. Here's why.
         </h2>
         <div>
           {faqs.map((faq, i) => {
             const isOpen = open.has(i);
             return (
-              <div key={i} style={{ borderBottom: '1px solid #E5E5E5' }}>
+              <div key={i} className="border-b border-border">
                 <button
                   type="button"
                   onClick={() => toggle(i)}
                   className="w-full flex items-center justify-between py-5 text-left gap-4"
+                  aria-expanded={isOpen}
+                  aria-controls={`faq-panel-${i}`}
                 >
-                  <span className="font-bold text-lg" style={{ color: '#1A1A1A' }}>{faq.q}</span>
+                  <span className="font-bold text-lg text-foreground">{faq.q}</span>
                   {isOpen
-                    ? <Minus className="w-5 h-5 flex-shrink-0 transition-transform duration-200" style={{ color: '#6B6B6B' }} />
-                    : <Plus className="w-5 h-5 flex-shrink-0 transition-transform duration-200" style={{ color: '#6B6B6B' }} />
+                    ? <Minus className="w-5 h-5 flex-shrink-0 transition-transform duration-200 text-muted-foreground" />
+                    : <Plus className="w-5 h-5 flex-shrink-0 transition-transform duration-200 text-muted-foreground" />
                   }
                 </button>
                 <div
+                  id={`faq-panel-${i}`}
+                  role="region"
+                  aria-labelledby={`faq-q-${i}`}
                   className="overflow-hidden transition-all duration-200 ease-in-out"
                   style={{ maxHeight: isOpen ? '500px' : '0', opacity: isOpen ? 1 : 0 }}
                 >
-                  <p className="pb-5 text-base" style={{ color: '#1A1A1A', paddingTop: '0' }}>
+                  <p className="pb-5 text-base text-foreground" style={{ paddingTop: '0' }}>
                     {faq.a}
                   </p>
                 </div>
@@ -71,6 +80,7 @@ function FAQSection() {
 }
 
 const IndexExperiment = () => {
+  const { isLoggedIn } = useAuth();
   const [scrolled, setScrolled] = useState(false);
 
   useEffect(() => {
@@ -80,26 +90,26 @@ const IndexExperiment = () => {
   }, []);
 
   return (
-    <div className="experiment min-h-screen overflow-x-hidden scroll-smooth" style={{ backgroundColor: '#FDFBF7' }}>
+    <div className="experiment min-h-screen overflow-x-hidden scroll-smooth bg-cream">
       <PageSEO
-        title="James Bugden — Experiment"
-        description="Experimental homepage layout"
-        path="/experiment"
+        title="James Bugden — Break Into Google, Uber & Microsoft From Taiwan"
+        description="Career coach shares insider strategies that helped 750+ candidates land roles at Google, Uber, Microsoft and other top companies."
+        path="/"
       />
 
       {/* ── Navigation ── */}
       <header>
         <nav
-          className={`fixed top-0 left-0 right-0 z-50 transition-shadow duration-300 ${
+          className={`fixed top-0 left-0 right-0 z-50 transition-shadow duration-300 bg-cream ${
             scrolled ? "shadow-md shadow-black/8" : ""
           }`}
-          style={{ backgroundColor: '#FDFBF7' }}
+          aria-label="Main navigation"
         >
-          <div className="container mx-auto px-5 md:px-6 py-4 flex items-center justify-between">
-            <span className="font-heading text-lg md:text-xl font-bold tracking-tight" style={{ color: '#2b4734' }}>
+          <div className="container mx-auto px-4 sm:px-5 md:px-6 py-4 flex items-center justify-between">
+            <span className="font-heading text-base sm:text-lg md:text-xl font-bold tracking-tight whitespace-nowrap text-executive-green">
               JAMES BUGDEN
             </span>
-            <div className="flex items-center gap-4">
+            <div className="flex items-center gap-2 sm:gap-4">
               <AuthHeaderButton variant="light" />
               <LanguageToggle variant="default" />
             </div>
@@ -108,8 +118,9 @@ const IndexExperiment = () => {
       </header>
 
       <main>
+        <PromoBanner lang="en" />
         {/* ── Hero — cream #FDFBF7 ── */}
-        <section id="about" className="pt-20 md:pt-36 pb-12 md:pb-20 px-5 md:px-6 relative" style={{ backgroundColor: '#FDFBF7' }}>
+        <section id="about" className="pt-20 md:pt-36 pb-12 md:pb-20 px-4 sm:px-5 md:px-6 relative bg-cream">
           <div className="container mx-auto max-w-5xl">
             <div className="flex flex-col items-center text-center md:grid md:grid-cols-[1fr_auto] md:gap-16 md:items-center md:text-left">
               <div className="order-2 md:order-1 w-full">
@@ -121,19 +132,19 @@ const IndexExperiment = () => {
                   </div>
                 </div>
 
-                <h1 className="font-heading leading-[1.12] tracking-tight mb-3 max-w-3xl mx-auto md:mx-0" style={{ color: '#1A1A1A', fontSize: 'clamp(2.25rem, 5vw, 3.5rem)' }}>
+                <h1 className="font-heading leading-[1.12] tracking-tight mb-3 max-w-3xl mx-auto md:mx-0 text-foreground" style={{ fontSize: 'clamp(1.75rem, 5vw, 3.5rem)' }}>
                   Get a $200K+ Offer at Your Dream&nbsp;Company
                 </h1>
 
                 {/* Credential badge */}
                 <div className="flex items-center justify-center md:justify-start gap-2 mb-5">
-                  <span className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full border" style={{ backgroundColor: 'rgba(43,71,52,0.06)', borderColor: 'rgba(43,71,52,0.12)', color: '#6B6B6B', fontSize: '0.9375rem' }}>
-                    <Briefcase className="w-4 h-4" style={{ color: '#6B6B6B' }} />
-                    Senior HR at Uber
+                  <span className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full border border-border bg-muted/40 text-muted-foreground text-[0.9375rem]">
+                    <Briefcase className="w-4 h-4 text-muted-foreground" />
+                    Senior Recruiter at Uber
                   </span>
                 </div>
 
-                <p className="leading-relaxed max-w-xl mx-auto md:mx-0 mb-5" style={{ color: '#1A1A1A', fontSize: '1.0625rem' }}>
+                <p className="leading-relaxed max-w-xl mx-auto md:mx-0 mb-5 text-foreground text-[1.0625rem]">
                   Free tools, templates, and insider strategies from a recruiter who's helped 750+ people get hired.
                 </p>
 
@@ -141,24 +152,24 @@ const IndexExperiment = () => {
                   <MailerLiteForm formId="sM1X80" className="ml-embedded" buttonText="Send Me the Free Toolkit" />
                 </div>
 
-                <p className="mb-5" style={{ color: '#6B6B6B', fontSize: '0.8125rem', marginTop: '8px' }}>
+                <p className="mb-5 text-muted-foreground text-[0.8125rem] mt-2">
                   Join 10,000+ professionals using my free tools · Unsubscribe anytime
                 </p>
 
                 <div className="flex flex-wrap justify-center md:justify-start gap-x-8 gap-y-3 pt-6 border-t border-border/60">
                   <div className="flex flex-col items-center md:items-start">
-                    <span className="text-xl font-bold flex items-center gap-1.5" style={{ color: '#1A1A1A' }}>
-                      <FileCheck className="w-5 h-5" style={{ color: '#2b4734', opacity: 0.7 }} />
+                    <span className="text-xl font-bold flex items-center gap-1.5 text-foreground">
+                      <FileCheck className="w-5 h-5 text-executive-green/70" />
                       20,000+
                     </span>
-                    <span className="text-sm" style={{ color: '#6B6B6B' }}>resumes reviewed</span>
+                    <span className="text-sm text-muted-foreground">resumes reviewed</span>
                   </div>
                   <div className="flex flex-col items-center md:items-start">
-                    <span className="text-xl font-bold flex items-center gap-1.5" style={{ color: '#1A1A1A' }}>
-                      <Users className="w-5 h-5" style={{ color: '#2b4734', opacity: 0.7 }} />
+                    <span className="text-xl font-bold flex items-center gap-1.5 text-foreground">
+                      <Users className="w-5 h-5 text-executive-green/70" />
                       750+
                     </span>
-                    <span className="text-sm" style={{ color: '#6B6B6B' }}>people hired</span>
+                    <span className="text-sm text-muted-foreground">people hired</span>
                   </div>
                 </div>
               </div>
@@ -175,42 +186,42 @@ const IndexExperiment = () => {
         </section>
 
         {/* ── Logo Trust Bar — cream #FDFBF7 ── */}
-        <div style={{ backgroundColor: '#FDFBF7' }}>
+        <div className="bg-cream">
           <LogoScrollExperiment />
         </div>
 
         {/* ── Testimonials — white #FFFFFF ── */}
         <LazySection>
-          <div style={{ backgroundColor: '#FFFFFF' }}>
+          <div className="bg-card">
             <HomepageTestimonialsExperiment />
           </div>
         </LazySection>
 
         {/* ── Pain-Point Section — cream #FDFBF7 ── */}
-        <section className="py-12 md:py-20 px-5 md:px-6" style={{ backgroundColor: '#FDFBF7' }}>
+        <section className="py-12 md:py-20 px-5 md:px-6 bg-cream">
           <div className="container mx-auto max-w-2xl text-center">
-            <h2 className="font-heading mb-6" style={{ color: '#1A1A1A', fontSize: 'clamp(2rem, 4vw, 2.625rem)' }}>
+            <h2 className="font-heading mb-6 text-foreground" style={{ fontSize: 'clamp(2rem, 4vw, 2.625rem)' }}>
               Sound Familiar?
             </h2>
 
             <div className="flex flex-col gap-5 mb-8 text-left max-w-xl mx-auto">
               <div className="flex items-start gap-3">
-                <X className="w-5 h-5 flex-shrink-0 mt-0.5" style={{ color: '#C85A5A' }} strokeWidth={2.5} />
-                <p style={{ color: '#1A1A1A', fontSize: '1.125rem' }}>You've applied to tons of jobs and never heard back.</p>
+                <X className="w-5 h-5 flex-shrink-0 mt-0.5 text-destructive" strokeWidth={2.5} />
+                <p className="text-foreground text-lg">You've applied to tons of jobs and never heard back.</p>
               </div>
               <div className="flex items-start gap-3">
-                <X className="w-5 h-5 flex-shrink-0 mt-0.5" style={{ color: '#C85A5A' }} strokeWidth={2.5} />
-                <p style={{ color: '#1A1A1A', fontSize: '1.125rem' }}>You made it to the final interview... then nothing. No email. No call.</p>
+                <X className="w-5 h-5 flex-shrink-0 mt-0.5 text-destructive" strokeWidth={2.5} />
+                <p className="text-foreground text-lg">You made it to the final interview... then nothing. No email. No call.</p>
               </div>
               <div className="flex items-start gap-3">
-                <X className="w-5 h-5 flex-shrink-0 mt-0.5" style={{ color: '#C85A5A' }} strokeWidth={2.5} />
-                <p style={{ color: '#1A1A1A', fontSize: '1.125rem' }}>You got a job offer, but you have no idea if the pay is fair or if you should ask for more.</p>
+                <X className="w-5 h-5 flex-shrink-0 mt-0.5 text-destructive" strokeWidth={2.5} />
+                <p className="text-foreground text-lg">You got a job offer, but you have no idea if the pay is fair or if you should ask for more.</p>
               </div>
             </div>
 
             <div className="flex items-start justify-center gap-2 mb-6">
-              <CheckCircle2 className="w-5 h-5 flex-shrink-0 mt-0.5" style={{ color: '#2b4734' }} />
-              <p style={{ color: '#6B6B6B', fontSize: '1rem' }}>
+              <CheckCircle2 className="w-5 h-5 flex-shrink-0 mt-0.5 text-executive-green" />
+              <p className="text-muted-foreground text-base">
                 You don't need another job board. You need someone who's been on the other side of the table.
               </p>
             </div>
@@ -218,40 +229,40 @@ const IndexExperiment = () => {
             <div className="max-w-md mx-auto">
               <MailerLiteForm formId="sM1X80" className="ml-embedded" buttonText="Get My Free Recruiting Tips" />
             </div>
-            <p className="text-center mt-2" style={{ color: '#6B6B6B', fontSize: '0.8125rem' }}>
+            <p className="text-center mt-2 text-muted-foreground text-[0.8125rem]">
               No spam, no fluff. Insider recruiting strategies every week.
             </p>
           </div>
         </section>
 
         {/* ── Credibility Section — white #FFFFFF ── */}
-        <section className="py-12 md:py-20 px-5 md:px-6" style={{ backgroundColor: '#FFFFFF' }}>
+        <section className="py-12 md:py-20 px-5 md:px-6 bg-card">
           <div className="container mx-auto max-w-4xl">
             <div className="text-center mb-6">
-              <h2 className="font-heading mb-3" style={{ color: '#1A1A1A', fontSize: 'clamp(2rem, 4vw, 2.625rem)' }}>
+              <h2 className="font-heading mb-3 text-foreground" style={{ fontSize: 'clamp(2rem, 4vw, 2.625rem)' }}>
                 Most career advice comes from people who've never hired anyone.
               </h2>
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-6 mb-10">
-              <div className="rounded-xl p-6 text-center md:text-left" style={{ backgroundColor: '#FDFBF7', borderTop: '3px solid #D4930D' }}>
-                <Eye className="w-10 h-10 mx-auto md:mx-0 mb-4" style={{ color: '#2b4734' }} strokeWidth={1.5} />
-                <p className="font-bold text-[20px] mb-2" style={{ color: '#1A1A1A' }}>I've Read 20,000+ Resumes</p>
-                <p className="text-base" style={{ color: '#1A1A1A' }}>
+              <div className="rounded-xl p-6 text-center md:text-left bg-cream border-t-[3px] border-gold">
+                <Eye className="w-10 h-10 mx-auto md:mx-0 mb-4 text-executive-green" strokeWidth={1.5} />
+                <p className="font-bold text-[20px] mb-2 text-foreground">I've Read 20,000+ Resumes</p>
+                <p className="text-base text-foreground">
                   I know what makes a recruiter stop and read. I also know what gets your resume tossed in 6 seconds. No guessing. I've seen it thousands of times.
                 </p>
               </div>
-              <div className="rounded-xl p-6 text-center md:text-left" style={{ backgroundColor: '#FDFBF7', borderTop: '3px solid #D4930D' }}>
-                <Users className="w-10 h-10 mx-auto md:mx-0 mb-4" style={{ color: '#2b4734' }} strokeWidth={1.5} />
-                <p className="font-bold text-[20px] mb-2" style={{ color: '#1A1A1A' }}>I've Hired 750+ People</p>
-                <p className="text-base" style={{ color: '#1A1A1A' }}>
+              <div className="rounded-xl p-6 text-center md:text-left bg-cream border-t-[3px] border-gold">
+                <Users className="w-10 h-10 mx-auto md:mx-0 mb-4 text-executive-green" strokeWidth={1.5} />
+                <p className="font-bold text-[20px] mb-2 text-foreground">I've Hired 750+ People</p>
+                <p className="text-base text-foreground">
                   I've sat in the room where they decide your offer. I know what HR thinks, what the hiring manager cares about, and where most people lose money.
                 </p>
               </div>
-              <div className="rounded-xl p-6 text-center md:text-left" style={{ backgroundColor: '#FDFBF7', borderTop: '3px solid #D4930D' }}>
-                <Building className="w-10 h-10 mx-auto md:mx-0 mb-4" style={{ color: '#2b4734' }} strokeWidth={1.5} />
-                <p className="font-bold text-[20px] mb-2" style={{ color: '#1A1A1A' }}>Insider Knowledge</p>
-                <p className="text-base" style={{ color: '#1A1A1A' }}>
+              <div className="rounded-xl p-6 text-center md:text-left bg-cream border-t-[3px] border-gold">
+                <Building className="w-10 h-10 mx-auto md:mx-0 mb-4 text-executive-green" strokeWidth={1.5} />
+                <p className="font-bold text-[20px] mb-2 text-foreground">Insider Knowledge</p>
+                <p className="text-base text-foreground">
                   I've hired over 750 people. I know how they interview, how they pay, and what makes you stand out.
                 </p>
               </div>
@@ -280,27 +291,65 @@ const IndexExperiment = () => {
           <FAQSection />
         </LazySection>
 
+        {/* ── Create Account CTA ── */}
+        {!isLoggedIn && (
+          <LazySection>
+            <section className="py-16 md:py-24 px-5 md:px-6 bg-cream">
+              <div className="container mx-auto max-w-2xl text-center">
+                <h2 className="font-heading mb-4 text-foreground" style={{ fontSize: 'clamp(2rem, 4vw, 2.625rem)' }}>
+                  Create your free account
+                </h2>
+                <p className="text-lg text-muted-foreground mb-8 max-w-xl mx-auto">
+                  Get full access to all career guides, resume tools, salary data, and more — completely free.
+                </p>
+                <div className="flex flex-col gap-3 mb-8 text-left max-w-sm mx-auto">
+                  <div className="flex items-center gap-3">
+                    <CheckCircle2 className="w-5 h-5 flex-shrink-0 text-executive-green" />
+                    <span className="text-foreground">10+ career &amp; interview guides</span>
+                  </div>
+                  <div className="flex items-center gap-3">
+                    <CheckCircle2 className="w-5 h-5 flex-shrink-0 text-executive-green" />
+                    <span className="text-foreground">Resume Builder &amp; AI Analyzer</span>
+                  </div>
+                  <div className="flex items-center gap-3">
+                    <CheckCircle2 className="w-5 h-5 flex-shrink-0 text-executive-green" />
+                    <span className="text-foreground">Interview Question Bank &amp; negotiation tools</span>
+                  </div>
+                </div>
+                <Link
+                  to="/join"
+                  className="inline-flex items-center justify-center px-8 py-3 rounded-lg font-bold text-white bg-gold hover:bg-gold/90 transition-colors text-lg"
+                >
+                  Get Full Access — It's Free
+                </Link>
+                <p className="mt-3 text-sm text-muted-foreground">No credit card required</p>
+              </div>
+            </section>
+          </LazySection>
+        )}
+
       </main>
 
       {/* ── Footer ── */}
-      <footer className="py-8 md:py-10 px-5 md:px-6" style={{ backgroundColor: '#2b4734' }}>
+      <footer className="py-8 md:py-10 px-5 md:px-6 bg-executive-green">
         <div className="container mx-auto max-w-5xl flex flex-col items-center gap-4">
           <div className="flex items-center gap-6">
-            <a href="https://www.linkedin.com/in/james-bugden/" target="_blank" rel="noopener noreferrer" className="hover:opacity-70 transition-opacity" style={{ color: '#FFFFFF' }}>
+            <a href="https://www.linkedin.com/in/james-bugden/" target="_blank" rel="noopener noreferrer" className="hover:opacity-70 transition-opacity text-cream" aria-label="LinkedIn">
               <Linkedin className="w-5 h-5" />
             </a>
-            <a href="https://www.instagram.com/james.careers/" target="_blank" rel="noopener noreferrer" className="hover:opacity-70 transition-opacity" style={{ color: '#FFFFFF' }}>
+            <a href="https://www.instagram.com/james.careers/" target="_blank" rel="noopener noreferrer" className="hover:opacity-70 transition-opacity text-cream" aria-label="Instagram">
               <InstagramIcon className="w-5 h-5" />
             </a>
-            <a href="https://www.threads.com/@james.careers" target="_blank" rel="noopener noreferrer" className="hover:opacity-70 transition-opacity" style={{ color: '#FFFFFF' }}>
+            <a href="https://www.threads.com/@james.careers" target="_blank" rel="noopener noreferrer" className="hover:opacity-70 transition-opacity text-cream" aria-label="Threads">
               <ThreadsIcon className="w-5 h-5" />
             </a>
           </div>
-          <span className="text-sm text-center w-full" style={{ color: '#A8B5A9' }}>
+          <span className="text-sm text-center w-full text-cream/60">
             © 2026 James Bugden. All rights reserved.
           </span>
         </div>
       </footer>
+      <ExitIntentPopup lang="en" />
     </div>
   );
 };

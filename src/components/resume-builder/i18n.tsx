@@ -280,6 +280,16 @@ export const translations = {
     contentStaysSame: "Your content stays the same — only the design changes",
     templateApplied: "Template applied!",
     styleApplied: "style has been applied.",
+    template_classic: "Classic",
+    template_modern: "Modern",
+    template_professional: "Professional",
+    template_minimal: "Minimal",
+    template_executive: "Executive",
+    templateDesc_classic: "Centered header, serif-style, traditional layout",
+    templateDesc_modern: "Clean sans-serif, teal accent, compact spacing",
+    templateDesc_professional: "Navy accent, bar headings, bold subtitles",
+    templateDesc_minimal: "Maximum whitespace, all black/gray, sparse",
+    templateDesc_executive: "Large name, uppercase headings, charcoal tones",
 
     // Stacked/Inline/Compact/Academic
     stacked: "Stacked",
@@ -289,26 +299,8 @@ export const translations = {
     bold: "Bold",
     italic: "Italic",
 
-    // AI Tools
-    aiTools: "AI Tools",
-    aiTailorTitle: "Tailor to Job Description",
-    aiTailorDesc: "Paste a job description to get keyword gap analysis and suggestions to improve your match rate.",
-    aiTailorPlaceholder: "Paste the full job description here...",
-    aiSummaryTitle: "Generate Summary",
-    aiSummaryDesc: "Auto-generate a professional summary based on your experience sections.",
-    aiSkillsTitle: "Suggest Skills",
-    aiSkillsDesc: "Get skill suggestions based on your experience and industry.",
-    aiOptimizeTitle: "Optimize All Bullets",
-    aiOptimizeDesc: "Batch-improve all bullet points across your experience sections with stronger action verbs.",
-    aiAnalyzing: "Analyzing...",
-    aiRun: "Run",
-    aiBackToTools: "← Back to tools",
-    aiAnalysisComplete: "AI analysis complete",
-    aiError: "AI Error",
-    aiApplyToSummary: "Apply to Summary Section",
-    aiSummaryApplied: "Summary applied to your resume",
-    aiNoSummarySection: "No summary section",
-    aiAddSummaryFirst: "Add a Summary section first, then apply.",
+
+
 
     // Dashboard extras
     viewResumeAction: "View Resume",
@@ -323,6 +315,75 @@ export const translations = {
     sectionAddedDesc: "section added.",
     sectionDeletedDesc: "was deleted.",
     customSectionFallback: "Custom Section",
+
+    // Missing summary prompt
+    missingSummaryTitle: "Add a Summary Section?",
+    missingSummaryDesc: "A professional summary is the first thing recruiters read. In 2–3 sentences, it tells them who you are, what you bring, and why you're a fit — before they even scan your experience.",
+    missingSummaryHow: "Write 2–3 sentences covering: your role/seniority, key strengths or domain, and what kind of opportunity you're targeting.",
+    missingSummaryAdd: "Add Summary",
+    missingSummarySkip: "Skip for now",
+
+    // Simple customize
+    simpleCustomizeTitle: "Customize",
+    fontSizeLabel: "Font Size",
+    marginsLabel: "Margins",
+    spacingLabel: "Section Spacing",
+    lineHeightLabel: "Line Height",
+
+    // Completeness Score
+    scoreLabel: "Resume Score",
+    scoreChecksPassed: "checks passed",
+    scoreCheckSummary: "Professional summary",
+    scoreCheck2Exp: "2+ experience entries",
+    scoreCheckDescriptions: "All entries have descriptions",
+    scoreCheckDates: "Dates filled in",
+    scoreCheckContact: "Contact info complete",
+    scoreCheckSkills: "Skills section exists",
+    scoreCheckQuantified: "Quantified achievements",
+
+    // Analyzer CTA
+    analyzerCtaTitle: "Want to know how your resume scores?",
+    analyzerCtaDesc: "Get your resume scored against recruiter standards with actionable suggestions.",
+    analyzerCtaButton: "Analyze My Resume",
+    analyzeAction: "Analyze",
+
+    // Design Philosophy
+    philoTitle: "Why can't I edit this part of my resume?",
+    philoIntro: "This template is built on what actually gets interviews.\n\nAfter reviewing 10,000+ resumes and hiring across roles, I've learned that the resumes that win are clear, simple, and easy to scan. This builder follows the same method I use when coaching candidates.",
+    philoOneColTitle: "One Column Only",
+    philoOneColBody: "I've seen strong candidates lose interviews because a two-column layout broke in the ATS. One column protects your content and makes sure every word gets read.",
+    philoFontTitle: "Clean, Professional Font",
+    philoFontBody: "Recruiters read hundreds of resumes a week. If it's hard to read, it gets skipped. I chose a simple serif font because it's clear, serious, and easy on the eyes.",
+    philoHeaderTitle: "Flexible but Clear Header",
+    philoHeaderBody: "You can adjust the header layout, but your name and contact info need to be findable in seconds. When recruiters scan fast, clarity wins.",
+    philoHeadingsTitle: "Standard, Scannable Headings",
+    philoHeadingsBody: "Recruiters look for familiar patterns: Experience, Education, Skills. Creative headings slow the scan. Speed matters more than style.",
+    philoNoColorTitle: "No Color Themes",
+    philoNoColorBody: "The strongest resumes at top companies are plain and focused. Black text on white keeps attention on your results, not decoration.",
+    philoSectionsTitle: "Focused Section Options",
+    philoSectionsBody: "This template limits section types on purpose. The goal is to highlight impact, not fill space. Extra sections distract from what matters most: your achievements.",
+    philoCanChangeTitle: "What You Can Control",
+    philoCanChangeBody: "Font size, spacing, margins, and header alignment. These help you fit strong content cleanly onto one page.",
+    philoMethod: "My method is simple: Make it easy to read. Easy to scan. Easy to say yes to.",
+    philoClosing: "This isn't about creativity.\nIt's about getting interviews.",
+
+    // Dashboard branding
+    resumeBuilderTitle: "Resume Builder",
+    resumeBuilderTagline: "Built on 10,000+ resume reviews",
+    resetsIn: "Resets in",
+    days: "days",
+    day: "day",
+    resumesRemaining: "resumes remaining",
+    resumeLimitReached: "Resume limit reached",
+    resumeLimitReachedDesc: "You can have up to 2 resumes. Delete one to create a new one.",
+    replaceLimitTitle: "Resume limit reached (2/2)",
+    replaceLimitDesc: "Choose an existing resume to replace:",
+    replaceAndCreate: "Replace & Continue",
+    resumesOf: "of",
+    usageLimitsTitle: "Why there are limits",
+    usageLimitsBody: "I built this tool solo. Every AI import and resume slot costs real money to run; hosting, AI processing, and development. These limits help me keep the tool completely free for everyone. Thank you for understanding!",
+    usageLimitsResumes: "resume slots per account",
+    usageLimitsImports: "free AI imports per month",
 
     // Date formatting
     mAgo: "m ago",
@@ -593,6 +654,16 @@ export const translations = {
     contentStaysSame: "你的內容不變——只有設計會改變",
     templateApplied: "已套用範本！",
     styleApplied: "樣式已套用。",
+    template_classic: "經典",
+    template_modern: "現代",
+    template_professional: "專業",
+    template_minimal: "極簡",
+    template_executive: "高階",
+    templateDesc_classic: "置中標頭、襯線風格、傳統排版",
+    templateDesc_modern: "簡潔無襯線、青色強調、緊湊間距",
+    templateDesc_professional: "深藍強調、欄位標題、粗體副標",
+    templateDesc_minimal: "最大留白、純黑灰色調、精簡",
+    templateDesc_executive: "大號姓名、大寫標題、炭灰色調",
 
     // Stacked/Inline/Compact/Academic
     stacked: "堆疊",
@@ -602,26 +673,8 @@ export const translations = {
     bold: "粗體",
     italic: "斜體",
 
-    // AI Tools
-    aiTools: "AI 工具",
-    aiTailorTitle: "針對職缺描述調整",
-    aiTailorDesc: "貼上職缺描述，取得關鍵字差距分析與改善建議。",
-    aiTailorPlaceholder: "在此貼上完整的職缺描述...",
-    aiSummaryTitle: "自動產生摘要",
-    aiSummaryDesc: "根據你的工作經歷自動產生專業摘要。",
-    aiSkillsTitle: "技能建議",
-    aiSkillsDesc: "根據你的經歷與產業取得技能建議。",
-    aiOptimizeTitle: "優化所有要點",
-    aiOptimizeDesc: "批次改善所有工作經歷的條列要點，使用更有力的動詞。",
-    aiAnalyzing: "分析中...",
-    aiRun: "執行",
-    aiBackToTools: "← 返回工具",
-    aiAnalysisComplete: "AI 分析完成",
-    aiError: "AI 錯誤",
-    aiApplyToSummary: "套用至摘要區塊",
-    aiSummaryApplied: "摘要已套用至你的履歷",
-    aiNoSummarySection: "無摘要區塊",
-    aiAddSummaryFirst: "請先新增摘要區塊，再套用。",
+
+
 
     // Dashboard extras
     viewResumeAction: "檢視履歷",
@@ -636,6 +689,75 @@ export const translations = {
     sectionAddedDesc: "區塊已新增。",
     sectionDeletedDesc: "已刪除。",
     customSectionFallback: "自訂區塊",
+
+    // Missing summary prompt
+    missingSummaryTitle: "要加入摘要嗎？",
+    missingSummaryDesc: "專業摘要是招募者最先閱讀的部分。用 2-3 句話告訴他們你是誰、你的優勢、以及為什麼你適合這個職位。",
+    missingSummaryHow: "寫 2-3 句涵蓋：你的職位/資歷、核心能力或領域、以及你正在尋找的機會類型。",
+    missingSummaryAdd: "加入摘要",
+    missingSummarySkip: "暫時跳過",
+
+    // Simple customize
+    simpleCustomizeTitle: "自訂",
+    fontSizeLabel: "字體大小",
+    marginsLabel: "邊距",
+    spacingLabel: "區塊間距",
+    lineHeightLabel: "行高",
+
+    // Completeness Score
+    scoreLabel: "履歷評分",
+    scoreChecksPassed: "項通過",
+    scoreCheckSummary: "專業摘要",
+    scoreCheck2Exp: "2+ 筆工作經歷",
+    scoreCheckDescriptions: "所有項目都有描述",
+    scoreCheckDates: "日期已填寫",
+    scoreCheckContact: "聯絡資訊完整",
+    scoreCheckSkills: "技能區塊存在",
+    scoreCheckQuantified: "量化成就",
+
+    // Analyzer CTA
+    analyzerCtaTitle: "想知道你的履歷得幾分嗎？",
+    analyzerCtaDesc: "用 AI 分析你的履歷，獲得具體的改進建議。",
+    analyzerCtaButton: "分析我的履歷",
+    analyzeAction: "分析",
+
+    // Design Philosophy
+    philoTitle: "為什麼有些部分被鎖定",
+    philoIntro: "這個範本是基於真正能拿到面試的方法打造的。\n\n在審閱超過 10,000 份履歷並跨職位招募後，我發現能勝出的履歷都是清晰、簡潔、容易掃描的。這個建構器遵循我輔導求職者時使用的方法。",
+    philoOneColTitle: "僅限單欄排版",
+    philoOneColBody: "我見過很強的求職者因為雙欄排版在 ATS 系統中跑版而失去面試機會。單欄排版保護你的內容，確保每個字都被讀到。",
+    philoFontTitle: "乾淨、專業的字型",
+    philoFontBody: "招募者每週閱讀數百份履歷。如果不好讀，就會被跳過。我選擇簡潔的襯線字型，因為它清晰、正式、看起來舒服。",
+    philoHeaderTitle: "靈活但清晰的標頭",
+    philoHeaderBody: "你可以調整標頭的排列方式，但你的姓名和聯絡資訊必須在幾秒內被找到。當招募者快速掃描時，清晰度決定一切。",
+    philoHeadingsTitle: "標準、易掃描的標題",
+    philoHeadingsBody: "招募者尋找熟悉的模式：工作經歷、學歷、技能。創意標題會拖慢掃描速度。速度比風格更重要。",
+    philoNoColorTitle: "沒有顏色主題",
+    philoNoColorBody: "頂尖公司最強的履歷都是素面且聚焦的。白底黑字讓注意力集中在你的成果上，而非裝飾。",
+    philoSectionsTitle: "精選的區塊選項",
+    philoSectionsBody: "這個範本刻意限制區塊類型。目標是突顯影響力，而非填滿空間。多餘的區塊會分散注意力，讓最重要的東西——你的成就——被忽略。",
+    philoCanChangeTitle: "你可以控制的部分",
+    philoCanChangeBody: "字體大小、間距、邊距和標頭對齊方式。這些幫助你把有力的內容整齊地排入一頁。",
+    philoMethod: "我的方法很簡單：讓它容易閱讀、容易掃描、讓人容易說「好」。",
+    philoClosing: "這不是關於創意。\n這是關於拿到面試。",
+
+    // Dashboard branding
+    resumeBuilderTitle: "履歷建構器",
+    resumeBuilderTagline: "基於 10,000+ 份履歷審閱經驗打造",
+    resetsIn: "重置倒數",
+    days: "天",
+    day: "天",
+    resumesRemaining: "份履歷剩餘",
+    resumeLimitReached: "履歷數量已達上限",
+    resumeLimitReachedDesc: "最多可建立 2 份履歷。請刪除一份後再建立新的。",
+    replaceLimitTitle: "履歷數量已達上限 (2/2)",
+    replaceLimitDesc: "選擇一份要替換的履歷：",
+    replaceAndCreate: "替換並繼續",
+    resumesOf: "/",
+    usageLimitsTitle: "為什麼有使用限制",
+    usageLimitsBody: "這個工具是我獨力開發的。每次 AI 匯入和履歷儲存都會產生實際費用——主機、AI 處理和開發成本。設定使用上限是為了讓這個工具能繼續免費提供給所有人。感謝你的體諒！",
+    usageLimitsResumes: "份履歷額度",
+    usageLimitsImports: "次免費 AI 匯入 / 月",
 
     // Date formatting
     mAgo: "分鐘前",

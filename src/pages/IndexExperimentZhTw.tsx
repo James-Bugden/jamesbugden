@@ -1,5 +1,6 @@
 import "@/styles/experiment.css";
 import { useState, useEffect } from "react";
+import { Link } from "react-router-dom";
 import { Briefcase, Users, Linkedin, FileCheck, X, CheckCircle2, Eye, Building, Plus, Minus } from "lucide-react";
 import { InstagramIcon, ThreadsIcon } from "@/components/SocialIcons";
 import jamesPhoto from "@/assets/james-bugden.jpg";
@@ -13,6 +14,9 @@ import SalaryProofSectionZhTw from "@/components/SalaryProofSectionZhTw";
 import MailerLiteForm from "@/components/MailerLiteForm";
 import LazySection from "@/components/LazySection";
 import AboutSectionZhTw from "@/components/AboutSectionZhTw";
+import ExitIntentPopup from "@/components/ExitIntentPopup";
+import PromoBanner from "@/components/PromoBanner";
+import { useAuth } from "@/contexts/AuthContext";
 
 const faqs = [
   { q: "\u70BA\u4EC0\u9EBC\u9019\u4E9B\u662F\u514D\u8CBB\u7684\uFF1F", a: "\u6211\u7684\u4F7F\u547D\u662F\u628A\u76E1\u53EF\u80FD\u591A\u7684\u4ED8\u8CBB\u5DE5\u5177\u548C\u8CC7\u8A0A\u514D\u8CBB\u958B\u653E\u3002\u6211\u60F3\u5E6B\u52A9\u66F4\u591A\u4EBA\u5F97\u5230\u4ED6\u5011\u60F3\u8981\u7684\u5DE5\u4F5C\u548C\u751F\u6D3B\u3002" },
@@ -32,32 +36,36 @@ function FAQSection() {
   });
 
   return (
-    <section className="py-12 md:py-20 px-5 md:px-6" style={{ backgroundColor: '#FFFFFF' }}>
+    <section className="py-12 md:py-20 px-5 md:px-6 bg-background">
       <div className="container mx-auto max-w-2xl">
-        <h2 className="font-heading text-center mb-6" style={{ color: '#1A1A1A', fontSize: 'clamp(2rem, 4vw, 2.625rem)', lineHeight: 1.2 }}>
+        <h2 className="font-heading text-center mb-6 text-foreground" style={{ fontSize: 'clamp(2rem, 4vw, 2.625rem)', lineHeight: 1.2 }}>
           {"\u4F60\u5FC3\u88E1\u7684\u7591\u554F"}
         </h2>
         <div>
           {faqs.map((faq, i) => {
             const isOpen = open.has(i);
             return (
-              <div key={i} style={{ borderBottom: '1px solid #E5E5E5' }}>
+              <div key={i} className="border-b border-border">
                 <button
                   type="button"
                   onClick={() => toggle(i)}
                   className="w-full flex items-center justify-between py-5 text-left gap-4"
+                  aria-expanded={isOpen}
+                  aria-controls={`faq-panel-zh-${i}`}
                 >
-                  <span className="font-bold text-lg" style={{ color: '#1A1A1A' }}>{faq.q}</span>
+                  <span className="font-bold text-lg text-foreground">{faq.q}</span>
                   {isOpen
-                    ? <Minus className="w-5 h-5 flex-shrink-0 transition-transform duration-200" style={{ color: '#6B6B6B' }} />
-                    : <Plus className="w-5 h-5 flex-shrink-0 transition-transform duration-200" style={{ color: '#6B6B6B' }} />
+                    ? <Minus className="w-5 h-5 flex-shrink-0 transition-transform duration-200 text-muted-foreground" />
+                    : <Plus className="w-5 h-5 flex-shrink-0 transition-transform duration-200 text-muted-foreground" />
                   }
                 </button>
                 <div
+                  id={`faq-panel-zh-${i}`}
+                  role="region"
                   className="overflow-hidden transition-all duration-200 ease-in-out"
                   style={{ maxHeight: isOpen ? '500px' : '0', opacity: isOpen ? 1 : 0 }}
                 >
-                  <p className="pb-5 text-base" style={{ color: '#1A1A1A', paddingTop: '0' }}>
+                  <p className="pb-5 text-base text-foreground" style={{ paddingTop: '0' }}>
                     {faq.a}
                   </p>
                 </div>
@@ -71,6 +79,7 @@ function FAQSection() {
 }
 
 const IndexExperimentZhTw = () => {
+  const { isLoggedIn } = useAuth();
   const [scrolled, setScrolled] = useState(false);
 
   useEffect(() => {
@@ -80,23 +89,24 @@ const IndexExperimentZhTw = () => {
   }, []);
 
   return (
-    <div className="experiment min-h-screen overflow-x-hidden scroll-smooth" style={{ backgroundColor: '#FDFBF7' }}>
+    <div className="experiment min-h-screen overflow-x-hidden scroll-smooth bg-cream">
       <PageSEO
-        title="James Bugden — \u514D\u8CBB\u8077\u6DAF\u5DE5\u5177\u8207\u5C65\u6B77\u653B\u7565"
-        description={"\u514D\u8CBB\u5DE5\u5177\u3001\u6A21\u677F\u548C\u5167\u90E8\u7B56\u7565\uFF0C\u4F86\u81EA\u5E6B\u52A9 750 \u4F4D\u4EE5\u4E0A\u6C42\u8077\u8005\u6210\u529F\u9304\u53D6\u7684\u8077\u6DAF\u6559\u7DF4"}
+        title="James Bugden — 拿到年薪300萬以上外商Offer"
+        description="職涯教練分享內部策略，協助750位以上候選人進入Google、Uber、Microsoft等頂尖企業。"
         path="/zh-tw"
+        lang="zh-Hant-TW"
       />
 
       {/* ── Navigation ── */}
       <header>
         <nav
-          className={`fixed top-0 left-0 right-0 z-50 transition-shadow duration-300 ${
+          className={`fixed top-0 left-0 right-0 z-50 transition-shadow duration-300 bg-cream ${
             scrolled ? "shadow-md shadow-black/8" : ""
           }`}
-          style={{ backgroundColor: '#FDFBF7' }}
+          aria-label="Main navigation"
         >
           <div className="container mx-auto px-5 md:px-6 py-4 flex items-center justify-between">
-            <span className="font-heading text-lg md:text-xl font-bold tracking-tight" style={{ color: '#2b4734' }}>
+            <span className="font-heading text-lg md:text-xl font-bold tracking-tight text-executive-green">
               JAMES BUGDEN
             </span>
             <div className="flex items-center gap-4">
@@ -108,8 +118,9 @@ const IndexExperimentZhTw = () => {
       </header>
 
       <main>
+        <PromoBanner lang="zh" />
         {/* ── Hero — cream #FDFBF7 ── */}
-        <section id="about" className="pt-20 md:pt-36 pb-12 md:pb-20 px-5 md:px-6 relative" style={{ backgroundColor: '#FDFBF7' }}>
+        <section id="about" className="pt-20 md:pt-36 pb-12 md:pb-20 px-5 md:px-6 relative bg-cream">
           <div className="container mx-auto max-w-5xl">
             <div className="flex flex-col items-center text-center md:grid md:grid-cols-[1fr_auto] md:gap-16 md:items-center md:text-left">
               <div className="order-2 md:order-1 w-full">
@@ -121,44 +132,44 @@ const IndexExperimentZhTw = () => {
                   </div>
                 </div>
 
-                <h1 className="font-heading leading-[1.12] tracking-tight mb-3 max-w-3xl mx-auto md:mx-0" style={{ color: '#1A1A1A', fontSize: 'clamp(2.25rem, 5vw, 3.5rem)', lineHeight: 1.2 }}>
+                <h1 className="font-heading leading-[1.12] tracking-tight mb-3 max-w-3xl mx-auto md:mx-0 text-foreground" style={{ fontSize: 'clamp(2.25rem, 5vw, 3.5rem)', lineHeight: 1.2 }}>
                   {"\u5728\u5922\u60F3\u516C\u53F8\u62FF\u5230\u5E74\u85AA"}<span style={{ fontFamily: 'system-ui, sans-serif', position: 'relative', top: '-0.05em' }}>3</span>{"\u767E\u842C\u4EE5\u4E0A\u7684\u00A0Offer"}
                 </h1>
 
                 {/* Credential badge */}
                 <div className="flex items-center justify-center md:justify-start gap-2 mb-5">
-                  <span className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full border" style={{ backgroundColor: 'rgba(43,71,52,0.06)', borderColor: 'rgba(43,71,52,0.12)', color: '#6B6B6B', fontSize: '0.9375rem' }}>
-                    <Briefcase className="w-4 h-4" style={{ color: '#6B6B6B' }} />
+                  <span className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full border border-border bg-muted/40 text-muted-foreground text-[0.9375rem]">
+                    <Briefcase className="w-4 h-4 text-muted-foreground" />
                     {`Uber \u8CC7\u6DF1 Recruiter`}
                   </span>
                 </div>
 
-                <p className="leading-relaxed max-w-xl mx-auto md:mx-0 mb-5" style={{ color: '#1A1A1A', fontSize: '1.0625rem' }}>
+                <p className="leading-relaxed max-w-xl mx-auto md:mx-0 mb-5 text-foreground text-[1.0625rem]">
                   {"\u514D\u8CBB\u5DE5\u5177\u3001\u6A21\u677F\u548C\u5167\u90E8\u7B56\u7565\uFF0C\u4F86\u81EA\u5E6B\u52A9 750 \u4F4D\u4EE5\u4E0A\u6C42\u8077\u8005\u6210\u529F\u9304\u53D6\u7684\u8077\u6DAF\u6559\u7DF4\u3002"}
                 </p>
 
                 <div className="mb-2 max-w-md mx-auto md:mx-0">
-                   <MailerLiteForm formId="sM1X80" className="ml-embedded" buttonText={"\u514D\u8CBB\u7D22\u53D6\u653B\u7565"} />
+              <MailerLiteForm formId="sM1X80" className="ml-embedded" buttonText={"\u514D\u8CBB\u7D22\u53D6\u653B\u7565"} successHeading="成功加入！" successBody="請查看您的信箱，免費求職指南已寄出。" successCta="建立免費帳號，儲存進度並探索更多工具" successCtaLink="/join" />
                 </div>
 
-                <p className="mb-5" style={{ color: '#6B6B6B', fontSize: '0.8125rem', marginTop: '8px' }}>
+                <p className="mb-5 text-muted-foreground text-[0.8125rem] mt-2">
                   {"\u52A0\u5165 10,000 \u4EE5\u4E0A\u4F4D\u5C08\u696D\u4EBA\u58EB \u00B7 \u6C38\u4E45\u514D\u8CBB \u00B7 \u96A8\u6642\u53D6\u6D88\u8A02\u95B1"}
                 </p>
 
                 <div className="flex flex-wrap justify-center md:justify-start gap-x-8 gap-y-3 pt-6 border-t border-border/60">
                   <div className="flex flex-col items-center md:items-start">
-                    <span className="text-xl font-bold flex items-center gap-1.5" style={{ color: '#1A1A1A' }}>
-                      <FileCheck className="w-5 h-5" style={{ color: '#2b4734', opacity: 0.7 }} />
+                    <span className="text-xl font-bold flex items-center gap-1.5 text-foreground">
+                      <FileCheck className="w-5 h-5 text-executive-green/70" />
                       {"20,000 \u4EE5\u4E0A"}
                     </span>
-                    <span className="text-sm" style={{ color: '#6B6B6B' }}>{"\u4EFD\u5C65\u6B77\u5BE9\u95B1"}</span>
+                    <span className="text-sm text-muted-foreground">{"\u4EFD\u5C65\u6B77\u5BE9\u95B1"}</span>
                   </div>
                   <div className="flex flex-col items-center md:items-start">
-                    <span className="text-xl font-bold flex items-center gap-1.5" style={{ color: '#1A1A1A' }}>
-                      <Users className="w-5 h-5" style={{ color: '#2b4734', opacity: 0.7 }} />
+                    <span className="text-xl font-bold flex items-center gap-1.5 text-foreground">
+                      <Users className="w-5 h-5 text-executive-green/70" />
                       {"750 \u4EE5\u4E0A"}
                     </span>
-                    <span className="text-sm" style={{ color: '#6B6B6B' }}>{"\u4EBA\u6210\u529F\u9304\u53D6"}</span>
+                    <span className="text-sm text-muted-foreground">{"\u4EBA\u6210\u529F\u9304\u53D6"}</span>
                   </div>
                 </div>
               </div>
@@ -175,83 +186,83 @@ const IndexExperimentZhTw = () => {
         </section>
 
         {/* ── Logo Trust Bar ── */}
-        <div style={{ backgroundColor: '#FDFBF7' }}>
+        <div className="bg-cream">
           <LogoScrollExperimentZhTw />
         </div>
 
         {/* ── Testimonials ── */}
         <LazySection>
-          <div style={{ backgroundColor: '#FFFFFF' }}>
+          <div className="bg-card">
             <HomepageTestimonialsExperimentZhTw />
           </div>
         </LazySection>
 
         {/* ── Sound Familiar? ── */}
-        <section className="py-12 md:py-20 px-5 md:px-6" style={{ backgroundColor: '#FDFBF7' }}>
+        <section className="py-12 md:py-20 px-5 md:px-6 bg-cream">
           <div className="container mx-auto max-w-2xl text-center">
-            <h2 className="font-heading mb-6" style={{ color: '#1A1A1A', fontSize: 'clamp(2rem, 4vw, 2.625rem)', lineHeight: 1.2 }}>
+            <h2 className="font-heading mb-6 text-foreground" style={{ fontSize: 'clamp(2rem, 4vw, 2.625rem)', lineHeight: 1.2 }}>
               {"\u807D\u8D77\u4F86\u5F88\u719F\u6089\uFF1F"}
             </h2>
 
             <div className="flex flex-col gap-5 mb-8 text-left max-w-xl mx-auto">
               <div className="flex items-start gap-3">
-                <X className="w-5 h-5 flex-shrink-0 mt-0.5" style={{ color: '#C85A5A' }} strokeWidth={2.5} />
-                <p style={{ color: '#1A1A1A', fontSize: '1.125rem' }}>{"\u4F60\u6295\u4E86\u4E00\u5806\u5DE5\u4F5C\uFF0C\u5B8C\u5168\u6C92\u6709\u56DE\u97F3\u3002"}</p>
+                <X className="w-5 h-5 flex-shrink-0 mt-0.5 text-destructive" strokeWidth={2.5} />
+                <p className="text-foreground text-lg">{"\u4F60\u6295\u4E86\u4E00\u5806\u5DE5\u4F5C\uFF0C\u5B8C\u5168\u6C92\u6709\u56DE\u97F3\u3002"}</p>
               </div>
               <div className="flex items-start gap-3">
-                <X className="w-5 h-5 flex-shrink-0 mt-0.5" style={{ color: '#C85A5A' }} strokeWidth={2.5} />
-                <p style={{ color: '#1A1A1A', fontSize: '1.125rem' }}>{"\u4F60\u9032\u5230\u6700\u7D42\u9762\u8A66\uFF0C\u7136\u5F8C\u6C92\u6709\u4E0B\u6587\u3002\u6C92\u6709 Email\u3002\u6C92\u6709\u96FB\u8A71\u3002"}</p>
+                <X className="w-5 h-5 flex-shrink-0 mt-0.5 text-destructive" strokeWidth={2.5} />
+                <p className="text-foreground text-lg">{"\u4F60\u9032\u5230\u6700\u7D42\u9762\u8A66\uFF0C\u7136\u5F8C\u6C92\u6709\u4E0B\u6587\u3002\u6C92\u6709 Email\u3002\u6C92\u6709\u96FB\u8A71\u3002"}</p>
               </div>
               <div className="flex items-start gap-3">
-                <X className="w-5 h-5 flex-shrink-0 mt-0.5" style={{ color: '#C85A5A' }} strokeWidth={2.5} />
-                <p style={{ color: '#1A1A1A', fontSize: '1.125rem' }}>{"\u4F60\u62FF\u5230 Offer\uFF0C\u4F46\u4F60\u4E0D\u77E5\u9053\u85AA\u6C34\u5408\u4E0D\u5408\u7406\uFF0C\u4E5F\u4E0D\u77E5\u9053\u8A72\u4E0D\u8A72\u518D\u8AC7\u3002"}</p>
+                <X className="w-5 h-5 flex-shrink-0 mt-0.5 text-destructive" strokeWidth={2.5} />
+                <p className="text-foreground text-lg">{"\u4F60\u62FF\u5230 Offer\uFF0C\u4F46\u4F60\u4E0D\u77E5\u9053\u85AA\u6C34\u5408\u4E0D\u5408\u7406\uFF0C\u4E5F\u4E0D\u77E5\u9053\u8A72\u4E0D\u8A72\u518D\u8AC7\u3002"}</p>
               </div>
             </div>
 
             <div className="flex items-start justify-center gap-2 mb-6">
-              <CheckCircle2 className="w-5 h-5 flex-shrink-0 mt-0.5" style={{ color: '#2b4734' }} />
-              <p style={{ color: '#6B6B6B', fontSize: '1rem' }}>
+              <CheckCircle2 className="w-5 h-5 flex-shrink-0 mt-0.5 text-executive-green" />
+              <p className="text-muted-foreground text-base">
                 {"\u4F60\u4E0D\u9700\u8981\u53E6\u4E00\u500B\u6C42\u8077\u5E73\u53F0\u3002\u4F60\u9700\u8981\u4E00\u500B\u5750\u5728\u684C\u5B50\u53E6\u4E00\u908A\u7684\u4EBA\u3002"}
               </p>
             </div>
 
             <div className="max-w-md mx-auto">
-              <MailerLiteForm formId="sM1X80" className="ml-embedded" buttonText={"\u514D\u8CBB\u7D22\u53D6\u653B\u7565"} />
+              <MailerLiteForm formId="sM1X80" className="ml-embedded" buttonText={"\u514D\u8CBB\u7D22\u53D6\u653B\u7565"} successHeading="成功加入！" successBody="請查看您的信箱，免費求職指南已寄出。" successCta="建立免費帳號，儲存進度並探索更多工具" successCtaLink="/join" />
             </div>
-            <p className="text-center mt-2" style={{ color: '#6B6B6B', fontSize: '0.8125rem' }}>
+            <p className="text-center mt-2 text-muted-foreground text-[0.8125rem]">
               {"\u4E0D\u704C\u6C34\u3001\u4E0D\u5EE2\u8A71\u3002\u6BCF\u9031\u4E00\u5247\u62DB\u52DF\u5167\u5E55\u7B56\u7565\u3002"}
             </p>
           </div>
         </section>
 
         {/* ── Why Work With an Insider ── */}
-        <section className="py-12 md:py-20 px-5 md:px-6" style={{ backgroundColor: '#FFFFFF' }}>
+        <section className="py-12 md:py-20 px-5 md:px-6 bg-card">
           <div className="container mx-auto max-w-4xl">
             <div className="text-center mb-6">
-              <h2 className="font-heading mb-3" style={{ color: '#1A1A1A', fontSize: 'clamp(2rem, 4vw, 2.625rem)', lineHeight: 1.2 }}>
+              <h2 className="font-heading mb-3 text-foreground" style={{ fontSize: 'clamp(2rem, 4vw, 2.625rem)', lineHeight: 1.2 }}>
                 {"\u5927\u90E8\u5206\u7684\u8077\u6DAF\u5EFA\u8B70\u4F86\u81EA\u6C92\u62DB\u52DF\u904E\u4EFB\u4F55\u4EBA\u7684\u4EBA"}
               </h2>
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-6 mb-10">
-              <div className="rounded-xl p-6 text-center md:text-left" style={{ backgroundColor: '#FDFBF7', borderTop: '3px solid #D4930D' }}>
-                <Eye className="w-10 h-10 mx-auto md:mx-0 mb-4" style={{ color: '#2b4734' }} strokeWidth={1.5} />
-                <p className="font-bold text-[20px] mb-2" style={{ color: '#1A1A1A' }}>{"\u5BE9\u95B1\u904E 20,000 \u4EE5\u4E0A\u4EFD\u5C65\u6B77"}</p>
-                <p className="text-base" style={{ color: '#1A1A1A' }}>
+              <div className="rounded-xl p-6 text-center md:text-left bg-cream border-t-[3px] border-gold">
+                <Eye className="w-10 h-10 mx-auto md:mx-0 mb-4 text-executive-green" strokeWidth={1.5} />
+                <p className="font-bold text-[20px] mb-2 text-foreground">{"\u5BE9\u95B1\u904E 20,000 \u4EE5\u4E0A\u4EFD\u5C65\u6B77"}</p>
+                <p className="text-base text-foreground">
                   {"\u6211\u77E5\u9053\u4EC0\u9EBC\u8B93\u9762\u8A66\u5B98\u505C\u4E0B\u4F86\u770B\u3002\u4E5F\u77E5\u9053\u4EC0\u9EBC\u8B93\u5C65\u6B77 6 \u79D2\u5167\u88AB\u6DD8\u6C70\u3002\u4E0D\u7528\u731C\uFF0C\u770B\u904E\u5E7E\u5343\u6B21\u4E86\u3002"}
                 </p>
               </div>
-              <div className="rounded-xl p-6 text-center md:text-left" style={{ backgroundColor: '#FDFBF7', borderTop: '3px solid #D4930D' }}>
-                <Users className="w-10 h-10 mx-auto md:mx-0 mb-4" style={{ color: '#2b4734' }} strokeWidth={1.5} />
-                <p className="font-bold text-[20px] mb-2" style={{ color: '#1A1A1A' }}>{"\u9304\u53D6\u904E 750 \u4EE5\u4E0A\u4EBA"}</p>
-                <p className="text-base" style={{ color: '#1A1A1A' }}>
+              <div className="rounded-xl p-6 text-center md:text-left bg-cream border-t-[3px] border-gold">
+                <Users className="w-10 h-10 mx-auto md:mx-0 mb-4 text-executive-green" strokeWidth={1.5} />
+                <p className="font-bold text-[20px] mb-2 text-foreground">{"\u9304\u53D6\u904E 750 \u4EE5\u4E0A\u4EBA"}</p>
+                <p className="text-base text-foreground">
                   {"\u6211\u5750\u5728\u6C7A\u5B9A\u4F60 Offer \u7684\u6703\u8B70\u5BA4\u88E1\u3002\u6211\u77E5\u9053 HR \u600E\u9EBC\u60F3\u3001\u7528\u4EBA\u4E3B\u7BA1\u5728\u610F\u4EC0\u9EBC\uFF0C\u9084\u6709\u5927\u90E8\u5206\u4EBA\u5728\u54EA\u88E1\u5C11\u62FF\u4E86\u9322\u3002"}
                 </p>
               </div>
-              <div className="rounded-xl p-6 text-center md:text-left" style={{ backgroundColor: '#FDFBF7', borderTop: '3px solid #D4930D' }}>
-                <Building className="w-10 h-10 mx-auto md:mx-0 mb-4" style={{ color: '#2b4734' }} strokeWidth={1.5} />
-                <p className="font-bold text-[20px] mb-2" style={{ color: '#1A1A1A' }}>{"\u5167\u90E8\u77E5\u8B58"}</p>
-                <p className="text-base" style={{ color: '#1A1A1A' }}>
+              <div className="rounded-xl p-6 text-center md:text-left bg-cream border-t-[3px] border-gold">
+                <Building className="w-10 h-10 mx-auto md:mx-0 mb-4 text-executive-green" strokeWidth={1.5} />
+                <p className="font-bold text-[20px] mb-2 text-foreground">{"\u5167\u90E8\u77E5\u8B58"}</p>
+                <p className="text-base text-foreground">
                   {"\u6211\u9304\u53D6\u904E 750 \u4F4D\u4EE5\u4E0A\u7684\u4EBA\u3002\u6211\u77E5\u9053\u4ED6\u5011\u600E\u9EBC\u9762\u8A66\u3001\u600E\u9EBC\u7D66\u85AA\uFF0C\u9084\u6709\u4EC0\u9EBC\u8B93\u4F60\u812B\u7A4E\u800C\u51FA\u3002"}
                 </p>
               </div>
@@ -278,27 +289,66 @@ const IndexExperimentZhTw = () => {
         <LazySection>
           <FAQSection />
         </LazySection>
+
+        {/* ── Create Account CTA ── */}
+        {!isLoggedIn && (
+          <LazySection>
+            <section className="py-16 md:py-24 px-5 md:px-6 bg-cream">
+              <div className="container mx-auto max-w-2xl text-center">
+                <h2 className="font-heading mb-4 text-foreground" style={{ fontSize: 'clamp(2rem, 4vw, 2.625rem)' }}>
+                  免費建立帳號
+                </h2>
+                <p className="text-lg text-muted-foreground mb-8 max-w-xl mx-auto">
+                  免費取得所有職涯指南、履歷工具、薪資數據等完整資源。
+                </p>
+                <div className="flex flex-col gap-3 mb-8 text-left max-w-sm mx-auto">
+                  <div className="flex items-center gap-3">
+                    <CheckCircle2 className="w-5 h-5 flex-shrink-0 text-executive-green" />
+                    <span className="text-foreground">10+ 份職涯與面試指南</span>
+                  </div>
+                  <div className="flex items-center gap-3">
+                    <CheckCircle2 className="w-5 h-5 flex-shrink-0 text-executive-green" />
+                    <span className="text-foreground">履歷建立器與 AI 分析工具</span>
+                  </div>
+                  <div className="flex items-center gap-3">
+                    <CheckCircle2 className="w-5 h-5 flex-shrink-0 text-executive-green" />
+                    <span className="text-foreground">面試題庫與談判工具</span>
+                  </div>
+                </div>
+                <Link
+                  to="/zh-tw/join"
+                  className="inline-flex items-center justify-center px-8 py-3 rounded-lg font-bold text-white bg-gold hover:bg-gold/90 transition-colors text-lg"
+                >
+                  免費取得完整資源
+                </Link>
+                <p className="mt-3 text-sm text-muted-foreground">無需信用卡</p>
+              </div>
+            </section>
+          </LazySection>
+        )}
+
       </main>
 
       {/* ── Footer ── */}
-      <footer className="py-8 md:py-10 px-5 md:px-6" style={{ backgroundColor: '#2b4734' }}>
+      <footer className="py-8 md:py-10 px-5 md:px-6 bg-executive-green">
         <div className="container mx-auto max-w-5xl flex flex-col items-center gap-4">
           <div className="flex items-center gap-6">
-            <a href="https://www.linkedin.com/in/james-bugden/" target="_blank" rel="noopener noreferrer" className="hover:opacity-70 transition-opacity" style={{ color: '#FFFFFF' }}>
+            <a href="https://www.linkedin.com/in/james-bugden/" target="_blank" rel="noopener noreferrer" className="hover:opacity-70 transition-opacity text-cream" aria-label="LinkedIn">
               <Linkedin className="w-5 h-5" />
             </a>
-            <a href="https://www.instagram.com/james.careers/" target="_blank" rel="noopener noreferrer" className="hover:opacity-70 transition-opacity" style={{ color: '#FFFFFF' }}>
+            <a href="https://www.instagram.com/james.careers/" target="_blank" rel="noopener noreferrer" className="hover:opacity-70 transition-opacity text-cream" aria-label="Instagram">
               <InstagramIcon className="w-5 h-5" />
             </a>
-            <a href="https://www.threads.com/@james.careers" target="_blank" rel="noopener noreferrer" className="hover:opacity-70 transition-opacity" style={{ color: '#FFFFFF' }}>
+            <a href="https://www.threads.com/@james.careers" target="_blank" rel="noopener noreferrer" className="hover:opacity-70 transition-opacity text-cream" aria-label="Threads">
               <ThreadsIcon className="w-5 h-5" />
             </a>
           </div>
-          <span className="text-sm text-center w-full" style={{ color: '#A8B5A9' }}>
+          <span className="text-sm text-center w-full text-cream/60">
             © 2026 James Bugden. All rights reserved.
           </span>
         </div>
       </footer>
+      <ExitIntentPopup lang="zh" />
     </div>
   );
 };

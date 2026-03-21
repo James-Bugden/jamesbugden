@@ -51,6 +51,21 @@ const BILINGUAL_PAIRS: [string, string][] = [
   ["/reviews/hope-chen", "/zh-tw/reviews/hope-chen"],
   ["/ai-job-search-guide", "/zh-tw/ai-job-search-guide"],
   ["/problem-solving-guide", "/zh-tw/problem-solving-guide"],
+  ["/interview-questions", "/zh-tw/interview-questions"],
+  ["/hr-interview-guide", "/zh-tw/hr-interview-guide"],
+  ["/recruiter-guide", "/zh-tw/recruiter-guide"],
+  ["/office-politics-guide", "/zh-tw/office-politics-guide"],
+  ["/career-game-guide", "/zh-tw/career-game-guide"],
+  ["/job-offer-guide", "/zh-tw/job-offer-guide"],
+  ["/ikigai-guide", "/zh-tw/ikigai-guide"],
+  ["/resume-analyzer", "/zh-tw/resume-analyzer"],
+  ["/resume", "/zh-tw/resume"],
+  ["/resume-simple", "/zh-tw/resume-simple"],
+  ["/dashboard", "/zh-tw/dashboard"],
+  ["/salary", "/zh-tw/salary"],
+  ["/salary/explore", "/zh-tw/salary/explore"],
+  ["/salary/compare", "/zh-tw/salary/compare"],
+  ["/salary/insights", "/zh-tw/salary/insights"],
 ];
 
 /** Look up index for fast matching */
@@ -82,7 +97,7 @@ const PageSEO = ({ title, description, path, lang = "en" }: PageSEOProps) => {
       <meta property="og:description" content={description} />
       <meta property="og:url" content={url} />
       <meta property="og:type" content="website" />
-      <meta property="og:image" content="https://lovable.dev/opengraph-image-p98pqg.png" />
+      <meta property="og:image" content={`${BASE_URL}/og-image.png`} />
       <meta name="twitter:card" content="summary_large_image" />
       <meta name="twitter:title" content={title} />
       <meta name="twitter:description" content={description} />

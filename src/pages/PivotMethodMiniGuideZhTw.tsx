@@ -1,9 +1,11 @@
-import { ArrowLeft, Download, CheckCircle2, AlertTriangle, Lightbulb, Target, Users, Rocket, Crown } from "lucide-react";
+import { ArrowLeft, CheckCircle2, AlertTriangle, Lightbulb, Target, Users, Rocket, Crown, Clock } from "lucide-react";
+import { InteractiveChecklist } from "@/components/guides/InteractiveChecklist";
 import { Link, useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import GuideShareButtons from "@/components/GuideShareButtons";
 import { AuthHeaderButton } from "@/components/AuthHeaderButton";
 import { useTrackGuideProgress } from "@/hooks/useReadingProgress";
+import GuideSignInBanner from "@/components/guides/GuideSignInBanner";
 
 const PivotMethodMiniGuideZhTw = () => {
   useTrackGuideProgress("pivot-mini");
@@ -30,12 +32,6 @@ const PivotMethodMiniGuideZhTw = () => {
             >
               EN
             </button>
-            <Button asChild className="btn-gold">
-              <a href="/downloads/ZH_The_Pivot_Method_Mini_Guide.pdf" download>
-                <Download className="w-4 h-4 mr-2" />
-                下載 PDF
-              </a>
-            </Button>
           </div>
         </div>
       </nav>
@@ -50,11 +46,17 @@ const PivotMethodMiniGuideZhTw = () => {
           <p className="text-xl md:text-2xl text-cream/90 mb-4">
             根據 Jenny Blake 的《Pivot:唯一重要的動作是你的下一步》改編
           </p>
-          <p className="text-lg text-cream/80">
+          <p className="text-lg text-cream/80 mb-2">
             作者:James Bugden • 資深招募顧問
           </p>
+          <div className="flex items-center justify-center gap-1.5 text-cream/60">
+            <Clock className="w-4 h-4" />
+            <span className="text-sm">10 分鐘閱讀</span>
+          </div>
         </div>
       </header>
+
+      <GuideSignInBanner lang="zh" />
 
       {/* Main Content */}
       <main className="container mx-auto px-4 py-12 md:py-16 max-w-4xl">
@@ -333,27 +335,27 @@ const PivotMethodMiniGuideZhTw = () => {
                 <div className="grid md:grid-cols-3 gap-4">
                   <div className="bg-muted/30 rounded-lg p-4">
                     <h5 className="font-medium text-foreground mb-3">財務標準:</h5>
-                    <ul className="space-y-2 text-sm text-muted-foreground">
-                      <li>☐ 儲蓄了 ___ 個月的應急基金</li>
-                      <li>☐ 建立了 $___ 的副業收入(如適用)</li>
-                      <li>☐ 將主要債務減少到可管理的水平</li>
-                    </ul>
+                    <InteractiveChecklist guideKey="pivot_mini_launch_financial_zh" lang="zh" items={[
+                      { label: "儲蓄了 ___ 個月的應急基金" },
+                      { label: "建立了 $___ 的副業收入(如適用)" },
+                      { label: "將主要債務減少到可管理的水平" },
+                    ]} />
                   </div>
                   <div className="bg-muted/30 rounded-lg p-4">
                     <h5 className="font-medium text-foreground mb-3">專業標準:</h5>
-                    <ul className="space-y-2 text-sm text-muted-foreground">
-                      <li>☐ 已排定 ___ 個付費客戶 / 獲得工作 offer</li>
-                      <li>☐ 獲得關鍵證書或技能</li>
-                      <li>☐ 擁有 ___ 個強大範例的作品集</li>
-                    </ul>
+                    <InteractiveChecklist guideKey="pivot_mini_launch_professional_zh" lang="zh" items={[
+                      { label: "已排定 ___ 個付費客戶 / 獲得工作 offer" },
+                      { label: "獲得關鍵證書或技能" },
+                      { label: "擁有 ___ 個強大範例的作品集" },
+                    ]} />
                   </div>
                   <div className="bg-muted/30 rounded-lg p-4">
                     <h5 className="font-medium text-foreground mb-3">個人標準:</h5>
-                    <ul className="space-y-2 text-sm text-muted-foreground">
-                      <li>☐ 伴侶/家人支持這個改變</li>
-                      <li>☐ 生活狀況穩定</li>
-                      <li>☐ 心理和身體健康狀況良好</li>
-                    </ul>
+                    <InteractiveChecklist guideKey="pivot_mini_launch_personal_zh" lang="zh" items={[
+                      { label: "伴侶/家人支持這個改變" },
+                      { label: "生活狀況穩定" },
+                      { label: "心理和身體健康狀況良好" },
+                    ]} />
                   </div>
                 </div>
               </div>
@@ -493,21 +495,6 @@ const PivotMethodMiniGuideZhTw = () => {
           </div>
         </section>
 
-        {/* CTA Section */}
-        <section className="bg-[#1B3A2F] rounded-2xl p-8 md:p-12 text-center">
-          <h2 className="font-heading text-2xl md:text-3xl text-cream mb-4">
-            獲取完整指南
-          </h2>
-          <p className="text-cream/80 mb-6 max-w-2xl mx-auto">
-            下載包含練習、詳細範例和視覺框架的完整指南。
-          </p>
-          <Button asChild size="lg" className="btn-gold">
-            <a href="/downloads/ZH_The_Pivot_Method_Mini_Guide.pdf" download>
-              <Download className="w-5 h-5 mr-2" />
-              下載 PDF 指南
-            </a>
-          </Button>
-        </section>
 
         <GuideShareButtons isZhTw />
 

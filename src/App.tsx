@@ -6,25 +6,29 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import { ScrollToTop } from "./components/ScrollToTop";
 import { HelmetProvider } from "react-helmet-async";
-import { AuthProvider } from "./contexts/AuthContext";
+import { AuthProvider, useAuth } from "./contexts/AuthContext";
+import MobileBottomNav from "./components/MobileBottomNav";
+import LoginGate from "./components/LoginGate";
+import { useLocation } from "react-router-dom";
+import { ThemeProvider } from "next-themes";
 
 // Loading fallback component
 const PageLoader = () => (
-  <div className="min-h-screen flex items-center justify-center bg-background">
+  <div className="min-h-screen flex flex-col items-center justify-center bg-background gap-4">
+    <span className="font-heading text-lg tracking-wide text-executive-green">JAMES BUGDEN</span>
     <div className="w-8 h-8 border-4 border-gold border-t-transparent rounded-full animate-spin" />
   </div>
 );
 
 // Core pages - lazy load for smaller initial bundle
-const Index = lazy(() => import("./pages/Index"));
-const IndexExperiment = lazy(() => import("./pages/IndexExperiment"));
-const IndexExperimentZhTw = lazy(() => import("./pages/IndexExperimentZhTw"));
-const IndexZhTw = lazy(() => import("./pages/IndexZhTw"));
+const Index = lazy(() => import("./pages/IndexExperiment"));
+const IndexZhTw = lazy(() => import("./pages/IndexExperimentZhTw"));
 import NotFound from "./pages/NotFound";
 
 // Lazy load all other pages
 const AdminLogin = lazy(() => import("./pages/AdminLogin"));
-const AdminReviews = lazy(() => import("./pages/AdminReviews"));
+const ImportQuestions = lazy(() => import("./pages/ImportQuestions"));
+const AdminDashboard = lazy(() => import("./pages/AdminDashboard"));
 const ClientReviewGate = lazy(() => import("./pages/ClientReviewGate"));
 const ProtectedRoute = lazy(() => import("./components/ProtectedRoute"));
 const ResumeGuide = lazy(() => import("./pages/ResumeGuide"));
@@ -55,8 +59,11 @@ const SiteDirectory = lazy(() => import("./pages/SiteDirectory"));
 const ResumeQuickReference = lazy(() => import("./pages/ResumeQuickReference"));
 const ResumeQuickReferenceZhTw = lazy(() => import("./pages/ResumeQuickReferenceZhTw"));
 const ResumeAnalyzer = lazy(() => import("./pages/ResumeAnalyzer"));
+const ResumeAnalyzerZhTw = lazy(() => import("./pages/ResumeAnalyzerZhTw"));
 const ResumeBuilder = lazy(() => import("./pages/ResumeBuilder"));
 const ResumeBuilderZhTw = lazy(() => import("./pages/ResumeBuilderZhTw"));
+const ResumeBuilderSimple = lazy(() => import("./pages/ResumeBuilderSimple"));
+const ResumeBuilderSimpleZhTw = lazy(() => import("./pages/ResumeBuilderSimpleZhTw"));
 const JobTracker = lazy(() => import("./pages/JobTracker"));
 const TrackerPage = lazy(() => import("./pages/TrackerPage"));
 const Login = lazy(() => import("./pages/Login"));
@@ -73,6 +80,25 @@ const JobOfferGuideZhTw = lazy(() => import("./pages/JobOfferGuideZhTw"));
 const ProblemSolvingGuide = lazy(() => import("./pages/ProblemSolvingGuide"));
 const ProblemSolvingGuideZhTw = lazy(() => import("./pages/ProblemSolvingGuideZhTw"));
 const OfficePoliticsGuide = lazy(() => import("./pages/OfficePoliticsGuide"));
+const OfficePoliticsGuideZhTw = lazy(() => import("./pages/OfficePoliticsGuideZhTw"));
+const CareerGameGuide = lazy(() => import("./pages/CareerGameGuide"));
+const CareerGameGuideZhTw = lazy(() => import("./pages/CareerGameGuideZhTw"));
+const IkigaiGuide = lazy(() => import("./pages/IkigaiGuide"));
+const IkigaiGuideZhTw = lazy(() => import("./pages/IkigaiGuideZhTw"));
+const RecruiterGuide = lazy(() => import("./pages/RecruiterGuide"));
+const RecruiterGuideZhTw = lazy(() => import("./pages/RecruiterGuideZhTw"));
+const InterviewQuestionBank = lazy(() => import("./pages/InterviewQuestionBank"));
+const InterviewQuestionBankZhTw = lazy(() => import("./pages/InterviewQuestionBankZhTw"));
+const SalaryDatabase = lazy(() => import("./pages/SalaryDatabase"));
+const SalaryDatabaseZhTw = lazy(() => import("./pages/SalaryDatabaseZhTw"));
+const SalaryExplore = lazy(() => import("./pages/SalaryExplore"));
+const SalaryExploreZhTw = lazy(() => import("./pages/SalaryExploreZhTw"));
+const SalaryCompare = lazy(() => import("./pages/SalaryCompare"));
+const SalaryCompareZhTw = lazy(() => import("./pages/SalaryCompareZhTw"));
+const SalaryInsights = lazy(() => import("./pages/SalaryInsights"));
+const SalaryInsightsZhTw = lazy(() => import("./pages/SalaryInsightsZhTw"));
+const Join = lazy(() => import("./pages/Join"));
+const JoinZhTw = lazy(() => import("./pages/JoinZhTw"));
 
 // Toolkit pages - English
 const ToolkitIndex = lazy(() => import("./pages/toolkit/ToolkitIndex"));
@@ -127,7 +153,32 @@ const RemaRaoReview = lazy(() => import("./pages/reviews/RemaRaoReview"));
 
 const queryClient = new QueryClient();
 
+const HIDDEN_NAV_PATHS = [
+  "/resume-guide", "/interview-prep-guide", "/interview-preparation-guide",
+  "/linkedin-guide", "/linkedin-branding-guide", "/pivot-method-guide",
+  "/pivot-method-mini-guide", "/guides", "/ikigai-guide", "/office-politics-guide",
+  "/problem-solving-guide", "/recruiter-guide", "/hr-interview-guide",
+  "/career-game-guide", "/ai-job-search-guide", "/interview-questions",
+  "/job-offer-guide", "/salary-starter-kit", "/review", "/join",
+];
+
+function MobileNavWrapper() {
+  const { pathname } = useLocation();
+  const { isLoggedIn, isLoading } = useAuth();
+  const lang = pathname.startsWith("/zh-tw") ? "zh" : "en";
+  const normalized = pathname.replace("/zh-tw", "");
+  const hidden = HIDDEN_NAV_PATHS.some(p => normalized.startsWith(p));
+  if (hidden || isLoading || !isLoggedIn) return null;
+  return (
+    <>
+      <div className="h-16 md:hidden" />
+      <MobileBottomNav lang={lang as "en" | "zh"} />
+    </>
+  );
+}
+
 const App = () => (
+  <ThemeProvider attribute="class" defaultTheme="light" enableSystem={false}>
   <HelmetProvider>
   <QueryClientProvider client={queryClient}>
     <TooltipProvider>
@@ -138,19 +189,22 @@ const App = () => (
         <ScrollToTop />
         <Suspense fallback={<PageLoader />}>
           <Routes>
-            <Route path="/" element={<IndexExperiment />} />
-            <Route path="/zh-tw" element={<IndexExperimentZhTw />} />
+            <Route path="/" element={<Index />} />
+            <Route path="/zh-tw" element={<IndexZhTw />} />
             <Route path="/experiment" element={<Navigate to="/" replace />} />
             <Route path="/zh-tw/experiment" element={<Navigate to="/zh-tw" replace />} />
             <Route path="/admin/login" element={<AdminLogin />} />
-            <Route 
-              path="/admin/reviews" 
+            <Route path="/admin/import-questions" element={<ImportQuestions />} />
+            <Route
+              path="/admin"
               element={
                 <ProtectedRoute requireAdmin={true}>
-                  <AdminReviews />
+                  <AdminDashboard />
                 </ProtectedRoute>
-              } 
+              }
             />
+            <Route path="/admin/reviews" element={<Navigate to="/admin?tab=reviews" replace />} />
+            <Route path="/admin/salary-checks" element={<Navigate to="/admin?tab=salary" replace />} />
             <Route path="/review" element={<ClientReviewGate />} />
             <Route path="/resume-guide" element={<ResumeGuide />} />
             <Route path="/zh-tw/resume-guide" element={<ResumeGuideZhTw />} />
@@ -231,8 +285,11 @@ const App = () => (
             <Route path="/reviews/rema-rao" element={<RemaRaoReview />} />
             <Route path="/resume-quick-reference" element={<ResumeQuickReference />} />
             <Route path="/zh-tw/resume-quick-reference" element={<ResumeQuickReferenceZhTw />} />
-            <Route path="/recruiter-screen-guide" element={<RecruiterScreenGuide />} />
-            <Route path="/zh-tw/recruiter-screen-guide" element={<RecruiterScreenGuideZhTw />} />
+            <Route path="/hr-interview-guide" element={<RecruiterScreenGuide />} />
+            <Route path="/zh-tw/hr-interview-guide" element={<RecruiterScreenGuideZhTw />} />
+            {/* Redirects from old URLs */}
+            <Route path="/recruiter-screen-guide" element={<Navigate to="/hr-interview-guide" replace />} />
+            <Route path="/zh-tw/recruiter-screen-guide" element={<Navigate to="/zh-tw/hr-interview-guide" replace />} />
             <Route path="/ai-job-search-guide" element={<AiJobSearchGuide />} />
             <Route path="/zh-tw/ai-job-search-guide" element={<AiJobSearchGuideZhTw />} />
             <Route path="/job-offer-guide" element={<JobOfferGuide />} />
@@ -240,12 +297,34 @@ const App = () => (
             <Route path="/problem-solving-guide" element={<ProblemSolvingGuide />} />
             <Route path="/zh-tw/problem-solving-guide" element={<ProblemSolvingGuideZhTw />} />
             <Route path="/office-politics-guide" element={<OfficePoliticsGuide />} />
+            <Route path="/zh-tw/office-politics-guide" element={<OfficePoliticsGuideZhTw />} />
+            <Route path="/career-game-guide" element={<CareerGameGuide />} />
+            <Route path="/zh-tw/career-game-guide" element={<CareerGameGuideZhTw />} />
+            <Route path="/ikigai-guide" element={<IkigaiGuide />} />
+            <Route path="/zh-tw/ikigai-guide" element={<IkigaiGuideZhTw />} />
+            <Route path="/recruiter-guide" element={<RecruiterGuide />} />
+            <Route path="/zh-tw/recruiter-guide" element={<RecruiterGuideZhTw />} />
+            <Route path="/interview-questions" element={<InterviewQuestionBank />} />
+            <Route path="/zh-tw/interview-questions" element={<InterviewQuestionBankZhTw />} />
             <Route path="/resume-analyzer" element={<ResumeAnalyzer />} />
-            <Route path="/resume" element={<ResumeBuilder />} />
-            <Route path="/zh-tw/resume" element={<ResumeBuilderZhTw />} />
+            <Route path="/zh-tw/resume-analyzer" element={<ResumeAnalyzerZhTw />} />
+            <Route path="/resume" element={<LoginGate lang="en"><ResumeBuilder /></LoginGate>} />
+            <Route path="/zh-tw/resume" element={<LoginGate lang="zh"><ResumeBuilderZhTw /></LoginGate>} />
+            <Route path="/resume-simple" element={<LoginGate lang="en"><ResumeBuilderSimple /></LoginGate>} />
+            <Route path="/zh-tw/resume-simple" element={<LoginGate lang="zh"><ResumeBuilderSimpleZhTw /></LoginGate>} />
             <Route path="/jobs" element={<JobTracker />} />
             <Route path="/tracker" element={<TrackerPage />} />
+            <Route path="/salary" element={<LoginGate lang="en"><SalaryDatabase /></LoginGate>} />
+            <Route path="/salary/explore" element={<LoginGate lang="en"><SalaryExplore /></LoginGate>} />
+            <Route path="/zh-tw/salary" element={<LoginGate lang="zh"><SalaryDatabaseZhTw /></LoginGate>} />
+            <Route path="/zh-tw/salary/explore" element={<LoginGate lang="zh"><SalaryExploreZhTw /></LoginGate>} />
+            <Route path="/salary/compare" element={<LoginGate lang="en"><SalaryCompare /></LoginGate>} />
+            <Route path="/zh-tw/salary/compare" element={<LoginGate lang="zh"><SalaryCompareZhTw /></LoginGate>} />
+            <Route path="/salary/insights" element={<LoginGate lang="en"><SalaryInsights /></LoginGate>} />
+            <Route path="/zh-tw/salary/insights" element={<LoginGate lang="zh"><SalaryInsightsZhTw /></LoginGate>} />
             <Route path="/site-directory" element={<SiteDirectory />} />
+            <Route path="/join" element={<Join />} />
+            <Route path="/zh-tw/join" element={<JoinZhTw />} />
             <Route path="/login" element={<Login />} />
             <Route path="/signup" element={<Signup />} />
             <Route path="/reset-password" element={<ResetPassword />} />
@@ -256,11 +335,13 @@ const App = () => (
             <Route path="*" element={<NotFound />} />
           </Routes>
         </Suspense>
+        <MobileNavWrapper />
         </AuthProvider>
       </BrowserRouter>
     </TooltipProvider>
   </QueryClientProvider>
   </HelmetProvider>
+  </ThemeProvider>
 );
 
 export default App;

@@ -33,8 +33,8 @@ export function TemplateGalleryModal({
 
   const templateSettings = useMemo(() => {
     const map: Record<string, CustomizeSettings> = {};
-    for (const t of TEMPLATE_LIST) {
-      map[t.id] = applyTemplatePreset(DEFAULT_CUSTOMIZE, t.id);
+    for (const tpl of TEMPLATE_LIST) {
+      map[tpl.id] = applyTemplatePreset(DEFAULT_CUSTOMIZE, tpl.id);
     }
     return map;
   }, []);
@@ -43,9 +43,6 @@ export function TemplateGalleryModal({
 
   const handleSelect = (id: string) => {
     onSelect(id);
-    if (showToast) {
-      toast({ title: t("templateApplied"), description: `"${TEMPLATE_LIST.find(tpl => tpl.id === id)?.name}" ${t("styleApplied")}` });
-    }
     onClose();
   };
 
@@ -77,15 +74,17 @@ export function TemplateGalleryModal({
         {/* Grid */}
         <div className="flex-1 overflow-y-auto p-6">
           <div className="grid grid-cols-2 md:grid-cols-3 gap-5">
-            {TEMPLATE_LIST.map((t) => {
-              const isSelected = selected === t.id;
-              const isHovered = hoveredId === t.id;
+            {TEMPLATE_LIST.map((tpl) => {
+              const isSelected = selected === tpl.id;
+              const isHovered = hoveredId === tpl.id;
+              const tplName = t((`template_${tpl.id}` as any)) || tpl.name;
+              const tplDesc = t((`templateDesc_${tpl.id}` as any)) || tpl.desc;
 
               return (
                 <button
-                  key={t.id}
-                  onClick={() => handleSelect(t.id)}
-                  onMouseEnter={() => setHoveredId(t.id)}
+                  key={tpl.id}
+                  onClick={() => handleSelect(tpl.id)}
+                  onMouseEnter={() => setHoveredId(tpl.id)}
                   onMouseLeave={() => setHoveredId(null)}
                   className={cn(
                     "relative rounded-xl border-2 overflow-hidden text-left transition-all",
@@ -100,7 +99,7 @@ export function TemplateGalleryModal({
                   <div className="aspect-[210/297] bg-[#fafaf8] relative overflow-hidden">
                     <ResumeThumbnail
                       data={previewData}
-                      settings={templateSettings[t.id]}
+                      settings={templateSettings[tpl.id]}
                     />
 
                     {/* Selected badge */}
@@ -113,9 +112,9 @@ export function TemplateGalleryModal({
 
                   {/* Label */}
                   <div className="px-3 py-2.5 bg-white border-t border-gray-100">
-                    <p className="text-xs font-bold text-gray-900">{t.name}</p>
+                    <p className="text-xs font-bold text-gray-900">{tplName}</p>
                     <p className="text-[10px] text-gray-500 mt-0.5 line-clamp-1">
-                      {t.desc}
+                      {tplDesc}
                     </p>
                   </div>
                 </button>

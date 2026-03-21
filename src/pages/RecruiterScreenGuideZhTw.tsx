@@ -6,6 +6,7 @@ import GuideShareButtons from "@/components/GuideShareButtons";
 import { AuthHeaderButton } from "@/components/AuthHeaderButton";
 import PageSEO from "@/components/PageSEO";
 import { useTrackGuideProgress } from "@/hooks/useReadingProgress";
+import GuideSignInBanner from "@/components/guides/GuideSignInBanner";
 import { useState, useEffect } from "react";
 
 const SectionNumber = ({ num }: { num: string }) => (
@@ -136,7 +137,7 @@ const RecruiterScreenGuideZhTw = () => {
       <PageSEO
         title="如何通過HR面試關 | James Bugden"
         description="資深招募官的完整實戰手冊。逐字範例、薪資話術、以及招募人員使用的評分表。"
-        path="/zh-tw/recruiter-screen-guide"
+        path="/zh-tw/hr-interview-guide"
         lang="zh-Hant-TW"
       />
 
@@ -149,7 +150,7 @@ const RecruiterScreenGuideZhTw = () => {
           <div className="flex items-center gap-3">
             <AuthHeaderButton variant="nav" />
             <button
-              onClick={() => navigate("/recruiter-screen-guide")}
+              onClick={() => navigate("/hr-interview-guide")}
               className="px-3 py-1.5 text-sm font-semibold bg-gold/20 hover:bg-gold/30 text-gold border border-gold/40 rounded-md transition-all duration-200 hover:scale-105"
             >
               EN
@@ -161,10 +162,6 @@ const RecruiterScreenGuideZhTw = () => {
       {/* Hero */}
       <section className="pt-28 md:pt-36 pb-14 md:pb-20 px-5 md:px-6 bg-executive-green">
         <div className="container mx-auto max-w-4xl text-center">
-          <div className="inline-flex items-center gap-2 px-4 py-2 bg-cream/10 border border-cream/20 rounded-full mb-6">
-            <Phone className="w-4 h-4 text-gold" />
-            <span className="text-sm text-cream/80">免費職涯資源</span>
-          </div>
           <h1 className="font-heading text-3xl md:text-5xl lg:text-6xl text-cream leading-tight mb-4" style={{ lineHeight: 1.2 }}>
             如何通過HR面試關
           </h1>
@@ -183,6 +180,8 @@ const RecruiterScreenGuideZhTw = () => {
           </div>
         </div>
       </section>
+
+      <GuideSignInBanner lang="zh" />
 
       {/* Introduction */}
       <TableOfContentsZh />
@@ -1264,12 +1263,15 @@ const RecruiterScreenGuideZhTw = () => {
                 電話前
               </h3>
               <ul className="space-y-3">
-                {["研究公司（30-60 分鐘）", "在 LinkedIn 上查看招募人員", "拆解職缺描述（必備條件 vs 加分條件）", "把經驗對照到每個關鍵要求", "準備「現在-過去-未來」自我介紹", "準備三個首要理由", "建立 5-7 個 STAR 故事", "建立一頁小抄", "準備好談論履歷上的每項技能"].map((item, i) => (
-                  <li key={i} className="flex items-start gap-3">
-                    <GoldCheckBadge />
-                    <span className="text-foreground text-sm">{item}</span>
-                  </li>
-                ))}
+                <li className="flex items-start gap-3"><GoldCheckBadge /><span className="text-foreground text-sm"><a href="#before" className="text-gold underline underline-offset-2 hover:text-gold/80 transition-colors">研究公司</a>（30-60 分鐘）</span></li>
+                <li className="flex items-start gap-3"><GoldCheckBadge /><span className="text-foreground text-sm">在 LinkedIn 上查看招募人員</span></li>
+                <li className="flex items-start gap-3"><GoldCheckBadge /><span className="text-foreground text-sm"><a href="#before" className="text-gold underline underline-offset-2 hover:text-gold/80 transition-colors">拆解職缺描述</a>（必備條件 vs 加分條件）</span></li>
+                <li className="flex items-start gap-3"><GoldCheckBadge /><span className="text-foreground text-sm">把經驗對照到每個關鍵要求</span></li>
+                <li className="flex items-start gap-3"><GoldCheckBadge /><span className="text-foreground text-sm">準備<a href="#story" className="text-gold underline underline-offset-2 hover:text-gold/80 transition-colors">「現在-過去-未來」自我介紹</a></span></li>
+                <li className="flex items-start gap-3"><GoldCheckBadge /><span className="text-foreground text-sm">準備三個首要理由</span></li>
+                <li className="flex items-start gap-3"><GoldCheckBadge /><span className="text-foreground text-sm">建立 5-7 個 <a href="#frameworks" className="text-gold underline underline-offset-2 hover:text-gold/80 transition-colors">STAR 故事</a></span></li>
+                <li className="flex items-start gap-3"><GoldCheckBadge /><span className="text-foreground text-sm">建立一頁小抄</span></li>
+                <li className="flex items-start gap-3"><GoldCheckBadge /><span className="text-foreground text-sm">準備好談論履歷上的每項技能</span></li>
               </ul>
             </div>
 
@@ -1279,12 +1281,12 @@ const RecruiterScreenGuideZhTw = () => {
                 通話中
               </h3>
               <ul className="space-y-3">
-                {["站起來（電話）或鏡頭調到眼睛高度（視訊）", "用「現在-過去-未來」回答自我介紹（60-90 秒）", "用 STAR 或 CAR 回答行為面試問題", "用三層級迴避框架處理薪資", "問 1-2 個精準的問題", "在掛斷前問下一步"].map((item, i) => (
-                  <li key={i} className="flex items-start gap-3">
-                    <GoldCheckBadge />
-                    <span className="text-foreground text-sm">{item}</span>
-                  </li>
-                ))}
+                <li className="flex items-start gap-3"><GoldCheckBadge /><span className="text-foreground text-sm">站起來（電話）或鏡頭調到眼睛高度（視訊）</span></li>
+                <li className="flex items-start gap-3"><GoldCheckBadge /><span className="text-foreground text-sm">用<a href="#story" className="text-gold underline underline-offset-2 hover:text-gold/80 transition-colors">「現在-過去-未來」</a>回答自我介紹（60-90 秒）</span></li>
+                <li className="flex items-start gap-3"><GoldCheckBadge /><span className="text-foreground text-sm">用 <a href="#frameworks" className="text-gold underline underline-offset-2 hover:text-gold/80 transition-colors">STAR 或 CAR</a> 回答行為面試問題</span></li>
+                <li className="flex items-start gap-3"><GoldCheckBadge /><span className="text-foreground text-sm">用<a href="#salary" className="text-gold underline underline-offset-2 hover:text-gold/80 transition-colors">三層級迴避框架</a>處理薪資</span></li>
+                <li className="flex items-start gap-3"><GoldCheckBadge /><span className="text-foreground text-sm">問 1-2 個<a href="#questions" className="text-gold underline underline-offset-2 hover:text-gold/80 transition-colors">精準的問題</a></span></li>
+                <li className="flex items-start gap-3"><GoldCheckBadge /><span className="text-foreground text-sm">在掛斷前問下一步</span></li>
               </ul>
             </div>
 
@@ -1294,12 +1296,10 @@ const RecruiterScreenGuideZhTw = () => {
                 困難問題速查
               </h3>
               <ul className="space-y-3">
-                {["為什麼離開：朝目標前進，不要逃離。一到兩句話。保持正面。", "弱點：真實的、可管理的、正在改善中的。用行為-影響-改善-結果公式。", "薪資：先迴避 → 再反問 → 只有在必須時才報高數字。", "五年計畫：符合職缺的企圖心。顯示你想在這裡成長。"].map((item, i) => (
-                  <li key={i} className="flex items-start gap-3">
-                    <GoldCheckBadge />
-                    <span className="text-foreground text-sm">{item}</span>
-                  </li>
-                ))}
+                <li className="flex items-start gap-3"><GoldCheckBadge /><span className="text-foreground text-sm">為什麼離開：朝目標前進，不要逃離。一到兩句話。保持正面。</span></li>
+                <li className="flex items-start gap-3"><GoldCheckBadge /><span className="text-foreground text-sm"><a href="#tough" className="text-gold underline underline-offset-2 hover:text-gold/80 transition-colors">弱點</a>：真實的、可管理的、正在改善中的。用行為-影響-改善-結果公式。</span></li>
+                <li className="flex items-start gap-3"><GoldCheckBadge /><span className="text-foreground text-sm"><a href="#salary" className="text-gold underline underline-offset-2 hover:text-gold/80 transition-colors">薪資</a>：先迴避 → 再反問 → 只有在必須時才報高數字。</span></li>
+                <li className="flex items-start gap-3"><GoldCheckBadge /><span className="text-foreground text-sm">五年計畫：符合職缺的企圖心。顯示你想在這裡成長。</span></li>
               </ul>
             </div>
 
@@ -1309,12 +1309,10 @@ const RecruiterScreenGuideZhTw = () => {
                 通話後
               </h3>
               <ul className="space-y-3">
-                {["2-4 小時內寄送後續信件", "提到對話中的具體內容", "簡短修正任何薄弱的回答", "繼續投遞其他職缺"].map((item, i) => (
-                  <li key={i} className="flex items-start gap-3">
-                    <GoldCheckBadge />
-                    <span className="text-foreground text-sm">{item}</span>
-                  </li>
-                ))}
+                <li className="flex items-start gap-3"><GoldCheckBadge /><span className="text-foreground text-sm"><a href="#after" className="text-gold underline underline-offset-2 hover:text-gold/80 transition-colors">2-4 小時內寄送後續信件</a></span></li>
+                <li className="flex items-start gap-3"><GoldCheckBadge /><span className="text-foreground text-sm">提到對話中的具體內容</span></li>
+                <li className="flex items-start gap-3"><GoldCheckBadge /><span className="text-foreground text-sm">簡短修正任何薄弱的回答</span></li>
+                <li className="flex items-start gap-3"><GoldCheckBadge /><span className="text-foreground text-sm">繼續投遞其他職缺</span></li>
               </ul>
             </div>
 
@@ -1324,12 +1322,11 @@ const RecruiterScreenGuideZhTw = () => {
                 需要注意的警訊
               </h3>
               <ul className="space-y-3">
-                {["模糊的職缺描述", "閃避薪資資訊", "長期開缺或反覆補人的職位", "雜亂無章的招募流程", "催促你快速決定"].map((item, i) => (
-                  <li key={i} className="flex items-start gap-3">
-                    <GoldCheckBadge />
-                    <span className="text-foreground text-sm">{item}</span>
-                  </li>
-                ))}
+                <li className="flex items-start gap-3"><GoldCheckBadge /><span className="text-foreground text-sm"><a href="#redflags" className="text-gold underline underline-offset-2 hover:text-gold/80 transition-colors">模糊的職缺描述</a></span></li>
+                <li className="flex items-start gap-3"><GoldCheckBadge /><span className="text-foreground text-sm"><a href="#redflags" className="text-gold underline underline-offset-2 hover:text-gold/80 transition-colors">閃避薪資資訊</a></span></li>
+                <li className="flex items-start gap-3"><GoldCheckBadge /><span className="text-foreground text-sm"><a href="#redflags" className="text-gold underline underline-offset-2 hover:text-gold/80 transition-colors">長期開缺或反覆補人的職位</a></span></li>
+                <li className="flex items-start gap-3"><GoldCheckBadge /><span className="text-foreground text-sm"><a href="#redflags" className="text-gold underline underline-offset-2 hover:text-gold/80 transition-colors">雜亂無章的招募流程</a></span></li>
+                <li className="flex items-start gap-3"><GoldCheckBadge /><span className="text-foreground text-sm"><a href="#redflags" className="text-gold underline underline-offset-2 hover:text-gold/80 transition-colors">催促你快速決定</a></span></li>
               </ul>
             </div>
           </div>
@@ -1371,7 +1368,7 @@ const RecruiterScreenGuideZhTw = () => {
       <footer className="py-8 md:py-10 px-5 md:px-6 bg-card border-t border-border">
         <div className="container mx-auto max-w-5xl">
           <div className="flex flex-col md:flex-row justify-between items-center gap-4">
-            <span className="text-sm text-muted-foreground">© 2024 James Bugden. 版權所有。</span>
+            <span className="text-sm text-muted-foreground">© 2026 James Bugden. 版權所有。</span>
             <div className="flex items-center gap-6">
               <a href="https://www.linkedin.com/in/james-bugden/" target="_blank" rel="noopener noreferrer" className="text-muted-foreground hover:text-foreground transition-colors"><Linkedin className="w-5 h-5" /></a>
               <a href="https://www.instagram.com/james.careers/" target="_blank" rel="noopener noreferrer" className="text-muted-foreground hover:text-foreground transition-colors"><InstagramIcon className="w-5 h-5" /></a>

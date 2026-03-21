@@ -76,6 +76,8 @@ function LogoItem({ company }: { company: Company }) {
         />
       ) : (
         <span
+          role="img"
+          aria-label={company.name}
           className="text-base md:text-lg font-bold tracking-tight"
           style={{ color: company.color, opacity: 0.8 }}
         >

@@ -7,6 +7,7 @@ import LanguageToggle from "@/components/LanguageToggle";
 import { AuthHeaderButton } from "@/components/AuthHeaderButton";
 import PageSEO from "@/components/PageSEO";
 import { useTrackGuideProgress } from "@/hooks/useReadingProgress";
+import GuideSignInBanner from "@/components/guides/GuideSignInBanner";
 import { useState, useEffect } from "react";
 
 const SectionNumber = ({ num }: { num: string }) => (
@@ -138,6 +139,8 @@ const ProblemSolvingGuideZhTw = () => {
         </div>
       </section>
 
+      <GuideSignInBanner lang="zh" />
+
       <TableOfContents />
 
       {/* Introduction */}
@@ -176,7 +179,7 @@ const ProblemSolvingGuideZhTw = () => {
 
           <div className="bg-card border border-border rounded-xl p-5 md:p-6">
             <h3 className="font-heading text-lg text-gold mb-4">這份指南包含什麼</h3>
-            <ul className="space-y-2">
+            <ol className="space-y-2">
               {[
                 "五種面試者類型。你是哪一種？（大多數人是混合型。）",
                 "四步驟框架。每一個強大面試回答背後的核心流程。",
@@ -191,9 +194,9 @@ const ProblemSolvingGuideZhTw = () => {
                 "快速參考工具包。每個工具的一頁小抄，包含使用時機和關鍵句。",
                 "如何練習。如何在下一次面試前演練這些工具。",
               ].map((item, i) => (
-                <li key={i} className="flex items-start gap-3"><GoldCheckBadge /><span className="text-foreground text-sm">{item}</span></li>
+                <li key={i} className="flex items-start gap-3"><span className="shrink-0 w-6 h-6 rounded-full bg-gold/20 text-gold text-xs font-bold flex items-center justify-center mt-0.5">{i + 1}</span><span className="text-foreground text-sm">{item}</span></li>
               ))}
-            </ul>
+            </ol>
           </div>
         </div>
       </section>
@@ -1189,7 +1192,7 @@ const ProblemSolvingGuideZhTw = () => {
       <footer className="py-8 md:py-10 px-5 md:px-6 bg-card border-t border-border">
         <div className="container mx-auto max-w-5xl">
           <div className="flex flex-col md:flex-row justify-between items-center gap-4">
-            <span className="text-sm text-muted-foreground">© 2024 James Bugden. All rights reserved.</span>
+            <span className="text-sm text-muted-foreground">© 2026 James Bugden. All rights reserved.</span>
             <div className="flex items-center gap-6">
               <a href="https://www.linkedin.com/in/james-bugden/" target="_blank" rel="noopener noreferrer" className="text-muted-foreground hover:text-foreground transition-colors"><Linkedin className="w-5 h-5" /></a>
               <a href="https://www.instagram.com/james.careers/" target="_blank" rel="noopener noreferrer" className="text-muted-foreground hover:text-foreground transition-colors"><InstagramIcon className="w-5 h-5" /></a>

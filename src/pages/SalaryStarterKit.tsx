@@ -1,10 +1,11 @@
-import { ArrowLeft, ArrowRight, DollarSign } from "lucide-react";
+import { ArrowLeft, ArrowRight, DollarSign, Clock } from "lucide-react";
 import { Link } from "react-router-dom";
 import LanguageToggle from "@/components/LanguageToggle";
 import { AuthHeaderButton } from "@/components/AuthHeaderButton";
 import { Button } from "@/components/ui/button";
 import GuideShareButtons from "@/components/GuideShareButtons";
 import { useTrackGuideProgress } from "@/hooks/useReadingProgress";
+import GuideSignInBanner from "@/components/guides/GuideSignInBanner";
 import ToolkitCallout from "@/components/ToolkitCallout";
 
 const SalaryStarterKit = () => {
@@ -43,11 +44,17 @@ const SalaryStarterKit = () => {
           <p className="text-lg md:text-xl text-cream/80 mb-2">
             Word-for-word scripts for every salary conversation
           </p>
-          <p className="text-base text-cream/60">
+          <p className="text-base text-cream/60 mb-2">
             Copy them. Fill in the blanks. Send.
           </p>
+          <div className="flex items-center justify-center gap-1.5 text-cream/60">
+            <Clock className="w-4 h-4" />
+            <span className="text-sm">10 min read</span>
+          </div>
         </div>
       </section>
+
+      <GuideSignInBanner lang="en" />
 
       {/* Intro */}
       <section className="py-12 px-5 md:px-6 border-b border-border">

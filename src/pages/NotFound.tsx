@@ -23,10 +23,10 @@ const quickLinks = [
     description: "Compare compensation packages side-by-side",
   },
   {
-    to: "/toolkit",
+    to: "/dashboard",
     icon: Briefcase,
-    title: "Negotiation Toolkit",
-    description: "Scripts, templates & salary calculators",
+    title: "Career Dashboard",
+    description: "All your tools, guides & negotiation templates in one place",
   },
   {
     to: "/quiz",

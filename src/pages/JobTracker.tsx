@@ -1,4 +1,5 @@
 import { useState, useEffect, useCallback } from "react";
+import PageSEO from "@/components/PageSEO";
 import { LayoutDashboard, Columns3, Table2, ArrowLeft, Download, Archive, Plus, MoreVertical } from "lucide-react";
 import {
   JobApplication, JobStage,
@@ -81,6 +82,7 @@ export default function JobTracker() {
 
   return (
     <div className="min-h-screen" style={{ backgroundColor: "#FBF7F0" }}>
+      <PageSEO title="Job Tracker — James Bugden" description="Track your job applications, manage your pipeline, and stay organized during your job search." path="/jobs" />
       <OnboardingModal />
       {/* Header */}
       <header className="px-4 sm:px-6 pt-6 pb-4 max-w-6xl mx-auto">

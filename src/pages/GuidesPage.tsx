@@ -1,9 +1,10 @@
 import { Button } from "@/components/ui/button";
-import { Linkedin, ArrowLeft, FileText, Briefcase, MessageSquare, Users, Phone, Bot } from "lucide-react";
+import { Linkedin, ArrowLeft, FileText, Briefcase, MessageSquare, Users, Phone, Bot, Shield, Puzzle, Gamepad2, DollarSign } from "lucide-react";
 import { Link } from "react-router-dom";
 import { InstagramIcon, ThreadsIcon } from "@/components/SocialIcons";
 import LanguageToggle from "@/components/LanguageToggle";
 import { AuthHeaderButton } from "@/components/AuthHeaderButton";
+import PageSEO from "@/components/PageSEO";
 
 interface Guide {
   icon: typeof FileText;
@@ -71,7 +72,7 @@ const guides: Guide[] = [
     icon: Phone,
     title: "How to Pass the Recruiter Screen",
     description: "A Senior Recruiter's end-to-end playbook for passing the screening call with word-for-word examples and salary scripts",
-    href: "/recruiter-screen-guide",
+    href: "/hr-interview-guide",
     category: "Interview Prep",
   },
   // AI & Job Search
@@ -82,9 +83,65 @@ const guides: Guide[] = [
     href: "/ai-job-search-guide",
     category: "AI & Job Search",
   },
+  // Career & Purpose
+  {
+    icon: Briefcase,
+    title: "The Ikigai Career Guide: Build a Career You Won't Quit in 12 Months",
+    description: "Find purpose, flow, and longevity at work using the Japanese concept of ikigai. Includes the Ikigai Career Map, Scorecard, and 90-day action plan.",
+    href: "/ikigai-guide",
+    category: "Career & Purpose",
+  },
+  // Interview Question Bank
+  {
+    icon: MessageSquare,
+    title: "Interview Question Database: 203 Real Questions",
+    description: "Search and filter 203 real interview questions by category, difficulty, and career level — in English and Traditional Chinese",
+    href: "/interview-questions",
+    category: "Interview Prep",
+  },
+  // Job Offer
+  {
+    icon: DollarSign,
+    title: "The Job Offer Playbook: How to Evaluate, Negotiate & Win",
+    description: "A recruiter's complete system for evaluating and negotiating job offers",
+    href: "/job-offer-guide",
+    category: "Negotiation",
+  },
+  // Recruiter Guide
+  {
+    icon: Users,
+    title: "Working With Recruiters: The Insider's Guide",
+    description: "How to build relationships with recruiters and make them work for you",
+    href: "/recruiter-guide",
+    category: "Job Search Strategy",
+  },
+  // Office Politics
+  {
+    icon: Shield,
+    title: "Office Politics Survival Guide",
+    description: "Navigate workplace dynamics, build influence, and protect your career",
+    href: "/office-politics-guide",
+    category: "Job Search Strategy",
+  },
+  // Problem Solving
+  {
+    icon: Puzzle,
+    title: "Problem Solving 101: The Complete Interview Framework",
+    description: "Master structured problem-solving for case interviews and beyond",
+    href: "/problem-solving-guide",
+    category: "Interview Prep",
+  },
+  // Career Game
+  {
+    icon: Gamepad2,
+    title: "The Career Game: Rules Nobody Taught You",
+    description: "Understand the hidden rules of career progression and how to play them",
+    href: "/career-game-guide",
+    category: "Job Search Strategy",
+  },
 ];
 
-const categories = ["LinkedIn", "Resume", "Career Change", "Interview Prep", "AI & Job Search"];
+const categories = ["LinkedIn", "Resume", "Career Change", "Interview Prep", "AI & Job Search", "Career & Purpose", "Negotiation", "Job Search Strategy"];
 
 const GuidesPage = () => {
   return (
@@ -115,6 +172,11 @@ const GuidesPage = () => {
 
       {/* Hero Section */}
       <section className="pt-28 md:pt-36 pb-12 md:pb-16 px-5 md:px-6 bg-background">
+        <PageSEO
+          title="Free Career Guides | James Bugden"
+          description="Practical frameworks and strategies from an active Fortune 100 recruiter to help you land your dream job."
+          path="/guides"
+        />
         <div className="container mx-auto max-w-4xl">
           <Link 
             to="/" 
@@ -144,6 +206,8 @@ const GuidesPage = () => {
                 {category === "Career Change" && <Briefcase className="w-6 h-6 text-gold" />}
                 {category === "Interview Prep" && <MessageSquare className="w-6 h-6 text-gold" />}
                 {category === "AI & Job Search" && <Bot className="w-6 h-6 text-gold" />}
+                {category === "Negotiation" && <DollarSign className="w-6 h-6 text-gold" />}
+                {category === "Job Search Strategy" && <Users className="w-6 h-6 text-gold" />}
                 {category}
               </h2>
               
@@ -186,7 +250,7 @@ const GuidesPage = () => {
         <div className="container mx-auto max-w-4xl">
           <div className="flex flex-col md:flex-row justify-between items-center gap-4">
             <span className="text-sm text-muted-foreground">
-              © 2024 James Bugden. All rights reserved.
+              © 2026 James Bugden. All rights reserved.
             </span>
             <div className="flex items-center gap-6">
               <a href="https://www.linkedin.com/in/james-bugden/" target="_blank" rel="noopener noreferrer" className="text-muted-foreground hover:text-foreground transition-colors">

@@ -1434,12 +1434,6 @@ const YoutingChenReview = () => {
               <p className="text-muted-foreground mt-2">Questions or need clarification on any recommendations? Feel free to reach out. I'm here to help you succeed.</p>
             </div>
 
-            <div className="bg-gold/10 rounded-lg p-4 border border-gold/20">
-              <p className="text-foreground">I work 1-on-1 with a small number of professionals each month—from fixing your resume to prepping for interviews to negotiating your offer.</p>
-              <p className="text-foreground mt-2">The full package: Resume optimization, LinkedIn strategy, interview prep, and salary negotiation. Start to finish.</p>
-              <p className="text-foreground mt-2">I only take 5 new clients per month because I'm still recruiting full-time at Uber.</p>
-              <p className="text-gold font-semibold mt-3">Reply "interested" if you want details.</p>
-            </div>
 
             <p className="text-gold font-semibold mt-6">Best of luck with your applications!</p>
             <p className="text-muted-foreground mt-2">I am here to help you succeed.</p>

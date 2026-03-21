@@ -1,4 +1,5 @@
-import { ArrowLeft, Download, Target, Lightbulb, MessageSquare, AlertTriangle, CheckCircle2, Calendar, HelpCircle, BookOpen } from "lucide-react";
+import { ArrowLeft, Target, Lightbulb, MessageSquare, AlertTriangle, CheckCircle2, Calendar, HelpCircle, BookOpen, Clock } from "lucide-react";
+import { InteractiveChecklist } from "@/components/guides/InteractiveChecklist";
 import { Link } from "react-router-dom";
 import LanguageToggle from "@/components/LanguageToggle";
 import { AuthHeaderButton } from "@/components/AuthHeaderButton";
@@ -8,18 +9,11 @@ import GuideShareButtons from "@/components/GuideShareButtons";
 import { InstagramIcon, ThreadsIcon } from "@/components/SocialIcons";
 import GoldCheckBadge from "@/components/GoldCheckBadge";
 import { useTrackGuideProgress } from "@/hooks/useReadingProgress";
+import GuideSignInBanner from "@/components/guides/GuideSignInBanner";
 
 const InterviewPreparationGuide = () => {
   useTrackGuideProgress("interview-full");
 
-  const handleDownload = () => {
-    const link = document.createElement('a');
-    link.href = '/downloads/Interview_Preparation_Guide.pdf';
-    link.download = 'Interview_Preparation_Guide.pdf';
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
-  };
 
   return (
     <div className="min-h-screen bg-background">
@@ -49,18 +43,17 @@ const InterviewPreparationGuide = () => {
           <p className="text-lg md:text-xl text-cream/80 mb-2">
             Stop Stressing. Start Performing. Get the Job.
           </p>
-          <p className="text-base text-cream/60 mb-6">
+          <p className="text-base text-cream/60 mb-2">
             By James Bugden, Senior Recruiter at Uber
           </p>
-          <Button 
-            onClick={handleDownload}
-            className="bg-gold hover:bg-gold/90 text-executive-green font-semibold px-6 py-3 rounded-lg shadow-lg hover:shadow-xl transition-all duration-300"
-          >
-            <Download className="w-5 h-5 mr-2" />
-            Download PDF Guide
-          </Button>
+          <div className="flex items-center justify-center gap-1.5 text-cream/60 mb-6">
+            <Clock className="w-4 h-4" />
+            <span className="text-sm">45 min read</span>
+          </div>
         </div>
       </section>
+
+      <GuideSignInBanner lang="en" />
 
       {/* Framework Note */}
       <section className="py-8 px-5 md:px-6 bg-card border-b border-border">
@@ -1055,31 +1048,37 @@ const InterviewPreparationGuide = () => {
             {/* Pre-Interview */}
             <div className="bg-background border border-border rounded-lg p-6">
               <h3 className="font-heading text-xl text-gold mb-4">Pre-Interview Checklist</h3>
-              <ul className="space-y-2 text-sm text-foreground">
-                <li>☐ Research company (1 hour)</li>
-                <li>☐ Informational interviews (2 hours)</li>
-                <li>☐ Create 7-10 power examples (1 hour)</li>
-                <li>☐ Prepare SPAR stories (1 hour)</li>
-                <li>☐ Prepare scenario frameworks (1 hour)</li>
-                <li>☐ Practice out loud (1 hour)</li>
-                <li>☐ Mock interview #1 (1 hour)</li>
-                <li>☐ Mock interview #2 (1 hour)</li>
-                <li>☐ Prepare questions to ask (30 min)</li>
-                <li>☐ Plan outfit (15 min)</li>
-              </ul>
+              <InteractiveChecklist
+                guideKey="interview_prep_pre_en"
+                items={[
+                  { label: "Research company (1 hour)" },
+                  { label: "Informational interviews (2 hours)" },
+                  { label: "Create 7-10 power examples (1 hour)" },
+                  { label: "Prepare SPAR stories (1 hour)" },
+                  { label: "Prepare scenario frameworks (1 hour)" },
+                  { label: "Practice out loud (1 hour)" },
+                  { label: "Mock interview #1 (1 hour)" },
+                  { label: "Mock interview #2 (1 hour)" },
+                  { label: "Prepare questions to ask (30 min)" },
+                  { label: "Plan outfit (15 min)" },
+                ]}
+              />
             </div>
 
             {/* Day-Of */}
             <div className="bg-background border border-border rounded-lg p-6">
               <h3 className="font-heading text-xl text-gold mb-4">Day-Of Checklist</h3>
-              <ul className="space-y-2 text-sm text-foreground">
-                <li>☐ Review power examples</li>
-                <li>☐ Arrive 10-15 min early</li>
-                <li>☐ Phone on silent</li>
-                <li>☐ Bring printed resume</li>
-                <li>☐ Bring notebook</li>
-                <li>☐ Smile and make eye contact</li>
-              </ul>
+              <InteractiveChecklist
+                guideKey="interview_prep_dayof_en"
+                items={[
+                  { label: "Review power examples" },
+                  { label: "Arrive 10-15 min early" },
+                  { label: "Phone on silent" },
+                  { label: "Bring printed resume" },
+                  { label: "Bring notebook" },
+                  { label: "Smile and make eye contact" },
+                ]}
+              />
             </div>
           </div>
 
@@ -1087,24 +1086,30 @@ const InterviewPreparationGuide = () => {
             {/* Online Interviews */}
             <div className="bg-background border border-border rounded-lg p-6">
               <h3 className="font-heading text-xl text-gold mb-4">Online Interviews</h3>
-              <ul className="space-y-2 text-sm text-foreground">
-                <li>☐ Test your internet connection</li>
-                <li>☐ Audio</li>
-                <li>☐ Video</li>
-                <li>☐ No clutter in the background</li>
-                <li>☐ Make sure you are in a quiet place</li>
-                <li>☐ The camera should be level with your face</li>
-              </ul>
+              <InteractiveChecklist
+                guideKey="interview_prep_online_en"
+                items={[
+                  { label: "Test your internet connection" },
+                  { label: "Audio" },
+                  { label: "Video" },
+                  { label: "No clutter in the background" },
+                  { label: "Make sure you are in a quiet place" },
+                  { label: "The camera should be level with your face" },
+                ]}
+              />
             </div>
 
             {/* Post-Interview */}
             <div className="bg-background border border-border rounded-lg p-6">
               <h3 className="font-heading text-xl text-gold mb-4">Post-Interview Checklist</h3>
-              <ul className="space-y-2 text-sm text-foreground">
-                <li>☐ Send thank you email within 24 hours</li>
-                <li>☐ Note what went well/needs improvement</li>
-                <li>☐ Follow up if no response by their timeline</li>
-              </ul>
+              <InteractiveChecklist
+                guideKey="interview_prep_post_en"
+                items={[
+                  { label: "Send thank you email within 24 hours" },
+                  { label: "Note what went well/needs improvement" },
+                  { label: "Follow up if no response by their timeline" },
+                ]}
+              />
             </div>
           </div>
         </div>
@@ -1146,12 +1151,6 @@ const InterviewPreparationGuide = () => {
               </p>
             </div>
 
-            <div className="bg-background border border-border rounded-lg p-6">
-              <h3 className="font-semibold text-foreground mb-2">1-on-1 Coaching</h3>
-              <p className="text-muted-foreground">
-                I offer 1-on-1 coaching and resume reviews for professionals targeting high-paying roles.
-              </p>
-            </div>
           </div>
 
           <div className="text-center">
@@ -1168,25 +1167,6 @@ const InterviewPreparationGuide = () => {
         </div>
       </section>
 
-      {/* Download CTA */}
-      <section className="py-12 md:py-16 px-5 md:px-6 bg-background border-t border-border">
-        <div className="container mx-auto max-w-3xl text-center">
-          <h2 className="font-heading text-2xl md:text-3xl text-foreground mb-4">
-            Save This Guide
-          </h2>
-          <p className="text-muted-foreground mb-6">
-            Download the PDF to reference before your next interview.
-          </p>
-          <Button 
-            onClick={handleDownload}
-            size="lg" 
-            className="h-14 px-8 btn-gold font-medium text-base uppercase tracking-wider"
-          >
-            <Download className="w-5 h-5 mr-2" />
-            Download PDF Guide
-          </Button>
-        </div>
-      </section>
 
       <GuideShareButtons />
 
@@ -1203,7 +1183,7 @@ const InterviewPreparationGuide = () => {
               </Link>
             </div>
             <span className="text-sm text-muted-foreground">
-              © 2024 James Bugden. All rights reserved.
+              © 2026 James Bugden. All rights reserved.
             </span>
             <div className="flex items-center gap-6">
               <a href="https://www.linkedin.com/in/james-bugden/" target="_blank" rel="noopener noreferrer" className="text-muted-foreground hover:text-foreground transition-colors">

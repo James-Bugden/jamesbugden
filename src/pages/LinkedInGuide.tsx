@@ -1,4 +1,5 @@
-import { ArrowLeft, Download, Star, Users, FileText, MessageSquare, Search, CheckCircle2, Calendar, Linkedin } from "lucide-react";
+import { ArrowLeft, Star, Users, FileText, MessageSquare, Search, CheckCircle2, Calendar, Linkedin, Clock } from "lucide-react";
+import { InteractiveChecklist } from "@/components/guides/InteractiveChecklist";
 import { Link } from "react-router-dom";
 import LanguageToggle from "@/components/LanguageToggle";
 import { AuthHeaderButton } from "@/components/AuthHeaderButton";
@@ -7,18 +8,11 @@ import { InstagramIcon, ThreadsIcon } from "@/components/SocialIcons";
 import GuideShareButtons from "@/components/GuideShareButtons";
 import GoldCheckBadge from "@/components/GoldCheckBadge";
 import { useTrackGuideProgress } from "@/hooks/useReadingProgress";
+import GuideSignInBanner from "@/components/guides/GuideSignInBanner";
 
 const LinkedInGuide = () => {
   useTrackGuideProgress("linkedin-guide");
 
-  const handleDownload = () => {
-    const link = document.createElement('a');
-    link.href = '/downloads/LinkedIn_Personal_Branding_Mini_Guide.pdf';
-    link.download = 'LinkedIn_Personal_Branding_Mini_Guide.pdf';
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
-  };
 
   return (
     <div className="min-h-screen bg-background">
@@ -53,19 +47,17 @@ const LinkedInGuide = () => {
           <p className="text-lg md:text-xl text-cream/80 mb-2">
             Get Recruiters to Find You
           </p>
-          <p className="text-base text-cream/60 mb-6">
+          <p className="text-base text-cream/60 mb-2">
             By James Bugden, Senior Recruiter
           </p>
-          <Button 
-            onClick={handleDownload}
-            className="bg-gold hover:bg-gold/90 text-executive-green font-semibold px-6 py-3 rounded-lg shadow-lg hover:shadow-xl transition-all duration-300"
-          >
-            <Download className="w-5 h-5 mr-2" />
-            Download PDF Guide
-          </Button>
+          <div className="flex items-center justify-center gap-1.5 text-cream/60 mb-6">
+            <Clock className="w-4 h-4" />
+            <span className="text-sm">15 min read</span>
+          </div>
         </div>
       </section>
 
+      <GuideSignInBanner lang="en" />
       {/* Framework Note */}
       <section className="py-8 px-5 md:px-6 bg-card border-b border-border">
         <div className="container mx-auto max-w-3xl">
@@ -663,42 +655,58 @@ const LinkedInGuide = () => {
           <div className="space-y-6">
             <div className="bg-white/10 backdrop-blur-sm rounded-lg p-6">
               <h3 className="font-heading text-xl text-gold mb-4">Week 1: Foundation</h3>
-              <ul className="space-y-2 text-cream/90">
-                <li>☐ Check your All-Star status on LinkedIn — fill any gaps</li>
-                <li>☐ Update photo and background banner</li>
-                <li>☐ Rewrite headline (write 3-5 options, pick the best)</li>
-                <li>☐ Choose your About section persona</li>
-              </ul>
+              <InteractiveChecklist
+                guideKey="linkedin_guide_wk1_en"
+                variant="dark"
+                items={[
+                  { label: "Check your All-Star status on LinkedIn — fill any gaps" },
+                  { label: "Update photo and background banner" },
+                  { label: "Rewrite headline (write 3-5 options, pick the best)" },
+                  { label: "Choose your About section persona" },
+                ]}
+              />
             </div>
 
             <div className="bg-white/10 backdrop-blur-sm rounded-lg p-6">
               <h3 className="font-heading text-xl text-gold mb-4">Week 2: Power Sections</h3>
-              <ul className="space-y-2 text-cream/90">
-                <li>☐ Write About section using the Five H's format</li>
-                <li>☐ Update top 3 Experience entries with accomplishments (not responsibilities)</li>
-                <li>☐ Clean up Skills — remove irrelevant ones, pin your top 3</li>
-                <li>☐ Add Featured section</li>
-              </ul>
+              <InteractiveChecklist
+                guideKey="linkedin_guide_wk2_en"
+                variant="dark"
+                items={[
+                  { label: "Write About section using the Five H's format" },
+                  { label: "Update top 3 Experience entries with accomplishments (not responsibilities)" },
+                  { label: "Clean up Skills — remove irrelevant ones, pin your top 3" },
+                  { label: "Add Featured section" },
+                ]}
+              />
             </div>
 
             <div className="bg-white/10 backdrop-blur-sm rounded-lg p-6">
               <h3 className="font-heading text-xl text-gold mb-4">Week 3: Social Proof</h3>
-              <ul className="space-y-2 text-cream/90">
-                <li>☐ Send 3-5 recommendation requests using the 6-step process</li>
-                <li>☐ Write 2-3 recommendations for others</li>
-                <li>☐ Give authentic endorsements to colleagues</li>
-                <li>☐ Customize your LinkedIn URL</li>
-              </ul>
+              <InteractiveChecklist
+                guideKey="linkedin_guide_wk3_en"
+                variant="dark"
+                items={[
+                  { label: "Send 3-5 recommendation requests using the 6-step process" },
+                  { label: "Write 2-3 recommendations for others" },
+                  { label: "Give authentic endorsements to colleagues" },
+                  { label: "Customize your LinkedIn URL" },
+                ]}
+              />
             </div>
 
             <div className="bg-white/10 backdrop-blur-sm rounded-lg p-6">
               <h3 className="font-heading text-xl text-gold mb-4">Week 4: Content & Engagement</h3>
-              <ul className="space-y-2 text-cream/90">
-                <li>☐ Apply the 80/20 rule — comment on 5+ posts daily</li>
-                <li>☐ Share 2-3 posts this week (create or curate with your perspective)</li>
-                <li>☐ Use the relationship-building comment strategy</li>
-                <li>☐ Review your profile analytics — what's working?</li>
-              </ul>
+              <InteractiveChecklist
+                guideKey="linkedin_guide_wk4_en"
+                variant="dark"
+                items={[
+                  { label: "Apply the 80/20 rule — comment on 5+ posts daily" },
+                  { label: "Share 2-3 posts this week (create or curate with your perspective)" },
+                  { label: "Use the relationship-building comment strategy" },
+                  { label: "Review your profile analytics — what's working?" },
+                ]}
+              />
             </div>
           </div>
         </div>

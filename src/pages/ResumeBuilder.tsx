@@ -1,5 +1,7 @@
 import { useState, useCallback, useEffect, useRef, useMemo } from "react";
 import { DndContext, closestCenter, KeyboardSensor, PointerSensor, useSensor, useSensors, DragEndEvent } from "@dnd-kit/core";
+import { useSearchParams } from "react-router-dom";
+import PageSEO from "@/components/PageSEO";
 import { SortableContext, verticalListSortingStrategy, arrayMove } from "@dnd-kit/sortable";
 import { restrictToVerticalAxis } from "@dnd-kit/modifiers" ;
 import { SortableSectionCard } from "@/components/resume-builder/SortableSectionCard";
@@ -16,7 +18,16 @@ import { CoverLetterBuilder } from "@/components/cover-letter/CoverLetterBuilder
 import { DocumentDashboard } from "@/components/document-dashboard/DocumentDashboard";
 import { TemplatePickerOverlay } from "@/components/resume-builder/TemplatePickerOverlay";
 import { ImportModal } from "@/components/document-dashboard/ImportModal";
-import { SavedDocument, DocType, updateDocument, getAllDocuments, renameDocument } from "@/lib/documentStore";
+import { CompletenessScore } from "@/components/resume-builder/CompletenessScore";
+import { AnalyzerCTA } from "@/components/resume-builder/AnalyzerCTA";
+import { DesignPhilosophy } from "@/components/resume-builder/DesignPhilosophy";
+
+import { SavedDocument, DocType, updateDocument, getAllDocuments, renameDocument, createDocument, deleteDocument } from "@/lib/documentStore";
+import { AlertDialog, AlertDialogContent, AlertDialogHeader, AlertDialogTitle, AlertDialogDescription, AlertDialogFooter, AlertDialogCancel, AlertDialogAction } from "@/components/ui/alert-dialog";
+import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
+import { Label } from "@/components/ui/label";
+import { supabase } from "@/integrations/supabase/client";
+import { useBuilderAiUsage } from "@/hooks/useBuilderAiUsage";
 import { applyTemplatePreset } from "@/components/resume-builder/templatePresets";
 import { exportToPdf } from "@/lib/pdfExport";
 import { useIsMobile } from "@/hooks/use-mobile";
@@ -26,6 +37,9 @@ import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import FeedbackBox from "@/components/FeedbackBox";
 import { useResumeBuilderLang, useT, getLocalizedSectionTypes, SAMPLE_RESUME_DATA_ZH_TW } from "@/components/resume-builder/i18n";
+import { useNavigate } from "react-router-dom";
+import { AnalyzerPromptDialog } from "@/components/resume-builder/AnalyzerPromptDialog";
+import { AnalyzerSuggestionsPanel, Suggestion, extractSuggestions, applySuggestionToData } from "@/components/resume-builder/AnalyzerSuggestionsPanel";
 
 type ViewMode = "dashboard" | "resume-editor" | "cover-letter-editor";
 
@@ -390,6 +404,9 @@ const ResumeBuilder = () => {
   const { data, setData, customize, updateCustomize, updatePersonalDetails, setSections, updateSection, removeSection } = store;
   const lang = useResumeBuilderLang();
   const t = useT();
+  const builderAiUsage = useBuilderAiUsage();
+  const navigateTo = useNavigate();
+  const [searchParams, setSearchParams] = useSearchParams();
   const localizedSectionTypes = useMemo(() => getLocalizedSectionTypes(lang), [lang]);
 
   /* ── dnd-kit sensors (defined early, used later after pushHistory) ── */
@@ -415,6 +432,125 @@ const ResumeBuilder = () => {
   const [nameValue, setNameValue] = useState("");
   const [editorImportOpen, setEditorImportOpen] = useState(false);
   const isMobile = useIsMobile();
+  const [analyzerImporting, setAnalyzerImporting] = useState(false);
+  const [pageCount, setPageCount] = useState(1);
+  const [showPageWarning, setShowPageWarning] = useState(false);
+  const [justImported, setJustImported] = useState(false);
+  const [analyzerSuggestions, setAnalyzerSuggestions] = useState<Suggestion[]>([]);
+  const [replacePickerOpen, setReplacePickerOpen] = useState(false);
+  const [pendingAnalyzerData, setPendingAnalyzerData] = useState<{ data: any; settings: any; name: string; suggestions: Suggestion[] } | null>(null);
+  const [replaceTargetId, setReplaceTargetId] = useState<string | null>(null);
+
+  const RESUME_LIMIT = 2;
+
+  // Show page warning after import when pages > 2
+  useEffect(() => {
+    if (justImported && pageCount > 2) {
+      setShowPageWarning(true);
+      setJustImported(false);
+    } else if (justImported && pageCount <= 2) {
+      // Give it a moment for preview to recalculate
+      const timer = setTimeout(() => setJustImported(false), 3000);
+      return () => clearTimeout(timer);
+    }
+  }, [justImported, pageCount]);
+
+  const handlePageCount = useCallback((count: number) => {
+    setPageCount(count);
+  }, []);
+
+  // Auto-import from Resume Analyzer
+  const analyzerImportRan = useRef(false);
+  useEffect(() => {
+    if (analyzerImportRan.current) return;
+    const isFromAnalyzer = searchParams.get("from") === "analyzer" || !!sessionStorage.getItem("analyzer-resume-text");
+    if (!isFromAnalyzer) return;
+    const resumeText = sessionStorage.getItem("analyzer-resume-text");
+    if (!resumeText) return;
+
+    // Mark as consumed immediately to prevent re-triggering on re-renders or re-visits
+    analyzerImportRan.current = true;
+
+    const analysisRaw = sessionStorage.getItem("analyzer-analysis-result");
+    let analysisResult: any = null;
+    try { analysisResult = analysisRaw ? JSON.parse(analysisRaw) : null; } catch {}
+
+    // Clear sessionStorage eagerly so a refresh won't re-trigger
+    sessionStorage.removeItem("analyzer-resume-text");
+    sessionStorage.removeItem("analyzer-analysis-result");
+
+    const withTimeout = <T,>(promise: Promise<T>, ms: number): Promise<T> =>
+      Promise.race([
+        promise,
+        new Promise<never>((_, reject) => setTimeout(() => reject(new Error("Request timed out")), ms)),
+      ]);
+
+    setAnalyzerImporting(true);
+    (async () => {
+      try {
+        if (builderAiUsage.importLimitReached) {
+          toast({ title: lang === "zh-tw" ? "本月 AI 匯入額度已用完" : "Monthly AI import limit reached", description: lang === "zh-tw" ? "每月限 2 次 AI 匯入。額度下月初重置。" : "You can import up to 2 resumes per month with AI. Resets next month.", variant: "destructive" });
+          setSearchParams({}, { replace: true });
+          setAnalyzerImporting(false);
+          return;
+        }
+        const { data: parsed, error } = await withTimeout(
+          supabase.functions.invoke("parse-resume-to-builder", {
+            body: { resumeText, analysisResult },
+          }),
+          60000
+        );
+
+        if (error || !parsed || parsed.error) {
+          toast({ title: "Import failed", description: parsed?.error || "Could not parse resume", variant: "destructive" });
+          setAnalyzerImporting(false);
+          return;
+        }
+
+        const docName = parsed.personalDetails?.fullName
+          ? `${parsed.personalDetails.fullName} Resume`
+          : "Imported Resume";
+        const tempDoc = createDocument("resume", "__temp__");
+        const classicSettings = { ...applyTemplatePreset(tempDoc.settings as any, "classic"), fontSize: 9, lineHeight: 1.2, marginY: 7 };
+        deleteDocument(tempDoc.id); // just needed settings shape
+
+        const sug = analysisResult ? extractSuggestions(analysisResult) : [];
+        const allDocs = getAllDocuments();
+        const resumes = allDocs.filter((d) => d.type === "resume");
+
+        if (resumes.length >= RESUME_LIMIT) {
+          // At limit — ask user which to replace
+          setPendingAnalyzerData({ data: parsed, settings: classicSettings, name: docName, suggestions: sug });
+          setReplaceTargetId(resumes[0]?.id || null);
+          setReplacePickerOpen(true);
+          setAnalyzerImporting(false);
+          return;
+        }
+
+        // Under limit — create normally
+        const doc = createDocument("resume", docName);
+        updateDocument(doc.id, { data: parsed, settings: classicSettings });
+        store.setData(parsed);
+        store.updateCustomize(classicSettings);
+        builderAiUsage.recordImport();
+        setActiveDocId(doc.id);
+        setViewMode("resume-editor");
+        setActiveTab("content");
+
+        toast({ title: lang === "zh-tw" ? "履歷已匯入！" : "Resume imported!", description: lang === "zh-tw" ? "已使用 Classic 模板匯入。可在下方編輯並下載。" : "Your resume has been imported with the Classic template. Edit and download it below." });
+
+        if (sug.length > 0) setAnalyzerSuggestions(sug);
+
+        setSearchParams({}, { replace: true });
+      } catch (e) {
+        console.error("Analyzer import error:", e);
+        setSearchParams({}, { replace: true });
+        toast({ title: "Import failed", description: "Something went wrong. Please try again.", variant: "destructive" });
+      } finally {
+        setAnalyzerImporting(false);
+      }
+    })();
+  }, [searchParams]);
 
   // Undo/redo
   const historyRef = useRef<{ past: any[]; future: any[] }>({ past: [], future: [] });
@@ -581,7 +717,7 @@ const ResumeBuilder = () => {
 
   const handleImported = useCallback((doc: SavedDocument) => {
     if (doc.type === "resume") {
-      const classicSettings = applyTemplatePreset(doc.settings as any, "classic");
+      const classicSettings = { ...applyTemplatePreset(doc.settings as any, "classic"), fontSize: 9, lineHeight: 1.2, marginY: 7 };
       store.setData(doc.data as any);
       store.updateCustomize(classicSettings);
       updateDocument(doc.id, { settings: classicSettings });
@@ -589,6 +725,7 @@ const ResumeBuilder = () => {
       setViewMode("resume-editor");
       setActiveTab("content");
       historyRef.current = { past: [], future: [] };
+      setJustImported(true);
     } else {
       handleOpenDocument(doc);
     }
@@ -613,6 +750,7 @@ const ResumeBuilder = () => {
       pushHistory();
       store.setData(doc.data as any);
       toast({ title: t("contentImported"), description: t("contentImportedDesc") });
+      setJustImported(true);
     }
     setEditorImportOpen(false);
   }, [store, pushHistory]);
@@ -624,6 +762,16 @@ const ResumeBuilder = () => {
     }
     setEditingName(false);
   };
+
+  if (analyzerImporting) {
+    return (
+      <div className="min-h-screen flex flex-col items-center justify-center gap-4" style={{ backgroundColor: BRAND.cream }}>
+        <Loader2 className="w-8 h-8 animate-spin" style={{ color: BRAND.gold }} />
+        <p className="text-sm font-medium" style={{ color: BRAND.text }}>Importing your resume...</p>
+        <p className="text-xs" style={{ color: BRAND.textSecondary }}>Parsing content and using my personal custom design</p>
+      </div>
+    );
+  }
 
   if (viewMode === "dashboard") {
     return (
@@ -663,7 +811,7 @@ const ResumeBuilder = () => {
     <EditorSkeleton />
   ) : activeTab === "content" ? (
     <div className="animate-fade-in">
-      <div className="max-w-2xl mx-auto p-4 md:p-6 space-y-3">
+      <div className="max-w-2xl mx-auto p-3 sm:p-4 md:p-6 space-y-3">
         {/* Import content link */}
         <div className="flex items-center justify-end mb-1">
           <TooltipProvider delayDuration={300}>
@@ -682,6 +830,30 @@ const ResumeBuilder = () => {
             </Tooltip>
           </TooltipProvider>
         </div>
+
+        {/* Page count warning after import */}
+        {showPageWarning && (
+          <div className="flex items-start gap-2 rounded-lg border border-amber-300 bg-amber-50 p-3 text-sm" style={{ color: BRAND.text }}>
+            <span className="text-amber-600 mt-0.5 flex-shrink-0">⚠️</span>
+            <div className="flex-1">
+              <p className="font-medium text-amber-800">
+                {lang === "zh-tw" ? "建議將履歷縮減為 2 頁以內" : "We recommend keeping your resume to 2 pages max"}
+              </p>
+              <p className="text-xs text-amber-700 mt-0.5">
+                {lang === "zh-tw"
+                  ? "大多數招募經理只花 6-10 秒瀏覽一份履歷。精簡內容能讓重點更突出。"
+                  : "Most recruiters spend 6–10 seconds scanning a resume. Trim to keep the strongest content visible."}
+              </p>
+            </div>
+            <button
+              onClick={() => setShowPageWarning(false)}
+              className="text-amber-400 hover:text-amber-600 transition-colors flex-shrink-0 mt-0.5"
+              aria-label="Dismiss"
+            >
+              ✕
+            </button>
+          </div>
+        )}
 
         {/* Personal Details */}
         <PersonalDetailsCard details={data.personalDetails} onChange={(u) => { pushHistory(); updatePersonalDetails(u); }} />
@@ -727,6 +899,12 @@ const ResumeBuilder = () => {
           </div>
         )}
 
+        {/* Completeness score */}
+        <CompletenessScore data={data} />
+
+        {/* Analyzer CTA */}
+        <AnalyzerCTA fromAnalyzer={searchParams.get("from") === "analyzer" || !!sessionStorage.getItem("analyzer-resume-text")} resumeData={data} />
+
         {/* Add Content button — gradient pill */}
         <div className="flex justify-center pt-2">
           <TooltipProvider delayDuration={300}>
@@ -734,7 +912,7 @@ const ResumeBuilder = () => {
               <TooltipTrigger asChild>
                 <button
                   onClick={() => setModalOpen(true)}
-                  className="flex items-center justify-center gap-2 px-8 py-3 rounded-full text-white font-semibold text-sm transition-all hover:opacity-90 active:scale-[0.98] shadow-md"
+                  className="flex items-center justify-center gap-2 px-8 py-3 rounded-full text-white font-semibold text-sm transition-all hover:opacity-90 active:scale-[0.98] shadow-md min-h-[44px]"
                   style={{ background: "linear-gradient(135deg, #D4930D 0%, #e8a520 50%, #f0c060 100%)" }}
                 >
                   <Plus className="w-4.5 h-4.5" /> {t("addContent")}
@@ -749,94 +927,117 @@ const ResumeBuilder = () => {
   ) : activeTab === "customize" ? (
     <div className="animate-fade-in">
       <CustomizePanel settings={customize} onChange={updateCustomize} sections={data.sections} resumeData={data} />
+      <div className="max-w-2xl mx-auto px-3 sm:px-4 md:px-6 pb-6">
+        <DesignPhilosophy />
+      </div>
     </div>
   ) : null;
 
   return (
     <div className="h-screen flex flex-col" style={{ backgroundColor: BRAND.cream }}>
-      {/* ── Simplified top bar ─────────────────────────── */}
-      <div className="sticky top-0 z-30 flex items-center justify-between bg-white border-b px-4 h-14" style={{ borderColor: BRAND.border }}>
-        {/* Left: Back + editable name */}
-        <div className="flex items-center gap-3 min-w-0">
-          <TooltipProvider delayDuration={300}>
-            <Tooltip>
-              <TooltipTrigger asChild>
-                <button
-                  onClick={handleBackToDashboard}
-                  className="flex items-center gap-1 text-sm transition-colors flex-shrink-0 hover:opacity-80"
-                  style={{ color: BRAND.textSecondary }}
-                >
-                  <ArrowLeft className="w-3.5 h-3.5" />
-                   <span className="hidden sm:inline">{t("dashboard")}</span>
-                </button>
-              </TooltipTrigger>
-              <TooltipContent side="bottom" className="text-xs">{t("dashboard")}</TooltipContent>
-            </Tooltip>
-          </TooltipProvider>
-          <span className="text-gray-300">|</span>
-          {editingName ? (
-            <input
-              autoFocus
-              value={nameValue}
-              onChange={(e) => setNameValue(e.target.value)}
-              onBlur={handleRenameSave}
-              onKeyDown={(e) => { if (e.key === "Enter") handleRenameSave(); if (e.key === "Escape") setEditingName(false); }}
-              className="text-sm font-medium bg-gray-50 border rounded px-2 py-1 outline-none min-w-[120px]"
-              style={{ color: BRAND.text, borderColor: BRAND.border }}
-            />
-          ) : (
-            <button
-              onClick={() => { setEditingName(true); setNameValue(currentDocName); }}
-              className="text-sm font-medium transition-colors truncate max-w-[160px] hover:opacity-70"
-              style={{ color: BRAND.text }}
-              title={t("clickToRename")}
-            >
-              {currentDocName}
-            </button>
-          )}
-        </div>
-
-        {/* Center: Content | Customize toggle */}
-        <div className="flex items-center gap-0.5 bg-gray-100 rounded-lg p-0.5">
-          <button
-            onClick={() => setActiveTab("content")}
-            className={cn(
-              "flex items-center gap-1.5 px-4 py-1.5 rounded-md text-sm font-medium transition-all",
-              activeTab === "content"
-                ? "bg-white shadow-sm"
-                : "hover:opacity-80"
+      <PageSEO title="Free Resume Builder — James Bugden" description="Build a recruiter-approved resume from scratch using proven templates. Export to PDF instantly." path="/resume" />
+      {/* ── Top bar — stacks on mobile ─────────────────────────── */}
+      <div className="sticky top-0 z-30 bg-white border-b" style={{ borderColor: BRAND.border }}>
+        {/* Row 1: Back + name + download */}
+        <div className="flex items-center justify-between px-3 sm:px-4 h-12 sm:h-14">
+          <div className="flex items-center gap-2 sm:gap-3 min-w-0 flex-1">
+            <TooltipProvider delayDuration={300}>
+              <Tooltip>
+                <TooltipTrigger asChild>
+                  <button
+                    onClick={handleBackToDashboard}
+                    className="flex items-center gap-1 text-sm transition-colors flex-shrink-0 hover:opacity-80 min-h-[44px] min-w-[44px] justify-center sm:justify-start sm:min-w-0"
+                    style={{ color: BRAND.textSecondary }}
+                  >
+                    <ArrowLeft className="w-4 h-4 sm:w-3.5 sm:h-3.5" />
+                    <span className="hidden sm:inline">{t("dashboard")}</span>
+                  </button>
+                </TooltipTrigger>
+                <TooltipContent side="bottom" className="text-xs">{t("dashboard")}</TooltipContent>
+              </Tooltip>
+            </TooltipProvider>
+            <span className="text-gray-300 hidden sm:inline">|</span>
+            {editingName ? (
+              <input
+                autoFocus
+                value={nameValue}
+                onChange={(e) => setNameValue(e.target.value)}
+                onBlur={handleRenameSave}
+                onKeyDown={(e) => { if (e.key === "Enter") handleRenameSave(); if (e.key === "Escape") setEditingName(false); }}
+                className="text-sm font-medium bg-gray-50 border rounded px-2 py-1 outline-none min-w-[100px] max-w-[160px]"
+                style={{ color: BRAND.text, borderColor: BRAND.border }}
+              />
+            ) : (
+              <button
+                onClick={() => { setEditingName(true); setNameValue(currentDocName); }}
+                className="text-sm font-medium transition-colors truncate max-w-[120px] sm:max-w-[160px] hover:opacity-70"
+                style={{ color: BRAND.text }}
+                title={t("clickToRename")}
+              >
+                {currentDocName}
+              </button>
             )}
-            style={{ color: activeTab === "content" ? BRAND.text : BRAND.textSecondary }}
-          >
-            <FileText className="w-3.5 h-3.5" />
-            {t("content")}
-          </button>
-          <button
-            onClick={() => setActiveTab("customize")}
-            className={cn(
-              "flex items-center gap-1.5 px-4 py-1.5 rounded-md text-sm font-medium transition-all",
-              activeTab === "customize"
-                ? "bg-white shadow-sm"
-                : "hover:opacity-80"
-            )}
-            style={{ color: activeTab === "customize" ? BRAND.text : BRAND.textSecondary }}
-          >
-            <Palette className="w-3.5 h-3.5" />
-            {t("customize")}
-          </button>
-        </div>
-
-        {/* Right: Save indicator + Download */}
-        <div className="flex items-center gap-3">
-          <div className="hidden sm:block">
-            <SaveIndicator saving={saving} />
           </div>
-          <DownloadDropdown
-            downloading={downloading}
-            pageFormat={customize.pageFormat || "a4"}
-            docName={currentDocName}
-            onDownload={handleDownload}
-          />
+
+          <div className="flex items-center gap-2 sm:gap-3 flex-shrink-0">
+            <div className="hidden sm:block">
+              <SaveIndicator saving={saving} />
+            </div>
+            <button
+              onClick={() => navigateTo(lang === "zh-tw" ? "/resume" : "/zh-tw/resume")}
+              className="hidden sm:flex items-center gap-1 px-2.5 py-1.5 text-xs font-semibold rounded-md transition-colors hover:opacity-80"
+              style={{ backgroundColor: `${BRAND.gold}20`, color: BRAND.gold, border: `1px solid ${BRAND.gold}40` }}
+            >
+              {lang === "zh-tw" ? "EN" : "中文"}
+            </button>
+            <DownloadDropdown
+              downloading={downloading}
+              pageFormat={customize.pageFormat || "a4"}
+              docName={currentDocName}
+              onDownload={handleDownload}
+            />
+          </div>
+        </div>
+
+        {/* Row 2: Content/Customize toggle — always visible, centered */}
+        <div className="flex items-center justify-center px-3 sm:px-4 pb-2 gap-2">
+          <div className="flex items-center gap-0.5 bg-gray-100 rounded-lg p-0.5">
+            <button
+              onClick={() => setActiveTab("content")}
+              className={cn(
+                "flex items-center gap-1.5 px-3 sm:px-4 py-1.5 rounded-md text-sm font-medium transition-all",
+                activeTab === "content"
+                  ? "bg-white shadow-sm"
+                  : "hover:opacity-80"
+              )}
+              style={{ color: activeTab === "content" ? BRAND.text : BRAND.textSecondary }}
+            >
+              <FileText className="w-3.5 h-3.5" />
+              {t("content")}
+            </button>
+            <button
+              onClick={() => setActiveTab("customize")}
+              className={cn(
+                "flex items-center gap-1.5 px-3 sm:px-4 py-1.5 rounded-md text-sm font-medium transition-all",
+                activeTab === "customize"
+                  ? "bg-white shadow-sm"
+                  : "hover:opacity-80"
+              )}
+              style={{ color: activeTab === "customize" ? BRAND.text : BRAND.textSecondary }}
+            >
+              <Palette className="w-3.5 h-3.5" />
+              {t("customize")}
+            </button>
+          </div>
+          {/* Mobile-only lang toggle */}
+          <button
+            onClick={() => navigateTo(lang === "zh-tw" ? "/resume" : "/zh-tw/resume")}
+            className="sm:hidden flex items-center gap-1 px-2 py-1.5 text-xs font-semibold rounded-md transition-colors hover:opacity-80 min-h-[36px]"
+            style={{ backgroundColor: `${BRAND.gold}20`, color: BRAND.gold, border: `1px solid ${BRAND.gold}40` }}
+          >
+            
+            {lang === "zh-tw" ? "EN" : "中"}
+          </button>
         </div>
       </div>
 
@@ -848,9 +1049,20 @@ const ResumeBuilder = () => {
             {editorContent}
           </div>
           <div className="flex-1 h-full relative">
-            <ResumePreview data={data} customize={customize} pdfTargetId="resume-pdf-target" onEditSection={handleEditSection} onColorChange={(f, c) => updateCustomize({ [f]: c } as any)} onContentEdit={handleContentEdit} />
+            <ResumePreview data={data} customize={customize} pdfTargetId="resume-pdf-target" onEditSection={handleEditSection} onColorChange={(f, c) => updateCustomize({ [f]: c } as any)} onContentEdit={handleContentEdit} onPageCount={handlePageCount} />
+            <AnalyzerSuggestionsPanel
+              suggestions={analyzerSuggestions}
+              onApply={(s) => {
+                pushHistory();
+                const updated = applySuggestionToData(data, s);
+                store.setData(updated);
+                setAnalyzerSuggestions(prev => prev.filter(x => x.id !== s.id));
+                toast({ title: "Suggestion applied", description: "The improvement has been applied to your resume." });
+              }}
+              onDismiss={(id) => setAnalyzerSuggestions(prev => prev.filter(x => x.id !== id))}
+            />
             <div className="absolute bottom-4 left-4 z-20">
-              <FeedbackBox subject="Resume Builder Feedback" />
+              <FeedbackBox subject="Resume Builder Feedback" locale={lang} />
             </div>
           </div>
         </div>
@@ -864,9 +1076,9 @@ const ResumeBuilder = () => {
         {!mobilePreview && (
           <button
             onClick={() => setMobilePreview(true)}
-            className="lg:hidden fixed bottom-20 right-4 z-40 w-14 h-14 rounded-full shadow-lg flex items-center justify-center hover:shadow-xl active:scale-95 transition-all"
+            className="lg:hidden fixed bottom-24 right-4 z-40 w-14 h-14 rounded-full shadow-lg flex items-center justify-center hover:shadow-xl active:scale-95 transition-all"
             style={{ backgroundColor: BRAND.green, border: `1px solid ${BRAND.border}` }}
-            title="Preview"
+            aria-label={t("preview")}
           >
             <Eye className="w-5 h-5 text-white" />
           </button>
@@ -875,9 +1087,20 @@ const ResumeBuilder = () => {
         {/* Mobile preview overlay */}
         {mobilePreview && (
           <MobilePreviewOverlay onClose={() => setMobilePreview(false)} onDownload={() => handleDownload()} downloading={downloading}>
-            <ResumePreview data={data} customize={customize} pdfTargetId="resume-pdf-target" onEditSection={handleEditSection} onColorChange={(f, c) => updateCustomize({ [f]: c } as any)} onContentEdit={handleContentEdit} />
+            <ResumePreview data={data} customize={customize} pdfTargetId="resume-pdf-target" onEditSection={handleEditSection} onColorChange={(f, c) => updateCustomize({ [f]: c } as any)} onContentEdit={handleContentEdit} onPageCount={handlePageCount} />
+            <AnalyzerSuggestionsPanel
+              suggestions={analyzerSuggestions}
+              onApply={(s) => {
+                pushHistory();
+                const updated = applySuggestionToData(data, s);
+                store.setData(updated);
+                setAnalyzerSuggestions(prev => prev.filter(x => x.id !== s.id));
+                toast({ title: "Suggestion applied", description: "The improvement has been applied to your resume." });
+              }}
+              onDismiss={(id) => setAnalyzerSuggestions(prev => prev.filter(x => x.id !== id))}
+            />
             <div className="absolute bottom-4 left-4 z-20">
-              <FeedbackBox subject="Resume Builder Feedback" />
+              <FeedbackBox subject="Resume Builder Feedback" locale={lang} />
             </div>
           </MobilePreviewOverlay>
         )}
@@ -899,6 +1122,95 @@ const ResumeBuilder = () => {
 
       {/* Import into existing resume */}
       <ImportModal open={editorImportOpen} onClose={() => setEditorImportOpen(false)} type="resume" onImported={handleEditorImported} />
+      {viewMode === "resume-editor" && <AnalyzerPromptDialog fromAnalyzer={searchParams.get("from") === "analyzer" || !!sessionStorage.getItem("analyzer-resume-text")} />}
+
+      {/* Replace picker dialog when at resume limit */}
+      <AlertDialog open={replacePickerOpen} onOpenChange={setReplacePickerOpen}>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>{lang === "zh-tw" ? "履歷數量已達上限" : "Resume limit reached"}</AlertDialogTitle>
+            <AlertDialogDescription>
+              {lang === "zh-tw"
+                ? `你最多可以有 ${RESUME_LIMIT} 份履歷。選擇一份要取代的履歷：`
+                : `You can have up to ${RESUME_LIMIT} resumes. Choose which one to replace with your new import:`}
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+
+          {/* Incoming resume preview */}
+          {pendingAnalyzerData && (() => {
+            const pd = pendingAnalyzerData.data as import("@/components/resume-builder/types").ResumeData;
+            const incomingName = pd?.personalDetails?.fullName || "";
+            const incomingTitle = pd?.personalDetails?.professionalTitle || "";
+            const incomingSub = [incomingName, incomingTitle].filter(Boolean).join(" · ");
+            return (
+              <div className="rounded-lg border-2 border-primary bg-primary/5 p-3 mb-1">
+                <div className="flex items-center gap-2 mb-1">
+                  <span className="text-[10px] font-semibold uppercase tracking-wider text-primary bg-primary/10 px-2 py-0.5 rounded-full">
+                    {lang === "zh-tw" ? "新匯入" : "New Import"}
+                  </span>
+                </div>
+                <p className="text-sm font-medium">{pendingAnalyzerData.name}</p>
+                {incomingSub && <p className="text-xs text-muted-foreground mt-0.5">{incomingSub}</p>}
+              </div>
+            );
+          })()}
+
+          <p className="text-xs font-medium text-muted-foreground">
+            {lang === "zh-tw" ? "選擇要取代的履歷：" : "Select which resume to replace:"}
+          </p>
+          <RadioGroup value={replaceTargetId || ""} onValueChange={setReplaceTargetId} className="gap-3">
+          {getAllDocuments().filter(d => d.type === "resume").map(doc => {
+              const rd = doc.data as import("@/components/resume-builder/types").ResumeData;
+              const personName = rd?.personalDetails?.fullName || "";
+              const personTitle = rd?.personalDetails?.professionalTitle || "";
+              const subtitle = [personName, personTitle].filter(Boolean).join(" · ");
+              return (
+                <div key={doc.id} className={cn("flex items-center space-x-3 rounded-lg border p-3 cursor-pointer transition-colors", replaceTargetId === doc.id ? "border-destructive bg-destructive/5" : "hover:bg-muted/50")} onClick={() => setReplaceTargetId(doc.id)}>
+                  <RadioGroupItem value={doc.id} id={`replace-${doc.id}`} />
+                  <Label htmlFor={`replace-${doc.id}`} className="cursor-pointer flex-1">
+                    <div className="flex items-center justify-between">
+                      <span className="font-medium">{doc.name}</span>
+                      <span className="text-xs text-muted-foreground">
+                        {new Date(doc.updatedAt).toLocaleDateString()}
+                      </span>
+                    </div>
+                    {subtitle && <p className="text-xs text-muted-foreground mt-0.5">{subtitle}</p>}
+                  </Label>
+                </div>
+              );
+            })}
+          </RadioGroup>
+          <AlertDialogFooter>
+            <AlertDialogCancel onClick={() => { setReplacePickerOpen(false); setPendingAnalyzerData(null); }}>
+              {lang === "zh-tw" ? "取消" : "Cancel"}
+            </AlertDialogCancel>
+            <AlertDialogAction
+              disabled={!replaceTargetId}
+              onClick={() => {
+                if (!replaceTargetId || !pendingAnalyzerData) return;
+                deleteDocument(replaceTargetId);
+                const doc = createDocument("resume", pendingAnalyzerData.name);
+                updateDocument(doc.id, { data: pendingAnalyzerData.data, settings: pendingAnalyzerData.settings });
+                store.setData(pendingAnalyzerData.data);
+                store.updateCustomize(pendingAnalyzerData.settings);
+                builderAiUsage.recordImport();
+                setActiveDocId(doc.id);
+                setViewMode("resume-editor");
+                setActiveTab("content");
+                toast({ title: lang === "zh-tw" ? "履歷已匯入！" : "Resume imported!", description: lang === "zh-tw" ? "已取代選取的履歷。" : "The selected resume has been replaced." });
+                if (pendingAnalyzerData.suggestions.length > 0) setAnalyzerSuggestions(pendingAnalyzerData.suggestions);
+                sessionStorage.removeItem("analyzer-resume-text");
+                sessionStorage.removeItem("analyzer-analysis-result");
+                setSearchParams({}, { replace: true });
+                setPendingAnalyzerData(null);
+                setReplacePickerOpen(false);
+              }}
+            >
+              {lang === "zh-tw" ? "取代並匯入" : "Replace & Import"}
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
     </div>
   );
 };

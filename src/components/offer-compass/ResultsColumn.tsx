@@ -103,15 +103,6 @@ export default function ResultsColumn({ scenario, currency, scenarios, activeId 
             </div>
           </div>
 
-        {/* Negotiate CTA */}
-        <a
-          href="https://james.careers/#coaching"
-          target="_blank"
-          rel="noopener noreferrer"
-          className="inline-flex items-center gap-1 text-xs text-muted-foreground hover:text-foreground mt-3 transition-colors"
-        >
-          Want help negotiating this? <span className="text-gold">→</span>
-        </a>
       </div>
 
       {/* Card 2: Pie Chart + 4-Year Projection — only shown when unlocked */}

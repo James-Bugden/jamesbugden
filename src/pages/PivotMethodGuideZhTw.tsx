@@ -1,4 +1,5 @@
-import { ArrowLeft, Download, Target, Compass, Search, FlaskConical, Rocket, Users, CheckCircle2, AlertTriangle, Linkedin, Calendar, TrendingUp, Zap, BarChart3, Lightbulb, RefreshCw } from "lucide-react";
+import { ArrowLeft, Target, Compass, Search, FlaskConical, Rocket, Users, CheckCircle2, AlertTriangle, Linkedin, Calendar, TrendingUp, Zap, BarChart3, Lightbulb, RefreshCw, Clock } from "lucide-react";
+import { InteractiveChecklist } from "@/components/guides/InteractiveChecklist";
 import { Link, useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { InstagramIcon, ThreadsIcon } from "@/components/SocialIcons";
@@ -6,19 +7,12 @@ import GoldCheckBadge from "@/components/GoldCheckBadge";
 import GuideShareButtons from "@/components/GuideShareButtons";
 import { AuthHeaderButton } from "@/components/AuthHeaderButton";
 import { useTrackGuideProgress } from "@/hooks/useReadingProgress";
+import GuideSignInBanner from "@/components/guides/GuideSignInBanner";
 
 const PivotMethodGuideZhTw = () => {
   useTrackGuideProgress("pivot-guide");
   const navigate = useNavigate();
 
-  const handleDownload = () => {
-    const link = document.createElement('a');
-    link.href = '/downloads/ZH_The_Pivot_Method_Career_Change_Guide.pdf';
-    link.download = 'ZH_The_Pivot_Method_Career_Change_Guide.pdf';
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
-  };
 
   return (
     <div className="min-h-screen bg-background">
@@ -58,18 +52,17 @@ const PivotMethodGuideZhTw = () => {
           <p className="text-lg md:text-xl text-cream/80 mb-2">
             招募人員的戰術指南
           </p>
-          <p className="text-base text-cream/60 mb-6">
+          <p className="text-base text-cream/60 mb-2">
             作者：James Bugden，資深招募顧問
           </p>
-          <Button 
-            onClick={handleDownload}
-            className="bg-gold hover:bg-gold/90 text-executive-green font-semibold px-6 py-3 rounded-lg shadow-lg hover:shadow-xl transition-all duration-300"
-          >
-            <Download className="w-5 h-5 mr-2" />
-            下載 PDF 指南
-          </Button>
+          <div className="flex items-center justify-center gap-1.5 text-cream/60 mb-6">
+            <Clock className="w-4 h-4" />
+            <span className="text-sm">40 分鐘閱讀</span>
+          </div>
         </div>
       </section>
+
+      <GuideSignInBanner lang="zh" />
 
       {/* Framework Note */}
       <section className="py-8 px-5 md:px-6 bg-card border-b border-border">
@@ -681,47 +674,47 @@ const PivotMethodGuideZhTw = () => {
           <div className="space-y-6">
             <div className="bg-white/10 backdrop-blur-sm rounded-lg p-6">
               <h3 className="font-heading text-xl text-gold mb-4">🌱 階段 1：種植 — 設定你的基礎</h3>
-              <ul className="space-y-2 text-cream/90 text-sm">
-                <li>☐ 校準指南針：定義價值觀、快樂公式、不可妥協事項</li>
-                <li>☐ 定下目標：從現在起一年的願景</li>
-                <li>☐ 為引擎加油：識別優勢、什麼有效</li>
-                <li>☐ 資助你的跑道：建立 3-6 個月的儲蓄</li>
-              </ul>
+              <InteractiveChecklist guideKey="pivot_ref_plant_zh" lang="zh" variant="dark" items={[
+                { label: "校準指南針：定義價值觀、快樂公式、不可妥協事項" },
+                { label: "定下目標：從現在起一年的願景" },
+                { label: "為引擎加油：識別優勢、什麼有效" },
+                { label: "資助你的跑道：建立 3-6 個月的儲蓄" },
+              ]} />
             </div>
 
             <div className="bg-white/10 backdrop-blur-sm rounded-lg p-6">
               <h3 className="font-heading text-xl text-gold mb-4">🔍 階段 2：掃描 — 收集情報</h3>
-              <ul className="space-y-2 text-cream/90 text-sm">
-                <li>☐ 加強你的替補席：擴展人脈網，找到顧問</li>
-                <li>☐ 彌合差距：評估所需技能，創建學習計劃</li>
-                <li>☐ 讓自己可被發現：建立能見度，讓人們知道你在探索</li>
-              </ul>
+              <InteractiveChecklist guideKey="pivot_ref_scan_zh" lang="zh" variant="dark" items={[
+                { label: "加強你的替補席：擴展人脈網，找到顧問" },
+                { label: "彌合差距：評估所需技能，創建學習計劃" },
+                { label: "讓自己可被發現：建立能見度，讓人們知道你在探索" },
+              ]} />
             </div>
 
             <div className="bg-white/10 backdrop-blur-sm rounded-lg p-6">
               <h3 className="font-heading text-xl text-gold mb-4">🧪 階段 3：試點 — 在承諾前測試</h3>
-              <ul className="space-y-2 text-cream/90 text-sm">
-                <li>☐ 運行小實驗：低風險、低成本測試</li>
-                <li>☐ 數量勝過質量：運行 5-10 個試點</li>
-                <li>☐ 暫停和審查：什麼有效？什麼無效？</li>
-              </ul>
+              <InteractiveChecklist guideKey="pivot_ref_pilot_zh" lang="zh" variant="dark" items={[
+                { label: "運行小實驗：低風險、低成本測試" },
+                { label: "數量勝過質量：運行 5-10 個試點" },
+                { label: "暫停和審查：什麼有效？什麼無效？" },
+              ]} />
             </div>
 
             <div className="bg-white/10 backdrop-blur-sm rounded-lg p-6">
               <h3 className="font-heading text-xl text-gold mb-4">🚀 階段 4：啟動 — 做出舉動</h3>
-              <ul className="space-y-2 text-cream/90 text-sm">
-                <li>☐ 定義標準：在你啟動之前什麼必須是真的？</li>
-                <li>☐ 先建立，勇氣第二</li>
-                <li>☐ 將決定與對話分開</li>
-              </ul>
+              <InteractiveChecklist guideKey="pivot_ref_launch_zh" lang="zh" variant="dark" items={[
+                { label: "定義標準：在你啟動之前什麼必須是真的？" },
+                { label: "先建立，勇氣第二" },
+                { label: "將決定與對話分開" },
+              ]} />
             </div>
 
             <div className="bg-white/10 backdrop-blur-sm rounded-lg p-6">
               <h3 className="font-heading text-xl text-gold mb-4">🎯 階段 5：領導 — 幫助他人轉換</h3>
-              <ul className="space-y-2 text-cream/90 text-sm">
-                <li>☐ 分享你的故事：教授你學到的東西</li>
-                <li>☐ 實踐職涯因果報應：給予介紹、反饋、支持</li>
-              </ul>
+              <InteractiveChecklist guideKey="pivot_ref_lead_zh" lang="zh" variant="dark" items={[
+                { label: "分享你的故事：教授你學到的東西" },
+                { label: "實踐職涯因果報應：給予介紹、反饋、支持" },
+              ]} />
             </div>
           </div>
         </div>

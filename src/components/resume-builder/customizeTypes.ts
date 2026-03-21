@@ -108,9 +108,9 @@ export const DEFAULT_CUSTOMIZE: CustomizeSettings = {
   columnRatio: 4,
   sectionOrder: [],
   fontSize: 11,
-  lineHeight: 1.5,
+  lineHeight: 1.2,
   marginX: 16,
-  marginY: 16,
+  marginY: 7,
   sectionSpacing: 5,
 
   colorMode: "basic",

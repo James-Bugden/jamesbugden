@@ -44,6 +44,7 @@ interface ResumePreviewProps {
   onEditSection?: (sectionId: string) => void;
   onColorChange?: (field: string, color: string) => void;
   onContentEdit?: (sectionId: string, entryId: string, field: string, html: string) => void;
+  onPageCount?: (count: number) => void;
 }
 
 /* ── Relative font-size helpers ──────────────────────────────── */
@@ -1016,12 +1017,14 @@ export const ResumePreview = React.memo(function ResumePreview({
   onEditSection,
   onColorChange,
   onContentEdit,
+  onPageCount,
 }: ResumePreviewProps) {
   const containerRef = useRef<HTMLDivElement>(null);
   const hiddenFlowRef = useRef<HTMLDivElement>(null);
   const visiblePageRefs = useRef<(HTMLDivElement | null)[]>([]);
   const [mutations, setMutations] = useState<PaginationMutations | null>(null);
-  
+  const [manualBreaks, setManualBreaks] = useState<Set<number>>(new Set());
+  const [fixedPages, setFixedPages] = useState<Set<number>>(new Set());
 
   const [autoScale, setAutoScale] = useState(0.65);
   const [zoomOffset, setZoomOffset] = useState(0);
@@ -1082,7 +1085,7 @@ export const ResumePreview = React.memo(function ResumePreview({
           const rootRect = root.getBoundingClientRect();
           const items = root.querySelectorAll('[data-page-item]');
 
-          items.forEach(el => {
+          items.forEach((el, itemIdx) => {
             // Skip container-level items that have nested data-page-items
             if (el.querySelector('[data-page-item]')) return;
 
@@ -1091,6 +1094,17 @@ export const ResumePreview = React.memo(function ResumePreview({
             const elBottom = elTop + rect.height;
             const pageIdx = Math.floor(Math.max(0, elTop) / usablePerPage);
             const pageBottom = (pageIdx + 1) * usablePerPage;
+
+            // Manual break: force-push to next page
+            if (manualBreaks.has(itemIdx) && elTop < pageBottom && elTop > pageBottom - usablePerPage) {
+              const push = pageBottom - elTop + 1;
+              const existing = parseFloat((el as HTMLElement).style.marginTop) || 0;
+              if (existing < push) {
+                (el as HTMLElement).style.marginTop = `${push}px`;
+                changed = true;
+              }
+              return;
+            }
 
             if (elTop < pageBottom && elBottom >= pageBottom + BOUNDARY_TOLERANCE) {
               // Orphan heading protection: push section headings near page bottom
@@ -1160,7 +1174,7 @@ export const ResumePreview = React.memo(function ResumePreview({
 
         const totalH = root.scrollHeight - contentOriginPX - (marginYPX + footerReservePX);
         const rawPages = totalH / usablePerPage;
-        let pages = Math.max(1, rawPages <= 1.02 ? 1 : Math.ceil(rawPages));
+        let pages = Math.max(1, rawPages <= 1.005 ? 1 : Math.ceil(rawPages));
 
         // Trim trailing empty pages: check if last page has any real content
         if (pages >= 2) {
@@ -1173,7 +1187,7 @@ export const ResumePreview = React.memo(function ResumePreview({
             const elBottom = rect.top - rootRect.top - contentOriginPX + rect.height;
             if (rect.height > 0) lastContentBottom = Math.max(lastContentBottom, elBottom);
           });
-          const neededPages = Math.max(1, lastContentBottom <= usablePerPage * 1.02 ? 1 : Math.ceil(lastContentBottom / usablePerPage));
+          const neededPages = Math.max(1, lastContentBottom <= usablePerPage * 1.005 ? 1 : Math.ceil(lastContentBottom / usablePerPage));
           pages = Math.min(pages, neededPages);
         }
         setPageCount(pages);
@@ -1186,7 +1200,23 @@ export const ResumePreview = React.memo(function ResumePreview({
       cancelAnimationFrame(raf1);
       cancelAnimationFrame(raf2);
     };
-  }, [data, customize, dims.hPX, marginYPX, headerReservePX, footerReservePX, usablePerPage, contentOriginPX]);
+  }, [data, customize, dims.hPX, marginYPX, headerReservePX, footerReservePX, usablePerPage, contentOriginPX, manualBreaks]);
+
+  // Reset manual breaks when data/customize changes (user edited content)
+  const prevDataRef = useRef(data);
+  const prevCustomizeRef = useRef(customize);
+  useEffect(() => {
+    if (prevDataRef.current !== data || prevCustomizeRef.current !== customize) {
+      prevDataRef.current = data;
+      prevCustomizeRef.current = customize;
+      setManualBreaks(new Set());
+      setFixedPages(new Set());
+    }
+  }, [data, customize]);
+
+  useEffect(() => {
+    onPageCount?.(pageCount);
+  }, [pageCount, onPageCount]);
 
 
   /* ── Clear stale margins immediately when data/customize changes ── */
@@ -1376,10 +1406,47 @@ export const ResumePreview = React.memo(function ResumePreview({
           {Array.from({ length: pageCount }, (_, i) => (
             <React.Fragment key={i}>
               {i > 0 && (
-                <div style={{ display: "flex", alignItems: "center", justifyContent: "center", padding: "16px 0", gap: "8px", background: "#f3f4f6", position: "relative", zIndex: 2 }}>
-                  <div style={{ flex: 1, height: "1px", background: "repeating-linear-gradient(90deg, #d1d5db 0, #d1d5db 6px, transparent 6px, transparent 12px)" }} />
-                  <Scissors style={{ width: "14px", height: "14px", color: "#9ca3af", transform: "rotate(180deg)" }} />
-                  <div style={{ flex: 1, height: "1px", background: "repeating-linear-gradient(90deg, #d1d5db 0, #d1d5db 6px, transparent 6px, transparent 12px)" }} />
+                <div className="group/break" style={{ position: "relative", zIndex: 2 }}>
+                  <div style={{ display: "flex", alignItems: "center", justifyContent: "center", padding: "16px 0", gap: "8px", background: "#f3f4f6" }}>
+                    <div style={{ flex: 1, height: "1px", background: "repeating-linear-gradient(90deg, #d1d5db 0, #d1d5db 6px, transparent 6px, transparent 12px)" }} />
+                    <Scissors style={{ width: "14px", height: "14px", color: "#9ca3af", transform: "rotate(180deg)" }} />
+                    <div style={{ flex: 1, height: "1px", background: "repeating-linear-gradient(90deg, #d1d5db 0, #d1d5db 6px, transparent 6px, transparent 12px)" }} />
+                  </div>
+                  <button
+                    onClick={() => {
+                      const root = hiddenFlowRef.current;
+                      if (!root) return;
+                      const items = root.querySelectorAll('[data-page-item]');
+                      const rootRect = root.getBoundingClientRect();
+                      const pageBottom = i * usablePerPage;
+                      const newBreaks = new Set(manualBreaks);
+                      items.forEach((el, idx) => {
+                        if (el.querySelector('[data-page-item]')) return;
+                        const rect = el.getBoundingClientRect();
+                        const elTop = rect.top - rootRect.top - contentOriginPX;
+                        const elBottom = elTop + rect.height;
+                        if (elTop < pageBottom && elBottom > pageBottom + 2) {
+                          newBreaks.add(idx);
+                        }
+                      });
+                      setManualBreaks(newBreaks);
+                      setFixedPages(prev => new Set(prev).add(i));
+                    }}
+                    className="absolute left-1/2 -translate-x-1/2 -bottom-3 opacity-0 group-hover/break:opacity-100 transition-opacity"
+                    style={{
+                      fontSize: "11px",
+                      padding: "2px 10px",
+                      borderRadius: "9999px",
+                      border: "1px solid #d1d5db",
+                      background: fixedPages.has(i) ? "#d1fae5" : "#fff",
+                      color: fixedPages.has(i) ? "#065f46" : "#6b7280",
+                      cursor: "pointer",
+                      whiteSpace: "nowrap",
+                      zIndex: 10,
+                    }}
+                  >
+                    {fixedPages.has(i) ? "✓ Fixed" : "↕ Fix overlap"}
+                  </button>
                 </div>
               )}
 

@@ -1,0 +1,1 @@
+ALTER TABLE public.interview_questions ADD COLUMN IF NOT EXISTS answer_en text, ADD COLUMN IF NOT EXISTS answer_zh text;

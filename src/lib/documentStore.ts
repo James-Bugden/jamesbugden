@@ -1,6 +1,8 @@
 import { ResumeData, DEFAULT_RESUME_DATA } from "@/components/resume-builder/types";
 import { CustomizeSettings, DEFAULT_CUSTOMIZE } from "@/components/resume-builder/customizeTypes";
 import { CoverLetterData, CoverLetterCustomize, DEFAULT_COVER_LETTER_DATA, DEFAULT_COVER_LETTER_CUSTOMIZE } from "@/components/cover-letter/types";
+import { applyTemplatePreset } from "@/components/resume-builder/templatePresets";
+import { EXAMPLE_RESUME_EN, EXAMPLE_RESUME_ZH_TW } from "@/lib/exampleResumeData";
 
 export type DocType = "resume" | "cover_letter";
 
@@ -81,6 +83,24 @@ export function deleteDocument(id: string) {
 
 export function renameDocument(id: string, name: string) {
   updateDocument(id, { name });
+}
+
+// Seed example resume on first visit
+const SEEDED_KEY = "james_careers_example_seeded";
+
+export function seedExampleResume(lang?: string) {
+  if (localStorage.getItem(SEEDED_KEY)) return;
+  const docs = load();
+  if (docs.length > 0) {
+    localStorage.setItem(SEEDED_KEY, "true");
+    return;
+  }
+  const isZh = lang === "zh-tw" || lang === "zh-TW";
+  const data = isZh ? EXAMPLE_RESUME_ZH_TW : EXAMPLE_RESUME_EN;
+  const name = isZh ? "範例履歷" : "Example Resume";
+  const settings = applyTemplatePreset({ ...DEFAULT_CUSTOMIZE }, "classic");
+  createDocument("resume", name, { data: JSON.parse(JSON.stringify(data)), settings });
+  localStorage.setItem(SEEDED_KEY, "true");
 }
 
 // Migration: if user has legacy single-doc data, import it

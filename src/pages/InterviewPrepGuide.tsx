@@ -1,4 +1,4 @@
-import { ArrowLeft, Download, Clock, Users, Lightbulb, Target, MessageSquare, AlertTriangle, CheckCircle2 } from "lucide-react";
+import { ArrowLeft, Clock, Users, Lightbulb, Target, MessageSquare, AlertTriangle, CheckCircle2 } from "lucide-react";
 import { Link } from "react-router-dom";
 import LanguageToggle from "@/components/LanguageToggle";
 import { AuthHeaderButton } from "@/components/AuthHeaderButton";
@@ -8,18 +8,11 @@ import GuideShareButtons from "@/components/GuideShareButtons";
 import { InstagramIcon, ThreadsIcon } from "@/components/SocialIcons";
 import GoldCheckBadge from "@/components/GoldCheckBadge";
 import { useTrackGuideProgress } from "@/hooks/useReadingProgress";
+import GuideSignInBanner from "@/components/guides/GuideSignInBanner";
 
 const InterviewPrepGuide = () => {
   useTrackGuideProgress("interview-prep");
 
-  const handleDownload = () => {
-    const link = document.createElement('a');
-    link.href = '/downloads/The_10-Hour_Interview_Prep_System.pdf';
-    link.download = 'The_10-Hour_Interview_Prep_System.pdf';
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
-  };
 
   return (
     <div className="min-h-screen bg-background">
@@ -49,18 +42,17 @@ const InterviewPrepGuide = () => {
           <p className="text-lg md:text-xl text-cream/80 mb-2">
             The Checklist You Need to Prepare For The Interview
           </p>
-          <p className="text-base text-cream/60 mb-6">
+          <p className="text-base text-cream/60 mb-2">
             By James Bugden, Senior Recruiter at Uber
           </p>
-          <Button 
-            onClick={handleDownload}
-            className="bg-gold hover:bg-gold/90 text-executive-green font-semibold"
-          >
-            <Download className="w-4 h-4 mr-2" />
-            Download PDF Guide
-          </Button>
+          <div className="flex items-center justify-center gap-1.5 text-cream/60 mb-6">
+            <Clock className="w-4 h-4" />
+            <span className="text-sm">20 min read</span>
+          </div>
         </div>
       </section>
+
+      <GuideSignInBanner lang="en" />
 
       {/* Framework Note */}
       <section className="py-8 px-5 md:px-6 bg-card border-b border-border">
@@ -640,25 +632,6 @@ const InterviewPrepGuide = () => {
         </div>
       </section>
 
-      {/* Download CTA */}
-      <section className="py-12 md:py-16 px-5 md:px-6 bg-background border-t border-border">
-        <div className="container mx-auto max-w-3xl text-center">
-          <h2 className="font-heading text-2xl md:text-3xl text-foreground mb-4">
-            Save This Guide
-          </h2>
-          <p className="text-muted-foreground mb-6">
-            Download the PDF to reference before your next interview.
-          </p>
-          <Button 
-            onClick={handleDownload}
-            size="lg" 
-            className="h-14 px-8 btn-gold font-medium text-base uppercase tracking-wider"
-          >
-            <Download className="w-5 h-5 mr-2" />
-            Download PDF Guide
-          </Button>
-        </div>
-      </section>
 
       <GuideShareButtons />
 
@@ -675,7 +648,7 @@ const InterviewPrepGuide = () => {
               </Link>
             </div>
             <span className="text-sm text-muted-foreground">
-              © 2024 James Bugden. All rights reserved.
+              © 2026 James Bugden. All rights reserved.
             </span>
             <div className="flex items-center gap-6">
               <a href="https://www.linkedin.com/in/james-bugden/" target="_blank" rel="noopener noreferrer" className="text-muted-foreground hover:text-foreground transition-colors">

@@ -72,7 +72,7 @@ export default function SelfSegmentationExperimentZhTw() {
 
         <div className="text-center">
           <a
-            href="/resume-analyzer"
+            href="/zh-tw/resume-analyzer"
             className="inline-flex items-center justify-center rounded-lg font-semibold transition-colors duration-200"
             style={{
               backgroundColor: '#2b4734',

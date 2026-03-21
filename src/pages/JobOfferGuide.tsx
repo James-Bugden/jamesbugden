@@ -7,6 +7,7 @@ import LanguageToggle from "@/components/LanguageToggle";
 import { AuthHeaderButton } from "@/components/AuthHeaderButton";
 import PageSEO from "@/components/PageSEO";
 import { useTrackGuideProgress } from "@/hooks/useReadingProgress";
+import GuideSignInBanner from "@/components/guides/GuideSignInBanner";
 import { useState, useEffect } from "react";
 import JobOfferScorecard from "@/components/job-offer/JobOfferScorecard";
 
@@ -147,6 +148,8 @@ const JobOfferGuide = () => {
           <p className="text-sm text-cream/50 italic">Based on 13 Harvard Business Review articles on job offers, negotiation, and career transitions</p>
         </div>
       </section>
+
+      <GuideSignInBanner lang="en" />
 
       <TableOfContents />
 
@@ -791,7 +794,7 @@ const JobOfferGuide = () => {
               <p className="text-cream font-semibold mb-2 group-hover:text-gold transition-colors">Compare your offers</p>
               <span className="text-gold text-sm font-medium">Offer Calculator →</span>
             </Link>
-            <Link to="/recruiter-screen-guide" className="group bg-cream/5 border border-cream/10 rounded-xl p-6 text-center hover:bg-cream/10 transition-all">
+            <Link to="/hr-interview-guide" className="group bg-cream/5 border border-cream/10 rounded-xl p-6 text-center hover:bg-cream/10 transition-all">
               <p className="text-cream font-semibold mb-2 group-hover:text-gold transition-colors">Pass the recruiter screen</p>
               <span className="text-gold text-sm font-medium">Recruiter Screen Guide →</span>
             </Link>
@@ -805,7 +808,7 @@ const JobOfferGuide = () => {
       <footer className="py-8 md:py-10 px-5 md:px-6 bg-card border-t border-border">
         <div className="container mx-auto max-w-5xl">
           <div className="flex flex-col md:flex-row justify-between items-center gap-4">
-            <span className="text-sm text-muted-foreground">© 2024 James Bugden. All rights reserved.</span>
+            <span className="text-sm text-muted-foreground">© 2026 James Bugden. All rights reserved.</span>
             <div className="flex items-center gap-6">
               <a href="https://www.linkedin.com/in/james-bugden/" target="_blank" rel="noopener noreferrer" className="text-muted-foreground hover:text-foreground transition-colors"><Linkedin className="w-5 h-5" /></a>
               <a href="https://www.instagram.com/james.careers/" target="_blank" rel="noopener noreferrer" className="text-muted-foreground hover:text-foreground transition-colors"><InstagramIcon className="w-5 h-5" /></a>

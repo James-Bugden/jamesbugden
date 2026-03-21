@@ -76,7 +76,7 @@ export function EmailGateOverlay({
             </Link>
           </Button>
           <Button asChild variant="outline" className="w-full h-11 gap-2">
-            <Link to="/signup" state={{ from: location.pathname }}>
+            <Link to="/join" state={{ from: location.pathname }}>
               <UserPlus className="w-4 h-4" />
               {createAccountText}
             </Link>

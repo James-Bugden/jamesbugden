@@ -221,7 +221,8 @@ export default function HomepageTestimonialsExperimentZhTw() {
     <section id="testimonials" className="py-12 md:py-20 px-5 md:px-6" style={{ backgroundColor: "#FFFFFF" }}>
       <div className="container mx-auto max-w-5xl">
         <h2 className="font-heading text-center mb-6" style={{ color: "#1A1A1A", fontSize: "clamp(2rem, 4vw, 2.625rem)", lineHeight: 1.2 }}>
-          超過 750 位專業人士拿到理想 Offer
+          <span className="hidden sm:inline">在夢想公司拿到年薪 3 百萬以上的 Offer</span>
+          <span className="sm:hidden">在夢想公司拿到<br />年薪 3 百萬以上<br />的 Offer</span>
         </h2>
 
         <TestimonialCard item={featured} featured />

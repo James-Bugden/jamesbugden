@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useRef, useCallback } from "react";
 import { Link, useNavigate, useLocation } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { lovable } from "@/integrations/lovable/index";
@@ -8,6 +8,9 @@ import { Mail, Lock, ArrowLeft, Eye, EyeOff } from "lucide-react";
 import { useAuth } from "@/contexts/AuthContext";
 import { useEffect } from "react";
 import PageSEO from "@/components/PageSEO";
+
+const MAX_ATTEMPTS = 5;
+const LOCKOUT_SECONDS = 60;
 
 export default function Login() {
   const navigate = useNavigate();
@@ -22,6 +25,24 @@ export default function Login() {
   const [loading, setLoading] = useState(false);
   const [resetSent, setResetSent] = useState(false);
   const [mode, setMode] = useState<"login" | "forgot">("login");
+  const [lockoutRemaining, setLockoutRemaining] = useState(0);
+
+  const attemptsRef = useRef(0);
+  const lockoutTimerRef = useRef<ReturnType<typeof setInterval> | null>(null);
+
+  const startLockout = useCallback(() => {
+    setLockoutRemaining(LOCKOUT_SECONDS);
+    lockoutTimerRef.current = setInterval(() => {
+      setLockoutRemaining((prev) => {
+        if (prev <= 1) {
+          if (lockoutTimerRef.current) clearInterval(lockoutTimerRef.current);
+          attemptsRef.current = 0;
+          return 0;
+        }
+        return prev - 1;
+      });
+    }, 1000);
+  }, []);
 
   useEffect(() => {
     if (isLoggedIn) {
@@ -32,16 +53,33 @@ export default function Login() {
     }
   }, [isLoggedIn, navigate, location.state, isZhTw]);
 
+  useEffect(() => {
+    return () => { if (lockoutTimerRef.current) clearInterval(lockoutTimerRef.current); };
+  }, []);
+
+  const isLockedOut = lockoutRemaining > 0;
+
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
+    if (isLockedOut) return;
     setError("");
     setLoading(true);
     const { error } = await supabase.auth.signInWithPassword({ email: email.trim(), password });
     setLoading(false);
     if (error) {
-      setError(error.message === "Invalid login credentials"
-        ? (isZhTw ? "電子郵件或密碼錯誤" : "Invalid email or password")
-        : error.message);
+      attemptsRef.current += 1;
+      if (attemptsRef.current >= MAX_ATTEMPTS) {
+        startLockout();
+        setError(isZhTw
+          ? `嘗試次數過多，請在 ${LOCKOUT_SECONDS} 秒後重試`
+          : `Too many attempts. Please wait ${LOCKOUT_SECONDS} seconds.`);
+      } else {
+        setError(error.message === "Invalid login credentials"
+          ? (isZhTw ? "電子郵件或密碼錯誤" : "Invalid email or password")
+          : error.message);
+      }
+    } else {
+      attemptsRef.current = 0;
     }
   };
 
@@ -133,8 +171,10 @@ export default function Login() {
                   </button>
                 </div>
                 {error && <p className="text-xs text-destructive">{error}</p>}
-                <Button type="submit" className="w-full h-11 font-semibold" disabled={loading}>
-                  {loading ? "..." : t.signIn}
+                <Button type="submit" className="w-full h-11 font-semibold" disabled={loading || isLockedOut}>
+                  {isLockedOut
+                    ? (isZhTw ? `請等待 ${lockoutRemaining} 秒` : `Wait ${lockoutRemaining}s`)
+                    : loading ? "..." : t.signIn}
                 </Button>
               </form>
 
@@ -144,7 +184,7 @@ export default function Login() {
 
               <p className="text-sm text-muted-foreground mt-4 text-center">
                 {t.noAccount}{" "}
-                <Link to="/signup" state={location.state} className="text-foreground font-medium hover:underline">
+                <Link to="/join" state={location.state} className="text-foreground font-medium hover:underline">
                   {t.signUp}
                 </Link>
               </p>

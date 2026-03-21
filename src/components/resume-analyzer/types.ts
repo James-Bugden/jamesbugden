@@ -18,6 +18,18 @@ export interface BulletRewrite {
   changes: string[];
 }
 
+export interface BulletRewriteDetailed {
+  original: string;
+  improved: string;
+  explanation: string;
+}
+
+export interface SummaryRewrite {
+  original: string;
+  improved: string;
+  explanation: string;
+}
+
 export interface Priority {
   priority: number;
   level: "critical" | "warning";
@@ -47,6 +59,8 @@ export interface AnalysisResult {
   four_tests: FourTests;
   sections: Section[];
   bullet_rewrite: BulletRewrite;
+  bullet_rewrites?: BulletRewriteDetailed[];
+  summary_rewrite?: SummaryRewrite;
   top_priorities: Priority[];
   segmentation: Segmentation;
 }

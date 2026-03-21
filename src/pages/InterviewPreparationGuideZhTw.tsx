@@ -1,4 +1,5 @@
-import { ArrowLeft, Download, Target, Lightbulb, MessageSquare, AlertTriangle, CheckCircle2, Calendar, HelpCircle, BookOpen } from "lucide-react";
+import { ArrowLeft, Target, Lightbulb, MessageSquare, AlertTriangle, CheckCircle2, Calendar, HelpCircle, BookOpen, Clock } from "lucide-react";
+import { InteractiveChecklist } from "@/components/guides/InteractiveChecklist";
 import { Link, useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Linkedin } from "lucide-react";
@@ -7,19 +8,12 @@ import GuideShareButtons from "@/components/GuideShareButtons";
 import { AuthHeaderButton } from "@/components/AuthHeaderButton";
 import GoldCheckBadge from "@/components/GoldCheckBadge";
 import { useTrackGuideProgress } from "@/hooks/useReadingProgress";
+import GuideSignInBanner from "@/components/guides/GuideSignInBanner";
 
 const InterviewPreparationGuideZhTw = () => {
   useTrackGuideProgress("interview-full");
   const navigate = useNavigate();
 
-  const handleDownload = () => {
-    const link = document.createElement('a');
-    link.href = '/downloads/ZH_Interview_Preparation_Guide.pdf';
-    link.download = 'ZH_Interview_Preparation_Guide.pdf';
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
-  };
 
   return (
     <div className="min-h-screen bg-background">
@@ -54,18 +48,17 @@ const InterviewPreparationGuideZhTw = () => {
           <p className="text-lg md:text-xl text-cream/80 mb-2">
             停止焦慮。開始表現。拿到工作。
           </p>
-          <p className="text-base text-cream/60 mb-6">
+          <p className="text-base text-cream/60 mb-2">
             作者：James Bugden，Uber 資深招募專員
           </p>
-          <Button 
-            onClick={handleDownload}
-            className="bg-gold hover:bg-gold/90 text-executive-green font-semibold px-6 py-3 rounded-lg shadow-lg hover:shadow-xl transition-all duration-300"
-          >
-            <Download className="w-5 h-5 mr-2" />
-            下載 PDF 指南
-          </Button>
+          <div className="flex items-center justify-center gap-1.5 text-cream/60 mb-6">
+            <Clock className="w-4 h-4" />
+            <span className="text-sm">45 分鐘閱讀</span>
+          </div>
         </div>
       </section>
+
+      <GuideSignInBanner lang="zh" />
 
       {/* Framework Note */}
       <section className="py-8 px-5 md:px-6 bg-card border-b border-border">
@@ -1060,31 +1053,39 @@ const InterviewPreparationGuideZhTw = () => {
             {/* Pre-Interview */}
             <div className="bg-background border border-border rounded-lg p-6">
               <h3 className="font-heading text-xl text-gold mb-4">面試前檢查清單</h3>
-              <ul className="space-y-2 text-sm text-foreground">
-                <li>☐ 研究公司（1 小時）</li>
-                <li>☐ 資訊性訪談（2 小時）</li>
-                <li>☐ 創建 7-10 個有力範例（1 小時）</li>
-                <li>☐ 準備 SPAR 故事（1 小時）</li>
-                <li>☐ 準備情境框架（1 小時）</li>
-                <li>☐ 大聲練習（1 小時）</li>
-                <li>☐ 模擬面試 #1（1 小時）</li>
-                <li>☐ 模擬面試 #2（1 小時）</li>
-                <li>☐ 準備要問的問題（30 分鐘）</li>
-                <li>☐ 計劃服裝（15 分鐘）</li>
-              </ul>
+              <InteractiveChecklist
+                guideKey="interview_prep_pre_zh"
+                lang="zh"
+                items={[
+                  { label: "研究公司（1 小時）" },
+                  { label: "資訊性訪談（2 小時）" },
+                  { label: "創建 7-10 個有力範例（1 小時）" },
+                  { label: "準備 SPAR 故事（1 小時）" },
+                  { label: "準備情境框架（1 小時）" },
+                  { label: "大聲練習（1 小時）" },
+                  { label: "模擬面試 #1（1 小時）" },
+                  { label: "模擬面試 #2（1 小時）" },
+                  { label: "準備要問的問題（30 分鐘）" },
+                  { label: "計劃服裝（15 分鐘）" },
+                ]}
+              />
             </div>
 
             {/* Day-Of */}
             <div className="bg-background border border-border rounded-lg p-6">
               <h3 className="font-heading text-xl text-gold mb-4">當天檢查清單</h3>
-              <ul className="space-y-2 text-sm text-foreground">
-                <li>☐ 複習有力範例</li>
-                <li>☐ 提前 10-15 分鐘到達</li>
-                <li>☐ 手機靜音</li>
-                <li>☐ 帶列印的履歷</li>
-                <li>☐ 帶筆記本</li>
-                <li>☐ 微笑並保持眼神接觸</li>
-              </ul>
+              <InteractiveChecklist
+                guideKey="interview_prep_dayof_zh"
+                lang="zh"
+                items={[
+                  { label: "複習有力範例" },
+                  { label: "提前 10-15 分鐘到達" },
+                  { label: "手機靜音" },
+                  { label: "帶列印的履歷" },
+                  { label: "帶筆記本" },
+                  { label: "微笑並保持眼神接觸" },
+                ]}
+              />
             </div>
           </div>
 
@@ -1092,24 +1093,32 @@ const InterviewPreparationGuideZhTw = () => {
             {/* Online Interviews */}
             <div className="bg-background border border-border rounded-lg p-6">
               <h3 className="font-heading text-xl text-gold mb-4">線上面試</h3>
-              <ul className="space-y-2 text-sm text-foreground">
-                <li>☐ 測試網路連接</li>
-                <li>☐ 音訊</li>
-                <li>☐ 視訊</li>
-                <li>☐ 背景無雜物</li>
-                <li>☐ 確保你在安靜的地方</li>
-                <li>☐ 攝影機應與你的臉齊平</li>
-              </ul>
+              <InteractiveChecklist
+                guideKey="interview_prep_online_zh"
+                lang="zh"
+                items={[
+                  { label: "測試網路連接" },
+                  { label: "音訊" },
+                  { label: "視訊" },
+                  { label: "背景無雜物" },
+                  { label: "確保你在安靜的地方" },
+                  { label: "攝影機應與你的臉齊平" },
+                ]}
+              />
             </div>
 
             {/* Post-Interview */}
             <div className="bg-background border border-border rounded-lg p-6">
               <h3 className="font-heading text-xl text-gold mb-4">面試後檢查清單</h3>
-              <ul className="space-y-2 text-sm text-foreground">
-                <li>☐ 在 24 小時內發送感謝郵件</li>
-                <li>☐ 記下什麼做得好/需要改進</li>
-                <li>☐ 如果在他們的時間表內沒有回應就跟進</li>
-              </ul>
+              <InteractiveChecklist
+                guideKey="interview_prep_post_zh"
+                lang="zh"
+                items={[
+                  { label: "在 24 小時內發送感謝郵件" },
+                  { label: "記下什麼做得好/需要改進" },
+                  { label: "如果在他們的時間表內沒有回應就跟進" },
+                ]}
+              />
             </div>
           </div>
         </div>
@@ -1173,25 +1182,6 @@ const InterviewPreparationGuideZhTw = () => {
         </div>
       </section>
 
-      {/* Download CTA */}
-      <section className="py-12 md:py-16 px-5 md:px-6 bg-background border-t border-border">
-        <div className="container mx-auto max-w-3xl text-center">
-          <h2 className="font-heading text-2xl md:text-3xl text-foreground mb-4">
-            保存這份指南
-          </h2>
-          <p className="text-muted-foreground mb-6">
-            下載 PDF，在下次面試前參考。
-          </p>
-          <Button 
-            onClick={handleDownload}
-            size="lg" 
-            className="h-14 px-8 btn-gold font-medium text-base uppercase tracking-wider"
-          >
-            <Download className="w-5 h-5 mr-2" />
-            下載 PDF 指南
-          </Button>
-        </div>
-      </section>
 
       <GuideShareButtons isZhTw />
 
@@ -1208,7 +1198,7 @@ const InterviewPreparationGuideZhTw = () => {
               </Link>
             </div>
             <span className="text-sm text-muted-foreground">
-              © 2024 James Bugden. 版權所有。
+              © 2026 James Bugden. 版權所有。
             </span>
             <div className="flex items-center gap-6">
               <a href="https://www.linkedin.com/in/james-bugden/" target="_blank" rel="noopener noreferrer" className="text-muted-foreground hover:text-foreground transition-colors">

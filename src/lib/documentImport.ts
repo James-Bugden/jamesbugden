@@ -116,10 +116,20 @@ const SECTION_HEADER_MAP: Record<string, string> = {
   "推薦人": "references", "推荐人": "references",
 };
 
+function normalizeHeaderText(raw: string): string {
+  // Fix OCR-broken spacing: "W ORK" → "WORK", "E XPERIENCE" → "EXPERIENCE"
+  // Detect pattern: single uppercase letter followed by space then uppercase letters
+  let fixed = raw.replace(/\b([A-Z])\s+([A-Z]{2,})\b/g, "$1$2");
+  // Remove continuation markers: "(Cont.)", "(continued)", etc.
+  fixed = fixed.replace(/\s*\(cont\.?\)/gi, "").replace(/\s*\(continued\)/gi, "").trim();
+  return fixed;
+}
+
 function detectSectionType(headerText: string): string | null {
-  const cleanEn = headerText.toLowerCase().replace(/[^a-z\s&]/g, "").trim();
+  const normalized = normalizeHeaderText(headerText);
+  const cleanEn = normalized.toLowerCase().replace(/[^a-z\s&]/g, "").trim();
   if (cleanEn && SECTION_HEADER_MAP[cleanEn]) return SECTION_HEADER_MAP[cleanEn];
-  const cleanZh = headerText.replace(/[\s:：\-–—·•|]/g, "").trim();
+  const cleanZh = normalized.replace(/[\s:：\-–—·•|]/g, "").trim();
   if (SECTION_HEADER_MAP[cleanZh]) return SECTION_HEADER_MAP[cleanZh];
   return null;
 }
@@ -247,8 +257,11 @@ function extractLocation(text: string): string | null {
 function extractContactInfo(text: string, headerLines: string[]) {
   const emailMatch = text.match(/[\w.+-]+@[\w-]+\.[\w.-]+/);
   const phoneMatch = text.match(/[\+]?[(]?[0-9]{1,4}[)]?[-\s./0-9]{7,}/);
-  const linkedinMatch = text.match(/(?:https?:\/\/)?(?:www\.)?linkedin\.com\/in\/[\w-]+/i);
+  const linkedinMatch = text.match(/(?:https?:\/\/)?(?:www\.)?linkedin\.com\/in\/[\w][\w -]*[\w]/i);
   const websiteMatch = text.match(/(?:https?:\/\/)?(?:www\.)(?!linkedin)[\w-]+\.[\w.]+(?:\/[\w-]*)?/i);
+
+  // Clean URLs — remove any spaces that may have been introduced by PDF extraction
+  const cleanUrl = (url: string | undefined) => url ? url.replace(/\s+/g, "") : "";
 
   // Try to extract location from header lines
   let location = "";
@@ -272,8 +285,8 @@ function extractContactInfo(text: string, headerLines: string[]) {
   return {
     email: emailMatch?.[0] || "",
     phone: phoneMatch?.[0] || "",
-    linkedin: linkedinMatch?.[0] || "",
-    website: websiteMatch?.[0] || "",
+    linkedin: cleanUrl(linkedinMatch?.[0]),
+    website: cleanUrl(websiteMatch?.[0]),
     location,
     professionalTitle,
   };
@@ -319,18 +332,32 @@ export function mapTextToResumeSections(text: string) {
     (l) => !contactPatterns.some((p) => p && l.includes(p)) && l.length > 20
   );
 
-  // Build parsed sections
-  const sections: ParsedSection[] = [];
+  // Build parsed sections — merge duplicates (e.g. "Experience" + "Experience (Cont.)")
+  const sectionsRaw: ParsedSection[] = [];
   for (let s = 0; s < sectionBreaks.length; s++) {
     const start = sectionBreaks[s].idx + 1;
     const end = s + 1 < sectionBreaks.length ? sectionBreaks[s + 1].idx : lines.length;
     const sectionLines = lines.slice(start, end).filter(Boolean);
     if (sectionLines.length > 0) {
-      sections.push({
+      sectionsRaw.push({
         type: sectionBreaks[s].type,
-        title: toTitleCase(sectionBreaks[s].title),
+        title: toTitleCase(normalizeHeaderText(sectionBreaks[s].title)),
         lines: sectionLines,
       });
+    }
+  }
+
+  // Merge sections with the same type (handles "(Cont.)" splits)
+  const sections: ParsedSection[] = [];
+  const sectionTypeMap = new Map<string, number>();
+  for (const sec of sectionsRaw) {
+    const existingIdx = sectionTypeMap.get(sec.type);
+    if (existingIdx !== undefined) {
+      // Append lines to existing section of same type
+      sections[existingIdx].lines.push(...sec.lines);
+    } else {
+      sectionTypeMap.set(sec.type, sections.length);
+      sections.push(sec);
     }
   }
 
@@ -338,6 +365,16 @@ export function mapTextToResumeSections(text: string) {
   if (!sections.some((s) => s.type === "summary") && nonContactHeader.length > 0) {
     sections.unshift({ type: "summary", title: "Summary", lines: nonContactHeader });
   }
+
+  // Reorder: summary → skills → experience → education → rest
+  const preferredOrder = ["summary", "skills", "experience", "education"];
+  sections.sort((a, b) => {
+    const ia = preferredOrder.indexOf(a.type);
+    const ib = preferredOrder.indexOf(b.type);
+    const oa = ia === -1 ? preferredOrder.length : ia;
+    const ob = ib === -1 ? preferredOrder.length : ib;
+    return oa - ob;
+  });
 
   // Convert to resume builder sections
   const resumeSections = sections.map(buildResumeSection);

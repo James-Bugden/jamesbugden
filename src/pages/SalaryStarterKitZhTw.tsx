@@ -1,9 +1,10 @@
-import { ArrowLeft, ArrowRight, DollarSign } from "lucide-react";
+import { ArrowLeft, ArrowRight, DollarSign, Clock } from "lucide-react";
 import { Link, useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import GuideShareButtons from "@/components/GuideShareButtons";
 import { AuthHeaderButton } from "@/components/AuthHeaderButton";
 import { useTrackGuideProgress } from "@/hooks/useReadingProgress";
+import GuideSignInBanner from "@/components/guides/GuideSignInBanner";
 import ToolkitCallout from "@/components/ToolkitCallout";
 
 const SalaryStarterKitZhTw = () => {
@@ -48,11 +49,17 @@ const SalaryStarterKitZhTw = () => {
           <p className="text-lg md:text-xl text-cream/80 mb-2">
             每個薪資對話的逐字話術
           </p>
-          <p className="text-base text-cream/60">
+          <p className="text-base text-cream/60 mb-2">
             複製、填空、寄出
           </p>
+          <div className="flex items-center justify-center gap-1.5 text-cream/60">
+            <Clock className="w-4 h-4" />
+            <span className="text-sm">10 分鐘閱讀</span>
+          </div>
         </div>
       </section>
+
+      <GuideSignInBanner lang="zh" />
 
       {/* Intro */}
       <section className="py-12 px-5 md:px-6 border-b border-border">

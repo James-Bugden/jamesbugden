@@ -1,4 +1,7 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo } from "react";
+import { useBuilderAiUsage } from "@/hooks/useBuilderAiUsage";
+import { useAnalyzerUsage } from "@/hooks/useAnalyzerUsage";
+import { DesignPhilosophy } from "@/components/resume-builder/DesignPhilosophy";
 import {
   FileText,
   Mail,
@@ -8,12 +11,16 @@ import {
   Copy,
   Trash2,
   Upload,
-  Briefcase,
   Search,
   ArrowRight,
   RotateCcw,
   User,
   ChevronRight,
+  Globe,
+  Clock,
+  Heart,
+  Info,
+  BarChart3,
 } from "lucide-react";
 import {
   SavedDocument,
@@ -23,17 +30,23 @@ import {
   duplicateDocument,
   renameDocument,
   migrateFromLegacy,
+  seedExampleResume,
   DocType,
 } from "@/lib/documentStore";
 import { cn } from "@/lib/utils";
 import { useNavigate } from "react-router-dom";
-import { useT } from "@/components/resume-builder/i18n";
+import { useT, useResumeBuilderLang, SAMPLE_RESUME_DATA_ZH_TW } from "@/components/resume-builder/i18n";
+import { toast } from "@/hooks/use-toast";
+
 import { TemplateGalleryModal } from "@/components/resume-builder/TemplateGalleryModal";
 import { DEFAULT_CUSTOMIZE } from "@/components/resume-builder/customizeTypes";
 import { applyTemplatePreset } from "@/components/resume-builder/templatePresets";
 import { ResumeThumbnail } from "@/components/resume-builder/ResumeThumbnail";
 import { ResumeData } from "@/components/resume-builder/types";
+import { resumeDataToText } from "@/lib/resumeDataToText";
 import { CustomizeSettings } from "@/components/resume-builder/customizeTypes";
+import { AlertDialog, AlertDialogContent, AlertDialogHeader, AlertDialogTitle, AlertDialogDescription, AlertDialogFooter, AlertDialogCancel, AlertDialogAction } from "@/components/ui/alert-dialog";
+import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 
 /* ── Brand colors ─────────────────────────────────────────── */
 const BRAND = {
@@ -57,6 +70,15 @@ type SidebarTab = "resume" | "cover_letter" | "job_tracker";
 
 export function DocumentDashboard({ onOpenDocument, onImport }: DocumentDashboardProps) {
   const t = useT();
+  const lang = useResumeBuilderLang();
+  const { importCount, importLimit, loading: usageLoading } = useBuilderAiUsage();
+  const { used: analyzerUsed, limit: analyzerLimit } = useAnalyzerUsage();
+
+  const daysUntilReset = useMemo(() => {
+    const now = new Date();
+    const endOfMonth = new Date(now.getFullYear(), now.getMonth() + 1, 1);
+    return Math.ceil((endOfMonth.getTime() - now.getTime()) / 86400000);
+  }, []);
   const [documents, setDocuments] = useState<SavedDocument[]>([]);
   const [menuOpenId, setMenuOpenId] = useState<string | null>(null);
   const [renamingId, setRenamingId] = useState<string | null>(null);
@@ -64,12 +86,16 @@ export function DocumentDashboard({ onOpenDocument, onImport }: DocumentDashboar
   const [templateModalOpen, setTemplateModalOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
   const [activeTab, setActiveTab] = useState<SidebarTab>("resume");
+  const [replacePickerOpen, setReplacePickerOpen] = useState(false);
+  const [replaceTargetId, setReplaceTargetId] = useState<string | null>(null);
+  const [pendingAction, setPendingAction] = useState<null | { type: "create"; templateId?: string } | { type: "import" } | { type: "duplicate"; sourceId: string }>(null);
   const navigate = useNavigate();
 
   const refresh = () => setDocuments(getAllDocuments());
 
   useEffect(() => {
     migrateFromLegacy();
+    seedExampleResume(lang);
     refresh();
   }, []);
 
@@ -85,9 +111,27 @@ export function DocumentDashboard({ onOpenDocument, onImport }: DocumentDashboar
     return () => document.removeEventListener("mousedown", handler);
   }, [menuOpenId]);
 
+  const RESUME_LIMIT = 2;
+
+  const openReplacePicker = (action: typeof pendingAction) => {
+    setPendingAction(action);
+    setReplaceTargetId(resumes[0]?.id || null);
+    setReplacePickerOpen(true);
+  };
+
   const handleCreateFromTemplate = (templateId: string) => {
+    if (resumeLimitReached) {
+      setTemplateModalOpen(false);
+      openReplacePicker({ type: "create", templateId });
+      return;
+    }
+    executeCreateFromTemplate(templateId);
+  };
+
+  const executeCreateFromTemplate = (templateId: string, deleteId?: string) => {
+    if (deleteId) deleteDocument(deleteId);
     const appliedSettings = applyTemplatePreset(DEFAULT_CUSTOMIZE, templateId);
-    const sampleData = {
+    const sampleData = lang === "zh-tw" ? SAMPLE_RESUME_DATA_ZH_TW : {
       personalDetails: {
         fullName: "Alex Chen",
         professionalTitle: "Software Engineer",
@@ -150,11 +194,16 @@ export function DocumentDashboard({ onOpenDocument, onImport }: DocumentDashboar
       data: sampleData,
       settings: appliedSettings,
     });
+    refresh();
     onOpenDocument(doc);
   };
 
   const handleCreate = (type: DocType) => {
     if (type === "resume") {
+      if (resumeLimitReached) {
+        openReplacePicker({ type: "create" });
+        return;
+      }
       setTemplateModalOpen(true);
       return;
     }
@@ -163,8 +212,38 @@ export function DocumentDashboard({ onOpenDocument, onImport }: DocumentDashboar
   };
 
   const handleDuplicate = (id: string) => {
+    if (resumeLimitReached) {
+      openReplacePicker({ type: "duplicate", sourceId: id });
+      return;
+    }
     duplicateDocument(id);
     refresh();
+    setMenuOpenId(null);
+  };
+
+  const handleReplaceConfirm = () => {
+    if (!replaceTargetId || !pendingAction) return;
+    setReplacePickerOpen(false);
+
+    if (pendingAction.type === "create" && pendingAction.templateId) {
+      executeCreateFromTemplate(pendingAction.templateId, replaceTargetId);
+    } else if (pendingAction.type === "create") {
+      // No template selected yet — delete first, then open template picker
+      deleteDocument(replaceTargetId);
+      refresh();
+      setTemplateModalOpen(true);
+    } else if (pendingAction.type === "import") {
+      deleteDocument(replaceTargetId);
+      refresh();
+      onImport("resume");
+    } else if (pendingAction.type === "duplicate") {
+      deleteDocument(replaceTargetId);
+      duplicateDocument(pendingAction.sourceId);
+      refresh();
+    }
+
+    setPendingAction(null);
+    setReplaceTargetId(null);
     setMenuOpenId(null);
   };
 
@@ -189,6 +268,7 @@ export function DocumentDashboard({ onOpenDocument, onImport }: DocumentDashboar
   };
 
   const resumes = documents.filter((d) => d.type === "resume");
+  const resumeLimitReached = resumes.length >= RESUME_LIMIT;
   const coverLetters = documents.filter((d) => d.type === "cover_letter");
 
   const filteredResumes = searchQuery
@@ -210,7 +290,7 @@ export function DocumentDashboard({ onOpenDocument, onImport }: DocumentDashboar
     if (diffMins < 60) return `${diffMins}${t("mAgo")}`;
     if (diffHours < 24) return `${diffHours}${t("hAgo")}`;
     if (diffDays < 7) return `${diffDays}${t("dAgo")}`;
-    return d.toLocaleDateString("en-GB", { day: "numeric", month: "short", year: "numeric" });
+    return d.toLocaleDateString(lang === "zh-tw" ? "zh-TW" : "en-GB", { day: "numeric", month: "short", year: "numeric" });
   };
 
   const pageSize = (settings: any) => {
@@ -285,6 +365,26 @@ export function DocumentDashboard({ onOpenDocument, onImport }: DocumentDashboar
           )}
         </div>
       </div>
+      <div className="px-3 pb-2.5">
+        <button
+          onClick={(e) => {
+            e.stopPropagation();
+            const text = resumeDataToText(doc.data as ResumeData);
+            sessionStorage.setItem("analyzer-auto-text", text);
+            navigate(lang === "zh-tw" ? "/zh-tw/resume-analyzer" : "/resume-analyzer");
+          }}
+          className="w-full flex items-center justify-center gap-1.5 text-[12px] font-semibold rounded-full py-1.5 border transition-colors"
+          style={{
+            color: "hsl(42 52% 56%)",
+            borderColor: "hsl(42 52% 56% / 0.4)",
+            backgroundColor: "hsl(42 52% 56% / 0.06)",
+          }}
+          onMouseEnter={(e) => { e.currentTarget.style.backgroundColor = "hsl(42 52% 56% / 0.15)"; }}
+          onMouseLeave={(e) => { e.currentTarget.style.backgroundColor = "hsl(42 52% 56% / 0.06)"; }}
+        >
+          <BarChart3 className="w-3.5 h-3.5" /> {t("analyzeAction")}
+        </button>
+      </div>
     </div>
   );
 
@@ -316,21 +416,36 @@ export function DocumentDashboard({ onOpenDocument, onImport }: DocumentDashboar
   /* ── Sidebar ──────────────────────────────────── */
   const sidebarItems: { id: SidebarTab; label: string; icon: React.ReactNode; count?: number }[] = [
     { id: "resume", label: t("resume"), icon: <FileText className="w-[18px] h-[18px]" />, count: resumes.length },
-    { id: "cover_letter", label: t("coverLetter"), icon: <Mail className="w-[18px] h-[18px]" />, count: coverLetters.length },
-    { id: "job_tracker", label: t("jobTracker"), icon: <Briefcase className="w-[18px] h-[18px]" /> },
   ];
 
   const mainTitle = activeTab === "resume" ? t("myResumes") : activeTab === "cover_letter" ? t("myCoverLetters") : t("jobTracker");
 
   return (
-    <div className="h-screen flex" style={{ backgroundColor: BRAND.cream }}>
-      {/* ── Left Sidebar ──────────────────────────── */}
-      <aside className="w-[200px] flex-shrink-0 bg-white border-r flex flex-col h-full" style={{ borderColor: BRAND.border }}>
-        <div className="px-5 pt-5 pb-4">
-          <a href="https://james.careers" target="_blank" rel="noopener noreferrer" className="inline-flex items-baseline gap-0.5">
-            <span className="text-[18px] font-bold tracking-tight" style={{ fontFamily: "'Source Sans 3', sans-serif", color: BRAND.text }}>james</span>
-            <span className="text-[18px] font-bold tracking-tight" style={{ color: BRAND.gold, fontFamily: "'Source Sans 3', sans-serif" }}>.careers</span>
-          </a>
+    <div className="h-screen flex flex-col md:flex-row" style={{ backgroundColor: BRAND.cream }}>
+      {/* ── Mobile Header ─────────────────────────── */}
+      <header className="md:hidden px-4 py-3 bg-white border-b space-y-3" style={{ borderColor: BRAND.border }}>
+        <div className="flex items-center justify-between">
+          <div>
+            <h1 className="text-[16px] font-bold tracking-tight" style={{ fontFamily: "'Source Sans 3', sans-serif", color: BRAND.text }}>{t("resumeBuilderTitle")}</h1>
+            <p className="text-[11px]" style={{ color: BRAND.textSecondary }}>{t("resumeBuilderTagline")}</p>
+          </div>
+          <div className="flex items-center gap-2">
+            <button
+              onClick={() => navigate(lang === "zh-tw" ? "/resume" : "/zh-tw/resume")}
+              className="px-3 py-1.5 text-sm font-semibold bg-gold/20 hover:bg-gold/30 text-gold border border-gold/40 rounded-md transition-all duration-200 hover:scale-105"
+            >
+              {lang === "zh-tw" ? "English" : "中文"}
+            </button>
+          </div>
+        </div>
+        <DesignPhilosophy />
+      </header>
+
+      {/* ── Left Sidebar (hidden on mobile) ───────── */}
+      <aside className="hidden md:flex w-[200px] flex-shrink-0 bg-white border-r flex-col h-full" style={{ borderColor: BRAND.border }}>
+        <div className="px-5 pt-5 pb-2">
+          <h1 className="text-[18px] font-bold tracking-tight" style={{ fontFamily: "'Source Sans 3', sans-serif", color: BRAND.text }}>{t("resumeBuilderTitle")}</h1>
+          <p className="text-[11px] mt-0.5" style={{ color: BRAND.textSecondary }}>{t("resumeBuilderTagline")}</p>
         </div>
         <nav className="flex-1 px-2 space-y-0.5">
           {sidebarItems.map((item) => (
@@ -359,13 +474,17 @@ export function DocumentDashboard({ onOpenDocument, onImport }: DocumentDashboar
             </button>
           ))}
         </nav>
-        <div className="px-2 pb-4">
+        <div className="px-3 py-2">
+          <DesignPhilosophy />
+        </div>
+        <div className="px-2 pb-4 space-y-1">
           <div className="border-t pt-3" style={{ borderColor: BRAND.border }}>
-            <button className="w-full flex items-center gap-2.5 px-3 py-2 rounded-md text-[13px] hover:bg-gray-50 transition-colors" style={{ color: BRAND.textSecondary }}>
-              <div className="w-6 h-6 rounded-full bg-gray-200 flex items-center justify-center flex-shrink-0">
-                <User className="w-3.5 h-3.5" style={{ color: BRAND.textSecondary }} />
-              </div>
-              <span className="font-medium">{t("myAccountAction")}</span>
+            <button
+              onClick={() => navigate(lang === "zh-tw" ? "/resume" : "/zh-tw/resume")}
+              className="w-full flex items-center justify-center gap-2 px-3 py-2 text-sm font-semibold bg-gold/20 hover:bg-gold/30 text-gold border border-gold/40 rounded-md transition-all duration-200 hover:scale-105"
+            >
+              <Globe className="w-4 h-4" />
+              <span>{lang === "zh-tw" ? "English" : "中文"}</span>
             </button>
           </div>
         </div>
@@ -373,10 +492,23 @@ export function DocumentDashboard({ onOpenDocument, onImport }: DocumentDashboar
 
       {/* ── Main Content ──────────────────────────── */}
       <main className="flex-1 overflow-y-auto">
-        <div className="max-w-[960px] mx-auto px-8 py-8">
-          <div className="flex items-center justify-between mb-6">
-            <h1 className="text-[22px] font-bold" style={{ fontFamily: "'Source Sans 3', sans-serif", color: BRAND.text }}>{mainTitle}</h1>
-            <div className="flex items-center gap-2">
+        <div className="max-w-[960px] mx-auto px-4 py-5 md:px-8 md:py-8">
+          <div className="flex items-center justify-between mb-5 md:mb-6 gap-3">
+            <h1 className="text-[18px] md:text-[22px] font-bold whitespace-nowrap flex items-center gap-2" style={{ fontFamily: "'Source Sans 3', sans-serif", color: BRAND.text }}>
+              {mainTitle}
+              <span className="text-[10px] font-bold uppercase tracking-wider px-1.5 py-0.5 rounded-full leading-none" style={{ backgroundColor: `${BRAND.gold}20`, color: BRAND.gold }}>Beta</span>
+              {activeTab === "resume" && (
+                <>
+                  <span className="text-[11px] font-semibold tabular-nums px-2 py-0.5 rounded-full" style={{ backgroundColor: resumeLimitReached ? "rgba(220,38,38,0.08)" : "rgba(43,71,52,0.08)", color: resumeLimitReached ? "#dc2626" : BRAND.green }}>
+                    {resumes.length}/{RESUME_LIMIT} {lang === "zh-tw" ? "份履歷" : "resumes"}
+                  </span>
+                  <span className="text-[11px] font-semibold tabular-nums px-2 py-0.5 rounded-full" style={{ backgroundColor: analyzerUsed >= analyzerLimit ? "rgba(220,38,38,0.08)" : "rgba(43,71,52,0.08)", color: analyzerUsed >= analyzerLimit ? "#dc2626" : BRAND.green }}>
+                    {analyzerUsed}/{analyzerLimit} {lang === "zh-tw" ? "次分析" : "analyses"}
+                  </span>
+                </>
+              )}
+            </h1>
+            <div className="flex items-center gap-2 flex-1 justify-end">
               <div className="relative">
                 <Search className="absolute left-2.5 top-1/2 -translate-y-1/2 w-3.5 h-3.5" style={{ color: BRAND.textSecondary }} />
                 <input
@@ -384,7 +516,7 @@ export function DocumentDashboard({ onOpenDocument, onImport }: DocumentDashboar
                   placeholder={t("search")}
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
-                  className="pl-8 pr-3 py-1.5 text-[12px] bg-white border rounded-md w-[160px] focus:outline-none placeholder-gray-400"
+                  className="pl-8 pr-3 py-1.5 text-[12px] bg-white border rounded-md w-[120px] md:w-[160px] focus:outline-none placeholder-gray-400"
                   style={{ borderColor: BRAND.border, color: BRAND.text }}
                 />
               </div>
@@ -396,9 +528,10 @@ export function DocumentDashboard({ onOpenDocument, onImport }: DocumentDashboar
               {/* New resume */}
               <button
                 onClick={() => handleCreate("resume")}
-                className="aspect-[210/297] rounded-lg border-[1.5px] border-dashed flex flex-col items-center justify-center gap-2 transition-colors bg-white/60 hover:bg-white"
+                disabled={resumeLimitReached}
+                className={`aspect-[210/297] rounded-lg border-[1.5px] border-dashed flex flex-col items-center justify-center gap-2 transition-colors ${resumeLimitReached ? "opacity-40 cursor-not-allowed bg-gray-50" : "bg-white/60 hover:bg-white"}`}
                 style={{ borderColor: BRAND.border, color: BRAND.textSecondary }}
-                onMouseEnter={(e) => { e.currentTarget.style.borderColor = BRAND.green; e.currentTarget.style.color = BRAND.green; }}
+                onMouseEnter={(e) => { if (!resumeLimitReached) { e.currentTarget.style.borderColor = BRAND.green; e.currentTarget.style.color = BRAND.green; } }}
                 onMouseLeave={(e) => { e.currentTarget.style.borderColor = BRAND.border; e.currentTarget.style.color = BRAND.textSecondary; }}
               >
                 <Plus className="w-7 h-7" strokeWidth={1.5} />
@@ -407,10 +540,11 @@ export function DocumentDashboard({ onOpenDocument, onImport }: DocumentDashboar
 
               {/* Import */}
               <button
-                onClick={() => onImport("resume")}
-                className="aspect-[210/297] rounded-lg border-[1.5px] border-dashed flex flex-col items-center justify-center gap-3 transition-colors bg-white/60 hover:bg-white"
+                onClick={() => { if (resumeLimitReached) { openReplacePicker({ type: "import" }); return; } onImport("resume"); }}
+                disabled={resumeLimitReached}
+                className={`aspect-[210/297] rounded-lg border-[1.5px] border-dashed flex flex-col items-center justify-center gap-3 transition-colors ${resumeLimitReached ? "opacity-40 cursor-not-allowed bg-gray-50" : "bg-white/60 hover:bg-white"}`}
                 style={{ borderColor: BRAND.border, color: BRAND.textSecondary }}
-                onMouseEnter={(e) => { e.currentTarget.style.borderColor = BRAND.green; e.currentTarget.style.color = BRAND.green; }}
+                onMouseEnter={(e) => { if (!resumeLimitReached) { e.currentTarget.style.borderColor = BRAND.green; e.currentTarget.style.color = BRAND.green; } }}
                 onMouseLeave={(e) => { e.currentTarget.style.borderColor = BRAND.border; e.currentTarget.style.color = BRAND.textSecondary; }}
               >
                 <Upload className="w-7 h-7" strokeWidth={1.5} />
@@ -418,6 +552,17 @@ export function DocumentDashboard({ onOpenDocument, onImport }: DocumentDashboar
                   <span className="text-[12px] font-medium block">{t("importAction")}</span>
                   <span className="text-[10px] mt-0.5 block" style={{ color: BRAND.textSecondary }}>{t("uploadExistingCvAction")}</span>
                 </div>
+                {!usageLoading && !resumeLimitReached && (
+                  <span className="text-[10px] font-medium px-2 py-0.5 rounded-full" style={{ backgroundColor: importCount >= importLimit ? "rgba(220,38,38,0.08)" : "rgba(212,147,13,0.1)", color: importCount >= importLimit ? "#dc2626" : "#D4930D" }}>
+                    {importCount}/{importLimit} {lang === "zh-tw" ? "已使用" : "used"}
+                  </span>
+                )}
+                {!usageLoading && !resumeLimitReached && (
+                  <span className="flex items-center gap-1 text-[10px]" style={{ color: BRAND.textSecondary }}>
+                    <Clock className="w-3 h-3" />
+                    {t("resetsIn")} {daysUntilReset} {daysUntilReset === 1 ? t("day") : t("days")}
+                  </span>
+                )}
               </button>
 
               {filteredResumes.map((doc) => (
@@ -426,8 +571,39 @@ export function DocumentDashboard({ onOpenDocument, onImport }: DocumentDashboar
             </div>
           )}
 
+          {/* ── Usage limits explanation ─────────────── */}
+          {activeTab === "resume" && (
+            <div className="mt-8 rounded-xl p-5 space-y-4" style={{ backgroundColor: "rgba(43,71,52,0.04)", border: "1px solid rgba(43,71,52,0.1)" }}>
+              <div className="flex items-start gap-3">
+                <Heart className="w-5 h-5 shrink-0 mt-0.5" style={{ color: BRAND.gold }} />
+                <div>
+                  <p className="text-[13px] font-semibold" style={{ color: BRAND.text }}>{t("usageLimitsTitle")}</p>
+                  <p className="text-[12px] mt-1.5 leading-relaxed" style={{ color: BRAND.textSecondary }}>
+                    {t("usageLimitsBody")}
+                  </p>
+                </div>
+              </div>
+              <div className="flex flex-wrap gap-3 ml-8">
+                <div className="flex items-center gap-2 px-3 py-1.5 rounded-lg bg-white" style={{ border: `1px solid ${BRAND.border}` }}>
+                  <span className="text-[13px] font-bold tabular-nums" style={{ color: BRAND.green }}>{RESUME_LIMIT}</span>
+                  <span className="text-[11px]" style={{ color: BRAND.textSecondary }}>{t("usageLimitsResumes")}</span>
+                </div>
+                {!usageLoading && (
+                  <div className="flex items-center gap-2 px-3 py-1.5 rounded-lg bg-white" style={{ border: `1px solid ${BRAND.border}` }}>
+                    <span className="text-[13px] font-bold tabular-nums" style={{ color: BRAND.green }}>{importLimit}</span>
+                    <span className="text-[11px]" style={{ color: BRAND.textSecondary }}>{t("usageLimitsImports")}</span>
+                  </div>
+                )}
+                <div className="flex items-center gap-2 px-3 py-1.5 rounded-lg bg-white" style={{ border: `1px solid ${BRAND.border}` }}>
+                  <span className="text-[13px] font-bold tabular-nums" style={{ color: BRAND.green }}>{analyzerLimit}</span>
+                  <span className="text-[11px]" style={{ color: BRAND.textSecondary }}>{lang === "zh-tw" ? "次分析額度 / 月" : "analyses per month"}</span>
+                </div>
+              </div>
+            </div>
+          )}
+
           {activeTab === "cover_letter" && (
-            <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-5">
+            <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3 md:gap-5">
               <button
                 onClick={() => handleCreate("cover_letter")}
                 className="aspect-[210/297] rounded-lg border-[1.5px] border-dashed flex flex-col items-center justify-center gap-2 transition-colors bg-white/60 hover:bg-white"
@@ -489,6 +665,38 @@ export function DocumentDashboard({ onOpenDocument, onImport }: DocumentDashboar
         selected=""
         onSelect={handleCreateFromTemplate}
       />
+
+      {/* ── Replace Picker Dialog ──────────────────── */}
+      <AlertDialog open={replacePickerOpen} onOpenChange={(o) => { if (!o) { setReplacePickerOpen(false); setPendingAction(null); } }}>
+        <AlertDialogContent className="max-w-[400px]">
+          <AlertDialogHeader>
+            <AlertDialogTitle className="text-[16px]">{t("replaceLimitTitle")}</AlertDialogTitle>
+            <AlertDialogDescription className="text-[13px]">{t("replaceLimitDesc")}</AlertDialogDescription>
+          </AlertDialogHeader>
+          <RadioGroup value={replaceTargetId || ""} onValueChange={setReplaceTargetId} className="space-y-2 my-2">
+            {resumes.map((doc) => {
+              const rd = doc.data as import("@/components/resume-builder/types").ResumeData;
+              const personName = rd?.personalDetails?.fullName || "";
+              const personTitle = rd?.personalDetails?.professionalTitle || "";
+              const subtitle = [personName, personTitle].filter(Boolean).join(" · ");
+              return (
+                <label key={doc.id} className={cn("flex items-center gap-3 p-3 rounded-lg border cursor-pointer transition-colors", replaceTargetId === doc.id ? "border-primary bg-primary/5" : "border-gray-200 hover:bg-gray-50")}>
+                  <RadioGroupItem value={doc.id} />
+                  <div className="min-w-0 flex-1">
+                    <p className="text-[13px] font-medium truncate">{doc.name}</p>
+                    {subtitle && <p className="text-[11px] text-muted-foreground">{subtitle}</p>}
+                    <p className="text-[11px] text-muted-foreground">{t("edited")} {formatDate(doc.updatedAt)}</p>
+                  </div>
+                </label>
+              );
+            })}
+          </RadioGroup>
+          <AlertDialogFooter>
+            <AlertDialogCancel className="text-[13px]">{lang === "zh-tw" ? "取消" : "Cancel"}</AlertDialogCancel>
+            <AlertDialogAction onClick={handleReplaceConfirm} disabled={!replaceTargetId} className="text-[13px]">{t("replaceAndCreate")}</AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
     </div>
   );
 }

@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useNavigate, useLocation } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -8,6 +8,7 @@ import PageSEO from "@/components/PageSEO";
 
 export default function ResetPassword() {
   const navigate = useNavigate();
+  const location = useLocation();
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState("");
@@ -15,14 +16,42 @@ export default function ResetPassword() {
   const [success, setSuccess] = useState(false);
   const [hasToken, setHasToken] = useState(false);
 
+  const isZhTw = location.state?.from?.startsWith("/zh-tw") || false;
+
+  const t = isZhTw
+    ? {
+        title: "重設密碼",
+        heading: "設定新密碼",
+        subtitle: "請在下方輸入您的新密碼。",
+        placeholder: "新密碼（至少 6 個字元）",
+        submit: "更新密碼",
+        successTitle: "密碼已更新",
+        successMsg: "正在為您導向…",
+        invalidLink: "無效或已過期的重設連結。",
+        backToLogin: "← 返回登入",
+        back: "返回",
+        minLength: "密碼至少需要 6 個字元",
+      }
+    : {
+        title: "Reset Password",
+        heading: "Set New Password",
+        subtitle: "Enter your new password below.",
+        placeholder: "New password (min. 6 characters)",
+        submit: "Update Password",
+        successTitle: "Password Updated",
+        successMsg: "Redirecting you now…",
+        invalidLink: "Invalid or expired reset link.",
+        backToLogin: "← Back to Sign In",
+        back: "Back",
+        minLength: "Password must be at least 6 characters",
+      };
+
   useEffect(() => {
-    // Check for recovery token in URL hash
     const hash = window.location.hash;
     if (hash.includes("type=recovery")) {
       setHasToken(true);
     }
 
-    // Listen for PASSWORD_RECOVERY event
     const { data: { subscription } } = supabase.auth.onAuthStateChange((event) => {
       if (event === "PASSWORD_RECOVERY") {
         setHasToken(true);
@@ -36,7 +65,7 @@ export default function ResetPassword() {
     e.preventDefault();
     setError("");
     if (password.length < 6) {
-      setError("Password must be at least 6 characters");
+      setError(t.minLength);
       return;
     }
     setLoading(true);
@@ -53,11 +82,11 @@ export default function ResetPassword() {
   if (!hasToken && !success) {
     return (
       <div className="min-h-screen bg-background flex items-center justify-center px-4">
-        <PageSEO title="Reset Password | James Bugden" description="Set a new password" path="/reset-password" />
+        <PageSEO title={`${t.title} | James Bugden`} description={t.subtitle} path="/reset-password" />
         <div className="w-full max-w-[400px] bg-card border border-border rounded-xl shadow-lg p-8 text-center">
-          <p className="text-sm text-muted-foreground">Invalid or expired reset link.</p>
+          <p className="text-sm text-muted-foreground">{t.invalidLink}</p>
           <Link to="/login" className="text-sm text-foreground font-medium hover:underline mt-4 inline-block">
-            ← Back to Sign In
+            {t.backToLogin}
           </Link>
         </div>
       </div>
@@ -66,12 +95,12 @@ export default function ResetPassword() {
 
   return (
     <div className="min-h-screen bg-background flex items-center justify-center px-4">
-      <PageSEO title="Reset Password | James Bugden" description="Set a new password" path="/reset-password" />
+      <PageSEO title={`${t.title} | James Bugden`} description={t.subtitle} path="/reset-password" />
       <div className="w-full max-w-[400px]">
         <div className="mb-6">
           <Link to="/login" className="inline-flex items-center gap-1.5 text-sm text-muted-foreground hover:text-foreground transition-colors">
             <ArrowLeft className="w-4 h-4" />
-            Back
+            {t.back}
           </Link>
         </div>
 
@@ -79,20 +108,20 @@ export default function ResetPassword() {
           {success ? (
             <div className="text-center py-4">
               <CheckCircle className="w-10 h-10 text-foreground mx-auto mb-4" />
-              <h2 className="font-heading text-xl font-bold text-foreground mb-2">Password Updated</h2>
-              <p className="text-sm text-muted-foreground">Redirecting you now…</p>
+              <h2 className="font-heading text-xl font-bold text-foreground mb-2">{t.successTitle}</h2>
+              <p className="text-sm text-muted-foreground">{t.successMsg}</p>
             </div>
           ) : (
             <>
-              <h1 className="font-heading text-2xl font-bold text-foreground mb-1">Set New Password</h1>
-              <p className="text-sm text-muted-foreground mb-6">Enter your new password below.</p>
+              <h1 className="font-heading text-2xl font-bold text-foreground mb-1">{t.heading}</h1>
+              <p className="text-sm text-muted-foreground mb-6">{t.subtitle}</p>
 
               <form onSubmit={handleSubmit} className="space-y-3">
                 <div className="relative">
                   <Lock className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
                   <Input
                     type={showPassword ? "text" : "password"}
-                    placeholder="New password (min. 6 characters)"
+                    placeholder={t.placeholder}
                     value={password}
                     onChange={e => setPassword(e.target.value)}
                     className="pl-10 pr-10 h-11"
@@ -104,7 +133,7 @@ export default function ResetPassword() {
                 </div>
                 {error && <p className="text-xs text-destructive">{error}</p>}
                 <Button type="submit" className="w-full h-11 font-semibold" disabled={loading}>
-                  {loading ? "..." : "Update Password"}
+                  {loading ? "..." : t.submit}
                 </Button>
               </form>
             </>

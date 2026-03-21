@@ -397,7 +397,7 @@ export default function LAMPTable({ employers, contacts, onUpdateEmployer, onDel
     toast.success("Employer deleted");
   };
 
-  const showCoachingCTA = employers.length >= 5 && employers.length <= 25;
+  
 
   return (
     <div className="space-y-4">
@@ -547,20 +547,6 @@ export default function LAMPTable({ employers, contacts, onUpdateEmployer, onDel
         )}
       </div>
 
-      {/* Coaching CTA */}
-      {showCoachingCTA && (
-        <div className="bg-white rounded-lg shadow-sm border p-5" style={{ borderColor: "#E5E0D8" }}>
-          <p className="text-sm font-medium" style={{ color: "#1B3A2F" }}>
-            💡 Struggling to hit 40 employers?
-          </p>
-          <p className="text-xs mt-1" style={{ color: "#888" }}>
-            Most people get stuck around 15-20. That's normal. A coaching session can help you find hidden opportunities.
-          </p>
-          <a href="https://james.careers/#coaching" target="_blank" rel="noopener noreferrer" className="text-xs font-semibold mt-2 inline-flex items-center gap-1 transition-colors hover:opacity-70" style={{ color: "#C9A961" }}>
-            Book a Strategy Call → <ExternalLink className="w-3 h-3" />
-          </a>
-        </div>
-      )}
 
       {/* Modals */}
       <QuickAddModal open={addOpen} onOpenChange={setAddOpen} onAdd={onAddEmployer} />

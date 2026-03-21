@@ -1,1 +1,4 @@
-project_id = "rvayiexcltwxnyddwfsd"
+project_id = "rpeaehxawjvbhdneglce"
+
+[functions.analyze-resume]
+verify_jwt = false

@@ -8,6 +8,7 @@ import LanguageToggle from "@/components/LanguageToggle";
 import { AuthHeaderButton } from "@/components/AuthHeaderButton";
 import PageSEO from "@/components/PageSEO";
 import { useTrackGuideProgress } from "@/hooks/useReadingProgress";
+import GuideSignInBanner from "@/components/guides/GuideSignInBanner";
 
 const SectionNumber = ({ num }: { num: string }) => (
   <span className="text-gold/30 font-heading text-6xl md:text-7xl font-bold leading-none select-none">
@@ -41,10 +42,6 @@ const ResumeQuickReference = () => {
       {/* Hero Section */}
       <section className="pt-28 md:pt-36 pb-14 md:pb-20 px-5 md:px-6 bg-executive-green">
         <div className="container mx-auto max-w-4xl text-center">
-          <div className="inline-flex items-center gap-2 px-4 py-2 bg-cream/10 border border-cream/20 rounded-full mb-6">
-            <FileText className="w-4 h-4 text-gold" />
-            <span className="text-sm text-cream/80">Free Career Resource</span>
-          </div>
           <h1 className="font-heading text-3xl md:text-5xl lg:text-6xl text-cream leading-tight mb-4">
             The Perfect Resume:<br className="hidden sm:block" /> Quick Reference Guide
           </h1>
@@ -63,6 +60,8 @@ const ResumeQuickReference = () => {
           </div>
         </div>
       </section>
+
+      <GuideSignInBanner lang="en" />
 
       {/* Template Download - separate from hero with distinct background */}
       <section className="py-10 md:py-14 px-5 md:px-6 bg-card border-b border-border">
@@ -427,7 +426,7 @@ const ResumeQuickReference = () => {
         <div className="container mx-auto max-w-5xl">
           <div className="flex flex-col md:flex-row justify-between items-center gap-4">
             <span className="text-sm text-muted-foreground">
-              © 2024 James Bugden. All rights reserved.
+              © 2026 James Bugden. All rights reserved.
             </span>
             <div className="flex items-center gap-6">
               <a href="https://www.linkedin.com/in/james-bugden/" target="_blank" rel="noopener noreferrer" className="text-muted-foreground hover:text-foreground transition-colors">

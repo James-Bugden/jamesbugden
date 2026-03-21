@@ -1,4 +1,6 @@
 import { FileText, Clock, Linkedin, Bot, Target, Briefcase, Send, MessageSquare, DollarSign, AlertTriangle, CheckCircle2, XCircle, ArrowRight, ChevronDown, Menu, Search, Zap, BookOpen, Copy, Check } from "lucide-react";
+import JobTitleWorksheet from "@/components/guides/JobTitleWorksheet";
+import { AI_GUIDE_PROMPTS } from "@/data/aiGuidePrompts";
 import { Link } from "react-router-dom";
 import GoldCheckBadge from "@/components/GoldCheckBadge";
 import { InstagramIcon, ThreadsIcon } from "@/components/SocialIcons";
@@ -7,6 +9,7 @@ import LanguageToggle from "@/components/LanguageToggle";
 import { AuthHeaderButton } from "@/components/AuthHeaderButton";
 import PageSEO from "@/components/PageSEO";
 import { useTrackGuideProgress } from "@/hooks/useReadingProgress";
+import GuideSignInBanner from "@/components/guides/GuideSignInBanner";
 import { useState, useEffect } from "react";
 
 const SectionNumber = ({ num }: { num: string }) => (
@@ -50,6 +53,25 @@ const AiPromptBlock = ({ children }: { children: React.ReactNode }) => {
       </div>
       <pre className="text-sm text-foreground whitespace-pre-wrap font-mono bg-background/50 rounded-lg p-4 overflow-x-auto">{children}</pre>
     </div>
+  );
+};
+
+const CopyAllPromptsButton = ({ lang }: { lang: "en" | "zh" }) => {
+  const [copied, setCopied] = useState(false);
+  const handleCopyAll = () => {
+    const allText = AI_GUIDE_PROMPTS.map(stage =>
+      `--- 階段 ${stage.stage}：${lang === "zh" ? stage.titleZh : stage.titleEn} ---\n\n` +
+      stage.prompts.map(p => `[${lang === "zh" ? p.stepZh : p.step}]\n${lang === "zh" ? p.promptZh : p.promptEn}`).join("\n\n")
+    ).join("\n\n\n");
+    navigator.clipboard.writeText(allText);
+    setCopied(true);
+    setTimeout(() => setCopied(false), 2500);
+  };
+  return (
+    <button onClick={handleCopyAll} className="flex items-center gap-2 text-sm font-medium text-gold hover:text-gold/80 transition-colors px-4 py-2.5 rounded-lg border border-gold/30 hover:bg-gold/5">
+      {copied ? <Check className="w-4 h-4" /> : <Copy className="w-4 h-4" />}
+      {copied ? "已複製所有提示詞！" : "複製所有提示詞"}
+    </button>
   );
 };
 
@@ -194,6 +216,14 @@ const TableOfContents = () => {
 
 const AiJobSearchGuideZhTw = () => {
   useTrackGuideProgress("ai-job-search-guide-zh");
+  const [checklistState, setChecklistState] = useState<Record<number, boolean[]>>({});
+  const toggleChecklist = (stageIndex: number, itemIndex: number) => {
+    setChecklistState(prev => {
+      const stage = [...(prev[stageIndex] || [])];
+      stage[itemIndex] = !stage[itemIndex];
+      return { ...prev, [stageIndex]: stage };
+    });
+  };
 
   return (
     <div className="min-h-screen bg-background">
@@ -225,10 +255,7 @@ const AiJobSearchGuideZhTw = () => {
       {/* Hero */}
       <section className="pt-28 md:pt-36 pb-14 md:pb-20 px-5 md:px-6 bg-executive-green">
         <div className="container mx-auto max-w-4xl text-center">
-          <div className="inline-flex items-center gap-2 px-4 py-2 bg-cream/10 border border-cream/20 rounded-full mb-6">
-            <Bot className="w-4 h-4 text-gold" />
-            <span className="text-sm text-cream/80">AI 驅動指南</span>
-          </div>
+          
           <h1 className="font-heading text-3xl md:text-5xl lg:text-6xl text-cream leading-tight mb-4" style={{ lineHeight: 1.2 }}>
             如何用 AI 掌控你的<br className="hidden sm:block" />整個求職過程
           </h1>
@@ -247,6 +274,8 @@ const AiJobSearchGuideZhTw = () => {
           </div>
         </div>
       </section>
+
+      <GuideSignInBanner lang="zh" />
 
       {/* ═══════════════ 前言 ═══════════════ */}
       <section id="intro" className="py-14 md:py-20 px-5 md:px-6 bg-card border-b border-border scroll-mt-24">
@@ -297,10 +326,9 @@ const AiJobSearchGuideZhTw = () => {
         </div>
       </section>
 
-      <main className="container mx-auto px-5 md:px-6 pb-20 max-w-3xl">
       {/* ═══════════════ 第 1 章：找到方向 ═══════════════ */}
-      <section id="find-path" className="py-14 md:py-20 scroll-mt-24">
-        <div className="space-y-6">
+      <section id="find-path" className="py-14 md:py-20 px-5 md:px-6 bg-background scroll-mt-24">
+        <div className="container mx-auto max-w-3xl space-y-6">
           <div className="flex items-start gap-5 mb-8">
             <SectionNumber num="01" />
             <div className="pt-3">
@@ -378,8 +406,8 @@ const AiJobSearchGuideZhTw = () => {
       </section>
 
       {/* ═══════════════ 第 2 章：LinkedIn 防線 ═══════════════ */}
-      <section id="linkedin" className="py-14 md:py-20 scroll-mt-24">
-        <div className="space-y-6">
+      <section id="linkedin" className="py-14 md:py-20 px-5 md:px-6 bg-card border-y border-border scroll-mt-24">
+        <div className="container mx-auto max-w-3xl space-y-6">
           <div className="flex items-start gap-5 mb-8">
             <SectionNumber num="02" />
             <div className="pt-3">
@@ -510,8 +538,8 @@ const AiJobSearchGuideZhTw = () => {
       </section>
 
       {/* ═══════════════ 第 3 章：履歷 ═══════════════ */}
-      <section id="resume" className="py-14 md:py-20 scroll-mt-24">
-        <div className="space-y-6">
+      <section id="resume" className="py-14 md:py-20 px-5 md:px-6 bg-background scroll-mt-24">
+        <div className="container mx-auto max-w-3xl space-y-6">
           <div className="flex items-start gap-5 mb-8">
             <SectionNumber num="03" />
             <div className="pt-3">
@@ -529,7 +557,34 @@ const AiJobSearchGuideZhTw = () => {
             <p className="text-muted-foreground leading-relaxed text-sm mb-3">強大的履歷從強大的結構開始。一個乾淨、經過招募官測試的模板，能消除你在版面、關鍵字、區塊和層級上的所有猜測。你只需要專注在內容上。</p>
             <ActionStep>下載一個乾淨的單欄履歷模板。避免有圖形、圖標、大頭照或多欄的模板。這些看起來漂亮但在 ATS（求職者追蹤系統）解析時會壞掉。</ActionStep>
             <RecruiterCheck>我審閱過數千份因為候選人用了華麗的雙欄模板而被 ATS 弄亂的履歷。系統讀不了它，所以顯示給我的是亂碼。如果我在前三秒內讀不了你的履歷，我就跳過。簡單打敗花俏。</RecruiterCheck>
+            <div className="flex flex-wrap gap-3 mt-4">
+              <Link to="/zh-tw/resume-builder" className="inline-flex items-center gap-1.5 text-sm text-gold hover:underline font-medium">
+                開啟履歷編輯器 →
+              </Link>
+              <Link to="/zh-tw/resume-guide" className="inline-flex items-center gap-1.5 text-sm text-gold hover:underline font-medium">
+                閱讀履歷指南 →
+              </Link>
+            </div>
           </Collapsible>
+
+          {/* 3.1b */}
+          <div className="bg-gold/5 border border-gold/20 rounded-xl p-5 space-y-3">
+            <h4 className="font-heading text-lg text-gold font-semibold">3.1b 打開互動式履歷工作手冊</h4>
+            <p className="text-muted-foreground text-sm leading-relaxed">這份工作手冊是你完成第 3 章剩餘部分的規劃工具。從關鍵字到要點的每一步都在這裡完成。在另一個分頁打開它，跟這份指南一起使用。</p>
+            <a href="#worksheet" className="inline-flex items-center gap-1.5 text-sm text-gold hover:underline font-medium">
+              打開履歷工作手冊 →
+            </a>
+            <p className="text-sm text-muted-foreground leading-relaxed mt-2">你會用這份工作手冊來：</p>
+            <ul className="text-sm text-muted-foreground space-y-1 list-disc list-inside">
+              <li>輸入你目標角色的 20 個關鍵字（步驟 3.9）</li>
+              <li>追蹤哪些關鍵字在不同職缺中出現最多次</li>
+              <li>記錄每段經歷的成就（步驟 3.11）</li>
+              <li>把關鍵字和成就配對（步驟 3.12）</li>
+              <li>建立並儲存你的最終要點（步驟 3.13）</li>
+              <li>即時觀看你的關鍵字匹配率達到 50%（步驟 3.15）</li>
+            </ul>
+            <p className="text-xs text-muted-foreground">工作手冊中的每個分頁代表一個目標職稱。如果你從第 1 章中瞄準了多個職稱，為每個建立一個獨立分頁。</p>
+          </div>
 
           <Collapsible title="3.2 為每個職稱建立不同版本">
             <p className="text-muted-foreground leading-relaxed text-sm mb-3">每個職稱代表不同的技能、成就和關鍵字組合。因為招募官用特定的角色用語搜尋，用同一份履歷投不同職稱會讓你對每個職稱看起來都不夠格。</p>
@@ -621,6 +676,11 @@ const AiJobSearchGuideZhTw = () => {
 [要點]`}</AiPromptBlock>
           <ProTip>AI 檢視完你的要點後，把它們大聲讀出來。如果聽起來像機器人寫的，用你自己的語氣重寫。招募官能看出 AI 生成的內容，這會讓你看起來偷懶而不是令人印象深刻。</ProTip>
 
+          <div className="flex flex-wrap gap-3 mt-3 mb-4">
+            <Link to="/zh-tw/resume-analyzer" className="inline-flex items-center gap-1.5 text-sm text-gold hover:underline font-medium">
+              用我們的履歷分析器檢查你的關鍵字匹配率 →
+            </Link>
+          </div>
           <h3 className="font-heading text-xl text-foreground font-semibold pt-4">3.15 瞄準約 50% 的關鍵字匹配率</h3>
           <p className="text-muted-foreground leading-relaxed text-sm">你不需要包含職缺描述中的每個關鍵字。但你需要足夠多的重要關鍵字，讓系統認定你是一個強力的匹配。</p>
           <p className="text-muted-foreground leading-relaxed text-sm">為什麼是 50%？低於 30%，ATS 可能根本不會讓你浮出來。高於 70%，你的履歷開始讀起來像是在塞關鍵字。50% 是最佳平衡點。</p>
@@ -670,8 +730,8 @@ const AiJobSearchGuideZhTw = () => {
       </section>
 
       {/* ═══════════════ 第 4 章：投遞 ═══════════════ */}
-      <section id="apply" className="py-14 md:py-20 scroll-mt-24">
-        <div className="space-y-6">
+      <section id="apply" className="py-14 md:py-20 px-5 md:px-6 bg-card border-y border-border scroll-mt-24">
+        <div className="container mx-auto max-w-3xl space-y-6">
           <div className="flex items-start gap-5 mb-8">
             <SectionNumber num="04" />
             <div className="pt-3">
@@ -748,8 +808,8 @@ const AiJobSearchGuideZhTw = () => {
       </section>
 
       {/* ═══════════════ 第 5 章：面試 ═══════════════ */}
-      <section id="interview" className="py-14 md:py-20 scroll-mt-24">
-        <div className="space-y-6">
+      <section id="interview" className="py-14 md:py-20 px-5 md:px-6 bg-background scroll-mt-24">
+        <div className="container mx-auto max-w-3xl space-y-6">
           <div className="flex items-start gap-5 mb-8">
             <SectionNumber num="05" />
             <div className="pt-3">
@@ -795,13 +855,22 @@ const AiJobSearchGuideZhTw = () => {
             <p>不要背腳本。記住你的關鍵故事和結構（挑戰-行動-結果）。然後練習用不同方式自然地表達它們。如果你逐字背，當面試官問了稍微不同版本的問題，你就會當機。如果你熟悉你的故事，你可以應對任何問法。</p>
           </CommonMistake>
 
+          <div className="bg-card border border-border rounded-xl p-5 space-y-3 my-4">
+            <h4 className="font-heading text-base text-foreground font-semibold">深入了解面試準備：</h4>
+            <ul className="space-y-2 text-sm text-muted-foreground">
+              <li><Link to="/zh-tw/interview-preparation-guide" className="text-gold hover:underline font-medium">面試攻略 →</Link> 招募官的完整面試致勝指南</li>
+              <li><Link to="/zh-tw/interview-questions" className="text-gold hover:underline font-medium">面試題庫 →</Link> 200+ 道真實面試題練習</li>
+            </ul>
+          </div>
+
+
           <p className="text-foreground font-medium">接下來：你的面試準備好了。最後一步：確保你拿到應有的薪水。</p>
         </div>
       </section>
 
       {/* ═══════════════ 第 6 章：談判 ═══════════════ */}
-      <section id="negotiate" className="py-14 md:py-20 scroll-mt-24">
-        <div className="space-y-6">
+      <section id="negotiate" className="py-14 md:py-20 px-5 md:px-6 bg-card border-y border-border scroll-mt-24">
+        <div className="container mx-auto max-w-3xl space-y-6">
           <div className="flex items-start gap-5 mb-8">
             <SectionNumber num="06" />
             <div className="pt-3">
@@ -880,8 +949,8 @@ const AiJobSearchGuideZhTw = () => {
       </section>
 
       {/* ═══════════════ 第 7 章：AI 錯誤 ═══════════════ */}
-      <section id="mistakes" className="py-14 md:py-20 scroll-mt-24">
-        <div className="space-y-6">
+      <section id="mistakes" className="py-14 md:py-20 px-5 md:px-6 bg-background scroll-mt-24">
+        <div className="container mx-auto max-w-3xl space-y-6">
           <div className="flex items-start gap-5 mb-8">
             <SectionNumber num="07" />
             <div className="pt-3">
@@ -912,8 +981,8 @@ const AiJobSearchGuideZhTw = () => {
       </section>
 
       {/* ═══════════════ 第 8 章：心態轉換 ═══════════════ */}
-      <section id="mindset" className="py-14 md:py-20 scroll-mt-24">
-        <div className="space-y-6">
+      <section id="mindset" className="py-14 md:py-20 px-5 md:px-6 bg-card border-y border-border scroll-mt-24">
+        <div className="container mx-auto max-w-3xl space-y-6">
           <div className="flex items-start gap-5 mb-8">
             <SectionNumber num="08" />
             <div className="pt-3">
@@ -952,8 +1021,8 @@ const AiJobSearchGuideZhTw = () => {
       </section>
 
       {/* ═══════════════ 第 9 章：檢核表 ═══════════════ */}
-      <section id="checklist" className="py-14 md:py-20 scroll-mt-24">
-        <div className="space-y-6">
+      <section id="checklist" className="py-14 md:py-20 px-5 md:px-6 bg-background scroll-mt-24">
+        <div className="container mx-auto max-w-3xl space-y-6">
           <div className="flex items-start gap-5 mb-8">
             <SectionNumber num="09" />
             <div className="pt-3">
@@ -962,31 +1031,87 @@ const AiJobSearchGuideZhTw = () => {
           </div>
 
           {[
-            { title: "階段 1：找到你的方向", items: ["根據你的技能和興趣產生 10 個潛在職稱 → 1.1", "探索每個角色的典型一天 → 1.2", "根據目標和資歷排序角色 → 1.3", "用三個實驗測試你對每個角色的適合度 → 1.4", "聯繫在你目標角色中的校友 → 1.5"] },
-            { title: "階段 2：建立你的 LinkedIn 防線", items: ["撰寫富含關鍵字的標題（120 字以內） → 2.1", "把地點設定到你想工作的地方 → 2.2", "加入目標角色的前 20 個技能 → 2.3", "在經歷要點中嵌入關鍵字 → 2.4", "撰寫結構化的「關於」區塊（1,200 字） → 2.5", "找出並開始補足缺少的技能 → 2.6", "開啟「Open to Work」（僅招募官可見） → 2.7", "將人脈網擴大到 500+ 連結 → 2.8", "追蹤目標公司 → 2.9", "上傳專業大頭照 → 2.10", "請求兩到三封推薦 → 2.11", "加上背景照片 → 2.12", "回覆所有 InMail → 2.13"] },
-            { title: "階段 3：建立你的履歷", items: ["下載乾淨、ATS 友善的模板 → 3.1", "為每個目標職稱建立獨立版本 → 3.2", "在最上方加入目標職稱 → 3.3", "更新地點為目標城市 → 3.4", "加入相關的非正職經歷 → 3.5", "短期工作經歷只用年份 → 3.6", "為不知名的公司加上組織背景 → 3.7", "釐清模糊的內部職稱 → 3.8", "從職缺描述中提取前 20 個關鍵字 → 3.9", "每段經歷寫 3 個以成就為基礎的要點 → 3.10", "把關鍵字和成就配對 → 3.12", "建立完整、精煉的要點 → 3.13", "檢視並評分要點品質 → 3.14", "瞄準 50% 的關鍵字匹配率 → 3.15", "加入教育背景要點 → 3.16", "檢視並評分教育背景要點品質 → 3.17", "完成並分類技能區塊 → 3.18", "撰寫聚焦的摘要 → 3.19"] },
-            { title: "階段 4：投遞", items: ["為目標和替代職稱設定每日職缺提醒 → 4.1", "新角色匹配時當天投遞 → 4.2", "需要時撰寫求職信 → 4.3", "為每個雇主客製化求職信 → 4.5", "為每次投遞找到並請求推薦 → 4.6"] },
-            { title: "階段 5：完勝面試", items: ["產生最可能被問到的 10 個面試問題 → 5.1", "為每個問題撰寫 CAR 格式的答案 → 5.1", "用 AI 回饋練習書面回答 → 5.2", "練習口頭回答（目標 60-90 秒每題） → 5.3", "研究公司的前 5 大挑戰 → 5.4", "準備角色的 90 天行動計畫 → 5.4", "準備要問面試官的有深度問題 → 5.4"] },
-            { title: "階段 6：像機器人一樣談判", items: ["根據職涯目標評估 offer → 6.1", "背景調查你的未來老闆 → 6.2", "儘早框架談判（分享競爭 offer） → 6.3", "用薪資數據重新錨定 → 6.4", "必要時反駁第二次 offer → 6.5", "如果底薪不動，轉移焦點到非薪資項目 → 6.6", "用有條件的接受來成交 → 6.7"] },
-          ].map((stage, i) => (
-            <div key={i} className="bg-card border border-border rounded-xl p-5 space-y-3">
-              <h3 className="font-heading text-lg text-gold font-semibold">{stage.title}</h3>
+            { title: "階段 1：找到你的方向", anchor: "#find-path", items: ["根據你的技能和興趣產生 10 個潛在職稱 → 1.1", "探索每個角色的典型一天 → 1.2", "根據目標和資歷排序角色 → 1.3", "用三個實驗測試你對每個角色的適合度 → 1.4", "聯繫在你目標角色中的校友 → 1.5"] },
+            { title: "階段 2：建立你的 LinkedIn 防線", anchor: "#linkedin", items: ["撰寫富含關鍵字的標題（120 字以內） → 2.1", "把地點設定到你想工作的地方 → 2.2", "加入目標角色的前 20 個技能 → 2.3", "在經歷要點中嵌入關鍵字 → 2.4", "撰寫結構化的「關於」區塊（1,200 字） → 2.5", "找出並開始補足缺少的技能 → 2.6", "開啟「Open to Work」（僅招募官可見） → 2.7", "將人脈網擴大到 500+ 連結 → 2.8", "追蹤目標公司 → 2.9", "上傳專業大頭照 → 2.10", "請求兩到三封推薦 → 2.11", "加上背景照片 → 2.12", "回覆所有 InMail → 2.13"] },
+            { title: "階段 3：建立你的履歷", anchor: "#resume", items: ["下載乾淨、ATS 友善的模板 → 3.1", "打開履歷工作手冊，為每個目標職稱建立分頁 → 3.1b", "為每個目標職稱建立獨立版本 → 3.2", "在最上方加入目標職稱 → 3.3", "更新地點為目標城市 → 3.4", "加入相關的非正職經歷 → 3.5", "短期工作經歷只用年份 → 3.6", "為不知名的公司加上組織背景 → 3.7", "釐清模糊的內部職稱 → 3.8", "從職缺描述中提取前 20 個關鍵字 → 3.9", "每段經歷寫 3 個以成就為基礎的要點 → 3.10", "把關鍵字和成就配對 → 3.12", "建立完整、精煉的要點 → 3.13", "檢視並評分要點品質 → 3.14", "瞄準 50% 的關鍵字匹配率 → 3.15", "加入教育背景要點 → 3.16", "檢視並評分教育背景要點品質 → 3.17", "完成並分類技能區塊 → 3.18", "撰寫聚焦的摘要 → 3.19"] },
+            { title: "階段 4：投遞", anchor: "#apply", items: ["為目標和替代職稱設定每日職缺提醒 → 4.1", "新角色匹配時當天投遞 → 4.2", "需要時撰寫求職信 → 4.3", "為每個雇主客製化求職信 → 4.5", "為每次投遞找到並請求推薦 → 4.6"] },
+            { title: "階段 5：完勝面試", anchor: "#interview", items: ["產生最可能被問到的 10 個面試問題 → 5.1", "為每個問題撰寫 CAR 格式的答案 → 5.1", "用 AI 回饋練習書面回答 → 5.2", "練習口頭回答（目標 60-90 秒每題） → 5.3", "研究公司的前 5 大挑戰 → 5.4", "準備角色的 90 天行動計畫 → 5.4", "準備要問面試官的有深度問題 → 5.4"] },
+            { title: "階段 6：像機器人一樣談判", anchor: "#negotiate", items: ["根據職涯目標評估 offer → 6.1", "背景調查你的未來老闆 → 6.2", "儘早框架談判（分享競爭 offer） → 6.3", "用薪資數據重新錨定 → 6.4", "必要時反駁第二次 offer → 6.5", "如果底薪不動，轉移焦點到非薪資項目 → 6.6", "用有條件的接受來成交 → 6.7"] },
+          ].map((stage, si) => (
+            <div key={si} className="bg-card border border-border rounded-xl p-5 space-y-3">
+              <h3 className="font-heading text-lg text-gold font-semibold">
+                <a href={stage.anchor} className="hover:underline underline-offset-2 transition-colors">{stage.title}</a>
+              </h3>
               <ul className="space-y-2">
-                {stage.items.map((item, j) => (
-                  <li key={j} className="flex items-start gap-2 text-sm text-muted-foreground">
-                    <span className="w-4 h-4 rounded border border-border flex-shrink-0 mt-0.5" />
-                    {item}
-                  </li>
-                ))}
+                {stage.items.map((item, j) => {
+                  const refMatch = item.match(/→\s*(\d+)\.\d+$/);
+                  const isChecked = checklistState[si]?.[j] ?? false;
+                  return (
+                    <li key={j} onClick={() => toggleChecklist(si, j)} className={`flex items-start gap-2 text-sm cursor-pointer group transition-opacity ${isChecked ? "opacity-60" : ""}`}>
+                      <span className={`w-5 h-5 rounded border-2 flex-shrink-0 mt-0.5 flex items-center justify-center transition-colors ${isChecked ? "bg-gold border-gold text-background" : "border-border group-hover:border-gold/60"}`}>
+                        {isChecked && <Check className="w-3 h-3" />}
+                      </span>
+                      <span className={isChecked ? "line-through text-muted-foreground" : "text-muted-foreground"}>
+                        {refMatch ? (
+                          <>{item.replace(/→\s*\d+\.\d+$/, "")} <a href={stage.anchor} onClick={e => e.stopPropagation()} className="text-gold hover:underline transition-colors">→ {refMatch[0].replace("→ ", "")}</a></>
+                        ) : item}
+                      </span>
+                    </li>
+                  );
+                })}
               </ul>
             </div>
           ))}
         </div>
       </section>
 
-      {/* ═══════════════ 第 10 章：資源 ═══════════════ */}
-      <section id="resources" className="py-14 md:py-20 scroll-mt-24">
-        <div className="space-y-6">
+      {/* ═══════════════ 第 11 章：提示詞庫 ═══════════════ */}
+      <section id="prompt-library" className="py-14 md:py-20 px-5 md:px-6 scroll-mt-24">
+        <div className="container mx-auto max-w-3xl space-y-6">
+          <div className="flex items-start gap-5 mb-8">
+            <SectionNumber num="11" />
+            <div className="pt-3">
+              <h2 className="font-heading text-2xl md:text-3xl text-foreground">完整提示詞庫</h2>
+              <p className="text-muted-foreground mt-2 text-sm">本指南所有 AI 提示詞集中在此。展開各階段，直接複製提示詞到 ChatGPT 使用。</p>
+            </div>
+          </div>
+
+          <CopyAllPromptsButton lang="zh" />
+
+          <div className="space-y-3">
+            {AI_GUIDE_PROMPTS.map(stage => (
+              <Collapsible key={stage.stage} title={`階段 ${stage.stage}：${stage.titleZh}`}>
+                <div className="space-y-1 pt-2">
+                  {stage.prompts.map((p, i) => (
+                    <div key={i}>
+                      <p className="text-xs font-semibold text-muted-foreground mb-1">{p.stepZh}</p>
+                      <AiPromptBlock>{p.promptZh}</AiPromptBlock>
+                    </div>
+                  ))}
+                </div>
+              </Collapsible>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* ═══════════════ 第 12 章：職稱工作表 ═══════════════ */}
+      <section id="worksheet" className="py-14 md:py-20 px-5 md:px-6 bg-card border-y border-border scroll-mt-24">
+        <div className="container mx-auto max-w-3xl space-y-6">
+          <div className="flex items-start gap-5 mb-8">
+            <SectionNumber num="12" />
+            <div className="pt-3">
+              <h2 className="font-heading text-2xl md:text-3xl text-foreground">職稱關鍵字工作表</h2>
+              <p className="text-muted-foreground mt-2 text-sm">針對每個目標職位，列出職缺說明中最常出現的 20 個關鍵技能，然後對應你的經歷、成就與關鍵字，建立優化的履歷條列句。你的進度會自動儲存。</p>
+            </div>
+          </div>
+          <JobTitleWorksheet lang="zh" />
+        </div>
+      </section>
+
+
+      <section id="resources" className="py-14 md:py-20 px-5 md:px-6 bg-card border-y border-border scroll-mt-24">
+        <div className="container mx-auto max-w-3xl space-y-6">
           <div className="flex items-start gap-5 mb-8">
             <SectionNumber num="10" />
             <div className="pt-3">
@@ -999,7 +1124,11 @@ const AiJobSearchGuideZhTw = () => {
             <ul className="space-y-3 text-sm text-muted-foreground">
               <li><Link to="/zh-tw/resume-guide" className="text-gold hover:underline font-medium">履歷指南：</Link>如何寫出通過每項測試的履歷（根據 Dan Clay 的框架）</li>
               <li><Link to="/zh-tw/interview-preparation-guide" className="text-gold hover:underline font-medium">面試攻略：</Link>招募官的完整面試致勝指南（根據 Thea Kelley 的系統）</li>
-              <li><Link to="/zh-tw/recruiter-screen-guide" className="text-gold hover:underline font-medium">招募官電話面試指南：</Link>如何通過招募官電話面試，進入用人主管面試</li>
+              <li><Link to="/zh-tw/hr-interview-guide" className="text-gold hover:underline font-medium">招募官電話面試指南：</Link>如何通過招募官電話面試，進入用人主管面試</li>
+              <li><Link to="/zh-tw/linkedin-guide" className="text-gold hover:underline font-medium">LinkedIn 指南：</Link>優化你的個人檔案，讓招募官先找到你</li>
+              <li><Link to="/zh-tw/pivot-method-guide" className="text-gold hover:underline font-medium">轉職方法指南：</Link>職涯轉換的結構化框架</li>
+              <li><Link to="/zh-tw/resume-analyzer" className="text-gold hover:underline font-medium">履歷分析器：</Link>獲得即時的 AI 履歷回饋</li>
+              <li><Link to="/zh-tw/salary-starter-kit" className="text-gold hover:underline font-medium">薪資入門包：</Link>在談判前研究薪資數據</li>
             </ul>
           </div>
 
@@ -1015,11 +1144,11 @@ const AiJobSearchGuideZhTw = () => {
         </div>
       </section>
 
-      {/* Share */}
-      <section className="pb-12">
+      <section className="py-12 px-5 md:px-6">
+        <div className="container mx-auto max-w-3xl">
           <GuideShareButtons isZhTw />
+        </div>
       </section>
-      </main>
 
       {/* Footer */}
       <footer className="py-8 md:py-10 px-5 md:px-6 bg-card border-t border-border">

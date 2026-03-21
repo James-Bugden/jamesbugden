@@ -1,9 +1,10 @@
 import { Button } from "@/components/ui/button";
-import { Linkedin, ArrowLeft, FileText, Briefcase, MessageSquare, Users, Phone, Bot } from "lucide-react";
+import { Linkedin, ArrowLeft, FileText, Briefcase, MessageSquare, Users, Phone, Bot, Shield, Puzzle, Gamepad2, DollarSign } from "lucide-react";
 import { Link } from "react-router-dom";
 import { InstagramIcon, ThreadsIcon } from "@/components/SocialIcons";
 import LanguageToggle from "@/components/LanguageToggle";
 import { AuthHeaderButton } from "@/components/AuthHeaderButton";
+import PageSEO from "@/components/PageSEO";
 
 interface Guide {
   icon: typeof FileText;
@@ -71,7 +72,7 @@ const guides: Guide[] = [
     icon: Phone,
     title: "如何通過招募人員的電話篩選",
     description: "資深招募官的完整實戰手冊，含逐字範例與薪資話術",
-    href: "/zh-tw/recruiter-screen-guide",
+    href: "/zh-tw/hr-interview-guide",
     category: "面試準備",
   },
   // AI 求職
@@ -82,6 +83,51 @@ const guides: Guide[] = [
     href: "/zh-tw/ai-job-search-guide",
     category: "AI 求職",
   },
+  // 職涯與使命感
+  {
+    icon: Briefcase,
+    title: "Ikigai 職涯指南：打造一份你不會在 12 個月內辭掉的職涯",
+    description: "用日本的 ikigai 概念找到工作中的使命感、心流與持久力。包含 Ikigai 職涯地圖、評分卡和 90 天行動計畫。",
+    href: "/zh-tw/ikigai-guide",
+    category: "職涯與使命感",
+  },
+  // 薪資談判
+  {
+    icon: DollarSign,
+    title: "工作Offer全攻略：如何評估、談判與勝出",
+    description: "招募人員的完整系統，教你評估和談判工作Offer",
+    href: "/zh-tw/job-offer-guide",
+    category: "薪資談判",
+  },
+  // 求職策略
+  {
+    icon: Users,
+    title: "如何與招募人員合作：內部人士指南",
+    description: "建立招募人員關係，讓他們為你工作",
+    href: "/zh-tw/recruiter-guide",
+    category: "求職策略",
+  },
+  {
+    icon: Shield,
+    title: "職場政治生存指南",
+    description: "掌握職場動態、建立影響力、保護你的職涯",
+    href: "/zh-tw/office-politics-guide",
+    category: "求職策略",
+  },
+  {
+    icon: Puzzle,
+    title: "問題解決101：完整面試框架",
+    description: "掌握結構化問題解決方法，應對案例面試",
+    href: "/zh-tw/problem-solving-guide",
+    category: "面試準備",
+  },
+  {
+    icon: Gamepad2,
+    title: "職涯遊戲：沒有人教你的規則",
+    description: "了解職涯晉升的潛規則，學會如何運用",
+    href: "/zh-tw/career-game-guide",
+    category: "求職策略",
+  },
 ];
 
 const categories = [
@@ -90,6 +136,9 @@ const categories = [
   { en: "職涯轉型", zh: "職涯轉型" },
   { en: "面試準備", zh: "面試準備" },
   { en: "AI 求職", zh: "AI 求職" },
+  { en: "職涯與使命感", zh: "職涯與使命感" },
+  { en: "薪資談判", zh: "薪資談判" },
+  { en: "求職策略", zh: "求職策略" },
 ];
 
 const GuidesPageZhTw = () => {
@@ -121,6 +170,12 @@ const GuidesPageZhTw = () => {
 
       {/* Hero Section */}
       <section className="pt-28 md:pt-36 pb-12 md:pb-16 px-5 md:px-6 bg-background">
+        <PageSEO
+          title="免費職涯指南 | James Bugden"
+          description="來自財富 100 強現任招募人員的實用框架與策略，幫助你找到理想工作。"
+          path="/zh-tw/guides"
+          lang="zh-Hant-TW"
+        />
         <div className="container mx-auto max-w-4xl">
           <Link 
             to="/zh-tw" 
@@ -149,8 +204,9 @@ const GuidesPageZhTw = () => {
                 {category.zh === "履歷撰寫" && <FileText className="w-6 h-6 text-gold" />}
                 {category.zh === "職涯轉型" && <Briefcase className="w-6 h-6 text-gold" />}
                 {category.zh === "面試準備" && <MessageSquare className="w-6 h-6 text-gold" />}
-                {category.zh === "電話篩選" && <Phone className="w-6 h-6 text-gold" />}
                 {category.zh === "AI 求職" && <Bot className="w-6 h-6 text-gold" />}
+                {category.zh === "薪資談判" && <DollarSign className="w-6 h-6 text-gold" />}
+                {category.zh === "求職策略" && <Users className="w-6 h-6 text-gold" />}
                 {category.zh}
               </h2>
               
@@ -193,7 +249,7 @@ const GuidesPageZhTw = () => {
         <div className="container mx-auto max-w-4xl">
           <div className="flex flex-col md:flex-row justify-between items-center gap-4">
             <span className="text-sm text-muted-foreground">
-              © 2024 James Bugden. 版權所有。
+              © 2026 James Bugden. 版權所有。
             </span>
             <div className="flex items-center gap-6">
               <a href="https://www.linkedin.com/in/james-bugden/" target="_blank" rel="noopener noreferrer" className="text-muted-foreground hover:text-foreground transition-colors">

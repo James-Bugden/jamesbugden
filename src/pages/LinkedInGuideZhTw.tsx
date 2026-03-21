@@ -1,4 +1,5 @@
-import { ArrowLeft, Download, Star, Users, FileText, MessageSquare, Search, CheckCircle2, Calendar, Linkedin } from "lucide-react";
+import { ArrowLeft, Star, Users, FileText, MessageSquare, Search, CheckCircle2, Calendar, Linkedin, Clock } from "lucide-react";
+import { InteractiveChecklist } from "@/components/guides/InteractiveChecklist";
 import { Link, useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { InstagramIcon, ThreadsIcon } from "@/components/SocialIcons";
@@ -6,19 +7,12 @@ import GoldCheckBadge from "@/components/GoldCheckBadge";
 import GuideShareButtons from "@/components/GuideShareButtons";
 import { AuthHeaderButton } from "@/components/AuthHeaderButton";
 import { useTrackGuideProgress } from "@/hooks/useReadingProgress";
+import GuideSignInBanner from "@/components/guides/GuideSignInBanner";
 
 const LinkedInGuideZhTw = () => {
   useTrackGuideProgress("linkedin-guide");
   const navigate = useNavigate();
 
-  const handleDownload = () => {
-    const link = document.createElement('a');
-    link.href = '/downloads/ZH_LinkedIn_for_Job_Search_Mini_Guide.pdf';
-    link.download = 'ZH_LinkedIn_for_Job_Search_Mini_Guide.pdf';
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
-  };
 
   return (
     <div className="min-h-screen bg-background">
@@ -58,18 +52,17 @@ const LinkedInGuideZhTw = () => {
           <p className="text-lg md:text-xl text-cream/80 mb-2">
             讓招募人員主動找到你
           </p>
-          <p className="text-base text-cream/60 mb-6">
+          <p className="text-base text-cream/60 mb-2">
             作者：James Bugden，資深招募顧問
           </p>
-          <Button 
-            onClick={handleDownload}
-            className="bg-gold hover:bg-gold/90 text-executive-green font-semibold px-6 py-3 rounded-lg shadow-lg hover:shadow-xl transition-all duration-300"
-          >
-            <Download className="w-5 h-5 mr-2" />
-            下載 PDF 指南
-          </Button>
+          <div className="flex items-center justify-center gap-1.5 text-cream/60 mb-6">
+            <Clock className="w-4 h-4" />
+            <span className="text-sm">15 分鐘閱讀</span>
+          </div>
         </div>
       </section>
+
+      <GuideSignInBanner lang="zh" />
 
       {/* Framework Note */}
       <section className="py-8 px-5 md:px-6 bg-card border-b border-border">
@@ -147,10 +140,10 @@ const LinkedInGuideZhTw = () => {
             </p>
           </div>
 
-          <div className="mt-6 p-4 bg-background border border-border rounded-lg">
-            <p className="text-foreground font-medium">
-              ☐ 行動：檢查你的個人檔案強度指標。這個週末填補上述任何空白。
-            </p>
+          <div className="mt-6">
+            <InteractiveChecklist guideKey="li_guide_action1_zh" lang="zh" items={[
+              { label: "行動：檢查你的個人檔案強度指標。這個週末填補上述任何空白。" },
+            ]} />
           </div>
         </div>
       </section>
@@ -233,11 +226,9 @@ const LinkedInGuideZhTw = () => {
             <li>• 「保護家庭資產和財富」</li>
           </ul>
 
-          <div className="p-4 bg-card border border-border rounded-lg">
-            <p className="text-foreground font-medium">
-              ☐ 行動：寫 3-5 個標題選項。選擇最吸引人且包含你的策略關鍵字的那個。
-            </p>
-          </div>
+          <InteractiveChecklist guideKey="li_guide_action2_zh" lang="zh" items={[
+            { label: "行動：寫 3-5 個標題選項。選擇最吸引人且包含你的策略關鍵字的那個。" },
+          ]} />
         </div>
       </section>
 
@@ -355,11 +346,9 @@ const LinkedInGuideZhTw = () => {
             </div>
           </div>
 
-          <div className="p-4 bg-background border border-border rounded-lg">
-            <p className="text-foreground font-medium">
-              ☐ 行動：選擇你的角色。使用五個 H 結構撰寫你的關於區塊。先在單獨的文件中起草，然後貼上。
-            </p>
-          </div>
+          <InteractiveChecklist guideKey="li_guide_action3_zh" lang="zh" items={[
+            { label: "行動：選擇你的角色。使用五個 H 結構撰寫你的關於區塊。先在單獨的文件中起草，然後貼上。" },
+          ]} />
         </div>
       </section>
 
@@ -452,11 +441,9 @@ const LinkedInGuideZhTw = () => {
             來自書中的專業建議：為推薦你的人寫推薦是完全可以的。在一個很棒的專案後：「我真的很享受與你合作。讓我們基於這個偉大的成就互相在 LinkedIn 上寫推薦吧。」
           </p>
 
-          <div className="p-4 bg-card border border-border rounded-lg">
-            <p className="text-foreground font-medium">
-              ☐ 行動：確定 3-5 個人請求推薦。本週使用 6 步驟流程發送你的第一個請求。
-            </p>
-          </div>
+          <InteractiveChecklist guideKey="li_guide_action4_zh" lang="zh" items={[
+            { label: "行動：確定 3-5 個人請求推薦。本週使用 6 步驟流程發送你的第一個請求。" },
+          ]} />
         </div>
       </section>
 
@@ -558,11 +545,9 @@ const LinkedInGuideZhTw = () => {
             <li>• <strong>文章</strong>（長篇部落格內容，1,500-3,000 字）</li>
           </ul>
 
-          <div className="p-4 bg-background border border-border rounded-lg">
-            <p className="text-foreground font-medium">
-              ☐ 行動：本週每天評論 5 篇貼文，給予真誠、深思熟慮的見解。分享 1 篇策展文章並加入你自己的觀點。
-            </p>
-          </div>
+          <InteractiveChecklist guideKey="li_guide_action5_zh" lang="zh" items={[
+            { label: "行動：本週每天評論 5 篇貼文，給予真誠、深思熟慮的見解。分享 1 篇策展文章並加入你自己的觀點。" },
+          ]} />
         </div>
       </section>
 
@@ -645,11 +630,9 @@ const LinkedInGuideZhTw = () => {
             </div>
           </div>
 
-          <div className="p-4 bg-card border border-border rounded-lg">
-            <p className="text-foreground font-medium">
-              ☐ 行動：自訂你的 URL。加入背景橫幅。在你的經歷區塊中上傳 1-2 個豐富媒體項目。
-            </p>
-          </div>
+          <InteractiveChecklist guideKey="li_guide_action6_zh" lang="zh" items={[
+            { label: "行動：自訂你的 URL。加入背景橫幅。在你的經歷區塊中上傳 1-2 個豐富媒體項目。" },
+          ]} />
         </div>
       </section>
 
@@ -668,42 +651,62 @@ const LinkedInGuideZhTw = () => {
           <div className="space-y-6">
             <div className="bg-white/10 backdrop-blur-sm rounded-lg p-6">
               <h3 className="font-heading text-xl text-gold mb-4">第 1 週：基礎</h3>
-              <ul className="space-y-2 text-cream/90">
-                <li>☐ 在 LinkedIn 上檢查你的全明星狀態 — 填補任何空白</li>
-                <li>☐ 更新照片和背景橫幅</li>
-                <li>☐ 重寫標題（寫 3-5 個選項，選擇最好的）</li>
-                <li>☐ 選擇你的關於區塊角色</li>
-              </ul>
+              <InteractiveChecklist
+                guideKey="linkedin_guide_wk1_zh"
+                lang="zh"
+                variant="dark"
+                items={[
+                  { label: "在 LinkedIn 上檢查你的全明星狀態 — 填補任何空白" },
+                  { label: "更新照片和背景橫幅" },
+                  { label: "重寫標題（寫 3-5 個選項，選擇最好的）" },
+                  { label: "選擇你的關於區塊角色" },
+                ]}
+              />
             </div>
 
             <div className="bg-white/10 backdrop-blur-sm rounded-lg p-6">
               <h3 className="font-heading text-xl text-gold mb-4">第 2 週：強力區塊</h3>
-              <ul className="space-y-2 text-cream/90">
-                <li>☐ 使用五個 H 結構撰寫關於區塊</li>
-                <li>☐ 更新經歷區塊（加入成就和關鍵字）</li>
-                <li>☐ 清理技能 — 釘選前 3 項策略性技能</li>
-                <li>☐ 加入精選區塊</li>
-              </ul>
+              <InteractiveChecklist
+                guideKey="linkedin_guide_wk2_zh"
+                lang="zh"
+                variant="dark"
+                items={[
+                  { label: "使用五個 H 結構撰寫關於區塊" },
+                  { label: "更新經歷區塊（加入成就和關鍵字）" },
+                  { label: "清理技能 — 釘選前 3 項策略性技能" },
+                  { label: "加入精選區塊" },
+                ]}
+              />
             </div>
 
             <div className="bg-white/10 backdrop-blur-sm rounded-lg p-6">
               <h3 className="font-heading text-xl text-gold mb-4">第 3 週：社會證明</h3>
-              <ul className="space-y-2 text-cream/90">
-                <li>☐ 使用 6 步驟流程發送 3-5 個推薦請求</li>
-                <li>☐ 為其他人寫 2-3 條推薦</li>
-                <li>☐ 給同事真誠的認可</li>
-                <li>☐ 自訂你的 LinkedIn URL</li>
-              </ul>
+              <InteractiveChecklist
+                guideKey="linkedin_guide_wk3_zh"
+                lang="zh"
+                variant="dark"
+                items={[
+                  { label: "使用 6 步驟流程發送 3-5 個推薦請求" },
+                  { label: "為其他人寫 2-3 條推薦" },
+                  { label: "給同事真誠的認可" },
+                  { label: "自訂你的 LinkedIn URL" },
+                ]}
+              />
             </div>
 
             <div className="bg-white/10 backdrop-blur-sm rounded-lg p-6">
               <h3 className="font-heading text-xl text-gold mb-4">第 4 週：內容與參與</h3>
-              <ul className="space-y-2 text-cream/90">
-                <li>☐ 應用 80/20 法則 — 每天評論 5+ 篇貼文</li>
-                <li>☐ 本週分享 2-3 篇貼文（創建或策展並加入你的觀點）</li>
-                <li>☐ 使用建立關係的評論策略</li>
-                <li>☐ 檢視你的個人檔案分析 — 什麼有效？</li>
-              </ul>
+              <InteractiveChecklist
+                guideKey="linkedin_guide_wk4_zh"
+                lang="zh"
+                variant="dark"
+                items={[
+                  { label: "應用 80/20 法則 — 每天評論 5+ 篇貼文" },
+                  { label: "本週分享 2-3 篇貼文（創建或策展並加入你的觀點）" },
+                  { label: "使用建立關係的評論策略" },
+                  { label: "檢視你的個人檔案分析 — 什麼有效？" },
+                ]}
+              />
             </div>
           </div>
         </div>

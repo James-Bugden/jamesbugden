@@ -177,11 +177,11 @@ export default function SelfSegmentation() {
   return (
     <section
       id="walkthrough"
-      className="py-14 md:py-20 px-5 md:px-6 bg-background"
+      className="py-14 md:py-20 px-4 sm:px-5 md:px-6 bg-background"
     >
       <div className="container mx-auto max-w-4xl">
         <div className="text-center mb-12">
-          <h2 className="font-heading text-3xl md:text-4xl lg:text-5xl text-foreground mb-3">
+          <h2 className="font-heading text-2xl sm:text-3xl md:text-4xl lg:text-5xl text-foreground mb-3">
             Where Are You Right Now?
           </h2>
           <p className="text-base md:text-lg text-muted-foreground">

@@ -1,4 +1,5 @@
-import { ArrowLeft, Download, Target, Compass, Search, FlaskConical, Rocket, Users, CheckCircle2, AlertTriangle, Linkedin, Calendar, TrendingUp, Zap, BarChart3, Lightbulb, RefreshCw, BookOpen, MessageSquare, ArrowRight } from "lucide-react";
+import { ArrowLeft, Target, Compass, Search, FlaskConical, Rocket, Users, CheckCircle2, AlertTriangle, Linkedin, Calendar, TrendingUp, Zap, BarChart3, Lightbulb, RefreshCw, BookOpen, MessageSquare, ArrowRight, Clock } from "lucide-react";
+import { InteractiveChecklist } from "@/components/guides/InteractiveChecklist";
 import { Link } from "react-router-dom";
 import LanguageToggle from "@/components/LanguageToggle";
 import { AuthHeaderButton } from "@/components/AuthHeaderButton";
@@ -7,18 +8,11 @@ import { InstagramIcon, ThreadsIcon } from "@/components/SocialIcons";
 import GuideShareButtons from "@/components/GuideShareButtons";
 import GoldCheckBadge from "@/components/GoldCheckBadge";
 import { useTrackGuideProgress } from "@/hooks/useReadingProgress";
+import GuideSignInBanner from "@/components/guides/GuideSignInBanner";
 
 const PivotMethodGuide = () => {
   useTrackGuideProgress("pivot-guide");
 
-  const handleDownload = () => {
-    const link = document.createElement('a');
-    link.href = '/downloads/The_Pivot_Method_Career_Change_Guide.pdf';
-    link.download = 'The_Pivot_Method_Career_Change_Guide.pdf';
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
-  };
 
   return (
     <div className="min-h-screen bg-background">
@@ -53,18 +47,17 @@ const PivotMethodGuide = () => {
           <p className="text-lg md:text-xl text-cream/80 mb-2">
             Based on "Pivot: The Only Move That Matters Is Your Next One" by Jenny Blake
           </p>
-          <p className="text-base text-cream/60 mb-6">
+          <p className="text-base text-cream/60 mb-2">
             By James Bugden • Senior Recruiter
           </p>
-          <Button 
-            onClick={handleDownload}
-            className="bg-gold hover:bg-gold/90 text-executive-green font-semibold px-6 py-3 rounded-lg shadow-lg hover:shadow-xl transition-all duration-300"
-          >
-            <Download className="w-5 h-5 mr-2" />
-            Download PDF Guide
-          </Button>
+          <div className="flex items-center justify-center gap-1.5 text-cream/60 mb-6">
+            <Clock className="w-4 h-4" />
+            <span className="text-sm">40 min read</span>
+          </div>
         </div>
       </section>
+
+      <GuideSignInBanner lang="en" />
 
       {/* Framework Note */}
       <section className="py-8 px-5 md:px-6 bg-card border-b border-border">
@@ -1127,54 +1120,74 @@ const PivotMethodGuide = () => {
           <div className="space-y-6">
             <div className="bg-white/10 backdrop-blur-sm rounded-lg p-6">
               <h3 className="font-heading text-xl text-gold mb-4">🌱 Stage 1: Plant — Set Your Foundation</h3>
-              <ul className="space-y-2 text-cream/90 text-sm">
-                <li>☐ Calibrate compass: Define values, happiness formula, non-negotiables</li>
-                <li>☐ Put a pin in it: Vision for 1 year from now (don't worry about how)</li>
-                <li>☐ Fuel your engine: Identify strengths, what's working, where you excel</li>
-                <li>☐ Fund your runway: Build 3-6 months savings, create side income</li>
-              </ul>
+              <InteractiveChecklist
+                guideKey="pivot_ref_plant_en"
+                variant="dark"
+                items={[
+                  { label: "Calibrate compass: Define values, happiness formula, non-negotiables" },
+                  { label: "Put a pin in it: Vision for 1 year from now (don't worry about how)" },
+                  { label: "Fuel your engine: Identify strengths, what's working, where you excel" },
+                  { label: "Fund your runway: Build 3-6 months savings, create side income" },
+                ]}
+              />
               <p className="text-cream/70 text-sm mt-3">Key output: Clear direction and financial foundation</p>
             </div>
 
             <div className="bg-white/10 backdrop-blur-sm rounded-lg p-6">
               <h3 className="font-heading text-xl text-gold mb-4">🔍 Stage 2: Scan — Gather Intelligence</h3>
-              <ul className="space-y-2 text-cream/90 text-sm">
-                <li>☐ Bolster your bench: Expand network, find advisors, practice career karma</li>
-                <li>☐ Bridge the gaps: Assess skills needed, create learning plan, focus on critical gaps</li>
-                <li>☐ Make yourself discoverable: Define unique value, build visibility, let people know you're exploring</li>
-              </ul>
+              <InteractiveChecklist
+                guideKey="pivot_ref_scan_en"
+                variant="dark"
+                items={[
+                  { label: "Bolster your bench: Expand network, find advisors, practice career karma" },
+                  { label: "Bridge the gaps: Assess skills needed, create learning plan, focus on critical gaps" },
+                  { label: "Make yourself discoverable: Define unique value, build visibility, let people know you're exploring" },
+                ]}
+              />
               <p className="text-cream/70 text-sm mt-3">Key output: Network built, skills identified, market awareness</p>
             </div>
 
             <div className="bg-white/10 backdrop-blur-sm rounded-lg p-6">
               <h3 className="font-heading text-xl text-gold mb-4">🧪 Stage 3: Pilot — Test Before Committing</h3>
-              <ul className="space-y-2 text-cream/90 text-sm">
-                <li>☐ Run small experiments: Low risk, low cost tests that give real data</li>
-                <li>☐ Quantity over quality: Run 5-10 pilots, not 1 perfect test</li>
-                <li>☐ Pause and review: What worked? What didn't? What's next?</li>
-              </ul>
+              <InteractiveChecklist
+                guideKey="pivot_ref_pilot_en"
+                variant="dark"
+                items={[
+                  { label: "Run small experiments: Low risk, low cost tests that give real data" },
+                  { label: "Quantity over quality: Run 5-10 pilots, not 1 perfect test" },
+                  { label: "Pause and review: What worked? What didn't? What's next?" },
+                ]}
+              />
               <p className="text-cream/70 text-sm mt-3">Key questions: Does this energize or drain you? Can you do the work? Is there market demand?</p>
             </div>
 
             <div className="bg-white/10 backdrop-blur-sm rounded-lg p-6">
               <h3 className="font-heading text-xl text-gold mb-4">🚀 Stage 4: Launch — Make the Move</h3>
-              <ul className="space-y-2 text-cream/90 text-sm">
-                <li>☐ Define criteria: What must be true before you launch? (financial, professional, personal)</li>
-                <li>☐ Build first, courage second: Gather evidence and runway before leaping</li>
-                <li>☐ Know when to fold: If pilots consistently fail, pivot direction</li>
-                <li>☐ Separate decisions from conversations: Decide first, then handle difficult talks</li>
-              </ul>
+              <InteractiveChecklist
+                guideKey="pivot_ref_launch_en"
+                variant="dark"
+                items={[
+                  { label: "Define criteria: What must be true before you launch? (financial, professional, personal)" },
+                  { label: "Build first, courage second: Gather evidence and runway before leaping" },
+                  { label: "Know when to fold: If pilots consistently fail, pivot direction" },
+                  { label: "Separate decisions from conversations: Decide first, then handle difficult talks" },
+                ]}
+              />
               <p className="text-cream/70 text-sm mt-3">Key output: Successful transition to new role/career</p>
             </div>
 
             <div className="bg-white/10 backdrop-blur-sm rounded-lg p-6">
               <h3 className="font-heading text-xl text-gold mb-4">🎯 Stage 5: Lead — Help Others Pivot</h3>
-              <ul className="space-y-2 text-cream/90 text-sm">
-                <li>☐ Share your story: Teach what you learned</li>
-                <li>☐ Facilitate career conversations: If you're a manager, support team growth</li>
-                <li>☐ Practice career karma: Give introductions, feedback, support</li>
-                <li>☐ Pilot internal mobility: Create opportunities for others to test new directions</li>
-              </ul>
+              <InteractiveChecklist
+                guideKey="pivot_ref_lead_en"
+                variant="dark"
+                items={[
+                  { label: "Share your story: Teach what you learned" },
+                  { label: "Facilitate career conversations: If you're a manager, support team growth" },
+                  { label: "Practice career karma: Give introductions, feedback, support" },
+                  { label: "Pilot internal mobility: Create opportunities for others to test new directions" },
+                ]}
+              />
               <p className="text-cream/70 text-sm mt-3">Key output: Stronger network and leadership reputation</p>
             </div>
           </div>

@@ -2,6 +2,7 @@ import { useState } from "react";
 import { ChevronDown, ChevronUp, CheckCircle2, Circle } from "lucide-react";
 import { ResumeData } from "./types";
 import { cn } from "@/lib/utils";
+import { useT } from "./i18n";
 
 interface CompletenessScoreProps {
   data: ResumeData;
@@ -13,7 +14,8 @@ interface CheckItem {
   passed: boolean;
 }
 
-function computeChecks(data: ResumeData): CheckItem[] {
+function useComputeChecks(data: ResumeData): CheckItem[] {
+  const t = useT();
   const { personalDetails: pd, sections } = data;
 
   const hasSummary = sections.some(
@@ -43,23 +45,23 @@ function computeChecks(data: ResumeData): CheckItem[] {
     (s) => s.type === "skills" && s.entries.some((e) => (e.fields.skills || "").trim().length > 0)
   );
 
-  // Check for numbers in experience descriptions (quantified achievements)
   const quantified = expEntries.some((e) => /\d+/.test(e.fields.description || ""));
 
   return [
-    { label: "Professional summary", points: 10, passed: hasSummary },
-    { label: "2+ experience entries", points: 20, passed: has2Exp },
-    { label: "All entries have descriptions", points: 15, passed: hasDescriptions },
-    { label: "Dates filled in", points: 10, passed: datesFilled },
-    { label: "Contact info complete", points: 15, passed: contactComplete },
-    { label: "Skills section exists", points: 10, passed: hasSkills },
-    { label: "Quantified achievements", points: 20, passed: quantified },
+    { label: t("scoreCheckSummary"), points: 10, passed: hasSummary },
+    { label: t("scoreCheck2Exp"), points: 20, passed: has2Exp },
+    { label: t("scoreCheckDescriptions"), points: 15, passed: hasDescriptions },
+    { label: t("scoreCheckDates"), points: 10, passed: datesFilled },
+    { label: t("scoreCheckContact"), points: 15, passed: contactComplete },
+    { label: t("scoreCheckSkills"), points: 10, passed: hasSkills },
+    { label: t("scoreCheckQuantified"), points: 20, passed: quantified },
   ];
 }
 
 export function CompletenessScore({ data }: CompletenessScoreProps) {
+  const t = useT();
   const [expanded, setExpanded] = useState(false);
-  const checks = computeChecks(data);
+  const checks = useComputeChecks(data);
   const earned = checks.filter((c) => c.passed).reduce((s, c) => s + c.points, 0);
   const total = checks.reduce((s, c) => s + c.points, 0);
   const pct = Math.round((earned / total) * 100);
@@ -77,11 +79,12 @@ export function CompletenessScore({ data }: CompletenessScoreProps) {
     <div className="bg-white rounded-xl border border-gray-200 p-4">
       <button
         onClick={() => setExpanded(!expanded)}
-        className="w-full flex items-center gap-3"
+        className="w-full flex items-center gap-3 min-h-[44px]"
+        aria-expanded={expanded}
+        aria-label={t("scoreLabel")}
       >
-        {/* Circular progress */}
-        <div className="relative w-16 h-16 flex-shrink-0">
-          <svg className="w-16 h-16 -rotate-90" viewBox="0 0 64 64">
+        <div className="relative w-14 h-14 sm:w-16 sm:h-16 flex-shrink-0">
+          <svg className="w-full h-full -rotate-90" viewBox="0 0 64 64">
             <circle cx="32" cy="32" r={radius} fill="none" stroke="#e5e7eb" strokeWidth="4" />
             <circle
               cx="32" cy="32" r={radius} fill="none"
@@ -97,9 +100,9 @@ export function CompletenessScore({ data }: CompletenessScoreProps) {
           </span>
         </div>
         <div className="flex-1 text-left">
-          <p className="text-sm font-semibold text-gray-700">Resume Score</p>
+          <p className="text-sm font-semibold text-gray-700">{t("scoreLabel")}</p>
           <p className="text-xs text-gray-400">
-            {checks.filter((c) => c.passed).length}/{checks.length} checks passed
+            {checks.filter((c) => c.passed).length}/{checks.length} {t("scoreChecksPassed")}
           </p>
         </div>
         {expanded ? <ChevronUp className="w-4 h-4 text-gray-400" /> : <ChevronDown className="w-4 h-4 text-gray-400" />}

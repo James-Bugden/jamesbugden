@@ -37,10 +37,10 @@ export function AuthHeaderButton({ variant = "nav" }: AuthHeaderButtonProps) {
   const dashboardLabel = isZhTw ? "我的專區" : "My Toolkit";
 
   return (
-    <div className="flex items-center gap-3">
+    <div className="flex items-center gap-2">
       <Link
         to={dashboardPath}
-        className={`text-sm font-semibold px-4 py-1.5 rounded-full border transition-colors whitespace-nowrap ${
+        className={`text-xs sm:text-sm font-semibold px-3 py-1 sm:px-4 sm:py-1.5 rounded-full border transition-colors whitespace-nowrap ${
           isNav
             ? "border-cream/30 text-cream hover:bg-cream/10"
             : "border-foreground/20 text-foreground hover:bg-foreground/5"

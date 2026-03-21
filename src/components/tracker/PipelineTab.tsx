@@ -290,25 +290,6 @@ export default function PipelineTab({ employers, contacts, onUpdateEmployer, onS
         </div>
       </div>
 
-      {/* ── Coaching CTA ───────────────────────────────────── */}
-      <div className="bg-white rounded-lg shadow-sm border p-5" style={{ borderColor: "#E5E0D8" }}>
-        <p className="font-semibold text-sm mb-1" style={{ color: "#1B3A2F" }}>
-          🎯 Stuck between stages?
-        </p>
-        <p className="text-xs leading-relaxed mb-3" style={{ color: "#2C2C2C" }}>
-          Most job seekers lose momentum after the first informational interview.
-          A coaching session keeps you accountable and moving forward.
-        </p>
-        <a
-          href="https://james.careers/#coaching"
-          target="_blank"
-          rel="noopener noreferrer"
-          className="text-xs font-semibold hover:underline"
-          style={{ color: "#C9A961" }}
-        >
-          Book a Coaching Session →
-        </a>
-      </div>
     </div>
   );
 }

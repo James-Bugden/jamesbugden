@@ -2,9 +2,9 @@ import { Users } from "lucide-react";
 
 export default function ReadinessAssessment() {
   return (
-    <section id="assessment" className="py-14 md:py-20 px-5 md:px-6 bg-background">
+    <section id="assessment" className="py-14 md:py-20 px-4 sm:px-5 md:px-6 bg-background">
       <div className="container mx-auto max-w-3xl text-center">
-        <h2 className="font-heading text-3xl md:text-4xl lg:text-5xl text-foreground mb-3">
+        <h2 className="font-heading text-2xl sm:text-3xl md:text-4xl lg:text-5xl text-foreground mb-3">
           Are You Ready for a Foreign Company?
         </h2>
         <p className="text-base md:text-lg text-muted-foreground mb-10">
@@ -12,7 +12,7 @@ export default function ReadinessAssessment() {
         </p>
 
         {/* Card */}
-        <div className="bg-background border border-border rounded-2xl p-8 md:p-10 max-w-xl mx-auto shadow-[0_2px_12px_rgba(0,0,0,0.06)] hover:shadow-[0_4px_20px_rgba(0,0,0,0.10)] transition-shadow duration-200">
+        <div className="bg-background border border-border rounded-2xl p-6 sm:p-8 md:p-10 max-w-xl mx-auto shadow-[0_2px_12px_rgba(0,0,0,0.06)] hover:shadow-[0_4px_20px_rgba(0,0,0,0.10)] transition-shadow duration-200">
           {/* Score ring (decorative) */}
           <div className="mx-auto w-28 h-28 mb-6 relative">
             <svg viewBox="0 0 120 120" className="w-full h-full -rotate-90">

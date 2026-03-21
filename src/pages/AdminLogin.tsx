@@ -33,7 +33,7 @@ const AdminLogin = () => {
         variant: "destructive",
       });
     } else {
-      navigate("/admin/reviews");
+      navigate("/admin");
     }
   };
 

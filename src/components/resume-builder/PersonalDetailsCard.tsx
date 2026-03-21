@@ -183,13 +183,13 @@ export function PersonalDetailsCard({ details, onChange, collapsible }: Personal
 
             <div className="grid grid-cols-2 gap-3">
               <Field
-                label="Email"
+                label={t("email")}
                 value={details.email}
                 onChange={(v) => onChange({ email: v })}
                 type="email"
               />
               <Field
-                label="Phone"
+                label={t("phone")}
                 value={details.phone}
                 onChange={(v) => onChange({ phone: v })}
                 type="tel"
@@ -197,10 +197,10 @@ export function PersonalDetailsCard({ details, onChange, collapsible }: Personal
             </div>
 
             <Field
-              label="Location"
+              label={t("location")}
               value={details.location}
               onChange={(v) => onChange({ location: v })}
-              placeholder="e.g. San Francisco, CA"
+              placeholder={t("egLocation")}
             />
 
             {/* Extra fields */}

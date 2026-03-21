@@ -25,7 +25,7 @@ export default function CoachingCTAExperimentZhTw() {
         </h2>
 
         <a
-          href="/resume-analyzer"
+          href="/zh-tw/resume-analyzer"
           className="inline-flex items-center justify-center font-semibold"
           style={{
             backgroundColor: '#D4930D',

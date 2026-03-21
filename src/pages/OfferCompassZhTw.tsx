@@ -130,19 +130,6 @@ export default function OfferCompassZhTw() {
                 </div>
               </EmailGateOverlay>
 
-              {/* Coaching Upsell */}
-              <div className="max-w-4xl mx-auto rounded-2xl p-8 print:hidden" style={{ backgroundColor: "#1A1A1A" }}>
-                <div className="w-10 h-1 rounded-full mb-4" style={{ backgroundColor: "#C9A961" }} />
-                <h3 className="font-heading text-xl font-bold mb-3" style={{ color: "#FBF7F0" }}>
-                  大多數候選人在談判中少拿 10-20%。
-                </h3>
-                <p className="text-sm mb-6 leading-relaxed" style={{ color: "#A0A0A0" }}>
-                  我曾協助 Google、Uber 和 Meta 的專業人士談判更好的 Offer。如果你正在比較方案，我可以告訴你什麼是合理的，什麼可以爭取。
-                </p>
-                <a href="https://james.careers/#coaching" target="_blank" rel="noopener noreferrer" className="inline-flex h-11 px-6 items-center justify-center rounded-lg font-semibold text-sm transition-transform hover:scale-[1.02]" style={{ backgroundColor: "#C9A961", color: "#1B3A2F" }}>
-                  預約免費策略諮詢
-                </a>
-              </div>
 
               <FeedbackBox locale="zh-tw" />
             </>

@@ -1,4 +1,4 @@
-import { ArrowLeft, Download, Clock, Users, Lightbulb, Target, MessageSquare, AlertTriangle, CheckCircle2 } from "lucide-react";
+import { ArrowLeft, Clock, Users, Lightbulb, Target, MessageSquare, AlertTriangle, CheckCircle2 } from "lucide-react";
 import { Link, useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Linkedin } from "lucide-react";
@@ -7,19 +7,12 @@ import GuideShareButtons from "@/components/GuideShareButtons";
 import { AuthHeaderButton } from "@/components/AuthHeaderButton";
 import GoldCheckBadge from "@/components/GoldCheckBadge";
 import { useTrackGuideProgress } from "@/hooks/useReadingProgress";
+import GuideSignInBanner from "@/components/guides/GuideSignInBanner";
 
 const InterviewPrepGuideZhTw = () => {
   useTrackGuideProgress("interview-prep");
   const navigate = useNavigate();
 
-  const handleDownload = () => {
-    const link = document.createElement('a');
-    link.href = '/downloads/ZH_The_10-Hour_Interview_Prep_System.pdf';
-    link.download = 'ZH_The_10-Hour_Interview_Prep_System.pdf';
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
-  };
 
   return (
     <div className="min-h-screen bg-background">
@@ -54,18 +47,17 @@ const InterviewPrepGuideZhTw = () => {
           <p className="text-lg md:text-xl text-cream/80 mb-2">
             你準備面試真正需要的檢查清單
           </p>
-          <p className="text-base text-cream/60 mb-6">
+          <p className="text-base text-cream/60 mb-2">
             James Bugden｜Uber 資深招募顧問
           </p>
-          <Button 
-            onClick={handleDownload}
-            className="bg-gold hover:bg-gold/90 text-executive-green font-semibold"
-          >
-            <Download className="w-4 h-4 mr-2" />
-            下載 PDF 指南
-          </Button>
+          <div className="flex items-center justify-center gap-1.5 text-cream/60 mb-6">
+            <Clock className="w-4 h-4" />
+            <span className="text-sm">20 分鐘閱讀</span>
+          </div>
         </div>
       </section>
+
+      <GuideSignInBanner lang="zh" />
 
       {/* Framework Note */}
       <section className="py-8 px-5 md:px-6 bg-card border-b border-border">
@@ -645,25 +637,6 @@ const InterviewPrepGuideZhTw = () => {
         </div>
       </section>
 
-      {/* Download CTA */}
-      <section className="py-12 md:py-16 px-5 md:px-6 bg-background border-t border-border">
-        <div className="container mx-auto max-w-3xl text-center">
-          <h2 className="font-heading text-2xl md:text-3xl text-foreground mb-4">
-            儲存這份指南
-          </h2>
-          <p className="text-muted-foreground mb-6">
-            下載 PDF，在下一次面試前隨時參考。
-          </p>
-          <Button 
-            onClick={handleDownload}
-            size="lg" 
-            className="h-14 px-8 btn-gold font-medium text-base uppercase tracking-wider"
-          >
-            <Download className="w-5 h-5 mr-2" />
-            下載 PDF 指南
-          </Button>
-        </div>
-      </section>
 
       <GuideShareButtons isZhTw />
 
@@ -680,7 +653,7 @@ const InterviewPrepGuideZhTw = () => {
               </Link>
             </div>
             <span className="text-sm text-muted-foreground">
-              © 2024 James Bugden. All rights reserved.
+              © 2026 James Bugden. All rights reserved.
             </span>
             <div className="flex items-center gap-6">
               <a href="https://www.linkedin.com/in/james-bugden/" target="_blank" rel="noopener noreferrer" className="text-muted-foreground hover:text-foreground transition-colors">

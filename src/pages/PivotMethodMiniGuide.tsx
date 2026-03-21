@@ -1,10 +1,12 @@
-import { ArrowLeft, Download, CheckCircle2, AlertTriangle, Lightbulb, Target, Users, Rocket, Crown } from "lucide-react";
+import { ArrowLeft, CheckCircle2, AlertTriangle, Lightbulb, Target, Users, Rocket, Crown, Clock } from "lucide-react";
+import { InteractiveChecklist } from "@/components/guides/InteractiveChecklist";
 import { Link } from "react-router-dom";
 import LanguageToggle from "@/components/LanguageToggle";
 import { AuthHeaderButton } from "@/components/AuthHeaderButton";
 import { Button } from "@/components/ui/button";
 import GuideShareButtons from "@/components/GuideShareButtons";
 import { useTrackGuideProgress } from "@/hooks/useReadingProgress";
+import GuideSignInBanner from "@/components/guides/GuideSignInBanner";
 
 const PivotMethodMiniGuide = () => {
   useTrackGuideProgress("pivot-mini");
@@ -21,12 +23,6 @@ const PivotMethodMiniGuide = () => {
           <div className="flex items-center gap-3">
             <AuthHeaderButton variant="nav" />
             <LanguageToggle variant="nav" />
-            <Button asChild className="btn-gold">
-              <a href="/downloads/The_Pivot_Method_Mini_Guide.pdf" download>
-                <Download className="w-4 h-4 mr-2" />
-                Download PDF
-              </a>
-            </Button>
           </div>
         </div>
       </nav>
@@ -41,11 +37,17 @@ const PivotMethodMiniGuide = () => {
           <p className="text-xl md:text-2xl text-cream/90 mb-4">
             Based on "Pivot: The Only Move That Matters Is Your Next One" by Jenny Blake
           </p>
-          <p className="text-lg text-cream/80">
+          <p className="text-lg text-cream/80 mb-2">
             By James Bugden • Senior Recruiter
           </p>
+          <div className="flex items-center justify-center gap-1.5 text-cream/60">
+            <Clock className="w-4 h-4" />
+            <span className="text-sm">10 min read</span>
+          </div>
         </div>
       </header>
+
+      <GuideSignInBanner lang="en" />
 
       {/* Main Content */}
       <main className="container mx-auto px-4 py-12 md:py-16 max-w-4xl">
@@ -324,27 +326,36 @@ const PivotMethodMiniGuide = () => {
                 <div className="grid md:grid-cols-3 gap-4">
                   <div className="bg-muted/30 rounded-lg p-4">
                     <h5 className="font-medium text-foreground mb-3">Financial criteria:</h5>
-                    <ul className="space-y-2 text-sm text-muted-foreground">
-                      <li>☐ Emergency fund of ___ months saved</li>
-                      <li>☐ Side income of $___ established (if applicable)</li>
-                      <li>☐ Major debt reduced to manageable level</li>
-                    </ul>
+                    <InteractiveChecklist
+                      guideKey="pivot_mini_launch_financial_en"
+                      items={[
+                        { label: "Emergency fund of ___ months saved" },
+                        { label: "Side income of $___ established (if applicable)" },
+                        { label: "Major debt reduced to manageable level" },
+                      ]}
+                    />
                   </div>
                   <div className="bg-muted/30 rounded-lg p-4">
                     <h5 className="font-medium text-foreground mb-3">Professional criteria:</h5>
-                    <ul className="space-y-2 text-sm text-muted-foreground">
-                      <li>☐ ___ paying clients lined up / job offer secured</li>
-                      <li>☐ Key certifications or skills acquired</li>
-                      <li>☐ Portfolio with ___ strong examples</li>
-                    </ul>
+                    <InteractiveChecklist
+                      guideKey="pivot_mini_launch_professional_en"
+                      items={[
+                        { label: "___ paying clients lined up / job offer secured" },
+                        { label: "Key certifications or skills acquired" },
+                        { label: "Portfolio with ___ strong examples" },
+                      ]}
+                    />
                   </div>
                   <div className="bg-muted/30 rounded-lg p-4">
                     <h5 className="font-medium text-foreground mb-3">Personal criteria:</h5>
-                    <ul className="space-y-2 text-sm text-muted-foreground">
-                      <li>☐ Partner/family supportive of the change</li>
-                      <li>☐ Living situation stable</li>
-                      <li>☐ Mental and physical health in a good place</li>
-                    </ul>
+                    <InteractiveChecklist
+                      guideKey="pivot_mini_launch_personal_en"
+                      items={[
+                        { label: "Partner/family supportive of the change" },
+                        { label: "Living situation stable" },
+                        { label: "Mental and physical health in a good place" },
+                      ]}
+                    />
                   </div>
                 </div>
               </div>
@@ -484,21 +495,6 @@ const PivotMethodMiniGuide = () => {
           </div>
         </section>
 
-        {/* CTA Section */}
-        <section className="bg-[#1B3A2F] rounded-2xl p-8 md:p-12 text-center">
-          <h2 className="font-heading text-2xl md:text-3xl text-cream mb-4">
-            Get the Full Guide
-          </h2>
-          <p className="text-cream/80 mb-6 max-w-2xl mx-auto">
-            Download the complete guide with exercises, detailed examples, and visual frameworks.
-          </p>
-          <Button asChild size="lg" className="btn-gold">
-            <a href="/downloads/The_Pivot_Method_Mini_Guide.pdf" download>
-              <Download className="w-5 h-5 mr-2" />
-              Download PDF Guide
-            </a>
-          </Button>
-        </section>
 
         <GuideShareButtons />
 

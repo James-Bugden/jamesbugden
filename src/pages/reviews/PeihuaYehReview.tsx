@@ -1124,16 +1124,6 @@ const PeihuaYehReview = () => {
           </div>
         </section>
 
-        {/* 1-on-1 Services */}
-        <section className="mb-16">
-          <div className="bg-muted/30 rounded-xl p-6 border border-border">
-            <p className="text-foreground">I work 1-on-1 with a small number of professionals each month—from fixing your resume to prepping for interviews to negotiating your offer.</p>
-            <p className="text-muted-foreground mt-2">The full package: Resume optimization, LinkedIn strategy, interview prep, and salary negotiation. Start to finish.</p>
-            <p className="text-muted-foreground mt-2">I only take 5 new clients per month because I'm still recruiting full-time at Uber.</p>
-            <p className="text-gold mt-4 font-semibold">Reply "interested" if you want details.</p>
-            <p className="text-muted-foreground mt-2">I am here to help you succeed.</p>
-          </div>
-        </section>
 
       </main>
 

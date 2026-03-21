@@ -2,6 +2,8 @@ import { LayoutGrid, FileText, Palette, Sparkles, Download, MoreVertical, Chevro
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { SavedDocument } from "@/lib/documentStore";
+import { ResumeData } from "@/components/resume-builder/types";
+import { formatDistanceToNow } from "date-fns";
 import { useState, useRef, useEffect } from "react";
 
 const BRAND = {
@@ -18,6 +20,7 @@ interface ResumeTopNavProps {
   activeTab: string;
   onTabChange: (tab: string) => void;
   docName?: string;
+  activeDocId?: string;
   allDocs?: SavedDocument[];
   onDocSwitch?: (id: string) => void;
   onDownload?: (filename: string) => void;
@@ -30,7 +33,7 @@ const tabs = [
   { id: "customize", label: "Customize", icon: Palette },
 ];
 
-export function ResumeTopNav({ activeTab, onTabChange, docName, allDocs, onDocSwitch, onDownload, downloading, pageFormat = "a4" }: ResumeTopNavProps) {
+export function ResumeTopNav({ activeTab, onTabChange, docName, activeDocId, allDocs, onDocSwitch, onDownload, downloading, pageFormat = "a4" }: ResumeTopNavProps) {
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const [dlDropdownOpen, setDlDropdownOpen] = useState(false);
   const [filename, setFilename] = useState("");
@@ -95,17 +98,30 @@ export function ResumeTopNav({ activeTab, onTabChange, docName, allDocs, onDocSw
             <ChevronDown className="w-3.5 h-3.5" />
           </button>
           {dropdownOpen && allDocs && allDocs.length > 0 && (
-            <div className="absolute right-0 top-full mt-1 bg-white rounded-lg shadow-lg border py-1 z-20 min-w-[180px]" style={{ borderColor: BRAND.border }}>
-              {allDocs.map((doc) => (
-                <button
-                  key={doc.id}
-                  onClick={() => { onDocSwitch?.(doc.id); setDropdownOpen(false); }}
-                  className="w-full text-left px-3 py-2 text-sm hover:bg-gray-50 truncate"
-                  style={{ color: BRAND.text }}
-                >
-                  {doc.name}
-                </button>
-              ))}
+            <div className="absolute right-0 top-full mt-1 bg-white rounded-lg shadow-lg border py-1 z-20 min-w-[240px]" style={{ borderColor: BRAND.border }}>
+              {allDocs.map((doc) => {
+                const isActive = doc.id === activeDocId;
+                const rd = doc.data as ResumeData;
+                const name = rd?.personalDetails?.fullName || "";
+                const title = rd?.personalDetails?.professionalTitle || "";
+                const subtitle = [name, title].filter(Boolean).join(" · ");
+                const ago = formatDistanceToNow(new Date(doc.updatedAt), { addSuffix: true });
+                return (
+                  <button
+                    key={doc.id}
+                    onClick={() => { onDocSwitch?.(doc.id); setDropdownOpen(false); }}
+                    className={cn("w-full text-left px-3 py-2 hover:bg-gray-50 transition-colors", isActive && "bg-[hsl(142_25%_96%)]")}
+                  >
+                    <div className="flex items-center justify-between">
+                      <span className="text-sm font-medium truncate" style={{ color: BRAND.text }}>{doc.name}</span>
+                      <span className="text-[11px] ml-2 shrink-0" style={{ color: BRAND.textSec }}>{ago}</span>
+                    </div>
+                    {subtitle && (
+                      <div className="text-[11px] truncate mt-0.5" style={{ color: BRAND.textSec }}>{subtitle}</div>
+                    )}
+                  </button>
+                );
+              })}
             </div>
           )}
         </div>

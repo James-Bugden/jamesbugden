@@ -4,10 +4,12 @@ import * as Icons from "lucide-react";
 import { Checkbox } from "@/components/ui/checkbox";
 import { ResumeSection, ResumeSectionEntry, SectionLayout, SectionSeparator, SubtitleStyle, getDefaultFieldsForType, SECTION_TYPES, PROFICIENCY_LEVELS } from "./types";
 import { RichTextEditor } from "./RichTextEditor";
+import { ResumeTipBanner } from "./ResumeTipBanner";
 import { MonthYearPicker } from "./MonthYearPicker";
 import { TagInput } from "./TagInput";
 import { SignatureModal } from "./SignatureModal";
 import { cn } from "@/lib/utils";
+import { useT } from "./i18n";
 
 function getIcon(iconName: string) {
   const Icon = (Icons as any)[iconName];
@@ -32,35 +34,29 @@ function SField({ label, value, onChange, placeholder, className, type = "text" 
   );
 }
 
-function getEntrySummary(type: string, fields: Record<string, string>): string {
+function getEntrySummary(type: string, fields: Record<string, string>, t: (key: any) => string): string {
   switch (type) {
     case "experience":
-      return [fields.position, fields.company].filter(Boolean).join(" at ") || "New entry";
+      return [fields.position, fields.company].filter(Boolean).join(" at ") || t("newEntry");
     case "education":
-      return [fields.degree, fields.institution].filter(Boolean).join(" at ") || "New entry";
+      return [fields.degree, fields.institution].filter(Boolean).join(" at ") || t("newEntry");
     case "certificates":
     case "courses":
     case "awards":
     case "projects":
-      return fields.name || "New entry";
+      return fields.name || t("newEntry");
     case "publications":
-      return fields.title || "New entry";
+      return fields.title || t("newEntry");
     case "references":
-      return fields.name || "New entry";
+      return fields.name || t("newEntry");
     case "organisations":
-      return [fields.name, fields.role].filter(Boolean).join(" — ") || "New entry";
+      return [fields.name, fields.role].filter(Boolean).join(" — ") || t("newEntry");
     default:
-      return "New entry";
+      return t("newEntry");
   }
 }
 
 /* ── Layout / Separator / Level / Subtitle switchers ──── */
-const LAYOUT_OPTIONS: { value: SectionLayout; label: string; icon: React.ElementType }[] = [
-  { value: "grid", label: "Grid", icon: Grid3X3 },
-  { value: "bubble", label: "Bubble", icon: Circle },
-  { value: "compact", label: "Compact", icon: List },
-];
-
 function PillSwitcher<T extends string>({ label, options, value, onChange }: {
   label: string; options: { value: T; label: string; icon?: React.ElementType }[]; value: T; onChange: (v: T) => void;
 }) {
@@ -86,45 +82,31 @@ function PillSwitcher<T extends string>({ label, options, value, onChange }: {
   );
 }
 
-const SEPARATOR_OPTIONS: { value: SectionSeparator; label: string }[] = [
-  { value: "bullet", label: "Bullet ·" },
-  { value: "pipe", label: "Pipe |" },
-  { value: "comma", label: "Comma ," },
-  { value: "newline", label: "New Line" },
-];
-
-
-const SUBTITLE_STYLE_OPTIONS: { value: SubtitleStyle; label: string }[] = [
-  { value: "dash", label: "Dash —" },
-  { value: "colon", label: "Colon :" },
-  { value: "bracket", label: "Bracket ()" },
-];
-
 /* ── Declaration form ───────────────────────────────────── */
-function DeclarationForm({ entry, set }: { entry: ResumeSectionEntry; set: (field: string) => (val: string) => void }) {
+function DeclarationForm({ entry, set, t }: { entry: ResumeSectionEntry; set: (field: string) => (val: string) => void; t: (key: any) => string }) {
   const [sigOpen, setSigOpen] = useState(false);
   const f = entry.fields;
   return (
     <div className="space-y-3">
       <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
-        <SField label="Full Name" value={f.fullName || ""} onChange={set("fullName")} />
-        <SField label="Place" value={f.place || ""} onChange={set("place")} />
-        <SField label="Date" value={f.date || ""} onChange={set("date")} placeholder="e.g. February 2026" />
+        <SField label={t("fullName")} value={f.fullName || ""} onChange={set("fullName")} />
+        <SField label={t("place")} value={f.place || ""} onChange={set("place")} />
+        <SField label={t("date")} value={f.date || ""} onChange={set("date")} placeholder="e.g. February 2026" />
       </div>
       <div>
-        <label className="block text-[11px] font-medium text-gray-500 mb-1">Signature</label>
+        <label className="block text-[11px] font-medium text-gray-500 mb-1">{t("signature")}</label>
         {f.signature ? (
           <div className="flex items-center gap-3">
             <img src={f.signature} alt="Signature" className="h-12 border border-gray-200 rounded-lg bg-white p-1" />
-            <button onClick={() => setSigOpen(true)} className="text-xs font-medium hover:opacity-80" style={{ color: "#2b4734" }}>Redraw</button>
-            <button onClick={() => set("signature")("")} className="text-xs text-gray-400 hover:text-red-500">Remove</button>
+            <button onClick={() => setSigOpen(true)} className="text-xs font-medium hover:opacity-80" style={{ color: "#2b4734" }}>{t("redraw")}</button>
+            <button onClick={() => set("signature")("")} className="text-xs text-gray-400 hover:text-red-500">{t("remove")}</button>
           </div>
         ) : (
           <button
             onClick={() => setSigOpen(true)}
             className="h-10 px-4 rounded-lg bg-gray-50 border border-gray-200 text-sm text-gray-600 hover:bg-gray-100 transition-colors"
           >
-            + Draw or Upload Signature
+            {t("drawOrUploadSignature")}
           </button>
         )}
       </div>
@@ -135,7 +117,7 @@ function DeclarationForm({ entry, set }: { entry: ResumeSectionEntry; set: (fiel
 
 /* ── Entry list ─────────────────────────────────────────── */
 function EntryList({
-  entries, type, renderEntryForm, toggleEntryCollapse, removeEntry, onReorder,
+  entries, type, renderEntryForm, toggleEntryCollapse, removeEntry, onReorder, t,
 }: {
   entries: ResumeSectionEntry[];
   type: string;
@@ -143,6 +125,7 @@ function EntryList({
   toggleEntryCollapse: (id: string) => void;
   removeEntry: (id: string) => void;
   onReorder: (entries: ResumeSectionEntry[]) => void;
+  t: (key: any) => string;
 }) {
   const dragIdx = useRef<number | null>(null);
   const [overIdx, setOverIdx] = useState<number | null>(null);
@@ -194,7 +177,7 @@ function EntryList({
             >
               <GripVertical className="w-3.5 h-3.5 text-gray-300 cursor-grab flex-shrink-0 opacity-0 group-hover:opacity-100 transition-opacity" />
               <span className="text-sm text-gray-700 flex-1 truncate">
-                {getEntrySummary(type, entry.fields)}
+                {getEntrySummary(type, entry.fields, t)}
               </span>
               <button
                 onClick={(e) => { e.stopPropagation(); removeEntry(entry.id); }}
@@ -221,7 +204,7 @@ function EntryList({
                   className="w-full py-2 rounded-lg text-sm font-semibold text-white transition-colors"
                   style={{ backgroundColor: "#2b4734" }}
                 >
-                  Done
+                  {t("done")}
                 </button>
               </div>
             </div>
@@ -238,10 +221,30 @@ export function SectionCard({ section, onUpdate, onRemove }: {
   onUpdate: (updates: Partial<ResumeSection>) => void;
   onRemove: () => void;
 }) {
+  const t = useT();
   const sectionMeta = SECTION_TYPES.find((s) => s.type === section.type);
   const IconComponent = getIcon(sectionMeta?.icon || "FileText");
   const [editingTitle, setEditingTitle] = useState(false);
   const [titleValue, setTitleValue] = useState(section.title);
+
+  const LAYOUT_OPTIONS: { value: SectionLayout; label: string; icon: React.ElementType }[] = [
+    { value: "grid", label: t("grid"), icon: Grid3X3 },
+    { value: "bubble", label: t("bubble"), icon: Circle },
+    { value: "compact", label: t("compact"), icon: List },
+  ];
+
+  const SEPARATOR_OPTIONS: { value: SectionSeparator; label: string }[] = [
+    { value: "bullet", label: "Bullet ·" },
+    { value: "pipe", label: "Pipe |" },
+    { value: "comma", label: "Comma ," },
+    { value: "newline", label: "New Line" },
+  ];
+
+  const SUBTITLE_STYLE_OPTIONS: { value: SubtitleStyle; label: string }[] = [
+    { value: "dash", label: "Dash —" },
+    { value: "colon", label: "Colon :" },
+    { value: "bracket", label: "Bracket ()" },
+  ];
 
   const toggleCollapse = () => onUpdate({ collapsed: !section.collapsed });
 
@@ -286,27 +289,27 @@ export function SectionCard({ section, onUpdate, onRemove }: {
         return (
           <div className="space-y-3">
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-              <SField label="Job Title" value={f.position} onChange={set("position")} />
-              <SField label="Employer" value={f.company} onChange={set("company")} />
+              <SField label={t("jobTitle")} value={f.position} onChange={set("position")} />
+              <SField label={t("employer")} value={f.company} onChange={set("company")} />
             </div>
-            <SField label="Location" value={f.location || ""} onChange={set("location")} />
+            <SField label={t("location")} value={f.location || ""} onChange={set("location")} />
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
               <div>
-                <label className="block text-[11px] font-medium text-gray-500 mb-1">Start Date</label>
+                <label className="block text-[11px] font-medium text-gray-500 mb-1">{t("startDate")}</label>
                 <MonthYearPicker monthValue={f.startMonth || ""} yearValue={f.startYear || ""} onMonthChange={set("startMonth")} onYearChange={set("startYear")} />
               </div>
               <div>
-                <label className="block text-[11px] font-medium text-gray-500 mb-1">End Date</label>
+                <label className="block text-[11px] font-medium text-gray-500 mb-1">{t("endDate")}</label>
                 <MonthYearPicker monthValue={f.endMonth || ""} yearValue={f.endYear || ""} onMonthChange={set("endMonth")} onYearChange={set("endYear")} showPresent={isCurrently} />
               </div>
             </div>
             <label className="flex items-center gap-2 text-sm text-gray-600 cursor-pointer py-1">
               <Checkbox checked={isCurrently} onCheckedChange={(v) => set("currentlyHere")(v ? "true" : "")} id={`currently-${entry.id}`} />
-              Currently working here
+              {t("currentlyWorkingHere")}
             </label>
             <div>
-              <label className="block text-[11px] font-medium text-gray-500 mb-1">Description</label>
-              <RichTextEditor value={f.description || ""} onChange={set("description")} placeholder="Describe your role..." showAiTools aiContext={`Role: ${f.position || "position"} at ${f.company || "company"}`} />
+              <label className="block text-[11px] font-medium text-gray-500 mb-1">{t("description")}</label>
+              <RichTextEditor value={f.description || ""} onChange={set("description")} placeholder={t("describeYourRole")} />
             </div>
           </div>
         );
@@ -315,27 +318,27 @@ export function SectionCard({ section, onUpdate, onRemove }: {
         return (
           <div className="space-y-3">
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-              <SField label="Degree / Field" value={f.degree} onChange={set("degree")} />
-              <SField label="School / University" value={f.institution} onChange={set("institution")} />
+              <SField label={t("degreeField")} value={f.degree} onChange={set("degree")} />
+              <SField label={t("schoolUniversity")} value={f.institution} onChange={set("institution")} />
             </div>
-            <SField label="Location" value={f.location || ""} onChange={set("location")} />
+            <SField label={t("location")} value={f.location || ""} onChange={set("location")} />
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
               <div>
-                <label className="block text-[11px] font-medium text-gray-500 mb-1">Start Date</label>
+                <label className="block text-[11px] font-medium text-gray-500 mb-1">{t("startDate")}</label>
                 <MonthYearPicker monthValue={f.startMonth || ""} yearValue={f.startYear || ""} onMonthChange={set("startMonth")} onYearChange={set("startYear")} />
               </div>
               <div>
-                <label className="block text-[11px] font-medium text-gray-500 mb-1">End Date</label>
+                <label className="block text-[11px] font-medium text-gray-500 mb-1">{t("endDate")}</label>
                 <MonthYearPicker monthValue={f.endMonth || ""} yearValue={f.endYear || ""} onMonthChange={set("endMonth")} onYearChange={set("endYear")} showPresent={f.currentlyHere === "true"} />
               </div>
             </div>
             <label className="flex items-center gap-2 text-sm text-gray-600 cursor-pointer py-1">
               <Checkbox checked={f.currentlyHere === "true"} onCheckedChange={(v) => set("currentlyHere")(v ? "true" : "")} id={`edu-currently-${entry.id}`} />
-              Currently studying here
+              {t("currentlyStudyingHere")}
             </label>
             <div>
-              <label className="block text-[11px] font-medium text-gray-500 mb-1">Description</label>
-              <RichTextEditor value={f.description || ""} onChange={set("description")} showAiTools aiContext={`Education: ${f.degree || "degree"} at ${f.institution || "institution"}`} />
+              <label className="block text-[11px] font-medium text-gray-500 mb-1">{t("description")}</label>
+              <RichTextEditor value={f.description || ""} onChange={set("description")} />
             </div>
           </div>
         );
@@ -343,14 +346,14 @@ export function SectionCard({ section, onUpdate, onRemove }: {
       case "skills":
         return (
           <div className="space-y-3">
-            <PillSwitcher label="Layout" options={LAYOUT_OPTIONS} value={section.layout || "bubble"} onChange={(l) => onUpdate({ layout: l })} />
+            <PillSwitcher label={t("layout")} options={LAYOUT_OPTIONS} value={section.layout || "bubble"} onChange={(l) => onUpdate({ layout: l })} />
             {(section.layout === "compact" || section.layout === "grid") && (
-              <PillSwitcher label="Separator" options={SEPARATOR_OPTIONS} value={section.separator || "bullet"} onChange={(s) => onUpdate({ separator: s })} />
+              <PillSwitcher label={t("separator")} options={SEPARATOR_OPTIONS} value={section.separator || "bullet"} onChange={(s) => onUpdate({ separator: s })} />
             )}
-            <PillSwitcher label="Subtitle Style" options={SUBTITLE_STYLE_OPTIONS} value={section.subtitleStyle || "dash"} onChange={(s) => onUpdate({ subtitleStyle: s })} />
+            <PillSwitcher label={t("subtitleStyleLabel")} options={SUBTITLE_STYLE_OPTIONS} value={section.subtitleStyle || "dash"} onChange={(s) => onUpdate({ subtitleStyle: s })} />
             <div>
-              <label className="block text-[11px] font-medium text-gray-500 mb-1">Skills</label>
-              <TagInput value={f.skills || ""} onChange={set("skills")} placeholder="Type a skill and press Enter" />
+              <label className="block text-[11px] font-medium text-gray-500 mb-1">{t("skills")}</label>
+              <TagInput value={f.skills || ""} onChange={set("skills")} placeholder={t("typeSkillPlaceholder")} />
             </div>
           </div>
         );
@@ -358,22 +361,34 @@ export function SectionCard({ section, onUpdate, onRemove }: {
       case "interests":
         return (
           <div>
-            <label className="block text-[11px] font-medium text-gray-500 mb-1">Interests</label>
-            <TagInput value={f.interests || ""} onChange={set("interests")} placeholder="Type an interest and press Enter" />
+            <label className="block text-[11px] font-medium text-gray-500 mb-1">{t("interests")}</label>
+            <TagInput value={f.interests || ""} onChange={set("interests")} placeholder={t("typeInterestPlaceholder")} />
           </div>
         );
 
       case "languages":
         return (
           <div className="space-y-3">
-            <PillSwitcher label="Layout" options={LAYOUT_OPTIONS} value={section.layout || "compact"} onChange={(l) => onUpdate({ layout: l })} />
+            <PillSwitcher label={t("layout")} options={LAYOUT_OPTIONS} value={section.layout || "compact"} onChange={(l) => onUpdate({ layout: l })} />
             {(section.layout === "compact" || section.layout === "grid") && (
-              <PillSwitcher label="Separator" options={SEPARATOR_OPTIONS} value={section.separator || "bullet"} onChange={(s) => onUpdate({ separator: s })} />
+              <PillSwitcher label={t("separator")} options={SEPARATOR_OPTIONS} value={section.separator || "bullet"} onChange={(s) => onUpdate({ separator: s })} />
             )}
-            <PillSwitcher label="Subtitle Style" options={SUBTITLE_STYLE_OPTIONS} value={section.subtitleStyle || "dash"} onChange={(s) => onUpdate({ subtitleStyle: s })} />
+            <PillSwitcher label={t("subtitleStyleLabel")} options={SUBTITLE_STYLE_OPTIONS} value={section.subtitleStyle || "dash"} onChange={(s) => onUpdate({ subtitleStyle: s })} />
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-              <SField label="Language" value={f.language} onChange={set("language")} />
-              <SField label="Proficiency" value={f.proficiency} onChange={set("proficiency")} placeholder="e.g. Native, Fluent, B2" />
+              <SField label={t("language")} value={f.language} onChange={set("language")} />
+              <div className="flex-1 min-w-0">
+                <label className="block text-xs font-semibold text-gray-700 mb-1">{t("proficiency")}</label>
+                <select
+                  value={f.proficiency || ""}
+                  onChange={(e) => set("proficiency")(e.target.value)}
+                  className="w-full px-3 py-2 text-sm border border-gray-200 rounded-lg outline-none bg-white focus:border-gray-400 transition-colors text-gray-800"
+                >
+                  <option value="">{t("egProficiency")}</option>
+                  {PROFICIENCY_LEVELS.map((level) => (
+                    <option key={level} value={level}>{level}</option>
+                  ))}
+                </select>
+              </div>
             </div>
           </div>
         );
@@ -383,11 +398,11 @@ export function SectionCard({ section, onUpdate, onRemove }: {
           <div className="space-y-3">
             <label className="flex items-center gap-2 text-sm text-gray-600 cursor-pointer">
               <Checkbox checked={section.showHeading !== false} onCheckedChange={(v) => onUpdate({ showHeading: !!v })} />
-              Show section heading
+              {t("showSectionHeading")}
             </label>
             <div>
-              <label className="block text-[11px] font-medium text-gray-500 mb-1">Professional Summary</label>
-              <RichTextEditor value={f.description || ""} onChange={set("description")} placeholder="Write a brief professional summary..." showAiTools aiContext="Professional summary for a resume" />
+              <label className="block text-[11px] font-medium text-gray-500 mb-1">{t("professionalSummary")}</label>
+              <RichTextEditor value={f.description || ""} onChange={set("description")} placeholder={t("writeBriefSummary")} />
             </div>
           </div>
         );
@@ -396,12 +411,12 @@ export function SectionCard({ section, onUpdate, onRemove }: {
         return (
           <div className="space-y-3">
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-              <SField label="Certificate Name" value={f.name} onChange={set("name")} />
-              <SField label="Issuing Organization" value={f.issuer} onChange={set("issuer")} />
+              <SField label={t("certificateName")} value={f.name} onChange={set("name")} />
+              <SField label={t("issuingOrganization")} value={f.issuer} onChange={set("issuer")} />
             </div>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-              <SField label="Date" value={f.date} onChange={set("date")} placeholder="e.g. March 2024" />
-              <SField label="URL" value={f.url || ""} onChange={set("url")} placeholder="https://..." />
+              <SField label={t("date")} value={f.date} onChange={set("date")} placeholder="e.g. March 2024" />
+              <SField label={t("url")} value={f.url || ""} onChange={set("url")} placeholder="https://..." />
             </div>
           </div>
         );
@@ -410,23 +425,23 @@ export function SectionCard({ section, onUpdate, onRemove }: {
         return (
           <div className="space-y-3">
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-              <SField label="Project Name" value={f.name} onChange={set("name")} />
-              <SField label="Role" value={f.role} onChange={set("role")} />
+              <SField label={t("projectName")} value={f.name} onChange={set("name")} />
+              <SField label={t("role")} value={f.role} onChange={set("role")} />
             </div>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
               <div>
-                <label className="block text-[11px] font-medium text-gray-500 mb-1">Start Date</label>
+                <label className="block text-[11px] font-medium text-gray-500 mb-1">{t("startDate")}</label>
                 <MonthYearPicker monthValue={f.startMonth || ""} yearValue={f.startYear || ""} onMonthChange={set("startMonth")} onYearChange={set("startYear")} />
               </div>
               <div>
-                <label className="block text-[11px] font-medium text-gray-500 mb-1">End Date</label>
+                <label className="block text-[11px] font-medium text-gray-500 mb-1">{t("endDate")}</label>
                 <MonthYearPicker monthValue={f.endMonth || ""} yearValue={f.endYear || ""} onMonthChange={set("endMonth")} onYearChange={set("endYear")} />
               </div>
             </div>
-            <SField label="URL" value={f.url || ""} onChange={set("url")} placeholder="https://..." />
+            <SField label={t("url")} value={f.url || ""} onChange={set("url")} placeholder="https://..." />
             <div>
-              <label className="block text-[11px] font-medium text-gray-500 mb-1">Description</label>
-              <RichTextEditor value={f.description || ""} onChange={set("description")} showAiTools aiContext={`Project: ${f.name || "project"}, Role: ${f.role || "contributor"}`} />
+              <label className="block text-[11px] font-medium text-gray-500 mb-1">{t("description")}</label>
+              <RichTextEditor value={f.description || ""} onChange={set("description")} />
             </div>
           </div>
         );
@@ -435,10 +450,10 @@ export function SectionCard({ section, onUpdate, onRemove }: {
         return (
           <div className="space-y-3">
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-              <SField label="Course Name" value={f.name} onChange={set("name")} />
-              <SField label="Institution" value={f.institution} onChange={set("institution")} />
+              <SField label={t("courseName")} value={f.name} onChange={set("name")} />
+              <SField label={t("institution")} value={f.institution} onChange={set("institution")} />
             </div>
-            <SField label="Date" value={f.date} onChange={set("date")} placeholder="e.g. 2024" />
+            <SField label={t("date")} value={f.date} onChange={set("date")} placeholder="e.g. 2024" />
           </div>
         );
 
@@ -446,12 +461,12 @@ export function SectionCard({ section, onUpdate, onRemove }: {
         return (
           <div className="space-y-3">
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-              <SField label="Award Name" value={f.name} onChange={set("name")} />
-              <SField label="Issuer" value={f.issuer} onChange={set("issuer")} />
+              <SField label={t("awardName")} value={f.name} onChange={set("name")} />
+              <SField label={t("issuer")} value={f.issuer} onChange={set("issuer")} />
             </div>
-            <SField label="Date" value={f.date} onChange={set("date")} placeholder="e.g. 2024" />
+            <SField label={t("date")} value={f.date} onChange={set("date")} placeholder="e.g. 2024" />
             <div>
-              <label className="block text-[11px] font-medium text-gray-500 mb-1">Description</label>
+              <label className="block text-[11px] font-medium text-gray-500 mb-1">{t("description")}</label>
               <RichTextEditor value={f.description || ""} onChange={set("description")} />
             </div>
           </div>
@@ -461,21 +476,21 @@ export function SectionCard({ section, onUpdate, onRemove }: {
         return (
           <div className="space-y-3">
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-              <SField label="Organisation Name" value={f.name} onChange={set("name")} />
-              <SField label="Role" value={f.role} onChange={set("role")} />
+              <SField label={t("organisationName")} value={f.name} onChange={set("name")} />
+              <SField label={t("role")} value={f.role} onChange={set("role")} />
             </div>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
               <div>
-                <label className="block text-[11px] font-medium text-gray-500 mb-1">Start Date</label>
+                <label className="block text-[11px] font-medium text-gray-500 mb-1">{t("startDate")}</label>
                 <MonthYearPicker monthValue={f.startMonth || ""} yearValue={f.startYear || ""} onMonthChange={set("startMonth")} onYearChange={set("startYear")} />
               </div>
               <div>
-                <label className="block text-[11px] font-medium text-gray-500 mb-1">End Date</label>
+                <label className="block text-[11px] font-medium text-gray-500 mb-1">{t("endDate")}</label>
                 <MonthYearPicker monthValue={f.endMonth || ""} yearValue={f.endYear || ""} onMonthChange={set("endMonth")} onYearChange={set("endYear")} />
               </div>
             </div>
             <div>
-              <label className="block text-[11px] font-medium text-gray-500 mb-1">Description</label>
+              <label className="block text-[11px] font-medium text-gray-500 mb-1">{t("description")}</label>
               <RichTextEditor value={f.description || ""} onChange={set("description")} />
             </div>
           </div>
@@ -485,15 +500,15 @@ export function SectionCard({ section, onUpdate, onRemove }: {
         return (
           <div className="space-y-3">
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-              <SField label="Title" value={f.title || ""} onChange={set("title")} />
-              <SField label="Publisher" value={f.publisher} onChange={set("publisher")} />
+              <SField label={t("title")} value={f.title || ""} onChange={set("title")} />
+              <SField label={t("publisher")} value={f.publisher} onChange={set("publisher")} />
             </div>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-              <SField label="Date" value={f.date} onChange={set("date")} placeholder="e.g. 2024" />
-              <SField label="URL" value={f.url || ""} onChange={set("url")} placeholder="https://..." />
+              <SField label={t("date")} value={f.date} onChange={set("date")} placeholder="e.g. 2024" />
+              <SField label={t("url")} value={f.url || ""} onChange={set("url")} placeholder="https://..." />
             </div>
             <div>
-              <label className="block text-[11px] font-medium text-gray-500 mb-1">Description</label>
+              <label className="block text-[11px] font-medium text-gray-500 mb-1">{t("description")}</label>
               <RichTextEditor value={f.description || ""} onChange={set("description")} />
             </div>
           </div>
@@ -503,30 +518,30 @@ export function SectionCard({ section, onUpdate, onRemove }: {
         return (
           <div className="space-y-3">
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-              <SField label="Full Name" value={f.name} onChange={set("name")} />
-              <SField label="Title / Position" value={f.position} onChange={set("position")} />
+              <SField label={t("fullName")} value={f.name} onChange={set("name")} />
+              <SField label={t("titlePosition")} value={f.position} onChange={set("position")} />
             </div>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-              <SField label="Company" value={f.company} onChange={set("company")} />
-              <SField label="Relationship" value={f.relationship || ""} onChange={set("relationship")} placeholder="e.g. Direct Manager" />
+              <SField label={t("company")} value={f.company} onChange={set("company")} />
+              <SField label={t("relationship")} value={f.relationship || ""} onChange={set("relationship")} placeholder={t("egDirectManager")} />
             </div>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-              <SField label="Email" value={f.email} onChange={set("email")} type="email" />
-              <SField label="Phone" value={f.phone} onChange={set("phone")} type="tel" />
+              <SField label={t("email")} value={f.email} onChange={set("email")} type="email" />
+              <SField label={t("phone")} value={f.phone} onChange={set("phone")} type="tel" />
             </div>
           </div>
         );
 
       case "declaration":
-        return <DeclarationForm entry={entry} set={set} />;
+        return <DeclarationForm entry={entry} set={set} t={t} />;
 
       case "custom":
         return (
           <div className="space-y-3">
-            <SField label="Section Title" value={f.sectionTitle || ""} onChange={set("sectionTitle")} placeholder="Custom section name" />
+            <SField label={t("sectionTitle")} value={f.sectionTitle || ""} onChange={set("sectionTitle")} placeholder={t("customSectionName")} />
             <div>
-              <label className="block text-[11px] font-medium text-gray-500 mb-1">Content</label>
-              <RichTextEditor value={f.description || ""} onChange={set("description")} placeholder="Add your content..." />
+              <label className="block text-[11px] font-medium text-gray-500 mb-1">{t("contentLabel")}</label>
+              <RichTextEditor value={f.description || ""} onChange={set("description")} placeholder={t("addYourContent")} />
             </div>
           </div>
         );
@@ -568,7 +583,7 @@ export function SectionCard({ section, onUpdate, onRemove }: {
         <button
           onClick={(e) => { e.stopPropagation(); setTitleValue(section.title); setEditingTitle(true); }}
           className="p-1 text-gray-300 hover:text-gray-500 opacity-0 group-hover:opacity-100 transition-all"
-          title="Edit heading"
+          title={t("editHeading")}
         >
           <Pencil className="w-3 h-3" />
         </button>
@@ -587,6 +602,7 @@ export function SectionCard({ section, onUpdate, onRemove }: {
         section.collapsed ? "max-h-0 opacity-0" : "max-h-[5000px] opacity-100"
       )}>
         <div className="pb-5 px-0 space-y-1">
+          <ResumeTipBanner sectionType={section.type} />
           {isSingleEntrySection ? (
             section.entries.length > 0 ? (
               <div className="space-y-3">
@@ -601,6 +617,7 @@ export function SectionCard({ section, onUpdate, onRemove }: {
               toggleEntryCollapse={toggleEntryCollapse}
               removeEntry={removeEntry}
               onReorder={(entries) => onUpdate({ entries })}
+              t={t}
             />
           )}
 
@@ -610,7 +627,7 @@ export function SectionCard({ section, onUpdate, onRemove }: {
               className="flex items-center gap-1.5 text-sm font-medium text-gray-500 hover:text-gray-700 px-1 py-2 transition-colors"
             >
               <Plus className="w-3.5 h-3.5" />
-              Add entry
+              {t("addEntry")}
             </button>
           )}
         </div>

@@ -78,7 +78,6 @@ export default function AboutSection() {
 
             <p className="text-base leading-relaxed mb-8" style={{ color: '#6B6B6B' }}>
               Now I make free tools and guides that give you the insider knowledge most people never get.
-              Want personal help? I also coach 1-on-1.
             </p>
 
             {/* Social pills */}

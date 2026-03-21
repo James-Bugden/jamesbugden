@@ -1,17 +1,21 @@
 import { useState, useCallback, useRef, useEffect } from "react";
-import { Helmet } from "react-helmet-async";
-import { Link } from "react-router-dom";
-import { Upload, FileText, Sparkles, BarChart3, CloudUpload, X, Check, Lock, ArrowRight, ShieldCheck, ChevronRight, AlertTriangle } from "lucide-react";
+import { toast } from "@/hooks/use-toast";
+import PageSEO from "@/components/PageSEO";
+import { Link, useNavigate } from "react-router-dom";
+import { Upload, FileText, Sparkles, BarChart3, CloudUpload, X, Check, Lock, ArrowRight, ShieldCheck, ChevronRight, AlertTriangle, LogIn } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
 import { supabase } from "@/integrations/supabase/client";
 import ResumeResults from "@/components/resume-analyzer/ResumeResults";
+import { UsageLimitBanner } from "@/components/resume-analyzer/UsageLimitBanner";
+import { useAnalyzerUsage } from "@/hooks/useAnalyzerUsage";
 
 import type { AnalysisResult } from "@/components/resume-analyzer/types";
 import LogoScroll from "@/components/LogoScroll";
 import { useAuth } from "@/contexts/AuthContext";
+import { useResumeAnalyses } from "@/hooks/useResumeAnalyses";
 import { renderPdfToImage } from "@/lib/renderPdfToImage";
 import jamesPhoto from "@/assets/james-bugden.jpg";
 
@@ -22,9 +26,12 @@ type InputMethod = "upload_pdf" | "upload_docx" | "paste";
 
 const t = (lang: Language, en: string, zh: string) => lang === "en" ? en : zh;
 
-export default function ResumeAnalyzer() {
-  const { isLoggedIn } = useAuth();
-  const [lang, setLang] = useState<Language>("en");
+export default function ResumeAnalyzer({ defaultLang = "en" }: { defaultLang?: Language }) {
+  const navigate = useNavigate();
+  const { isLoggedIn, user } = useAuth();
+  const { saveAnalysis } = useResumeAnalyses();
+  const { used, limit, limitReached, recordUsage } = useAnalyzerUsage();
+  const [lang, setLang] = useState<Language>(defaultLang);
   const [screen, setScreen] = useState<Screen>("upload");
   const [file, setFile] = useState<File | null>(null);
   const [pasteText, setPasteText] = useState("");
@@ -36,6 +43,7 @@ export default function ResumeAnalyzer() {
   const [progress, setProgress] = useState(0);
   const [resumeImageUrl, setResumeImageUrl] = useState<string | null>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
+  
 
   // Restore analysis from sessionStorage after auth redirect
   useEffect(() => {
@@ -56,6 +64,28 @@ export default function ResumeAnalyzer() {
       }
     }
   }, [isLoggedIn, analysisResult]);
+
+  // Auto-analyze when arriving from builder/dashboard with pre-loaded text
+  const autoTriggered = useRef(false);
+  useEffect(() => {
+    const autoText = sessionStorage.getItem("analyzer-auto-text");
+    if (autoText && screen === "upload" && !autoTriggered.current) {
+      autoTriggered.current = true;
+      sessionStorage.removeItem("analyzer-auto-text");
+      setResumeText(autoText);
+      setPasteText(autoText);
+      setInputMethod("paste");
+    }
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps
+
+  // Trigger analysis once pasteText is set from auto-text
+  const submitRef = useRef<(() => void) | null>(null);
+  useEffect(() => {
+    if (autoTriggered.current && pasteText.length >= 100 && screen === "upload") {
+      // Use ref to call handleSubmitResume after it's defined
+      setTimeout(() => submitRef.current?.(), 50);
+    }
+  }, [pasteText]); // eslint-disable-line react-hooks/exhaustive-deps
 
   const analyzeSteps = [
     t(lang, "Extracting resume content...", "擷取履歷內容..."),
@@ -150,9 +180,14 @@ export default function ResumeAnalyzer() {
     }
   }, [lang]);
 
+
   // New flow: Upload → Analyzing → Results (no email gate)
   const handleSubmitResume = useCallback(async () => {
     setError("");
+    if (limitReached) {
+      setError(t(lang, "You've reached your monthly analysis limit. Please try again next month.", "你已達到本月分析上限。請下月再試。"));
+      return;
+    }
     try {
       let text = "";
       if (file) {
@@ -184,10 +219,46 @@ export default function ResumeAnalyzer() {
       }
 
       setResumeText(text);
+      sessionStorage.setItem("analyzer-resume-text", text);
       const result = await startAnalysis(text);
       if (result) {
+        recordUsage();
         sessionStorage.setItem("resume-analysis-result", JSON.stringify(result));
         sessionStorage.setItem("resume-analysis-lang", lang);
+
+        // Fire-and-forget analytics tracking
+        supabase.from("resume_leads").insert({
+          email: "",
+          language: lang,
+          overall_score: result.overall_score ?? null,
+          input_method: file ? "upload" : "paste",
+          analysis_result: result as any,
+          seniority_level: result.segmentation?.seniority_level ?? null,
+          industry: result.segmentation?.industry ?? null,
+          current_company_type: result.segmentation?.current_company_type ?? null,
+          target_readiness: result.segmentation?.target_readiness ?? null,
+          user_agent: navigator.userAgent,
+        }).then(({ error }) => {
+          if (error) console.warn("Analytics insert failed:", error.message);
+        });
+
+        // Auto-save analysis for logged-in users
+        if (isLoggedIn && user) {
+          saveAnalysis({
+            overall_score: result.overall_score,
+            analysis_result: result,
+            resume_text: text,
+            language: lang,
+          });
+          toast({
+            title: t(lang, "Report saved!", "報告已儲存！"),
+            description: t(lang,
+              "Your analysis report has been saved to your dashboard.",
+              "你的分析報告已儲存至你的儀表板。"
+            ),
+          });
+        }
+
         setTimeout(() => setScreen("results"), 800);
       }
     } catch (err: any) {
@@ -196,28 +267,53 @@ export default function ResumeAnalyzer() {
     }
   }, [file, pasteText, lang, extractTextFromPDF, extractTextFromDOCX, startAnalysis]);
 
+  // Keep submit ref in sync for auto-analyze
+  submitRef.current = handleSubmitResume;
+
 
   const canSubmit = file || pasteText.trim().length >= 200;
 
   return (
     <>
-      <Helmet>
-        <title>{t(lang, "Free Resume Analyzer — AI-Powered Resume Score", "免費履歷分析工具 — AI 驅動的履歷評分")}</title>
-        <meta name="description" content={t(lang, "Get a free, instant AI analysis of your resume powered by the same criteria top recruiters use.", "免費獲得即時 AI 履歷分析，基於頂尖招募官實際使用的篩選標準。")} />
-      </Helmet>
+      <PageSEO
+        title={t(lang, "Free Resume Analyzer — AI-Powered Resume Score", "免費履歷分析工具 — AI 驅動的履歷評分")}
+        description={t(lang, "Get a free, instant AI analysis of your resume powered by the same criteria top recruiters use.", "免費獲得即時 AI 履歷分析，基於頂尖招募官實際使用的篩選標準。")}
+        path={lang === "zh-TW" ? "/zh-tw/resume-analyzer" : "/resume-analyzer"}
+        lang={lang === "zh-TW" ? "zh-Hant-TW" : "en"}
+      />
 
       {/* Header — cream nav matching homepage */}
       <header className="sticky top-0 z-50" style={{ backgroundColor: '#FDFBF7', borderBottom: '1px solid rgba(43,71,52,0.1)' }}>
         <div className="container mx-auto max-w-5xl flex items-center justify-between h-14 px-5">
-          <Link to="/" className="font-heading text-lg font-bold tracking-wide" style={{ color: '#2b4734' }}>
+          <Link to={lang === "zh-TW" ? "/zh-tw" : "/"} className="font-heading text-base md:text-lg font-bold tracking-wide whitespace-nowrap" style={{ color: '#2b4734' }}>
             JAMES BUGDEN
           </Link>
-          <div className="flex items-center gap-3">
-            <Link to="/" className="text-sm transition-colors hover:opacity-80" style={{ color: '#6B6B6B' }}>
+          <div className="flex items-center gap-2">
+            <Link to={lang === "zh-TW" ? "/zh-tw" : "/"} className="text-sm transition-colors hover:opacity-80 hidden sm:inline" style={{ color: '#6B6B6B' }}>
               {t(lang, "← Home", "← 首頁")}
             </Link>
+            {!isLoggedIn && (
+              <Link
+                to="/login"
+                state={{ from: lang === "zh-TW" ? "/zh-tw/resume-analyzer" : "/resume-analyzer" }}
+                className="inline-flex items-center gap-1.5 text-xs font-semibold px-3 py-1.5 rounded-full transition-all hover:opacity-80"
+                style={{ backgroundColor: '#2b4734', color: '#FDFBF7' }}
+              >
+                <LogIn className="w-3.5 h-3.5" />
+                {t(lang, "Sign in", "登入")}
+              </Link>
+            )}
+            {isLoggedIn && (
+              <Link
+                to={lang === "zh-TW" ? "/zh-tw/dashboard" : "/dashboard"}
+                className="text-xs font-semibold px-3 py-1.5 rounded-full transition-all hover:opacity-80"
+                style={{ backgroundColor: '#2b4734', color: '#FDFBF7' }}
+              >
+                {t(lang, "Dashboard", "我的專區")}
+              </Link>
+            )}
             <button
-              onClick={() => setLang(lang === "en" ? "zh-TW" : "en")}
+              onClick={() => navigate(lang === "en" ? "/zh-tw/resume-analyzer" : "/resume-analyzer")}
               className="text-xs font-semibold px-3 py-1.5 rounded-full transition-all hover:bg-gold hover:text-white"
               style={{ border: '1px solid #D4930D', color: '#D4930D' }}
             >
@@ -345,10 +441,15 @@ export default function ResumeAnalyzer() {
                   <p className="text-destructive text-sm mt-4 text-center">{error}</p>
                 )}
 
+                {/* Usage limit banner */}
+                <div className="mt-4">
+                  <UsageLimitBanner lang={lang} used={used} limit={limit} limitReached={limitReached} />
+                </div>
+
                 <button
                   onClick={handleSubmitResume}
-                  disabled={!canSubmit}
-                  className="w-full mt-6 h-12 text-base font-semibold rounded-lg text-white transition-colors disabled:opacity-40"
+                  disabled={!canSubmit || limitReached}
+                  className="w-full mt-4 h-12 text-base font-semibold rounded-lg text-white transition-colors disabled:opacity-40"
                   style={{ backgroundColor: '#2b4734' }}
                   onMouseEnter={(e) => { if (!e.currentTarget.disabled) e.currentTarget.style.backgroundColor = '#3a5a45'; }}
                   onMouseLeave={(e) => { e.currentTarget.style.backgroundColor = '#2b4734'; }}
@@ -451,10 +552,6 @@ export default function ResumeAnalyzer() {
                 </div>
               </div>
 
-              {/* Logo Scroll */}
-              <div className="mt-10">
-                <LogoScroll heading={t(lang, "I've helped professionals from", "這些公司的人都找過我")} />
-              </div>
 
               {/* FAQ Section */}
               <div className="mt-12">
@@ -463,10 +560,10 @@ export default function ResumeAnalyzer() {
                 </h2>
                 <Accordion type="single" collapsible className="w-full">
                   {[
-                    { q: t(lang, "What is an ATS and why does it matter?", "ATS 是什麼？為什麼很重要？"), a: t(lang, "An Applicant Tracking System (ATS) is software used by 99% of large employers to screen resumes. If your resume isn't ATS-friendly, it may be rejected before a human ever reads it.", "ATS（應徵者追蹤系統）是 99% 大企業用來自動篩選履歷的軟體。如果你的履歷不符合 ATS 格式，還沒被人看到就會被刷掉。") },
+                    
                     { q: t(lang, "How does the resume analyzer work?", "這個分析工具怎麼運作？"), a: t(lang, "Our AI evaluates your resume against the same criteria top recruiters use: keyword optimization, formatting, quantified achievements, and overall readability. You get a score and specific recommendations.", "AI 會根據頂尖招募官的實際篩選標準來評估你的履歷，包括關鍵字、格式、量化成就和可讀性，最後給你評分和具體改善建議。") },
                     { q: t(lang, "Is my resume data safe?", "我的履歷資料安全嗎？"), a: t(lang, "Yes. Your resume is processed securely, never shared with third parties, and never used for training. We take your privacy seriously.", "完全安全。你的履歷經過加密處理，不會分享給任何第三方，也不會用來訓練 AI 模型。") },
-                    { q: t(lang, "How many times can I use this tool?", "可以免費用幾次？"), a: t(lang, "You can analyze up to 5 resumes per month for free. This resets at the beginning of each calendar month.", "每月可免費分析 5 份履歷，每月月初自動重置。") },
+                    { q: t(lang, "How many times can I use this tool?", "可以免費用幾次？"), a: t(lang, "You can analyze up to 3 resumes per month for free. I built this tool by myself, and every analysis uses AI which costs real money — plus hosting and development. These limits help me keep the tool free for everyone.", "每月可免費分析 3 份履歷。這個工具是我一個人獨力開發的，每次分析都會使用 AI，產生實際費用，加上主機和開發成本。設定使用上限是為了讓這個工具能繼續免費提供給大家。") },
                     { q: t(lang, "What file formats are supported?", "支援哪些檔案格式？"), a: t(lang, "We support PDF and DOCX files up to 5MB. You can also paste your resume text directly.", "支援 5MB 以內的 PDF 和 DOCX 檔案，也可以直接貼上履歷文字。") },
                     { q: t(lang, "How is this different from other resume scanners?", "跟其他履歷工具有什麼不同？"), a: t(lang, "This tool is built by a senior recruiter who has personally reviewed 20,000+ resumes. The scoring criteria reflect real hiring decisions, not generic AI rules.", "這個工具由親自審閱超過兩萬份履歷的資深招募官打造，評分標準來自真實招聘經驗，不是套公式的 AI 規則。") },
                   ].map((item, i) => (
@@ -532,6 +629,7 @@ export default function ResumeAnalyzer() {
             lang={lang}
             isUnlocked={isLoggedIn}
             resumeImageUrl={resumeImageUrl}
+            resumeText={resumeText}
             onReset={() => {
               setAnalysisResult(null);
               setFile(null);
