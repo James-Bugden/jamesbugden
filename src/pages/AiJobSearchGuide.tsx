@@ -1,5 +1,5 @@
 import { FileText, Clock, Linkedin, Bot, Target, Briefcase, Send, MessageSquare, DollarSign, AlertTriangle, CheckCircle2, XCircle, ArrowRight, ChevronDown, Menu, Search, Zap, BookOpen, Copy, Check } from "lucide-react";
-import JobTitleWorksheet from "@/components/guides/JobTitleWorksheet";
+
 import { AI_GUIDE_PROMPTS } from "@/data/aiGuidePrompts";
 import { Link } from "react-router-dom";
 import GoldCheckBadge from "@/components/GoldCheckBadge";
@@ -590,24 +590,6 @@ And here's the resume: ____`}</AiPromptBlock>
             </div>
           </Collapsible>
 
-          {/* 3.1b */}
-          <div className="bg-gold/5 border border-gold/20 rounded-xl p-5 space-y-3">
-            <h4 className="font-heading text-lg text-gold font-semibold">3.1b Open the Interactive Resume Workbook</h4>
-            <p className="text-muted-foreground text-sm leading-relaxed">This workbook is your planning tool for the rest of Section 3. Every step from keywords to bullets happens here. Open it in another tab and keep it next to this guide as you work.</p>
-            <a href="#worksheet" className="inline-flex items-center gap-1.5 text-sm text-gold hover:underline font-medium">
-              Open the Resume Workbook →
-            </a>
-            <p className="text-sm text-muted-foreground leading-relaxed mt-2">You will use this workbook to:</p>
-            <ul className="text-sm text-muted-foreground space-y-1 list-disc list-inside">
-              <li>Enter the 20 keywords for your target role (Step 3.9)</li>
-              <li>Track which keywords appear most often across job postings</li>
-              <li>Record your achievements for each experience (Step 3.11)</li>
-              <li>Match keywords to achievements (Step 3.12)</li>
-              <li>Build and store your final bullet points (Step 3.13)</li>
-              <li>Watch your keyword match rate hit 50% in real time (Step 3.15)</li>
-            </ul>
-            <p className="text-xs text-muted-foreground">Each tab in the workbook represents one target job title. If you are targeting multiple titles from Section 1, create a separate tab for each.</p>
-          </div>
 
           {/* 3.2 */}
           <Collapsible title="3.2 Create Different Versions for Each Job Title">
@@ -1135,7 +1117,7 @@ Generate a short, conversational response that asks them to do better, given my 
             ]},
             { title: "Stage 3: Build Your Resume", anchor: "#resume", items: [
               "Download a clean, ATS-friendly template → 3.1",
-              "Open the Resume Workbook and create a tab for each target job title → 3.1b",
+              
               "Create a separate version for each target job title → 3.2",
               "Add desired job title at the top → 3.3",
               "Update location to target city → 3.4",
@@ -1237,19 +1219,6 @@ Generate a short, conversational response that asks them to do better, given my 
         </div>
       </section>
 
-      {/* ═══════════════ SECTION 12: JOB TITLE WORKSHEET ═══════════════ */}
-      <section id="worksheet" className="py-14 md:py-20 px-5 md:px-6 bg-card border-y border-border scroll-mt-24">
-        <div className="container mx-auto max-w-3xl space-y-6">
-          <div className="flex items-start gap-5 mb-8">
-            <SectionNumber num="12" />
-            <div className="pt-3">
-              <h2 className="font-heading text-2xl md:text-3xl text-foreground">Job Title Keyword Worksheet</h2>
-              <p className="text-muted-foreground mt-2 text-sm">For each target role, list the top 20 keywords from job descriptions, then map your experience, achievements, and keywords to build optimized resume bullets. Your progress is saved automatically.</p>
-            </div>
-          </div>
-          <JobTitleWorksheet lang="en" />
-        </div>
-      </section>
 
 
       <section id="resources" className="py-14 md:py-20 px-5 md:px-6 bg-card border-y border-border scroll-mt-24">
