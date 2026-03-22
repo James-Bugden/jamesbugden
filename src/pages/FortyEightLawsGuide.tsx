@@ -741,7 +741,7 @@ const FortyEightLawsGuide = () => {
             <p className="text-muted-foreground leading-relaxed mb-6">
               Don't spread across 10 projects doing average work on each. Go deep on 2-3 and deliver exceptional results. Become the go-to person for one specific thing before expanding. Build T-shaped skills: wide awareness across many areas, deep expertise in one.
             </p>
-            <ActionStep>
+            <ActionStep checked={safeActions[8]} onToggle={() => toggleAction(8)}>
               Count how many active projects you're contributing to right now. If the number is higher than 5, you're spread too thin. Pick the 2-3 with the highest impact and visibility. Reduce your involvement in the rest. Depth on a few beats surface-level effort on many.
             </ActionStep>
 
