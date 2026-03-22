@@ -93,12 +93,13 @@ function serializeResumeHtml(
       if (val?.trim()) cloneA4Page.style.setProperty(name, val.trim());
     }
 
-    // KEY FIX: Override padding/margin CSS vars to 0 — @page margins handle this now
+    // KEY FIX: Zero only VERTICAL padding — @page margins handle top/bottom.
+    // Keep horizontal padding on the element itself.
     cloneA4Page.style.setProperty("--resume-pad-top", "0mm");
     cloneA4Page.style.setProperty("--resume-pad-bottom", "0mm");
-    cloneA4Page.style.setProperty("--resume-margin-x", "0mm");
     cloneA4Page.style.setProperty("--resume-margin-y", "0mm");
-    cloneA4Page.style.padding = "0";
+    cloneA4Page.style.paddingTop = "0";
+    cloneA4Page.style.paddingBottom = "0";
     cloneA4Page.style.width = "100%";
   }
 
