@@ -111,6 +111,13 @@ function serializeResumeHtml(
     // even when the content is shorter. Without this, page 1 is mostly blank space.
     cloneA4Page.style.minHeight = "0";
     cloneA4Page.style.height = "auto";
+
+    // Strip internal padding — @page margins now handle spacing on every page.
+    // Without this, page 1 would have double margins (element padding + @page margin).
+    cloneA4Page.style.paddingTop = "0";
+    cloneA4Page.style.paddingBottom = "0";
+    cloneA4Page.style.paddingLeft = "0";
+    cloneA4Page.style.paddingRight = "0";
   }
 
   // Copy global CSS custom properties from :root
