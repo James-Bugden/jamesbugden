@@ -52,14 +52,21 @@ async function captureElement(el: HTMLElement, pixelRatio: number, useJpeg = tru
 
   const fontEmbedCSS = await getFontEmbedCSS();
 
-  // Clone element off-screen at native size (no transforms)
+  // Clone element off-screen at native size, preserving inner transforms (e.g. translateY for pagination)
   const clone = el.cloneNode(true) as HTMLElement;
+  // Only strip scale transforms on the root — preserve translateY on children
   clone.style.transform = "none";
   clone.style.position = "absolute";
   clone.style.left = "-9999px";
   clone.style.top = "0";
   clone.style.zIndex = "-1";
-  clone.style.width = `${el.scrollWidth}px`;
+  // Use explicit dimensions from inline styles if available, fall back to scrollWidth
+  clone.style.width = el.style.width || `${el.scrollWidth}px`;
+  clone.style.height = el.style.height || `${el.scrollHeight}px`;
+  // Strip decorative styles that shouldn't appear in PDF
+  clone.style.boxShadow = "none";
+  clone.style.borderRadius = "0";
+  clone.classList.remove("shadow-2xl", "rounded-sm");
   document.body.appendChild(clone);
 
   try {
@@ -68,7 +75,7 @@ async function captureElement(el: HTMLElement, pixelRatio: number, useJpeg = tru
       cacheBust: true,
       skipAutoScale: true,
       fontEmbedCSS,
-      // Filter out cross-origin stylesheets that cause SecurityError
+      // Filter out cross-origin stylesheets and hover-only UI elements
       filter: (node: HTMLElement) => {
         if (node.tagName === "LINK" && (node as HTMLLinkElement).href?.includes("fonts.googleapis.com")) {
           return false; // skip — we provide CSS via fontEmbedCSS
