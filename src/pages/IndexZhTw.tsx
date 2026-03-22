@@ -89,7 +89,7 @@ const IndexZhTw = () => {
   }, []);
 
   return (
-    <div className="experiment min-h-screen overflow-x-hidden scroll-smooth bg-cream">
+    <div className="homepage min-h-screen overflow-x-hidden scroll-smooth bg-cream">
       <PageSEO
         title="James Bugden — 拿到年薪300萬以上外商Offer"
         description="職涯教練分享內部策略，協助750位以上候選人進入Google、Uber、Microsoft等頂尖企業。"

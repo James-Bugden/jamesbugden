@@ -90,7 +90,7 @@ const Index = () => {
   }, []);
 
   return (
-    <div className="experiment min-h-screen overflow-x-hidden scroll-smooth bg-cream">
+    <div className="homepage min-h-screen overflow-x-hidden scroll-smooth bg-cream">
       <PageSEO
         title="James Bugden — Break Into Google, Uber & Microsoft From Taiwan"
         description="Career coach shares insider strategies that helped 750+ candidates land roles at Google, Uber, Microsoft and other top companies."
