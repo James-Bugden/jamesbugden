@@ -81,7 +81,17 @@ function FAQSection() {
 
 const Index = () => {
   const { isLoggedIn } = useAuth();
+  const navigate = useNavigate();
   const [scrolled, setScrolled] = useState(false);
+
+  useEffect(() => {
+    if (!isLoggedIn) return;
+    const pending = sessionStorage.getItem("auth_redirect");
+    if (pending) {
+      sessionStorage.removeItem("auth_redirect");
+      navigate(pending === "/" ? "/dashboard" : pending, { replace: true });
+    }
+  }, [isLoggedIn, navigate]);
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 80);
