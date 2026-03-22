@@ -30,4 +30,3 @@ Additionally, several components always link to `/login` and `/join` regardless 
 - **Login.tsx**: Add a check — if `redirectTo` is `/`, `/zh-tw`, or `/zh-tw/`, replace it with the appropriate dashboard path.
 - **JoinZhTw.tsx**: Already redirects to `/zh-tw/dashboard` — correct.
 - **Join.tsx**: Redirects to `/dashboard` — correct, but should respect `location.state?.from` like Login does.
-
