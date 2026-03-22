@@ -1061,7 +1061,7 @@ const ResumeBuilder = () => {
             {editorContent}
           </div>
           <div className="flex-1 h-full relative">
-            <ResumePreview data={data} customize={customize} pdfTargetId="resume-pdf-target" onEditSection={handleEditSection} onColorChange={(f, c) => updateCustomize({ [f]: c } as any)} onContentEdit={handleContentEdit} onPageCount={handlePageCount} />
+            <ResumePreview data={data} customize={customize} pdfTargetId="resume-pdf-target" onEditSection={handleEditSection} onColorChange={(f, c) => updateCustomize({ [f]: c } as any)} onContentEdit={handleContentEdit} onPageCount={handlePageCount} exportMetricsRef={exportMetricsRef} />
             <AnalyzerSuggestionsPanel
               suggestions={analyzerSuggestions}
               onApply={(s) => {
