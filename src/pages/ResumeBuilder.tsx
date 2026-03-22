@@ -433,6 +433,7 @@ const ResumeBuilder = () => {
   const [nameValue, setNameValue] = useState("");
   const [editorImportOpen, setEditorImportOpen] = useState(false);
   const isMobile = useIsMobile();
+  const exportMetricsRef = useRef<ResumeExportMetrics | null>(null);
   const [analyzerImporting, setAnalyzerImporting] = useState(false);
   const [pageCount, setPageCount] = useState(1);
   const [showPageWarning, setShowPageWarning] = useState(false);
