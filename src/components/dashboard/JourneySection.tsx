@@ -190,7 +190,7 @@ export default function JourneySection({
         onClick={() => setCollapsed((v) => !v)}
         className="w-full flex items-center gap-3 mb-4 group text-left"
       >
-        <span className="text-xl">{emoji}</span>
+        <span className="text-foreground" style={{ color }}>{icon}</span>
         <span className="font-heading text-lg md:text-xl font-bold text-foreground flex-1">
           {label}
         </span>
