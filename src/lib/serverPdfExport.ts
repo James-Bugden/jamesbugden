@@ -210,8 +210,36 @@ export async function exportResumePdfServer({
     });
 
     if (!response.ok) {
-      const errorText = await response.text();
-      throw new Error(`PDF generation failed: ${errorText}`);
+      // Try to parse error JSON for specific messages
+      let errorBody: { error?: string; limit?: number; used?: number } = {};
+      try {
+        errorBody = await response.json();
+      } catch {
+        const errorText = await response.text();
+        throw new Error(`PDF generation failed: ${errorText}`);
+      }
+
+      if (response.status === 429) {
+        toast({
+          title: "Monthly limit reached",
+          description: `You've used all ${errorBody.limit ?? 50} free PDF exports this month. Your limit resets at the start of next month. You can still use browser print as a fallback.`,
+          variant: "destructive",
+        });
+        // Offer browser print fallback
+        await fallbackBrowserPrint(sourceElement, pageFormat, customize);
+        return;
+      }
+
+      if (response.status === 401) {
+        toast({
+          title: "Sign in required",
+          description: "Please sign in to download PDFs.",
+          variant: "destructive",
+        });
+        return;
+      }
+
+      throw new Error(errorBody.error || `PDF generation failed (${response.status})`);
     }
 
     const pdfBlob = await response.blob();
