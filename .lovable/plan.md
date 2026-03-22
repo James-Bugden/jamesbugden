@@ -1,61 +1,37 @@
 
-Goal: fix the admin Google login flow so a valid admin Google account actually reaches `/admin` instead of ending up back on the login page.
 
-What I found
-- The backend side is working:
-  - `auth` logs show a successful Google login for `james@jamesbugden.com`.
-  - `public.admin_users` already contains `james@jamesbugden.com`, so this account is recognized as an admin.
-- That means the failure is very likely client-side, not a credential or role issue.
-- There are two weak spots in the current flow:
-  1. `src/pages/AdminLogin.tsx` sends Google OAuth back to `window.location.origin`, so the admin flow depends on the homepage noticing `sessionStorage.auth_redirect` and forwarding to `/admin`.
-  2. `src/components/ProtectedRoute.tsx` can redirect too early because `checkedUserRef` suppresses duplicate admin checks before the first `is_admin` RPC has finished. In that race, `loading` becomes false while `isAdmin` is still false, so the user gets bounced back to `/admin/login`.
+## Fix: Resume PDF Export Broken by `html2canvas` CSS Color Function Error
 
-Implementation plan
-1. Make the admin OAuth return directly to the admin login route
-- In `src/pages/AdminLogin.tsx`, change the Google sign-in `redirect_uri` from `window.location.origin` to `${window.location.origin}/admin/login`.
-- Keep `sessionStorage` as a fallback, but stop relying on the homepage redirect to complete admin login.
+### Problem
+`html2canvas` crashes with `"Attempting to parse an unsupported color function 'color'"` when trying to capture the resume preview. This is a known, unfixable limitation of the abandoned `html2canvas` library — it cannot parse modern CSS `color()` functions used by newer browser stylesheets/Tailwind.
 
-2. Make AdminLogin recover existing sessions on mount
-- Update `AdminLogin` so it always checks for an existing session on mount, not only when `auth_redirect === "/admin"`.
-- If a session already exists:
-  - run `is_admin`
-  - navigate to `/admin` when true
-  - sign out and show “Access denied” when false
-- Clear stale `auth_redirect` after a successful admin redirect or denied access.
+### Solution
+Replace the `html2canvas + jsPDF` export with a `window.print()` approach using custom `@media print` CSS. This is the same pattern already used by the Resume Analyzer and toolkit pages.
 
-3. Remove the ProtectedRoute race condition
-- Refactor `src/components/ProtectedRoute.tsx` so admin routes stay in a loading state until the admin RPC actually resolves.
-- Replace the current “skip duplicate checks” pattern with one of these safer approaches:
-  - simplest: remove `checkedUserRef` and just re-check on mount/auth change
-  - or keep dedupe, but only mark a user as checked after the RPC finishes
-- Ensure `requireAdmin` routes never render the redirect branch while the admin status is still unresolved.
+### Changes
 
-4. Add explicit admin-auth loading states
-- Split auth resolution from admin resolution inside `ProtectedRoute`.
-- Only evaluate:
-  - “no session” after auth is resolved
-  - “not admin” after admin check is resolved
-- This prevents false redirects during OAuth return / session hydration.
+**1. `src/lib/pdfExport.ts`** — Replace both `exportToPdf` and `exportResumePages` with a single `printResume()` function that:
+- Temporarily adds a class to `<html>` to activate print-specific styles
+- Calls `window.print()` (browser-native PDF generation, no library needed)
+- Removes the class after printing
+- Keep the function signatures backward-compatible or update callers
 
-5. Add regression tests
-- Add tests covering:
-  - admin Google OAuth uses `/admin/login` as the return location
-  - `AdminLogin` redirects an already-authenticated admin to `/admin`
-  - `ProtectedRoute` does not redirect before `is_admin` finishes
-  - a non-admin authenticated user is still rejected correctly
+**2. `src/pages/ResumeBuilder.tsx`** — Update `handleDownload` to call the new print-based export instead of `exportResumePages`/`exportToPdf`.
 
-Files to update
-- `src/pages/AdminLogin.tsx`
-- `src/components/ProtectedRoute.tsx`
-- `src/test/auth.test.ts` (or a new focused auth route test file)
+**3. `src/pages/ResumeBuilderSimple.tsx`** — Same update as above.
 
-Technical notes
-- I do not plan any database changes: the admin role row already exists and the admin-check function is already correct.
-- I do not plan changes to `src/integrations/lovable/index.ts` or `src/integrations/supabase/client.ts`.
-- Root cause is most likely: successful Google auth + admin role exists + client redirect/race sends the user back to login.
+**4. `src/components/cover-letter/CoverLetterBuilder.tsx`** — Update to use print-based export for cover letters.
 
-Expected outcome
-- Clicking “Sign in with Google” returns to `/admin/login`
-- the page detects the authenticated admin session immediately
-- the admin check completes before redirect logic runs
-- the user lands reliably on `/admin`
+**5. `src/index.css` (or new print stylesheet)** — Add `@media print` rules that:
+- Hide everything except the resume/cover-letter preview target
+- Remove scaling transforms so the A4 content prints at native size
+- Set `@page` size to A4/Letter with zero margins
+- Hide nav bars, sidebars, and other UI chrome
+
+**6. `package.json`** — Remove `html2canvas` and `jspdf` dependencies (no longer needed).
+
+### Why This Works
+- `window.print()` uses the browser's own rendering engine, which fully supports modern CSS
+- No dependency on abandoned libraries with known vulnerabilities and parsing gaps
+- Already proven in the project's other export flows (Resume Analyzer, toolkit pages)
+
