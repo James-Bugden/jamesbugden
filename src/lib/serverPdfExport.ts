@@ -4,6 +4,7 @@
  * and triggers a direct download — no print dialog.
  */
 import { toast } from "@/hooks/use-toast";
+import { supabase } from "@/integrations/supabase/client";
 
 interface ServerPdfExportOptions {
   /** The hidden full-flow element containing the resume preview */
@@ -204,15 +205,17 @@ export async function exportResumePdfServer({
     // Serialize resume to self-contained HTML
     const html = serializeResumeHtml(sourceElement, pageFormat);
 
-    // Call edge function directly via fetch for binary response
+    // Get auth token for rate limiting
     const supabaseUrl = import.meta.env.VITE_SUPABASE_URL;
     const supabaseKey = import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY;
+    const { data: sessionData } = await supabase.auth.getSession();
+    const accessToken = sessionData?.session?.access_token || supabaseKey;
 
     const response = await fetch(`${supabaseUrl}/functions/v1/generate-pdf`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
-        Authorization: `Bearer ${supabaseKey}`,
+        Authorization: `Bearer ${accessToken}`,
         apikey: supabaseKey,
       },
       body: JSON.stringify({ html, pageFormat }),
