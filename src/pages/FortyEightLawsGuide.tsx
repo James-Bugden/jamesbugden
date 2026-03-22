@@ -595,7 +595,7 @@ const FortyEightLawsGuide = () => {
       {/* ── Introduction ── */}
       <section id="intro" className="py-14 md:py-20 px-5 md:px-6 bg-card border-b border-border scroll-mt-24">
         <div className="container mx-auto max-w-3xl">
-          <p className="text-foreground text-lg leading-relaxed mb-6">
+          <p className="text-muted-foreground leading-relaxed mb-6">
             Robert Greene held between 50 and 80 jobs before he published his first book at age 39. Construction worker in Greece. Hotel receptionist in Paris. English teacher in Barcelona. Hollywood screenwriter. Magazine editor.
           </p>
           <p className="text-muted-foreground leading-relaxed mb-6">
