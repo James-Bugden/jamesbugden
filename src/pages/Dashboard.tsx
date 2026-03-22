@@ -5,7 +5,7 @@ import { Linkedin } from "lucide-react";
 import { InstagramIcon, ThreadsIcon } from "@/components/SocialIcons";
 import LanguageToggle from "@/components/LanguageToggle";
 import ThemeToggle from "@/components/ThemeToggle";
-import { ArrowRight, FileText, DollarSign, PenTool, Search, X, BarChart3 } from "lucide-react";
+import { ArrowRight, FileText, DollarSign, PenTool, Search, X, BarChart3, MessageSquare } from "lucide-react";
 import PageSEO from "@/components/PageSEO";
 import { useRecentlyUsed } from "@/hooks/useRecentlyUsed";
 import { useLocalStorage } from "@/hooks/useLocalStorage";
