@@ -1260,22 +1260,19 @@ export const ResumePreview = React.memo(function ResumePreview({
     });
   }, [data, customize]);
 
-  /* ── Apply pagination mutations to visible pages (sync before paint) ── */
+  /* ── Apply pagination mutations to visible + export pages (sync before paint) ── */
   useLayoutEffect(() => {
     if (!mutations) return;
 
-    visiblePageRefs.current.forEach(ref => {
+    const applyMutationsToRef = (ref: HTMLElement | null) => {
       if (!ref) return;
-
       const items = ref.querySelectorAll('[data-page-item]');
-
       items.forEach((el, idx) => {
         const mt = mutations.items[idx] || 0;
         (el as HTMLElement).style.marginTop = mt ? `${mt}px` : '';
         const blocks = getAtomicBlocks(el);
         blocks.forEach(block => { block.style.marginTop = ''; });
       });
-
       mutations.children.forEach((childMuts, parentIdx) => {
         if (!items[parentIdx]) return;
         const blocks = getAtomicBlocks(items[parentIdx]);
@@ -1285,7 +1282,10 @@ export const ResumePreview = React.memo(function ResumePreview({
           }
         });
       });
-    });
+    };
+
+    visiblePageRefs.current.forEach(applyMutationsToRef);
+    exportPageRefs.current.forEach(applyMutationsToRef);
   }, [mutations, pageCount]);
 
   useEffect(() => {
