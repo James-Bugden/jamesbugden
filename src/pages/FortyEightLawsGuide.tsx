@@ -532,7 +532,7 @@ const FortyEightLawsGuide = () => {
               If your boss is failing or on the way out, outshining them speeds up their replacement. But you need allies above them and an exit plan if it backfires.
             </Reversal>
             <div className="mt-6">
-              <ActionStep>
+              <ActionStep checked={safeActions[3]} onToggle={() => toggleAction(3)}>
                 This week, find one way to make your boss look good without being asked. Send them a bullet-point summary of a win they can forward to their boss. Prepare a slide they can use in their next leadership meeting. The goal: they associate you with making their life easier.
               </ActionStep>
             </div>
