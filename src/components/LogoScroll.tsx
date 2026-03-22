@@ -12,7 +12,6 @@ import agodaLogo from "@/assets/logos/agoda.png";
 import appierLogo from "@/assets/logos/appier.png";
 import pgLogo from "@/assets/logos/pg.png";
 import teslaLogo from "@/assets/logos/tesla.png";
-import momoLogo from "@/assets/logos/momo.png";
 import mckinseyLogo from "@/assets/logos/mckinsey.svg";
 import bcgLogo from "@/assets/logos/bcg.png";
 
@@ -69,9 +68,6 @@ function LogoItem({ company }: { company: Company }) {
         <img
           src={company.logo}
           alt={company.name}
-          loading="lazy"
-          width={80}
-          height={32}
           className={`flex-shrink-0 object-contain ${sizeClass} ${company.rounded ? "rounded-sm bg-white mix-blend-multiply" : ""}`}
         />
       ) : (
@@ -88,16 +84,13 @@ function LogoItem({ company }: { company: Company }) {
   );
 }
 
-export default function LogoScroll({ heading = "I've helped professionals from" }: { heading?: string }) {
+export default function LogoScroll() {
   return (
-    <section className="py-3 bg-white overflow-hidden relative">
-      <p className="text-center text-[11px] uppercase tracking-[0.15em] text-foreground/40 mb-2.5 font-medium">
-        {heading}
-      </p>
-
+    <section className="py-4 overflow-hidden relative" style={{ backgroundColor: '#FDFBF7' }}>
+      <p className="text-center text-sm text-muted-foreground mb-3 px-4">I worked with candidates from these companies</p>
       {/* Fade edges */}
-      <div className="absolute left-0 top-0 bottom-0 w-12 z-10 bg-gradient-to-r from-white to-transparent pointer-events-none" />
-      <div className="absolute right-0 top-0 bottom-0 w-12 z-10 bg-gradient-to-l from-white to-transparent pointer-events-none" />
+      <div className="absolute left-0 top-0 bottom-0 w-12 z-10 pointer-events-none" style={{ background: 'linear-gradient(to right, #FDFBF7, transparent)' }} />
+      <div className="absolute right-0 top-0 bottom-0 w-12 z-10 pointer-events-none" style={{ background: 'linear-gradient(to left, #FDFBF7, transparent)' }} />
 
       {/* Seamless infinite scroll */}
       <div className="overflow-hidden">

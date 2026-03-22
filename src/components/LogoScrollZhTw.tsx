@@ -3,7 +3,6 @@ import microsoftLogo from "@/assets/logos/microsoft.png";
 import metaLogo from "@/assets/logos/meta.png";
 import amazonLogo from "@/assets/logos/amazon.svg";
 import sapLogo from "@/assets/logos/sap.svg";
-import shopeeLogo from "@/assets/logos/shopee.svg";
 import appleLogo from "@/assets/logos/apple.svg";
 import nvidiaLogo from "@/assets/logos/nvidia.svg";
 import unileverLogo from "@/assets/logos/unilever.svg";
@@ -14,6 +13,7 @@ import pgLogo from "@/assets/logos/pg.png";
 import teslaLogo from "@/assets/logos/tesla.png";
 import mckinseyLogo from "@/assets/logos/mckinsey.svg";
 import bcgLogo from "@/assets/logos/bcg.png";
+import shopeeLogo from "@/assets/logos/shopee.svg";
 
 interface Company {
   name: string;
@@ -84,15 +84,13 @@ function LogoItem({ company }: { company: Company }) {
   );
 }
 
-export default function LogoScrollExperiment() {
+export default function LogoScrollZhTw() {
   return (
     <section className="py-4 overflow-hidden relative" style={{ backgroundColor: '#FDFBF7' }}>
-      <p className="text-center text-sm text-muted-foreground mb-3 px-4">I worked with candidates from these companies</p>
-      {/* Fade edges */}
+      <p className="text-center text-sm text-muted-foreground mb-3 px-4">我曾與來自這些公司的求職者合作</p>
       <div className="absolute left-0 top-0 bottom-0 w-12 z-10 pointer-events-none" style={{ background: 'linear-gradient(to right, #FDFBF7, transparent)' }} />
       <div className="absolute right-0 top-0 bottom-0 w-12 z-10 pointer-events-none" style={{ background: 'linear-gradient(to left, #FDFBF7, transparent)' }} />
 
-      {/* Seamless infinite scroll */}
       <div className="overflow-hidden">
         <div className="flex w-max animate-logo-scroll">
           {companies.map((company, i) => (

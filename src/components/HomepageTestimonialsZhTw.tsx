@@ -1,281 +1,266 @@
-import { useState, useRef } from "react";
-import { ChevronDown, ChevronUp, Quote } from "lucide-react";
-import sunnyPhoto from "@/assets/testimonials/sunny-thumb.webp";
-import monicaPhoto from "@/assets/testimonials/monica-thumb.webp";
-import juliePhoto from "@/assets/testimonials/julie-thumb.webp";
-import cynthiaPhoto from "@/assets/testimonials/cynthia-thumb.webp";
+import { useState } from "react";
+import { ChevronDown } from "lucide-react";
 import pinweiPhoto from "@/assets/testimonials/pinwei-thumb.webp";
+import cynthiaPhoto from "@/assets/testimonials/cynthia-thumb.webp";
 import airuPhoto from "@/assets/testimonials/airu.png";
+import royPhoto from "@/assets/testimonials/roy.jpeg";
+import monicaPhoto from "@/assets/testimonials/monica-thumb.webp";
+import janellePhoto from "@/assets/testimonials/janelle.jpg";
+import annePhoto from "@/assets/testimonials/anne.jpeg";
+import silviaPhoto from "@/assets/testimonials/silvia.jpg";
+import sunnyPhoto from "@/assets/testimonials/sunny-thumb.webp";
 import omarPhoto from "@/assets/testimonials/omar-li.jpg";
+import juliePhoto from "@/assets/testimonials/julie-thumb.webp";
+import peterPhoto from "@/assets/testimonials/peter.jpg";
+import kikiPhoto from "@/assets/testimonials/kiki.png";
+import rockPhoto from "@/assets/testimonials/rock.png";
 
-const featured = {
-  hook: "讓一個專業招募官做深度審閱完全是另一個層級。",
-  full: "這太棒了！現在大家都用AI來潤履歷，但讓一個專業招募官做深度審閱完全是另一個層級。比起單純的履歷檢查，這更像是一場高密度的職涯諮詢。你幫我找到了那些我自己永遠不會注意到的『隱藏亮點』。真的很感謝你的幫助，James！這讓我對下一步有了更多信心。",
-  name: "Pin-Wei Wu",
-  photo: pinweiPhoto,
+type Testimonial = {
+  headline: string;
+  name: string;
+  titleSource: string;
+  photo: string;
+  quote: string;
+  bold: string;
 };
 
-const scrollCards = [
+const tier1: Testimonial[] = [
   {
-    hook: "從人資視角出發，讓我第一次清楚理解 HR 在評估人選時真正關心的重點。",
-    full: "我最喜歡的部分，是能從招募過程中不同角色的角度思考談判。這次從人資視角出發，讓我第一次清楚理解 HR 在評估人選時真正關心的重點，也釐清了許多薪資相關問題，例如哪些可以問、以及如何回應比較合適。對我準備面試真的很有幫助，也更清楚自己該怎麼調整。這次諮詢幫助我理解不同面試角色的考量，尤其是人資的視角，也釐清了薪資相關問題應答。對面試準備很有幫助，也讓我更有方向。",
-    name: "Airu",
-    photo: airuPhoto,
+    headline: "遠超一般的履歷檢查",
+    name: "Pin-Wei Wu",
+    titleSource: "轉職者 · 透過履歷健檢",
+    photo: pinweiPhoto,
+    quote: "現在每個人都用 AI 修改履歷，但讓專業招募官做深度審查完全是另一個層次。感覺更像是一場高密度的職涯諮詢，而不只是履歷檢查。你幫我找到那些我自己永遠不會注意到的『隱藏亮點』。這讓我對下一步更有信心。",
+    bold: "感覺更像是一場高密度的職涯諮詢，而不只是履歷檢查。",
   },
   {
-    hook: "他的建議清晰、實用，而且完全針對我的情況量身打造。",
-    full: "跟 James 討論薪資談判的經驗非常好。他的建議清晰、實用，而且完全針對我的情況量身打造。他不僅幫我更了解自己的市場價值，也給了我在談判中專業溝通的信心和策略。整個過程中，他非常支持、有洞察力，而且真心關注我的成功。我非常推薦他的服務。",
-    name: "Omar Li",
-    photo: omarPhoto,
-  },
-  {
-    hook: "能事先了解每個利害關係人重視什麼，真的幫助很大。",
-    full: "感謝薪資談判的建議。能事先了解每個利害關係人重視什麼，真的幫助很大。",
-    name: "Reese",
-    photo: undefined as string | undefined,
-  },
-  {
-    hook: "在這麼短的諮詢中，James 的建議就能如此精準有洞見，真的令我印象深刻。",
-    full: "在這麼短的諮詢中，James 的建議就能如此精準有洞見，真的令我印象深刻。即使我所在的產業不是美國市場，他仍然能提供深思熟慮、客觀且平衡的回饋。非常感謝他的觀點。",
-    name: "Patty Kuo",
-    photo: undefined as string | undefined,
-  },
-  {
-    hook: "這是就連我身邊的HR朋友，或是獵頭朋友，都給不了我的建議。",
-    full: "謝謝James認真的幫我做履歷健檢，我收到回饋的時候非常訝異！怎麼能夠這麼細心，我感受到收穫滿滿，這是就連我身邊的HR朋友，或是獵頭朋友，都給不了我的建議。推薦給大家，非常認真又專業的James。",
-    name: "Sunny",
-    photo: sunnyPhoto,
-  },
-  {
-    hook: "讓我對「怎麼寫一份有內容與策略的履歷」有了更清楚的方向與信心。",
-    full: "在看原版履歷以及調整的履歷後，呈現的感覺都專業了許多。我覺得在針對履歷每一個 section 所提供的回饋都非常具體，會依照我目前的工作年資與過往經驗，給出有脈絡與可實際調整的建議。這也讓我能夠未來在面對不同公司時，可以沿用同樣架構與思考方式，依照職缺與企業做客製化調整，大幅提升修改效率與精準度。非常感謝這次細心而專業的指導，讓我對「怎麼寫一份有內容與策略的履歷」有了更清楚的方向與信心。",
-    name: "Monica",
-    photo: monicaPhoto,
-  },
-  {
-    hook: "James的回應很直接且針針見血。",
-    full: "我覺得James的回應很直接且針針見血，後續我是搭配評語以及AI工具不斷的對話，最後果斷刪除與我現在經歷較少關聯的學歷以及其中一段較為短暫的實習經驗。後續也會陸續精進自己，訓練自己撰寫能力。感謝您抽空審視我的履歷。",
-    name: "Julie Huang",
-    photo: juliePhoto,
-  },
-  {
-    hook: "你幫我發現了幾個重要的盲點，特別是ATS優化、影響力導向的寫法，以及職位對齊。",
-    full: "感謝你提供如此詳細且有洞察力的履歷review。你幫我發現了幾個重要的盲點，特別是ATS優化、影響力導向的寫法，以及職位對齊。你在改善header格式、強化開頭15個字，以及呈現清晰的專業頭銜方面的指導，都非常有幫助。整體來說，你的review簡潔、專業，而且充滿可以立即執行的建議。這正是我需要的那種有架構的回饋。",
+    headline: "滿滿的具體改善建議",
     name: "Cynthia Chiang",
+    titleSource: "專業人士 · 透過履歷健檢",
     photo: cynthiaPhoto,
+    quote: "你幫我找到幾個重要的盲點，特別是 ATS 優化、以成果為導向的寫法，還有職位定位。你在改善標題格式、強化前 15 個字、呈現清楚的職稱方面的建議都非常實用。你的審查精簡、專業，而且充滿具體的改善建議。",
+    bold: "充滿具體的改善建議。",
   },
   {
-    hook: "即便我已經精修履歷不下十次，依然在 James 的履歷健檢收穫許多寶貴的建議！",
-    full: "James 的履歷健檢非常實用，他會仔細的針對每個細節提出具體的評論和修改建議，也會從 talent acquisition 的角度告訴你 HR 看重的內容，且不只會告訴你問題在哪裡（What）也會示範該怎麼改（How）、為什麼要改（Why），即便我已經精修履歷不下十次，依然在 James 的履歷健檢收穫許多寶貴的建議！",
-    name: "David",
-    photo: undefined as string | undefined,
+    headline: "第一次真正理解 HR 在意什麼",
+    name: "Airu",
+    titleSource: "求職者 · 透過薪資談判教練",
+    photo: airuPhoto,
+    quote: "我最喜歡的部分是學會從招募流程中不同角色的角度思考談判。這是我第一次清楚理解 HR 在評估候選人時到底在意什麼。這幫助我準備面試，也讓我的方向更加明確。",
+    bold: "第一次清楚理解 HR 在評估候選人時到底在意什麼。",
   },
   {
-    hook: "如果James有進階服務，像是面試輔導，我一定會報名。",
-    full: "我覺得這次的履歷review非常專業。James用他的專業知識給了我清晰、有架構的改進建議，還附上了修改內容的範例。如果他有進階服務，像是面試輔導，我一定會報名。如果你的目標是海外機會，他真的能幫上大忙。",
-    name: "Sam Lee",
-    photo: undefined as string | undefined,
+    headline: "跨產業求職者的信心提升",
+    name: "Roy Tsai",
+    titleSource: "轉職者 · 透過履歷健檢",
+    photo: royPhoto,
+    quote: "這份審查的深度遠超我的預期。James 不只是建議修改，他給了我一套策略框架，幫我針對目標職位重新定位我的背景。他讓我發現我最強的成就被放在錯誤的地方。這不只是改履歷，是讓我用全新的眼光重新看見自己的職涯價值。",
+    bold: "這不只是改履歷，是讓我用全新的眼光重新看見自己的職涯價值。",
+  },
+  {
+    headline: "現在我會自己針對任何職位客製化履歷",
+    name: "Monica",
+    titleSource: "專業人士 · 透過履歷健檢",
+    photo: monicaPhoto,
+    quote: "看到修改前後的對比，差異讓我很驚訝。每個部分的回饋都非常具體，建議完全針對我的經驗程度量身打造。現在我會用同樣的架構自己客製化履歷，效率大幅提升。",
+    bold: "現在我會用同樣的架構自己客製化履歷，效率大幅提升。",
+  },
+  {
+    headline: "他找到你故事裡隱藏的潛力",
+    name: "Janelle Cheng",
+    titleSource: "專業人士 · 透過履歷健檢",
+    photo: janellePhoto,
+    quote: "James 非常注重細節，也能從平淡的描述中找到隱藏的潛力。強烈推薦讓 James 這樣的專業人士用專家角度評估你的履歷。我非常感謝這次的經驗。",
+    bold: "從平淡的描述中找到隱藏的潛力。",
+  },
+  {
+    headline: "現在我知道 HR 到底怎麼想",
+    name: "Peter Cho",
+    titleSource: "專業人士 · 透過薪資談判教練",
+    photo: peterPhoto,
+    quote: "James 很快掌握了我的狀況，幫我理解 HR 的思維方式，還給了我馬上可以用的實際方法。我對即將到來的面試和薪資談判感覺準備充分多了。",
+    bold: "幫我理解 HR 的思維方式。",
   },
 ];
 
-const remainingTestimonials = [
+const tier2: Testimonial[] = [
   {
-    hook: "James 真的非常用心在按照每個人的狀況以及想申請的職位去做客制化的調整!",
-    full: "很清楚按照我的背景跟目前的狀況去點出我應該改善的地方。逐項檢查讓我可以清楚定位問題去做改善。James 真的非常用心在按照每個人的狀況以及想申請的職位去做客制化的調整!",
-    name: "Roger Lee",
-    photo: undefined as string | undefined,
+    headline: "了解招募流程中每個人的思考方式",
+    name: "Anne Chen",
+    titleSource: "專業人士 · 透過薪資談判教練",
+    photo: annePhoto,
+    quote: "這次諮詢完全改變了我對薪資談判的看法。我以前覺得談薪很尷尬、很對立，但 James 讓我理解這其實是專業的職涯溝通。他拆解了招募官、獵頭、用人團隊各自不同的思維方式，讓你知道面對每個人時該怎麼定位自己。",
+    bold: "他拆解了招募官、獵頭、用人團隊各自不同的思維方式。",
   },
   {
-    hook: "經過你的review的確讓我發現本身的優勢以及未來在resume上可以再加強跟改進的部分！",
-    full: "雖然這份履歷健檢來的太晚，但我認為幫助很多！確實有時候會有盲點，但經過你的review的確讓我發現本身的優勢以及未來在resume上可以再加強跟改進的部分！",
-    name: "Charlene Lee",
-    photo: undefined as string | undefined,
+    headline: "列出優先順序，讓我馬上行動",
+    name: "Silvia Chen",
+    titleSource: "專業人士 · 透過履歷健檢",
+    photo: silviaPhoto,
+    quote: "視覺化的版面讓審查報告非常好讀。優勢和需要改善的地方清楚列出，適用於不同職位。有優先順序的改善建議搭配優化範例，讓我很容易理解，也馬上付諸行動。",
+    bold: "有優先順序的改善建議搭配優化範例。",
   },
   {
-    hook: "從面試過程中去觀察蛛絲馬跡來增加自身談判籌碼，是非常全面且實用的知識。",
-    full: "非常感謝James 提供幫助！透過這次諮詢，認知到談薪資的其實從一開與招募人員接洽就開始，過重中需釐清自己、招募人員與hiring manager 之間的利害關係，並從面試過程中去觀察蛛絲馬跡來增加自身談判籌碼，是非常全面且實用的知識。",
-    name: "Sean Wang",
-    photo: undefined as string | undefined,
+    headline: "比我的 HR 和獵頭朋友給的建議更好",
+    name: "Sunny",
+    titleSource: "專業人士 · 透過履歷健檢",
+    photo: sunnyPhoto,
+    quote: "我真的很驚訝回饋有多詳細。這種建議連我的 HR 朋友和獵頭人脈都給不出來。James 非常仔細、非常專業。我大力推薦。",
+    bold: "這種建議連我的 HR 朋友和獵頭人脈都給不出來。",
+  },
+  {
+    headline: "真心投入幫助我成功",
+    name: "Omar Li",
+    titleSource: "專業人士 · 透過薪資談判教練",
+    photo: omarPhoto,
+    quote: "整個過程中，James 都很支持我，洞察力很深，也真心投入幫助我成功。我強烈推薦他的服務給想要提升職涯、帶著更清晰的方向和信心面對薪資談判的人。",
+    bold: "真心投入幫助我成功。",
   },
 ];
 
-const allTestimonials = remainingTestimonials;
+const tier3: Testimonial[] = [
+  {
+    headline: "一份專業的求職路線圖",
+    name: "Julie Huang",
+    titleSource: "專業人士 · 透過履歷健檢",
+    photo: juliePhoto,
+    quote: "James 很直接，每一點都切中要害。我把他的回饋搭配 AI 工具進一步優化履歷，就像有一份專業的路線圖。我已經明顯感受到投遞品質的差異。",
+    bold: "每一點都切中要害。",
+  },
+  {
+    headline: "發現我的薪水還有成長空間",
+    name: "Kiki",
+    titleSource: "專業人士 · 透過薪資談判教練",
+    photo: kikiPhoto,
+    quote: "短短 30 分鐘，James 讓我意識到我的薪水還有成長空間，我只是需要對自己的價值更有信心。了解自己在業界的定位是一個很好的起點。",
+    bold: "讓我意識到我的薪水還有成長空間。",
+  },
+  {
+    headline: "客製化指導，不是通用建議",
+    name: "Rock Shih",
+    titleSource: "專業人士 · 透過薪資談判教練",
+    photo: rockPhoto,
+    quote: "我原本以為是通用的薪資談判課程，但 James 根據我的具體狀況給了我高度客製化的指導。我現在對跟雇主溝通、談到更好的條件更有把握了。",
+    bold: "根據我的具體狀況給了我高度客製化的指導。",
+  },
+];
 
-function FeaturedCard() {
-  const [expanded, setExpanded] = useState(false);
-
+function BoldQuote({ text, bold }: { text: string; bold: string }) {
+  const idx = text.indexOf(bold);
+  if (idx === -1) return <>{text}</>;
   return (
-    <div className="bg-background rounded-2xl border border-border p-6 md:p-10 shadow-[0_2px_12px_rgba(0,0,0,0.06)]">
-      <Quote className="w-8 h-8 text-gold/40 mb-4" />
-      <blockquote className="font-heading text-xl md:text-2xl text-foreground leading-relaxed mb-4">
-        「{featured.hook}」
-      </blockquote>
+    <>
+      {text.slice(0, idx)}
+      <strong className="font-bold">{bold}</strong>
+      {text.slice(idx + bold.length)}
+    </>
+  );
+}
 
-      <div
-        className={`overflow-hidden transition-all duration-300 ease-out ${
-          expanded ? "max-h-96 opacity-100 mb-4" : "max-h-0 opacity-0"
-        }`}
-      >
-        <p className="text-muted-foreground text-sm md:text-base leading-relaxed border-t border-border pt-4">
-          {featured.full}
-        </p>
-      </div>
-
-      <div className="flex items-center justify-between">
-        <div className="flex items-center gap-4">
-          {featured.photo ? (
-            <img src={featured.photo} alt={featured.name} width={48} height={48} className="w-12 h-12 rounded-full object-cover border-2 border-gold" />
-          ) : (
-            <div className="w-12 h-12 rounded-full border-2 border-gold bg-muted flex items-center justify-center text-muted-foreground font-semibold text-lg">
-              {featured.name[0]}
-            </div>
-          )}
-          <p className="font-semibold text-foreground">{featured.name}</p>
+function TestimonialCard({ item, featured = false }: { item: Testimonial; featured?: boolean }) {
+  return (
+    <div
+      className={`rounded-xl ${featured ? "md:col-span-2" : ""}`}
+      style={{
+        backgroundColor: "#FFFFFF",
+        borderLeft: "4px solid #D4930D",
+        boxShadow: "0 2px 8px rgba(0,0,0,0.06)",
+        padding: "24px",
+      }}
+    >
+      <p className="font-bold mb-3" style={{ color: "#1A1A1A", fontSize: featured ? "1.25rem" : "1.0625rem" }}>
+        {item.headline}
+      </p>
+      <p className="leading-relaxed mb-4" style={{ color: "#1A1A1A", fontSize: "1rem" }}>
+        「<BoldQuote text={item.quote} bold={item.bold} />」
+      </p>
+      <div className="flex items-center gap-3">
+        <img
+          src={item.photo}
+          alt={item.name}
+          width={40}
+          height={40}
+          loading="lazy"
+          className="w-10 h-10 rounded-full object-cover flex-shrink-0"
+          style={{ border: "2px solid #D4930D" }}
+        />
+        <div>
+          <p className="font-bold" style={{ color: "#1A1A1A", fontSize: "0.9375rem" }}>
+            {item.name}
+          </p>
+          <p style={{ color: "#6B6B6B", fontSize: "0.8125rem" }}>{item.titleSource}</p>
         </div>
-        <button
-          onClick={() => setExpanded((v) => !v)}
-          className="flex items-center gap-1 text-gold hover:text-gold/80 transition-colors text-sm font-medium"
-        >
-          {expanded ? "收起" : "更多"}
-          <ChevronDown className={`w-4 h-4 transition-transform duration-300 ${expanded ? "rotate-180" : ""}`} />
-        </button>
       </div>
     </div>
   );
 }
 
-function ScrollCard({ item }: { item: (typeof scrollCards)[0] }) {
-  const [expanded, setExpanded] = useState(false);
-
+function TierReveal({ visible, children }: { visible: boolean; children: React.ReactNode }) {
   return (
-    <button
-      type="button"
-      onClick={() => setExpanded((v) => !v)}
-      className="snap-start shrink-0 w-[42vw] sm:w-56 text-left bg-background rounded-xl border border-border border-l-4 border-l-gold p-4 shadow-[0_2px_12px_rgba(0,0,0,0.06)] transition-all duration-200 hover:-translate-y-1 hover:shadow-[0_4px_20px_rgba(0,0,0,0.10)] focus:outline-none focus:ring-2 focus:ring-gold/40"
+    <div
+      className="grid grid-cols-1 md:grid-cols-2 gap-4 transition-all duration-300 ease-out overflow-hidden"
+      style={{
+        maxHeight: visible ? "5000px" : "0",
+        opacity: visible ? 1 : 0,
+        marginTop: visible ? "16px" : "0",
+      }}
     >
-      {item.photo && (
-        <img src={item.photo} alt={item.name} loading="lazy" width={40} height={40} className="w-10 h-10 rounded-full object-cover border-2 border-gold mb-3" />
-      )}
-      <p className="text-foreground text-sm leading-relaxed mb-2">
-        「{item.hook}」
-      </p>
-
-      <div
-        className={`overflow-hidden transition-all duration-300 ease-out ${
-          expanded ? "max-h-96 opacity-100 mt-3" : "max-h-0 opacity-0"
-        }`}
-      >
-        <p className="text-muted-foreground text-xs leading-relaxed border-t border-border pt-3">
-          {item.full}
-        </p>
-      </div>
-
-      <div className="flex items-center justify-between mt-3">
-        <p className="font-semibold text-foreground text-sm">{item.name}</p>
-        <span className="flex items-center gap-1 text-gold text-xs font-medium">
-          {expanded ? "收起" : "更多"}
-          <ChevronDown
-            className={`w-3 h-3 transition-transform duration-300 ${
-              expanded ? "rotate-180" : ""
-            }`}
-          />
-        </span>
-      </div>
-    </button>
+      {children}
+    </div>
   );
 }
 
 export default function HomepageTestimonialsZhTw() {
-  const [showAll, setShowAll] = useState(false);
-  const scrollRef = useRef<HTMLDivElement>(null);
+  const [revealLevel, setRevealLevel] = useState(0);
+
+  const buttonText = revealLevel === 0 ? "顯示更多評價" : "顯示更多評價";
+  const featured = tier1[0];
+  const gridTier1 = tier1.slice(1);
 
   return (
-    <section
-      id="testimonials"
-      className="py-14 md:py-20 px-5 md:px-6 bg-card border-y border-border"
-    >
+    <section id="testimonials" className="py-12 md:py-20 px-5 md:px-6" style={{ backgroundColor: "#FFFFFF" }}>
       <div className="container mx-auto max-w-5xl">
-        <h2 className="font-heading text-3xl md:text-4xl lg:text-5xl text-foreground text-center mb-12">
-          客戶怎麼說
+        <h2 className="font-heading text-center mb-6" style={{ color: "#1A1A1A", fontSize: "clamp(2rem, 4vw, 2.625rem)", lineHeight: 1.2 }}>
+          <span className="hidden sm:inline">在夢想公司拿到年薪 3 百萬以上的 Offer</span>
+          <span className="sm:hidden">在夢想公司拿到<br />年薪 3 百萬以上<br />的 Offer</span>
         </h2>
 
-        <FeaturedCard />
+        <TestimonialCard item={featured} featured />
 
-        <div
-          ref={scrollRef}
-          className="mt-8 flex gap-4 overflow-x-auto snap-x snap-mandatory pb-4 -mx-5 px-5 scrollbar-hide"
-          style={{ scrollbarWidth: "none" }}
-        >
-          {scrollCards.map((item) => (
-            <ScrollCard key={item.name} item={item} />
+        <div className="mt-4 grid grid-cols-1 md:grid-cols-2 gap-4">
+          {gridTier1.map((item) => (
+            <TestimonialCard key={item.name} item={item} />
           ))}
         </div>
 
-        <div className="mt-8 text-center">
-          <button
-            type="button"
-            onClick={() => setShowAll((v) => !v)}
-            className="inline-flex items-center gap-1.5 text-sm font-medium text-gold hover:text-gold-dark transition-colors"
-          >
-            {showAll ? "收起評價" : "查看所有評價"}
-            {showAll ? (
-              <ChevronUp className="w-4 h-4" />
-            ) : (
+        <TierReveal visible={revealLevel >= 1}>
+          {tier2.map((item) => (
+            <TestimonialCard key={item.name} item={item} />
+          ))}
+        </TierReveal>
+
+        <TierReveal visible={revealLevel >= 2}>
+          {tier3.map((item) => (
+            <TestimonialCard key={item.name} item={item} />
+          ))}
+        </TierReveal>
+
+        {revealLevel < 2 && (
+          <div className="mt-8 text-center">
+            <button
+              type="button"
+              onClick={() => setRevealLevel((v) => v + 1)}
+              className="inline-flex items-center gap-2 px-6 py-2.5 rounded-lg text-sm font-semibold transition-all duration-200 border"
+              style={{ color: "#2b4734", borderColor: "#2b4734", backgroundColor: "transparent" }}
+              onMouseEnter={(e) => { e.currentTarget.style.backgroundColor = "#2b4734"; e.currentTarget.style.color = "#FFFFFF"; }}
+              onMouseLeave={(e) => { e.currentTarget.style.backgroundColor = "transparent"; e.currentTarget.style.color = "#2b4734"; }}
+            >
+              {buttonText}
               <ChevronDown className="w-4 h-4" />
-            )}
-          </button>
-        </div>
-
-        <div
-          className={`grid gap-4 mt-6 transition-all duration-500 ease-in-out overflow-hidden ${
-            showAll ? "max-h-[5000px] opacity-100" : "max-h-0 opacity-0"
-          }`}
-        >
-          {allTestimonials.map((item) => (
-            <ExpandableTestimonial key={item.name} item={item} />
-          ))}
-        </div>
+            </button>
+          </div>
+        )}
       </div>
     </section>
-  );
-}
-
-function ExpandableTestimonial({ item }: { item: (typeof allTestimonials)[0] }) {
-  const [expanded, setExpanded] = useState(false);
-
-  return (
-    <div className="bg-background rounded-xl border border-border border-l-4 border-l-gold/60 p-5 shadow-[0_2px_12px_rgba(0,0,0,0.06)] hover:shadow-[0_4px_20px_rgba(0,0,0,0.10)] transition-shadow duration-200">
-      {item.photo && (
-        <img src={item.photo} alt={item.name} loading="lazy" width={40} height={40} className="w-10 h-10 rounded-full object-cover border-2 border-gold mb-3" />
-      )}
-      <p className="text-foreground text-sm leading-relaxed mb-2">
-        「{item.hook}」
-      </p>
-
-      <div
-        className={`overflow-hidden transition-all duration-300 ease-out ${
-          expanded ? "max-h-[600px] opacity-100 mt-3" : "max-h-0 opacity-0"
-        }`}
-      >
-        <p className="text-muted-foreground text-xs leading-relaxed border-t border-border pt-3">
-          {item.full}
-        </p>
-      </div>
-
-      <div className="flex items-center justify-between mt-3">
-        <p className="font-semibold text-foreground text-sm">{item.name}</p>
-        <button
-          onClick={() => setExpanded((v) => !v)}
-          className="flex items-center gap-1 text-gold hover:text-gold/80 transition-colors text-xs font-medium"
-        >
-          {expanded ? "收起" : "更多"}
-          <ChevronDown
-            className={`w-3 h-3 transition-transform duration-300 ${
-              expanded ? "rotate-180" : ""
-            }`}
-          />
-        </button>
-      </div>
-    </div>
   );
 }

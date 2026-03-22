@@ -8,7 +8,7 @@ import { Mail, Lock, Eye, EyeOff, ScanSearch, FileText, BookOpen, Loader2, Shiel
 import LanguageToggle from "@/components/LanguageToggle";
 import { useAuth } from "@/contexts/AuthContext";
 import PageSEO from "@/components/PageSEO";
-import LogoScrollExperimentZhTw from "@/components/LogoScrollExperimentZhTw";
+import LogoScrollZhTw from "@/components/LogoScrollZhTw";
 import { motion } from "framer-motion";
 import {
   Accordion,
@@ -279,7 +279,7 @@ export default function JoinZhTw() {
             <p className="text-sm text-muted-foreground mb-4">
               超過 3,459 位專業人士已加入，來自以下企業
             </p>
-            <LogoScrollExperimentZhTw />
+            <LogoScrollZhTw />
           </motion.div>
 
           <motion.div
