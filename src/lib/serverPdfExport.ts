@@ -113,8 +113,8 @@ function serializeResumeHtml(
     if (val?.trim()) rootVars += `  ${name}: ${val.trim()};\n`;
   }
 
-  // Set width to match the source
-  clone.style.width = `${element.scrollWidth || element.offsetWidth}px`;
+  // Fill the printable area defined by @page margins
+  clone.style.width = "100%";
 
   // KEY FIX: Remove pagination margin-top hacks from the preview system.
   // Chrome handles page breaks naturally with @page rules.
