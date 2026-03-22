@@ -1,4 +1,4 @@
-import { Clock, Linkedin, ChevronDown, Menu, FileText, Shield, Target, Zap, Brain, Compass, Swords, Crown, Eye, ArrowRight, BookOpen, Check, X, Save } from "lucide-react";
+import { Clock, Linkedin, ChevronDown, Menu, FileText, Shield, Target, Zap, Brain, Compass, Swords, Crown, Eye, ArrowRight, BookOpen, Check, X, Save, ChevronUp } from "lucide-react";
 import { Link, useLocation } from "react-router-dom";
 import GoldCheckBadge from "@/components/GoldCheckBadge";
 import { InstagramIcon, ThreadsIcon } from "@/components/SocialIcons";
@@ -19,13 +19,23 @@ const SectionNumber = ({ num }: { num: string }) => (
   </span>
 );
 
-const Collapsible = ({ title, children }: { title: string; children: React.ReactNode }) => {
+const tagColors = {
+  USE: { border: "border-l-emerald-500", bg: "bg-emerald-100 text-emerald-700 dark:bg-emerald-900/30 dark:text-emerald-400" },
+  DEFEND: { border: "border-l-amber-500", bg: "bg-amber-100 text-amber-700 dark:bg-amber-900/30 dark:text-amber-400" },
+  AVOID: { border: "border-l-red-500", bg: "bg-red-100 text-red-700 dark:bg-red-900/30 dark:text-red-400" },
+};
+
+const Collapsible = ({ title, children, tag }: { title: string; children: React.ReactNode; tag?: "USE" | "DEFEND" | "AVOID" }) => {
   const [open, setOpen] = useState(false);
+  const colors = tag ? tagColors[tag] : null;
   return (
-    <div className="border border-border rounded-xl overflow-hidden">
-      <button onClick={() => setOpen(!open)} className="w-full flex items-center justify-between p-4 md:p-5 bg-card hover:bg-muted/50 transition-colors text-left">
-        <span className="text-foreground font-medium text-sm md:text-base">{title}</span>
-        <ChevronDown className={`w-5 h-5 text-muted-foreground transition-transform ${open ? "rotate-180" : ""}`} />
+    <div className={`border border-border rounded-xl overflow-hidden ${colors ? `border-l-4 ${colors.border}` : ""}`}>
+      <button onClick={() => setOpen(!open)} className="w-full flex items-center justify-between p-4 md:p-5 bg-card hover:bg-muted/50 transition-colors text-left gap-3">
+        <span className="text-foreground font-medium text-sm md:text-base flex-1">{title}</span>
+        {tag && colors && (
+          <span className={`shrink-0 px-2 py-0.5 rounded-full text-[10px] font-bold uppercase tracking-wider ${colors.bg}`}>{tag}</span>
+        )}
+        <ChevronDown className={`w-5 h-5 shrink-0 text-muted-foreground transition-transform ${open ? "rotate-180" : ""}`} />
       </button>
       {open && <div className="px-4 md:px-5 pb-4 md:pb-5 bg-card border-t border-border">{children}</div>}
     </div>
@@ -95,6 +105,24 @@ const tocSections = [
   { id: "resources", label: "Resources" },
 ];
 
+const ReadingProgressBar = () => {
+  const [progress, setProgress] = useState(0);
+  useEffect(() => {
+    const onScroll = () => {
+      const scrollable = document.documentElement.scrollHeight - window.innerHeight;
+      if (scrollable <= 0) return;
+      setProgress(Math.min(100, (window.scrollY / scrollable) * 100));
+    };
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => window.removeEventListener("scroll", onScroll);
+  }, []);
+  return (
+    <div className="fixed top-[56px] left-0 right-0 z-40 h-[3px] bg-muted/30">
+      <div className="h-full bg-gold transition-[width] duration-150 ease-out" style={{ width: `${progress}%` }} />
+    </div>
+  );
+};
+
 const TableOfContents = () => {
   const [active, setActive] = useState("");
   const [open, setOpen] = useState(false);
@@ -114,6 +142,9 @@ const TableOfContents = () => {
     return () => observer.disconnect();
   }, []);
 
+  const activeLabel = tocSections.find(s => s.id === active)?.label || "Contents";
+  const activeIdx = tocSections.findIndex(s => s.id === active);
+
   return (
     <>
       <aside className="hidden xl:block fixed left-[max(1rem,calc((100vw-72rem)/2-14rem))] top-28 w-48 z-30">
@@ -127,17 +158,24 @@ const TableOfContents = () => {
         </nav>
       </aside>
       <div className="xl:hidden fixed bottom-6 left-6 z-50">
-        <button onClick={() => setOpen(!open)} className="w-11 h-11 rounded-full bg-executive-green text-cream shadow-lg flex items-center justify-center hover:scale-105 transition-transform" aria-label="Table of contents">
-          <Menu className="w-5 h-5" />
+        <button onClick={() => setOpen(!open)} className="flex items-center gap-2 rounded-full bg-executive-green text-cream shadow-lg px-4 py-2.5 hover:scale-105 transition-transform" aria-label="Table of contents">
+          <Menu className="w-4 h-4 shrink-0" />
+          <span className="text-xs font-medium truncate max-w-[140px]">
+            {activeIdx >= 0 ? `${String(activeIdx).padStart(2, '0')} · ` : ""}{activeLabel}
+          </span>
+          <ChevronUp className={`w-3.5 h-3.5 shrink-0 transition-transform ${open ? "rotate-180" : ""}`} />
         </button>
         {open && (
           <div className="absolute bottom-14 left-0 bg-card border border-border rounded-xl shadow-2xl p-4 w-56 max-h-[70vh] overflow-y-auto">
             <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wider mb-2">Contents</p>
             <nav className="space-y-1">
-              {tocSections.map(({ id, label }) => (
+              {tocSections.map(({ id, label }, idx) => (
                 <a key={id} href={`#${id}`} onClick={(e) => { e.preventDefault(); document.getElementById(id)?.scrollIntoView({ behavior: "smooth", block: "start" }); setOpen(false); }}
-                  className={`block text-sm py-1.5 pl-3 border-l-2 transition-all ${active === id ? "border-gold text-gold font-medium" : "border-transparent text-muted-foreground hover:text-foreground"}`}
-                >{label}</a>
+                  className={`flex items-center gap-2 text-sm py-1.5 pl-3 border-l-2 transition-all ${active === id ? "border-gold text-gold font-medium" : "border-transparent text-muted-foreground hover:text-foreground"}`}
+                >
+                  <span className={`shrink-0 w-5 h-5 rounded-full text-[10px] font-bold flex items-center justify-center ${active === id ? "bg-gold text-background" : "bg-muted text-muted-foreground"}`}>{idx}</span>
+                  {label}
+                </a>
               ))}
             </nav>
           </div>
@@ -210,6 +248,22 @@ const AUDIT_AREAS = [
   { area: "7. LONG GAME", question: "Does my current role serve my 5-year plan? Am I building skills for where I want to be?" },
 ];
 
+const ALIVE_AUDIT_QUESTIONS = [
+  "How much are you learning right now?",
+  "Are you building skills for your next role?",
+  "Do you know what you learned this month?",
+  "Do you study how your company runs?",
+  "Do you watch how decisions get made?",
+];
+
+const IRREPLACEABLE_QUESTIONS = [
+  { q: "If you quit tomorrow, how long to replace you?", labels: "Under 2 weeks (0) · 1-3 months (1) · 3+ months (2)" },
+  { q: "Do you own a process/client/domain nobody else understands?", labels: "No (0) · Partially (1) · Yes (2)" },
+  { q: "Has a senior leader requested you for a project in 6 months?", labels: "No (0) · Once (1) · Multiple times (2)" },
+  { q: "Do people from other teams come to you for advice?", labels: "No (0) · Sometimes (1) · Regularly (2)" },
+  { q: "If layoffs hit, would your manager fight to keep you?", labels: "Unsure (0) · Likely (1) · Yes (2)" },
+];
+
 const FortyEightLawsGuide = () => {
   useTrackGuideProgress("48-laws");
   const { isLoggedIn } = useAuth();
@@ -220,6 +274,8 @@ const FortyEightLawsGuide = () => {
   const [actionChecks, setActionChecks] = useGuideStorage<boolean[]>("48laws_actions_en", Array(TOTAL_ACTIONS).fill(false));
   const [auditScores, setAuditScores] = useGuideStorage<number[]>("48laws_power_audit_en", Array(7).fill(0));
   const [auditHistory, setAuditHistory] = useGuideStorage<Array<{ date: string; scores: number[]; total: number }>>("48laws_audit_history_en", []);
+  const [aliveScores, setAliveScores] = useGuideStorage<number[]>("48laws_alive_audit_en", Array(5).fill(0));
+  const [irrepScores, setIrrepScores] = useGuideStorage<number[]>("48laws_irreplaceable_audit_en", Array(5).fill(0));
 
   const safeActions = Array.from({ length: TOTAL_ACTIONS }, (_, i) => actionChecks[i] ?? false);
   const completedActions = safeActions.filter(Boolean).length;
@@ -240,18 +296,36 @@ const FortyEightLawsGuide = () => {
     setAuditHistory(prev => [...prev, { date: new Date().toISOString().slice(0, 10), scores: [...safeScores], total: auditTotal }]);
   };
 
-  const totalInteractions = completedActions + safeScores.filter(s => s > 0).length;
+  const safeAlive = Array.from({ length: 5 }, (_, i) => aliveScores[i] ?? 0);
+  const aliveTotal = safeAlive.reduce((a, b) => a + b, 0);
+  const setAliveScore = (i: number, val: number) => setAliveScores(prev => {
+    const next = [...(prev.length >= 5 ? prev : Array(5).fill(0))];
+    next[i] = next[i] === val ? 0 : Math.max(0, Math.min(5, val));
+    return next;
+  });
+
+  const safeIrrep = Array.from({ length: 5 }, (_, i) => irrepScores[i] ?? 0);
+  const irrepTotal = safeIrrep.reduce((a, b) => a + b, 0);
+  const setIrrepScore = (i: number, val: number) => setIrrepScores(prev => {
+    const next = [...(prev.length >= 5 ? prev : Array(5).fill(0))];
+    next[i] = next[i] === val ? 0 : Math.max(0, Math.min(2, val));
+    return next;
+  });
+
+  const totalInteractions = completedActions + safeScores.filter(s => s > 0).length + safeAlive.filter(s => s > 0).length + safeIrrep.filter(s => s > 0).length;
   const showSaveBanner = totalInteractions >= 2 && !isLoggedIn && !bannerDismissed;
 
   const filteredLaws = lawFilter === "ALL" ? allLaws : allLaws.filter(l => l.tag === lawFilter);
 
   return (
-    <div className="min-h-screen bg-background">
+    <div className="min-h-screen bg-background text-foreground">
       <PageSEO
         title="Why Your Best Work Isn't Getting You Promoted (And What Will) | James Bugden"
         description="A recruiter's guide to workplace power, office politics, and career strategy based on The 48 Laws of Power by Robert Greene. Learn to manage up, build your reputation, and play the long game."
         path="/48-laws-guide"
       />
+
+      <ReadingProgressBar />
 
       {/* Navigation */}
       <nav className="fixed top-0 left-0 right-0 z-50 bg-nav-green">
@@ -331,7 +405,7 @@ const FortyEightLawsGuide = () => {
       <section id="intro" className="py-14 md:py-20 px-5 md:px-6 bg-card border-b border-border scroll-mt-24">
         <div className="container mx-auto max-w-3xl">
           <p className="text-foreground text-lg leading-relaxed mb-6">
-            Robert Greene held between 50 and 80 jobs before he published his first book at age 39. Construction worker in Greece. Hotel receptionist in Paris. English teacher in Barcelona. Hollywood screenwriter. Skip tracer at a detective agency. Magazine editor.
+            Robert Greene held between 50 and 80 jobs before he published his first book at age 39. Construction worker in Greece. Hotel receptionist in Paris. English teacher in Barcelona. Hollywood screenwriter. Magazine editor.
           </p>
           <p className="text-muted-foreground leading-relaxed mb-6">
             During those years, he watched the same patterns repeat in every workplace. People wanted power. They disguised the wanting. They played games. They manipulated and schemed while presenting polished, professional exteriors.
@@ -398,7 +472,7 @@ const FortyEightLawsGuide = () => {
         </div>
       </section>
 
-      <main>
+      <main className={completedActions > 0 ? "pb-14" : ""}>
         {/* ── Section 1: Find Your Direction ── */}
         <section id="find-direction" className="py-14 md:py-20 px-5 md:px-6 scroll-mt-24">
           <div className="container mx-auto max-w-3xl">
@@ -453,17 +527,37 @@ const FortyEightLawsGuide = () => {
 
             <DiagramBox title="Alive Time Audit">
               <p className="mb-3">Rate your current role. Score each 1-5.</p>
-              <ol className="space-y-2 list-decimal list-inside">
-                <li>How much are you learning right now?</li>
-                <li>Are you building skills for your next role?</li>
-                <li>Do you know what you learned this month?</li>
-                <li>Do you study how your company runs?</li>
-                <li>Do you watch how decisions get made?</li>
-              </ol>
-              <div className="mt-4 pt-4 border-t border-border space-y-1">
-                <p><strong>20-25:</strong> Strong alive time. Keep building.</p>
-                <p><strong>12-19:</strong> Mixed. You're leaving growth on the table.</p>
-                <p><strong>5-11:</strong> Dead time. Start treating this role as school or start planning your exit.</p>
+              <div className="space-y-4">
+                {ALIVE_AUDIT_QUESTIONS.map((q, i) => (
+                  <div key={i} className="flex items-start gap-4">
+                    <p className="flex-1 text-foreground text-sm">{i + 1}. {q}</p>
+                    <div className="shrink-0 flex items-center gap-1.5">
+                      {[1, 2, 3, 4, 5].map(n => (
+                        <button
+                          key={n}
+                          onClick={() => setAliveScore(i, n)}
+                          className={`w-7 h-7 rounded-lg text-xs font-semibold transition-colors ${
+                            safeAlive[i] === n
+                              ? "bg-gold text-background"
+                              : "bg-muted text-muted-foreground hover:bg-muted/80"
+                          }`}
+                        >
+                          {n}
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+                ))}
+              </div>
+              <div className="mt-4 pt-4 border-t border-border">
+                <p className="font-medium text-foreground mb-2">
+                  Your score: <span className={`text-lg font-bold ${aliveTotal >= 20 ? "text-emerald-500" : aliveTotal >= 12 ? "text-gold" : aliveTotal > 0 ? "text-red-500" : "text-muted-foreground"}`}>{aliveTotal}</span> / 25
+                </p>
+                <div className="space-y-1">
+                  <p><strong>20-25:</strong> Strong alive time. Keep building.</p>
+                  <p><strong>12-19:</strong> Mixed. You're leaving growth on the table.</p>
+                  <p><strong>5-11:</strong> Dead time. Start treating this role as school or start planning your exit.</p>
+                </div>
               </div>
             </DiagramBox>
 
@@ -736,17 +830,22 @@ const FortyEightLawsGuide = () => {
 
             <h3 className="font-heading text-xl text-foreground mt-10 mb-4">Law 23: Concentrate Your Forces</h3>
             <p className="text-muted-foreground leading-relaxed mb-6">
-              Irreplaceability comes from depth, not breadth. "You gain more by finding a rich mine and mining it deeper, than by flitting from one shallow mine to another."
+              Law 11 tells you to go deep. Law 23 tells you where to focus.
+            </p>
+            <p className="text-foreground leading-relaxed mb-6 italic">
+              "Intensity defeats extensity every time. When looking for sources of power to elevate you, find the one key patron, the fat cow who will give you milk for a long time to come."
             </p>
             <p className="text-muted-foreground leading-relaxed mb-6">
-              Don't spread across 10 projects doing average work on each. Go deep on 2-3 and deliver exceptional results. Become the go-to person for one specific thing before expanding. Build T-shaped skills: wide awareness across many areas, deep expertise in one.
+              Most people spread themselves across too many projects, too many committees, too many "nice to haves." The result: mediocre work on everything, exceptional work on nothing.
+            </p>
+            <p className="text-muted-foreground leading-relaxed mb-6">
+              Pick two or three priorities. Decline the rest. Depth on a few high-impact deliverables beats breadth across a dozen forgettable ones.
             </p>
             <ActionStep checked={safeActions[8]} onToggle={() => toggleAction(8)}>
-              Count how many active projects you're contributing to right now. If the number is higher than 5, you're spread too thin. Pick the 2-3 with the highest impact and visibility. Reduce your involvement in the rest. Depth on a few beats surface-level effort on many.
+              Count your active projects and commitments. If the number is above five, it's too many. Cut back to the two or three with the highest impact and visibility. Say no to the rest. "I'd love to help, but I'm at capacity on [high-impact project]. Can we revisit next quarter?" Declining is a career skill.
             </ActionStep>
 
-            <DiagramBox title="The 3 Laws for Career Success">
-              <p className="text-muted-foreground mb-4 italic">"Follow these three religiously and you cannot fail to succeed."</p>
+            <DiagramBox title="The Three Laws of Career Security">
               <ol className="space-y-3 list-decimal list-inside">
                 <li><strong>Law 11: Keep People Dependent on You</strong> — Makes you essential.</li>
                 <li><strong>Law 13: Appeal to People's Self-Interest</strong> — Gets you what you want.</li>
@@ -755,18 +854,39 @@ const FortyEightLawsGuide = () => {
             </DiagramBox>
 
             <DiagramBox title="The Irreplaceability Audit">
-              <p className="mb-3">Answer each question. Score yourself 0-2.</p>
-              <ol className="space-y-3 list-decimal list-inside">
-                <li>If you quit tomorrow, how long would it take to replace you?<br /><span className="text-muted-foreground ml-4">Under 2 weeks (0) · 1-3 months (1) · 3+ months or "they couldn't" (2)</span></li>
-                <li>Do you own a process, client, or knowledge domain nobody else fully understands?<br /><span className="text-muted-foreground ml-4">No (0) · Partially (1) · Yes (2)</span></li>
-                <li>Has a senior leader specifically requested you for a project in the last 6 months?<br /><span className="text-muted-foreground ml-4">No (0) · Once (1) · Multiple times (2)</span></li>
-                <li>Do people from other teams come to you for advice or help?<br /><span className="text-muted-foreground ml-4">No (0) · Sometimes (1) · Regularly (2)</span></li>
-                <li>If layoffs hit, would your manager fight to keep you?<br /><span className="text-muted-foreground ml-4">Unsure (0) · Likely (1) · Yes (2)</span></li>
-              </ol>
-              <div className="mt-4 pt-4 border-t border-border space-y-1">
-                <p><strong>0-3:</strong> Replaceable. Start building your position today.</p>
-                <p><strong>4-6:</strong> Valued. Keep strengthening your position.</p>
-                <p><strong>7-10:</strong> Irreplaceable. Now focus on growth.</p>
+              <p className="mb-3">Answer each question. Tap your score (0-2).</p>
+              <div className="space-y-4">
+                {IRREPLACEABLE_QUESTIONS.map((item, i) => (
+                  <div key={i}>
+                    <p className="text-foreground text-sm mb-1">{i + 1}. {item.q}</p>
+                    <div className="flex items-center gap-1.5 ml-4">
+                      {[0, 1, 2].map(n => (
+                        <button
+                          key={n}
+                          onClick={() => setIrrepScore(i, n)}
+                          className={`w-7 h-7 rounded-lg text-xs font-semibold transition-colors ${
+                            safeIrrep[i] === n
+                              ? "bg-gold text-background"
+                              : "bg-muted text-muted-foreground hover:bg-muted/80"
+                          }`}
+                        >
+                          {n}
+                        </button>
+                      ))}
+                    </div>
+                    <p className="text-muted-foreground text-xs ml-4 mt-0.5">{item.labels}</p>
+                  </div>
+                ))}
+              </div>
+              <div className="mt-4 pt-4 border-t border-border">
+                <p className="font-medium text-foreground mb-2">
+                  Your score: <span className={`text-lg font-bold ${irrepTotal >= 7 ? "text-emerald-500" : irrepTotal >= 4 ? "text-gold" : irrepTotal > 0 ? "text-red-500" : "text-muted-foreground"}`}>{irrepTotal}</span> / 10
+                </p>
+                <div className="space-y-1">
+                  <p><strong>0-3:</strong> Replaceable. Start building your position today.</p>
+                  <p><strong>4-6:</strong> Valued. Keep strengthening your position.</p>
+                  <p><strong>7-10:</strong> Irreplaceable. Now focus on growth.</p>
+                </div>
               </div>
             </DiagramBox>
 
@@ -982,7 +1102,7 @@ const FortyEightLawsGuide = () => {
               For the full political survival framework, see the <Link to="/office-politics-guide" className="text-gold hover:underline">Office Politics Guide</Link>.
             </p>
             <p className="text-muted-foreground leading-relaxed mt-4">
-              Politics is the short game: reading today's room, managing today's relationships. But careers span decades. The final section covers the long view.
+              Politics protects you. But your career still needs a direction longer than the current quarter. That's the long game.
             </p>
           </div>
         </section>
@@ -997,6 +1117,9 @@ const FortyEightLawsGuide = () => {
               </div>
             </div>
 
+            <p className="text-foreground text-lg leading-relaxed mb-6 italic">
+              "True success and true power in life goes on for 10, 20, 30 years."
+            </p>
             <p className="text-muted-foreground leading-relaxed mb-6">
               The 48 Laws of Power was published in 1998. The author was 39 years old. Those 50+ "failed" jobs became the foundation of the book. Every career looks messy in the middle. The question is whether the mess builds toward something.
             </p>
@@ -1138,13 +1261,8 @@ const FortyEightLawsGuide = () => {
 
             <div className="space-y-3">
               {filteredLaws.map(law => (
-                <Collapsible key={law.num} title={`Law ${law.num}: ${law.title}`}>
+                <Collapsible key={law.num} title={`Law ${law.num}: ${law.title}`} tag={law.tag}>
                   <div className="space-y-3 pt-2">
-                    <span className={`inline-block px-2 py-0.5 rounded-full text-[10px] font-bold uppercase tracking-wider ${
-                      law.tag === "USE" ? "bg-emerald-100 text-emerald-700 dark:bg-emerald-900/30 dark:text-emerald-400"
-                      : law.tag === "DEFEND" ? "bg-amber-100 text-amber-700 dark:bg-amber-900/30 dark:text-amber-400"
-                      : "bg-red-100 text-red-700 dark:bg-red-900/30 dark:text-red-400"
-                    }`}>{law.tag}</span>
                     <p className="text-foreground text-sm">{law.workplace}</p>
                     <p className="text-muted-foreground text-sm"><em>Example: {law.example}</em></p>
                     <p className="text-sm"><span className="text-gold font-medium">Do this:</span> {law.action}</p>
@@ -1328,12 +1446,24 @@ const FortyEightLawsGuide = () => {
         </section>
       </main>
 
-      {/* Action step progress + save banner */}
+      {/* Sticky floating action step progress bar */}
       {completedActions > 0 && (
-        <div className="py-6 px-5 md:px-6 bg-muted/30 border-t border-border">
-          <div className="container mx-auto max-w-3xl">
-            <p className="text-sm text-muted-foreground">{completedActions}/{TOTAL_ACTIONS} action steps completed</p>
-            {showSaveBanner && <ActionSaveBanner onDismiss={() => setBannerDismissed(true)} />}
+        <div className="fixed bottom-0 left-0 right-0 z-40 bg-card/95 backdrop-blur-sm border-t border-border shadow-lg">
+          <div className="h-1 bg-muted">
+            <div className="h-full bg-gold transition-all duration-300" style={{ width: `${(completedActions / TOTAL_ACTIONS) * 100}%` }} />
+          </div>
+          <div className="container mx-auto max-w-3xl px-5 py-2.5 flex items-center justify-between">
+            <p className="text-sm font-medium text-foreground">{completedActions}/{TOTAL_ACTIONS} action steps completed</p>
+            {showSaveBanner && (
+              <div className="flex items-center gap-2">
+                <a href={`/join?returnUrl=${encodeURIComponent("/48-laws-guide")}`} className="text-xs font-semibold text-gold hover:text-gold/80 underline underline-offset-2">
+                  Save progress
+                </a>
+                <button onClick={() => setBannerDismissed(true)} className="text-muted-foreground hover:text-foreground">
+                  <X className="w-3.5 h-3.5" />
+                </button>
+              </div>
+            )}
           </div>
         </div>
       )}
