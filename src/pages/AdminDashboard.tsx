@@ -406,6 +406,7 @@ export default function AdminDashboard() {
     { label: "Salary Checks", value: counts.salary, icon: DollarSign, color: "text-emerald-600" },
     { label: "Resume Leads", value: counts.resumes, icon: Users, color: "text-violet-600" },
     { label: "Email Leads", value: counts.emails, icon: Mail, color: "text-amber-600" },
+    { label: "Feedback", value: counts.feedback, icon: MessageSquare, color: "text-pink-600" },
   ];
 
   return (
