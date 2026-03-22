@@ -39,12 +39,20 @@ function getPageDims(format?: string) {
 
 export interface ResumeExportMetrics {
   sourceElement: HTMLElement | null;
-  pageElements: HTMLElement[];
   pageCount: number;
   contentOriginPX: number;
   usablePerPagePX: number;
   pageHeightPX: number;
   marginYPX: number;
+  marginXPX: number;
+  /** Footer config */
+  footerName: string;
+  footerEmail: string;
+  showPageNumbers: boolean;
+  bodyFont: string;
+  footerColor: string;
+  footerFontSizePt: number;
+  backgroundColor: string;
 }
 
 interface ResumePreviewProps {
