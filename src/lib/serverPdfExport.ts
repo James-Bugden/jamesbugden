@@ -13,55 +13,29 @@ interface ServerPdfExportOptions {
   fileName?: string;
   /** Page format */
   pageFormat?: "a4" | "letter";
+  /** Customize settings for margin calculation */
+  customize?: { marginX?: number; marginY?: number };
 }
 
 /**
- * Serialize the resume element into a self-contained HTML string
- * with all styles and font links embedded.
+ * Serialize the resume element into a self-contained HTML string.
+ * Uses @page margins instead of element padding so every page gets proper margins.
  */
-function resolveInlineVars(el: HTMLElement): void {
-  /**
-   * Walk every element in the clone. For any inline style property that
-   * references a CSS custom property (var(--xxx)), resolve it to the
-   * computed value from the LIVE element tree so headless Chrome doesn't
-   * need to resolve them.
-   */
-  const style = el.getAttribute("style");
-  if (style && style.includes("var(--")) {
-    // Get the computed style of this element (from the live DOM, not the clone)
-    // We can't do that here, so we'll handle it differently below
-  }
-}
+function serializeResumeHtml(
+  element: HTMLElement,
+  pageFormat: "a4" | "letter",
+  customize?: { marginX?: number; marginY?: number },
+): string {
+  // Calculate page margins from customize settings
+  const marginX = customize?.marginX ?? 16;
+  const marginY = customize?.marginY ?? 16;
+  const headerSafe = 4;
+  const footerSafe = 4;
+  const padTop = marginY + headerSafe;   // default: 20mm
+  const padBottom = marginY + footerSafe; // default: 20mm
+  const pageW = pageFormat === "letter" ? "8.5in" : "210mm";
+  const pageH = pageFormat === "letter" ? "11in" : "297mm";
 
-function computedStyleForClone(liveEl: HTMLElement, cloneEl: HTMLElement): void {
-  /**
-   * For elements using CSS custom properties, resolve them to concrete values
-   * by reading computed styles from the live DOM.
-   */
-  const computed = getComputedStyle(liveEl);
-
-  // Resolve padding (critical — prevents header clipping)
-  const paddingTop = computed.paddingTop;
-  const paddingRight = computed.paddingRight;
-  const paddingBottom = computed.paddingBottom;
-  const paddingLeft = computed.paddingLeft;
-  if (paddingTop) cloneEl.style.paddingTop = paddingTop;
-  if (paddingRight) cloneEl.style.paddingRight = paddingRight;
-  if (paddingBottom) cloneEl.style.paddingBottom = paddingBottom;
-  if (paddingLeft) cloneEl.style.paddingLeft = paddingLeft;
-
-  // Resolve font
-  const fontFamily = computed.fontFamily;
-  const fontSize = computed.fontSize;
-  const lineHeight = computed.lineHeight;
-  const color = computed.color;
-  if (fontFamily) cloneEl.style.fontFamily = fontFamily;
-  if (fontSize) cloneEl.style.fontSize = fontSize;
-  if (lineHeight) cloneEl.style.lineHeight = lineHeight;
-  if (color) cloneEl.style.color = color;
-}
-
-function serializeResumeHtml(element: HTMLElement, pageFormat: "a4" | "letter"): string {
   // Collect all stylesheets (same-origin)
   let allCSS = "";
   for (const sheet of Array.from(document.styleSheets)) {
@@ -84,7 +58,7 @@ function serializeResumeHtml(element: HTMLElement, pageFormat: "a4" | "letter"):
   // Clone the element
   const clone = element.cloneNode(true) as HTMLElement;
 
-  // Reset off-screen positioning that the hidden flow uses
+  // Reset off-screen positioning
   clone.style.position = "relative";
   clone.style.left = "auto";
   clone.style.top = "auto";
@@ -95,20 +69,21 @@ function serializeResumeHtml(element: HTMLElement, pageFormat: "a4" | "letter"):
   clone.removeAttribute("data-hidden-flow");
   clone.removeAttribute("id");
 
-  // CRITICAL: Resolve CSS custom properties to computed values.
-  // React sets CSS vars via setProperty() which may not survive cloneNode+outerHTML,
-  // and headless Chrome may not resolve vars defined only in inline styles.
+  // Resolve CSS custom properties (colors, fonts, spacing) from the live DOM
   const liveA4Page = element.querySelector("[data-color-role='background']") as HTMLElement | null;
   const cloneA4Page = clone.querySelector("[data-color-role='background']") as HTMLElement | null;
   if (liveA4Page && cloneA4Page) {
-    computedStyleForClone(liveA4Page, cloneA4Page);
-
-    // Also explicitly set the CSS custom properties as a style block
     const computed = getComputedStyle(liveA4Page);
+
+    // Copy font properties
+    cloneA4Page.style.fontFamily = computed.fontFamily;
+    cloneA4Page.style.fontSize = computed.fontSize;
+    cloneA4Page.style.lineHeight = computed.lineHeight;
+    cloneA4Page.style.color = computed.color;
+
+    // Copy CSS custom properties for colors/spacing
     const cssVarNames = [
       "--resume-font-size", "--resume-line-height",
-      "--resume-margin-x", "--resume-margin-y",
-      "--resume-pad-top", "--resume-pad-bottom",
       "--resume-section-spacing", "--resume-accent",
       "--resume-name", "--resume-title", "--resume-headings",
       "--resume-dates", "--resume-subtitle", "--resume-body",
@@ -117,29 +92,42 @@ function serializeResumeHtml(element: HTMLElement, pageFormat: "a4" | "letter"):
       const val = computed.getPropertyValue(name);
       if (val?.trim()) cloneA4Page.style.setProperty(name, val.trim());
     }
+
+    // KEY FIX: Override padding/margin CSS vars to 0 — @page margins handle this now
+    cloneA4Page.style.setProperty("--resume-pad-top", "0mm");
+    cloneA4Page.style.setProperty("--resume-pad-bottom", "0mm");
+    cloneA4Page.style.setProperty("--resume-margin-x", "0mm");
+    cloneA4Page.style.setProperty("--resume-margin-y", "0mm");
+    cloneA4Page.style.padding = "0";
+    cloneA4Page.style.width = "100%";
   }
 
-  // Copy CSS custom properties from :root as well
+  // Copy global CSS custom properties from :root
   const rootComputed = getComputedStyle(document.documentElement);
-  const elComputed = getComputedStyle(element);
   const globalVarNames = [
     "--background", "--foreground", "--primary", "--primary-foreground",
     "--secondary", "--muted", "--accent",
   ];
   let rootVars = "";
   for (const name of globalVarNames) {
-    const val = elComputed.getPropertyValue(name) || rootComputed.getPropertyValue(name);
+    const val = rootComputed.getPropertyValue(name);
     if (val?.trim()) rootVars += `  ${name}: ${val.trim()};\n`;
   }
 
   // Set width to match the source
   clone.style.width = `${element.scrollWidth || element.offsetWidth}px`;
 
+  // KEY FIX: Remove pagination margin-top hacks from the preview system.
+  // Chrome handles page breaks naturally with @page rules.
+  clone.querySelectorAll("[data-page-item]").forEach((el) => {
+    (el as HTMLElement).style.marginTop = "";
+  });
+  clone.querySelectorAll("[data-page-break-child]").forEach((el) => {
+    (el as HTMLElement).style.marginTop = "";
+  });
+
   // Remove interactive elements
   clone.querySelectorAll("button, [data-edit-overlay], .no-print, [data-radix-popper-content-wrapper]").forEach((el) => el.remove());
-
-  const pageW = pageFormat === "letter" ? "8.5in" : "210mm";
-  const pageH = pageFormat === "letter" ? "11in" : "297mm";
 
   return `<!DOCTYPE html>
 <html>
@@ -155,7 +143,7 @@ ${allCSS}
 
 @page {
   size: ${pageW} ${pageH};
-  margin: 0;
+  margin: ${padTop}mm ${marginX}mm ${padBottom}mm ${marginX}mm;
 }
 
 *, *::before, *::after {
@@ -167,7 +155,6 @@ html, body {
   margin: 0;
   padding: 0;
   background: #ffffff;
-  width: ${pageW};
 }
 
 [data-page-item] {
@@ -192,6 +179,7 @@ export async function exportResumePdfServer({
   sourceElement,
   fileName = "Resume",
   pageFormat = "a4",
+  customize,
 }: ServerPdfExportOptions): Promise<void> {
   if (!sourceElement) {
     toast({ title: "Export failed", description: "Preview not ready yet.", variant: "destructive" });
@@ -202,8 +190,8 @@ export async function exportResumePdfServer({
     // Wait for fonts
     await document.fonts.ready;
 
-    // Serialize resume to self-contained HTML
-    const html = serializeResumeHtml(sourceElement, pageFormat);
+    // Serialize resume to self-contained HTML with @page margins
+    const html = serializeResumeHtml(sourceElement, pageFormat, customize);
 
     // Get auth token for rate limiting
     const supabaseUrl = import.meta.env.VITE_SUPABASE_URL;
@@ -249,7 +237,7 @@ export async function exportResumePdfServer({
     });
 
     // Fallback: browser print via hidden iframe
-    await fallbackBrowserPrint(sourceElement, pageFormat);
+    await fallbackBrowserPrint(sourceElement, pageFormat, customize);
   }
 }
 
@@ -257,8 +245,12 @@ export async function exportResumePdfServer({
  * Fallback: browser print via hidden iframe.
  * Used when the server-side export fails.
  */
-async function fallbackBrowserPrint(sourceElement: HTMLElement, pageFormat: "a4" | "letter"): Promise<void> {
-  const html = serializeResumeHtml(sourceElement, pageFormat);
+async function fallbackBrowserPrint(
+  sourceElement: HTMLElement,
+  pageFormat: "a4" | "letter",
+  customize?: { marginX?: number; marginY?: number },
+): Promise<void> {
+  const html = serializeResumeHtml(sourceElement, pageFormat, customize);
 
   const iframe = document.createElement("iframe");
   iframe.style.cssText = "position:fixed;right:0;bottom:0;width:0;height:0;border:none;visibility:hidden;";
