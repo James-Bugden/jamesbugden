@@ -5,7 +5,7 @@ import { Linkedin } from "lucide-react";
 import { InstagramIcon, ThreadsIcon } from "@/components/SocialIcons";
 import LanguageToggle from "@/components/LanguageToggle";
 import ThemeToggle from "@/components/ThemeToggle";
-import { ArrowRight, FileText, DollarSign, PenTool, Search, X, BarChart3 } from "lucide-react";
+import { ArrowRight, FileText, DollarSign, PenTool, Search, X, BarChart3, MessageSquare } from "lucide-react";
 import PageSEO from "@/components/PageSEO";
 import { useRecentlyUsed } from "@/hooks/useRecentlyUsed";
 import { useLocalStorage } from "@/hooks/useLocalStorage";
@@ -52,6 +52,15 @@ const tools: ToolItem[] = [
     description: { en: "See how much more you'd earn over 30 years by negotiating strategically.", zh: "算算看，策略性談薪 30 年下來能多賺多少。" },
     path: "/offer-calculator",
     zhPath: "/zh-tw/offer-calculator",
+  },
+  {
+    id: "interview-questions",
+    icon: <MessageSquare className="w-5 h-5" />,
+    iconBg: "#F0FDF4",
+    title: { en: "Interview Question Bank", zh: "面試題庫" },
+    description: { en: "500+ real interview questions from top companies, sorted by category and difficulty.", zh: "500+ 道頂尖企業真實面試題，依類別與難度分類。" },
+    path: "/interview-questions",
+    zhPath: "/zh-tw/interview-questions",
   },
 ];
 
