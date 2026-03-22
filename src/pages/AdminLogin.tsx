@@ -70,16 +70,19 @@ const AdminLogin = () => {
 
   const handleGoogleLogin = async () => {
     setGoogleLoading(true);
+    const timeout = setTimeout(() => setGoogleLoading(false), 10000);
     try {
       sessionStorage.setItem("auth_redirect", "/admin");
       const { error } = await lovable.auth.signInWithOAuth("google", {
         redirect_uri: window.location.origin,
       });
       if (error) {
+        clearTimeout(timeout);
         toast({ title: "Login failed", description: error.message, variant: "destructive" });
         setGoogleLoading(false);
       }
     } catch {
+      clearTimeout(timeout);
       setGoogleLoading(false);
     }
   };
