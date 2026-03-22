@@ -1422,76 +1422,7 @@ export const ResumePreview = React.memo(function ResumePreview({
         <A4Page data={data} customize={customize} />
       </div>
 
-      {/* Export-only 1:1 scale page stack (off-screen, used for PDF capture) */}
-      <div
-        data-export-stack
-        style={{
-          position: "absolute",
-          left: "-19999px",
-          top: 0,
-          pointerEvents: "none",
-          zIndex: -2,
-        }}
-      >
-        {Array.from({ length: pageCount }, (_, i) => (
-          <div
-            key={`export-page-${i}`}
-            ref={el => { exportPageRefs.current[i] = el; }}
-            style={{
-              width: `${dims.wPX}px`,
-              height: `${dims.hPX}px`,
-              overflow: "hidden",
-              backgroundColor: customize?.a4Background || "#ffffff",
-              position: "relative",
-            }}
-          >
-            <div style={{
-              position: "absolute",
-              top: `${marginYPX + headerReservePX}px`,
-              left: 0,
-              width: `${dims.wPX}px`,
-              height: `${usablePerPage}px`,
-              overflow: "hidden",
-            }}>
-              <div
-                style={{
-                  width: `${dims.wPX}px`,
-                  transform: `translateY(${-(marginYPX + headerReservePX + i * usablePerPage)}px)`,
-                }}
-              >
-                <A4Page data={data} customize={customize} />
-              </div>
-            </div>
 
-            {(customize?.showPageNumbers || customize?.showFooterEmail || customize?.showFooterName) && (
-              <div
-                style={{
-                  position: "absolute",
-                  bottom: `${marginYPX}px`,
-                  left: `${(customize?.marginX ?? 16) * PX_PER_MM}px`,
-                  right: `${(customize?.marginX ?? 16) * PX_PER_MM}px`,
-                  display: "flex",
-                  justifyContent: "space-between",
-                  alignItems: "center",
-                  fontSize: `${(customize?.fontSize ?? 10.5) - 3}pt`,
-                  color: customize?.datesColor || "#6B7280",
-                  fontFamily: customize?.bodyFont || "'Source Sans 3', sans-serif",
-                  backgroundColor: customize?.a4Background || "#ffffff",
-                  zIndex: 5,
-                }}
-              >
-                <span>{customize?.showFooterName ? (data.personalDetails?.fullName || "") : ""}</span>
-                <span>
-                  {[
-                    customize?.showFooterEmail ? data.personalDetails?.email : "",
-                    customize?.showPageNumbers ? `Page ${i + 1} of ${pageCount}` : "",
-                  ].filter(Boolean).join(" · ")}
-                </span>
-              </div>
-            )}
-          </div>
-        ))}
-      </div>
 
       <div className="flex justify-center py-8 px-6" onClick={handlePreviewClick}>
         <div
