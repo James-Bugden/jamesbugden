@@ -1,4 +1,6 @@
 import { toast } from "@/hooks/use-toast";
+import html2canvas from "html2canvas";
+import jsPDF from "jspdf";
 
 interface ExportOptions {
   elementId: string;
@@ -6,10 +8,11 @@ interface ExportOptions {
   pageFormat: "a4" | "letter";
 }
 
-/**
- * Export an element to PDF using the browser's native print dialog.
- * This avoids vulnerable third-party PDF libraries (jsPDF, html2pdf).
- */
+const PAGE_DIMS = {
+  a4: { w: 210, h: 297 },
+  letter: { w: 215.9, h: 279.4 },
+};
+
 export async function exportToPdf({ elementId, fileName, pageFormat = "a4" }: ExportOptions) {
   const container = document.getElementById(elementId);
   if (!container) {
@@ -17,56 +20,60 @@ export async function exportToPdf({ elementId, fileName, pageFormat = "a4" }: Ex
     return;
   }
 
-  // Inject print-only styles
-  const styleId = "__pdf-export-print-styles";
-  let styleEl = document.getElementById(styleId) as HTMLStyleElement | null;
-  if (!styleEl) {
-    styleEl = document.createElement("style");
-    styleEl.id = styleId;
-    document.head.appendChild(styleEl);
-  }
+  try {
+    const scale = 2;
+    const canvas = await html2canvas(container, {
+      scale,
+      useCORS: true,
+      allowTaint: true,
+      backgroundColor: "#ffffff",
+      logging: false,
+    });
 
-  const size = pageFormat === "letter" ? "letter" : "A4";
+    const dims = PAGE_DIMS[pageFormat] || PAGE_DIMS.a4;
+    const pdf = new jsPDF({ orientation: "portrait", unit: "mm", format: [dims.w, dims.h] });
 
-  styleEl.textContent = `
-    @media print {
-      @page {
-        size: ${size} portrait;
-        margin: 0;
-      }
-      body * {
-        visibility: hidden !important;
-      }
-      #${CSS.escape(elementId)},
-      #${CSS.escape(elementId)} * {
-        visibility: visible !important;
-      }
-      #${CSS.escape(elementId)} {
-        position: fixed !important;
-        left: 0 !important;
-        top: 0 !important;
-        width: 100% !important;
-        z-index: 999999 !important;
-        background: white !important;
-        -webkit-print-color-adjust: exact !important;
-        print-color-adjust: exact !important;
+    const pdfWidth = dims.w;
+    const pdfHeight = dims.h;
+    const imgWidth = canvas.width;
+    const imgHeight = canvas.height;
+
+    const ratio = pdfWidth / imgWidth;
+    const scaledHeight = imgHeight * ratio;
+
+    // Single page or multi-page
+    if (scaledHeight <= pdfHeight) {
+      pdf.addImage(canvas.toDataURL("image/jpeg", 0.95), "JPEG", 0, 0, pdfWidth, scaledHeight);
+    } else {
+      // Multi-page: slice the canvas
+      const pageHeightPx = pdfHeight / ratio;
+      let yOffset = 0;
+      let page = 0;
+
+      while (yOffset < imgHeight) {
+        if (page > 0) pdf.addPage();
+
+        const sliceHeight = Math.min(pageHeightPx, imgHeight - yOffset);
+        const pageCanvas = document.createElement("canvas");
+        pageCanvas.width = imgWidth;
+        pageCanvas.height = sliceHeight;
+        const ctx = pageCanvas.getContext("2d");
+        if (ctx) {
+          ctx.drawImage(canvas, 0, -yOffset);
+          pdf.addImage(pageCanvas.toDataURL("image/jpeg", 0.95), "JPEG", 0, 0, pdfWidth, sliceHeight * ratio);
+        }
+
+        yOffset += pageHeightPx;
+        page++;
       }
     }
-  `;
 
-  // Set document title so the browser suggests it as the filename
-  const originalTitle = document.title;
-  document.title = fileName.replace(/\.pdf$/i, "");
+    const safeName = (fileName || "Resume").replace(/\.pdf$/i, "") + ".pdf";
+    pdf.save(safeName);
 
-  window.print();
-
-  // Restore title after a short delay (print dialog is async)
-  setTimeout(() => {
-    document.title = originalTitle;
-  }, 1000);
-
-  toast({
-    title: "Print dialog opened",
-    description: 'Select "Save as PDF" to download your document.',
-  });
+    toast({ title: "PDF downloaded", description: `${safeName} has been saved.` });
+  } catch (err) {
+    console.error("PDF export error:", err);
+    toast({ title: "Export failed", description: "Something went wrong generating the PDF.", variant: "destructive" });
+  }
 }
