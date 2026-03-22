@@ -239,13 +239,25 @@ export async function exportResumePages(config: ResumeExportConfig) {
     return;
   }
 
+  // Cleanup functions for style overrides
+  let restoreLight: (() => void) | null = null;
+  let restoreVars: (() => void) | null = null;
+
   try {
-    await document.fonts.ready;
+    // 0. Wait for all assets (images + fonts)
+    await waitForAssets(sourceElement);
+
+    // 1. Force light mode & resolve CSS variables to prevent dark/blank output
+    restoreLight = forceLightMode(sourceElement);
+    restoreVars = resolveCSSVariables(sourceElement);
+
+    // Small repaint delay so forced styles take effect
+    await new Promise((r) => setTimeout(r, 50));
 
     const ratio = isMobile() ? 1.5 : 2;
     const fontEmbedCSS = await getFontEmbedCSS();
 
-    // 1. Capture the entire hidden flow as one tall PNG
+    // 2. Capture the entire hidden flow as one tall PNG
     const tallDataUrl = await toPng(sourceElement, {
       pixelRatio: ratio,
       cacheBust: true,
