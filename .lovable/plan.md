@@ -1,42 +1,37 @@
 
 
-## Plan: Delete "Skip tracer" line + UI/UX Improvements for 48 Laws Guide
+## Plan: Make Remaining Sections Interactive + Flywheel Diagram
 
-### 1. Content fix
-**Delete "Skip tracer at a detective agency."** from the Introduction paragraph (line 334). The sentence currently reads:
-> "Construction worker in Greece. Hotel receptionist in Paris. English teacher in Barcelona. Hollywood screenwriter. Skip tracer at a detective agency. Magazine editor."
+The Alive Time Audit and Irreplaceability Audit are **already interactive** with scoring buttons from the previous implementation. The three items that need work are:
 
-Remove "Skip tracer at a detective agency." — this phrase is not in the source markdown.
+### 1. Brag Doc Template → Fillable Form (line ~941-951)
+Replace the static `___________` placeholders with actual text inputs saved via `useGuideStorage`. Users fill in their weekly entries and can add multiple weeks.
 
-### 2. UI/UX Improvements
+- Storage key: `48laws_bragdoc_en` — array of `{ week: string, shipped: string, result: string, who: string, learned: string }`
+- "Add week" button appends a new blank entry; each entry is editable inline
+- Show count: "X entries logged"
 
-After reviewing the full page and comparing it with the best-designed guides (Ikigai, Office Politics), here are the improvements:
+### 2. Boss Management Matrix → Interactive Selector (line ~678-707)
+Replace the static table + steps with two interactive selectors:
+- **Boss's Ego**: Low / High (two buttons)
+- **Your Visibility**: Low / High (two buttons)
 
-**A. Sticky floating action step progress bar**
-Currently, the action step counter only appears at the very bottom after completing at least 1 step. Move it to a sticky bottom bar that appears once the user completes 1+ action steps — always visible as they scroll, showing "X/19 action steps completed" with a thin progress bar. This gives constant feedback and motivation.
+Once both are selected, highlight the matching quadrant in the table (gold border) and show the strategy text prominently below. Save selections via `useGuideStorage<{ego: string, visibility: string}>("48laws_boss_matrix_en", {ego:"",visibility:""})`.
 
-**B. Make the Alive Time Audit and Irreplaceability Audit interactive**
-Two static audits (Alive Time Audit at line 454 and Irreplaceability Audit at line 757) currently just show questions without scoring inputs. Add the same interactive scoring buttons (like the Power Audit) so users can actually score themselves and see results. Save with `useGuideStorage`.
-
-**C. Improve the 48 Laws collapsible cards**
-Currently all 48 laws are plain collapsible text blocks. Add:
-- Color-coded left border based on tag (green for USE, amber for DEFEND, red for AVOID)
-- Show the tag badge on the collapsed title row (not just inside)
-- This lets users scan the full list visually without opening each one
-
-**D. Better mobile ToC**
-The current mobile ToC is a floating button that opens a full list. Add section numbering dots/pills and make the current section name visible on the button (not just a menu icon), so users always know where they are in this long guide.
-
-**E. Add reading progress bar**
-Add a thin gold progress bar at the top of the page (under the nav) that fills as the user scrolls, similar to the pattern used on long-form content sites. Gives spatial awareness on a 45-min read.
+### 3. Reputation Flywheel → Visual Cycle Diagram (line ~781-787)
+Replace the plain text "Results → Visibility → Trust → Opportunity → More Results" with a circular HTML/CSS flywheel diagram:
+- 5 nodes arranged in a circle/pentagon using absolute positioning
+- Curved arrows connecting them (CSS borders or SVG arcs)
+- The "Visibility" node highlighted in gold with a pulse animation
+- Caption below: "Most people break the VISIBILITY link"
 
 ### Technical details
 
-**Files to edit:** `src/pages/FortyEightLawsGuide.tsx`
+**File:** `src/pages/FortyEightLawsGuide.tsx`
 
 **New storage keys:**
-- `48laws_alive_audit_en` — number[] (5 scores for Alive Time Audit)
-- `48laws_irreplaceable_audit_en` — number[] (5 scores for Irreplaceability Audit)
+- `48laws_bragdoc_en` — brag doc entries array
+- `48laws_boss_matrix_en` — boss matrix selections
 
-**No new dependencies or DB migrations needed.**
+**No DB migration needed.** All data stored as JSON in existing `guide_progress` table.
 
