@@ -210,7 +210,7 @@ function TierReveal({ visible, children }: { visible: boolean; children: React.R
   );
 }
 
-export default function HomepageTestimonialsExperimentZhTw() {
+export default function HomepageTestimonialsZhTw() {
   const [revealLevel, setRevealLevel] = useState(0);
 
   const buttonText = revealLevel === 0 ? "顯示更多評價" : "顯示更多評價";

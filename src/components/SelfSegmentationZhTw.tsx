@@ -21,7 +21,7 @@ const steps = [
   },
 ];
 
-export default function SelfSegmentationExperimentZhTw() {
+export default function SelfSegmentationZhTw() {
   return (
     <section className="py-12 md:py-20 px-5 md:px-6" style={{ backgroundColor: '#FDFBF7' }}>
       <div className="container mx-auto max-w-4xl">

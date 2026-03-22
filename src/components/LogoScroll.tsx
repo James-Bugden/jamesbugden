@@ -84,7 +84,7 @@ function LogoItem({ company }: { company: Company }) {
   );
 }
 
-export default function LogoScrollExperiment() {
+export default function LogoScroll() {
   return (
     <section className="py-4 overflow-hidden relative" style={{ backgroundColor: '#FDFBF7' }}>
       <p className="text-center text-sm text-muted-foreground mb-3 px-4">I worked with candidates from these companies</p>

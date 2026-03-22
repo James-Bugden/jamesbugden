@@ -78,7 +78,7 @@ function FAQSection() {
   );
 }
 
-const IndexExperimentZhTw = () => {
+const IndexZhTw = () => {
   const { isLoggedIn } = useAuth();
   const [scrolled, setScrolled] = useState(false);
 
@@ -353,4 +353,4 @@ const IndexExperimentZhTw = () => {
   );
 };
 
-export default IndexExperimentZhTw;
+export default IndexZhTw;

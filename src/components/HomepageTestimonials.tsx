@@ -219,7 +219,7 @@ function TierReveal({ visible, children }: { visible: boolean; children: React.R
 }
 
 /* ── Main ── */
-export default function HomepageTestimonialsExperiment() {
+export default function HomepageTestimonials() {
   const [revealLevel, setRevealLevel] = useState(0);
 
   const buttonText = revealLevel === 0 ? "Show More Reviews" : "Show Even More Reviews";

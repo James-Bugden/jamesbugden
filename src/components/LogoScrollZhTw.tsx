@@ -84,7 +84,7 @@ function LogoItem({ company }: { company: Company }) {
   );
 }
 
-export default function LogoScrollExperimentZhTw() {
+export default function LogoScrollZhTw() {
   return (
     <section className="py-4 overflow-hidden relative" style={{ backgroundColor: '#FDFBF7' }}>
       <p className="text-center text-sm text-muted-foreground mb-3 px-4">我曾與來自這些公司的求職者合作</p>
