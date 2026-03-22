@@ -41,6 +41,11 @@ function serializeResumeHtml(
   for (const sheet of Array.from(document.styleSheets)) {
     try {
       for (const rule of Array.from(sheet.cssRules)) {
+        // Skip @media print blocks — they contain conflicting @page rules
+        // and analysis-report-specific styles that break the resume PDF export.
+        if (rule instanceof CSSMediaRule && rule.conditionText === "print") {
+          continue;
+        }
         allCSS += rule.cssText + "\n";
       }
     } catch {
