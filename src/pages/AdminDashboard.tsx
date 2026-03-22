@@ -22,7 +22,7 @@ import { useToast } from "@/hooks/use-toast";
 import { getSafeErrorMessage } from "@/lib/utils";
 import {
   Loader2, Plus, Copy, Trash2, LogOut, Check, ArrowUpDown, Search, Download,
-  FileText, DollarSign, Users, Mail, UserCheck,
+  FileText, DollarSign, Users, Mail, UserCheck, MessageSquare,
 } from "lucide-react";
 import { format } from "date-fns";
 import bcrypt from "bcryptjs";
