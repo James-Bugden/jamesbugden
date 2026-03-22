@@ -44,6 +44,7 @@ serve(async (req) => {
     });
 
     const data = await res.json();
+    console.log("MailerLite API response:", res.status, JSON.stringify(data));
 
     if (!res.ok) {
       console.error("MailerLite API error:", res.status, JSON.stringify(data));
