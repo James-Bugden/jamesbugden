@@ -322,7 +322,7 @@ const IndexExperiment = () => {
                 >
                   Get Full Access — It's Free
                 </Link>
-                <p className="mt-3 text-sm text-muted-foreground">No credit card required</p>
+                
               </div>
             </section>
           </LazySection>
