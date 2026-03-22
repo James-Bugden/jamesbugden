@@ -887,7 +887,9 @@ export const A4Page = React.memo(function A4Page({
                       {i > 0 && sep === "bullet" && <span className="mx-[1mm]">·</span>}
                       {i > 0 && sep === "bar" && <span className="mx-[1mm]">|</span>}
                       {sep === "icon" && item.icon}
-                      {item.text}
+                      {item.href ? (
+                        <a href={item.href} target="_blank" rel="noopener noreferrer" style={{ color: "inherit", textDecoration: c?.linkUnderline ? "underline" : "none" }}>{item.text}</a>
+                      ) : item.text}
                     </span>
                   );
                 })}
