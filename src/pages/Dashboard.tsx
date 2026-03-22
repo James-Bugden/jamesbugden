@@ -53,6 +53,15 @@ const tools: ToolItem[] = [
     path: "/offer-calculator",
     zhPath: "/zh-tw/offer-calculator",
   },
+  {
+    id: "interview-questions",
+    icon: <MessageSquare className="w-5 h-5" />,
+    iconBg: "#F0FDF4",
+    title: { en: "Interview Question Bank", zh: "面試題庫" },
+    description: { en: "500+ real interview questions from top companies, sorted by category and difficulty.", zh: "500+ 道頂尖企業真實面試題，依類別與難度分類。" },
+    path: "/interview-questions",
+    zhPath: "/zh-tw/interview-questions",
+  },
 ];
 
 const journeyItems: JourneyItem[] = [
