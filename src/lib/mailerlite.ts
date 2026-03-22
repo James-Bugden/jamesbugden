@@ -1,10 +1,16 @@
-import { supabase } from "@/integrations/supabase/client";
-
 export function syncToMailerLite(email: string, name?: string): void {
-  supabase.functions
-    .invoke("sync-mailerlite", { body: { email, name } })
-    .then(({ error }) => {
-      if (error) console.warn("[MailerLite] sync failed:", error.message);
+  const url = `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/sync-mailerlite`;
+  fetch(url, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      apikey: import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY,
+    },
+    body: JSON.stringify({ email, name }),
+    keepalive: true,
+  })
+    .then((res) => {
+      if (!res.ok) console.warn("[MailerLite] sync failed:", res.status);
       else console.log("[MailerLite] subscriber synced");
     })
     .catch((err) => console.warn("[MailerLite] sync error:", err));
