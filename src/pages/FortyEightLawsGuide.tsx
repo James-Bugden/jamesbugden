@@ -909,7 +909,7 @@ const FortyEightLawsGuide = () => {
               <li>What is the worst-case interpretation of my words?</li>
             </ol>
             <p className="text-muted-foreground leading-relaxed mb-6">If you don't know the answer to all three, slow down.</p>
-            <ActionStep>
+            <ActionStep checked={safeActions[12]} onToggle={() => toggleAction(12)}>
               Before your next sensitive email, meeting request, or escalation, pause and answer those three questions on paper. Keep a note on your desk: "Who gains? Who loses? Worst interpretation?" Make it a habit. This filter prevents more career damage than any other habit in this guide.
             </ActionStep>
 
