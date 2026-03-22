@@ -1,68 +1,90 @@
 
-## Best solution
+Goal: reapproach this as an architecture fix, not another export patch.
 
-The best fix is to export the exact paginated preview pages, not the hidden measurement flow and not a separate PDF renderer.
+What is going wrong now
+- The export path is still too indirect.
+- `ResumePreview.tsx` currently maintains separate resume representations:
+  1. `hiddenFlowRef` for pagination measurement
+  2. visible preview pages
+  3. export-only off-screen pages
+  4. a cloned copy created again inside `captureElement()` during export
+- Pagination is measured in one tree, replayed into other trees by DOM index, then captured from a cloned copy. That is why each “fix” keeps drifting from what the user actually sees.
 
-## Why it is still broken now
+Best reapproach
+- Keep only one “source of truth” for the final paginated page UI.
+- Use measurement DOM only to calculate page breaks.
+- Render the actual page shells through one shared paginated page component.
+- Export those same rendered page shells directly.
 
-The “revert” only switched the button back to `exportResumePages()`, but the exporter still uses `exportMetricsRef.current.sourceElement = hiddenFlowRef.current`.
+Implementation plan
 
-That hidden node is not the same thing the user sees:
-- it is the off-screen measurement tree
-- it does not include the visible page shells/cropping behavior
-- it does not include footer/page-number rendering
-- it is exported as one tall image and then sliced mathematically
+1. Extract a shared paginated page renderer
+- Pull the repeated page-shell markup out of `ResumePreview.tsx` into one internal renderer/component.
+- That renderer should own:
+  - page frame
+  - cropped content window
+  - footer
+  - page numbers
+  - page background
+- Use it for both on-screen preview and export output so they cannot diverge structurally.
 
-So the current export path is still not exporting the real preview. It is exporting an internal layout source.
+2. Reduce pagination to data, not duplicated DOM
+- Keep `hiddenFlowRef` only for measurement.
+- Continue computing page count and margin/push mutations there.
+- Convert that result into a stable pagination model that the shared renderer consumes.
+- Stop relying on “same DOM order in multiple trees” as the contract.
 
-## Implementation plan
+3. Replace the permanent export stack with on-demand export mode
+- Do not keep a second always-mounted export stack in the normal preview.
+- When the user clicks Download:
+  - mount a temporary 1:1 export root using the same shared paginated renderer
+  - wait for fonts/layout to settle
+  - capture those page wrappers
+  - unmount the export root after save
+- This avoids stale refs and removes another long-lived duplicate tree.
 
-1. In `ResumePreview.tsx`, expose the actual rendered page DOM for export
-- extend `ResumeExportMetrics` to include `pageElements` or an `exportRoot`
-- stop treating `hiddenFlowRef` as the export source
-- keep `hiddenFlowRef` only for pagination measurement
+4. Simplify the PDF capture pipeline
+- `exportResumePages()` should only accept already-rendered page wrapper elements.
+- Capture one page wrapper per PDF page.
+- Remove legacy `sourceElement` usage entirely.
+- Keep the font/CORS protections, but avoid cloning a cloned export structure where possible.
 
-2. Add a dedicated export-only page stack in `ResumePreview.tsx`
-- render the same page markup as the visible preview, at 1:1 scale, off-screen
-- include the exact page frame, cropped content window, translated page content, and footer/page numbers
-- apply the same pagination mutations that the visible preview uses
+5. Add strict readiness guards
+- Only allow export when:
+  - pagination model exists
+  - export root page count matches computed page count
+  - fonts are ready
+- If not ready, delay export by one or two animation frames instead of exporting stale DOM.
 
-3. Rewrite `exportResumePages()` in `src/lib/pdfExport.ts`
-- accept the real page elements instead of one tall `sourceElement`
-- capture each page individually and add one image per PDF page
-- remove the current single-image slicing logic for resume export
-- keep font embedding/CORS handling, but add stronger readiness guards before capture
+6. Add a regression checklist while implementing
+- one-page resume
+- multi-page resume
+- two-column layout
+- footer/page numbers on and off
+- custom fonts/colors
+- desktop and mobile trigger paths
 
-4. Update both resume builders
-- `src/pages/ResumeBuilder.tsx`
-- `src/pages/ResumeBuilderSimple.tsx`
-- use the new export metrics shape and fail gracefully if export pages are not ready
-
-## Files to change
-
+Files to rework
 - `src/components/resume-builder/ResumePreview.tsx`
 - `src/lib/pdfExport.ts`
 - `src/pages/ResumeBuilder.tsx`
 - `src/pages/ResumeBuilderSimple.tsx`
 
-## Technical details
+Technical direction
+- Do not go back to the separate PDF renderer for this exact-match requirement.
+- Do not export `hiddenFlowRef`.
+- Do not keep two hand-maintained page stacks inside `ResumePreview`.
+- Remove `sourceElement` from the export contract once the new flow is in place.
 
-Recommended direction:
-- export page-by-page from the same DOM structure used for the visible preview
-- do not use `ResumePdfDocument.tsx` for exact-match export
-- do not use `hiddenFlowRef` as the final export source
-- do not slice one long screenshot into pages
-
-This is the lowest-risk way to get true preview parity, because it removes the mismatch between:
+Success criterion
 ```text
-measurement DOM  -> exported now
-visible paginated DOM -> what the user actually sees
+measurement DOM -> computes breaks only
+shared paginated renderer -> draws preview pages
+same shared paginated renderer -> draws export pages
+PDF capture -> captures those exact export pages
 ```
 
-After this change, the PDF should match:
-- section order
-- column layout
-- pagination breaks
-- footer/page numbers
-- colors/fonts/spacing
-- any future preview styling changes automatically
+Why this is the right reapproach
+- It attacks the real problem: too many render copies of the same resume.
+- It gives exact preview parity without depending on a separate PDF layout engine.
+- It makes future preview styling changes automatically flow into export.
