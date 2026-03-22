@@ -99,6 +99,11 @@ function serializeResumeHtml(
       const val = computed.getPropertyValue(name);
       if (val?.trim()) cloneA4Page.style.setProperty(name, val.trim());
     }
+
+    // CRITICAL: Strip minHeight — it forces the element to fill 297mm (a full page)
+    // even when the content is shorter. Without this, page 1 is mostly blank space.
+    cloneA4Page.style.minHeight = "0";
+    cloneA4Page.style.height = "auto";
   }
 
   // Copy global CSS custom properties from :root
