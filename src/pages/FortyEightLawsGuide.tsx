@@ -1067,7 +1067,7 @@ const FortyEightLawsGuide = () => {
             <p className="text-muted-foreground leading-relaxed mb-6">
               Know the difference between consolidation and coasting. Consolidation is intentional: building the foundation for the next move. Coasting is passive: you've stopped growing.
             </p>
-            <ActionStep>
+            <ActionStep checked={safeActions[18]} onToggle={() => toggleAction(18)}>
               After your next win (promotion, successful project, public recognition), resist the urge to immediately push for the next thing. Instead, spend 30 days building relationships at your new level. Schedule 1:1 coffees with three new peers or stakeholders you didn't have access to before. Consolidate your position before expanding it.
             </ActionStep>
 
