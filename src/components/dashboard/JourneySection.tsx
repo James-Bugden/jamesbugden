@@ -32,7 +32,7 @@ export interface JourneyItem {
 interface JourneySectionProps {
   tag: GuideTag;
   label: string;
-  emoji: string;
+  icon: ReactNode;
   color: string;
   items: JourneyItem[];
   lang: "en" | "zh";
