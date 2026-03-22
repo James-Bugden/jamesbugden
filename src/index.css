@@ -520,7 +520,7 @@
     print-color-adjust: exact;
   }
 
-  header, footer, nav, .sticky, [data-print-hide] { display: none !important; }
+  .site-header, .site-footer, .site-nav, .sticky, [data-print-hide] { display: none !important; }
 
   #analysis-results-container {
     padding: 0 !important;
