@@ -1201,6 +1201,7 @@ const FortyEightLawsGuide = () => {
                     { text: "Ikigai Career Guide", desc: "finding purpose and direction", link: "/ikigai-guide" },
                     { text: "Office Politics Guide", desc: "full political survival framework", link: "/office-politics-guide" },
                     { text: "Career Game / Promotion Playbook", desc: "getting promoted", link: "/career-game-guide" },
+                    { text: "7 Rules of Power Guide", desc: "the research behind workplace power", link: "/office-politics-guide" },
                     { text: "Interview Playbook", desc: "landing the role", link: "/interview-preparation-guide" },
                     { text: "Job Offer Guide", desc: "evaluating and negotiating offers", link: "/job-offer-guide" },
                     { text: "Working with Recruiters Guide", desc: "getting on a recruiter's radar", link: "/recruiter-guide" },
