@@ -44,6 +44,7 @@ export const translations = {
     paperSize: "Paper size",
     usLetter: "US Letter",
     downloadPdf: "Download PDF",
+    exportMultiPageNote: "⚠️ Multi-page export is currently being fixed. For resumes longer than 1 page, please use browser print (⌘P) as a temporary workaround.",
 
     // Footer
     poweredBy: "Powered by",
