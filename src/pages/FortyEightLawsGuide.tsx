@@ -320,7 +320,7 @@ const FortyEightLawsGuide = () => {
   return (
     <div className="min-h-screen bg-background text-foreground">
       <PageSEO
-        title="Why Your Best Work Isn't Getting You Promoted (And What Will) | James Bugden"
+        title="48 Laws of Power (Workplace Edition) | James Bugden"
         description="A recruiter's guide to workplace power, office politics, and career strategy based on The 48 Laws of Power by Robert Greene. Learn to manage up, build your reputation, and play the long game."
         path="/48-laws-guide"
       />
@@ -343,12 +343,12 @@ const FortyEightLawsGuide = () => {
         <div className="container mx-auto max-w-4xl text-center">
           <div className="inline-flex items-center gap-2 bg-cream/10 rounded-full px-4 py-1.5 mb-6">
             <Crown className="w-4 h-4 text-gold" />
-            <span className="text-sm font-medium text-cream/80">Career Strategy Guide</span>
+            <span className="text-sm font-medium text-cream/80">Workplace Edition</span>
           </div>
           <h1 className="font-heading text-3xl md:text-5xl lg:text-6xl text-cream leading-tight mb-4" style={{ lineHeight: 1.2 }}>
-            Why Your Best Work Isn't Getting You Promoted<br className="hidden sm:block" /> (And What Will)
+            48 Laws of Power<br className="hidden sm:block" /> (Workplace Edition)
           </h1>
-          <p className="text-lg md:text-xl text-cream/80 mb-3">A Recruiter's Guide to Workplace Power, Office Politics, and Career Strategy</p>
+          <p className="text-lg md:text-xl text-cream/80 mb-3">A Guide to Workplace Power, Office Politics, and Career Strategy</p>
           <div className="flex flex-col sm:flex-row items-center justify-center gap-2 sm:gap-4 mb-6">
             <p className="text-base text-cream/60">By James Bugden, Career Coach · Senior Recruiter @ Uber</p>
             <span className="hidden sm:inline text-cream/30">·</span>
