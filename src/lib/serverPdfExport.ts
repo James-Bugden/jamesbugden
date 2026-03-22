@@ -18,6 +18,48 @@ interface ServerPdfExportOptions {
  * Serialize the resume element into a self-contained HTML string
  * with all styles and font links embedded.
  */
+function resolveInlineVars(el: HTMLElement): void {
+  /**
+   * Walk every element in the clone. For any inline style property that
+   * references a CSS custom property (var(--xxx)), resolve it to the
+   * computed value from the LIVE element tree so headless Chrome doesn't
+   * need to resolve them.
+   */
+  const style = el.getAttribute("style");
+  if (style && style.includes("var(--")) {
+    // Get the computed style of this element (from the live DOM, not the clone)
+    // We can't do that here, so we'll handle it differently below
+  }
+}
+
+function computedStyleForClone(liveEl: HTMLElement, cloneEl: HTMLElement): void {
+  /**
+   * For elements using CSS custom properties, resolve them to concrete values
+   * by reading computed styles from the live DOM.
+   */
+  const computed = getComputedStyle(liveEl);
+
+  // Resolve padding (critical — prevents header clipping)
+  const paddingTop = computed.paddingTop;
+  const paddingRight = computed.paddingRight;
+  const paddingBottom = computed.paddingBottom;
+  const paddingLeft = computed.paddingLeft;
+  if (paddingTop) cloneEl.style.paddingTop = paddingTop;
+  if (paddingRight) cloneEl.style.paddingRight = paddingRight;
+  if (paddingBottom) cloneEl.style.paddingBottom = paddingBottom;
+  if (paddingLeft) cloneEl.style.paddingLeft = paddingLeft;
+
+  // Resolve font
+  const fontFamily = computed.fontFamily;
+  const fontSize = computed.fontSize;
+  const lineHeight = computed.lineHeight;
+  const color = computed.color;
+  if (fontFamily) cloneEl.style.fontFamily = fontFamily;
+  if (fontSize) cloneEl.style.fontSize = fontSize;
+  if (lineHeight) cloneEl.style.lineHeight = lineHeight;
+  if (color) cloneEl.style.color = color;
+}
+
 function serializeResumeHtml(element: HTMLElement, pageFormat: "a4" | "letter"): string {
   // Collect all stylesheets (same-origin)
   let allCSS = "";
@@ -52,23 +94,39 @@ function serializeResumeHtml(element: HTMLElement, pageFormat: "a4" | "letter"):
   clone.removeAttribute("data-hidden-flow");
   clone.removeAttribute("id");
 
-  // Copy CSS custom properties from :root and the source element
+  // CRITICAL: Resolve CSS custom properties to computed values.
+  // React sets CSS vars via setProperty() which may not survive cloneNode+outerHTML,
+  // and headless Chrome may not resolve vars defined only in inline styles.
+  const liveA4Page = element.querySelector("[data-color-role='background']") as HTMLElement | null;
+  const cloneA4Page = clone.querySelector("[data-color-role='background']") as HTMLElement | null;
+  if (liveA4Page && cloneA4Page) {
+    computedStyleForClone(liveA4Page, cloneA4Page);
+
+    // Also explicitly set the CSS custom properties as a style block
+    const computed = getComputedStyle(liveA4Page);
+    const cssVarNames = [
+      "--resume-font-size", "--resume-line-height",
+      "--resume-margin-x", "--resume-margin-y",
+      "--resume-pad-top", "--resume-pad-bottom",
+      "--resume-section-spacing", "--resume-accent",
+      "--resume-name", "--resume-title", "--resume-headings",
+      "--resume-dates", "--resume-subtitle", "--resume-body",
+    ];
+    for (const name of cssVarNames) {
+      const val = computed.getPropertyValue(name);
+      if (val?.trim()) cloneA4Page.style.setProperty(name, val.trim());
+    }
+  }
+
+  // Copy CSS custom properties from :root as well
   const rootComputed = getComputedStyle(document.documentElement);
   const elComputed = getComputedStyle(element);
-
-  const cssVarNames = [
-    "--resume-font-size", "--resume-line-height",
-    "--resume-margin-x", "--resume-margin-y",
-    "--resume-pad-top", "--resume-pad-bottom",
-    "--resume-section-spacing", "--resume-accent",
-    "--resume-name", "--resume-title", "--resume-headings",
-    "--resume-dates", "--resume-subtitle", "--resume-body",
+  const globalVarNames = [
     "--background", "--foreground", "--primary", "--primary-foreground",
     "--secondary", "--muted", "--accent",
   ];
-
   let rootVars = "";
-  for (const name of cssVarNames) {
+  for (const name of globalVarNames) {
     const val = elComputed.getPropertyValue(name) || rootComputed.getPropertyValue(name);
     if (val?.trim()) rootVars += `  ${name}: ${val.trim()};\n`;
   }
