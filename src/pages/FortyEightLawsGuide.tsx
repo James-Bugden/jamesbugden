@@ -490,9 +490,6 @@ const FortyEightLawsGuide = () => {
     next[i] = Math.max(0, Math.min(5, val));
     return next;
   });
-  const saveSnapshot = () => {
-    setAuditHistory(prev => [...prev, { date: new Date().toISOString().slice(0, 10), scores: [...safeScores], total: auditTotal }]);
-  };
 
   const safeAlive = Array.from({ length: 5 }, (_, i) => aliveScores[i] ?? 0);
   const aliveTotal = safeAlive.reduce((a, b) => a + b, 0);
