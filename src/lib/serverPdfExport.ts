@@ -58,8 +58,13 @@ function serializeResumeHtml(
     .map((href) => `<link rel="stylesheet" href="${href}" />`)
     .join("\n");
 
-  // Clone the element
-  const clone = element.cloneNode(true) as HTMLElement;
+  // Export the actual A4 page element rather than the hidden wrapper.
+  // This keeps Browserless paginating the same box the preview uses.
+  const liveA4Page = element.matches("[data-color-role='background']")
+    ? element
+    : (element.querySelector("[data-color-role='background']") as HTMLElement | null);
+  const exportRoot = liveA4Page ?? element;
+  const clone = exportRoot.cloneNode(true) as HTMLElement;
 
   // Reset off-screen positioning — but keep everything else as-is
   clone.style.position = "relative";
@@ -73,8 +78,9 @@ function serializeResumeHtml(
   clone.removeAttribute("id");
 
   // Resolve CSS custom properties from the live DOM
-  const liveA4Page = element.querySelector("[data-color-role='background']") as HTMLElement | null;
-  const cloneA4Page = clone.querySelector("[data-color-role='background']") as HTMLElement | null;
+  const cloneA4Page = clone.matches("[data-color-role='background']")
+    ? clone
+    : (clone.querySelector("[data-color-role='background']") as HTMLElement | null);
   if (liveA4Page && cloneA4Page) {
     const computed = getComputedStyle(liveA4Page);
 
