@@ -1028,6 +1028,7 @@ export const ResumePreview = React.memo(function ResumePreview({
   onColorChange,
   onContentEdit,
   onPageCount,
+  exportMetricsRef,
 }: ResumePreviewProps) {
   const containerRef = useRef<HTMLDivElement>(null);
   const hiddenFlowRef = useRef<HTMLDivElement>(null);
