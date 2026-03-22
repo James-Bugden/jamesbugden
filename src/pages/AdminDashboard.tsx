@@ -176,6 +176,7 @@ export default function AdminDashboard() {
     fetchChecks();
     fetchResumeLeads();
     fetchEmailLeads();
+    fetchFeedback();
     fetchAccounts();
   }, []);
 
