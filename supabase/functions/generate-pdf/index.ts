@@ -1,4 +1,5 @@
 import "jsr:@supabase/functions-js/edge-runtime.d.ts";
+import { createClient } from "jsr:@supabase/supabase-js@2";
 
 const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
@@ -6,12 +7,60 @@ const corsHeaders = {
     "authorization, x-client-info, apikey, content-type, x-supabase-client-platform, x-supabase-client-platform-version, x-supabase-client-runtime, x-supabase-client-runtime-version",
 };
 
+const PDF_MONTHLY_LIMIT = 50;
+const USAGE_TYPE = "pdf_export";
+
 Deno.serve(async (req) => {
   if (req.method === "OPTIONS") {
     return new Response("ok", { headers: corsHeaders });
   }
 
   try {
+    // ── Auth check ──
+    const authHeader = req.headers.get("Authorization");
+    if (!authHeader?.startsWith("Bearer ")) {
+      return new Response(JSON.stringify({ error: "Unauthorized" }), {
+        status: 401,
+        headers: { ...corsHeaders, "Content-Type": "application/json" },
+      });
+    }
+
+    const supabase = createClient(
+      Deno.env.get("SUPABASE_URL")!,
+      Deno.env.get("SUPABASE_ANON_KEY")!,
+      { global: { headers: { Authorization: authHeader } } },
+    );
+
+    const token = authHeader.replace("Bearer ", "");
+    const { data: claimsData, error: claimsError } = await supabase.auth.getClaims(token);
+    if (claimsError || !claimsData?.claims) {
+      return new Response(JSON.stringify({ error: "Unauthorized" }), {
+        status: 401,
+        headers: { ...corsHeaders, "Content-Type": "application/json" },
+      });
+    }
+
+    const userId = claimsData.claims.sub as string;
+
+    // ── Rate limit check ──
+    const { data: countData } = await supabase.rpc("count_ai_usage_this_month", {
+      p_user_id: userId,
+      p_usage_type: USAGE_TYPE,
+    });
+
+    const currentCount = (countData as number) ?? 0;
+    if (currentCount >= PDF_MONTHLY_LIMIT) {
+      return new Response(
+        JSON.stringify({
+          error: "Monthly PDF export limit reached",
+          limit: PDF_MONTHLY_LIMIT,
+          used: currentCount,
+        }),
+        { status: 429, headers: { ...corsHeaders, "Content-Type": "application/json" } },
+      );
+    }
+
+    // ── Parse request ──
     const { html, pageFormat = "a4" } = await req.json();
 
     if (!html || typeof html !== "string") {
@@ -29,11 +78,10 @@ Deno.serve(async (req) => {
       });
     }
 
-    // Page dimensions
+    // ── Generate PDF ──
     const width = pageFormat === "letter" ? "8.5in" : "210mm";
     const height = pageFormat === "letter" ? "11in" : "297mm";
 
-    // Call Browserless.io v2 PDF API
     const browserlessUrl = `https://production-sfo.browserless.io/pdf?token=${browserlessApiKey}`;
 
     const browserlessResponse = await fetch(browserlessUrl, {
@@ -66,11 +114,18 @@ Deno.serve(async (req) => {
 
     const pdfBuffer = await browserlessResponse.arrayBuffer();
 
+    // ── Log usage (after success) ──
+    await supabase.from("ai_usage_log").insert({
+      user_id: userId,
+      usage_type: USAGE_TYPE,
+    });
+
     return new Response(new Uint8Array(pdfBuffer), {
       headers: {
         ...corsHeaders,
         "Content-Type": "application/pdf",
         "Content-Disposition": "attachment; filename=resume.pdf",
+        "X-PDF-Usage": `${currentCount + 1}/${PDF_MONTHLY_LIMIT}`,
       },
     });
   } catch (error) {
