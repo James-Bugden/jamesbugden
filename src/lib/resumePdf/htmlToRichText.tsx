@@ -73,16 +73,13 @@ export function htmlToRichText(html: string, opts: ParseOpts): React.ReactNode {
     if (/^<ol[\s>]/i.test(trimmed)) {
       const items = trimmed.match(/<li[\s>][^]*?<\/li>/gi) || [];
       items.forEach((item, idx) => {
-        const content = item.replace(/<\/?li[^>]*>/gi, "");
+        const content = item.replace(/<\/?li[^>]*>/gi, "").replace(/<\/?p[^>]*>/gi, "");
+        const inlineChildren = renderInlineContent(content, opts);
         elements.push(
-          <View key={key++} style={{ flexDirection: "row", marginBottom: 2 }}>
-            <Text style={{ fontSize: opts.fontSize, color: opts.color, lineHeight: opts.lineHeight, width: 16 }}>
-              {idx + 1}.
-            </Text>
-            <View style={{ flex: 1 }}>
-              {renderInlineHtml(content, opts)}
-            </View>
-          </View>
+          <Text key={key++} style={{ fontSize: opts.fontSize, color: opts.color, lineHeight: opts.lineHeight, marginBottom: 2 }}>
+            <Text>{idx + 1}.  </Text>
+            {inlineChildren}
+          </Text>
         );
       });
       continue;
