@@ -934,7 +934,7 @@ const ResumeBuilderSimple = () => {
 
         {mobilePreview && (
           <MobilePreviewOverlay onClose={() => setMobilePreview(false)} onDownload={() => handleDownload()} downloading={downloading}>
-            <ResumePreview data={data} customize={customize} pdfTargetId="resume-pdf-target" onEditSection={handleEditSection} onContentEdit={handleContentEdit} />
+            <ResumePreview data={data} customize={customize} pdfTargetId="resume-pdf-target" onEditSection={handleEditSection} onContentEdit={handleContentEdit} exportMetricsRef={exportMetricsRef} />
           </MobilePreviewOverlay>
         )}
       </div>
