@@ -106,17 +106,17 @@ type SearchableItem = { id: string; type: "tool" | "guide"; title: { en: string;
 
 function buildSearchable(lang: "en" | "zh"): SearchableItem[] {
   const items: SearchableItem[] = [];
-  tools.forEach(t => items.push({ id: t.id, type: "tool", title: t.title, desc: t.description, path: t.path }));
+  const seen = new Set<string>();
+  tools.forEach(t => {
+    if (seen.has(t.id)) return;
+    seen.add(t.id);
+    items.push({ id: t.id, type: "tool", title: t.title, desc: t.description, path: lang === "zh" && t.zhPath ? t.zhPath : t.path });
+  });
   journeyItems.forEach(g => {
+    if (seen.has(g.id)) return;
+    seen.add(g.id);
     const path = lang === "zh" && g.zhPath ? g.zhPath : g.enPath;
     items.push({ id: g.id, type: "guide", title: g.title, desc: g.description, path });
-  });
-  items.push({
-    id: "interview-questions",
-    type: "tool",
-    title: { en: "Interview Question Bank", zh: "面試題庫" },
-    desc: { en: "203 real interview questions with sample answers. Filter by role, difficulty, and category.", zh: "203 道真實面試題與參考答案。可依職位、難度、分類篩選。" },
-    path: lang === "zh" ? "/zh-tw/interview-questions" : "/interview-questions",
   });
   return items;
 }
