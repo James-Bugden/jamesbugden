@@ -1229,6 +1229,19 @@ export const ResumePreview = React.memo(function ResumePreview({
     onPageCount?.(pageCount);
   }, [pageCount, onPageCount]);
 
+  // Expose export metrics for the page-by-page PDF exporter
+  useEffect(() => {
+    if (exportMetricsRef) {
+      exportMetricsRef.current = {
+        sourceElement: hiddenFlowRef.current,
+        pageCount,
+        contentOriginPX,
+        usablePerPagePX: usablePerPage,
+        pageHeightPX: dims.hPX,
+        marginYPX,
+      };
+    }
+  }, [exportMetricsRef, pageCount, contentOriginPX, usablePerPage, dims.hPX, marginYPX]);
 
   /* ── Clear stale margins immediately when data/customize changes ── */
   useEffect(() => {
