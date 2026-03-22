@@ -162,7 +162,7 @@ ${allCSS}
 
 @page {
   size: ${pageW} ${pageH};
-  margin: 0;
+  margin: ${marginY}mm ${marginX}mm;
 }
 
 *, *::before, *::after {
