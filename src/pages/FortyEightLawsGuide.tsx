@@ -1,4 +1,4 @@
-import { Clock, Linkedin, ChevronDown, Menu, FileText, Shield, Target, Zap, Brain, Compass, Swords, Crown, Eye, ArrowRight, BookOpen, Check, X, Save, ChevronUp, Plus, Trash2 } from "lucide-react";
+import { Clock, Linkedin, ChevronDown, Menu, FileText, Shield, Target, Zap, Brain, Compass, Swords, Crown, Eye, ArrowRight, BookOpen, Check, X, ChevronUp, Plus, Trash2 } from "lucide-react";
 import { Link, useLocation } from "react-router-dom";
 import GoldCheckBadge from "@/components/GoldCheckBadge";
 import { InstagramIcon, ThreadsIcon } from "@/components/SocialIcons";
@@ -471,7 +471,7 @@ const FortyEightLawsGuide = () => {
   // Interactive state with cloud sync
   const [actionChecks, setActionChecks] = useGuideStorage<boolean[]>("48laws_actions_en", Array(TOTAL_ACTIONS).fill(false));
   const [auditScores, setAuditScores] = useGuideStorage<number[]>("48laws_power_audit_en", Array(7).fill(0));
-  const [auditHistory, setAuditHistory] = useGuideStorage<Array<{ date: string; scores: number[]; total: number }>>("48laws_audit_history_en", []);
+  
   const [aliveScores, setAliveScores] = useGuideStorage<number[]>("48laws_alive_audit_en", Array(5).fill(0));
   const [irrepScores, setIrrepScores] = useGuideStorage<number[]>("48laws_irreplaceable_audit_en", Array(5).fill(0));
 
@@ -490,9 +490,6 @@ const FortyEightLawsGuide = () => {
     next[i] = Math.max(0, Math.min(5, val));
     return next;
   });
-  const saveSnapshot = () => {
-    setAuditHistory(prev => [...prev, { date: new Date().toISOString().slice(0, 10), scores: [...safeScores], total: auditTotal }]);
-  };
 
   const safeAlive = Array.from({ length: 5 }, (_, i) => aliveScores[i] ?? 0);
   const aliveTotal = safeAlive.reduce((a, b) => a + b, 0);
@@ -1492,12 +1489,6 @@ const FortyEightLawsGuide = () => {
                   <p className="font-medium text-foreground">
                     Your score: <span className={`text-lg font-bold ${auditTotal >= 28 ? "text-emerald-500" : auditTotal >= 20 ? "text-gold" : auditTotal >= 12 ? "text-amber-500" : auditTotal > 0 ? "text-red-500" : "text-muted-foreground"}`}>{auditTotal}</span> / 35
                   </p>
-                  {auditTotal > 0 && (
-                    <button onClick={saveSnapshot} className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-gold/10 text-gold text-xs font-semibold hover:bg-gold/20 transition-colors">
-                      <Save className="w-3.5 h-3.5" />
-                      Save snapshot
-                    </button>
-                  )}
                 </div>
                 <div className="space-y-1">
                   <p><strong>28-35:</strong> Strong position. Focus on growth and impact.</p>
@@ -1506,19 +1497,6 @@ const FortyEightLawsGuide = () => {
                   <p><strong>Below 12:</strong> Career risk. Start with Sections 2 and 4 today.</p>
                 </div>
               </div>
-              {auditHistory.length > 0 && (
-                <div className="mt-6 pt-4 border-t border-border">
-                  <p className="font-medium text-foreground mb-2">Previous snapshots</p>
-                  <div className="space-y-2">
-                    {auditHistory.map((snap, i) => (
-                      <div key={i} className="flex items-center justify-between bg-muted/50 rounded-lg px-3 py-2 text-sm">
-                        <span className="text-muted-foreground">{snap.date}</span>
-                        <span className="font-semibold text-foreground">{snap.total}/35</span>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-              )}
               <div className="mt-6 pt-4 border-t border-border">
                 <p className="font-medium text-foreground mb-2">After scoring:</p>
                 <ol className="space-y-1 list-decimal list-inside text-muted-foreground text-sm">
