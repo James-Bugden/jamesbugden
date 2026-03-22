@@ -806,7 +806,7 @@ const FortyEightLawsGuide = () => {
             <p className="text-muted-foreground leading-relaxed mb-6">
               Reframe it: "Here's what I've delivered. Here's what I plan to deliver next. Here's the role and compensation level where I will do my best work." Every sentence focuses on what they gain, not what you deserve.
             </p>
-            <ActionStep>
+            <ActionStep checked={safeActions[9]} onToggle={() => toggleAction(9)}>
               Write your raise request right now using this frame. Three sentences. What you delivered (with numbers). What you plan to deliver next. What you need to do your best work. Don't send it yet. Refine it over a week. Then schedule the meeting.
             </ActionStep>
 
