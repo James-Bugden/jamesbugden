@@ -248,7 +248,11 @@ export default function Dashboard({ lang = "en" }: { lang?: "en" | "zh" }) {
   }, [recentItems, allSearchable]);
 
   if (isLoading) return <DashboardSkeleton />;
-  if (!isLoggedIn) return <Navigate to="/login" replace />;
+  if (!isLoggedIn) {
+    const dashPath = window.location.pathname;
+    const isZhDash = dashPath.startsWith("/zh-tw") || dashPath.startsWith("/zh");
+    return <Navigate to="/login" state={{ from: dashPath }} replace />;
+  }
 
   const firstName =
     user?.user_metadata?.full_name?.split(" ")[0] ||

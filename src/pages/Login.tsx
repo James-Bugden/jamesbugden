@@ -48,7 +48,9 @@ export default function Login() {
   useEffect(() => {
     if (isLoggedIn) {
       const defaultDash = isZhTw ? "/zh-tw/dashboard" : "/dashboard";
-      const redirectTo = location.state?.from || sessionStorage.getItem("auth_redirect") || defaultDash;
+      const homePaths = ["/", "/zh-tw", "/zh-tw/"];
+      let redirectTo = location.state?.from || sessionStorage.getItem("auth_redirect") || defaultDash;
+      if (homePaths.includes(redirectTo)) redirectTo = defaultDash;
       sessionStorage.removeItem("auth_redirect");
       navigate(redirectTo, { replace: true });
     }
