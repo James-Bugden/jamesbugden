@@ -729,7 +729,7 @@ const FortyEightLawsGuide = () => {
               Don't hoard information out of fear. People who hoard become bottlenecks. Bottlenecks get bypassed and eventually removed. Share enough to be generous. Keep enough to be essential.
             </Reversal>
             <div className="mt-6">
-              <ActionStep>
+              <ActionStep checked={safeActions[7]} onToggle={() => toggleAction(7)}>
                 Identify the one thing you do at work nobody else fully understands. Now ask: if you got sick for two weeks, would the team struggle? If yes, you have some degree of irreplaceability. If no, start building it. Pick one process, one client relationship, or one knowledge area and go deeper than anyone else on your team.
               </ActionStep>
             </div>
