@@ -926,7 +926,7 @@ const FortyEightLawsGuide = () => {
             <p className="text-muted-foreground leading-relaxed mb-6">
               Choose your lunch table, your Slack channels, and your allies with intention. Be kind to everyone. But invest your time and energy in people who build, not people who tear down.
             </p>
-            <ActionStep>
+            <ActionStep checked={safeActions[13]} onToggle={() => toggleAction(13)}>
               Audit your top 5 work relationships. Who do you spend the most time with? Are they builders or complainers? If more than two are chronic complainers, start creating distance. Sit somewhere different at lunch. Join a different Slack channel. Proximity shapes perception. Choose it deliberately.
             </ActionStep>
 
