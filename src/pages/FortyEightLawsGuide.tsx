@@ -1133,6 +1133,16 @@ const FortyEightLawsGuide = () => {
                 <p><strong>12-19:</strong> Exposed. Pick your weakest area. Focus there for the next 90 days.</p>
                 <p><strong>Below 12:</strong> Career risk. Start with Sections 2 and 4 today.</p>
               </div>
+              <div className="mt-6 pt-4 border-t border-border">
+                <p className="font-medium text-foreground mb-2">After scoring:</p>
+                <ol className="space-y-1 list-decimal list-inside text-muted-foreground text-sm">
+                  <li>Circle your lowest score.</li>
+                  <li>Re-read the section for that area.</li>
+                  <li>Pick one action step from that section.</li>
+                  <li>Do it this week.</li>
+                  <li>Re-score in 90 days.</li>
+                </ol>
+              </div>
             </DiagramBox>
 
             <DiagramBox title="90-Day Power Audit Cycle">
