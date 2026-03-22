@@ -225,6 +225,38 @@ const FortyEightLawsGuide = () => {
       <GuideSignInBanner lang="en" />
       <TableOfContents />
 
+      {/* ── How to Use This Guide ── */}
+      <section className="py-10 md:py-14 px-5 md:px-6 bg-muted/30 border-b border-border">
+        <div className="container mx-auto max-w-3xl">
+          <h2 className="font-heading text-xl md:text-2xl text-foreground mb-6">How to Use This Guide</h2>
+          <div className="overflow-x-auto mb-6">
+            <table className="w-full text-sm border-collapse">
+              <thead>
+                <tr><th className="text-left p-3 border-b border-border text-foreground" colSpan={2}>Where are you right now?</th></tr>
+              </thead>
+              <tbody>
+                {[
+                  { situation: "\"I feel lost. I don't know what career to pursue.\"", start: "Find Your Direction First", extra: <> + the <Link to="/ikigai-guide" className="text-gold hover:underline">Ikigai Career Guide</Link></> },
+                  { situation: "\"My boss takes credit for my work.\"", start: "Manage Up", extra: null },
+                  { situation: "\"I got passed over for a promotion.\"", start: "Build Your Reputation", extra: <> + Get What You Want</> },
+                  { situation: "\"Office politics are destroying me.\"", start: "Survive Office Politics", extra: null },
+                  { situation: "\"I don't know who to trust at work.\"", start: "Survive Office Politics", extra: null },
+                  { situation: "\"I want to ask for a raise but don't know when.\"", start: "Get What You Want", extra: null },
+                  { situation: "\"I feel stuck and invisible.\"", start: "Build Your Reputation", extra: null },
+                  { situation: "\"I need a full career reset.\"", start: "Find Your Direction First", extra: <> + the <Link to="/ikigai-guide" className="text-gold hover:underline">Ikigai Career Guide</Link></> },
+                  { situation: "\"Give me the cheat sheet.\"", start: "All 48 Laws: Quick Reference", extra: null },
+                ].map((row, i) => (
+                  <tr key={i} className="border-b border-border/50">
+                    <td className="p-3 text-muted-foreground">{row.situation}</td>
+                    <td className="p-3 text-foreground font-medium">→ Start with: {row.start}{row.extra}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
       {/* ── Introduction ── */}
       <section id="intro" className="py-14 md:py-20 px-5 md:px-6 bg-card border-b border-border scroll-mt-24">
         <div className="container mx-auto max-w-3xl">
@@ -254,11 +286,28 @@ const FortyEightLawsGuide = () => {
             </p>
           </div>
 
+          <div className="bg-card border border-border rounded-xl p-5 md:p-6 mb-6">
+            <h3 className="font-heading text-lg text-gold mb-4">Guide structure at a glance</h3>
+            <ol className="space-y-1 list-decimal list-inside text-foreground text-sm">
+              <li>Introduction</li>
+              <li>Find Your Direction First</li>
+              <li>Manage Up</li>
+              <li>Build Your Reputation</li>
+              <li>Become Irreplaceable</li>
+              <li>Get What You Want</li>
+              <li>Survive Office Politics</li>
+              <li>Play the Long Game</li>
+              <li>All 48 Laws: Quick Reference</li>
+              <li>Your Power Audit Tracker</li>
+              <li>Resources</li>
+            </ol>
+          </div>
+
           <div className="bg-card border border-border rounded-xl p-5 md:p-6">
             <h3 className="font-heading text-lg text-gold mb-4">How this guide connects to the others</h3>
             <ul className="space-y-2">
               {[
-                { label: "Career direction", link: "/ikigai-guide", text: "Ikigai Career Guide" },
+                { label: "Career direction", link: "/ikigai-guide", text: "Ikigai Career Guide and Pivot Guide" },
                 { label: "Office politics", link: "/office-politics-guide", text: "Office Politics Guide (full framework)" },
                 { label: "Promotions", link: "/career-game-guide", text: "Career Game / Promotion Playbook" },
                 { label: "Interviews", link: "/interview-preparation-guide", text: "Interview Playbook" },
