@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { lovable } from "@/integrations/lovable/index";
@@ -15,14 +15,17 @@ const AdminLogin = () => {
   const [googleLoading, setGoogleLoading] = useState(false);
   const [mode, setMode] = useState<"login" | "forgot">("login");
   const [resetSent, setResetSent] = useState(false);
+  const [checkingSession, setCheckingSession] = useState(true);
   const navigate = useNavigate();
+  const checkedRef = useRef(false);
 
   const checkAdminAndRedirect = async () => {
     const { data: { user } } = await supabase.auth.getUser();
     if (user) {
       const { data: isAdmin } = await supabase.rpc("is_admin", { _user_id: user.id });
       if (isAdmin) {
-        navigate("/admin");
+        sessionStorage.removeItem("auth_redirect");
+        navigate("/admin", { replace: true });
         return true;
       } else {
         toast({ title: "Access denied", description: "You are not an admin.", variant: "destructive" });
@@ -31,6 +34,25 @@ const AdminLogin = () => {
     }
     return false;
   };
+
+  // Always check for existing session on mount (handles OAuth return + already-logged-in)
+  useEffect(() => {
+    if (checkedRef.current) return;
+    checkedRef.current = true;
+
+    const checkExistingSession = async () => {
+      try {
+        const { data: { session } } = await supabase.auth.getSession();
+        if (session?.user) {
+          await checkAdminAndRedirect();
+        }
+      } finally {
+        setCheckingSession(false);
+      }
+    };
+
+    checkExistingSession();
+  }, []);
 
   const handleEmailLogin = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -74,7 +96,7 @@ const AdminLogin = () => {
     try {
       sessionStorage.setItem("auth_redirect", "/admin");
       const { error } = await lovable.auth.signInWithOAuth("google", {
-        redirect_uri: window.location.origin,
+        redirect_uri: `${window.location.origin}/admin/login`,
       });
       if (error) {
         clearTimeout(timeout);
@@ -87,20 +109,13 @@ const AdminLogin = () => {
     }
   };
 
-  // Handle redirect back from OAuth — if already logged in, check admin and go
-  useEffect(() => {
-    const handleOAuthReturn = async () => {
-      const { data: { session } } = await supabase.auth.getSession();
-      if (session?.user) {
-        const redirected = await checkAdminAndRedirect();
-        if (!redirected) setGoogleLoading(false);
-      }
-    };
-    // Only run if we have an auth_redirect pending (just came back from OAuth)
-    if (sessionStorage.getItem("auth_redirect") === "/admin") {
-      handleOAuthReturn();
-    }
-  }, []);
+  if (checkingSession) {
+    return (
+      <div className="min-h-screen bg-background flex items-center justify-center">
+        <Loader2 className="h-8 w-8 animate-spin text-executive-green" />
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen bg-background flex items-center justify-center px-4">
