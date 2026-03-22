@@ -599,37 +599,12 @@ const InterviewPrepGuide = () => {
         </div>
       </section>
 
-      {/* Need More Help */}
-      <section className="py-12 md:py-16 px-5 md:px-6 bg-card border-t border-border">
-        <div className="container mx-auto max-w-3xl">
-          <h2 className="font-heading text-2xl md:text-3xl text-foreground mb-6 text-center">
-            Need More Help?
-          </h2>
-          
-          <div className="space-y-6 mb-8">
-            <div className="bg-background border border-border rounded-lg p-6">
-              <h3 className="font-semibold text-foreground mb-2">Resume Reviews</h3>
-              <p className="text-muted-foreground">
-                I review 5 resumes per month for free using an exhaustive report. <a href="https://tally.so/r/Pd1jlB" target="_blank" rel="noopener noreferrer" className="text-gold hover:underline">Join the waitlist here.</a>
-              </p>
-            </div>
-
-            <div className="bg-background border border-border rounded-lg p-6">
-              <h3 className="font-semibold text-foreground mb-2">Full Career Package</h3>
-              <p className="text-muted-foreground">
-                If you want the complete package - resume, LinkedIn optimization, interview preparation, salary negotiation coaching - I'm testing this product at a discounted rate right now.
-              </p>
-            </div>
-          </div>
-
-          <div className="text-center">
-            <p className="text-foreground mb-4">
-              Email <a href="mailto:james@jamesbugden.com" className="text-gold hover:underline">james@jamesbugden.com</a> or message me on LinkedIn or Threads to find out more.
-            </p>
-            <p className="text-sm text-muted-foreground italic">
-              This guide is based on Sam Owens' "I Hate Job Interviews" methodology. Support the author - his book is the best resource on interviewing I've read.
-            </p>
-          </div>
+      {/* Book Attribution */}
+      <section className="py-8 px-5 md:px-6 bg-card border-t border-border">
+        <div className="container mx-auto max-w-3xl text-center">
+          <p className="text-sm text-muted-foreground italic">
+            This guide is based on Sam Owens' "I Hate Job Interviews" methodology. Support the author - his book is the best resource on interviewing I've read.
+          </p>
         </div>
       </section>
 

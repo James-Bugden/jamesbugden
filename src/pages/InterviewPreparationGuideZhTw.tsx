@@ -1146,40 +1146,15 @@ const InterviewPreparationGuideZhTw = () => {
         </div>
       </section>
 
-      {/* Need More Help */}
-      <section className="py-12 md:py-16 px-5 md:px-6 bg-card border-t border-border">
-        <div className="container mx-auto max-w-3xl">
-          <h2 className="font-heading text-2xl md:text-3xl text-foreground mb-6 text-center">
-            想要個人化的面試準備協助？
-          </h2>
-          
-          <div className="space-y-6 mb-8">
-            <div className="bg-background border border-border rounded-lg p-6">
-              <h3 className="font-semibold text-foreground mb-2">履歷審查</h3>
-              <p className="text-muted-foreground">
-                我每月免費審查 5 份履歷，使用詳盡的報告。<a href="https://tally.so/r/Pd1jlB" target="_blank" rel="noopener noreferrer" className="text-gold hover:underline">在這裡加入等待名單。</a>
-              </p>
-            </div>
-
-            <div className="bg-background border border-border rounded-lg p-6">
-              <h3 className="font-semibold text-foreground mb-2">一對一輔導</h3>
-              <p className="text-muted-foreground">
-                我為針對高薪職位的專業人士提供一對一輔導和履歷審查。
-              </p>
-            </div>
-          </div>
-
-          <div className="text-center">
-            <p className="text-foreground mb-4">
-              發郵件給我：<a href="mailto:james@jamesbugden.com" className="text-gold hover:underline">james@jamesbugden.com</a> 了解更多資訊
-            </p>
-            <p className="text-sm text-muted-foreground italic">
-              本指南基於 Sam Owens 的《我討厭求職面試》方法論，我根據作為資深招募專員的招募經驗進行了改編。請支持作者並購買他的書以了解其框架背後的完整背景。這是我讀過最好的面試準備指南。
-            </p>
-            <p className="text-xs text-muted-foreground mt-2">
-              來源：Owens, Sam. "I Hate Job Interviews: Stop Stressing, Start Performing, Get the Job You Want." HarperCollins Leadership, 2024.
-            </p>
-          </div>
+      {/* Book Attribution */}
+      <section className="py-8 px-5 md:px-6 bg-card border-t border-border">
+        <div className="container mx-auto max-w-3xl text-center">
+          <p className="text-sm text-muted-foreground italic">
+            本指南基於 Sam Owens 的《我討厭求職面試》方法論，我根據作為資深招募專員的招募經驗進行了改編。請支持作者並購買他的書以了解其框架背後的完整背景。這是我讀過最好的面試準備指南。
+          </p>
+          <p className="text-xs text-muted-foreground mt-2">
+            來源：Owens, Sam. "I Hate Job Interviews: Stop Stressing, Start Performing, Get the Job You Want." HarperCollins Leadership, 2024.
+          </p>
         </div>
       </section>
 
