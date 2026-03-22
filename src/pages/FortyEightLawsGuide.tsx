@@ -1497,19 +1497,6 @@ const FortyEightLawsGuide = () => {
                   <p><strong>Below 12:</strong> Career risk. Start with Sections 2 and 4 today.</p>
                 </div>
               </div>
-              {auditHistory.length > 0 && (
-                <div className="mt-6 pt-4 border-t border-border">
-                  <p className="font-medium text-foreground mb-2">Previous snapshots</p>
-                  <div className="space-y-2">
-                    {auditHistory.map((snap, i) => (
-                      <div key={i} className="flex items-center justify-between bg-muted/50 rounded-lg px-3 py-2 text-sm">
-                        <span className="text-muted-foreground">{snap.date}</span>
-                        <span className="font-semibold text-foreground">{snap.total}/35</span>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-              )}
               <div className="mt-6 pt-4 border-t border-border">
                 <p className="font-medium text-foreground mb-2">After scoring:</p>
                 <ol className="space-y-1 list-decimal list-inside text-muted-foreground text-sm">
