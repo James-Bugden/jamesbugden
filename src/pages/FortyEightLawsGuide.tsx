@@ -1328,6 +1328,16 @@ const FortyEightLawsGuide = () => {
         </section>
       </main>
 
+      {/* Action step progress + save banner */}
+      {completedActions > 0 && (
+        <div className="py-6 px-5 md:px-6 bg-muted/30 border-t border-border">
+          <div className="container mx-auto max-w-3xl">
+            <p className="text-sm text-muted-foreground">{completedActions}/{TOTAL_ACTIONS} action steps completed</p>
+            {showSaveBanner && <ActionSaveBanner onDismiss={() => setBannerDismissed(true)} />}
+          </div>
+        </div>
+      )}
+
       <GuideBottomCTA lang="en" />
 
       {/* Footer */}
