@@ -830,7 +830,7 @@ const FortyEightLawsGuide = () => {
               <p className="mt-4 pt-4 border-t border-border text-muted-foreground">Use this at review time. Don't rely on memory. Your manager won't remember. Your brag doc will.</p>
             </DiagramBox>
 
-            <ActionStep>
+            <ActionStep checked={safeActions[10]} onToggle={() => toggleAction(10)}>
               Set a recurring 5-minute calendar event every Friday at 4 PM. Title it "Brag Doc." Fill in the four fields above. Do this for 12 weeks. At your next review, you'll have 12 weeks of documented wins ready to go while everyone else is trying to remember what they did.
             </ActionStep>
 
