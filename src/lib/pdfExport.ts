@@ -1,5 +1,5 @@
 import { toast } from "@/hooks/use-toast";
-import { toJpeg, toPng } from "html-to-image";
+import { toPng } from "html-to-image";
 import { jsPDF } from "jspdf";
 
 type PageFormat = "a4" | "letter";
@@ -19,7 +19,6 @@ let fontCSSCache: string | null = null;
 async function getFontEmbedCSS(): Promise<string | undefined> {
   if (fontCSSCache) return fontCSSCache;
   try {
-    // Find all Google Fonts <link> tags and fetch their CSS
     const links = Array.from(document.querySelectorAll('link[rel="stylesheet"]'))
       .filter((l) => (l as HTMLLinkElement).href.includes("fonts.googleapis.com"));
     if (!links.length) return undefined;
@@ -42,57 +41,6 @@ async function getFontEmbedCSS(): Promise<string | undefined> {
   }
 }
 
-/**
- * Capture a DOM element as a JPEG data-url using html-to-image.
- * Clones the element off-screen at 1:1 scale so transforms don't affect output.
- * Pre-fetches Google Fonts CSS to avoid cross-origin SecurityError.
- */
-async function captureElement(el: HTMLElement, pixelRatio: number, useJpeg = true): Promise<string> {
-  await document.fonts.ready;
-
-  const fontEmbedCSS = await getFontEmbedCSS();
-
-  // Clone element off-screen at native size, preserving inner transforms (e.g. translateY for pagination)
-  const clone = el.cloneNode(true) as HTMLElement;
-  // Only strip scale transforms on the root — preserve translateY on children
-  clone.style.transform = "none";
-  clone.style.position = "absolute";
-  clone.style.left = "-9999px";
-  clone.style.top = "0";
-  clone.style.zIndex = "-1";
-  // Use explicit dimensions from inline styles if available, fall back to scrollWidth
-  clone.style.width = el.style.width || `${el.scrollWidth}px`;
-  clone.style.height = el.style.height || `${el.scrollHeight}px`;
-  // Strip decorative styles that shouldn't appear in PDF
-  clone.style.boxShadow = "none";
-  clone.style.borderRadius = "0";
-  clone.classList.remove("shadow-2xl", "rounded-sm");
-  document.body.appendChild(clone);
-
-  try {
-    const opts = {
-      pixelRatio,
-      cacheBust: true,
-      skipAutoScale: true,
-      fontEmbedCSS,
-      // Filter out cross-origin stylesheets and hover-only UI elements
-      filter: (node: HTMLElement) => {
-        if (node.tagName === "LINK" && (node as HTMLLinkElement).href?.includes("fonts.googleapis.com")) {
-          return false; // skip — we provide CSS via fontEmbedCSS
-        }
-        return true;
-      },
-    };
-
-    if (useJpeg) {
-      return await toJpeg(clone, { ...opts, quality: 0.85 });
-    }
-    return await toPng(clone, opts);
-  } finally {
-    document.body.removeChild(clone);
-  }
-}
-
 /* ───────────────────────────────────────────────────────────────
    Legacy API — used by cover letter builder
    ─────────────────────────────────────────────────────────────── */
@@ -112,11 +60,40 @@ export async function exportToPdf({ elementId, fileName, pageFormat = "a4" }: Ex
 
   try {
     const ratio = isMobile() ? 1.5 : 2;
-    const dataUrl = await captureElement(el, ratio);
+    await document.fonts.ready;
+    const fontEmbedCSS = await getFontEmbedCSS();
+
+    const clone = el.cloneNode(true) as HTMLElement;
+    clone.style.transform = "none";
+    clone.style.position = "absolute";
+    clone.style.left = "-9999px";
+    clone.style.top = "0";
+    clone.style.zIndex = "-1";
+    clone.style.width = el.style.width || `${el.scrollWidth}px`;
+    clone.style.height = el.style.height || `${el.scrollHeight}px`;
+    clone.style.boxShadow = "none";
+    clone.style.borderRadius = "0";
+    document.body.appendChild(clone);
+
+    let dataUrl: string;
+    try {
+      dataUrl = await toPng(clone, {
+        pixelRatio: ratio,
+        cacheBust: true,
+        skipAutoScale: true,
+        fontEmbedCSS,
+        filter: (node: HTMLElement) => {
+          if (node.tagName === "LINK" && (node as HTMLLinkElement).href?.includes("fonts.googleapis.com")) return false;
+          return true;
+        },
+      });
+    } finally {
+      document.body.removeChild(clone);
+    }
 
     const { wMM, hMM } = PAGE_DIMS[pageFormat];
     const pdf = new jsPDF({ orientation: "portrait", unit: "mm", format: [wMM, hMM] });
-    pdf.addImage(dataUrl, "JPEG", 0, 0, wMM, hMM);
+    pdf.addImage(dataUrl, "PNG", 0, 0, wMM, hMM);
 
     const safeName = fileName.endsWith(".pdf") ? fileName : `${fileName}.pdf`;
     pdf.save(safeName);
@@ -128,21 +105,51 @@ export async function exportToPdf({ elementId, fileName, pageFormat = "a4" }: Ex
 }
 
 /* ───────────────────────────────────────────────────────────────
-   Resume page-by-page export (per-element capture)
+   Resume export: capture hidden flow → slice into pages via Canvas
    ─────────────────────────────────────────────────────────────── */
 
-interface ResumeExportOptions {
-  pageElements: HTMLElement[];
+export interface ResumeExportConfig {
+  /** The hidden measurement div (flat, no transforms) */
+  sourceElement: HTMLElement;
+  pageCount: number;
+  contentOriginPX: number;
+  usablePerPagePX: number;
+  pageHeightPX: number;
+  marginYPX: number;
   fileName: string;
   pageFormat: PageFormat;
+  /** Footer options */
+  footerName?: string;
+  footerEmail?: string;
+  showPageNumbers?: boolean;
+  bodyFont?: string;
+  footerColor?: string;
+  footerFontSizePt?: number;
+  marginXPX?: number;
+  backgroundColor?: string;
 }
 
-export async function exportResumePages({
-  pageElements,
-  fileName,
-  pageFormat = "a4",
-}: ResumeExportOptions) {
-  if (!pageElements.length) {
+export async function exportResumePages(config: ResumeExportConfig) {
+  const {
+    sourceElement,
+    pageCount,
+    contentOriginPX,
+    usablePerPagePX,
+    pageHeightPX,
+    marginYPX,
+    fileName,
+    pageFormat = "a4",
+    footerName,
+    footerEmail,
+    showPageNumbers,
+    bodyFont,
+    footerColor = "#6B7280",
+    footerFontSizePt = 8,
+    marginXPX = 60,
+    backgroundColor = "#ffffff",
+  } = config;
+
+  if (!sourceElement || pageCount < 1) {
     toast({ title: "Export failed", description: "No pages to export.", variant: "destructive" });
     return;
   }
@@ -151,15 +158,96 @@ export async function exportResumePages({
     await document.fonts.ready;
 
     const ratio = isMobile() ? 1.5 : 2;
-    const { wMM, hMM } = PAGE_DIMS[pageFormat];
+    const fontEmbedCSS = await getFontEmbedCSS();
 
+    // 1. Capture the entire hidden flow as one tall PNG
+    const tallDataUrl = await toPng(sourceElement, {
+      pixelRatio: ratio,
+      cacheBust: true,
+      skipAutoScale: true,
+      fontEmbedCSS,
+      filter: (node: HTMLElement) => {
+        if (node.tagName === "LINK" && (node as HTMLLinkElement).href?.includes("fonts.googleapis.com")) return false;
+        return true;
+      },
+    });
+
+    // 2. Load into an Image
+    const img = await new Promise<HTMLImageElement>((resolve, reject) => {
+      const image = new Image();
+      image.onload = () => resolve(image);
+      image.onerror = reject;
+      image.src = tallDataUrl;
+    });
+
+    // The image is scaled by `ratio`, so all pixel calculations must be scaled too
+    const scaledPageW = Math.round(sourceElement.scrollWidth * ratio);
+    const scaledPageH = Math.round(pageHeightPX * ratio);
+    const scaledContentOrigin = Math.round(contentOriginPX * ratio);
+    const scaledUsable = Math.round(usablePerPagePX * ratio);
+    const scaledMarginY = Math.round(marginYPX * ratio);
+    const scaledMarginX = Math.round(marginXPX * ratio);
+
+    const { wMM, hMM } = PAGE_DIMS[pageFormat];
     const pdf = new jsPDF({ orientation: "portrait", unit: "mm", format: [wMM, hMM] });
 
-    for (let i = 0; i < pageElements.length; i++) {
+    const hasFooter = !!(footerName || footerEmail || showPageNumbers);
+    const scaledFooterFontSize = Math.round(footerFontSizePt * ratio * 1.33); // pt to px conversion
+
+    for (let i = 0; i < pageCount; i++) {
       if (i > 0) pdf.addPage([wMM, hMM]);
 
-      const dataUrl = await captureElement(pageElements[i], ratio, true);
-      pdf.addImage(dataUrl, "JPEG", 0, 0, wMM, hMM);
+      // Create a page-sized canvas
+      const canvas = document.createElement("canvas");
+      canvas.width = scaledPageW;
+      canvas.height = scaledPageH;
+      const ctx = canvas.getContext("2d")!;
+
+      // Fill background
+      ctx.fillStyle = backgroundColor;
+      ctx.fillRect(0, 0, scaledPageW, scaledPageH);
+
+      // Calculate the slice region from the tall image
+      const sliceY = scaledContentOrigin + i * scaledUsable;
+      const sliceH = Math.min(scaledUsable, img.height - sliceY);
+
+      if (sliceH > 0) {
+        // Draw the content slice into the content area of the page
+        ctx.drawImage(
+          img,
+          0, sliceY, scaledPageW, sliceH,           // source rect
+          0, scaledContentOrigin, scaledPageW, sliceH // dest rect
+        );
+      }
+
+      // Draw footer
+      if (hasFooter) {
+        const footerY = scaledPageH - scaledMarginY;
+        ctx.font = `${scaledFooterFontSize}px ${bodyFont || "sans-serif"}`;
+        ctx.fillStyle = footerColor;
+        ctx.textBaseline = "bottom";
+
+        // Left: name
+        if (footerName) {
+          ctx.textAlign = "left";
+          ctx.fillText(footerName, scaledMarginX, footerY);
+        }
+
+        // Right: email · Page X of Y
+        const rightParts = [
+          footerEmail || "",
+          showPageNumbers ? `Page ${i + 1} of ${pageCount}` : "",
+        ].filter(Boolean).join(" · ");
+
+        if (rightParts) {
+          ctx.textAlign = "right";
+          ctx.fillText(rightParts, scaledPageW - scaledMarginX, footerY);
+        }
+      }
+
+      // Add canvas to PDF
+      const pageDataUrl = canvas.toDataURL("image/jpeg", 0.92);
+      pdf.addImage(pageDataUrl, "JPEG", 0, 0, wMM, hMM);
     }
 
     const safeName = fileName.endsWith(".pdf") ? fileName : `${fileName}.pdf`;

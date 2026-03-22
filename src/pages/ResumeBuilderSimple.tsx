@@ -657,16 +657,29 @@ const ResumeBuilderSimple = () => {
   const handleDownload = async (filename?: string) => {
     if (downloading) return;
     const metrics = exportMetricsRef.current;
-    if (!metrics?.pageElements?.length) {
+    if (!metrics?.sourceElement || !metrics.pageCount) {
       toast({ title: "Export failed", description: "Preview not ready yet. Please wait a moment and try again.", variant: "destructive" });
       return;
     }
     setDownloading(true);
     const fn = filename || (data.personalDetails.fullName || "Resume").replace(/\s+/g, "_") + "_Resume";
     await exportResumePages({
-      pageElements: metrics.pageElements,
+      sourceElement: metrics.sourceElement,
+      pageCount: metrics.pageCount,
+      contentOriginPX: metrics.contentOriginPX,
+      usablePerPagePX: metrics.usablePerPagePX,
+      pageHeightPX: metrics.pageHeightPX,
+      marginYPX: metrics.marginYPX,
+      marginXPX: metrics.marginXPX,
       fileName: fn,
       pageFormat: (customize.pageFormat || "a4") as "a4" | "letter",
+      footerName: metrics.footerName,
+      footerEmail: metrics.footerEmail,
+      showPageNumbers: metrics.showPageNumbers,
+      bodyFont: metrics.bodyFont,
+      footerColor: metrics.footerColor,
+      footerFontSizePt: metrics.footerFontSizePt,
+      backgroundColor: metrics.backgroundColor,
     });
     setDownloading(false);
   };
