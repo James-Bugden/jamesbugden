@@ -57,7 +57,7 @@ export function htmlToRichText(html: string, opts: ParseOpts): React.ReactNode {
       const items = trimmed.match(/<li[\s>][^]*?<\/li>/gi) || [];
       for (const item of items) {
         const content = item.replace(/<\/?li[^>]*>/gi, "").replace(/<\/?p[^>]*>/gi, "");
-        const inlineChildren = renderInlineContent(content, opts);
+        const inlineChildren = renderInlineHtml(content, opts);
         // Use a single <Text> with nested <Text> children so bullet + text stay on one line
         elements.push(
           <Text key={key++} style={{ fontSize: opts.fontSize, color: opts.color, lineHeight: opts.lineHeight, marginBottom: 2 }}>
@@ -74,7 +74,7 @@ export function htmlToRichText(html: string, opts: ParseOpts): React.ReactNode {
       const items = trimmed.match(/<li[\s>][^]*?<\/li>/gi) || [];
       items.forEach((item, idx) => {
         const content = item.replace(/<\/?li[^>]*>/gi, "").replace(/<\/?p[^>]*>/gi, "");
-        const inlineChildren = renderInlineContent(content, opts);
+        const inlineChildren = renderInlineHtml(content, opts);
         elements.push(
           <Text key={key++} style={{ fontSize: opts.fontSize, color: opts.color, lineHeight: opts.lineHeight, marginBottom: 2 }}>
             <Text>{idx + 1}.  </Text>
@@ -88,7 +88,7 @@ export function htmlToRichText(html: string, opts: ParseOpts): React.ReactNode {
     // Handle bare <li> (not inside ul/ol)
     if (/^<li[\s>]/i.test(trimmed)) {
       const content = trimmed.replace(/<\/?li[^>]*>/gi, "").replace(/<\/?p[^>]*>/gi, "");
-      const inlineChildren = renderInlineContent(content, opts);
+      const inlineChildren = renderInlineHtml(content, opts);
       elements.push(
         <Text key={key++} style={{ fontSize: opts.fontSize, color: opts.color, lineHeight: opts.lineHeight, marginBottom: 2 }}>
           <Text>{opts.bulletChar || "•"}  </Text>
@@ -107,7 +107,7 @@ export function htmlToRichText(html: string, opts: ParseOpts): React.ReactNode {
     // Handle <p>...</p> or any other block
     const inner = trimmed.replace(/<\/?p[^>]*>/gi, "").replace(/<br\s*\/?>/gi, "\n");
     if (inner.trim()) {
-      const inlineChildren = renderInlineContent(inner, opts);
+      const inlineChildren = renderInlineHtml(inner, opts);
       elements.push(
         <Text key={key++} style={{ fontSize: opts.fontSize, color: opts.color, lineHeight: opts.lineHeight, marginBottom: 2 }}>
           {inlineChildren}
