@@ -94,8 +94,8 @@ const guides: Guide[] = [
   // Interview Question Bank
   {
     icon: MessageSquare,
-    title: "Interview Question Database: 203 Real Questions (Beta)",
-    description: "Search and filter 203 real interview questions by category, difficulty, and career level — in English and Traditional Chinese",
+    title: "Interview Question Database: 203 Real Questions with Sample Answers (Beta)",
+    description: "203 real interview questions with sample answers to prepare for your next interview — searchable by category, difficulty, and career level",
     href: "/interview-questions",
     category: "Interview Prep",
   },
