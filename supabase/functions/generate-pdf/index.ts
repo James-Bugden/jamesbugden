@@ -79,8 +79,7 @@ Deno.serve(async (req) => {
     }
 
     // ── Generate PDF ──
-    const width = pageFormat === "letter" ? "8.5in" : "210mm";
-    const height = pageFormat === "letter" ? "11in" : "297mm";
+    // PDF size/margins are now controlled by CSS @page rules in the HTML
 
     const browserlessUrl = `https://production-sfo.browserless.io/pdf?token=${browserlessApiKey}`;
 
@@ -91,10 +90,7 @@ Deno.serve(async (req) => {
         html,
         options: {
           printBackground: true,
-          preferCSSPageSize: false,
-          width,
-          height,
-          margin: { top: "0", right: "0", bottom: "0", left: "0" },
+          preferCSSPageSize: true,
         },
         gotoOptions: {
           waitUntil: "networkidle0",
