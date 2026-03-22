@@ -542,11 +542,11 @@ export function ResumePdfDocument({ data, customize }: Props) {
               color: nameColor,
               textTransform: "uppercase",
               letterSpacing: 1.5,
-              marginBottom: 2,
+              marginBottom: 4,
             }}>{pd.fullName}</Text>
           ) : null}
           {pd.professionalTitle ? (
-            <Text style={{ fontSize: titleFontSize, color: titleColor, marginBottom: 4 }}>{pd.professionalTitle}</Text>
+            <Text style={{ fontSize: titleFontSize, color: titleColor, marginBottom: 6 }}>{pd.professionalTitle}</Text>
           ) : null}
           {contactParts.length > 0 && (
             <Text style={{ fontSize: contactFontSize, color: datesColor }}>

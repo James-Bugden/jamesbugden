@@ -56,16 +56,14 @@ export function htmlToRichText(html: string, opts: ParseOpts): React.ReactNode {
     if (/^<ul[\s>]/i.test(trimmed)) {
       const items = trimmed.match(/<li[\s>][^]*?<\/li>/gi) || [];
       for (const item of items) {
-        const content = item.replace(/<\/?li[^>]*>/gi, "");
+        const content = item.replace(/<\/?li[^>]*>/gi, "").replace(/<\/?p[^>]*>/gi, "");
+        const inlineChildren = renderInlineHtml(content, opts);
+        // Use a single <Text> with nested <Text> children so bullet + text stay on one line
         elements.push(
-          <View key={key++} style={{ flexDirection: "row", marginBottom: 2 }}>
-            <Text style={{ fontSize: opts.fontSize, color: opts.color, lineHeight: opts.lineHeight, width: 12 }}>
-              {opts.bulletChar || "•"}
-            </Text>
-            <View style={{ flex: 1 }}>
-              {renderInlineHtml(content, opts)}
-            </View>
-          </View>
+          <Text key={key++} style={{ fontSize: opts.fontSize, color: opts.color, lineHeight: opts.lineHeight, marginBottom: 2 }}>
+            <Text style={{ width: 12 }}>{opts.bulletChar || "•"}  </Text>
+            {inlineChildren}
+          </Text>
         );
       }
       continue;
@@ -75,16 +73,13 @@ export function htmlToRichText(html: string, opts: ParseOpts): React.ReactNode {
     if (/^<ol[\s>]/i.test(trimmed)) {
       const items = trimmed.match(/<li[\s>][^]*?<\/li>/gi) || [];
       items.forEach((item, idx) => {
-        const content = item.replace(/<\/?li[^>]*>/gi, "");
+        const content = item.replace(/<\/?li[^>]*>/gi, "").replace(/<\/?p[^>]*>/gi, "");
+        const inlineChildren = renderInlineHtml(content, opts);
         elements.push(
-          <View key={key++} style={{ flexDirection: "row", marginBottom: 2 }}>
-            <Text style={{ fontSize: opts.fontSize, color: opts.color, lineHeight: opts.lineHeight, width: 16 }}>
-              {idx + 1}.
-            </Text>
-            <View style={{ flex: 1 }}>
-              {renderInlineHtml(content, opts)}
-            </View>
-          </View>
+          <Text key={key++} style={{ fontSize: opts.fontSize, color: opts.color, lineHeight: opts.lineHeight, marginBottom: 2 }}>
+            <Text>{idx + 1}.  </Text>
+            {inlineChildren}
+          </Text>
         );
       });
       continue;
@@ -92,16 +87,13 @@ export function htmlToRichText(html: string, opts: ParseOpts): React.ReactNode {
 
     // Handle bare <li> (not inside ul/ol)
     if (/^<li[\s>]/i.test(trimmed)) {
-      const content = trimmed.replace(/<\/?li[^>]*>/gi, "");
+      const content = trimmed.replace(/<\/?li[^>]*>/gi, "").replace(/<\/?p[^>]*>/gi, "");
+      const inlineChildren = renderInlineHtml(content, opts);
       elements.push(
-        <View key={key++} style={{ flexDirection: "row", marginBottom: 2 }}>
-          <Text style={{ fontSize: opts.fontSize, color: opts.color, lineHeight: opts.lineHeight, width: 12 }}>
-            {opts.bulletChar || "•"}
-          </Text>
-          <View style={{ flex: 1 }}>
-            {renderInlineHtml(content, opts)}
-          </View>
-        </View>
+        <Text key={key++} style={{ fontSize: opts.fontSize, color: opts.color, lineHeight: opts.lineHeight, marginBottom: 2 }}>
+          <Text>{opts.bulletChar || "•"}  </Text>
+          {inlineChildren}
+        </Text>
       );
       continue;
     }
@@ -115,10 +107,11 @@ export function htmlToRichText(html: string, opts: ParseOpts): React.ReactNode {
     // Handle <p>...</p> or any other block
     const inner = trimmed.replace(/<\/?p[^>]*>/gi, "").replace(/<br\s*\/?>/gi, "\n");
     if (inner.trim()) {
+      const inlineChildren = renderInlineHtml(inner, opts);
       elements.push(
-        <View key={key++} style={{ marginBottom: 2 }}>
-          {renderInlineHtml(inner, opts)}
-        </View>
+        <Text key={key++} style={{ fontSize: opts.fontSize, color: opts.color, lineHeight: opts.lineHeight, marginBottom: 2 }}>
+          {inlineChildren}
+        </Text>
       );
     }
   }
@@ -126,43 +119,41 @@ export function htmlToRichText(html: string, opts: ParseOpts): React.ReactNode {
   return <>{elements}</>;
 }
 
-/** Render inline HTML (bold, italic, underline, links) as <Text> with nested styles */
-function renderInlineHtml(html: string, opts: ParseOpts): React.ReactNode {
+/** Render inline HTML (bold, italic, underline, links) as an array of <Text> children.
+ *  These are meant to be placed inside a parent <Text> for inline flow. */
+function renderInlineHtml(html: string, opts: ParseOpts): React.ReactNode[] {
   const baseStyle: Style = {
     fontSize: opts.fontSize,
     color: opts.color,
     lineHeight: opts.lineHeight,
   };
 
-  // Tokenize inline HTML
   const tokens = tokenizeInline(html);
-  if (tokens.length === 0) return null;
-  if (tokens.length === 1 && tokens[0].type === "text") {
-    return <Text style={baseStyle}>{decodeEntities(tokens[0].content)}</Text>;
-  }
+  if (tokens.length === 0) return [];
 
   const children: React.ReactNode[] = [];
   let k = 0;
 
   for (const token of tokens) {
+    const text = decodeEntities(token.content);
     if (token.type === "text") {
-      children.push(<Text key={k++} style={baseStyle}>{decodeEntities(token.content)}</Text>);
+      children.push(<Text key={k++}>{text}</Text>);
     } else if (token.type === "bold") {
-      children.push(<Text key={k++} style={{ ...baseStyle, fontWeight: 700 }}>{decodeEntities(token.content)}</Text>);
+      children.push(<Text key={k++} style={{ fontWeight: 700 }}>{text}</Text>);
     } else if (token.type === "italic") {
-      children.push(<Text key={k++} style={{ ...baseStyle, fontStyle: "italic" }}>{decodeEntities(token.content)}</Text>);
+      children.push(<Text key={k++} style={{ fontStyle: "italic" }}>{text}</Text>);
     } else if (token.type === "underline") {
-      children.push(<Text key={k++} style={{ ...baseStyle, textDecoration: "underline" }}>{decodeEntities(token.content)}</Text>);
+      children.push(<Text key={k++} style={{ textDecoration: "underline" }}>{text}</Text>);
     } else if (token.type === "link") {
       children.push(
-        <Link key={k++} src={token.href || "#"} style={{ ...baseStyle, color: opts.linkColor || "#2563eb", textDecoration: "underline" }}>
-          {decodeEntities(token.content)}
+        <Link key={k++} src={token.href || "#"} style={{ color: opts.linkColor || "#2563eb", textDecoration: "underline" }}>
+          {text}
         </Link>
       );
     }
   }
 
-  return <Text style={baseStyle}>{children}</Text>;
+  return children;
 }
 
 interface InlineToken {
