@@ -10,6 +10,7 @@ import { useAuth } from "@/contexts/AuthContext";
 import PageSEO from "@/components/PageSEO";
 import LogoScroll from "@/components/LogoScroll";
 import { motion } from "framer-motion";
+import { syncToMailerLite } from "@/lib/mailerlite";
 import {
   Accordion,
   AccordionContent,
@@ -125,6 +126,7 @@ export default function Join() {
       setError(error.message);
     } else {
       setSuccess(true);
+      syncToMailerLite(email.trim());
     }
   };
 

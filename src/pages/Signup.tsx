@@ -8,6 +8,7 @@ import { Mail, Lock, ArrowLeft, Eye, EyeOff } from "lucide-react";
 import { useAuth } from "@/contexts/AuthContext";
 import { useEffect } from "react";
 import PageSEO from "@/components/PageSEO";
+import { syncToMailerLite } from "@/lib/mailerlite";
 
 export default function Signup() {
   const navigate = useNavigate();
@@ -49,6 +50,7 @@ export default function Signup() {
       setError(error.message);
     } else {
       setSuccess(true);
+      syncToMailerLite(email.trim());
     }
   };
 
