@@ -93,13 +93,11 @@ function serializeResumeHtml(
       if (val?.trim()) cloneA4Page.style.setProperty(name, val.trim());
     }
 
-    // Move vertical spacing from element padding to @page margins so every
-    // printed page gets consistent top/bottom whitespace.
-    cloneA4Page.style.paddingTop = "0";
-    cloneA4Page.style.paddingBottom = "0";
+    // Strip ALL padding — @page margins handle everything now.
     cloneA4Page.style.setProperty("--resume-pad-top", "0mm");
     cloneA4Page.style.setProperty("--resume-pad-bottom", "0mm");
-    // Keep horizontal padding intact — left/right margins come from the element.
+    cloneA4Page.style.setProperty("--resume-margin-x", "0mm");
+    cloneA4Page.style.padding = "0";
     cloneA4Page.style.width = "100%";
   }
 
@@ -115,8 +113,8 @@ function serializeResumeHtml(
     if (val?.trim()) rootVars += `  ${name}: ${val.trim()};\n`;
   }
 
-  // Set width to match the source
-  clone.style.width = `${element.scrollWidth || element.offsetWidth}px`;
+  // Fill the printable area defined by @page margins
+  clone.style.width = "100%";
 
   // KEY FIX: Remove pagination margin-top hacks from the preview system.
   // Chrome handles page breaks naturally with @page rules.
@@ -144,7 +142,7 @@ ${allCSS}
 
 @page {
   size: ${pageW} ${pageH};
-  margin: ${padTop}mm 0 ${padBottom}mm 0;
+  margin: ${padTop}mm ${marginX}mm ${padBottom}mm ${marginX}mm;
 }
 
 *, *::before, *::after {
