@@ -66,7 +66,7 @@ export default function GuideBottomCTA({ lang = "en" }: GuideBottomCTAProps) {
           {t.cta}
           <ArrowRight className="w-5 h-5" />
         </Link>
-        <p className="mt-3 text-sm text-cream/60">{t.note}</p>
+        
       </div>
     </section>
   );
