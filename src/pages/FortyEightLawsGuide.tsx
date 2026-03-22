@@ -903,17 +903,7 @@ const FortyEightLawsGuide = () => {
               Don't argue for the promotion. Build the case with evidence. Track your wins weekly. Keep a brag doc. When review time arrives, you pull out 12 months of documented impact instead of trying to remember what you did.
             </p>
 
-            <DiagramBox title="The Brag Doc Template">
-              <p className="text-muted-foreground mb-3">Update this every Friday. 5 minutes.</p>
-              <div className="space-y-3">
-                <p><strong>Week of:</strong> ___________</p>
-                <p><strong>What I shipped or completed:</strong></p>
-                <p><strong>Measurable result (numbers, time saved, revenue):</strong></p>
-                <p><strong>Who saw it / who benefited:</strong></p>
-                <p><strong>What I learned:</strong></p>
-              </div>
-              <p className="mt-4 pt-4 border-t border-border text-muted-foreground">Use this at review time. Don't rely on memory. Your manager won't remember. Your brag doc will.</p>
-            </DiagramBox>
+            <BragDocTemplate />
 
             <ActionStep checked={safeActions[10]} onToggle={() => toggleAction(10)}>
               Set a recurring 5-minute calendar event every Friday at 4 PM. Title it "Brag Doc." Fill in the four fields above. Do this for 12 weeks. At your next review, you'll have 12 weeks of documented wins ready to go while everyone else is trying to remember what they did.
