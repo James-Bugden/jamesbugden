@@ -38,7 +38,12 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   }, []);
 
   const signOut = useCallback(async () => {
-    await supabase.auth.signOut();
+    try {
+      await supabase.auth.signOut();
+    } catch {
+      // If server session is already gone, clear local state anyway
+    }
+    setSession(null);
   }, []);
 
   return (
