@@ -226,9 +226,15 @@ export default function ResumeAnalyzer({ defaultLang = "en" }: { defaultLang?: L
         sessionStorage.setItem("resume-analysis-result", JSON.stringify(result));
         sessionStorage.setItem("resume-analysis-lang", lang);
 
-        // Fire-and-forget analytics tracking
-        const leadEmail = user?.email || "";
-        const leadName = user?.user_metadata?.full_name || user?.user_metadata?.name || "";
+        // Fire-and-forget analytics tracking — extract name/email from resume text or auth
+        const resumeLines = text.split("\n").map(l => l.trim()).filter(Boolean);
+        // First non-empty line is typically the candidate's name
+        const resumeName = resumeLines[0] || "";
+        // Try to find an email in the resume text
+        const emailMatch = text.match(/[\w.+-]+@[\w-]+\.[\w.-]+/);
+        const resumeEmail = emailMatch?.[0] || "";
+        const leadName = user?.user_metadata?.full_name || user?.user_metadata?.name || resumeName;
+        const leadEmail = user?.email || resumeEmail;
         supabase.from("resume_leads").insert({
           email: leadEmail,
           name: leadName || null,
@@ -241,6 +247,7 @@ export default function ResumeAnalyzer({ defaultLang = "en" }: { defaultLang?: L
           current_company_type: result.segmentation?.current_company_type ?? null,
           target_readiness: result.segmentation?.target_readiness ?? null,
           user_agent: navigator.userAgent,
+          resume_text: text.slice(0, 500),
         }).then(({ error }) => {
           if (error) console.warn("Analytics insert failed:", error.message);
         });
