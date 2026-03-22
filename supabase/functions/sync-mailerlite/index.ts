@@ -40,6 +40,7 @@ serve(async (req) => {
         email,
         fields: { name: firstName, last_name: lastName },
         groups: ["181733295867823354"],
+        status: "active",
       }),
     });
 
