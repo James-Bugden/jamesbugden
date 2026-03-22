@@ -442,42 +442,36 @@ export default function Dashboard({ lang = "en" }: { lang?: "en" | "zh" }) {
                     key={tool.path}
                     to={lang === "zh" && tool.zhPath ? tool.zhPath : tool.path}
                     onClick={() => trackTool(tool.id)}
-                    className="group rounded-2xl border-l-[4px] border-l-gold p-6 md:p-7 min-h-[180px] flex flex-col justify-between transition-all duration-200 hover:-translate-y-0.5 bg-card shadow-[var(--dash-card-shadow)] hover:shadow-[var(--dash-card-hover-shadow)]"
+                    className="group rounded-2xl border-l-[4px] border-l-gold p-4 md:p-5 flex items-center gap-4 transition-all duration-200 hover:-translate-y-0.5 bg-card shadow-[var(--dash-card-shadow)] hover:shadow-[var(--dash-card-hover-shadow)]"
                   >
-                    <div>
-                      <div className="flex items-center gap-3 mb-3">
-                        <span
-                          className="w-10 h-10 rounded-full flex items-center justify-center shrink-0 text-foreground"
-                          style={{ backgroundColor: tool.iconBg }}
-                        >
-                          {tool.icon}
-                        </span>
-                        {badge && (
-                          <span className="text-[11px] font-semibold px-2 py-0.5 rounded-full bg-gold/15 text-gold">
-                            {badge}
-                          </span>
-                        )}
-                      </div>
-                      <h3 className="text-lg font-bold mb-1 text-foreground">
+                    <span
+                      className="w-9 h-9 rounded-full flex items-center justify-center shrink-0 text-foreground"
+                      style={{ backgroundColor: tool.iconBg }}
+                    >
+                      {tool.icon}
+                    </span>
+                    <div className="flex-1 min-w-0">
+                      <h3 className="text-[15px] font-bold text-foreground leading-snug">
                         {tool.title[lang]}
                         {["resume-analyzer", "resume-builder", "offer-calculator", "interview-questions"].includes(tool.id) && (
                           <span className="ml-2 text-[10px] font-semibold uppercase tracking-wide px-1.5 py-0.5 rounded-full align-middle bg-gold/15 text-gold">Beta</span>
                         )}
                       </h3>
-                      <p className="text-sm leading-relaxed text-muted-foreground">{tool.description[lang]}</p>
+                      <p className="text-xs leading-relaxed text-muted-foreground mt-0.5 line-clamp-2">{tool.description[lang]}</p>
+                      {badge && (
+                        <span className="text-[10px] font-semibold mt-1 inline-block px-1.5 py-0.5 rounded-full bg-gold/15 text-gold">
+                          {badge}
+                        </span>
+                      )}
                       {tool.id === "resume-analyzer" && (
-                        <p className="text-xs font-medium mt-2 text-muted-foreground">
+                        <p className="text-[11px] font-medium mt-1 text-muted-foreground">
                           {lang === "zh"
                             ? `本月已使用 ${analyzerUsed}/${analyzerLimit} 次`
                             : `${analyzerUsed}/${analyzerLimit} analyses used this month`}
                         </p>
                       )}
                     </div>
-                    <div className="flex justify-end mt-4">
-                      <span className="inline-flex items-center gap-1 text-sm font-semibold transition-all text-gold">
-                        {t.launch} <ArrowRight className="w-4 h-4 transition-transform group-hover:translate-x-1" />
-                      </span>
-                    </div>
+                    <ArrowRight className="w-4 h-4 shrink-0 transition-transform group-hover:translate-x-1 text-gold" />
                   </Link>
                 );
               })}
