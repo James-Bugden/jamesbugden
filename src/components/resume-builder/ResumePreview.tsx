@@ -685,7 +685,7 @@ function renderSectionEntries(section: ResumeSection, customize?: CustomizeSetti
 
               {(f.url || f.link) && (
                 <p style={{ fontSize: subtitleFontSize, color: "var(--resume-dates)", marginTop: "0.5mm" }}>
-                  {f.url || f.link}
+                  <a href={f.url || f.link} target="_blank" rel="noopener noreferrer" style={{ color: "inherit", textDecoration: c?.linkUnderline ? "underline" : "none" }}>{f.url || f.link}</a>
                 </p>
               )}
 
@@ -764,21 +764,25 @@ export const A4Page = React.memo(function A4Page({
       .filter((x) => x.value.trim().length > 0);
 
     const fromExtras = normalizedExtras.map((extra) => {
-      if (extra.type.includes("linkedin")) return { icon: <Linkedin {...iconProps} />, text: extra.value };
-      if (extra.type.includes("website")) return { icon: <Globe {...iconProps} />, text: extra.value };
-      if (extra.type.includes("nationality")) return { icon: <Flag {...iconProps} />, text: extra.value };
+      const href = extra.value.startsWith("http") ? extra.value
+        : extra.type.includes("linkedin") ? `https://${extra.value}` 
+        : extra.type.includes("website") ? `https://${extra.value}` 
+        : undefined;
+      if (extra.type.includes("linkedin")) return { icon: <Linkedin {...iconProps} />, text: extra.value, href };
+      if (extra.type.includes("website")) return { icon: <Globe {...iconProps} />, text: extra.value, href };
+      if (extra.type.includes("nationality")) return { icon: <Flag {...iconProps} />, text: extra.value, href: undefined };
       if (extra.type.includes("visa") || extra.type.includes("passport") || extra.type.includes("id")) {
-        return { icon: <IdCard {...iconProps} />, text: extra.value };
+        return { icon: <IdCard {...iconProps} />, text: extra.value, href: undefined };
       }
-      return { icon: <FileText {...iconProps} />, text: extra.value };
+      return { icon: <FileText {...iconProps} />, text: extra.value, href: undefined };
     });
 
     return [
-      p.email ? { icon: <Mail {...iconProps} />, text: p.email } : null,
-      p.phone ? { icon: <Phone {...iconProps} />, text: p.phone } : null,
-      p.location ? { icon: <MapPin {...iconProps} />, text: p.location } : null,
+      p.email ? { icon: <Mail {...iconProps} />, text: p.email, href: `mailto:${p.email}` } : null,
+      p.phone ? { icon: <Phone {...iconProps} />, text: p.phone, href: `tel:${p.phone}` } : null,
+      p.location ? { icon: <MapPin {...iconProps} />, text: p.location, href: undefined } : null,
       ...fromExtras,
-    ].filter(Boolean) as { icon: React.ReactNode; text: string }[];
+    ].filter(Boolean) as { icon: React.ReactNode; text: string; href?: string }[];
   }, [p]);
 
   const isTwoColumn = c?.columns === "two" || c?.columns === "mix";
@@ -887,7 +891,9 @@ export const A4Page = React.memo(function A4Page({
                       {i > 0 && sep === "bullet" && <span className="mx-[1mm]">·</span>}
                       {i > 0 && sep === "bar" && <span className="mx-[1mm]">|</span>}
                       {sep === "icon" && item.icon}
-                      {item.text}
+                      {item.href ? (
+                        <a href={item.href} target="_blank" rel="noopener noreferrer" style={{ color: "inherit", textDecoration: c?.linkUnderline ? "underline" : "none" }}>{item.text}</a>
+                      ) : item.text}
                     </span>
                   );
                 })}
