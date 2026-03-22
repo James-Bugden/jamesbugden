@@ -1,4 +1,4 @@
-import { Clock, Linkedin, ChevronDown, Menu, FileText, Shield, Target, Zap, Brain, Compass, Swords, Crown, Eye, ArrowRight, BookOpen, Check, X, Save, ChevronUp } from "lucide-react";
+import { Clock, Linkedin, ChevronDown, Menu, FileText, Shield, Target, Zap, Brain, Compass, Swords, Crown, Eye, ArrowRight, BookOpen, Check, X, Save, ChevronUp, Plus, Trash2 } from "lucide-react";
 import { Link, useLocation } from "react-router-dom";
 import GoldCheckBadge from "@/components/GoldCheckBadge";
 import { InstagramIcon, ThreadsIcon } from "@/components/SocialIcons";
@@ -11,7 +11,7 @@ import GuideSignInBanner from "@/components/guides/GuideSignInBanner";
 import GuideBottomCTA from "@/components/guides/GuideBottomCTA";
 import { useGuideStorage } from "@/hooks/useGuideStorage";
 import { useAuth } from "@/contexts/AuthContext";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 
 const SectionNumber = ({ num }: { num: string }) => (
   <span className="text-gold/30 font-heading text-6xl md:text-7xl font-bold leading-none select-none">
@@ -90,6 +90,204 @@ const DiagramBox = ({ title, children }: { title: string; children: React.ReactN
     <div className="text-sm text-foreground leading-relaxed">{children}</div>
   </div>
 );
+/* ── Interactive: Boss Management Matrix ── */
+const matrixQuadrants = {
+  "low-low": { label: "Normal Mode", strategy: "Rare. Normal mode. Do great work. You have space to build without interference.", color: "border-muted-foreground/30" },
+  "low-high": { label: "Best Case", strategy: "Best case. You shine. Boss is secure. Everyone wins. Keep doing exactly what you're doing.", color: "border-emerald-500" },
+  "high-low": { label: "Surrender", strategy: "Law 22. Surrender. Stay low. Build quietly. Your boss has a big ego and you're not visible yet — don't threaten them. Bide your time.", color: "border-amber-500" },
+  "high-high": { label: "DANGER", strategy: "DANGER. Law 1. Make them look good or you will pay. Your boss has a high ego and you're highly visible — the most dangerous quadrant. Credit your boss publicly. Never outshine.", color: "border-red-500" },
+} as const;
+
+const BossManagementMatrix = () => {
+  const [bossMatrix, setBossMatrix] = useGuideStorage<{ego: string, visibility: string}>("48laws_boss_matrix_en", { ego: "", visibility: "" });
+  const quadrantKey = bossMatrix.ego && bossMatrix.visibility ? `${bossMatrix.ego}-${bossMatrix.visibility}` as keyof typeof matrixQuadrants : null;
+  const result = quadrantKey ? matrixQuadrants[quadrantKey] : null;
+
+  return (
+    <div className="bg-card border border-border rounded-xl p-5 md:p-6 my-6">
+      <h4 className="font-heading text-base md:text-lg text-gold mb-4">The Boss Management Matrix</h4>
+      <div className="text-sm text-foreground leading-relaxed">
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-5">
+          <div>
+            <p className="font-medium mb-2">Boss's Ego</p>
+            <div className="flex gap-2">
+              {(["low", "high"] as const).map(v => (
+                <button key={v} onClick={() => setBossMatrix(prev => ({ ...prev, ego: v }))}
+                  className={`flex-1 px-4 py-2 rounded-lg border text-sm font-medium transition-all capitalize ${bossMatrix.ego === v ? "bg-gold/20 border-gold text-gold" : "border-border text-muted-foreground hover:border-gold/40"}`}>
+                  {v}
+                </button>
+              ))}
+            </div>
+          </div>
+          <div>
+            <p className="font-medium mb-2">Your Visibility</p>
+            <div className="flex gap-2">
+              {(["low", "high"] as const).map(v => (
+                <button key={v} onClick={() => setBossMatrix(prev => ({ ...prev, visibility: v }))}
+                  className={`flex-1 px-4 py-2 rounded-lg border text-sm font-medium transition-all capitalize ${bossMatrix.visibility === v ? "bg-gold/20 border-gold text-gold" : "border-border text-muted-foreground hover:border-gold/40"}`}>
+                  {v}
+                </button>
+              ))}
+            </div>
+          </div>
+        </div>
+
+        {/* 2x2 grid */}
+        <div className="grid grid-cols-[auto_1fr_1fr] text-xs sm:text-sm border border-border rounded-lg overflow-hidden">
+          <div className="p-2 bg-muted/50 border-b border-r border-border" />
+          <div className="p-2 bg-muted/50 border-b border-r border-border font-medium text-center">Ego: LOW</div>
+          <div className="p-2 bg-muted/50 border-b border-border font-medium text-center">Ego: HIGH</div>
+          <div className="p-2 border-b border-r border-border font-medium bg-muted/50 flex items-center">Vis: LOW</div>
+          <div className={`p-3 border-b border-r border-border transition-all ${quadrantKey === "low-low" ? "bg-gold/10 ring-2 ring-gold ring-inset" : ""}`}>Normal mode. Do great work.</div>
+          <div className={`p-3 border-b border-border transition-all ${quadrantKey === "high-low" ? "bg-gold/10 ring-2 ring-gold ring-inset" : ""}`}>Law 22. Surrender. Build quietly.</div>
+          <div className="p-2 border-r border-border font-medium bg-muted/50 flex items-center">Vis: HIGH</div>
+          <div className={`p-3 border-r border-border transition-all ${quadrantKey === "low-high" ? "bg-gold/10 ring-2 ring-gold ring-inset" : ""}`}>Best case. Everyone wins.</div>
+          <div className={`p-3 transition-all ${quadrantKey === "high-high" ? "bg-gold/10 ring-2 ring-gold ring-inset" : ""}`}><span className="text-gold font-medium">DANGER.</span> Law 1. Make them look good.</div>
+        </div>
+
+        {result && (
+          <div className={`mt-4 p-4 rounded-lg border-l-4 ${result.color} bg-muted/30 animate-in fade-in slide-in-from-bottom-2 duration-300`}>
+            <p className="font-semibold text-foreground mb-1">Your Quadrant: {result.label}</p>
+            <p className="text-muted-foreground">{result.strategy}</p>
+          </div>
+        )}
+      </div>
+    </div>
+  );
+};
+
+/* ── Interactive: Reputation Flywheel ── */
+const flywheelNodes = ["Results", "Visibility", "Trust", "Opportunity", "More Results"];
+
+const ReputationFlywheel = () => {
+  const [active, setActive] = useState(1); // Visibility highlighted by default
+  useEffect(() => {
+    const timer = setInterval(() => setActive(prev => (prev + 1) % 5), 2500);
+    return () => clearInterval(timer);
+  }, []);
+
+  // Pentagon positions (top-center start, clockwise)
+  const positions = [
+    { x: 50, y: 5 },   // Results (top)
+    { x: 93, y: 38 },  // Visibility (right)
+    { x: 77, y: 90 },  // Trust (bottom-right)
+    { x: 23, y: 90 },  // Opportunity (bottom-left)
+    { x: 7, y: 38 },   // More Results (left)
+  ];
+
+  return (
+    <div className="bg-card border border-border rounded-xl p-5 md:p-6 my-6">
+      <h4 className="font-heading text-base md:text-lg text-gold mb-4">The Reputation Flywheel</h4>
+      <div className="relative w-full max-w-xs mx-auto aspect-square">
+        <svg viewBox="0 0 100 100" className="absolute inset-0 w-full h-full" fill="none">
+          {positions.map((from, i) => {
+            const to = positions[(i + 1) % 5];
+            return (
+              <line key={i} x1={from.x} y1={from.y} x2={to.x} y2={to.y}
+                stroke="currentColor" className="text-border" strokeWidth="0.5" strokeDasharray="2 1" />
+            );
+          })}
+          {/* Arrow markers */}
+          {positions.map((from, i) => {
+            const to = positions[(i + 1) % 5];
+            const mx = (from.x + to.x) / 2;
+            const my = (from.y + to.y) / 2;
+            return (
+              <circle key={`dot-${i}`} cx={mx} cy={my} r="1.2"
+                className={i === active ? "fill-gold" : "fill-muted-foreground/40"}
+              />
+            );
+          })}
+        </svg>
+        {positions.map((pos, i) => (
+          <div key={i}
+            className={`absolute transform -translate-x-1/2 -translate-y-1/2 px-2 py-1 rounded-lg text-[10px] sm:text-xs font-medium text-center transition-all duration-500 border whitespace-nowrap
+              ${i === 1 ? "bg-gold/20 border-gold text-gold shadow-[0_0_12px_hsl(var(--gold)/0.3)] scale-110" :
+                i === active ? "bg-gold/10 border-gold/60 text-gold scale-105" :
+                "bg-card border-border text-muted-foreground"}`}
+            style={{ left: `${pos.x}%`, top: `${pos.y}%` }}
+          >
+            {flywheelNodes[i]}
+          </div>
+        ))}
+      </div>
+      <div className="text-center mt-4 space-y-1">
+        <p className="text-muted-foreground text-sm">Break any link and the flywheel stops.</p>
+        <p className="text-gold font-medium text-sm">Most people break the VISIBILITY link. They do great work nobody sees.</p>
+      </div>
+    </div>
+  );
+};
+
+/* ── Interactive: Brag Doc Template ── */
+type BragEntry = { week: string; shipped: string; result: string; who: string; learned: string };
+const emptyEntry = (): BragEntry => ({ week: "", shipped: "", result: "", who: "", learned: "" });
+
+const BragDocTemplate = () => {
+  const [entries, setEntries] = useGuideStorage<BragEntry[]>("48laws_bragdoc_en", []);
+  const filledCount = entries.filter(e => e.shipped || e.result).length;
+
+  const addEntry = () => setEntries(prev => [emptyEntry(), ...prev]);
+  const removeEntry = (idx: number) => setEntries(prev => prev.filter((_, i) => i !== idx));
+  const updateEntry = (idx: number, field: keyof BragEntry, value: string) =>
+    setEntries(prev => prev.map((e, i) => i === idx ? { ...e, [field]: value } : e));
+
+  return (
+    <div className="bg-card border border-border rounded-xl p-5 md:p-6 my-6">
+      <div className="flex items-center justify-between mb-1">
+        <h4 className="font-heading text-base md:text-lg text-gold">The Brag Doc</h4>
+        {filledCount > 0 && (
+          <span className="text-xs text-gold bg-gold/10 px-2 py-0.5 rounded-full font-medium">{filledCount} {filledCount === 1 ? "entry" : "entries"} logged</span>
+        )}
+      </div>
+      <p className="text-muted-foreground text-sm mb-4">Update this every Friday. 5 minutes.</p>
+
+      <button onClick={addEntry}
+        className="w-full flex items-center justify-center gap-2 py-2.5 rounded-lg border border-dashed border-gold/40 text-gold text-sm font-medium hover:bg-gold/5 transition-colors mb-4">
+        <Plus className="w-4 h-4" /> Add Week
+      </button>
+
+      {entries.length === 0 && (
+        <p className="text-center text-muted-foreground text-sm py-6">No entries yet. Click "Add Week" to start tracking your wins.</p>
+      )}
+
+      <div className="space-y-4">
+        {entries.map((entry, idx) => (
+          <div key={idx} className="border border-border rounded-lg p-4 space-y-3 bg-muted/20">
+            <div className="flex items-center justify-between">
+              <input type="text" placeholder="Week of (e.g. Jan 6)"
+                value={entry.week} onChange={e => updateEntry(idx, "week", e.target.value)}
+                className="bg-transparent border-none text-foreground text-sm font-medium placeholder:text-muted-foreground/50 focus:outline-none flex-1"
+              />
+              <button onClick={() => removeEntry(idx)} className="text-muted-foreground hover:text-destructive transition-colors p-1">
+                <Trash2 className="w-3.5 h-3.5" />
+              </button>
+            </div>
+            {([
+              ["shipped", "What I shipped or completed"],
+              ["result", "Measurable result (numbers, time saved, revenue)"],
+              ["who", "Who saw it / who benefited"],
+              ["learned", "What I learned"],
+            ] as [keyof BragEntry, string][]).map(([field, label]) => (
+              <div key={field}>
+                <label className="text-xs text-muted-foreground font-medium block mb-1">{label}</label>
+                <textarea
+                  value={entry[field]} onChange={e => updateEntry(idx, field, e.target.value)}
+                  rows={1}
+                  className="w-full bg-background border border-border rounded-md px-3 py-2 text-sm text-foreground placeholder:text-muted-foreground/40 focus:outline-none focus:ring-1 focus:ring-gold/50 resize-none"
+                  placeholder="..."
+                />
+              </div>
+            ))}
+          </div>
+        ))}
+      </div>
+
+      <p className="mt-4 pt-4 border-t border-border text-muted-foreground text-sm">Use this at review time. Don't rely on memory. Your manager won't remember. Your brag doc will.</p>
+    </div>
+  );
+};
+
 
 const tocSections = [
   { id: "intro", label: "Introduction" },
@@ -675,36 +873,7 @@ const FortyEightLawsGuide = () => {
               This doesn't mean becoming a doormat. It means knowing the difference between a battle worth fighting and one where folding preserves your energy and position. If the situation crosses ethical or legal lines, the correct move is documentation and escalation, not surrender.
             </p>
 
-            <DiagramBox title="The Boss Management Matrix">
-              <div className="overflow-x-auto">
-                <table className="w-full text-sm border-collapse">
-                  <thead>
-                    <tr>
-                      <th className="text-left p-2 border-b border-border"></th>
-                      <th className="text-left p-2 border-b border-border">Boss's Ego: LOW</th>
-                      <th className="text-left p-2 border-b border-border">Boss's Ego: HIGH</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    <tr>
-                      <td className="p-2 border-b border-border font-medium">Your Visibility: LOW</td>
-                      <td className="p-2 border-b border-border">Rare. Normal mode. Do great work.</td>
-                      <td className="p-2 border-b border-border">Law 22. Surrender. Stay low. Build quietly.</td>
-                    </tr>
-                    <tr>
-                      <td className="p-2 font-medium">Your Visibility: HIGH</td>
-                      <td className="p-2">Best case. You shine. Boss is secure. Everyone wins.</td>
-                      <td className="p-2 text-gold font-medium">DANGER. Law 1. Make them look good or you will pay.</td>
-                    </tr>
-                  </tbody>
-                </table>
-              </div>
-              <div className="mt-4 pt-4 border-t border-border space-y-1 text-muted-foreground">
-                <p>Step 1: Assess your boss's ego. Watch how they react when others get praised.</p>
-                <p>Step 2: Assess your visibility. Are senior leaders noticing your work directly?</p>
-                <p>Step 3: Pick your quadrant. Adjust your strategy.</p>
-              </div>
-            </DiagramBox>
+            <BossManagementMatrix />
 
             <p className="text-muted-foreground leading-relaxed mt-6">
               Managing up keeps you safe. But safety alone won't advance your career. For that, you need people beyond your boss to know your name. That's reputation.
@@ -778,13 +947,7 @@ const FortyEightLawsGuide = () => {
               The antidote is strategic vulnerability. Admit mistakes early and publicly. Ask for help visibly. Share credit generously. Don't manufacture fake weaknesses. People see through performed humility. But let others see your humanity alongside your competence.
             </p>
 
-            <DiagramBox title="The Reputation Flywheel">
-              <div className="text-center space-y-2">
-                <p className="font-medium text-foreground">Results → Visibility → Trust → Opportunity → More Results</p>
-                <p className="text-muted-foreground mt-3">Break any link and the flywheel stops.</p>
-                <p className="text-gold font-medium">Most people break the VISIBILITY link. They do great work nobody sees.</p>
-              </div>
-            </DiagramBox>
+            <ReputationFlywheel />
 
             <p className="text-muted-foreground leading-relaxed mt-6">
               Reputation gets you noticed. But being noticed is not the same as being needed. The next section covers the difference.
@@ -938,17 +1101,7 @@ const FortyEightLawsGuide = () => {
               Don't argue for the promotion. Build the case with evidence. Track your wins weekly. Keep a brag doc. When review time arrives, you pull out 12 months of documented impact instead of trying to remember what you did.
             </p>
 
-            <DiagramBox title="The Brag Doc Template">
-              <p className="text-muted-foreground mb-3">Update this every Friday. 5 minutes.</p>
-              <div className="space-y-3">
-                <p><strong>Week of:</strong> ___________</p>
-                <p><strong>What I shipped or completed:</strong></p>
-                <p><strong>Measurable result (numbers, time saved, revenue):</strong></p>
-                <p><strong>Who saw it / who benefited:</strong></p>
-                <p><strong>What I learned:</strong></p>
-              </div>
-              <p className="mt-4 pt-4 border-t border-border text-muted-foreground">Use this at review time. Don't rely on memory. Your manager won't remember. Your brag doc will.</p>
-            </DiagramBox>
+            <BragDocTemplate />
 
             <ActionStep checked={safeActions[10]} onToggle={() => toggleAction(10)}>
               Set a recurring 5-minute calendar event every Friday at 4 PM. Title it "Brag Doc." Fill in the four fields above. Do this for 12 weeks. At your next review, you'll have 12 weeks of documented wins ready to go while everyone else is trying to remember what they did.
