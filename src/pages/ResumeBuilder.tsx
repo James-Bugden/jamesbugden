@@ -380,9 +380,6 @@ function DownloadDropdown({ downloading, pageFormat, docName, onDownload }: {
               </span>
             </div>
             <div className="text-[10px] text-center" style={{ color: BRAND.textSecondary }}>⌘S to save · ⌘P to download</div>
-            <div className="text-[10px] leading-relaxed px-1 py-1.5 rounded bg-amber-50 text-amber-700 border border-amber-200">
-              {t("exportMultiPageNote")}
-            </div>
             <Button
               className="w-full text-white transition-colors"
               style={{ backgroundColor: BRAND.green }}
