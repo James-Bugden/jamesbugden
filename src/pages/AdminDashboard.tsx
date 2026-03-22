@@ -246,7 +246,7 @@ export default function AdminDashboard() {
     return feedbackItems.filter(f => f.message.toLowerCase().includes(q) || f.page?.toLowerCase().includes(q));
   }, [feedbackItems, feedbackSearch]);
 
-
+  const fetchAccounts = async () => {
     setAccountsLoading(true);
     try {
       const { data: { session } } = await supabase.auth.getSession();
