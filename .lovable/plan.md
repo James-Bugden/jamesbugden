@@ -1,63 +1,61 @@
 
-Goal: make Resume Builder PDF export reliable on both desktop and mobile by removing the brittle “capture one off-screen tall node” approach and exporting from a stable paginated source.
+Goal: fix the admin Google login flow so a valid admin Google account actually reaches `/admin` instead of ending up back on the login page.
 
-1. Identify and replace the fragile export path
-- The current export depends on `getElementById("resume-pdf-target")` and a hidden flow positioned at `left: -9999px`.
-- That is brittle for mobile browsers, font loading, and large multi-page resumes.
-- I’ll replace this with a dedicated resume export path that does not rely on a globally queried off-screen node.
+What I found
+- The backend side is working:
+  - `auth` logs show a successful Google login for `james@jamesbugden.com`.
+  - `public.admin_users` already contains `james@jamesbugden.com`, so this account is recognized as an admin.
+- That means the failure is very likely client-side, not a credential or role issue.
+- There are two weak spots in the current flow:
+  1. `src/pages/AdminLogin.tsx` sends Google OAuth back to `window.location.origin`, so the admin flow depends on the homepage noticing `sessionStorage.auth_redirect` and forwarding to `/admin`.
+  2. `src/components/ProtectedRoute.tsx` can redirect too early because `checkedUserRef` suppresses duplicate admin checks before the first `is_admin` RPC has finished. In that race, `loading` becomes false while `isAdmin` is still false, so the user gets bounced back to `/admin/login`.
 
-2. Add a stable export source in `ResumePreview`
-- In `src/components/resume-builder/ResumePreview.tsx`, I’ll expose an always-mounted, unscaled export container or page refs for the already-paginated resume pages.
-- Each PDF page will map to one real DOM page, matching the existing pagination engine instead of slicing one giant canvas.
-- This keeps the current live preview behavior, zoom, and mobile overlay intact while giving export a clean source.
+Implementation plan
+1. Make the admin OAuth return directly to the admin login route
+- In `src/pages/AdminLogin.tsx`, change the Google sign-in `redirect_uri` from `window.location.origin` to `${window.location.origin}/admin/login`.
+- Keep `sessionStorage` as a fallback, but stop relying on the homepage redirect to complete admin login.
 
-3. Upgrade `src/lib/pdfExport.ts` for reliable page-by-page export
-- Change the exporter so it can capture page elements directly instead of only an `elementId`.
-- Export each page separately with `html2canvas`, then append each page to `jsPDF`.
-- Add readiness guards before capture:
-  - wait for layout paint
-  - wait for `document.fonts.ready`
-  - wait for images to finish decoding where possible
-- Add mobile-safe capture settings:
-  - adaptive scale (lower on small/mobile devices to avoid memory crashes)
-  - explicit background color
-  - safe scroll offsets / fixed positioning handling
-- Keep backward compatibility for the cover-letter export path if possible, so only resume export behavior changes.
+2. Make AdminLogin recover existing sessions on mount
+- Update `AdminLogin` so it always checks for an existing session on mount, not only when `auth_redirect === "/admin"`.
+- If a session already exists:
+  - run `is_admin`
+  - navigate to `/admin` when true
+  - sign out and show “Access denied” when false
+- Clear stale `auth_redirect` after a successful admin redirect or denied access.
 
-4. Update Resume Builder download handlers
-- In `src/pages/ResumeBuilder.tsx` and `src/pages/ResumeBuilderSimple.tsx`, switch the download action to the new resume export API.
-- Keep the existing loading state, filename handling, and paper-size selection.
-- Ensure both desktop dropdown download and mobile preview-overlay download call the same stable exporter.
+3. Remove the ProtectedRoute race condition
+- Refactor `src/components/ProtectedRoute.tsx` so admin routes stay in a loading state until the admin RPC actually resolves.
+- Replace the current “skip duplicate checks” pattern with one of these safer approaches:
+  - simplest: remove `checkedUserRef` and just re-check on mount/auth change
+  - or keep dedupe, but only mark a user as checked after the RPC finishes
+- Ensure `requireAdmin` routes never render the redirect branch while the admin status is still unresolved.
 
-5. Prevent common failure modes
-- No more dependence on `left: -9999px` for the resume export.
-- No more giant single-canvas capture for multi-page resumes.
-- Avoid blank/partial PDFs caused by fonts not being ready.
-- Reduce mobile failures caused by memory pressure from high-resolution full-document capture.
+4. Add explicit admin-auth loading states
+- Split auth resolution from admin resolution inside `ProtectedRoute`.
+- Only evaluate:
+  - “no session” after auth is resolved
+  - “not admin” after admin check is resolved
+- This prevents false redirects during OAuth return / session hydration.
 
-Technical details
-```text
-Current flow
-  hidden off-screen tall node
-  -> html2canvas(one huge capture)
-  -> slice into pages
+5. Add regression tests
+- Add tests covering:
+  - admin Google OAuth uses `/admin/login` as the return location
+  - `AdminLogin` redirects an already-authenticated admin to `/admin`
+  - `ProtectedRoute` does not redirect before `is_admin` finishes
+  - a non-admin authenticated user is still rejected correctly
 
-Planned flow
-  paginated page DOM refs / hidden export pages
-  -> wait until fonts + layout are ready
-  -> html2canvas(each page individually)
-  -> jsPDF addPage per captured page
-```
+Files to update
+- `src/pages/AdminLogin.tsx`
+- `src/components/ProtectedRoute.tsx`
+- `src/test/auth.test.ts` (or a new focused auth route test file)
 
-Files likely to change
-- `src/lib/pdfExport.ts`
-- `src/components/resume-builder/ResumePreview.tsx`
-- `src/pages/ResumeBuilder.tsx`
-- `src/pages/ResumeBuilderSimple.tsx`
+Technical notes
+- I do not plan any database changes: the admin role row already exists and the admin-check function is already correct.
+- I do not plan changes to `src/integrations/lovable/index.ts` or `src/integrations/supabase/client.ts`.
+- Root cause is most likely: successful Google auth + admin role exists + client redirect/race sends the user back to login.
 
-QA plan
-- Desktop: export 1-page and 2+ page resumes
-- Mobile: export from the preview overlay on a narrow viewport
-- Formats: verify both A4 and Letter
-- Styling: verify custom fonts/colors render correctly
-- Regression: confirm cover-letter PDF export still works
+Expected outcome
+- Clicking “Sign in with Google” returns to `/admin/login`
+- the page detects the authenticated admin session immediately
+- the admin check completes before redirect logic runs
+- the user lands reliably on `/admin`
