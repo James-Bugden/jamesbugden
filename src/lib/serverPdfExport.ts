@@ -93,12 +93,13 @@ function serializeResumeHtml(
       if (val?.trim()) cloneA4Page.style.setProperty(name, val.trim());
     }
 
-    // KEY FIX: Override padding/margin CSS vars to 0 — @page margins handle this now
+    // KEY FIX: Zero only VERTICAL padding — @page margins handle top/bottom.
+    // Keep horizontal padding on the element itself.
     cloneA4Page.style.setProperty("--resume-pad-top", "0mm");
     cloneA4Page.style.setProperty("--resume-pad-bottom", "0mm");
-    cloneA4Page.style.setProperty("--resume-margin-x", "0mm");
     cloneA4Page.style.setProperty("--resume-margin-y", "0mm");
-    cloneA4Page.style.padding = "0";
+    cloneA4Page.style.paddingTop = "0";
+    cloneA4Page.style.paddingBottom = "0";
     cloneA4Page.style.width = "100%";
   }
 
@@ -126,8 +127,20 @@ function serializeResumeHtml(
     (el as HTMLElement).style.marginTop = "";
   });
 
-  // Remove interactive elements
+  // Remove interactive elements (NOT <header> — that's the resume header with name/title)
   clone.querySelectorAll("button, [data-edit-overlay], .no-print, [data-radix-popper-content-wrapper]").forEach((el) => el.remove());
+
+  // Debug: verify header is in the clone
+  const headerEl = clone.querySelector("header");
+  const nameEl = clone.querySelector("h1");
+  console.log("PDF Export Debug:", {
+    hasHeader: !!headerEl,
+    hasH1: !!nameEl,
+    h1Text: nameEl?.textContent,
+    cloneChildCount: clone.children.length,
+    firstChildTag: clone.firstElementChild?.tagName,
+    innerHtmlPreview: clone.innerHTML.substring(0, 500),
+  });
 
   return `<!DOCTYPE html>
 <html>
@@ -143,7 +156,7 @@ ${allCSS}
 
 @page {
   size: ${pageW} ${pageH};
-  margin: ${padTop}mm ${marginX}mm ${padBottom}mm ${marginX}mm;
+  margin: ${padTop}mm 0 ${padBottom}mm 0;
 }
 
 *, *::before, *::after {
