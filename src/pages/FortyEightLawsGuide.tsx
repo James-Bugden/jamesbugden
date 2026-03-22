@@ -467,7 +467,7 @@ const FortyEightLawsGuide = () => {
               </div>
             </DiagramBox>
 
-            <ActionStep>
+            <ActionStep checked={safeActions[1]} onToggle={() => toggleAction(1)}>
               If you scored below 12, pick one thing to learn from your current role this week. It doesn't need to be related to your job title. Study how budgets get approved. Watch how the top performer on your team communicates. Read the company's investor presentations. Turn dead time into alive time starting today.
             </ActionStep>
 
