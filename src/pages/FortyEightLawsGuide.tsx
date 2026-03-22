@@ -947,7 +947,7 @@ const FortyEightLawsGuide = () => {
               Conformity without boundaries becomes spinelessness. Know where your line is. Some hills are worth dying on. Choose them deliberately.
             </Reversal>
             <div className="mt-6">
-              <ActionStep>
+              <ActionStep checked={safeActions[14]} onToggle={() => toggleAction(14)}>
                 Write down your three non-negotiable professional boundaries. These are the lines you will not cross regardless of pressure: ethical, personal, or professional. Examples: "I will not lie to a client." "I will not take credit for someone else's work." "I will not stay silent about safety issues." Knowing your lines before you face pressure is the difference between integrity and regret.
               </ActionStep>
             </div>
