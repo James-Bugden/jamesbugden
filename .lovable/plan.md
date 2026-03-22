@@ -1,67 +1,33 @@
 
 
-## Redesign JobTitleWorksheet for Clarity and Usability
+## Fix Login Redirect Logic
 
-### Problems Identified
+### Problem
+When a user clicks "Sign in" from the homepage (`/` or `/zh-tw`), `location.state.from` is set to `/` or `/zh-tw`. After login, the redirect logic sends them back to that page instead of the dashboard.
 
-1. **Confusing purpose** — Title "Interactive Resume Workbook" doesn't explain what this tool does. The subtitle is vague. Users don't understand why they should use it or what outcome they'll get.
+Additionally, several components always link to `/login` and `/join` regardless of language context, so Chinese users get English login/signup pages.
 
-2. **Instructions are overwhelming** — 7 steps shown in a collapsible panel, mixing concepts (skills, counts, experiences, achievements, keywords, bullet points) without visual flow. Users see a wall of text.
+### Changes
 
-3. **Empty state is unhelpful** — Shows 20 empty rows immediately, which is intimidating. The empty state message only shows when no job title is entered, but the tab system makes this confusing.
+**1. `src/pages/Login.tsx` — Smart redirect after login**
+- In the `useEffect` that handles post-login redirect (line 47-54), treat homepage paths (`/`, `/zh-tw`, `/zh-tw/`) as non-specific — redirect to dashboard instead of back to homepage.
+- Also detect `isZhTw` from `location.state?.from` OR current path patterns to handle edge cases.
 
-4. **Column relationships are invisible** — The 6-column table doesn't show that columns 1-2 (skills/count) are about the job, columns 3-4 (experience/achievement) are about YOU, column 5 (keywords) is the BRIDGE, and column 6 (bullet point) is the OUTPUT. This is the core mental model users need.
+**2. `src/components/AuthHeaderButton.tsx` — Language-aware login link**
+- Change `to="/login"` to use `/login` for English and pass the ZH context properly so the Login page knows the language.
 
-5. **Mobile UX is poor** — 20 cards with 6 fields each = massive scroll. No way to collapse or focus on one step at a time.
+**3. `src/components/guides/GuideSignInBanner.tsx` — Language-aware routes**
+- When `lang="zh"`, navigate to `/login` but ensure `state.from` carries the zh-tw path (already does this via `location.pathname`, so this is correct). No change needed here.
 
-6. **AI prompts are disconnected** — "Generate with AI" button appears but users don't know where to paste results back.
+**4. `src/components/LoginGate.tsx` — Already correct** (uses `location.pathname`).
 
-7. **No visual workflow** — Users can't tell if they're making progress through the steps or just filling random fields.
+**5. `src/components/EmailGateOverlay.tsx` — Already passes `state.from`**, but check it links correctly for ZH users.
 
-### Plan
+**6. `src/pages/Dashboard.tsx` — Language-aware login redirect**
+- Line 251: When redirecting unauthenticated users, detect if on ZH dashboard path and redirect to `/login` with appropriate state.
 
-**File**: `src/components/guides/JobTitleWorksheet.tsx`
-
-**1. Rewrite header and subtitle**
-- EN: "Job Title Keyword Worksheet" / "Turn job description keywords into resume bullet points. One tab per target role."
-- ZH: "職稱關鍵字工作表" / "將職缺描述中的關鍵字轉化為履歷條列句。每個分頁對應一個目標職位。"
-
-**2. Replace 7-step instructions with a 3-phase visual flow**
-- Show a simple horizontal stepper (3 phases) instead of 7 text steps:
-  - Phase 1: "Research the Job" → Fill Skills + Count columns from job descriptions
-  - Phase 2: "Map Your Experience" → Add your experiences, achievements, and match keywords  
-  - Phase 3: "Build Bullet Points" → Combine into optimized resume bullets
-- Each phase shows 1-2 sentences max, with the relevant AI prompt inline
-- Use colored badges/icons to make phases scannable
-
-**3. Improve empty state**
-- When job title is empty: show a focused prompt card with input field and "Get Started" CTA
-- Start with 5 rows instead of 20 (less intimidating), let users add more
-- Show example data as placeholder text in first row
-
-**4. Add column group headers on desktop table**
-- Add a secondary header row above the columns:
-  - "The Job" spans Skills + Count
-  - "Your Background" spans Experience + Achievement  
-  - "The Match" spans Keywords + Bullet Point
-- Use subtle background colors to visually group columns
-
-**5. Improve mobile card layout**
-- Group fields into the 3 phases with collapsible sections per card
-- Show only skill name and a completion indicator in collapsed state
-- Add a "phase indicator" badge on each card
-
-**6. Better placeholder text**
-- Skills: "e.g. Project Management"
-- Count: leave as number
-- Experience: "e.g. Led product launch at Acme Corp"
-- Achievement: "e.g. Increased user retention by 35%"
-- Keywords: keep selector
-- Bullet Point: "e.g. Spearheaded product launch driving 35% retention increase through strategic project management"
-
-**7. Update Chinese labels to match**
-- Same structural improvements with proper ZH translations
-
-### Files Modified
-- `src/components/guides/JobTitleWorksheet.tsx` — all changes in this single component
+### Summary of actual code changes:
+- **Login.tsx**: Add a check — if `redirectTo` is `/`, `/zh-tw`, or `/zh-tw/`, replace it with the appropriate dashboard path.
+- **JoinZhTw.tsx**: Already redirects to `/zh-tw/dashboard` — correct.
+- **Join.tsx**: Redirects to `/dashboard` — correct, but should respect `location.state?.from` like Login does.
 
