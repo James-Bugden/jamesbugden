@@ -1,60 +1,38 @@
 
-Fix the dashboard search duplication by making the search index canonical and deduplicated.
 
-1. Inspect and update `src/pages/Dashboard.tsx` search indexing
-- Keep `buildSearchable()` as the single source for dashboard search results.
-- Remove the extra hardcoded `interview-questions` entry currently appended at the end.
-- Add deduplication by `id` while building the combined list from `tools` and `journeyItems`.
+## Make 48 Laws Guide Interactive with Cloud Save
 
-2. Preserve the intended result priority
-- Keep `tools` indexed first, then `journeyItems`.
-- When the same `id` exists in both places, keep the first one and skip later duplicates.
-- This means shared items like `interview-questions` will appear once in search, using the tool version as the canonical result.
+### What becomes interactive
 
-3. Keep language-aware routing intact
-- For tools, use the localized path (`zhPath` when available) instead of always indexing `path`.
-- For guides, continue using the existing localized `enPath`/`zhPath` logic.
+1. **Power Audit Tracker** — The 7 areas (Direction, Managing Up, Reputation, etc.) become score inputs (1-5) with auto-calculated total, color-coded result, and history tracking per 90-day cycle.
 
-4. Validate affected UI behavior
-- Confirm search results no longer repeat the same card for queries like “interview”.
-- Check both English and Traditional Chinese dashboards.
-- Verify recently used cards still resolve correctly after the deduplicated search list is used as the lookup source.
+2. **Action Step Checklists** — Each section's Action Steps get a checkbox so users can mark them done and track progress.
 
-Technical details
-- Root cause: `interview-questions` is currently indexed 3 times:
-  1. in `tools`
-  2. in `journeyItems`
-  3. in a manual `items.push(...)` inside `buildSearchable()`
-- Recommended implementation shape:
-```ts
-function buildSearchable(lang: "en" | "zh"): SearchableItem[] {
-  const items: SearchableItem[] = [];
-  const seen = new Set<string>();
+Both use the existing `useGuideStorage` hook which saves to localStorage for guests and syncs to the cloud `guide_progress` table for logged-in users. No database changes needed.
 
-  tools.forEach((t) => {
-    if (seen.has(t.id)) return;
-    seen.add(t.id);
-    items.push({
-      id: t.id,
-      type: "tool",
-      title: t.title,
-      desc: t.description,
-      path: lang === "zh" && t.zhPath ? t.zhPath : t.path,
-    });
-  });
+### Implementation
 
-  journeyItems.forEach((g) => {
-    if (seen.has(g.id)) return;
-    seen.add(g.id);
-    items.push({
-      id: g.id,
-      type: "guide",
-      title: g.title,
-      desc: g.description,
-      path: lang === "zh" && g.zhPath ? g.zhPath : g.enPath,
-    });
-  });
+**File: `src/pages/FortyEightLawsGuide.tsx`**
 
-  return items;
-}
-```
+1. Import `useGuideStorage` and `useAuth`, plus the `SaveBanner` pattern from `InteractiveChecklist`.
+
+2. **Power Audit Tracker** (Section 9, ~line 1111-1146):
+   - Replace static text with 7 number inputs (1-5) using `useGuideStorage<number[]>("48laws_power_audit_en", Array(7).fill(0))`.
+   - Show auto-calculated total out of 35 with color-coded scoring bracket.
+   - Add a "Save snapshot" button that appends `{ date, scores }` to a `useGuideStorage<Array>` history array, letting users compare 90-day cycles.
+   - Show save banner for guests after they start scoring.
+
+3. **Action Step checkboxes** (~12 Action Steps across sections):
+   - Add a `useGuideStorage<boolean[]>("48laws_actions_en", Array(12).fill(false))` for tracking which action steps are completed.
+   - Wrap each `<ActionStep>` with a clickable checkbox row showing completed/uncompleted state.
+   - Display overall "X/12 action steps completed" counter.
+
+4. Keep the `SaveBanner` pattern: after 2+ interactions, show "Create a free account to sync across devices" for guests (matching `InteractiveChecklist` behavior).
+
+### Technical details
+
+- **Storage keys**: `48laws_power_audit_en`, `48laws_audit_history_en`, `48laws_actions_en`
+- **No DB migration needed** — `guide_progress` table already stores arbitrary JSON per `(user_id, guide_key)`
+- **Pattern**: follows `InteractiveScorecard` from Ikigai guide (number inputs, clamped 1-5, `useGuideStorage`)
+- Action Steps will be indexed by their order of appearance (0-11), with a stable array length
+
