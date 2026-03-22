@@ -607,7 +607,7 @@ const FortyEightLawsGuide = () => {
           <p className="text-muted-foreground leading-relaxed mb-6">
             The book draws from 3,000 years of history. Kings, generals, con artists, diplomats. The stories about Julius Caesar and Louis XIV "were the exact same stories I had personally witnessed in all of my different jobs. Only less bloody."
           </p>
-          <p className="text-foreground text-lg leading-relaxed mb-6">
+          <p className="text-muted-foreground leading-relaxed mb-6">
             Every workplace is a modern court. Politics are not a bug in the system. They are the operating system. The people who refuse to learn the rules get dominated by those who already know them.
           </p>
           <p className="text-muted-foreground leading-relaxed mb-6">
