@@ -669,7 +669,7 @@ const FortyEightLawsGuide = () => {
             <p className="text-muted-foreground leading-relaxed mb-6">
               Visibility means volunteering for projects where new people see your name. Presenting your own work instead of letting others present it. Raising your hand when senior leaders visit your team. Writing internal updates and recaps with your name on them.
             </p>
-            <ActionStep>
+            <ActionStep checked={safeActions[6]} onToggle={() => toggleAction(6)}>
               Identify one project or initiative at work where you're doing the work but someone else gets the visibility. Volunteer to present it yourself at the next team meeting or send a written recap with your name on it. Do this once a month. Within a quarter, senior leaders will know your name.
             </ActionStep>
 
