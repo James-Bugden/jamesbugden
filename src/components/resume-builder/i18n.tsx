@@ -44,7 +44,7 @@ export const translations = {
     paperSize: "Paper size",
     usLetter: "US Letter",
     downloadPdf: "Download PDF",
-    exportMultiPageNote: "⚠️ Multi-page export is currently being fixed. For resumes longer than 1 page, please use browser print (⌘P) as a temporary workaround.",
+    exportMultiPageNote: "⚠️ PDF export for resumes longer than 1 page is currently being fixed. We're working on it!",
 
     // Footer
     poweredBy: "Powered by",
@@ -419,7 +419,7 @@ export const translations = {
     paperSize: "紙張大小",
     usLetter: "美規 Letter",
     downloadPdf: "下載 PDF",
-    exportMultiPageNote: "⚠️ 多頁匯出功能目前正在修復中。若履歷超過 1 頁，請暫時使用瀏覽器列印（⌘P）作為替代方案。",
+    exportMultiPageNote: "⚠️ 超過 1 頁的履歷 PDF 匯出功能目前正在修復中，敬請期待！",
 
     // Footer
     poweredBy: "由",

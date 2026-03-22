@@ -380,9 +380,6 @@ function DownloadDropdown({ downloading, pageFormat, docName, onDownload }: {
               </span>
             </div>
             <div className="text-[10px] text-center" style={{ color: BRAND.textSecondary }}>⌘S to save · ⌘P to download</div>
-            <div className="text-[10px] leading-relaxed px-1 py-1.5 rounded bg-amber-50 text-amber-700 border border-amber-200">
-              {t("exportMultiPageNote")}
-            </div>
             <Button
               className="w-full text-white transition-colors"
               style={{ backgroundColor: BRAND.green }}
@@ -1053,6 +1050,11 @@ const ResumeBuilder = () => {
             {lang === "zh-tw" ? "EN" : "中"}
           </button>
         </div>
+      </div>
+
+      {/* ── Multi-page export warning ──────────────────── */}
+      <div className="mx-3 sm:mx-4 mb-2 px-3 py-2 rounded-lg bg-amber-50 border border-amber-200 text-xs leading-relaxed text-amber-700">
+        {t("exportMultiPageNote")}
       </div>
 
       {/* ── Editor body ────────────────────────────────── */}
