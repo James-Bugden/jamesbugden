@@ -1249,7 +1249,7 @@ export const ResumePreview = React.memo(function ResumePreview({
 
   /* ── Clear stale margins immediately when data/customize changes ── */
   useEffect(() => {
-    visiblePageRefs.current.forEach(ref => {
+    const clearRefs = (ref: HTMLElement | null) => {
       if (!ref) return;
       ref.querySelectorAll('[data-page-item]').forEach(el => {
         (el as HTMLElement).style.marginTop = '';
@@ -1257,7 +1257,9 @@ export const ResumePreview = React.memo(function ResumePreview({
       ref.querySelectorAll('[data-page-break-child]').forEach(el => {
         (el as HTMLElement).style.marginTop = '';
       });
-    });
+    };
+    visiblePageRefs.current.forEach(clearRefs);
+    exportPageRefs.current.forEach(clearRefs);
   }, [data, customize]);
 
   /* ── Apply pagination mutations to visible + export pages (sync before paint) ── */
