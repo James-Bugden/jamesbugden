@@ -42,9 +42,9 @@ interface JourneySectionProps {
 }
 
 const CONTENT_TYPE_LABELS = {
-  guide: { en: "Guide", zh: "指南", icon: "📖" },
-  template: { en: "Template", zh: "範本", icon: "🛠" },
-  calculator: { en: "Calculator", zh: "計算器", icon: "📊" },
+  guide: { en: "Guide", zh: "指南", Icon: BookOpen },
+  template: { en: "Template", zh: "範本", Icon: Wrench },
+  calculator: { en: "Calculator", zh: "計算器", Icon: Calculator },
 };
 
 const JourneyCard = memo(function JourneyCard({
