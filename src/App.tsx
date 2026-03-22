@@ -82,6 +82,7 @@ const ProblemSolvingGuideZhTw = lazy(() => import("./pages/ProblemSolvingGuideZh
 const OfficePoliticsGuide = lazy(() => import("./pages/OfficePoliticsGuide"));
 const OfficePoliticsGuideZhTw = lazy(() => import("./pages/OfficePoliticsGuideZhTw"));
 const CareerGameGuide = lazy(() => import("./pages/CareerGameGuide"));
+const FortyEightLawsGuide = lazy(() => import("./pages/FortyEightLawsGuide"));
 const CareerGameGuideZhTw = lazy(() => import("./pages/CareerGameGuideZhTw"));
 const IkigaiGuide = lazy(() => import("./pages/IkigaiGuide"));
 const IkigaiGuideZhTw = lazy(() => import("./pages/IkigaiGuideZhTw"));
@@ -159,7 +160,7 @@ const HIDDEN_NAV_PATHS = [
   "/pivot-method-mini-guide", "/guides", "/ikigai-guide", "/office-politics-guide",
   "/problem-solving-guide", "/recruiter-guide", "/hr-interview-guide",
   "/career-game-guide", "/ai-job-search-guide", "/interview-questions",
-  "/job-offer-guide", "/salary-starter-kit", "/review", "/join",
+  "/job-offer-guide", "/salary-starter-kit", "/review", "/join", "/48-laws-guide",
 ];
 
 function MobileNavWrapper() {
@@ -300,6 +301,7 @@ const App = () => (
             <Route path="/zh-tw/office-politics-guide" element={<OfficePoliticsGuideZhTw />} />
             <Route path="/career-game-guide" element={<CareerGameGuide />} />
             <Route path="/zh-tw/career-game-guide" element={<CareerGameGuideZhTw />} />
+            <Route path="/48-laws-guide" element={<FortyEightLawsGuide />} />
             <Route path="/ikigai-guide" element={<IkigaiGuide />} />
             <Route path="/zh-tw/ikigai-guide" element={<IkigaiGuideZhTw />} />
             <Route path="/recruiter-guide" element={<RecruiterGuide />} />
