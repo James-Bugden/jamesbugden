@@ -560,7 +560,7 @@ const FortyEightLawsGuide = () => {
               <p className="mt-4 text-muted-foreground">Use this format for email updates, standup meetings, and status reports. Three sentences. No fluff.</p>
             </DiagramBox>
 
-            <ActionStep>
+            <ActionStep checked={safeActions[4]} onToggle={() => toggleAction(4)}>
               At your next meeting, prepare your update using the 3-sentence format above. Write it down before the meeting. Time yourself. If it takes more than 60 seconds to deliver, cut it shorter. Practice this every week until it becomes automatic.
             </ActionStep>
 
