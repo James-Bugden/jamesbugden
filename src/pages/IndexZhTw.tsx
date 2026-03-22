@@ -1,6 +1,6 @@
 import "@/styles/homepage.css";
 import { useState, useEffect } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { Briefcase, Users, Linkedin, FileCheck, X, CheckCircle2, Eye, Building, Plus, Minus } from "lucide-react";
 import { InstagramIcon, ThreadsIcon } from "@/components/SocialIcons";
 import jamesPhoto from "@/assets/james-bugden.jpg";
@@ -80,7 +80,17 @@ function FAQSection() {
 
 const IndexZhTw = () => {
   const { isLoggedIn } = useAuth();
+  const navigate = useNavigate();
   const [scrolled, setScrolled] = useState(false);
+
+  useEffect(() => {
+    if (!isLoggedIn) return;
+    const pending = sessionStorage.getItem("auth_redirect");
+    if (pending) {
+      sessionStorage.removeItem("auth_redirect");
+      navigate(pending === "/zh-tw" ? "/zh-tw/dashboard" : pending, { replace: true });
+    }
+  }, [isLoggedIn, navigate]);
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 80);
