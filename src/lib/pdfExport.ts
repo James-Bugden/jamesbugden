@@ -242,22 +242,34 @@ export async function exportResumePages(config: ResumeExportConfig) {
   // Cleanup functions for style overrides
   let restoreLight: (() => void) | null = null;
   let restoreVars: (() => void) | null = null;
+  let restorePosition: (() => void) | null = null;
 
   try {
     // 0. Wait for all assets (images + fonts)
     await waitForAssets(sourceElement);
 
-    // 1. Force light mode & resolve CSS variables to prevent dark/blank output
+    // 1. Move hidden element into viewport for capture
+    //    html-to-image cannot capture elements at left:-9999px
+    const savedPos = sourceElement.style.cssText;
+    sourceElement.style.position = "fixed";
+    sourceElement.style.left = "0";
+    sourceElement.style.top = "0";
+    sourceElement.style.zIndex = "-1";
+    sourceElement.style.opacity = "0.01"; // near-invisible but renderable
+    sourceElement.style.pointerEvents = "none";
+    restorePosition = () => { sourceElement.style.cssText = savedPos; };
+
+    // 2. Force light mode & resolve CSS variables to prevent dark/blank output
     restoreLight = forceLightMode(sourceElement);
     restoreVars = resolveCSSVariables(sourceElement);
 
-    // Small repaint delay so forced styles take effect
-    await new Promise((r) => setTimeout(r, 50));
+    // Repaint delay so forced styles + position take effect
+    await new Promise((r) => requestAnimationFrame(() => requestAnimationFrame(() => setTimeout(r, 80))));
 
     const ratio = isMobile() ? 1.5 : 2;
     const fontEmbedCSS = await getFontEmbedCSS();
 
-    // 2. Capture the entire hidden flow as one tall PNG
+    // 3. Capture the entire hidden flow as one tall PNG
     const tallDataUrl = await toPng(sourceElement, {
       pixelRatio: ratio,
       cacheBust: true,
