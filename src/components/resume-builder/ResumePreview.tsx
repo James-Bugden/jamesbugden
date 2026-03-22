@@ -1262,7 +1262,7 @@ export const ResumePreview = React.memo(function ResumePreview({
     visiblePageRefs.current.forEach(clearRefs);
   }, [data, customize]);
 
-  /* ── Apply pagination mutations to visible + export pages (sync before paint) ── */
+  /* ── Apply pagination mutations to visible pages (sync before paint) ── */
   useLayoutEffect(() => {
     if (!mutations) return;
 
@@ -1287,7 +1287,6 @@ export const ResumePreview = React.memo(function ResumePreview({
     };
 
     visiblePageRefs.current.forEach(applyMutationsToRef);
-    exportPageRefs.current.forEach(applyMutationsToRef);
   }, [mutations, pageCount]);
 
   useEffect(() => {
