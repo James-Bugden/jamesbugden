@@ -127,8 +127,20 @@ function serializeResumeHtml(
     (el as HTMLElement).style.marginTop = "";
   });
 
-  // Remove interactive elements
+  // Remove interactive elements (NOT <header> — that's the resume header with name/title)
   clone.querySelectorAll("button, [data-edit-overlay], .no-print, [data-radix-popper-content-wrapper]").forEach((el) => el.remove());
+
+  // Debug: verify header is in the clone
+  const headerEl = clone.querySelector("header");
+  const nameEl = clone.querySelector("h1");
+  console.log("PDF Export Debug:", {
+    hasHeader: !!headerEl,
+    hasH1: !!nameEl,
+    h1Text: nameEl?.textContent,
+    cloneChildCount: clone.children.length,
+    firstChildTag: clone.firstElementChild?.tagName,
+    innerHtmlPreview: clone.innerHTML.substring(0, 500),
+  });
 
   return `<!DOCTYPE html>
 <html>
