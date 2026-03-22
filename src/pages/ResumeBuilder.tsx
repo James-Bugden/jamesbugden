@@ -1052,6 +1052,11 @@ const ResumeBuilder = () => {
         </div>
       </div>
 
+      {/* ── Multi-page export warning ──────────────────── */}
+      <div className="mx-3 sm:mx-4 mb-2 px-3 py-2 rounded-lg bg-amber-50 border border-amber-200 text-xs leading-relaxed text-amber-700">
+        {t("exportMultiPageNote")}
+      </div>
+
       {/* ── Editor body ────────────────────────────────── */}
       <div className="flex-1 overflow-hidden">
         {/* Desktop: 40/60 split */}
