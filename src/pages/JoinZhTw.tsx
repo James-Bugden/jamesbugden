@@ -8,7 +8,7 @@ import { Mail, Lock, Eye, EyeOff, ScanSearch, FileText, BookOpen, Loader2, Shiel
 import LanguageToggle from "@/components/LanguageToggle";
 import { useAuth } from "@/contexts/AuthContext";
 import PageSEO from "@/components/PageSEO";
-import LogoScrollExperimentZhTw from "@/components/LogoScrollExperimentZhTw";
+import LogoScrollZhTw from "@/components/LogoScrollZhTw";
 import { motion } from "framer-motion";
 import {
   Accordion,
