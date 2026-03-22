@@ -369,5 +369,6 @@ export async function exportResumePages(config: ResumeExportConfig) {
     // Always restore original styles
     restoreVars?.();
     restoreLight?.();
+    restorePosition?.();
   }
 }
