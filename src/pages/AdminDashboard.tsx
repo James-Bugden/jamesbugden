@@ -128,7 +128,7 @@ export default function AdminDashboard() {
   const { toast } = useToast();
 
   // Counts
-  const [counts, setCounts] = useState({ reviews: 0, salary: 0, resumes: 0, emails: 0, accounts: 0 });
+  const [counts, setCounts] = useState({ reviews: 0, salary: 0, resumes: 0, emails: 0, accounts: 0, feedback: 0 });
 
   // Reviews state
   const [reviews, setReviews] = useState<ClientReview[]>([]);
