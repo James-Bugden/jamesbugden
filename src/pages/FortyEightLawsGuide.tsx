@@ -1,5 +1,5 @@
-import { Clock, Linkedin, ChevronDown, Menu, FileText, Shield, Target, Zap, Brain, Compass, Swords, Crown, Eye, ArrowRight, BookOpen } from "lucide-react";
-import { Link } from "react-router-dom";
+import { Clock, Linkedin, ChevronDown, Menu, FileText, Shield, Target, Zap, Brain, Compass, Swords, Crown, Eye, ArrowRight, BookOpen, Check, X, Save } from "lucide-react";
+import { Link, useLocation } from "react-router-dom";
 import GoldCheckBadge from "@/components/GoldCheckBadge";
 import { InstagramIcon, ThreadsIcon } from "@/components/SocialIcons";
 import GuideShareButtons from "@/components/GuideShareButtons";
@@ -9,6 +9,8 @@ import PageSEO from "@/components/PageSEO";
 import { useTrackGuideProgress } from "@/hooks/useReadingProgress";
 import GuideSignInBanner from "@/components/guides/GuideSignInBanner";
 import GuideBottomCTA from "@/components/guides/GuideBottomCTA";
+import { useGuideStorage } from "@/hooks/useGuideStorage";
+import { useAuth } from "@/contexts/AuthContext";
 import { useState, useEffect } from "react";
 
 const SectionNumber = ({ num }: { num: string }) => (
@@ -30,12 +32,40 @@ const Collapsible = ({ title, children }: { title: string; children: React.React
   );
 };
 
-const ActionStep = ({ children }: { children: React.ReactNode }) => (
-  <div className="bg-gold/5 border border-gold/20 rounded-xl p-5 md:p-6">
-    <p className="text-sm font-semibold text-gold uppercase tracking-wider mb-2">Action Step</p>
-    <div className="text-foreground text-sm leading-relaxed">{children}</div>
+const ActionStep = ({ children, checked, onToggle }: { children: React.ReactNode; checked?: boolean; onToggle?: () => void }) => (
+  <div
+    className={`bg-gold/5 border border-gold/20 rounded-xl p-5 md:p-6 transition-opacity ${checked ? "opacity-60" : ""} ${onToggle ? "cursor-pointer" : ""}`}
+    onClick={onToggle}
+  >
+    <div className="flex items-center justify-between mb-2">
+      <p className="text-sm font-semibold text-gold uppercase tracking-wider">Action Step</p>
+      {onToggle && (
+        <span className={`shrink-0 w-5 h-5 rounded border-2 flex items-center justify-center transition-colors ${checked ? "bg-gold border-gold text-background" : "border-muted-foreground/40 hover:border-gold/60"}`}>
+          {checked && <Check className="w-3 h-3" />}
+        </span>
+      )}
+    </div>
+    <div className={`text-foreground text-sm leading-relaxed ${checked ? "line-through text-muted-foreground" : ""}`}>{children}</div>
   </div>
 );
+
+function ActionSaveBanner({ onDismiss }: { onDismiss: () => void }) {
+  const location = useLocation();
+  const returnUrl = encodeURIComponent(location.pathname);
+  return (
+    <div className="flex items-center gap-3 bg-gold/10 border border-gold/30 rounded-lg px-4 py-3 mt-6">
+      <p className="text-muted-foreground text-xs flex-1">
+        Progress saved on this device. Create a free account to sync across devices.
+      </p>
+      <a href={`/join?returnUrl=${returnUrl}`} className="shrink-0 text-xs font-semibold text-gold hover:text-gold/80 underline underline-offset-2">
+        Create Account
+      </a>
+      <button onClick={onDismiss} className="shrink-0 text-muted-foreground hover:text-foreground">
+        <X className="w-3.5 h-3.5" />
+      </button>
+    </div>
+  );
+}
 
 const Reversal = ({ children }: { children: React.ReactNode }) => (
   <div className="bg-muted/50 border border-border rounded-xl p-5 md:p-6">
@@ -169,9 +199,49 @@ const allLaws: { num: number; title: string; tag: "USE" | "DEFEND" | "AVOID"; wo
   { num: 48, title: "Assume Formlessness", tag: "USE", workplace: "Stay adaptable. The market will shift under you.", example: "Your specialty gets automated. You learn to manage the automation and become more valuable.", action: "Identify one skill outside your current role worth learning. Spend 30 minutes a week on it for 6 months." },
 ];
 
+const TOTAL_ACTIONS = 19;
+const AUDIT_AREAS = [
+  { area: "1. DIRECTION", question: "Do I know what I'm building toward? Am I in alive time?" },
+  { area: "2. MANAGING UP", question: "Does my boss see me as an ally? Do I pick battles well?" },
+  { area: "3. REPUTATION", question: "Do senior leaders (beyond my boss) know my name and work?" },
+  { area: "4. IRREPLACEABILITY", question: "Would my team struggle if I left? Do I own something nobody else understands?" },
+  { area: "5. GETTING WHAT I WANT", question: "Am I tracking my wins? Is my brag doc up to date? Have I asked for what I've earned?" },
+  { area: "6. POLITICAL AWARENESS", question: "Do I know who has influence? Am I allied with builders? Do I avoid negativity?" },
+  { area: "7. LONG GAME", question: "Does my current role serve my 5-year plan? Am I building skills for where I want to be?" },
+];
+
 const FortyEightLawsGuide = () => {
   useTrackGuideProgress("48-laws");
+  const { isLoggedIn } = useAuth();
   const [lawFilter, setLawFilter] = useState<"ALL" | "USE" | "DEFEND" | "AVOID">("ALL");
+  const [bannerDismissed, setBannerDismissed] = useState(false);
+
+  // Interactive state with cloud sync
+  const [actionChecks, setActionChecks] = useGuideStorage<boolean[]>("48laws_actions_en", Array(TOTAL_ACTIONS).fill(false));
+  const [auditScores, setAuditScores] = useGuideStorage<number[]>("48laws_power_audit_en", Array(7).fill(0));
+  const [auditHistory, setAuditHistory] = useGuideStorage<Array<{ date: string; scores: number[]; total: number }>>("48laws_audit_history_en", []);
+
+  const safeActions = Array.from({ length: TOTAL_ACTIONS }, (_, i) => actionChecks[i] ?? false);
+  const completedActions = safeActions.filter(Boolean).length;
+  const toggleAction = (i: number) => setActionChecks(prev => {
+    const next = [...(prev.length >= TOTAL_ACTIONS ? prev : Array(TOTAL_ACTIONS).fill(false))];
+    next[i] = !next[i];
+    return next;
+  });
+
+  const safeScores = Array.from({ length: 7 }, (_, i) => auditScores[i] ?? 0);
+  const auditTotal = safeScores.reduce((a, b) => a + b, 0);
+  const setScore = (i: number, val: number) => setAuditScores(prev => {
+    const next = [...(prev.length >= 7 ? prev : Array(7).fill(0))];
+    next[i] = Math.max(0, Math.min(5, val));
+    return next;
+  });
+  const saveSnapshot = () => {
+    setAuditHistory(prev => [...prev, { date: new Date().toISOString().slice(0, 10), scores: [...safeScores], total: auditTotal }]);
+  };
+
+  const totalInteractions = completedActions + safeScores.filter(s => s > 0).length;
+  const showSaveBanner = totalInteractions >= 2 && !isLoggedIn && !bannerDismissed;
 
   const filteredLaws = lawFilter === "ALL" ? allLaws : allLaws.filter(l => l.tag === lawFilter);
 
@@ -357,7 +427,7 @@ const FortyEightLawsGuide = () => {
               "The greatest career danger is you are replaceable." Following your unique inclinations is the only real protection against that.
             </p>
 
-            <ActionStep>
+            <ActionStep checked={safeActions[0]} onToggle={() => toggleAction(0)}>
               Write down three activities from your childhood you loved doing before anyone told you what was practical. Then write three things in your current work that give you the same feeling. Look for the overlap. If there is none, bring one of those childhood skills into your current role this month. Find a project where it applies.
             </ActionStep>
 
@@ -397,7 +467,7 @@ const FortyEightLawsGuide = () => {
               </div>
             </DiagramBox>
 
-            <ActionStep>
+            <ActionStep checked={safeActions[1]} onToggle={() => toggleAction(1)}>
               If you scored below 12, pick one thing to learn from your current role this week. It doesn't need to be related to your job title. Study how budgets get approved. Watch how the top performer on your team communicates. Read the company's investor presentations. Turn dead time into alive time starting today.
             </ActionStep>
 
@@ -412,7 +482,7 @@ const FortyEightLawsGuide = () => {
               Think of it as the "hacker model" of career development. Learn many skills following your deepest interests. Combine them in ways nobody else does. "The future belongs to those who learn more skills and combine them in creative ways."
             </p>
 
-            <ActionStep>
+            <ActionStep checked={safeActions[2]} onToggle={() => toggleAction(2)}>
               List every skill you've picked up across all your roles. Include side projects and hobbies with transferable skills. Which two or three skills, stacked together, would make you hard to replace? Identify the gap in your stack. Then find a project, course, or side assignment in the next 30 days to start filling it.
             </ActionStep>
 
@@ -462,7 +532,7 @@ const FortyEightLawsGuide = () => {
               If your boss is failing or on the way out, outshining them speeds up their replacement. But you need allies above them and an exit plan if it backfires.
             </Reversal>
             <div className="mt-6">
-              <ActionStep>
+              <ActionStep checked={safeActions[3]} onToggle={() => toggleAction(3)}>
                 This week, find one way to make your boss look good without being asked. Send them a bullet-point summary of a win they can forward to their boss. Prepare a slide they can use in their next leadership meeting. The goal: they associate you with making their life easier.
               </ActionStep>
             </div>
@@ -490,7 +560,7 @@ const FortyEightLawsGuide = () => {
               <p className="mt-4 text-muted-foreground">Use this format for email updates, standup meetings, and status reports. Three sentences. No fluff.</p>
             </DiagramBox>
 
-            <ActionStep>
+            <ActionStep checked={safeActions[4]} onToggle={() => toggleAction(4)}>
               At your next meeting, prepare your update using the 3-sentence format above. Write it down before the meeting. Time yourself. If it takes more than 60 seconds to deliver, cut it shorter. Practice this every week until it becomes automatic.
             </ActionStep>
 
@@ -585,7 +655,7 @@ const FortyEightLawsGuide = () => {
             <p className="text-muted-foreground leading-relaxed mb-6">
               Reputation is the single most valuable asset in your career. And the easiest to destroy.
             </p>
-            <ActionStep>
+            <ActionStep checked={safeActions[5]} onToggle={() => toggleAction(5)}>
               Google yourself right now. Check LinkedIn, social media, and anything public. If the results don't reflect the professional you want to be, fix it today. Remove old posts. Update your LinkedIn headline. Ask a trusted friend: "What would someone say about me after meeting me once?" If the answer surprises you, you have work to do.
             </ActionStep>
 
@@ -599,7 +669,7 @@ const FortyEightLawsGuide = () => {
             <p className="text-muted-foreground leading-relaxed mb-6">
               Visibility means volunteering for projects where new people see your name. Presenting your own work instead of letting others present it. Raising your hand when senior leaders visit your team. Writing internal updates and recaps with your name on them.
             </p>
-            <ActionStep>
+            <ActionStep checked={safeActions[6]} onToggle={() => toggleAction(6)}>
               Identify one project or initiative at work where you're doing the work but someone else gets the visibility. Volunteer to present it yourself at the next team meeting or send a written recap with your name on it. Do this once a month. Within a quarter, senior leaders will know your name.
             </ActionStep>
 
@@ -659,7 +729,7 @@ const FortyEightLawsGuide = () => {
               Don't hoard information out of fear. People who hoard become bottlenecks. Bottlenecks get bypassed and eventually removed. Share enough to be generous. Keep enough to be essential.
             </Reversal>
             <div className="mt-6">
-              <ActionStep>
+              <ActionStep checked={safeActions[7]} onToggle={() => toggleAction(7)}>
                 Identify the one thing you do at work nobody else fully understands. Now ask: if you got sick for two weeks, would the team struggle? If yes, you have some degree of irreplaceability. If no, start building it. Pick one process, one client relationship, or one knowledge area and go deeper than anyone else on your team.
               </ActionStep>
             </div>
@@ -671,7 +741,7 @@ const FortyEightLawsGuide = () => {
             <p className="text-muted-foreground leading-relaxed mb-6">
               Don't spread across 10 projects doing average work on each. Go deep on 2-3 and deliver exceptional results. Become the go-to person for one specific thing before expanding. Build T-shaped skills: wide awareness across many areas, deep expertise in one.
             </p>
-            <ActionStep>
+            <ActionStep checked={safeActions[8]} onToggle={() => toggleAction(8)}>
               Count how many active projects you're contributing to right now. If the number is higher than 5, you're spread too thin. Pick the 2-3 with the highest impact and visibility. Reduce your involvement in the rest. Depth on a few beats surface-level effort on many.
             </ActionStep>
 
@@ -736,7 +806,7 @@ const FortyEightLawsGuide = () => {
             <p className="text-muted-foreground leading-relaxed mb-6">
               Reframe it: "Here's what I've delivered. Here's what I plan to deliver next. Here's the role and compensation level where I will do my best work." Every sentence focuses on what they gain, not what you deserve.
             </p>
-            <ActionStep>
+            <ActionStep checked={safeActions[9]} onToggle={() => toggleAction(9)}>
               Write your raise request right now using this frame. Three sentences. What you delivered (with numbers). What you plan to deliver next. What you need to do your best work. Don't send it yet. Refine it over a week. Then schedule the meeting.
             </ActionStep>
 
@@ -760,7 +830,7 @@ const FortyEightLawsGuide = () => {
               <p className="mt-4 pt-4 border-t border-border text-muted-foreground">Use this at review time. Don't rely on memory. Your manager won't remember. Your brag doc will.</p>
             </DiagramBox>
 
-            <ActionStep>
+            <ActionStep checked={safeActions[10]} onToggle={() => toggleAction(10)}>
               Set a recurring 5-minute calendar event every Friday at 4 PM. Title it "Brag Doc." Fill in the four fields above. Do this for 12 weeks. At your next review, you'll have 12 weeks of documented wins ready to go while everyone else is trying to remember what they did.
             </ActionStep>
 
@@ -777,7 +847,7 @@ const FortyEightLawsGuide = () => {
             <p className="text-muted-foreground leading-relaxed mb-6">
               Deliver the results. Let them speak. Don't attach a "this was so hard" narrative to everything you produce. If you need more resources or more time, ask for them clearly and professionally. Don't martyr yourself.
             </p>
-            <ActionStep>
+            <ActionStep checked={safeActions[11]} onToggle={() => toggleAction(11)}>
               For your next project delivery, strip all "effort language" from your update. No mentions of late nights, weekends, or stress. Present the result. Describe the impact. Stop there. Watch how people respond differently when you project composure instead of exhaustion.
             </ActionStep>
 
@@ -839,7 +909,7 @@ const FortyEightLawsGuide = () => {
               <li>What is the worst-case interpretation of my words?</li>
             </ol>
             <p className="text-muted-foreground leading-relaxed mb-6">If you don't know the answer to all three, slow down.</p>
-            <ActionStep>
+            <ActionStep checked={safeActions[12]} onToggle={() => toggleAction(12)}>
               Before your next sensitive email, meeting request, or escalation, pause and answer those three questions on paper. Keep a note on your desk: "Who gains? Who loses? Worst interpretation?" Make it a habit. This filter prevents more career damage than any other habit in this guide.
             </ActionStep>
 
@@ -856,7 +926,7 @@ const FortyEightLawsGuide = () => {
             <p className="text-muted-foreground leading-relaxed mb-6">
               Choose your lunch table, your Slack channels, and your allies with intention. Be kind to everyone. But invest your time and energy in people who build, not people who tear down.
             </p>
-            <ActionStep>
+            <ActionStep checked={safeActions[13]} onToggle={() => toggleAction(13)}>
               Audit your top 5 work relationships. Who do you spend the most time with? Are they builders or complainers? If more than two are chronic complainers, start creating distance. Sit somewhere different at lunch. Join a different Slack channel. Proximity shapes perception. Choose it deliberately.
             </ActionStep>
 
@@ -877,7 +947,7 @@ const FortyEightLawsGuide = () => {
               Conformity without boundaries becomes spinelessness. Know where your line is. Some hills are worth dying on. Choose them deliberately.
             </Reversal>
             <div className="mt-6">
-              <ActionStep>
+              <ActionStep checked={safeActions[14]} onToggle={() => toggleAction(14)}>
                 Write down your three non-negotiable professional boundaries. These are the lines you will not cross regardless of pressure: ethical, personal, or professional. Examples: "I will not lie to a client." "I will not take credit for someone else's work." "I will not stay silent about safety issues." Knowing your lines before you face pressure is the difference between integrity and regret.
               </ActionStep>
             </div>
@@ -947,7 +1017,7 @@ const FortyEightLawsGuide = () => {
             <p className="text-muted-foreground leading-relaxed mb-6">
               Work backward from where you want to be in five years. Every role is a stepping stone, not a destination. Before you accept a new position, ask: "Does this get me closer to where I want to be?"
             </p>
-            <ActionStep>
+            <ActionStep checked={safeActions[15]} onToggle={() => toggleAction(15)}>
               Write your ideal job title for 5 years from now. Then list the 3 skills or experiences your resume is missing to get there. Now look at your current role: does it fill any of those gaps? If yes, double down. If no, start planning your next move.
             </ActionStep>
 
@@ -968,7 +1038,7 @@ const FortyEightLawsGuide = () => {
               Patience becomes stagnation if you stay too long without growing. If you've been in the same role for three years with no development, the problem isn't timing. It's the role.
             </Reversal>
             <div className="mt-6">
-              <ActionStep>
+              <ActionStep checked={safeActions[16]} onToggle={() => toggleAction(16)}>
                 Answer honestly: are you still learning at your current job? If the answer has been "no" for 6+ months, start preparing your exit. Update your resume. Activate your network. Don't wait for the perfect moment. The right time to move is before you're desperate to leave.
               </ActionStep>
             </div>
@@ -983,7 +1053,7 @@ const FortyEightLawsGuide = () => {
             <p className="text-muted-foreground leading-relaxed mb-6">
               And if you're starting late? "You must cultivate a new set of skills suited to this change in direction, and find a way to blend them with your previous skills. Nothing in this process is ever wasted."
             </p>
-            <ActionStep>
+            <ActionStep checked={safeActions[17]} onToggle={() => toggleAction(17)}>
               Write down one skill outside your current job description worth learning in the next 6 months. Not because your boss asked for it. Because the market will reward it in 3-5 years. Start with 30 minutes a week. That's how formlessness begins.
             </ActionStep>
 
@@ -997,7 +1067,7 @@ const FortyEightLawsGuide = () => {
             <p className="text-muted-foreground leading-relaxed mb-6">
               Know the difference between consolidation and coasting. Consolidation is intentional: building the foundation for the next move. Coasting is passive: you've stopped growing.
             </p>
-            <ActionStep>
+            <ActionStep checked={safeActions[18]} onToggle={() => toggleAction(18)}>
               After your next win (promotion, successful project, public recognition), resist the urge to immediately push for the next thing. Instead, spend 30 days building relationships at your new level. Schedule 1:1 coffees with three new peers or stakeholders you didn't have access to before. Consolidate your position before expanding it.
             </ActionStep>
 
@@ -1111,28 +1181,62 @@ const FortyEightLawsGuide = () => {
             <DiagramBox title="Your Power Audit">
               <p className="mb-4">Score each area 1-5. Repeat every 90 days.</p>
               <div className="space-y-4">
-                {[
-                  { area: "1. DIRECTION", question: "Do I know what I'm building toward? Am I in alive time?" },
-                  { area: "2. MANAGING UP", question: "Does my boss see me as an ally? Do I pick battles well?" },
-                  { area: "3. REPUTATION", question: "Do senior leaders (beyond my boss) know my name and work?" },
-                  { area: "4. IRREPLACEABILITY", question: "Would my team struggle if I left? Do I own something nobody else understands?" },
-                  { area: "5. GETTING WHAT I WANT", question: "Am I tracking my wins? Is my brag doc up to date? Have I asked for what I've earned?" },
-                  { area: "6. POLITICAL AWARENESS", question: "Do I know who has influence? Am I allied with builders? Do I avoid negativity?" },
-                  { area: "7. LONG GAME", question: "Does my current role serve my 5-year plan? Am I building skills for where I want to be?" },
-                ].map((item, i) => (
-                  <div key={i}>
-                    <p className="font-medium text-foreground">{item.area}</p>
-                    <p className="text-muted-foreground text-sm">{item.question}</p>
+                {AUDIT_AREAS.map((item, i) => (
+                  <div key={i} className="flex items-start gap-4">
+                    <div className="flex-1">
+                      <p className="font-medium text-foreground">{item.area}</p>
+                      <p className="text-muted-foreground text-sm">{item.question}</p>
+                    </div>
+                    <div className="shrink-0 flex items-center gap-1.5">
+                      {[1, 2, 3, 4, 5].map(n => (
+                        <button
+                          key={n}
+                          onClick={() => setScore(i, safeScores[i] === n ? 0 : n)}
+                          className={`w-8 h-8 rounded-lg text-sm font-semibold transition-colors ${
+                            safeScores[i] === n
+                              ? "bg-gold text-background"
+                              : "bg-muted text-muted-foreground hover:bg-muted/80"
+                          }`}
+                        >
+                          {n}
+                        </button>
+                      ))}
+                    </div>
                   </div>
                 ))}
               </div>
-              <div className="mt-6 pt-4 border-t border-border space-y-1">
-                <p className="font-medium text-foreground">Scoring (out of 35):</p>
-                <p><strong>28-35:</strong> Strong position. Focus on growth and impact.</p>
-                <p><strong>20-27:</strong> Solid foundation. One or two areas need attention.</p>
-                <p><strong>12-19:</strong> Exposed. Pick your weakest area. Focus there for the next 90 days.</p>
-                <p><strong>Below 12:</strong> Career risk. Start with Sections 2 and 4 today.</p>
+              <div className="mt-6 pt-4 border-t border-border">
+                <div className="flex items-center justify-between mb-3">
+                  <p className="font-medium text-foreground">
+                    Your score: <span className={`text-lg font-bold ${auditTotal >= 28 ? "text-emerald-500" : auditTotal >= 20 ? "text-gold" : auditTotal >= 12 ? "text-amber-500" : auditTotal > 0 ? "text-red-500" : "text-muted-foreground"}`}>{auditTotal}</span> / 35
+                  </p>
+                  {auditTotal > 0 && (
+                    <button onClick={saveSnapshot} className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-gold/10 text-gold text-xs font-semibold hover:bg-gold/20 transition-colors">
+                      <Save className="w-3.5 h-3.5" />
+                      Save snapshot
+                    </button>
+                  )}
+                </div>
+                <div className="space-y-1">
+                  <p><strong>28-35:</strong> Strong position. Focus on growth and impact.</p>
+                  <p><strong>20-27:</strong> Solid foundation. One or two areas need attention.</p>
+                  <p><strong>12-19:</strong> Exposed. Pick your weakest area. Focus there for the next 90 days.</p>
+                  <p><strong>Below 12:</strong> Career risk. Start with Sections 2 and 4 today.</p>
+                </div>
               </div>
+              {auditHistory.length > 0 && (
+                <div className="mt-6 pt-4 border-t border-border">
+                  <p className="font-medium text-foreground mb-2">Previous snapshots</p>
+                  <div className="space-y-2">
+                    {auditHistory.map((snap, i) => (
+                      <div key={i} className="flex items-center justify-between bg-muted/50 rounded-lg px-3 py-2 text-sm">
+                        <span className="text-muted-foreground">{snap.date}</span>
+                        <span className="font-semibold text-foreground">{snap.total}/35</span>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )}
               <div className="mt-6 pt-4 border-t border-border">
                 <p className="font-medium text-foreground mb-2">After scoring:</p>
                 <ol className="space-y-1 list-decimal list-inside text-muted-foreground text-sm">
@@ -1223,6 +1327,16 @@ const FortyEightLawsGuide = () => {
           </div>
         </section>
       </main>
+
+      {/* Action step progress + save banner */}
+      {completedActions > 0 && (
+        <div className="py-6 px-5 md:px-6 bg-muted/30 border-t border-border">
+          <div className="container mx-auto max-w-3xl">
+            <p className="text-sm text-muted-foreground">{completedActions}/{TOTAL_ACTIONS} action steps completed</p>
+            {showSaveBanner && <ActionSaveBanner onDismiss={() => setBannerDismissed(true)} />}
+          </div>
+        </div>
+      )}
 
       <GuideBottomCTA lang="en" />
 
