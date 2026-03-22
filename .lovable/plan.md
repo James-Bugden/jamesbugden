@@ -1,59 +1,33 @@
 
-# Fix: MailerLite sync not firing for Google OAuth signups
 
-## Problem
-13 new Google OAuth accounts were created today but none triggered the `sync-mailerlite` edge function. The logs confirm zero calls for these users.
+## Fix: Resume PDF Export
 
-**Root cause**: When a Google OAuth user returns to the site, two things happen simultaneously:
-1. `AuthContext` detects `SIGNED_IN` and calls `syncToMailerLite` (fire-and-forget fetch)
-2. The Join/Signup page's `useEffect` detects `isLoggedIn` and immediately navigates to the dashboard
+### Problem
+The `#resume-pdf-target` element in `ResumePreview.tsx` is the hidden measurement div used for pagination calculations. It's positioned at `left: -9999px` — completely off-screen. When `exportToPdf()` calls `html2canvas` on this element, the rendering fails or produces a blank/broken output because `html2canvas` struggles with off-screen elements.
 
-The page navigation cancels the in-flight fetch request before it completes.
+### Solution
+Modify `exportToPdf` in `src/lib/pdfExport.ts` to temporarily move the target element on-screen (but visually hidden behind a white overlay) before capturing, then restore it after.
 
-## Solution: Move sync to a database trigger (server-side)
+### Changes
 
-Instead of relying on client-side code that can be interrupted by navigation, move the MailerLite sync to a **database trigger + edge function** pattern that fires reliably on the server.
+**File: `src/lib/pdfExport.ts`**
+- Before calling `html2canvas`, temporarily override the container's styles:
+  - Set `left: 0`, `top: 0`, `position: fixed`, `z-index: -1`, `opacity: 1`
+  - This makes it renderable by html2canvas without being visible to the user
+- After capture completes, restore the original styles
+- This is a minimal, non-breaking change — no other files need editing
 
-### Step 1 — Create a `profiles` insert trigger via migration
-- Create a trigger on `auth.users` — **wait, we can't modify auth schema.**
-- Instead: create a database webhook or use the existing `AuthContext` approach but make it more resilient.
+### Technical Detail
+```text
+Before capture:
+  container.style.left = "0"
+  container.style.top = "0"  
+  container.style.position = "fixed"
+  container.style.zIndex = "-1"
 
-### Revised approach — Make client-side sync resilient
+Capture with html2canvas...
 
-**File: `src/contexts/AuthContext.tsx`**
-- Add a small delay or use `setTimeout(..., 0)` to ensure the sync call is dispatched before navigation occurs
-- Better: use `navigator.sendBeacon` or `keepalive: true` fetch option so the request survives page navigation
-
-**File: `src/lib/mailerlite.ts`**
-- Change from `supabase.functions.invoke` to a direct `fetch` call with `keepalive: true` — this ensures the request completes even if the page navigates away
-- Construct the edge function URL using `VITE_SUPABASE_URL`
-
-### Step 2 — Backfill missing subscribers
-- Run a one-time script via the edge function to sync today's 13 missing users to MailerLite group `181733295867823354`
-
-### Step 3 — Add a fallback server-side sync
-- Create a lightweight cron or database trigger approach: add a `profiles` table insert trigger that calls the sync function, ensuring no signups are ever missed regardless of client behavior
-
-## Technical details
-
-The key fix in `mailerlite.ts`:
-```typescript
-export function syncToMailerLite(email: string, name?: string): void {
-  const url = `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/sync-mailerlite`;
-  fetch(url, {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-      "apikey": import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY,
-    },
-    body: JSON.stringify({ email, name }),
-    keepalive: true,  // survives page navigation
-  }).catch(() => {});
-}
+After capture:
+  Restore original styles
 ```
 
-This single change (`keepalive: true`) will fix the issue for all OAuth signups going forward.
-
-## Files to modify
-1. `src/lib/mailerlite.ts` — switch to `fetch` with `keepalive: true`
-2. `supabase/functions/sync-mailerlite/index.ts` — add a `/batch` mode to backfill the 13 missing users
