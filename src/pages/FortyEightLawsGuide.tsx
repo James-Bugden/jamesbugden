@@ -166,7 +166,7 @@ const allLaws: { num: number; title: string; tag: "USE" | "DEFEND" | "AVOID"; wo
   { num: 45, title: "Preach Change, But Don't Reform Too Much", tag: "USE", workplace: "New in a role? Change things gradually. Rapid overhaul = resistance.", example: "New managers who change everything in month one lose trust.", action: "In a new role, spend 30 days listening before changing anything. Small wins first. Big changes after trust is built." },
   { num: 46, title: "Never Appear Too Perfect", tag: "USE", workplace: "Show strategic vulnerability. Envy is the silent career killer.", example: "After a big win, you credit your team and mention what you'd improve next time.", action: "After your next visible success, publicly credit one person who helped and name one thing you'd do differently." },
   { num: 47, title: "In Victory, Learn When to Stop", tag: "USE", workplace: "After a win, consolidate. Overreach turns allies into opponents.", example: "You get promoted. You spend 6 months proving you belong before pushing for the next move.", action: "After a win, schedule 3 coffees with new peers at your new level. Build the foundation before expanding." },
-  { num: 48, title: "Assume Formlessness", tag: "USE", workplace: "Stay adaptable. Rigidity is a career risk.", example: "You learn a new skill outside your job description. It becomes your advantage.", action: "Pick one skill the market will reward in 3-5 years. Spend 30 minutes a week learning it. Start this week." },
+  { num: 48, title: "Assume Formlessness", tag: "USE", workplace: "Stay adaptable. The market will shift under you.", example: "Your specialty gets automated. You learn to manage the automation and become more valuable.", action: "Identify one skill outside your current role worth learning. Spend 30 minutes a week on it for 6 months." },
 ];
 
 const FortyEightLawsGuide = () => {
@@ -225,6 +225,38 @@ const FortyEightLawsGuide = () => {
       <GuideSignInBanner lang="en" />
       <TableOfContents />
 
+      {/* ── How to Use This Guide ── */}
+      <section className="py-10 md:py-14 px-5 md:px-6 bg-muted/30 border-b border-border">
+        <div className="container mx-auto max-w-3xl">
+          <h2 className="font-heading text-xl md:text-2xl text-foreground mb-6">How to Use This Guide</h2>
+          <div className="overflow-x-auto mb-6">
+            <table className="w-full text-sm border-collapse">
+              <thead>
+                <tr><th className="text-left p-3 border-b border-border text-foreground" colSpan={2}>Where are you right now?</th></tr>
+              </thead>
+              <tbody>
+                {[
+                  { situation: "\"I feel lost. I don't know what career to pursue.\"", start: "Find Your Direction First", extra: <> + the <Link to="/ikigai-guide" className="text-gold hover:underline">Ikigai Career Guide</Link></> },
+                  { situation: "\"My boss takes credit for my work.\"", start: "Manage Up", extra: null },
+                  { situation: "\"I got passed over for a promotion.\"", start: "Build Your Reputation", extra: <> + Get What You Want</> },
+                  { situation: "\"Office politics are destroying me.\"", start: "Survive Office Politics", extra: null },
+                  { situation: "\"I don't know who to trust at work.\"", start: "Survive Office Politics", extra: null },
+                  { situation: "\"I want to ask for a raise but don't know when.\"", start: "Get What You Want", extra: null },
+                  { situation: "\"I feel stuck and invisible.\"", start: "Build Your Reputation", extra: null },
+                  { situation: "\"I need a full career reset.\"", start: "Find Your Direction First", extra: <> + the <Link to="/ikigai-guide" className="text-gold hover:underline">Ikigai Career Guide</Link></> },
+                  { situation: "\"Give me the cheat sheet.\"", start: "All 48 Laws: Quick Reference", extra: null },
+                ].map((row, i) => (
+                  <tr key={i} className="border-b border-border/50">
+                    <td className="p-3 text-muted-foreground">{row.situation}</td>
+                    <td className="p-3 text-foreground font-medium">→ Start with: {row.start}{row.extra}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
       {/* ── Introduction ── */}
       <section id="intro" className="py-14 md:py-20 px-5 md:px-6 bg-card border-b border-border scroll-mt-24">
         <div className="container mx-auto max-w-3xl">
@@ -254,11 +286,28 @@ const FortyEightLawsGuide = () => {
             </p>
           </div>
 
+          <div className="bg-card border border-border rounded-xl p-5 md:p-6 mb-6">
+            <h3 className="font-heading text-lg text-gold mb-4">Guide structure at a glance</h3>
+            <ol className="space-y-1 list-decimal list-inside text-foreground text-sm">
+              <li>Introduction</li>
+              <li>Find Your Direction First</li>
+              <li>Manage Up</li>
+              <li>Build Your Reputation</li>
+              <li>Become Irreplaceable</li>
+              <li>Get What You Want</li>
+              <li>Survive Office Politics</li>
+              <li>Play the Long Game</li>
+              <li>All 48 Laws: Quick Reference</li>
+              <li>Your Power Audit Tracker</li>
+              <li>Resources</li>
+            </ol>
+          </div>
+
           <div className="bg-card border border-border rounded-xl p-5 md:p-6">
             <h3 className="font-heading text-lg text-gold mb-4">How this guide connects to the others</h3>
             <ul className="space-y-2">
               {[
-                { label: "Career direction", link: "/ikigai-guide", text: "Ikigai Career Guide" },
+                { label: "Career direction", link: "/ikigai-guide", text: "Ikigai Career Guide and Pivot Guide" },
                 { label: "Office politics", link: "/office-politics-guide", text: "Office Politics Guide (full framework)" },
                 { label: "Promotions", link: "/career-game-guide", text: "Career Game / Promotion Playbook" },
                 { label: "Interviews", link: "/interview-preparation-guide", text: "Interview Playbook" },
@@ -1084,6 +1133,16 @@ const FortyEightLawsGuide = () => {
                 <p><strong>12-19:</strong> Exposed. Pick your weakest area. Focus there for the next 90 days.</p>
                 <p><strong>Below 12:</strong> Career risk. Start with Sections 2 and 4 today.</p>
               </div>
+              <div className="mt-6 pt-4 border-t border-border">
+                <p className="font-medium text-foreground mb-2">After scoring:</p>
+                <ol className="space-y-1 list-decimal list-inside text-muted-foreground text-sm">
+                  <li>Circle your lowest score.</li>
+                  <li>Re-read the section for that area.</li>
+                  <li>Pick one action step from that section.</li>
+                  <li>Do it this week.</li>
+                  <li>Re-score in 90 days.</li>
+                </ol>
+              </div>
             </DiagramBox>
 
             <DiagramBox title="90-Day Power Audit Cycle">
@@ -1142,6 +1201,7 @@ const FortyEightLawsGuide = () => {
                     { text: "Ikigai Career Guide", desc: "finding purpose and direction", link: "/ikigai-guide" },
                     { text: "Office Politics Guide", desc: "full political survival framework", link: "/office-politics-guide" },
                     { text: "Career Game / Promotion Playbook", desc: "getting promoted", link: "/career-game-guide" },
+                    { text: "7 Rules of Power Guide", desc: "the research behind workplace power", link: "/office-politics-guide" },
                     { text: "Interview Playbook", desc: "landing the role", link: "/interview-preparation-guide" },
                     { text: "Job Offer Guide", desc: "evaluating and negotiating offers", link: "/job-offer-guide" },
                     { text: "Working with Recruiters Guide", desc: "getting on a recruiter's radar", link: "/recruiter-guide" },
