@@ -1532,7 +1532,7 @@ const FortyEightLawsGuide = () => {
             </DiagramBox>
 
             <DiagramBox title="90-Day Power Audit Cycle">
-              <div className="grid grid-cols-2 md:grid-cols-4 gap-4 text-center">
+              <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4 text-center">
                 {[
                   { day: "Day 1", action: "Score all 7 areas. Identify weakest area. Pick one action step.", feel: "\"I know where I stand.\"" },
                   { day: "Day 30", action: "Check: did I do the action step from my weakest area? If not, do it today.", feel: "\"I'm taking action.\"" },
