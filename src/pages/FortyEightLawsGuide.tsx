@@ -749,13 +749,7 @@ const FortyEightLawsGuide = () => {
               The antidote is strategic vulnerability. Admit mistakes early and publicly. Ask for help visibly. Share credit generously. Don't manufacture fake weaknesses. People see through performed humility. But let others see your humanity alongside your competence.
             </p>
 
-            <DiagramBox title="The Reputation Flywheel">
-              <div className="text-center space-y-2">
-                <p className="font-medium text-foreground">Results → Visibility → Trust → Opportunity → More Results</p>
-                <p className="text-muted-foreground mt-3">Break any link and the flywheel stops.</p>
-                <p className="text-gold font-medium">Most people break the VISIBILITY link. They do great work nobody sees.</p>
-              </div>
-            </DiagramBox>
+            <ReputationFlywheel />
 
             <p className="text-muted-foreground leading-relaxed mt-6">
               Reputation gets you noticed. But being noticed is not the same as being needed. The next section covers the difference.
