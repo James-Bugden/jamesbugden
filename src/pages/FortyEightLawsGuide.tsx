@@ -320,7 +320,7 @@ const FortyEightLawsGuide = () => {
   return (
     <div className="min-h-screen bg-background text-foreground">
       <PageSEO
-        title="Why Your Best Work Isn't Getting You Promoted (And What Will) | James Bugden"
+        title="48 Laws of Power (Workplace Edition) | James Bugden"
         description="A recruiter's guide to workplace power, office politics, and career strategy based on The 48 Laws of Power by Robert Greene. Learn to manage up, build your reputation, and play the long game."
         path="/48-laws-guide"
       />
