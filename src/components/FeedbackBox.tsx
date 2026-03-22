@@ -3,6 +3,7 @@ import { MessageSquare, Send, ChevronDown, ChevronUp } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { useToast } from "@/hooks/use-toast";
+import { supabase } from "@/integrations/supabase/client";
 
 interface FeedbackBoxProps {
   locale?: "en" | "zh-tw";
@@ -15,32 +16,47 @@ const LABELS = {
     placeholder: "What's on your mind?",
     send: "Send Feedback",
     success: "Feedback sent",
-    successDesc: "Your email client will open with the message.",
+    successDesc: "Thanks for your feedback!",
     empty: "Please write something first.",
+    error: "Failed to send feedback. Please try again.",
   },
   "zh-tw": {
     trigger: "回饋建議",
     placeholder: "你有什麼想法？",
     send: "發送回饋",
     success: "回饋已發送",
-    successDesc: "你的 Email 應用程式將打開並帶入訊息。",
+    successDesc: "感謝你的回饋！",
     empty: "請先輸入內容。",
+    error: "發送失敗，請再試一次。",
   },
 };
 
-export default function FeedbackBox({ locale = "en", subject: customSubject }: FeedbackBoxProps) {
+export default function FeedbackBox({ locale = "en", subject: _subject }: FeedbackBoxProps) {
   const [open, setOpen] = useState(false);
   const [text, setText] = useState("");
+  const [sending, setSending] = useState(false);
   const { toast } = useToast();
   const t = LABELS[locale];
 
-  const handleSend = () => {
+  const handleSend = async () => {
     if (!text.trim()) return;
-    const subject = customSubject ?? (locale === "zh-tw" ? "Offer Calculator 意見回饋" : "Offer Calculator Feedback");
-    window.location.href = `mailto:james@jamesbugden.com?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(text.trim())}`;
-    toast({ title: t.success, description: t.successDesc });
-    setText("");
-    setOpen(false);
+    setSending(true);
+    try {
+      const page = window.location.pathname;
+      const { error } = await supabase.from("feedback" as any).insert({
+        message: text.trim(),
+        page,
+        locale,
+      } as any);
+      if (error) throw error;
+      toast({ title: t.success, description: t.successDesc });
+      setText("");
+      setOpen(false);
+    } catch {
+      toast({ title: t.error, variant: "destructive" });
+    } finally {
+      setSending(false);
+    }
   };
 
   return (
@@ -67,7 +83,7 @@ export default function FeedbackBox({ locale = "en", subject: customSubject }: F
           <Button
             size="sm"
             onClick={handleSend}
-            disabled={!text.trim()}
+            disabled={!text.trim() || sending}
             className="h-8"
           >
             <Send className="w-3.5 h-3.5 mr-1.5" />

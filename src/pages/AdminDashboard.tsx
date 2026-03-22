@@ -22,7 +22,7 @@ import { useToast } from "@/hooks/use-toast";
 import { getSafeErrorMessage } from "@/lib/utils";
 import {
   Loader2, Plus, Copy, Trash2, LogOut, Check, ArrowUpDown, Search, Download,
-  FileText, DollarSign, Users, Mail, UserCheck,
+  FileText, DollarSign, Users, Mail, UserCheck, MessageSquare,
 } from "lucide-react";
 import { format } from "date-fns";
 import bcrypt from "bcryptjs";
@@ -66,6 +66,14 @@ interface EmailLead {
   id: string;
   email: string;
   source: string | null;
+  created_at: string;
+}
+
+interface FeedbackItem {
+  id: string;
+  message: string;
+  page: string | null;
+  locale: string | null;
   created_at: string;
 }
 
@@ -120,7 +128,7 @@ export default function AdminDashboard() {
   const { toast } = useToast();
 
   // Counts
-  const [counts, setCounts] = useState({ reviews: 0, salary: 0, resumes: 0, emails: 0, accounts: 0 });
+  const [counts, setCounts] = useState({ reviews: 0, salary: 0, resumes: 0, emails: 0, accounts: 0, feedback: 0 });
 
   // Reviews state
   const [reviews, setReviews] = useState<ClientReview[]>([]);
@@ -149,6 +157,11 @@ export default function AdminDashboard() {
   const [emailLeads, setEmailLeads] = useState<EmailLead[]>([]);
   const [emailLeadsLoading, setEmailLeadsLoading] = useState(true);
 
+  // Feedback state
+  const [feedbackItems, setFeedbackItems] = useState<FeedbackItem[]>([]);
+  const [feedbackLoading, setFeedbackLoading] = useState(true);
+  const [feedbackSearch, setFeedbackSearch] = useState("");
+
   // Accounts state
   const [accounts, setAccounts] = useState<AccountUser[]>([]);
   const [accountsLoading, setAccountsLoading] = useState(true);
@@ -163,22 +176,25 @@ export default function AdminDashboard() {
     fetchChecks();
     fetchResumeLeads();
     fetchEmailLeads();
+    fetchFeedback();
     fetchAccounts();
   }, []);
 
   const fetchCounts = async () => {
-    const [r1, r2, r3, r4] = await Promise.all([
+    const [r1, r2, r3, r4, r5] = await Promise.all([
       supabase.from("client_reviews").select("*", { count: "exact", head: true }),
       supabase.from("salary_checks").select("*", { count: "exact", head: true }),
       supabase.from("resume_leads").select("*", { count: "exact", head: true }),
       supabase.from("email_gate_leads").select("*", { count: "exact", head: true }),
+      supabase.from("feedback" as any).select("*", { count: "exact", head: true }),
     ]);
     setCounts({
       reviews: r1.count ?? 0,
       salary: r2.count ?? 0,
       resumes: r3.count ?? 0,
       emails: r4.count ?? 0,
-      accounts: 0, // updated by fetchAccounts
+      feedback: (r5 as any).count ?? 0,
+      accounts: 0,
     });
   };
 
@@ -211,7 +227,26 @@ export default function AdminDashboard() {
     setEmailLeadsLoading(false);
   };
 
-  const fetchAccounts = async () => {
+  const fetchFeedback = async () => {
+    setFeedbackLoading(true);
+    const { data } = await supabase.from("feedback" as any).select("*").order("created_at", { ascending: false }).limit(500);
+    if (data) setFeedbackItems(data as any);
+    setFeedbackLoading(false);
+  };
+
+  const handleDeleteFeedback = async (id: string) => {
+    const { error } = await supabase.from("feedback" as any).delete().eq("id", id);
+    if (error) toast({ title: "Error", description: getSafeErrorMessage(error), variant: "destructive" });
+    else { toast({ title: "Feedback deleted" }); fetchFeedback(); fetchCounts(); }
+  };
+
+  const filteredFeedback = useMemo(() => {
+    if (!feedbackSearch) return feedbackItems;
+    const q = feedbackSearch.toLowerCase();
+    return feedbackItems.filter(f => f.message.toLowerCase().includes(q) || f.page?.toLowerCase().includes(q));
+  }, [feedbackItems, feedbackSearch]);
+
+
     setAccountsLoading(true);
     try {
       const { data: { session } } = await supabase.auth.getSession();
@@ -371,6 +406,7 @@ export default function AdminDashboard() {
     { label: "Salary Checks", value: counts.salary, icon: DollarSign, color: "text-emerald-600" },
     { label: "Resume Leads", value: counts.resumes, icon: Users, color: "text-violet-600" },
     { label: "Email Leads", value: counts.emails, icon: Mail, color: "text-amber-600" },
+    { label: "Feedback", value: counts.feedback, icon: MessageSquare, color: "text-pink-600" },
   ];
 
   return (
@@ -387,7 +423,7 @@ export default function AdminDashboard() {
 
       <main className="max-w-7xl mx-auto px-4 py-6 space-y-6">
         {/* Overview Cards */}
-        <div className="grid grid-cols-2 md:grid-cols-5 gap-4">
+        <div className="grid grid-cols-2 md:grid-cols-6 gap-4">
           {statCards.map(s => (
             <Card key={s.label}>
               <CardContent className="p-4 flex items-center gap-3">
@@ -409,6 +445,7 @@ export default function AdminDashboard() {
             <TabsTrigger value="salary">Salary Checks</TabsTrigger>
             <TabsTrigger value="resumes">Resume Leads</TabsTrigger>
             <TabsTrigger value="emails">Email Leads</TabsTrigger>
+            <TabsTrigger value="feedback">Feedback</TabsTrigger>
           </TabsList>
 
           {/* ── Reviews Tab ──────────────────────────────────────────────── */}
@@ -674,6 +711,63 @@ export default function AdminDashboard() {
                         <TableCell className="text-xs text-muted-foreground capitalize">{a.provider}</TableCell>
                         <TableCell>{a.email_confirmed ? <Check className="w-4 h-4 text-emerald-500" /> : <span className="text-xs text-muted-foreground">No</span>}</TableCell>
                         <TableCell className="text-xs text-muted-foreground whitespace-nowrap">{a.last_sign_in_at ? format(new Date(a.last_sign_in_at), "MMM d, yyyy HH:mm") : "Never"}</TableCell>
+                      </TableRow>
+                    ))}
+                  </TableBody>
+                </Table>
+              </div>
+            )}
+          </TabsContent>
+
+          {/* ── Feedback Tab ─────────────────────────────────────────────── */}
+          <TabsContent value="feedback">
+            <div className="flex items-center justify-between mb-4 flex-wrap gap-2">
+              <p className="text-sm text-muted-foreground">{filteredFeedback.length} feedback submissions</p>
+              <div className="relative">
+                <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
+                <Input placeholder="Search feedback…" value={feedbackSearch} onChange={e => setFeedbackSearch(e.target.value)} className="pl-9 w-64" />
+              </div>
+            </div>
+            {feedbackLoading ? (
+              <div className="flex justify-center py-12"><Loader2 className="w-6 h-6 animate-spin text-muted-foreground" /></div>
+            ) : (
+              <div className="rounded-md border border-border overflow-auto">
+                <Table>
+                  <TableHeader>
+                    <TableRow>
+                      <TableHead className="w-[140px]">Date</TableHead>
+                      <TableHead>Message</TableHead>
+                      <TableHead className="w-[180px]">Page</TableHead>
+                      <TableHead className="w-[80px]">Lang</TableHead>
+                      <TableHead className="w-[60px]" />
+                    </TableRow>
+                  </TableHeader>
+                  <TableBody>
+                    {filteredFeedback.length === 0 ? (
+                      <TableRow><TableCell colSpan={5} className="text-center py-12 text-muted-foreground">No feedback yet</TableCell></TableRow>
+                    ) : filteredFeedback.map(f => (
+                      <TableRow key={f.id}>
+                        <TableCell className="text-xs text-muted-foreground whitespace-nowrap">{format(new Date(f.created_at), "MMM d, yyyy HH:mm")}</TableCell>
+                        <TableCell className="text-sm max-w-md">{f.message}</TableCell>
+                        <TableCell className="text-xs text-muted-foreground font-mono">{f.page}</TableCell>
+                        <TableCell className="text-xs text-muted-foreground">{f.locale}</TableCell>
+                        <TableCell>
+                          <AlertDialog>
+                            <AlertDialogTrigger asChild>
+                              <Button variant="ghost" size="icon" className="h-8 w-8"><Trash2 className="w-4 h-4 text-destructive" /></Button>
+                            </AlertDialogTrigger>
+                            <AlertDialogContent>
+                              <AlertDialogHeader>
+                                <AlertDialogTitle>Delete feedback?</AlertDialogTitle>
+                                <AlertDialogDescription>This cannot be undone.</AlertDialogDescription>
+                              </AlertDialogHeader>
+                              <AlertDialogFooter>
+                                <AlertDialogCancel>Cancel</AlertDialogCancel>
+                                <AlertDialogAction onClick={() => handleDeleteFeedback(f.id)}>Delete</AlertDialogAction>
+                              </AlertDialogFooter>
+                            </AlertDialogContent>
+                          </AlertDialog>
+                        </TableCell>
                       </TableRow>
                     ))}
                   </TableBody>
