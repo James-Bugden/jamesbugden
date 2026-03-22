@@ -1464,7 +1464,7 @@ const FortyEightLawsGuide = () => {
               <p className="mb-4">Score each area 1-5. Repeat every 90 days.</p>
               <div className="space-y-4">
                 {AUDIT_AREAS.map((item, i) => (
-                  <div key={i} className="flex items-start gap-4">
+                  <div key={i} className="flex flex-col sm:flex-row sm:items-start gap-2 sm:gap-4">
                     <div className="flex-1">
                       <p className="font-medium text-foreground">{item.area}</p>
                       <p className="text-muted-foreground text-sm">{item.question}</p>
@@ -1474,7 +1474,7 @@ const FortyEightLawsGuide = () => {
                         <button
                           key={n}
                           onClick={() => setScore(i, safeScores[i] === n ? 0 : n)}
-                          className={`w-8 h-8 rounded-lg text-sm font-semibold transition-colors ${
+                          className={`w-7 h-7 sm:w-8 sm:h-8 rounded-lg text-xs sm:text-sm font-semibold transition-colors ${
                             safeScores[i] === n
                               ? "bg-gold text-background"
                               : "bg-muted text-muted-foreground hover:bg-muted/80"
