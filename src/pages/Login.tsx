@@ -16,7 +16,8 @@ export default function Login() {
   const navigate = useNavigate();
   const location = useLocation();
   const { isLoggedIn } = useAuth();
-  const isZhTw = location.state?.from?.startsWith("/zh-tw") || false;
+  const fromPath: string = location.state?.from || "";
+  const isZhTw = fromPath.startsWith("/zh-tw") || fromPath.startsWith("/zh");
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
