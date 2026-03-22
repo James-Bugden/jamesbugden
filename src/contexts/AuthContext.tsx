@@ -22,11 +22,22 @@ const AuthContext = createContext<AuthContextValue>({
 export function AuthProvider({ children }: { children: ReactNode }) {
   const [session, setSession] = useState<Session | null>(null);
   const [isLoading, setIsLoading] = useState(true);
+  const syncedRef = useRef<Set<string>>(new Set());
 
   useEffect(() => {
     const { data: { subscription } } = supabase.auth.onAuthStateChange(
-      (_event, session) => {
+      (event, session) => {
         setSession(session);
+
+        // Sync OAuth users to MailerLite on sign-in (once per session)
+        if (event === "SIGNED_IN" && session?.user?.email) {
+          const uid = session.user.id;
+          if (!syncedRef.current.has(uid)) {
+            syncedRef.current.add(uid);
+            const name = session.user.user_metadata?.full_name || session.user.user_metadata?.name || "";
+            syncToMailerLite(session.user.email, name);
+          }
+        }
       }
     );
 
