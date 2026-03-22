@@ -450,8 +450,9 @@ export default function InterviewQuestionBank({ lang: initialLang }: { lang: Lan
       <section className="pt-28 md:pt-36 pb-8 md:pb-12 px-5 md:px-6 bg-background">
         <div className="container mx-auto max-w-5xl">
 
-          <h1 className="font-heading text-3xl md:text-5xl text-foreground mb-3">
+          <h1 className="font-heading text-3xl md:text-5xl text-foreground mb-3 flex items-center gap-3 justify-center flex-wrap">
             {t("Interview Question & Answer Database", "面試問答資料庫")}
+            <span className="text-[11px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-full bg-gold/15 text-gold leading-none">Beta</span>
           </h1>
           <p className="text-lg text-muted-foreground max-w-2xl mb-5">
             {t(

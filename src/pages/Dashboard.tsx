@@ -460,7 +460,7 @@ export default function Dashboard({ lang = "en" }: { lang?: "en" | "zh" }) {
                       </div>
                       <h3 className="text-lg font-bold mb-1 text-foreground">
                         {tool.title[lang]}
-                        {["resume-analyzer", "resume-builder", "offer-calculator"].includes(tool.id) && (
+                        {["resume-analyzer", "resume-builder", "offer-calculator", "interview-questions"].includes(tool.id) && (
                           <span className="ml-2 text-[10px] font-semibold uppercase tracking-wide px-1.5 py-0.5 rounded-full align-middle bg-gold/15 text-gold">Beta</span>
                         )}
                       </h3>
