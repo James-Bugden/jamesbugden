@@ -914,7 +914,7 @@ const ResumeBuilderSimple = () => {
             {editorContent}
           </div>
           <div className="flex-1 h-full relative">
-            <ResumePreview data={data} customize={customize} pdfTargetId="resume-pdf-target" onEditSection={handleEditSection} onContentEdit={handleContentEdit} />
+            <ResumePreview data={data} customize={customize} pdfTargetId="resume-pdf-target" onEditSection={handleEditSection} onContentEdit={handleContentEdit} exportMetricsRef={exportMetricsRef} />
             <div className="absolute bottom-4 left-4 z-20">
               <FeedbackBox subject="Resume Builder Feedback" locale={lang} />
             </div>
