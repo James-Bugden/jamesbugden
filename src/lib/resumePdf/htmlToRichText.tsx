@@ -56,16 +56,14 @@ export function htmlToRichText(html: string, opts: ParseOpts): React.ReactNode {
     if (/^<ul[\s>]/i.test(trimmed)) {
       const items = trimmed.match(/<li[\s>][^]*?<\/li>/gi) || [];
       for (const item of items) {
-        const content = item.replace(/<\/?li[^>]*>/gi, "");
+        const content = item.replace(/<\/?li[^>]*>/gi, "").replace(/<\/?p[^>]*>/gi, "");
+        const inlineChildren = renderInlineContent(content, opts);
+        // Use a single <Text> with nested <Text> children so bullet + text stay on one line
         elements.push(
-          <View key={key++} style={{ flexDirection: "row", marginBottom: 2 }}>
-            <Text style={{ fontSize: opts.fontSize, color: opts.color, lineHeight: opts.lineHeight, width: 12 }}>
-              {opts.bulletChar || "•"}
-            </Text>
-            <View style={{ flex: 1 }}>
-              {renderInlineHtml(content, opts)}
-            </View>
-          </View>
+          <Text key={key++} style={{ fontSize: opts.fontSize, color: opts.color, lineHeight: opts.lineHeight, marginBottom: 2 }}>
+            <Text style={{ width: 12 }}>{opts.bulletChar || "•"}  </Text>
+            {inlineChildren}
+          </Text>
         );
       }
       continue;
