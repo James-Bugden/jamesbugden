@@ -87,16 +87,13 @@ export function htmlToRichText(html: string, opts: ParseOpts): React.ReactNode {
 
     // Handle bare <li> (not inside ul/ol)
     if (/^<li[\s>]/i.test(trimmed)) {
-      const content = trimmed.replace(/<\/?li[^>]*>/gi, "");
+      const content = trimmed.replace(/<\/?li[^>]*>/gi, "").replace(/<\/?p[^>]*>/gi, "");
+      const inlineChildren = renderInlineContent(content, opts);
       elements.push(
-        <View key={key++} style={{ flexDirection: "row", marginBottom: 2 }}>
-          <Text style={{ fontSize: opts.fontSize, color: opts.color, lineHeight: opts.lineHeight, width: 12 }}>
-            {opts.bulletChar || "•"}
-          </Text>
-          <View style={{ flex: 1 }}>
-            {renderInlineHtml(content, opts)}
-          </View>
-        </View>
+        <Text key={key++} style={{ fontSize: opts.fontSize, color: opts.color, lineHeight: opts.lineHeight, marginBottom: 2 }}>
+          <Text>{opts.bulletChar || "•"}  </Text>
+          {inlineChildren}
+        </Text>
       );
       continue;
     }
