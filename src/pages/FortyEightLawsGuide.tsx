@@ -482,7 +482,7 @@ const FortyEightLawsGuide = () => {
               Think of it as the "hacker model" of career development. Learn many skills following your deepest interests. Combine them in ways nobody else does. "The future belongs to those who learn more skills and combine them in creative ways."
             </p>
 
-            <ActionStep>
+            <ActionStep checked={safeActions[2]} onToggle={() => toggleAction(2)}>
               List every skill you've picked up across all your roles. Include side projects and hobbies with transferable skills. Which two or three skills, stacked together, would make you hard to replace? Identify the gap in your stack. Then find a project, course, or side assignment in the next 30 days to start filling it.
             </ActionStep>
 
