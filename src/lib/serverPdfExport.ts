@@ -28,11 +28,8 @@ function serializeResumeHtml(
 ): string {
   const pageW = pageFormat === "letter" ? "8.5in" : "210mm";
   const pageH = pageFormat === "letter" ? "11in" : "297mm";
-  // Small fixed margin for continuation pages (page 2+).
-  // The element's own internal padding still applies, so we only need
-  // a modest page-level margin to prevent content from touching the edge.
-  const padTop = 10;
-  const padBottom = 10;
+
+
 
   // Collect all stylesheets — but skip @media print blocks
   // (they contain conflicting @page rules from the analysis report)
@@ -148,9 +145,6 @@ ${allCSS}
 
 @page {
   size: ${pageW} ${pageH};
-  margin: ${padTop}mm 0 ${padBottom}mm 0;
-}
-@page :first {
   margin: 0;
 }
 
