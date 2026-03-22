@@ -58,7 +58,7 @@ const tools: ToolItem[] = [
     icon: <MessageSquare className="w-5 h-5" />,
     iconBg: "#F0FDF4",
     title: { en: "Interview Question Bank", zh: "面試題庫" },
-    description: { en: "500+ real interview questions from top companies, sorted by category and difficulty.", zh: "500+ 道頂尖企業真實面試題，依類別與難度分類。" },
+    description: { en: "203 real interview questions with sample answers to prepare for your next interview.", zh: "203 道真實面試題附參考答案，幫你準備下一場面試。" },
     path: "/interview-questions",
     zhPath: "/zh-tw/interview-questions",
   },
