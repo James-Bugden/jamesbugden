@@ -718,6 +718,63 @@ export default function AdminDashboard() {
               </div>
             )}
           </TabsContent>
+
+          {/* ── Feedback Tab ─────────────────────────────────────────────── */}
+          <TabsContent value="feedback">
+            <div className="flex items-center justify-between mb-4 flex-wrap gap-2">
+              <p className="text-sm text-muted-foreground">{filteredFeedback.length} feedback submissions</p>
+              <div className="relative">
+                <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
+                <Input placeholder="Search feedback…" value={feedbackSearch} onChange={e => setFeedbackSearch(e.target.value)} className="pl-9 w-64" />
+              </div>
+            </div>
+            {feedbackLoading ? (
+              <div className="flex justify-center py-12"><Loader2 className="w-6 h-6 animate-spin text-muted-foreground" /></div>
+            ) : (
+              <div className="rounded-md border border-border overflow-auto">
+                <Table>
+                  <TableHeader>
+                    <TableRow>
+                      <TableHead className="w-[140px]">Date</TableHead>
+                      <TableHead>Message</TableHead>
+                      <TableHead className="w-[180px]">Page</TableHead>
+                      <TableHead className="w-[80px]">Lang</TableHead>
+                      <TableHead className="w-[60px]" />
+                    </TableRow>
+                  </TableHeader>
+                  <TableBody>
+                    {filteredFeedback.length === 0 ? (
+                      <TableRow><TableCell colSpan={5} className="text-center py-12 text-muted-foreground">No feedback yet</TableCell></TableRow>
+                    ) : filteredFeedback.map(f => (
+                      <TableRow key={f.id}>
+                        <TableCell className="text-xs text-muted-foreground whitespace-nowrap">{format(new Date(f.created_at), "MMM d, yyyy HH:mm")}</TableCell>
+                        <TableCell className="text-sm max-w-md">{f.message}</TableCell>
+                        <TableCell className="text-xs text-muted-foreground font-mono">{f.page}</TableCell>
+                        <TableCell className="text-xs text-muted-foreground">{f.locale}</TableCell>
+                        <TableCell>
+                          <AlertDialog>
+                            <AlertDialogTrigger asChild>
+                              <Button variant="ghost" size="icon" className="h-8 w-8"><Trash2 className="w-4 h-4 text-destructive" /></Button>
+                            </AlertDialogTrigger>
+                            <AlertDialogContent>
+                              <AlertDialogHeader>
+                                <AlertDialogTitle>Delete feedback?</AlertDialogTitle>
+                                <AlertDialogDescription>This cannot be undone.</AlertDialogDescription>
+                              </AlertDialogHeader>
+                              <AlertDialogFooter>
+                                <AlertDialogCancel>Cancel</AlertDialogCancel>
+                                <AlertDialogAction onClick={() => handleDeleteFeedback(f.id)}>Delete</AlertDialogAction>
+                              </AlertDialogFooter>
+                            </AlertDialogContent>
+                          </AlertDialog>
+                        </TableCell>
+                      </TableRow>
+                    ))}
+                  </TableBody>
+                </Table>
+              </div>
+            )}
+          </TabsContent>
         </Tabs>
       </main>
     </div>
