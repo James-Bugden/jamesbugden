@@ -199,9 +199,49 @@ const allLaws: { num: number; title: string; tag: "USE" | "DEFEND" | "AVOID"; wo
   { num: 48, title: "Assume Formlessness", tag: "USE", workplace: "Stay adaptable. The market will shift under you.", example: "Your specialty gets automated. You learn to manage the automation and become more valuable.", action: "Identify one skill outside your current role worth learning. Spend 30 minutes a week on it for 6 months." },
 ];
 
+const TOTAL_ACTIONS = 19;
+const AUDIT_AREAS = [
+  { area: "1. DIRECTION", question: "Do I know what I'm building toward? Am I in alive time?" },
+  { area: "2. MANAGING UP", question: "Does my boss see me as an ally? Do I pick battles well?" },
+  { area: "3. REPUTATION", question: "Do senior leaders (beyond my boss) know my name and work?" },
+  { area: "4. IRREPLACEABILITY", question: "Would my team struggle if I left? Do I own something nobody else understands?" },
+  { area: "5. GETTING WHAT I WANT", question: "Am I tracking my wins? Is my brag doc up to date? Have I asked for what I've earned?" },
+  { area: "6. POLITICAL AWARENESS", question: "Do I know who has influence? Am I allied with builders? Do I avoid negativity?" },
+  { area: "7. LONG GAME", question: "Does my current role serve my 5-year plan? Am I building skills for where I want to be?" },
+];
+
 const FortyEightLawsGuide = () => {
   useTrackGuideProgress("48-laws");
+  const { isLoggedIn } = useAuth();
   const [lawFilter, setLawFilter] = useState<"ALL" | "USE" | "DEFEND" | "AVOID">("ALL");
+  const [bannerDismissed, setBannerDismissed] = useState(false);
+
+  // Interactive state with cloud sync
+  const [actionChecks, setActionChecks] = useGuideStorage<boolean[]>("48laws_actions_en", Array(TOTAL_ACTIONS).fill(false));
+  const [auditScores, setAuditScores] = useGuideStorage<number[]>("48laws_power_audit_en", Array(7).fill(0));
+  const [auditHistory, setAuditHistory] = useGuideStorage<Array<{ date: string; scores: number[]; total: number }>>("48laws_audit_history_en", []);
+
+  const safeActions = Array.from({ length: TOTAL_ACTIONS }, (_, i) => actionChecks[i] ?? false);
+  const completedActions = safeActions.filter(Boolean).length;
+  const toggleAction = (i: number) => setActionChecks(prev => {
+    const next = [...(prev.length >= TOTAL_ACTIONS ? prev : Array(TOTAL_ACTIONS).fill(false))];
+    next[i] = !next[i];
+    return next;
+  });
+
+  const safeScores = Array.from({ length: 7 }, (_, i) => auditScores[i] ?? 0);
+  const auditTotal = safeScores.reduce((a, b) => a + b, 0);
+  const setScore = (i: number, val: number) => setAuditScores(prev => {
+    const next = [...(prev.length >= 7 ? prev : Array(7).fill(0))];
+    next[i] = Math.max(0, Math.min(5, val));
+    return next;
+  });
+  const saveSnapshot = () => {
+    setAuditHistory(prev => [...prev, { date: new Date().toISOString().slice(0, 10), scores: [...safeScores], total: auditTotal }]);
+  };
+
+  const totalInteractions = completedActions + safeScores.filter(s => s > 0).length;
+  const showSaveBanner = totalInteractions >= 2 && !isLoggedIn && !bannerDismissed;
 
   const filteredLaws = lawFilter === "ALL" ? allLaws : allLaws.filter(l => l.tag === lawFilter);
 
