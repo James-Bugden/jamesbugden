@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef } from "react";
-import { Link, useNavigate, useSearchParams } from "react-router-dom";
+import { Link, useNavigate, useSearchParams, useLocation } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { lovable } from "@/integrations/lovable/index";
 import { Button } from "@/components/ui/button";
@@ -61,6 +61,7 @@ const fadeUp = {
 
 export default function Join() {
   const navigate = useNavigate();
+  const location = useLocation();
   const [searchParams] = useSearchParams();
   const { isLoggedIn } = useAuth();
   const passwordRef = useRef<HTMLInputElement>(null);
@@ -81,8 +82,16 @@ export default function Join() {
   const utmMedium = searchParams.get("utm_medium") || "";
 
   useEffect(() => {
-    if (isLoggedIn) navigate("/dashboard", { replace: true });
-  }, [isLoggedIn, navigate]);
+    if (isLoggedIn) {
+      const fromPath: string = location.state?.from || "";
+      const isZh = fromPath.startsWith("/zh-tw") || fromPath.startsWith("/zh");
+      const defaultDash = isZh ? "/zh-tw/dashboard" : "/dashboard";
+      const homePaths = ["/", "/zh-tw", "/zh-tw/"];
+      let redirectTo = fromPath || defaultDash;
+      if (!fromPath || homePaths.includes(redirectTo)) redirectTo = defaultDash;
+      navigate(redirectTo, { replace: true });
+    }
+  }, [isLoggedIn, navigate, location.state]);
 
   // Auto-focus password field when email is pre-filled
   useEffect(() => {

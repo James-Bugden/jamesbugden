@@ -16,7 +16,8 @@ export default function Login() {
   const navigate = useNavigate();
   const location = useLocation();
   const { isLoggedIn } = useAuth();
-  const isZhTw = location.state?.from?.startsWith("/zh-tw") || false;
+  const fromPath: string = location.state?.from || "";
+  const isZhTw = fromPath.startsWith("/zh-tw") || fromPath.startsWith("/zh");
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -47,7 +48,9 @@ export default function Login() {
   useEffect(() => {
     if (isLoggedIn) {
       const defaultDash = isZhTw ? "/zh-tw/dashboard" : "/dashboard";
-      const redirectTo = location.state?.from || sessionStorage.getItem("auth_redirect") || defaultDash;
+      const homePaths = ["/", "/zh-tw", "/zh-tw/"];
+      let redirectTo = location.state?.from || sessionStorage.getItem("auth_redirect") || defaultDash;
+      if (homePaths.includes(redirectTo)) redirectTo = defaultDash;
       sessionStorage.removeItem("auth_redirect");
       navigate(redirectTo, { replace: true });
     }
