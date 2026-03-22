@@ -13,7 +13,92 @@ function isMobile() {
   return /Mobi|Android/i.test(navigator.userAgent) || window.innerWidth < 768;
 }
 
-/* ── Font CSS cache ─────────────────────────────────────── */
+/* ── Force light mode & resolve CSS variables before capture ── */
+
+function forceLightMode(el: HTMLElement): () => void {
+  const originals: { el: HTMLElement; colorScheme: string; className: string }[] = [];
+
+  const walk = (node: HTMLElement) => {
+    originals.push({
+      el: node,
+      colorScheme: node.style.colorScheme,
+      className: node.className,
+    });
+    node.style.colorScheme = "light";
+    node.classList.remove("dark");
+    node.classList.add("light");
+    Array.from(node.children).forEach((child) => {
+      if (child instanceof HTMLElement) walk(child);
+    });
+  };
+  walk(el);
+
+  const htmlEl = document.documentElement;
+  const bodyEl = document.body;
+  const savedHtml = htmlEl.className;
+  const savedBody = bodyEl.className;
+  const savedHtmlScheme = htmlEl.style.colorScheme;
+  const savedBodyScheme = bodyEl.style.colorScheme;
+
+  htmlEl.classList.remove("dark");
+  htmlEl.classList.add("light");
+  htmlEl.style.colorScheme = "light";
+  bodyEl.classList.remove("dark");
+  bodyEl.classList.add("light");
+  bodyEl.style.colorScheme = "light";
+
+  return () => {
+    originals.forEach(({ el: node, colorScheme, className }) => {
+      node.style.colorScheme = colorScheme;
+      node.className = className;
+    });
+    htmlEl.className = savedHtml;
+    htmlEl.style.colorScheme = savedHtmlScheme;
+    bodyEl.className = savedBody;
+    bodyEl.style.colorScheme = savedBodyScheme;
+  };
+}
+
+function resolveCSSVariables(el: HTMLElement): () => void {
+  const overrides: { el: HTMLElement; prop: string; original: string }[] = [];
+  const propsToCheck = ["color", "backgroundColor", "borderColor", "boxShadow", "fill", "stroke"];
+
+  const walk = (node: HTMLElement) => {
+    const computed = getComputedStyle(node);
+    for (const prop of propsToCheck) {
+      const value = computed.getPropertyValue(prop);
+      if (value && value !== "none" && value !== "transparent") {
+        overrides.push({ el: node, prop, original: node.style.getPropertyValue(prop) });
+        node.style.setProperty(prop, value);
+      }
+    }
+    Array.from(node.children).forEach((child) => {
+      if (child instanceof HTMLElement) walk(child);
+    });
+  };
+  walk(el);
+
+  return () => {
+    overrides.forEach(({ el: node, prop, original }) => {
+      if (original) node.style.setProperty(prop, original);
+      else node.style.removeProperty(prop);
+    });
+  };
+}
+
+async function waitForAssets(el: HTMLElement): Promise<void> {
+  const images = Array.from(el.querySelectorAll("img"));
+  await Promise.all(
+    images.map((img) => new Promise<void>((resolve) => {
+      if (img.complete) return resolve();
+      img.onload = () => resolve();
+      img.onerror = () => resolve();
+    }))
+  );
+  if (document.fonts?.ready) await document.fonts.ready;
+}
+
+
 let fontCSSCache: string | null = null;
 
 async function getFontEmbedCSS(): Promise<string | undefined> {
