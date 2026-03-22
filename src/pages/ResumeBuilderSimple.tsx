@@ -658,21 +658,7 @@ const ResumeBuilderSimple = () => {
     if (downloading) return;
     setDownloading(true);
     const fn = filename || (data.personalDetails.fullName || "Resume").replace(/\s+/g, "_") + "_Resume";
-    const metrics = exportMetricsRef.current;
-    if (metrics?.sourceElement && metrics.pageCount > 0) {
-      await exportResumePages({
-        sourceElement: metrics.sourceElement,
-        fileName: fn,
-        pageFormat: "a4",
-        pageCount: metrics.pageCount,
-        contentOriginPX: metrics.contentOriginPX,
-        usablePerPagePX: metrics.usablePerPagePX,
-        pageHeightPX: metrics.pageHeightPX,
-        marginYPX: metrics.marginYPX,
-      });
-    } else {
-      await exportToPdf({ elementId: "resume-pdf-target", fileName: fn, pageFormat: "a4" });
-    }
+    await exportResumePdf({ data, customize, fileName: fn });
     setDownloading(false);
   };
 
