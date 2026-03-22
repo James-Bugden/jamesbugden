@@ -144,7 +144,7 @@ ${allCSS}
 
 @page {
   size: ${pageW} ${pageH};
-  margin: 0;
+  margin: ${padTop}mm 0 ${padBottom}mm 0;
 }
 
 *, *::before, *::after {
