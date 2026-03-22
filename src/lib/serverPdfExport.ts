@@ -93,13 +93,11 @@ function serializeResumeHtml(
       if (val?.trim()) cloneA4Page.style.setProperty(name, val.trim());
     }
 
-    // Move vertical spacing from element padding to @page margins so every
-    // printed page gets consistent top/bottom whitespace.
-    cloneA4Page.style.paddingTop = "0";
-    cloneA4Page.style.paddingBottom = "0";
+    // Strip ALL padding — @page margins handle everything now.
     cloneA4Page.style.setProperty("--resume-pad-top", "0mm");
     cloneA4Page.style.setProperty("--resume-pad-bottom", "0mm");
-    // Keep horizontal padding intact — left/right margins come from the element.
+    cloneA4Page.style.setProperty("--resume-margin-x", "0mm");
+    cloneA4Page.style.padding = "0";
     cloneA4Page.style.width = "100%";
   }
 
