@@ -1,14 +1,64 @@
-import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
+import "jsr:@supabase/functions-js/edge-runtime.d.ts";
+import { createClient } from "jsr:@supabase/supabase-js@2";
 
 const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
-  "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type, x-supabase-client-platform, x-supabase-client-platform-version, x-supabase-client-runtime, x-supabase-client-runtime-version",
+  "Access-Control-Allow-Headers":
+    "authorization, x-client-info, apikey, content-type, x-supabase-client-platform, x-supabase-client-platform-version, x-supabase-client-runtime, x-supabase-client-runtime-version",
 };
 
-serve(async (req) => {
+const IMPORT_MONTHLY_LIMIT = 2;
+const USAGE_TYPE = "import";
+
+Deno.serve(async (req) => {
   if (req.method === "OPTIONS") return new Response(null, { headers: corsHeaders });
 
   try {
+    // ── Auth check ──
+    const authHeader = req.headers.get("Authorization");
+    if (!authHeader?.startsWith("Bearer ")) {
+      return new Response(JSON.stringify({ error: "Sign in required to import resumes." }), {
+        status: 401,
+        headers: { ...corsHeaders, "Content-Type": "application/json" },
+      });
+    }
+
+    const supabase = createClient(
+      Deno.env.get("SUPABASE_URL")!,
+      Deno.env.get("SUPABASE_ANON_KEY")!,
+      { global: { headers: { Authorization: authHeader } } },
+    );
+
+    const token = authHeader.replace("Bearer ", "");
+    const { data: claimsData, error: claimsError } = await supabase.auth.getClaims(token);
+    if (claimsError || !claimsData?.claims) {
+      return new Response(JSON.stringify({ error: "Unauthorized" }), {
+        status: 401,
+        headers: { ...corsHeaders, "Content-Type": "application/json" },
+      });
+    }
+
+    const userId = claimsData.claims.sub as string;
+
+    // ── Rate limit check ──
+    const { data: countData } = await supabase.rpc("count_ai_usage_this_month", {
+      p_user_id: userId,
+      p_usage_type: USAGE_TYPE,
+    });
+
+    const currentCount = (countData as number) ?? 0;
+    if (currentCount >= IMPORT_MONTHLY_LIMIT) {
+      return new Response(
+        JSON.stringify({
+          error: "Monthly import limit reached",
+          limit: IMPORT_MONTHLY_LIMIT,
+          used: currentCount,
+        }),
+        { status: 429, headers: { ...corsHeaders, "Content-Type": "application/json" } },
+      );
+    }
+
+    // ── Parse request ──
     const { resumeText, analysisResult } = await req.json();
     if (!resumeText || typeof resumeText !== "string") {
       return new Response(JSON.stringify({ error: "resumeText is required" }), {
@@ -25,7 +75,6 @@ serve(async (req) => {
     if (analysisResult) {
       const parts: string[] = [];
 
-      // Bullet rewrites
       if (analysisResult.bullet_rewrite) {
         const br = analysisResult.bullet_rewrite;
         if (br.original && br.improved) {
@@ -34,14 +83,12 @@ serve(async (req) => {
         }
       }
 
-      // Top priorities
       if (analysisResult.top_priorities?.length) {
         analysisResult.top_priorities.forEach((p: any) => {
           parts.push(`PRIORITY ${p.priority} (${p.level}): ${p.title} — ${p.description}`);
         });
       }
 
-      // Section-level feedback
       if (analysisResult.sections?.length) {
         analysisResult.sections.forEach((s: any) => {
           if (s.score < 7) {
@@ -209,7 +256,6 @@ When improvement recommendations are provided:
     // Convert to ResumeData format
     const sections: any[] = [];
 
-    // Summary
     if (parsed.summary) {
       sections.push({
         id: crypto.randomUUID(),
@@ -221,7 +267,6 @@ When improvement recommendations are provided:
       });
     }
 
-    // Experience
     if (parsed.experience?.length) {
       sections.push({
         id: crypto.randomUUID(),
@@ -245,7 +290,6 @@ When improvement recommendations are provided:
       });
     }
 
-    // Education
     if (parsed.education?.length) {
       sections.push({
         id: crypto.randomUUID(),
@@ -269,7 +313,6 @@ When improvement recommendations are provided:
       });
     }
 
-    // Skills
     if (parsed.skills) {
       sections.push({
         id: crypto.randomUUID(),
@@ -280,7 +323,6 @@ When improvement recommendations are provided:
       });
     }
 
-    // Languages
     if (parsed.languages?.length) {
       sections.push({
         id: crypto.randomUUID(),
@@ -294,7 +336,6 @@ When improvement recommendations are provided:
       });
     }
 
-    // Certificates
     if (parsed.certificates?.length) {
       sections.push({
         id: crypto.randomUUID(),
@@ -321,8 +362,18 @@ When improvement recommendations are provided:
       sections,
     };
 
+    // ── Log usage after successful parse ──
+    await supabase.from("ai_usage_log").insert({
+      user_id: userId,
+      usage_type: USAGE_TYPE,
+    });
+
     return new Response(JSON.stringify(resumeData), {
-      headers: { ...corsHeaders, "Content-Type": "application/json" },
+      headers: {
+        ...corsHeaders,
+        "Content-Type": "application/json",
+        "X-Import-Usage": `${currentCount + 1}/${IMPORT_MONTHLY_LIMIT}`,
+      },
     });
   } catch (e) {
     console.error("parse-resume-to-builder error:", e);
