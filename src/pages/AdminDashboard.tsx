@@ -69,6 +69,14 @@ interface EmailLead {
   created_at: string;
 }
 
+interface FeedbackItem {
+  id: string;
+  message: string;
+  page: string | null;
+  locale: string | null;
+  created_at: string;
+}
+
 interface AccountUser {
   id: string;
   email: string;
