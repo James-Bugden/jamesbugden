@@ -1,66 +1,72 @@
 
-Goal: replace the still-broken screenshot export with a true resume PDF generator. The uploaded PDF confirms the current output is effectively empty: both pages parse as `NO_CONTENT_HERE`, and the current code still exports from a hidden off-screen DOM clone in `src/lib/pdfExport.ts`, which is the same fragile path causing blank pages and oversized files.
 
-Plan
+## Fix: PDF Export Visual Parity with Preview
 
-1. Stop using DOM capture for resume exports
-- Keep the on-screen resume preview exactly as it is.
-- Remove the resume download path’s dependency on `html-to-image`, hidden measurement DOM, and page-image slicing.
-- Leave cover letter export alone for now so this fix stays scoped and lower-risk.
+### Problem
+The exported PDF doesn't match the on-screen preview. Key differences found by comparing `ResumePdfDocument.tsx` against `ResumePreview.tsx`:
 
-2. Add a dedicated resume PDF document
-- Create a new PDF renderer using `@react-pdf/renderer` that builds the resume directly from `ResumeData` + `CustomizeSettings`.
-- Generate real PDF text instead of a flattened screenshot, which fixes both blank pages and file size.
-- Support A4 and Letter based on the existing page format setting.
+### Issues to Fix
 
-3. Mirror the current resume structure in PDF
-- Reuse the existing section order and section types: summary, experience, education, skills, languages, certificates, plus the personal header.
-- Map the current customization options that matter most for output:
-  - page size
-  - margins
-  - font size / line height
-  - accent color
-  - one-column vs two-column layout
-  - heading style
-  - footer / page numbers
-- Build this with shared helpers so the PDF stays close to the live preview without depending on browser CSS.
+**1. Entry title color wrong**
+- PDF uses `bodyColor` for entry titles; preview uses `nameColor`
+- Fix: change `entryTitle` style to use `nameColor`
 
-4. Convert builder rich text into PDF-safe content
-- Add a small parser for the HTML the editor already produces: paragraphs, line breaks, bold, italic, underline, lists, and links.
-- Render those as native PDF text blocks and bullets instead of images.
-- Sanitize and normalize unsupported markup so exports stay reliable.
+**2. Location rendered incorrectly**
+- PDF concatenates company/institution and location with " · " on same line
+- Preview renders location on its own line below subtitle
+- Fix: render location as separate `Text` element
 
-5. Make fonts reliable instead of browser-dependent
-- Do not depend on Google Fonts stylesheets at export time.
-- Register only the active font families needed for the current resume, or map to safe PDF fonts where necessary for reliability.
-- This removes the current cross-origin/font stylesheet failure point entirely.
+**3. Skills display doesn't match**
+- PDF always renders as gray pill tags
+- Preview supports `bubble`, `grid`, and `compact` layouts with configurable separators
+- Fix: replicate the three display modes and separator options
 
-6. Wire the builders to the new API
-- Update `ResumeBuilder.tsx` and `ResumeBuilderSimple.tsx` to call a new resume-specific PDF export function using the actual resume data/settings, not `exportMetricsRef`.
-- Keep `exportToPdf()` only for cover letters until resume export is stable.
+**4. Languages display doesn't match**
+- PDF renders as flat tags ("English – Native")
+- Preview's default `grid` mode shows language name left-aligned with proficiency right-aligned
+- Fix: replicate grid/compact/bubble modes
 
-Files to update
-- `src/lib/pdfExport.ts`
-- `src/pages/ResumeBuilder.tsx`
-- `src/pages/ResumeBuilderSimple.tsx`
-- new resume PDF files under `src/components/resume-builder/` or `src/lib/`
-- `package.json`
+**5. Contact separator "icon" mode falls back to " | "**
+- When `contactSeparator === "icon"`, preview shows icons (Mail, Phone, MapPin) — icons can't render in PDF
+- Fix: fall back to " | " for icon mode (already works), but ensure the separator logic is correct
 
-Technical notes
-- The current blank output is not just a tuning issue. It comes from exporting a hidden DOM clone through a screenshot pipeline.
-- Because the present resume preview uses browser CSS features like Google Fonts and modern color functions, continuing to patch the screenshot approach will stay brittle.
-- A true PDF renderer is the correct fix for:
-  - non-blank output
-  - smaller files
-  - selectable/searchable text
-  - stable multi-page exports
+**6. Missing header divider line**
+- Preview renders a thin horizontal accent line after the header
+- Fix: add a `View` with 0.3pt height and accent background color after header
 
-QA plan
-- Export a one-page and multi-page resume from `/resume`.
-- Verify the downloaded PDF contains real text, not empty pages.
-- Check file size against the current export and confirm it is materially smaller.
-- Parse the generated PDF and visually inspect page renders to confirm:
-  - no blank pages
-  - no clipped sections
-  - correct pagination
-  - footer/page-number behavior
+**7. Heading styles incomplete**
+- PDF only handles `underline` and `full-underline`
+- Preview also has `left-accent`, `background`, `left-border`, `plain`
+- Fix: implement all heading styles in PDF
+
+**8. Section order not applied**
+- PDF uses `data.sections` directly without reordering
+- Preview calls `normalizeSectionOrder()` to respect `customize.sectionOrder`
+- Fix: apply same sort logic before rendering
+
+**9. Two-column layout not supported**
+- Preview splits sections into sidebar (skills, languages, etc.) and main columns
+- `@react-pdf/renderer` doesn't support CSS grid, but supports flexbox `flexDirection: "row"`
+- Fix: for `columns === "two"` or `"mix"`, render a two-column `View` with sidebar and main content
+
+**10. Experience subtitle placement options missing**
+- Preview supports `subtitlePlacement: "same-line"` (primary · secondary on one line)
+- PDF always renders on separate lines
+- Fix: check `subtitlePlacement` and render accordingly
+
+### Technical Approach
+All changes in `src/lib/resumePdf/ResumePdfDocument.tsx`:
+- Add section ordering logic (port `normalizeSectionOrder`)
+- Fix entry title color to `nameColor`
+- Add location as separate line in experience/education
+- Rewrite skills section to support grid/compact/bubble display modes
+- Rewrite languages section to support grid/compact/bubble display modes
+- Add all heading style variants
+- Add header divider line
+- Add two-column layout support using flexbox row
+- Add subtitle placement support
+- No new files needed — all fixes in the existing PDF document component
+
+### Files to Edit
+- `src/lib/resumePdf/ResumePdfDocument.tsx`
+
