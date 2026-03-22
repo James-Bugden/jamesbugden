@@ -20,7 +20,7 @@ import { SavedDocument, DocType, updateDocument, getAllDocuments, renameDocument
 import { supabase } from "@/integrations/supabase/client";
 import { useBuilderAiUsage } from "@/hooks/useBuilderAiUsage";
 import { CustomizeSettings, DEFAULT_CUSTOMIZE } from "@/components/resume-builder/customizeTypes";
-import { exportResumePdf } from "@/lib/resumePdf/exportResumePdf";
+import { exportResumePages } from "@/lib/pdfExport";
 import { ResumeExportMetrics } from "@/components/resume-builder/ResumePreview";
 import { useIsMobile } from "@/hooks/use-mobile";
 import { Skeleton } from "@/components/ui/skeleton";
