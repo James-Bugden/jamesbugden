@@ -847,7 +847,7 @@ const FortyEightLawsGuide = () => {
             <p className="text-muted-foreground leading-relaxed mb-6">
               Deliver the results. Let them speak. Don't attach a "this was so hard" narrative to everything you produce. If you need more resources or more time, ask for them clearly and professionally. Don't martyr yourself.
             </p>
-            <ActionStep>
+            <ActionStep checked={safeActions[11]} onToggle={() => toggleAction(11)}>
               For your next project delivery, strip all "effort language" from your update. No mentions of late nights, weekends, or stress. Present the result. Describe the impact. Stop there. Watch how people respond differently when you project composure instead of exhaustion.
             </ActionStep>
 
