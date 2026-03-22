@@ -1408,9 +1408,20 @@ const FortyEightLawsGuide = () => {
               </div>
             </div>
 
-            <p className="text-xs text-muted-foreground mb-6">
-              <strong>USE</strong> = Apply proactively as career strategy. <strong>DEFEND</strong> = Recognize when others use this against you. <strong>AVOID</strong> = Too risky for most workplace situations.
-            </p>
+            <div className="rounded-lg bg-muted/30 border border-border p-3 mb-6 space-y-1.5">
+              <div className="flex items-center gap-2 text-sm">
+                <span className="w-2.5 h-2.5 rounded-full bg-emerald-500 shrink-0" />
+                <span><strong className="text-foreground">USE</strong> <span className="text-muted-foreground">— Apply proactively as career strategy</span></span>
+              </div>
+              <div className="flex items-center gap-2 text-sm">
+                <span className="w-2.5 h-2.5 rounded-full bg-amber-500 shrink-0" />
+                <span><strong className="text-foreground">DEFEND</strong> <span className="text-muted-foreground">— Recognize when others use this against you</span></span>
+              </div>
+              <div className="flex items-center gap-2 text-sm">
+                <span className="w-2.5 h-2.5 rounded-full bg-red-500 shrink-0" />
+                <span><strong className="text-foreground">AVOID</strong> <span className="text-muted-foreground">— Too risky for most workplace situations</span></span>
+              </div>
+            </div>
 
             <div className="space-y-3">
               {filteredLaws.map(law => (
@@ -1453,7 +1464,7 @@ const FortyEightLawsGuide = () => {
               <p className="mb-4">Score each area 1-5. Repeat every 90 days.</p>
               <div className="space-y-4">
                 {AUDIT_AREAS.map((item, i) => (
-                  <div key={i} className="flex items-start gap-4">
+                  <div key={i} className="flex flex-col sm:flex-row sm:items-start gap-2 sm:gap-4">
                     <div className="flex-1">
                       <p className="font-medium text-foreground">{item.area}</p>
                       <p className="text-muted-foreground text-sm">{item.question}</p>
@@ -1463,7 +1474,7 @@ const FortyEightLawsGuide = () => {
                         <button
                           key={n}
                           onClick={() => setScore(i, safeScores[i] === n ? 0 : n)}
-                          className={`w-8 h-8 rounded-lg text-sm font-semibold transition-colors ${
+                          className={`w-7 h-7 sm:w-8 sm:h-8 rounded-lg text-xs sm:text-sm font-semibold transition-colors ${
                             safeScores[i] === n
                               ? "bg-gold text-background"
                               : "bg-muted text-muted-foreground hover:bg-muted/80"
@@ -1521,7 +1532,7 @@ const FortyEightLawsGuide = () => {
             </DiagramBox>
 
             <DiagramBox title="90-Day Power Audit Cycle">
-              <div className="grid grid-cols-2 md:grid-cols-4 gap-4 text-center">
+              <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4 text-center">
                 {[
                   { day: "Day 1", action: "Score all 7 areas. Identify weakest area. Pick one action step.", feel: "\"I know where I stand.\"" },
                   { day: "Day 30", action: "Check: did I do the action step from my weakest area? If not, do it today.", feel: "\"I'm taking action.\"" },
