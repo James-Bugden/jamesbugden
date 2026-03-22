@@ -675,36 +675,7 @@ const FortyEightLawsGuide = () => {
               This doesn't mean becoming a doormat. It means knowing the difference between a battle worth fighting and one where folding preserves your energy and position. If the situation crosses ethical or legal lines, the correct move is documentation and escalation, not surrender.
             </p>
 
-            <DiagramBox title="The Boss Management Matrix">
-              <div className="overflow-x-auto">
-                <table className="w-full text-sm border-collapse">
-                  <thead>
-                    <tr>
-                      <th className="text-left p-2 border-b border-border"></th>
-                      <th className="text-left p-2 border-b border-border">Boss's Ego: LOW</th>
-                      <th className="text-left p-2 border-b border-border">Boss's Ego: HIGH</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    <tr>
-                      <td className="p-2 border-b border-border font-medium">Your Visibility: LOW</td>
-                      <td className="p-2 border-b border-border">Rare. Normal mode. Do great work.</td>
-                      <td className="p-2 border-b border-border">Law 22. Surrender. Stay low. Build quietly.</td>
-                    </tr>
-                    <tr>
-                      <td className="p-2 font-medium">Your Visibility: HIGH</td>
-                      <td className="p-2">Best case. You shine. Boss is secure. Everyone wins.</td>
-                      <td className="p-2 text-gold font-medium">DANGER. Law 1. Make them look good or you will pay.</td>
-                    </tr>
-                  </tbody>
-                </table>
-              </div>
-              <div className="mt-4 pt-4 border-t border-border space-y-1 text-muted-foreground">
-                <p>Step 1: Assess your boss's ego. Watch how they react when others get praised.</p>
-                <p>Step 2: Assess your visibility. Are senior leaders noticing your work directly?</p>
-                <p>Step 3: Pick your quadrant. Adjust your strategy.</p>
-              </div>
-            </DiagramBox>
+            <BossManagementMatrix />
 
             <p className="text-muted-foreground leading-relaxed mt-6">
               Managing up keeps you safe. But safety alone won't advance your career. For that, you need people beyond your boss to know your name. That's reputation.
