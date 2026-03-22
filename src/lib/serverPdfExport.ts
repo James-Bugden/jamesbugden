@@ -24,10 +24,13 @@ interface ServerPdfExportOptions {
 function serializeResumeHtml(
   element: HTMLElement,
   pageFormat: "a4" | "letter",
-  _customize?: { marginX?: number; marginY?: number },
+  customize?: { marginX?: number; marginY?: number },
 ): string {
   const pageW = pageFormat === "letter" ? "8.5in" : "210mm";
   const pageH = pageFormat === "letter" ? "11in" : "297mm";
+  const marginY = customize?.marginY ?? 16;
+  const padTop = marginY + 4;
+  const padBottom = marginY + 4;
 
   // Collect all stylesheets — but skip @media print blocks
   // (they contain conflicting @page rules from the analysis report)
