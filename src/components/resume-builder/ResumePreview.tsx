@@ -1482,6 +1482,7 @@ export const ResumePreview = React.memo(function ResumePreview({
               )}
 
               <div
+                ref={el => { pageFrameRefs.current[i] = el; }}
                 className="shadow-2xl rounded-sm"
                 style={{
                   width: `${dims.wPX}px`,
