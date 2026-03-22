@@ -29,6 +29,10 @@ function serializeResumeHtml(
   const pageW = pageFormat === "letter" ? "8.5in" : "210mm";
   const pageH = pageFormat === "letter" ? "11in" : "297mm";
 
+  // Derive @page margins from user settings (mm)
+  const marginX = customize?.marginX ?? 10;
+  const marginY = customize?.marginY ?? 10;
+
 
 
   // Collect all stylesheets — but skip @media print blocks
