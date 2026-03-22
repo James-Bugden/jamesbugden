@@ -1,51 +1,60 @@
 
+Fix the dashboard search duplication by making the search index canonical and deduplicated.
 
-## MailerLite Subscriber Sync on Signup
+1. Inspect and update `src/pages/Dashboard.tsx` search indexing
+- Keep `buildSearchable()` as the single source for dashboard search results.
+- Remove the extra hardcoded `interview-questions` entry currently appended at the end.
+- Add deduplication by `id` while building the combined list from `tools` and `journeyItems`.
 
-### Overview
-Add MailerLite email sync as a fire-and-forget side effect after every successful signup. The uploaded API token will be stored as a secret.
+2. Preserve the intended result priority
+- Keep `tools` indexed first, then `journeyItems`.
+- When the same `id` exists in both places, keep the first one and skip later duplicates.
+- This means shared items like `interview-questions` will appear once in search, using the tool version as the canonical result.
 
-### Important Note
-Your signup forms don't collect a name field — only email and password. The MailerLite sync will send the email only (name will be empty). If you want names synced, we'd need to add a name input to the signup forms — but per your request, we won't change the UI.
+3. Keep language-aware routing intact
+- For tools, use the localized path (`zhPath` when available) instead of always indexing `path`.
+- For guides, continue using the existing localized `enPath`/`zhPath` logic.
 
-### Steps
+4. Validate affected UI behavior
+- Confirm search results no longer repeat the same card for queries like “interview”.
+- Check both English and Traditional Chinese dashboards.
+- Verify recently used cards still resolve correctly after the deduplicated search list is used as the lookup source.
 
-1. **Store the MailerLite API key as a secret**
-   - Use the `add_secret` tool to store `MAILERLITE_API_KEY` with the token you uploaded
+Technical details
+- Root cause: `interview-questions` is currently indexed 3 times:
+  1. in `tools`
+  2. in `journeyItems`
+  3. in a manual `items.push(...)` inside `buildSearchable()`
+- Recommended implementation shape:
+```ts
+function buildSearchable(lang: "en" | "zh"): SearchableItem[] {
+  const items: SearchableItem[] = [];
+  const seen = new Set<string>();
 
-2. **Create Edge Function `sync-mailerlite`** (`supabase/functions/sync-mailerlite/index.ts`)
-   - POST handler accepting `{ email, name? }`
-   - Calls `https://connect.mailerlite.com/api/subscribers` with Bearer auth
-   - Splits name into first/last, assigns group `181733295867823354`
-   - CORS headers, OPTIONS preflight handler
-   - Returns success/error JSON
+  tools.forEach((t) => {
+    if (seen.has(t.id)) return;
+    seen.add(t.id);
+    items.push({
+      id: t.id,
+      type: "tool",
+      title: t.title,
+      desc: t.description,
+      path: lang === "zh" && t.zhPath ? t.zhPath : t.path,
+    });
+  });
 
-3. **Create helper** (`src/lib/mailerlite.ts`)
-   - `syncToMailerLite(email, name?)` — invokes the edge function via `supabase.functions.invoke`
-   - Catches all errors silently, logs to console
+  journeyItems.forEach((g) => {
+    if (seen.has(g.id)) return;
+    seen.add(g.id);
+    items.push({
+      id: g.id,
+      type: "guide",
+      title: g.title,
+      desc: g.description,
+      path: lang === "zh" && g.zhPath ? g.zhPath : g.enPath,
+    });
+  });
 
-4. **Update 3 signup pages** to call `syncToMailerLite` after successful `signUp()`:
-   - `src/pages/Signup.tsx`
-   - `src/pages/Join.tsx`
-   - `src/pages/JoinZhTw.tsx`
-   - Fire-and-forget (no `await`), no UI changes
-
-### Technical Details
-
-**Edge Function structure:**
+  return items;
+}
 ```
-POST /sync-mailerlite
-Body: { email: string, name?: string }
-→ POST https://connect.mailerlite.com/api/subscribers
-  Headers: Authorization: Bearer $MAILERLITE_API_KEY
-  Body: { email, fields: { name, last_name }, groups: ["181733295867823354"] }
-```
-
-**Integration point in each signup handler:**
-```typescript
-// After: setSuccess(true)
-// Add: syncToMailerLite(email.trim());
-```
-
-No database changes needed. No UI changes.
-
