@@ -107,10 +107,11 @@ export function htmlToRichText(html: string, opts: ParseOpts): React.ReactNode {
     // Handle <p>...</p> or any other block
     const inner = trimmed.replace(/<\/?p[^>]*>/gi, "").replace(/<br\s*\/?>/gi, "\n");
     if (inner.trim()) {
+      const inlineChildren = renderInlineContent(inner, opts);
       elements.push(
-        <View key={key++} style={{ marginBottom: 2 }}>
-          {renderInlineHtml(inner, opts)}
-        </View>
+        <Text key={key++} style={{ fontSize: opts.fontSize, color: opts.color, lineHeight: opts.lineHeight, marginBottom: 2 }}>
+          {inlineChildren}
+        </Text>
       );
     }
   }
