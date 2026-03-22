@@ -1,38 +1,42 @@
 
 
-## Make 48 Laws Guide Interactive with Cloud Save
+## Plan: Delete "Skip tracer" line + UI/UX Improvements for 48 Laws Guide
 
-### What becomes interactive
+### 1. Content fix
+**Delete "Skip tracer at a detective agency."** from the Introduction paragraph (line 334). The sentence currently reads:
+> "Construction worker in Greece. Hotel receptionist in Paris. English teacher in Barcelona. Hollywood screenwriter. Skip tracer at a detective agency. Magazine editor."
 
-1. **Power Audit Tracker** — The 7 areas (Direction, Managing Up, Reputation, etc.) become score inputs (1-5) with auto-calculated total, color-coded result, and history tracking per 90-day cycle.
+Remove "Skip tracer at a detective agency." — this phrase is not in the source markdown.
 
-2. **Action Step Checklists** — Each section's Action Steps get a checkbox so users can mark them done and track progress.
+### 2. UI/UX Improvements
 
-Both use the existing `useGuideStorage` hook which saves to localStorage for guests and syncs to the cloud `guide_progress` table for logged-in users. No database changes needed.
+After reviewing the full page and comparing it with the best-designed guides (Ikigai, Office Politics), here are the improvements:
 
-### Implementation
+**A. Sticky floating action step progress bar**
+Currently, the action step counter only appears at the very bottom after completing at least 1 step. Move it to a sticky bottom bar that appears once the user completes 1+ action steps — always visible as they scroll, showing "X/19 action steps completed" with a thin progress bar. This gives constant feedback and motivation.
 
-**File: `src/pages/FortyEightLawsGuide.tsx`**
+**B. Make the Alive Time Audit and Irreplaceability Audit interactive**
+Two static audits (Alive Time Audit at line 454 and Irreplaceability Audit at line 757) currently just show questions without scoring inputs. Add the same interactive scoring buttons (like the Power Audit) so users can actually score themselves and see results. Save with `useGuideStorage`.
 
-1. Import `useGuideStorage` and `useAuth`, plus the `SaveBanner` pattern from `InteractiveChecklist`.
+**C. Improve the 48 Laws collapsible cards**
+Currently all 48 laws are plain collapsible text blocks. Add:
+- Color-coded left border based on tag (green for USE, amber for DEFEND, red for AVOID)
+- Show the tag badge on the collapsed title row (not just inside)
+- This lets users scan the full list visually without opening each one
 
-2. **Power Audit Tracker** (Section 9, ~line 1111-1146):
-   - Replace static text with 7 number inputs (1-5) using `useGuideStorage<number[]>("48laws_power_audit_en", Array(7).fill(0))`.
-   - Show auto-calculated total out of 35 with color-coded scoring bracket.
-   - Add a "Save snapshot" button that appends `{ date, scores }` to a `useGuideStorage<Array>` history array, letting users compare 90-day cycles.
-   - Show save banner for guests after they start scoring.
+**D. Better mobile ToC**
+The current mobile ToC is a floating button that opens a full list. Add section numbering dots/pills and make the current section name visible on the button (not just a menu icon), so users always know where they are in this long guide.
 
-3. **Action Step checkboxes** (~12 Action Steps across sections):
-   - Add a `useGuideStorage<boolean[]>("48laws_actions_en", Array(12).fill(false))` for tracking which action steps are completed.
-   - Wrap each `<ActionStep>` with a clickable checkbox row showing completed/uncompleted state.
-   - Display overall "X/12 action steps completed" counter.
-
-4. Keep the `SaveBanner` pattern: after 2+ interactions, show "Create a free account to sync across devices" for guests (matching `InteractiveChecklist` behavior).
+**E. Add reading progress bar**
+Add a thin gold progress bar at the top of the page (under the nav) that fills as the user scrolls, similar to the pattern used on long-form content sites. Gives spatial awareness on a 45-min read.
 
 ### Technical details
 
-- **Storage keys**: `48laws_power_audit_en`, `48laws_audit_history_en`, `48laws_actions_en`
-- **No DB migration needed** — `guide_progress` table already stores arbitrary JSON per `(user_id, guide_key)`
-- **Pattern**: follows `InteractiveScorecard` from Ikigai guide (number inputs, clamped 1-5, `useGuideStorage`)
-- Action Steps will be indexed by their order of appearance (0-11), with a stable array length
+**Files to edit:** `src/pages/FortyEightLawsGuide.tsx`
+
+**New storage keys:**
+- `48laws_alive_audit_en` — number[] (5 scores for Alive Time Audit)
+- `48laws_irreplaceable_audit_en` — number[] (5 scores for Irreplaceability Audit)
+
+**No new dependencies or DB migrations needed.**
 
