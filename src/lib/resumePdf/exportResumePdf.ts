@@ -23,7 +23,7 @@ export async function exportResumePdf({ data, customize, fileName }: ExportOptio
     const fullName = safeName.endsWith(".pdf") ? safeName : `${safeName}.pdf`;
 
     // Generate PDF blob
-    const doc = createElement(ResumePdfDocument, { data, customize });
+    const doc = createElement(ResumePdfDocument, { data, customize }) as any;
     const blob = await pdf(doc).toBlob();
 
     // Trigger download
