@@ -118,7 +118,7 @@ const JourneyCard = memo(function JourneyCard({
       <div>
         <div className="flex items-center gap-2 mb-3">
           <span className="inline-flex items-center gap-1 text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-full bg-muted text-muted-foreground">
-            {typeInfo.icon} {typeInfo[lang]}
+            <typeInfo.Icon className="w-3 h-3" /> {typeInfo[lang]}
           </span>
           {item.isNew && !hasSeen(item.id) && (
             <span className="inline-flex items-center gap-0.5 text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-full bg-gold/15 text-gold">
