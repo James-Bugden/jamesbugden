@@ -1017,7 +1017,7 @@ const FortyEightLawsGuide = () => {
             <p className="text-muted-foreground leading-relaxed mb-6">
               Work backward from where you want to be in five years. Every role is a stepping stone, not a destination. Before you accept a new position, ask: "Does this get me closer to where I want to be?"
             </p>
-            <ActionStep>
+            <ActionStep checked={safeActions[15]} onToggle={() => toggleAction(15)}>
               Write your ideal job title for 5 years from now. Then list the 3 skills or experiences your resume is missing to get there. Now look at your current role: does it fill any of those gaps? If yes, double down. If no, start planning your next move.
             </ActionStep>
 
