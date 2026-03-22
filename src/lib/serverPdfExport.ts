@@ -4,6 +4,7 @@
  * and triggers a direct download — no print dialog.
  */
 import { toast } from "@/hooks/use-toast";
+import { supabase } from "@/integrations/supabase/client";
 
 interface ServerPdfExportOptions {
   /** The hidden full-flow element containing the resume preview */
