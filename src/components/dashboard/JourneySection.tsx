@@ -1,6 +1,6 @@
-import { useState, memo, MouseEvent, useCallback } from "react";
+import { useState, memo, MouseEvent, useCallback, ReactNode } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { ChevronDown, ChevronUp, Check, ArrowRight, Sparkles } from "lucide-react";
+import { ChevronDown, ChevronUp, Check, ArrowRight, Sparkles, BookOpen, Wrench, Calculator } from "lucide-react";
 import { useReadingProgress } from "@/hooks/useReadingProgress";
 import { useLocalStorage } from "@/hooks/useLocalStorage";
 
@@ -32,7 +32,7 @@ export interface JourneyItem {
 interface JourneySectionProps {
   tag: GuideTag;
   label: string;
-  emoji: string;
+  icon: ReactNode;
   color: string;
   items: JourneyItem[];
   lang: "en" | "zh";
@@ -42,9 +42,9 @@ interface JourneySectionProps {
 }
 
 const CONTENT_TYPE_LABELS = {
-  guide: { en: "Guide", zh: "指南", icon: "📖" },
-  template: { en: "Template", zh: "範本", icon: "🛠" },
-  calculator: { en: "Calculator", zh: "計算器", icon: "📊" },
+  guide: { en: "Guide", zh: "指南", Icon: BookOpen },
+  template: { en: "Template", zh: "範本", Icon: Wrench },
+  calculator: { en: "Calculator", zh: "計算器", Icon: Calculator },
 };
 
 const JourneyCard = memo(function JourneyCard({
@@ -118,7 +118,7 @@ const JourneyCard = memo(function JourneyCard({
       <div>
         <div className="flex items-center gap-2 mb-3">
           <span className="inline-flex items-center gap-1 text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-full bg-muted text-muted-foreground">
-            {typeInfo.icon} {typeInfo[lang]}
+            <typeInfo.Icon className="w-3 h-3" /> {typeInfo[lang]}
           </span>
           {item.isNew && !hasSeen(item.id) && (
             <span className="inline-flex items-center gap-0.5 text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-full bg-gold/15 text-gold">
@@ -167,7 +167,7 @@ const JourneyCard = memo(function JourneyCard({
 export default function JourneySection({
   tag,
   label,
-  emoji,
+  icon,
   color,
   items,
   lang,
@@ -190,7 +190,7 @@ export default function JourneySection({
         onClick={() => setCollapsed((v) => !v)}
         className="w-full flex items-center gap-3 mb-4 group text-left"
       >
-        <span className="text-xl">{emoji}</span>
+        <span className="text-foreground" style={{ color }}>{icon}</span>
         <span className="font-heading text-lg md:text-xl font-bold text-foreground flex-1">
           {label}
         </span>

@@ -5,7 +5,7 @@ import { Linkedin } from "lucide-react";
 import { InstagramIcon, ThreadsIcon } from "@/components/SocialIcons";
 import LanguageToggle from "@/components/LanguageToggle";
 import ThemeToggle from "@/components/ThemeToggle";
-import { ArrowRight, FileText, DollarSign, PenTool, Search, X, BarChart3, MessageSquare } from "lucide-react";
+import { ArrowRight, FileText, DollarSign, PenTool, Search, X, BarChart3, MessageSquare, Compass, ClipboardList, Mic, Banknote } from "lucide-react";
 import PageSEO from "@/components/PageSEO";
 import { useRecentlyUsed } from "@/hooks/useRecentlyUsed";
 import { useLocalStorage } from "@/hooks/useLocalStorage";
@@ -95,11 +95,11 @@ const journeyItems: JourneyItem[] = [
   { id: "tk-log", title: { en: "Achievement Log", zh: "成就紀錄簿" }, description: { en: "Track your wins weekly so when review time comes, you have the evidence ready.", zh: "每週記錄你的成果，績效考核時直接拿出來用。" }, enPath: "/toolkit/log", zhPath: "/zh-tw/toolkit/log", tag: "negotiating", contentType: "template" },
 ];
 
-const JOURNEY_META: { tag: GuideTag; emoji: string; color: string; label: { en: string; zh: string } }[] = [
-  { tag: "end-to-end", emoji: "🧭", color: "hsl(var(--executive-green))", label: { en: "End to End Guides", zh: "完整指南" } },
-  { tag: "applying", emoji: "📝", color: "#1D4ED8", label: { en: "Applying", zh: "投遞申請" } },
-  { tag: "interviewing", emoji: "🎤", color: "#7C3AED", label: { en: "Interviewing", zh: "面試準備" } },
-  { tag: "negotiating", emoji: "💰", color: "hsl(var(--gold-dark))", label: { en: "Negotiating", zh: "薪資談判" } },
+const JOURNEY_META: { tag: GuideTag; icon: React.ReactNode; color: string; label: { en: string; zh: string } }[] = [
+  { tag: "end-to-end", icon: <Compass className="w-5 h-5" />, color: "hsl(var(--executive-green))", label: { en: "End to End Guides", zh: "完整指南" } },
+  { tag: "applying", icon: <ClipboardList className="w-5 h-5" />, color: "#1D4ED8", label: { en: "Applying", zh: "投遞申請" } },
+  { tag: "interviewing", icon: <Mic className="w-5 h-5" />, color: "#7C3AED", label: { en: "Interviewing", zh: "面試準備" } },
+  { tag: "negotiating", icon: <Banknote className="w-5 h-5" />, color: "hsl(var(--gold-dark))", label: { en: "Negotiating", zh: "薪資談判" } },
 ];
 
 type SearchableItem = { id: string; type: "tool" | "guide"; title: { en: string; zh: string }; desc: { en: string; zh: string }; path: string };
@@ -531,7 +531,7 @@ export default function Dashboard({ lang = "en" }: { lang?: "en" | "zh" }) {
                   key={journey.tag}
                   tag={journey.tag}
                   label={journey.label[lang]}
-                  emoji={journey.emoji}
+                  icon={journey.icon}
                   color={journey.color}
                   items={items}
                   lang={lang}
