@@ -445,6 +445,7 @@ export default function AdminDashboard() {
             <TabsTrigger value="salary">Salary Checks</TabsTrigger>
             <TabsTrigger value="resumes">Resume Leads</TabsTrigger>
             <TabsTrigger value="emails">Email Leads</TabsTrigger>
+            <TabsTrigger value="feedback">Feedback</TabsTrigger>
           </TabsList>
 
           {/* ── Reviews Tab ──────────────────────────────────────────────── */}
