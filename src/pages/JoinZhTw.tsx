@@ -279,7 +279,7 @@ export default function JoinZhTw() {
             <p className="text-sm text-muted-foreground mb-4">
               超過 3,459 位專業人士已加入，來自以下企業
             </p>
-            <LogoScrollExperimentZhTw />
+            <LogoScrollZhTw />
           </motion.div>
 
           <motion.div

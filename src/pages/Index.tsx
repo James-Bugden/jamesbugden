@@ -187,13 +187,13 @@ const IndexExperiment = () => {
 
         {/* ── Logo Trust Bar — cream #FDFBF7 ── */}
         <div className="bg-cream">
-          <LogoScrollExperiment />
+          <LogoScroll />
         </div>
 
         {/* ── Testimonials — white #FFFFFF ── */}
         <LazySection>
           <div className="bg-card">
-            <HomepageTestimonialsExperiment />
+            <HomepageTestimonials />
           </div>
         </LazySection>
 
@@ -273,7 +273,7 @@ const IndexExperiment = () => {
 
         {/* ── How It Works ── */}
         <LazySection>
-          <SelfSegmentationExperiment />
+          <SelfSegmentation />
         </LazySection>
 
         {/* ── Salary Calculator Proof ── */}

@@ -300,7 +300,7 @@ export default function Join() {
             <p className="text-sm text-muted-foreground mb-4">
               Join 3,459+ professionals from companies like
             </p>
-            <LogoScrollExperiment />
+            <LogoScroll />
           </motion.div>
 
           {/* FAQ — first item pre-expanded */}

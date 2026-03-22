@@ -187,13 +187,13 @@ const IndexExperimentZhTw = () => {
 
         {/* ── Logo Trust Bar ── */}
         <div className="bg-cream">
-          <LogoScrollExperimentZhTw />
+          <LogoScrollZhTw />
         </div>
 
         {/* ── Testimonials ── */}
         <LazySection>
           <div className="bg-card">
-            <HomepageTestimonialsExperimentZhTw />
+            <HomepageTestimonialsZhTw />
           </div>
         </LazySection>
 
@@ -272,7 +272,7 @@ const IndexExperimentZhTw = () => {
 
         {/* ── How It Works ── */}
         <LazySection>
-          <SelfSegmentationExperimentZhTw />
+          <SelfSegmentationZhTw />
         </LazySection>
 
         {/* ── Salary Proof ── */}
