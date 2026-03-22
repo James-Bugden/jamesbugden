@@ -1,60 +1,66 @@
 
-Goal: make the resume download a real, clean PDF with no blank pages and a much smaller file size.
+Goal: replace the still-broken screenshot export with a true resume PDF generator. The uploaded PDF confirms the current output is effectively empty: both pages parse as `NO_CONTENT_HERE`, and the current code still exports from a hidden off-screen DOM clone in `src/lib/pdfExport.ts`, which is the same fragile path causing blank pages and oversized files.
 
-What I found
-- The current resume export in `src/lib/pdfExport.ts` is still screenshot-based: it captures the hidden resume DOM with `html-to-image`, then slices that raster image into PDF pages.
-- The console error points to the real failure: `html-to-image` is trying to read Google Fonts stylesheet rules and hits a cross-origin `SecurityError`. `ResumePreview.tsx` injects `<link rel="stylesheet" href={GOOGLE_FONTS_URL} />`, so the export pipeline depends on a stylesheet the browser won’t let it inspect.
-- Even when it works, the current approach produces large files because every page becomes a high-resolution PNG inside the PDF.
-- This is also why the export can drift from the visible preview: it exports the hidden measurement tree, not a true PDF document.
+Plan
 
-Implementation plan
-1. Replace the resume export path with a true PDF renderer
-- Build a dedicated resume PDF document module using `@react-pdf/renderer`.
-- Generate the PDF directly from `ResumeData` + `CustomizeSettings` instead of capturing DOM.
-- Keep text as real PDF text and only use raster images for items like the profile photo.
+1. Stop using DOM capture for resume exports
+- Keep the on-screen resume preview exactly as it is.
+- Remove the resume download path’s dependency on `html-to-image`, hidden measurement DOM, and page-image slicing.
+- Leave cover letter export alone for now so this fix stays scoped and lower-risk.
 
-2. Reuse the existing resume structure and styling rules
-- Create shared helpers for:
-  - section ordering
-  - date formatting
-  - page size (A4 / Letter)
-  - margins, colors, header/footer settings
-  - one-column / two-column section placement
-- Map the current customization controls to PDF styles so the downloaded file still matches the builder design closely.
+2. Add a dedicated resume PDF document
+- Create a new PDF renderer using `@react-pdf/renderer` that builds the resume directly from `ResumeData` + `CustomizeSettings`.
+- Generate real PDF text instead of a flattened screenshot, which fixes both blank pages and file size.
+- Support A4 and Letter based on the existing page format setting.
 
-3. Convert editor HTML into PDF-safe rich text
-- Add a small parser for the limited markup the builder already uses (`p`, `br`, `ul`, `ol`, `li`, `strong`, `em`, `u`, `a`).
-- Render bullets, links, emphasis, and paragraph spacing as real PDF text blocks instead of flattened images.
+3. Mirror the current resume structure in PDF
+- Reuse the existing section order and section types: summary, experience, education, skills, languages, certificates, plus the personal header.
+- Map the current customization options that matter most for output:
+  - page size
+  - margins
+  - font size / line height
+  - accent color
+  - one-column vs two-column layout
+  - heading style
+  - footer / page numbers
+- Build this with shared helpers so the PDF stays close to the live preview without depending on browser CSS.
 
-4. Make the export smaller and more reliable
-- Register only the active fonts used by the current resume instead of relying on the full Google Fonts stylesheet bundle.
-- Remove resume dependence on `html-to-image`, `hiddenFlowRef`, and page-image slicing.
-- Keep image assets compressed, but stop embedding full-page PNGs.
+4. Convert builder rich text into PDF-safe content
+- Add a small parser for the HTML the editor already produces: paragraphs, line breaks, bold, italic, underline, lists, and links.
+- Render those as native PDF text blocks and bullets instead of images.
+- Sanitize and normalize unsupported markup so exports stay reliable.
 
-5. Wire the builders to the new export API
-- Update `ResumeBuilder.tsx` and `ResumeBuilderSimple.tsx` to call the new resume PDF generator directly.
-- Scope this change to resume export only, so cover letter export is not disturbed during the fix.
+5. Make fonts reliable instead of browser-dependent
+- Do not depend on Google Fonts stylesheets at export time.
+- Register only the active font families needed for the current resume, or map to safe PDF fonts where necessary for reliability.
+- This removes the current cross-origin/font stylesheet failure point entirely.
 
-6. Add regression coverage
-- Add tests for the rich-text conversion helpers and section/style mapping.
-- Add an export smoke test to verify one-page and multi-page resumes generate a non-empty PDF blob.
-- Verify page numbers, footer options, and two-column resumes still export correctly.
+6. Wire the builders to the new API
+- Update `ResumeBuilder.tsx` and `ResumeBuilderSimple.tsx` to call a new resume-specific PDF export function using the actual resume data/settings, not `exportMetricsRef`.
+- Keep `exportToPdf()` only for cover letters until resume export is stable.
 
 Files to update
 - `src/lib/pdfExport.ts`
 - `src/pages/ResumeBuilder.tsx`
 - `src/pages/ResumeBuilderSimple.tsx`
-- new PDF document component/helper files under `src/components/resume-builder/` or `src/lib/`
+- new resume PDF files under `src/components/resume-builder/` or `src/lib/`
 - `package.json`
 
-Technical note
-- I would not keep iterating on the current screenshot exporter for resumes. It is the direct cause of both reported problems:
-  - blank/failed pages from the font stylesheet security error
-  - oversized files from rasterized page images
-- The preview UI can stay as-is. Only the download path needs to move to a true PDF implementation.
+Technical notes
+- The current blank output is not just a tuning issue. It comes from exporting a hidden DOM clone through a screenshot pipeline.
+- Because the present resume preview uses browser CSS features like Google Fonts and modern color functions, continuing to patch the screenshot approach will stay brittle.
+- A true PDF renderer is the correct fix for:
+  - non-blank output
+  - smaller files
+  - selectable/searchable text
+  - stable multi-page exports
 
-Expected outcome
-- no blank first page
-- much smaller PDF files
-- selectable/searchable text
-- clean one-click PDF download without using a screenshot export pipeline
+QA plan
+- Export a one-page and multi-page resume from `/resume`.
+- Verify the downloaded PDF contains real text, not empty pages.
+- Check file size against the current export and confirm it is materially smaller.
+- Parse the generated PDF and visually inspect page renders to confirm:
+  - no blank pages
+  - no clipped sections
+  - correct pagination
+  - footer/page-number behavior
