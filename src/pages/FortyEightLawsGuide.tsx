@@ -427,7 +427,7 @@ const FortyEightLawsGuide = () => {
               "The greatest career danger is you are replaceable." Following your unique inclinations is the only real protection against that.
             </p>
 
-            <ActionStep>
+            <ActionStep checked={safeActions[0]} onToggle={() => toggleAction(0)}>
               Write down three activities from your childhood you loved doing before anyone told you what was practical. Then write three things in your current work that give you the same feeling. Look for the overlap. If there is none, bring one of those childhood skills into your current role this month. Find a project where it applies.
             </ActionStep>
 
