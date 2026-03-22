@@ -29,7 +29,8 @@ import { Label } from "@/components/ui/label";
 import { supabase } from "@/integrations/supabase/client";
 import { useBuilderAiUsage } from "@/hooks/useBuilderAiUsage";
 import { applyTemplatePreset } from "@/components/resume-builder/templatePresets";
-import { exportToPdf } from "@/lib/pdfExport";
+import { exportToPdf, exportResumePages } from "@/lib/pdfExport";
+import { ResumeExportMetrics } from "@/components/resume-builder/ResumePreview";
 import { useIsMobile } from "@/hooks/use-mobile";
 import { Skeleton } from "@/components/ui/skeleton";
 import { toast } from "@/hooks/use-toast";
@@ -432,6 +433,7 @@ const ResumeBuilder = () => {
   const [nameValue, setNameValue] = useState("");
   const [editorImportOpen, setEditorImportOpen] = useState(false);
   const isMobile = useIsMobile();
+  const exportMetricsRef = useRef<ResumeExportMetrics | null>(null);
   const [analyzerImporting, setAnalyzerImporting] = useState(false);
   const [pageCount, setPageCount] = useState(1);
   const [showPageWarning, setShowPageWarning] = useState(false);
@@ -660,11 +662,21 @@ const ResumeBuilder = () => {
     setDownloading(true);
     const pf = customize.pageFormat || "a4";
     const fn = filename || (data.personalDetails.fullName || "Resume").replace(/\s+/g, "_") + "_Resume";
-    await exportToPdf({
-      elementId: "resume-pdf-target",
-      fileName: fn,
-      pageFormat: pf as "a4" | "letter",
-    });
+    const metrics = exportMetricsRef.current;
+    if (metrics?.sourceElement && metrics.pageCount > 0) {
+      await exportResumePages({
+        sourceElement: metrics.sourceElement,
+        fileName: fn,
+        pageFormat: pf as "a4" | "letter",
+        pageCount: metrics.pageCount,
+        contentOriginPX: metrics.contentOriginPX,
+        usablePerPagePX: metrics.usablePerPagePX,
+        pageHeightPX: metrics.pageHeightPX,
+        marginYPX: metrics.marginYPX,
+      });
+    } else {
+      await exportToPdf({ elementId: "resume-pdf-target", fileName: fn, pageFormat: pf as "a4" | "letter" });
+    }
     setDownloading(false);
   };
 
@@ -1049,7 +1061,7 @@ const ResumeBuilder = () => {
             {editorContent}
           </div>
           <div className="flex-1 h-full relative">
-            <ResumePreview data={data} customize={customize} pdfTargetId="resume-pdf-target" onEditSection={handleEditSection} onColorChange={(f, c) => updateCustomize({ [f]: c } as any)} onContentEdit={handleContentEdit} onPageCount={handlePageCount} />
+            <ResumePreview data={data} customize={customize} pdfTargetId="resume-pdf-target" onEditSection={handleEditSection} onColorChange={(f, c) => updateCustomize({ [f]: c } as any)} onContentEdit={handleContentEdit} onPageCount={handlePageCount} exportMetricsRef={exportMetricsRef} />
             <AnalyzerSuggestionsPanel
               suggestions={analyzerSuggestions}
               onApply={(s) => {
@@ -1087,7 +1099,7 @@ const ResumeBuilder = () => {
         {/* Mobile preview overlay */}
         {mobilePreview && (
           <MobilePreviewOverlay onClose={() => setMobilePreview(false)} onDownload={() => handleDownload()} downloading={downloading}>
-            <ResumePreview data={data} customize={customize} pdfTargetId="resume-pdf-target" onEditSection={handleEditSection} onColorChange={(f, c) => updateCustomize({ [f]: c } as any)} onContentEdit={handleContentEdit} onPageCount={handlePageCount} />
+            <ResumePreview data={data} customize={customize} pdfTargetId="resume-pdf-target" onEditSection={handleEditSection} onColorChange={(f, c) => updateCustomize({ [f]: c } as any)} onContentEdit={handleContentEdit} onPageCount={handlePageCount} exportMetricsRef={exportMetricsRef} />
             <AnalyzerSuggestionsPanel
               suggestions={analyzerSuggestions}
               onApply={(s) => {

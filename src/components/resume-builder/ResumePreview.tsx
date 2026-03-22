@@ -37,6 +37,15 @@ function getPageDims(format?: string) {
   return { wMM: d.w, hMM: d.h, wPX: d.w * PX_PER_MM, hPX: d.h * PX_PER_MM };
 }
 
+export interface ResumeExportMetrics {
+  sourceElement: HTMLElement | null;
+  pageCount: number;
+  contentOriginPX: number;
+  usablePerPagePX: number;
+  pageHeightPX: number;
+  marginYPX: number;
+}
+
 interface ResumePreviewProps {
   data: ResumeData;
   customize?: CustomizeSettings;
@@ -45,6 +54,7 @@ interface ResumePreviewProps {
   onColorChange?: (field: string, color: string) => void;
   onContentEdit?: (sectionId: string, entryId: string, field: string, html: string) => void;
   onPageCount?: (count: number) => void;
+  exportMetricsRef?: React.MutableRefObject<ResumeExportMetrics | null>;
 }
 
 /* ── Relative font-size helpers ──────────────────────────────── */
@@ -1018,6 +1028,7 @@ export const ResumePreview = React.memo(function ResumePreview({
   onColorChange,
   onContentEdit,
   onPageCount,
+  exportMetricsRef,
 }: ResumePreviewProps) {
   const containerRef = useRef<HTMLDivElement>(null);
   const hiddenFlowRef = useRef<HTMLDivElement>(null);
@@ -1218,6 +1229,19 @@ export const ResumePreview = React.memo(function ResumePreview({
     onPageCount?.(pageCount);
   }, [pageCount, onPageCount]);
 
+  // Expose export metrics for the page-by-page PDF exporter
+  useEffect(() => {
+    if (exportMetricsRef) {
+      exportMetricsRef.current = {
+        sourceElement: hiddenFlowRef.current,
+        pageCount,
+        contentOriginPX,
+        usablePerPagePX: usablePerPage,
+        pageHeightPX: dims.hPX,
+        marginYPX,
+      };
+    }
+  }, [exportMetricsRef, pageCount, contentOriginPX, usablePerPage, dims.hPX, marginYPX]);
 
   /* ── Clear stale margins immediately when data/customize changes ── */
   useEffect(() => {

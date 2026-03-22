@@ -20,7 +20,8 @@ import { SavedDocument, DocType, updateDocument, getAllDocuments, renameDocument
 import { supabase } from "@/integrations/supabase/client";
 import { useBuilderAiUsage } from "@/hooks/useBuilderAiUsage";
 import { CustomizeSettings, DEFAULT_CUSTOMIZE } from "@/components/resume-builder/customizeTypes";
-import { exportToPdf } from "@/lib/pdfExport";
+import { exportToPdf, exportResumePages } from "@/lib/pdfExport";
+import { ResumeExportMetrics } from "@/components/resume-builder/ResumePreview";
 import { useIsMobile } from "@/hooks/use-mobile";
 import { Skeleton } from "@/components/ui/skeleton";
 import { toast } from "@/hooks/use-toast";
@@ -501,6 +502,7 @@ const ResumeBuilderSimple = () => {
   const [nameValue, setNameValue] = useState("");
   const [editorImportOpen, setEditorImportOpen] = useState(false);
   const isMobile = useIsMobile();
+  const exportMetricsRef = useRef<ResumeExportMetrics | null>(null);
   const [analyzerImporting, setAnalyzerImporting] = useState(false);
 
   // Auto-import from Resume Analyzer
@@ -656,7 +658,21 @@ const ResumeBuilderSimple = () => {
     if (downloading) return;
     setDownloading(true);
     const fn = filename || (data.personalDetails.fullName || "Resume").replace(/\s+/g, "_") + "_Resume";
-    await exportToPdf({ elementId: "resume-pdf-target", fileName: fn, pageFormat: "a4" });
+    const metrics = exportMetricsRef.current;
+    if (metrics?.sourceElement && metrics.pageCount > 0) {
+      await exportResumePages({
+        sourceElement: metrics.sourceElement,
+        fileName: fn,
+        pageFormat: "a4",
+        pageCount: metrics.pageCount,
+        contentOriginPX: metrics.contentOriginPX,
+        usablePerPagePX: metrics.usablePerPagePX,
+        pageHeightPX: metrics.pageHeightPX,
+        marginYPX: metrics.marginYPX,
+      });
+    } else {
+      await exportToPdf({ elementId: "resume-pdf-target", fileName: fn, pageFormat: "a4" });
+    }
     setDownloading(false);
   };
 
@@ -898,7 +914,7 @@ const ResumeBuilderSimple = () => {
             {editorContent}
           </div>
           <div className="flex-1 h-full relative">
-            <ResumePreview data={data} customize={customize} pdfTargetId="resume-pdf-target" onEditSection={handleEditSection} onContentEdit={handleContentEdit} />
+            <ResumePreview data={data} customize={customize} pdfTargetId="resume-pdf-target" onEditSection={handleEditSection} onContentEdit={handleContentEdit} exportMetricsRef={exportMetricsRef} />
             <div className="absolute bottom-4 left-4 z-20">
               <FeedbackBox subject="Resume Builder Feedback" locale={lang} />
             </div>
@@ -918,7 +934,7 @@ const ResumeBuilderSimple = () => {
 
         {mobilePreview && (
           <MobilePreviewOverlay onClose={() => setMobilePreview(false)} onDownload={() => handleDownload()} downloading={downloading}>
-            <ResumePreview data={data} customize={customize} pdfTargetId="resume-pdf-target" onEditSection={handleEditSection} onContentEdit={handleContentEdit} />
+            <ResumePreview data={data} customize={customize} pdfTargetId="resume-pdf-target" onEditSection={handleEditSection} onContentEdit={handleContentEdit} exportMetricsRef={exportMetricsRef} />
           </MobilePreviewOverlay>
         )}
       </div>
