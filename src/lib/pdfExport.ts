@@ -96,5 +96,8 @@ export async function exportToPdf({ elementId, fileName, pageFormat = "a4" }: Ex
   } catch (err) {
     console.error("PDF export error:", err);
     toast({ title: "Export failed", description: "Something went wrong generating the PDF.", variant: "destructive" });
+  } finally {
+    // Restore original off-screen styles
+    Object.assign(container.style, orig);
   }
 }
