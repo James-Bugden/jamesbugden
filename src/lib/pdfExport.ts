@@ -353,5 +353,9 @@ export async function exportResumePages(config: ResumeExportConfig) {
   } catch (err) {
     console.error("Resume PDF export error:", err);
     toast({ title: "Export failed", description: "Something went wrong generating the PDF.", variant: "destructive" });
+  } finally {
+    // Always restore original styles
+    restoreVars?.();
+    restoreLight?.();
   }
 }
