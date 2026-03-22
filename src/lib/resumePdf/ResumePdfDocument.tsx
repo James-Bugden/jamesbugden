@@ -542,7 +542,7 @@ export function ResumePdfDocument({ data, customize }: Props) {
               color: nameColor,
               textTransform: "uppercase",
               letterSpacing: 1.5,
-              marginBottom: 2,
+              marginBottom: 4,
             }}>{pd.fullName}</Text>
           ) : null}
           {pd.professionalTitle ? (
