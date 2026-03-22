@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { Navigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { Session } from "@supabase/supabase-js";
@@ -18,11 +18,15 @@ const ProtectedRoute = ({
   const [session, setSession] = useState<Session | null>(null);
   const [isAdmin, setIsAdmin] = useState(false);
   const [loading, setLoading] = useState(true);
+  const checkedUserRef = useRef<string | null>(null);
 
   useEffect(() => {
     let isMounted = true;
 
     const checkAdminRole = async (userId: string) => {
+      // Prevent duplicate checks for the same user
+      if (checkedUserRef.current === userId) return;
+      checkedUserRef.current = userId;
       try {
         const { data } = await supabase.rpc('is_admin', { _user_id: userId });
         if (isMounted) setIsAdmin(!!data);
@@ -30,22 +34,6 @@ const ProtectedRoute = ({
         if (isMounted) setIsAdmin(false);
       }
     };
-
-    // Listener for ONGOING auth changes (does NOT control loading)
-    const { data: { subscription } } = supabase.auth.onAuthStateChange(
-      (_event, session) => {
-        if (!isMounted) return;
-        setSession(session);
-
-        if (session?.user && requireAdmin) {
-          checkAdminRole(session.user.id);
-        } else if (session && !requireAdmin) {
-          setIsAdmin(true);
-        } else {
-          setIsAdmin(false);
-        }
-      }
-    );
 
     // INITIAL load (controls loading state)
     const initializeAuth = async () => {
@@ -64,6 +52,23 @@ const ProtectedRoute = ({
         if (isMounted) setLoading(false);
       }
     };
+
+    // Listener for ONGOING auth changes
+    const { data: { subscription } } = supabase.auth.onAuthStateChange(
+      (_event, session) => {
+        if (!isMounted) return;
+        setSession(session);
+
+        if (session?.user && requireAdmin) {
+          checkAdminRole(session.user.id);
+        } else if (session && !requireAdmin) {
+          setIsAdmin(true);
+        } else {
+          setIsAdmin(false);
+          checkedUserRef.current = null;
+        }
+      }
+    );
 
     initializeAuth();
 

@@ -1,21 +1,10 @@
-import { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import { useState } from "react";
 import { lovable } from "@/integrations/lovable/index";
-import { useAuth } from "@/contexts/AuthContext";
 import { Button } from "@/components/ui/button";
 import { Loader2 } from "lucide-react";
 
 const AdminLogin = () => {
   const [loading, setLoading] = useState(false);
-  const navigate = useNavigate();
-  const { isLoggedIn, isLoading } = useAuth();
-
-  // If already logged in, go straight to admin dashboard (ProtectedRoute will verify admin)
-  useEffect(() => {
-    if (!isLoading && isLoggedIn) {
-      navigate("/admin", { replace: true });
-    }
-  }, [isLoggedIn, isLoading, navigate]);
 
   const handleGoogleLogin = async () => {
     setLoading(true);
