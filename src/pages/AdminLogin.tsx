@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { lovable } from "@/integrations/lovable/index";
@@ -72,13 +72,32 @@ const AdminLogin = () => {
     setGoogleLoading(true);
     try {
       sessionStorage.setItem("auth_redirect", "/admin");
-      await lovable.auth.signInWithOAuth("google", {
+      const { error } = await lovable.auth.signInWithOAuth("google", {
         redirect_uri: window.location.origin,
       });
+      if (error) {
+        toast({ title: "Login failed", description: error.message, variant: "destructive" });
+        setGoogleLoading(false);
+      }
     } catch {
       setGoogleLoading(false);
     }
   };
+
+  // Handle redirect back from OAuth — if already logged in, check admin and go
+  useEffect(() => {
+    const handleOAuthReturn = async () => {
+      const { data: { session } } = await supabase.auth.getSession();
+      if (session?.user) {
+        const redirected = await checkAdminAndRedirect();
+        if (!redirected) setGoogleLoading(false);
+      }
+    };
+    // Only run if we have an auth_redirect pending (just came back from OAuth)
+    if (sessionStorage.getItem("auth_redirect") === "/admin") {
+      handleOAuthReturn();
+    }
+  }, []);
 
   return (
     <div className="min-h-screen bg-background flex items-center justify-center px-4">
