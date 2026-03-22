@@ -181,18 +181,20 @@ export default function AdminDashboard() {
   }, []);
 
   const fetchCounts = async () => {
-    const [r1, r2, r3, r4] = await Promise.all([
+    const [r1, r2, r3, r4, r5] = await Promise.all([
       supabase.from("client_reviews").select("*", { count: "exact", head: true }),
       supabase.from("salary_checks").select("*", { count: "exact", head: true }),
       supabase.from("resume_leads").select("*", { count: "exact", head: true }),
       supabase.from("email_gate_leads").select("*", { count: "exact", head: true }),
+      supabase.from("feedback" as any).select("*", { count: "exact", head: true }),
     ]);
     setCounts({
       reviews: r1.count ?? 0,
       salary: r2.count ?? 0,
       resumes: r3.count ?? 0,
       emails: r4.count ?? 0,
-      accounts: 0, // updated by fetchAccounts
+      feedback: (r5 as any).count ?? 0,
+      accounts: 0,
     });
   };
 
