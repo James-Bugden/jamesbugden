@@ -24,27 +24,23 @@ interface ServerPdfExportOptions {
 function serializeResumeHtml(
   element: HTMLElement,
   pageFormat: "a4" | "letter",
-  customize?: { marginX?: number; marginY?: number },
+  _customize?: { marginX?: number; marginY?: number },
 ): string {
-  // Calculate page margins from customize settings
-  const marginX = customize?.marginX ?? 16;
-  const marginY = customize?.marginY ?? 16;
-  const headerSafe = 4;
-  const footerSafe = 4;
-  const padTop = marginY + headerSafe;   // default: 20mm
-  const padBottom = marginY + footerSafe; // default: 20mm
   const pageW = pageFormat === "letter" ? "8.5in" : "210mm";
   const pageH = pageFormat === "letter" ? "11in" : "297mm";
 
-  // Collect all stylesheets (same-origin)
+  // Collect all stylesheets — but skip @media print blocks
+  // (they contain conflicting @page rules from the analysis report)
   let allCSS = "";
   for (const sheet of Array.from(document.styleSheets)) {
     try {
       for (const rule of Array.from(sheet.cssRules)) {
-        // Skip @media print blocks — they contain conflicting @page rules
-        // and analysis-report-specific styles that break the resume PDF export.
-        if (rule instanceof CSSMediaRule && rule.conditionText === "print") {
-          continue;
+        if (rule instanceof CSSMediaRule) {
+          try {
+            if (rule.media.mediaText === "print") continue;
+          } catch {
+            if (rule.conditionText === "print") continue;
+          }
         }
         allCSS += rule.cssText + "\n";
       }
@@ -63,7 +59,7 @@ function serializeResumeHtml(
   // Clone the element
   const clone = element.cloneNode(true) as HTMLElement;
 
-  // Reset off-screen positioning
+  // Reset off-screen positioning — but keep everything else as-is
   clone.style.position = "relative";
   clone.style.left = "auto";
   clone.style.top = "auto";
@@ -74,7 +70,7 @@ function serializeResumeHtml(
   clone.removeAttribute("data-hidden-flow");
   clone.removeAttribute("id");
 
-  // Resolve CSS custom properties (colors, fonts, spacing) from the live DOM
+  // Resolve CSS custom properties from the live DOM
   const liveA4Page = element.querySelector("[data-color-role='background']") as HTMLElement | null;
   const cloneA4Page = clone.querySelector("[data-color-role='background']") as HTMLElement | null;
   if (liveA4Page && cloneA4Page) {
@@ -92,23 +88,12 @@ function serializeResumeHtml(
       "--resume-section-spacing", "--resume-accent",
       "--resume-name", "--resume-title", "--resume-headings",
       "--resume-dates", "--resume-subtitle", "--resume-body",
+      "--resume-pad-top", "--resume-pad-bottom", "--resume-margin-x",
     ];
     for (const name of cssVarNames) {
       const val = computed.getPropertyValue(name);
       if (val?.trim()) cloneA4Page.style.setProperty(name, val.trim());
     }
-
-    // Strip ALL padding — @page margins handle everything now.
-    cloneA4Page.style.setProperty("--resume-pad-top", "0mm");
-    cloneA4Page.style.setProperty("--resume-pad-bottom", "0mm");
-    cloneA4Page.style.setProperty("--resume-margin-x", "0mm");
-    cloneA4Page.style.padding = "0";
-    cloneA4Page.style.width = "100%";
-
-    // Strip minHeight — prevents forcing extra pages.
-    // The A4Page has minHeight: 297mm but the @page printable area is only ~257mm.
-    cloneA4Page.style.minHeight = "0";
-    cloneA4Page.style.height = "auto";
   }
 
   // Copy global CSS custom properties from :root
@@ -123,19 +108,20 @@ function serializeResumeHtml(
     if (val?.trim()) rootVars += `  ${name}: ${val.trim()};\n`;
   }
 
-  // Fill the printable area defined by @page margins
-  clone.style.width = "100%";
+  // Keep the clone's width matching the source element
+  const sourceWidth = liveA4Page?.style.width || `${element.scrollWidth || element.offsetWidth}px`;
+  clone.style.width = sourceWidth;
 
-  // KEY FIX: Remove pagination margin-top hacks from the preview system.
-  // Chrome handles page breaks naturally with @page rules.
+  // Remove pagination margin-top hacks
   clone.querySelectorAll("[data-page-item]").forEach((el) => {
     (el as HTMLElement).style.marginTop = "";
   });
   clone.querySelectorAll("[data-page-break-child]").forEach((el) => {
     (el as HTMLElement).style.marginTop = "";
+    el.removeAttribute("data-page-break-child");
   });
 
-  // Remove interactive elements (NOT <header> — that's the resume header with name/title)
+  // Remove interactive elements
   clone.querySelectorAll("button, [data-edit-overlay], .no-print, [data-radix-popper-content-wrapper]").forEach((el) => el.remove());
 
   return `<!DOCTYPE html>
@@ -152,7 +138,7 @@ ${allCSS}
 
 @page {
   size: ${pageW} ${pageH};
-  margin: ${padTop}mm ${marginX}mm ${padBottom}mm ${marginX}mm;
+  margin: 0;
 }
 
 *, *::before, *::after {
