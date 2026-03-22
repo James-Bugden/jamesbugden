@@ -97,10 +97,11 @@ const IndexExperiment = () => {
         path="/"
       />
 
-      {/* ── Navigation ── */}
-      <header>
+      {/* ── Promo Banner + Navigation (sticky together) ── */}
+      <header className="sticky top-0 z-50">
+        <PromoBanner lang="en" />
         <nav
-          className={`fixed top-0 left-0 right-0 z-50 transition-shadow duration-300 bg-cream ${
+          className={`transition-shadow duration-300 bg-cream ${
             scrolled ? "shadow-md shadow-black/8" : ""
           }`}
           aria-label="Main navigation"
@@ -118,7 +119,6 @@ const IndexExperiment = () => {
       </header>
 
       <main>
-        <PromoBanner lang="en" />
         {/* ── Hero — cream #FDFBF7 ── */}
         <section id="about" className="pt-20 md:pt-36 pb-12 md:pb-20 px-4 sm:px-5 md:px-6 relative bg-cream">
           <div className="container mx-auto max-w-5xl">
