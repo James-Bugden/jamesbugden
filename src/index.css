@@ -550,4 +550,18 @@
 
   .blur-sm { filter: none !important; }
   .pointer-events-none { pointer-events: auto !important; }
+
+  /* Resume / Cover Letter print target — hide everything else */
+  body.printing-document > *:not(#resume-pdf-target):not(#cover-letter-pdf-target) {
+    display: none !important;
+  }
+
+  #resume-pdf-target,
+  #cover-letter-pdf-target {
+    transform: none !important;
+    box-shadow: none !important;
+    position: static !important;
+    width: 210mm !important;
+    margin: 0 !important;
+  }
 }
