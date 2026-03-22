@@ -1053,7 +1053,7 @@ const FortyEightLawsGuide = () => {
             <p className="text-muted-foreground leading-relaxed mb-6">
               And if you're starting late? "You must cultivate a new set of skills suited to this change in direction, and find a way to blend them with your previous skills. Nothing in this process is ever wasted."
             </p>
-            <ActionStep>
+            <ActionStep checked={safeActions[17]} onToggle={() => toggleAction(17)}>
               Write down one skill outside your current job description worth learning in the next 6 months. Not because your boss asked for it. Because the market will reward it in 3-5 years. Start with 30 minutes a week. That's how formlessness begins.
             </ActionStep>
 
