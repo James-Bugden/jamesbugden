@@ -1239,22 +1239,28 @@ export const ResumePreview = React.memo(function ResumePreview({
     onPageCount?.(pageCount);
   }, [pageCount, onPageCount]);
 
-  // Expose export metrics — use the actual visible page frames for capture
+  // Expose export metrics
   useEffect(() => {
     if (exportMetricsRef) {
-      pageFrameRefs.current.length = pageCount;
-      const pages = pageFrameRefs.current.filter(Boolean) as HTMLElement[];
+      const c = customize;
       exportMetricsRef.current = {
         sourceElement: hiddenFlowRef.current,
-        pageElements: pages,
         pageCount,
         contentOriginPX,
         usablePerPagePX: usablePerPage,
         pageHeightPX: dims.hPX,
         marginYPX,
+        marginXPX: (c?.marginX ?? 16) * PX_PER_MM,
+        footerName: c?.showFooterName ? (data.personalDetails?.fullName || "") : "",
+        footerEmail: c?.showFooterEmail ? (data.personalDetails?.email || "") : "",
+        showPageNumbers: !!c?.showPageNumbers,
+        bodyFont: c?.bodyFont || "'Source Sans 3', sans-serif",
+        footerColor: c?.datesColor || "#6B7280",
+        footerFontSizePt: (c?.fontSize ?? 10.5) - 3,
+        backgroundColor: c?.a4Background || "#ffffff",
       };
     }
-  }, [exportMetricsRef, pageCount, contentOriginPX, usablePerPage, dims.hPX, marginYPX]);
+  }, [exportMetricsRef, pageCount, contentOriginPX, usablePerPage, dims.hPX, marginYPX, data, customize]);
 
   /* ── Clear stale margins immediately when data/customize changes ── */
   useEffect(() => {
