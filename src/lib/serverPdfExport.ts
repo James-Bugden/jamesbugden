@@ -99,6 +99,11 @@ function serializeResumeHtml(
     cloneA4Page.style.setProperty("--resume-margin-x", "0mm");
     cloneA4Page.style.padding = "0";
     cloneA4Page.style.width = "100%";
+
+    // Strip minHeight — prevents forcing extra pages.
+    // The A4Page has minHeight: 297mm but the @page printable area is only ~257mm.
+    cloneA4Page.style.minHeight = "0";
+    cloneA4Page.style.height = "auto";
   }
 
   // Copy global CSS custom properties from :root
