@@ -119,43 +119,41 @@ export function htmlToRichText(html: string, opts: ParseOpts): React.ReactNode {
   return <>{elements}</>;
 }
 
-/** Render inline HTML (bold, italic, underline, links) as <Text> with nested styles */
-function renderInlineHtml(html: string, opts: ParseOpts): React.ReactNode {
+/** Render inline HTML (bold, italic, underline, links) as an array of <Text> children.
+ *  These are meant to be placed inside a parent <Text> for inline flow. */
+function renderInlineHtml(html: string, opts: ParseOpts): React.ReactNode[] {
   const baseStyle: Style = {
     fontSize: opts.fontSize,
     color: opts.color,
     lineHeight: opts.lineHeight,
   };
 
-  // Tokenize inline HTML
   const tokens = tokenizeInline(html);
-  if (tokens.length === 0) return null;
-  if (tokens.length === 1 && tokens[0].type === "text") {
-    return <Text style={baseStyle}>{decodeEntities(tokens[0].content)}</Text>;
-  }
+  if (tokens.length === 0) return [];
 
   const children: React.ReactNode[] = [];
   let k = 0;
 
   for (const token of tokens) {
+    const text = decodeEntities(token.content);
     if (token.type === "text") {
-      children.push(<Text key={k++} style={baseStyle}>{decodeEntities(token.content)}</Text>);
+      children.push(<Text key={k++}>{text}</Text>);
     } else if (token.type === "bold") {
-      children.push(<Text key={k++} style={{ ...baseStyle, fontWeight: 700 }}>{decodeEntities(token.content)}</Text>);
+      children.push(<Text key={k++} style={{ fontWeight: 700 }}>{text}</Text>);
     } else if (token.type === "italic") {
-      children.push(<Text key={k++} style={{ ...baseStyle, fontStyle: "italic" }}>{decodeEntities(token.content)}</Text>);
+      children.push(<Text key={k++} style={{ fontStyle: "italic" }}>{text}</Text>);
     } else if (token.type === "underline") {
-      children.push(<Text key={k++} style={{ ...baseStyle, textDecoration: "underline" }}>{decodeEntities(token.content)}</Text>);
+      children.push(<Text key={k++} style={{ textDecoration: "underline" }}>{text}</Text>);
     } else if (token.type === "link") {
       children.push(
-        <Link key={k++} src={token.href || "#"} style={{ ...baseStyle, color: opts.linkColor || "#2563eb", textDecoration: "underline" }}>
-          {decodeEntities(token.content)}
+        <Link key={k++} src={token.href || "#"} style={{ color: opts.linkColor || "#2563eb", textDecoration: "underline" }}>
+          {text}
         </Link>
       );
     }
   }
 
-  return <Text style={baseStyle}>{children}</Text>;
+  return children;
 }
 
 interface InlineToken {
