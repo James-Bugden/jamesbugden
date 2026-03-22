@@ -115,7 +115,7 @@ function buildSearchable(lang: "en" | "zh"): SearchableItem[] {
     id: "interview-questions",
     type: "tool",
     title: { en: "Interview Question Bank", zh: "面試題庫" },
-    desc: { en: "500+ real interview questions with model answers. Filter by role, difficulty, and category.", zh: "500+ 道真實面試題與參考答案。可依職位、難度、分類篩選。" },
+    desc: { en: "203 real interview questions with sample answers. Filter by role, difficulty, and category.", zh: "203 道真實面試題與參考答案。可依職位、難度、分類篩選。" },
     path: lang === "zh" ? "/zh-tw/interview-questions" : "/interview-questions",
   });
   return items;
