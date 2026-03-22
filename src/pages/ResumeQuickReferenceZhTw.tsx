@@ -8,6 +8,7 @@ import PageSEO from "@/components/PageSEO";
 import { AuthHeaderButton } from "@/components/AuthHeaderButton";
 import { useTrackGuideProgress } from "@/hooks/useReadingProgress";
 import GuideSignInBanner from "@/components/guides/GuideSignInBanner";
+import GuideBottomCTA from "@/components/guides/GuideBottomCTA";
 
 const SectionNumber = ({ num }: { num: string }) => (
   <span className="text-gold/30 font-heading text-6xl md:text-7xl font-bold leading-none select-none">
@@ -445,6 +446,8 @@ const ResumeQuickReferenceZhTw = () => {
           </div>
         </div>
       </footer>
+    
+      <GuideBottomCTA lang="zh" />
     </div>
   );
 };

@@ -7,6 +7,7 @@ import { Button } from "@/components/ui/button";
 import GuideShareButtons from "@/components/GuideShareButtons";
 import { useTrackGuideProgress } from "@/hooks/useReadingProgress";
 import GuideSignInBanner from "@/components/guides/GuideSignInBanner";
+import GuideBottomCTA from "@/components/guides/GuideBottomCTA";
 
 const PivotMethodMiniGuide = () => {
   useTrackGuideProgress("pivot-mini");
@@ -508,6 +509,8 @@ const PivotMethodMiniGuide = () => {
           </p>
         </footer>
       </main>
+    
+      <GuideBottomCTA lang="en" />
     </div>
   );
 };

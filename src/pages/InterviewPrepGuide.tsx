@@ -9,6 +9,7 @@ import { InstagramIcon, ThreadsIcon } from "@/components/SocialIcons";
 import GoldCheckBadge from "@/components/GoldCheckBadge";
 import { useTrackGuideProgress } from "@/hooks/useReadingProgress";
 import GuideSignInBanner from "@/components/guides/GuideSignInBanner";
+import GuideBottomCTA from "@/components/guides/GuideBottomCTA";
 
 const InterviewPrepGuide = () => {
   useTrackGuideProgress("interview-prep");
@@ -664,6 +665,8 @@ const InterviewPrepGuide = () => {
           </div>
         </div>
       </footer>
+    
+      <GuideBottomCTA lang="en" />
     </div>
   );
 };

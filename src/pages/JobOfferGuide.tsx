@@ -8,6 +8,7 @@ import { AuthHeaderButton } from "@/components/AuthHeaderButton";
 import PageSEO from "@/components/PageSEO";
 import { useTrackGuideProgress } from "@/hooks/useReadingProgress";
 import GuideSignInBanner from "@/components/guides/GuideSignInBanner";
+import GuideBottomCTA from "@/components/guides/GuideBottomCTA";
 import { useState, useEffect } from "react";
 import JobOfferScorecard from "@/components/job-offer/JobOfferScorecard";
 
@@ -817,6 +818,8 @@ const JobOfferGuide = () => {
           </div>
         </div>
       </footer>
+    
+      <GuideBottomCTA lang="en" />
     </div>
   );
 };

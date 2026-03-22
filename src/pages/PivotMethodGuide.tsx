@@ -9,6 +9,7 @@ import GuideShareButtons from "@/components/GuideShareButtons";
 import GoldCheckBadge from "@/components/GoldCheckBadge";
 import { useTrackGuideProgress } from "@/hooks/useReadingProgress";
 import GuideSignInBanner from "@/components/guides/GuideSignInBanner";
+import GuideBottomCTA from "@/components/guides/GuideBottomCTA";
 
 const PivotMethodGuide = () => {
   useTrackGuideProgress("pivot-guide");
@@ -1300,6 +1301,8 @@ const PivotMethodGuide = () => {
           </div>
         </div>
       </footer>
+    
+      <GuideBottomCTA lang="en" />
     </div>
   );
 };

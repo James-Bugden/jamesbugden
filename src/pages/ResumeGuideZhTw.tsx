@@ -9,6 +9,7 @@ import PageSEO from "@/components/PageSEO";
 import { AuthHeaderButton } from "@/components/AuthHeaderButton";
 import { useTrackGuideProgress } from "@/hooks/useReadingProgress";
 import GuideSignInBanner from "@/components/guides/GuideSignInBanner";
+import GuideBottomCTA from "@/components/guides/GuideBottomCTA";
 
 /* ─── Reading Progress Bar ─── */
 const ReadingProgress = () => {
@@ -1183,6 +1184,8 @@ const ResumeGuideZhTw = () => {
           </div>
         </div>
       </footer>
+    
+      <GuideBottomCTA lang="zh" />
     </div>
   );
 };

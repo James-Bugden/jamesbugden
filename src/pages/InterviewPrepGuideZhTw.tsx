@@ -8,6 +8,7 @@ import { AuthHeaderButton } from "@/components/AuthHeaderButton";
 import GoldCheckBadge from "@/components/GoldCheckBadge";
 import { useTrackGuideProgress } from "@/hooks/useReadingProgress";
 import GuideSignInBanner from "@/components/guides/GuideSignInBanner";
+import GuideBottomCTA from "@/components/guides/GuideBottomCTA";
 
 const InterviewPrepGuideZhTw = () => {
   useTrackGuideProgress("interview-prep");
@@ -669,6 +670,8 @@ const InterviewPrepGuideZhTw = () => {
           </div>
         </div>
       </footer>
+    
+      <GuideBottomCTA lang="zh" />
     </div>
   );
 };
