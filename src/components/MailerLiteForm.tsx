@@ -1,23 +1,7 @@
-import { useState, useRef } from "react";
+import { useState } from "react";
 import { Mail, CheckCircle2, ArrowRight } from "lucide-react";
 import { Link } from "react-router-dom";
-
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-declare const ml: any;
-
-let mailerLiteLoaded = false;
-function loadMailerLite() {
-  if (mailerLiteLoaded) return;
-  mailerLiteLoaded = true;
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const w = window as any;
-  w.ml = w.ml || function () { (w.ml.q = w.ml.q || []).push(arguments); };
-  const s = document.createElement("script");
-  s.async = true;
-  s.src = "https://assets.mailerlite.com/js/universal.js";
-  document.head.appendChild(s);
-  ml("account", "1937443");
-}
+import { supabase } from "@/integrations/supabase/client";
 
 type MailerLiteFormProps = {
   formId: string;
@@ -33,60 +17,24 @@ export default function MailerLiteForm({ formId, className, buttonText = "Get on
   const [email, setEmail] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [isSuccess, setIsSuccess] = useState(false);
-  const formRef = useRef<HTMLFormElement>(null);
 
-  // Load MailerLite script only when user interacts with the form
-  const handleFocus = () => {
-    loadMailerLite();
-  };
-
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!email) return;
-    
+
     setIsLoading(true);
 
-    // Create a hidden iframe to submit the form
-    const iframe = document.createElement("iframe");
-    iframe.name = `ml_iframe_${formId}_${Date.now()}`;
-    iframe.style.display = "none";
-    document.body.appendChild(iframe);
+    try {
+      await supabase.functions.invoke("sync-mailerlite", {
+        body: { email: email.trim() },
+      });
+    } catch (err) {
+      console.error("MailerLite sync error:", err);
+    }
 
-    // Wait for iframe to be ready before submitting
-    iframe.addEventListener("load", () => {
-      // Create a form that targets the iframe
-      const form = document.createElement("form");
-      form.method = "POST";
-      form.action = `https://assets.mailerlite.com/jsonp/1937443/forms/145693936040498462/subscribe`;
-      form.target = iframe.name;
-
-      // Add email field
-      const emailInput = document.createElement("input");
-      emailInput.type = "hidden";
-      emailInput.name = "fields[email]";
-      emailInput.value = email;
-      form.appendChild(emailInput);
-
-      document.body.appendChild(form);
-      form.submit();
-
-      // Cleanup form immediately, iframe after delay
-      setTimeout(() => {
-        try { document.body.removeChild(form); } catch (_) {}
-      }, 100);
-    });
-
-    // Set a blank src to trigger the load event
-    iframe.src = "about:blank";
-
-    setTimeout(() => {
-      setIsSuccess(true);
-      setIsLoading(false);
-      setEmail("");
-      
-      // Cleanup iframe
-      try { document.body.removeChild(iframe); } catch (_) {}
-    }, 1500);
+    setIsSuccess(true);
+    setIsLoading(false);
+    setEmail("");
   };
 
   if (isSuccess) {
@@ -110,13 +58,12 @@ export default function MailerLiteForm({ formId, className, buttonText = "Get on
 
   return (
     <div className={className || ""}>
-      <form ref={formRef} onSubmit={handleSubmit} className="flex flex-col gap-2">
+      <form onSubmit={handleSubmit} className="flex flex-col gap-2">
         <div className="relative">
           <input
             type="email"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
-            onFocus={handleFocus}
             placeholder="Enter your email"
             required
             className="w-full px-4 py-3.5 pr-12 rounded-lg border border-border/60 bg-card text-foreground placeholder:text-muted-foreground/60 focus:outline-none focus:ring-2 focus:ring-gold/40 focus:border-gold transition-colors text-base"
