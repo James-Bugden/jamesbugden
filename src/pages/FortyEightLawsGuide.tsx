@@ -1038,7 +1038,7 @@ const FortyEightLawsGuide = () => {
               Patience becomes stagnation if you stay too long without growing. If you've been in the same role for three years with no development, the problem isn't timing. It's the role.
             </Reversal>
             <div className="mt-6">
-              <ActionStep>
+              <ActionStep checked={safeActions[16]} onToggle={() => toggleAction(16)}>
                 Answer honestly: are you still learning at your current job? If the answer has been "no" for 6+ months, start preparing your exit. Update your resume. Activate your network. Don't wait for the perfect moment. The right time to move is before you're desperate to leave.
               </ActionStep>
             </div>
