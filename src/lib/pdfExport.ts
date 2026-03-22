@@ -20,7 +20,28 @@ export async function exportToPdf({ elementId, fileName, pageFormat = "a4" }: Ex
     return;
   }
 
+  // Save original styles so we can restore after capture
+  const orig = {
+    position: container.style.position,
+    left: container.style.left,
+    top: container.style.top,
+    zIndex: container.style.zIndex,
+    opacity: container.style.opacity,
+  };
+
   try {
+    // Temporarily move on-screen so html2canvas can render it
+    Object.assign(container.style, {
+      position: "fixed",
+      left: "0",
+      top: "0",
+      zIndex: "-1",
+      opacity: "1",
+    });
+
+    // Allow a paint frame so the browser lays it out on-screen
+    await new Promise((r) => requestAnimationFrame(() => requestAnimationFrame(r)));
+
     const scale = 2;
     const canvas = await html2canvas(container, {
       scale,
@@ -75,5 +96,8 @@ export async function exportToPdf({ elementId, fileName, pageFormat = "a4" }: Ex
   } catch (err) {
     console.error("PDF export error:", err);
     toast({ title: "Export failed", description: "Something went wrong generating the PDF.", variant: "destructive" });
+  } finally {
+    // Restore original off-screen styles
+    Object.assign(container.style, orig);
   }
 }
