@@ -167,7 +167,7 @@ const JourneyCard = memo(function JourneyCard({
 export default function JourneySection({
   tag,
   label,
-  emoji,
+  icon,
   color,
   items,
   lang,
