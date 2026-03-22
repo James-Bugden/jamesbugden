@@ -20,8 +20,9 @@ const AdminLogin = () => {
   const handleGoogleLogin = async () => {
     setLoading(true);
     try {
+      sessionStorage.setItem("auth_redirect", "/admin");
       await lovable.auth.signInWithOAuth("google", {
-        redirectTo: `${window.location.origin}/admin`,
+        redirect_uri: window.location.origin,
       });
     } catch {
       setLoading(false);
