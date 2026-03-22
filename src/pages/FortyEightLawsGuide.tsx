@@ -1602,9 +1602,6 @@ const FortyEightLawsGuide = () => {
                 </ul>
               </div>
 
-              <p className="text-muted-foreground">
-                More free guides: <Link to="/" className="text-gold hover:underline">james.careers</Link>
-              </p>
             </div>
           </div>
         </section>
