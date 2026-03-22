@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect } from "react";
 import { Navigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { Session } from "@supabase/supabase-js";
@@ -17,25 +17,27 @@ const ProtectedRoute = ({
 }: ProtectedRouteProps) => {
   const [session, setSession] = useState<Session | null>(null);
   const [isAdmin, setIsAdmin] = useState(false);
-  const [loading, setLoading] = useState(true);
-  const checkedUserRef = useRef<string | null>(null);
+  const [authResolved, setAuthResolved] = useState(false);
+  const [adminResolved, setAdminResolved] = useState(false);
 
   useEffect(() => {
     let isMounted = true;
 
     const checkAdminRole = async (userId: string) => {
-      // Prevent duplicate checks for the same user
-      if (checkedUserRef.current === userId) return;
-      checkedUserRef.current = userId;
       try {
         const { data } = await supabase.rpc('is_admin', { _user_id: userId });
-        if (isMounted) setIsAdmin(!!data);
+        if (isMounted) {
+          setIsAdmin(!!data);
+          setAdminResolved(true);
+        }
       } catch {
-        if (isMounted) setIsAdmin(false);
+        if (isMounted) {
+          setIsAdmin(false);
+          setAdminResolved(true);
+        }
       }
     };
 
-    // INITIAL load (controls loading state)
     const initializeAuth = async () => {
       try {
         const { data: { session } } = await supabase.auth.getSession();
@@ -45,27 +47,28 @@ const ProtectedRoute = ({
 
         if (session?.user && requireAdmin) {
           await checkAdminRole(session.user.id);
-        } else if (session && !requireAdmin) {
-          setIsAdmin(true);
+        } else {
+          // No admin check needed — mark resolved
+          if (isMounted) setAdminResolved(true);
         }
       } finally {
-        if (isMounted) setLoading(false);
+        if (isMounted) setAuthResolved(true);
       }
     };
 
-    // Listener for ONGOING auth changes
     const { data: { subscription } } = supabase.auth.onAuthStateChange(
-      (_event, session) => {
+      (_event, newSession) => {
         if (!isMounted) return;
-        setSession(session);
+        setSession(newSession);
 
-        if (session?.user && requireAdmin) {
-          checkAdminRole(session.user.id);
-        } else if (session && !requireAdmin) {
-          setIsAdmin(true);
-        } else {
+        if (newSession?.user && requireAdmin) {
+          // Reset admin state and re-check
+          setAdminResolved(false);
           setIsAdmin(false);
-          checkedUserRef.current = null;
+          checkAdminRole(newSession.user.id);
+        } else if (!newSession) {
+          setIsAdmin(false);
+          setAdminResolved(true);
         }
       }
     );
@@ -77,6 +80,9 @@ const ProtectedRoute = ({
       subscription.unsubscribe();
     };
   }, [requireAdmin]);
+
+  // Still loading auth or admin check
+  const loading = !authResolved || (requireAdmin && !adminResolved);
 
   if (loading) {
     return (
