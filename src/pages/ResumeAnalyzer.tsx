@@ -227,8 +227,11 @@ export default function ResumeAnalyzer({ defaultLang = "en" }: { defaultLang?: L
         sessionStorage.setItem("resume-analysis-lang", lang);
 
         // Fire-and-forget analytics tracking
+        const leadEmail = user?.email || "";
+        const leadName = user?.user_metadata?.full_name || user?.user_metadata?.name || "";
         supabase.from("resume_leads").insert({
-          email: "",
+          email: leadEmail,
+          name: leadName || null,
           language: lang,
           overall_score: result.overall_score ?? null,
           input_method: file ? "upload" : "paste",
