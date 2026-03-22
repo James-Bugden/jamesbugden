@@ -289,6 +289,7 @@ const BragDocTemplate = () => {
 };
 
 
+const tocSections = [
   { id: "intro", label: "Introduction" },
   { id: "find-direction", label: "01 · Find Your Direction" },
   { id: "manage-up", label: "02 · Manage Up" },
