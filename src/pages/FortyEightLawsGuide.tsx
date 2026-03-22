@@ -1408,9 +1408,20 @@ const FortyEightLawsGuide = () => {
               </div>
             </div>
 
-            <p className="text-xs text-muted-foreground mb-6">
-              <strong>USE</strong> = Apply proactively as career strategy. <strong>DEFEND</strong> = Recognize when others use this against you. <strong>AVOID</strong> = Too risky for most workplace situations.
-            </p>
+            <div className="rounded-lg bg-muted/30 border border-border p-3 mb-6 space-y-1.5">
+              <div className="flex items-center gap-2 text-sm">
+                <span className="w-2.5 h-2.5 rounded-full bg-emerald-500 shrink-0" />
+                <span><strong className="text-foreground">USE</strong> <span className="text-muted-foreground">— Apply proactively as career strategy</span></span>
+              </div>
+              <div className="flex items-center gap-2 text-sm">
+                <span className="w-2.5 h-2.5 rounded-full bg-amber-500 shrink-0" />
+                <span><strong className="text-foreground">DEFEND</strong> <span className="text-muted-foreground">— Recognize when others use this against you</span></span>
+              </div>
+              <div className="flex items-center gap-2 text-sm">
+                <span className="w-2.5 h-2.5 rounded-full bg-red-500 shrink-0" />
+                <span><strong className="text-foreground">AVOID</strong> <span className="text-muted-foreground">— Too risky for most workplace situations</span></span>
+              </div>
+            </div>
 
             <div className="space-y-3">
               {filteredLaws.map(law => (
