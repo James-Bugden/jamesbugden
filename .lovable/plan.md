@@ -1,35 +1,38 @@
 
 
-## Plan: Format Tag Legend + Improve Power Audit Mobile Layout
+## Problem
 
-### 1. Tag Legend (USE / DEFEND / AVOID) — Better formatting
+When a user clicks "Sign in" on the homepage → Google OAuth → redirects back to `window.location.origin` (the homepage `/`). The homepage has **no logic** to detect the freshly-logged-in state and redirect to `/dashboard`. The redirect logic only lives in `Login.tsx` and `Signup.tsx`.
 
-**Current** (line 1411-1413): Plain `<p>` with inline bold text, hard to scan.
+The `sessionStorage.setItem("auth_redirect", from)` is set before OAuth, but the homepage never reads it.
 
-**Replace with** styled card-style legend — three stacked rows with color-coded dots matching the filter buttons:
-- Green dot + **USE** — Apply proactively as career strategy
-- Amber dot + **DEFEND** — Recognize when others use this against you  
-- Red dot + **AVOID** — Too risky for most workplace situations
+## Solution
 
-Use `flex items-center gap-2` per row inside a `rounded-lg bg-muted/30 p-3 space-y-2` container. Dots are small `w-2.5 h-2.5 rounded-full` divs with matching bg colors (`bg-emerald-500`, `bg-amber-500`, `bg-red-500`).
+Add a small `useEffect` to the **homepage components** (`Index.tsx` and `IndexZhTw.tsx`) that checks:
+1. User just became logged in (`isLoggedIn` from `useAuth()`)
+2. There's an `auth_redirect` value in sessionStorage, OR default to `/dashboard`
 
-### 2. Power Audit — Mobile improvements (lines 1452-1521)
+If both conditions are met, redirect to dashboard and clear the sessionStorage flag.
 
-**Problems on mobile:**
-- Score buttons (5 × `w-8`) + label text in a horizontal flex row is cramped
-- The `flex items-start gap-4` layout doesn't stack on small screens
+### Changes
 
-**Fixes:**
-- Change the audit area rows from side-by-side to **stacked on mobile**: area name + question on top, score buttons below (`flex-col sm:flex-row`)
-- Make score buttons `w-7 h-7 text-xs` on mobile, `w-8 h-8 text-sm` on `sm:` breakpoint
-- Add `gap-2` instead of `gap-4` on mobile
-- For the 90-Day cycle grid: change from `grid-cols-2 md:grid-cols-4` to `grid-cols-1 sm:grid-cols-2 md:grid-cols-4` so it's single-column on small phones
+**File: `src/pages/Index.tsx`**
+- Add a `useEffect` after the existing `useAuth()` call:
+```tsx
+const navigate = useNavigate();
+useEffect(() => {
+  if (!isLoggedIn) return;
+  const pending = sessionStorage.getItem("auth_redirect");
+  if (pending) {
+    sessionStorage.removeItem("auth_redirect");
+    navigate(pending === "/" ? "/dashboard" : pending, { replace: true });
+  }
+}, [isLoggedIn]);
+```
+- Add `useNavigate` import
 
-### Technical details
+**File: `src/pages/IndexZhTw.tsx`**
+- Same pattern but defaulting to `/zh-tw/dashboard`
 
-**File:** `src/pages/FortyEightLawsGuide.tsx`
-- Lines 1411-1413: Replace tag legend paragraph
-- Lines 1454-1477: Update audit area layout for mobile stacking
-- Lines 1461-1475: Responsive score button sizing
-- Line 1524: Update 90-day cycle grid breakpoints
+This keeps the existing Login/Signup redirect logic intact and adds a safety net on the homepage for OAuth returns.
 
