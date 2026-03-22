@@ -227,7 +227,26 @@ export default function AdminDashboard() {
     setEmailLeadsLoading(false);
   };
 
-  const fetchAccounts = async () => {
+  const fetchFeedback = async () => {
+    setFeedbackLoading(true);
+    const { data } = await supabase.from("feedback" as any).select("*").order("created_at", { ascending: false }).limit(500);
+    if (data) setFeedbackItems(data as any);
+    setFeedbackLoading(false);
+  };
+
+  const handleDeleteFeedback = async (id: string) => {
+    const { error } = await supabase.from("feedback" as any).delete().eq("id", id);
+    if (error) toast({ title: "Error", description: getSafeErrorMessage(error), variant: "destructive" });
+    else { toast({ title: "Feedback deleted" }); fetchFeedback(); fetchCounts(); }
+  };
+
+  const filteredFeedback = useMemo(() => {
+    if (!feedbackSearch) return feedbackItems;
+    const q = feedbackSearch.toLowerCase();
+    return feedbackItems.filter(f => f.message.toLowerCase().includes(q) || f.page?.toLowerCase().includes(q));
+  }, [feedbackItems, feedbackSearch]);
+
+
     setAccountsLoading(true);
     try {
       const { data: { session } } = await supabase.auth.getSession();
