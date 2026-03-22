@@ -125,6 +125,7 @@ export default function Join() {
       setError(error.message);
     } else {
       setSuccess(true);
+      syncToMailerLite(email.trim());
     }
   };
 

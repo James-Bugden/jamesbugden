@@ -114,6 +114,7 @@ export default function JoinZhTw() {
       setError(error.message);
     } else {
       setSuccess(true);
+      syncToMailerLite(email.trim());
     }
   };
 
