@@ -471,7 +471,7 @@ const FortyEightLawsGuide = () => {
   // Interactive state with cloud sync
   const [actionChecks, setActionChecks] = useGuideStorage<boolean[]>("48laws_actions_en", Array(TOTAL_ACTIONS).fill(false));
   const [auditScores, setAuditScores] = useGuideStorage<number[]>("48laws_power_audit_en", Array(7).fill(0));
-  const [auditHistory, setAuditHistory] = useGuideStorage<Array<{ date: string; scores: number[]; total: number }>>("48laws_audit_history_en", []);
+  
   const [aliveScores, setAliveScores] = useGuideStorage<number[]>("48laws_alive_audit_en", Array(5).fill(0));
   const [irrepScores, setIrrepScores] = useGuideStorage<number[]>("48laws_irreplaceable_audit_en", Array(5).fill(0));
 
