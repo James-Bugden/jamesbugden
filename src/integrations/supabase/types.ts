@@ -104,6 +104,30 @@ export type Database = {
         }
         Relationships: []
       }
+      feedback: {
+        Row: {
+          created_at: string
+          id: string
+          locale: string | null
+          message: string
+          page: string | null
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          locale?: string | null
+          message: string
+          page?: string | null
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          locale?: string | null
+          message?: string
+          page?: string | null
+        }
+        Relationships: []
+      }
       guide_progress: {
         Row: {
           data: Json
