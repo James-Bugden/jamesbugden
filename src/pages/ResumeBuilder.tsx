@@ -29,7 +29,8 @@ import { Label } from "@/components/ui/label";
 import { supabase } from "@/integrations/supabase/client";
 import { useBuilderAiUsage } from "@/hooks/useBuilderAiUsage";
 import { applyTemplatePreset } from "@/components/resume-builder/templatePresets";
-import { exportToPdf, exportResumePages } from "@/lib/pdfExport";
+import { exportToPdf } from "@/lib/pdfExport";
+import { exportResumePdf } from "@/lib/resumePdf/exportResumePdf";
 import { ResumeExportMetrics } from "@/components/resume-builder/ResumePreview";
 import { useIsMobile } from "@/hooks/use-mobile";
 import { Skeleton } from "@/components/ui/skeleton";
@@ -660,23 +661,8 @@ const ResumeBuilder = () => {
   const handleDownload = async (filename?: string) => {
     if (downloading) return;
     setDownloading(true);
-    const pf = customize.pageFormat || "a4";
     const fn = filename || (data.personalDetails.fullName || "Resume").replace(/\s+/g, "_") + "_Resume";
-    const metrics = exportMetricsRef.current;
-    if (metrics?.sourceElement && metrics.pageCount > 0) {
-      await exportResumePages({
-        sourceElement: metrics.sourceElement,
-        fileName: fn,
-        pageFormat: pf as "a4" | "letter",
-        pageCount: metrics.pageCount,
-        contentOriginPX: metrics.contentOriginPX,
-        usablePerPagePX: metrics.usablePerPagePX,
-        pageHeightPX: metrics.pageHeightPX,
-        marginYPX: metrics.marginYPX,
-      });
-    } else {
-      await exportToPdf({ elementId: "resume-pdf-target", fileName: fn, pageFormat: pf as "a4" | "letter" });
-    }
+    await exportResumePdf({ data, customize, fileName: fn });
     setDownloading(false);
   };
 
