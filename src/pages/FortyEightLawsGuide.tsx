@@ -1181,28 +1181,62 @@ const FortyEightLawsGuide = () => {
             <DiagramBox title="Your Power Audit">
               <p className="mb-4">Score each area 1-5. Repeat every 90 days.</p>
               <div className="space-y-4">
-                {[
-                  { area: "1. DIRECTION", question: "Do I know what I'm building toward? Am I in alive time?" },
-                  { area: "2. MANAGING UP", question: "Does my boss see me as an ally? Do I pick battles well?" },
-                  { area: "3. REPUTATION", question: "Do senior leaders (beyond my boss) know my name and work?" },
-                  { area: "4. IRREPLACEABILITY", question: "Would my team struggle if I left? Do I own something nobody else understands?" },
-                  { area: "5. GETTING WHAT I WANT", question: "Am I tracking my wins? Is my brag doc up to date? Have I asked for what I've earned?" },
-                  { area: "6. POLITICAL AWARENESS", question: "Do I know who has influence? Am I allied with builders? Do I avoid negativity?" },
-                  { area: "7. LONG GAME", question: "Does my current role serve my 5-year plan? Am I building skills for where I want to be?" },
-                ].map((item, i) => (
-                  <div key={i}>
-                    <p className="font-medium text-foreground">{item.area}</p>
-                    <p className="text-muted-foreground text-sm">{item.question}</p>
+                {AUDIT_AREAS.map((item, i) => (
+                  <div key={i} className="flex items-start gap-4">
+                    <div className="flex-1">
+                      <p className="font-medium text-foreground">{item.area}</p>
+                      <p className="text-muted-foreground text-sm">{item.question}</p>
+                    </div>
+                    <div className="shrink-0 flex items-center gap-1.5">
+                      {[1, 2, 3, 4, 5].map(n => (
+                        <button
+                          key={n}
+                          onClick={() => setScore(i, safeScores[i] === n ? 0 : n)}
+                          className={`w-8 h-8 rounded-lg text-sm font-semibold transition-colors ${
+                            safeScores[i] === n
+                              ? "bg-gold text-background"
+                              : "bg-muted text-muted-foreground hover:bg-muted/80"
+                          }`}
+                        >
+                          {n}
+                        </button>
+                      ))}
+                    </div>
                   </div>
                 ))}
               </div>
-              <div className="mt-6 pt-4 border-t border-border space-y-1">
-                <p className="font-medium text-foreground">Scoring (out of 35):</p>
-                <p><strong>28-35:</strong> Strong position. Focus on growth and impact.</p>
-                <p><strong>20-27:</strong> Solid foundation. One or two areas need attention.</p>
-                <p><strong>12-19:</strong> Exposed. Pick your weakest area. Focus there for the next 90 days.</p>
-                <p><strong>Below 12:</strong> Career risk. Start with Sections 2 and 4 today.</p>
+              <div className="mt-6 pt-4 border-t border-border">
+                <div className="flex items-center justify-between mb-3">
+                  <p className="font-medium text-foreground">
+                    Your score: <span className={`text-lg font-bold ${auditTotal >= 28 ? "text-emerald-500" : auditTotal >= 20 ? "text-gold" : auditTotal >= 12 ? "text-amber-500" : auditTotal > 0 ? "text-red-500" : "text-muted-foreground"}`}>{auditTotal}</span> / 35
+                  </p>
+                  {auditTotal > 0 && (
+                    <button onClick={saveSnapshot} className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-gold/10 text-gold text-xs font-semibold hover:bg-gold/20 transition-colors">
+                      <Save className="w-3.5 h-3.5" />
+                      Save snapshot
+                    </button>
+                  )}
+                </div>
+                <div className="space-y-1">
+                  <p><strong>28-35:</strong> Strong position. Focus on growth and impact.</p>
+                  <p><strong>20-27:</strong> Solid foundation. One or two areas need attention.</p>
+                  <p><strong>12-19:</strong> Exposed. Pick your weakest area. Focus there for the next 90 days.</p>
+                  <p><strong>Below 12:</strong> Career risk. Start with Sections 2 and 4 today.</p>
+                </div>
               </div>
+              {auditHistory.length > 0 && (
+                <div className="mt-6 pt-4 border-t border-border">
+                  <p className="font-medium text-foreground mb-2">Previous snapshots</p>
+                  <div className="space-y-2">
+                    {auditHistory.map((snap, i) => (
+                      <div key={i} className="flex items-center justify-between bg-muted/50 rounded-lg px-3 py-2 text-sm">
+                        <span className="text-muted-foreground">{snap.date}</span>
+                        <span className="font-semibold text-foreground">{snap.total}/35</span>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )}
               <div className="mt-6 pt-4 border-t border-border">
                 <p className="font-medium text-foreground mb-2">After scoring:</p>
                 <ol className="space-y-1 list-decimal list-inside text-muted-foreground text-sm">
