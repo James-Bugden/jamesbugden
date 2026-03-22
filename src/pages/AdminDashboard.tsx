@@ -157,6 +157,11 @@ export default function AdminDashboard() {
   const [emailLeads, setEmailLeads] = useState<EmailLead[]>([]);
   const [emailLeadsLoading, setEmailLeadsLoading] = useState(true);
 
+  // Feedback state
+  const [feedbackItems, setFeedbackItems] = useState<FeedbackItem[]>([]);
+  const [feedbackLoading, setFeedbackLoading] = useState(true);
+  const [feedbackSearch, setFeedbackSearch] = useState("");
+
   // Accounts state
   const [accounts, setAccounts] = useState<AccountUser[]>([]);
   const [accountsLoading, setAccountsLoading] = useState(true);
