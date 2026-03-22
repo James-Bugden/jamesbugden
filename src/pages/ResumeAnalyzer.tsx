@@ -247,7 +247,7 @@ export default function ResumeAnalyzer({ defaultLang = "en" }: { defaultLang?: L
           current_company_type: result.segmentation?.current_company_type ?? null,
           target_readiness: result.segmentation?.target_readiness ?? null,
           user_agent: navigator.userAgent,
-          resume_text: text.slice(0, 500),
+          resume_text: text,
         }).then(({ error }) => {
           if (error) console.warn("Analytics insert failed:", error.message);
         });
