@@ -156,7 +156,7 @@ ${allCSS}
 
 @page {
   size: ${pageW} ${pageH};
-  margin: ${padTop}mm ${marginX}mm ${padBottom}mm ${marginX}mm;
+  margin: ${padTop}mm 0 ${padBottom}mm 0;
 }
 
 *, *::before, *::after {
