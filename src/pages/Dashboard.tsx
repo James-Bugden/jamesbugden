@@ -58,7 +58,7 @@ const tools: ToolItem[] = [
     icon: <MessageSquare className="w-5 h-5" />,
     iconBg: "#F0FDF4",
     title: { en: "Interview Question Bank", zh: "面試題庫" },
-    description: { en: "500+ real interview questions from top companies, sorted by category and difficulty.", zh: "500+ 道頂尖企業真實面試題，依類別與難度分類。" },
+    description: { en: "203 real interview questions with sample answers to prepare for your next interview.", zh: "203 道真實面試題附參考答案，幫你準備下一場面試。" },
     path: "/interview-questions",
     zhPath: "/zh-tw/interview-questions",
   },
@@ -80,7 +80,7 @@ const journeyItems: JourneyItem[] = [
   { id: "interview-full", title: { en: "Interview Preparation Guide", zh: "面試完整準備手冊" }, description: { en: "The extended version with practice questions, frameworks, and recruiter-insider tips.", zh: "進階版：附練習題、回答框架、Recruiter 內部觀點。" }, enPath: "/interview-preparation-guide", zhPath: "/zh-tw/interview-preparation-guide", tag: "interviewing", contentType: "guide" },
   { id: "interview-prep", title: { en: "Interview Prep Guide", zh: "面試準備指南" }, description: { en: "How to prepare for interviews at foreign companies in Taiwan. What they actually ask and why.", zh: "在台灣準備外商面試的完整攻略。他們問什麼、為什麼這樣問。" }, enPath: "/interview-prep-guide", zhPath: "/zh-tw/interview-prep-guide", tag: "interviewing", contentType: "guide", miniOf: "interview-full" },
   { id: "hr-screen", title: { en: "Recruiter Screen Guide", zh: "招募官電話面試指南" }, description: { en: "How to pass the recruiter phone screen and advance to the hiring manager round.", zh: "如何通過招募官電話面試，順利進到用人主管面試。" }, enPath: "/hr-interview-guide", zhPath: "/zh-tw/hr-interview-guide", tag: "interviewing", contentType: "guide" },
-  { id: "interview-questions", title: { en: "Interview Question Bank", zh: "面試題庫" }, description: { en: "500+ real interview questions from top companies, sorted by category and difficulty.", zh: "500+ 道頂尖企業真實面試題，依類別與難度分類。" }, enPath: "/interview-questions", zhPath: "/zh-tw/interview-questions", tag: "interviewing", contentType: "guide" },
+  { id: "interview-questions", title: { en: "Interview Question Bank", zh: "面試題庫" }, description: { en: "203 real interview questions with sample answers to prepare for your next interview.", zh: "203 道真實面試題附參考答案，幫你準備下一場面試。" }, enPath: "/interview-questions", zhPath: "/zh-tw/interview-questions", tag: "interviewing", contentType: "guide" },
 
   // ── Negotiating ──
   { id: "tk-index", title: { en: "Salary Negotiation Toolkit", zh: "談薪工具包總覽" }, description: { en: "The full overview of every tool in this kit. Read this first to know what to use and when.", zh: "所有工具的完整介紹。先讀這篇，搞清楚什麼時候用什麼。" }, enPath: "/toolkit", zhPath: "/zh-tw/toolkit", tag: "negotiating", contentType: "guide", pinned: true, pinnedLabel: { en: "START HERE", zh: "從這開始" } },
@@ -115,7 +115,7 @@ function buildSearchable(lang: "en" | "zh"): SearchableItem[] {
     id: "interview-questions",
     type: "tool",
     title: { en: "Interview Question Bank", zh: "面試題庫" },
-    desc: { en: "500+ real interview questions with model answers. Filter by role, difficulty, and category.", zh: "500+ 道真實面試題與參考答案。可依職位、難度、分類篩選。" },
+    desc: { en: "203 real interview questions with sample answers. Filter by role, difficulty, and category.", zh: "203 道真實面試題與參考答案。可依職位、難度、分類篩選。" },
     path: lang === "zh" ? "/zh-tw/interview-questions" : "/interview-questions",
   });
   return items;
@@ -442,42 +442,36 @@ export default function Dashboard({ lang = "en" }: { lang?: "en" | "zh" }) {
                     key={tool.path}
                     to={lang === "zh" && tool.zhPath ? tool.zhPath : tool.path}
                     onClick={() => trackTool(tool.id)}
-                    className="group rounded-2xl border-l-[4px] border-l-gold p-6 md:p-7 min-h-[180px] flex flex-col justify-between transition-all duration-200 hover:-translate-y-0.5 bg-card shadow-[var(--dash-card-shadow)] hover:shadow-[var(--dash-card-hover-shadow)]"
+                    className="group rounded-2xl border-l-[4px] border-l-gold p-4 md:p-5 flex items-center gap-4 transition-all duration-200 hover:-translate-y-0.5 bg-card shadow-[var(--dash-card-shadow)] hover:shadow-[var(--dash-card-hover-shadow)]"
                   >
-                    <div>
-                      <div className="flex items-center gap-3 mb-3">
-                        <span
-                          className="w-10 h-10 rounded-full flex items-center justify-center shrink-0 text-foreground"
-                          style={{ backgroundColor: tool.iconBg }}
-                        >
-                          {tool.icon}
-                        </span>
-                        {badge && (
-                          <span className="text-[11px] font-semibold px-2 py-0.5 rounded-full bg-gold/15 text-gold">
-                            {badge}
-                          </span>
-                        )}
-                      </div>
-                      <h3 className="text-lg font-bold mb-1 text-foreground">
+                    <span
+                      className="w-9 h-9 rounded-full flex items-center justify-center shrink-0 text-foreground"
+                      style={{ backgroundColor: tool.iconBg }}
+                    >
+                      {tool.icon}
+                    </span>
+                    <div className="flex-1 min-w-0">
+                      <h3 className="text-[15px] font-bold text-foreground leading-snug">
                         {tool.title[lang]}
                         {["resume-analyzer", "resume-builder", "offer-calculator", "interview-questions"].includes(tool.id) && (
                           <span className="ml-2 text-[10px] font-semibold uppercase tracking-wide px-1.5 py-0.5 rounded-full align-middle bg-gold/15 text-gold">Beta</span>
                         )}
                       </h3>
-                      <p className="text-sm leading-relaxed text-muted-foreground">{tool.description[lang]}</p>
+                      <p className="text-xs leading-relaxed text-muted-foreground mt-0.5 line-clamp-2">{tool.description[lang]}</p>
+                      {badge && (
+                        <span className="text-[10px] font-semibold mt-1 inline-block px-1.5 py-0.5 rounded-full bg-gold/15 text-gold">
+                          {badge}
+                        </span>
+                      )}
                       {tool.id === "resume-analyzer" && (
-                        <p className="text-xs font-medium mt-2 text-muted-foreground">
+                        <p className="text-[11px] font-medium mt-1 text-muted-foreground">
                           {lang === "zh"
                             ? `本月已使用 ${analyzerUsed}/${analyzerLimit} 次`
                             : `${analyzerUsed}/${analyzerLimit} analyses used this month`}
                         </p>
                       )}
                     </div>
-                    <div className="flex justify-end mt-4">
-                      <span className="inline-flex items-center gap-1 text-sm font-semibold transition-all text-gold">
-                        {t.launch} <ArrowRight className="w-4 h-4 transition-transform group-hover:translate-x-1" />
-                      </span>
-                    </div>
+                    <ArrowRight className="w-4 h-4 shrink-0 transition-transform group-hover:translate-x-1 text-gold" />
                   </Link>
                 );
               })}
