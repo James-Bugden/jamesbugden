@@ -578,19 +578,19 @@ const FortyEightLawsGuide = () => {
               </thead>
               <tbody>
                 {[
-                  { situation: "\"I feel lost. I don't know what career to pursue.\"", start: "Find Your Direction First", extra: <> + the <Link to="/ikigai-guide" className="text-gold hover:underline">Ikigai Career Guide</Link></> },
-                  { situation: "\"My boss takes credit for my work.\"", start: "Manage Up", extra: null },
-                  { situation: "\"I got passed over for a promotion.\"", start: "Build Your Reputation", extra: <> + Get What You Want</> },
-                  { situation: "\"Office politics are destroying me.\"", start: "Survive Office Politics", extra: null },
-                  { situation: "\"I don't know who to trust at work.\"", start: "Survive Office Politics", extra: null },
-                  { situation: "\"I want to ask for a raise but don't know when.\"", start: "Get What You Want", extra: null },
-                  { situation: "\"I feel stuck and invisible.\"", start: "Build Your Reputation", extra: null },
-                  { situation: "\"I need a full career reset.\"", start: "Find Your Direction First", extra: <> + the <Link to="/ikigai-guide" className="text-gold hover:underline">Ikigai Career Guide</Link></> },
-                  { situation: "\"Give me the cheat sheet.\"", start: "All 48 Laws: Quick Reference", extra: null },
+                  { situation: "\"I feel lost. I don't know what career to pursue.\"", start: "Find Your Direction First", anchor: "#find-direction", extra: <> + the <Link to="/ikigai-guide" className="text-gold hover:underline">Ikigai Career Guide</Link></> },
+                  { situation: "\"My boss takes credit for my work.\"", start: "Manage Up", anchor: "#manage-up", extra: null },
+                  { situation: "\"I got passed over for a promotion.\"", start: "Build Your Reputation", anchor: "#reputation", extra: <> + <a href="#get-what-you-want" className="text-gold hover:underline">Get What You Want</a></> },
+                  { situation: "\"Office politics are destroying me.\"", start: "Survive Office Politics", anchor: "#office-politics", extra: null },
+                  { situation: "\"I don't know who to trust at work.\"", start: "Survive Office Politics", anchor: "#office-politics", extra: null },
+                  { situation: "\"I want to ask for a raise but don't know when.\"", start: "Get What You Want", anchor: "#get-what-you-want", extra: null },
+                  { situation: "\"I feel stuck and invisible.\"", start: "Build Your Reputation", anchor: "#reputation", extra: null },
+                  { situation: "\"I need a full career reset.\"", start: "Find Your Direction First", anchor: "#find-direction", extra: <> + the <Link to="/ikigai-guide" className="text-gold hover:underline">Ikigai Career Guide</Link></> },
+                  { situation: "\"Give me the cheat sheet.\"", start: "All 48 Laws: Quick Reference", anchor: "#quick-reference", extra: null },
                 ].map((row, i) => (
                   <tr key={i} className="border-b border-border/50">
                     <td className="p-3 text-muted-foreground">{row.situation}</td>
-                    <td className="p-3 text-foreground font-medium">→ Start with: {row.start}{row.extra}</td>
+                    <td className="p-3 text-foreground font-medium">→ Start with: <a href={row.anchor} className="text-gold hover:underline">{row.start}</a>{row.extra}</td>
                   </tr>
                 ))}
               </tbody>
