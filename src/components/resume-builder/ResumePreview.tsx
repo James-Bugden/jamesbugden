@@ -37,6 +37,15 @@ function getPageDims(format?: string) {
   return { wMM: d.w, hMM: d.h, wPX: d.w * PX_PER_MM, hPX: d.h * PX_PER_MM };
 }
 
+export interface ResumeExportMetrics {
+  sourceElement: HTMLElement | null;
+  pageCount: number;
+  contentOriginPX: number;
+  usablePerPagePX: number;
+  pageHeightPX: number;
+  marginYPX: number;
+}
+
 interface ResumePreviewProps {
   data: ResumeData;
   customize?: CustomizeSettings;
@@ -45,6 +54,7 @@ interface ResumePreviewProps {
   onColorChange?: (field: string, color: string) => void;
   onContentEdit?: (sectionId: string, entryId: string, field: string, html: string) => void;
   onPageCount?: (count: number) => void;
+  exportMetricsRef?: React.MutableRefObject<ResumeExportMetrics | null>;
 }
 
 /* ── Relative font-size helpers ──────────────────────────────── */
