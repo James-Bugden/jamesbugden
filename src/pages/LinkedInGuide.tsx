@@ -9,6 +9,7 @@ import GuideShareButtons from "@/components/GuideShareButtons";
 import GoldCheckBadge from "@/components/GoldCheckBadge";
 import { useTrackGuideProgress } from "@/hooks/useReadingProgress";
 import GuideSignInBanner from "@/components/guides/GuideSignInBanner";
+import GuideBottomCTA from "@/components/guides/GuideBottomCTA";
 
 const LinkedInGuide = () => {
   useTrackGuideProgress("linkedin-guide");
@@ -842,6 +843,8 @@ const LinkedInGuide = () => {
           </div>
         </div>
       </footer>
+    
+      <GuideBottomCTA lang="en" />
     </div>
   );
 };

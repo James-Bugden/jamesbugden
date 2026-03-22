@@ -5,6 +5,7 @@ import GuideShareButtons from "@/components/GuideShareButtons";
 import { AuthHeaderButton } from "@/components/AuthHeaderButton";
 import { useTrackGuideProgress } from "@/hooks/useReadingProgress";
 import GuideSignInBanner from "@/components/guides/GuideSignInBanner";
+import GuideBottomCTA from "@/components/guides/GuideBottomCTA";
 import ToolkitCallout from "@/components/ToolkitCallout";
 
 const SalaryStarterKitZhTw = () => {
@@ -787,6 +788,8 @@ const SalaryStarterKitZhTw = () => {
           </p>
         </div>
       </footer>
+    
+      <GuideBottomCTA lang="zh" />
     </div>
   );
 };

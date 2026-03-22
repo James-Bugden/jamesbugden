@@ -6,6 +6,7 @@ import GuideShareButtons from "@/components/GuideShareButtons";
 import { AuthHeaderButton } from "@/components/AuthHeaderButton";
 import { useTrackGuideProgress } from "@/hooks/useReadingProgress";
 import GuideSignInBanner from "@/components/guides/GuideSignInBanner";
+import GuideBottomCTA from "@/components/guides/GuideBottomCTA";
 
 const PivotMethodMiniGuideZhTw = () => {
   useTrackGuideProgress("pivot-mini");
@@ -508,6 +509,8 @@ const PivotMethodMiniGuideZhTw = () => {
           </p>
         </footer>
       </main>
+    
+      <GuideBottomCTA lang="zh" />
     </div>
   );
 };

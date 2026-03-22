@@ -10,6 +10,7 @@ import { InstagramIcon, ThreadsIcon } from "@/components/SocialIcons";
 import GoldCheckBadge from "@/components/GoldCheckBadge";
 import { useTrackGuideProgress } from "@/hooks/useReadingProgress";
 import GuideSignInBanner from "@/components/guides/GuideSignInBanner";
+import GuideBottomCTA from "@/components/guides/GuideBottomCTA";
 
 const InterviewPreparationGuide = () => {
   useTrackGuideProgress("interview-full");
@@ -1136,34 +1137,15 @@ const InterviewPreparationGuide = () => {
         </div>
       </section>
 
-      {/* Need More Help */}
-      <section className="py-12 md:py-16 px-5 md:px-6 bg-card border-t border-border">
-        <div className="container mx-auto max-w-3xl">
-          <h2 className="font-heading text-2xl md:text-3xl text-foreground mb-6 text-center">
-            Want Personalized Help?
-          </h2>
-          
-          <div className="space-y-6 mb-8">
-            <div className="bg-background border border-border rounded-lg p-6">
-              <h3 className="font-semibold text-foreground mb-2">Resume Reviews</h3>
-              <p className="text-muted-foreground">
-                I review 5 resumes per month for free using an exhaustive report. <a href="https://tally.so/r/Pd1jlB" target="_blank" rel="noopener noreferrer" className="text-gold hover:underline">Join the waitlist here.</a>
-              </p>
-            </div>
-
-          </div>
-
-          <div className="text-center">
-            <p className="text-foreground mb-4">
-              Email: <a href="mailto:james@jamesbugden.com" className="text-gold hover:underline">james@jamesbugden.com</a> for more information
-            </p>
-            <p className="text-sm text-muted-foreground italic">
-              This guide is based on Sam Owens' "I Hate Job Interviews" methodology, which I've adapted based on my experience hiring as a Senior Recruiter. Support the author and buy his book to understand the full context behind his framework. It's the best interview preparation guide I've read.
-            </p>
-            <p className="text-xs text-muted-foreground mt-2">
-              Source: Owens, Sam. "I Hate Job Interviews: Stop Stressing, Start Performing, Get the Job You Want." HarperCollins Leadership, 2024.
-            </p>
-          </div>
+      {/* Book Attribution */}
+      <section className="py-8 px-5 md:px-6 bg-card border-t border-border">
+        <div className="container mx-auto max-w-3xl text-center">
+          <p className="text-sm text-muted-foreground italic">
+            This guide is based on Sam Owens' "I Hate Job Interviews" methodology, which I've adapted based on my experience hiring as a Senior Recruiter. Support the author and buy his book to understand the full context behind his framework. It's the best interview preparation guide I've read.
+          </p>
+          <p className="text-xs text-muted-foreground mt-2">
+            Source: Owens, Sam. "I Hate Job Interviews: Stop Stressing, Start Performing, Get the Job You Want." HarperCollins Leadership, 2024.
+          </p>
         </div>
       </section>
 
@@ -1199,6 +1181,8 @@ const InterviewPreparationGuide = () => {
           </div>
         </div>
       </footer>
+    
+      <GuideBottomCTA lang="en" />
     </div>
   );
 };

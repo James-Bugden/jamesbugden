@@ -8,6 +8,7 @@ import { AuthHeaderButton } from "@/components/AuthHeaderButton";
 import GoldCheckBadge from "@/components/GoldCheckBadge";
 import { useTrackGuideProgress } from "@/hooks/useReadingProgress";
 import GuideSignInBanner from "@/components/guides/GuideSignInBanner";
+import GuideBottomCTA from "@/components/guides/GuideBottomCTA";
 
 const InterviewPrepGuideZhTw = () => {
   useTrackGuideProgress("interview-prep");
@@ -603,37 +604,12 @@ const InterviewPrepGuideZhTw = () => {
         </div>
       </section>
 
-      {/* Need More Help */}
-      <section className="py-12 md:py-16 px-5 md:px-6 bg-card border-t border-border">
-        <div className="container mx-auto max-w-3xl">
-          <h2 className="font-heading text-2xl md:text-3xl text-foreground mb-6 text-center">
-            需要更多協助嗎？
-          </h2>
-          
-          <div className="space-y-6 mb-8">
-            <div className="bg-background border border-border rounded-lg p-6">
-              <h3 className="font-semibold text-foreground mb-2">履歷健檢</h3>
-              <p className="text-muted-foreground">
-                我每月免費審 5 份履歷，提供超完整報告。<a href="https://tally.so/r/lbeBdv" target="_blank" rel="noopener noreferrer" className="text-gold hover:underline">加入候補名單。</a>
-              </p>
-            </div>
-
-            <div className="bg-background border border-border rounded-lg p-6">
-              <h3 className="font-semibold text-foreground mb-2">完整職涯方案</h3>
-              <p className="text-muted-foreground">
-                如果你想要一站式服務（履歷、LinkedIn 優化、面試準備、談薪策略），我目前正在以測試價提供這個方案。
-              </p>
-            </div>
-          </div>
-
-          <div className="text-center">
-            <p className="text-foreground mb-4">
-              Email：<a href="mailto:james@jamesbugden.com" className="text-gold hover:underline">james@jamesbugden.com</a> 或在 LinkedIn、Threads 私訊我。
-            </p>
-            <p className="text-sm text-muted-foreground italic">
-              本指南基於 Sam Owens《I Hate Job Interviews》的方法論。強烈推薦支持原作者，這是我讀過最好的面試書。
-            </p>
-          </div>
+      {/* Book Attribution */}
+      <section className="py-8 px-5 md:px-6 bg-card border-t border-border">
+        <div className="container mx-auto max-w-3xl text-center">
+          <p className="text-sm text-muted-foreground italic">
+            本指南基於 Sam Owens《I Hate Job Interviews》的方法論。強烈推薦支持原作者，這是我讀過最好的面試書。
+          </p>
         </div>
       </section>
 
@@ -669,6 +645,8 @@ const InterviewPrepGuideZhTw = () => {
           </div>
         </div>
       </footer>
+    
+      <GuideBottomCTA lang="zh" />
     </div>
   );
 };

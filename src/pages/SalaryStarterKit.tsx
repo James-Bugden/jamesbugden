@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/button";
 import GuideShareButtons from "@/components/GuideShareButtons";
 import { useTrackGuideProgress } from "@/hooks/useReadingProgress";
 import GuideSignInBanner from "@/components/guides/GuideSignInBanner";
+import GuideBottomCTA from "@/components/guides/GuideBottomCTA";
 import ToolkitCallout from "@/components/ToolkitCallout";
 
 const SalaryStarterKit = () => {
@@ -736,6 +737,8 @@ const SalaryStarterKit = () => {
           </p>
         </div>
       </footer>
+    
+      <GuideBottomCTA lang="en" />
     </div>
   );
 };
