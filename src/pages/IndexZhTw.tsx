@@ -1,4 +1,4 @@
-import "@/styles/experiment.css";
+import "@/styles/homepage.css";
 import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { Briefcase, Users, Linkedin, FileCheck, X, CheckCircle2, Eye, Building, Plus, Minus } from "lucide-react";
