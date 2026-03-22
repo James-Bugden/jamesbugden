@@ -1,56 +1,25 @@
 
 
-## Fix: "Fix overlap" button doesn't work
+## Fix: Page 2 content too close to top in PDF export
 
-### Root cause
+### Problem
+The exported PDF uses `@page { margin: 0 }` and relies on the resume element's internal padding for margins. This works on page 1, but when content flows to page 2+, headless Chrome starts content at the very top edge — there's no `@page` margin to create spacing on subsequent pages.
 
-The "Fix overlap" button (line 1466-1500) measures item positions from the **already-paginated** hidden flow (where margins have been applied by the auto-pass). It then calculates the page boundary as `pageBottom = i * usablePerPage`. But after auto-pagination has pushed items down with `marginTop`, the actual content positions no longer align with simple multiples of `usablePerPage`. So the button either finds **no straddling items** or the **wrong items**.
+### Solution
+Use CSS `@page` margins (derived from the user's `marginX`/`marginY` settings) so **every page** gets consistent margins. Then strip the element's own top/bottom padding to avoid doubling on page 1.
 
-When `manualBreaks` is set, the pagination `useEffect` fires, **resets all margins**, and re-runs from scratch. The item indices stored in `manualBreaks` may now refer to items that don't actually straddle the boundary in the un-paginated state.
+### Changes
 
-### The fix
+**File: `src/lib/serverPdfExport.ts`**
 
-**In the button click handler** (lines 1466-1484): reset the hidden flow margins before measuring, so positions match the un-paginated coordinate system that the pagination engine uses after its own reset.
+1. Calculate `@page` margin values from the `customize.marginY` and `customize.marginX` settings (defaulting to 10mm if not provided)
+2. Update the `@page` rule from `margin: 0` to `margin: {marginY}mm {marginX}mm`
+3. Strip the cloned element's top and bottom padding so margins aren't doubled on page 1 (the `@page` margin now handles it)
 
-```typescript
-onClick={() => {
-  const root = hiddenFlowRef.current;
-  if (!root) return;
+This ensures headless Chrome applies the same margin on every page, matching what the user sees in the preview.
 
-  // Reset margins first so we measure un-paginated positions
-  // (same as what the pagination useEffect does before its passes)
-  root.querySelectorAll('[data-page-item]').forEach(el => {
-    (el as HTMLElement).style.marginTop = '';
-  });
-  root.querySelectorAll('[data-page-break-child]').forEach(el => {
-    (el as HTMLElement).style.marginTop = '';
-    el.removeAttribute('data-page-break-child');
-  });
-
-  // Force layout reflow
-  void root.offsetHeight;
-
-  const items = root.querySelectorAll('[data-page-item]');
-  const rootRect = root.getBoundingClientRect();
-  const pageBottom = i * usablePerPage;
-  const newBreaks = new Set(manualBreaks);
-  items.forEach((el, idx) => {
-    if (el.querySelector('[data-page-item]')) return;
-    const rect = el.getBoundingClientRect();
-    const elTop = rect.top - rootRect.top - contentOriginPX;
-    const elBottom = elTop + rect.height;
-    if (elTop < pageBottom && elBottom > pageBottom + 2) {
-      newBreaks.add(idx);
-    }
-  });
-  setManualBreaks(newBreaks);
-  setFixedPages(prev => new Set(prev).add(i));
-}}
-```
-
-### File to edit
-- `src/components/resume-builder/ResumePreview.tsx` — button click handler (lines 1466-1484)
-
-### Why this works
-The pagination `useEffect` always resets margins before running its passes. The button now measures in the **same coordinate space** (un-paginated), so the item indices it stores in `manualBreaks` will correctly identify straddling items when the useEffect re-runs its passes.
+### Technical detail
+- The `@page` CSS rule controls margins on *every* printed page
+- Currently set to `0`, meaning only the element's internal padding provides spacing — but only on the first page
+- By moving margins to `@page`, Chrome's print engine applies them uniformly across all pages
 
