@@ -120,7 +120,7 @@ const IndexExperiment = () => {
 
       <main>
         {/* ── Hero — cream #FDFBF7 ── */}
-        <section id="about" className="pt-20 md:pt-36 pb-12 md:pb-20 px-4 sm:px-5 md:px-6 relative bg-cream">
+        <section id="about" className="pt-8 md:pt-16 pb-12 md:pb-20 px-4 sm:px-5 md:px-6 relative bg-cream">
           <div className="container mx-auto max-w-5xl">
             <div className="flex flex-col items-center text-center md:grid md:grid-cols-[1fr_auto] md:gap-16 md:items-center md:text-left">
               <div className="order-2 md:order-1 w-full">
