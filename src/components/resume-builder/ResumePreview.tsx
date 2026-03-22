@@ -685,7 +685,7 @@ function renderSectionEntries(section: ResumeSection, customize?: CustomizeSetti
 
               {(f.url || f.link) && (
                 <p style={{ fontSize: subtitleFontSize, color: "var(--resume-dates)", marginTop: "0.5mm" }}>
-                  {f.url || f.link}
+                  <a href={f.url || f.link} target="_blank" rel="noopener noreferrer" style={{ color: "inherit", textDecoration: c?.linkUnderline ? "underline" : "none" }}>{f.url || f.link}</a>
                 </p>
               )}
 
