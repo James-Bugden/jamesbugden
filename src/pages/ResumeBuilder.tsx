@@ -29,8 +29,7 @@ import { Label } from "@/components/ui/label";
 import { supabase } from "@/integrations/supabase/client";
 import { useBuilderAiUsage } from "@/hooks/useBuilderAiUsage";
 import { applyTemplatePreset } from "@/components/resume-builder/templatePresets";
-import { exportToPdf } from "@/lib/pdfExport";
-import { exportResumePdf } from "@/lib/resumePdf/exportResumePdf";
+import { exportResumePages } from "@/lib/pdfExport";
 import { ResumeExportMetrics } from "@/components/resume-builder/ResumePreview";
 import { useIsMobile } from "@/hooks/use-mobile";
 import { Skeleton } from "@/components/ui/skeleton";
@@ -660,9 +659,23 @@ const ResumeBuilder = () => {
 
   const handleDownload = async (filename?: string) => {
     if (downloading) return;
+    const metrics = exportMetricsRef.current;
+    if (!metrics?.sourceElement) {
+      toast({ title: "Export failed", description: "Preview not ready yet. Please wait a moment and try again.", variant: "destructive" });
+      return;
+    }
     setDownloading(true);
     const fn = filename || (data.personalDetails.fullName || "Resume").replace(/\s+/g, "_") + "_Resume";
-    await exportResumePdf({ data, customize, fileName: fn });
+    await exportResumePages({
+      sourceElement: metrics.sourceElement,
+      fileName: fn,
+      pageFormat: (customize.pageFormat || "a4") as "a4" | "letter",
+      pageCount: metrics.pageCount,
+      contentOriginPX: metrics.contentOriginPX,
+      usablePerPagePX: metrics.usablePerPagePX,
+      pageHeightPX: metrics.pageHeightPX,
+      marginYPX: metrics.marginYPX,
+    });
     setDownloading(false);
   };
 
