@@ -1489,12 +1489,6 @@ const FortyEightLawsGuide = () => {
                   <p className="font-medium text-foreground">
                     Your score: <span className={`text-lg font-bold ${auditTotal >= 28 ? "text-emerald-500" : auditTotal >= 20 ? "text-gold" : auditTotal >= 12 ? "text-amber-500" : auditTotal > 0 ? "text-red-500" : "text-muted-foreground"}`}>{auditTotal}</span> / 35
                   </p>
-                  {auditTotal > 0 && (
-                    <button onClick={saveSnapshot} className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-gold/10 text-gold text-xs font-semibold hover:bg-gold/20 transition-colors">
-                      <Save className="w-3.5 h-3.5" />
-                      Save snapshot
-                    </button>
-                  )}
                 </div>
                 <div className="space-y-1">
                   <p><strong>28-35:</strong> Strong position. Focus on growth and impact.</p>
