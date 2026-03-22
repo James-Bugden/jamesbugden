@@ -1260,7 +1260,6 @@ export const ResumePreview = React.memo(function ResumePreview({
       });
     };
     visiblePageRefs.current.forEach(clearRefs);
-    exportPageRefs.current.forEach(clearRefs);
   }, [data, customize]);
 
   /* ── Apply pagination mutations to visible + export pages (sync before paint) ── */
