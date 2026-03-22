@@ -655,7 +655,7 @@ const FortyEightLawsGuide = () => {
             <p className="text-muted-foreground leading-relaxed mb-6">
               Reputation is the single most valuable asset in your career. And the easiest to destroy.
             </p>
-            <ActionStep>
+            <ActionStep checked={safeActions[5]} onToggle={() => toggleAction(5)}>
               Google yourself right now. Check LinkedIn, social media, and anything public. If the results don't reflect the professional you want to be, fix it today. Remove old posts. Update your LinkedIn headline. Ask a trusted friend: "What would someone say about me after meeting me once?" If the answer surprises you, you have work to do.
             </ActionStep>
 
