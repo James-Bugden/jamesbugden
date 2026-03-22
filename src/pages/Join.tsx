@@ -61,6 +61,7 @@ const fadeUp = {
 
 export default function Join() {
   const navigate = useNavigate();
+  const location = useLocation();
   const [searchParams] = useSearchParams();
   const { isLoggedIn } = useAuth();
   const passwordRef = useRef<HTMLInputElement>(null);
