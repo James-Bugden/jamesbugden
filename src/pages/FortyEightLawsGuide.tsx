@@ -536,10 +536,6 @@ const FortyEightLawsGuide = () => {
       {/* Hero */}
       <section className="pt-28 md:pt-36 pb-14 md:pb-20 px-5 md:px-6 bg-executive-green">
         <div className="container mx-auto max-w-4xl text-center">
-          <div className="inline-flex items-center gap-2 bg-cream/10 rounded-full px-4 py-1.5 mb-6">
-            <Crown className="w-4 h-4 text-gold" />
-            <span className="text-sm font-medium text-cream/80">Workplace Edition</span>
-          </div>
           <h1 className="font-heading text-3xl md:text-5xl lg:text-6xl text-cream leading-tight mb-4" style={{ lineHeight: 1.2 }}>
             48 Laws of Power<br className="hidden sm:block" /> (Workplace Edition)
           </h1>
