@@ -1,33 +1,63 @@
 
+Goal: make Resume Builder PDF export reliable on both desktop and mobile by removing the brittle “capture one off-screen tall node” approach and exporting from a stable paginated source.
 
-## Fix: Resume PDF Export
+1. Identify and replace the fragile export path
+- The current export depends on `getElementById("resume-pdf-target")` and a hidden flow positioned at `left: -9999px`.
+- That is brittle for mobile browsers, font loading, and large multi-page resumes.
+- I’ll replace this with a dedicated resume export path that does not rely on a globally queried off-screen node.
 
-### Problem
-The `#resume-pdf-target` element in `ResumePreview.tsx` is the hidden measurement div used for pagination calculations. It's positioned at `left: -9999px` — completely off-screen. When `exportToPdf()` calls `html2canvas` on this element, the rendering fails or produces a blank/broken output because `html2canvas` struggles with off-screen elements.
+2. Add a stable export source in `ResumePreview`
+- In `src/components/resume-builder/ResumePreview.tsx`, I’ll expose an always-mounted, unscaled export container or page refs for the already-paginated resume pages.
+- Each PDF page will map to one real DOM page, matching the existing pagination engine instead of slicing one giant canvas.
+- This keeps the current live preview behavior, zoom, and mobile overlay intact while giving export a clean source.
 
-### Solution
-Modify `exportToPdf` in `src/lib/pdfExport.ts` to temporarily move the target element on-screen (but visually hidden behind a white overlay) before capturing, then restore it after.
+3. Upgrade `src/lib/pdfExport.ts` for reliable page-by-page export
+- Change the exporter so it can capture page elements directly instead of only an `elementId`.
+- Export each page separately with `html2canvas`, then append each page to `jsPDF`.
+- Add readiness guards before capture:
+  - wait for layout paint
+  - wait for `document.fonts.ready`
+  - wait for images to finish decoding where possible
+- Add mobile-safe capture settings:
+  - adaptive scale (lower on small/mobile devices to avoid memory crashes)
+  - explicit background color
+  - safe scroll offsets / fixed positioning handling
+- Keep backward compatibility for the cover-letter export path if possible, so only resume export behavior changes.
 
-### Changes
+4. Update Resume Builder download handlers
+- In `src/pages/ResumeBuilder.tsx` and `src/pages/ResumeBuilderSimple.tsx`, switch the download action to the new resume export API.
+- Keep the existing loading state, filename handling, and paper-size selection.
+- Ensure both desktop dropdown download and mobile preview-overlay download call the same stable exporter.
 
-**File: `src/lib/pdfExport.ts`**
-- Before calling `html2canvas`, temporarily override the container's styles:
-  - Set `left: 0`, `top: 0`, `position: fixed`, `z-index: -1`, `opacity: 1`
-  - This makes it renderable by html2canvas without being visible to the user
-- After capture completes, restore the original styles
-- This is a minimal, non-breaking change — no other files need editing
+5. Prevent common failure modes
+- No more dependence on `left: -9999px` for the resume export.
+- No more giant single-canvas capture for multi-page resumes.
+- Avoid blank/partial PDFs caused by fonts not being ready.
+- Reduce mobile failures caused by memory pressure from high-resolution full-document capture.
 
-### Technical Detail
+Technical details
 ```text
-Before capture:
-  container.style.left = "0"
-  container.style.top = "0"  
-  container.style.position = "fixed"
-  container.style.zIndex = "-1"
+Current flow
+  hidden off-screen tall node
+  -> html2canvas(one huge capture)
+  -> slice into pages
 
-Capture with html2canvas...
-
-After capture:
-  Restore original styles
+Planned flow
+  paginated page DOM refs / hidden export pages
+  -> wait until fonts + layout are ready
+  -> html2canvas(each page individually)
+  -> jsPDF addPage per captured page
 ```
 
+Files likely to change
+- `src/lib/pdfExport.ts`
+- `src/components/resume-builder/ResumePreview.tsx`
+- `src/pages/ResumeBuilder.tsx`
+- `src/pages/ResumeBuilderSimple.tsx`
+
+QA plan
+- Desktop: export 1-page and 2+ page resumes
+- Mobile: export from the preview overlay on a narrow viewport
+- Formats: verify both A4 and Letter
+- Styling: verify custom fonts/colors render correctly
+- Regression: confirm cover-letter PDF export still works
