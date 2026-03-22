@@ -32,12 +32,40 @@ const Collapsible = ({ title, children }: { title: string; children: React.React
   );
 };
 
-const ActionStep = ({ children }: { children: React.ReactNode }) => (
-  <div className="bg-gold/5 border border-gold/20 rounded-xl p-5 md:p-6">
-    <p className="text-sm font-semibold text-gold uppercase tracking-wider mb-2">Action Step</p>
-    <div className="text-foreground text-sm leading-relaxed">{children}</div>
+const ActionStep = ({ children, checked, onToggle }: { children: React.ReactNode; checked?: boolean; onToggle?: () => void }) => (
+  <div
+    className={`bg-gold/5 border border-gold/20 rounded-xl p-5 md:p-6 transition-opacity ${checked ? "opacity-60" : ""} ${onToggle ? "cursor-pointer" : ""}`}
+    onClick={onToggle}
+  >
+    <div className="flex items-center justify-between mb-2">
+      <p className="text-sm font-semibold text-gold uppercase tracking-wider">Action Step</p>
+      {onToggle && (
+        <span className={`shrink-0 w-5 h-5 rounded border-2 flex items-center justify-center transition-colors ${checked ? "bg-gold border-gold text-background" : "border-muted-foreground/40 hover:border-gold/60"}`}>
+          {checked && <Check className="w-3 h-3" />}
+        </span>
+      )}
+    </div>
+    <div className={`text-foreground text-sm leading-relaxed ${checked ? "line-through text-muted-foreground" : ""}`}>{children}</div>
   </div>
 );
+
+function ActionSaveBanner({ onDismiss }: { onDismiss: () => void }) {
+  const location = useLocation();
+  const returnUrl = encodeURIComponent(location.pathname);
+  return (
+    <div className="flex items-center gap-3 bg-gold/10 border border-gold/30 rounded-lg px-4 py-3 mt-6">
+      <p className="text-muted-foreground text-xs flex-1">
+        Progress saved on this device. Create a free account to sync across devices.
+      </p>
+      <a href={`/join?returnUrl=${returnUrl}`} className="shrink-0 text-xs font-semibold text-gold hover:text-gold/80 underline underline-offset-2">
+        Create Account
+      </a>
+      <button onClick={onDismiss} className="shrink-0 text-muted-foreground hover:text-foreground">
+        <X className="w-3.5 h-3.5" />
+      </button>
+    </div>
+  );
+}
 
 const Reversal = ({ children }: { children: React.ReactNode }) => (
   <div className="bg-muted/50 border border-border rounded-xl p-5 md:p-6">
