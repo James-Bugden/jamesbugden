@@ -1234,8 +1234,10 @@ export const ResumePreview = React.memo(function ResumePreview({
   // Expose export metrics for the page-by-page PDF exporter
   useEffect(() => {
     if (exportMetricsRef) {
+      const pages = exportPageRefs.current.filter(Boolean) as HTMLElement[];
       exportMetricsRef.current = {
         sourceElement: hiddenFlowRef.current,
+        pageElements: pages,
         pageCount,
         contentOriginPX,
         usablePerPagePX: usablePerPage,
