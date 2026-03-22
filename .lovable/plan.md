@@ -1,32 +1,51 @@
 
 
-## Fix Login Redirect Logic
+## MailerLite Subscriber Sync on Signup
 
-### Problem
-When a user clicks "Sign in" from the homepage (`/` or `/zh-tw`), `location.state.from` is set to `/` or `/zh-tw`. After login, the redirect logic sends them back to that page instead of the dashboard.
+### Overview
+Add MailerLite email sync as a fire-and-forget side effect after every successful signup. The uploaded API token will be stored as a secret.
 
-Additionally, several components always link to `/login` and `/join` regardless of language context, so Chinese users get English login/signup pages.
+### Important Note
+Your signup forms don't collect a name field — only email and password. The MailerLite sync will send the email only (name will be empty). If you want names synced, we'd need to add a name input to the signup forms — but per your request, we won't change the UI.
 
-### Changes
+### Steps
 
-**1. `src/pages/Login.tsx` — Smart redirect after login**
-- In the `useEffect` that handles post-login redirect (line 47-54), treat homepage paths (`/`, `/zh-tw`, `/zh-tw/`) as non-specific — redirect to dashboard instead of back to homepage.
-- Also detect `isZhTw` from `location.state?.from` OR current path patterns to handle edge cases.
+1. **Store the MailerLite API key as a secret**
+   - Use the `add_secret` tool to store `MAILERLITE_API_KEY` with the token you uploaded
 
-**2. `src/components/AuthHeaderButton.tsx` — Language-aware login link**
-- Change `to="/login"` to use `/login` for English and pass the ZH context properly so the Login page knows the language.
+2. **Create Edge Function `sync-mailerlite`** (`supabase/functions/sync-mailerlite/index.ts`)
+   - POST handler accepting `{ email, name? }`
+   - Calls `https://connect.mailerlite.com/api/subscribers` with Bearer auth
+   - Splits name into first/last, assigns group `181733295867823354`
+   - CORS headers, OPTIONS preflight handler
+   - Returns success/error JSON
 
-**3. `src/components/guides/GuideSignInBanner.tsx` — Language-aware routes**
-- When `lang="zh"`, navigate to `/login` but ensure `state.from` carries the zh-tw path (already does this via `location.pathname`, so this is correct). No change needed here.
+3. **Create helper** (`src/lib/mailerlite.ts`)
+   - `syncToMailerLite(email, name?)` — invokes the edge function via `supabase.functions.invoke`
+   - Catches all errors silently, logs to console
 
-**4. `src/components/LoginGate.tsx` — Already correct** (uses `location.pathname`).
+4. **Update 3 signup pages** to call `syncToMailerLite` after successful `signUp()`:
+   - `src/pages/Signup.tsx`
+   - `src/pages/Join.tsx`
+   - `src/pages/JoinZhTw.tsx`
+   - Fire-and-forget (no `await`), no UI changes
 
-**5. `src/components/EmailGateOverlay.tsx` — Already passes `state.from`**, but check it links correctly for ZH users.
+### Technical Details
 
-**6. `src/pages/Dashboard.tsx` — Language-aware login redirect**
-- Line 251: When redirecting unauthenticated users, detect if on ZH dashboard path and redirect to `/login` with appropriate state.
+**Edge Function structure:**
+```
+POST /sync-mailerlite
+Body: { email: string, name?: string }
+→ POST https://connect.mailerlite.com/api/subscribers
+  Headers: Authorization: Bearer $MAILERLITE_API_KEY
+  Body: { email, fields: { name, last_name }, groups: ["181733295867823354"] }
+```
 
-### Summary of actual code changes:
-- **Login.tsx**: Add a check — if `redirectTo` is `/`, `/zh-tw`, or `/zh-tw/`, replace it with the appropriate dashboard path.
-- **JoinZhTw.tsx**: Already redirects to `/zh-tw/dashboard` — correct.
-- **Join.tsx**: Redirects to `/dashboard` — correct, but should respect `location.state?.from` like Login does.
+**Integration point in each signup handler:**
+```typescript
+// After: setSuccess(true)
+// Add: syncToMailerLite(email.trim());
+```
+
+No database changes needed. No UI changes.
+
