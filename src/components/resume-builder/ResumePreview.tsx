@@ -1467,6 +1467,20 @@ export const ResumePreview = React.memo(function ResumePreview({
                     onClick={() => {
                       const root = hiddenFlowRef.current;
                       if (!root) return;
+
+                      // Reset margins first so we measure un-paginated positions
+                      // (same as what the pagination useEffect does before its passes)
+                      root.querySelectorAll('[data-page-item]').forEach(el => {
+                        (el as HTMLElement).style.marginTop = '';
+                      });
+                      root.querySelectorAll('[data-page-break-child]').forEach(el => {
+                        (el as HTMLElement).style.marginTop = '';
+                        el.removeAttribute('data-page-break-child');
+                      });
+
+                      // Force layout reflow so measurements reflect un-paginated state
+                      void root.offsetHeight;
+
                       const items = root.querySelectorAll('[data-page-item]');
                       const rootRect = root.getBoundingClientRect();
                       const pageBottom = i * usablePerPage;
