@@ -1,56 +1,47 @@
 
+Goal: fix resume PDF export so page 1 no longer clips the top header, and page 2+ starts lower with proper top spacing.
 
-## Fix: Capture Hidden Flow as One Image, Slice into Pages via Canvas
+What I found
+- `src/lib/serverPdfExport.ts` currently serializes the hidden full-flow resume with `@page { margin: 0; }` and keeps the resume’s own top/bottom padding intact.
+- In `src/components/resume-builder/ResumePreview.tsx`, the hidden export source is one continuous `A4Page` box. Its vertical padding only protects the very top and very bottom of that one long element, not each printed page.
+- `supabase/functions/generate-pdf/index.ts` also forces Browserless print margins to zero and uses `preferCSSPageSize: false`, which can override or fight any page-margin rules we set in the exported HTML.
 
-### Root Cause
-The current approach tries to capture each visible page frame with `html-to-image`. These frames have a complex nested structure: `overflow:hidden` → absolutely positioned clipping div → `translateY`-shifted full A4Page content. When `html-to-image` clones this structure off-screen, the layout breaks and produces a blank image.
+Implementation plan
+1. Restore export-only page margins in the serializer
+- In `src/lib/serverPdfExport.ts`, compute export margins from `customize.marginY` plus the existing safe zones.
+- Set `@page` to vertical margins only:
+  ```text
+  margin: {topSafe}mm 0 {bottomSafe}mm 0
+  ```
+- Keep horizontal spacing on the resume element itself so left/right margins still come from `--resume-margin-x`.
 
-### Solution
-Stop trying to capture the complex page frame DOM. Instead:
+2. Strip only vertical padding from the cloned resume root
+- Find the cloned `A4Page` root (`[data-color-role='background']`).
+- Zero only:
+  - `--resume-pad-top`
+  - `--resume-pad-bottom`
+  - `paddingTop`
+  - `paddingBottom`
+- Do not touch `--resume-margin-x` or left/right padding.
 
-1. **Capture the hidden flow as one tall image** — `hiddenFlowRef` is a simple div, no transforms, no overflow clipping. It already has all pagination mutations (marginTop spacers) applied. `html-to-image` handles it reliably.
+3. Make the backend respect the print CSS
+- In `supabase/functions/generate-pdf/index.ts`, stop hardcoding zero PDF margins in Browserless.
+- Switch the PDF call to honor CSS page sizing/margins cleanly (`preferCSSPageSize: true` and remove conflicting width/height/margin overrides, or otherwise align backend options to the same values).
+- This is the key coordination step so the serializer fix actually takes effect in the generated PDF.
 
-2. **Slice into pages using Canvas** — Load the tall image into a Canvas, then for each page, draw the correct vertical slice corresponding to `contentOriginPX + i * usablePerPage` into a page-sized canvas.
+4. Keep the header intact and preserve natural pagination
+- Leave the cleanup selector limited to interactive UI only (`button`, overlays, poppers, `.no-print`).
+- Keep removing preview-only `marginTop` hacks from `[data-page-item]` and `[data-page-break-child]` before export so Chrome can paginate naturally.
 
-3. **Draw footer/page numbers onto each canvas** — Use Canvas text drawing to add footer content (name, email, page numbers) at the bottom of each page slice, matching the preview's footer styling.
+Technical details
+- The export source is `hiddenFlowRef`, which wraps a single `A4Page`; exporting a continuous layout is fine as long as vertical spacing is moved from element padding to page margins.
+- `clone.outerHTML` should continue to be sent, not inner fragments.
+- No database changes are needed; this is a client + backend-function export fix only.
+- Both `ResumeBuilder.tsx` and `ResumeBuilderSimple.tsx` already pass `customize`, so they should benefit automatically once the serializer/backend are corrected.
 
-4. **Export each canvas as a JPEG page in the PDF** — Convert each canvas to a data URL and add to jsPDF.
-
-### Changes
-
-**`src/lib/pdfExport.ts`**
-- Rewrite `exportResumePages` to accept: `sourceElement`, `pageCount`, `contentOriginPX`, `usablePerPagePX`, `pageHeightPX`, `marginYPX`, `fileName`, `pageFormat`, and optional footer config (`footerName`, `footerEmail`, `showPageNumbers`)
-- Capture `sourceElement` once as a tall PNG using `html-to-image`
-- Load into an `Image`, draw sliced regions into per-page canvases
-- Render footer text with `ctx.fillText()` if provided
-- Add each canvas to jsPDF
-- Remove the per-element capture loop
-
-**`src/components/resume-builder/ResumePreview.tsx`**
-- Update `ResumeExportMetrics` to include footer config: `footerName`, `footerEmail`, `showPageNumbers`, `bodyFont`, `datesColor`
-- Populate these from `customize` and `data.personalDetails` in the export metrics effect
-- Remove `pageElements` from the metrics (no longer needed)
-- Keep `pageFrameRefs` for UI only (not export)
-
-**`src/pages/ResumeBuilder.tsx`** and **`src/pages/ResumeBuilderSimple.tsx`**
-- Update `handleDownload` to pass `sourceElement` and pagination metrics instead of `pageElements`
-- Pass footer config from metrics
-
-### Why This Works
-- The hidden flow is a flat div that `html-to-image` can capture reliably (no transforms, no overflow clipping, no absolute positioning tricks)
-- Canvas slicing is deterministic — no DOM cloning ambiguity
-- Footer text is drawn in canvas space — no need for a second DOM tree
-- The pagination mutations are already applied to the hidden flow, so page breaks are correct
-- Single capture + slice is faster than N separate DOM captures
-
-### Technical Detail
-```text
-hiddenFlowRef (simple div, mutations applied)
-    ↓ html-to-image → one tall PNG
-    ↓ Canvas slice per page region
-    ↓ Draw footer text per page
-    ↓ canvas.toDataURL() per page
-    ↓ jsPDF.addImage() per page
-    = PDF with exact content match + footers
-```
-
+Verification plan
+1. Export a 2-page resume like the uploaded example.
+2. Confirm page 1 shows the full name/title/contact row above the divider.
+3. Confirm page 2 content starts below a visible top margin instead of touching the top edge.
+4. Confirm left/right margins still match the on-screen preview.
+5. Re-test with different margin settings and both A4/Letter to ensure the spacing scales correctly.
