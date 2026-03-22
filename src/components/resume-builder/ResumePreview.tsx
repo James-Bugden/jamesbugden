@@ -39,6 +39,7 @@ function getPageDims(format?: string) {
 
 export interface ResumeExportMetrics {
   sourceElement: HTMLElement | null;
+  pageElements: HTMLElement[];
   pageCount: number;
   contentOriginPX: number;
   usablePerPagePX: number;
