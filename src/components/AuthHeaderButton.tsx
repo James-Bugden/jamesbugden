@@ -29,7 +29,7 @@ export function AuthHeaderButton({ variant = "nav" }: AuthHeaderButtonProps) {
         className={`flex items-center gap-1.5 text-sm ${baseClass}`}
       >
         <LogIn className="w-4 h-4" />
-        <span className="hidden sm:inline">Sign in</span>
+        <span className="hidden sm:inline">{isZhTw ? "登入" : "Sign in"}</span>
       </Link>
     );
   }
