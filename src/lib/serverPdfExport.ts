@@ -13,8 +13,20 @@ interface ServerPdfExportOptions {
   fileName?: string;
   /** Page format */
   pageFormat?: "a4" | "letter";
-  /** Customize settings for margin calculation */
-  customize?: { marginX?: number; marginY?: number };
+  /** Full customize settings */
+  customize?: {
+    marginX?: number;
+    marginY?: number;
+    a4Background?: string;
+    showPageNumbers?: boolean;
+    showFooterName?: boolean;
+    showFooterEmail?: boolean;
+    bodyFont?: string;
+    bodyColor?: string;
+    datesColor?: string;
+  };
+  /** Personal details for footer content */
+  personalDetails?: { fullName?: string; email?: string };
 }
 
 /**
