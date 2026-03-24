@@ -13,8 +13,46 @@ interface ServerPdfExportOptions {
   fileName?: string;
   /** Page format */
   pageFormat?: "a4" | "letter";
-  /** Customize settings for margin calculation */
-  customize?: { marginX?: number; marginY?: number };
+  /** Full customize settings */
+  customize?: {
+    marginX?: number;
+    marginY?: number;
+    a4Background?: string;
+    showPageNumbers?: boolean;
+    showFooterName?: boolean;
+    showFooterEmail?: boolean;
+    bodyFont?: string;
+    bodyColor?: string;
+    datesColor?: string;
+  };
+  /** Personal details for footer content */
+  personalDetails?: { fullName?: string; email?: string };
+}
+
+/**
+ * Build a fixed-position footer div for the PDF.
+ * Headless Chrome repeats `position: fixed` elements on every printed page.
+ */
+function buildFooterHtml(
+  customize?: ServerPdfExportOptions["customize"],
+  personalDetails?: ServerPdfExportOptions["personalDetails"],
+): string {
+  const showName = customize?.showFooterName && personalDetails?.fullName;
+  const showEmail = customize?.showFooterEmail && personalDetails?.email;
+  const showPages = customize?.showPageNumbers;
+
+  if (!showName && !showEmail && !showPages) return "";
+
+  const leftParts: string[] = [];
+  if (showName) leftParts.push(personalDetails!.fullName!);
+  if (showEmail) leftParts.push(personalDetails!.email!);
+
+  const left = leftParts.join(" · ");
+  const right = showPages
+    ? '<span class="page-counter"></span>'
+    : "";
+
+  return `<div class="pdf-footer"><span>${left}</span><span>${right}</span></div>`;
 }
 
 /**
@@ -24,7 +62,8 @@ interface ServerPdfExportOptions {
 function serializeResumeHtml(
   element: HTMLElement,
   pageFormat: "a4" | "letter",
-  customize?: { marginX?: number; marginY?: number },
+  customize?: ServerPdfExportOptions["customize"],
+  personalDetails?: ServerPdfExportOptions["personalDetails"],
 ): string {
   const pageW = pageFormat === "letter" ? "8.5in" : "210mm";
   const pageH = pageFormat === "letter" ? "11in" : "297mm";
@@ -173,7 +212,7 @@ ${allCSS}
 html, body {
   margin: 0;
   padding: 0;
-  background: #ffffff;
+  background: ${customize?.a4Background || "#ffffff"};
 }
 
 [data-page-item] {
@@ -188,9 +227,27 @@ html, body {
 button, [data-edit-overlay], .no-print {
   display: none !important;
 }
+
+.pdf-footer {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 9pt;
+  color: ${customize?.datesColor || "#6B7280"};
+  font-family: ${customize?.bodyFont || "inherit"};
+  padding: 0 2mm;
+}
+
+.page-counter::after {
+  content: counter(page) " / " counter(pages);
+}
 </style>
 </head>
-<body>${clone.outerHTML}</body>
+<body>${clone.outerHTML}${buildFooterHtml(customize, personalDetails)}</body>
 </html>`;
 }
 
@@ -199,6 +256,7 @@ export async function exportResumePdfServer({
   fileName = "Resume",
   pageFormat = "a4",
   customize,
+  personalDetails,
 }: ServerPdfExportOptions): Promise<void> {
   if (!sourceElement) {
     toast({ title: "Export failed", description: "Preview not ready yet.", variant: "destructive" });
@@ -210,7 +268,7 @@ export async function exportResumePdfServer({
     await document.fonts.ready;
 
     // Serialize resume to self-contained HTML with @page margins
-    const html = serializeResumeHtml(sourceElement, pageFormat, customize);
+    const html = serializeResumeHtml(sourceElement, pageFormat, customize, personalDetails);
 
     // Get auth token for rate limiting
     const supabaseUrl = import.meta.env.VITE_SUPABASE_URL;

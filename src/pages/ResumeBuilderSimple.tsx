@@ -668,7 +668,8 @@ const ResumeBuilderSimple = () => {
         sourceElement: metrics.sourceElement,
         fileName: fn,
         pageFormat: (customize.pageFormat || "a4") as "a4" | "letter",
-        customize: { marginX: customize.marginX, marginY: customize.marginY },
+        customize,
+        personalDetails: data.personalDetails,
       });
     } catch (err) {
       console.error("PDF export error:", err);
