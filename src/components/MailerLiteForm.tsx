@@ -14,7 +14,7 @@ type MailerLiteFormProps = {
   leadSource?: string;
 };
 
-export default function MailerLiteForm({ formId, className, buttonText = "Get on the waitlist", successHeading = "You're in!", successBody = "Check your inbox for your free job search guides.", successCta = "Create a free account to save progress & explore more tools", successCtaLink = "/join" }: MailerLiteFormProps) {
+export default function MailerLiteForm({ formId, className, buttonText = "Get on the waitlist", successHeading = "You're in!", successBody = "Check your inbox for your free job search guides.", successCta = "Create a free account to save progress & explore more tools", successCtaLink = "/join", leadSource = "homepage" }: MailerLiteFormProps) {
   const [email, setEmail] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [isSuccess, setIsSuccess] = useState(false);
