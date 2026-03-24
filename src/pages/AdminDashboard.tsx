@@ -59,6 +59,8 @@ interface ResumeLead {
   seniority_level: string | null;
   industry: string | null;
   language: string | null;
+  job_title: string | null;
+  years_experience: string | null;
   created_at: string;
 }
 
