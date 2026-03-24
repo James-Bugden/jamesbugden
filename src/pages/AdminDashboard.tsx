@@ -132,6 +132,8 @@ export default function AdminDashboard() {
 
   // Counts
   const [counts, setCounts] = useState({ reviews: 0, salary: 0, resumes: 0, emails: 0, accounts: 0, feedback: 0 });
+  // Sparkline trends (30-day daily counts)
+  const [trends, setTrends] = useState<Record<string, { date: string; count: number }[]>>({});
 
   // Reviews state
   const [reviews, setReviews] = useState<ClientReview[]>([]);
