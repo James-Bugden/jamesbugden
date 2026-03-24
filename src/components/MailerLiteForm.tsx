@@ -11,6 +11,7 @@ type MailerLiteFormProps = {
   successBody?: string;
   successCta?: string;
   successCtaLink?: string;
+  leadSource?: string;
 };
 
 export default function MailerLiteForm({ formId, className, buttonText = "Get on the waitlist", successHeading = "You're in!", successBody = "Check your inbox for your free job search guides.", successCta = "Create a free account to save progress & explore more tools", successCtaLink = "/join" }: MailerLiteFormProps) {
