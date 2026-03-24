@@ -593,6 +593,7 @@ export default function AdminDashboard() {
             <TabsTrigger value="resumes">Resume Leads</TabsTrigger>
             <TabsTrigger value="emails">Email Leads</TabsTrigger>
             <TabsTrigger value="feedback">Feedback</TabsTrigger>
+            <TabsTrigger value="ai-usage">AI Usage</TabsTrigger>
           </TabsList>
 
           {/* ── Reviews Tab ──────────────────────────────────────────────── */}
