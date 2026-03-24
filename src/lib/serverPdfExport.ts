@@ -30,6 +30,32 @@ interface ServerPdfExportOptions {
 }
 
 /**
+ * Build a fixed-position footer div for the PDF.
+ * Headless Chrome repeats `position: fixed` elements on every printed page.
+ */
+function buildFooterHtml(
+  customize?: ServerPdfExportOptions["customize"],
+  personalDetails?: ServerPdfExportOptions["personalDetails"],
+): string {
+  const showName = customize?.showFooterName && personalDetails?.fullName;
+  const showEmail = customize?.showFooterEmail && personalDetails?.email;
+  const showPages = customize?.showPageNumbers;
+
+  if (!showName && !showEmail && !showPages) return "";
+
+  const leftParts: string[] = [];
+  if (showName) leftParts.push(personalDetails!.fullName!);
+  if (showEmail) leftParts.push(personalDetails!.email!);
+
+  const left = leftParts.join(" · ");
+  const right = showPages
+    ? '<span class="page-counter"></span>'
+    : "";
+
+  return `<div class="pdf-footer"><span>${left}</span><span>${right}</span></div>`;
+}
+
+/**
  * Serialize the resume element into a self-contained HTML string.
  * Uses @page margins instead of element padding so every page gets proper margins.
  */
