@@ -268,7 +268,7 @@ export async function exportResumePdfServer({
     await document.fonts.ready;
 
     // Serialize resume to self-contained HTML with @page margins
-    const html = serializeResumeHtml(sourceElement, pageFormat, customize);
+    const html = serializeResumeHtml(sourceElement, pageFormat, customize, personalDetails);
 
     // Get auth token for rate limiting
     const supabaseUrl = import.meta.env.VITE_SUPABASE_URL;
