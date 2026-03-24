@@ -494,15 +494,26 @@ export default function AdminDashboard() {
 
       <main className="max-w-7xl mx-auto px-4 py-6 space-y-6">
         {/* Overview Cards */}
-        <div className="grid grid-cols-2 md:grid-cols-6 gap-4">
+        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
           {statCards.map(s => (
             <Card key={s.label}>
-              <CardContent className="p-4 flex items-center gap-3">
-                <s.icon className={`w-8 h-8 ${s.color}`} />
-                <div>
-                  <p className="text-2xl font-bold text-foreground">{s.value.toLocaleString()}</p>
-                  <p className="text-xs text-muted-foreground">{s.label}</p>
+              <CardContent className="p-4">
+                <div className="flex items-center gap-3">
+                  <s.icon className={`w-7 h-7 ${s.color}`} />
+                  <div>
+                    <p className="text-2xl font-bold text-foreground">{s.value.toLocaleString()}</p>
+                    <p className="text-xs text-muted-foreground">{s.label}</p>
+                  </div>
                 </div>
+                {s.trend.length > 0 && (
+                  <div className="mt-2 h-8">
+                    <ResponsiveContainer width="100%" height="100%">
+                      <AreaChart data={s.trend} margin={{ top: 0, right: 0, left: 0, bottom: 0 }}>
+                        <Area type="monotone" dataKey="count" stroke={s.sparkColor} fill={s.sparkColor} fillOpacity={0.15} strokeWidth={1.5} dot={false} />
+                      </AreaChart>
+                    </ResponsiveContainer>
+                  </div>
+                )}
               </CardContent>
             </Card>
           ))}
