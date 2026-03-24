@@ -938,6 +938,86 @@ export default function AdminDashboard() {
               </div>
             )}
           </TabsContent>
+
+          {/* ── AI Usage Tab ─────────────────────────────────────────────── */}
+          <TabsContent value="ai-usage">
+            {aiUsageLoading ? (
+              <div className="flex justify-center py-16"><Loader2 className="w-6 h-6 animate-spin text-muted-foreground" /></div>
+            ) : (
+              <div className="space-y-6">
+                {/* Summary cards */}
+                <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+                  <Card>
+                    <CardContent className="p-4 text-center">
+                      <p className="text-3xl font-bold text-foreground">{aiUsageStats.totalThisMonth}</p>
+                      <p className="text-xs text-muted-foreground">Total this month</p>
+                    </CardContent>
+                  </Card>
+                  {aiUsageStats.typeData.slice(0, 3).map(t => (
+                    <Card key={t.type}>
+                      <CardContent className="p-4 text-center">
+                        <p className="text-3xl font-bold text-foreground">{t.count}</p>
+                        <p className="text-xs text-muted-foreground capitalize">{t.type.replace(/_/g, " ")}</p>
+                      </CardContent>
+                    </Card>
+                  ))}
+                </div>
+
+                {/* Daily trend chart */}
+                <Card>
+                  <CardContent className="p-4">
+                    <h3 className="text-sm font-semibold text-foreground mb-3">Daily Usage (30 days)</h3>
+                    <div className="h-48">
+                      <ResponsiveContainer width="100%" height="100%">
+                        <BarChart data={aiUsageStats.dailyByType} margin={{ top: 0, right: 0, left: -20, bottom: 0 }}>
+                          <XAxis dataKey="date" tick={{ fontSize: 10 }} tickFormatter={v => format(new Date(v), "M/d")} />
+                          <YAxis tick={{ fontSize: 10 }} allowDecimals={false} />
+                          <Tooltip labelFormatter={v => format(new Date(v as string), "MMM d, yyyy")} />
+                          <Bar dataKey="import" stackId="a" fill="#7c3aed" name="Import" />
+                          <Bar dataKey="ai_tool" stackId="a" fill="#0891b2" name="AI Tool" />
+                          <Bar dataKey="pdf_export" stackId="a" fill="#059669" name="PDF Export" />
+                          <Bar dataKey="analyze" stackId="a" fill="#d97706" name="Analyze" />
+                        </BarChart>
+                      </ResponsiveContainer>
+                    </div>
+                  </CardContent>
+                </Card>
+
+                {/* Top users table */}
+                <Card>
+                  <CardContent className="p-4">
+                    <h3 className="text-sm font-semibold text-foreground mb-3">Top Users This Month</h3>
+                    <div className="border border-border rounded-xl overflow-hidden">
+                      <Table>
+                        <TableHeader>
+                          <TableRow>
+                            <TableHead>User</TableHead>
+                            <TableHead className="text-center">Total</TableHead>
+                            {aiUsageStats.typeData.map(t => (
+                              <TableHead key={t.type} className="text-center capitalize">{t.type.replace(/_/g, " ")}</TableHead>
+                            ))}
+                          </TableRow>
+                        </TableHeader>
+                        <TableBody>
+                          {aiUsageStats.topUsers.length === 0 ? (
+                            <TableRow><TableCell colSpan={2 + aiUsageStats.typeData.length} className="text-center py-12 text-muted-foreground">No usage this month</TableCell></TableRow>
+                          ) : aiUsageStats.topUsers.map(u => (
+                            <TableRow key={u.userId}>
+                              <TableCell className="text-sm font-mono">{topUserEmails[u.userId] || u.userId}</TableCell>
+                              <TableCell className="text-center font-semibold">{u.total}</TableCell>
+                              {aiUsageStats.typeData.map(t => (
+                                <TableCell key={t.type} className="text-center text-sm text-muted-foreground">{u.types[t.type] || 0}</TableCell>
+                              ))}
+                            </TableRow>
+                          ))}
+                        </TableBody>
+                      </Table>
+                    </div>
+                  </CardContent>
+                </Card>
+              </div>
+            )}
+          </TabsContent>
         </Tabs>
       </main>
     </div>
