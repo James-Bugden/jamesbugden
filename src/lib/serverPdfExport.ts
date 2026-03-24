@@ -36,7 +36,8 @@ interface ServerPdfExportOptions {
 function serializeResumeHtml(
   element: HTMLElement,
   pageFormat: "a4" | "letter",
-  customize?: { marginX?: number; marginY?: number },
+  customize?: ServerPdfExportOptions["customize"],
+  personalDetails?: ServerPdfExportOptions["personalDetails"],
 ): string {
   const pageW = pageFormat === "letter" ? "8.5in" : "210mm";
   const pageH = pageFormat === "letter" ? "11in" : "297mm";
