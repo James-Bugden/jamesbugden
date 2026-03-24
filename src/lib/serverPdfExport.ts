@@ -201,9 +201,23 @@ html, body {
 button, [data-edit-overlay], .no-print {
   display: none !important;
 }
+
+.pdf-footer {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 9pt;
+  color: ${customize?.datesColor || "#6B7280"};
+  font-family: ${customize?.bodyFont || "inherit"};
+  padding: 0 2mm;
+}
 </style>
 </head>
-<body>${clone.outerHTML}</body>
+<body>${clone.outerHTML}${buildFooterHtml(customize, personalDetails)}</body>
 </html>`;
 }
 
