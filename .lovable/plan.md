@@ -1,25 +1,56 @@
 
 
-## Fix: Page 2 content too close to top in PDF export
+## Investigation: Preview changes not reflected in PDF export
 
-### Problem
-The exported PDF uses `@page { margin: 0 }` and relies on the resume element's internal padding for margins. This works on page 1, but when content flows to page 2+, headless Chrome starts content at the very top edge — there's no `@page` margin to create spacing on subsequent pages.
+### Issues Found
 
-### Solution
-Use CSS `@page` margins (derived from the user's `marginX`/`marginY` settings) so **every page** gets consistent margins. Then strip the element's own top/bottom padding to avoid doubling on page 1.
+After tracing the full export pipeline, I found **3 concrete gaps** where preview customizations are lost during export:
 
-### Changes
+---
 
-**File: `src/lib/serverPdfExport.ts`**
+### 1. Background color is hardcoded to white
+**File:** `src/lib/serverPdfExport.ts` (line 177)
 
-1. Calculate `@page` margin values from the `customize.marginY` and `customize.marginX` settings (defaulting to 10mm if not provided)
-2. Update the `@page` rule from `margin: 0` to `margin: {marginY}mm {marginX}mm`
-3. Strip the cloned element's top and bottom padding so margins aren't doubled on page 1 (the `@page` margin now handles it)
+The serialized HTML has `html, body { background: #ffffff; }` hardcoded, ignoring the user's `a4Background` customize setting. If a user picks a custom page background (e.g., the dark green seen in the session replay), the export renders white.
 
-This ensures headless Chrome applies the same margin on every page, matching what the user sees in the preview.
+**Fix:** Read the background color from the cloned element's `backgroundColor` style and inject it into the HTML body CSS.
 
-### Technical detail
-- The `@page` CSS rule controls margins on *every* printed page
-- Currently set to `0`, meaning only the element's internal padding provides spacing — but only on the first page
-- By moving margins to `@page`, Chrome's print engine applies them uniformly across all pages
+---
+
+### 2. Footer (page numbers, name, email) is missing from export
+**File:** `src/lib/serverPdfExport.ts`
+
+The footer is rendered as an absolutely-positioned overlay in `ResumePreview` (lines 1548–1573), **outside** the `A4Page` component. The serializer only captures the `A4Page` content (`[data-color-role='background']`), so footers are completely absent from the exported PDF.
+
+**Fix:** If footer settings are enabled, inject a CSS `@bottom-left` / `@bottom-right` margin box in the `@page` rule, or append a simple fixed-position footer div into the serialized HTML. Since `@page` margin boxes have limited browser support, the practical approach is to pass footer config into the serializer and append a `position: fixed; bottom` footer element that headless Chrome repeats on every page.
+
+---
+
+### 3. Full `customize` object not passed to serializer
+**File:** `src/pages/ResumeBuilder.tsx` (line 674) and `src/pages/ResumeBuilderSimple.tsx`
+
+Only `{ marginX, marginY }` is passed:
+```typescript
+customize: { marginX: customize.marginX, marginY: customize.marginY },
+```
+
+The serializer needs the full `a4Background` and footer settings too.
+
+**Fix:** Pass the complete customize object (or at least the additional fields: `a4Background`, `showPageNumbers`, `showFooterName`, `showFooterEmail`, `fontSize`, `datesColor`, `bodyFont`) to `exportResumePdfServer`.
+
+---
+
+### Implementation Plan
+
+**Step 1 — Expand the `ServerPdfExportOptions` interface** (`src/lib/serverPdfExport.ts`)
+- Accept full customize settings (background, footer flags, font, colors)
+
+**Step 2 — Fix background color in serializer** (`src/lib/serverPdfExport.ts`)
+- Replace hardcoded `#ffffff` with the user's `a4Background` value
+
+**Step 3 — Add footer to serialized HTML** (`src/lib/serverPdfExport.ts`)
+- Append a `position: fixed; bottom: 0` footer div with the user's name, email, and page numbers using CSS `counter(page)` / `counter(pages)`
+
+**Step 4 — Pass full customize from callers** (`src/pages/ResumeBuilder.tsx`, `src/pages/ResumeBuilderSimple.tsx`)
+- Change `customize: { marginX, marginY }` to pass the full customize object
 
