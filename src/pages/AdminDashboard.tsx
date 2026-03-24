@@ -22,10 +22,10 @@ import { useToast } from "@/hooks/use-toast";
 import { getSafeErrorMessage } from "@/lib/utils";
 import {
   Loader2, Plus, Copy, Trash2, LogOut, Check, ArrowUpDown, Search, Download,
-  FileText, DollarSign, Users, Mail, UserCheck, MessageSquare,
+  FileText, DollarSign, Users, Mail, UserCheck, MessageSquare, Activity,
 } from "lucide-react";
 import { format, subDays, startOfDay } from "date-fns";
-import { AreaChart, Area, ResponsiveContainer } from "recharts";
+import { AreaChart, Area, BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer } from "recharts";
 import bcrypt from "bcryptjs";
 
 // ── Types ───────────────────────────────────────────────────────────────────────
