@@ -181,6 +181,10 @@ export default function AdminDashboard() {
   const [accountSearch, setAccountSearch] = useState("");
   const [accountSort, setAccountSort] = useState<{ col: "created_at" | "last_sign_in_at"; dir: "asc" | "desc" }>({ col: "created_at", dir: "desc" });
 
+  // AI Usage state
+  const [aiUsageRows, setAiUsageRows] = useState<AiUsageRow[]>([]);
+  const [aiUsageLoading, setAiUsageLoading] = useState(true);
+
   // ── Data fetching ───────────────────────────────────────────────────────────
 
   useEffect(() => {
