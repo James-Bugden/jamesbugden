@@ -253,6 +253,14 @@ export default function AdminDashboard() {
     setTrends(buckets);
   };
 
+  const fetchAiUsage = async () => {
+    setAiUsageLoading(true);
+    const since = startOfDay(subDays(new Date(), 90)).toISOString();
+    const { data } = await supabase.from("ai_usage_log").select("id, user_id, usage_type, created_at").gte("created_at", since).order("created_at", { ascending: false });
+    if (data) setAiUsageRows(data);
+    setAiUsageLoading(false);
+  };
+
   const fetchReviews = async () => {
     setReviewsLoading(true);
     const { data, error } = await supabase.from("client_reviews").select("*").order("created_at", { ascending: false });
