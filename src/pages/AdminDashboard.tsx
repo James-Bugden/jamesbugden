@@ -456,13 +456,28 @@ export default function AdminDashboard() {
     );
   };
 
+  // Build account trends from already-fetched accounts
+  const accountTrend = useMemo(() => {
+    const days = Array.from({ length: 30 }, (_, i) => {
+      const d = startOfDay(subDays(new Date(), 29 - i));
+      return format(d, "yyyy-MM-dd");
+    });
+    const countMap: Record<string, number> = {};
+    days.forEach(d => (countMap[d] = 0));
+    for (const a of accounts) {
+      const day = format(new Date(a.created_at), "yyyy-MM-dd");
+      if (countMap[day] !== undefined) countMap[day]++;
+    }
+    return days.map(d => ({ date: d, count: countMap[d] }));
+  }, [accounts]);
+
   const statCards = [
-    { label: "Accounts", value: counts.accounts, icon: UserCheck, color: "text-teal-600" },
-    { label: "Reviews", value: counts.reviews, icon: FileText, color: "text-blue-600" },
-    { label: "Salary Checks", value: counts.salary, icon: DollarSign, color: "text-emerald-600" },
-    { label: "Resume Leads", value: counts.resumes, icon: Users, color: "text-violet-600" },
-    { label: "Email Leads", value: counts.emails, icon: Mail, color: "text-amber-600" },
-    { label: "Feedback", value: counts.feedback, icon: MessageSquare, color: "text-pink-600" },
+    { label: "Accounts", value: counts.accounts, icon: UserCheck, color: "text-teal-600", sparkColor: "#0d9488", trend: accountTrend },
+    { label: "Reviews", value: counts.reviews, icon: FileText, color: "text-blue-600", sparkColor: "#2563eb", trend: [] as { date: string; count: number }[] },
+    { label: "Salary Checks", value: counts.salary, icon: DollarSign, color: "text-emerald-600", sparkColor: "#059669", trend: trends.salary || [] },
+    { label: "Resume Leads", value: counts.resumes, icon: Users, color: "text-violet-600", sparkColor: "#7c3aed", trend: trends.resumes || [] },
+    { label: "Email Leads", value: counts.emails, icon: Mail, color: "text-amber-600", sparkColor: "#d97706", trend: trends.emails || [] },
+    { label: "Feedback", value: counts.feedback, icon: MessageSquare, color: "text-pink-600", sparkColor: "#db2777", trend: trends.feedback || [] },
   ];
 
   return (
