@@ -22,10 +22,10 @@ import { useToast } from "@/hooks/use-toast";
 import { getSafeErrorMessage } from "@/lib/utils";
 import {
   Loader2, Plus, Copy, Trash2, LogOut, Check, ArrowUpDown, Search, Download,
-  FileText, DollarSign, Users, Mail, UserCheck, MessageSquare,
+  FileText, DollarSign, Users, Mail, UserCheck, MessageSquare, Activity,
 } from "lucide-react";
 import { format, subDays, startOfDay } from "date-fns";
-import { AreaChart, Area, ResponsiveContainer } from "recharts";
+import { AreaChart, Area, BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer } from "recharts";
 import bcrypt from "bcryptjs";
 
 // ── Types ───────────────────────────────────────────────────────────────────────
@@ -91,6 +91,12 @@ interface AccountUser {
 
 type SalarySortKey = "created_at" | "salary" | "job_title" | "role";
 
+interface AiUsageRow {
+  id: string;
+  user_id: string;
+  usage_type: string;
+  created_at: string;
+}
 // ── Helpers ─────────────────────────────────────────────────────────────────────
 
 const validateReviewUrl = (url: string): boolean => {
@@ -175,6 +181,10 @@ export default function AdminDashboard() {
   const [accountSearch, setAccountSearch] = useState("");
   const [accountSort, setAccountSort] = useState<{ col: "created_at" | "last_sign_in_at"; dir: "asc" | "desc" }>({ col: "created_at", dir: "desc" });
 
+  // AI Usage state
+  const [aiUsageRows, setAiUsageRows] = useState<AiUsageRow[]>([]);
+  const [aiUsageLoading, setAiUsageLoading] = useState(true);
+
   // ── Data fetching ───────────────────────────────────────────────────────────
 
   useEffect(() => {
@@ -186,6 +196,7 @@ export default function AdminDashboard() {
     fetchFeedback();
     fetchAccounts();
     fetchTrends();
+    fetchAiUsage();
   }, []);
 
   const fetchCounts = async () => {
@@ -240,6 +251,14 @@ export default function AdminDashboard() {
     }
 
     setTrends(buckets);
+  };
+
+  const fetchAiUsage = async () => {
+    setAiUsageLoading(true);
+    const since = startOfDay(subDays(new Date(), 90)).toISOString();
+    const { data } = await supabase.from("ai_usage_log").select("id, user_id, usage_type, created_at").gte("created_at", since).order("created_at", { ascending: false });
+    if (data) setAiUsageRows(data);
+    setAiUsageLoading(false);
   };
 
   const fetchReviews = async () => {
@@ -471,6 +490,51 @@ export default function AdminDashboard() {
     return days.map(d => ({ date: d, count: countMap[d] }));
   }, [accounts]);
 
+  // AI Usage computed data
+  const aiUsageStats = useMemo(() => {
+    const now = new Date();
+    const monthStart = new Date(now.getFullYear(), now.getMonth(), 1);
+    const thisMonth = aiUsageRows.filter(r => new Date(r.created_at) >= monthStart);
+    
+    const byType: Record<string, number> = {};
+    const byUser: Record<string, { total: number; types: Record<string, number> }> = {};
+    
+    for (const row of thisMonth) {
+      byType[row.usage_type] = (byType[row.usage_type] || 0) + 1;
+      if (!byUser[row.user_id]) byUser[row.user_id] = { total: 0, types: {} };
+      byUser[row.user_id].total++;
+      byUser[row.user_id].types[row.usage_type] = (byUser[row.user_id].types[row.usage_type] || 0) + 1;
+    }
+    
+    const topUsers = Object.entries(byUser)
+      .sort(([, a], [, b]) => b.total - a.total)
+      .slice(0, 15)
+      .map(([userId, data]) => ({ userId: userId.slice(0, 8) + "…", ...data }));
+
+    // Daily trend for last 30 days
+    const days = Array.from({ length: 30 }, (_, i) => format(startOfDay(subDays(new Date(), 29 - i)), "yyyy-MM-dd"));
+    const dailyByType: { date: string; import: number; ai_tool: number; pdf_export: number; analyze: number; [k: string]: number | string }[] = days.map(d => ({ date: d, import: 0, ai_tool: 0, pdf_export: 0, analyze: 0 }));
+    for (const row of aiUsageRows) {
+      const day = format(new Date(row.created_at), "yyyy-MM-dd");
+      const entry = dailyByType.find(e => e.date === day);
+      if (entry) (entry as any)[row.usage_type] = ((entry as any)[row.usage_type] || 0) + 1;
+    }
+
+    const typeData = Object.entries(byType).map(([type, count]) => ({ type, count })).sort((a, b) => b.count - a.count);
+
+    return { totalThisMonth: thisMonth.length, typeData, topUsers, dailyByType };
+  }, [aiUsageRows]);
+
+  // Resolve user emails for AI usage top users
+  const topUserEmails = useMemo(() => {
+    const map: Record<string, string> = {};
+    for (const a of accounts) {
+      const short = a.id.slice(0, 8) + "…";
+      map[short] = a.email;
+    }
+    return map;
+  }, [accounts]);
+
   const statCards = [
     { label: "Accounts", value: counts.accounts, icon: UserCheck, color: "text-teal-600", sparkColor: "#0d9488", trend: accountTrend },
     { label: "Reviews", value: counts.reviews, icon: FileText, color: "text-blue-600", sparkColor: "#2563eb", trend: [] as { date: string; count: number }[] },
@@ -478,6 +542,7 @@ export default function AdminDashboard() {
     { label: "Resume Leads", value: counts.resumes, icon: Users, color: "text-violet-600", sparkColor: "#7c3aed", trend: trends.resumes || [] },
     { label: "Email Leads", value: counts.emails, icon: Mail, color: "text-amber-600", sparkColor: "#d97706", trend: trends.emails || [] },
     { label: "Feedback", value: counts.feedback, icon: MessageSquare, color: "text-pink-600", sparkColor: "#db2777", trend: trends.feedback || [] },
+    { label: "AI Usage", value: aiUsageStats.totalThisMonth, icon: Activity, color: "text-cyan-600", sparkColor: "#0891b2", trend: aiUsageStats.dailyByType.map(d => ({ date: d.date, count: d.import + d.ai_tool + d.pdf_export + d.analyze })) },
   ];
 
   return (
@@ -494,7 +559,7 @@ export default function AdminDashboard() {
 
       <main className="max-w-7xl mx-auto px-4 py-6 space-y-6">
         {/* Overview Cards */}
-        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
+        <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-7 gap-4">
           {statCards.map(s => (
             <Card key={s.label}>
               <CardContent className="p-4">
@@ -528,6 +593,7 @@ export default function AdminDashboard() {
             <TabsTrigger value="resumes">Resume Leads</TabsTrigger>
             <TabsTrigger value="emails">Email Leads</TabsTrigger>
             <TabsTrigger value="feedback">Feedback</TabsTrigger>
+            <TabsTrigger value="ai-usage">AI Usage</TabsTrigger>
           </TabsList>
 
           {/* ── Reviews Tab ──────────────────────────────────────────────── */}
@@ -869,6 +935,86 @@ export default function AdminDashboard() {
                     ))}
                   </TableBody>
                 </Table>
+              </div>
+            )}
+          </TabsContent>
+
+          {/* ── AI Usage Tab ─────────────────────────────────────────────── */}
+          <TabsContent value="ai-usage">
+            {aiUsageLoading ? (
+              <div className="flex justify-center py-16"><Loader2 className="w-6 h-6 animate-spin text-muted-foreground" /></div>
+            ) : (
+              <div className="space-y-6">
+                {/* Summary cards */}
+                <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+                  <Card>
+                    <CardContent className="p-4 text-center">
+                      <p className="text-3xl font-bold text-foreground">{aiUsageStats.totalThisMonth}</p>
+                      <p className="text-xs text-muted-foreground">Total this month</p>
+                    </CardContent>
+                  </Card>
+                  {aiUsageStats.typeData.slice(0, 3).map(t => (
+                    <Card key={t.type}>
+                      <CardContent className="p-4 text-center">
+                        <p className="text-3xl font-bold text-foreground">{t.count}</p>
+                        <p className="text-xs text-muted-foreground capitalize">{t.type.replace(/_/g, " ")}</p>
+                      </CardContent>
+                    </Card>
+                  ))}
+                </div>
+
+                {/* Daily trend chart */}
+                <Card>
+                  <CardContent className="p-4">
+                    <h3 className="text-sm font-semibold text-foreground mb-3">Daily Usage (30 days)</h3>
+                    <div className="h-48">
+                      <ResponsiveContainer width="100%" height="100%">
+                        <BarChart data={aiUsageStats.dailyByType} margin={{ top: 0, right: 0, left: -20, bottom: 0 }}>
+                          <XAxis dataKey="date" tick={{ fontSize: 10 }} tickFormatter={v => format(new Date(v), "M/d")} />
+                          <YAxis tick={{ fontSize: 10 }} allowDecimals={false} />
+                          <Tooltip labelFormatter={v => format(new Date(v as string), "MMM d, yyyy")} />
+                          <Bar dataKey="import" stackId="a" fill="#7c3aed" name="Import" />
+                          <Bar dataKey="ai_tool" stackId="a" fill="#0891b2" name="AI Tool" />
+                          <Bar dataKey="pdf_export" stackId="a" fill="#059669" name="PDF Export" />
+                          <Bar dataKey="analyze" stackId="a" fill="#d97706" name="Analyze" />
+                        </BarChart>
+                      </ResponsiveContainer>
+                    </div>
+                  </CardContent>
+                </Card>
+
+                {/* Top users table */}
+                <Card>
+                  <CardContent className="p-4">
+                    <h3 className="text-sm font-semibold text-foreground mb-3">Top Users This Month</h3>
+                    <div className="border border-border rounded-xl overflow-hidden">
+                      <Table>
+                        <TableHeader>
+                          <TableRow>
+                            <TableHead>User</TableHead>
+                            <TableHead className="text-center">Total</TableHead>
+                            {aiUsageStats.typeData.map(t => (
+                              <TableHead key={t.type} className="text-center capitalize">{t.type.replace(/_/g, " ")}</TableHead>
+                            ))}
+                          </TableRow>
+                        </TableHeader>
+                        <TableBody>
+                          {aiUsageStats.topUsers.length === 0 ? (
+                            <TableRow><TableCell colSpan={2 + aiUsageStats.typeData.length} className="text-center py-12 text-muted-foreground">No usage this month</TableCell></TableRow>
+                          ) : aiUsageStats.topUsers.map(u => (
+                            <TableRow key={u.userId}>
+                              <TableCell className="text-sm font-mono">{topUserEmails[u.userId] || u.userId}</TableCell>
+                              <TableCell className="text-center font-semibold">{u.total}</TableCell>
+                              {aiUsageStats.typeData.map(t => (
+                                <TableCell key={t.type} className="text-center text-sm text-muted-foreground">{u.types[t.type] || 0}</TableCell>
+                              ))}
+                            </TableRow>
+                          ))}
+                        </TableBody>
+                      </Table>
+                    </div>
+                  </CardContent>
+                </Card>
               </div>
             )}
           </TabsContent>
