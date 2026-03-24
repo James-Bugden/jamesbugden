@@ -358,10 +358,22 @@ export default function AdminDashboard() {
     );
   };
 
+  const filteredResumeLeads = useMemo(() => {
+    let result = resumeLeads;
+    if (resumeSearch) {
+      const q = resumeSearch.toLowerCase();
+      result = result.filter(r => r.email.toLowerCase().includes(q) || r.name?.toLowerCase().includes(q) || r.job_title?.toLowerCase().includes(q) || r.industry?.toLowerCase().includes(q));
+    }
+    if (resumeSeniorityFilter !== "all") result = result.filter(r => r.seniority_level === resumeSeniorityFilter);
+    return result;
+  }, [resumeLeads, resumeSearch, resumeSeniorityFilter]);
+
+  const resumeSeniorities = useMemo(() => [...new Set(resumeLeads.map(r => r.seniority_level).filter(Boolean))].sort(), [resumeLeads]);
+
   const exportResumeCsv = () => {
     downloadCsv(
-      ["Date", "Email", "Name", "Score", "Seniority", "Industry", "Language"],
-      resumeLeads.map(r => [format(new Date(r.created_at), "yyyy-MM-dd HH:mm"), r.email, r.name, r.overall_score, r.seniority_level, r.industry, r.language]),
+      ["Date", "Email", "Name", "Job Title", "Score", "Seniority", "Years Exp", "Industry", "Language"],
+      filteredResumeLeads.map(r => [format(new Date(r.created_at), "yyyy-MM-dd HH:mm"), r.email, r.name, r.job_title, r.overall_score, r.seniority_level, r.years_experience, r.industry, r.language]),
       `resume-leads-${format(new Date(), "yyyy-MM-dd")}.csv`,
     );
   };
