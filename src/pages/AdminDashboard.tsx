@@ -219,7 +219,7 @@ export default function AdminDashboard() {
 
   const fetchResumeLeads = async () => {
     setResumeLeadsLoading(true);
-    const { data } = await supabase.from("resume_leads").select("id, email, name, overall_score, seniority_level, industry, language, created_at").order("created_at", { ascending: false }).limit(500);
+    const { data } = await supabase.from("resume_leads").select("id, email, name, overall_score, seniority_level, industry, language, job_title, years_experience, created_at").order("created_at", { ascending: false }).limit(500);
     if (data) setResumeLeads(data);
     setResumeLeadsLoading(false);
   };
