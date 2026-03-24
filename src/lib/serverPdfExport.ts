@@ -256,6 +256,7 @@ export async function exportResumePdfServer({
   fileName = "Resume",
   pageFormat = "a4",
   customize,
+  personalDetails,
 }: ServerPdfExportOptions): Promise<void> {
   if (!sourceElement) {
     toast({ title: "Export failed", description: "Preview not ready yet.", variant: "destructive" });
