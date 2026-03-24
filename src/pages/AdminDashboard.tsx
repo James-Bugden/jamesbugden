@@ -59,6 +59,8 @@ interface ResumeLead {
   seniority_level: string | null;
   industry: string | null;
   language: string | null;
+  job_title: string | null;
+  years_experience: string | null;
   created_at: string;
 }
 
@@ -152,6 +154,8 @@ export default function AdminDashboard() {
   // Resume leads state
   const [resumeLeads, setResumeLeads] = useState<ResumeLead[]>([]);
   const [resumeLeadsLoading, setResumeLeadsLoading] = useState(true);
+  const [resumeSearch, setResumeSearch] = useState("");
+  const [resumeSeniorityFilter, setResumeSeniorityFilter] = useState("all");
 
   // Email leads state
   const [emailLeads, setEmailLeads] = useState<EmailLead[]>([]);
@@ -215,7 +219,7 @@ export default function AdminDashboard() {
 
   const fetchResumeLeads = async () => {
     setResumeLeadsLoading(true);
-    const { data } = await supabase.from("resume_leads").select("id, email, name, overall_score, seniority_level, industry, language, created_at").order("created_at", { ascending: false }).limit(500);
+    const { data } = await supabase.from("resume_leads").select("id, email, name, overall_score, seniority_level, industry, language, job_title, years_experience, created_at").order("created_at", { ascending: false }).limit(500);
     if (data) setResumeLeads(data);
     setResumeLeadsLoading(false);
   };
@@ -354,10 +358,22 @@ export default function AdminDashboard() {
     );
   };
 
+  const filteredResumeLeads = useMemo(() => {
+    let result = resumeLeads;
+    if (resumeSearch) {
+      const q = resumeSearch.toLowerCase();
+      result = result.filter(r => r.email.toLowerCase().includes(q) || r.name?.toLowerCase().includes(q) || r.job_title?.toLowerCase().includes(q) || r.industry?.toLowerCase().includes(q));
+    }
+    if (resumeSeniorityFilter !== "all") result = result.filter(r => r.seniority_level === resumeSeniorityFilter);
+    return result;
+  }, [resumeLeads, resumeSearch, resumeSeniorityFilter]);
+
+  const resumeSeniorities = useMemo(() => [...new Set(resumeLeads.map(r => r.seniority_level).filter(Boolean))].sort(), [resumeLeads]);
+
   const exportResumeCsv = () => {
     downloadCsv(
-      ["Date", "Email", "Name", "Score", "Seniority", "Industry", "Language"],
-      resumeLeads.map(r => [format(new Date(r.created_at), "yyyy-MM-dd HH:mm"), r.email, r.name, r.overall_score, r.seniority_level, r.industry, r.language]),
+      ["Date", "Email", "Name", "Job Title", "Score", "Seniority", "Years Exp", "Industry", "Language"],
+      filteredResumeLeads.map(r => [format(new Date(r.created_at), "yyyy-MM-dd HH:mm"), r.email, r.name, r.job_title, r.overall_score, r.seniority_level, r.years_experience, r.industry, r.language]),
       `resume-leads-${format(new Date(), "yyyy-MM-dd")}.csv`,
     );
   };
@@ -597,10 +613,21 @@ export default function AdminDashboard() {
 
           {/* ── Resume Leads Tab ─────────────────────────────────────────── */}
           <TabsContent value="resumes">
-            <div className="flex items-center justify-between mb-4">
-              <p className="text-sm text-muted-foreground">{resumeLeads.length} leads</p>
-              <Button variant="outline" size="sm" onClick={exportResumeCsv}><Download className="w-4 h-4 mr-1" /> CSV</Button>
+            <div className="flex flex-col sm:flex-row gap-3 mb-4">
+              <div className="relative flex-1">
+                <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
+                <Input value={resumeSearch} onChange={e => setResumeSearch(e.target.value)} placeholder="Search by email, name, job title, industry..." className="pl-9 h-10" />
+              </div>
+              <Select value={resumeSeniorityFilter} onValueChange={setResumeSeniorityFilter}>
+                <SelectTrigger className="w-40 h-10"><SelectValue placeholder="Seniority" /></SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="all">All Seniority</SelectItem>
+                  {resumeSeniorities.map(s => <SelectItem key={s} value={s!}>{s}</SelectItem>)}
+                </SelectContent>
+              </Select>
+              <Button variant="outline" size="sm" onClick={exportResumeCsv} className="h-10"><Download className="w-4 h-4 mr-1" /> CSV</Button>
             </div>
+            <p className="text-sm text-muted-foreground mb-3">{filteredResumeLeads.length} of {resumeLeads.length} leads</p>
 
             {resumeLeadsLoading ? (
               <div className="flex justify-center py-16"><Loader2 className="w-6 h-6 animate-spin text-muted-foreground" /></div>
@@ -612,22 +639,26 @@ export default function AdminDashboard() {
                       <TableHead className="w-36">Date</TableHead>
                       <TableHead>Email</TableHead>
                       <TableHead>Name</TableHead>
+                      <TableHead>Job Title</TableHead>
                       <TableHead className="text-center">Score</TableHead>
                       <TableHead>Seniority</TableHead>
+                      <TableHead>Yrs Exp</TableHead>
                       <TableHead>Industry</TableHead>
                       <TableHead>Lang</TableHead>
                     </TableRow>
                   </TableHeader>
                   <TableBody>
-                    {resumeLeads.length === 0 ? (
-                      <TableRow><TableCell colSpan={7} className="text-center py-12 text-muted-foreground">No resume leads yet</TableCell></TableRow>
-                    ) : resumeLeads.map(r => (
+                    {filteredResumeLeads.length === 0 ? (
+                      <TableRow><TableCell colSpan={9} className="text-center py-12 text-muted-foreground">No resume leads found</TableCell></TableRow>
+                    ) : filteredResumeLeads.map(r => (
                       <TableRow key={r.id}>
                         <TableCell className="text-xs text-muted-foreground whitespace-nowrap">{format(new Date(r.created_at), "MMM d, HH:mm")}</TableCell>
                         <TableCell className="text-sm">{r.email}</TableCell>
                         <TableCell className="text-sm">{r.name || "—"}</TableCell>
+                        <TableCell className="text-sm">{r.job_title || "—"}</TableCell>
                         <TableCell className="text-center text-sm font-semibold">{r.overall_score ?? "—"}</TableCell>
                         <TableCell className="text-xs text-muted-foreground">{r.seniority_level || "—"}</TableCell>
+                        <TableCell className="text-xs text-muted-foreground">{r.years_experience || "—"}</TableCell>
                         <TableCell className="text-xs text-muted-foreground">{r.industry || "—"}</TableCell>
                         <TableCell className="text-xs text-muted-foreground">{r.language || "—"}</TableCell>
                       </TableRow>
