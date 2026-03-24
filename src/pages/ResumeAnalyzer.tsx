@@ -246,6 +246,7 @@ export default function ResumeAnalyzer({ defaultLang = "en" }: { defaultLang?: L
           industry: result.segmentation?.industry ?? null,
           current_company_type: result.segmentation?.current_company_type ?? null,
           target_readiness: result.segmentation?.target_readiness ?? null,
+          years_experience: result.segmentation?.years_experience ?? null,
           user_agent: navigator.userAgent,
           resume_text: text,
         }).then(({ error }) => {
