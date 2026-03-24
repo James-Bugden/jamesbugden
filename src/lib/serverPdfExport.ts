@@ -186,7 +186,7 @@ ${allCSS}
 html, body {
   margin: 0;
   padding: 0;
-  background: #ffffff;
+  background: ${customize?.a4Background || "#ffffff"};
 }
 
 [data-page-item] {
