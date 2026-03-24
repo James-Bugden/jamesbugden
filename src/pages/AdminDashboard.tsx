@@ -91,6 +91,12 @@ interface AccountUser {
 
 type SalarySortKey = "created_at" | "salary" | "job_title" | "role";
 
+interface AiUsageRow {
+  id: string;
+  user_id: string;
+  usage_type: string;
+  created_at: string;
+}
 // ── Helpers ─────────────────────────────────────────────────────────────────────
 
 const validateReviewUrl = (url: string): boolean => {
