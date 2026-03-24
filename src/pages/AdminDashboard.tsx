@@ -206,6 +206,42 @@ export default function AdminDashboard() {
     });
   };
 
+  const fetchTrends = async () => {
+    const since = subDays(new Date(), 30).toISOString();
+    const tables = [
+      { key: "resumes", table: "resume_leads" as const },
+      { key: "emails", table: "email_gate_leads" as const },
+      { key: "salary", table: "salary_checks" as const },
+      { key: "feedback", table: "feedback" as const },
+    ];
+
+    const results = await Promise.all(
+      tables.map(async ({ key, table }) => {
+        const { data } = await supabase.from(table as any).select("created_at").gte("created_at", since);
+        return { key, data: data || [] };
+      })
+    );
+
+    // Build 30-day buckets
+    const buckets: Record<string, { date: string; count: number }[]> = {};
+    const days = Array.from({ length: 30 }, (_, i) => {
+      const d = startOfDay(subDays(new Date(), 29 - i));
+      return format(d, "yyyy-MM-dd");
+    });
+
+    for (const { key, data } of results) {
+      const countMap: Record<string, number> = {};
+      days.forEach(d => (countMap[d] = 0));
+      for (const row of data) {
+        const day = format(new Date((row as any).created_at), "yyyy-MM-dd");
+        if (countMap[day] !== undefined) countMap[day]++;
+      }
+      buckets[key] = days.map(d => ({ date: d, count: countMap[d] }));
+    }
+
+    setTrends(buckets);
+  };
+
   const fetchReviews = async () => {
     setReviewsLoading(true);
     const { data, error } = await supabase.from("client_reviews").select("*").order("created_at", { ascending: false });
