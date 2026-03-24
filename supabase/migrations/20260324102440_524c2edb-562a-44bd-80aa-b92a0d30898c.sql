@@ -1,0 +1,1 @@
+ALTER TABLE public.resume_leads ADD COLUMN IF NOT EXISTS job_title text;

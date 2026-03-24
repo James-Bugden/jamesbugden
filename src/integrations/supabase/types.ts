@@ -230,6 +230,7 @@ export type Database = {
           id: string
           industry: string | null
           input_method: string | null
+          job_title: string | null
           language: string | null
           name: string | null
           overall_score: number | null
@@ -248,6 +249,7 @@ export type Database = {
           id?: string
           industry?: string | null
           input_method?: string | null
+          job_title?: string | null
           language?: string | null
           name?: string | null
           overall_score?: number | null
@@ -266,6 +268,7 @@ export type Database = {
           id?: string
           industry?: string | null
           input_method?: string | null
+          job_title?: string | null
           language?: string | null
           name?: string | null
           overall_score?: number | null
