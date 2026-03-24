@@ -11,9 +11,10 @@ type MailerLiteFormProps = {
   successBody?: string;
   successCta?: string;
   successCtaLink?: string;
+  leadSource?: string;
 };
 
-export default function MailerLiteForm({ formId, className, buttonText = "Get on the waitlist", successHeading = "You're in!", successBody = "Check your inbox for your free job search guides.", successCta = "Create a free account to save progress & explore more tools", successCtaLink = "/join" }: MailerLiteFormProps) {
+export default function MailerLiteForm({ formId, className, buttonText = "Get on the waitlist", successHeading = "You're in!", successBody = "Check your inbox for your free job search guides.", successCta = "Create a free account to save progress & explore more tools", successCtaLink = "/join", leadSource = "homepage" }: MailerLiteFormProps) {
   const [email, setEmail] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [isSuccess, setIsSuccess] = useState(false);
@@ -25,11 +26,16 @@ export default function MailerLiteForm({ formId, className, buttonText = "Get on
     setIsLoading(true);
 
     try {
-      await supabase.functions.invoke("sync-mailerlite", {
-        body: { email: email.trim() },
-      });
+      await Promise.all([
+        supabase.functions.invoke("sync-mailerlite", {
+          body: { email: email.trim() },
+        }),
+        supabase
+          .from("email_gate_leads")
+          .insert({ email: email.trim(), source: leadSource }),
+      ]);
     } catch (err) {
-      console.error("MailerLite sync error:", err);
+      console.error("Lead sync error:", err);
     }
 
     setIsSuccess(true);
