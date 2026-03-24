@@ -154,6 +154,8 @@ export default function AdminDashboard() {
   // Resume leads state
   const [resumeLeads, setResumeLeads] = useState<ResumeLead[]>([]);
   const [resumeLeadsLoading, setResumeLeadsLoading] = useState(true);
+  const [resumeSearch, setResumeSearch] = useState("");
+  const [resumeSeniorityFilter, setResumeSeniorityFilter] = useState("all");
 
   // Email leads state
   const [emailLeads, setEmailLeads] = useState<EmailLead[]>([]);
