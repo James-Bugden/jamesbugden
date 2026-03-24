@@ -241,6 +241,10 @@ button, [data-edit-overlay], .no-print {
   font-family: ${customize?.bodyFont || "inherit"};
   padding: 0 2mm;
 }
+
+.page-counter::after {
+  content: counter(page) " / " counter(pages);
+}
 </style>
 </head>
 <body>${clone.outerHTML}${buildFooterHtml(customize, personalDetails)}</body>
