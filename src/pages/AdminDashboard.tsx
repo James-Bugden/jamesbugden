@@ -490,6 +490,51 @@ export default function AdminDashboard() {
     return days.map(d => ({ date: d, count: countMap[d] }));
   }, [accounts]);
 
+  // AI Usage computed data
+  const aiUsageStats = useMemo(() => {
+    const now = new Date();
+    const monthStart = new Date(now.getFullYear(), now.getMonth(), 1);
+    const thisMonth = aiUsageRows.filter(r => new Date(r.created_at) >= monthStart);
+    
+    const byType: Record<string, number> = {};
+    const byUser: Record<string, { total: number; types: Record<string, number> }> = {};
+    
+    for (const row of thisMonth) {
+      byType[row.usage_type] = (byType[row.usage_type] || 0) + 1;
+      if (!byUser[row.user_id]) byUser[row.user_id] = { total: 0, types: {} };
+      byUser[row.user_id].total++;
+      byUser[row.user_id].types[row.usage_type] = (byUser[row.user_id].types[row.usage_type] || 0) + 1;
+    }
+    
+    const topUsers = Object.entries(byUser)
+      .sort(([, a], [, b]) => b.total - a.total)
+      .slice(0, 15)
+      .map(([userId, data]) => ({ userId: userId.slice(0, 8) + "…", ...data }));
+
+    // Daily trend for last 30 days
+    const days = Array.from({ length: 30 }, (_, i) => format(startOfDay(subDays(new Date(), 29 - i)), "yyyy-MM-dd"));
+    const dailyByType: { date: string; import: number; ai_tool: number; pdf_export: number; analyze: number; [k: string]: number | string }[] = days.map(d => ({ date: d, import: 0, ai_tool: 0, pdf_export: 0, analyze: 0 }));
+    for (const row of aiUsageRows) {
+      const day = format(new Date(row.created_at), "yyyy-MM-dd");
+      const entry = dailyByType.find(e => e.date === day);
+      if (entry) (entry as any)[row.usage_type] = ((entry as any)[row.usage_type] || 0) + 1;
+    }
+
+    const typeData = Object.entries(byType).map(([type, count]) => ({ type, count })).sort((a, b) => b.count - a.count);
+
+    return { totalThisMonth: thisMonth.length, typeData, topUsers, dailyByType };
+  }, [aiUsageRows]);
+
+  // Resolve user emails for AI usage top users
+  const topUserEmails = useMemo(() => {
+    const map: Record<string, string> = {};
+    for (const a of accounts) {
+      const short = a.id.slice(0, 8) + "…";
+      map[short] = a.email;
+    }
+    return map;
+  }, [accounts]);
+
   const statCards = [
     { label: "Accounts", value: counts.accounts, icon: UserCheck, color: "text-teal-600", sparkColor: "#0d9488", trend: accountTrend },
     { label: "Reviews", value: counts.reviews, icon: FileText, color: "text-blue-600", sparkColor: "#2563eb", trend: [] as { date: string; count: number }[] },
@@ -497,6 +542,7 @@ export default function AdminDashboard() {
     { label: "Resume Leads", value: counts.resumes, icon: Users, color: "text-violet-600", sparkColor: "#7c3aed", trend: trends.resumes || [] },
     { label: "Email Leads", value: counts.emails, icon: Mail, color: "text-amber-600", sparkColor: "#d97706", trend: trends.emails || [] },
     { label: "Feedback", value: counts.feedback, icon: MessageSquare, color: "text-pink-600", sparkColor: "#db2777", trend: trends.feedback || [] },
+    { label: "AI Usage", value: aiUsageStats.totalThisMonth, icon: Activity, color: "text-cyan-600", sparkColor: "#0891b2", trend: aiUsageStats.dailyByType.map(d => ({ date: d.date, count: d.import + d.ai_tool + d.pdf_export + d.analyze })) },
   ];
 
   return (
