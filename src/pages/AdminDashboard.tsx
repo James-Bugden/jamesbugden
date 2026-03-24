@@ -185,6 +185,7 @@ export default function AdminDashboard() {
     fetchEmailLeads();
     fetchFeedback();
     fetchAccounts();
+    fetchTrends();
   }, []);
 
   const fetchCounts = async () => {
