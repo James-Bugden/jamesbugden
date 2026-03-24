@@ -1,4 +1,4 @@
-import { useState, useEffect, useMemo } from "react";
+import { useState, useEffect, useMemo, useCallback } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
@@ -24,7 +24,8 @@ import {
   Loader2, Plus, Copy, Trash2, LogOut, Check, ArrowUpDown, Search, Download,
   FileText, DollarSign, Users, Mail, UserCheck, MessageSquare,
 } from "lucide-react";
-import { format } from "date-fns";
+import { format, subDays, startOfDay } from "date-fns";
+import { AreaChart, Area, ResponsiveContainer } from "recharts";
 import bcrypt from "bcryptjs";
 
 // ── Types ───────────────────────────────────────────────────────────────────────
@@ -131,6 +132,8 @@ export default function AdminDashboard() {
 
   // Counts
   const [counts, setCounts] = useState({ reviews: 0, salary: 0, resumes: 0, emails: 0, accounts: 0, feedback: 0 });
+  // Sparkline trends (30-day daily counts)
+  const [trends, setTrends] = useState<Record<string, { date: string; count: number }[]>>({});
 
   // Reviews state
   const [reviews, setReviews] = useState<ClientReview[]>([]);
@@ -182,6 +185,7 @@ export default function AdminDashboard() {
     fetchEmailLeads();
     fetchFeedback();
     fetchAccounts();
+    fetchTrends();
   }, []);
 
   const fetchCounts = async () => {
@@ -200,6 +204,42 @@ export default function AdminDashboard() {
       feedback: (r5 as any).count ?? 0,
       accounts: 0,
     });
+  };
+
+  const fetchTrends = async () => {
+    const since = subDays(new Date(), 30).toISOString();
+    const tables = [
+      { key: "resumes", table: "resume_leads" as const },
+      { key: "emails", table: "email_gate_leads" as const },
+      { key: "salary", table: "salary_checks" as const },
+      { key: "feedback", table: "feedback" as const },
+    ];
+
+    const results = await Promise.all(
+      tables.map(async ({ key, table }) => {
+        const { data } = await supabase.from(table as any).select("created_at").gte("created_at", since);
+        return { key, data: data || [] };
+      })
+    );
+
+    // Build 30-day buckets
+    const buckets: Record<string, { date: string; count: number }[]> = {};
+    const days = Array.from({ length: 30 }, (_, i) => {
+      const d = startOfDay(subDays(new Date(), 29 - i));
+      return format(d, "yyyy-MM-dd");
+    });
+
+    for (const { key, data } of results) {
+      const countMap: Record<string, number> = {};
+      days.forEach(d => (countMap[d] = 0));
+      for (const row of data) {
+        const day = format(new Date((row as any).created_at), "yyyy-MM-dd");
+        if (countMap[day] !== undefined) countMap[day]++;
+      }
+      buckets[key] = days.map(d => ({ date: d, count: countMap[d] }));
+    }
+
+    setTrends(buckets);
   };
 
   const fetchReviews = async () => {
@@ -416,13 +456,28 @@ export default function AdminDashboard() {
     );
   };
 
+  // Build account trends from already-fetched accounts
+  const accountTrend = useMemo(() => {
+    const days = Array.from({ length: 30 }, (_, i) => {
+      const d = startOfDay(subDays(new Date(), 29 - i));
+      return format(d, "yyyy-MM-dd");
+    });
+    const countMap: Record<string, number> = {};
+    days.forEach(d => (countMap[d] = 0));
+    for (const a of accounts) {
+      const day = format(new Date(a.created_at), "yyyy-MM-dd");
+      if (countMap[day] !== undefined) countMap[day]++;
+    }
+    return days.map(d => ({ date: d, count: countMap[d] }));
+  }, [accounts]);
+
   const statCards = [
-    { label: "Accounts", value: counts.accounts, icon: UserCheck, color: "text-teal-600" },
-    { label: "Reviews", value: counts.reviews, icon: FileText, color: "text-blue-600" },
-    { label: "Salary Checks", value: counts.salary, icon: DollarSign, color: "text-emerald-600" },
-    { label: "Resume Leads", value: counts.resumes, icon: Users, color: "text-violet-600" },
-    { label: "Email Leads", value: counts.emails, icon: Mail, color: "text-amber-600" },
-    { label: "Feedback", value: counts.feedback, icon: MessageSquare, color: "text-pink-600" },
+    { label: "Accounts", value: counts.accounts, icon: UserCheck, color: "text-teal-600", sparkColor: "#0d9488", trend: accountTrend },
+    { label: "Reviews", value: counts.reviews, icon: FileText, color: "text-blue-600", sparkColor: "#2563eb", trend: [] as { date: string; count: number }[] },
+    { label: "Salary Checks", value: counts.salary, icon: DollarSign, color: "text-emerald-600", sparkColor: "#059669", trend: trends.salary || [] },
+    { label: "Resume Leads", value: counts.resumes, icon: Users, color: "text-violet-600", sparkColor: "#7c3aed", trend: trends.resumes || [] },
+    { label: "Email Leads", value: counts.emails, icon: Mail, color: "text-amber-600", sparkColor: "#d97706", trend: trends.emails || [] },
+    { label: "Feedback", value: counts.feedback, icon: MessageSquare, color: "text-pink-600", sparkColor: "#db2777", trend: trends.feedback || [] },
   ];
 
   return (
@@ -439,15 +494,26 @@ export default function AdminDashboard() {
 
       <main className="max-w-7xl mx-auto px-4 py-6 space-y-6">
         {/* Overview Cards */}
-        <div className="grid grid-cols-2 md:grid-cols-6 gap-4">
+        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
           {statCards.map(s => (
             <Card key={s.label}>
-              <CardContent className="p-4 flex items-center gap-3">
-                <s.icon className={`w-8 h-8 ${s.color}`} />
-                <div>
-                  <p className="text-2xl font-bold text-foreground">{s.value.toLocaleString()}</p>
-                  <p className="text-xs text-muted-foreground">{s.label}</p>
+              <CardContent className="p-4">
+                <div className="flex items-center gap-3">
+                  <s.icon className={`w-7 h-7 ${s.color}`} />
+                  <div>
+                    <p className="text-2xl font-bold text-foreground">{s.value.toLocaleString()}</p>
+                    <p className="text-xs text-muted-foreground">{s.label}</p>
+                  </div>
                 </div>
+                {s.trend.length > 0 && (
+                  <div className="mt-2 h-8">
+                    <ResponsiveContainer width="100%" height="100%">
+                      <AreaChart data={s.trend} margin={{ top: 0, right: 0, left: 0, bottom: 0 }}>
+                        <Area type="monotone" dataKey="count" stroke={s.sparkColor} fill={s.sparkColor} fillOpacity={0.15} strokeWidth={1.5} dot={false} />
+                      </AreaChart>
+                    </ResponsiveContainer>
+                  </div>
+                )}
               </CardContent>
             </Card>
           ))}
