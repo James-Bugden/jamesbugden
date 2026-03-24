@@ -24,7 +24,8 @@ import {
   Loader2, Plus, Copy, Trash2, LogOut, Check, ArrowUpDown, Search, Download,
   FileText, DollarSign, Users, Mail, UserCheck, MessageSquare,
 } from "lucide-react";
-import { format } from "date-fns";
+import { format, subDays, startOfDay } from "date-fns";
+import { AreaChart, Area, ResponsiveContainer } from "recharts";
 import bcrypt from "bcryptjs";
 
 // ── Types ───────────────────────────────────────────────────────────────────────
