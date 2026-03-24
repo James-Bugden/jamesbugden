@@ -108,6 +108,7 @@ export default function ExitIntentPopup({ lang = "en" }: ExitIntentPopupProps) {
             successBody={c.successBody}
             successCta={c.successCta}
             successCtaLink={c.successCtaLink}
+            leadSource="exit-intent"
           />
         </div>
       </DialogContent>
