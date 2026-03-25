@@ -1231,6 +1231,7 @@ const ResumeBuilder = () => {
           </AlertDialogFooter>
         </AlertDialogContent>
       </AlertDialog>
+      {showPdfSurvey && <MicroSurvey actionKey="resume_pdf_export" />}
     </div>
   );
 };
