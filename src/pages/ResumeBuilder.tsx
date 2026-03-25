@@ -425,6 +425,7 @@ const ResumeBuilder = () => {
   const [importing, setImporting] = useState(false);
   const [importType, setImportType] = useState<DocType>("resume");
   const [downloading, setDownloading] = useState(false);
+  const [showPdfSurvey, setShowPdfSurvey] = useState(false);
   const [saving, setSaving] = useState(false);
   const [loading, setLoading] = useState(false);
   const [mobilePreview, setMobilePreview] = useState(false);
