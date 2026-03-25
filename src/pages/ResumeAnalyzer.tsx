@@ -14,6 +14,7 @@ import { useAnalyzerUsage } from "@/hooks/useAnalyzerUsage";
 
 import type { AnalysisResult } from "@/components/resume-analyzer/types";
 import LogoScroll from "@/components/LogoScroll";
+import MicroSurvey from "@/components/feedback/MicroSurvey";
 import { useAuth } from "@/contexts/AuthContext";
 import { useResumeAnalyses } from "@/hooks/useResumeAnalyses";
 import { renderPdfToImage } from "@/lib/renderPdfToImage";
