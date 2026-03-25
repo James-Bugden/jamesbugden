@@ -1077,7 +1077,6 @@ export default function AdminDashboard() {
                           <Tooltip labelFormatter={v => format(new Date(v as string), "MMM d, yyyy")} />
                           <Bar dataKey="import" stackId="a" fill="#7c3aed" name="Import" />
                           <Bar dataKey="ai_tool" stackId="a" fill="#0891b2" name="AI Tool" />
-                          <Bar dataKey="pdf_export" stackId="a" fill="#059669" name="PDF Export" />
                           <Bar dataKey="analyze" stackId="a" fill="#d97706" name="Analyze" />
                         </BarChart>
                       </ResponsiveContainer>
