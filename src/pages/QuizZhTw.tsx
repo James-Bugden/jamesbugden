@@ -2,7 +2,7 @@ import { useState, useEffect, useCallback, useRef } from "react";
 import { Link } from "react-router-dom";
 import { ArrowLeft, Check, Copy, Linkedin, Users } from "lucide-react";
 import LanguageToggle from "@/components/LanguageToggle";
-import { Helmet } from "react-helmet-async";
+
 import {
   Radar,
   RadarChart,
