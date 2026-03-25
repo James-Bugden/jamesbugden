@@ -241,7 +241,7 @@ const GuidesPage = () => {
         </div>
       </main>
 
-      <SiteFooter />
+      
     </div>
   );
 };

@@ -241,7 +241,7 @@ const GuidesPageZhTw = () => {
         </div>
       </main>
 
-      <SiteFooter />
+      
     </div>
   );
 };

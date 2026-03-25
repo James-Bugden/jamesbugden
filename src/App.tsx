@@ -8,6 +8,7 @@ import { ScrollToTop } from "./components/ScrollToTop";
 import { HelmetProvider } from "react-helmet-async";
 import { AuthProvider, useAuth } from "./contexts/AuthContext";
 import MobileBottomNav from "./components/MobileBottomNav";
+import SiteLayout from "./components/SiteLayout";
 import LoginGate from "./components/LoginGate";
 import { useLocation } from "react-router-dom";
 import { ThemeProvider } from "next-themes";
