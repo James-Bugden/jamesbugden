@@ -41,6 +41,7 @@ import { useResumeBuilderLang, useT, getLocalizedSectionTypes, SAMPLE_RESUME_DAT
 import { useNavigate } from "react-router-dom";
 import { AnalyzerPromptDialog } from "@/components/resume-builder/AnalyzerPromptDialog";
 import { AnalyzerSuggestionsPanel, Suggestion, extractSuggestions, applySuggestionToData } from "@/components/resume-builder/AnalyzerSuggestionsPanel";
+import MicroSurvey from "@/components/feedback/MicroSurvey";
 
 type ViewMode = "dashboard" | "resume-editor" | "cover-letter-editor";
 
@@ -424,6 +425,7 @@ const ResumeBuilder = () => {
   const [importing, setImporting] = useState(false);
   const [importType, setImportType] = useState<DocType>("resume");
   const [downloading, setDownloading] = useState(false);
+  const [showPdfSurvey, setShowPdfSurvey] = useState(false);
   const [saving, setSaving] = useState(false);
   const [loading, setLoading] = useState(false);
   const [mobilePreview, setMobilePreview] = useState(false);
@@ -674,6 +676,7 @@ const ResumeBuilder = () => {
         customize,
         personalDetails: data.personalDetails,
       });
+      setShowPdfSurvey(true);
     } catch (err) {
       console.error("PDF export error:", err);
     }
@@ -1228,6 +1231,7 @@ const ResumeBuilder = () => {
           </AlertDialogFooter>
         </AlertDialogContent>
       </AlertDialog>
+      {showPdfSurvey && <MicroSurvey actionKey="resume_pdf_export" />}
     </div>
   );
 };

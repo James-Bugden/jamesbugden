@@ -1,9 +1,10 @@
 import { useState } from "react";
-import { MessageSquare, Send, ChevronDown, ChevronUp } from "lucide-react";
+import { MessageSquare, Send, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { useToast } from "@/hooks/use-toast";
 import { supabase } from "@/integrations/supabase/client";
+import { motion, AnimatePresence } from "framer-motion";
 
 interface FeedbackBoxProps {
   locale?: "en" | "zh-tw";
@@ -12,9 +13,9 @@ interface FeedbackBoxProps {
 
 const LABELS = {
   en: {
-    trigger: "Send Feedback",
+    trigger: "Feedback",
     placeholder: "What's on your mind?",
-    send: "Send Feedback",
+    send: "Send",
     success: "Feedback sent",
     successDesc: "Thanks for your feedback!",
     empty: "Please write something first.",
@@ -23,7 +24,7 @@ const LABELS = {
   "zh-tw": {
     trigger: "回饋建議",
     placeholder: "你有什麼想法？",
-    send: "發送回饋",
+    send: "發送",
     success: "回饋已發送",
     successDesc: "感謝你的回饋！",
     empty: "請先輸入內容。",
@@ -47,6 +48,7 @@ export default function FeedbackBox({ locale = "en", subject: _subject }: Feedba
         message: text.trim(),
         page,
         locale,
+        type: "general",
       } as any);
       if (error) throw error;
       toast({ title: t.success, description: t.successDesc });
@@ -61,36 +63,61 @@ export default function FeedbackBox({ locale = "en", subject: _subject }: Feedba
 
   return (
     <div className="print:hidden">
-      <button
-        onClick={() => setOpen(!open)}
-        className="inline-flex items-center gap-1.5 text-xs text-muted-foreground hover:text-foreground transition-colors"
-      >
-        <MessageSquare className="w-3.5 h-3.5" />
-        {t.trigger}
-        {open ? <ChevronUp className="w-3 h-3" /> : <ChevronDown className="w-3 h-3" />}
-      </button>
-
-      {open && (
-        <div className="mt-3 space-y-2 max-w-md animate-in slide-in-from-top-2 duration-200">
-          <Textarea
-            value={text}
-            onChange={(e) => setText(e.target.value)}
-            placeholder={t.placeholder}
-            rows={3}
-            className="text-sm resize-none"
-            maxLength={1000}
-          />
-          <Button
-            size="sm"
-            onClick={handleSend}
-            disabled={!text.trim() || sending}
-            className="h-8"
+      {/* Floating Action Button */}
+      <AnimatePresence>
+        {!open && (
+          <motion.button
+            initial={{ scale: 0 }}
+            animate={{ scale: 1 }}
+            exit={{ scale: 0 }}
+            onClick={() => setOpen(true)}
+            className="fixed bottom-5 right-5 z-40 flex items-center gap-2 bg-primary text-primary-foreground rounded-full px-4 py-2.5 shadow-lg hover:shadow-xl transition-shadow text-sm font-medium"
           >
-            <Send className="w-3.5 h-3.5 mr-1.5" />
-            {t.send}
-          </Button>
-        </div>
-      )}
+            <MessageSquare className="w-4 h-4" />
+            {t.trigger}
+          </motion.button>
+        )}
+      </AnimatePresence>
+
+      {/* Expanded panel */}
+      <AnimatePresence>
+        {open && (
+          <motion.div
+            initial={{ opacity: 0, y: 20, scale: 0.95 }}
+            animate={{ opacity: 1, y: 0, scale: 1 }}
+            exit={{ opacity: 0, y: 20, scale: 0.95 }}
+            className="fixed bottom-5 right-5 z-40 bg-card border border-border rounded-xl shadow-xl p-4 w-80"
+          >
+            <div className="flex items-center justify-between mb-3">
+              <div className="flex items-center gap-2 text-sm font-medium text-foreground">
+                <MessageSquare className="w-4 h-4" />
+                {t.trigger}
+              </div>
+              <button onClick={() => setOpen(false)} className="text-muted-foreground hover:text-foreground">
+                <X className="w-4 h-4" />
+              </button>
+            </div>
+            <Textarea
+              value={text}
+              onChange={(e) => setText(e.target.value)}
+              placeholder={t.placeholder}
+              rows={3}
+              className="text-sm resize-none mb-3"
+              maxLength={1000}
+              autoFocus
+            />
+            <Button
+              size="sm"
+              onClick={handleSend}
+              disabled={!text.trim() || sending}
+              className="w-full h-8"
+            >
+              <Send className="w-3.5 h-3.5 mr-1.5" />
+              {t.send}
+            </Button>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </div>
   );
 }

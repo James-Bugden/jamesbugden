@@ -8,6 +8,7 @@ import { Link, useLocation, useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
 import ResumeVisualSummary from "./ResumeVisualSummary";
 import { toast } from "@/hooks/use-toast";
+import InlineRating from "@/components/feedback/InlineRating";
 import { useIsMobile } from "@/hooks/use-mobile";
 
 type Language = "en" | "zh-TW";
@@ -807,6 +808,15 @@ export default function ResumeResults({
             </Button>
           </div>
         )}
+
+        {/* Inline Rating */}
+        <div className="flex justify-center">
+          <InlineRating
+            contentId="resume_analysis_result"
+            locale={lang === "zh-TW" ? "zh-tw" : "en"}
+            label={lang === "zh-TW" ? "這個分析對你有幫助嗎？" : "Was this analysis helpful?"}
+          />
+        </div>
 
         {/* Share */}
         <ShareSection lang={lang} score={analysis.overall_score} />

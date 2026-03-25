@@ -14,6 +14,7 @@ import { useAnalyzerUsage } from "@/hooks/useAnalyzerUsage";
 
 import type { AnalysisResult } from "@/components/resume-analyzer/types";
 import LogoScroll from "@/components/LogoScroll";
+import MicroSurvey from "@/components/feedback/MicroSurvey";
 import { useAuth } from "@/contexts/AuthContext";
 import { useResumeAnalyses } from "@/hooks/useResumeAnalyses";
 import { renderPdfToImage } from "@/lib/renderPdfToImage";
@@ -42,6 +43,7 @@ export default function ResumeAnalyzer({ defaultLang = "en" }: { defaultLang?: L
   const [analyzeStep, setAnalyzeStep] = useState(0);
   const [progress, setProgress] = useState(0);
   const [resumeImageUrl, setResumeImageUrl] = useState<string | null>(null);
+  const [showMicroSurvey, setShowMicroSurvey] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
   
 
@@ -270,7 +272,10 @@ export default function ResumeAnalyzer({ defaultLang = "en" }: { defaultLang?: L
           });
         }
 
-        setTimeout(() => setScreen("results"), 800);
+        setTimeout(() => {
+          setScreen("results");
+          setShowMicroSurvey(true);
+        }, 800);
       }
     } catch (err: any) {
       console.error("Extract error:", err);
@@ -657,6 +662,7 @@ export default function ResumeAnalyzer({ defaultLang = "en" }: { defaultLang?: L
             }}
           />
         )}
+        {showMicroSurvey && <MicroSurvey actionKey="resume_analysis" locale={lang === "zh-TW" ? "zh-tw" : "en"} />}
       </main>
     </>
   );

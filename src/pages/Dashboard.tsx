@@ -13,6 +13,7 @@ import { useResumeAnalyses } from "@/hooks/useResumeAnalyses";
 import { useAnalyzerUsage } from "@/hooks/useAnalyzerUsage";
 import OnboardingChecklist from "@/components/OnboardingChecklist";
 import DashboardSkeleton from "@/components/DashboardSkeleton";
+import NpsPulse from "@/components/feedback/NpsPulse";
 import JourneySection, { type JourneyItem, type GuideTag, useSeenNewItems } from "@/components/dashboard/JourneySection";
 
 interface ToolItem {
@@ -564,6 +565,7 @@ export default function Dashboard({ lang = "en" }: { lang?: "en" | "zh" }) {
           </span>
         </div>
       </footer>
+      <NpsPulse locale="en" />
     </>
   );
 }

@@ -8,6 +8,7 @@ import { ResizablePanelGroup, ResizablePanel, ResizableHandle } from "@/componen
 import { getDocument, updateDocument, getAllDocuments, SavedDocument } from "@/lib/documentStore";
 import { CoverLetterData, CoverLetterCustomize, DEFAULT_COVER_LETTER_DATA, DEFAULT_COVER_LETTER_CUSTOMIZE } from "./types";
 import { exportToPdf } from "@/lib/pdfExport";
+import MicroSurvey from "@/components/feedback/MicroSurvey";
 
 interface CoverLetterBuilderProps {
   docId?: string | null;
@@ -17,6 +18,7 @@ export function CoverLetterBuilder({ docId }: CoverLetterBuilderProps) {
   const store = useCoverLetterStore();
   const [activeTab, setActiveTab] = useState("write");
   const [downloading, setDownloading] = useState(false);
+  const [showSurvey, setShowSurvey] = useState(false);
 
   // Load data from multi-doc store if docId provided
   useEffect(() => {
@@ -52,10 +54,12 @@ export function CoverLetterBuilder({ docId }: CoverLetterBuilderProps) {
       pageFormat: (customize.pageFormat || "a4") as "a4" | "letter",
     });
     setDownloading(false);
+    setShowSurvey(true);
   };
 
   return (
     <div className="flex flex-col h-full bg-gray-50">
+      {showSurvey && <MicroSurvey actionKey="cover_letter_download" />}
       <CoverLetterTopNav
         activeTab={activeTab}
         onTabChange={setActiveTab}

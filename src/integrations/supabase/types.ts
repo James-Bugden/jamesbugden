@@ -106,25 +106,34 @@ export type Database = {
       }
       feedback: {
         Row: {
+          context: string | null
           created_at: string
           id: string
           locale: string | null
           message: string
           page: string | null
+          rating: number | null
+          type: string | null
         }
         Insert: {
+          context?: string | null
           created_at?: string
           id?: string
           locale?: string | null
           message: string
           page?: string | null
+          rating?: number | null
+          type?: string | null
         }
         Update: {
+          context?: string | null
           created_at?: string
           id?: string
           locale?: string | null
           message?: string
           page?: string | null
+          rating?: number | null
+          type?: string | null
         }
         Relationships: []
       }
