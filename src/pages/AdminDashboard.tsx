@@ -890,8 +890,58 @@ export default function AdminDashboard() {
 
           {/* ── Feedback Tab ─────────────────────────────────────────────── */}
           <TabsContent value="feedback">
+            {/* Summary cards */}
+            {(() => {
+              const byType: Record<string, number> = {};
+              const npsScores: number[] = [];
+              let thumbsUp = 0, thumbsDown = 0;
+              feedbackItems.forEach(f => {
+                const tp = f.type || "general";
+                byType[tp] = (byType[tp] || 0) + 1;
+                if (tp === "nps" && f.rating !== null) npsScores.push(f.rating);
+                if ((tp === "micro_survey" || tp === "inline_rating") && f.rating !== null) {
+                  if (f.rating > 0) thumbsUp++; else thumbsDown++;
+                }
+              });
+              const avgNps = npsScores.length ? (npsScores.reduce((a, b) => a + b, 0) / npsScores.length).toFixed(1) : "—";
+              return (
+                <div className="grid grid-cols-2 md:grid-cols-5 gap-3 mb-4">
+                  {[
+                    { label: "General", value: byType.general || 0 },
+                    { label: "Micro Survey", value: byType.micro_survey || 0 },
+                    { label: "Inline Rating", value: byType.inline_rating || 0 },
+                    { label: "NPS Responses", value: byType.nps || 0 },
+                    { label: "Avg NPS", value: avgNps },
+                  ].map(s => (
+                    <div key={s.label} className="rounded-lg border border-border bg-card p-3 text-center">
+                      <p className="text-xs text-muted-foreground">{s.label}</p>
+                      <p className="text-xl font-bold text-foreground">{s.value}</p>
+                    </div>
+                  ))}
+                  {(thumbsUp + thumbsDown > 0) && (
+                    <div className="col-span-2 md:col-span-5 text-xs text-muted-foreground">
+                      👍 {thumbsUp} / 👎 {thumbsDown} ({((thumbsUp / (thumbsUp + thumbsDown)) * 100).toFixed(0)}% positive)
+                    </div>
+                  )}
+                </div>
+              );
+            })()}
+
             <div className="flex items-center justify-between mb-4 flex-wrap gap-2">
-              <p className="text-sm text-muted-foreground">{filteredFeedback.length} feedback submissions</p>
+              <div className="flex items-center gap-2">
+                <p className="text-sm text-muted-foreground">{filteredFeedback.length} submissions</p>
+                <select
+                  value={feedbackTypeFilter}
+                  onChange={e => setFeedbackTypeFilter(e.target.value)}
+                  className="text-xs border border-border rounded px-2 py-1 bg-background text-foreground"
+                >
+                  <option value="all">All types</option>
+                  <option value="general">General</option>
+                  <option value="micro_survey">Micro Survey</option>
+                  <option value="inline_rating">Inline Rating</option>
+                  <option value="nps">NPS</option>
+                </select>
+              </div>
               <div className="relative">
                 <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
                 <Input placeholder="Search feedback…" value={feedbackSearch} onChange={e => setFeedbackSearch(e.target.value)} className="pl-9 w-64" />
@@ -904,22 +954,40 @@ export default function AdminDashboard() {
                 <Table>
                   <TableHeader>
                     <TableRow>
-                      <TableHead className="w-[140px]">Date</TableHead>
+                      <TableHead className="w-[130px]">Date</TableHead>
+                      <TableHead className="w-[100px]">Type</TableHead>
+                      <TableHead className="w-[60px]">Rating</TableHead>
                       <TableHead>Message</TableHead>
-                      <TableHead className="w-[180px]">Page</TableHead>
-                      <TableHead className="w-[80px]">Lang</TableHead>
+                      <TableHead className="w-[140px]">Context</TableHead>
+                      <TableHead className="w-[160px]">Page</TableHead>
                       <TableHead className="w-[60px]" />
                     </TableRow>
                   </TableHeader>
                   <TableBody>
                     {filteredFeedback.length === 0 ? (
-                      <TableRow><TableCell colSpan={5} className="text-center py-12 text-muted-foreground">No feedback yet</TableCell></TableRow>
+                      <TableRow><TableCell colSpan={7} className="text-center py-12 text-muted-foreground">No feedback yet</TableCell></TableRow>
                     ) : filteredFeedback.map(f => (
                       <TableRow key={f.id}>
                         <TableCell className="text-xs text-muted-foreground whitespace-nowrap">{format(new Date(f.created_at), "MMM d, yyyy HH:mm")}</TableCell>
-                        <TableCell className="text-sm max-w-md">{f.message}</TableCell>
-                        <TableCell className="text-xs text-muted-foreground font-mono">{f.page}</TableCell>
-                        <TableCell className="text-xs text-muted-foreground">{f.locale}</TableCell>
+                        <TableCell>
+                          <span className={`text-xs px-2 py-0.5 rounded-full ${
+                            f.type === "nps" ? "bg-blue-100 text-blue-700 dark:bg-blue-900 dark:text-blue-300" :
+                            f.type === "micro_survey" ? "bg-green-100 text-green-700 dark:bg-green-900 dark:text-green-300" :
+                            f.type === "inline_rating" ? "bg-amber-100 text-amber-700 dark:bg-amber-900 dark:text-amber-300" :
+                            "bg-muted text-muted-foreground"
+                          }`}>
+                            {f.type || "general"}
+                          </span>
+                        </TableCell>
+                        <TableCell className="text-sm text-center">
+                          {f.rating !== null ? (
+                            f.type === "nps" ? <span className="font-medium">{f.rating}/10</span> :
+                            f.rating > 0 ? "👍" : "👎"
+                          ) : "—"}
+                        </TableCell>
+                        <TableCell className="text-sm max-w-xs truncate">{f.message}</TableCell>
+                        <TableCell className="text-xs text-muted-foreground font-mono">{f.context || "—"}</TableCell>
+                        <TableCell className="text-xs text-muted-foreground font-mono truncate max-w-[160px]">{f.page}</TableCell>
                         <TableCell>
                           <AlertDialog>
                             <AlertDialogTrigger asChild>
