@@ -190,6 +190,7 @@ const App = () => (
         <AuthProvider>
         <ScrollToTop />
         <Suspense fallback={<PageLoader />}>
+          <SiteLayout>
           <Routes>
             <Route path="/" element={<Index />} />
             <Route path="/zh-tw" element={<IndexZhTw />} />
