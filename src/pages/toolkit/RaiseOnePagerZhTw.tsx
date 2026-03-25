@@ -7,6 +7,7 @@ import { nativeShare } from "@/lib/share";
 import ToolkitHeaderZhTw from "@/components/toolkit/ToolkitHeaderZhTw";
 import ToolkitFooterZhTw from "@/components/toolkit/ToolkitFooterZhTw";
 import ToolkitNavZhTw from "@/components/toolkit/ToolkitNavZhTw";
+import { SEO } from "@/components/SEO";
 
 const exampleAchievements = [
   { achievement: "主導舊系統遷移到雲端架構", impact: "伺服器成本降低 35%（年省 NT$2.4M）" },
@@ -91,7 +92,9 @@ _________________________________ | _________________________________
   };
 
   return (
-    <div className="min-h-screen bg-background">
+    <>
+      <SEO />
+      <div className="min-h-screen bg-background">
       <ToolkitHeaderZhTw />
 
       <section className="bg-executive-green py-12 md:py-16 px-5 md:px-6 relative print:hidden">

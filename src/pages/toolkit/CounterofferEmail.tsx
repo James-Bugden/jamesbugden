@@ -8,6 +8,7 @@ import { useToast } from "@/hooks/use-toast";
 import ToolkitHeader from "@/components/toolkit/ToolkitHeader";
 import ToolkitFooter from "@/components/toolkit/ToolkitFooter";
 import ToolkitNav from "@/components/toolkit/ToolkitNav";
+import { SEO } from "@/components/SEO";
 
 const emailTemplates = [
   {
@@ -139,7 +140,9 @@ const CounterofferEmail = () => {
   };
 
   return (
-    <div className="min-h-screen bg-background">
+    <>
+      <SEO />
+      <div className="min-h-screen bg-background">
       <ToolkitHeader />
 
       {/* Hero */}

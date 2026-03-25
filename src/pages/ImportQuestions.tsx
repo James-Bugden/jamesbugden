@@ -1,6 +1,7 @@
 import { useState } from "react";
 import questionsData from "@/data/interview_questions_full.json";
 import { supabase } from "@/integrations/supabase/client";
+import { SEO } from "@/components/SEO";
 
 export default function ImportQuestions() {
   const [status, setStatus] = useState("");
@@ -25,7 +26,9 @@ export default function ImportQuestions() {
   };
 
   return (
-    <div className="min-h-screen flex flex-col items-center justify-center gap-4 p-8">
+    <>
+      <SEO />
+      <div className="min-h-screen flex flex-col items-center justify-center gap-4 p-8">
       <h1 className="text-2xl font-bold">Import Interview Questions</h1>
       <p className="text-muted-foreground">{questionsData.length} questions ready to import</p>
       <button

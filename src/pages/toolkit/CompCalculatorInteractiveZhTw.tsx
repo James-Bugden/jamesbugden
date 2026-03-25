@@ -29,6 +29,7 @@ import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/component
 import { ChevronDown } from "lucide-react";
 import { useEmailGate } from "@/hooks/useEmailGate";
 import { EmailGateOverlay } from "@/components/EmailGateOverlay";
+import { SEO } from "@/components/SEO";
 
 function formatNTD(value: number): string {
   if (value === 0) return "NT$0";
@@ -50,7 +51,9 @@ function TipIcon({ text }: { text: string }) {
 
 function RowLabel({ children, tip, isSubtracted }: { children: React.ReactNode; tip?: string; isSubtracted?: boolean }) {
   return (
-    <div className="flex items-center gap-2 mb-2">
+    <>
+      <SEO />
+      <div className="flex items-center gap-2 mb-2">
       {isSubtracted && <Minus className="w-3.5 h-3.5 text-destructive flex-shrink-0" />}
       <label className="text-sm font-medium text-foreground">{children}</label>
       {tip && <TipIcon text={tip} />}

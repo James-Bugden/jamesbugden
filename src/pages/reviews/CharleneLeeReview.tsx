@@ -2,6 +2,7 @@ import { ArrowLeft, Download, FileText, TrendingUp, Zap, Target, CheckCircle, XC
 import { Link } from 'react-router-dom';
 import AnnotatedResume from '@/components/AnnotatedResume';
 import ReviewLanguageToggle from '@/components/ReviewLanguageToggle';
+import { SEO } from "@/components/SEO";
 
 // Annotations for page 1 - positions are percentages
 const page1Annotations = [
@@ -17,7 +18,9 @@ const page2Annotations = [
 
 const CharleneLeeReview = () => {
   return (
-    <div className="min-h-screen bg-background">
+    <>
+      <SEO />
+      <div className="min-h-screen bg-background">
       {/* Header */}
       <header className="bg-nav-green sticky top-0 z-50">
         <div className="max-w-5xl mx-auto px-4 sm:px-6 py-4 flex items-center justify-between">

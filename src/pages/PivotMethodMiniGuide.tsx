@@ -8,12 +8,15 @@ import GuideShareButtons from "@/components/GuideShareButtons";
 import { useTrackGuideProgress } from "@/hooks/useReadingProgress";
 import GuideSignInBanner from "@/components/guides/GuideSignInBanner";
 import GuideBottomCTA from "@/components/guides/GuideBottomCTA";
+import { SEO } from "@/components/SEO";
 
 const PivotMethodMiniGuide = () => {
   useTrackGuideProgress("pivot-mini");
 
   return (
-    <div className="min-h-screen bg-background">
+    <>
+      <SEO />
+      <div className="min-h-screen bg-background">
       {/* Navigation */}
       <nav className="sticky top-0 z-50 bg-background/95 backdrop-blur-sm border-b border-border">
         <div className="container mx-auto px-4 py-4 flex items-center justify-between">

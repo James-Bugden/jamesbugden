@@ -8,6 +8,7 @@ import { nativeShare } from "@/lib/share";
 import ToolkitHeaderZhTw from "@/components/toolkit/ToolkitHeaderZhTw";
 import ToolkitFooterZhTw from "@/components/toolkit/ToolkitFooterZhTw";
 import ToolkitNavZhTw from "@/components/toolkit/ToolkitNavZhTw";
+import { SEO } from "@/components/SEO";
 
 const emailTemplates = [
   {
@@ -139,7 +140,9 @@ const CounterofferEmailZhTw = () => {
   };
 
   return (
-    <div className="min-h-screen bg-background">
+    <>
+      <SEO />
+      <div className="min-h-screen bg-background">
       <ToolkitHeaderZhTw />
 
       {/* Hero */}

@@ -2,10 +2,13 @@ import { ArrowLeft, Download, FileText, TrendingUp, Zap, Target, CheckCircle, XC
 import { Link } from 'react-router-dom';
 import ReviewLanguageToggle from '@/components/ReviewLanguageToggle';
 import ScoreGauge from '@/components/ScoreGauge';
+import { SEO } from "@/components/SEO";
 
 const PinWeiWuReview = () => {
   return (
-    <div className="min-h-screen bg-background">
+    <>
+      <SEO />
+      <div className="min-h-screen bg-background">
       {/* Header */}
       <header className="bg-nav-green sticky top-0 z-50">
         <div className="max-w-5xl mx-auto px-4 sm:px-6 py-4 flex items-center justify-between">

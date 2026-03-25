@@ -4,6 +4,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Loader2, Lock } from "lucide-react";
+import { SEO } from "@/components/SEO";
 
 // Validate that URL is an internal path only (prevents open redirect attacks)
 const isInternalUrl = (url: string): boolean => {
@@ -63,7 +64,9 @@ const ClientReviewGate = () => {
   };
 
   return (
-    <div className="min-h-screen bg-background flex items-center justify-center px-4">
+    <>
+      <SEO />
+      <div className="min-h-screen bg-background flex items-center justify-center px-4">
       <div className="w-full max-w-lg">
         <div className="bg-card rounded-2xl shadow-lg p-10 md:p-12">
           <div className="text-center mb-8">

@@ -31,6 +31,7 @@ import FeedbackBox from "@/components/FeedbackBox";
 import { useResumeBuilderLang, useT, getLocalizedSectionTypes } from "@/components/resume-builder/i18n";
 import { useNavigate } from "react-router-dom";
 import { AnalyzerPromptDialog } from "@/components/resume-builder/AnalyzerPromptDialog";
+import { SEO } from "@/components/SEO";
 
 type ViewMode = "dashboard" | "resume-editor";
 
@@ -160,7 +161,9 @@ function SaveIndicator({ saving }: { saving: boolean }) {
     if (!saving) { setPulse(true); const tm = setTimeout(() => setPulse(false), 1500); return () => clearTimeout(tm); }
   }, [saving]);
   return (
-    <div className={cn("flex items-center gap-1.5 text-xs transition-opacity duration-300", pulse ? "opacity-100" : "opacity-60")}>
+    <>
+      <SEO />
+      <div className={cn("flex items-center gap-1.5 text-xs transition-opacity duration-300", pulse ? "opacity-100" : "opacity-60")}>
       {saving ? (
         <><Loader2 className="w-3 h-3 animate-spin text-gray-400" /><span className="text-gray-400">{t("saving")}</span></>
       ) : (

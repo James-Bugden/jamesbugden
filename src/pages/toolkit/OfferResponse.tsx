@@ -7,6 +7,7 @@ import { nativeShare } from "@/lib/share";
 import ToolkitHeader from "@/components/toolkit/ToolkitHeader";
 import ToolkitFooter from "@/components/toolkit/ToolkitFooter";
 import ToolkitNav from "@/components/toolkit/ToolkitNav";
+import { SEO } from "@/components/SEO";
 
 const steps = [
   {
@@ -100,7 +101,9 @@ ${outcomes[1].text}`;
   };
 
   return (
-    <div className="min-h-screen bg-background">
+    <>
+      <SEO />
+      <div className="min-h-screen bg-background">
       <ToolkitHeader />
 
       {/* Hero */}

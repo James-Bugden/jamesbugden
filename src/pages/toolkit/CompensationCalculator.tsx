@@ -8,6 +8,7 @@ import ToolkitHeader from "@/components/toolkit/ToolkitHeader";
 import ToolkitFooter from "@/components/toolkit/ToolkitFooter";
 import ToolkitNav from "@/components/toolkit/ToolkitNav";
 import { BarChart, Bar, XAxis, YAxis, Tooltip as RechartsTooltip, ResponsiveContainer, Legend, Cell } from "recharts";
+import { SEO } from "@/components/SEO";
 
 const exampleOffers = [
   {
@@ -116,7 +117,9 @@ const CompensationCalculator = () => {
   };
 
   return (
-    <div className="min-h-screen bg-background">
+    <>
+      <SEO />
+      <div className="min-h-screen bg-background">
       <ToolkitHeader />
 
       {/* Hero */}

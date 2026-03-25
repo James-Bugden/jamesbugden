@@ -2,6 +2,7 @@ import { Link } from "react-router-dom";
 import { ArrowLeft, ArrowRight, FileText, Calculator, MessageSquare, TrendingUp, ClipboardList } from "lucide-react";
 import ToolkitHeader from "@/components/toolkit/ToolkitHeader";
 import ToolkitFooter from "@/components/toolkit/ToolkitFooter";
+import { SEO } from "@/components/SEO";
 
 const templates = [
   {
@@ -64,7 +65,9 @@ const templates = [
 
 const ToolkitIndex = () => {
   return (
-    <div className="min-h-screen bg-background">
+    <>
+      <SEO />
+      <div className="min-h-screen bg-background">
       <ToolkitHeader />
 
       {/* Hero */}
