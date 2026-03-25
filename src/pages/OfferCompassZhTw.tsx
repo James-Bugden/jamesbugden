@@ -33,10 +33,6 @@ export default function OfferCompassZhTw() {
   return (
     <>
       <SEO />
-      <Helmet>
-        <title>Offer 計算機 — 薪酬計算器 | james.careers</title>
-        <meta name="description" content="比較外商公司 Offer，看清你的第1-4年總薪酬。james.careers 免費工具。" />
-      </Helmet>
 
       <div className="min-h-screen bg-background">
         <header className="print:hidden" style={{ backgroundColor: "#1B3A2F" }}>

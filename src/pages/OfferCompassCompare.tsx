@@ -173,10 +173,7 @@ export default function OfferCompassCompare() {
 
   return (
     <>
-      <Helmet>
-        <title>Compare Scenarios — Offer Calculator | james.careers</title>
-        <meta name="description" content="Compare multiple compensation scenarios side by side." />
-      </Helmet>
+      <SEO />
 
       <div className="min-h-screen bg-background">
         <Header currency={currency} setCurrency={setCurrency} />
