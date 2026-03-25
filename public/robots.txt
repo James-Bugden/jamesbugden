@@ -1,4 +1,19 @@
+# robots.txt for jamesbugden.com
+# Place in: public/robots.txt in your Lovable project
+
 User-agent: *
 Allow: /
 
-Sitemap: https://jamesbugden.lovable.app/sitemap.xml
+# Block admin and auth pages
+Disallow: /admin
+Disallow: /admin/
+Disallow: /login
+Disallow: /signup
+Disallow: /reset-password
+Disallow: /dashboard
+Disallow: /zh-tw/dashboard
+Disallow: /experiment
+Disallow: /zh-tw/experiment
+
+# Sitemap location
+Sitemap: https://jamesbugden.com/sitemap.xml
