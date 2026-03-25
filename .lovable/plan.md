@@ -1,29 +1,30 @@
 
 
-## Add AI Usage Tracking to `resume-ai` Edge Function
+## Backfill Historical Analyze Usage
 
 ### Problem
-The `resume-ai` function (used for improve, grammar, starter, tailor, summary, skills, optimize, and parse_resume actions) has **no auth check and no usage logging**. Every call is an AI cost that goes untracked.
-
-Note: `parse-resume-to-builder` **already tracks usage** as `import` — no changes needed there.
+44 resume analyses exist in `resume_analyses` but were never logged to `ai_usage_log` because tracking was added after the fact. The AI Usage tab underreports costs.
 
 ### Plan
 
-**File: `supabase/functions/resume-ai/index.ts`**
+**Database migration** — Insert historical `analyze` entries into `ai_usage_log` from `resume_analyses`:
 
-1. Add Supabase client import and initialization with the caller's auth header
-2. Extract user ID from JWT claims (same pattern as other edge functions)
-3. After a successful AI response, insert a row into `ai_usage_log` with `usage_type: 'ai_tool'`
-4. Make tracking best-effort — don't fail the request if the insert fails (user may be unauthenticated for some actions)
-5. Redeploy the function
+```sql
+INSERT INTO ai_usage_log (user_id, usage_type, created_at)
+SELECT user_id, 'analyze', created_at
+FROM resume_analyses
+WHERE NOT EXISTS (
+  SELECT 1 FROM ai_usage_log
+  WHERE ai_usage_log.user_id = resume_analyses.user_id
+    AND ai_usage_log.usage_type = 'analyze'
+    AND ai_usage_log.created_at = resume_analyses.created_at
+);
+```
 
-### Technical Detail
+This is a one-time data fix. No code changes needed — both edge functions now have tracking going forward.
 
-The function currently has no auth at all — it reads `{ action, text, context }` directly. Since resume builder AI tools require sign-in on the frontend, the auth header should already be present. The tracking will:
-- Attempt to extract user ID from the Authorization header
-- If authenticated, log usage after successful AI response
-- If not authenticated, skip logging silently (no breaking change)
-
-### Cost mapping
-In the admin dashboard, `ai_tool` is already mapped at `$0.0006/call` — these will now appear in the AI Usage tab.
+### Impact
+- Admin dashboard AI Usage tab will show ~44 `analyze` entries
+- Estimated cost display increases by ~44 × $0.003 = ~$0.13
+- No effect on user-facing rate limits (those query current month only)
 
