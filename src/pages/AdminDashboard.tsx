@@ -496,6 +496,15 @@ export default function AdminDashboard() {
     return days.map(d => ({ date: d, count: countMap[d] }));
   }, [accounts]);
 
+  // Estimated cost per usage type (USD) — adjust these as needed
+  const COST_PER_TYPE: Record<string, number> = {
+    analyze: 0.08,
+    ai_tool: 0.05,
+    import: 0.06,
+    pdf_export: 0.03,
+  };
+  const DEFAULT_COST = 0.04;
+
   // AI Usage computed data
   const aiUsageStats = useMemo(() => {
     const now = new Date();
@@ -503,12 +512,19 @@ export default function AdminDashboard() {
     const thisMonth = aiUsageRows.filter(r => new Date(r.created_at) >= monthStart);
     
     const byType: Record<string, number> = {};
-    const byUser: Record<string, { total: number; types: Record<string, number> }> = {};
+    const byUser: Record<string, { total: number; types: Record<string, number>; cost: number }> = {};
     
+    let totalCost = 0;
+    const costByType: Record<string, number> = {};
+
     for (const row of thisMonth) {
+      const unitCost = COST_PER_TYPE[row.usage_type] ?? DEFAULT_COST;
       byType[row.usage_type] = (byType[row.usage_type] || 0) + 1;
-      if (!byUser[row.user_id]) byUser[row.user_id] = { total: 0, types: {} };
+      costByType[row.usage_type] = (costByType[row.usage_type] || 0) + unitCost;
+      totalCost += unitCost;
+      if (!byUser[row.user_id]) byUser[row.user_id] = { total: 0, types: {}, cost: 0 };
       byUser[row.user_id].total++;
+      byUser[row.user_id].cost += unitCost;
       byUser[row.user_id].types[row.usage_type] = (byUser[row.user_id].types[row.usage_type] || 0) + 1;
     }
     
@@ -519,16 +535,19 @@ export default function AdminDashboard() {
 
     // Daily trend for last 30 days
     const days = Array.from({ length: 30 }, (_, i) => format(startOfDay(subDays(new Date(), 29 - i)), "yyyy-MM-dd"));
-    const dailyByType: { date: string; import: number; ai_tool: number; pdf_export: number; analyze: number; [k: string]: number | string }[] = days.map(d => ({ date: d, import: 0, ai_tool: 0, pdf_export: 0, analyze: 0 }));
+    const dailyByType: { date: string; import: number; ai_tool: number; pdf_export: number; analyze: number; cost: number; [k: string]: number | string }[] = days.map(d => ({ date: d, import: 0, ai_tool: 0, pdf_export: 0, analyze: 0, cost: 0 }));
     for (const row of aiUsageRows) {
       const day = format(new Date(row.created_at), "yyyy-MM-dd");
       const entry = dailyByType.find(e => e.date === day);
-      if (entry) (entry as any)[row.usage_type] = ((entry as any)[row.usage_type] || 0) + 1;
+      if (entry) {
+        (entry as any)[row.usage_type] = ((entry as any)[row.usage_type] || 0) + 1;
+        (entry as any).cost = ((entry as any).cost || 0) + (COST_PER_TYPE[row.usage_type] ?? DEFAULT_COST);
+      }
     }
 
-    const typeData = Object.entries(byType).map(([type, count]) => ({ type, count })).sort((a, b) => b.count - a.count);
+    const typeData = Object.entries(byType).map(([type, count]) => ({ type, count, cost: costByType[type] || 0 })).sort((a, b) => b.count - a.count);
 
-    return { totalThisMonth: thisMonth.length, typeData, topUsers, dailyByType };
+    return { totalThisMonth: thisMonth.length, totalCost, typeData, topUsers, dailyByType };
   }, [aiUsageRows]);
 
   // Resolve user emails for AI usage top users
@@ -1020,11 +1039,17 @@ export default function AdminDashboard() {
             ) : (
               <div className="space-y-6">
                 {/* Summary cards */}
-                <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+                <div className="grid grid-cols-2 md:grid-cols-5 gap-4">
                   <Card>
                     <CardContent className="p-4 text-center">
                       <p className="text-3xl font-bold text-foreground">{aiUsageStats.totalThisMonth}</p>
                       <p className="text-xs text-muted-foreground">Total this month</p>
+                    </CardContent>
+                  </Card>
+                  <Card>
+                    <CardContent className="p-4 text-center">
+                      <p className="text-3xl font-bold text-emerald-600">${aiUsageStats.totalCost.toFixed(2)}</p>
+                      <p className="text-xs text-muted-foreground">Est. Cost (USD)</p>
                     </CardContent>
                   </Card>
                   {aiUsageStats.typeData.slice(0, 3).map(t => (
@@ -1032,6 +1057,7 @@ export default function AdminDashboard() {
                       <CardContent className="p-4 text-center">
                         <p className="text-3xl font-bold text-foreground">{t.count}</p>
                         <p className="text-xs text-muted-foreground capitalize">{t.type.replace(/_/g, " ")}</p>
+                        <p className="text-xs text-muted-foreground">${t.cost.toFixed(2)}</p>
                       </CardContent>
                     </Card>
                   ))}
@@ -1067,6 +1093,7 @@ export default function AdminDashboard() {
                           <TableRow>
                             <TableHead>User</TableHead>
                             <TableHead className="text-center">Total</TableHead>
+                            <TableHead className="text-center">Est. Cost</TableHead>
                             {aiUsageStats.typeData.map(t => (
                               <TableHead key={t.type} className="text-center capitalize">{t.type.replace(/_/g, " ")}</TableHead>
                             ))}
@@ -1074,11 +1101,12 @@ export default function AdminDashboard() {
                         </TableHeader>
                         <TableBody>
                           {aiUsageStats.topUsers.length === 0 ? (
-                            <TableRow><TableCell colSpan={2 + aiUsageStats.typeData.length} className="text-center py-12 text-muted-foreground">No usage this month</TableCell></TableRow>
+                            <TableRow><TableCell colSpan={3 + aiUsageStats.typeData.length} className="text-center py-12 text-muted-foreground">No usage this month</TableCell></TableRow>
                           ) : aiUsageStats.topUsers.map(u => (
                             <TableRow key={u.userId}>
                               <TableCell className="text-sm font-mono">{topUserEmails[u.userId] || u.userId}</TableCell>
                               <TableCell className="text-center font-semibold">{u.total}</TableCell>
+                              <TableCell className="text-center text-sm font-medium text-emerald-600">${u.cost.toFixed(2)}</TableCell>
                               {aiUsageStats.typeData.map(t => (
                                 <TableCell key={t.type} className="text-center text-sm text-muted-foreground">{u.types[t.type] || 0}</TableCell>
                               ))}
