@@ -18,6 +18,7 @@ export function CoverLetterBuilder({ docId }: CoverLetterBuilderProps) {
   const store = useCoverLetterStore();
   const [activeTab, setActiveTab] = useState("write");
   const [downloading, setDownloading] = useState(false);
+  const [showSurvey, setShowSurvey] = useState(false);
 
   // Load data from multi-doc store if docId provided
   useEffect(() => {
