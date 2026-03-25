@@ -1,56 +1,69 @@
 
 
-## Investigation: Preview changes not reflected in PDF export
+## Plan: Post-Action Micro-Surveys + Inline Ratings + NPS Pulse + Visible FeedbackBox
 
-### Issues Found
-
-After tracing the full export pipeline, I found **3 concrete gaps** where preview customizations are lost during export:
-
----
-
-### 1. Background color is hardcoded to white
-**File:** `src/lib/serverPdfExport.ts` (line 177)
-
-The serialized HTML has `html, body { background: #ffffff; }` hardcoded, ignoring the user's `a4Background` customize setting. If a user picks a custom page background (e.g., the dark green seen in the session replay), the export renders white.
-
-**Fix:** Read the background color from the cloned element's `backgroundColor` style and inject it into the HTML body CSS.
+### Answer to your question
+No — each micro-survey uses `localStorage` to remember that the user already responded for that specific action (e.g., `feedback_survey_resume_analysis`). Once dismissed or submitted, it won't show again. The NPS pulse similarly tracks a `lastNpsShown` timestamp and only re-triggers after 90 days.
 
 ---
 
-### 2. Footer (page numbers, name, email) is missing from export
-**File:** `src/lib/serverPdfExport.ts`
+### What we're building
 
-The footer is rendered as an absolutely-positioned overlay in `ResumePreview` (lines 1548–1573), **outside** the `A4Page` component. The serializer only captures the `A4Page` content (`[data-color-role='background']`), so footers are completely absent from the exported PDF.
+**4 feedback mechanisms**, all storing responses in the existing `feedback` table with a new `type` column to distinguish them.
 
-**Fix:** If footer settings are enabled, inject a CSS `@bottom-left` / `@bottom-right` margin box in the `@page` rule, or append a simple fixed-position footer div into the serialized HTML. Since `@page` margin boxes have limited browser support, the practical approach is to pass footer config into the serializer and append a `position: fixed; bottom` footer element that headless Chrome repeats on every page.
+### Database change
+- Add `type` column to `feedback` table (nullable text, default `'general'`). Values: `general`, `micro_survey`, `inline_rating`, `nps`.
+- Add `rating` column (nullable integer) for thumbs/NPS score storage.
+- Add `context` column (nullable text) for storing which action/tool triggered it.
 
----
+### 1. Post-action micro-surveys (`MicroSurvey` component)
+- Small toast-like popup with thumbs up/down + optional one-line text input
+- Triggered after: resume analysis completion, PDF export, cover letter download
+- localStorage key per action type prevents repeat prompts (e.g., `micro_survey_resume_analysis_done`)
+- Saves to `feedback` with `type = 'micro_survey'`, `rating` (1 or -1), `context` (action name)
 
-### 3. Full `customize` object not passed to serializer
-**File:** `src/pages/ResumeBuilder.tsx` (line 674) and `src/pages/ResumeBuilderSimple.tsx`
+**Integration points:**
+- `ResumeAnalyzer.tsx` — after analysis completes (~line 273, after `setScreen("results")`)
+- `ResumeBuilder.tsx` — after PDF download succeeds (~line 676)
+- `CoverLetterBuilder.tsx` — after PDF download succeeds (~line 53)
 
-Only `{ marginX, marginY }` is passed:
-```typescript
-customize: { marginX: customize.marginX, marginY: customize.marginY },
-```
+### 2. Inline AI output ratings (`InlineRating` component)
+- Thumbs up/down buttons below AI-generated content
+- localStorage tracks per-content-id to prevent duplicate ratings
+- Saves to `feedback` with `type = 'inline_rating'`, `context` (e.g., `resume_analysis_result`)
 
-The serializer needs the full `a4Background` and footer settings too.
+**Integration points:**
+- `ResumeResults.tsx` — below the analysis results
 
-**Fix:** Pass the complete customize object (or at least the additional fields: `a4Background`, `showPageNumbers`, `showFooterName`, `showFooterEmail`, `fontSize`, `datesColor`, `bodyFont`) to `exportResumePdfServer`.
+### 3. NPS pulse (`NpsPulse` component)
+- Modal dialog with 0-10 slider + optional comment
+- Shows to logged-in users on 3rd+ session (tracked via `localStorage` session counter)
+- Won't re-show for 90 days after dismissal or submission
+- Saves to `feedback` with `type = 'nps'`, `rating` (0-10)
 
----
+**Integration point:**
+- Rendered in `App.tsx` or `Dashboard.tsx` for logged-in users
 
-### Implementation Plan
+### 4. Make FeedbackBox more visible
+- Convert from collapsible text link to a small fixed floating button (bottom-right corner)
+- Expand into a card on click (same textarea + send functionality)
 
-**Step 1 — Expand the `ServerPdfExportOptions` interface** (`src/lib/serverPdfExport.ts`)
-- Accept full customize settings (background, footer flags, font, colors)
+### Files to create
+- `src/components/feedback/MicroSurvey.tsx`
+- `src/components/feedback/InlineRating.tsx`
+- `src/components/feedback/NpsPulse.tsx`
 
-**Step 2 — Fix background color in serializer** (`src/lib/serverPdfExport.ts`)
-- Replace hardcoded `#ffffff` with the user's `a4Background` value
+### Files to modify
+- `src/components/FeedbackBox.tsx` — redesign as floating button
+- `src/pages/ResumeAnalyzer.tsx` — trigger MicroSurvey after analysis
+- `src/pages/ResumeBuilder.tsx` — trigger MicroSurvey after PDF export
+- `src/components/cover-letter/CoverLetterBuilder.tsx` — trigger MicroSurvey after download
+- `src/components/resume-analyzer/ResumeResults.tsx` — add InlineRating
+- `src/pages/Dashboard.tsx` — render NpsPulse
 
-**Step 3 — Add footer to serialized HTML** (`src/lib/serverPdfExport.ts`)
-- Append a `position: fixed; bottom: 0` footer div with the user's name, email, and page numbers using CSS `counter(page)` / `counter(pages)`
-
-**Step 4 — Pass full customize from callers** (`src/pages/ResumeBuilder.tsx`, `src/pages/ResumeBuilderSimple.tsx`)
-- Change `customize: { marginX, marginY }` to pass the full customize object
+### Technical details
+- All components use `localStorage` for deduplication — no extra DB queries needed
+- The `feedback` table insert uses `as any` cast (matching existing pattern) since types are auto-generated
+- MicroSurvey auto-dismisses after 10 seconds if ignored
+- NPS uses session count via `localStorage` key `session_count`, incremented on mount in AuthContext or Dashboard
 
