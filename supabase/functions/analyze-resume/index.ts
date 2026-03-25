@@ -272,6 +272,12 @@ Deno.serve(async (req) => {
       analysis.overall_score = Math.round(analysis.overall_score);
     }
 
+    // Log AI usage after successful analysis
+    await supabase.from('ai_usage_log').insert({
+      user_id: userId,
+      usage_type: 'analyze',
+    });
+
     return new Response(
       JSON.stringify(analysis),
       { headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
