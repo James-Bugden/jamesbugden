@@ -32,7 +32,7 @@ const SiteFooter = () => {
             <ul className="space-y-1 text-sm">
               <li><Link to={`${prefix}/guides`} className="text-cream-70 hover:text-cream transition-colors">{isZh ? "所有指南" : "All Guides"}</Link></li>
               <li><Link to={`${prefix}/resume-guide`} className="text-cream-70 hover:text-cream transition-colors">{isZh ? "履歷攻略" : "Resume Guide"}</Link></li>
-              <li><Link to={`${prefix}/interview-prep-guide`} className="text-cream-70 hover:text-cream transition-colors">{isZh ? "面試準備" : "Interview Prep"}</Link></li>
+              <li><Link to={`${prefix}/interview-preparation-guide`} className="text-cream-70 hover:text-cream transition-colors">{isZh ? "面試準備" : "Interview Prep"}</Link></li>
               <li><Link to={`${prefix}/linkedin-guide`} className="text-cream-70 hover:text-cream transition-colors">LinkedIn</Link></li>
               <li><Link to={`${prefix}/salary-starter-kit`} className="text-cream-70 hover:text-cream transition-colors">{isZh ? "薪資談判入門" : "Salary Guide"}</Link></li>
             </ul>
