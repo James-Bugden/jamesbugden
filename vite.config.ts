@@ -2,18 +2,18 @@ import { defineConfig } from "vite";
 import react from "@vitejs/plugin-react";
 import path from "path";
 import { componentTagger } from "lovable-tagger";
-import { generateSitemap } from "./scripts/generate-sitemap";
+import { execSync } from "child_process";
 
 function sitemapPlugin() {
-  const appPath = path.resolve(__dirname, "src/App.tsx");
-  const outPath = path.resolve(__dirname, "public/sitemap.xml");
   return {
-    name: "vite-plugin-sitemap",
-    buildStart() {
-      generateSitemap(appPath, outPath);
-    },
-    configureServer() {
-      generateSitemap(appPath, outPath);
+    name: "sitemap-generator",
+    buildEnd: () => {
+      console.log("Running sitemap generator...");
+      try {
+        execSync("bun run src/lib/generate-sitemap.ts", { stdio: "inherit" });
+      } catch (error) {
+        console.error("Failed to generate sitemap:", error);
+      }
     },
   };
 }
