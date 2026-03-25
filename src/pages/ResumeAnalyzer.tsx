@@ -271,7 +271,10 @@ export default function ResumeAnalyzer({ defaultLang = "en" }: { defaultLang?: L
           });
         }
 
-        setTimeout(() => setScreen("results"), 800);
+        setTimeout(() => {
+          setScreen("results");
+          setShowMicroSurvey(true);
+        }, 800);
       }
     } catch (err: any) {
       console.error("Extract error:", err);

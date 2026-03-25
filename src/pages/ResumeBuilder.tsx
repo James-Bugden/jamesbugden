@@ -674,6 +674,7 @@ const ResumeBuilder = () => {
         customize,
         personalDetails: data.personalDetails,
       });
+      setShowPdfSurvey(true);
     } catch (err) {
       console.error("PDF export error:", err);
     }

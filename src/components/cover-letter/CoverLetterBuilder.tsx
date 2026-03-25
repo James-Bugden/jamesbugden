@@ -59,6 +59,7 @@ export function CoverLetterBuilder({ docId }: CoverLetterBuilderProps) {
 
   return (
     <div className="flex flex-col h-full bg-gray-50">
+      {showSurvey && <MicroSurvey actionKey="cover_letter_download" />}
       <CoverLetterTopNav
         activeTab={activeTab}
         onTabChange={setActiveTab}

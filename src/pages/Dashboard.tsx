@@ -565,6 +565,7 @@ export default function Dashboard({ lang = "en" }: { lang?: "en" | "zh" }) {
           </span>
         </div>
       </footer>
+      <NpsPulse locale="en" />
     </>
   );
 }
