@@ -6,7 +6,6 @@ import { InstagramIcon, ThreadsIcon } from "@/components/SocialIcons";
 import jamesPhoto from "@/assets/james-bugden.jpg";
 import LanguageToggle from "@/components/LanguageToggle";
 import { AuthHeaderButton } from "@/components/AuthHeaderButton";
-import PageSEO from "@/components/PageSEO";
 import HomepageTestimonialsZhTw from "@/components/HomepageTestimonialsZhTw";
 import LogoScrollZhTw from "@/components/LogoScrollZhTw";
 import SelfSegmentationZhTw from "@/components/SelfSegmentationZhTw";
@@ -17,6 +16,7 @@ import AboutSectionZhTw from "@/components/AboutSectionZhTw";
 import ExitIntentPopup from "@/components/ExitIntentPopup";
 import PromoBanner from "@/components/PromoBanner";
 import { useAuth } from "@/contexts/AuthContext";
+import { SEO } from "@/components/SEO";
 
 const faqs = [
   { q: "\u70BA\u4EC0\u9EBC\u9019\u4E9B\u662F\u514D\u8CBB\u7684\uFF1F", a: "\u6211\u7684\u4F7F\u547D\u662F\u628A\u76E1\u53EF\u80FD\u591A\u7684\u4ED8\u8CBB\u5DE5\u5177\u548C\u8CC7\u8A0A\u514D\u8CBB\u958B\u653E\u3002\u6211\u60F3\u5E6B\u52A9\u66F4\u591A\u4EBA\u5F97\u5230\u4ED6\u5011\u60F3\u8981\u7684\u5DE5\u4F5C\u548C\u751F\u6D3B\u3002" },
@@ -100,12 +100,7 @@ const IndexZhTw = () => {
 
   return (
     <div className="homepage min-h-screen overflow-x-hidden scroll-smooth bg-cream">
-      <PageSEO
-        title="James Bugden — 拿到年薪300萬以上外商Offer"
-        description="職涯教練分享內部策略，協助750位以上候選人進入Google、Uber、Microsoft等頂尖企業。"
-        path="/zh-tw"
-        lang="zh-Hant-TW"
-      />
+      <SEO />
 
       {/* ── Promo Banner + Navigation (sticky together) ── */}
       <header className="sticky top-0 z-50">

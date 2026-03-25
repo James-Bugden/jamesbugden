@@ -124,7 +124,6 @@ const SectionBlock = ({ section, forceOpen }: { section: Section; forceOpen?: bo
 
   return (
       <div className="mb-8">
-      <SEO />
       <button
         onClick={() => section.collapsible && setOpen(!open)}
         className={`flex items-center gap-2 text-lg font-semibold text-foreground mb-3 border-b border-border pb-1 w-full text-left ${section.collapsible ? "cursor-pointer hover:text-gold transition-colors" : "cursor-default"}`}
@@ -181,6 +180,7 @@ const SiteDirectory = () => {
 
   return (
     <div className="min-h-screen bg-background p-8 max-w-4xl mx-auto">
+      <SEO />
       <h1 className="text-3xl font-bold text-foreground mb-4">Site Directory</h1>
       <div className="relative mb-8">
         <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />

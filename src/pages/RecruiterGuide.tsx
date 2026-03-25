@@ -5,11 +5,11 @@ import { InstagramIcon, ThreadsIcon } from "@/components/SocialIcons";
 import GuideShareButtons from "@/components/GuideShareButtons";
 import LanguageToggle from "@/components/LanguageToggle";
 import { AuthHeaderButton } from "@/components/AuthHeaderButton";
-import PageSEO from "@/components/PageSEO";
 import { useTrackGuideProgress } from "@/hooks/useReadingProgress";
 import GuideSignInBanner from "@/components/guides/GuideSignInBanner";
 import GuideBottomCTA from "@/components/guides/GuideBottomCTA";
 import { useState, useEffect } from "react";
+import { SEO } from "@/components/SEO";
 
 const SectionNumber = ({ num }: { num: string }) => (
   <span className="text-gold/30 font-heading text-6xl md:text-7xl font-bold leading-none select-none">
@@ -130,11 +130,7 @@ export default function RecruiterGuide() {
 
   return (
     <div className="min-h-screen bg-background">
-      <PageSEO
-        title="How to Get Recruiters to Fight Over You — James Bugden"
-        description="The insider playbook to getting headhunted. Learn how recruiters think, how to build relationships, and how to get on their radar."
-        path="/recruiter-guide"
-      />
+      <SEO />
 
       {/* Navigation */}
       <nav className="fixed top-0 left-0 right-0 z-50 bg-nav-green">

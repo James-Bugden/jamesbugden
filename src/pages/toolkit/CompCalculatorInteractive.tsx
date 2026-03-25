@@ -47,7 +47,6 @@ function TipIcon({ text }: { text: string }) {
 function RowLabel({ children, tip, isSubtracted }: { children: React.ReactNode; tip?: string; isSubtracted?: boolean }) {
   return (
       <div className="flex items-center gap-2 mb-2">
-      <SEO />
       {isSubtracted && <Minus className="w-3.5 h-3.5 text-destructive flex-shrink-0" />}
       <label className="text-sm font-medium text-foreground">{children}</label>
       {tip && <TipIcon text={tip} />}
@@ -504,6 +503,7 @@ const CompCalculatorInteractive = () => {
                     const i = indices[vi];
                     return (
                       <div key={i}>
+                        <SEO />
                         <CurrencyInput value={offer.commuteMonthly} onChange={(v) => updateOffer(i, { commuteMonthly: v })} placeholder="e.g. 150" ariaLabel={`Commute for ${offer.name}`} />
                         {offer.commuteMonthly > 0 && <p className="text-xs text-destructive mt-1">Annual: -{formatCurrency(offer.commuteMonthly * 12)}</p>}
                       </div>

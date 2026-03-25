@@ -52,7 +52,6 @@ function TipIcon({ text }: { text: string }) {
 function RowLabel({ children, tip, isSubtracted }: { children: React.ReactNode; tip?: string; isSubtracted?: boolean }) {
   return (
       <div className="flex items-center gap-2 mb-2">
-      <SEO />
       {isSubtracted && <Minus className="w-3.5 h-3.5 text-destructive flex-shrink-0" />}
       <label className="text-sm font-medium text-foreground">{children}</label>
       {tip && <TipIcon text={tip} />}
@@ -587,6 +586,7 @@ const CompCalculatorInteractiveZhTw = () => {
                     const ptoVal = offer.ptoDays * (offer.monthlySalary / 30);
                     return (
                       <div key={i}>
+                        <SEO />
                         <CurrencyInput value={offer.ptoDays} onChange={(v) => updateOffer(i, { ptoDays: v })} placeholder="例：15" prefix="" ariaLabel={`年假 ${offer.name}`} />
                         {offer.ptoDays > 0 && offer.monthlySalary > 0 && (
                           <p className="text-xs text-muted-foreground mt-1">價值：{formatNTD(ptoVal)}（已含在保障年薪中，不重複計入）</p>

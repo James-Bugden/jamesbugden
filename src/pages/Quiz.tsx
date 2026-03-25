@@ -11,6 +11,7 @@ import {
   PolarRadiusAxis,
   ResponsiveContainer,
 } from "recharts";
+import { SEO } from "@/components/SEO";
 
 /* ─── types ─── */
 type Screen = "intro" | "questions" | "email" | "results" | "results-minimal";
@@ -542,6 +543,7 @@ export default function Quiz() {
 
   return (
     <>
+      <SEO />
       <Helmet>
         <title>外商 Readiness Assessment — james.careers</title>
         <meta name="description" content="Find out if you're ready for a foreign company in Taiwan. Free 2-minute assessment with personalized action plan." />

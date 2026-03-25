@@ -162,7 +162,6 @@ function SaveIndicator({ saving }: { saving: boolean }) {
   }, [saving]);
   return (
       <div className={cn("flex items-center gap-1.5 text-xs transition-opacity duration-300", pulse ? "opacity-100" : "opacity-60")}>
-      <SEO />
       {saving ? (
         <><Loader2 className="w-3 h-3 animate-spin text-gray-400" /><span className="text-gray-400">{t("saving")}</span></>
       ) : (
@@ -861,6 +860,7 @@ const ResumeBuilderSimple = () => {
 
   return (
     <div className="h-screen flex flex-col" style={{ backgroundColor: BRAND.cream }}>
+      <SEO />
       {/* ── Top bar — simplified, no tabs ──────────────────── */}
       <div className="sticky top-0 z-30 bg-white border-b" style={{ borderColor: BRAND.border }}>
         <div className="flex items-center justify-between px-3 sm:px-4 h-12 sm:h-14">

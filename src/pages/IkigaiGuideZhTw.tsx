@@ -5,12 +5,12 @@ import { InstagramIcon, ThreadsIcon } from "@/components/SocialIcons";
 import GuideShareButtons from "@/components/GuideShareButtons";
 import LanguageToggle from "@/components/LanguageToggle";
 import { AuthHeaderButton } from "@/components/AuthHeaderButton";
-import PageSEO from "@/components/PageSEO";
 import { useTrackGuideProgress } from "@/hooks/useReadingProgress";
 import GuideSignInBanner from "@/components/guides/GuideSignInBanner";
 import GuideBottomCTA from "@/components/guides/GuideBottomCTA";
 import { useState, useEffect } from "react";
 import { InteractiveCareerMap, InteractiveScorecard, InteractivePulseCheck } from "@/components/ikigai/InteractiveWidgets";
+import { SEO } from "@/components/SEO";
 
 const SectionNumber = ({ num }: { num: string }) => (
   <span className="text-gold/30 font-heading text-6xl md:text-7xl font-bold leading-none select-none">
@@ -186,11 +186,7 @@ const IkigaiGuideZhTw = () => {
 
   return (
     <div className="min-h-screen bg-background">
-      <PageSEO
-        title="Ikigai：打造一份你不會在 12 個月內辭掉的職涯 | James Bugden"
-        description="招募人員的使命感、心流與持久力完整指南。根據 Héctor García 的 Ikigai 改編。包含 Ikigai 職涯地圖、評分卡和 90 天行動計畫。"
-        path="/zh-tw/ikigai-guide"
-      />
+      <SEO />
 
       <nav className="fixed top-0 left-0 right-0 z-50 bg-nav-green">
         <div className="container mx-auto px-5 md:px-6 py-4 flex items-center justify-between">

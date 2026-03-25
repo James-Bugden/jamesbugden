@@ -122,7 +122,6 @@ const CompensationCalculatorZhTw = () => {
 
   return (
       <div className="min-h-screen bg-background">
-      <SEO />
       <ToolkitHeaderZhTw />
 
       {/* Hero */}
@@ -229,6 +228,7 @@ const CompensationCalculatorZhTw = () => {
                         const val = (o as any)[row.key] as number;
                         return (
                           <td key={i} className="text-right px-4 py-2.5 text-foreground">
+                            <SEO />
                             {val === 0 ? "—" : fmtNTD(val)}
                           </td>
                         );

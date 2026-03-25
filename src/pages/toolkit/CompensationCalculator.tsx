@@ -118,7 +118,6 @@ const CompensationCalculator = () => {
 
   return (
       <div className="min-h-screen bg-background">
-      <SEO />
       <ToolkitHeader />
 
       {/* Hero */}
@@ -227,6 +226,7 @@ const CompensationCalculator = () => {
                         const val = (o as any)[row.key] as number;
                         return (
                           <td key={i} className={`text-right px-4 py-2.5 ${val < 0 ? "text-destructive" : "text-foreground"}`}>
+                            <SEO />
                             {val === 0 ? "—" : fmtFull(val)}
                           </td>
                         );

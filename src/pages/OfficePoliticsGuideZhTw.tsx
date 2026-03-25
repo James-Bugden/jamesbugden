@@ -5,11 +5,11 @@ import { InstagramIcon, ThreadsIcon } from "@/components/SocialIcons";
 import GuideShareButtons from "@/components/GuideShareButtons";
 import LanguageToggle from "@/components/LanguageToggle";
 import { AuthHeaderButton } from "@/components/AuthHeaderButton";
-import PageSEO from "@/components/PageSEO";
 import { useTrackGuideProgress } from "@/hooks/useReadingProgress";
 import GuideSignInBanner from "@/components/guides/GuideSignInBanner";
 import GuideBottomCTA from "@/components/guides/GuideBottomCTA";
 import { useState, useEffect } from "react";
+import { SEO } from "@/components/SEO";
 
 const SectionNumber = ({ num }: { num: string }) => (
   <span className="text-gold/30 font-heading text-6xl md:text-7xl font-bold leading-none select-none">
@@ -103,11 +103,7 @@ const OfficePoliticsGuideZhTw = () => {
 
   return (
     <div className="min-h-screen bg-background">
-      <PageSEO
-        title="職場政治：如何在工作中得到你想要的 | James Bugden"
-        description="招募人員的職場政治指南。5個組織事實、4種政治類型、7種籌碼加速器、8種遊戲。根據 Marie McIntyre 的研究。"
-        path="/zh-tw/office-politics-guide"
-      />
+      <SEO />
 
       {/* Navigation */}
       <nav className="fixed top-0 left-0 right-0 z-50 bg-nav-green">

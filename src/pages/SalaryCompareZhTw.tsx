@@ -1,7 +1,6 @@
 import { SalaryProvider } from "@/components/salary/SalaryContext";
 import SalaryNav from "@/components/salary/SalaryNav";
 import SalaryFooter from "@/components/salary/SalaryFooter";
-import PageSEO from "@/components/PageSEO";
 import { useSalaryT } from "@/components/salary/salaryI18n";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import CompareRolesTab from "@/components/salary/compare/CompareRolesTab";
@@ -10,6 +9,7 @@ import CareerPathTab from "@/components/salary/compare/CareerPathTab";
 import AmIUnderpaidTab from "@/components/salary/compare/AmIUnderpaidTab";
 import { useState } from "react";
 import { useSearchParams } from "react-router-dom";
+import { SEO } from "@/components/SEO";
 
 type Tab = "roles" | "sectors" | "career" | "underpaid";
 
@@ -27,7 +27,7 @@ function Inner() {
 
   return (
     <div className="min-h-screen bg-background font-[Inter,var(--font-body)] animate-in fade-in slide-in-from-bottom-2 duration-300">
-      <PageSEO title="比較薪資 — James Bugden" description="比較職位、產業薪資，查看職涯成長路徑。" path="/zh-tw/salary/compare" />
+      <SEO />
       <SalaryNav lang="zh" />
       <main className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
         {/* Mobile: select dropdown */}

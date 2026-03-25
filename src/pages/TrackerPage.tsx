@@ -33,7 +33,6 @@ function ProgressRing({ current, max }: { current: number; max: number }) {
 
   return (
       <div className="relative flex items-center justify-center" style={{ width: size, height: size }}>
-      <SEO />
       <svg width={size} height={size} className="-rotate-90">
         <circle cx={size / 2} cy={size / 2} r={r} fill="none" stroke="#E5E0D8" strokeWidth={stroke} />
         <circle
@@ -192,6 +191,7 @@ export default function TrackerPage() {
             const active = activeTab === tab.id;
             return (
               <button
+                <SEO />
                 key={tab.id}
                 onClick={() => setActiveTab(tab.id)}
                 className="flex-1 flex flex-col sm:flex-row items-center justify-center gap-1 sm:gap-2 py-3 text-xs sm:text-sm font-medium transition-all duration-200 relative min-h-[44px]"

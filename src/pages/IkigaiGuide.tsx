@@ -5,12 +5,12 @@ import { InstagramIcon, ThreadsIcon } from "@/components/SocialIcons";
 import GuideShareButtons from "@/components/GuideShareButtons";
 import LanguageToggle from "@/components/LanguageToggle";
 import { AuthHeaderButton } from "@/components/AuthHeaderButton";
-import PageSEO from "@/components/PageSEO";
 import { useTrackGuideProgress } from "@/hooks/useReadingProgress";
 import GuideSignInBanner from "@/components/guides/GuideSignInBanner";
 import GuideBottomCTA from "@/components/guides/GuideBottomCTA";
 import { useState, useEffect } from "react";
 import { InteractiveCareerMap, InteractiveScorecard, InteractivePulseCheck } from "@/components/ikigai/InteractiveWidgets";
+import { SEO } from "@/components/SEO";
 
 const SectionNumber = ({ num }: { num: string }) => (
   <span className="text-gold/30 font-heading text-6xl md:text-7xl font-bold leading-none select-none">
@@ -195,11 +195,7 @@ const IkigaiGuide = () => {
 
   return (
     <div className="min-h-screen bg-background">
-      <PageSEO
-        title="Ikigai: Build a Career You Won't Quit in 12 Months | James Bugden"
-        description="A recruiter's guide to finding purpose, flow, and longevity at work. Based on Ikigai by Héctor García & Francesc Miralles. Includes the Ikigai Career Map, Scorecard, and 90-day action plan."
-        path="/ikigai-guide"
-      />
+      <SEO />
 
       {/* Navigation */}
       <nav className="fixed top-0 left-0 right-0 z-50 bg-nav-green">

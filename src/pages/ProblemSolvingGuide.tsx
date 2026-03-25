@@ -5,11 +5,11 @@ import { InstagramIcon, ThreadsIcon } from "@/components/SocialIcons";
 import GuideShareButtons from "@/components/GuideShareButtons";
 import LanguageToggle from "@/components/LanguageToggle";
 import { AuthHeaderButton } from "@/components/AuthHeaderButton";
-import PageSEO from "@/components/PageSEO";
 import { useTrackGuideProgress } from "@/hooks/useReadingProgress";
 import GuideSignInBanner from "@/components/guides/GuideSignInBanner";
 import GuideBottomCTA from "@/components/guides/GuideBottomCTA";
 import { useState, useEffect } from "react";
+import { SEO } from "@/components/SEO";
 
 const SectionNumber = ({ num }: { num: string }) => (
   <span className="text-gold/30 font-heading text-6xl md:text-7xl font-bold leading-none select-none">
@@ -105,11 +105,7 @@ const ProblemSolvingGuide = () => {
 
   return (
     <div className="min-h-screen bg-background">
-      <PageSEO
-        title="Problem Solving 101: The Thinking Framework That Gets You Hired | James Bugden"
-        description="A recruiter's guide to structured thinking in interviews. Logic trees, yes/no trees, hypothesis pyramids, and the 4-step framework used by top candidates. Based on Ken Watanabe's book."
-        path="/problem-solving-guide"
-      />
+      <SEO />
 
       {/* Navigation */}
       <nav className="fixed top-0 left-0 right-0 z-50 bg-nav-green">

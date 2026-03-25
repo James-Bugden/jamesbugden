@@ -5,11 +5,11 @@ import { InstagramIcon, ThreadsIcon } from "@/components/SocialIcons";
 import GuideShareButtons from "@/components/GuideShareButtons";
 import LanguageToggle from "@/components/LanguageToggle";
 import { AuthHeaderButton } from "@/components/AuthHeaderButton";
-import PageSEO from "@/components/PageSEO";
 import { useTrackGuideProgress } from "@/hooks/useReadingProgress";
 import GuideSignInBanner from "@/components/guides/GuideSignInBanner";
 import GuideBottomCTA from "@/components/guides/GuideBottomCTA";
 import { useState, useEffect } from "react";
+import { SEO } from "@/components/SEO";
 
 const SectionNumber = ({ num }: { num: string }) => (
   <span className="text-gold/30 font-heading text-6xl md:text-7xl font-bold leading-none select-none">
@@ -103,11 +103,7 @@ const OfficePoliticsGuide = () => {
 
   return (
     <div className="min-h-screen bg-background">
-      <PageSEO
-        title="Office Politics: How to Get What You Want at Work | James Bugden"
-        description="A recruiter's guide to office politics. The 5 organizational facts, 4 political types, 7 leverage boosters, and 8 games people play. Based on Marie McIntyre's research."
-        path="/office-politics-guide"
-      />
+      <SEO />
 
       {/* Navigation */}
       <nav className="fixed top-0 left-0 right-0 z-50 bg-nav-green">

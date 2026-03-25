@@ -4,7 +4,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Lock, ArrowLeft, Eye, EyeOff, CheckCircle } from "lucide-react";
-import PageSEO from "@/components/PageSEO";
+import { SEO } from "@/components/SEO";
 
 export default function ResetPassword() {
   const navigate = useNavigate();
@@ -82,7 +82,6 @@ export default function ResetPassword() {
   if (!hasToken && !success) {
     return (
       <div className="min-h-screen bg-background flex items-center justify-center px-4">
-        <PageSEO title={`${t.title} | James Bugden`} description={t.subtitle} path="/reset-password" />
         <div className="w-full max-w-[400px] bg-card border border-border rounded-xl shadow-lg p-8 text-center">
           <p className="text-sm text-muted-foreground">{t.invalidLink}</p>
           <Link to="/login" className="text-sm text-foreground font-medium hover:underline mt-4 inline-block">
@@ -95,7 +94,7 @@ export default function ResetPassword() {
 
   return (
     <div className="min-h-screen bg-background flex items-center justify-center px-4">
-      <PageSEO title={`${t.title} | James Bugden`} description={t.subtitle} path="/reset-password" />
+      <SEO />
       <div className="w-full max-w-[400px]">
         <div className="mb-6">
           <Link to="/login" className="inline-flex items-center gap-1.5 text-sm text-muted-foreground hover:text-foreground transition-colors">

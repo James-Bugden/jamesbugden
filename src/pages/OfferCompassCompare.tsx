@@ -28,6 +28,7 @@ import { useEmailGate } from "@/hooks/useEmailGate";
 import { EmailGateOverlay } from "@/components/EmailGateOverlay";
 import { calcScenario, formatCurrency, formatPct } from "@/components/offer-compass/types";
 import type { Scenario } from "@/components/offer-compass/types";
+import { SEO } from "@/components/SEO";
 
 const COLORS = ["#1B3A2F", "#C9A961", "#3D7A5F", "#B06B3A", "#6B5B95"];
 
@@ -200,6 +201,7 @@ export default function OfferCompassCompare() {
 function Header({ currency, setCurrency }: { currency: Currency; setCurrency: (c: Currency) => void }) {
   return (
     <header style={{ backgroundColor: "#1B3A2F" }}>
+      <SEO />
       <div className="max-w-7xl mx-auto px-4 md:px-6 h-14 flex items-center justify-between">
         <div className="flex items-center gap-4">
           <Link to="/offer-calculator" className="flex items-center gap-2 text-white/70 hover:text-white transition-colors text-sm">

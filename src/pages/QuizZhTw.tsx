@@ -11,6 +11,7 @@ import {
   PolarRadiusAxis,
   ResponsiveContainer,
 } from "recharts";
+import { SEO } from "@/components/SEO";
 
 /* ─── types ─── */
 type Screen = "intro" | "questions" | "email" | "results" | "results-minimal";
@@ -535,6 +536,7 @@ export default function QuizZhTw() {
 
   return (
     <>
+      <SEO />
       <Helmet>
         <title>外商準備度測驗 — james.careers</title>
         <meta name="description" content="測試你是否準備好進入外商公司。免費 2 分鐘測驗，附個人化行動計畫。" />

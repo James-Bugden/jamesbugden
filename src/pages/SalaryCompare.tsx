@@ -3,13 +3,13 @@ import { useSearchParams } from "react-router-dom";
 import { SalaryProvider } from "@/components/salary/SalaryContext";
 import SalaryNav from "@/components/salary/SalaryNav";
 import SalaryFooter from "@/components/salary/SalaryFooter";
-import PageSEO from "@/components/PageSEO";
 import { useSalaryT, type SalaryLang } from "@/components/salary/salaryI18n";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import CompareRolesTab from "@/components/salary/compare/CompareRolesTab";
 import CompareSectorsTab from "@/components/salary/compare/CompareSectorsTab";
 import CareerPathTab from "@/components/salary/compare/CareerPathTab";
 import AmIUnderpaidTab from "@/components/salary/compare/AmIUnderpaidTab";
+import { SEO } from "@/components/SEO";
 
 type Tab = "roles" | "sectors" | "career" | "underpaid";
 
@@ -27,11 +27,7 @@ function Inner({ lang }: { lang: SalaryLang }) {
 
   return (
     <div className="min-h-screen bg-background font-[Inter,var(--font-body)]">
-      <PageSEO
-        title={lang === "zh" ? "比較薪資 — James Bugden" : "Compare Salaries — James Bugden"}
-        description={lang === "zh" ? "比較職位、產業薪資，查看職涯成長路徑。" : "Compare roles, sectors, career paths and check if you're underpaid."}
-        path={lang === "zh" ? "/zh-tw/salary/compare" : "/salary/compare"}
-      />
+      <SEO />
       <SalaryNav lang={lang} />
 
       <main className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-6 animate-in fade-in slide-in-from-bottom-2 duration-300">

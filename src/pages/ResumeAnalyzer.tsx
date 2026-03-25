@@ -1,6 +1,5 @@
 import { useState, useCallback, useRef, useEffect } from "react";
 import { toast } from "@/hooks/use-toast";
-import PageSEO from "@/components/PageSEO";
 import { Link, useNavigate } from "react-router-dom";
 import { Upload, FileText, Sparkles, BarChart3, CloudUpload, X, Check, Lock, ArrowRight, ShieldCheck, ChevronRight, AlertTriangle, LogIn } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -19,6 +18,7 @@ import { useAuth } from "@/contexts/AuthContext";
 import { useResumeAnalyses } from "@/hooks/useResumeAnalyses";
 import { renderPdfToImage } from "@/lib/renderPdfToImage";
 import jamesPhoto from "@/assets/james-bugden.jpg";
+import { SEO } from "@/components/SEO";
 
 
 type Screen = "upload" | "analyzing" | "results";
@@ -291,12 +291,7 @@ export default function ResumeAnalyzer({ defaultLang = "en" }: { defaultLang?: L
 
   return (
     <>
-      <PageSEO
-        title={t(lang, "Free Resume Analyzer — AI-Powered Resume Score", "免費履歷分析工具 — AI 驅動的履歷評分")}
-        description={t(lang, "Get a free, instant AI analysis of your resume powered by the same criteria top recruiters use.", "免費獲得即時 AI 履歷分析，基於頂尖招募官實際使用的篩選標準。")}
-        path={lang === "zh-TW" ? "/zh-tw/resume-analyzer" : "/resume-analyzer"}
-        lang={lang === "zh-TW" ? "zh-Hant-TW" : "en"}
-      />
+      <SEO />
 
       {/* Header — cream nav matching homepage */}
       <header className="sticky top-0 z-50" style={{ backgroundColor: '#FDFBF7', borderBottom: '1px solid rgba(43,71,52,0.1)' }}>

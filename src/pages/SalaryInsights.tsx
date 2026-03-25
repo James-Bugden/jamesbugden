@@ -12,8 +12,8 @@ import SectorTreemap from "@/components/salary/insights/SectorTreemap";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { ALL_SECTORS, salaryData, NATIONAL_MEDIAN } from "@/data/salaryData";
 import { type SalaryLang } from "@/components/salary/salaryI18n";
-import PageSEO from "@/components/PageSEO";
 import { useLocation } from "react-router-dom";
+import { SEO } from "@/components/SEO";
 
 function InsightsContent({ lang }: { lang: SalaryLang }) {
   const [sectorFilter, setSectorFilter] = useState("");
@@ -56,11 +56,7 @@ function InsightsContent({ lang }: { lang: SalaryLang }) {
 
   return (
     <div className="min-h-screen bg-background font-sans animate-in fade-in slide-in-from-bottom-2 duration-300">
-      <PageSEO
-        title={lang === "zh" ? "台灣薪資洞察 | James Bugden" : "Taiwan Salary Insights | James Bugden"}
-        description={lang === "zh" ? "互動式圖表深入了解台灣薪資趨勢" : "Interactive charts exploring Taiwan salary trends across sectors and experience levels."}
-        path="/salary/insights"
-      />
+      <SEO />
       <SalaryNav lang={lang} />
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-8">
         {/* Header */}

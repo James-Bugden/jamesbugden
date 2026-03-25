@@ -93,7 +93,7 @@ _________________________________ | _________________________________
 
   return (
       <div className="min-h-screen bg-background">
-      <SEO />
+        <SEO />
       <ToolkitHeaderZhTw />
 
       <section className="bg-executive-green py-12 md:py-16 px-5 md:px-6 relative print:hidden">
