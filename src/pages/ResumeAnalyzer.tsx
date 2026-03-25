@@ -43,6 +43,7 @@ export default function ResumeAnalyzer({ defaultLang = "en" }: { defaultLang?: L
   const [analyzeStep, setAnalyzeStep] = useState(0);
   const [progress, setProgress] = useState(0);
   const [resumeImageUrl, setResumeImageUrl] = useState<string | null>(null);
+  const [showMicroSurvey, setShowMicroSurvey] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
   
 
