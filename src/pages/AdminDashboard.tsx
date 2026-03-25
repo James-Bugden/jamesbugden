@@ -78,6 +78,9 @@ interface FeedbackItem {
   page: string | null;
   locale: string | null;
   created_at: string;
+  type: string | null;
+  rating: number | null;
+  context: string | null;
 }
 
 interface AccountUser {
