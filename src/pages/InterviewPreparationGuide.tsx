@@ -6,7 +6,6 @@ import { AuthHeaderButton } from "@/components/AuthHeaderButton";
 import { Button } from "@/components/ui/button";
 import { Linkedin } from "lucide-react";
 import GuideShareButtons from "@/components/GuideShareButtons";
-import { InstagramIcon, ThreadsIcon } from "@/components/SocialIcons";
 import GoldCheckBadge from "@/components/GoldCheckBadge";
 import { useTrackGuideProgress } from "@/hooks/useReadingProgress";
 import GuideSignInBanner from "@/components/guides/GuideSignInBanner";
@@ -1154,36 +1153,6 @@ const InterviewPreparationGuide = () => {
 
       <GuideShareButtons />
 
-      {/* Footer */}
-      <footer className="py-8 md:py-10 px-5 md:px-6 bg-card border-t border-border">
-        <div className="container mx-auto max-w-5xl">
-          <div className="flex flex-col md:flex-row justify-between items-center gap-4">
-            <div className="flex items-center gap-6">
-              <Link to="/" className="text-sm text-muted-foreground hover:text-foreground transition-colors">
-                Home
-              </Link>
-              <Link to="/resume-guide" className="text-sm text-muted-foreground hover:text-foreground transition-colors">
-                Resume Guide
-              </Link>
-            </div>
-            <span className="text-sm text-muted-foreground">
-              © 2026 James Bugden. All rights reserved.
-            </span>
-            <div className="flex items-center gap-6">
-              <a href="https://www.linkedin.com/in/james-bugden/" target="_blank" rel="noopener noreferrer" className="text-muted-foreground hover:text-foreground transition-colors">
-                <Linkedin className="w-5 h-5" />
-              </a>
-              <a href="https://www.instagram.com/james.careers/" target="_blank" rel="noopener noreferrer" className="text-muted-foreground hover:text-foreground transition-colors">
-                <InstagramIcon className="w-5 h-5" />
-              </a>
-              <a href="https://www.threads.com/@james.careers" target="_blank" rel="noopener noreferrer" className="text-muted-foreground hover:text-foreground transition-colors">
-                <ThreadsIcon className="w-5 h-5" />
-              </a>
-            </div>
-          </div>
-        </div>
-      </footer>
-    
       <GuideBottomCTA lang="en" />
     </div>
   );

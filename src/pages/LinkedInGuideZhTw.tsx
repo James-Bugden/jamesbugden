@@ -2,7 +2,6 @@ import { ArrowLeft, Star, Users, FileText, MessageSquare, Search, CheckCircle2, 
 import { InteractiveChecklist } from "@/components/guides/InteractiveChecklist";
 import { Link, useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
-import { InstagramIcon, ThreadsIcon } from "@/components/SocialIcons";
 import GoldCheckBadge from "@/components/GoldCheckBadge";
 import GuideShareButtons from "@/components/GuideShareButtons";
 import { AuthHeaderButton } from "@/components/AuthHeaderButton";
@@ -803,49 +802,6 @@ const LinkedInGuideZhTw = () => {
 
       <GuideShareButtons isZhTw />
 
-      {/* Footer */}
-      <footer className="py-8 px-5 md:px-6 bg-nav-green">
-        <div className="container mx-auto max-w-4xl">
-          <div className="flex flex-col md:flex-row items-center justify-between gap-4">
-            <Link to="/zh-tw" className="font-heading text-lg font-medium text-cream">
-              JAMES BUGDEN
-            </Link>
-            <div className="flex items-center gap-4">
-              <a 
-                href="https://www.linkedin.com/in/jamesbugden/" 
-                target="_blank" 
-                rel="noopener noreferrer"
-                className="text-cream/70 hover:text-cream transition-colors"
-                aria-label="LinkedIn"
-              >
-                <Linkedin className="w-5 h-5" />
-              </a>
-              <a 
-                href="https://www.instagram.com/jamesbugden/" 
-                target="_blank" 
-                rel="noopener noreferrer"
-                className="text-cream/70 hover:text-cream transition-colors"
-                aria-label="Instagram"
-              >
-                <InstagramIcon />
-              </a>
-              <a 
-                href="https://www.threads.net/@jamesbugden" 
-                target="_blank" 
-                rel="noopener noreferrer"
-                className="text-cream/70 hover:text-cream transition-colors"
-                aria-label="Threads"
-              >
-                <ThreadsIcon />
-              </a>
-            </div>
-            <p className="text-cream/60 text-sm">
-              © {new Date().getFullYear()} James Bugden
-            </p>
-          </div>
-        </div>
-      </footer>
-    
       <GuideBottomCTA lang="zh" />
     </div>
   );

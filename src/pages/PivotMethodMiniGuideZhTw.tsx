@@ -501,15 +501,6 @@ const PivotMethodMiniGuideZhTw = () => {
 
         <GuideShareButtons isZhTw />
 
-        {/* Footer */}
-        <footer className="mt-16 pt-8 border-t border-border text-center text-muted-foreground">
-          <p className="mb-2">
-            James Bugden • Uber Taiwan 資深招募顧問
-          </p>
-          <p className="text-sm">
-            根據 Jenny Blake 的《Pivot:唯一重要的動作是你的下一步》。所有框架概念和方法論歸功於 Jenny Blake。
-          </p>
-        </footer>
       </main>
     
       <GuideBottomCTA lang="zh" />

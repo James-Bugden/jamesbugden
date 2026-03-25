@@ -1,8 +1,7 @@
 import "@/styles/homepage.css";
 import { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { Briefcase, Users, Linkedin, FileCheck, X, CheckCircle2, Eye, Building, Plus, Minus } from "lucide-react";
-import { InstagramIcon, ThreadsIcon } from "@/components/SocialIcons";
+import { Briefcase, Users, FileCheck, X, CheckCircle2, Eye, Building, Plus, Minus } from "lucide-react";
 import jamesPhoto from "@/assets/james-bugden.jpg";
 import LanguageToggle from "@/components/LanguageToggle";
 import { AuthHeaderButton } from "@/components/AuthHeaderButton";
@@ -334,25 +333,6 @@ const IndexZhTw = () => {
 
       </main>
 
-      {/* ── Footer ── */}
-      <footer className="py-8 md:py-10 px-5 md:px-6 bg-executive-green">
-        <div className="container mx-auto max-w-5xl flex flex-col items-center gap-4">
-          <div className="flex items-center gap-6">
-            <a href="https://www.linkedin.com/in/james-bugden/" target="_blank" rel="noopener noreferrer" className="hover:opacity-70 transition-opacity text-cream" aria-label="LinkedIn">
-              <Linkedin className="w-5 h-5" />
-            </a>
-            <a href="https://www.instagram.com/james.careers/" target="_blank" rel="noopener noreferrer" className="hover:opacity-70 transition-opacity text-cream" aria-label="Instagram">
-              <InstagramIcon className="w-5 h-5" />
-            </a>
-            <a href="https://www.threads.com/@james.careers" target="_blank" rel="noopener noreferrer" className="hover:opacity-70 transition-opacity text-cream" aria-label="Threads">
-              <ThreadsIcon className="w-5 h-5" />
-            </a>
-          </div>
-          <span className="text-sm text-center w-full text-cream/60">
-            © 2026 James Bugden. All rights reserved.
-          </span>
-        </div>
-      </footer>
       <ExitIntentPopup lang="zh" />
     </div>
   );

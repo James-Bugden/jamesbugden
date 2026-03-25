@@ -1787,12 +1787,6 @@ const CharleneLeeReview = () => {
           </div>
         </section>
 
-        {/* Footer */}
-        <footer className="text-center py-8 border-t border-border">
-          <p className="text-muted-foreground text-sm">
-            Resume Review by James Bugden | <a href="mailto:james@james.careers" className="text-gold hover:underline">james@james.careers</a>
-          </p>
-        </footer>
       </main>
     </div>
   );

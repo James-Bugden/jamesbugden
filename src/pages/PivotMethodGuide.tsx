@@ -1,10 +1,9 @@
-import { ArrowLeft, Target, Compass, Search, FlaskConical, Rocket, Users, CheckCircle2, AlertTriangle, Linkedin, Calendar, TrendingUp, Zap, BarChart3, Lightbulb, RefreshCw, BookOpen, MessageSquare, ArrowRight, Clock } from "lucide-react";
+import { ArrowLeft, Target, Compass, Search, FlaskConical, Rocket, Users, CheckCircle2, AlertTriangle, Calendar, TrendingUp, Zap, BarChart3, Lightbulb, RefreshCw, BookOpen, MessageSquare, ArrowRight, Clock } from "lucide-react";
 import { InteractiveChecklist } from "@/components/guides/InteractiveChecklist";
 import { Link } from "react-router-dom";
 import LanguageToggle from "@/components/LanguageToggle";
 import { AuthHeaderButton } from "@/components/AuthHeaderButton";
 import { Button } from "@/components/ui/button";
-import { InstagramIcon, ThreadsIcon } from "@/components/SocialIcons";
 import GuideShareButtons from "@/components/GuideShareButtons";
 import GoldCheckBadge from "@/components/GoldCheckBadge";
 import { useTrackGuideProgress } from "@/hooks/useReadingProgress";
@@ -1261,49 +1260,6 @@ const PivotMethodGuide = () => {
 
       <GuideShareButtons />
 
-      {/* Footer */}
-      <footer className="py-8 px-5 md:px-6 bg-nav-green">
-        <div className="container mx-auto max-w-4xl">
-          <div className="flex flex-col md:flex-row items-center justify-between gap-4">
-            <Link to="/" className="font-heading text-lg font-medium text-cream">
-              JAMES BUGDEN
-            </Link>
-            <div className="flex items-center gap-4">
-              <a 
-                href="https://www.linkedin.com/in/jamesbugden/" 
-                target="_blank" 
-                rel="noopener noreferrer"
-                className="text-cream/70 hover:text-cream transition-colors"
-                aria-label="LinkedIn"
-              >
-                <Linkedin className="w-5 h-5" />
-              </a>
-              <a 
-                href="https://www.instagram.com/jamesbugden/" 
-                target="_blank" 
-                rel="noopener noreferrer"
-                className="text-cream/70 hover:text-cream transition-colors"
-                aria-label="Instagram"
-              >
-                <InstagramIcon />
-              </a>
-              <a 
-                href="https://www.threads.net/@jamesbugden" 
-                target="_blank" 
-                rel="noopener noreferrer"
-                className="text-cream/70 hover:text-cream transition-colors"
-                aria-label="Threads"
-              >
-                <ThreadsIcon />
-              </a>
-            </div>
-          </div>
-          <div className="mt-4 text-center text-cream/50 text-sm">
-            © {new Date().getFullYear()} James Bugden. All rights reserved.
-          </div>
-        </div>
-      </footer>
-    
       <GuideBottomCTA lang="en" />
     </div>
   );
