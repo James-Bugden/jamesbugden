@@ -7,9 +7,10 @@ interface SEOProps {
   description?: string;
   ogImage?: string;
   noIndex?: boolean;
+  schemaJson?: Record<string, unknown>;
 }
 
-export function SEO({ title, description, ogImage, noIndex }: SEOProps) {
+export function SEO({ title, description, ogImage, noIndex, schemaJson }: SEOProps) {
   const { pathname } = useLocation();
 
   const config = seoConfig[pathname];
@@ -61,6 +62,10 @@ export function SEO({ title, description, ogImage, noIndex }: SEOProps) {
       <meta name="twitter:title" content={pageTitle} />
       <meta name="twitter:description" content={pageDescription} />
       <meta name="twitter:image" content={pageOgImage} />
+
+      {schemaJson && (
+        <script type="application/ld+json">{JSON.stringify(schemaJson)}</script>
+      )}
     </Helmet>
   );
 }
