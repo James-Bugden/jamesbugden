@@ -409,13 +409,7 @@ export default function InterviewQuestionBank({ lang: initialLang }: { lang: Lan
 
   return (
     <div className="min-h-screen bg-background">
-      <PageSEO
-        title={lang === "zh" ? "面試問答資料庫 | 203題真實面試問題附參考回答" : "Interview Question & Answer Database | 203 Real Questions"}
-        description={lang === "zh"
-          ? "203題真實面試問題附參考回答，涵蓋行為題、情境題、薪資談判等11大類別，幫助你準備下一次面試。"
-          : "203 real interview questions with sample answers across 11 categories including behavioral, situational, salary negotiation, and more."}
-        path={lang === "zh" ? "/zh-tw/interview-questions" : "/interview-questions"}
-      />
+      <SEO />
 
       {/* Nav */}
       <nav className="fixed top-0 left-0 right-0 z-50 bg-nav-green">
