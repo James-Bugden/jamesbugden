@@ -496,14 +496,18 @@ export default function AdminDashboard() {
     return days.map(d => ({ date: d, count: countMap[d] }));
   }, [accounts]);
 
-  // Estimated cost per usage type (USD) — adjust these as needed
+  // Estimated cost per usage type (USD) based on actual models used:
+  // analyze → gemini-2.5-flash (~4K in + 4K out tokens)
+  // ai_tool → gemini-3-flash-preview (~2K in + 1K out tokens)
+  // import  → gemini-2.5-flash (~3K in + 2K out tokens)
+  // pdf_export → Browserless API (no AI tokens, infra cost only)
   const COST_PER_TYPE: Record<string, number> = {
-    analyze: 0.08,
-    ai_tool: 0.05,
-    import: 0.06,
-    pdf_export: 0.03,
+    analyze: 0.003,
+    ai_tool: 0.0006,
+    import: 0.002,
+    pdf_export: 0.005,
   };
-  const DEFAULT_COST = 0.04;
+  const DEFAULT_COST = 0.001;
 
   // AI Usage computed data
   const aiUsageStats = useMemo(() => {
