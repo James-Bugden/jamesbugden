@@ -65,9 +65,8 @@ const templates = [
 
 const ToolkitIndex = () => {
   return (
-    <>
-      <SEO />
       <div className="min-h-screen bg-background">
+      <SEO />
       <ToolkitHeader />
 
       {/* Hero */}

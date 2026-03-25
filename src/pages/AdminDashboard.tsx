@@ -574,9 +574,8 @@ export default function AdminDashboard() {
   ];
 
   return (
-    <>
-      <SEO />
       <div className="min-h-screen bg-background">
+      <SEO />
       {/* Header */}
       <header className="border-b border-border bg-card sticky top-0 z-10">
         <div className="max-w-7xl mx-auto px-4 h-14 flex items-center justify-between">

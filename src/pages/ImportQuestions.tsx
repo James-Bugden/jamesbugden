@@ -26,9 +26,8 @@ export default function ImportQuestions() {
   };
 
   return (
-    <>
-      <SEO />
       <div className="min-h-screen flex flex-col items-center justify-center gap-4 p-8">
+      <SEO />
       <h1 className="text-2xl font-bold">Import Interview Questions</h1>
       <p className="text-muted-foreground">{questionsData.length} questions ready to import</p>
       <button

@@ -123,9 +123,8 @@ const SectionBlock = ({ section, forceOpen }: { section: Section; forceOpen?: bo
   const isOpen = forceOpen || open;
 
   return (
-    <>
-      <SEO />
       <div className="mb-8">
+      <SEO />
       <button
         onClick={() => section.collapsible && setOpen(!open)}
         className={`flex items-center gap-2 text-lg font-semibold text-foreground mb-3 border-b border-border pb-1 w-full text-left ${section.collapsible ? "cursor-pointer hover:text-gold transition-colors" : "cursor-default"}`}

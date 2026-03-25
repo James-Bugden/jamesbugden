@@ -64,9 +64,8 @@ const ClientReviewGate = () => {
   };
 
   return (
-    <>
-      <SEO />
       <div className="min-h-screen bg-background flex items-center justify-center px-4">
+      <SEO />
       <div className="w-full max-w-lg">
         <div className="bg-card rounded-2xl shadow-lg p-10 md:p-12">
           <div className="text-center mb-8">

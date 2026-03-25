@@ -32,9 +32,8 @@ function ProgressRing({ current, max }: { current: number; max: number }) {
   const offset = circ * (1 - pct);
 
   return (
-    <>
-      <SEO />
       <div className="relative flex items-center justify-center" style={{ width: size, height: size }}>
+      <SEO />
       <svg width={size} height={size} className="-rotate-90">
         <circle cx={size / 2} cy={size / 2} r={r} fill="none" stroke="#E5E0D8" strokeWidth={stroke} />
         <circle

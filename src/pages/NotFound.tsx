@@ -13,9 +13,8 @@ const NotFound = () => {
   }, [location.pathname]);
 
   return (
-    <>
-      <SEO />
       <div className="min-h-screen bg-background flex flex-col">
+      <SEO />
       <div className="h-1 bg-gradient-to-r from-gold/60 via-gold to-gold/60" />
 
       <main className="flex-1 flex flex-col items-center justify-center px-4 py-16 sm:py-24">
