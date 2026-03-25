@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
-import { Helmet } from "react-helmet-async";
+import { SEO } from "@/components/SEO";
 import { ArrowLeft } from "lucide-react";
 import { CURRENCY_OPTIONS } from "@/components/offer-compass/types";
 import type { Currency } from "@/components/offer-compass/types";
