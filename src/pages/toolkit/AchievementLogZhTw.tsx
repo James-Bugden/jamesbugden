@@ -7,6 +7,7 @@ import { nativeShare } from "@/lib/share";
 import ToolkitHeaderZhTw from "@/components/toolkit/ToolkitHeaderZhTw";
 import ToolkitFooterZhTw from "@/components/toolkit/ToolkitFooterZhTw";
 import ToolkitNavZhTw from "@/components/toolkit/ToolkitNavZhTw";
+import { SEO } from "@/components/SEO";
 
 const exampleWeek = [
   { day: "一", achievement: "交付修訂後的 API 文件給合作團隊", impact: "解除了等了 2 週的 3 個下游整合的阻塞", category: "⚡ 效率" },
@@ -65,7 +66,8 @@ ________ 那週
   };
 
   return (
-    <div className="min-h-screen bg-background">
+      <div className="min-h-screen bg-background">
+      <SEO />
       <ToolkitHeaderZhTw />
 
       <section className="bg-executive-green py-12 md:py-16 px-5 md:px-6 relative print:hidden">

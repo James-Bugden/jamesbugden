@@ -27,6 +27,7 @@ import {
 import { format, subDays, startOfDay } from "date-fns";
 import { AreaChart, Area, BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer } from "recharts";
 import bcrypt from "bcryptjs";
+import { SEO } from "@/components/SEO";
 
 // ── Types ───────────────────────────────────────────────────────────────────────
 
@@ -573,7 +574,8 @@ export default function AdminDashboard() {
   ];
 
   return (
-    <div className="min-h-screen bg-background">
+      <div className="min-h-screen bg-background">
+      <SEO />
       {/* Header */}
       <header className="border-b border-border bg-card sticky top-0 z-10">
         <div className="max-w-7xl mx-auto px-4 h-14 flex items-center justify-between">

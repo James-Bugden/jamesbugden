@@ -7,6 +7,7 @@ import { nativeShare } from "@/lib/share";
 import ToolkitHeaderZhTw from "@/components/toolkit/ToolkitHeaderZhTw";
 import ToolkitFooterZhTw from "@/components/toolkit/ToolkitFooterZhTw";
 import ToolkitNavZhTw from "@/components/toolkit/ToolkitNavZhTw";
+import { SEO } from "@/components/SEO";
 
 const mainCards = [
   {
@@ -85,7 +86,8 @@ const PushbackCheatSheetZhTw = () => {
   };
 
   return (
-    <div className="min-h-screen bg-background">
+      <div className="min-h-screen bg-background">
+      <SEO />
       <ToolkitHeaderZhTw />
 
       {/* Hero */}

@@ -1,5 +1,11 @@
 import Dashboard from "./Dashboard";
+import { SEO } from "@/components/SEO";
 
 export default function DashboardZhTw() {
-  return <Dashboard lang="zh" />;
+  return (
+    <>
+      <SEO />
+      <Dashboard lang="zh" />
+    </>
+  );
 }

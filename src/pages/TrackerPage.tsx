@@ -9,6 +9,7 @@ import LAMPListTab from "@/components/tracker/LAMPListTab";
 import ContactsTab from "@/components/tracker/ContactsTab";
 import PipelineTab from "@/components/tracker/PipelineTab";
 import ResourcesTab from "@/components/tracker/ResourcesTab";
+import { SEO } from "@/components/SEO";
 
 const TABS = [
   { id: "lamp", label: "LAMP List", icon: Target },
@@ -31,7 +32,8 @@ function ProgressRing({ current, max }: { current: number; max: number }) {
   const offset = circ * (1 - pct);
 
   return (
-    <div className="relative flex items-center justify-center" style={{ width: size, height: size }}>
+      <div className="relative flex items-center justify-center" style={{ width: size, height: size }}>
+      <SEO />
       <svg width={size} height={size} className="-rotate-90">
         <circle cx={size / 2} cy={size / 2} r={r} fill="none" stroke="#E5E0D8" strokeWidth={stroke} />
         <circle

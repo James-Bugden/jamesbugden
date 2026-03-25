@@ -7,6 +7,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Loader2, CheckCircle } from "lucide-react";
 import { toast } from "@/hooks/use-toast";
+import { SEO } from "@/components/SEO";
 
 const AdminLogin = () => {
   const [email, setEmail] = useState("");
@@ -111,7 +112,8 @@ const AdminLogin = () => {
 
   if (checkingSession) {
     return (
-      <div className="min-h-screen bg-background flex items-center justify-center">
+        <div className="min-h-screen bg-background flex items-center justify-center">
+        <SEO />
         <Loader2 className="h-8 w-8 animate-spin text-executive-green" />
       </div>
     );

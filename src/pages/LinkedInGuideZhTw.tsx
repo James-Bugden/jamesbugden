@@ -9,6 +9,7 @@ import { AuthHeaderButton } from "@/components/AuthHeaderButton";
 import { useTrackGuideProgress } from "@/hooks/useReadingProgress";
 import GuideSignInBanner from "@/components/guides/GuideSignInBanner";
 import GuideBottomCTA from "@/components/guides/GuideBottomCTA";
+import { SEO } from "@/components/SEO";
 
 const LinkedInGuideZhTw = () => {
   useTrackGuideProgress("linkedin-guide");
@@ -16,7 +17,8 @@ const LinkedInGuideZhTw = () => {
 
 
   return (
-    <div className="min-h-screen bg-background">
+      <div className="min-h-screen bg-background">
+      <SEO />
       {/* Navigation */}
       <nav className="fixed top-0 left-0 right-0 z-50 bg-nav-green">
         <div className="container mx-auto px-5 md:px-6 py-4 flex items-center justify-between">

@@ -7,6 +7,7 @@ import { nativeShare } from "@/lib/share";
 import ToolkitHeader from "@/components/toolkit/ToolkitHeader";
 import ToolkitFooter from "@/components/toolkit/ToolkitFooter";
 import ToolkitNav from "@/components/toolkit/ToolkitNav";
+import { SEO } from "@/components/SEO";
 
 const exampleAchievements = [
   { achievement: "Led migration of legacy system to cloud infrastructure", impact: "Reduced server costs by 35% (NT$2.4M annual savings)" },
@@ -94,7 +95,8 @@ TALKING POINTS
   };
 
   return (
-    <div className="min-h-screen bg-background">
+      <div className="min-h-screen bg-background">
+      <SEO />
       <ToolkitHeader />
 
       {/* Hero */}
