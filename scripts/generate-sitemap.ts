@@ -1,7 +1,7 @@
 import fs from "fs";
 import path from "path";
 
-const BASE_URL = "https://jamesbugden.lovable.app";
+const BASE_URL = "https://jamesbugden.com";
 
 // Priority rules
 function getPriority(route: string): number {
