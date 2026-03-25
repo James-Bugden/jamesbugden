@@ -1,5 +1,4 @@
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
-import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
 
 const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
@@ -97,62 +96,20 @@ const parseResumeTool = {
   },
 };
 
-const AI_TOOL_MONTHLY_LIMIT = 6;
-
 serve(async (req) => {
   if (req.method === "OPTIONS") return new Response(null, { headers: corsHeaders });
 
   try {
-    const { action, text, context } = await req.json();
+    const { action, text } = await req.json();
+
+    if (action !== "parse_resume") {
+      throw new Error("Unknown action: " + action);
+    }
+
     const LOVABLE_API_KEY = Deno.env.get("LOVABLE_API_KEY");
     if (!LOVABLE_API_KEY) throw new Error("LOVABLE_API_KEY is not configured");
 
-    // Auth extraction (required for rate limiting)
-    let userId: string | null = null;
-    let supabase: any = null;
-    const authHeader = req.headers.get("Authorization");
-    if (authHeader?.startsWith("Bearer ")) {
-      try {
-        supabase = createClient(
-          Deno.env.get("SUPABASE_URL")!,
-          Deno.env.get("SUPABASE_ANON_KEY")!,
-          { global: { headers: { Authorization: authHeader } } }
-        );
-        const token = authHeader.replace("Bearer ", "");
-        const { data } = await supabase.auth.getClaims(token);
-        userId = data?.claims?.sub ?? null;
-      } catch { /* skip silently */ }
-    }
-
-    // Rate limit check for authenticated users
-    if (userId && supabase) {
-      try {
-        const { data: countData } = await supabase.rpc("count_ai_usage_this_month", {
-          p_user_id: userId,
-          p_usage_type: "ai_tool",
-        });
-        const currentCount = (countData as number) ?? 0;
-        if (currentCount >= AI_TOOL_MONTHLY_LIMIT) {
-          return new Response(
-            JSON.stringify({
-              error: "Monthly AI tool limit reached",
-              limit: AI_TOOL_MONTHLY_LIMIT,
-              used: currentCount,
-            }),
-            { status: 429, headers: { ...corsHeaders, "Content-Type": "application/json" } }
-          );
-        }
-      } catch { /* don't block on rate limit check failure */ }
-    }
-
-    let systemPrompt = "";
-    let userPrompt = "";
-    let tools: any[] | undefined;
-    let tool_choice: any | undefined;
-
-    switch (action) {
-      case "parse_resume": {
-        systemPrompt = `You are a resume parser. Given raw resume text, extract ALL content into structured sections.
+    const systemPrompt = `You are a resume parser. Given raw resume text, extract ALL content into structured sections.
 
 Rules:
 - Identify the person's name, title, email, phone, location, LinkedIn, and website from the header area.
@@ -167,61 +124,17 @@ Rules:
 - If a section doesn't match any known type, use "custom".
 - description fields should use HTML: <p> for paragraphs, <ul><li> for bullets.
 - Preserve the original section ordering from the resume.`;
-        userPrompt = text;
-        tools = [parseResumeTool];
-        tool_choice = { type: "function", function: { name: "parsed_resume" } };
-        break;
-      }
-      case "improve":
-        systemPrompt = "You are a professional resume writer. Improve the following text to be more impactful, concise, and use strong action verbs. Keep bullet points if present. Return ONLY the improved text in the same HTML format, no explanation.";
-        userPrompt = text;
-        break;
-      case "grammar":
-        systemPrompt = "You are an expert proofreader. Fix any grammar, spelling, punctuation, and style issues in the following resume text. Return ONLY the corrected text in the same HTML format, no explanation.";
-        userPrompt = text;
-        break;
-      case "starter":
-        systemPrompt = "You are a professional resume writer. Generate 3-4 bullet points for a resume entry based on the context provided. Use strong action verbs and quantify achievements where possible. Return ONLY HTML bullet list, no explanation.";
-        userPrompt = context || "Generate professional resume bullet points for a typical role.";
-        break;
-      case "tailor":
-        systemPrompt = `You are a resume optimization expert. The user will provide their resume text and a job description (in context). Analyze the match and return HTML with:
-1. <h3>Match Score</h3> with an estimated percentage match
-2. <h3>Missing Keywords</h3> with a bullet list of important keywords/skills from the JD not found in the resume
-3. <h3>Suggested Improvements</h3> with specific bullet point rewrites that incorporate missing keywords naturally
-Keep it actionable and concise.`;
-        userPrompt = text;
-        if (context) userPrompt += "\n\n--- JOB DESCRIPTION ---\n" + context;
-        break;
-      case "summary":
-        systemPrompt = "You are a professional resume writer. Based on the resume content provided, generate a compelling 2-3 sentence professional summary. Return ONLY the summary text as a paragraph, no HTML tags, no explanation.";
-        userPrompt = text;
-        break;
-      case "skills":
-        systemPrompt = "You are a career advisor. Based on the resume content, suggest 10-15 relevant skills the candidate should add. Return as an HTML bullet list grouped by category (Technical, Soft Skills, Tools). No explanation.";
-        userPrompt = text;
-        break;
-      case "optimize":
-        systemPrompt = "You are a professional resume writer. Take all the experience bullet points from this resume and rewrite them to be more impactful using strong action verbs and quantified results. Return the improved bullets as HTML, grouped by role/company. Preserve the original meaning.";
-        userPrompt = text;
-        break;
-      default:
-        throw new Error("Unknown action: " + action);
-    }
 
-    const body: any = {
+    const body = {
       model: "google/gemini-3-flash-preview",
       messages: [
         { role: "system", content: systemPrompt },
-        { role: "user", content: userPrompt },
+        { role: "user", content: text },
       ],
       stream: false,
+      tools: [parseResumeTool],
+      tool_choice: { type: "function", function: { name: "parsed_resume" } },
     };
-
-    if (tools) {
-      body.tools = tools;
-      body.tool_choice = tool_choice;
-    }
 
     const response = await fetch("https://ai.gateway.lovable.dev/v1/chat/completions", {
       method: "POST",
@@ -255,52 +168,39 @@ Keep it actionable and concise.`;
 
     const data = await response.json();
 
-    // Best-effort usage logging
-    if (userId && supabase) {
+    // Handle tool-call response
+    const toolCall = data.choices?.[0]?.message?.tool_calls?.[0];
+    if (toolCall?.function?.arguments) {
       try {
-        await supabase.from("ai_usage_log").insert({ user_id: userId, usage_type: "ai_tool" });
-      } catch { /* don't fail the request */ }
-    }
-
-    // Handle tool-call response for parse_resume
-    if (action === "parse_resume") {
-      const toolCall = data.choices?.[0]?.message?.tool_calls?.[0];
-      if (toolCall?.function?.arguments) {
-        try {
-          const parsed = typeof toolCall.function.arguments === "string"
-            ? JSON.parse(toolCall.function.arguments)
-            : toolCall.function.arguments;
-          return new Response(JSON.stringify({ result: parsed }), {
-            headers: { ...corsHeaders, "Content-Type": "application/json" },
-          });
-        } catch (parseErr) {
-          console.error("Failed to parse tool call arguments:", parseErr);
-          return new Response(JSON.stringify({ error: "Failed to parse AI structured output" }), {
-            status: 500,
-            headers: { ...corsHeaders, "Content-Type": "application/json" },
-          });
-        }
-      }
-      // Fallback: try content as JSON
-      const content = data.choices?.[0]?.message?.content || "";
-      try {
-        const parsed = JSON.parse(content);
+        const parsed = typeof toolCall.function.arguments === "string"
+          ? JSON.parse(toolCall.function.arguments)
+          : toolCall.function.arguments;
         return new Response(JSON.stringify({ result: parsed }), {
           headers: { ...corsHeaders, "Content-Type": "application/json" },
         });
-      } catch {
-        console.error("AI did not return structured output for parse_resume");
-        return new Response(JSON.stringify({ error: "AI did not return structured data" }), {
+      } catch (parseErr) {
+        console.error("Failed to parse tool call arguments:", parseErr);
+        return new Response(JSON.stringify({ error: "Failed to parse AI structured output" }), {
           status: 500,
           headers: { ...corsHeaders, "Content-Type": "application/json" },
         });
       }
     }
 
-    const result = data.choices?.[0]?.message?.content || "";
-    return new Response(JSON.stringify({ result }), {
-      headers: { ...corsHeaders, "Content-Type": "application/json" },
-    });
+    // Fallback: try content as JSON
+    const content = data.choices?.[0]?.message?.content || "";
+    try {
+      const parsed = JSON.parse(content);
+      return new Response(JSON.stringify({ result: parsed }), {
+        headers: { ...corsHeaders, "Content-Type": "application/json" },
+      });
+    } catch {
+      console.error("AI did not return structured output for parse_resume");
+      return new Response(JSON.stringify({ error: "AI did not return structured data" }), {
+        status: 500,
+        headers: { ...corsHeaders, "Content-Type": "application/json" },
+      });
+    }
   } catch (e) {
     console.error("resume-ai error:", e);
     return new Response(JSON.stringify({ error: e instanceof Error ? e.message : "Unknown error" }), {
