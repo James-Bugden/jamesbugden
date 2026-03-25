@@ -575,6 +575,7 @@ export default function AdminDashboard() {
 
   return (
       <div className="min-h-screen bg-background">
+        <SEO />
       {/* Header */}
       <header className="border-b border-border bg-card sticky top-0 z-10">
         <div className="max-w-7xl mx-auto px-4 h-14 flex items-center justify-between">
@@ -928,7 +929,6 @@ export default function AdminDashboard() {
               const avgNps = npsScores.length ? (npsScores.reduce((a, b) => a + b, 0) / npsScores.length).toFixed(1) : "—";
               return (
                 <div className="grid grid-cols-2 md:grid-cols-5 gap-3 mb-4">
-                  <SEO />
                   {[
                     { label: "General", value: byType.general || 0 },
                     { label: "Micro Survey", value: byType.micro_survey || 0 },

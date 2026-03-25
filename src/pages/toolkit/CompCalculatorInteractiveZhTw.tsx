@@ -145,6 +145,7 @@ const CompCalculatorInteractiveZhTw = () => {
 
   return (
     <div className="min-h-screen bg-background pb-24 md:pb-0">
+      <SEO />
       <ToolkitHeaderZhTw />
 
       {/* Hero */}
@@ -586,7 +587,6 @@ const CompCalculatorInteractiveZhTw = () => {
                     const ptoVal = offer.ptoDays * (offer.monthlySalary / 30);
                     return (
                       <div key={i}>
-                        <SEO />
                         <CurrencyInput value={offer.ptoDays} onChange={(v) => updateOffer(i, { ptoDays: v })} placeholder="例：15" prefix="" ariaLabel={`年假 ${offer.name}`} />
                         {offer.ptoDays > 0 && offer.monthlySalary > 0 && (
                           <p className="text-xs text-muted-foreground mt-1">價值：{formatNTD(ptoVal)}（已含在保障年薪中，不重複計入）</p>

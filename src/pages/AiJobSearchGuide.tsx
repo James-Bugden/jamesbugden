@@ -228,6 +228,7 @@ const AiJobSearchGuide = () => {
 
   return (
     <div className="min-h-screen bg-background">
+      <SEO />
 
       {/* Navigation */}
       <nav className="fixed top-0 left-0 right-0 z-50 bg-nav-green">
@@ -1168,7 +1169,6 @@ Generate a short, conversational response that asks them to do better, given my 
                   const isChecked = checklistState[si]?.[j] ?? false;
                   return (
                     <li key={j} onClick={() => toggleChecklist(si, j)} className={`flex items-start gap-2 text-sm cursor-pointer group transition-opacity ${isChecked ? "opacity-60" : ""}`}>
-                      <SEO />
                       <span className={`w-5 h-5 rounded border-2 flex-shrink-0 mt-0.5 flex items-center justify-center transition-colors ${isChecked ? "bg-gold border-gold text-background" : "border-border group-hover:border-gold/60"}`}>
                         {isChecked && <Check className="w-3 h-3" />}
                       </span>

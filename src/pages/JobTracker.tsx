@@ -82,6 +82,7 @@ export default function JobTracker() {
 
   return (
     <div className="min-h-screen" style={{ backgroundColor: "#FBF7F0" }}>
+      <SEO />
       <OnboardingModal />
       {/* Header */}
       <header className="px-4 sm:px-6 pt-6 pb-4 max-w-6xl mx-auto">
@@ -149,7 +150,6 @@ export default function JobTracker() {
             const active = view === tab.id;
             return (
               <button
-                <SEO />
                 key={tab.id}
                 onClick={() => setView(tab.id)}
                 className="flex items-center gap-2 px-4 py-2.5 text-sm font-medium transition-all relative"

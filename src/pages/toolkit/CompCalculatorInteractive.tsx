@@ -136,6 +136,7 @@ const CompCalculatorInteractive = () => {
 
   return (
     <div className="min-h-screen bg-background pb-24 md:pb-0">
+      <SEO />
       <ToolkitHeader />
 
       {/* Hero */}
@@ -503,7 +504,6 @@ const CompCalculatorInteractive = () => {
                     const i = indices[vi];
                     return (
                       <div key={i}>
-                        <SEO />
                         <CurrencyInput value={offer.commuteMonthly} onChange={(v) => updateOffer(i, { commuteMonthly: v })} placeholder="e.g. 150" ariaLabel={`Commute for ${offer.name}`} />
                         {offer.commuteMonthly > 0 && <p className="text-xs text-destructive mt-1">Annual: -{formatCurrency(offer.commuteMonthly * 12)}</p>}
                       </div>

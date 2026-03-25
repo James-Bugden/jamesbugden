@@ -146,6 +146,7 @@ const categories = ["LinkedIn", "Resume", "Career Change", "Interview Prep", "AI
 const GuidesPage = () => {
   return (
     <div className="min-h-screen bg-background">
+      <SEO />
       {/* Navigation */}
       <nav className="fixed top-0 left-0 right-0 z-50 bg-nav-green">
         <div className="container mx-auto px-5 md:px-6 py-4 flex items-center justify-between">
@@ -213,7 +214,6 @@ const GuidesPage = () => {
                     const IconComponent = guide.icon;
                     return (
                       <Link
-                        <SEO />
                         key={index}
                         to={guide.href}
                         className="group bg-card border border-border rounded-xl p-6 hover:border-gold/40 hover:shadow-lg transition-all duration-300"

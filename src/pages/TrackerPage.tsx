@@ -131,6 +131,7 @@ export default function TrackerPage() {
 
   return (
     <div className="min-h-screen" style={{ backgroundColor: "#FBF7F0" }}>
+      <SEO />
       {/* Skip to content */}
       <a href="#tracker-content" className="sr-only focus:not-sr-only focus:absolute focus:top-2 focus:left-2 focus:z-50 focus:px-4 focus:py-2 focus:bg-white focus:rounded-md focus:shadow-lg focus:text-sm focus:font-medium" style={{ color: "#1B3A2F" }}>
         Skip to content
@@ -191,7 +192,6 @@ export default function TrackerPage() {
             const active = activeTab === tab.id;
             return (
               <button
-                <SEO />
                 key={tab.id}
                 onClick={() => setActiveTab(tab.id)}
                 className="flex-1 flex flex-col sm:flex-row items-center justify-center gap-1 sm:gap-2 py-3 text-xs sm:text-sm font-medium transition-all duration-200 relative min-h-[44px]"

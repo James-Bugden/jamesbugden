@@ -277,6 +277,7 @@ export default function Dashboard({ lang = "en" }: { lang?: "en" | "zh" }) {
 
   return (
     <>
+      <SEO />
 
       {/* Nav */}
       <nav className={`sticky top-0 z-50 bg-executive-green transition-shadow duration-300 ${scrolled ? 'shadow-lg shadow-black/20' : ''}`}>
@@ -528,7 +529,6 @@ export default function Dashboard({ lang = "en" }: { lang?: "en" | "zh" }) {
               if (items.length === 0) return null;
               return (
                 <JourneySection
-                  <SEO />
                   key={journey.tag}
                   tag={journey.tag}
                   label={journey.label[lang]}

@@ -89,6 +89,7 @@ CATEGORIES:
 
   return (
       <div className="min-h-screen bg-background">
+        <SEO />
       <ToolkitHeader />
 
       {/* Hero */}
@@ -160,7 +161,6 @@ CATEGORIES:
                     const cat = categories[entry.category as keyof typeof categories];
                     return (
                       <tr key={index} className={index % 2 === 0 ? "bg-card" : "bg-muted/50"}>
-                        <SEO />
                         <td className="px-4 py-3 font-medium text-foreground">{entry.day}</td>
                         <td className="px-4 py-3 text-foreground">{entry.achievement}</td>
                         <td className="px-4 py-3 text-foreground">{entry.impact}</td>

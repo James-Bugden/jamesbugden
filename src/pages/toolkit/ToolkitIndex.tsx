@@ -66,6 +66,7 @@ const templates = [
 const ToolkitIndex = () => {
   return (
       <div className="min-h-screen bg-background">
+        <SEO />
       <ToolkitHeader />
 
       {/* Hero */}
@@ -88,7 +89,6 @@ const ToolkitIndex = () => {
               const IconComponent = template.icon;
               return (
                 <Link
-                  <SEO />
                   key={template.id}
                   to={template.href}
                   className="group card-premium bg-card rounded-xl p-6 border border-border"
