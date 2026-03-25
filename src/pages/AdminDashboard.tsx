@@ -1039,11 +1039,17 @@ export default function AdminDashboard() {
             ) : (
               <div className="space-y-6">
                 {/* Summary cards */}
-                <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+                <div className="grid grid-cols-2 md:grid-cols-5 gap-4">
                   <Card>
                     <CardContent className="p-4 text-center">
                       <p className="text-3xl font-bold text-foreground">{aiUsageStats.totalThisMonth}</p>
                       <p className="text-xs text-muted-foreground">Total this month</p>
+                    </CardContent>
+                  </Card>
+                  <Card>
+                    <CardContent className="p-4 text-center">
+                      <p className="text-3xl font-bold text-emerald-600">${aiUsageStats.totalCost.toFixed(2)}</p>
+                      <p className="text-xs text-muted-foreground">Est. Cost (USD)</p>
                     </CardContent>
                   </Card>
                   {aiUsageStats.typeData.slice(0, 3).map(t => (
@@ -1051,6 +1057,7 @@ export default function AdminDashboard() {
                       <CardContent className="p-4 text-center">
                         <p className="text-3xl font-bold text-foreground">{t.count}</p>
                         <p className="text-xs text-muted-foreground capitalize">{t.type.replace(/_/g, " ")}</p>
+                        <p className="text-xs text-muted-foreground">${t.cost.toFixed(2)}</p>
                       </CardContent>
                     </Card>
                   ))}
