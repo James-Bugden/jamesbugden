@@ -662,6 +662,7 @@ export default function ResumeAnalyzer({ defaultLang = "en" }: { defaultLang?: L
             }}
           />
         )}
+        {showMicroSurvey && <MicroSurvey actionKey="resume_analysis" locale={lang === "zh-TW" ? "zh-tw" : "en"} />}
       </main>
     </>
   );
