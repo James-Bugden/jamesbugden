@@ -101,7 +101,20 @@ const Index = () => {
 
   return (
     <div className="homepage min-h-screen overflow-x-hidden scroll-smooth bg-cream">
-      <SEO />
+      <SEO schemaJson={{
+        "@context": "https://schema.org",
+        "@type": "Person",
+        "name": "James Bugden",
+        "url": "https://jamesbugden.com",
+        "jobTitle": "Senior Recruiter",
+        "description": "Fortune 500 recruiter who has placed 750+ candidates at companies like Google, Uber, and Microsoft.",
+        "sameAs": [
+          "https://www.linkedin.com/in/james-bugden/",
+          "https://www.instagram.com/james.careers/",
+          "https://www.threads.com/@james.careers"
+        ],
+        "knowsAbout": ["Recruiting", "Career Coaching", "Resume Writing", "Interview Preparation", "Salary Negotiation"]
+      }} />
 
       {/* ── Promo Banner + Navigation (sticky together) ── */}
       <header className="sticky top-0 z-50">

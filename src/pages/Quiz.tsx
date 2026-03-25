@@ -2,7 +2,7 @@ import { useState, useEffect, useCallback, useRef } from "react";
 import { Link } from "react-router-dom";
 import { ArrowLeft, Check, Copy, Linkedin, Users } from "lucide-react";
 import LanguageToggle from "@/components/LanguageToggle";
-import { Helmet } from "react-helmet-async";
+
 import {
   Radar,
   RadarChart,
@@ -544,12 +544,6 @@ export default function Quiz() {
   return (
     <>
       <SEO />
-      <Helmet>
-        <title>外商 Readiness Assessment — james.careers</title>
-        <meta name="description" content="Find out if you're ready for a foreign company in Taiwan. Free 2-minute assessment with personalized action plan." />
-        <meta property="og:title" content="外商 Readiness Assessment — james.careers" />
-        <meta property="og:description" content="Find out if you're ready for a foreign company in Taiwan. Free 2-minute assessment with personalized action plan." />
-      </Helmet>
 
       <div className="transition-opacity duration-300">
         {screen === "intro" && renderIntro()}

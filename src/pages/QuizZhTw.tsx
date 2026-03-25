@@ -2,7 +2,7 @@ import { useState, useEffect, useCallback, useRef } from "react";
 import { Link } from "react-router-dom";
 import { ArrowLeft, Check, Copy, Linkedin, Users } from "lucide-react";
 import LanguageToggle from "@/components/LanguageToggle";
-import { Helmet } from "react-helmet-async";
+
 import {
   Radar,
   RadarChart,
@@ -537,12 +537,6 @@ export default function QuizZhTw() {
   return (
     <>
       <SEO />
-      <Helmet>
-        <title>外商準備度測驗 — james.careers</title>
-        <meta name="description" content="測試你是否準備好進入外商公司。免費 2 分鐘測驗，附個人化行動計畫。" />
-        <meta property="og:title" content="外商準備度測驗 — james.careers" />
-        <meta property="og:description" content="測試你是否準備好進入外商公司。免費 2 分鐘測驗，附個人化行動計畫。" />
-      </Helmet>
 
       <div className="transition-opacity duration-300">
         {screen === "intro" && renderIntro()}

@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
-import { Helmet } from "react-helmet-async";
+import { SEO } from "@/components/SEO";
 import { ArrowLeft } from "lucide-react";
 import { CURRENCY_OPTIONS } from "@/components/offer-compass/types";
 import type { Currency } from "@/components/offer-compass/types";
@@ -28,7 +28,6 @@ import { useEmailGate } from "@/hooks/useEmailGate";
 import { EmailGateOverlay } from "@/components/EmailGateOverlay";
 import { calcScenario, formatCurrency, formatPct } from "@/components/offer-compass/types";
 import type { Scenario } from "@/components/offer-compass/types";
-import { SEO } from "@/components/SEO";
 
 const COLORS = ["#1B3A2F", "#C9A961", "#3D7A5F", "#B06B3A", "#6B5B95"];
 
@@ -173,10 +172,7 @@ export default function OfferCompassCompare() {
 
   return (
     <>
-      <Helmet>
-        <title>Compare Scenarios — Offer Calculator | james.careers</title>
-        <meta name="description" content="Compare multiple compensation scenarios side by side." />
-      </Helmet>
+      <SEO />
 
       <div className="min-h-screen bg-background">
         <Header currency={currency} setCurrency={setCurrency} />
