@@ -1,4 +1,6 @@
 import { Link, useLocation } from "react-router-dom";
+import { Linkedin } from "lucide-react";
+import { InstagramIcon, ThreadsIcon } from "@/components/SocialIcons";
 
 const SiteFooter = () => {
   const { pathname } = useLocation();
@@ -8,8 +10,21 @@ const SiteFooter = () => {
   return (
     <footer className="bg-nav-green py-6 px-5 md:px-6">
       <div className="container mx-auto max-w-5xl">
-        <div className="flex flex-col sm:flex-row gap-6 sm:gap-12 mb-6">
-          {/* Guides */}
+        {/* Social icons */}
+        <div className="flex items-center gap-5 mb-5">
+          <a href="https://www.linkedin.com/in/james-bugden/" target="_blank" rel="noopener noreferrer" className="text-cream-70 hover:text-cream transition-colors">
+            <Linkedin className="w-5 h-5" />
+          </a>
+          <a href="https://www.instagram.com/james.careers/" target="_blank" rel="noopener noreferrer" className="text-cream-70 hover:text-cream transition-colors">
+            <InstagramIcon className="w-5 h-5" />
+          </a>
+          <a href="https://www.threads.com/@james.careers" target="_blank" rel="noopener noreferrer" className="text-cream-70 hover:text-cream transition-colors">
+            <ThreadsIcon className="w-4 h-4" />
+          </a>
+        </div>
+
+        {/* Link groups */}
+        <div className="flex flex-col sm:flex-row gap-5 sm:gap-12 mb-5">
           <div>
             <h4 className="text-cream-90 text-xs font-semibold uppercase tracking-wider mb-2">
               {isZh ? "指南" : "Guides"}
@@ -23,7 +38,6 @@ const SiteFooter = () => {
             </ul>
           </div>
 
-          {/* Tools */}
           <div>
             <h4 className="text-cream-90 text-xs font-semibold uppercase tracking-wider mb-2">
               {isZh ? "工具" : "Tools"}
@@ -36,6 +50,7 @@ const SiteFooter = () => {
           </div>
         </div>
 
+        {/* Copyright */}
         <div className="border-t border-white/10 pt-4">
           <span className="text-xs text-cream-90">
             © {new Date().getFullYear()} James Bugden. {isZh ? "版權所有" : "All rights reserved"}.
