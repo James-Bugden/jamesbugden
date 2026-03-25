@@ -177,6 +177,7 @@ export default function AdminDashboard() {
   const [feedbackItems, setFeedbackItems] = useState<FeedbackItem[]>([]);
   const [feedbackLoading, setFeedbackLoading] = useState(true);
   const [feedbackSearch, setFeedbackSearch] = useState("");
+  const [feedbackTypeFilter, setFeedbackTypeFilter] = useState<string>("all");
 
   // Accounts state
   const [accounts, setAccounts] = useState<AccountUser[]>([]);
