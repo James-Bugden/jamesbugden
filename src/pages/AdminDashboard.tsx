@@ -537,8 +537,8 @@ export default function AdminDashboard() {
 
     // Daily trend for last 30 days
     const days = Array.from({ length: 30 }, (_, i) => format(startOfDay(subDays(new Date(), 29 - i)), "yyyy-MM-dd"));
-    const dailyByType: { date: string; import: number; ai_tool: number; pdf_export: number; analyze: number; cost: number; [k: string]: number | string }[] = days.map(d => ({ date: d, import: 0, ai_tool: 0, pdf_export: 0, analyze: 0, cost: 0 }));
-    for (const row of aiUsageRows) {
+    const dailyByType: { date: string; import: number; ai_tool: number; analyze: number; cost: number; [k: string]: number | string }[] = days.map(d => ({ date: d, import: 0, ai_tool: 0, analyze: 0, cost: 0 }));
+    for (const row of aiUsageRows.filter(r => r.usage_type !== "pdf_export")) {
       const day = format(new Date(row.created_at), "yyyy-MM-dd");
       const entry = dailyByType.find(e => e.date === day);
       if (entry) {
