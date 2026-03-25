@@ -500,12 +500,10 @@ export default function AdminDashboard() {
   // analyze → gemini-2.5-flash (~4K in + 4K out tokens)
   // ai_tool → gemini-3-flash-preview (~2K in + 1K out tokens)
   // import  → gemini-2.5-flash (~3K in + 2K out tokens)
-  // pdf_export → Browserless API (no AI tokens, infra cost only)
   const COST_PER_TYPE: Record<string, number> = {
     analyze: 0.003,
     ai_tool: 0.0006,
     import: 0.002,
-    pdf_export: 0.005,
   };
   const DEFAULT_COST = 0.001;
 
