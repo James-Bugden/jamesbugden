@@ -1093,6 +1093,7 @@ export default function AdminDashboard() {
                           <TableRow>
                             <TableHead>User</TableHead>
                             <TableHead className="text-center">Total</TableHead>
+                            <TableHead className="text-center">Est. Cost</TableHead>
                             {aiUsageStats.typeData.map(t => (
                               <TableHead key={t.type} className="text-center capitalize">{t.type.replace(/_/g, " ")}</TableHead>
                             ))}
@@ -1100,11 +1101,12 @@ export default function AdminDashboard() {
                         </TableHeader>
                         <TableBody>
                           {aiUsageStats.topUsers.length === 0 ? (
-                            <TableRow><TableCell colSpan={2 + aiUsageStats.typeData.length} className="text-center py-12 text-muted-foreground">No usage this month</TableCell></TableRow>
+                            <TableRow><TableCell colSpan={3 + aiUsageStats.typeData.length} className="text-center py-12 text-muted-foreground">No usage this month</TableCell></TableRow>
                           ) : aiUsageStats.topUsers.map(u => (
                             <TableRow key={u.userId}>
                               <TableCell className="text-sm font-mono">{topUserEmails[u.userId] || u.userId}</TableCell>
                               <TableCell className="text-center font-semibold">{u.total}</TableCell>
+                              <TableCell className="text-center text-sm font-medium text-emerald-600">${u.cost.toFixed(2)}</TableCell>
                               {aiUsageStats.typeData.map(t => (
                                 <TableCell key={t.type} className="text-center text-sm text-muted-foreground">{u.types[t.type] || 0}</TableCell>
                               ))}
