@@ -54,6 +54,7 @@ export function CoverLetterBuilder({ docId }: CoverLetterBuilderProps) {
       pageFormat: (customize.pageFormat || "a4") as "a4" | "letter",
     });
     setDownloading(false);
+    setShowSurvey(true);
   };
 
   return (
