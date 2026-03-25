@@ -1,4 +1,5 @@
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
+import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
 
 const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
@@ -103,6 +104,22 @@ serve(async (req) => {
     const { action, text, context } = await req.json();
     const LOVABLE_API_KEY = Deno.env.get("LOVABLE_API_KEY");
     if (!LOVABLE_API_KEY) throw new Error("LOVABLE_API_KEY is not configured");
+
+    // Best-effort auth extraction
+    let userId: string | null = null;
+    const authHeader = req.headers.get("Authorization");
+    if (authHeader?.startsWith("Bearer ")) {
+      try {
+        const supabase = createClient(
+          Deno.env.get("SUPABASE_URL")!,
+          Deno.env.get("SUPABASE_ANON_KEY")!,
+          { global: { headers: { Authorization: authHeader } } }
+        );
+        const token = authHeader.replace("Bearer ", "");
+        const { data } = await supabase.auth.getClaims(token);
+        userId = data?.claims?.sub ?? null;
+      } catch { /* skip silently */ }
+    }
 
     let systemPrompt = "";
     let userPrompt = "";
@@ -213,6 +230,17 @@ Keep it actionable and concise.`;
     }
 
     const data = await response.json();
+
+    // Best-effort usage logging
+    if (userId) {
+      try {
+        const sb = createClient(
+          Deno.env.get("SUPABASE_URL")!,
+          Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!
+        );
+        await sb.from("ai_usage_log").insert({ user_id: userId, usage_type: "ai_tool" });
+      } catch { /* don't fail the request */ }
+    }
 
     // Handle tool-call response for parse_resume
     if (action === "parse_resume") {
