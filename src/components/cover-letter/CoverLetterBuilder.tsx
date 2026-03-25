@@ -8,6 +8,7 @@ import { ResizablePanelGroup, ResizablePanel, ResizableHandle } from "@/componen
 import { getDocument, updateDocument, getAllDocuments, SavedDocument } from "@/lib/documentStore";
 import { CoverLetterData, CoverLetterCustomize, DEFAULT_COVER_LETTER_DATA, DEFAULT_COVER_LETTER_CUSTOMIZE } from "./types";
 import { exportToPdf } from "@/lib/pdfExport";
+import MicroSurvey from "@/components/feedback/MicroSurvey";
 
 interface CoverLetterBuilderProps {
   docId?: string | null;
