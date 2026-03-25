@@ -569,7 +569,7 @@ export default function AdminDashboard() {
     { label: "Resume Leads", value: counts.resumes, icon: Users, color: "text-violet-600", sparkColor: "#7c3aed", trend: trends.resumes || [] },
     { label: "Email Leads", value: counts.emails, icon: Mail, color: "text-amber-600", sparkColor: "#d97706", trend: trends.emails || [] },
     { label: "Feedback", value: counts.feedback, icon: MessageSquare, color: "text-pink-600", sparkColor: "#db2777", trend: trends.feedback || [] },
-    { label: "AI Usage", value: aiUsageStats.totalThisMonth, icon: Activity, color: "text-cyan-600", sparkColor: "#0891b2", trend: aiUsageStats.dailyByType.map(d => ({ date: d.date, count: d.import + d.ai_tool + d.pdf_export + d.analyze })) },
+    { label: "AI Usage", value: aiUsageStats.totalThisMonth, icon: Activity, color: "text-cyan-600", sparkColor: "#0891b2", trend: aiUsageStats.dailyByType.map(d => ({ date: d.date, count: d.import + d.ai_tool + d.analyze })) },
   ];
 
   return (
