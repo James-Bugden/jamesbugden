@@ -500,12 +500,10 @@ export default function AdminDashboard() {
   // analyze → gemini-2.5-flash (~4K in + 4K out tokens)
   // ai_tool → gemini-3-flash-preview (~2K in + 1K out tokens)
   // import  → gemini-2.5-flash (~3K in + 2K out tokens)
-  // pdf_export → Browserless API (no AI tokens, infra cost only)
   const COST_PER_TYPE: Record<string, number> = {
     analyze: 0.003,
     ai_tool: 0.0006,
     import: 0.002,
-    pdf_export: 0.005,
   };
   const DEFAULT_COST = 0.001;
 
@@ -513,7 +511,7 @@ export default function AdminDashboard() {
   const aiUsageStats = useMemo(() => {
     const now = new Date();
     const monthStart = new Date(now.getFullYear(), now.getMonth(), 1);
-    const thisMonth = aiUsageRows.filter(r => new Date(r.created_at) >= monthStart);
+    const thisMonth = aiUsageRows.filter(r => new Date(r.created_at) >= monthStart && r.usage_type !== "pdf_export");
     
     const byType: Record<string, number> = {};
     const byUser: Record<string, { total: number; types: Record<string, number>; cost: number }> = {};
@@ -539,8 +537,8 @@ export default function AdminDashboard() {
 
     // Daily trend for last 30 days
     const days = Array.from({ length: 30 }, (_, i) => format(startOfDay(subDays(new Date(), 29 - i)), "yyyy-MM-dd"));
-    const dailyByType: { date: string; import: number; ai_tool: number; pdf_export: number; analyze: number; cost: number; [k: string]: number | string }[] = days.map(d => ({ date: d, import: 0, ai_tool: 0, pdf_export: 0, analyze: 0, cost: 0 }));
-    for (const row of aiUsageRows) {
+    const dailyByType: { date: string; import: number; ai_tool: number; analyze: number; cost: number; [k: string]: number | string }[] = days.map(d => ({ date: d, import: 0, ai_tool: 0, analyze: 0, cost: 0 }));
+    for (const row of aiUsageRows.filter(r => r.usage_type !== "pdf_export")) {
       const day = format(new Date(row.created_at), "yyyy-MM-dd");
       const entry = dailyByType.find(e => e.date === day);
       if (entry) {
@@ -571,7 +569,7 @@ export default function AdminDashboard() {
     { label: "Resume Leads", value: counts.resumes, icon: Users, color: "text-violet-600", sparkColor: "#7c3aed", trend: trends.resumes || [] },
     { label: "Email Leads", value: counts.emails, icon: Mail, color: "text-amber-600", sparkColor: "#d97706", trend: trends.emails || [] },
     { label: "Feedback", value: counts.feedback, icon: MessageSquare, color: "text-pink-600", sparkColor: "#db2777", trend: trends.feedback || [] },
-    { label: "AI Usage", value: aiUsageStats.totalThisMonth, icon: Activity, color: "text-cyan-600", sparkColor: "#0891b2", trend: aiUsageStats.dailyByType.map(d => ({ date: d.date, count: d.import + d.ai_tool + d.pdf_export + d.analyze })) },
+    { label: "AI Usage", value: aiUsageStats.totalThisMonth, icon: Activity, color: "text-cyan-600", sparkColor: "#0891b2", trend: aiUsageStats.dailyByType.map(d => ({ date: d.date, count: d.import + d.ai_tool + d.analyze })) },
   ];
 
   return (
@@ -1079,7 +1077,6 @@ export default function AdminDashboard() {
                           <Tooltip labelFormatter={v => format(new Date(v as string), "MMM d, yyyy")} />
                           <Bar dataKey="import" stackId="a" fill="#7c3aed" name="Import" />
                           <Bar dataKey="ai_tool" stackId="a" fill="#0891b2" name="AI Tool" />
-                          <Bar dataKey="pdf_export" stackId="a" fill="#059669" name="PDF Export" />
                           <Bar dataKey="analyze" stackId="a" fill="#d97706" name="Analyze" />
                         </BarChart>
                       </ResponsiveContainer>
