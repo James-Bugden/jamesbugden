@@ -1314,6 +1314,7 @@ const JanelleChengReview = () => {
         </div>
       </footer>
     </div>
+    </>
   );
 };
 

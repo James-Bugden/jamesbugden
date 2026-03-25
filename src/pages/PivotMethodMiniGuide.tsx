@@ -515,6 +515,7 @@ const PivotMethodMiniGuide = () => {
     
       <GuideBottomCTA lang="en" />
     </div>
+    </>
   );
 };
 

@@ -311,6 +311,7 @@ const CompensationCalculator = () => {
 
       <ToolkitFooter />
     </div>
+    </>
   );
 };
 

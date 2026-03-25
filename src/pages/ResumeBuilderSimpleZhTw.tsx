@@ -9,5 +9,6 @@ export default function ResumeBuilderSimpleZhTw() {
     <ResumeBuilderLangContext.Provider value="zh-tw">
       <ResumeBuilderSimple />
     </ResumeBuilderLangContext.Provider>
+    </>
   );
 }

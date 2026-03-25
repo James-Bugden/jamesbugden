@@ -132,6 +132,7 @@ const ClientReviewGate = () => {
         </p>
       </div>
     </div>
+    </>
   );
 };
 

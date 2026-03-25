@@ -800,6 +800,7 @@ const PivotMethodGuideZhTw = () => {
     
       <GuideBottomCTA lang="zh" />
     </div>
+    </>
   );
 };
 

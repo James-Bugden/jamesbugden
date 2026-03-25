@@ -874,6 +874,7 @@ const LinkedInBrandingGuide = () => {
     
       <GuideBottomCTA lang="en" />
     </div>
+    </>
   );
 };
 

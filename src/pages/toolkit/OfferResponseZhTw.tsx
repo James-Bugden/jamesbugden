@@ -276,6 +276,7 @@ ${outcomes[1].text}`;
 
       <ToolkitFooterZhTw />
     </div>
+    </>
   );
 };
 

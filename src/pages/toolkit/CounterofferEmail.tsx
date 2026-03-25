@@ -271,6 +271,7 @@ const CounterofferEmail = () => {
 
       <ToolkitFooter />
     </div>
+    </>
   );
 };
 

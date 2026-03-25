@@ -1307,6 +1307,7 @@ const PivotMethodGuide = () => {
     
       <GuideBottomCTA lang="en" />
     </div>
+    </>
   );
 };
 

@@ -313,6 +313,7 @@ const CompensationCalculatorZhTw = () => {
 
       <ToolkitFooterZhTw />
     </div>
+    </>
   );
 };
 
