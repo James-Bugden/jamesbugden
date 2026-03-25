@@ -37,7 +37,7 @@ const SiteFooter = () => {
         </div>
 
         <div className="border-t border-white/10 pt-4">
-          <span className="text-xs text-cream-70">
+          <span className="text-xs text-cream-90">
             © {new Date().getFullYear()} James Bugden. {isZh ? "版權所有" : "All rights reserved"}.
           </span>
         </div>
