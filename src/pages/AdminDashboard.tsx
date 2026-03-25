@@ -511,7 +511,7 @@ export default function AdminDashboard() {
   const aiUsageStats = useMemo(() => {
     const now = new Date();
     const monthStart = new Date(now.getFullYear(), now.getMonth(), 1);
-    const thisMonth = aiUsageRows.filter(r => new Date(r.created_at) >= monthStart);
+    const thisMonth = aiUsageRows.filter(r => new Date(r.created_at) >= monthStart && r.usage_type !== "pdf_export");
     
     const byType: Record<string, number> = {};
     const byUser: Record<string, { total: number; types: Record<string, number>; cost: number }> = {};
