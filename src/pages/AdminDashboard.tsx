@@ -307,10 +307,12 @@ export default function AdminDashboard() {
   };
 
   const filteredFeedback = useMemo(() => {
-    if (!feedbackSearch) return feedbackItems;
+    let items = feedbackItems;
+    if (feedbackTypeFilter !== "all") items = items.filter(f => (f.type || "general") === feedbackTypeFilter);
+    if (!feedbackSearch) return items;
     const q = feedbackSearch.toLowerCase();
-    return feedbackItems.filter(f => f.message.toLowerCase().includes(q) || f.page?.toLowerCase().includes(q));
-  }, [feedbackItems, feedbackSearch]);
+    return items.filter(f => f.message.toLowerCase().includes(q) || f.page?.toLowerCase().includes(q) || f.context?.toLowerCase().includes(q));
+  }, [feedbackItems, feedbackSearch, feedbackTypeFilter]);
 
   const fetchAccounts = async () => {
     setAccountsLoading(true);
