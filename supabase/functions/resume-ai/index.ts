@@ -97,6 +97,8 @@ const parseResumeTool = {
   },
 };
 
+const AI_TOOL_MONTHLY_LIMIT = 6;
+
 serve(async (req) => {
   if (req.method === "OPTIONS") return new Response(null, { headers: corsHeaders });
 
@@ -105,12 +107,13 @@ serve(async (req) => {
     const LOVABLE_API_KEY = Deno.env.get("LOVABLE_API_KEY");
     if (!LOVABLE_API_KEY) throw new Error("LOVABLE_API_KEY is not configured");
 
-    // Best-effort auth extraction
+    // Auth extraction (required for rate limiting)
     let userId: string | null = null;
+    let supabase: any = null;
     const authHeader = req.headers.get("Authorization");
     if (authHeader?.startsWith("Bearer ")) {
       try {
-        const supabase = createClient(
+        supabase = createClient(
           Deno.env.get("SUPABASE_URL")!,
           Deno.env.get("SUPABASE_ANON_KEY")!,
           { global: { headers: { Authorization: authHeader } } }
@@ -119,6 +122,27 @@ serve(async (req) => {
         const { data } = await supabase.auth.getClaims(token);
         userId = data?.claims?.sub ?? null;
       } catch { /* skip silently */ }
+    }
+
+    // Rate limit check for authenticated users
+    if (userId && supabase) {
+      try {
+        const { data: countData } = await supabase.rpc("count_ai_usage_this_month", {
+          p_user_id: userId,
+          p_usage_type: "ai_tool",
+        });
+        const currentCount = (countData as number) ?? 0;
+        if (currentCount >= AI_TOOL_MONTHLY_LIMIT) {
+          return new Response(
+            JSON.stringify({
+              error: "Monthly AI tool limit reached",
+              limit: AI_TOOL_MONTHLY_LIMIT,
+              used: currentCount,
+            }),
+            { status: 429, headers: { ...corsHeaders, "Content-Type": "application/json" } }
+          );
+        }
+      } catch { /* don't block on rate limit check failure */ }
     }
 
     let systemPrompt = "";
