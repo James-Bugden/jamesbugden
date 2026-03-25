@@ -41,6 +41,7 @@ import { useResumeBuilderLang, useT, getLocalizedSectionTypes, SAMPLE_RESUME_DAT
 import { useNavigate } from "react-router-dom";
 import { AnalyzerPromptDialog } from "@/components/resume-builder/AnalyzerPromptDialog";
 import { AnalyzerSuggestionsPanel, Suggestion, extractSuggestions, applySuggestionToData } from "@/components/resume-builder/AnalyzerSuggestionsPanel";
+import MicroSurvey from "@/components/feedback/MicroSurvey";
 
 type ViewMode = "dashboard" | "resume-editor" | "cover-letter-editor";
 
