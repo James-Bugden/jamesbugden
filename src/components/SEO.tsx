@@ -42,11 +42,12 @@ export function SEO({ title, description, ogImage, noIndex }: SEOProps) {
       {hasAlternate && (
         <link
           rel="alternate"
-          hrefLang={isZhTw ? "en" : "zh-TW"}
+          hrefLang={isZhTw ? "en" : "zh-Hant-TW"}
           href={`${SITE_URL}${alternatePath}`}
         />
       )}
-      <link rel="alternate" hrefLang={lang} href={canonicalUrl} />
+      <link rel="alternate" hrefLang={lang === "zh-TW" ? "zh-Hant-TW" : "en"} href={canonicalUrl} />
+      <link rel="alternate" hrefLang="x-default" href={`${SITE_URL}${isZhTw ? (alternatePath || "/") : pathname}`} />
 
       <meta property="og:type" content={config?.ogType || "website"} />
       <meta property="og:title" content={pageTitle} />
