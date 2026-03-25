@@ -1,149 +1,189 @@
-import { Button } from "@/components/ui/button";
-import { Linkedin, ArrowLeft, FileText, Briefcase, MessageSquare, Users, Phone, Bot, Shield, Puzzle, Gamepad2, DollarSign } from "lucide-react";
 import { Link } from "react-router-dom";
+import { ArrowLeft, Linkedin } from "lucide-react";
 import { InstagramIcon, ThreadsIcon } from "@/components/SocialIcons";
 import LanguageToggle from "@/components/LanguageToggle";
 import { AuthHeaderButton } from "@/components/AuthHeaderButton";
 import { SEO } from "@/components/SEO";
+import SiteFooter from "@/components/SiteFooter";
 
-interface Guide {
-  icon: typeof FileText;
+interface GuideItem {
   title: string;
   description: string;
-  href: string;
-  category: string;
+  en: string;
+  zh: string;
+  mini?: GuideItem;
 }
 
-const guides: Guide[] = [
-  // LinkedIn Guides
+interface Category {
+  label: string;
+  guides: GuideItem[];
+}
+
+const categories: Category[] = [
   {
-    icon: Linkedin,
-    title: "LinkedIn 求職攻略：讓獵頭主動找上你（迷你指南）",
-    description: "快速優化 LinkedIn 個人檔案，提升求職成功率",
-    href: "/zh-tw/linkedin-guide",
-    category: "LinkedIn",
+    label: "履歷與 LinkedIn",
+    guides: [
+      {
+        title: "履歷攻略",
+        description: "如何寫出讓你獲得面試的履歷",
+        en: "/resume-guide",
+        zh: "/zh-tw/resume-guide",
+        mini: {
+          title: "履歷速查表",
+          description: "一頁重點整理",
+          en: "/resume-quick-reference",
+          zh: "/zh-tw/resume-quick-reference",
+        },
+      },
+      {
+        title: "LinkedIn 指南",
+        description: "讓招募人員主動找上你",
+        en: "/linkedin-guide",
+        zh: "/zh-tw/linkedin-guide",
+        mini: {
+          title: "LinkedIn 品牌指南",
+          description: "打造個人品牌",
+          en: "/linkedin-branding-guide",
+          zh: "/zh-tw/linkedin-branding-guide",
+        },
+      },
+    ],
   },
   {
-    icon: Linkedin,
-    title: "LinkedIn 求職者必讀：別再投履歷，讓機會主動上門",
-    description: "全面打造 LinkedIn 個人品牌的戰術指南",
-    href: "/zh-tw/linkedin-branding-guide",
-    category: "LinkedIn",
-  },
-  // Career Change Guides
-  {
-    icon: Briefcase,
-    title: "轉職方法論：快速轉換職涯跑道（迷你指南）",
-    description: "快速了解成功轉職的 5 階段框架",
-    href: "/zh-tw/pivot-method-mini-guide",
-    category: "職涯轉型",
-  },
-  {
-    icon: Briefcase,
-    title: "轉職方法論：快速轉換職涯跑道",
-    description: "招募人員的完整職涯轉型指南，助你自信地開啟新篇章",
-    href: "/zh-tw/pivot-method-guide",
-    category: "職涯轉型",
-  },
-  // Resume Guide
-  {
-    icon: FileText,
-    title: "履歷攻略：讓招募人員一眼選中你",
-    description: "來自財富 100 強招募人員的履歷撰寫完整指南",
-    href: "/zh-tw/resume-guide",
-    category: "履歷撰寫",
-  },
-  // Interview Guides
-  {
-    icon: MessageSquare,
-    title: "10 小時面試準備系統",
-    description: "結構化的系統，讓你在 10 小時內準備好任何面試",
-    href: "/zh-tw/interview-prep-guide",
-    category: "面試準備",
+    label: "面試準備",
+    guides: [
+      {
+        title: "面試準備指南",
+        description: "步驟式面試準備法",
+        en: "/interview-prep-guide",
+        zh: "/zh-tw/interview-prep-guide",
+        mini: {
+          title: "完整面試準備指南",
+          description: "深度解析與範例",
+          en: "/interview-preparation-guide",
+          zh: "/zh-tw/interview-preparation-guide",
+        },
+      },
+      {
+        title: "HR 面試指南",
+        description: "通過 HR 篩選關",
+        en: "/hr-interview-guide",
+        zh: "/zh-tw/hr-interview-guide",
+      },
+      {
+        title: "招募人員篩選指南",
+        description: "搞定第一通電話",
+        en: "/recruiter-guide",
+        zh: "/zh-tw/recruiter-guide",
+      },
+      {
+        title: "問題解決 101",
+        description: "面試中的結構化思維",
+        en: "/problem-solving-guide",
+        zh: "/zh-tw/problem-solving-guide",
+      },
+    ],
   },
   {
-    icon: MessageSquare,
-    title: "完整面試準備指南",
-    description: "涵蓋面試準備所有面向的完整指南",
-    href: "/zh-tw/interview-preparation-guide",
-    category: "面試準備",
+    label: "職涯策略",
+    guides: [
+      {
+        title: "轉職方法論",
+        description: "成功轉換跑道",
+        en: "/pivot-method-guide",
+        zh: "/zh-tw/pivot-method-guide",
+        mini: {
+          title: "轉職迷你指南",
+          description: "快速入門框架",
+          en: "/pivot-method-mini-guide",
+          zh: "/zh-tw/pivot-method-mini-guide",
+        },
+      },
+      {
+        title: "Ikigai 職涯指南",
+        description: "找到有使命感的工作",
+        en: "/ikigai-guide",
+        zh: "/zh-tw/ikigai-guide",
+      },
+      {
+        title: "職涯遊戲指南",
+        description: "策略性經營你的職涯",
+        en: "/career-game-guide",
+        zh: "/zh-tw/career-game-guide",
+      },
+      {
+        title: "職場政治指南",
+        description: "掌握職場動態",
+        en: "/office-politics-guide",
+        zh: "/zh-tw/office-politics-guide",
+      },
+      {
+        title: "招募人員指南",
+        description: "了解招募人員的思維（內部人士指南）",
+        en: "/recruiter-guide",
+        zh: "/zh-tw/recruiter-guide",
+      },
+    ],
   },
   {
-    icon: Phone,
-    title: "如何通過招募人員的電話篩選",
-    description: "資深招募官的完整實戰手冊，含逐字範例與薪資話術",
-    href: "/zh-tw/hr-interview-guide",
-    category: "面試準備",
-  },
-  // AI 求職
-  {
-    icon: Bot,
-    title: "如何用 AI 管理你的整個求職流程",
-    description: "完整指南：從職涯探索到薪資談判，善用 ChatGPT 與 AI 工具提升求職每個階段的效率",
-    href: "/zh-tw/ai-job-search-guide",
-    category: "AI 求職",
-  },
-  // 職涯與使命感
-  {
-    icon: Briefcase,
-    title: "Ikigai 職涯指南：打造一份你不會在 12 個月內辭掉的職涯",
-    description: "用日本的 ikigai 概念找到工作中的使命感、心流與持久力。包含 Ikigai 職涯地圖、評分卡和 90 天行動計畫。",
-    href: "/zh-tw/ikigai-guide",
-    category: "職涯與使命感",
-  },
-  // 薪資談判
-  {
-    icon: DollarSign,
-    title: "工作Offer全攻略：如何評估、談判與勝出",
-    description: "招募人員的完整系統，教你評估和談判工作Offer",
-    href: "/zh-tw/job-offer-guide",
-    category: "薪資談判",
-  },
-  // 求職策略
-  {
-    icon: Users,
-    title: "如何與招募人員合作：內部人士指南",
-    description: "建立招募人員關係，讓他們為你工作",
-    href: "/zh-tw/recruiter-guide",
-    category: "求職策略",
-  },
-  {
-    icon: Shield,
-    title: "職場政治生存指南",
-    description: "掌握職場動態、建立影響力、保護你的職涯",
-    href: "/zh-tw/office-politics-guide",
-    category: "求職策略",
-  },
-  {
-    icon: Puzzle,
-    title: "問題解決101：完整面試框架",
-    description: "掌握結構化問題解決方法，應對案例面試",
-    href: "/zh-tw/problem-solving-guide",
-    category: "面試準備",
-  },
-  {
-    icon: Gamepad2,
-    title: "職涯遊戲：沒有人教你的規則",
-    description: "了解職涯晉升的潛規則，學會如何運用",
-    href: "/zh-tw/career-game-guide",
-    category: "求職策略",
+    label: "求職與 Offer",
+    guides: [
+      {
+        title: "AI 求職指南",
+        description: "用 AI 工具更快找到工作",
+        en: "/ai-job-search-guide",
+        zh: "/zh-tw/ai-job-search-guide",
+      },
+      {
+        title: "工作 Offer 指南",
+        description: "評估與談判 Offer",
+        en: "/job-offer-guide",
+        zh: "/zh-tw/job-offer-guide",
+      },
+      {
+        title: "薪資談判入門",
+        description: "談判範本與框架",
+        en: "/salary-starter-kit",
+        zh: "/zh-tw/salary-starter-kit",
+      },
+    ],
   },
 ];
 
-const categories = [
-  { en: "LinkedIn", zh: "LinkedIn" },
-  { en: "履歷撰寫", zh: "履歷撰寫" },
-  { en: "職涯轉型", zh: "職涯轉型" },
-  { en: "面試準備", zh: "面試準備" },
-  { en: "AI 求職", zh: "AI 求職" },
-  { en: "職涯與使命感", zh: "職涯與使命感" },
-  { en: "薪資談判", zh: "薪資談判" },
-  { en: "求職策略", zh: "求職策略" },
-];
+function PillLink({ href, label }: { href: string; label: string }) {
+  return (
+    <a
+      href={href}
+      className="inline-block px-2.5 py-0.5 text-xs font-medium rounded-full border border-border text-muted-foreground hover:text-foreground hover:border-gold/50 transition-colors"
+    >
+      {label}
+    </a>
+  );
+}
+
+function GuideRow({ guide, isNested = false }: { guide: GuideItem; isNested?: boolean }) {
+  return (
+    <div className={`flex items-baseline justify-between gap-4 py-2.5 ${isNested ? "pl-6 md:pl-8" : ""}`}>
+      <div className="flex-1 min-w-0">
+        {isNested && <span className="text-muted-foreground mr-1.5 text-sm">↳</span>}
+        <span className={`font-medium ${isNested ? "text-sm text-muted-foreground" : "text-base text-foreground"}`}>
+          {guide.title}
+        </span>
+        <span className={`hidden sm:inline ml-2 ${isNested ? "text-xs" : "text-sm"} text-muted-foreground`}>
+          — {guide.description}
+        </span>
+      </div>
+      <div className="flex items-center gap-1.5 flex-shrink-0">
+        <PillLink href={guide.en} label="EN" />
+        <PillLink href={guide.zh} label="中文" />
+      </div>
+    </div>
+  );
+}
 
 const GuidesPageZhTw = () => {
   return (
-    <div className="min-h-screen bg-background">
+    <div className="min-h-screen bg-background flex flex-col">
       <SEO />
       {/* Navigation */}
       <nav className="fixed top-0 left-0 right-0 z-50 bg-nav-green">
@@ -169,97 +209,39 @@ const GuidesPageZhTw = () => {
         </div>
       </nav>
 
-      {/* Hero Section */}
-      <section className="pt-28 md:pt-36 pb-12 md:pb-16 px-5 md:px-6 bg-background">
-        <div className="container mx-auto max-w-4xl">
-          <Link 
-            to="/zh-tw" 
+      {/* Content */}
+      <main className="flex-1 pt-28 md:pt-36 pb-16 md:pb-24 px-5 md:px-6">
+        <div className="container mx-auto max-w-3xl">
+          <Link
+            to="/zh-tw"
             className="inline-flex items-center gap-2 text-muted-foreground hover:text-foreground transition-colors mb-8"
           >
             <ArrowLeft className="w-4 h-4" />
             返回首頁
           </Link>
-          
-          <h1 className="font-heading text-4xl md:text-5xl lg:text-6xl text-foreground mb-4">
-            免費職涯指南
-          </h1>
-          <p className="text-lg md:text-xl text-muted-foreground max-w-2xl">
-            來自財富 100 強現任招募人員的實用框架與策略，幫助你找到理想工作。
-          </p>
-        </div>
-      </section>
 
-      {/* Guides Grid */}
-      <section className="pb-20 md:pb-28 px-5 md:px-6">
-        <div className="container mx-auto max-w-4xl">
-          {categories.map((category) => (
-            <div key={category.zh} className="mb-12 last:mb-0">
-              <h2 className="font-heading text-2xl md:text-3xl text-foreground mb-6 flex items-center gap-3">
-                {category.zh === "LinkedIn" && <Linkedin className="w-6 h-6 text-gold" />}
-                {category.zh === "履歷撰寫" && <FileText className="w-6 h-6 text-gold" />}
-                {category.zh === "職涯轉型" && <Briefcase className="w-6 h-6 text-gold" />}
-                {category.zh === "面試準備" && <MessageSquare className="w-6 h-6 text-gold" />}
-                {category.zh === "AI 求職" && <Bot className="w-6 h-6 text-gold" />}
-                {category.zh === "薪資談判" && <DollarSign className="w-6 h-6 text-gold" />}
-                {category.zh === "求職策略" && <Users className="w-6 h-6 text-gold" />}
-                {category.zh}
-              </h2>
-              
-              <div className="grid gap-4">
-                {guides
-                  .filter((guide) => guide.category === category.zh)
-                  .map((guide, index) => {
-                    const IconComponent = guide.icon;
-                    return (
-                      <Link
-                        key={index}
-                        to={guide.href}
-                        className="group bg-card border border-border rounded-xl p-6 hover:border-gold/40 hover:shadow-lg transition-all duration-300"
-                      >
-                        <div className="flex items-start gap-4">
-                          <div className="w-12 h-12 rounded-lg bg-gold/10 flex items-center justify-center flex-shrink-0">
-                            <IconComponent className="w-6 h-6 text-gold" />
-                          </div>
-                          <div className="flex-1">
-                            <h3 className="font-heading text-lg md:text-xl text-foreground font-semibold mb-1 group-hover:text-gold transition-colors">
-                              {guide.title}
-                            </h3>
-                            <p className="text-sm md:text-base text-muted-foreground">
-                              {guide.description}
-                            </p>
-                          </div>
-                          <ArrowLeft className="w-5 h-5 text-muted-foreground rotate-180 opacity-0 group-hover:opacity-100 transition-opacity flex-shrink-0 mt-1" />
-                        </div>
-                      </Link>
-                    );
-                  })}
+          <h1 className="font-heading text-3xl md:text-4xl text-foreground mb-2">求職指南</h1>
+          <p className="text-muted-foreground mb-10">
+            由擁有13年以上經驗的資深招募官撰寫
+          </p>
+
+          {categories.map((cat) => (
+            <section key={cat.label} className="mb-10 last:mb-0">
+              <h2 className="font-heading text-lg font-semibold text-executive-green mb-3">{cat.label}</h2>
+              <div className="divide-y divide-border">
+                {cat.guides.map((guide) => (
+                  <div key={guide.zh}>
+                    <GuideRow guide={guide} />
+                    {guide.mini && <GuideRow guide={guide.mini} isNested />}
+                  </div>
+                ))}
               </div>
-            </div>
+            </section>
           ))}
         </div>
-      </section>
+      </main>
 
-      {/* Footer */}
-      <footer className="py-8 md:py-10 px-5 md:px-6 bg-card border-t border-border">
-        <div className="container mx-auto max-w-4xl">
-          <div className="flex flex-col md:flex-row justify-between items-center gap-4">
-            <span className="text-sm text-muted-foreground">
-              © 2026 James Bugden. 版權所有。
-            </span>
-            <div className="flex items-center gap-6">
-              <a href="https://www.linkedin.com/in/james-bugden/" target="_blank" rel="noopener noreferrer" className="text-muted-foreground hover:text-foreground transition-colors">
-                <Linkedin className="w-5 h-5" />
-              </a>
-              <a href="https://www.instagram.com/james.careers/" target="_blank" rel="noopener noreferrer" className="text-muted-foreground hover:text-foreground transition-colors">
-                <InstagramIcon className="w-5 h-5" />
-              </a>
-              <a href="https://www.threads.com/@james.careers" target="_blank" rel="noopener noreferrer" className="text-muted-foreground hover:text-foreground transition-colors">
-                <ThreadsIcon className="w-5 h-5" />
-              </a>
-            </div>
-          </div>
-        </div>
-      </footer>
+      <SiteFooter />
     </div>
   );
 };
