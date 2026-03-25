@@ -52,7 +52,6 @@ function TipIcon({ text }: { text: string }) {
 function RowLabel({ children, tip, isSubtracted }: { children: React.ReactNode; tip?: string; isSubtracted?: boolean }) {
   return (
       <div className="flex items-center gap-2 mb-2">
-      <SEO />
       {isSubtracted && <Minus className="w-3.5 h-3.5 text-destructive flex-shrink-0" />}
       <label className="text-sm font-medium text-foreground">{children}</label>
       {tip && <TipIcon text={tip} />}
@@ -146,6 +145,7 @@ const CompCalculatorInteractiveZhTw = () => {
 
   return (
     <div className="min-h-screen bg-background pb-24 md:pb-0">
+      <SEO />
       <ToolkitHeaderZhTw />
 
       {/* Hero */}

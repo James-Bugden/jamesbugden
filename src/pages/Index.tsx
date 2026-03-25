@@ -6,7 +6,6 @@ import { InstagramIcon, ThreadsIcon } from "@/components/SocialIcons";
 import jamesPhoto from "@/assets/james-bugden.jpg";
 import LanguageToggle from "@/components/LanguageToggle";
 import { AuthHeaderButton } from "@/components/AuthHeaderButton";
-import PageSEO from "@/components/PageSEO";
 import HomepageTestimonials from "@/components/HomepageTestimonials";
 import LogoScroll from "@/components/LogoScroll";
 import SelfSegmentation from "@/components/SelfSegmentation";
@@ -17,6 +16,7 @@ import AboutSection from "@/components/AboutSection";
 import ExitIntentPopup from "@/components/ExitIntentPopup";
 import PromoBanner from "@/components/PromoBanner";
 import { useAuth } from "@/contexts/AuthContext";
+import { SEO } from "@/components/SEO";
 
 const faqs = [
   { q: "Why are these free?", a: "It's my mission to make as many paid tools and information online free. I want to help as many people as I can to have the job and lifestyle they want." },
@@ -101,11 +101,7 @@ const Index = () => {
 
   return (
     <div className="homepage min-h-screen overflow-x-hidden scroll-smooth bg-cream">
-      <PageSEO
-        title="James Bugden — Break Into Google, Uber & Microsoft From Taiwan"
-        description="Career coach shares insider strategies that helped 750+ candidates land roles at Google, Uber, Microsoft and other top companies."
-        path="/"
-      />
+      <SEO />
 
       {/* ── Promo Banner + Navigation (sticky together) ── */}
       <header className="sticky top-0 z-50">

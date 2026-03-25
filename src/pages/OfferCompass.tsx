@@ -22,6 +22,7 @@ import ScenarioInput from "@/components/offer-compass/ScenarioInput";
 import ResultsColumn from "@/components/offer-compass/ResultsColumn";
 import ScenarioComparison from "@/components/offer-compass/ScenarioComparison";
 import NegotiationImpact from "@/components/offer-compass/NegotiationImpact";
+import { SEO } from "@/components/SEO";
 
 export default function OfferCompass() {
   const {
@@ -44,6 +45,7 @@ export default function OfferCompass() {
 
   return (
     <>
+      <SEO />
       <Helmet>
         <title>Offer Calculator — Compensation Calculator | james.careers</title>
         <meta name="description" content="Compare foreign company offers and see your real Year 1-4 total compensation. Free calculator by james.careers." />

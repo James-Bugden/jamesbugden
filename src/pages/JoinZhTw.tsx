@@ -7,7 +7,6 @@ import { Input } from "@/components/ui/input";
 import { Mail, Lock, Eye, EyeOff, ScanSearch, FileText, BookOpen, Loader2, ShieldCheck } from "lucide-react";
 import LanguageToggle from "@/components/LanguageToggle";
 import { useAuth } from "@/contexts/AuthContext";
-import PageSEO from "@/components/PageSEO";
 import LogoScrollZhTw from "@/components/LogoScrollZhTw";
 import { motion } from "framer-motion";
 import { syncToMailerLite } from "@/lib/mailerlite";
@@ -17,6 +16,7 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from "@/components/ui/accordion";
+import { SEO } from "@/components/SEO";
 
 const UNLOCK_BADGES = [
   { icon: ScanSearch, label: "AI 履歷健檢" },
@@ -129,11 +129,7 @@ export default function JoinZhTw() {
 
   return (
     <div className="min-h-screen bg-background">
-      <PageSEO
-        title="免費加入 — 解鎖你的職涯工具箱 | James Bugden"
-        description="建立免費帳號，使用履歷產生器、AI 履歷健檢和所有職涯攻略。"
-        path="/zh-tw/join"
-      />
+      <SEO />
 
       <header className="py-6 px-4 flex items-center justify-between max-w-[440px] mx-auto w-full">
         <Link to="/zh-tw" className="font-heading text-sm tracking-[0.25em] text-foreground hover:text-gold transition-colors">

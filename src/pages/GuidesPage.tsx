@@ -4,7 +4,7 @@ import { Link } from "react-router-dom";
 import { InstagramIcon, ThreadsIcon } from "@/components/SocialIcons";
 import LanguageToggle from "@/components/LanguageToggle";
 import { AuthHeaderButton } from "@/components/AuthHeaderButton";
-import PageSEO from "@/components/PageSEO";
+import { SEO } from "@/components/SEO";
 
 interface Guide {
   icon: typeof FileText;
@@ -146,6 +146,7 @@ const categories = ["LinkedIn", "Resume", "Career Change", "Interview Prep", "AI
 const GuidesPage = () => {
   return (
     <div className="min-h-screen bg-background">
+      <SEO />
       {/* Navigation */}
       <nav className="fixed top-0 left-0 right-0 z-50 bg-nav-green">
         <div className="container mx-auto px-5 md:px-6 py-4 flex items-center justify-between">
@@ -172,11 +173,6 @@ const GuidesPage = () => {
 
       {/* Hero Section */}
       <section className="pt-28 md:pt-36 pb-12 md:pb-16 px-5 md:px-6 bg-background">
-        <PageSEO
-          title="Free Career Guides | James Bugden"
-          description="Practical frameworks and strategies from an active Fortune 100 recruiter to help you land your dream job."
-          path="/guides"
-        />
         <div className="container mx-auto max-w-4xl">
           <Link 
             to="/" 

@@ -5,13 +5,13 @@ import { InstagramIcon, ThreadsIcon } from "@/components/SocialIcons";
 import GuideShareButtons from "@/components/GuideShareButtons";
 import LanguageToggle from "@/components/LanguageToggle";
 import { AuthHeaderButton } from "@/components/AuthHeaderButton";
-import PageSEO from "@/components/PageSEO";
 import { useTrackGuideProgress } from "@/hooks/useReadingProgress";
 import GuideSignInBanner from "@/components/guides/GuideSignInBanner";
 import GuideBottomCTA from "@/components/guides/GuideBottomCTA";
 import { useGuideStorage } from "@/hooks/useGuideStorage";
 import { useAuth } from "@/contexts/AuthContext";
 import { useState, useEffect, useCallback } from "react";
+import { SEO } from "@/components/SEO";
 
 const SectionNumber = ({ num }: { num: string }) => (
   <span className="text-gold/30 font-heading text-6xl md:text-7xl font-bold leading-none select-none">
@@ -514,11 +514,7 @@ const FortyEightLawsGuide = () => {
 
   return (
     <div className="min-h-screen bg-background text-foreground">
-      <PageSEO
-        title="48 Laws of Power (Workplace Edition) | James Bugden"
-        description="A recruiter's guide to workplace power, office politics, and career strategy based on The 48 Laws of Power by Robert Greene. Learn to manage up, build your reputation, and play the long game."
-        path="/48-laws-guide"
-      />
+      <SEO />
 
       <ReadingProgressBar />
 

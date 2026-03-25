@@ -4,7 +4,7 @@ import { Link } from "react-router-dom";
 import { InstagramIcon, ThreadsIcon } from "@/components/SocialIcons";
 import LanguageToggle from "@/components/LanguageToggle";
 import { AuthHeaderButton } from "@/components/AuthHeaderButton";
-import PageSEO from "@/components/PageSEO";
+import { SEO } from "@/components/SEO";
 
 interface Guide {
   icon: typeof FileText;
@@ -144,6 +144,7 @@ const categories = [
 const GuidesPageZhTw = () => {
   return (
     <div className="min-h-screen bg-background">
+      <SEO />
       {/* Navigation */}
       <nav className="fixed top-0 left-0 right-0 z-50 bg-nav-green">
         <div className="container mx-auto px-5 md:px-6 py-4 flex items-center justify-between">
@@ -170,12 +171,6 @@ const GuidesPageZhTw = () => {
 
       {/* Hero Section */}
       <section className="pt-28 md:pt-36 pb-12 md:pb-16 px-5 md:px-6 bg-background">
-        <PageSEO
-          title="免費職涯指南 | James Bugden"
-          description="來自財富 100 強現任招募人員的實用框架與策略，幫助你找到理想工作。"
-          path="/zh-tw/guides"
-          lang="zh-Hant-TW"
-        />
         <div className="container mx-auto max-w-4xl">
           <Link 
             to="/zh-tw" 

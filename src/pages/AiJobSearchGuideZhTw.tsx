@@ -7,11 +7,11 @@ import { InstagramIcon, ThreadsIcon } from "@/components/SocialIcons";
 import GuideShareButtons from "@/components/GuideShareButtons";
 import LanguageToggle from "@/components/LanguageToggle";
 import { AuthHeaderButton } from "@/components/AuthHeaderButton";
-import PageSEO from "@/components/PageSEO";
 import { useTrackGuideProgress } from "@/hooks/useReadingProgress";
 import GuideSignInBanner from "@/components/guides/GuideSignInBanner";
 import GuideBottomCTA from "@/components/guides/GuideBottomCTA";
 import { useState, useEffect } from "react";
+import { SEO } from "@/components/SEO";
 
 const SectionNumber = ({ num }: { num: string }) => (
   <span className="text-gold/30 font-heading text-6xl md:text-7xl font-bold leading-none select-none">
@@ -228,12 +228,7 @@ const AiJobSearchGuideZhTw = () => {
 
   return (
     <div className="min-h-screen bg-background">
-      <PageSEO
-        title="如何用 AI 掌控你的整個求職過程 — James Bugden"
-        description="招募官的完整指南：從職涯方向到最終 Offer，每個階段都用 ChatGPT"
-        path="/zh-tw/ai-job-search-guide"
-        lang="zh-Hant-TW"
-      />
+      <SEO />
 
       {/* Navigation */}
       <nav className="fixed top-0 left-0 right-0 z-50 bg-nav-green">

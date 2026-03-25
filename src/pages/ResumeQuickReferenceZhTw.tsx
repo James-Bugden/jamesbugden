@@ -4,11 +4,11 @@ import { Button } from "@/components/ui/button";
 import GoldCheckBadge from "@/components/GoldCheckBadge";
 import { InstagramIcon, ThreadsIcon } from "@/components/SocialIcons";
 import GuideShareButtons from "@/components/GuideShareButtons";
-import PageSEO from "@/components/PageSEO";
 import { AuthHeaderButton } from "@/components/AuthHeaderButton";
 import { useTrackGuideProgress } from "@/hooks/useReadingProgress";
 import GuideSignInBanner from "@/components/guides/GuideSignInBanner";
 import GuideBottomCTA from "@/components/guides/GuideBottomCTA";
+import { SEO } from "@/components/SEO";
 
 const SectionNumber = ({ num }: { num: string }) => (
   <span className="text-gold/30 font-heading text-6xl md:text-7xl font-bold leading-none select-none">
@@ -22,12 +22,7 @@ const ResumeQuickReferenceZhTw = () => {
 
   return (
     <div className="min-h-screen bg-background">
-      <PageSEO
-        title="完美履歷：快速參考指南 | James Bugden"
-        description="10 條黃金法則、三 R 模型、框架技巧與送出前檢查清單。由 Uber 資深招募官 James Bugden 撰寫。"
-        path="/zh-tw/resume-quick-reference"
-        lang="zh-Hant-TW"
-      />
+      <SEO />
 
       {/* Navigation */}
       <nav className="fixed top-0 left-0 right-0 z-50 bg-nav-green">

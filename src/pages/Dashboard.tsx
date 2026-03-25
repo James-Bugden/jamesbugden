@@ -6,7 +6,6 @@ import { InstagramIcon, ThreadsIcon } from "@/components/SocialIcons";
 import LanguageToggle from "@/components/LanguageToggle";
 import ThemeToggle from "@/components/ThemeToggle";
 import { ArrowRight, FileText, DollarSign, PenTool, Search, X, BarChart3, MessageSquare, Compass, ClipboardList, Mic, Banknote } from "lucide-react";
-import PageSEO from "@/components/PageSEO";
 import { useRecentlyUsed } from "@/hooks/useRecentlyUsed";
 import { useLocalStorage } from "@/hooks/useLocalStorage";
 import { useResumeAnalyses } from "@/hooks/useResumeAnalyses";
@@ -15,6 +14,7 @@ import OnboardingChecklist from "@/components/OnboardingChecklist";
 import DashboardSkeleton from "@/components/DashboardSkeleton";
 import NpsPulse from "@/components/feedback/NpsPulse";
 import JourneySection, { type JourneyItem, type GuideTag, useSeenNewItems } from "@/components/dashboard/JourneySection";
+import { SEO } from "@/components/SEO";
 
 interface ToolItem {
   id: string;
@@ -277,7 +277,7 @@ export default function Dashboard({ lang = "en" }: { lang?: "en" | "zh" }) {
 
   return (
     <>
-      <PageSEO title={t.seoTitle} description={t.seoDesc} path={lang === "zh" ? "/zh-tw/dashboard" : "/dashboard"} />
+      <SEO />
 
       {/* Nav */}
       <nav className={`sticky top-0 z-50 bg-executive-green transition-shadow duration-300 ${scrolled ? 'shadow-lg shadow-black/20' : ''}`}>

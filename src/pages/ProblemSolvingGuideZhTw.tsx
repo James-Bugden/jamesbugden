@@ -5,11 +5,11 @@ import { InstagramIcon, ThreadsIcon } from "@/components/SocialIcons";
 import GuideShareButtons from "@/components/GuideShareButtons";
 import LanguageToggle from "@/components/LanguageToggle";
 import { AuthHeaderButton } from "@/components/AuthHeaderButton";
-import PageSEO from "@/components/PageSEO";
 import { useTrackGuideProgress } from "@/hooks/useReadingProgress";
 import GuideSignInBanner from "@/components/guides/GuideSignInBanner";
 import GuideBottomCTA from "@/components/guides/GuideBottomCTA";
 import { useState, useEffect } from "react";
+import { SEO } from "@/components/SEO";
 
 const SectionNumber = ({ num }: { num: string }) => (
   <span className="text-gold/30 font-heading text-6xl md:text-7xl font-bold leading-none select-none">
@@ -105,11 +105,7 @@ const ProblemSolvingGuideZhTw = () => {
 
   return (
     <div className="min-h-screen bg-background">
-      <PageSEO
-        title="問題解決 101：讓你成功錄取的思考框架 | James Bugden"
-        description="招募官的結構化思考面試指南。分解樹、是非樹、假設金字塔和四步驟框架。根據渡邊健介的《解決問題最簡單的方法》。"
-        path="/zh-tw/problem-solving-guide"
-      />
+      <SEO />
 
       {/* Navigation */}
       <nav className="fixed top-0 left-0 right-0 z-50 bg-nav-green">

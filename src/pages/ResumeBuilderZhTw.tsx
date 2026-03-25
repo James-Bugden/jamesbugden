@@ -8,7 +8,7 @@ import { SEO } from "@/components/SEO";
 export default function ResumeBuilderZhTw() {
   return (
     <>
-    <SEO />
+      <SEO />
     <ResumeBuilderLangContext.Provider value="zh-tw">
       <ResumeBuilder />
     </ResumeBuilderLangContext.Provider>

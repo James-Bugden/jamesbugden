@@ -18,6 +18,7 @@ import ScenarioInputZhTw from "@/components/offer-compass/ScenarioInputZhTw";
 import ResultsColumnZhTw from "@/components/offer-compass/ResultsColumnZhTw";
 import ScenarioComparison from "@/components/offer-compass/ScenarioComparison";
 import NegotiationImpactZhTw from "@/components/offer-compass/NegotiationImpactZhTw";
+import { SEO } from "@/components/SEO";
 
 export default function OfferCompassZhTw() {
   const {
@@ -31,6 +32,7 @@ export default function OfferCompassZhTw() {
 
   return (
     <>
+      <SEO />
       <Helmet>
         <title>Offer 計算機 — 薪酬計算器 | james.careers</title>
         <meta name="description" content="比較外商公司 Offer，看清你的第1-4年總薪酬。james.careers 免費工具。" />

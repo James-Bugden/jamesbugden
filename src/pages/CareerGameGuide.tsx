@@ -6,11 +6,11 @@ import { InstagramIcon, ThreadsIcon } from "@/components/SocialIcons";
 import GuideShareButtons from "@/components/GuideShareButtons";
 import LanguageToggle from "@/components/LanguageToggle";
 import { AuthHeaderButton } from "@/components/AuthHeaderButton";
-import PageSEO from "@/components/PageSEO";
 import { useTrackGuideProgress } from "@/hooks/useReadingProgress";
 import GuideSignInBanner from "@/components/guides/GuideSignInBanner";
 import GuideBottomCTA from "@/components/guides/GuideBottomCTA";
 import { useState, useEffect } from "react";
+import { SEO } from "@/components/SEO";
 
 const SectionNumber = ({ num }: { num: string }) => (
   <span className="text-gold/30 font-heading text-6xl md:text-7xl font-bold leading-none select-none">
@@ -293,11 +293,7 @@ const CareerGameGuide = () => {
 
   return (
     <div className="min-h-screen bg-background">
-      <PageSEO
-        title="The Promotion Playbook: 36 Secrets Your Company Will Never Tell You | James Bugden"
-        description="A recruiter's breakdown of the 36 career secrets from Kendall Berg's framework. Learn what gets you promoted, how to build your brand, grow your network, and play the career game."
-        path="/career-game-guide"
-      />
+      <SEO />
 
       {/* Navigation */}
       <nav className="fixed top-0 left-0 right-0 z-50 bg-nav-green">

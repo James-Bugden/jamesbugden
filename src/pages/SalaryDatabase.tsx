@@ -7,7 +7,7 @@ import TopPayingRoles from "@/components/salary/TopPayingRoles";
 import SalaryFooter from "@/components/salary/SalaryFooter";
 import { Link } from "react-router-dom";
 import { useSalaryT, type SalaryLang } from "@/components/salary/salaryI18n";
-import PageSEO from "@/components/PageSEO";
+import { SEO } from "@/components/SEO";
 
 function SalaryDatabaseInner({ lang }: { lang: SalaryLang }) {
   const t = useSalaryT(lang);
@@ -22,14 +22,6 @@ function SalaryDatabaseInner({ lang }: { lang: SalaryLang }) {
 
   return (
     <div className="min-h-screen bg-background font-[Inter,var(--font-body)] animate-in fade-in slide-in-from-bottom-2 duration-300">
-      <PageSEO
-        title={lang === "zh" ? "台灣薪資資料庫 — James Bugden" : "Taiwan Salary Database — James Bugden"}
-        description={lang === "zh"
-          ? "搜尋 169 個職位、25 個產業的台灣薪資數據。資料來自 9 個權威來源。"
-          : "Search salary data for 169 roles across 25 sectors in Taiwan. Data from 9 authoritative sources."
-        }
-        path={lang === "zh" ? "/zh-tw/salary" : "/salary"}
-      />
       <SalaryNav lang={lang} />
       <SalaryChecker lang={lang} />
 
@@ -54,6 +46,7 @@ function SalaryDatabaseInner({ lang }: { lang: SalaryLang }) {
 export default function SalaryDatabase() {
   return (
     <SalaryProvider>
+      <SEO />
       <SalaryDatabaseInner lang="en" />
     </SalaryProvider>
   );

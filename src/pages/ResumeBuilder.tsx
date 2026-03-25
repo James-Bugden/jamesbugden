@@ -1,7 +1,6 @@
 import { useState, useCallback, useEffect, useRef, useMemo } from "react";
 import { DndContext, closestCenter, KeyboardSensor, PointerSensor, useSensor, useSensors, DragEndEvent } from "@dnd-kit/core";
 import { useSearchParams } from "react-router-dom";
-import PageSEO from "@/components/PageSEO";
 import { SortableContext, verticalListSortingStrategy, arrayMove } from "@dnd-kit/sortable";
 import { restrictToVerticalAxis } from "@dnd-kit/modifiers" ;
 import { SortableSectionCard } from "@/components/resume-builder/SortableSectionCard";
@@ -42,6 +41,7 @@ import { useNavigate } from "react-router-dom";
 import { AnalyzerPromptDialog } from "@/components/resume-builder/AnalyzerPromptDialog";
 import { AnalyzerSuggestionsPanel, Suggestion, extractSuggestions, applySuggestionToData } from "@/components/resume-builder/AnalyzerSuggestionsPanel";
 import MicroSurvey from "@/components/feedback/MicroSurvey";
+import { SEO } from "@/components/SEO";
 
 type ViewMode = "dashboard" | "resume-editor" | "cover-letter-editor";
 
@@ -950,7 +950,7 @@ const ResumeBuilder = () => {
 
   return (
     <div className="h-screen flex flex-col" style={{ backgroundColor: BRAND.cream }}>
-      <PageSEO title="Free Resume Builder — James Bugden" description="Build a recruiter-approved resume from scratch using proven templates. Export to PDF instantly." path="/resume" />
+      <SEO />
       {/* ── Top bar — stacks on mobile ─────────────────────────── */}
       <div className="sticky top-0 z-30 bg-white border-b" style={{ borderColor: BRAND.border }}>
         {/* Row 1: Back + name + download */}

@@ -10,9 +10,9 @@ import SalaryDistributionChart from "@/components/salary/insights/SalaryDistribu
 import SectorTreemap from "@/components/salary/insights/SectorTreemap";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { ALL_SECTORS, salaryData, NATIONAL_MEDIAN } from "@/data/salaryData";
-import PageSEO from "@/components/PageSEO";
 import { useState, useMemo, useEffect } from "react";
 import { useLocation } from "react-router-dom";
+import { SEO } from "@/components/SEO";
 
 function InsightsContent() {
   const lang = "zh" as const;
@@ -49,7 +49,7 @@ function InsightsContent() {
 
   return (
     <div className="min-h-screen bg-background font-sans">
-      <PageSEO title="台灣薪資洞察 | James Bugden" description="互動式圖表深入了解台灣薪資趨勢" path="/zh-tw/salary/insights" />
+      <SEO />
       <SalaryNav lang={lang} />
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-8">
         <div className="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-4">

@@ -113,7 +113,6 @@ const AdminLogin = () => {
   if (checkingSession) {
     return (
         <div className="min-h-screen bg-background flex items-center justify-center">
-        <SEO />
         <Loader2 className="h-8 w-8 animate-spin text-executive-green" />
       </div>
     );
@@ -121,6 +120,7 @@ const AdminLogin = () => {
 
   return (
     <div className="min-h-screen bg-background flex items-center justify-center px-4">
+      <SEO />
       <div className="w-full max-w-md">
         <div className="bg-card border border-border rounded-lg shadow-lg p-8">
           <div className="text-center mb-8">

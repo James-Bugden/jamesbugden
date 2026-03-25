@@ -7,7 +7,6 @@ import { Input } from "@/components/ui/input";
 import { Mail, Lock, Eye, EyeOff, ScanSearch, FileText, BookOpen, Loader2, ShieldCheck } from "lucide-react";
 import LanguageToggle from "@/components/LanguageToggle";
 import { useAuth } from "@/contexts/AuthContext";
-import PageSEO from "@/components/PageSEO";
 import LogoScroll from "@/components/LogoScroll";
 import { motion } from "framer-motion";
 import { syncToMailerLite } from "@/lib/mailerlite";
@@ -17,6 +16,7 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from "@/components/ui/accordion";
+import { SEO } from "@/components/SEO";
 
 const UNLOCK_BADGES = [
   { icon: ScanSearch, label: "AI Resume Analyzer" },
@@ -140,11 +140,7 @@ export default function Join() {
 
   return (
     <div className="min-h-screen bg-background">
-      <PageSEO
-        title="Join Free — Unlock Your Career Toolkit | James Bugden"
-        description="Create your free account to access the Resume Builder, AI Resume Analyzer, and all career guides."
-        path="/join"
-      />
+      <SEO />
 
       {/* Minimal header */}
       <header className="py-6 px-4 flex items-center justify-between max-w-[440px] mx-auto w-full">

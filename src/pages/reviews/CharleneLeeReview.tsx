@@ -19,7 +19,7 @@ const page2Annotations = [
 const CharleneLeeReview = () => {
   return (
       <div className="min-h-screen bg-background">
-      <SEO />
+        <SEO />
       {/* Header */}
       <header className="bg-nav-green sticky top-0 z-50">
         <div className="max-w-5xl mx-auto px-4 sm:px-6 py-4 flex items-center justify-between">

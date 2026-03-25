@@ -6,10 +6,10 @@ import { InstagramIcon, ThreadsIcon } from "@/components/SocialIcons";
 import GuideShareButtons from "@/components/GuideShareButtons";
 import LanguageToggle from "@/components/LanguageToggle";
 import { AuthHeaderButton } from "@/components/AuthHeaderButton";
-import PageSEO from "@/components/PageSEO";
 import { useTrackGuideProgress } from "@/hooks/useReadingProgress";
 import GuideSignInBanner from "@/components/guides/GuideSignInBanner";
 import GuideBottomCTA from "@/components/guides/GuideBottomCTA";
+import { SEO } from "@/components/SEO";
 
 const SectionNumber = ({ num }: { num: string }) => (
   <span className="text-gold/30 font-heading text-6xl md:text-7xl font-bold leading-none select-none">
@@ -21,11 +21,7 @@ const ResumeQuickReference = () => {
   useTrackGuideProgress("resume-ref");
   return (
     <div className="min-h-screen bg-background">
-      <PageSEO
-        title="The Perfect Resume: Quick Reference Guide | James Bugden"
-        description="A concise cheat sheet with the 10 Golden Rules, Three R Model, Framing Technique, and pre-submission checklist. By James Bugden, Senior Recruiter at Uber."
-        path="/resume-quick-reference"
-      />
+      <SEO />
 
       {/* Navigation */}
       <nav className="fixed top-0 left-0 right-0 z-50 bg-nav-green">

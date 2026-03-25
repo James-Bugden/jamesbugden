@@ -122,7 +122,7 @@ const CompensationCalculatorZhTw = () => {
 
   return (
       <div className="min-h-screen bg-background">
-      <SEO />
+        <SEO />
       <ToolkitHeaderZhTw />
 
       {/* Hero */}

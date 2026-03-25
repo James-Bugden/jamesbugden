@@ -7,8 +7,8 @@ import { Input } from "@/components/ui/input";
 import { Mail, Lock, ArrowLeft, Eye, EyeOff } from "lucide-react";
 import { useAuth } from "@/contexts/AuthContext";
 import { useEffect } from "react";
-import PageSEO from "@/components/PageSEO";
 import { syncToMailerLite } from "@/lib/mailerlite";
+import { SEO } from "@/components/SEO";
 
 export default function Signup() {
   const navigate = useNavigate();
@@ -81,7 +81,7 @@ export default function Signup() {
 
   return (
     <div className="min-h-screen bg-background flex items-center justify-center px-4">
-      <PageSEO title={`${t.title} | James Bugden`} description={t.subtitle} path="/signup" />
+      <SEO />
       <div className="w-full max-w-[400px]">
         <div className="mb-6">
           <Link to={isZhTw ? "/zh-tw" : "/"} className="inline-flex items-center gap-1.5 text-sm text-muted-foreground hover:text-foreground transition-colors">

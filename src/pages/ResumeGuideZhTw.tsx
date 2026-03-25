@@ -5,11 +5,11 @@ import { Link, useNavigate } from "react-router-dom";
 import { InstagramIcon, ThreadsIcon } from "@/components/SocialIcons";
 import GuideShareButtons from "@/components/GuideShareButtons";
 import LanguageToggle from "@/components/LanguageToggle";
-import PageSEO from "@/components/PageSEO";
 import { AuthHeaderButton } from "@/components/AuthHeaderButton";
 import { useTrackGuideProgress } from "@/hooks/useReadingProgress";
 import GuideSignInBanner from "@/components/guides/GuideSignInBanner";
 import GuideBottomCTA from "@/components/guides/GuideBottomCTA";
+import { SEO } from "@/components/SEO";
 
 /* ─── Reading Progress Bar ─── */
 const ReadingProgress = () => {
@@ -390,12 +390,7 @@ const ResumeGuideZhTw = () => {
 
   return (
     <div className="min-h-screen bg-background">
-      <PageSEO
-        title="完美履歷指南：10 條黃金法則 | James Bugden"
-        description="招募官指南：改變求職策略的 4 個履歷真相、必須通過的 4 項測試、10 條讓你脫穎而出的黃金法則。"
-        path="/zh-tw/resume-guide"
-        lang="zh-Hant-TW"
-      />
+      <SEO />
 
       {/* Navigation */}
       <nav className="fixed top-0 left-0 right-0 z-50 bg-nav-green">

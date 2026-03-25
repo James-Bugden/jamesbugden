@@ -141,7 +141,7 @@ const CounterofferEmail = () => {
 
   return (
       <div className="min-h-screen bg-background">
-      <SEO />
+        <SEO />
       <ToolkitHeader />
 
       {/* Hero */}
