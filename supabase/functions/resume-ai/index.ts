@@ -256,13 +256,9 @@ Keep it actionable and concise.`;
     const data = await response.json();
 
     // Best-effort usage logging
-    if (userId) {
+    if (userId && supabase) {
       try {
-        const sb = createClient(
-          Deno.env.get("SUPABASE_URL")!,
-          Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!
-        );
-        await sb.from("ai_usage_log").insert({ user_id: userId, usage_type: "ai_tool" });
+        await supabase.from("ai_usage_log").insert({ user_id: userId, usage_type: "ai_tool" });
       } catch { /* don't fail the request */ }
     }
 
