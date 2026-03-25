@@ -4,7 +4,7 @@ import { InstagramIcon, ThreadsIcon } from "@/components/SocialIcons";
 import LanguageToggle from "@/components/LanguageToggle";
 import { AuthHeaderButton } from "@/components/AuthHeaderButton";
 import { SEO } from "@/components/SEO";
-import SiteFooter from "@/components/SiteFooter";
+
 
 interface GuideItem {
   title: string;
@@ -241,7 +241,7 @@ const GuidesPage = () => {
         </div>
       </main>
 
-      <SiteFooter />
+      
     </div>
   );
 };

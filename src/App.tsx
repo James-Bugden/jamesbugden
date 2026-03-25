@@ -8,6 +8,7 @@ import { ScrollToTop } from "./components/ScrollToTop";
 import { HelmetProvider } from "react-helmet-async";
 import { AuthProvider, useAuth } from "./contexts/AuthContext";
 import MobileBottomNav from "./components/MobileBottomNav";
+import SiteLayout from "./components/SiteLayout";
 import LoginGate from "./components/LoginGate";
 import { useLocation } from "react-router-dom";
 import { ThemeProvider } from "next-themes";
@@ -189,6 +190,7 @@ const App = () => (
         <AuthProvider>
         <ScrollToTop />
         <Suspense fallback={<PageLoader />}>
+          <SiteLayout>
           <Routes>
             <Route path="/" element={<Index />} />
             <Route path="/zh-tw" element={<IndexZhTw />} />
@@ -336,6 +338,7 @@ const App = () => (
             {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
             <Route path="*" element={<NotFound />} />
           </Routes>
+          </SiteLayout>
         </Suspense>
         <MobileNavWrapper />
         </AuthProvider>
