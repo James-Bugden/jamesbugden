@@ -28,7 +28,6 @@ import { useEmailGate } from "@/hooks/useEmailGate";
 import { EmailGateOverlay } from "@/components/EmailGateOverlay";
 import { calcScenario, formatCurrency, formatPct } from "@/components/offer-compass/types";
 import type { Scenario } from "@/components/offer-compass/types";
-import { SEO } from "@/components/SEO";
 
 const COLORS = ["#1B3A2F", "#C9A961", "#3D7A5F", "#B06B3A", "#6B5B95"];
 
