@@ -2,7 +2,7 @@ import { useState } from "react";
 import { useEmailGate } from "@/hooks/useEmailGate";
 import { EmailGateOverlay } from "@/components/EmailGateOverlay";
 import { Link } from "react-router-dom";
-import { Helmet } from "react-helmet-async";
+
 import { Plus, Copy, Sparkles, Trash2, RotateCcw, ArrowRight } from "lucide-react";
 import LanguageToggle from "@/components/LanguageToggle";
 import { Button } from "@/components/ui/button";
