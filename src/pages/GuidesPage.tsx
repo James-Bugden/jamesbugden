@@ -1,151 +1,189 @@
-import { Button } from "@/components/ui/button";
-import { Linkedin, ArrowLeft, FileText, Briefcase, MessageSquare, Users, Phone, Bot, Shield, Puzzle, Gamepad2, DollarSign } from "lucide-react";
 import { Link } from "react-router-dom";
+import { ArrowLeft, Linkedin } from "lucide-react";
 import { InstagramIcon, ThreadsIcon } from "@/components/SocialIcons";
 import LanguageToggle from "@/components/LanguageToggle";
 import { AuthHeaderButton } from "@/components/AuthHeaderButton";
 import { SEO } from "@/components/SEO";
+import SiteFooter from "@/components/SiteFooter";
 
-interface Guide {
-  icon: typeof FileText;
+interface GuideItem {
   title: string;
   description: string;
-  href: string;
-  category: string;
+  en: string;
+  zh: string;
+  mini?: GuideItem;
 }
 
-const guides: Guide[] = [
-  // LinkedIn Guides
+interface Category {
+  label: string;
+  guides: GuideItem[];
+}
+
+const categories: Category[] = [
   {
-    icon: Linkedin,
-    title: "LinkedIn for Job Search: Get Recruiters to Find You (Mini Guide)",
-    description: "Quick-start guide to optimizing your LinkedIn profile for job searching",
-    href: "/linkedin-guide",
-    category: "LinkedIn",
+    label: "Resume & LinkedIn",
+    guides: [
+      {
+        title: "Resume Guide",
+        description: "How to write a resume that gets interviews",
+        en: "/resume-guide",
+        zh: "/zh-tw/resume-guide",
+        mini: {
+          title: "Resume Quick Reference",
+          description: "One-page cheat sheet",
+          en: "/resume-quick-reference",
+          zh: "/zh-tw/resume-quick-reference",
+        },
+      },
+      {
+        title: "LinkedIn Guide",
+        description: "Optimize your LinkedIn for recruiters",
+        en: "/linkedin-guide",
+        zh: "/zh-tw/linkedin-guide",
+        mini: {
+          title: "LinkedIn Branding Guide",
+          description: "Build your personal brand",
+          en: "/linkedin-branding-guide",
+          zh: "/zh-tw/linkedin-branding-guide",
+        },
+      },
+    ],
   },
   {
-    icon: Linkedin,
-    title: "LinkedIn for Job Seekers: Stop Applying, Start Getting Found",
-    description: "Comprehensive tactical guide to building your personal brand on LinkedIn",
-    href: "/linkedin-branding-guide",
-    category: "LinkedIn",
-  },
-  // Career Change Guides
-  {
-    icon: Briefcase,
-    title: "The Pivot Method: Quick Guide to Career Change (Mini Guide)",
-    description: "Quick overview of the 5-stage framework for successful career transitions",
-    href: "/pivot-method-mini-guide",
-    category: "Career Change",
-  },
-  {
-    icon: Briefcase,
-    title: "The Pivot Method: A Full Guide to Career Change",
-    description: "Complete recruiter's guide to navigating career changes with confidence",
-    href: "/pivot-method-guide",
-    category: "Career Change",
-  },
-  // Resume
-  {
-    icon: FileText,
-    title: "Resume Guide: Get Recruiters to Pick You",
-    description: "Complete resume writing guide from a Fortune 100 recruiter",
-    href: "/resume-guide",
-    category: "Resume",
-  },
-  // Interview Guides
-  {
-    icon: MessageSquare,
-    title: "10-Hour Interview Prep System",
-    description: "Structured system to prepare for any interview in 10 focused hours",
-    href: "/interview-prep-guide",
-    category: "Interview Prep",
+    label: "Interview Prep",
+    guides: [
+      {
+        title: "Interview Prep Guide",
+        description: "Step-by-step interview preparation",
+        en: "/interview-prep-guide",
+        zh: "/zh-tw/interview-prep-guide",
+        mini: {
+          title: "Interview Preparation Guide",
+          description: "Deep dive with examples",
+          en: "/interview-preparation-guide",
+          zh: "/zh-tw/interview-preparation-guide",
+        },
+      },
+      {
+        title: "HR Interview Guide",
+        description: "Pass the HR screening round",
+        en: "/hr-interview-guide",
+        zh: "/zh-tw/hr-interview-guide",
+      },
+      {
+        title: "Recruiter Screen Guide",
+        description: "Ace the first phone call",
+        en: "/recruiter-guide",
+        zh: "/zh-tw/recruiter-guide",
+      },
+      {
+        title: "Problem Solving 101",
+        description: "Structured thinking for interviews",
+        en: "/problem-solving-guide",
+        zh: "/zh-tw/problem-solving-guide",
+      },
+    ],
   },
   {
-    icon: MessageSquare,
-    title: "Full Interview Preparation Guide",
-    description: "Comprehensive guide covering all aspects of interview preparation",
-    href: "/interview-preparation-guide",
-    category: "Interview Prep",
+    label: "Career Strategy",
+    guides: [
+      {
+        title: "Pivot Method Guide",
+        description: "Change careers successfully",
+        en: "/pivot-method-guide",
+        zh: "/zh-tw/pivot-method-guide",
+        mini: {
+          title: "Pivot Method Mini Guide",
+          description: "Quick-start framework",
+          en: "/pivot-method-mini-guide",
+          zh: "/zh-tw/pivot-method-mini-guide",
+        },
+      },
+      {
+        title: "Ikigai Career Guide",
+        description: "Find work that gives you purpose",
+        en: "/ikigai-guide",
+        zh: "/zh-tw/ikigai-guide",
+      },
+      {
+        title: "Career Game Guide",
+        description: "Play your career strategically",
+        en: "/career-game-guide",
+        zh: "/zh-tw/career-game-guide",
+      },
+      {
+        title: "Office Politics Guide",
+        description: "Navigate workplace dynamics",
+        en: "/office-politics-guide",
+        zh: "/zh-tw/office-politics-guide",
+      },
+      {
+        title: "Recruiter Guide",
+        description: "How recruiters think (insider guide)",
+        en: "/recruiter-guide",
+        zh: "/zh-tw/recruiter-guide",
+      },
+    ],
   },
   {
-    icon: Phone,
-    title: "How to Pass the Recruiter Screen",
-    description: "A Senior Recruiter's end-to-end playbook for passing the screening call with word-for-word examples and salary scripts",
-    href: "/hr-interview-guide",
-    category: "Interview Prep",
-  },
-  // AI & Job Search
-  {
-    icon: Bot,
-    title: "How to Use AI to Run Your Entire Job Search",
-    description: "Complete guide to using ChatGPT and AI tools for every stage of your job search — from career discovery to salary negotiation",
-    href: "/ai-job-search-guide",
-    category: "AI & Job Search",
-  },
-  // Career & Purpose
-  {
-    icon: Briefcase,
-    title: "The Ikigai Career Guide: Build a Career You Won't Quit in 12 Months",
-    description: "Find purpose, flow, and longevity at work using the Japanese concept of ikigai. Includes the Ikigai Career Map, Scorecard, and 90-day action plan.",
-    href: "/ikigai-guide",
-    category: "Career & Purpose",
-  },
-  // Interview Question Bank
-  {
-    icon: MessageSquare,
-    title: "Interview Question Database: 203 Real Questions with Sample Answers (Beta)",
-    description: "203 real interview questions with sample answers to prepare for your next interview — searchable by category, difficulty, and career level",
-    href: "/interview-questions",
-    category: "Interview Prep",
-  },
-  // Job Offer
-  {
-    icon: DollarSign,
-    title: "The Job Offer Playbook: How to Evaluate, Negotiate & Win",
-    description: "A recruiter's complete system for evaluating and negotiating job offers",
-    href: "/job-offer-guide",
-    category: "Negotiation",
-  },
-  // Recruiter Guide
-  {
-    icon: Users,
-    title: "Working With Recruiters: The Insider's Guide",
-    description: "How to build relationships with recruiters and make them work for you",
-    href: "/recruiter-guide",
-    category: "Job Search Strategy",
-  },
-  // Office Politics
-  {
-    icon: Shield,
-    title: "Office Politics Survival Guide",
-    description: "Navigate workplace dynamics, build influence, and protect your career",
-    href: "/office-politics-guide",
-    category: "Job Search Strategy",
-  },
-  // Problem Solving
-  {
-    icon: Puzzle,
-    title: "Problem Solving 101: The Complete Interview Framework",
-    description: "Master structured problem-solving for case interviews and beyond",
-    href: "/problem-solving-guide",
-    category: "Interview Prep",
-  },
-  // Career Game
-  {
-    icon: Gamepad2,
-    title: "The Career Game: Rules Nobody Taught You",
-    description: "Understand the hidden rules of career progression and how to play them",
-    href: "/career-game-guide",
-    category: "Job Search Strategy",
+    label: "Job Search & Offers",
+    guides: [
+      {
+        title: "AI Job Search Guide",
+        description: "Use AI tools to find jobs faster",
+        en: "/ai-job-search-guide",
+        zh: "/zh-tw/ai-job-search-guide",
+      },
+      {
+        title: "Job Offer Guide",
+        description: "Evaluate and negotiate offers",
+        en: "/job-offer-guide",
+        zh: "/zh-tw/job-offer-guide",
+      },
+      {
+        title: "Salary Starter Kit",
+        description: "Negotiation templates and framework",
+        en: "/salary-starter-kit",
+        zh: "/zh-tw/salary-starter-kit",
+      },
+    ],
   },
 ];
 
-const categories = ["LinkedIn", "Resume", "Career Change", "Interview Prep", "AI & Job Search", "Career & Purpose", "Negotiation", "Job Search Strategy"];
+function PillLink({ href, label }: { href: string; label: string }) {
+  return (
+    <a
+      href={href}
+      className="inline-block px-2.5 py-0.5 text-xs font-medium rounded-full border border-border text-muted-foreground hover:text-foreground hover:border-gold/50 transition-colors"
+    >
+      {label}
+    </a>
+  );
+}
+
+function GuideRow({ guide, isNested = false }: { guide: GuideItem; isNested?: boolean }) {
+  return (
+    <div className={`flex items-baseline justify-between gap-4 py-2.5 ${isNested ? "pl-6 md:pl-8" : ""}`}>
+      <div className="flex-1 min-w-0">
+        {isNested && <span className="text-muted-foreground mr-1.5 text-sm">↳</span>}
+        <span className={`font-medium ${isNested ? "text-sm text-muted-foreground" : "text-base text-foreground"}`}>
+          {guide.title}
+        </span>
+        <span className={`hidden sm:inline ml-2 ${isNested ? "text-xs" : "text-sm"} text-muted-foreground`}>
+          — {guide.description}
+        </span>
+      </div>
+      <div className="flex items-center gap-1.5 flex-shrink-0">
+        <PillLink href={guide.en} label="EN" />
+        <PillLink href={guide.zh} label="中文" />
+      </div>
+    </div>
+  );
+}
 
 const GuidesPage = () => {
   return (
-    <div className="min-h-screen bg-background">
+    <div className="min-h-screen bg-background flex flex-col">
       <SEO />
       {/* Navigation */}
       <nav className="fixed top-0 left-0 right-0 z-50 bg-nav-green">
@@ -171,97 +209,39 @@ const GuidesPage = () => {
         </div>
       </nav>
 
-      {/* Hero Section */}
-      <section className="pt-28 md:pt-36 pb-12 md:pb-16 px-5 md:px-6 bg-background">
-        <div className="container mx-auto max-w-4xl">
-          <Link 
-            to="/" 
+      {/* Content */}
+      <main className="flex-1 pt-28 md:pt-36 pb-16 md:pb-24 px-5 md:px-6">
+        <div className="container mx-auto max-w-3xl">
+          <Link
+            to="/"
             className="inline-flex items-center gap-2 text-muted-foreground hover:text-foreground transition-colors mb-8"
           >
             <ArrowLeft className="w-4 h-4" />
             Back to Home
           </Link>
-          
-          <h1 className="font-heading text-4xl md:text-5xl lg:text-6xl text-foreground mb-4">
-            Free Career Guides
-          </h1>
-          <p className="text-lg md:text-xl text-muted-foreground max-w-2xl">
-            Practical frameworks and strategies from an active Fortune 100 recruiter to help you land your dream job.
-          </p>
-        </div>
-      </section>
 
-      {/* Guides Grid */}
-      <section className="pb-20 md:pb-28 px-5 md:px-6">
-        <div className="container mx-auto max-w-4xl">
-          {categories.map((category) => (
-            <div key={category} className="mb-12 last:mb-0">
-              <h2 className="font-heading text-2xl md:text-3xl text-foreground mb-6 flex items-center gap-3">
-                {category === "LinkedIn" && <Linkedin className="w-6 h-6 text-gold" />}
-                {category === "Resume" && <FileText className="w-6 h-6 text-gold" />}
-                {category === "Career Change" && <Briefcase className="w-6 h-6 text-gold" />}
-                {category === "Interview Prep" && <MessageSquare className="w-6 h-6 text-gold" />}
-                {category === "AI & Job Search" && <Bot className="w-6 h-6 text-gold" />}
-                {category === "Negotiation" && <DollarSign className="w-6 h-6 text-gold" />}
-                {category === "Job Search Strategy" && <Users className="w-6 h-6 text-gold" />}
-                {category}
-              </h2>
-              
-              <div className="grid gap-4">
-                {guides
-                  .filter((guide) => guide.category === category)
-                  .map((guide, index) => {
-                    const IconComponent = guide.icon;
-                    return (
-                      <Link
-                        key={index}
-                        to={guide.href}
-                        className="group bg-card border border-border rounded-xl p-6 hover:border-gold/40 hover:shadow-lg transition-all duration-300"
-                      >
-                        <div className="flex items-start gap-4">
-                          <div className="w-12 h-12 rounded-lg bg-gold/10 flex items-center justify-center flex-shrink-0">
-                            <IconComponent className="w-6 h-6 text-gold" />
-                          </div>
-                          <div className="flex-1">
-                            <h3 className="font-heading text-lg md:text-xl text-foreground font-semibold mb-1 group-hover:text-gold transition-colors">
-                              {guide.title}
-                            </h3>
-                            <p className="text-sm md:text-base text-muted-foreground">
-                              {guide.description}
-                            </p>
-                          </div>
-                          <ArrowLeft className="w-5 h-5 text-muted-foreground rotate-180 opacity-0 group-hover:opacity-100 transition-opacity flex-shrink-0 mt-1" />
-                        </div>
-                      </Link>
-                    );
-                  })}
+          <h1 className="font-heading text-3xl md:text-4xl text-foreground mb-2">Career Guides</h1>
+          <p className="text-muted-foreground mb-10">
+            Written by a senior recruiter with 13+ years of experience.
+          </p>
+
+          {categories.map((cat) => (
+            <section key={cat.label} className="mb-10 last:mb-0">
+              <h2 className="font-heading text-lg font-semibold text-executive-green mb-3">{cat.label}</h2>
+              <div className="divide-y divide-border">
+                {cat.guides.map((guide) => (
+                  <div key={guide.en}>
+                    <GuideRow guide={guide} />
+                    {guide.mini && <GuideRow guide={guide.mini} isNested />}
+                  </div>
+                ))}
               </div>
-            </div>
+            </section>
           ))}
         </div>
-      </section>
+      </main>
 
-      {/* Footer */}
-      <footer className="py-8 md:py-10 px-5 md:px-6 bg-card border-t border-border">
-        <div className="container mx-auto max-w-4xl">
-          <div className="flex flex-col md:flex-row justify-between items-center gap-4">
-            <span className="text-sm text-muted-foreground">
-              © 2026 James Bugden. All rights reserved.
-            </span>
-            <div className="flex items-center gap-6">
-              <a href="https://www.linkedin.com/in/james-bugden/" target="_blank" rel="noopener noreferrer" className="text-muted-foreground hover:text-foreground transition-colors">
-                <Linkedin className="w-5 h-5" />
-              </a>
-              <a href="https://www.instagram.com/james.careers/" target="_blank" rel="noopener noreferrer" className="text-muted-foreground hover:text-foreground transition-colors">
-                <InstagramIcon className="w-5 h-5" />
-              </a>
-              <a href="https://www.threads.com/@james.careers" target="_blank" rel="noopener noreferrer" className="text-muted-foreground hover:text-foreground transition-colors">
-                <ThreadsIcon className="w-5 h-5" />
-              </a>
-            </div>
-          </div>
-        </div>
-      </footer>
+      <SiteFooter />
     </div>
   );
 };
