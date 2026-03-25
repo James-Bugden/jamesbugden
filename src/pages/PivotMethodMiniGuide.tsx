@@ -501,15 +501,6 @@ const PivotMethodMiniGuide = () => {
 
         <GuideShareButtons />
 
-        {/* Footer */}
-        <footer className="mt-16 pt-8 border-t border-border text-center text-muted-foreground">
-          <p className="mb-2">
-            James Bugden • Senior Recruiter @ Uber Taiwan
-          </p>
-          <p className="text-sm">
-            Based on "Pivot: The Only Move That Matters Is Your Next One" by Jenny Blake. All framework concepts and methodology credit goes to Jenny Blake.
-          </p>
-        </footer>
       </main>
     
       <GuideBottomCTA lang="en" />

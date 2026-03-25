@@ -1052,12 +1052,6 @@ const ChienJungLiuReviewZhTw = () => {
 
       </main>
 
-      {/* Footer */}
-      <footer className="bg-nav-green py-8">
-        <div className="max-w-5xl mx-auto px-4 sm:px-6 text-center">
-          <p className="text-cream/60 text-sm">© 2025 履歷審查。保留所有權利。</p>
-        </div>
-      </footer>
     </div>
   );
 };

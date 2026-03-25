@@ -1,8 +1,7 @@
-import { Download, FileText, Target, CheckSquare, Linkedin, Clock, ArrowRight } from "lucide-react";
+import { Download, FileText, Target, CheckSquare, Clock, ArrowRight } from "lucide-react";
 import { Link, useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import GoldCheckBadge from "@/components/GoldCheckBadge";
-import { InstagramIcon, ThreadsIcon } from "@/components/SocialIcons";
 import GuideShareButtons from "@/components/GuideShareButtons";
 import { AuthHeaderButton } from "@/components/AuthHeaderButton";
 import { useTrackGuideProgress } from "@/hooks/useReadingProgress";
@@ -420,28 +419,6 @@ const ResumeQuickReferenceZhTw = () => {
 
       <GuideShareButtons isZhTw />
 
-      {/* Footer */}
-      <footer className="py-8 md:py-10 px-5 md:px-6 bg-card border-t border-border">
-        <div className="container mx-auto max-w-5xl">
-          <div className="flex flex-col md:flex-row justify-between items-center gap-4">
-            <span className="text-sm text-muted-foreground">
-              © 2026 James Bugden. 版權所有。
-            </span>
-            <div className="flex items-center gap-6">
-              <a href="https://www.linkedin.com/in/james-bugden/" target="_blank" rel="noopener noreferrer" className="text-muted-foreground hover:text-foreground transition-colors">
-                <Linkedin className="w-5 h-5" />
-              </a>
-              <a href="https://www.instagram.com/james.careers/" target="_blank" rel="noopener noreferrer" className="text-muted-foreground hover:text-foreground transition-colors">
-                <InstagramIcon className="w-5 h-5" />
-              </a>
-              <a href="https://www.threads.com/@james.careers" target="_blank" rel="noopener noreferrer" className="text-muted-foreground hover:text-foreground transition-colors">
-                <ThreadsIcon className="w-5 h-5" />
-              </a>
-            </div>
-          </div>
-        </div>
-      </footer>
-    
       <GuideBottomCTA lang="zh" />
     </div>
   );

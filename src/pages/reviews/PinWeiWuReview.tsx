@@ -1654,12 +1654,6 @@ const PinWeiWuReview = () => {
 
       </main>
 
-      {/* Footer */}
-      <footer className="bg-nav-green py-8">
-        <div className="max-w-5xl mx-auto px-4 sm:px-6 text-center">
-          <p className="text-cream/60 text-sm">© 2025 Resume Review. All rights reserved.</p>
-        </div>
-      </footer>
     </div>
   );
 };

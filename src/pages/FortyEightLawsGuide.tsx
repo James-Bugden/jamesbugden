@@ -1,7 +1,6 @@
-import { Clock, Linkedin, ChevronDown, Menu, FileText, Shield, Target, Zap, Brain, Compass, Swords, Crown, Eye, ArrowRight, BookOpen, Check, X, ChevronUp, Plus, Trash2 } from "lucide-react";
+import { Clock, ChevronDown, Menu, FileText, Shield, Target, Zap, Brain, Compass, Swords, Crown, Eye, ArrowRight, BookOpen, Check, X, ChevronUp, Plus, Trash2 } from "lucide-react";
 import { Link, useLocation } from "react-router-dom";
 import GoldCheckBadge from "@/components/GoldCheckBadge";
-import { InstagramIcon, ThreadsIcon } from "@/components/SocialIcons";
 import GuideShareButtons from "@/components/GuideShareButtons";
 import LanguageToggle from "@/components/LanguageToggle";
 import { AuthHeaderButton } from "@/components/AuthHeaderButton";
@@ -1601,19 +1600,6 @@ const FortyEightLawsGuide = () => {
 
       <GuideBottomCTA lang="en" />
 
-      {/* Footer */}
-      <footer className="py-8 md:py-10 px-5 md:px-6 bg-card border-t border-border">
-        <div className="container mx-auto max-w-3xl">
-          <div className="flex flex-col md:flex-row justify-between items-center gap-4">
-            <span className="text-sm text-muted-foreground">James Bugden · Senior Recruiter @ Uber</span>
-            <div className="flex items-center gap-6">
-              <a href="https://www.linkedin.com/in/james-bugden/" target="_blank" rel="noopener noreferrer" className="text-muted-foreground hover:text-foreground transition-colors"><Linkedin className="w-5 h-5" /></a>
-              <a href="https://www.instagram.com/james.careers/" target="_blank" rel="noopener noreferrer" className="text-muted-foreground hover:text-foreground transition-colors"><InstagramIcon className="w-5 h-5" /></a>
-              <a href="https://www.threads.com/@james.careers" target="_blank" rel="noopener noreferrer" className="text-muted-foreground hover:text-foreground transition-colors"><ThreadsIcon className="w-5 h-5" /></a>
-            </div>
-          </div>
-        </div>
-      </footer>
     </div>
   );
 };

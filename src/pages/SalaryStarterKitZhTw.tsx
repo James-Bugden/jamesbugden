@@ -780,17 +780,6 @@ const SalaryStarterKitZhTw = () => {
 
       <GuideShareButtons isZhTw />
 
-      {/* Footer */}
-      <footer className="py-8 px-5 md:px-6 border-t border-border">
-        <div className="container mx-auto max-w-3xl text-center">
-          <p className="text-muted-foreground text-sm">
-            來自{" "}
-            <Link to="/zh-tw" className="text-gold hover:underline">James Bugden</Link>{" "}
-            的薪資談判指南
-          </p>
-        </div>
-      </footer>
-    
       <GuideBottomCTA lang="zh" />
     </div>
   );

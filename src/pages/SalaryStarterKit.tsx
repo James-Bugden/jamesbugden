@@ -730,16 +730,6 @@ const SalaryStarterKit = () => {
 
       <GuideShareButtons />
 
-      {/* Footer */}
-      <footer className="py-8 px-5 md:px-6 border-t border-border">
-        <div className="container mx-auto max-w-3xl text-center">
-          <p className="text-muted-foreground text-sm">
-            From the Salary Negotiation Guide by{" "}
-            <Link to="/" className="text-gold hover:underline">James Bugden</Link>
-          </p>
-        </div>
-      </footer>
-    
       <GuideBottomCTA lang="en" />
     </div>
   );
