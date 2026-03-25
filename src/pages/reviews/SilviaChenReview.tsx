@@ -719,7 +719,6 @@ const SilviaChenReview = () => {
         </div>
       </footer>
     </div>
-    </>
   );
 };
 

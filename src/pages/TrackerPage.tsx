@@ -259,6 +259,5 @@ export default function TrackerPage() {
 
       <ProfileModal profile={profile} onChange={setProfile} open={profileOpen} onOpenChange={setProfileOpen} />
     </div>
-    </>
   );
 }

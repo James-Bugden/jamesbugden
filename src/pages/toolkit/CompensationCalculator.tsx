@@ -310,7 +310,6 @@ const CompensationCalculator = () => {
 
       <ToolkitFooter />
     </div>
-    </>
   );
 };
 

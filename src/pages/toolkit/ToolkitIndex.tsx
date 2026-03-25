@@ -139,7 +139,6 @@ const ToolkitIndex = () => {
 
       <ToolkitFooter />
     </div>
-    </>
   );
 };
 

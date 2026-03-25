@@ -308,7 +308,6 @@ CATEGORIES:
 
       <ToolkitFooter />
     </div>
-    </>
   );
 };
 

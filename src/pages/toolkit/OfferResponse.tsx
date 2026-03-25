@@ -274,7 +274,6 @@ ${outcomes[1].text}`;
 
       <ToolkitFooter />
     </div>
-    </>
   );
 };
 

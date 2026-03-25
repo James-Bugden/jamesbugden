@@ -742,7 +742,6 @@ const SalaryStarterKit = () => {
     
       <GuideBottomCTA lang="en" />
     </div>
-    </>
   );
 };
 

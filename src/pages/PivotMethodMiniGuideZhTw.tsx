@@ -514,7 +514,6 @@ const PivotMethodMiniGuideZhTw = () => {
     
       <GuideBottomCTA lang="zh" />
     </div>
-    </>
   );
 };
 

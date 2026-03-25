@@ -720,7 +720,6 @@ const SilviaChenReviewZhTw = () => {
         </div>
       </footer>
     </div>
-    </>
   );
 };
 

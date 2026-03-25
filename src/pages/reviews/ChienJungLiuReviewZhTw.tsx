@@ -1059,7 +1059,6 @@ const ChienJungLiuReviewZhTw = () => {
         </div>
       </footer>
     </div>
-    </>
   );
 };
 

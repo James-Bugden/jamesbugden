@@ -210,7 +210,6 @@ const PushbackCheatSheet = () => {
 
       <ToolkitFooter />
     </div>
-    </>
   );
 };
 

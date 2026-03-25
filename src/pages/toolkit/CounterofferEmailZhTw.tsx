@@ -270,7 +270,6 @@ const CounterofferEmailZhTw = () => {
 
       <ToolkitFooterZhTw />
     </div>
-    </>
   );
 };
 

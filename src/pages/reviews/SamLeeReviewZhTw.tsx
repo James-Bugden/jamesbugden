@@ -1488,7 +1488,6 @@ const SamLeeReviewZhTw = () => {
         </div>
       </footer>
     </div>
-    </>
   );
 };
 

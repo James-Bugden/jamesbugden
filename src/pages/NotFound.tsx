@@ -49,7 +49,6 @@ const NotFound = () => {
         </div>
       </main>
     </div>
-    </>
   );
 };
 

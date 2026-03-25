@@ -1450,7 +1450,6 @@ const YoutingChenReview = () => {
         </div>
       </footer>
     </div>
-    </>
   );
 };
 

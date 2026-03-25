@@ -848,7 +848,6 @@ const LinkedInGuide = () => {
     
       <GuideBottomCTA lang="en" />
     </div>
-    </>
   );
 };
 

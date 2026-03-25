@@ -39,6 +39,5 @@ export default function ImportQuestions() {
       </button>
       {status && <pre className="mt-4 p-4 bg-muted rounded-lg text-sm max-w-lg whitespace-pre-wrap">{status}</pre>}
     </div>
-    </>
   );
 }

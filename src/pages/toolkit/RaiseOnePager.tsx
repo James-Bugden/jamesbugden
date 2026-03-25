@@ -323,7 +323,6 @@ TALKING POINTS
 
       <ToolkitFooter />
     </div>
-    </>
   );
 };
 

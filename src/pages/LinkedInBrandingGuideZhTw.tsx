@@ -1868,7 +1868,6 @@ const LinkedInBrandingGuideZhTw = () => {
     
       <GuideBottomCTA lang="zh" />
     </div>
-    </>
   );
 };
 

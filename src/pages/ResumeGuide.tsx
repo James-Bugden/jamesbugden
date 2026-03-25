@@ -527,7 +527,6 @@ const ResumeGuide = () => {
     
       <GuideBottomCTA lang="en" />
     </div>
-    </>
   );
 };
 

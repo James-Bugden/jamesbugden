@@ -988,7 +988,6 @@ const JanelleChengReviewZhTw = () => {
         </section>
       </main>
     </div>
-    </>
   );
 };
 

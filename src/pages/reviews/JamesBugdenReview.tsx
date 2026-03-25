@@ -1757,7 +1757,6 @@ const JamesBugdenReview = () => {
         </footer>
       </main>
     </div>
-    </>
   );
 };
 

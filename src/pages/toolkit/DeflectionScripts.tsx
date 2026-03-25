@@ -213,7 +213,6 @@ const DeflectionScripts = () => {
 
       <ToolkitFooter />
     </div>
-    </>
   );
 };
 

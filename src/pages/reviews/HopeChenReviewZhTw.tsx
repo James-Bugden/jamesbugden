@@ -819,7 +819,6 @@ const HopeChenReviewZhTw = () => {
         </section>
       </main>
     </div>
-    </>
   );
 };
 

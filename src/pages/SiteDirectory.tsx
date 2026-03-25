@@ -198,7 +198,6 @@ const SiteDirectory = () => {
         <SectionBlock key={section.title} section={section} forceOpen={isSearching} />
       ))}
     </div>
-    </>
   );
 };
 
