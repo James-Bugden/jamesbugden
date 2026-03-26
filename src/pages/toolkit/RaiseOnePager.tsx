@@ -280,7 +280,7 @@ TALKING POINTS
       <section className="pb-12 px-5 md:px-6 print:hidden">
         <div className="container mx-auto max-w-5xl">
           <div className="bg-gold/10 rounded-xl p-6 border-l-4 border-gold">
-            <h3 className="font-heading text-lg text-gold mb-4">💡 Tips</p>
+            <h2 className="font-heading text-lg text-gold mb-4">💡 Tips</h2>
             <ul className="space-y-2">
               {tips.map((tip, index) => (
                 <li key={index} className="flex items-start gap-2 text-foreground">
