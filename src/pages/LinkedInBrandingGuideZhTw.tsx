@@ -9,6 +9,7 @@ import { useTrackGuideProgress } from "@/hooks/useReadingProgress";
 import GuideSignInBanner from "@/components/guides/GuideSignInBanner";
 import GuideBottomCTA from "@/components/guides/GuideBottomCTA";
 import { SEO } from "@/components/SEO";
+import { guideSchema } from "@/lib/guideSchema";
 
 const LinkedInBrandingGuideZhTw = () => {
   useTrackGuideProgress("linkedin-brand");
@@ -17,7 +18,7 @@ const LinkedInBrandingGuideZhTw = () => {
 
   return (
       <div className="min-h-screen bg-background">
-        <SEO />
+        <SEO schemaJson={guideSchema({ path: "/zh-tw/linkedin-branding-guide", title: "LinkedIn 品牌指南｜脫穎而出", description: "超越個人檔案基礎。打造讓你成為外商首選的LinkedIn個人品牌。" })} />
       {/* Navigation */}
       <nav className="fixed top-0 left-0 right-0 z-50 bg-nav-green">
         <div className="container mx-auto px-5 md:px-6 py-4 flex items-center justify-between">

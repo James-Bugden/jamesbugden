@@ -9,6 +9,7 @@ import GuideSignInBanner from "@/components/guides/GuideSignInBanner";
 import GuideBottomCTA from "@/components/guides/GuideBottomCTA";
 import { useState, useEffect } from "react";
 import { SEO } from "@/components/SEO";
+import { guideSchema } from "@/lib/guideSchema";
 
 const SectionNumber = ({ num }: { num: string }) => (
   <span className="text-gold/30 font-heading text-6xl md:text-7xl font-bold leading-none select-none">
@@ -102,7 +103,7 @@ const OfficePoliticsGuideZhTw = () => {
 
   return (
     <div className="min-h-screen bg-background">
-      <SEO />
+      <SEO schemaJson={guideSchema({ path: "/zh-tw/office-politics-guide", title: "辦公室政治指南｜職場技巧", description: "在跨國企業中閱讀和應對辦公室政治的實用指南。" })} />
 
       {/* Navigation */}
       <nav className="fixed top-0 left-0 right-0 z-50 bg-nav-green">

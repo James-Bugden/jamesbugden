@@ -10,6 +10,7 @@ import { useTrackGuideProgress } from "@/hooks/useReadingProgress";
 import GuideSignInBanner from "@/components/guides/GuideSignInBanner";
 import GuideBottomCTA from "@/components/guides/GuideBottomCTA";
 import { SEO } from "@/components/SEO";
+import { guideSchema } from "@/lib/guideSchema";
 
 const InterviewPreparationGuideZhTw = () => {
   useTrackGuideProgress("interview-full");
@@ -18,7 +19,7 @@ const InterviewPreparationGuideZhTw = () => {
 
   return (
       <div className="min-h-screen bg-background">
-        <SEO />
+        <SEO schemaJson={guideSchema({ path: "/zh-tw/interview-preparation-guide", title: "面試準備指南｜深度解析", description: "全面的面試準備，涵蓋行為面試、案例分析和技術輪面試。" })} />
       {/* Navigation */}
       <nav className="fixed top-0 left-0 right-0 z-50 bg-nav-green">
         <div className="container mx-auto px-5 md:px-6 py-4 flex items-center justify-between">

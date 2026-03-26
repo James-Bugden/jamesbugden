@@ -9,13 +9,14 @@ import GuideSignInBanner from "@/components/guides/GuideSignInBanner";
 import GuideBottomCTA from "@/components/guides/GuideBottomCTA";
 import ToolkitCallout from "@/components/ToolkitCallout";
 import { SEO } from "@/components/SEO";
+import { guideSchema } from "@/lib/guideSchema";
 
 const SalaryStarterKit = () => {
   useTrackGuideProgress("salary-kit");
 
   return (
       <div className="min-h-screen bg-background">
-        <SEO />
+        <SEO schemaJson={guideSchema({ path: "/salary-starter-kit", title: "Salary Negotiation Starter Kit", description: "Free email templates, scripts, and a step-by-step framework for negotiating your salary." })} />
       {/* Navigation */}
       <nav className="fixed top-0 left-0 right-0 z-50 bg-nav-green">
         <div className="container mx-auto px-5 md:px-6 py-4 flex items-center justify-between">

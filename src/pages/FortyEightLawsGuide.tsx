@@ -11,6 +11,7 @@ import { useGuideStorage } from "@/hooks/useGuideStorage";
 import { useAuth } from "@/contexts/AuthContext";
 import { useState, useEffect, useCallback } from "react";
 import { SEO } from "@/components/SEO";
+import { guideSchema } from "@/lib/guideSchema";
 
 const SectionNumber = ({ num }: { num: string }) => (
   <span className="text-gold/30 font-heading text-6xl md:text-7xl font-bold leading-none select-none">
@@ -513,7 +514,7 @@ const FortyEightLawsGuide = () => {
 
   return (
     <div className="min-h-screen bg-background text-foreground">
-      <SEO />
+      <SEO schemaJson={guideSchema({ path: "/48-laws-guide", title: "48 Laws of Power for Your Career", description: "Key principles from the 48 Laws of Power applied to your career." })} />
 
       <ReadingProgressBar />
 

@@ -12,6 +12,7 @@ import GuideSignInBanner from "@/components/guides/GuideSignInBanner";
 import GuideBottomCTA from "@/components/guides/GuideBottomCTA";
 import { useState, useEffect } from "react";
 import { SEO } from "@/components/SEO";
+import { guideSchema } from "@/lib/guideSchema";
 
 const SectionNumber = ({ num }: { num: string }) => (
   <span className="text-gold/30 font-heading text-6xl md:text-7xl font-bold leading-none select-none">
@@ -228,7 +229,7 @@ const AiJobSearchGuideZhTw = () => {
 
   return (
     <div className="min-h-screen bg-background">
-      <SEO />
+      <SEO schemaJson={guideSchema({ path: "/zh-tw/ai-job-search-guide", title: "AI 求職指南｜更快找到工作", description: "使用ChatGPT、Claude和AI工具加速求職流程。" })} />
 
       {/* Navigation */}
       <nav className="fixed top-0 left-0 right-0 z-50 bg-nav-green">

@@ -10,6 +10,7 @@ import { useTrackGuideProgress } from "@/hooks/useReadingProgress";
 import GuideSignInBanner from "@/components/guides/GuideSignInBanner";
 import GuideBottomCTA from "@/components/guides/GuideBottomCTA";
 import { SEO } from "@/components/SEO";
+import { guideSchema } from "@/lib/guideSchema";
 
 const LinkedInBrandingGuide = () => {
   useTrackGuideProgress("linkedin-brand");
@@ -17,7 +18,7 @@ const LinkedInBrandingGuide = () => {
 
   return (
       <div className="min-h-screen bg-background">
-        <SEO />
+        <SEO schemaJson={guideSchema({ path: "/linkedin-branding-guide", title: "LinkedIn Branding Guide | Stand Out", description: "Go beyond profile basics. Build a personal brand on LinkedIn that positions you as a top candidate." })} />
       {/* Navigation */}
       <nav className="fixed top-0 left-0 right-0 z-50 bg-nav-green">
         <div className="container mx-auto px-5 md:px-6 py-4 flex items-center justify-between">

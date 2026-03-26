@@ -10,6 +10,7 @@ import GuideBottomCTA from "@/components/guides/GuideBottomCTA";
 import { useState, useEffect } from "react";
 import { InteractiveCareerMap, InteractiveScorecard, InteractivePulseCheck } from "@/components/ikigai/InteractiveWidgets";
 import { SEO } from "@/components/SEO";
+import { guideSchema } from "@/lib/guideSchema";
 
 const SectionNumber = ({ num }: { num: string }) => (
   <span className="text-gold/30 font-heading text-6xl md:text-7xl font-bold leading-none select-none">
@@ -185,7 +186,7 @@ const IkigaiGuideZhTw = () => {
 
   return (
     <div className="min-h-screen bg-background">
-      <SEO />
+      <SEO schemaJson={guideSchema({ path: "/zh-tw/ikigai-guide", title: "Ikigai 職涯指南｜找到你的使命", description: "將Ikigai應用於職涯。在熱情、技能、需求和報酬交匯處找到工作。" })} />
 
       <nav className="fixed top-0 left-0 right-0 z-50 bg-nav-green">
         <div className="container mx-auto px-5 md:px-6 py-4 flex items-center justify-between">

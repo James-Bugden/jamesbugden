@@ -8,6 +8,7 @@ import { useTrackGuideProgress } from "@/hooks/useReadingProgress";
 import GuideSignInBanner from "@/components/guides/GuideSignInBanner";
 import GuideBottomCTA from "@/components/guides/GuideBottomCTA";
 import { SEO } from "@/components/SEO";
+import { guideSchema } from "@/lib/guideSchema";
 
 const PivotMethodMiniGuideZhTw = () => {
   useTrackGuideProgress("pivot-mini");
@@ -19,7 +20,7 @@ const PivotMethodMiniGuideZhTw = () => {
 
   return (
       <div className="min-h-screen bg-background">
-        <SEO />
+        <SEO schemaJson={guideSchema({ path: "/zh-tw/pivot-method-mini-guide", title: "轉職方法迷你指南｜快速開始", description: "30分鐘內識別優勢、掃描市場並邁出第一步的快速轉職指南。" })} />
       {/* Navigation */}
       <nav className="sticky top-0 z-50 bg-background/95 backdrop-blur-sm border-b border-border">
         <div className="container mx-auto px-4 py-4 flex items-center justify-between">

@@ -3,6 +3,7 @@ import { ArrowLeft, ArrowRight, FileText, Calculator, MessageSquare, TrendingUp,
 import ToolkitHeader from "@/components/toolkit/ToolkitHeader";
 import ToolkitFooter from "@/components/toolkit/ToolkitFooter";
 import { SEO } from "@/components/SEO";
+import { guideSchema } from "@/lib/guideSchema";
 
 const templates = [
   {
@@ -66,7 +67,7 @@ const templates = [
 const ToolkitIndex = () => {
   return (
       <div className="min-h-screen bg-background">
-        <SEO />
+        <SEO schemaJson={guideSchema({ path: "/toolkit", title: "Salary Negotiation Toolkit", description: "Everything to negotiate your salary: email scripts, counteroffer templates, and frameworks." })} />
       <ToolkitHeader />
 
       {/* Hero */}

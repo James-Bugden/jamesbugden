@@ -9,6 +9,7 @@ import { useTrackGuideProgress } from "@/hooks/useReadingProgress";
 import GuideSignInBanner from "@/components/guides/GuideSignInBanner";
 import GuideBottomCTA from "@/components/guides/GuideBottomCTA";
 import { SEO } from "@/components/SEO";
+import { guideSchema } from "@/lib/guideSchema";
 
 const PivotMethodGuideZhTw = () => {
   useTrackGuideProgress("pivot-guide");
@@ -17,7 +18,7 @@ const PivotMethodGuideZhTw = () => {
 
   return (
       <div className="min-h-screen bg-background">
-        <SEO />
+        <SEO schemaJson={guideSchema({ path: "/zh-tw/pivot-method-guide", title: "轉職方法｜成功轉換職業", description: "不從零開始的轉職實用框架。識別可轉移技能並獲得下一份工作。" })} />
       {/* Navigation */}
       <nav className="fixed top-0 left-0 right-0 z-50 bg-nav-green">
         <div className="container mx-auto px-5 md:px-6 py-4 flex items-center justify-between">

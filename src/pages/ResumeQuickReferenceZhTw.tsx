@@ -8,6 +8,7 @@ import { useTrackGuideProgress } from "@/hooks/useReadingProgress";
 import GuideSignInBanner from "@/components/guides/GuideSignInBanner";
 import GuideBottomCTA from "@/components/guides/GuideBottomCTA";
 import { SEO } from "@/components/SEO";
+import { guideSchema } from "@/lib/guideSchema";
 
 const SectionNumber = ({ num }: { num: string }) => (
   <span className="text-gold/30 font-heading text-6xl md:text-7xl font-bold leading-none select-none">
@@ -21,7 +22,7 @@ const ResumeQuickReferenceZhTw = () => {
 
   return (
     <div className="min-h-screen bg-background">
-      <SEO />
+      <SEO schemaJson={guideSchema({ path: "/zh-tw/resume-quick-reference", title: "履歷快速參考｜一頁速查表", description: "一頁式履歷速查表，含格式規則、動作動詞和注意事項。" })} />
 
       {/* Navigation */}
       <nav className="fixed top-0 left-0 right-0 z-50 bg-nav-green">
