@@ -542,7 +542,7 @@ const CompCalculatorInteractive = () => {
         <div className="mx-auto max-w-[1200px]">
           <div className="bg-foreground rounded-xl p-8 md:p-10">
             <div className="w-10 h-1 rounded-full bg-gold mb-5" />
-            <h3 className="font-heading text-xl md:text-2xl font-bold text-background mb-3">
+            <h2 className="font-heading text-xl md:text-2xl font-bold text-background mb-3">
               Most candidates leave 10–20% on the table.
             </h3>
             <p className="text-muted mb-6 text-sm md:text-base max-w-xl">

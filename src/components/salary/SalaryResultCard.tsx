@@ -26,7 +26,7 @@ export default function SalaryResultCard({ entry, lang, showRangeLegend = false 
     <div className="bg-card border border-border rounded-xl shadow-premium p-4 sm:p-6 space-y-4 sm:space-y-5 animate-fade-in hover:-translate-y-0.5 hover:shadow-lg active:translate-y-px transition-all duration-200">
       <div className="flex items-start justify-between flex-wrap gap-2">
         <div>
-          <h3 className="font-heading text-lg sm:text-xl font-bold text-foreground">{entry.role}</h3>
+          <h2 className="font-heading text-lg sm:text-xl font-bold text-foreground">{entry.role}</h2>
           <p className="text-xs sm:text-sm text-muted-foreground">{entry.sector} · {entry.exp}</p>
         </div>
         <div className="flex items-center gap-1.5">
