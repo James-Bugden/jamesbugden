@@ -907,7 +907,7 @@ export const A4Page = React.memo(function A4Page({
             const photoEl = (
               <img
                 src={p.photo}
-                alt=""
+                alt="Profile photo"
                 style={{
                   width: `${photoSizeMM}mm`,
                   height: `${photoSizeMM}mm`,
