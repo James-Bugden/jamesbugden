@@ -135,7 +135,7 @@ TALKING POINTS
               <div className="p-6 space-y-6">
                 {/* Achievements */}
                 <div>
-                  <h3 className="font-semibold text-foreground mb-3">KEY ACHIEVEMENTS (past 12 months)</h3>
+                  <p className="font-semibold text-foreground mb-3">KEY ACHIEVEMENTS (past 12 months)</p>
                   <table className="w-full text-sm">
                     <thead>
                       <tr className="border-b border-border">
@@ -156,7 +156,7 @@ TALKING POINTS
 
                 {/* Market Data */}
                 <div>
-                  <h3 className="font-semibold text-foreground mb-3">MARKET DATA</h3>
+                  <p className="font-semibold text-foreground mb-3">MARKET DATA</p>
                   <ul className="text-sm space-y-1">
                     <li className="text-foreground">• My current pay: {exampleMarketData.currentComp}</li>
                     <li className="text-foreground">• Market range for this role: {exampleMarketData.marketRange}</li>
@@ -167,7 +167,7 @@ TALKING POINTS
 
                 {/* My Ask */}
                 <div>
-                  <h3 className="font-semibold text-foreground mb-3">MY ASK</h3>
+                  <p className="font-semibold text-foreground mb-3">MY ASK</p>
                   <ul className="text-sm space-y-1">
                     <li className="text-foreground">• Primary: {exampleAsk.primary}</li>
                     <li className="text-foreground">• Alternative: {exampleAsk.alternative}</li>
@@ -177,7 +177,7 @@ TALKING POINTS
 
                 {/* Talking Points */}
                 <div>
-                  <h3 className="font-semibold text-foreground mb-3">TALKING POINTS</h3>
+                  <p className="font-semibold text-foreground mb-3">TALKING POINTS</p>
                   <div className="space-y-3 text-sm">
                     <div className="border-l-4 border-gold pl-3">
                       <p className="text-muted-foreground font-semibold">Opening:</p>
@@ -208,7 +208,7 @@ TALKING POINTS
               <div className="p-6 space-y-6">
                 {/* Achievements */}
                 <div>
-                  <h3 className="font-semibold text-foreground mb-3">KEY ACHIEVEMENTS (past 12 months)</h3>
+                  <p className="font-semibold text-foreground mb-3">KEY ACHIEVEMENTS (past 12 months)</p>
                   <table className="w-full text-sm">
                     <thead>
                       <tr className="border-b border-border">
@@ -229,7 +229,7 @@ TALKING POINTS
 
                 {/* Market Data */}
                 <div>
-                  <h3 className="font-semibold text-foreground mb-3">MARKET DATA</h3>
+                  <p className="font-semibold text-foreground mb-3">MARKET DATA</p>
                   <ul className="text-sm space-y-2">
                     <li className="text-foreground">• My current pay: NT$<span className="border-b border-dashed border-border px-8">________</span>/month (annual TC ~NT$<span className="border-b border-dashed border-border px-8">________</span>)</li>
                     <li className="text-foreground">• Market range for this role: NT$<span className="border-b border-dashed border-border px-8">________</span> to NT$<span className="border-b border-dashed border-border px-8">________</span>/month</li>
@@ -240,7 +240,7 @@ TALKING POINTS
 
                 {/* My Ask */}
                 <div>
-                  <h3 className="font-semibold text-foreground mb-3">MY ASK</h3>
+                  <p className="font-semibold text-foreground mb-3">MY ASK</p>
                   <ul className="text-sm space-y-2">
                     <li className="text-foreground">• Primary: <span className="border-b border-dashed border-border px-24">________________________________________________________________</span></li>
                     <li className="text-foreground">• Alternative: <span className="border-b border-dashed border-border px-24">________________________________________________________________</span></li>
@@ -250,7 +250,7 @@ TALKING POINTS
 
                 {/* Talking Points */}
                 <div>
-                  <h3 className="font-semibold text-foreground mb-3">TALKING POINTS</h3>
+                  <p className="font-semibold text-foreground mb-3">TALKING POINTS</p>
                   <div className="space-y-3 text-sm">
                     <div className="border-l-4 border-gold pl-3">
                       <p className="text-muted-foreground font-semibold">Opening:</p>
@@ -280,7 +280,7 @@ TALKING POINTS
       <section className="pb-12 px-5 md:px-6 print:hidden">
         <div className="container mx-auto max-w-5xl">
           <div className="bg-gold/10 rounded-xl p-6 border-l-4 border-gold">
-            <h3 className="font-heading text-lg text-gold mb-4">💡 Tips</h3>
+            <h3 className="font-heading text-lg text-gold mb-4">💡 Tips</p>
             <ul className="space-y-2">
               {tips.map((tip, index) => (
                 <li key={index} className="flex items-start gap-2 text-foreground">
