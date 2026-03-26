@@ -23,9 +23,9 @@ export const DEFAULT_OG_IMAGE = `${SITE_URL}/og-image.png`; // Create a 1200x630
 export const seoConfig: Record<string, SEOMeta> = {
   // ─── Homepage ───────────────────────────────────────────────────────────────
   "/": {
-    title: "James Bugden | Career Coach for Professionals Targeting Top Companies",
+    title: "James Bugden | Career Coach for Top Company Job Seekers",
     description:
-      "Senior recruiter with 13+ years of experience helping professionals in Taiwan land $200K+ offers at top multinational companies. Free guides, tools, and 1-on-1 coaching.",
+      "Senior recruiter with 13+ years helping professionals in Taiwan land $200K+ offers at top multinationals. Free guides, tools & coaching.",
     keywords: "career coach Taiwan, foreign company jobs Taiwan, 外商 career coaching",
   },
 
