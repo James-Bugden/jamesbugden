@@ -580,7 +580,7 @@ export default function InterviewQuestionBank({ lang: initialLang }: { lang: Lan
             <div className={`space-y-4 ${filtersOpen ? "block" : "hidden md:block"}`}>
               {/* Category */}
               <div>
-                <h3 className="text-xs font-semibold uppercase tracking-wider text-muted-foreground mb-2 flex items-center gap-1.5">
+                <p className="text-xs font-semibold uppercase tracking-wider text-muted-foreground mb-2 flex items-center gap-1.5">
                   {t("Category", "類別")}
                   <Popover>
                     <PopoverTrigger asChild>
@@ -592,7 +592,7 @@ export default function InterviewQuestionBank({ lang: initialLang }: { lang: Lan
                       {t("Tap each badge to filter. Hold to see description.", "點選標籤篩選，長按查看說明。")}
                     </PopoverContent>
                   </Popover>
-                </h3>
+                </p>
                 <div className="flex flex-wrap gap-2">
                   {CATEGORIES.map(cat => (
                     <Tooltip key={cat.key}>
@@ -622,7 +622,7 @@ export default function InterviewQuestionBank({ lang: initialLang }: { lang: Lan
 
               {/* Difficulty */}
               <div>
-                <h3 className="text-xs font-semibold uppercase tracking-wider text-muted-foreground mb-2 flex items-center gap-1.5">
+                <p className="text-xs font-semibold uppercase tracking-wider text-muted-foreground mb-2 flex items-center gap-1.5">
                   {t("Difficulty", "難度")}
                   <Popover>
                     <PopoverTrigger asChild>
@@ -634,7 +634,7 @@ export default function InterviewQuestionBank({ lang: initialLang }: { lang: Lan
                       {t("Tap each badge to filter. Hold to see description.", "點選標籤篩選，長按查看說明。")}
                     </PopoverContent>
                   </Popover>
-                </h3>
+                </p>
                 <div className="flex gap-2">
                   {DIFFICULTIES.map(d => (
                     <Tooltip key={d.value}>
@@ -661,7 +661,7 @@ export default function InterviewQuestionBank({ lang: initialLang }: { lang: Lan
 
               {/* Audience */}
               <div>
-                <h3 className="text-xs font-semibold uppercase tracking-wider text-muted-foreground mb-2 flex items-center gap-1.5">
+                <p className="text-xs font-semibold uppercase tracking-wider text-muted-foreground mb-2 flex items-center gap-1.5">
                   {t("Audience", "對象")}
                   <Popover>
                     <PopoverTrigger asChild>
@@ -673,7 +673,7 @@ export default function InterviewQuestionBank({ lang: initialLang }: { lang: Lan
                       {t("Tap each badge to filter. Hold to see description.", "點選標籤篩選，長按查看說明。")}
                     </PopoverContent>
                   </Popover>
-                </h3>
+                </p>
                 <div className="flex flex-wrap gap-2">
                   {AUDIENCES.map(a => (
                     <Tooltip key={a.key}>
