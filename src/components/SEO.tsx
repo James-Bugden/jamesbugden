@@ -43,7 +43,7 @@ export function SEO({ title, description, ogImage, noIndex, schemaJson }: SEOPro
       {hasAlternate && (
         <link
           rel="alternate"
-          hrefLang={isZhTw ? "en" : "zh-Hant-TW"}
+          hrefLang={isZhTw ? "en" : "zh-TW"}
           href={`${SITE_URL}${alternatePath}`}
         />
       )}
