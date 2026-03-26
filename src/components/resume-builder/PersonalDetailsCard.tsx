@@ -127,7 +127,7 @@ export function PersonalDetailsCard({ details, onChange, collapsible }: Personal
               className="w-16 h-16 rounded-full bg-gray-100 flex items-center justify-center flex-shrink-0 overflow-hidden relative group cursor-pointer"
             >
               {details.photo ? (
-                <img src={details.photo} className="w-full h-full object-cover" alt="" />
+                <img src={details.photo} className="w-full h-full object-cover" alt="Profile photo" />
               ) : (
                 <Camera className="w-6 h-6 text-gray-300" />
               )}
