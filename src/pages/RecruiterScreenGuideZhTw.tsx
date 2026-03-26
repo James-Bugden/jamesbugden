@@ -8,6 +8,7 @@ import GuideSignInBanner from "@/components/guides/GuideSignInBanner";
 import GuideBottomCTA from "@/components/guides/GuideBottomCTA";
 import { useState, useEffect } from "react";
 import { SEO } from "@/components/SEO";
+import { guideSchema } from "@/lib/guideSchema";
 
 const SectionNumber = ({ num }: { num: string }) => (
   <span className="text-gold/30 font-heading text-6xl md:text-7xl font-bold leading-none select-none">
@@ -134,7 +135,7 @@ const RecruiterScreenGuideZhTw = () => {
 
   return (
     <div className="min-h-screen bg-background">
-      <SEO />
+      <SEO schemaJson={guideSchema({ path: "/zh-tw/recruiter-screen-guide", title: "招募官篩選指南｜通過第一關", description: "招募官在電話面試中檢查什麼，以及如何回答每個問題。" })} />
 
       {/* Navigation */}
       <nav className="fixed top-0 left-0 right-0 z-50 bg-nav-green">

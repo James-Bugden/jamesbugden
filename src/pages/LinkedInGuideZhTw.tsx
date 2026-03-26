@@ -9,6 +9,7 @@ import { useTrackGuideProgress } from "@/hooks/useReadingProgress";
 import GuideSignInBanner from "@/components/guides/GuideSignInBanner";
 import GuideBottomCTA from "@/components/guides/GuideBottomCTA";
 import { SEO } from "@/components/SEO";
+import { guideSchema } from "@/lib/guideSchema";
 
 const LinkedInGuideZhTw = () => {
   useTrackGuideProgress("linkedin-guide");
@@ -17,7 +18,7 @@ const LinkedInGuideZhTw = () => {
 
   return (
       <div className="min-h-screen bg-background">
-        <SEO />
+        <SEO schemaJson={guideSchema({ path: "/zh-tw/linkedin-guide", title: "LinkedIn 個人檔案指南｜吸引招募官", description: "打造吸引頂尖企業招募官的LinkedIn檔案。標題公式、摘要範本和真實案例。" })} />
       {/* Navigation */}
       <nav className="fixed top-0 left-0 right-0 z-50 bg-nav-green">
         <div className="container mx-auto px-5 md:px-6 py-4 flex items-center justify-between">

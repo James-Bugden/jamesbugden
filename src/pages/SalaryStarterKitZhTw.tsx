@@ -8,6 +8,7 @@ import GuideSignInBanner from "@/components/guides/GuideSignInBanner";
 import GuideBottomCTA from "@/components/guides/GuideBottomCTA";
 import ToolkitCallout from "@/components/ToolkitCallout";
 import { SEO } from "@/components/SEO";
+import { guideSchema } from "@/lib/guideSchema";
 
 const SalaryStarterKitZhTw = () => {
   useTrackGuideProgress("salary-kit");
@@ -15,7 +16,7 @@ const SalaryStarterKitZhTw = () => {
 
   return (
       <div className="min-h-screen bg-background">
-        <SEO />
+        <SEO schemaJson={guideSchema({ path: "/zh-tw/salary-starter-kit", title: "薪資談判入門套件", description: "免費的薪資談判電子郵件範本、腳本和逐步框架。" })} />
       {/* Navigation */}
       <nav className="fixed top-0 left-0 right-0 z-50 bg-nav-green">
         <div className="container mx-auto px-5 md:px-6 py-4 flex items-center justify-between">

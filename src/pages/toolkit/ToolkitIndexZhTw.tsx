@@ -3,6 +3,7 @@ import { ArrowLeft, ArrowRight, FileText, Calculator, MessageSquare, TrendingUp,
 import ToolkitHeaderZhTw from "@/components/toolkit/ToolkitHeaderZhTw";
 import ToolkitFooterZhTw from "@/components/toolkit/ToolkitFooterZhTw";
 import { SEO } from "@/components/SEO";
+import { guideSchema } from "@/lib/guideSchema";
 
 const templates = [
   {
@@ -67,7 +68,7 @@ const ToolkitIndexZhTw = () => {
 
   return (
       <div className="min-h-screen bg-background">
-        <SEO />
+        <SEO schemaJson={guideSchema({ path: "/zh-tw/toolkit", title: "薪資談判工具包", description: "談判薪資所需的一切：電子郵件腳本、還價範本和框架。" })} />
       <ToolkitHeaderZhTw />
 
       {/* Hero */}

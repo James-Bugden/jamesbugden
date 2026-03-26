@@ -9,6 +9,7 @@ import { useTrackGuideProgress } from "@/hooks/useReadingProgress";
 import GuideSignInBanner from "@/components/guides/GuideSignInBanner";
 import GuideBottomCTA from "@/components/guides/GuideBottomCTA";
 import { SEO } from "@/components/SEO";
+import { guideSchema } from "@/lib/guideSchema";
 
 const InterviewPrepGuideZhTw = () => {
   useTrackGuideProgress("interview-prep");
@@ -17,7 +18,7 @@ const InterviewPrepGuideZhTw = () => {
 
   return (
       <div className="min-h-screen bg-background">
-        <SEO />
+        <SEO schemaJson={guideSchema({ path: "/zh-tw/interview-prep-guide", title: "面試準備指南｜循序漸進", description: "頂尖企業面試準備的逐步指南。涵蓋STAR方法、常見問題和招募官見解。" })} />
       {/* Navigation */}
       <nav className="fixed top-0 left-0 right-0 z-50 bg-nav-green">
         <div className="container mx-auto px-5 md:px-6 py-4 flex items-center justify-between">

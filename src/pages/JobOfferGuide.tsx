@@ -10,6 +10,7 @@ import GuideBottomCTA from "@/components/guides/GuideBottomCTA";
 import { useState, useEffect } from "react";
 import JobOfferScorecard from "@/components/job-offer/JobOfferScorecard";
 import { SEO } from "@/components/SEO";
+import { guideSchema } from "@/lib/guideSchema";
 
 const SectionNumber = ({ num }: { num: string }) => (
   <span className="text-gold/30 font-heading text-6xl md:text-7xl font-bold leading-none select-none">
@@ -113,7 +114,7 @@ const JobOfferGuide = () => {
 
   return (
     <div className="min-h-screen bg-background">
-      <SEO />
+      <SEO schemaJson={guideSchema({ path: "/job-offer-guide", title: "Job Offer Guide | Evaluate & Negotiate", description: "A recruiter's guide to evaluating job offers, negotiating salary, and making the right decision." })} />
 
       {/* Navigation */}
       <nav className="fixed top-0 left-0 right-0 z-50 bg-nav-green">
