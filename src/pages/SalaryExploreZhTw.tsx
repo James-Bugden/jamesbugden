@@ -10,6 +10,7 @@ function Inner() {
       <SEO />
       <SalaryNav lang="zh" />
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        <h1 className="sr-only">探索薪資</h1>
         <SalaryTable lang="zh" />
       </main>
       <SalaryFooter lang="zh" />

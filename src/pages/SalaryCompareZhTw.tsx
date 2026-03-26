@@ -30,6 +30,7 @@ function Inner() {
       <SEO />
       <SalaryNav lang="zh" />
       <main className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
+        <h1 className="sr-only">比較薪資</h1>
         {/* Mobile: select dropdown */}
         <div className="sm:hidden mb-4">
           <Select value={tab} onValueChange={v => setTab(v as Tab)}>

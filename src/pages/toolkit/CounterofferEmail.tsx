@@ -236,7 +236,7 @@ const CounterofferEmail = () => {
       <section className="pb-12 px-5 md:px-6">
         <div className="container mx-auto max-w-3xl">
           <div className="bg-card rounded-xl p-6 shadow-premium border border-border">
-            <h3 className="font-heading text-xl text-foreground mb-4">5 Rules for Every Counteroffer Email</h3>
+            <h2 className="font-heading text-xl text-foreground mb-4">5 Rules for Every Counteroffer Email</h2>
             <ol className="space-y-4">
               {keyPrinciples.map((principle, index) => (
                 <li key={index} className="flex items-start gap-4">
