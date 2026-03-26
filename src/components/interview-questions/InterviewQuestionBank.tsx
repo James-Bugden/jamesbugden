@@ -622,7 +622,7 @@ export default function InterviewQuestionBank({ lang: initialLang }: { lang: Lan
 
               {/* Difficulty */}
               <div>
-                <h3 className="text-xs font-semibold uppercase tracking-wider text-muted-foreground mb-2 flex items-center gap-1.5">
+                <p className="text-xs font-semibold uppercase tracking-wider text-muted-foreground mb-2 flex items-center gap-1.5">
                   {t("Difficulty", "難度")}
                   <Popover>
                     <PopoverTrigger asChild>
