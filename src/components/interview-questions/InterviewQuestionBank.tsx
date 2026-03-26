@@ -673,7 +673,7 @@ export default function InterviewQuestionBank({ lang: initialLang }: { lang: Lan
                       {t("Tap each badge to filter. Hold to see description.", "點選標籤篩選，長按查看說明。")}
                     </PopoverContent>
                   </Popover>
-                </h3>
+                </p>
                 <div className="flex flex-wrap gap-2">
                   {AUDIENCES.map(a => (
                     <Tooltip key={a.key}>
