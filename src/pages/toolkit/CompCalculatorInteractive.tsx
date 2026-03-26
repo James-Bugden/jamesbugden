@@ -544,7 +544,7 @@ const CompCalculatorInteractive = () => {
             <div className="w-10 h-1 rounded-full bg-gold mb-5" />
             <h2 className="font-heading text-xl md:text-2xl font-bold text-background mb-3">
               Most candidates leave 10–20% on the table.
-            </h3>
+            </h2>
             <p className="text-muted mb-6 text-sm md:text-base max-w-xl">
               I've helped professionals at Google, Uber, and Meta negotiate better offers. If you're comparing packages, I can tell you what's realistic — and what to push back on.
             </p>
