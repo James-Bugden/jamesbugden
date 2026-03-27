@@ -212,6 +212,7 @@ export default function AdminDashboard() {
     fetchTrends();
     fetchAiUsage();
     fetchShareClicks();
+    fetchEventTracks();
   }, []);
 
   const fetchCounts = async () => {
