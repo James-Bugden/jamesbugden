@@ -1,5 +1,6 @@
 import { useEffect, useCallback, useRef } from "react";
 import { useLocalStorage } from "./useLocalStorage";
+import { trackEvent } from "@/lib/trackEvent";
 
 type ProgressMap = Record<string, number>;
 
