@@ -440,22 +440,7 @@ export default function RecruiterGuide() {
 
           <p className="text-foreground/80 leading-relaxed mb-4">The honest truth: if your skills are common and your experience is generic, headhunters will deprioritize you. Not because you're bad. Because companies don't need to pay a placement fee to find you.</p>
 
-          <Collapsible title="Self-Assessment: Where Do You Sit? (7 Questions)">
-            <ol className="list-decimal list-inside space-y-2 mt-3 text-sm text-foreground/80">
-              <li>Have you been contacted by a headhunter in the last 12 months?</li>
-              <li>Do you have a specialized skill most people in your field don't have?</li>
-              <li>Is your total compensation above the market median for your role and city?</li>
-              <li>Do you have domain expertise in a specific industry, not a general function?</li>
-              <li>Have you worked at a company well-known in your field?</li>
-              <li>Do you have a rare combination of skills (e.g., technical depth + management)?</li>
-              <li>If you posted on LinkedIn that you're open to work, would headhunters reach out within a week?</li>
-            </ol>
-            <div className="mt-4 space-y-2 text-sm">
-              <p><strong>5-7 Yes:</strong> You're a tuna. Headhunters are looking for you.</p>
-              <p><strong>3-4 Yes:</strong> You're on the border. This guide will help you get on more radars.</p>
-              <p><strong>0-2 Yes:</strong> You're a catfish right now. That's fine. This guide will show you how to start building toward tuna.</p>
-            </div>
-          </Collapsible>
+          <RecruiterSelfAssessment />
 
           <h3 className="font-heading text-lg font-bold text-foreground mt-8 mb-3">What Makes Someone a "Tuna"</h3>
           <ul className="space-y-1 text-sm text-foreground/80 mb-4">
