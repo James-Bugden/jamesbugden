@@ -63,6 +63,7 @@ interface ResumeLead {
   language: string | null;
   job_title: string | null;
   years_experience: string | null;
+  resume_text: string | null;
   created_at: string;
 }
 
