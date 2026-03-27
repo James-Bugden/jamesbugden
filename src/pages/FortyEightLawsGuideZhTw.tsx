@@ -818,27 +818,35 @@ const FortyEightLawsGuideZhTw = () => {
               <SectionNumber num="03" />
               <div className="pt-3"><h2 className="font-heading text-2xl md:text-3xl text-foreground">建立你的聲譽</h2></div>
             </div>
-            <p className="text-muted-foreground leading-relaxed mb-6">你的聲譽比你先走進每一個房間。「聲譽是權力的基石。光靠聲譽你就能威懾和勝出。一旦聲譽滑落，你就會暴露弱點，從四面八方遭到攻擊。」</p>
+            <p className="text-foreground text-lg leading-relaxed mb-6">你的聲譽比你先走進每一個房間。它走進每一場面試、每一次新團隊會議、每一個升遷委員會。在任何人讀你的履歷之前，他們已經從別人口中聽過你了。</p>
+            <p className="text-foreground leading-relaxed mb-6 italic">「聲譽是權力的基石。光靠聲譽你就能威懾和勝出。一旦聲譽滑落，你就會暴露弱點，從四面八方遭到攻擊。」</p>
+            <p className="text-muted-foreground leading-relaxed mb-6">三個面向決定你在職場的聲譽：你保護它的能力、你的能見度、以及你如何處理別人的嫉妒。</p>
 
             <h3 className="font-heading text-xl text-foreground mt-10 mb-4">法則 5：用生命守護你的聲譽</h3>
-            <p className="text-muted-foreground leading-relaxed mb-6">聲譽是複利累積的。一個糟糕的瞬間傳播得比 100 件好事更快。</p>
+            <p className="text-muted-foreground leading-relaxed mb-6">聲譽是複利累積的。一個糟糕的瞬間傳播得比 100 件好事更快。在研討會上一句不專業的話、LinkedIn 上一篇抱怨前公司的文章、一封措辭不當被轉寄的 email。這些在專業人脈網路中傳播的速度，比任何成就都快。</p>
+            <p className="text-muted-foreground leading-relaxed mb-4">守護聲譽的規則：</p>
             <ul className="space-y-2 mb-6">
               {["永遠不要說前公司、前主管、前同事的壞話。面試中不行。LinkedIn 上不行。下班聚會不行。", "假設每封 email 都會被轉寄。寫之前想清楚。", "假設每則 Slack 訊息都會被截圖。打字前想清楚。"].map((item, i) => (
                 <li key={i} className="flex items-start gap-3"><GoldCheckBadge /><span className="text-foreground text-sm">{item}</span></li>
               ))}
             </ul>
+            <p className="text-muted-foreground leading-relaxed mb-6">聲譽是你職涯中最有價值的資產。也是最容易摧毀的。</p>
             <ActionStep checked={safeActions[6]} onToggle={() => toggleAction(6)}>
-              現在就 Google 你自己。檢查 LinkedIn、社群媒體和任何公開資訊。如果搜尋結果不符合你想成為的專業形象，今天就修正。
+              現在就 Google 你自己。檢查 LinkedIn、社群媒體和任何公開資訊。如果搜尋結果不符合你想成為的專業形象，今天就修正。刪掉舊貼文。更新你的 LinkedIn 標題。問一個信任的朋友：「別人第一次見到我之後，會怎麼描述我？」如果答案讓你意外，你有工作要做。
             </ActionStep>
 
             <h3 className="font-heading text-xl text-foreground mt-10 mb-4">法則 6：不惜一切代價吸引注意</h3>
-            <p className="text-muted-foreground leading-relaxed mb-6">「一切都是以外表來評斷。看不見的東西，等於不存在。」安靜做事，期待成果自己說話的人，每次都會被跳過。</p>
+            <p className="text-muted-foreground leading-relaxed mb-6">守護聲譽讓你安全。但只有安全沒有能見度，只會讓你原地踏步。道理很直白：「一切都是以外表來評斷。看不見的東西，等於不存在。」</p>
+            <p className="text-muted-foreground leading-relaxed mb-6">安靜做事，期待成果自己說話的人，每次都會被跳過。不是因為工作做得差。是因為沒有人看到。</p>
+            <p className="text-muted-foreground leading-relaxed mb-6">做法很具體：主動參與能讓新人看到你名字的專案。自己報告自己的工作成果，不要讓別人代為報告。高層來訪時舉手。寫有你名字的內部更新和總結。</p>
             <ActionStep checked={safeActions[7]} onToggle={() => toggleAction(7)}>
-              找出一個你在做事但別人拿到能見度的專案。在下一次團隊會議中主動報告它。每月做一次。一季之內，高層主管會知道你的名字。
+              找出一個你在做事但別人拿到能見度的專案。在下一次團隊會議中主動報告它，或寫一份有你名字的書面總結。每月做一次。一季之內，高層主管會知道你的名字。
             </ActionStep>
 
             <h3 className="font-heading text-xl text-foreground mt-10 mb-4">法則 46：永遠不要表現得太完美</h3>
-            <p className="text-muted-foreground leading-relaxed mb-6">嫉妒是「最常見的人類情緒，也是最少被討論的。」解藥是策略性的脆弱。公開而提早地承認錯誤。大方地分享功勞。</p>
+            <p className="text-muted-foreground leading-relaxed mb-6">聲譽和能見度會產生一個新問題：嫉妒。</p>
+            <p className="text-muted-foreground leading-relaxed mb-6">嫉妒是「最常見的人類情緒，也是最少被討論的。」那個總是贏、總是交出成果、總是被表揚、從不顯露脆弱的同事，會成為目標。不是公開的。是悄悄的。透過私下的批評、隱瞞的資訊、微妙的打壓。</p>
+            <p className="text-muted-foreground leading-relaxed mb-6">解藥是策略性的脆弱。公開而提早地承認錯誤。讓別人看到你請求協助。大方地分享功勞。不要假裝弱點。人們一眼看穿表演出來的謙虛。但讓別人看到你的人性，和你的能力並存。</p>
 
             <ReputationFlywheel />
 
