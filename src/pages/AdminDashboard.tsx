@@ -191,6 +191,10 @@ export default function AdminDashboard() {
   const [aiUsageRows, setAiUsageRows] = useState<AiUsageRow[]>([]);
   const [aiUsageLoading, setAiUsageLoading] = useState(true);
 
+  // Share clicks state
+  const [shareClicks, setShareClicks] = useState<{ channel: string; page: string; created_at: string }[]>([]);
+  const [shareClicksLoading, setShareClicksLoading] = useState(true);
+
   // ── Data fetching ───────────────────────────────────────────────────────────
 
   useEffect(() => {
