@@ -1163,6 +1163,7 @@ const ProblemSolvingGuide = () => {
             <PracticeScorecard />
 
             <InterviewChecklist />
+          </div>
         </section>
 
         {/* Final Word */}
