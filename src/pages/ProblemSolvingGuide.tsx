@@ -10,6 +10,7 @@ import GuideBottomCTA from "@/components/guides/GuideBottomCTA";
 import { useState, useEffect } from "react";
 import { SEO } from "@/components/SEO";
 import { guideSchema } from "@/lib/guideSchema";
+import InlineRating from "@/components/feedback/InlineRating";
 
 function PracticeScorecard() {
   const [scores, setScores] = useState<Record<number, boolean | null>>({});
@@ -1225,6 +1226,8 @@ const ProblemSolvingGuide = () => {
       </section>
 
       <GuideShareButtons />
+
+      <InlineRating contentId="guide_problem_solving" locale="en" />
 
       <GuideBottomCTA lang="en" />
     </div>

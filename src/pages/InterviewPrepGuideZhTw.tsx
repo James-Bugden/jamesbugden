@@ -10,6 +10,7 @@ import GuideSignInBanner from "@/components/guides/GuideSignInBanner";
 import GuideBottomCTA from "@/components/guides/GuideBottomCTA";
 import { SEO } from "@/components/SEO";
 import { guideSchema } from "@/lib/guideSchema";
+import InlineRating from "@/components/feedback/InlineRating";
 
 const InterviewPrepGuideZhTw = () => {
   useTrackGuideProgress("interview-prep");
@@ -617,6 +618,8 @@ const InterviewPrepGuideZhTw = () => {
 
 
       <GuideShareButtons isZhTw />
+
+      <InlineRating contentId="guide_interview_prep_zhtw" locale="zh-tw" />
 
       <GuideBottomCTA lang="zh" />
     </div>

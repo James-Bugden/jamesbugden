@@ -10,6 +10,7 @@ import GuideSignInBanner from "@/components/guides/GuideSignInBanner";
 import GuideBottomCTA from "@/components/guides/GuideBottomCTA";
 import { SEO } from "@/components/SEO";
 import { guideSchema } from "@/lib/guideSchema";
+import InlineRating from "@/components/feedback/InlineRating";
 
 const PivotMethodMiniGuide = () => {
   useTrackGuideProgress("pivot-mini");
@@ -504,6 +505,8 @@ const PivotMethodMiniGuide = () => {
 
       </main>
     
+      <InlineRating contentId="guide_pivot_mini" locale="en" />
+
       <GuideBottomCTA lang="en" />
     </div>
   );

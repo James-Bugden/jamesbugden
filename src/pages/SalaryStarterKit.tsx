@@ -10,6 +10,7 @@ import GuideBottomCTA from "@/components/guides/GuideBottomCTA";
 import ToolkitCallout from "@/components/ToolkitCallout";
 import { SEO } from "@/components/SEO";
 import { guideSchema } from "@/lib/guideSchema";
+import InlineRating from "@/components/feedback/InlineRating";
 
 const SalaryStarterKit = () => {
   useTrackGuideProgress("salary-kit");
@@ -730,6 +731,8 @@ const SalaryStarterKit = () => {
       </section>
 
       <GuideShareButtons />
+
+      <InlineRating contentId="guide_salary_starter" locale="en" />
 
       <GuideBottomCTA lang="en" />
     </div>

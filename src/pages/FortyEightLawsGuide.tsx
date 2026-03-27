@@ -12,6 +12,7 @@ import { useAuth } from "@/contexts/AuthContext";
 import { useState, useEffect, useCallback } from "react";
 import { SEO } from "@/components/SEO";
 import { guideSchema } from "@/lib/guideSchema";
+import InlineRating from "@/components/feedback/InlineRating";
 
 const SectionNumber = ({ num }: { num: string }) => (
   <span className="text-gold/30 font-heading text-6xl md:text-7xl font-bold leading-none select-none">
@@ -1598,6 +1599,8 @@ const FortyEightLawsGuide = () => {
           </div>
         </div>
       )}
+
+      <InlineRating contentId="guide_48_laws" locale="en" />
 
       <GuideBottomCTA lang="en" />
 

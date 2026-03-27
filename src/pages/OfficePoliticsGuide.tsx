@@ -10,6 +10,7 @@ import GuideBottomCTA from "@/components/guides/GuideBottomCTA";
 import { useState, useEffect } from "react";
 import { SEO } from "@/components/SEO";
 import { guideSchema } from "@/lib/guideSchema";
+import InlineRating from "@/components/feedback/InlineRating";
 
 type TreeStep = "q1" | "q2" | "q3" | "q4" | "pathA" | "pathB" | "pathC" | "pathD" | "pathE";
 
@@ -1186,6 +1187,8 @@ const OfficePoliticsGuide = () => {
       </section>
 
       <GuideShareButtons />
+
+      <InlineRating contentId="guide_office_politics" locale="en" />
 
       <GuideBottomCTA lang="en" />
     </div>

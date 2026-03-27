@@ -10,6 +10,7 @@ import GuideSignInBanner from "@/components/guides/GuideSignInBanner";
 import GuideBottomCTA from "@/components/guides/GuideBottomCTA";
 import { SEO } from "@/components/SEO";
 import { guideSchema } from "@/lib/guideSchema";
+import InlineRating from "@/components/feedback/InlineRating";
 
 const LinkedInGuideZhTw = () => {
   useTrackGuideProgress("linkedin-guide");
@@ -802,6 +803,8 @@ const LinkedInGuideZhTw = () => {
       </section>
 
       <GuideShareButtons isZhTw />
+
+      <InlineRating contentId="guide_linkedin_zhtw" locale="zh-tw" />
 
       <GuideBottomCTA lang="zh" />
     </div>

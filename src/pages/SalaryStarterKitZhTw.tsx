@@ -9,6 +9,7 @@ import GuideBottomCTA from "@/components/guides/GuideBottomCTA";
 import ToolkitCallout from "@/components/ToolkitCallout";
 import { SEO } from "@/components/SEO";
 import { guideSchema } from "@/lib/guideSchema";
+import InlineRating from "@/components/feedback/InlineRating";
 
 const SalaryStarterKitZhTw = () => {
   useTrackGuideProgress("salary-kit");
@@ -780,6 +781,8 @@ const SalaryStarterKitZhTw = () => {
       </section>
 
       <GuideShareButtons isZhTw />
+
+      <InlineRating contentId="guide_salary_starter_zhtw" locale="zh-tw" />
 
       <GuideBottomCTA lang="zh" />
     </div>

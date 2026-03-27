@@ -11,6 +11,7 @@ import GuideSignInBanner from "@/components/guides/GuideSignInBanner";
 import GuideBottomCTA from "@/components/guides/GuideBottomCTA";
 import { SEO } from "@/components/SEO";
 import { guideSchema } from "@/lib/guideSchema";
+import InlineRating from "@/components/feedback/InlineRating";
 
 const PivotMethodGuide = () => {
   useTrackGuideProgress("pivot-guide");
@@ -1260,6 +1261,8 @@ const PivotMethodGuide = () => {
       </section>
 
       <GuideShareButtons />
+
+      <InlineRating contentId="guide_pivot" locale="en" />
 
       <GuideBottomCTA lang="en" />
     </div>
