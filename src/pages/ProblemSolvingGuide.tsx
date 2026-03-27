@@ -1065,69 +1065,110 @@ const ProblemSolvingGuide = () => {
               </Collapsible>
             </div>
 
-            <div className="bg-background border border-border rounded-xl p-5 md:p-6 mb-6">
-              <h3 className="font-heading text-lg text-gold mb-4">The Practice Scorecard</h3>
-              <div className="space-y-2">
-                {[
-                  "Did I clarify before answering?",
-                  "Did I identify a root cause?",
-                  "Did I show 2+ options?",
-                  "Did I use specific numbers?",
-                  "Did I share what I learned?",
-                  "Did I stay under 2 minutes?",
-                ].map((item, i) => (
-                  <div key={i} className="flex items-center gap-3 bg-background border border-border rounded-lg px-4 py-2.5">
-                    <div className="w-5 h-5 rounded border-2 border-gold/40 shrink-0" />
-                    <span className="text-foreground text-sm flex-1">{item}</span>
-                    <span className="text-muted-foreground text-xs">YES / NO</span>
-                  </div>
-                ))}
-                <div className="flex items-center justify-between mt-3 px-1">
-                  <p className="text-foreground text-sm font-semibold">Score: ___/6</p>
-                  <p className="text-gold text-sm font-medium">Goal: Hit 5/6 consistently before your interview.</p>
-                </div>
-              </div>
-            </div>
-
-            <div className="bg-background border border-border rounded-xl p-5 md:p-6">
-              <h3 className="font-heading text-lg text-gold mb-4">Before Your Next Interview: Checklist</h3>
-              <div className="space-y-5">
-                {[
-                  { heading: "Preparation", items: [
-                    "I have 3 stories ready that follow the 4-step framework.",
-                    "Each story has specific numbers (before/after, %, $, time).",
-                    "I have researched the company using real sources.",
-                    'I know my "Why this company?" answer with 3 weighted criteria.',
-                    'I know my "Why are you looking?" answer framed as a gap analysis.',
-                  ]},
-                  { heading: "During the Interview", items: [
-                    "I will pause before answering. Clarify if needed.",
-                    "I will break problems into categories before solving them.",
-                    "I will state my hypothesis and explain how I'd test it.",
-                    'I will show 2-3 options when asked "How would you...?"',
-                    "I will use numbers in every answer. No vague claims.",
-                    "I will close every story with what I learned.",
-                  ]},
-                  { heading: "After the Interview", items: [
-                    "I will write down every question I was asked.",
-                    "I will score my answers against the 4-step framework.",
-                    "I will identify which step I missed and practice it.",
-                  ]},
-                ].map((section) => (
-                  <div key={section.heading}>
-                    <p className="text-gold text-xs font-bold uppercase tracking-wider mb-2">{section.heading}</p>
-                    <div className="space-y-1.5">
-                      {section.items.map((item, i) => (
-                        <div key={i} className="flex items-start gap-3 bg-background border border-border rounded-lg px-4 py-2.5">
-                          <div className="w-4 h-4 mt-0.5 rounded border-2 border-gold/40 shrink-0" />
-                          <span className="text-foreground text-sm">{item}</span>
+            {(() => {
+              const [scores, setScores] = useState<Record<number, boolean | null>>({});
+              const items = [
+                "Did I clarify before answering?",
+                "Did I identify a root cause?",
+                "Did I show 2+ options?",
+                "Did I use specific numbers?",
+                "Did I share what I learned?",
+                "Did I stay under 2 minutes?",
+              ];
+              const yesCount = Object.values(scores).filter(v => v === true).length;
+              const answered = Object.values(scores).filter(v => v !== null && v !== undefined).length;
+              return (
+                <div className="bg-background border border-border rounded-xl p-5 md:p-6 mb-6">
+                  <h3 className="font-heading text-lg text-gold mb-4">The Practice Scorecard</h3>
+                  <div className="space-y-2">
+                    {items.map((item, i) => (
+                      <div key={i} className="flex items-center gap-3 bg-background border border-border rounded-lg px-4 py-2.5">
+                        <span className="text-foreground text-sm flex-1">{item}</span>
+                        <div className="flex gap-1.5 shrink-0">
+                          <button
+                            onClick={() => setScores(prev => ({ ...prev, [i]: prev[i] === true ? null : true }))}
+                            className={`px-3 py-1 rounded text-xs font-bold transition-colors ${scores[i] === true ? "bg-green-600 text-white" : "bg-muted text-muted-foreground hover:bg-muted/80"}`}
+                          >YES</button>
+                          <button
+                            onClick={() => setScores(prev => ({ ...prev, [i]: prev[i] === false ? null : false }))}
+                            className={`px-3 py-1 rounded text-xs font-bold transition-colors ${scores[i] === false ? "bg-red-500 text-white" : "bg-muted text-muted-foreground hover:bg-muted/80"}`}
+                          >NO</button>
                         </div>
-                      ))}
+                      </div>
+                    ))}
+                    <div className="flex items-center justify-between mt-3 px-1">
+                      <p className="text-foreground text-sm font-semibold">Score: {answered > 0 ? `${yesCount}/${items.length}` : "___/6"}</p>
+                      <p className={`text-sm font-medium ${yesCount >= 5 && answered === items.length ? "text-green-500" : "text-gold"}`}>
+                        {yesCount >= 5 && answered === items.length ? "✓ Interview ready!" : "Goal: Hit 5/6 consistently before your interview."}
+                      </p>
                     </div>
+                    {answered > 0 && (
+                      <button onClick={() => setScores({})} className="text-xs text-muted-foreground hover:text-foreground transition-colors mt-1">Reset</button>
+                    )}
                   </div>
-                ))}
-              </div>
-            </div>
+                </div>
+              );
+            })()}
+
+            {(() => {
+              const [checked, setChecked] = useState<Record<string, boolean>>({});
+              const toggle = (key: string) => setChecked(prev => ({ ...prev, [key]: !prev[key] }));
+              const sections = [
+                { heading: "Preparation", items: [
+                  "I have 3 stories ready that follow the 4-step framework.",
+                  "Each story has specific numbers (before/after, %, $, time).",
+                  "I have researched the company using real sources.",
+                  'I know my "Why this company?" answer with 3 weighted criteria.',
+                  'I know my "Why are you looking?" answer framed as a gap analysis.',
+                ]},
+                { heading: "During the Interview", items: [
+                  "I will pause before answering. Clarify if needed.",
+                  "I will break problems into categories before solving them.",
+                  "I will state my hypothesis and explain how I'd test it.",
+                  'I will show 2-3 options when asked "How would you...?"',
+                  "I will use numbers in every answer. No vague claims.",
+                  "I will close every story with what I learned.",
+                ]},
+                { heading: "After the Interview", items: [
+                  "I will write down every question I was asked.",
+                  "I will score my answers against the 4-step framework.",
+                  "I will identify which step I missed and practice it.",
+                ]},
+              ];
+              const totalItems = sections.reduce((sum, s) => sum + s.items.length, 0);
+              const checkedCount = Object.values(checked).filter(Boolean).length;
+              return (
+                <div className="bg-background border border-border rounded-xl p-5 md:p-6">
+                  <div className="flex items-center justify-between mb-4">
+                    <h3 className="font-heading text-lg text-gold">Before Your Next Interview: Checklist</h3>
+                    {checkedCount > 0 && <span className="text-xs text-muted-foreground">{checkedCount}/{totalItems}</span>}
+                  </div>
+                  <div className="space-y-5">
+                    {sections.map((section) => (
+                      <div key={section.heading}>
+                        <p className="text-gold text-xs font-bold uppercase tracking-wider mb-2">{section.heading}</p>
+                        <div className="space-y-1.5">
+                          {section.items.map((item, i) => {
+                            const key = `${section.heading}-${i}`;
+                            return (
+                              <button key={i} onClick={() => toggle(key)} className="w-full flex items-start gap-3 bg-background border border-border rounded-lg px-4 py-2.5 text-left hover:bg-muted/50 transition-colors">
+                                <div className={`w-4 h-4 mt-0.5 rounded border-2 shrink-0 flex items-center justify-center transition-colors ${checked[key] ? "bg-green-600 border-green-600" : "border-gold/40"}`}>
+                                  {checked[key] && <svg viewBox="0 0 12 12" className="w-3 h-3 text-white" fill="none" stroke="currentColor" strokeWidth="2"><path d="M2 6l3 3 5-5" /></svg>}
+                                </div>
+                                <span className={`text-sm transition-colors ${checked[key] ? "text-muted-foreground line-through" : "text-foreground"}`}>{item}</span>
+                              </button>
+                            );
+                          })}
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                  {checkedCount > 0 && (
+                    <button onClick={() => setChecked({})} className="text-xs text-muted-foreground hover:text-foreground transition-colors mt-3">Reset all</button>
+                  )}
+                </div>
+              );
+            })()}
           </div>
         </section>
 
