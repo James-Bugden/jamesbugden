@@ -4,6 +4,7 @@ import { ArrowLeft, ArrowDown, Copy, Share2, Check } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useToast } from "@/hooks/use-toast";
 import { nativeShare } from "@/lib/share";
+import { trackEvent } from "@/lib/trackEvent";
 import ToolkitHeaderZhTw from "@/components/toolkit/ToolkitHeaderZhTw";
 import ToolkitFooterZhTw from "@/components/toolkit/ToolkitFooterZhTw";
 import ToolkitNavZhTw from "@/components/toolkit/ToolkitNavZhTw";
