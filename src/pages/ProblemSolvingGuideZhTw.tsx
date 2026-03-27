@@ -1060,7 +1060,7 @@ const ProblemSolvingGuideZhTw = () => {
             </div>
 
             {(() => {
-              const [scores, setScores] = React.useState<Record<number, boolean | null>>({});
+              const [scores, setScores] = useState<Record<number, boolean | null>>({});
               const items = [
                 "我有在回答前釐清嗎？",
                 "我有找到根本原因嗎？",
@@ -1105,7 +1105,7 @@ const ProblemSolvingGuideZhTw = () => {
             })()}
 
             {(() => {
-              const [checked, setChecked] = React.useState<Record<string, boolean>>({});
+              const [checked, setChecked] = useState<Record<string, boolean>>({});
               const toggle = (key: string) => setChecked(prev => ({ ...prev, [key]: !prev[key] }));
               const sections = [
                 { heading: "準備", items: [

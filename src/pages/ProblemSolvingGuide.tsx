@@ -1066,7 +1066,7 @@ const ProblemSolvingGuide = () => {
             </div>
 
             {(() => {
-              const [scores, setScores] = React.useState<Record<number, boolean | null>>({});
+              const [scores, setScores] = useState<Record<number, boolean | null>>({});
               const items = [
                 "Did I clarify before answering?",
                 "Did I identify a root cause?",
@@ -1111,7 +1111,7 @@ const ProblemSolvingGuide = () => {
             })()}
 
             {(() => {
-              const [checked, setChecked] = React.useState<Record<string, boolean>>({});
+              const [checked, setChecked] = useState<Record<string, boolean>>({});
               const toggle = (key: string) => setChecked(prev => ({ ...prev, [key]: !prev[key] }));
               const sections = [
                 { heading: "Preparation", items: [
