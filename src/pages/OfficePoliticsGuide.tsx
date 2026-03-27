@@ -11,6 +11,78 @@ import { useState, useEffect } from "react";
 import { SEO } from "@/components/SEO";
 import { guideSchema } from "@/lib/guideSchema";
 
+type TreeStep = "q1" | "q2" | "q3" | "q4" | "pathA" | "pathB" | "pathC" | "pathD" | "pathE";
+
+const paths: Record<string, { label: string; title: string; id: string }> = {
+  pathA: { label: "PATH A", title: "Emergency Repair", id: "path-a" },
+  pathB: { label: "PATH B", title: "Adversary Management", id: "path-b" },
+  pathC: { label: "PATH C", title: "Energy Redirect", id: "path-c" },
+  pathD: { label: "PATH D", title: "Goal Clarity", id: "path-d" },
+  pathE: { label: "PATH E", title: "Build Political Power", id: "path-e" },
+};
+
+const DecisionTree = () => {
+  const [step, setStep] = useState<TreeStep>("q1");
+  const [fade, setFade] = useState(true);
+
+  const go = (next: TreeStep) => {
+    setFade(false);
+    setTimeout(() => { setStep(next); setFade(true); }, 200);
+  };
+
+  const QuestionCard = ({ question, hint, onYes, onNo }: { question: string; hint?: string; onYes: () => void; onNo: () => void }) => (
+    <div className={`flex flex-col items-center gap-4 transition-opacity duration-200 ${fade ? "opacity-100" : "opacity-0"}`}>
+      <div className="bg-executive-green text-cream text-sm font-semibold px-6 py-4 rounded-lg text-center max-w-sm leading-snug">
+        {question}
+      </div>
+      {hint && <p className="text-muted-foreground text-xs text-center max-w-xs -mt-2">{hint}</p>}
+      <div className="flex gap-3">
+        <button onClick={onYes} className="px-6 py-2.5 rounded-lg text-sm font-bold bg-accent/15 border border-accent/30 text-accent hover:bg-accent/25 transition-colors">YES</button>
+        <button onClick={onNo} className="px-6 py-2.5 rounded-lg text-sm font-bold bg-muted border border-border text-muted-foreground hover:bg-muted/80 transition-colors">NO</button>
+      </div>
+    </div>
+  );
+
+  const isResult = step.startsWith("path");
+  const path = isResult ? paths[step] : null;
+
+  return (
+    <div className="bg-card border border-border rounded-xl p-5 md:p-6 mb-8">
+      <p className="text-xs font-bold text-accent uppercase tracking-wider mb-5">Decision Tree: Find Your Starting Point</p>
+      <div className="flex flex-col items-center min-h-[160px] justify-center">
+        {step === "q1" && (
+          <QuestionCard question="Are you in political trouble right now?" hint="(Boss is distant, assignments going elsewhere, HR checking in)" onYes={() => go("q2")} onNo={() => go("q4")} />
+        )}
+        {step === "q2" && (
+          <QuestionCard question='Are you seen as "The Problem"?' onYes={() => go("pathA")} onNo={() => go("q3")} />
+        )}
+        {step === "q3" && (
+          <QuestionCard question="Is someone blocking you?" onYes={() => go("pathB")} onNo={() => go("pathC")} />
+        )}
+        {step === "q4" && (
+          <QuestionCard question="Do you know what you want from your career?" onYes={() => go("pathE")} onNo={() => go("pathD")} />
+        )}
+        {isResult && path && (
+          <div className={`flex flex-col items-center gap-4 transition-opacity duration-200 ${fade ? "opacity-100" : "opacity-0"}`}>
+            <div className="bg-accent/15 border border-accent/30 rounded-xl px-8 py-5 text-center">
+              <p className="text-accent text-sm font-bold">{path.label}</p>
+              <p className="text-foreground text-lg font-heading font-bold mt-1">{path.title}</p>
+            </div>
+            <div className="flex gap-3">
+              <a href={`#${path.id}`} className="px-5 py-2 rounded-lg text-sm font-semibold bg-accent text-accent-foreground hover:bg-accent/90 transition-colors">
+                Jump to {path.label} ↓
+              </a>
+              <button onClick={() => go("q1")} className="px-5 py-2 rounded-lg text-sm font-medium border border-border text-muted-foreground hover:bg-muted transition-colors">
+                Start over
+              </button>
+            </div>
+          </div>
+        )}
+      </div>
+    </div>
+  );
+};
+
 const SectionNumber = ({ num }: { num: string }) => (
   <span className="text-gold/30 font-heading text-6xl md:text-7xl font-bold leading-none select-none">
     {num}
