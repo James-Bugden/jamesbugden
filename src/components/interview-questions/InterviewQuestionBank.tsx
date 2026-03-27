@@ -8,6 +8,7 @@ import { Button } from "@/components/ui/button";
 import { supabase } from "@/integrations/supabase/client";
 import { Linkedin } from "lucide-react";
 import { InstagramIcon, ThreadsIcon } from "@/components/SocialIcons";
+import { trackShare } from "@/lib/trackShare";
 import { AuthHeaderButton } from "@/components/AuthHeaderButton";
 import { motion, AnimatePresence } from "framer-motion";
 import { SEO } from "@/components/SEO";
@@ -457,6 +458,7 @@ export default function InterviewQuestionBank({ lang: initialLang }: { lang: Lan
           <div className="flex items-center gap-3 flex-wrap">
             <button
               onClick={() => {
+                trackShare("email");
                 const subject = encodeURIComponent(
                   lang === "zh" ? "推薦給你的面試題庫" : "Interview question bank I found helpful"
                 );
@@ -475,8 +477,10 @@ export default function InterviewQuestionBank({ lang: initialLang }: { lang: Lan
               onClick={() => {
                 const url = encodeURIComponent(window.location.href);
                 if (lang === "zh") {
+                  trackShare("line");
                   window.location.href = `https://line.me/R/share?text=${url}`;
                 } else {
+                  trackShare("whatsapp");
                   window.open(`https://wa.me/?text=${url}`, "_blank");
                 }
               }}

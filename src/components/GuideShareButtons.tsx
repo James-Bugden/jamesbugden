@@ -1,4 +1,5 @@
 import { Mail } from "lucide-react";
+import { trackShare } from "@/lib/trackShare";
 
 const LineIcon = () => (
   <svg viewBox="0 0 24 24" fill="currentColor" className="w-5 h-5">
@@ -18,6 +19,7 @@ interface GuideShareButtonsProps {
 
 const GuideShareButtons = ({ isZhTw = false }: GuideShareButtonsProps) => {
   const handleEmailShare = () => {
+    trackShare("email");
     const subject = encodeURIComponent(
       isZhTw ? "推薦給你的職涯指南" : "Career guide I found helpful"
     );
@@ -30,8 +32,10 @@ const GuideShareButtons = ({ isZhTw = false }: GuideShareButtonsProps) => {
   const handleMessengerShare = () => {
     const url = encodeURIComponent(window.location.href);
     if (isZhTw) {
+      trackShare("line");
       window.location.href = `https://line.me/R/share?text=${url}`;
     } else {
+      trackShare("whatsapp");
       window.open(`https://wa.me/?text=${url}`, "_blank");
     }
   };
