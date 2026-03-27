@@ -346,10 +346,10 @@ export default function RecruiterGuideZhTw() {
               { label: "30-50 份履歷篩選", w: "50%", color: "bg-muted-foreground/30" },
               { label: "10-15 通招募人員篩選電話", w: "30%", color: "bg-gold/30" },
               { label: "5-8 次技能/能力篩選", w: "18%", color: "bg-gold/50" },
-              { label: "2-3 次最終面試", w: "10%", color: "bg-executive/40" },
-              { label: "1 個 offer", w: "5%", color: "bg-executive" },
+              { label: "2-3 次最終面試", w: "10%", color: "bg-accent/70" },
+              { label: "1 個 offer", w: "5%", color: "bg-executive-green" },
             ].map((step) => (
-              <div key={step.label}><div className={`${step.color} rounded-md h-7 flex items-center px-3`} style={{ width: step.w }}><span className="text-xs font-medium text-foreground truncate">{step.label}</span></div></div>
+              <div key={step.label}><div className={`${step.color} rounded-md h-7 flex items-center px-3`} style={{ width: step.w, minWidth: "fit-content" }}><span className={`text-xs font-medium whitespace-nowrap ${step.color === "bg-executive-green" ? "text-cream" : "text-foreground"}`}>{step.label}</span></div></div>
             ))}
             <p className="text-xs text-muted-foreground italic mt-2">{"← 淘汰率最高的階段：履歷篩選 →"}</p>
           </div>
