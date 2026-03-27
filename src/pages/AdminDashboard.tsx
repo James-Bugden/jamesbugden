@@ -308,6 +308,13 @@ export default function AdminDashboard() {
     setFeedbackLoading(false);
   };
 
+  const fetchShareClicks = async () => {
+    setShareClicksLoading(true);
+    const { data } = await supabase.from("share_clicks" as any).select("channel, page, created_at").order("created_at", { ascending: false }).limit(1000);
+    if (data) setShareClicks(data as any);
+    setShareClicksLoading(false);
+  };
+
   const handleDeleteFeedback = async (id: string) => {
     const { error } = await supabase.from("feedback" as any).delete().eq("id", id);
     if (error) toast({ title: "Error", description: getSafeErrorMessage(error), variant: "destructive" });
