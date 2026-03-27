@@ -1139,6 +1139,85 @@ export default function AdminDashboard() {
               </div>
             )}
           </TabsContent>
+
+          {/* ── Shares Tab ──────────────────────────────────────────────── */}
+          <TabsContent value="shares">
+            {shareClicksLoading ? (
+              <div className="flex justify-center py-16"><Loader2 className="w-6 h-6 animate-spin text-muted-foreground" /></div>
+            ) : (() => {
+              const byChannel: Record<string, number> = {};
+              const byPage: Record<string, number> = {};
+              shareClicks.forEach(c => {
+                byChannel[c.channel] = (byChannel[c.channel] || 0) + 1;
+                byPage[c.page] = (byPage[c.page] || 0) + 1;
+              });
+              const channelEntries = Object.entries(byChannel).sort((a, b) => b[1] - a[1]);
+              const pageEntries = Object.entries(byPage).sort((a, b) => b[1] - a[1]);
+              return (
+                <div className="space-y-6">
+                  <p className="text-sm text-muted-foreground">{shareClicks.length} total share clicks tracked</p>
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <Card>
+                      <CardContent className="pt-6">
+                        <h3 className="font-semibold text-sm mb-3">By Channel</h3>
+                        {channelEntries.length === 0 ? (
+                          <p className="text-muted-foreground text-sm">No share clicks yet</p>
+                        ) : (
+                          <div className="space-y-2">
+                            {channelEntries.map(([ch, count]) => (
+                              <div key={ch} className="flex items-center justify-between text-sm">
+                                <span className="capitalize">{ch}</span>
+                                <span className="font-semibold">{count}</span>
+                              </div>
+                            ))}
+                          </div>
+                        )}
+                      </CardContent>
+                    </Card>
+                    <Card>
+                      <CardContent className="pt-6">
+                        <h3 className="font-semibold text-sm mb-3">By Page (Top 10)</h3>
+                        {pageEntries.length === 0 ? (
+                          <p className="text-muted-foreground text-sm">No share clicks yet</p>
+                        ) : (
+                          <div className="space-y-2">
+                            {pageEntries.slice(0, 10).map(([pg, count]) => (
+                              <div key={pg} className="flex items-center justify-between text-sm">
+                                <span className="truncate max-w-[200px]" title={pg}>{pg}</span>
+                                <span className="font-semibold">{count}</span>
+                              </div>
+                            ))}
+                          </div>
+                        )}
+                      </CardContent>
+                    </Card>
+                  </div>
+                  <div className="border border-border rounded-xl overflow-hidden overflow-x-auto">
+                    <Table>
+                      <TableHeader>
+                        <TableRow>
+                          <TableHead className="w-36">Date</TableHead>
+                          <TableHead>Channel</TableHead>
+                          <TableHead>Page</TableHead>
+                        </TableRow>
+                      </TableHeader>
+                      <TableBody>
+                        {shareClicks.length === 0 ? (
+                          <TableRow><TableCell colSpan={3} className="text-center py-12 text-muted-foreground">No share clicks yet</TableCell></TableRow>
+                        ) : shareClicks.slice(0, 100).map((c, i) => (
+                          <TableRow key={i}>
+                            <TableCell className="text-xs text-muted-foreground whitespace-nowrap">{format(new Date(c.created_at), "MMM d, HH:mm")}</TableCell>
+                            <TableCell className="text-sm capitalize">{c.channel}</TableCell>
+                            <TableCell className="text-sm max-w-[250px] truncate" title={c.page}>{c.page}</TableCell>
+                          </TableRow>
+                        ))}
+                      </TableBody>
+                    </Table>
+                  </div>
+                </div>
+              );
+            })()}
+          </TabsContent>
         </Tabs>
       </main>
     </div>
