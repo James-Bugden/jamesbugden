@@ -831,7 +831,7 @@ const FortyEightLawsGuideZhTw = () => {
               ))}
             </ul>
             <p className="text-muted-foreground leading-relaxed mb-6">聲譽是你職涯中最有價值的資產。也是最容易摧毀的。</p>
-            <ActionStep checked={safeActions[6]} onToggle={() => toggleAction(6)}>
+            <ActionStep checked={safeActions[5]} onToggle={() => toggleAction(5)}>
               現在就 Google 你自己。檢查 LinkedIn、社群媒體和任何公開資訊。如果搜尋結果不符合你想成為的專業形象，今天就修正。刪掉舊貼文。更新你的 LinkedIn 標題。問一個信任的朋友：「別人第一次見到我之後，會怎麼描述我？」如果答案讓你意外，你有工作要做。
             </ActionStep>
 
@@ -839,7 +839,7 @@ const FortyEightLawsGuideZhTw = () => {
             <p className="text-muted-foreground leading-relaxed mb-6">守護聲譽讓你安全。但只有安全沒有能見度，只會讓你原地踏步。道理很直白：「一切都是以外表來評斷。看不見的東西，等於不存在。」</p>
             <p className="text-muted-foreground leading-relaxed mb-6">安靜做事，期待成果自己說話的人，每次都會被跳過。不是因為工作做得差。是因為沒有人看到。</p>
             <p className="text-muted-foreground leading-relaxed mb-6">做法很具體：主動參與能讓新人看到你名字的專案。自己報告自己的工作成果，不要讓別人代為報告。高層來訪時舉手。寫有你名字的內部更新和總結。</p>
-            <ActionStep checked={safeActions[7]} onToggle={() => toggleAction(7)}>
+            <ActionStep checked={safeActions[6]} onToggle={() => toggleAction(6)}>
               找出一個你在做事但別人拿到能見度的專案。在下一次團隊會議中主動報告它，或寫一份有你名字的書面總結。每月做一次。一季之內，高層主管會知道你的名字。
             </ActionStep>
 
@@ -870,7 +870,7 @@ const FortyEightLawsGuideZhTw = () => {
             <p className="text-muted-foreground leading-relaxed mb-6">具體做法：掌握一個流程、一個客戶關係、或一個沒有其他人完全理解的知識領域。成為出問題時被打電話的那個人。在跨部門建立關係，讓你的價值延伸到直屬團隊之外。一旦你累積了不可或缺的紀錄，你就贏得了開口要更多的底氣。但要有耐心。讓它透過過程自然累積。</p>
             <Reversal>不要因為恐懼而囤積資訊。囤積的人會變成瓶頸。瓶頸最終會被繞過和移除。分享到足夠慷慨的程度。保留到足夠關鍵的程度。</Reversal>
             <div className="mt-6">
-              <ActionStep checked={safeActions[8]} onToggle={() => toggleAction(8)}>
+              <ActionStep checked={safeActions[7]} onToggle={() => toggleAction(7)}>
                 找出你在工作中做的一件沒有其他人完全理解的事情。如果你請假兩週，團隊會很吃力嗎？如果會，你有一定程度的不可取代性。如果不會，開始建立它。選擇一個流程、一個客戶關係、或一個知識領域，深入到比團隊中任何人都深。
               </ActionStep>
             </div>
@@ -880,7 +880,7 @@ const FortyEightLawsGuideZhTw = () => {
             <p className="text-foreground leading-relaxed mb-6 italic">「強度每次都勝過廣度。當你在尋找能提升你的力量來源時，找到那個關鍵的贊助人，那頭能長期供你牛奶的肥牛。」</p>
             <p className="text-muted-foreground leading-relaxed mb-6">大多數人把自己攤在太多專案、太多委員會、太多「有也不錯」的事情上。結果：每件事都做得普普通通，沒有一件做得出色。</p>
             <p className="text-muted-foreground leading-relaxed mb-6">選定兩到三個優先事項。其餘的推掉。在少數高影響力的交付項目上做到深入，勝過在十幾個無人記住的事情上做到廣泛。</p>
-            <ActionStep checked={safeActions[9]} onToggle={() => toggleAction(9)}>
+            <ActionStep checked={safeActions[8]} onToggle={() => toggleAction(8)}>
               數一數你現在正在參與的活躍專案有幾個。如果超過 5 個，你太分散了。挑出影響力和能見度最高的 2-3 個。對其餘的說不。「我很想幫忙，但我目前在 [高影響力專案] 上已經滿載了。下一季可以再看看嗎？」推掉是一項職涯技能。
             </ActionStep>
 
@@ -941,7 +941,7 @@ const FortyEightLawsGuideZhTw = () => {
             <p className="text-muted-foreground leading-relaxed mb-6">走進加薪談話時，永遠不要說「我在這裡三年了，我值得加薪。」沒有人因為年資而升遷。要展示的是：升你對他們有什麼好處。</p>
             <p className="text-muted-foreground leading-relaxed mb-6">先證明你是不可或缺的。累積紀錄。讓案例不言自明。「到時候一切順理成章，你提出來，自然有道理。」</p>
             <p className="text-muted-foreground leading-relaxed mb-6">換個說法：「這是我交出的成果。這是我接下來計畫交出的成果。這是讓我做到最好的職位和薪資水準。」每一句話都聚焦在他們得到什麼，不是你值得什麼。</p>
-            <ActionStep checked={safeActions[10]} onToggle={() => toggleAction(10)}>
+            <ActionStep checked={safeActions[9]} onToggle={() => toggleAction(9)}>
               現在就用這個框架寫你的加薪請求。三句話。你交出了什麼（附數字）。你接下來計畫交出什麼。你需要什麼才能做到最好。先不要寄出。花一週精修。然後約一場會議。
             </ActionStep>
 
@@ -951,7 +951,7 @@ const FortyEightLawsGuideZhTw = () => {
 
             <BragDocTemplate />
 
-            <ActionStep checked={safeActions[11]} onToggle={() => toggleAction(11)}>
+            <ActionStep checked={safeActions[10]} onToggle={() => toggleAction(10)}>
               設定每週五下午 4 點的 5 分鐘行事曆提醒。標題「戰績文件」。填寫上面的四個欄位。連續做 12 週。績效考核時，你會有 12 週有紀錄的成果，而其他人都在努力回想自己做了什麼。
             </ActionStep>
 
@@ -960,7 +960,7 @@ const FortyEightLawsGuideZhTw = () => {
             <p className="text-foreground leading-relaxed mb-6 italic">「你的行動必須看起來自然而輕鬆。所有的辛苦、練習和巧妙的技巧，都必須被隱藏。」</p>
             <p className="text-muted-foreground leading-relaxed mb-6">沉穩的能力展現傳達領導潛力。明顯的恐慌和壓力傳達你還沒準備好承擔更多責任。同樣的簡報，冷靜交出的人看起來比一邊報告一邊強調自己加了多少班的人更適合升遷。</p>
             <p className="text-muted-foreground leading-relaxed mb-6">交出成果。讓成果自己說話。不要在每一份產出上附加「這真的很辛苦」的敘事。如果你需要更多資源或更多時間，清楚而專業地提出要求。不要當烈士。</p>
-            <ActionStep checked={safeActions[12]} onToggle={() => toggleAction(12)}>
+            <ActionStep checked={safeActions[11]} onToggle={() => toggleAction(11)}>
               下次專案交付時，移除所有「辛苦語言」。不提加班、週末、或壓力。報告成果。描述影響。停在那裡。觀察當你展現沉穩而非疲憊時，人們的反應有什麼不同。
             </ActionStep>
 
@@ -1000,7 +1000,7 @@ const FortyEightLawsGuideZhTw = () => {
               <li>我的話被最壞的方式解讀，會變成什麼？</li>
             </ol>
             <p className="text-muted-foreground leading-relaxed mb-6">如果三個都回答不出來，先慢下來。</p>
-            <ActionStep checked={safeActions[13]} onToggle={() => toggleAction(13)}>
+            <ActionStep checked={safeActions[12]} onToggle={() => toggleAction(12)}>
               在你下一封敏感的 email、會議邀請或向上反映之前，暫停，在紙上回答那三個問題。在桌上貼一張便條：「誰得利？誰受損？最壞的解讀？」養成習慣。這個過濾器防止的職涯傷害，比本指南中任何其他習慣都多。
             </ActionStep>
 
@@ -1009,7 +1009,7 @@ const FortyEightLawsGuideZhTw = () => {
             <p className="text-foreground leading-relaxed mb-6 italic">「你會死於別人的苦難。情緒狀態像疾病一樣有傳染力。」</p>
             <p className="text-muted-foreground leading-relaxed mb-6">職場中，負面情緒傳播的速度比能力快。午餐桌上的慣性抱怨者、每場會議都散播冷嘲熱諷的團隊成員、對所有人說閒話的同事。跟這些人待在一起，你的聲譽也會被拖下水。</p>
             <p className="text-muted-foreground leading-relaxed mb-6">有意識地選擇你的午餐桌、你的 Slack 頻道、和你的盟友。對所有人友善。但把你的時間和精力投入在建設的人身上，不是拆台的人。</p>
-            <ActionStep checked={safeActions[14]} onToggle={() => toggleAction(14)}>
+            <ActionStep checked={safeActions[13]} onToggle={() => toggleAction(13)}>
               盤點你的 5 個最主要的工作關係。你最常跟誰相處？他們是建設者還是抱怨者？如果超過兩個是慣性抱怨者，開始拉開距離。換個位置吃午餐。加入不同的 Slack 頻道。距離塑造觀感。刻意選擇。
             </ActionStep>
 
@@ -1020,7 +1020,7 @@ const FortyEightLawsGuideZhTw = () => {
             <p className="text-muted-foreground leading-relaxed mb-6">這對內向的人格外相關。「第一件事是不要試著成為你不是的人。如果你是內向的，愛上這一點。」但要學會遊戲的社交規則。理解文化。在其中運作，同時私下保持你自己的判斷。</p>
             <Reversal>沒有界線的順從會變成軟弱。知道你的底線在哪裡。有些山頭值得為之犧牲。刻意選擇。</Reversal>
             <div className="mt-6">
-              <ActionStep checked={safeActions[15]} onToggle={() => toggleAction(15)}>
+              <ActionStep checked={safeActions[14]} onToggle={() => toggleAction(14)}>
                 寫下你的三條不可妥協的專業底線。這些是無論壓力多大你都不會跨越的線：倫理的、個人的、或專業的。例如：「我不會對客戶說謊。」「我不會把別人的功勞據為己有。」「我不會對安全問題保持沉默。」在壓力來臨之前就知道你的底線，是正直和遺憾之間的差別。
               </ActionStep>
             </div>
@@ -1067,7 +1067,7 @@ const FortyEightLawsGuideZhTw = () => {
             <p className="text-muted-foreground leading-relaxed mb-6">這是職涯成功三大法則之一。</p>
             <p className="text-foreground leading-relaxed mb-6 italic">「結局就是一切。一路規劃到結局，把所有可能的後果、障礙、和可能逆轉你辛苦成果的命運轉折都考慮進去。」</p>
             <p className="text-muted-foreground leading-relaxed mb-6">從你五年後想到達的位置倒推回來。每一份工作都是跳板，不是終點。接受一個新職位之前，問自己：「這份工作是否讓我更接近我想到達的地方？」</p>
-            <ActionStep checked={safeActions[16]} onToggle={() => toggleAction(16)}>
+            <ActionStep checked={safeActions[15]} onToggle={() => toggleAction(15)}>
               寫下你 5 年後理想的職稱。然後列出你的履歷缺少的 3 項技能或經驗。現在看你目前的工作：它是否填補了其中任何缺口？如果是，加倍投入。如果不是，開始規劃你的下一步。
             </ActionStep>
 
@@ -1078,7 +1078,7 @@ const FortyEightLawsGuideZhTw = () => {
             <p className="text-muted-foreground leading-relaxed mb-6">職涯早期，為學習速度優化。「二十幾歲的時候，不要太看重錢和加薪。真正重要的是責任感和經驗。是更大的格局。」後來，為定位優化。讓你的行動時機配合市場對你技能組合的需求。</p>
             <Reversal>耐心如果待太久不成長，會變成停滯。如果你在同一個職位待了三年沒有發展，問題不是時機。是這份工作。</Reversal>
             <div className="mt-6">
-              <ActionStep checked={safeActions[17]} onToggle={() => toggleAction(17)}>
+              <ActionStep checked={safeActions[16]} onToggle={() => toggleAction(16)}>
                 誠實回答：你在目前的工作還在學習嗎？如果答案已經是「沒有」超過 6 個月，開始準備離開。更新你的履歷。啟動你的人脈。不要等完美時機。離開的正確時間，是在你走投無路之前。
               </ActionStep>
             </div>
@@ -1087,7 +1087,7 @@ const FortyEightLawsGuideZhTw = () => {
             <p className="text-muted-foreground leading-relaxed mb-6">規劃設定目的地。時機控制節奏。但路徑本身永遠不會是直的。「接受這個事實：沒有什麼是確定的，沒有法則是固定的。保護自己最好的方式，是像水一樣流動和無形。」</p>
             <p className="text-muted-foreground leading-relaxed mb-6">這本書本身就是證明。新聞業、電視、劇場、電影、偵探社、飯店。每份工作在當時看起來都是隨機的。加在一起，它們提供了寫書需要的每一項技能。寫作教會組織思緒。歷史教會想法。那些隨機的工作教會了人類心理學。</p>
             <p className="text-muted-foreground leading-relaxed mb-6">如果你起步較晚？「你必須培養適合這個方向轉變的新技能組合，並找到方法將它們和你之前的技能融合。在這個過程中，沒有任何東西是浪費的。」</p>
-            <ActionStep checked={safeActions[18]} onToggle={() => toggleAction(18)}>
+            <ActionStep checked={safeActions[17]} onToggle={() => toggleAction(17)}>
               寫下一項超出你目前工作職責但值得在未來 6 個月學習的技能。不是因為你的主管要求。是因為市場在 3-5 年後會獎勵它。從每週 30 分鐘開始。這就是無形的起點。
             </ActionStep>
 
@@ -1095,6 +1095,9 @@ const FortyEightLawsGuideZhTw = () => {
             <p className="text-foreground leading-relaxed mb-6 italic">「勝利的那一刻，往往是最危險的時刻。在勝利的熱潮中，傲慢和過度自信會推著你越過你原本瞄準的目標。」</p>
             <p className="text-muted-foreground leading-relaxed mb-6">拿到升遷了？不要立刻開始爭取下一次。先鞏固。在你的新層級建立關係。先證明你屬於這個層級，再推進。</p>
             <p className="text-muted-foreground leading-relaxed mb-6">分清鞏固和混日子的差別。鞏固是有意識的：為下一步行動建立基礎。混日子是被動的：你停止成長了。</p>
+            <ActionStep checked={safeActions[18]} onToggle={() => toggleAction(18)}>
+              下次獲得勝利（升遷、成功的專案、公開表揚）之後，忍住立刻推進下一件事的衝動。相反地，花 30 天在你的新層級建立關係。約三位以前沒有機會接觸的新同事或利害關係人喝咖啡。先鞏固你的位置，再擴張它。
+            </ActionStep>
 
             <DiagramBox title="職涯時間軸">
               <div className="space-y-6">
