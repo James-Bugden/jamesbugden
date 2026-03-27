@@ -32,8 +32,10 @@ const GuideShareButtons = ({ isZhTw = false }: GuideShareButtonsProps) => {
   const handleMessengerShare = () => {
     const url = encodeURIComponent(window.location.href);
     if (isZhTw) {
+      trackShare("line");
       window.location.href = `https://line.me/R/share?text=${url}`;
     } else {
+      trackShare("whatsapp");
       window.open(`https://wa.me/?text=${url}`, "_blank");
     }
   };
