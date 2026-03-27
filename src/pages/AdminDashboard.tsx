@@ -615,19 +615,19 @@ export default function AdminDashboard() {
 
       <main className="max-w-7xl mx-auto px-4 py-6 space-y-6">
         {/* Overview Cards */}
-        <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-7 gap-4">
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
           {statCards.map(s => (
-            <Card key={s.label}>
-              <CardContent className="p-4">
-                <div className="flex items-center gap-3">
-                  <s.icon className={`w-7 h-7 ${s.color}`} />
-                  <div>
-                    <p className="text-2xl font-bold text-foreground">{s.value.toLocaleString()}</p>
-                    <p className="text-xs text-muted-foreground">{s.label}</p>
+            <Card key={s.label} className="overflow-hidden">
+              <CardContent className="p-3">
+                <div className="flex items-center gap-2.5">
+                  <s.icon className={`w-5 h-5 shrink-0 ${s.color}`} />
+                  <div className="min-w-0">
+                    <p className="text-xl font-bold text-foreground leading-tight">{s.value.toLocaleString()}</p>
+                    <p className="text-[11px] text-muted-foreground leading-tight">{s.label}</p>
                   </div>
                 </div>
                 {s.trend.length > 0 && (
-                  <div className="mt-2 h-8">
+                  <div className="mt-1.5 h-6">
                     <ResponsiveContainer width="100%" height="100%">
                       <AreaChart data={s.trend} margin={{ top: 0, right: 0, left: 0, bottom: 0 }}>
                         <Area type="monotone" dataKey="count" stroke={s.sparkColor} fill={s.sparkColor} fillOpacity={0.15} strokeWidth={1.5} dot={false} />
@@ -642,17 +642,23 @@ export default function AdminDashboard() {
 
         {/* Tabs */}
         <Tabs value={activeTab} onValueChange={setActiveTab}>
-          <TabsList className="w-full justify-start">
-            <TabsTrigger value="accounts">Accounts</TabsTrigger>
-            <TabsTrigger value="reviews">Reviews</TabsTrigger>
-            <TabsTrigger value="salary">Salary Checks</TabsTrigger>
-            <TabsTrigger value="resumes">Resume Leads</TabsTrigger>
-            <TabsTrigger value="emails">Email Leads</TabsTrigger>
-            <TabsTrigger value="feedback">Feedback</TabsTrigger>
-            <TabsTrigger value="ai-usage">AI Usage</TabsTrigger>
-            <TabsTrigger value="shares">Shares</TabsTrigger>
-            <TabsTrigger value="events">Events</TabsTrigger>
-          </TabsList>
+          <div className="overflow-x-auto -mx-4 px-4 md:mx-0 md:px-0">
+            <TabsList className="w-max md:w-full justify-start gap-0.5">
+              {/* People & Leads */}
+              <TabsTrigger value="accounts">Accounts</TabsTrigger>
+              <TabsTrigger value="resumes">Resume Leads</TabsTrigger>
+              <TabsTrigger value="emails">Email Leads</TabsTrigger>
+              {/* Content & Data */}
+              <span className="w-px h-5 bg-border mx-1 hidden md:block" />
+              <TabsTrigger value="reviews">Reviews</TabsTrigger>
+              <TabsTrigger value="salary">Salary</TabsTrigger>
+              <TabsTrigger value="feedback">Feedback</TabsTrigger>
+              {/* Analytics */}
+              <span className="w-px h-5 bg-border mx-1 hidden md:block" />
+              <TabsTrigger value="ai-usage">AI Usage</TabsTrigger>
+              <TabsTrigger value="analytics">Analytics</TabsTrigger>
+            </TabsList>
+          </div>
 
           {/* ── Reviews Tab ──────────────────────────────────────────────── */}
           <TabsContent value="reviews">
