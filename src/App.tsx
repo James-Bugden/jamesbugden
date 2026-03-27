@@ -84,6 +84,7 @@ const OfficePoliticsGuide = lazy(() => import("./pages/OfficePoliticsGuide"));
 const OfficePoliticsGuideZhTw = lazy(() => import("./pages/OfficePoliticsGuideZhTw"));
 const CareerGameGuide = lazy(() => import("./pages/CareerGameGuide"));
 const FortyEightLawsGuide = lazy(() => import("./pages/FortyEightLawsGuide"));
+const FortyEightLawsGuideZhTw = lazy(() => import("./pages/FortyEightLawsGuideZhTw"));
 const CareerGameGuideZhTw = lazy(() => import("./pages/CareerGameGuideZhTw"));
 const IkigaiGuide = lazy(() => import("./pages/IkigaiGuide"));
 const IkigaiGuideZhTw = lazy(() => import("./pages/IkigaiGuideZhTw"));
