@@ -1,44 +1,36 @@
 
 
-## Fix Admin Dashboard Resume Leads Table
+## Track Guide Visit Frequency
 
 ### Problem
-1. The `name` column often contains resume text (first line of resume) instead of actual names, because when there's no auth user, it falls back to `resumeLines[0]`
-2. The `job_title` column is never populated in the insert — it's always `null`
-3. The `resume_text` field is stored but not accessible from the admin view, and long name values expand rows
+Currently, guide progress (scroll %) is tracked only in localStorage. There's no server-side record of how often each guide is visited, so you can't combine visit frequency with thumbs up/down ratings to identify truly valuable content.
 
-### Fix
+### Solution
+Add a `trackEvent("guide_view", guideId)` call inside `useTrackGuideProgress` so every guide page load logs to the `event_tracks` table. This requires zero new tables — it reuses the existing event tracking infrastructure.
 
-**1. `src/pages/ResumeAnalyzer.tsx` (~line 234-242)**
-- Extract job title from the resume's second line (typically the professional title) or from segmentation data
-- Better name extraction: only use first line as name if it looks like a name (short, no special characters like `@`, `|`, etc.)
-- Add `job_title` to the insert payload
+Then surface a "Most Visited Guides" section in the Admin Dashboard's Analytics tab, showing visit counts per guide alongside their thumbs up/down ratio from the `feedback` table.
 
-**2. `src/pages/AdminDashboard.tsx` (~lines 56-67, 284-287, 796-829)**
-- Add `resume_text` to the ResumeLead interface and the select query
-- Truncate the `name` column display with `max-w-[120px] truncate`
-- Truncate `job_title` similarly
-- Add a collapsible/expandable "Resume Text" column that shows first ~50 chars with a tooltip or expand toggle
-- Add `max-w` and `truncate` to all text columns to prevent row expansion
+### Implementation
 
-### Technical Details
+**1. `src/hooks/useReadingProgress.ts`** — Add `trackEvent` call in `useTrackGuideProgress`
+- Import `trackEvent` from `@/lib/trackEvent`
+- Fire `trackEvent("guide_view", guideId)` once on mount (inside the existing `useEffect`, before the scroll listener)
+- This automatically logs guide ID, page URL, and timestamp
 
-**Name extraction improvement** (ResumeAnalyzer.tsx):
-```ts
-const looksLikeName = (s: string) => s.length < 40 && !/[@|•]/.test(s);
-const resumeName = looksLikeName(resumeLines[0] || "") ? resumeLines[0] : null;
-```
+**2. `src/pages/AdminDashboard.tsx`** — Add "Guide Engagement" card to Analytics tab
+- Query `event_tracks` where `event_type = 'guide_view'`, group by `event_name`, count visits
+- Query `feedback` where `type = 'inline_rating'`, group by `context`, compute thumbs-up ratio
+- Join the two datasets client-side by mapping guide IDs
+- Display a table: Guide Name | Visits | 👍 | 👎 | Approval % — sorted by visits descending
+- This gives the combined view: high-visit + high-approval = most valuable guides
 
-**Job title extraction**:
-```ts
-job_title: result.segmentation?.seniority_level 
-  ? (resumeLines[1] && resumeLines[1].length < 60 ? resumeLines[1] : null) 
-  : null,
-```
+### Why this works
+- No new database tables or migrations needed
+- Reuses `event_tracks` (already has public insert + admin select RLS)
+- Reuses `feedback` table for ratings
+- One-line addition to the shared hook means all 36 guide pages are instrumented automatically
 
-**Table columns** — add `max-w` and `truncate` to Name, Job Title, Industry cells. Add a "Resume" column with truncated preview and title tooltip.
-
-### Files Changed
-1. `src/pages/ResumeAnalyzer.tsx` — improve name/job_title extraction in the insert
-2. `src/pages/AdminDashboard.tsx` — fix column widths, add resume_text preview column
+### Files changed
+1. `src/hooks/useReadingProgress.ts` — add trackEvent call
+2. `src/pages/AdminDashboard.tsx` — add Guide Engagement analytics card
 
