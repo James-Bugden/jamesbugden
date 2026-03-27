@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/button";
 import { Switch } from "@/components/ui/switch";
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
 import { useToast } from "@/hooks/use-toast";
+import { trackEvent } from "@/lib/trackEvent";
 import { useIsMobile } from "@/hooks/use-mobile";
 import {
   AlertDialog,
