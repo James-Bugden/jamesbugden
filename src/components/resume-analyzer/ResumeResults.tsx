@@ -280,6 +280,7 @@ function ShareSection({ lang, score }: { lang: Language; score?: number }) {
   const analyzerUrl = `${window.location.origin}/resume-analyzer`;
   
   const handleEmailShare = () => {
+    trackShare("email", "/resume-analyzer");
     const subject = encodeURIComponent(isZhTw ? "推薦給你的免費履歷分析工具" : "Free resume analyzer I found helpful");
     const body = encodeURIComponent(
       `${isZhTw ? "我發現了這個免費履歷分析工具，分享給你：" : "I found this free resume analyzer and wanted to share it with you:"}\n\n${analyzerUrl}`
@@ -289,8 +290,10 @@ function ShareSection({ lang, score }: { lang: Language; score?: number }) {
   const handleMessengerShare = () => {
     const url = encodeURIComponent(analyzerUrl);
     if (isZhTw) {
+      trackShare("line", "/resume-analyzer");
       window.location.href = `https://line.me/R/msg/text/?${url}`;
     } else {
+      trackShare("whatsapp", "/resume-analyzer");
       window.open(`https://wa.me/?text=${url}`, "_blank");
     }
   };
