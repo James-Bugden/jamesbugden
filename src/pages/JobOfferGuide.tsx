@@ -11,6 +11,7 @@ import { useState, useEffect } from "react";
 import JobOfferScorecard from "@/components/job-offer/JobOfferScorecard";
 import { SEO } from "@/components/SEO";
 import { guideSchema } from "@/lib/guideSchema";
+import InlineRating from "@/components/feedback/InlineRating";
 
 const SectionNumber = ({ num }: { num: string }) => (
   <span className="text-gold/30 font-heading text-6xl md:text-7xl font-bold leading-none select-none">
@@ -800,6 +801,8 @@ const JobOfferGuide = () => {
       </section>
 
       <GuideShareButtons />
+
+      <InlineRating contentId="guide_job_offer" locale="en" />
 
       <GuideBottomCTA lang="en" />
     </div>

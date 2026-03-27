@@ -10,6 +10,7 @@ import GuideSignInBanner from "@/components/guides/GuideSignInBanner";
 import GuideBottomCTA from "@/components/guides/GuideBottomCTA";
 import { SEO } from "@/components/SEO";
 import { guideSchema } from "@/lib/guideSchema";
+import InlineRating from "@/components/feedback/InlineRating";
 
 const ResumeGuide = () => {
   useTrackGuideProgress("resume-guide");
@@ -502,6 +503,8 @@ const ResumeGuide = () => {
       </main>
 
       <GuideShareButtons />
+
+      <InlineRating contentId="guide_resume" locale="en" />
 
       <GuideBottomCTA lang="en" />
     </div>

@@ -11,6 +11,7 @@ import GuideSignInBanner from "@/components/guides/GuideSignInBanner";
 import GuideBottomCTA from "@/components/guides/GuideBottomCTA";
 import { SEO } from "@/components/SEO";
 import { guideSchema } from "@/lib/guideSchema";
+import InlineRating from "@/components/feedback/InlineRating";
 
 const LinkedInGuide = () => {
   useTrackGuideProgress("linkedin-guide");
@@ -802,6 +803,8 @@ const LinkedInGuide = () => {
       </section>
 
       <GuideShareButtons />
+
+      <InlineRating contentId="guide_linkedin" locale="en" />
 
       <GuideBottomCTA lang="en" />
     </div>

@@ -10,6 +10,7 @@ import GuideSignInBanner from "@/components/guides/GuideSignInBanner";
 import GuideBottomCTA from "@/components/guides/GuideBottomCTA";
 import { SEO } from "@/components/SEO";
 import { guideSchema } from "@/lib/guideSchema";
+import InlineRating from "@/components/feedback/InlineRating";
 
 const SectionNumber = ({ num }: { num: string }) => (
   <span className="text-gold/30 font-heading text-6xl md:text-7xl font-bold leading-none select-none">
@@ -417,6 +418,8 @@ const ResumeQuickReference = () => {
       </section>
 
       <GuideShareButtons />
+
+      <InlineRating contentId="guide_resume_quick_ref" locale="en" />
 
       <GuideBottomCTA lang="en" />
     </div>

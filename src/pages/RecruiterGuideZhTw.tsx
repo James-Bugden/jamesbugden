@@ -10,6 +10,7 @@ import GuideBottomCTA from "@/components/guides/GuideBottomCTA";
 import { useState, useEffect } from "react";
 import { SEO } from "@/components/SEO";
 import { guideSchema } from "@/lib/guideSchema";
+import InlineRating from "@/components/feedback/InlineRating";
 
 const selfAssessmentQsZh = [
   "過去 12 個月內，有獵頭主動聯繫你嗎？",

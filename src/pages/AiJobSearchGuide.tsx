@@ -13,6 +13,7 @@ import GuideBottomCTA from "@/components/guides/GuideBottomCTA";
 import { useState, useEffect } from "react";
 import { SEO } from "@/components/SEO";
 import { guideSchema } from "@/lib/guideSchema";
+import InlineRating from "@/components/feedback/InlineRating";
 
 const SectionNumber = ({ num }: { num: string }) => (
   <span className="text-gold/30 font-heading text-6xl md:text-7xl font-bold leading-none select-none">
@@ -1258,6 +1259,8 @@ Generate a short, conversational response that asks them to do better, given my 
           <GuideShareButtons />
         </div>
       </section>
+
+      <InlineRating contentId="guide_ai_job_search" locale="en" />
 
       <GuideBottomCTA lang="en" />
     </div>

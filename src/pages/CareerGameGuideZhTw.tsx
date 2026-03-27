@@ -11,6 +11,7 @@ import GuideBottomCTA from "@/components/guides/GuideBottomCTA";
 import { useState, useEffect } from "react";
 import { SEO } from "@/components/SEO";
 import { guideSchema } from "@/lib/guideSchema";
+import InlineRating from "@/components/feedback/InlineRating";
 
 const SectionNumber = ({ num }: { num: string }) => (
   <span className="text-gold/30 font-heading text-6xl md:text-7xl font-bold leading-none select-none">{num}</span>
@@ -866,6 +867,8 @@ const CareerGameGuideZhTw = () => {
           <p className="text-muted-foreground text-xs italic text-center">本指南根據 Kendall Berg 的著作《Secrets of the Career Game: 36 Simple Strategies to Win in the Workplace》整理。所有框架概念、秘密和核心方法論歸功於 Kendall Berg。招募人員視角和觀點來自 James Bugden 15 年以上的招募經驗。</p>
         </div>
       </section>
+
+      <InlineRating contentId="guide_career_game_zhtw" locale="zh-tw" />
 
       <GuideBottomCTA lang="zh" />
     </div>

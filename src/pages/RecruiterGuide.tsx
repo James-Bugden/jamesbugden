@@ -10,6 +10,7 @@ import GuideBottomCTA from "@/components/guides/GuideBottomCTA";
 import { useState, useEffect } from "react";
 import { SEO } from "@/components/SEO";
 import { guideSchema } from "@/lib/guideSchema";
+import InlineRating from "@/components/feedback/InlineRating";
 
 const selfAssessmentQs = [
   "Have you been contacted by a headhunter in the last 12 months?",

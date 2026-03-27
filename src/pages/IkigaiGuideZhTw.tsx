@@ -11,6 +11,7 @@ import { useState, useEffect } from "react";
 import { InteractiveCareerMap, InteractiveScorecard, InteractivePulseCheck } from "@/components/ikigai/InteractiveWidgets";
 import { SEO } from "@/components/SEO";
 import { guideSchema } from "@/lib/guideSchema";
+import InlineRating from "@/components/feedback/InlineRating";
 
 const SectionNumber = ({ num }: { num: string }) => (
   <span className="text-gold/30 font-heading text-6xl md:text-7xl font-bold leading-none select-none">
@@ -858,6 +859,8 @@ const IkigaiGuideZhTw = () => {
           </p>
         </div>
       </section>
+
+      <InlineRating contentId="guide_ikigai_zhtw" locale="zh-tw" />
 
       <GuideBottomCTA lang="zh" />
     </div>
