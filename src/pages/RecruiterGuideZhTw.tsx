@@ -711,32 +711,32 @@ export default function RecruiterGuideZhTw() {
         <section id="cheatsheet" className="mb-16 scroll-mt-20">
           <h2 className="font-heading text-2xl md:text-3xl font-bold text-foreground mb-6">快速參考速查表</h2>
           <div className="space-y-4">
-            <div className="bg-card border border-border rounded-xl p-5">
-              <h3 className="font-heading font-bold text-sm mb-3">7 條法則</h3>
+            <a href="#rules" className="block bg-card border border-border rounded-xl p-5 hover:bg-muted/50 transition-colors group">
+              <h3 className="font-heading font-bold text-sm mb-3 group-hover:text-accent transition-colors">7 條法則 ↗</h3>
               <ol className="list-decimal list-inside space-y-1 text-sm text-foreground/80">
                 <li>搞清楚誰付他們錢</li><li>保守他們的秘密</li><li>對一切誠實</li><li>保持一致，不要有意外（獵頭）</li><li>回覆要快</li><li>聽從獵頭的指導</li><li>什麼都要溝通，特別是其他面試</li>
               </ol>
-            </div>
-            <div className="bg-card border border-border rounded-xl p-5">
-              <h3 className="font-heading font-bold text-sm mb-3">獵頭的 8 步流程</h3>
+            </a>
+            <a href="#process" className="block bg-card border border-border rounded-xl p-5 hover:bg-muted/50 transition-colors group">
+              <h3 className="font-heading font-bold text-sm mb-3 group-hover:text-accent transition-colors">獵頭的 8 步流程 ↗</h3>
               <p className="text-sm text-foreground/80">{"公司開出職缺 → 獵頭搜尋資料庫 → 獵頭聯繫你 → 篩選電話（2-3 通）→ 推薦人查核 → 向用人主管推薦 → 公司面試你 → 錄用或不錄用"}</p>
-            </div>
-            <div className="bg-card border border-border rounded-xl p-5">
-              <h3 className="font-heading font-bold text-sm mb-3">履歷優先順序</h3>
+            </a>
+            <a href="#business" className="block bg-card border border-border rounded-xl p-5 hover:bg-muted/50 transition-colors group">
+              <h3 className="font-heading font-bold text-sm mb-3 group-hover:text-accent transition-colors">履歷優先順序 ↗</h3>
               <p className="text-sm text-foreground/80">{"內部推薦 → 獵頭推薦 → 當地候選人 → 不需要簽證 → 需要簽證 + 搬遷"}</p>
-            </div>
-            <div className="bg-card border border-border rounded-xl p-5">
-              <h3 className="font-heading font-bold text-sm mb-3">保持聯繫的頻率</h3>
+            </a>
+            <a href="#multiple" className="block bg-card border border-border rounded-xl p-5 hover:bg-muted/50 transition-colors group">
+              <h3 className="font-heading font-bold text-sm mb-3 group-hover:text-accent transition-colors">保持聯繫的頻率 ↗</h3>
               <ul className="space-y-1 text-sm text-foreground/80">
                 <li>• 積極求職中：每週一封郵件</li><li>• 被動/未在找工作：每 3-6 個月</li><li>• 換工作、換職稱或換聯繫方式：立刻通知</li>
               </ul>
-            </div>
-            <div className="bg-card border border-border rounded-xl p-5">
-              <h3 className="font-heading font-bold text-sm mb-3">他們打電話時要準備好的東西</h3>
+            </a>
+            <a href="#process" className="block bg-card border border-border rounded-xl p-5 hover:bg-muted/50 transition-colors group">
+              <h3 className="font-heading font-bold text-sm mb-3 group-hover:text-accent transition-colors">他們打電話時要準備好的東西 ↗</h3>
               <ul className="space-y-1 text-sm text-foreground/80">
                 <li>• 你的履歷（已更新）</li><li>• 你的薪資範圍</li><li>• 你的地點偏好和底線</li><li>• 你的「為什麼在找工作？」回答</li><li>• 關於職位和公司的問題</li>
               </ul>
-            </div>
+            </a>
           </div>
         </section>
 
