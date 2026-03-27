@@ -1058,35 +1058,43 @@ const FortyEightLawsGuideZhTw = () => {
               <SectionNumber num="07" />
               <div className="pt-3"><h2 className="font-heading text-2xl md:text-3xl text-foreground">打長期戰</h2></div>
             </div>
-            <p className="text-muted-foreground leading-relaxed mb-6">《乘勝追擊的48條法則》在 1998 年出版。作者寫這本書時 39 歲。他之前那 50 多份「失敗」的工作，成了整本書的基礎。</p>
+            <p className="text-foreground text-lg leading-relaxed mb-6 italic">「人生中真正的成功和真正的權力，是持續 10 年、20 年、30 年的。」</p>
+            <p className="text-muted-foreground leading-relaxed mb-6">《乘勝追擊的48條法則》在 1998 年出版。作者寫這本書時 39 歲。他之前那 50 多份「失敗」的工作，成了整本書的基礎。每段職涯在中途都看起來很亂。問題是這些混亂是否在朝著某個方向累積。</p>
             <p className="text-foreground leading-relaxed mb-6 italic">「大多數人想要簡單、直接、筆直的路通往完美的位置和成功。但你必須歡迎走錯路和犯錯。它們讓你意識到自己的缺點。它們拓寬你的經驗。它們讓你更堅韌。」</p>
+            <p className="text-muted-foreground leading-relaxed mb-6">四條法則涵蓋：規劃、時機、適應力、和知道何時停下。</p>
 
             <h3 className="font-heading text-xl text-foreground mt-10 mb-4">法則 29：規劃到最後一步</h3>
+            <p className="text-muted-foreground leading-relaxed mb-6">這是職涯成功三大法則之一。</p>
             <p className="text-foreground leading-relaxed mb-6 italic">「結局就是一切。一路規劃到結局，把所有可能的後果、障礙、和可能逆轉你辛苦成果的命運轉折都考慮進去。」</p>
-            <ActionStep checked={safeActions[15]} onToggle={() => toggleAction(15)}>
+            <p className="text-muted-foreground leading-relaxed mb-6">從你五年後想到達的位置倒推回來。每一份工作都是跳板，不是終點。接受一個新職位之前，問自己：「這份工作是否讓我更接近我想到達的地方？」</p>
+            <ActionStep checked={safeActions[16]} onToggle={() => toggleAction(16)}>
               寫下你 5 年後理想的職稱。然後列出你的履歷缺少的 3 項技能或經驗。現在看你目前的工作：它是否填補了其中任何缺口？如果是，加倍投入。如果不是，開始規劃你的下一步。
             </ActionStep>
 
             <h3 className="font-heading text-xl text-foreground mt-10 mb-4">法則 35：掌握時機的藝術</h3>
+            <p className="text-muted-foreground leading-relaxed mb-6">規劃給你方向。時機決定你的行動是否著陸。</p>
             <p className="text-foreground leading-relaxed mb-6 italic">「永遠不要顯得匆忙。匆忙暴露你對自己缺乏控制，也對時間缺乏控制。」</p>
+            <p className="text-muted-foreground leading-relaxed mb-6">時機管控三個職涯決定：何時留下、何時離開、何時開始新事物。太多人離職太早（在建立紀錄之前）或太晚（在停止成長之後）。最佳的時間點是待得夠久來建立聲譽，但在工作變成死時間之前離開。</p>
+            <p className="text-muted-foreground leading-relaxed mb-6">職涯早期，為學習速度優化。「二十幾歲的時候，不要太看重錢和加薪。真正重要的是責任感和經驗。是更大的格局。」後來，為定位優化。讓你的行動時機配合市場對你技能組合的需求。</p>
             <Reversal>耐心如果待太久不成長，會變成停滯。如果你在同一個職位待了三年沒有發展，問題不是時機。是這份工作。</Reversal>
             <div className="mt-6">
-              <ActionStep checked={safeActions[16]} onToggle={() => toggleAction(16)}>
-                誠實回答：你在目前的工作還在學習嗎？如果答案已經是「沒有」超過 6 個月，開始準備離開。更新你的履歷。啟動你的人脈。不要等完美時機。
+              <ActionStep checked={safeActions[17]} onToggle={() => toggleAction(17)}>
+                誠實回答：你在目前的工作還在學習嗎？如果答案已經是「沒有」超過 6 個月，開始準備離開。更新你的履歷。啟動你的人脈。不要等完美時機。離開的正確時間，是在你走投無路之前。
               </ActionStep>
             </div>
 
             <h3 className="font-heading text-xl text-foreground mt-10 mb-4">法則 48：保持無形</h3>
-            <p className="text-muted-foreground leading-relaxed mb-6">「接受這個事實：沒有什麼是確定的，沒有法則是固定的。保護自己最好的方式，是像水一樣流動和無形。」</p>
-            <ActionStep checked={safeActions[17]} onToggle={() => toggleAction(17)}>
-              寫下一項超出你目前工作職責但值得在未來 6 個月學習的技能。不是因為你的主管要求。是因為市場在 3-5 年後會獎勵它。從每週 30 分鐘開始。
+            <p className="text-muted-foreground leading-relaxed mb-6">規劃設定目的地。時機控制節奏。但路徑本身永遠不會是直的。「接受這個事實：沒有什麼是確定的，沒有法則是固定的。保護自己最好的方式，是像水一樣流動和無形。」</p>
+            <p className="text-muted-foreground leading-relaxed mb-6">這本書本身就是證明。新聞業、電視、劇場、電影、偵探社、飯店。每份工作在當時看起來都是隨機的。加在一起，它們提供了寫書需要的每一項技能。寫作教會組織思緒。歷史教會想法。那些隨機的工作教會了人類心理學。</p>
+            <p className="text-muted-foreground leading-relaxed mb-6">如果你起步較晚？「你必須培養適合這個方向轉變的新技能組合，並找到方法將它們和你之前的技能融合。在這個過程中，沒有任何東西是浪費的。」</p>
+            <ActionStep checked={safeActions[18]} onToggle={() => toggleAction(18)}>
+              寫下一項超出你目前工作職責但值得在未來 6 個月學習的技能。不是因為你的主管要求。是因為市場在 3-5 年後會獎勵它。從每週 30 分鐘開始。這就是無形的起點。
             </ActionStep>
 
             <h3 className="font-heading text-xl text-foreground mt-10 mb-4">法則 47：在勝利中學會停下</h3>
             <p className="text-foreground leading-relaxed mb-6 italic">「勝利的那一刻，往往是最危險的時刻。在勝利的熱潮中，傲慢和過度自信會推著你越過你原本瞄準的目標。」</p>
-            <ActionStep checked={safeActions[18]} onToggle={() => toggleAction(18)}>
-              在你下一次勝利之後，抵抗立刻推進下一件事的衝動。花 30 天在你的新層級建立關係。跟三個你之前接觸不到的新同儕約 1:1 咖啡。先鞏固你的位置，再擴張。
-            </ActionStep>
+            <p className="text-muted-foreground leading-relaxed mb-6">拿到升遷了？不要立刻開始爭取下一次。先鞏固。在你的新層級建立關係。先證明你屬於這個層級，再推進。</p>
+            <p className="text-muted-foreground leading-relaxed mb-6">分清鞏固和混日子的差別。鞏固是有意識的：為下一步行動建立基礎。混日子是被動的：你停止成長了。</p>
 
             <DiagramBox title="職涯時間軸">
               <div className="space-y-6">
