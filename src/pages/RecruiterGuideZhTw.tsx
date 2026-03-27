@@ -11,6 +11,64 @@ import { useState, useEffect } from "react";
 import { SEO } from "@/components/SEO";
 import { guideSchema } from "@/lib/guideSchema";
 
+const selfAssessmentQsZh = [
+  "過去 12 個月內，有獵頭主動聯繫你嗎？",
+  "你有一項同行業大多數人沒有的專業技能嗎？",
+  "你的整體薪酬高於你的職位和城市的市場中位數嗎？",
+  "你在特定產業有深入的專業知識，而不只是一般性的功能？",
+  "你曾在你所在領域知名的公司工作過嗎？",
+  "你有稀有的技能組合嗎（例如：技術深度 + 管理能力）？",
+  "如果你在 LinkedIn 上發布你正在找工作，獵頭會在一週內聯繫你嗎？",
+];
+
+const RecruiterSelfAssessmentZh = () => {
+  const [answers, setAnswers] = useState<Record<number, boolean>>({});
+  const answered = Object.keys(answers).length;
+  const yesCount = Object.values(answers).filter(Boolean).length;
+  const done = answered === selfAssessmentQsZh.length;
+
+  const result = done
+    ? yesCount >= 5 ? { emoji: "🐟", label: "你是鮪魚", desc: "獵頭正在找你" }
+    : yesCount >= 3 ? { emoji: "🔄", label: "你在邊界上", desc: "這份指南會幫你進入更多獵頭的視野" }
+    : { emoji: "🐱", label: "你目前是鯰魚", desc: "沒關係。這份指南會告訴你如何開始建立關係" }
+    : null;
+
+  return (
+    <div className="bg-card border border-border rounded-xl p-5 md:p-6 my-6">
+      <p className="text-xs font-bold text-accent uppercase tracking-wider mb-4">自我評估：你在哪個位置？（7 個問題）</p>
+      <div className="space-y-3">
+        {selfAssessmentQsZh.map((q, i) => (
+          <div key={i} className="flex items-start gap-3">
+            <span className="text-sm text-muted-foreground font-medium mt-0.5 w-5 shrink-0">{i + 1}.</span>
+            <p className="text-sm text-foreground/80 flex-1">{q}</p>
+            <div className="flex gap-1.5 shrink-0">
+              <button
+                onClick={() => setAnswers(prev => ({ ...prev, [i]: true }))}
+                className={`px-3 py-1 rounded text-xs font-bold transition-colors ${answers[i] === true ? "bg-accent text-accent-foreground" : "bg-muted text-muted-foreground hover:bg-muted/80"}`}
+              >是</button>
+              <button
+                onClick={() => setAnswers(prev => ({ ...prev, [i]: false }))}
+                className={`px-3 py-1 rounded text-xs font-bold transition-colors ${answers[i] === false ? "bg-destructive text-destructive-foreground" : "bg-muted text-muted-foreground hover:bg-muted/80"}`}
+              >否</button>
+            </div>
+          </div>
+        ))}
+      </div>
+      {done && result && (
+        <div className="mt-5 p-4 bg-accent/10 border border-accent/20 rounded-lg text-center">
+          <p className="text-2xl mb-1">{result.emoji}</p>
+          <p className="font-heading font-bold text-foreground">{result.label}</p>
+          <p className="text-sm text-muted-foreground mt-1">{result.desc}</p>
+          <p className="text-xs text-muted-foreground mt-2">分數：{yesCount}/7</p>
+        </div>
+      )}
+      {!done && answered > 0 && (
+        <p className="text-xs text-muted-foreground mt-3">{answered}/7 已回答</p>
+      )}
+    </div>
+  );
+};
+
 const SectionNumber = ({ num }: { num: string }) => (
   <span className="text-gold/30 font-heading text-6xl md:text-7xl font-bold leading-none select-none">{num}</span>
 );
@@ -375,22 +433,7 @@ export default function RecruiterGuideZhTw() {
           </div>
           <p className="text-foreground/80 leading-relaxed mb-4">事實是：如果你的技能很普遍，經驗也很一般，獵頭會把你往後排。不是因為你不好。是因為公司不需要付一筆仲介費來找你。</p>
 
-          <Collapsible title="自我評估：你在哪個位置？（7 個問題）">
-            <ol className="list-decimal list-inside space-y-2 mt-3 text-sm text-foreground/80">
-              <li>過去 12 個月內，有獵頭主動聯繫你嗎？</li>
-              <li>你有一項同行業大多數人沒有的專業技能嗎？</li>
-              <li>你的整體薪酬高於你的職位和城市的市場中位數嗎？</li>
-              <li>你在特定產業有深入的專業知識，而不只是一般性的功能？</li>
-              <li>你曾在你所在領域知名的公司工作過嗎？</li>
-              <li>你有稀有的技能組合嗎（例如：技術深度 + 管理能力）？</li>
-              <li>如果你在 LinkedIn 上發布你正在找工作，獵頭會在一週內聯繫你嗎？</li>
-            </ol>
-            <div className="mt-4 space-y-2 text-sm">
-              <p><strong>5-7 個「是」：</strong>你是鮪魚。獵頭正在找你。</p>
-              <p><strong>3-4 個「是」：</strong>你在邊界上。這份指南會幫你進入更多獵頭的視野。</p>
-              <p><strong>0-2 個「是」：</strong>你目前是鯰魚。沒關係。這份指南會告訴你如何開始建立關係。</p>
-            </div>
-          </Collapsible>
+          <RecruiterSelfAssessmentZh />
 
           <h3 className="font-heading text-lg font-bold text-foreground mt-8 mb-3">什麼讓一個人成為「鮪魚」</h3>
           <ul className="space-y-1 text-sm text-foreground/80 mb-4">
