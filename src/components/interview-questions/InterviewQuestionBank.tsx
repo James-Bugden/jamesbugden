@@ -8,6 +8,7 @@ import { Button } from "@/components/ui/button";
 import { supabase } from "@/integrations/supabase/client";
 import { Linkedin } from "lucide-react";
 import { InstagramIcon, ThreadsIcon } from "@/components/SocialIcons";
+import { trackShare } from "@/lib/trackShare";
 import { AuthHeaderButton } from "@/components/AuthHeaderButton";
 import { motion, AnimatePresence } from "framer-motion";
 import { SEO } from "@/components/SEO";
