@@ -934,16 +934,20 @@ const FortyEightLawsGuideZhTw = () => {
               <div className="pt-3"><h2 className="font-heading text-2xl md:text-3xl text-foreground">爭取你想要的</h2></div>
             </div>
             <p className="text-muted-foreground leading-relaxed mb-6">你找到了方向。你做好了向上管理。你建立了聲譽。你讓自己不可取代。現在你需要把這一切轉換成加薪、升遷、和值得拿到的專案。</p>
+            <p className="text-muted-foreground leading-relaxed mb-6">三條法則涵蓋這個過程：怎麼包裝你的請求、怎麼證明你的案例、以及過程中怎麼展現自己。</p>
 
             <h3 className="font-heading text-xl text-foreground mt-10 mb-4">法則 13：訴諸他人的利益，而非同情或感恩</h3>
             <p className="text-foreground leading-relaxed mb-6 italic">「如果你需要向盟友求助，不要費心提醒他你過去幫過他什麼。他會找到方法忽略你。」</p>
-            <p className="text-muted-foreground leading-relaxed mb-6">換個說法：「這是我交出的成果。這是我接下來計畫交出的成果。這是讓我做到最好的職位和薪資水準。」每一句話都聚焦在他們得到什麼。</p>
+            <p className="text-muted-foreground leading-relaxed mb-6">走進加薪談話時，永遠不要說「我在這裡三年了，我值得加薪。」沒有人因為年資而升遷。要展示的是：升你對他們有什麼好處。</p>
+            <p className="text-muted-foreground leading-relaxed mb-6">先證明你是不可或缺的。累積紀錄。讓案例不言自明。「到時候一切順理成章，你提出來，自然有道理。」</p>
+            <p className="text-muted-foreground leading-relaxed mb-6">換個說法：「這是我交出的成果。這是我接下來計畫交出的成果。這是讓我做到最好的職位和薪資水準。」每一句話都聚焦在他們得到什麼，不是你值得什麼。</p>
             <ActionStep checked={safeActions[10]} onToggle={() => toggleAction(10)}>
               現在就用這個框架寫你的加薪請求。三句話。你交出了什麼（附數字）。你接下來計畫交出什麼。你需要什麼才能做到最好。先不要寄出。花一週精修。然後約一場會議。
             </ActionStep>
 
             <h3 className="font-heading text-xl text-foreground mt-10 mb-4">法則 9：用行動勝出，永遠不要用爭論</h3>
-            <p className="text-muted-foreground leading-relaxed mb-6">不要爭論你為什麼該升遷。用證據建立案例。每週追蹤你的成果。記錄一份戰績文件。</p>
+            <p className="text-muted-foreground leading-relaxed mb-6">法則 13 告訴你怎麼包裝請求。法則 9 告訴你帶什麼上場。</p>
+            <p className="text-muted-foreground leading-relaxed mb-6">不要爭論你為什麼該升遷。用證據建立案例。每週追蹤你的成果。記錄一份戰績文件。績效考核到來時，你拿出 12 個月有文件紀錄的影響力，而不是在那裡努力回想你做了什麼。</p>
 
             <BragDocTemplate />
 
@@ -952,17 +956,21 @@ const FortyEightLawsGuideZhTw = () => {
             </ActionStep>
 
             <h3 className="font-heading text-xl text-foreground mt-10 mb-4">法則 30：讓成就看起來毫不費力</h3>
-            <p className="text-foreground leading-relaxed mb-6 italic">「你的行動必須看起來自然且毫不費力。所有的辛苦和練習都必須隱藏起來。」</p>
-            <p className="text-muted-foreground leading-relaxed mb-6">沉穩的能力傳達領導潛力。壓力外顯傳達你還沒準備好承擔更多責任。</p>
+            <p className="text-muted-foreground leading-relaxed mb-6">法則 13 包裝請求。法則 9 提供證據。法則 30 管的是整個過程中你的姿態。</p>
+            <p className="text-foreground leading-relaxed mb-6 italic">「你的行動必須看起來自然而輕鬆。所有的辛苦、練習和巧妙的技巧，都必須被隱藏。」</p>
+            <p className="text-muted-foreground leading-relaxed mb-6">沉穩的能力展現傳達領導潛力。明顯的恐慌和壓力傳達你還沒準備好承擔更多責任。同樣的簡報，冷靜交出的人看起來比一邊報告一邊強調自己加了多少班的人更適合升遷。</p>
+            <p className="text-muted-foreground leading-relaxed mb-6">交出成果。讓成果自己說話。不要在每一份產出上附加「這真的很辛苦」的敘事。如果你需要更多資源或更多時間，清楚而專業地提出要求。不要當烈士。</p>
             <ActionStep checked={safeActions[12]} onToggle={() => toggleAction(12)}>
               下次專案交付時，移除所有「辛苦語言」。不提加班、週末、或壓力。報告成果。描述影響。停在那裡。觀察當你展現沉穩而非疲憊時，人們的反應有什麼不同。
             </ActionStep>
 
             <h3 className="font-heading text-xl text-foreground mt-10 mb-4">加薪時機公式</h3>
-            <p className="text-muted-foreground leading-relaxed mb-4"><strong className="text-foreground">最佳時機：</strong>在一場明顯的勝利之後。成功的產品發布、強勁的季度成果、被高層讚揚的專案完成。</p>
-            <p className="text-muted-foreground leading-relaxed mb-4"><strong className="text-foreground">最差時機：</strong>預算凍結、裁員、或主管承受壓力時。</p>
-            <p className="text-muted-foreground leading-relaxed mb-6"><strong className="text-foreground">格式：</strong>不要突擊你的主管。約一場專門的會議。帶著你的戰績文件、一個明確的數字、和一個聚焦於未來影響力的理由。</p>
+            <p className="text-muted-foreground leading-relaxed mb-6">先證明你不可或缺，然後再開口。</p>
+            <p className="text-muted-foreground leading-relaxed mb-4"><strong className="text-foreground">最佳時機：</strong>在一個明顯的勝利之後。一次成功的產品上線、一個強勁的季度成果、一個被高層讚揚的專案完成。你的主管在這個位置上比較容易說好。趁著勢頭。</p>
+            <p className="text-muted-foreground leading-relaxed mb-4"><strong className="text-foreground">最差時機：</strong>預算凍結期間、裁員期間、或你的主管正在承受壓力的時候。即使你的理由很充分，組織情境也會擋住一個「好」的回答。</p>
+            <p className="text-muted-foreground leading-relaxed mb-6"><strong className="text-foreground">格式：</strong>不要突襲你的主管。要求一場專門的會議。帶著你的戰績文件、一個明確的數字、和一個以未來影響力為框架的理由。</p>
             <p className="text-muted-foreground leading-relaxed">薪資談判策略，請參考 <Link to="/zh-tw/salary-starter-kit" className="text-gold hover:underline">薪資談判指南</Link>。</p>
+            <p className="text-muted-foreground leading-relaxed mt-6">爭取你想要的，不只需要對主管的策略。還需要解讀你周圍更廣泛的人際和聯盟網路。那就是政治。</p>
           </div>
         </section>
 
