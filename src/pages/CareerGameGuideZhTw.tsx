@@ -1,4 +1,5 @@
 import { Clock, ChevronDown, Menu, AlertTriangle } from "lucide-react";
+
 import { InteractiveChecklist } from "@/components/guides/InteractiveChecklist";
 import { Link } from "react-router-dom";
 import GoldCheckBadge from "@/components/GoldCheckBadge";
