@@ -4,6 +4,7 @@ import { ArrowLeft, Copy, Share2, Check } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { nativeShare } from "@/lib/share";
+import { trackEvent } from "@/lib/trackEvent";
 import { useToast } from "@/hooks/use-toast";
 import ToolkitHeader from "@/components/toolkit/ToolkitHeader";
 import ToolkitFooter from "@/components/toolkit/ToolkitFooter";
