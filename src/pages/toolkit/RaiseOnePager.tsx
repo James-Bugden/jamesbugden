@@ -77,6 +77,7 @@ TALKING POINTS
 - If No: "I understand. What specific milestones would need to be met for a pay adjustment at the next review cycle?"`;
 
     navigator.clipboard.writeText(templateText);
+    trackEvent("copy", "raise_onepager");
     setCopied(true);
     toast({ title: "Template copied!", description: "Paste it into a document and fill it in." });
     setTimeout(() => setCopied(false), 2000);

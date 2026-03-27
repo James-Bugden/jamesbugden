@@ -87,6 +87,7 @@ ${outcomes[0].text}
 ${outcomes[1].text}`;
 
     navigator.clipboard.writeText(scriptText);
+    trackEvent("copy", "offer_response");
     setCopied(true);
     toast({ title: "已複製話術！", description: "貼到任何你需要的地方。" });
     setTimeout(() => setCopied(false), 2000);

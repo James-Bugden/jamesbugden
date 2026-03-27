@@ -80,6 +80,7 @@ const DeflectionScripts = () => {
       .join("\n\n---\n\n");
 
     navigator.clipboard.writeText(scriptsText);
+    trackEvent("copy", "deflection_scripts");
     setCopied(true);
     toast({ title: "All scripts copied!", description: "Paste them anywhere you need." });
     setTimeout(() => setCopied(false), 2000);

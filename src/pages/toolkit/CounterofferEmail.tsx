@@ -111,6 +111,7 @@ const CounterofferEmail = () => {
   const copyEmail = (template: typeof emailTemplates[0]) => {
     const emailText = `SUBJECT: ${template.subject}\n\n${template.body}`;
     navigator.clipboard.writeText(emailText);
+    trackEvent("copy", "counteroffer_email", { template: template.id });
     setCopiedId(template.id);
     toast({ title: "Email copied!", description: "Paste it into your email client and fill in the brackets." });
     setTimeout(() => setCopiedId(null), 2000);

@@ -71,6 +71,7 @@ const PushbackCheatSheetZhTw = () => {
     const fullText = `回絕應對小抄\n\n${mainScriptsText}\n\n---\n\n${bonusScriptsText}`;
 
     navigator.clipboard.writeText(fullText);
+    trackEvent("copy", "pushback_cheatsheet");
     setCopied(true);
     toast({ title: "已複製所有話術！", description: "貼到任何你需要的地方。" });
     setTimeout(() => setCopied(false), 2000);

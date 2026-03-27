@@ -111,6 +111,7 @@ const CounterofferEmailZhTw = () => {
   const copyEmail = (template: typeof emailTemplates[0]) => {
     const emailText = `主旨：${template.subject}\n\n${template.body}`;
     navigator.clipboard.writeText(emailText);
+    trackEvent("copy", "counteroffer_email", { template: template.id });
     setCopiedId(template.id);
     toast({ title: "已複製 Email！", description: "貼到你的郵件程式，填入括號中的內容。" });
     setTimeout(() => setCopiedId(null), 2000);

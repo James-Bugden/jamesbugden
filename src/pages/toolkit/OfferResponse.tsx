@@ -87,6 +87,7 @@ OUTCOME B (Written offer received):
 ${outcomes[1].text}`;
 
     navigator.clipboard.writeText(scriptText);
+    trackEvent("copy", "offer_response");
     setCopied(true);
     toast({ title: "Script copied!", description: "Paste it anywhere you need." });
     setTimeout(() => setCopied(false), 2000);

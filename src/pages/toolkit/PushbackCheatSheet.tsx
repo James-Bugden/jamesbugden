@@ -71,6 +71,7 @@ const PushbackCheatSheet = () => {
     const fullText = `PUSHBACK RESPONSE CHEAT SHEET\n\n${mainScriptsText}\n\n---\n\n${bonusScriptsText}`;
 
     navigator.clipboard.writeText(fullText);
+    trackEvent("copy", "pushback_cheatsheet");
     setCopied(true);
     toast({ title: "All scripts copied!", description: "Paste them anywhere you need." });
     setTimeout(() => setCopied(false), 2000);

@@ -80,6 +80,7 @@ const DeflectionScriptsZhTw = () => {
       .join("\n\n---\n\n");
 
     navigator.clipboard.writeText(scriptsText);
+    trackEvent("copy", "deflection_scripts");
     setCopied(true);
     toast({ title: "已複製所有話術！", description: "貼到任何你需要的地方。" });
     setTimeout(() => setCopied(false), 2000);

@@ -556,6 +556,7 @@ const CompCalculatorInteractive = () => {
               rel="noopener noreferrer"
               className="inline-flex h-11 px-6 items-center justify-center rounded-lg font-semibold text-sm transition-transform hover:scale-[1.02]"
               style={{ backgroundColor: "#C9A961", color: "#1B3A2F" }}
+              onClick={() => trackEvent("cta_click", "book_call")}
             >
               Book a Free Strategy Call
             </a>

@@ -130,6 +130,7 @@ const CompCalculatorInteractiveZhTw = () => {
       }
     }
     navigator.clipboard.writeText(`年度總薪酬比較\n\n${lines.join("\n")}`);
+    trackEvent("copy", "comp_calculator_summary");
     setCopied(true);
     toast({ title: "已複製！", description: "摘要已複製到剪貼簿。" });
     setTimeout(() => setCopied(false), 2000);

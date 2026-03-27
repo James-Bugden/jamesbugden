@@ -77,6 +77,7 @@ _________________________________ | _________________________________
 - 如果被拒：「我理解。那要達到什麼樣的目標或里程碑，才能在下一個考核週期調整薪酬呢？」`;
 
     navigator.clipboard.writeText(templateText);
+    trackEvent("copy", "raise_onepager");
     setCopied(true);
     toast({ title: "已複製模板！", description: "貼到文件中填寫。" });
     setTimeout(() => setCopied(false), 2000);

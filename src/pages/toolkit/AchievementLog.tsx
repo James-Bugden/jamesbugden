@@ -70,6 +70,7 @@ CATEGORIES:
 💡 Innovation: New ideas proposed, prototypes built, experiments run, patents filed`;
 
     navigator.clipboard.writeText(templateText);
+    trackEvent("copy", "achievement_log");
     setCopied(true);
     toast({ title: "Template copied!", description: "Paste it into a document and fill it in weekly." });
     setTimeout(() => setCopied(false), 2000);
