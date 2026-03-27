@@ -387,7 +387,7 @@ export default function RecruiterGuide() {
             ].map((step) => (
               <div key={step.label}>
                 <div className={`${step.color} rounded-md h-7 flex items-center px-3`} style={{ width: step.w, minWidth: "fit-content" }}>
-                  <span className={`text-xs font-medium whitespace-nowrap ${"textColor" in step ? (step as any).textColor : "text-foreground"}`}>{step.label}</span>
+                  <span className={`text-xs font-medium whitespace-nowrap ${step.color === "bg-executive-green" ? "text-cream" : "text-foreground"}`}>{step.label}</span>
                 </div>
               </div>
             ))}
