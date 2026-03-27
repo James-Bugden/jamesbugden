@@ -174,14 +174,27 @@ Deno.serve(async (req) => {
       { global: { headers: { Authorization: authHeader } } }
     );
 
-    const { data: { user }, error: userError } = await supabase.auth.getUser();
-    if (userError || !user) {
-      return new Response(
-        JSON.stringify({ error: 'Unauthorized' }),
-        { status: 401, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
-      );
+    let userId: string;
+    const token = authHeader.replace('Bearer ', '');
+    
+    try {
+      const { data: claimsData, error: claimsError } = await (supabase.auth as any).getClaims(token);
+      if (!claimsError && claimsData?.claims?.sub) {
+        userId = claimsData.claims.sub;
+      } else {
+        throw new Error('getClaims failed');
+      }
+    } catch {
+      // Fallback: try getUser
+      const { data: { user }, error: userError } = await supabase.auth.getUser();
+      if (userError || !user) {
+        return new Response(
+          JSON.stringify({ error: 'Unauthorized' }),
+          { status: 401, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+        );
+      }
+      userId = user.id;
     }
-    const userId = user.id;
 
     // --- Server-side usage limit ---
     const { count: usageCount, error: usageError } = await supabase
