@@ -19,6 +19,7 @@ interface GuideShareButtonsProps {
 
 const GuideShareButtons = ({ isZhTw = false }: GuideShareButtonsProps) => {
   const handleEmailShare = () => {
+    trackShare("email");
     const subject = encodeURIComponent(
       isZhTw ? "推薦給你的職涯指南" : "Career guide I found helpful"
     );
