@@ -195,6 +195,10 @@ export default function AdminDashboard() {
   const [shareClicks, setShareClicks] = useState<{ channel: string; page: string; created_at: string }[]>([]);
   const [shareClicksLoading, setShareClicksLoading] = useState(true);
 
+  // Event tracks state
+  const [eventTracks, setEventTracks] = useState<{ event_type: string; event_name: string; page: string; metadata: any; created_at: string }[]>([]);
+  const [eventTracksLoading, setEventTracksLoading] = useState(true);
+
   // ── Data fetching ───────────────────────────────────────────────────────────
 
   useEffect(() => {
