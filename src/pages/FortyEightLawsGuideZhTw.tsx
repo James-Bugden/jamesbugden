@@ -769,27 +769,41 @@ const FortyEightLawsGuideZhTw = () => {
 
             <h3 className="font-heading text-xl text-foreground mt-10 mb-4">法則 1：永遠不要蓋過你的上司</h3>
             <p className="text-muted-foreground leading-relaxed mb-6">它被列為法則 1 是有原因的。這是職場中最常見的錯誤。</p>
-            <p className="text-muted-foreground leading-relaxed mb-6">書中的故事：路易十四的財政大臣 Nicolas Fouquet 舉辦了一場華麗到讓國王感覺被比下去的宴會。三週後，Fouquet 被逮捕。他餘生都在監獄中度過。</p>
-            <p className="text-muted-foreground leading-relaxed mb-6">職場版本沒那麼戲劇化，但結果類似。如果你做出優秀的工作成果，又因此獲得高度關注，你冒著觸發主管不安全感的風險。</p>
+            <p className="text-muted-foreground leading-relaxed mb-6">書中的故事：路易十四的財政大臣 Nicolas Fouquet 舉辦了一場華麗到讓國王感覺被比下去的宴會。花園比國王的壯觀，食物更豐盛，娛樂更精彩。三週後，Fouquet 被逮捕。他餘生都在監獄中度過。</p>
+            <p className="text-muted-foreground leading-relaxed mb-6">職場版本沒那麼戲劇化，但結果類似。如果你做出優秀的工作成果，又因此獲得高度關注，你冒著觸發主管不安全感的風險。結果不是坐牢。是被邊緣化、被跳過升遷、或被管理出局。</p>
+            <p className="text-muted-foreground leading-relaxed mb-6">解決辦法不是做差一點。是在成功的同時讓你的主管也分享到光環。記錄你的貢獻。但在公開場合讓你的主管發光。這個教訓在好萊塢上演了很多年。為一位導演寫了大量對白，功勞全歸導演。當時很刺痛。但組織就是這樣運作的。幕後的人打基礎。台前的人拿聚光燈。聰明的做法是在後台當關鍵人物，而不是在台上被嫉妒。</p>
             <Reversal>如果你的主管正在走下坡或即將離開，超越他們會加速他們被替換。但你需要在他們之上有盟友，以及萬一失敗的退路計畫。</Reversal>
             <div className="mt-6">
               <ActionStep checked={safeActions[3]} onToggle={() => toggleAction(3)}>
-                這週找一個方法主動讓你的主管看起來好。傳給他們一份重點摘要，是他們能轉寄給他們主管的那種。目標：讓他們把你和「讓我工作更輕鬆的人」劃上等號。
+                這週找一個方法主動讓你的主管看起來好。傳給他們一份重點摘要，是他們能轉寄給他們主管的那種。準備一張他們在下次主管會議中能用的投影片。目標：讓他們把你和「讓我工作更輕鬆的人」劃上等號。
               </ActionStep>
             </div>
 
             <h3 className="font-heading text-xl text-foreground mt-10 mb-4">法則 4：永遠少說一點</h3>
-            <p className="text-muted-foreground leading-relaxed mb-6">大多數人在會議中話太多。重複要點。加上修飾語。用廢話填補沉默。每多一句話都稀釋了你的訊息。</p>
+            <p className="text-muted-foreground leading-relaxed mb-6">法則 1 管的是你做什麼。法則 4 管的是你說什麼。</p>
+            <p className="text-muted-foreground leading-relaxed mb-6">想想季辛吉助手 Winston Lord 的故事。Lord 起草了一份報告。季辛吉退回去，只寫了一句：「這是你能做到的最好的嗎？」Lord 重寫了。季辛吉又退回來，同樣的話。Lord 第三次重寫。提交時他說：「是的，這是我能做到的最好的。」季辛吉回答：「好。現在我來讀。」</p>
+            <p className="text-muted-foreground leading-relaxed mb-6">大多數人在會議中話太多。重複要點。加上修飾語。用廢話填補沉默。每多一句話都稀釋了你的訊息，讓你看起來更不自信。</p>
+            <p className="text-muted-foreground leading-relaxed mb-6">做法：精準地說。當你向主管或團隊報告時，目標三句話。</p>
+
+            <DiagramBox title="三句話報告格式">
+              <div className="space-y-2">
+                <p><strong>發生了什麼：</strong>[一句話描述進度/成果]</p>
+                <p><strong>下一步：</strong>[一句話描述接下來的計畫]</p>
+                <p><strong>需要什麼：</strong>[一句話描述障礙/請求]</p>
+              </div>
+              <p className="mt-4 text-muted-foreground">用這個格式寫 email 更新、站會報告、進度報告。三句話。不囉唆。</p>
+            </DiagramBox>
+
             <ActionStep checked={safeActions[4]} onToggle={() => toggleAction(4)}>
-              在你的下一次會議中，用三句話格式準備你的報告：發生了什麼。下一步。需要什麼。計時。如果超過 60 秒，再精簡。
+              在你的下一次會議中，用上面的三句話格式準備你的報告。開會前先寫下來。計時。如果超過 60 秒，再精簡。每週練習，直到變成自動反應。
             </ActionStep>
 
             <h3 className="font-heading text-xl text-foreground mt-10 mb-4">法則 22：運用投降策略</h3>
-            <p className="text-muted-foreground leading-relaxed mb-6">「當你處於弱勢，絕對不要為了面子而戰。選擇投降。投降讓你有時間恢復。」</p>
-            <p className="text-muted-foreground leading-relaxed mb-6">爛主管會被輪調走。組織改組會發生。耐心是武器。在小事上優雅退讓的員工，會在大事上贏得信任。</p>
-            <ActionStep checked={safeActions[5]} onToggle={() => toggleAction(5)}>
-              下次和主管意見不同之前，先問自己：「這件事 6 個月後還重要嗎？」如果不重要，退讓。把你的信用額度留給真正值得打的仗。
-            </ActionStep>
+            <p className="text-muted-foreground leading-relaxed mb-6">法則 1 教你讓主管發光。法則 4 教你精準。法則 22 教你何時退讓。</p>
+            <p className="text-muted-foreground leading-relaxed mb-6">當你的主管做錯了，你也知道他錯了，本能反應是反擊。是頂回去。是證明你的觀點。但在公開場合跟主管對幹，很少幫你拿到升遷。更常讓你得到「很難搞」的名聲。</p>
+            <p className="text-foreground leading-relaxed mb-6 italic">「當你處於弱勢，絕對不要為了面子而戰。選擇投降。投降讓你有時間恢復，有時間等對方的權力衰退。」</p>
+            <p className="text-muted-foreground leading-relaxed mb-6">爛主管會被輪調走。組織改組會發生。領導層會換人。耐心是武器。在小事上優雅退讓的員工，會在大事上贏得信任。每場仗都打的員工，很快就用光了別人對他的善意。</p>
+            <p className="text-muted-foreground leading-relaxed mb-6">這不代表當軟柿子。這代表分辨哪些仗值得打，哪些退讓能保存你的精力和位置。如果情況涉及倫理或法律底線，正確的做法是記錄和向上反映，不是投降。</p>
 
             <BossManagementMatrix />
 
