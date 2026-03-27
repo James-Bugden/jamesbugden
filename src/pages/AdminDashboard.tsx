@@ -320,6 +320,13 @@ export default function AdminDashboard() {
     setShareClicksLoading(false);
   };
 
+  const fetchEventTracks = async () => {
+    setEventTracksLoading(true);
+    const { data } = await supabase.from("event_tracks" as any).select("event_type, event_name, page, metadata, created_at").order("created_at", { ascending: false }).limit(1000);
+    if (data) setEventTracks(data as any);
+    setEventTracksLoading(false);
+  };
+
   const handleDeleteFeedback = async (id: string) => {
     const { error } = await supabase.from("feedback" as any).delete().eq("id", id);
     if (error) toast({ title: "Error", description: getSafeErrorMessage(error), variant: "destructive" });
