@@ -329,6 +329,27 @@ export type Database = {
         }
         Relationships: []
       }
+      share_clicks: {
+        Row: {
+          channel: string
+          created_at: string
+          id: string
+          page: string
+        }
+        Insert: {
+          channel: string
+          created_at?: string
+          id?: string
+          page: string
+        }
+        Update: {
+          channel?: string
+          created_at?: string
+          id?: string
+          page?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
