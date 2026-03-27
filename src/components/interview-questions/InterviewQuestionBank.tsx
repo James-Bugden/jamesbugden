@@ -458,6 +458,7 @@ export default function InterviewQuestionBank({ lang: initialLang }: { lang: Lan
           <div className="flex items-center gap-3 flex-wrap">
             <button
               onClick={() => {
+                trackShare("email");
                 const subject = encodeURIComponent(
                   lang === "zh" ? "推薦給你的面試題庫" : "Interview question bank I found helpful"
                 );
