@@ -981,32 +981,55 @@ const FortyEightLawsGuideZhTw = () => {
               <SectionNumber num="06" />
               <div className="pt-3"><h2 className="font-heading text-2xl md:text-3xl text-foreground">在辦公室政治中生存</h2></div>
             </div>
-            <p className="text-muted-foreground leading-relaxed mb-6">「要在你的領域做得好，你必須懂得跟人打交道。這佔了任何權力情境至少一半以上的比重。」</p>
+            <p className="text-foreground text-lg leading-relaxed mb-6">人的問題就是權力的問題。「要在你的領域做得好，你必須懂得跟人打交道。這佔了任何權力情境至少一半以上的比重。」</p>
+            <p className="text-muted-foreground leading-relaxed mb-6">辦公室政治不是工作的腐敗。是人類群體的運作方式。每個組織都有聯盟、對立、不成文規定、以及按不同規則行事的人。三條法則涵蓋：看懂局勢、選擇盟友、挑選戰場。</p>
 
             <h3 className="font-heading text-xl text-foreground mt-10 mb-4">法則 19：了解你在跟誰打交道</h3>
-            <p className="text-muted-foreground leading-relaxed mb-6">在任何組織中，你都會遇到五種危險的人：自大型、不安全型、多疑型、算計型、記仇型。</p>
-            <p className="text-muted-foreground leading-relaxed mb-6">在你做出任何重大動作之前，問三個問題：誰從中得利？誰從中受損？我的話被最壞的方式解讀，會變成什麼？</p>
+            <p className="text-muted-foreground leading-relaxed mb-4">在任何組織中，你都會遇到五種危險的人。</p>
+            <ol className="space-y-2 mb-6 list-decimal list-inside">
+              <li className="text-foreground text-sm"><strong>自大型。</strong>對感知到的冒犯進行報復。</li>
+              <li className="text-foreground text-sm"><strong>不安全型。</strong>把一切都當針對自己。</li>
+              <li className="text-foreground text-sm"><strong>多疑型。</strong>到處看到敵人。</li>
+              <li className="text-foreground text-sm"><strong>算計型。</strong>每一次互動都精心設計，為了自己的利益。</li>
+              <li className="text-foreground text-sm"><strong>記仇型。</strong>永遠記恨。</li>
+            </ol>
+            <p className="text-muted-foreground leading-relaxed mb-4">在你做出任何重大動作之前，問三個問題：</p>
+            <ol className="space-y-1 mb-6 list-decimal list-inside text-foreground text-sm">
+              <li>誰從中得利？</li>
+              <li>誰從中受損？</li>
+              <li>我的話被最壞的方式解讀，會變成什麼？</li>
+            </ol>
+            <p className="text-muted-foreground leading-relaxed mb-6">如果三個都回答不出來，先慢下來。</p>
             <ActionStep checked={safeActions[13]} onToggle={() => toggleAction(13)}>
-              在你下一封敏感的 email、會議邀請或向上反映之前，暫停，在紙上回答那三個問題。養成習慣。這個過濾器防止的職涯傷害，比本指南中任何其他習慣都多。
+              在你下一封敏感的 email、會議邀請或向上反映之前，暫停，在紙上回答那三個問題。在桌上貼一張便條：「誰得利？誰受損？最壞的解讀？」養成習慣。這個過濾器防止的職涯傷害，比本指南中任何其他習慣都多。
             </ActionStep>
 
             <h3 className="font-heading text-xl text-foreground mt-10 mb-4">法則 10：遠離不幸和倒楣的人</h3>
-            <p className="text-muted-foreground leading-relaxed mb-6">「你會死於別人的苦難。情緒狀態像疾病一樣有傳染力。」有意識地選擇你的午餐桌、你的 Slack 頻道、和你的盟友。</p>
+            <p className="text-muted-foreground leading-relaxed mb-6">知道你在跟誰打交道之後，下一個問題是你跟誰共度時間。</p>
+            <p className="text-foreground leading-relaxed mb-6 italic">「你會死於別人的苦難。情緒狀態像疾病一樣有傳染力。」</p>
+            <p className="text-muted-foreground leading-relaxed mb-6">職場中，負面情緒傳播的速度比能力快。午餐桌上的慣性抱怨者、每場會議都散播冷嘲熱諷的團隊成員、對所有人說閒話的同事。跟這些人待在一起，你的聲譽也會被拖下水。</p>
+            <p className="text-muted-foreground leading-relaxed mb-6">有意識地選擇你的午餐桌、你的 Slack 頻道、和你的盟友。對所有人友善。但把你的時間和精力投入在建設的人身上，不是拆台的人。</p>
+            <ActionStep checked={safeActions[14]} onToggle={() => toggleAction(14)}>
+              盤點你的 5 個最主要的工作關係。你最常跟誰相處？他們是建設者還是抱怨者？如果超過兩個是慣性抱怨者，開始拉開距離。換個位置吃午餐。加入不同的 Slack 頻道。距離塑造觀感。刻意選擇。
+            </ActionStep>
 
             <h3 className="font-heading text-xl text-foreground mt-10 mb-4">法則 38：想怎麼想都行，但表現得跟別人一樣</h3>
-            <p className="text-muted-foreground leading-relaxed mb-6">不要當那個對每一項政策都反對的叛逆者。即使你是對的，持續叛逆的代價是孤立。</p>
+            <p className="text-muted-foreground leading-relaxed mb-6">法則 19 和 10 教你看人和選圈子。法則 38 教你怎麼在圈子裡運作。</p>
+            <p className="text-foreground leading-relaxed mb-6 italic">「如果你大張旗鼓地反對時代潮流，炫耀你的非主流想法和不正統的做法，人們會認為你只是想要引人注目，並且看不起他們。」</p>
+            <p className="text-muted-foreground leading-relaxed mb-6">不要當那個對每一項政策都反對、挑戰每一個規範、鄙視每一個公司傳統的叛逆者。即使你是對的，持續叛逆的代價是孤立。</p>
+            <p className="text-muted-foreground leading-relaxed mb-6">這對內向的人格外相關。「第一件事是不要試著成為你不是的人。如果你是內向的，愛上這一點。」但要學會遊戲的社交規則。理解文化。在其中運作，同時私下保持你自己的判斷。</p>
             <Reversal>沒有界線的順從會變成軟弱。知道你的底線在哪裡。有些山頭值得為之犧牲。刻意選擇。</Reversal>
             <div className="mt-6">
-              <ActionStep checked={safeActions[14]} onToggle={() => toggleAction(14)}>
-                寫下你的三條不可妥協的專業底線。例如：「我不會對客戶說謊。」「我不會把別人的功勞據為己有。」「我不會對安全問題保持沉默。」在壓力來臨之前就知道你的底線。
+              <ActionStep checked={safeActions[15]} onToggle={() => toggleAction(15)}>
+                寫下你的三條不可妥協的專業底線。這些是無論壓力多大你都不會跨越的線：倫理的、個人的、或專業的。例如：「我不會對客戶說謊。」「我不會把別人的功勞據為己有。」「我不會對安全問題保持沉默。」在壓力來臨之前就知道你的底線，是正直和遺憾之間的差別。
               </ActionStep>
             </div>
 
             <DiagramBox title="辦公室權力地圖">
               <div className="space-y-4">
-                <div><p className="font-medium mb-1">誰有真正的影響力？（不是頭銜。是誰的話人們真的在聽？）</p></div>
-                <div><p className="font-medium mb-1">誰和誰是盟友？</p></div>
-                <div><p className="font-medium mb-1">誰和誰有衝突？</p></div>
+                <div><p className="font-medium mb-1">誰有真正的影響力？（不是頭銜。是誰的話人們真的在聽？）</p><p className="text-muted-foreground">列出組織中真正有影響力的 3 個人。</p></div>
+                <div><p className="font-medium mb-1">誰和誰是盟友？</p><p className="text-muted-foreground">畫出關鍵的聯盟。</p></div>
+                <div><p className="font-medium mb-1">誰和誰有衝突？</p><p className="text-muted-foreground">找出正在發生的緊張關係。</p></div>
                 <div>
                   <p className="font-medium mb-1">你在哪裡？</p>
                   <ul className="text-muted-foreground space-y-1 ml-4 list-disc">
@@ -1021,6 +1044,9 @@ const FortyEightLawsGuideZhTw = () => {
 
             <p className="text-muted-foreground leading-relaxed mt-6">
               完整的政治生存框架，請參考 <Link to="/zh-tw/office-politics-guide" className="text-gold hover:underline">辦公室政治指南</Link>。
+            </p>
+            <p className="text-muted-foreground leading-relaxed mt-4">
+              政治保護你。但你的職涯還需要一個比當前這一季更長遠的方向。那就是長期賽局。
             </p>
           </div>
         </section>
