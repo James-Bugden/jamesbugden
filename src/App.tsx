@@ -305,6 +305,7 @@ const App = () => (
             <Route path="/career-game-guide" element={<CareerGameGuide />} />
             <Route path="/zh-tw/career-game-guide" element={<CareerGameGuideZhTw />} />
             <Route path="/48-laws-guide" element={<FortyEightLawsGuide />} />
+            <Route path="/zh-tw/48-laws-guide" element={<FortyEightLawsGuideZhTw />} />
             <Route path="/ikigai-guide" element={<IkigaiGuide />} />
             <Route path="/zh-tw/ikigai-guide" element={<IkigaiGuideZhTw />} />
             <Route path="/recruiter-guide" element={<RecruiterGuide />} />
