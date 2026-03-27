@@ -35,6 +35,8 @@ export function useTrackGuideProgress(guideId: string) {
   const maxRef = useRef(0);
 
   useEffect(() => {
+    trackEvent("guide_view", guideId);
+
     const onScroll = () => {
       const scrollable = document.documentElement.scrollHeight - window.innerHeight;
       if (scrollable <= 0) return;
