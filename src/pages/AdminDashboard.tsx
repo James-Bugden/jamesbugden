@@ -23,6 +23,7 @@ import { getSafeErrorMessage } from "@/lib/utils";
 import {
   Loader2, Plus, Copy, Trash2, LogOut, Check, ArrowUpDown, Search, Download,
   FileText, DollarSign, Users, Mail, UserCheck, MessageSquare, Activity,
+  Share2, MousePointerClick,
 } from "lucide-react";
 import { format, subDays, startOfDay } from "date-fns";
 import { AreaChart, Area, BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer } from "recharts";
