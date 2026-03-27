@@ -11,6 +11,64 @@ import { useState, useEffect } from "react";
 import { SEO } from "@/components/SEO";
 import { guideSchema } from "@/lib/guideSchema";
 
+const selfAssessmentQs = [
+  "Have you been contacted by a headhunter in the last 12 months?",
+  "Do you have a specialized skill most people in your field don't have?",
+  "Is your total compensation above the market median for your role and city?",
+  "Do you have domain expertise in a specific industry, not a general function?",
+  "Have you worked at a company well-known in your field?",
+  "Do you have a rare combination of skills (e.g., technical depth + management)?",
+  "If you posted on LinkedIn that you're open to work, would headhunters reach out within a week?",
+];
+
+const RecruiterSelfAssessment = () => {
+  const [answers, setAnswers] = useState<Record<number, boolean>>({});
+  const answered = Object.keys(answers).length;
+  const yesCount = Object.values(answers).filter(Boolean).length;
+  const done = answered === selfAssessmentQs.length;
+
+  const result = done
+    ? yesCount >= 5 ? { emoji: "🐟", label: "You're a tuna.", desc: "Headhunters are looking for you." }
+    : yesCount >= 3 ? { emoji: "🔄", label: "You're on the border.", desc: "This guide will help you get on more radars." }
+    : { emoji: "🐱", label: "You're a catfish right now.", desc: "That's fine. This guide will show you how to start building toward tuna." }
+    : null;
+
+  return (
+    <div className="bg-card border border-border rounded-xl p-5 md:p-6 my-6">
+      <p className="text-xs font-bold text-accent uppercase tracking-wider mb-4">Self-Assessment: Where Do You Sit? (7 Questions)</p>
+      <div className="space-y-3">
+        {selfAssessmentQs.map((q, i) => (
+          <div key={i} className="flex items-start gap-3">
+            <span className="text-sm text-muted-foreground font-medium mt-0.5 w-5 shrink-0">{i + 1}.</span>
+            <p className="text-sm text-foreground/80 flex-1">{q}</p>
+            <div className="flex gap-1.5 shrink-0">
+              <button
+                onClick={() => setAnswers(prev => ({ ...prev, [i]: true }))}
+                className={`px-3 py-1 rounded text-xs font-bold transition-colors ${answers[i] === true ? "bg-accent text-accent-foreground" : "bg-muted text-muted-foreground hover:bg-muted/80"}`}
+              >Yes</button>
+              <button
+                onClick={() => setAnswers(prev => ({ ...prev, [i]: false }))}
+                className={`px-3 py-1 rounded text-xs font-bold transition-colors ${answers[i] === false ? "bg-destructive text-destructive-foreground" : "bg-muted text-muted-foreground hover:bg-muted/80"}`}
+              >No</button>
+            </div>
+          </div>
+        ))}
+      </div>
+      {done && result && (
+        <div className="mt-5 p-4 bg-accent/10 border border-accent/20 rounded-lg text-center">
+          <p className="text-2xl mb-1">{result.emoji}</p>
+          <p className="font-heading font-bold text-foreground">{result.label}</p>
+          <p className="text-sm text-muted-foreground mt-1">{result.desc}</p>
+          <p className="text-xs text-muted-foreground mt-2">Score: {yesCount}/7</p>
+        </div>
+      )}
+      {!done && answered > 0 && (
+        <p className="text-xs text-muted-foreground mt-3">{answered}/7 answered</p>
+      )}
+    </div>
+  );
+};
+
 const SectionNumber = ({ num }: { num: string }) => (
   <span className="text-gold/30 font-heading text-6xl md:text-7xl font-bold leading-none select-none">
     {num}
