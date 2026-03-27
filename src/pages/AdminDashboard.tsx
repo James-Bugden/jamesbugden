@@ -1259,6 +1259,71 @@ export default function AdminDashboard() {
                   {/* Divider */}
                   <div className="border-t border-border" />
 
+                  {/* ── Guide Engagement Section ── */}
+                  {(() => {
+                    // Guide views from event_tracks
+                    const guideViews: Record<string, number> = {};
+                    eventTracks.filter(e => e.event_type === "guide_view").forEach(e => {
+                      guideViews[e.event_name] = (guideViews[e.event_name] || 0) + 1;
+                    });
+
+                    // Thumbs up/down from feedback (inline_rating type)
+                    const guideRatings: Record<string, { up: number; down: number }> = {};
+                    feedbackItems.filter(f => f.type === "inline_rating" && f.context).forEach(f => {
+                      const key = f.context!;
+                      if (!guideRatings[key]) guideRatings[key] = { up: 0, down: 0 };
+                      if (f.rating === 1) guideRatings[key].up++;
+                      else if (f.rating === -1) guideRatings[key].down++;
+                    });
+
+                    // Merge datasets
+                    const allGuideIds = new Set([...Object.keys(guideViews), ...Object.keys(guideRatings)]);
+                    const guideEngagement = Array.from(allGuideIds).map(id => ({
+                      id,
+                      visits: guideViews[id] || 0,
+                      up: guideRatings[id]?.up || 0,
+                      down: guideRatings[id]?.down || 0,
+                      approval: guideRatings[id] ? Math.round((guideRatings[id].up / (guideRatings[id].up + guideRatings[id].down)) * 100) || 0 : null,
+                    })).sort((a, b) => b.visits - a.visits);
+
+                    return guideEngagement.length > 0 ? (
+                      <div>
+                        <div className="flex items-center gap-2 mb-4">
+                          <FileText className="w-4 h-4 text-emerald-600" />
+                          <h2 className="font-semibold text-foreground">Guide Engagement</h2>
+                          <span className="text-xs text-muted-foreground ml-1">{Object.values(guideViews).reduce((a, b) => a + b, 0)} total views</span>
+                        </div>
+                        <div className="border border-border rounded-xl overflow-hidden overflow-x-auto">
+                          <Table>
+                            <TableHeader>
+                              <TableRow>
+                                <TableHead>Guide</TableHead>
+                                <TableHead className="w-20 text-right">Visits</TableHead>
+                                <TableHead className="w-16 text-right">👍</TableHead>
+                                <TableHead className="w-16 text-right">👎</TableHead>
+                                <TableHead className="w-24 text-right">Approval</TableHead>
+                              </TableRow>
+                            </TableHeader>
+                            <TableBody>
+                              {guideEngagement.map(g => (
+                                <TableRow key={g.id}>
+                                  <TableCell className="text-sm capitalize">{g.id.replace(/^guide_/, "").replace(/_/g, " ")}</TableCell>
+                                  <TableCell className="text-sm text-right font-semibold tabular-nums">{g.visits}</TableCell>
+                                  <TableCell className="text-sm text-right tabular-nums text-emerald-600">{g.up}</TableCell>
+                                  <TableCell className="text-sm text-right tabular-nums text-red-500">{g.down}</TableCell>
+                                  <TableCell className="text-sm text-right tabular-nums">{g.approval !== null ? `${g.approval}%` : "—"}</TableCell>
+                                </TableRow>
+                              ))}
+                            </TableBody>
+                          </Table>
+                        </div>
+                      </div>
+                    ) : null;
+                  })()}
+
+                  {/* Divider */}
+                  <div className="border-t border-border" />
+
                   {/* ── Events Section ── */}
                   <div>
                     <div className="flex items-center gap-2 mb-4">

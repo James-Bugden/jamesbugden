@@ -1,5 +1,6 @@
 import { useEffect, useCallback, useRef } from "react";
 import { useLocalStorage } from "./useLocalStorage";
+import { trackEvent } from "@/lib/trackEvent";
 
 type ProgressMap = Record<string, number>;
 
@@ -34,6 +35,8 @@ export function useTrackGuideProgress(guideId: string) {
   const maxRef = useRef(0);
 
   useEffect(() => {
+    trackEvent("guide_view", guideId);
+
     const onScroll = () => {
       const scrollable = document.documentElement.scrollHeight - window.innerHeight;
       if (scrollable <= 0) return;
