@@ -27,10 +27,13 @@ const GuideShareButtons = ({ isZhTw = false }: GuideShareButtonsProps) => {
     window.open(`mailto:?subject=${subject}&body=${body}`, "_self");
   };
 
-  const handleLineShare = () => {
-    const url = window.location.href;
-    const text = encodeURIComponent(url);
-    window.location.href = `https://line.me/R/share?text=${text}`;
+  const handleMessengerShare = () => {
+    const url = encodeURIComponent(window.location.href);
+    if (isZhTw) {
+      window.location.href = `https://line.me/R/share?text=${url}`;
+    } else {
+      window.open(`https://wa.me/?text=${url}`, "_blank");
+    }
   };
 
   return (
@@ -49,12 +52,14 @@ const GuideShareButtons = ({ isZhTw = false }: GuideShareButtonsProps) => {
             Email
           </button>
           <button
-            onClick={handleLineShare}
-            className="inline-flex items-center gap-2 px-5 py-2.5 rounded-lg border border-border bg-[#06C755] text-white hover:bg-[#05b34d] transition-colors text-sm font-medium"
-            aria-label="Share via LINE"
+            onClick={handleMessengerShare}
+            className={`inline-flex items-center gap-2 px-5 py-2.5 rounded-lg border border-border text-white transition-colors text-sm font-medium ${
+              isZhTw ? "bg-[#06C755] hover:bg-[#05b34d]" : "bg-[#25D366] hover:bg-[#20bd5a]"
+            }`}
+            aria-label={isZhTw ? "Share via LINE" : "Share via WhatsApp"}
           >
-            <LineIcon />
-            LINE
+            {isZhTw ? <LineIcon /> : <WhatsAppIcon />}
+            {isZhTw ? "LINE" : "WhatsApp"}
           </button>
         </div>
       </div>
