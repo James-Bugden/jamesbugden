@@ -860,8 +860,8 @@ export default function RecruiterGuide() {
           <h2 className="font-heading text-2xl md:text-3xl font-bold text-foreground mb-6">Quick Reference Cheat Sheet</h2>
 
           <div className="space-y-4">
-            <div className="bg-card border border-border rounded-xl p-5">
-              <h3 className="font-heading font-bold text-sm mb-3">The 7 Rules</h3>
+            <a href="#rules" className="block bg-card border border-border rounded-xl p-5 hover:bg-muted/50 transition-colors group">
+              <h3 className="font-heading font-bold text-sm mb-3 group-hover:text-accent transition-colors">The 7 Rules ↗</h3>
               <ol className="list-decimal list-inside space-y-1 text-sm text-foreground/80">
                 <li>Understand who pays them</li>
                 <li>Keep their secrets</li>
@@ -871,29 +871,29 @@ export default function RecruiterGuide() {
                 <li>Listen to your headhunter's coaching</li>
                 <li>Communicate everything, especially other interviews</li>
               </ol>
-            </div>
+            </a>
 
-            <div className="bg-card border border-border rounded-xl p-5">
-              <h3 className="font-heading font-bold text-sm mb-3">The 8-Step Headhunter Process</h3>
+            <a href="#process" className="block bg-card border border-border rounded-xl p-5 hover:bg-muted/50 transition-colors group">
+              <h3 className="font-heading font-bold text-sm mb-3 group-hover:text-accent transition-colors">The 8-Step Headhunter Process ↗</h3>
               <p className="text-sm text-foreground/80">Company opens role → Headhunter searches database → Headhunter contacts you → Screening calls (2-3) → Reference checks → Presented to hiring manager → Company interviews you → Hire or pass</p>
-            </div>
+            </a>
 
-            <div className="bg-card border border-border rounded-xl p-5">
-              <h3 className="font-heading font-bold text-sm mb-3">Resume Priority Order</h3>
+            <a href="#business" className="block bg-card border border-border rounded-xl p-5 hover:bg-muted/50 transition-colors group">
+              <h3 className="font-heading font-bold text-sm mb-3 group-hover:text-accent transition-colors">Resume Priority Order ↗</h3>
               <p className="text-sm text-foreground/80">Referrals → Headhunter submissions → Local candidates → No visa needed → Visa + relocation</p>
-            </div>
+            </a>
 
-            <div className="bg-card border border-border rounded-xl p-5">
-              <h3 className="font-heading font-bold text-sm mb-3">How Often to Stay in Touch</h3>
+            <a href="#multiple" className="block bg-card border border-border rounded-xl p-5 hover:bg-muted/50 transition-colors group">
+              <h3 className="font-heading font-bold text-sm mb-3 group-hover:text-accent transition-colors">How Often to Stay in Touch ↗</h3>
               <ul className="space-y-1 text-sm text-foreground/80">
                 <li>• Active job search: weekly email</li>
                 <li>• Passive / not searching: every 3-6 months</li>
                 <li>• Any change in job, title, or contact info: immediately</li>
               </ul>
-            </div>
+            </a>
 
-            <div className="bg-card border border-border rounded-xl p-5">
-              <h3 className="font-heading font-bold text-sm mb-3">What to Have Ready When They Call</h3>
+            <a href="#process" className="block bg-card border border-border rounded-xl p-5 hover:bg-muted/50 transition-colors group">
+              <h3 className="font-heading font-bold text-sm mb-3 group-hover:text-accent transition-colors">What to Have Ready When They Call ↗</h3>
               <ul className="space-y-1 text-sm text-foreground/80">
                 <li>• Your resume (updated)</li>
                 <li>• Your salary range</li>
@@ -901,7 +901,7 @@ export default function RecruiterGuide() {
                 <li>• Your "why are you looking?" answer (clear, 2-3 sentences)</li>
                 <li>• Questions about the role and company</li>
               </ul>
-            </div>
+            </a>
           </div>
         </section>
 
