@@ -4,6 +4,7 @@ import { ArrowLeft, Copy, Share2, Check, Printer } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useToast } from "@/hooks/use-toast";
 import { nativeShare } from "@/lib/share";
+import { trackEvent } from "@/lib/trackEvent";
 import ToolkitHeaderZhTw from "@/components/toolkit/ToolkitHeaderZhTw";
 import ToolkitFooterZhTw from "@/components/toolkit/ToolkitFooterZhTw";
 import ToolkitNavZhTw from "@/components/toolkit/ToolkitNavZhTw";
@@ -50,6 +51,7 @@ ________ 那週
 五 | _________________________________ | _________________________________ | ☐💰 ☐⚡ ☐👥 ☐💡`;
 
     navigator.clipboard.writeText(templateText);
+    trackEvent("copy", "achievement_log");
     setCopied(true);
     toast({ title: "已複製模板！", description: "貼到文件中填寫。" });
     setTimeout(() => setCopied(false), 2000);

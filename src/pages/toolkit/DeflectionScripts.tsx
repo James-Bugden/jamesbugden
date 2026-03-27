@@ -4,6 +4,7 @@ import { ArrowLeft, Copy, Share2, Check } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useToast } from "@/hooks/use-toast";
 import { nativeShare } from "@/lib/share";
+import { trackEvent } from "@/lib/trackEvent";
 import ToolkitHeader from "@/components/toolkit/ToolkitHeader";
 import ToolkitFooter from "@/components/toolkit/ToolkitFooter";
 import ToolkitNav from "@/components/toolkit/ToolkitNav";
@@ -79,6 +80,7 @@ const DeflectionScripts = () => {
       .join("\n\n---\n\n");
 
     navigator.clipboard.writeText(scriptsText);
+    trackEvent("copy", "deflection_scripts");
     setCopied(true);
     toast({ title: "All scripts copied!", description: "Paste them anywhere you need." });
     setTimeout(() => setCopied(false), 2000);

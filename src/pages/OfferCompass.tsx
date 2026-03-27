@@ -4,6 +4,7 @@ import { EmailGateOverlay } from "@/components/EmailGateOverlay";
 import { Link } from "react-router-dom";
 
 import { Plus, Copy, Sparkles, Trash2, RotateCcw, ArrowRight, X } from "lucide-react";
+import { trackEvent } from "@/lib/trackEvent";
 import LanguageToggle from "@/components/LanguageToggle";
 import { Button } from "@/components/ui/button";
 import {
@@ -89,7 +90,7 @@ export default function OfferCompass() {
                 <Copy className="w-3.5 h-3.5 mr-1" /> Duplicate
               </Button>
             )}
-            <Button variant="outline" size="sm" onClick={() => loadExample("en")} className="h-9">
+            <Button variant="outline" size="sm" onClick={() => { loadExample("en"); trackEvent("calculator", "load_example"); }} className="h-9">
               <Sparkles className="w-3.5 h-3.5 mr-1" /> Example
             </Button>
 
@@ -167,6 +168,7 @@ export default function OfferCompass() {
                   rel="noopener noreferrer"
                   className="inline-flex h-11 px-6 items-center justify-center rounded-lg font-semibold text-sm transition-transform hover:scale-[1.02]"
                   style={{ backgroundColor: "#C9A961", color: "#1B3A2F" }}
+                  onClick={() => trackEvent("cta_click", "book_call")}
                 >
                   Book a Free Strategy Call
                 </a>

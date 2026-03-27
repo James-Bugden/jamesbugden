@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useToast } from "@/hooks/use-toast";
 import { nativeShare } from "@/lib/share";
+import { trackEvent } from "@/lib/trackEvent";
 import ToolkitHeaderZhTw from "@/components/toolkit/ToolkitHeaderZhTw";
 import ToolkitFooterZhTw from "@/components/toolkit/ToolkitFooterZhTw";
 import ToolkitNavZhTw from "@/components/toolkit/ToolkitNavZhTw";
@@ -110,6 +111,7 @@ const CounterofferEmailZhTw = () => {
   const copyEmail = (template: typeof emailTemplates[0]) => {
     const emailText = `主旨：${template.subject}\n\n${template.body}`;
     navigator.clipboard.writeText(emailText);
+    trackEvent("copy", "counteroffer_email", { template: template.id });
     setCopiedId(template.id);
     toast({ title: "已複製 Email！", description: "貼到你的郵件程式，填入括號中的內容。" });
     setTimeout(() => setCopiedId(null), 2000);

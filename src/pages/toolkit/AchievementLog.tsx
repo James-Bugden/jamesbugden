@@ -4,6 +4,7 @@ import { ArrowLeft, Copy, Share2, Check, Printer } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useToast } from "@/hooks/use-toast";
 import { nativeShare } from "@/lib/share";
+import { trackEvent } from "@/lib/trackEvent";
 import ToolkitHeader from "@/components/toolkit/ToolkitHeader";
 import ToolkitFooter from "@/components/toolkit/ToolkitFooter";
 import ToolkitNav from "@/components/toolkit/ToolkitNav";
@@ -69,6 +70,7 @@ CATEGORIES:
 💡 Innovation: New ideas proposed, prototypes built, experiments run, patents filed`;
 
     navigator.clipboard.writeText(templateText);
+    trackEvent("copy", "achievement_log");
     setCopied(true);
     toast({ title: "Template copied!", description: "Paste it into a document and fill it in weekly." });
     setTimeout(() => setCopied(false), 2000);

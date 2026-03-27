@@ -4,6 +4,7 @@ import { ArrowLeft, Copy, Share2, Check } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { nativeShare } from "@/lib/share";
+import { trackEvent } from "@/lib/trackEvent";
 import { useToast } from "@/hooks/use-toast";
 import ToolkitHeader from "@/components/toolkit/ToolkitHeader";
 import ToolkitFooter from "@/components/toolkit/ToolkitFooter";
@@ -110,6 +111,7 @@ const CounterofferEmail = () => {
   const copyEmail = (template: typeof emailTemplates[0]) => {
     const emailText = `SUBJECT: ${template.subject}\n\n${template.body}`;
     navigator.clipboard.writeText(emailText);
+    trackEvent("copy", "counteroffer_email", { template: template.id });
     setCopiedId(template.id);
     toast({ title: "Email copied!", description: "Paste it into your email client and fill in the brackets." });
     setTimeout(() => setCopiedId(null), 2000);

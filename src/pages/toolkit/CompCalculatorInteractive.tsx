@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/button";
 import { Switch } from "@/components/ui/switch";
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
 import { useToast } from "@/hooks/use-toast";
+import { trackEvent } from "@/lib/trackEvent";
 import { useIsMobile } from "@/hooks/use-mobile";
 import {
   AlertDialog,
@@ -120,6 +121,7 @@ const CompCalculatorInteractive = () => {
       }
     }
     navigator.clipboard.writeText(`Total Compensation Comparison\n\n${lines.join("\n")}`);
+    trackEvent("copy", "comp_calculator_summary");
     setCopied(true);
     toast({ title: "Copied!", description: "Summary copied to clipboard." });
     setTimeout(() => setCopied(false), 2000);
@@ -554,6 +556,7 @@ const CompCalculatorInteractive = () => {
               rel="noopener noreferrer"
               className="inline-flex h-11 px-6 items-center justify-center rounded-lg font-semibold text-sm transition-transform hover:scale-[1.02]"
               style={{ backgroundColor: "#C9A961", color: "#1B3A2F" }}
+              onClick={() => trackEvent("cta_click", "book_call")}
             >
               Book a Free Strategy Call
             </a>
