@@ -1,4 +1,5 @@
 import { Mail } from "lucide-react";
+import { trackShare } from "@/lib/trackShare";
 
 const LineIcon = () => (
   <svg viewBox="0 0 24 24" fill="currentColor" className="w-5 h-5">
