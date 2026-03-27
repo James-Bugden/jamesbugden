@@ -11,6 +11,101 @@ import { useState, useEffect } from "react";
 import { SEO } from "@/components/SEO";
 import { guideSchema } from "@/lib/guideSchema";
 
+function PracticeScorecardZh() {
+  const [scores, setScores] = useState<Record<number, boolean | null>>({});
+  const items = [
+    "我有在回答前釐清嗎？",
+    "我有找到根本原因嗎？",
+    "我有展示 2 個以上的選項嗎？",
+    "我有使用具體數字嗎？",
+    "我有分享學到的教訓嗎？",
+    "我有控制在 2 分鐘以內嗎？",
+  ];
+  const yesCount = Object.values(scores).filter(v => v === true).length;
+  const answered = Object.values(scores).filter(v => v !== null && v !== undefined).length;
+  return (
+    <div className="bg-background border border-border rounded-xl p-5 md:p-6 mb-6">
+      <h3 className="font-heading text-lg text-gold mb-4">練習記分卡</h3>
+      <div className="space-y-2">
+        {items.map((item, i) => (
+          <div key={i} className="flex items-center gap-3 bg-background border border-border rounded-lg px-4 py-2.5">
+            <span className="text-foreground text-sm flex-1">{item}</span>
+            <div className="flex gap-1.5 shrink-0">
+              <button onClick={() => setScores(prev => ({ ...prev, [i]: prev[i] === true ? null : true }))} className={`px-3 py-1 rounded text-xs font-bold transition-colors ${scores[i] === true ? "bg-green-600 text-white" : "bg-muted text-muted-foreground hover:bg-muted/80"}`}>是</button>
+              <button onClick={() => setScores(prev => ({ ...prev, [i]: prev[i] === false ? null : false }))} className={`px-3 py-1 rounded text-xs font-bold transition-colors ${scores[i] === false ? "bg-red-500 text-white" : "bg-muted text-muted-foreground hover:bg-muted/80"}`}>否</button>
+            </div>
+          </div>
+        ))}
+        <div className="flex items-center justify-between mt-3 px-1">
+          <p className="text-foreground text-sm font-semibold">分數：{answered > 0 ? `${yesCount}/${items.length}` : "___/6"}</p>
+          <p className={`text-sm font-medium ${yesCount >= 5 && answered === items.length ? "text-green-500" : "text-gold"}`}>
+            {yesCount >= 5 && answered === items.length ? "✓ 面試準備就緒！" : "目標：在面試前穩定達到 5/6。"}
+          </p>
+        </div>
+        {answered > 0 && <button onClick={() => setScores({})} className="text-xs text-muted-foreground hover:text-foreground transition-colors mt-1">重置</button>}
+      </div>
+    </div>
+  );
+}
+
+function InterviewChecklistZh() {
+  const [checked, setChecked] = useState<Record<string, boolean>>({});
+  const toggle = (key: string) => setChecked(prev => ({ ...prev, [key]: !prev[key] }));
+  const sections = [
+    { heading: "準備", items: [
+      "我有 3 個按照四步驟框架準備的故事。",
+      "每個故事都有具體數字（前後對比、%、$、時間）。",
+      "我用真實來源研究了這家公司。",
+      "我知道我的「為什麼選這家公司？」回答，有 3 個加權標準。",
+      "我知道我的「為什麼在找工作？」回答，框架為差距分析。",
+    ]},
+    { heading: "面試中", items: [
+      "我會在回答前暫停。需要時釐清。",
+      "我會在解決問題之前先分類。",
+      "我會陳述我的假設並解釋如何測試。",
+      "被問到「你會怎麼……？」時我會展示 2-3 個選項。",
+      "我會在每個回答中使用數字。不要模糊的宣稱。",
+      "我會用學到的教訓結束每個故事。",
+    ]},
+    { heading: "面試後", items: [
+      "我會寫下每一個被問到的問題。",
+      "我會用四步驟框架為我的回答打分。",
+      "我會找出我漏掉的步驟並練習它。",
+    ]},
+  ];
+  const totalItems = sections.reduce((sum, s) => sum + s.items.length, 0);
+  const checkedCount = Object.values(checked).filter(Boolean).length;
+  return (
+    <div className="bg-background border border-border rounded-xl p-5 md:p-6">
+      <div className="flex items-center justify-between mb-4">
+        <h3 className="font-heading text-lg text-gold">下次面試前：檢查清單</h3>
+        {checkedCount > 0 && <span className="text-xs text-muted-foreground">{checkedCount}/{totalItems}</span>}
+      </div>
+      <div className="space-y-5">
+        {sections.map((section) => (
+          <div key={section.heading}>
+            <p className="text-gold text-xs font-bold uppercase tracking-wider mb-2">{section.heading}</p>
+            <div className="space-y-1.5">
+              {section.items.map((item, i) => {
+                const key = `${section.heading}-${i}`;
+                return (
+                  <button key={i} onClick={() => toggle(key)} className="w-full flex items-start gap-3 bg-background border border-border rounded-lg px-4 py-2.5 text-left hover:bg-muted/50 transition-colors">
+                    <div className={`w-4 h-4 mt-0.5 rounded border-2 shrink-0 flex items-center justify-center transition-colors ${checked[key] ? "bg-green-600 border-green-600" : "border-gold/40"}`}>
+                      {checked[key] && <svg viewBox="0 0 12 12" className="w-3 h-3 text-white" fill="none" stroke="currentColor" strokeWidth="2"><path d="M2 6l3 3 5-5" /></svg>}
+                    </div>
+                    <span className={`text-sm transition-colors ${checked[key] ? "text-muted-foreground line-through" : "text-foreground"}`}>{item}</span>
+                  </button>
+                );
+              })}
+            </div>
+          </div>
+        ))}
+      </div>
+      {checkedCount > 0 && <button onClick={() => setChecked({})} className="text-xs text-muted-foreground hover:text-foreground transition-colors mt-3">全部重置</button>}
+    </div>
+  );
+}
+
 const SectionNumber = ({ num }: { num: string }) => (
   <span className="text-gold/30 font-heading text-6xl md:text-7xl font-bold leading-none select-none">
     {num}
@@ -1059,110 +1154,9 @@ const ProblemSolvingGuideZhTw = () => {
               </Collapsible>
             </div>
 
-            {(() => {
-              const [scores, setScores] = useState<Record<number, boolean | null>>({});
-              const items = [
-                "我有在回答前釐清嗎？",
-                "我有找到根本原因嗎？",
-                "我有展示 2 個以上的選項嗎？",
-                "我有使用具體數字嗎？",
-                "我有分享學到的教訓嗎？",
-                "我有控制在 2 分鐘以內嗎？",
-              ];
-              const yesCount = Object.values(scores).filter(v => v === true).length;
-              const answered = Object.values(scores).filter(v => v !== null && v !== undefined).length;
-              return (
-                <div className="bg-background border border-border rounded-xl p-5 md:p-6 mb-6">
-                  <h3 className="font-heading text-lg text-gold mb-4">練習記分卡</h3>
-                  <div className="space-y-2">
-                    {items.map((item, i) => (
-                      <div key={i} className="flex items-center gap-3 bg-background border border-border rounded-lg px-4 py-2.5">
-                        <span className="text-foreground text-sm flex-1">{item}</span>
-                        <div className="flex gap-1.5 shrink-0">
-                          <button
-                            onClick={() => setScores(prev => ({ ...prev, [i]: prev[i] === true ? null : true }))}
-                            className={`px-3 py-1 rounded text-xs font-bold transition-colors ${scores[i] === true ? "bg-green-600 text-white" : "bg-muted text-muted-foreground hover:bg-muted/80"}`}
-                          >是</button>
-                          <button
-                            onClick={() => setScores(prev => ({ ...prev, [i]: prev[i] === false ? null : false }))}
-                            className={`px-3 py-1 rounded text-xs font-bold transition-colors ${scores[i] === false ? "bg-red-500 text-white" : "bg-muted text-muted-foreground hover:bg-muted/80"}`}
-                          >否</button>
-                        </div>
-                      </div>
-                    ))}
-                    <div className="flex items-center justify-between mt-3 px-1">
-                      <p className="text-foreground text-sm font-semibold">分數：{answered > 0 ? `${yesCount}/${items.length}` : "___/6"}</p>
-                      <p className={`text-sm font-medium ${yesCount >= 5 && answered === items.length ? "text-green-500" : "text-gold"}`}>
-                        {yesCount >= 5 && answered === items.length ? "✓ 面試準備就緒！" : "目標：在面試前穩定達到 5/6。"}
-                      </p>
-                    </div>
-                    {answered > 0 && (
-                      <button onClick={() => setScores({})} className="text-xs text-muted-foreground hover:text-foreground transition-colors mt-1">重置</button>
-                    )}
-                  </div>
-                </div>
-              );
-            })()}
+            <PracticeScorecardZh />
 
-            {(() => {
-              const [checked, setChecked] = useState<Record<string, boolean>>({});
-              const toggle = (key: string) => setChecked(prev => ({ ...prev, [key]: !prev[key] }));
-              const sections = [
-                { heading: "準備", items: [
-                  "我有 3 個按照四步驟框架準備的故事。",
-                  "每個故事都有具體數字（前後對比、%、$、時間）。",
-                  "我用真實來源研究了這家公司。",
-                  "我知道我的「為什麼選這家公司？」回答，有 3 個加權標準。",
-                  "我知道我的「為什麼在找工作？」回答，框架為差距分析。",
-                ]},
-                { heading: "面試中", items: [
-                  "我會在回答前暫停。需要時釐清。",
-                  "我會在解決問題之前先分類。",
-                  "我會陳述我的假設並解釋如何測試。",
-                  "被問到「你會怎麼……？」時我會展示 2-3 個選項。",
-                  "我會在每個回答中使用數字。不要模糊的宣稱。",
-                  "我會用學到的教訓結束每個故事。",
-                ]},
-                { heading: "面試後", items: [
-                  "我會寫下每一個被問到的問題。",
-                  "我會用四步驟框架為我的回答打分。",
-                  "我會找出我漏掉的步驟並練習它。",
-                ]},
-              ];
-              const totalItems = sections.reduce((sum, s) => sum + s.items.length, 0);
-              const checkedCount = Object.values(checked).filter(Boolean).length;
-              return (
-                <div className="bg-background border border-border rounded-xl p-5 md:p-6">
-                  <div className="flex items-center justify-between mb-4">
-                    <h3 className="font-heading text-lg text-gold">下次面試前：檢查清單</h3>
-                    {checkedCount > 0 && <span className="text-xs text-muted-foreground">{checkedCount}/{totalItems}</span>}
-                  </div>
-                  <div className="space-y-5">
-                    {sections.map((section) => (
-                      <div key={section.heading}>
-                        <p className="text-gold text-xs font-bold uppercase tracking-wider mb-2">{section.heading}</p>
-                        <div className="space-y-1.5">
-                          {section.items.map((item, i) => {
-                            const key = `${section.heading}-${i}`;
-                            return (
-                              <button key={i} onClick={() => toggle(key)} className="w-full flex items-start gap-3 bg-background border border-border rounded-lg px-4 py-2.5 text-left hover:bg-muted/50 transition-colors">
-                                <div className={`w-4 h-4 mt-0.5 rounded border-2 shrink-0 flex items-center justify-center transition-colors ${checked[key] ? "bg-green-600 border-green-600" : "border-gold/40"}`}>
-                                  {checked[key] && <svg viewBox="0 0 12 12" className="w-3 h-3 text-white" fill="none" stroke="currentColor" strokeWidth="2"><path d="M2 6l3 3 5-5" /></svg>}
-                                </div>
-                                <span className={`text-sm transition-colors ${checked[key] ? "text-muted-foreground line-through" : "text-foreground"}`}>{item}</span>
-                              </button>
-                            );
-                          })}
-                        </div>
-                      </div>
-                    ))}
-                  </div>
-                  {checkedCount > 0 && (
-                    <button onClick={() => setChecked({})} className="text-xs text-muted-foreground hover:text-foreground transition-colors mt-3">全部重置</button>
-                  )}
-                </div>
-              );
-            })()}
+            <InterviewChecklistZh />
           </div>
         </section>
 
