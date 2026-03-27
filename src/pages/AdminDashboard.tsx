@@ -23,6 +23,7 @@ import { getSafeErrorMessage } from "@/lib/utils";
 import {
   Loader2, Plus, Copy, Trash2, LogOut, Check, ArrowUpDown, Search, Download,
   FileText, DollarSign, Users, Mail, UserCheck, MessageSquare, Activity,
+  Share2, MousePointerClick,
 } from "lucide-react";
 import { format, subDays, startOfDay } from "date-fns";
 import { AreaChart, Area, BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer } from "recharts";
@@ -590,12 +591,13 @@ export default function AdminDashboard() {
 
   const statCards = [
     { label: "Accounts", value: counts.accounts, icon: UserCheck, color: "text-teal-600", sparkColor: "#0d9488", trend: accountTrend },
-    { label: "Reviews", value: counts.reviews, icon: FileText, color: "text-blue-600", sparkColor: "#2563eb", trend: [] as { date: string; count: number }[] },
-    { label: "Salary Checks", value: counts.salary, icon: DollarSign, color: "text-emerald-600", sparkColor: "#059669", trend: trends.salary || [] },
     { label: "Resume Leads", value: counts.resumes, icon: Users, color: "text-violet-600", sparkColor: "#7c3aed", trend: trends.resumes || [] },
     { label: "Email Leads", value: counts.emails, icon: Mail, color: "text-amber-600", sparkColor: "#d97706", trend: trends.emails || [] },
+    { label: "Salary Checks", value: counts.salary, icon: DollarSign, color: "text-emerald-600", sparkColor: "#059669", trend: trends.salary || [] },
     { label: "Feedback", value: counts.feedback, icon: MessageSquare, color: "text-pink-600", sparkColor: "#db2777", trend: trends.feedback || [] },
     { label: "AI Usage", value: aiUsageStats.totalThisMonth, icon: Activity, color: "text-cyan-600", sparkColor: "#0891b2", trend: aiUsageStats.dailyByType.map(d => ({ date: d.date, count: d.import + d.ai_tool + d.analyze })) },
+    { label: "Shares", value: shareClicks.length, icon: Share2, color: "text-indigo-600", sparkColor: "#4f46e5", trend: [] as { date: string; count: number }[] },
+    { label: "Events", value: eventTracks.length, icon: MousePointerClick, color: "text-orange-600", sparkColor: "#ea580c", trend: [] as { date: string; count: number }[] },
   ];
 
   return (
@@ -613,19 +615,19 @@ export default function AdminDashboard() {
 
       <main className="max-w-7xl mx-auto px-4 py-6 space-y-6">
         {/* Overview Cards */}
-        <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-7 gap-4">
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
           {statCards.map(s => (
-            <Card key={s.label}>
-              <CardContent className="p-4">
-                <div className="flex items-center gap-3">
-                  <s.icon className={`w-7 h-7 ${s.color}`} />
-                  <div>
-                    <p className="text-2xl font-bold text-foreground">{s.value.toLocaleString()}</p>
-                    <p className="text-xs text-muted-foreground">{s.label}</p>
+            <Card key={s.label} className="overflow-hidden">
+              <CardContent className="p-3">
+                <div className="flex items-center gap-2.5">
+                  <s.icon className={`w-5 h-5 shrink-0 ${s.color}`} />
+                  <div className="min-w-0">
+                    <p className="text-xl font-bold text-foreground leading-tight">{s.value.toLocaleString()}</p>
+                    <p className="text-[11px] text-muted-foreground leading-tight">{s.label}</p>
                   </div>
                 </div>
                 {s.trend.length > 0 && (
-                  <div className="mt-2 h-8">
+                  <div className="mt-1.5 h-6">
                     <ResponsiveContainer width="100%" height="100%">
                       <AreaChart data={s.trend} margin={{ top: 0, right: 0, left: 0, bottom: 0 }}>
                         <Area type="monotone" dataKey="count" stroke={s.sparkColor} fill={s.sparkColor} fillOpacity={0.15} strokeWidth={1.5} dot={false} />
@@ -640,17 +642,23 @@ export default function AdminDashboard() {
 
         {/* Tabs */}
         <Tabs value={activeTab} onValueChange={setActiveTab}>
-          <TabsList className="w-full justify-start">
-            <TabsTrigger value="accounts">Accounts</TabsTrigger>
-            <TabsTrigger value="reviews">Reviews</TabsTrigger>
-            <TabsTrigger value="salary">Salary Checks</TabsTrigger>
-            <TabsTrigger value="resumes">Resume Leads</TabsTrigger>
-            <TabsTrigger value="emails">Email Leads</TabsTrigger>
-            <TabsTrigger value="feedback">Feedback</TabsTrigger>
-            <TabsTrigger value="ai-usage">AI Usage</TabsTrigger>
-            <TabsTrigger value="shares">Shares</TabsTrigger>
-            <TabsTrigger value="events">Events</TabsTrigger>
-          </TabsList>
+          <div className="overflow-x-auto -mx-4 px-4 md:mx-0 md:px-0">
+            <TabsList className="w-max md:w-full justify-start gap-0.5">
+              {/* People & Leads */}
+              <TabsTrigger value="accounts">Accounts</TabsTrigger>
+              <TabsTrigger value="resumes">Resume Leads</TabsTrigger>
+              <TabsTrigger value="emails">Email Leads</TabsTrigger>
+              {/* Content & Data */}
+              <span className="w-px h-5 bg-border mx-1 hidden md:block" />
+              <TabsTrigger value="reviews">Reviews</TabsTrigger>
+              <TabsTrigger value="salary">Salary</TabsTrigger>
+              <TabsTrigger value="feedback">Feedback</TabsTrigger>
+              {/* Analytics */}
+              <span className="w-px h-5 bg-border mx-1 hidden md:block" />
+              <TabsTrigger value="ai-usage">AI Usage</TabsTrigger>
+              <TabsTrigger value="analytics">Analytics</TabsTrigger>
+            </TabsList>
+          </div>
 
           {/* ── Reviews Tab ──────────────────────────────────────────────── */}
           <TabsContent value="reviews">
@@ -1153,180 +1161,172 @@ export default function AdminDashboard() {
             )}
           </TabsContent>
 
-          {/* ── Shares Tab ──────────────────────────────────────────────── */}
-          <TabsContent value="shares">
-            {shareClicksLoading ? (
+          {/* ── Analytics Tab (Shares + Events combined) ─────────────── */}
+          <TabsContent value="analytics">
+            {(shareClicksLoading || eventTracksLoading) ? (
               <div className="flex justify-center py-16"><Loader2 className="w-6 h-6 animate-spin text-muted-foreground" /></div>
             ) : (() => {
+              // Share stats
               const byChannel: Record<string, number> = {};
-              const byPage: Record<string, number> = {};
+              const bySharePage: Record<string, number> = {};
               shareClicks.forEach(c => {
                 byChannel[c.channel] = (byChannel[c.channel] || 0) + 1;
-                byPage[c.page] = (byPage[c.page] || 0) + 1;
+                bySharePage[c.page] = (bySharePage[c.page] || 0) + 1;
               });
               const channelEntries = Object.entries(byChannel).sort((a, b) => b[1] - a[1]);
-              const pageEntries = Object.entries(byPage).sort((a, b) => b[1] - a[1]);
-              return (
-                <div className="space-y-6">
-                  <p className="text-sm text-muted-foreground">{shareClicks.length} total share clicks tracked</p>
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    <Card>
-                      <CardContent className="pt-6">
-                        <h3 className="font-semibold text-sm mb-3">By Channel</h3>
-                        {channelEntries.length === 0 ? (
-                          <p className="text-muted-foreground text-sm">No share clicks yet</p>
-                        ) : (
-                          <div className="space-y-2">
-                            {channelEntries.map(([ch, count]) => (
-                              <div key={ch} className="flex items-center justify-between text-sm">
-                                <span className="capitalize">{ch}</span>
-                                <span className="font-semibold">{count}</span>
-                              </div>
-                            ))}
-                          </div>
-                        )}
-                      </CardContent>
-                    </Card>
-                    <Card>
-                      <CardContent className="pt-6">
-                        <h3 className="font-semibold text-sm mb-3">By Page (Top 10)</h3>
-                        {pageEntries.length === 0 ? (
-                          <p className="text-muted-foreground text-sm">No share clicks yet</p>
-                        ) : (
-                          <div className="space-y-2">
-                            {pageEntries.slice(0, 10).map(([pg, count]) => (
-                              <div key={pg} className="flex items-center justify-between text-sm">
-                                <span className="truncate max-w-[200px]" title={pg}>{pg}</span>
-                                <span className="font-semibold">{count}</span>
-                              </div>
-                            ))}
-                          </div>
-                        )}
-                      </CardContent>
-                    </Card>
-                  </div>
-                  <div className="border border-border rounded-xl overflow-hidden overflow-x-auto">
-                    <Table>
-                      <TableHeader>
-                        <TableRow>
-                          <TableHead className="w-36">Date</TableHead>
-                          <TableHead>Channel</TableHead>
-                          <TableHead>Page</TableHead>
-                        </TableRow>
-                      </TableHeader>
-                      <TableBody>
-                        {shareClicks.length === 0 ? (
-                          <TableRow><TableCell colSpan={3} className="text-center py-12 text-muted-foreground">No share clicks yet</TableCell></TableRow>
-                        ) : shareClicks.slice(0, 100).map((c, i) => (
-                          <TableRow key={i}>
-                            <TableCell className="text-xs text-muted-foreground whitespace-nowrap">{format(new Date(c.created_at), "MMM d, HH:mm")}</TableCell>
-                            <TableCell className="text-sm capitalize">{c.channel}</TableCell>
-                            <TableCell className="text-sm max-w-[250px] truncate" title={c.page}>{c.page}</TableCell>
-                          </TableRow>
-                        ))}
-                      </TableBody>
-                    </Table>
-                  </div>
-                </div>
-              );
-            })()}
-          </TabsContent>
+              const sharePageEntries = Object.entries(bySharePage).sort((a, b) => b[1] - a[1]);
 
-          {/* ── Events Tab ──────────────────────────────────────────────── */}
-          <TabsContent value="events">
-            {eventTracksLoading ? (
-              <div className="flex justify-center py-16"><Loader2 className="w-6 h-6 animate-spin text-muted-foreground" /></div>
-            ) : (() => {
+              // Event stats
               const byType: Record<string, number> = {};
               const byName: Record<string, number> = {};
-              const byPage: Record<string, number> = {};
               eventTracks.forEach(e => {
                 byType[e.event_type] = (byType[e.event_type] || 0) + 1;
                 byName[e.event_name] = (byName[e.event_name] || 0) + 1;
-                byPage[e.page] = (byPage[e.page] || 0) + 1;
               });
               const typeEntries = Object.entries(byType).sort((a, b) => b[1] - a[1]);
               const nameEntries = Object.entries(byName).sort((a, b) => b[1] - a[1]);
-              const pageEntries = Object.entries(byPage).sort((a, b) => b[1] - a[1]);
+
               return (
-                <div className="space-y-6">
-                  <p className="text-sm text-muted-foreground">{eventTracks.length} total events tracked</p>
-                  <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-                    <Card>
-                      <CardContent className="pt-6">
-                        <h3 className="font-semibold text-sm mb-3">By Type</h3>
-                        {typeEntries.length === 0 ? (
-                          <p className="text-muted-foreground text-sm">No events yet</p>
-                        ) : (
-                          <div className="space-y-2">
-                            {typeEntries.map(([t, count]) => (
-                              <div key={t} className="flex items-center justify-between text-sm">
-                                <span className="capitalize">{t.replace(/_/g, " ")}</span>
-                                <span className="font-semibold">{count}</span>
-                              </div>
-                            ))}
-                          </div>
-                        )}
-                      </CardContent>
-                    </Card>
-                    <Card>
-                      <CardContent className="pt-6">
-                        <h3 className="font-semibold text-sm mb-3">By Action</h3>
-                        {nameEntries.length === 0 ? (
-                          <p className="text-muted-foreground text-sm">No events yet</p>
-                        ) : (
-                          <div className="space-y-2">
-                            {nameEntries.map(([n, count]) => (
-                              <div key={n} className="flex items-center justify-between text-sm">
-                                <span className="capitalize">{n.replace(/_/g, " ")}</span>
-                                <span className="font-semibold">{count}</span>
-                              </div>
-                            ))}
-                          </div>
-                        )}
-                      </CardContent>
-                    </Card>
-                    <Card>
-                      <CardContent className="pt-6">
-                        <h3 className="font-semibold text-sm mb-3">Top Pages</h3>
-                        {pageEntries.length === 0 ? (
-                          <p className="text-muted-foreground text-sm">No events yet</p>
-                        ) : (
-                          <div className="space-y-2">
-                            {pageEntries.slice(0, 10).map(([pg, count]) => (
-                              <div key={pg} className="flex items-center justify-between text-sm">
-                                <span className="truncate max-w-[200px]" title={pg}>{pg}</span>
-                                <span className="font-semibold">{count}</span>
-                              </div>
-                            ))}
-                          </div>
-                        )}
-                      </CardContent>
-                    </Card>
-                  </div>
-                  <div className="border border-border rounded-xl overflow-hidden overflow-x-auto">
-                    <Table>
-                      <TableHeader>
-                        <TableRow>
-                          <TableHead className="w-36">Date</TableHead>
-                          <TableHead>Type</TableHead>
-                          <TableHead>Action</TableHead>
-                          <TableHead>Page</TableHead>
-                        </TableRow>
-                      </TableHeader>
-                      <TableBody>
-                        {eventTracks.length === 0 ? (
-                          <TableRow><TableCell colSpan={4} className="text-center py-12 text-muted-foreground">No events yet</TableCell></TableRow>
-                        ) : eventTracks.slice(0, 100).map((e, i) => (
-                          <TableRow key={i}>
-                            <TableCell className="text-xs text-muted-foreground whitespace-nowrap">{format(new Date(e.created_at), "MMM d, HH:mm")}</TableCell>
-                            <TableCell className="text-sm capitalize">{e.event_type.replace(/_/g, " ")}</TableCell>
-                            <TableCell className="text-sm capitalize">{e.event_name.replace(/_/g, " ")}</TableCell>
-                            <TableCell className="text-sm max-w-[250px] truncate" title={e.page}>{e.page}</TableCell>
+                <div className="space-y-8">
+                  {/* ── Shares Section ── */}
+                  <div>
+                    <div className="flex items-center gap-2 mb-4">
+                      <Share2 className="w-4 h-4 text-indigo-600" />
+                      <h2 className="font-semibold text-foreground">Share Clicks</h2>
+                      <span className="text-xs text-muted-foreground ml-1">{shareClicks.length} total</span>
+                    </div>
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+                      <Card>
+                        <CardContent className="pt-5 pb-4 px-5">
+                          <h3 className="font-medium text-xs text-muted-foreground uppercase tracking-wide mb-3">By Channel</h3>
+                          {channelEntries.length === 0 ? (
+                            <p className="text-muted-foreground text-sm">No share clicks yet</p>
+                          ) : (
+                            <div className="space-y-1.5">
+                              {channelEntries.map(([ch, count]) => (
+                                <div key={ch} className="flex items-center justify-between text-sm">
+                                  <span className="capitalize">{ch}</span>
+                                  <span className="font-semibold tabular-nums">{count}</span>
+                                </div>
+                              ))}
+                            </div>
+                          )}
+                        </CardContent>
+                      </Card>
+                      <Card>
+                        <CardContent className="pt-5 pb-4 px-5">
+                          <h3 className="font-medium text-xs text-muted-foreground uppercase tracking-wide mb-3">Top Shared Pages</h3>
+                          {sharePageEntries.length === 0 ? (
+                            <p className="text-muted-foreground text-sm">No share clicks yet</p>
+                          ) : (
+                            <div className="space-y-1.5">
+                              {sharePageEntries.slice(0, 8).map(([pg, count]) => (
+                                <div key={pg} className="flex items-center justify-between text-sm gap-2">
+                                  <span className="truncate text-muted-foreground" title={pg}>{pg}</span>
+                                  <span className="font-semibold tabular-nums shrink-0">{count}</span>
+                                </div>
+                              ))}
+                            </div>
+                          )}
+                        </CardContent>
+                      </Card>
+                    </div>
+                    {/* Recent shares table */}
+                    <div className="border border-border rounded-xl overflow-hidden overflow-x-auto">
+                      <Table>
+                        <TableHeader>
+                          <TableRow>
+                            <TableHead className="w-36">Date</TableHead>
+                            <TableHead className="w-28">Channel</TableHead>
+                            <TableHead>Page</TableHead>
                           </TableRow>
-                        ))}
-                      </TableBody>
-                    </Table>
+                        </TableHeader>
+                        <TableBody>
+                          {shareClicks.length === 0 ? (
+                            <TableRow><TableCell colSpan={3} className="text-center py-8 text-muted-foreground">No share clicks yet</TableCell></TableRow>
+                          ) : shareClicks.slice(0, 50).map((c, i) => (
+                            <TableRow key={i}>
+                              <TableCell className="text-xs text-muted-foreground whitespace-nowrap">{format(new Date(c.created_at), "MMM d, HH:mm")}</TableCell>
+                              <TableCell className="text-sm capitalize">{c.channel}</TableCell>
+                              <TableCell className="text-sm max-w-[300px] truncate" title={c.page}>{c.page}</TableCell>
+                            </TableRow>
+                          ))}
+                        </TableBody>
+                      </Table>
+                    </div>
+                  </div>
+
+                  {/* Divider */}
+                  <div className="border-t border-border" />
+
+                  {/* ── Events Section ── */}
+                  <div>
+                    <div className="flex items-center gap-2 mb-4">
+                      <MousePointerClick className="w-4 h-4 text-orange-600" />
+                      <h2 className="font-semibold text-foreground">User Events</h2>
+                      <span className="text-xs text-muted-foreground ml-1">{eventTracks.length} total</span>
+                    </div>
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+                      <Card>
+                        <CardContent className="pt-5 pb-4 px-5">
+                          <h3 className="font-medium text-xs text-muted-foreground uppercase tracking-wide mb-3">By Type</h3>
+                          {typeEntries.length === 0 ? (
+                            <p className="text-muted-foreground text-sm">No events yet</p>
+                          ) : (
+                            <div className="space-y-1.5">
+                              {typeEntries.map(([t, count]) => (
+                                <div key={t} className="flex items-center justify-between text-sm">
+                                  <span className="capitalize">{t.replace(/_/g, " ")}</span>
+                                  <span className="font-semibold tabular-nums">{count}</span>
+                                </div>
+                              ))}
+                            </div>
+                          )}
+                        </CardContent>
+                      </Card>
+                      <Card>
+                        <CardContent className="pt-5 pb-4 px-5">
+                          <h3 className="font-medium text-xs text-muted-foreground uppercase tracking-wide mb-3">By Action</h3>
+                          {nameEntries.length === 0 ? (
+                            <p className="text-muted-foreground text-sm">No events yet</p>
+                          ) : (
+                            <div className="space-y-1.5">
+                              {nameEntries.map(([n, count]) => (
+                                <div key={n} className="flex items-center justify-between text-sm">
+                                  <span className="capitalize">{n.replace(/_/g, " ")}</span>
+                                  <span className="font-semibold tabular-nums">{count}</span>
+                                </div>
+                              ))}
+                            </div>
+                          )}
+                        </CardContent>
+                      </Card>
+                    </div>
+                    {/* Recent events table */}
+                    <div className="border border-border rounded-xl overflow-hidden overflow-x-auto">
+                      <Table>
+                        <TableHeader>
+                          <TableRow>
+                            <TableHead className="w-36">Date</TableHead>
+                            <TableHead className="w-24">Type</TableHead>
+                            <TableHead className="w-36">Action</TableHead>
+                            <TableHead>Page</TableHead>
+                          </TableRow>
+                        </TableHeader>
+                        <TableBody>
+                          {eventTracks.length === 0 ? (
+                            <TableRow><TableCell colSpan={4} className="text-center py-8 text-muted-foreground">No events yet</TableCell></TableRow>
+                          ) : eventTracks.slice(0, 50).map((e, i) => (
+                            <TableRow key={i}>
+                              <TableCell className="text-xs text-muted-foreground whitespace-nowrap">{format(new Date(e.created_at), "MMM d, HH:mm")}</TableCell>
+                              <TableCell className="text-sm capitalize">{e.event_type.replace(/_/g, " ")}</TableCell>
+                              <TableCell className="text-sm capitalize">{e.event_name.replace(/_/g, " ")}</TableCell>
+                              <TableCell className="text-sm max-w-[300px] truncate" title={e.page}>{e.page}</TableCell>
+                            </TableRow>
+                          ))}
+                        </TableBody>
+                      </Table>
+                    </div>
                   </div>
                 </div>
               );
