@@ -529,7 +529,7 @@ const FortyEightLawsGuideZhTw = () => {
       <section className="pt-28 md:pt-36 pb-14 md:pb-20 px-5 md:px-6 bg-executive-green">
         <div className="container mx-auto max-w-4xl text-center">
           <h1 className="font-heading text-3xl md:text-5xl lg:text-6xl text-cream leading-tight mb-4" style={{ lineHeight: 1.2 }}>
-            為什麼你的努力<br className="hidden sm:block" />沒有換來升遷？
+            《權力的48法則》<br className="hidden sm:block" />職場實戰版
           </h1>
           <p className="text-lg md:text-xl text-cream/80 mb-3">招募官的職場權力、辦公室政治與職涯策略指南</p>
           <div className="flex flex-col sm:flex-row items-center justify-center gap-2 sm:gap-4 mb-6">
