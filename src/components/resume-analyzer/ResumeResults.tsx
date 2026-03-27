@@ -10,6 +10,7 @@ import ResumeVisualSummary from "./ResumeVisualSummary";
 import { toast } from "@/hooks/use-toast";
 import InlineRating from "@/components/feedback/InlineRating";
 import { useIsMobile } from "@/hooks/use-mobile";
+import { trackShare } from "@/lib/trackShare";
 
 type Language = "en" | "zh-TW";
 const t = (lang: Language, en: string, zh: string) => lang === "en" ? en : zh;
