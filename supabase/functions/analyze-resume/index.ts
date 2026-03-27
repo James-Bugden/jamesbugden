@@ -174,10 +174,18 @@ Deno.serve(async (req) => {
       { global: { headers: { Authorization: authHeader } } }
     );
 
+    let userId: string;
     const token = authHeader.replace('Bearer ', '');
-    const { data: claimsData, error: claimsError } = await supabase.auth.getClaims(token);
-    if (claimsError || !claimsData?.claims) {
-      // Fallback: try getUser if getClaims is unavailable
+    
+    try {
+      const { data: claimsData, error: claimsError } = await (supabase.auth as any).getClaims(token);
+      if (!claimsError && claimsData?.claims?.sub) {
+        userId = claimsData.claims.sub;
+      } else {
+        throw new Error('getClaims failed');
+      }
+    } catch {
+      // Fallback: try getUser
       const { data: { user }, error: userError } = await supabase.auth.getUser();
       if (userError || !user) {
         return new Response(
@@ -185,9 +193,7 @@ Deno.serve(async (req) => {
           { status: 401, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
         );
       }
-      var userId = user.id;
-    } else {
-      var userId = claimsData.claims.sub;
+      userId = user.id;
     }
 
     // --- Server-side usage limit ---
