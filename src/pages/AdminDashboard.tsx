@@ -800,29 +800,31 @@ export default function AdminDashboard() {
                     <TableRow>
                       <TableHead className="w-36">Date</TableHead>
                       <TableHead>Email</TableHead>
-                      <TableHead>Name</TableHead>
-                      <TableHead>Job Title</TableHead>
+                      <TableHead className="w-[120px]">Name</TableHead>
+                      <TableHead className="w-[120px]">Job Title</TableHead>
                       <TableHead className="text-center">Score</TableHead>
                       <TableHead>Seniority</TableHead>
                       <TableHead>Yrs Exp</TableHead>
-                      <TableHead>Industry</TableHead>
+                      <TableHead className="w-[100px]">Industry</TableHead>
                       <TableHead>Lang</TableHead>
+                      <TableHead className="w-[180px]">Resume Preview</TableHead>
                     </TableRow>
                   </TableHeader>
                   <TableBody>
                     {filteredResumeLeads.length === 0 ? (
-                      <TableRow><TableCell colSpan={9} className="text-center py-12 text-muted-foreground">No resume leads found</TableCell></TableRow>
+                      <TableRow><TableCell colSpan={10} className="text-center py-12 text-muted-foreground">No resume leads found</TableCell></TableRow>
                     ) : filteredResumeLeads.map(r => (
                       <TableRow key={r.id}>
                         <TableCell className="text-xs text-muted-foreground whitespace-nowrap">{format(new Date(r.created_at), "MMM d, HH:mm")}</TableCell>
-                        <TableCell className="text-sm">{r.email}</TableCell>
-                        <TableCell className="text-sm">{r.name || "—"}</TableCell>
-                        <TableCell className="text-sm">{r.job_title || "—"}</TableCell>
+                        <TableCell className="text-sm max-w-[160px] truncate" title={r.email}>{r.email}</TableCell>
+                        <TableCell className="text-sm max-w-[120px] truncate" title={r.name || ""}>{r.name || "—"}</TableCell>
+                        <TableCell className="text-sm max-w-[120px] truncate" title={r.job_title || ""}>{r.job_title || "—"}</TableCell>
                         <TableCell className="text-center text-sm font-semibold">{r.overall_score ?? "—"}</TableCell>
                         <TableCell className="text-xs text-muted-foreground">{r.seniority_level || "—"}</TableCell>
                         <TableCell className="text-xs text-muted-foreground">{r.years_experience || "—"}</TableCell>
-                        <TableCell className="text-xs text-muted-foreground">{r.industry || "—"}</TableCell>
+                        <TableCell className="text-xs text-muted-foreground max-w-[100px] truncate" title={r.industry || ""}>{r.industry || "—"}</TableCell>
                         <TableCell className="text-xs text-muted-foreground">{r.language || "—"}</TableCell>
+                        <TableCell className="text-xs text-muted-foreground max-w-[180px] truncate" title={r.resume_text || ""}>{r.resume_text ? r.resume_text.slice(0, 60) + "…" : "—"}</TableCell>
                       </TableRow>
                     ))}
                   </TableBody>

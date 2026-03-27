@@ -230,16 +230,23 @@ export default function ResumeAnalyzer({ defaultLang = "en" }: { defaultLang?: L
 
         // Fire-and-forget analytics tracking — extract name/email from resume text or auth
         const resumeLines = text.split("\n").map(l => l.trim()).filter(Boolean);
-        // First non-empty line is typically the candidate's name
-        const resumeName = resumeLines[0] || "";
+        // Only treat first line as name if it looks like one (short, no special chars)
+        const looksLikeName = (s: string) => s.length > 0 && s.length < 40 && !/[@|•·]/.test(s) && !/\d{5,}/.test(s);
+        const rawName = resumeLines[0] || "";
+        const resumeName = looksLikeName(rawName) ? rawName : null;
         // Try to find an email in the resume text
         const emailMatch = text.match(/[\w.+-]+@[\w-]+\.[\w.-]+/);
         const resumeEmail = emailMatch?.[0] || "";
         const leadName = user?.user_metadata?.full_name || user?.user_metadata?.name || resumeName;
         const leadEmail = user?.email || resumeEmail;
+        // Extract job title from second line or segmentation
+        const rawTitle = resumeLines[1] || "";
+        const extractedTitle = (rawTitle.length > 0 && rawTitle.length < 60 && !/[@|•·]/.test(rawTitle) && !/\d{5,}/.test(rawTitle)) ? rawTitle : null;
+        const jobTitle = extractedTitle || result.segmentation?.seniority_level || null;
         supabase.from("resume_leads").insert({
           email: leadEmail,
           name: leadName || null,
+          job_title: jobTitle,
           language: lang,
           overall_score: result.overall_score ?? null,
           input_method: file ? "upload" : "paste",
