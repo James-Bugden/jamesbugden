@@ -1161,6 +1161,8 @@ const ProblemSolvingGuideZhTw = () => {
                     <button onClick={() => setChecked({})} className="text-xs text-muted-foreground hover:text-foreground transition-colors mt-3">全部重置</button>
                   )}
                 </div>
+              );
+            })()}
           </div>
         </section>
 

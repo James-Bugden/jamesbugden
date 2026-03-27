@@ -1167,6 +1167,8 @@ const ProblemSolvingGuide = () => {
                     <button onClick={() => setChecked({})} className="text-xs text-muted-foreground hover:text-foreground transition-colors mt-3">Reset all</button>
                   )}
                 </div>
+              );
+            })()}
           </div>
         </section>
 
