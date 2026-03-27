@@ -377,10 +377,11 @@ const CareerGameGuideZhTw = () => {
           </div>
 
           <h3 className="font-heading text-xl text-foreground mb-4">三種工作類型</h3>
+          <p className="text-muted-foreground leading-relaxed mb-4">所有的工作都可以歸類為三種。這個框架改變了我評估候選人的方式。</p>
           <div className="space-y-3 mb-6">
             {[
-              { num: "1", title: "BAU（日常營運工作）", desc: "這是你的核心工作。職位說明書上列出的任務。做報表、管理系統、回覆需求。這是維持你職位的工作，但很少讓你升遷。" },
-              { num: "2", title: "高影響力/高能見度工作", desc: "這是推動公司前進的工作。涉及多個團隊。符合公司策略。解決關鍵問題。而且成果可衡量。" },
+              { num: "1", title: "BAU（日常營運工作）", desc: "這是你的核心工作。職位說明書上列出的任務。做報表、管理系統、回覆需求。這是維持你職位的工作，但很少讓你升遷。BAU 的定義：核心職責、僅限於直屬團隊的工作、可重複或可訓練的任務、以及任何可以自動化的事情。" },
+              { num: "2", title: "高影響力/高能見度工作", desc: "這是推動公司前進的工作。涉及多個團隊。符合公司策略。解決關鍵問題。而且成果可衡量。標準：推動組織前進、涉及三個以上的團隊、符合你的核心技能、解決關鍵問題、成果可衡量。" },
               { num: "3", title: "自我發展/參與工作", desc: "這是投資自己和團隊文化。考取證照。閱讀。上課。帶領團隊參與活動。指導他人。" },
             ].map((item) => (
               <div key={item.num} className="bg-background border border-border rounded-xl p-5">
@@ -394,8 +395,25 @@ const CareerGameGuideZhTw = () => {
           <p className="text-muted-foreground leading-relaxed mb-4">追蹤你一週做的所有事情。標記每項任務。理想的比例：40% BAU、40-50% 高影響力工作、10-20% 自我發展。</p>
           <WorkSplitDiagram />
 
-          <h3 className="font-heading text-xl text-foreground mt-8 mb-3">秘密 5：你必須建立和維持健康的界限</h3>
-          <p className="text-muted-foreground leading-relaxed mb-4">目標不是工作更多。也不是工作更努力。目標是更好地安排你的時間。這從界限開始。把它們寫下來。範例：週末不工作。準時下班。一定要吃午飯。家人生病時不工作。</p>
+          <p className="text-muted-foreground leading-relaxed mt-6 mb-8">如果你是高度技術性的角色（工程師、科學家、開發人員），你的 BAU 比例會更高。這是預期的。但目標仍然是盡可能向影響力工作傾斜。</p>
+
+          <h3 className="font-heading text-xl text-foreground mb-3">秘密 5：你必須建立和維持健康的界限</h3>
+          <p className="text-muted-foreground leading-relaxed mb-4">目標不是工作更多。也不是工作更努力。目標是更好地安排你的時間。這從界限開始。把它們寫下來。範例：週末不工作。下午五點後不工作。一定要吃午飯。家人生病時不工作。</p>
+          <p className="text-muted-foreground leading-relaxed mb-4">當你的工作超載時，用這三個步驟：</p>
+          <div className="space-y-3 mb-4">
+            <div className="bg-background border border-border rounded-xl p-4">
+              <p className="text-foreground font-semibold text-sm mb-1">排序：</p>
+              <p className="text-muted-foreground text-sm">不要說「好，我來處理。」改說「我知道這很重要。考慮到我手上的 A、B、C 任務，你覺得我可以先放下 C 來騰出時間嗎？」</p>
+            </div>
+            <div className="bg-background border border-border rounded-xl p-4">
+              <p className="text-foreground font-semibold text-sm mb-1">整合：</p>
+              <p className="text-muted-foreground text-sm">把重複的需求合併。如果你一直收到數據需求，建一個自助式儀表板，而不是一一回答。</p>
+            </div>
+            <div className="bg-background border border-border rounded-xl p-4">
+              <p className="text-foreground font-semibold text-sm mb-1">重新定位：</p>
+              <p className="text-muted-foreground text-sm">原本是「跑一份每週報表」變成「透過自動化儀表板實現數據驅動的決策」。同樣的工作。不同的包裝。更大的影響力。</p>
+            </div>
+          </div>
 
           <h3 className="font-heading text-xl text-foreground mt-8 mb-3">秘密 6：你的老闆不知道你在做什麼</h3>
           <p className="text-muted-foreground leading-relaxed mb-4">就這樣。再好的主管也不會追蹤你的所有任務。讓他們了解你的工作狀況是你的責任。</p>
@@ -496,26 +514,80 @@ const CareerGameGuideZhTw = () => {
           </div>
 
           <h3 className="font-heading text-xl text-foreground mb-3">秘密 12：人們喜歡和自己喜歡的人一起工作</h3>
-          <p className="text-muted-foreground leading-relaxed mb-6">六項標準職能評估中有五項和軟實力相關。你的公司對你在協作、文化貢獻和與人共事方面的評分，高於對你技術能力的評分。</p>
+          <p className="text-muted-foreground leading-relaxed mb-4">六項標準職能評估中有五項和軟實力相關。你的公司對你在協作、文化貢獻和與人共事方面的評分，高於對你技術能力的評分。這對任何一直專注於技術表現的人來說是一記警鐘。加班時數和培訓都不重要，如果你不能和人好好相處。</p>
+          <p className="text-muted-foreground leading-relaxed mb-6">對「我不想做作」這個反駁的回應：這不是關於拍馬屁。這是關於把溝通、交付和個性當成你需要發展的技能，就像其他任何技能一樣。</p>
 
           <h3 className="font-heading text-xl text-foreground mb-3">秘密 13：只有想升遷但沒有計畫，12 個月後你會在原地不動</h3>
-          <p className="text-muted-foreground leading-relaxed mb-6">獲得升遷的人是那些主動要求、有計畫、建立自己支持資源的人。他們不會走進年終考核時期待驚喜。</p>
+          <p className="text-muted-foreground leading-relaxed mb-4">獲得升遷的人是那些主動要求、有計畫、建立自己支持資源的人。他們不會走進年終考核時期待驚喜。</p>
+          <p className="text-muted-foreground leading-relaxed mb-4"><strong className="text-foreground">職能練習：</strong>拿到你角色的職能框架。按職級給自己每項職能打分。然後給你的老闆一張空白表格，請他們也給你打分。</p>
+          <div className="space-y-3 mb-6">
+            {[
+              { scenario: "你的老闆給你的分數比你自己打的高。", action: "你應該開始有針對性地討論升遷。是什麼阻礙了？時間表？預算？直接問。" },
+              { scenario: "你的老闆給你的分數比你低。", action: "了解差距在哪裡。請求具體的例子。制定一個在未來 6-12 個月內縮小差距的計畫。" },
+              { scenario: "分數大致吻合。", action: "你們是同步的。現在問：「你需要什麼條件才會在下一個週期替我爭取升遷？」" },
+            ].map((item, i) => (
+              <div key={i} className="bg-background border border-border rounded-xl p-4">
+                <p className="text-foreground font-semibold text-sm mb-1">情境 {i + 1}：{item.scenario}</p>
+                <p className="text-muted-foreground text-sm">{item.action}</p>
+              </div>
+            ))}
+          </div>
+
+          <h3 className="font-heading text-xl text-foreground mb-3">學會「自誇」（重新定義：你是在彙報）</h3>
+          <p className="text-muted-foreground leading-relaxed mb-4">你不是在自誇。你是在彙報。想想你上一個工作日。你的老闆親眼見證了你多少百分比的工作？20%？50%？剩下的部分，你的老闆完全不知道你做了什麼或者需要多少努力。開始做一個成就追蹤表。每週更新。在一對一會議中用它把你的工作和業務成果連結起來。</p>
+
+          <h3 className="font-heading text-xl text-foreground mb-3">秘密 14：你老闆不知道的工作等於不存在</h3>
+          <p className="text-muted-foreground leading-relaxed mb-4">保護你的資產。當你犯了錯，帶著計畫去找你的老闆。不要藏起來希望它自己消失。</p>
+          <div className="bg-muted/30 border border-border rounded-xl p-5 mb-6">
+            <p className="text-foreground text-sm italic">「嗨。我想確保你知道昨天發出的報告中有一個小錯誤。我們已經解決了，會重新發送。未來，我們已經做了 X、Y、Z 來防止再次發生。想讓你知道。」</p>
+            <p className="text-muted-foreground text-xs mt-2">這展現了解決問題、負責任和預防的能力。你的老闆從你這裡先聽到，而不是從一個生氣的利害關係人那裡。</p>
+          </div>
 
           <h3 className="font-heading text-xl text-foreground mb-3">秘密 15：大多數關於你職涯的對話會在你不在場時進行</h3>
-          <p className="text-muted-foreground leading-relaxed mb-4">公司有三個階段：績效考核（你有 80% 控制權）、升遷提報（60% 控制權）、校準（最少控制權，但你的人脈和品牌會替你工作）。</p>
+          <p className="text-muted-foreground leading-relaxed mb-4">以下是大多數大公司背後發生的事情：</p>
+          <div className="space-y-3 mb-4">
+            {[
+              { phase: "第一階段：績效考核", desc: "你和你的老闆根據職能給你打分。你在這裡有大約 80% 的控制權。" },
+              { phase: "第二階段：升遷提報", desc: "如果你被提名升遷，你的文件會被送出。有些公司需要高階贊助人。有些需要「升遷包」。例如，Google 要求寫一份你的工作如何對應公司價值觀的報告，由一個不包括你老闆的小組審閱。你在這裡有大約 60% 的控制權。" },
+              { phase: "第三階段：校準", desc: "領導者把所有考核帶到一個房間裡跨團隊比較。公司目標是鐘型曲線：70% 得分 3，10% 得分 1-2，20% 得分 4-5。如果太多人被評為 5，他們會把人往下調。如果你的分數在邊界上，房間裡認識你且高度評價你的人數，決定了你是留在原位還是被調降。" },
+            ].map((item, i) => (
+              <div key={i} className="bg-background border border-border rounded-xl p-4">
+                <p className="text-foreground font-semibold text-sm mb-1">{item.phase}</p>
+                <p className="text-muted-foreground text-sm">{item.desc}</p>
+              </div>
+            ))}
+          </div>
           <InfoBox title="我的看法" variant="gold"><p>我去過這些房間。我看過有人因為房間裡沒人認識他們而被調降。我也看過有人因為三位領導者替他們說話而留在頂端。你的人脈不是可有可無的。它是你在那些你不在場的會議室裡的保險。</p></InfoBox>
 
           <h3 className="font-heading text-xl text-foreground mt-8 mb-3">秘密 16：讓你進入高階管理層的是你的潛力，不是你的績效</h3>
+          <p className="text-muted-foreground leading-relaxed mb-4">績效是關於你做現在的工作有多好。潛力是關於你能成長多高、多快。它們是不同的衡量標準，大多數公司在升遷決策中更看重潛力。</p>
+
           <NineBoxGrid />
+
+          <div className="space-y-4 mt-6">
+            {[
+              { box: "第 1 格，招錯人：", desc: "低績效，低潛力。很快被管理出局或被解僱。" },
+              { box: "第 4 格，拚命三郎：", desc: "交付能力強，但溝通和自我行銷差。他們每天拚命做，但幾乎得不到認可。主管利用他們分配更多工作，而不是投資他們的成長。" },
+              { box: "第 5 格，工作馬：", desc: "工作做得很好，超越職責，但離開主管就無法運作。被告知「沒有你我們做不到」，但不被邀請參加領導會議或跨團隊專案。" },
+              { box: "第 6 格，核心成員：", desc: "工作不錯，軟實力也不錯，會到中階管理層然後停滯。他們是維持事情運轉的穩定型選手。" },
+              { box: "第 7 格，高潛力：", desc: "工作做得不錯，但溝通和軟實力比核心績效更出色。經常被拉入高能見度的專案。" },
+              { box: "第 8 格，高績效者：", desc: "你在每場會議中都會看到的專家。處理龐大的工作量，水準高，軟實力強。每 3-4 年升遷一次。" },
+              { box: "第 9 格，明星：", desc: "人口的 1-5%。優秀的軟實力，快速晉升，高品質的工作，天生擅長這場遊戲。如果你在這個群體裡，你知道的。" },
+            ].map((item, i) => (
+              <p key={i} className="text-muted-foreground text-sm leading-relaxed"><strong className="text-foreground">{item.box}</strong> {item.desc}</p>
+            ))}
+          </div>
+
+          <p className="text-muted-foreground leading-relaxed mt-4 mb-4">公司通常不會告訴你你在哪一格。但你應該能根據你收到的回饋感受到。</p>
 
           <Collapsible title="你現在在哪一格？快速自我檢測">
             <div className="space-y-3 mt-3">
               {[
-                { q: "你聽到「工作做得好」但從不升遷？", a: "第 4 或 5 格。你的軟實力需要加強。" },
-                { q: "人們喜歡和你合作但質疑你的產出？", a: "第 2 或 7 格。你的交付需要加強。" },
-                { q: "你得到不錯的考核但覺得卡住了？", a: "第 6 格。你需要決定是否想要更多。" },
-                { q: "你被拉入高能見度的專案，每 3-4 年升一次？", a: "第 8 格。繼續你正在做的。" },
-                { q: "每個人都搶著和你合作，你正在快速晉升？", a: "第 9 格。你已經掌握了這場遊戲。" },
+                { q: "你聽到「工作做得好」但從不升遷？", a: "第 4 或 5 格（拚命三郎或工作馬）。你的軟實力需要加強。" },
+                { q: "人們喜歡和你合作但質疑你的產出？", a: "第 2 或 7 格（進退兩難或高潛力）。你的交付需要加強。" },
+                { q: "你得到不錯的考核、好的回饋，但覺得卡住了？", a: "第 6 格（核心成員）。你需要決定是否想要更多，然後制定計畫。" },
+                { q: "你被拉入高能見度的專案，每 3-4 年升一次？", a: "第 8 格（高績效者）。繼續你正在做的。" },
+                { q: "每個人都搶著和你合作，你正在快速晉升？", a: "第 9 格（明星）。你已經掌握了這場遊戲。" },
               ].map((item, i) => (
                 <div key={i} className="bg-background rounded-lg p-3">
                   <p className="text-foreground text-sm font-medium mb-1">{item.q}</p>
@@ -525,8 +597,12 @@ const CareerGameGuideZhTw = () => {
             </div>
           </Collapsible>
 
+          <InfoBox title="我的看法" variant="gold">
+            <p className="mt-2">當我招募領導角色時，我篩選的是潛力，不是績效。這個人會成長到下一個層級嗎？他們會帶團隊嗎？他們能處理模糊性嗎？我不在乎你是否每個星期四都跑出了完美的報表。我在乎的是你能不能走進一個坐滿資深領導者的房間，然後站穩腳跟。</p>
+          </InfoBox>
+
           <h3 className="font-heading text-xl text-foreground mt-8 mb-3">秘密 17：建立你的領導力，不只讓你成功，也讓你的團隊成功</h3>
-          <p className="text-muted-foreground leading-relaxed">你的個人技能讓你走到這裡。領導力技能讓你到達下一個層級。你需要持續成長和發展自己與你的人才，同時讓你的領導層了解這些工作。</p>
+          <p className="text-muted-foreground leading-relaxed">這是知道自己位置和採取行動之間的橋樑。你的個人技能讓你走到這裡。領導力技能讓你到達下一個層級。光是做好自己的工作和幫助團隊做好他們的工作是不夠的。你需要持續成長和發展自己與你的人才，同時讓你的領導層了解這些工作。這讓你在職涯中走得更遠，並帶著你的團隊一起前進。</p>
         </div>
       </section>
 
@@ -542,13 +618,21 @@ const CareerGameGuideZhTw = () => {
           </div>
 
           <h3 className="font-heading text-xl text-foreground mb-3">秘密 18：你的人脈必須超越你自己的團隊</h3>
-          <p className="text-muted-foreground leading-relaxed mb-4">把你的人脈想成一棵樹。主幹是你的直屬領導鏈。枝葉是你的橫向、斜向和跨組織關係。大多數人建立了強壯的主幹就停下來。但枝葉才是讓你脫穎而出的關鍵。</p>
+          <p className="text-muted-foreground leading-relaxed mb-4">把你的人脈想成一棵樹。主幹是你的直屬領導鏈（你的老闆、他們的老闆，一路往上）。枝葉是你的橫向、斜向和跨組織關係。大多數人建立了強壯的主幹就停下來。但枝葉才是讓你脫穎而出並讓你獲得資源（機會、能見度、支持者）的關鍵。</p>
+          <p className="text-muted-foreground leading-relaxed mb-6">看看 Jim。任何職涯書籍中最優秀的社交高手。Jim 從來沒有投過履歷。當 Jim 在公司重組後發現自己陷入死胡同時，他沒有投遞申請。他舉辦和參加活動。他加入電子報和社群。他對任何可能認識他目標領域的人進行陌生開發。兩個月內，他的人脈擴展了十倍。他在目標產業的五家主要公司都有聯繫人。當正式找工作的時候，每個聯繫人都有潛在的機會。Jim 有了選擇權。</p>
 
           <h3 className="font-heading text-xl text-foreground mb-3">秘密 19：沒有人脈你會失敗</h3>
-          <p className="text-muted-foreground leading-relaxed mb-4">為你組織中的 20-25 人按八個標準評分：關係強度、職級、風險、影響力、曝光度、威嚇度、背書力、未來影響力。專注於你的前五位可接觸對象。在 30 天內安排咖啡聊天。</p>
+          <p className="text-muted-foreground leading-relaxed mb-4">為你組織中的 20-25 人按八個標準評分：關係強度、職級、對你晉升的風險、在組織中的權力、能給你曝光的能力、威嚇度、背書力、對你職涯的未來影響力。總分排名。移除比你高兩個以上層級的人（放到「目標」清單）。專注於你的前五位可接觸對象。</p>
+          <p className="text-muted-foreground leading-relaxed mb-4">在 30 天內安排咖啡聊天或指導會議。如果在你的公司文化中直接聯繫感覺不太合適，問你的老闆：「作為我持續成長的一部分，我正在擴展我的人脈。我注意到 [某人] 在 [某項技能] 方面非常出色。我很想和他們見面學習。你願意幫我介紹嗎？」</p>
 
           <h3 className="font-heading text-xl text-foreground mb-3">秘密 20：幫助你的人會比你幫助的人更喜歡你</h3>
-          <p className="text-muted-foreground leading-relaxed mb-4">這違反直覺，但有心理學作為依據。在社交時，先尋求學習。不要先提供幫助。請他們教你。</p>
+          <p className="text-muted-foreground leading-relaxed mb-4">這違反直覺，但有心理學作為依據。當有人幫助你時，他們把你視為自己的延伸。他們投資了你。推薦你就像推薦他們自己的判斷力。建議：在社交時，先尋求學習。不要先提供幫助。請他們教你。</p>
+          <p className="text-muted-foreground leading-relaxed mb-4">你和新聯繫人的第一次對話應該達到三件事：</p>
+          <ol className="list-decimal list-inside space-y-2 text-muted-foreground text-sm mb-6">
+            <li>了解他們的個人和職業背景。找到共同點。</li>
+            <li>找出他們擁有的一項你想發展的技能。真誠地讚美：「我注意到你在 [某方面] 非常出色，我很想向你學習一些技巧。」</li>
+            <li>分享你的個人品牌。不是履歷摘要。是什麼讓你與眾不同和有價值。</li>
+          </ol>
 
           <h3 className="font-heading text-xl text-foreground mb-3">導師關係的規則</h3>
           <div className="space-y-2 mb-6">
@@ -571,22 +655,35 @@ const CareerGameGuideZhTw = () => {
           </div>
 
           <h3 className="font-heading text-xl text-foreground mb-3">秘密 21：你表達不同意見的方式比你的意見更重要</h3>
-          <p className="text-muted-foreground leading-relaxed mb-4">意見分歧失控的三個原因：管理層不一定想要最直接的解決方案、管理層有你看不到的背景資訊、你沒有帶人跟上你的思考過程。</p>
+          <p className="text-muted-foreground leading-relaxed mb-4">意見分歧失控的三個原因：</p>
+          <div className="space-y-3 mb-6">
+            {[
+              { title: "你的管理層不一定想要最直接的解決方案。", desc: "辦公室政治存在。你的解決方案可能需要和一個不願合作的團隊協作。或者管理層正在爭取更大的職權範圍，而你的方案不支持。" },
+              { title: "你的管理層有你看不到的背景資訊。", desc: "你的解決方案可能解決了你的問題，但在其他地方造成問題。隧道視野讓你錯過了更大的圖景。" },
+              { title: "你沒有帶人跟上你的思考過程。", desc: "天生的問題解決者會直接跳到解決方案。但如果你的解決方案比房間裡其他人的思考快了三步，人們不會跟上。" },
+            ].map((item, i) => (
+              <div key={i} className="bg-card border border-border rounded-xl p-4">
+                <p className="text-foreground font-semibold text-sm mb-1">{i + 1}. {item.title}</p>
+                <p className="text-muted-foreground text-sm">{item.desc}</p>
+              </div>
+            ))}
+          </div>
 
           <h3 className="font-heading text-xl text-foreground mb-4">國王和專家</h3>
           <KingsVsSpecialists />
+          <p className="text-muted-foreground leading-relaxed mt-4 mb-6">了解你面對的是哪種類型，能在衝突開始前就預防。</p>
 
-          <h3 className="font-heading text-xl text-foreground mt-8 mb-3">秘密 22：根據對方調整你的溝通方式，能在衝突出現前就化解它</h3>
-          <p className="text-muted-foreground leading-relaxed mb-4">日本概念 nemawashi（根回し）：「決策在走廊上完成」。不要等到大型會議才第一次提出你的想法。做預先溝通。建立共識。</p>
+          <h3 className="font-heading text-xl text-foreground mb-3">秘密 22：根據對方調整你的溝通方式，能在衝突出現前就化解它</h3>
+          <p className="text-muted-foreground leading-relaxed mb-4">日本概念 nemawashi（根回し）：翻譯為「轉動根基」，意思是「決策在走廊上完成」。不要等到大型會議才第一次提出你的想法。做預先溝通。進行一對一的對話。在正式提案前建立共識。如果你的老闆第一次聽到你的想法是在一個有 20 個人的會議上，你成功的機會很低。先做預備工作。</p>
 
           <h3 className="font-heading text-lg text-foreground mb-3">衝突解決的五個工具</h3>
           <div className="space-y-3 mb-6">
             {[
               { tool: "大量提問。", desc: "把你的回饋包裝成問題。不要說「那行不通」，改說「你能幫我理解這如何和營運團隊的需求對齊嗎？」" },
-              { tool: "先認可再回應。", desc: "當有人提出你不同意的方案時，先說「謝謝你提出這個」再解釋你的顧慮。" },
-              { tool: "表達不同意見但不說不。", desc: "說「我理解為什麼我們想這樣做，但我有一些顧慮...」" },
+              { tool: "先認可再回應。", desc: "當有人提出你不同意的方案時，先說「謝謝你提出這個」再解釋你的顧慮。這讓人感覺被包容而不是被碾壓。" },
+              { tool: "表達不同意見但不說不。", desc: "說「我理解為什麼我們想這樣做，但我有一些顧慮...」分享顧慮而不是直接反對。" },
               { tool: "RASI 框架。", desc: "重述問題。提出釐清問題。陳述你的解決方案。讓其他人參與取得共識。" },
-              { tool: "一切都是「可以」。", desc: "不要說不，而是框定成本：「我們完全做得到。需要增加兩個人力，並把 Q3 時間線延後六週。你希望我把這些選項整理出來嗎？」" },
+              { tool: "一切都是「可以」。", desc: "如果你有足夠的人力、時間或資金，沒有什麼是不可能的。不要說不，而是框定成本：「我們完全做得到。需要增加兩個人力，並把 Q3 時間線延後六週。你希望我把這些選項整理出來嗎？」" },
             ].map((item, i) => (
               <div key={i} className="bg-card border border-border rounded-xl p-4">
                 <p className="text-foreground font-semibold text-sm mb-1">{i + 1}. {item.tool}</p>
@@ -596,10 +693,11 @@ const CareerGameGuideZhTw = () => {
           </div>
 
           <h3 className="font-heading text-lg text-foreground mb-3">ARSE 電子郵件模板</h3>
+          <p className="text-muted-foreground leading-relaxed mb-3">用於和管理層或困難利害關係人溝通的框架（是的，這個縮寫是故意的）：</p>
           <div className="grid sm:grid-cols-2 gap-3 mb-6">
             {[
               { letter: "A", word: "認可", desc: "感謝他們聯繫你。如果他們是更高層級或外部人員，正式打招呼。" },
-              { letter: "R", word: "重述", desc: "用你自己的話重複他們的問題。增加背景資訊。" },
+              { letter: "R", word: "重述", desc: "用你自己的話重複他們的問題。增加背景資訊以顯示你理解他們在問什麼。" },
               { letter: "S", word: "解決", desc: "提出解決方案。回答問題。提供下一步行動。" },
               { letter: "E", word: "讚揚", desc: "表達感謝。認可他們的專業知識。提醒他們你隨時可以跟進。" },
             ].map((item) => (
@@ -612,7 +710,18 @@ const CareerGameGuideZhTw = () => {
           </div>
 
           <h3 className="font-heading text-xl text-foreground mb-3">秘密 23：你不會總是如願</h3>
-          <p className="text-muted-foreground leading-relaxed">這就是 Amazon 的「不同意但承諾」做法。儘早分享你的顧慮。如果管理層仍然選擇不同的方向，放下它，努力讓專案成功。</p>
+          <p className="text-muted-foreground leading-relaxed mb-4">這就是 Amazon 的「不同意但承諾」做法。用上面的五個工具儘早分享你的顧慮。如果管理層仍然選擇不同的方向，放下它，努力讓專案成功。</p>
+          <p className="text-muted-foreground leading-relaxed mb-4">觸發因素也很重要。看看你「不想被知道的」五件事清單。這些同樣的特質就是在其他人身上觸發你的東西。當一個同事讓你抓狂時，很可能是因為他們展現了一個你在自己身上拒絕接受的特質。了解你的觸發因素可以讓你做好準備。</p>
+
+          <Collapsible title="在你下次和困難同事互動之前，做這些事">
+            <ol className="list-decimal list-inside space-y-2 text-muted-foreground text-sm mt-3">
+              <li><strong className="text-foreground">命名觸發因素。</strong>這個人身上什麼讓你困擾？是他們的懶惰？控制慾？無組織？要具體。</li>
+              <li><strong className="text-foreground">對照你的 11 清單。</strong>這個特質是否在你「不想被知道的」清單上？如果是，你是把自己的標準投射到一個不共享這些標準的人身上。這是你要管理的問題，不是他們的。</li>
+              <li><strong className="text-foreground">提前準備你的回應。</strong>寫下兩到三件你知道你在會議中會想說的話。然後用「先認可再回應」的方法重新寫。</li>
+              <li><strong className="text-foreground">為這次互動設定個人界限。</strong>提前決定：「我不會打斷。我會在反應之前先問一個釐清的問題。我不會在還在生氣的時候發跟進郵件。」</li>
+              <li><strong className="text-foreground">事後覆盤。</strong>你的觸發因素被觸發了嗎？你說了什麼？下次你會改變什麼？目標不是消除你的觸發因素。目標是阻止它們在當下控制你的行為。</li>
+            </ol>
+          </Collapsible>
         </div>
       </section>
 
@@ -628,18 +737,27 @@ const CareerGameGuideZhTw = () => {
           </div>
 
           <h3 className="font-heading text-xl text-foreground mb-3">秘密 24：管理和領導不是同一回事</h3>
-          <p className="text-muted-foreground leading-relaxed mb-4">從資深經理到總監的跳躍是所有產業中最困難的之一。你必須學會領導，不只是管理。</p>
-          <InfoBox title="我的看法" variant="gold"><p>我曾經僱了一位資深經理擔任團隊主管。技術能力強。面試表現出色。三個月內，半個團隊要求轉調。問題？他什麼都自己做。現在當我招募管理職時，我問的第一個問題是：「告訴我你團隊裡你培養的一個人。」如果答案含糊，這告訴我一切。</p></InfoBox>
+          <p className="text-muted-foreground leading-relaxed mb-4">從資深經理到總監的跳躍是所有產業中最困難的之一。你必須學會領導，不只是管理。很多經理知道如何管理但不知道如何領導。這些人變成了微管理者。很多領導者不知道如何管理。這些人變成了隱形老闆。能兩者兼顧的人很少見。</p>
+          <InfoBox title="我的看法" variant="gold"><p>我曾經僱了一位資深經理擔任團隊主管。技術能力強。面試表現出色。三個月內，半個團隊要求轉調。問題？他什麼都自己做。他重寫團隊的工作而不是指導他們。他參加每一場會議而不是授權。他作為個人貢獻者是高績效者，但他的管理技能為零。他的團隊覺得自己隱形了。現在當我招募管理職時，我問的第一個問題是：「告訴我你團隊裡你培養的一個人。」如果答案含糊，這告訴我一切。</p></InfoBox>
 
           <SkillMaturityLadder />
 
-          <h3 className="font-heading text-xl text-foreground mt-8 mb-3">CODS 工作指派框架</h3>
+          <h3 className="font-heading text-xl text-foreground mt-8 mb-3">有效管理的三大支柱</h3>
+          <p className="text-muted-foreground leading-relaxed mb-4">有效管理只需要三件事：</p>
+          <ol className="list-decimal list-inside space-y-2 text-muted-foreground text-sm mb-4">
+            <li>為你的團隊設定清楚的期望</li>
+            <li>定期的發展和專案完成檢視</li>
+            <li>了解每個團隊成員的學習風格和目標</li>
+          </ol>
+          <p className="text-muted-foreground leading-relaxed mb-6">掌握這三件事，你就會比 90% 的經理更好。</p>
+
+          <h3 className="font-heading text-lg text-foreground mb-3">CODS 工作指派框架</h3>
           <div className="grid sm:grid-cols-2 gap-3 mb-6">
             {[
-              { letter: "C", word: "背景", desc: "為什麼這項工作重要？什麼利害關係人提出的？" },
-              { letter: "O", word: "產出", desc: "交付物長什麼樣子？要具體。" },
-              { letter: "D", word: "截止日期", desc: "初稿什麼時候交？中間有什麼檢查點？" },
-              { letter: "S", word: "資源", desc: "他們去哪裡獲取更多資訊？和誰合作？" },
+              { letter: "C", word: "背景", desc: "為什麼這項工作重要？你要回答什麼問題？什麼利害關係人提出的？" },
+              { letter: "O", word: "產出", desc: "交付物長什麼樣子？樞紐分析表？儀表板？簡報？要具體，尤其對初階團隊成員。" },
+              { letter: "D", word: "截止日期", desc: "初稿什麼時候交？最終版本？中間有什麼檢查點？" },
+              { letter: "S", word: "資源", desc: "他們去哪裡獲取更多資訊？和誰合作？數據在哪？" },
             ].map((item) => (
               <div key={item.letter} className="bg-background border border-border rounded-xl p-4">
                 <span className="text-gold font-bold text-lg">{item.letter}</span>
@@ -649,17 +767,54 @@ const CareerGameGuideZhTw = () => {
             ))}
           </div>
 
-          <h3 className="font-heading text-xl text-foreground mb-3">秘密 25-29 重點</h3>
+          <h3 className="font-heading text-xl text-foreground mb-3">秘密 25：成功始於任務指派，而非完成</h3>
+          <p className="text-muted-foreground leading-relaxed mb-6">如果你在指派工作時就為團隊做好準備，你在後端修正的時間就會更少。</p>
+
+          <Collapsible title="管理儀式 — 有效的節奏">
+            <ul className="space-y-2 text-muted-foreground text-sm mt-3">
+              <li>• <strong className="text-foreground">每兩週一對一：</strong>10 分鐘談優先事項，10 分鐘即時回饋，10 分鐘上報和障礙。</li>
+              <li>• <strong className="text-foreground">交替進行的團隊會議</strong>分享更新、專案成功和背景資訊。</li>
+              <li>• <strong className="text-foreground">一月</strong>和每個人進行目標設定。</li>
+              <li>• <strong className="text-foreground">六月</strong>年中檢視進度和職涯對話。</li>
+              <li>• <strong className="text-foreground">十月/十一月</strong>年終準備，確保沒有人對自己的評估感到驚訝。</li>
+            </ul>
+          </Collapsible>
+
+          <h3 className="font-heading text-xl text-foreground mt-8 mb-3">秘密 26：一個成功的員工造就一個成功的領導者</h3>
+          <p className="text-muted-foreground leading-relaxed mb-6">太多經理害怕和團隊分享功勞。他們擔心員工會比自己看起來更好。這是本末倒置的。你的團隊做得越好，你看起來越好。你作為經理的目標應該是不斷取代自己。當你的團隊能在沒有你的情況下運作，你就能騰出時間做更具策略性、更高能見度的工作。</p>
+
+          <h3 className="font-heading text-xl text-foreground mb-3">秘密 27：負面的模式比負面的人更有問題</h3>
+          <p className="text-muted-foreground leading-relaxed mb-4">忘掉「問題員工」。專注於問題模式。就像醫生透過症狀診斷疾病一樣，經理應該找出根本原因的模式並加以治療。</p>
+          <Collapsible title="常見的負面模式">
+            <ul className="space-y-2 text-muted-foreground text-sm mt-3">
+              <li>• <strong className="text-foreground">注意力不足：</strong>小錯誤、錯字、CC 錯人、錯過小截止日期。</li>
+              <li>• <strong className="text-foreground">缺乏主動性：</strong>等待一步一步的指示，BAU 做得好但面對新工作就掙扎。</li>
+              <li>• <strong className="text-foreground">組織能力差：</strong>沒有文件、溝通散亂、計畫沒有後續。</li>
+              <li>• <strong className="text-foreground">溝通和執行風範薄弱：</strong>工作做得好但無法表達，在領導面前害羞。</li>
+              <li>• <strong className="text-foreground">拒絕授權：</strong>什麼都自己做，不信任團隊。</li>
+            </ul>
+            <p className="text-muted-foreground text-sm mt-3">管理模式，而不是個人。持續對「授權」給予回饋，而不是給出一堆他們不知道怎麼修的零散抱怨。</p>
+          </Collapsible>
+
+          <h3 className="font-heading text-xl text-foreground mt-8 mb-3">秘密 28：你無法代替你的團隊</h3>
+          <p className="text-muted-foreground leading-relaxed mb-4">建立團隊的三條規則：</p>
+          <ol className="list-decimal list-inside space-y-2 text-muted-foreground text-sm mb-6">
+            <li>不要害怕管理低績效者出局。設定期望，給時間交付，清楚溝通。如果他們沒有改善，他們需要走。</li>
+            <li>招聘時，先看態度、工作倫理和文化契合度。技術能力其次。有好基礎的努力工作者可以被教會大多數技能。</li>
+            <li>授權。如果你什麼都自己做，你的團隊成長不了，你也是。</li>
+          </ol>
+
+          <h3 className="font-heading text-xl text-foreground mb-3">秘密 29：策略是必要的</h3>
+          <p className="text-muted-foreground leading-relaxed mb-4">建立策略的兩個工具：</p>
           <div className="space-y-3">
-            {[
-              "秘密 25：成功始於任務指派，而非完成。",
-              "秘密 26：一個成功的員工造就一個成功的領導者。你的團隊做得越好，你看起來越好。",
-              "秘密 27：負面的模式比負面的人更有問題。管理的是模式，不是個人。",
-              "秘密 28：你無法代替你的團隊。授權。如果你什麼都自己做，你的團隊成長不了，你也是。",
-              "秘密 29：策略是必要的。用願景問題和三的法則來建立策略。",
-            ].map((s, i) => (
-              <p key={i} className="text-muted-foreground text-sm leading-relaxed"><strong className="text-foreground">{s.split("。")[0]}。</strong>{s.substring(s.indexOf("。") + 1)}</p>
-            ))}
+            <div className="bg-background border border-border rounded-xl p-4">
+              <p className="text-foreground font-semibold text-sm mb-1">1. 願景問題：</p>
+              <p className="text-muted-foreground text-sm">「如果我有無限的資金和資源，我會怎麼管理我的團隊？」然後回到現實，從今天的狀態到那個未來狀態建立一個路線圖。</p>
+            </div>
+            <div className="bg-background border border-border rounded-xl p-4">
+              <p className="text-foreground font-semibold text-sm mb-1">2. 三的法則：</p>
+              <p className="text-muted-foreground text-sm">把你的目標組織成三個類別。超過三個會讓人不知所措。少於三個看起來你沒有認真思考。三是人們在一次會議中能消化的理想數字。</p>
+            </div>
           </div>
         </div>
       </section>
@@ -676,18 +831,22 @@ const CareerGameGuideZhTw = () => {
           </div>
 
           <h3 className="font-heading text-xl text-foreground mb-3">秘密 30：管理你的心理負擔應該優先於管理你的工作量</h3>
-          <p className="text-muted-foreground leading-relaxed mb-4">心理負擔，而非工作時數，才是倦怠的真正預測指標。</p>
+          <p className="text-muted-foreground leading-relaxed mb-4">心理負擔，而非工作時數，才是倦怠的真正預測指標。一個每週工作 30-35 小時的人，如果他們扛著整個團隊的規劃、跟進和品質控制，心理負擔可能很高。一個每週工作 50 小時但有明確定義、可重複範圍的人，心理負擔可能很低。</p>
           <h4 className="text-foreground font-semibold text-sm mb-3">降低心理負擔的六個策略：</h4>
           <ol className="list-decimal list-inside space-y-2 text-muted-foreground text-sm mb-6">
-            <li>清單和路線圖。把大專案拆成小任務。</li>
-            <li>日程區塊化。某些類型的工作放在某些天。</li>
-            <li>優先順序權衡。帶著清單找老闆。</li>
-            <li>全面授權。交出所有權，不只是任務。</li>
-            <li>制定策略。有清楚路線圖後更容易拒絕不符合的新要求。</li>
-            <li>給經理：專注於未來一到兩年。</li>
+            <li><strong className="text-foreground">清單和路線圖。</strong>把大專案拆成小任務。指定到具體日期。</li>
+            <li><strong className="text-foreground">日程區塊化。</strong>某些類型的工作放在某些天。例如：週一和週五下午用來趕進度，週二做簡報，週日做內容創作。</li>
+            <li><strong className="text-foreground">優先順序權衡。</strong>帶著準備好的優先事項清單找你的老闆。問哪些最重要。放下被降級的事項。</li>
+            <li><strong className="text-foreground">全面授權。</strong>不只是交出一項任務，而是交出所有權。如果你授權了但一直被拉回來，它不會減少你的負擔。</li>
+            <li><strong className="text-foreground">制定策略。</strong>當你有一個經過老闆批准的清楚路線圖時，更容易拒絕不符合的新要求。</li>
+            <li><strong className="text-foreground">給經理：</strong>如果完整的多年路線圖會讓你的團隊對尚未存在的未來工作感到壓力，不要分享它。專注於未來一到兩年。</li>
           </ol>
 
+          <h3 className="font-heading text-lg text-foreground mb-3">用選項向上管理</h3>
+          <p className="text-muted-foreground leading-relaxed mb-4">管理老闆的最佳方式是減輕他們的心理負擔。預先做好思考。要求加薪時：研究市場行情，製作簡報，列出你的價值和你的請求。爭取升遷時：製作一頁紙展示你在下一個層級的職責範圍和你已經展現的職能。提出方案時：在一張投影片上呈現三個選項，讓他們能快速做出決定。</p>
+
           <h3 className="font-heading text-xl text-foreground mb-3">秘密 31：有毒的工作環境對任何人都沒好處</h3>
+          <p className="text-muted-foreground leading-relaxed mb-4">以下是識別有毒工作環境的檢查清單：</p>
           <div className="bg-destructive/5 border border-destructive/20 rounded-xl p-5 mb-6">
             <ul className="space-y-2">
               {["你在週日晚上就開始恐懼週一早上。", "你因為害怕被責罵而不敢問問題。", "你覺得被歧視。", "你不信任你的老闆會支持你。", "無償的極端加班、言語虐待或不當關係是常態。", "你請假只是為了從工作中恢復。"].map((item, i) => (
@@ -698,7 +857,7 @@ const CareerGameGuideZhTw = () => {
           </div>
 
           <h3 className="font-heading text-xl text-foreground mb-3">秘密 32：從有毒工作環境中恢復需要時間</h3>
-          <p className="text-muted-foreground leading-relaxed">就像從一段糟糕的感情中恢復一樣，離開有毒環境後你需要時間重建。回到你的尖峰技能和 11 清單。重新認識自己。</p>
+          <p className="text-muted-foreground leading-relaxed">就像從一段糟糕的感情中恢復一樣，離開有毒環境後你需要時間重建。回到你的尖峰技能和 11 清單。重新認識自己，不要讓過去的毒性影響你的自我認知。重新寫你的品牌宣言，開始再次把它融入對話中。</p>
         </div>
       </section>
 
@@ -714,17 +873,38 @@ const CareerGameGuideZhTw = () => {
           </div>
 
           <h3 className="font-heading text-xl text-foreground mb-3">秘密 33：大多數人永遠不會成為高階主管</h3>
-          <p className="text-muted-foreground leading-relaxed mb-4">高階領導的五項不可妥協的技能：公眾演說、堅強的道德品格、策略、處理人際衝突的能力、堅定不移的自信。</p>
+          <p className="text-muted-foreground leading-relaxed mb-4">這不是殘忍。這是務實的。高階領導所需的技能都可以學習，但大多數人不願意投入所需的時間和不適感。作者在 30 歲前就收到了財務長的職位邀約。她拒絕了。她的目標改變了。她不再想要長時間工作。她的問題解決技能在營運方面比金融更有影響力。財務長的角色不再與她是誰相符。</p>
+          <h4 className="text-foreground font-semibold text-sm mb-3">高階領導的五項不可妥協的技能：</h4>
+          <ol className="list-decimal list-inside space-y-2 text-muted-foreground text-sm mb-6">
+            <li><strong className="text-foreground">公眾演說。</strong>你必須定期向大群人做報告。沒有例外。</li>
+            <li><strong className="text-foreground">堅強的道德品格。</strong>信任是基礎。沒有它，其他一切都不行。</li>
+            <li><strong className="text-foreground">策略。</strong>看到公司目前運營方式之外的東西。把願景和可執行的目標連結起來。</li>
+            <li><strong className="text-foreground">處理人際衝突的能力。</strong>你越往上走，情況越複雜。更多的人、更多的意見、更多的資源利害關係。</li>
+            <li><strong className="text-foreground">堅定不移的自信。</strong>相信你的決定，並在出錯時做好為它們辯護的準備。</li>
+          </ol>
 
           <h3 className="font-heading text-xl text-foreground mb-3">秘密 34：你職涯的正確路徑是你技能和興趣的自然對齊</h3>
-          <p className="text-muted-foreground leading-relaxed mb-6">它不總是一條直線往上的梯子。它是一個職涯格子，往上、往旁邊、斜向移動。</p>
+          <p className="text-muted-foreground leading-relaxed mb-6">注意「意外的職涯」——不帶意圖地接受任何出現的機會。但典型的職涯建議也需要翻轉。它不總是一條直線往上的梯子。它是一個職涯格子，往上、往旁邊、斜向移動。書中描述的最成功的人在多個部門、產業和職級擔任過職位。他們跟隨自己的技能進入任何能產生最大影響力的角色。</p>
 
           <h3 className="font-heading text-xl text-foreground mb-3">秘密 35：只有你直屬主管的文化才重要</h3>
-          <p className="text-muted-foreground leading-relaxed mb-4">「幽靈文化」是執行長認為存在的文化。大多數員工體驗到的是他們直屬團隊的次文化。</p>
+          <p className="text-muted-foreground leading-relaxed mb-4">有一個概念叫「幽靈文化」。這是執行長認為存在的文化。印在海報上的、貼在網站上的、在面試中引用的。現實是：大多數員工體驗到的是他們直屬團隊和主管的次文化。更廣泛的公司文化可能存在於頂層，但很少能一致地向下傳遞。</p>
+          <p className="text-muted-foreground leading-relaxed mb-4">評估文化的有力面試問題：</p>
+          <div className="space-y-2 mb-4">
+            {[
+              "「你們如何給予建設性回饋？」",
+              "「組織多久允許一次晉升對話？」",
+              "「這個團隊的成員平均任期多長？」",
+              "「你最不喜歡公司和這個團隊的什麼？」",
+            ].map((q, i) => (
+              <div key={i} className="bg-background border border-border rounded-lg p-3">
+                <p className="text-foreground text-sm italic">{q}</p>
+              </div>
+            ))}
+          </div>
           <p className="text-muted-foreground leading-relaxed mb-6">最強的建議：要求和團隊中的一位同事交談。如果公司拒絕，這是一個嚴重的紅旗。</p>
 
           <h3 className="font-heading text-xl text-foreground mb-3">秘密 36：你僱用的領導者決定你的公司文化</h3>
-          <p className="text-muted-foreground leading-relaxed">以價值觀對齊為標準招聘。技術技能教得會。價值觀教不會。</p>
+          <p className="text-muted-foreground leading-relaxed">最後一個秘密直接對領導者說。一個錯誤的招聘會毒害團隊的文化。一個糟糕的經理會創造一個難以扭轉的有毒次文化。隨著你的晉升，你組織的文化取決於你引進的領導者。以價值觀對齊為標準招聘。以文化契合度為標準招聘。技術技能教得會。價值觀教不會。</p>
         </div>
       </section>
 
@@ -751,40 +931,40 @@ const CareerGameGuideZhTw = () => {
             <div className="bg-card border border-border rounded-xl p-5 md:p-6">
               <h3 className="font-heading text-lg text-foreground mb-3">第 2 步：做一次現實檢驗（30 天內）</h3>
               <InteractiveChecklist guideKey="career_game_step2_zh" lang="zh" items={[
-                { label: "給你的老闆一張空白的職能表。請他們為你評分。" },
-                { label: "請三個人做 20 項技能評估。平均結果。", href: "#spikes" },
-                { label: "問：「你需要什麼條件才會替我爭取升遷？」", href: "#promotion" },
+                { label: "給你的老闆一張空白的職能表。請他們為你評分。比較他們的分數和你的。" },
+                { label: "請三個人（老闆、同事、利害關係人）做 20 項技能評估。平均結果。", href: "#spikes" },
+                { label: "問：「你需要什麼條件才會在下一個週期替我爭取升遷？」", href: "#promotion" },
               ]} />
             </div>
             <div className="bg-card border border-border rounded-xl p-5 md:p-6">
               <h3 className="font-heading text-lg text-foreground mb-3">第 3 步：建立你的品牌（60 天內）</h3>
               <InteractiveChecklist guideKey="career_game_step3_zh" lang="zh" items={[
                 { label: "寫你的兩句電梯簡報。背下來。", href: "#brand" },
-                { label: "挑出三到五個品牌關鍵詞。寫在便利貼上。" },
-                { label: "在 5 場以上的會議中使用品牌語言。", href: "#brand" },
+                { label: "從你的使命宣言中挑出三到五個關鍵詞。寫在便利貼上，放在每天看得到的地方。" },
+                { label: "開始在會議、一對一和電子郵件中使用你的品牌語言。到第 20 次，它會變得自然。", href: "#brand" },
               ]} />
             </div>
             <div className="bg-card border border-border rounded-xl p-5 md:p-6">
               <h3 className="font-heading text-lg text-foreground mb-3">第 4 步：擴展你的人脈（90 天內）</h3>
               <InteractiveChecklist guideKey="career_game_step4_zh" lang="zh" items={[
                 { label: "建立 20-25 人的影響力名單。用八個標準評分。", href: "#network" },
-                { label: "和你的前五名聯繫人安排咖啡聊天。" },
-                { label: "為每次會議準備兩到三個指導話題。" },
+                { label: "和你的前五名可接觸聯繫人安排咖啡聊天。" },
+                { label: "為每次會議準備兩到三個指導話題。請求學習，不是推銷。" },
               ]} />
             </div>
             <div className="bg-card border border-border rounded-xl p-5 md:p-6">
               <h3 className="font-heading text-lg text-foreground mb-3">第 5 步：建立升遷基礎設施（持續）</h3>
               <InteractiveChecklist guideKey="career_game_step5_zh" lang="zh" items={[
                 { label: "開始使用成就追蹤表。每週更新。", href: "#promotion" },
-                { label: "安排每兩週一對一會議。用 10/10/10 結構。", href: "#promotion" },
-                { label: "找出一項 BAU 任務來整合、重新定位或自動化為高影響力工作。", href: "#work" },
+                { label: "安排每兩週一對一會議（如果還沒有的話）。用 10/10/10 結構：彙報、上報、爭取。", href: "#promotion" },
+                { label: "找出一項 BAU 任務，這個季度可以整合、重新定位或自動化為高影響力工作。", href: "#work" },
               ]} />
             </div>
             <div className="bg-card border border-border rounded-xl p-5 md:p-6">
               <h3 className="font-heading text-lg text-foreground mb-3">第 6 步：每 90 天檢視自己</h3>
               <InteractiveChecklist guideKey="career_game_step6_zh" lang="zh" items={[
                 { label: "重新評估你的職能。差距在縮小嗎？", href: "#spikes" },
-                { label: "檢視你的 40/40/20 工作分配。有改變嗎？", href: "#work" },
+                { label: "檢視你的 40/40/20 工作分配。比例有改變嗎？", href: "#work" },
                 { label: "更新成就追蹤表。和老闆分享成績。" },
                 { label: "每季重新聯繫一位淡出的人脈。", href: "#network" },
               ]} />
