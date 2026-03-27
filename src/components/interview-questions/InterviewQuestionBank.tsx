@@ -477,8 +477,10 @@ export default function InterviewQuestionBank({ lang: initialLang }: { lang: Lan
               onClick={() => {
                 const url = encodeURIComponent(window.location.href);
                 if (lang === "zh") {
+                  trackShare("line");
                   window.location.href = `https://line.me/R/share?text=${url}`;
                 } else {
+                  trackShare("whatsapp");
                   window.open(`https://wa.me/?text=${url}`, "_blank");
                 }
               }}
