@@ -1095,6 +1095,9 @@ const FortyEightLawsGuideZhTw = () => {
             <p className="text-foreground leading-relaxed mb-6 italic">「勝利的那一刻，往往是最危險的時刻。在勝利的熱潮中，傲慢和過度自信會推著你越過你原本瞄準的目標。」</p>
             <p className="text-muted-foreground leading-relaxed mb-6">拿到升遷了？不要立刻開始爭取下一次。先鞏固。在你的新層級建立關係。先證明你屬於這個層級，再推進。</p>
             <p className="text-muted-foreground leading-relaxed mb-6">分清鞏固和混日子的差別。鞏固是有意識的：為下一步行動建立基礎。混日子是被動的：你停止成長了。</p>
+            <ActionStep checked={safeActions[18]} onToggle={() => toggleAction(18)}>
+              下次獲得勝利（升遷、成功的專案、公開表揚）之後，忍住立刻推進下一件事的衝動。相反地，花 30 天在你的新層級建立關係。約三位以前沒有機會接觸的新同事或利害關係人喝咖啡。先鞏固你的位置，再擴張它。
+            </ActionStep>
 
             <DiagramBox title="職涯時間軸">
               <div className="space-y-6">
