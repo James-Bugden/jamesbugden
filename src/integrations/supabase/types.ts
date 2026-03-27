@@ -104,6 +104,33 @@ export type Database = {
         }
         Relationships: []
       }
+      event_tracks: {
+        Row: {
+          created_at: string
+          event_name: string
+          event_type: string
+          id: string
+          metadata: Json | null
+          page: string
+        }
+        Insert: {
+          created_at?: string
+          event_name: string
+          event_type: string
+          id?: string
+          metadata?: Json | null
+          page: string
+        }
+        Update: {
+          created_at?: string
+          event_name?: string
+          event_type?: string
+          id?: string
+          metadata?: Json | null
+          page?: string
+        }
+        Relationships: []
+      }
       feedback: {
         Row: {
           context: string | null
