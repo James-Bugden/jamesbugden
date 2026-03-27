@@ -865,21 +865,26 @@ const FortyEightLawsGuideZhTw = () => {
             <p className="text-muted-foreground leading-relaxed mb-6">聲譽讓人尊重你。無可取代讓人害怕失去你。兩者加在一起，是職涯安全感的基礎。</p>
 
             <h3 className="font-heading text-xl text-foreground mt-10 mb-4">法則 11：學會讓人依賴你</h3>
+            <p className="text-muted-foreground leading-relaxed mb-6">這是職涯安全感最重要的一條法則。</p>
             <p className="text-foreground leading-relaxed mb-6 italic">「要維持你的獨立，你必須始終被需要、被想要。越多人依賴你，你的自由度越大。」</p>
+            <p className="text-muted-foreground leading-relaxed mb-6">具體做法：掌握一個流程、一個客戶關係、或一個沒有其他人完全理解的知識領域。成為出問題時被打電話的那個人。在跨部門建立關係，讓你的價值延伸到直屬團隊之外。一旦你累積了不可或缺的紀錄，你就贏得了開口要更多的底氣。但要有耐心。讓它透過過程自然累積。</p>
             <Reversal>不要因為恐懼而囤積資訊。囤積的人會變成瓶頸。瓶頸最終會被繞過和移除。分享到足夠慷慨的程度。保留到足夠關鍵的程度。</Reversal>
             <div className="mt-6">
               <ActionStep checked={safeActions[8]} onToggle={() => toggleAction(8)}>
-                找出你在工作中做的一件沒有其他人完全理解的事情。如果你請假兩週，團隊會很吃力嗎？如果不會，選擇一個流程、一個客戶關係、或一個知識領域，深入到比團隊中任何人都深。
+                找出你在工作中做的一件沒有其他人完全理解的事情。如果你請假兩週，團隊會很吃力嗎？如果會，你有一定程度的不可取代性。如果不會，開始建立它。選擇一個流程、一個客戶關係、或一個知識領域，深入到比團隊中任何人都深。
               </ActionStep>
             </div>
 
             <h3 className="font-heading text-xl text-foreground mt-10 mb-4">法則 23：集中你的力量</h3>
-            <p className="text-muted-foreground leading-relaxed mb-6">「你從一座礦挖得越深，獲得越多，遠勝過在多座淺礦之間跳來跳去。」</p>
+            <p className="text-muted-foreground leading-relaxed mb-6">法則 11 告訴你要深入。法則 23 告訴你深入的方向。</p>
+            <p className="text-foreground leading-relaxed mb-6 italic">「強度每次都勝過廣度。當你在尋找能提升你的力量來源時，找到那個關鍵的贊助人，那頭能長期供你牛奶的肥牛。」</p>
+            <p className="text-muted-foreground leading-relaxed mb-6">大多數人把自己攤在太多專案、太多委員會、太多「有也不錯」的事情上。結果：每件事都做得普普通通，沒有一件做得出色。</p>
+            <p className="text-muted-foreground leading-relaxed mb-6">選定兩到三個優先事項。其餘的推掉。在少數高影響力的交付項目上做到深入，勝過在十幾個無人記住的事情上做到廣泛。</p>
             <ActionStep checked={safeActions[9]} onToggle={() => toggleAction(9)}>
-              數一數你現在正在參與的活躍專案有幾個。如果超過 5 個，你太分散了。挑出影響力和能見度最高的 2-3 個。減少你對其他專案的投入。
+              數一數你現在正在參與的活躍專案有幾個。如果超過 5 個，你太分散了。挑出影響力和能見度最高的 2-3 個。對其餘的說不。「我很想幫忙，但我目前在 [高影響力專案] 上已經滿載了。下一季可以再看看嗎？」推掉是一項職涯技能。
             </ActionStep>
 
-            <DiagramBox title="職涯成功的 3 條法則">
+            <DiagramBox title="職涯安全感的 3 條法則">
               <ol className="space-y-3 list-decimal list-inside">
                 <li><strong>法則 11：讓人依賴你</strong> — 讓你變得不可或缺。</li>
                 <li><strong>法則 13：訴諸他人的利益</strong> — 幫你拿到你想要的。</li>
