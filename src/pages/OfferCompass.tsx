@@ -90,7 +90,7 @@ export default function OfferCompass() {
                 <Copy className="w-3.5 h-3.5 mr-1" /> Duplicate
               </Button>
             )}
-            <Button variant="outline" size="sm" onClick={() => loadExample("en")} className="h-9">
+            <Button variant="outline" size="sm" onClick={() => { loadExample("en"); trackEvent("calculator", "load_example"); }} className="h-9">
               <Sparkles className="w-3.5 h-3.5 mr-1" /> Example
             </Button>
 
