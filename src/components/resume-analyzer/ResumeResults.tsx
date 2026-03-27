@@ -285,8 +285,13 @@ function ShareSection({ lang, score }: { lang: Language; score?: number }) {
     );
     window.open(`mailto:?subject=${subject}&body=${body}`, "_self");
   };
-  const handleLineShare = () => {
-    window.location.href = `https://line.me/R/msg/text/?${encodeURIComponent(analyzerUrl)}`;
+  const handleMessengerShare = () => {
+    const url = encodeURIComponent(analyzerUrl);
+    if (isZhTw) {
+      window.location.href = `https://line.me/R/msg/text/?${url}`;
+    } else {
+      window.open(`https://wa.me/?text=${url}`, "_blank");
+    }
   };
   const handleCopyLink = async () => {
     await navigator.clipboard.writeText(analyzerUrl);
@@ -312,8 +317,8 @@ function ShareSection({ lang, score }: { lang: Language; score?: number }) {
         <button onClick={handleEmailShare} className="inline-flex items-center gap-2 px-5 py-2.5 rounded-lg border border-white/20 bg-white/10 text-white hover:bg-white/20 transition-colors text-sm font-medium">
           <Mail className="w-5 h-5" /> Email
         </button>
-        <button onClick={handleLineShare} className="inline-flex items-center gap-2 px-5 py-2.5 rounded-lg bg-[#06C755] text-white hover:bg-[#05b34d] transition-colors text-sm font-medium">
-          <LineIcon /> LINE
+        <button onClick={handleMessengerShare} className={`inline-flex items-center gap-2 px-5 py-2.5 rounded-lg text-white transition-colors text-sm font-medium ${isZhTw ? "bg-[#06C755] hover:bg-[#05b34d]" : "bg-[#25D366] hover:bg-[#20bd5a]"}`}>
+          {isZhTw ? <LineIcon /> : <WhatsAppIcon />} {isZhTw ? "LINE" : "WhatsApp"}
         </button>
         <button onClick={handleCopyLink} className="inline-flex items-center gap-2 px-5 py-2.5 rounded-lg border border-white/20 bg-white/10 text-white hover:bg-white/20 transition-colors text-sm font-medium">
           <Copy className="w-4 h-4" /> {t(lang, "Copy Link", "複製連結")}
