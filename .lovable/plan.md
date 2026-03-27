@@ -1,18 +1,29 @@
 
 
-## Fix "Quick Reference: All 36 Secrets" Desktop Layout
+## Replace LINE with WhatsApp on English Pages
 
-### Problem
-On mobile, the single-column list looks fine. On desktop, the 2-column grid (`sm:grid-cols-2`) makes the 36 items look sparse and poorly formatted — long sentences wrap awkwardly across narrow columns.
+### What changes
+On all English pages, the LINE share button becomes a WhatsApp share button. Chinese (ZhTw) pages keep LINE unchanged.
 
-### Fix
-Switch to a 3-column grid on medium+ screens and add numbered cards with subtle borders for better visual structure on desktop:
+### Files to edit
 
-- Change `grid sm:grid-cols-2 gap-x-6 gap-y-2` → `grid sm:grid-cols-2 md:grid-cols-3 gap-3`
-- Wrap each item in a compact card with border styling (similar to the "10 Golden Rules" pattern in the Resume Quick Reference page)
-- Each card: gold number badge + secret text, with `bg-background border border-border rounded-lg p-3`
+**1. `src/components/GuideShareButtons.tsx`**
+- Add a WhatsApp icon SVG component
+- When `isZhTw === false`: render WhatsApp button with deep link `https://wa.me/?text={url}` instead of LINE
+- When `isZhTw === true`: keep LINE button as-is
+- Update button color from LINE green (`#06C755`) to WhatsApp green (`#25D366`) for English
 
-### Files Changed
-1. **`src/pages/CareerGameGuide.tsx`** — lines 1237-1279: update grid classes and item styling
-2. **`src/pages/CareerGameGuideZhTw.tsx`** — lines 803-816: same changes with Chinese content
+**2. `src/components/resume-analyzer/ResumeResults.tsx`**
+- Add WhatsApp icon SVG
+- When `isZhTw === false` (English): show WhatsApp button with `https://wa.me/?text={url}`
+- When `isZhTw === true`: keep LINE button
+- This component already has `isZhTw` prop available via the language check
+
+**3. `src/components/interview-questions/InterviewQuestionBank.tsx`**
+- This is an English-only page — replace LINE button with WhatsApp button
+- Change icon, label, color, and deep link
+
+### Deep link format
+- WhatsApp: `https://wa.me/?text=${encodeURIComponent(url)}`
+- This opens the WhatsApp app's share/compose screen with the URL pre-filled
 
