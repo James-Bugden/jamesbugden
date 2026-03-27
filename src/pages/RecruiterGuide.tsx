@@ -383,7 +383,7 @@ export default function RecruiterGuide() {
               { label: "10-15 recruiter screens", w: "30%", color: "bg-accent/30" },
               { label: "5-8 technical screens", w: "18%", color: "bg-accent/50" },
               { label: "2-3 final interviews", w: "10%", color: "bg-accent/70" },
-              { label: "1 offer", w: "5%", color: "bg-executive-green" },
+              { label: "1 offer", w: "5%", color: "bg-executive-green", textColor: "text-cream" },
             ].map((step) => (
               <div key={step.label}>
                 <div className={`${step.color} rounded-md h-7 flex items-center px-3`} style={{ width: step.w, minWidth: "fit-content" }}>
