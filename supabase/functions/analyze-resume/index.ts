@@ -174,21 +174,21 @@ Deno.serve(async (req) => {
       { global: { headers: { Authorization: authHeader } } }
     );
 
-    const token = authHeader.replace('Bearer ', '');
-    const { data: claimsData, error: claimsError } = await supabase.auth.getClaims(token);
-    if (claimsError || !claimsData?.claims) {
+    const { data: { user }, error: userError } = await supabase.auth.getUser();
+    if (userError || !user) {
       return new Response(
         JSON.stringify({ error: 'Unauthorized' }),
         { status: 401, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
       );
     }
-    const userId = claimsData.claims.sub;
+    const userId = user.id;
 
     // --- Server-side usage limit ---
-    const { data: usageCount, error: usageError } = await supabase.rpc(
-      'count_resume_analyses_by_user',
-      { p_user_id: userId }
-    );
+    const { count: usageCount, error: usageError } = await supabase
+      .from('resume_analyses')
+      .select('id', { count: 'exact', head: true })
+      .eq('user_id', userId)
+      .gte('created_at', `${new Date().getFullYear()}-${String(new Date().getMonth() + 1).padStart(2, '0')}-01T00:00:00.000Z`);
 
     if (!usageError && typeof usageCount === 'number' && usageCount >= MONTHLY_LIMIT) {
       return new Response(
