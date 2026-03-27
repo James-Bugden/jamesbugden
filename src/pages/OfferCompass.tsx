@@ -4,6 +4,7 @@ import { EmailGateOverlay } from "@/components/EmailGateOverlay";
 import { Link } from "react-router-dom";
 
 import { Plus, Copy, Sparkles, Trash2, RotateCcw, ArrowRight, X } from "lucide-react";
+import { trackEvent } from "@/lib/trackEvent";
 import LanguageToggle from "@/components/LanguageToggle";
 import { Button } from "@/components/ui/button";
 import {
