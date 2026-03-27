@@ -1234,7 +1234,7 @@ const CareerGameGuide = () => {
       <section id="reference" className="py-14 md:py-20 px-5 md:px-6 bg-card border-y border-border scroll-mt-24">
         <div className="container mx-auto max-w-3xl">
           <h2 className="font-heading text-2xl md:text-3xl text-foreground mb-6">Quick Reference: All 36 Secrets</h2>
-          <div className="grid sm:grid-cols-2 gap-x-6 gap-y-2">
+          <div className="grid sm:grid-cols-2 md:grid-cols-3 gap-3">
             {[
               "You are an entrepreneur, and your career is your business.",
               "Relationships matter more than the work.",
@@ -1273,9 +1273,10 @@ const CareerGameGuide = () => {
               "Only the culture of your direct manager matters.",
               "The leaders you hire determine your company culture.",
             ].map((secret, i) => (
-              <p key={i} className="text-muted-foreground text-sm py-1.5">
-                <span className="text-gold font-bold mr-1.5">{i + 1}.</span>{secret}
-              </p>
+              <div key={i} className="bg-background border border-border rounded-lg p-3 flex items-start gap-2">
+                <span className="inline-flex items-center justify-center w-6 h-6 rounded-full bg-accent/15 text-accent text-xs font-bold flex-shrink-0 mt-0.5">{i + 1}</span>
+                <p className="text-muted-foreground text-sm leading-snug">{secret}</p>
+              </div>
             ))}
           </div>
         </div>
