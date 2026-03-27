@@ -1231,6 +1231,107 @@ export default function AdminDashboard() {
               );
             })()}
           </TabsContent>
+
+          {/* ── Events Tab ──────────────────────────────────────────────── */}
+          <TabsContent value="events">
+            {eventTracksLoading ? (
+              <div className="flex justify-center py-16"><Loader2 className="w-6 h-6 animate-spin text-muted-foreground" /></div>
+            ) : (() => {
+              const byType: Record<string, number> = {};
+              const byName: Record<string, number> = {};
+              const byPage: Record<string, number> = {};
+              eventTracks.forEach(e => {
+                byType[e.event_type] = (byType[e.event_type] || 0) + 1;
+                byName[e.event_name] = (byName[e.event_name] || 0) + 1;
+                byPage[e.page] = (byPage[e.page] || 0) + 1;
+              });
+              const typeEntries = Object.entries(byType).sort((a, b) => b[1] - a[1]);
+              const nameEntries = Object.entries(byName).sort((a, b) => b[1] - a[1]);
+              const pageEntries = Object.entries(byPage).sort((a, b) => b[1] - a[1]);
+              return (
+                <div className="space-y-6">
+                  <p className="text-sm text-muted-foreground">{eventTracks.length} total events tracked</p>
+                  <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                    <Card>
+                      <CardContent className="pt-6">
+                        <h3 className="font-semibold text-sm mb-3">By Type</h3>
+                        {typeEntries.length === 0 ? (
+                          <p className="text-muted-foreground text-sm">No events yet</p>
+                        ) : (
+                          <div className="space-y-2">
+                            {typeEntries.map(([t, count]) => (
+                              <div key={t} className="flex items-center justify-between text-sm">
+                                <span className="capitalize">{t.replace(/_/g, " ")}</span>
+                                <span className="font-semibold">{count}</span>
+                              </div>
+                            ))}
+                          </div>
+                        )}
+                      </CardContent>
+                    </Card>
+                    <Card>
+                      <CardContent className="pt-6">
+                        <h3 className="font-semibold text-sm mb-3">By Action</h3>
+                        {nameEntries.length === 0 ? (
+                          <p className="text-muted-foreground text-sm">No events yet</p>
+                        ) : (
+                          <div className="space-y-2">
+                            {nameEntries.map(([n, count]) => (
+                              <div key={n} className="flex items-center justify-between text-sm">
+                                <span className="capitalize">{n.replace(/_/g, " ")}</span>
+                                <span className="font-semibold">{count}</span>
+                              </div>
+                            ))}
+                          </div>
+                        )}
+                      </CardContent>
+                    </Card>
+                    <Card>
+                      <CardContent className="pt-6">
+                        <h3 className="font-semibold text-sm mb-3">Top Pages</h3>
+                        {pageEntries.length === 0 ? (
+                          <p className="text-muted-foreground text-sm">No events yet</p>
+                        ) : (
+                          <div className="space-y-2">
+                            {pageEntries.slice(0, 10).map(([pg, count]) => (
+                              <div key={pg} className="flex items-center justify-between text-sm">
+                                <span className="truncate max-w-[200px]" title={pg}>{pg}</span>
+                                <span className="font-semibold">{count}</span>
+                              </div>
+                            ))}
+                          </div>
+                        )}
+                      </CardContent>
+                    </Card>
+                  </div>
+                  <div className="border border-border rounded-xl overflow-hidden overflow-x-auto">
+                    <Table>
+                      <TableHeader>
+                        <TableRow>
+                          <TableHead className="w-36">Date</TableHead>
+                          <TableHead>Type</TableHead>
+                          <TableHead>Action</TableHead>
+                          <TableHead>Page</TableHead>
+                        </TableRow>
+                      </TableHeader>
+                      <TableBody>
+                        {eventTracks.length === 0 ? (
+                          <TableRow><TableCell colSpan={4} className="text-center py-12 text-muted-foreground">No events yet</TableCell></TableRow>
+                        ) : eventTracks.slice(0, 100).map((e, i) => (
+                          <TableRow key={i}>
+                            <TableCell className="text-xs text-muted-foreground whitespace-nowrap">{format(new Date(e.created_at), "MMM d, HH:mm")}</TableCell>
+                            <TableCell className="text-sm capitalize">{e.event_type.replace(/_/g, " ")}</TableCell>
+                            <TableCell className="text-sm capitalize">{e.event_name.replace(/_/g, " ")}</TableCell>
+                            <TableCell className="text-sm max-w-[250px] truncate" title={e.page}>{e.page}</TableCell>
+                          </TableRow>
+                        ))}
+                      </TableBody>
+                    </Table>
+                  </div>
+                </div>
+              );
+            })()}
+          </TabsContent>
         </Tabs>
       </main>
     </div>
