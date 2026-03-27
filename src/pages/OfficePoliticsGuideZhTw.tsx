@@ -11,6 +11,78 @@ import { useState, useEffect } from "react";
 import { SEO } from "@/components/SEO";
 import { guideSchema } from "@/lib/guideSchema";
 
+type TreeStepZh = "q1" | "q2" | "q3" | "q4" | "pathA" | "pathB" | "pathC" | "pathD" | "pathE";
+
+const pathsZh: Record<string, { label: string; title: string; id: string }> = {
+  pathA: { label: "路徑 A", title: "緊急修復", id: "path-a" },
+  pathB: { label: "路徑 B", title: "對手管理", id: "path-b" },
+  pathC: { label: "路徑 C", title: "能量重導", id: "path-c" },
+  pathD: { label: "路徑 D", title: "目標清晰化", id: "path-d" },
+  pathE: { label: "路徑 E", title: "建立政治影響力", id: "path-e" },
+};
+
+const DecisionTreeZh = () => {
+  const [step, setStep] = useState<TreeStepZh>("q1");
+  const [fade, setFade] = useState(true);
+
+  const go = (next: TreeStepZh) => {
+    setFade(false);
+    setTimeout(() => { setStep(next); setFade(true); }, 200);
+  };
+
+  const QuestionCard = ({ question, hint, onYes, onNo }: { question: string; hint?: string; onYes: () => void; onNo: () => void }) => (
+    <div className={`flex flex-col items-center gap-4 transition-opacity duration-200 ${fade ? "opacity-100" : "opacity-0"}`}>
+      <div className="bg-executive-green text-cream text-sm font-semibold px-6 py-4 rounded-lg text-center max-w-sm leading-snug">
+        {question}
+      </div>
+      {hint && <p className="text-muted-foreground text-xs text-center max-w-xs -mt-2">{hint}</p>}
+      <div className="flex gap-3">
+        <button onClick={onYes} className="px-6 py-2.5 rounded-lg text-sm font-bold bg-accent/15 border border-accent/30 text-accent hover:bg-accent/25 transition-colors">是</button>
+        <button onClick={onNo} className="px-6 py-2.5 rounded-lg text-sm font-bold bg-muted border border-border text-muted-foreground hover:bg-muted/80 transition-colors">否</button>
+      </div>
+    </div>
+  );
+
+  const isResult = step.startsWith("path");
+  const path = isResult ? pathsZh[step] : null;
+
+  return (
+    <div className="bg-card border border-border rounded-xl p-5 md:p-6 mb-8">
+      <p className="text-xs font-bold text-accent uppercase tracking-wider mb-5">決策樹：找到你的起點</p>
+      <div className="flex flex-col items-center min-h-[160px] justify-center">
+        {step === "q1" && (
+          <QuestionCard question="你現在有政治麻煩嗎？" hint="（老闆疏遠、任務被分給別人、HR 來找你）" onYes={() => go("q2")} onNo={() => go("q4")} />
+        )}
+        {step === "q2" && (
+          <QuestionCard question="你是否被視為「問題人物」？" onYes={() => go("pathA")} onNo={() => go("q3")} />
+        )}
+        {step === "q3" && (
+          <QuestionCard question="有人在阻擋你嗎？" onYes={() => go("pathB")} onNo={() => go("pathC")} />
+        )}
+        {step === "q4" && (
+          <QuestionCard question="你知道你的職涯想要什麼嗎？" onYes={() => go("pathE")} onNo={() => go("pathD")} />
+        )}
+        {isResult && path && (
+          <div className={`flex flex-col items-center gap-4 transition-opacity duration-200 ${fade ? "opacity-100" : "opacity-0"}`}>
+            <div className="bg-accent/10 border border-accent/20 rounded-xl px-8 py-5 text-center">
+              <p className="text-accent text-sm font-bold">{path.label}</p>
+              <p className="text-foreground text-lg font-heading font-bold mt-1">{path.title}</p>
+            </div>
+            <div className="flex gap-3">
+              <a href={`#${path.id}`} className="px-5 py-2 rounded-lg text-sm font-semibold bg-accent text-accent-foreground hover:bg-accent/90 transition-colors">
+                前往{path.label} ↓
+              </a>
+              <button onClick={() => go("q1")} className="px-5 py-2 rounded-lg text-sm font-medium border border-border text-muted-foreground hover:bg-muted transition-colors">
+                重新開始
+              </button>
+            </div>
+          </div>
+        )}
+      </div>
+    </div>
+  );
+};
+
 const SectionNumber = ({ num }: { num: string }) => (
   <span className="text-gold/30 font-heading text-6xl md:text-7xl font-bold leading-none select-none">
     {num}
@@ -900,83 +972,7 @@ const OfficePoliticsGuideZhTw = () => {
           <h3 className="font-heading text-lg text-foreground mb-4">步驟 1：找到你的起點</h3>
           <p className="text-muted-foreground leading-relaxed mb-4">使用下面的決策樹。從頂部開始。跟隨符合你情況的路線。</p>
 
-          <div className="bg-card border border-border rounded-xl p-5 md:p-6 mb-8">
-            <p className="text-xs font-bold text-gold uppercase tracking-wider mb-5">決策樹：找到你的起點</p>
-            <div className="flex flex-col items-center gap-0">
-              <div className="bg-executive-green text-cream text-sm font-semibold px-6 py-3 rounded-lg text-center max-w-sm leading-snug">
-                你現在有政治麻煩嗎？
-              </div>
-              <p className="text-muted-foreground text-xs text-center max-w-xs mt-1 mb-1">（老闆疏遠、任務被分給別人、HR 來找你）</p>
-              <div className="w-px h-3 bg-gold/40" />
-              <div className="flex w-full max-w-lg">
-                <div className="flex-1 flex flex-col items-center">
-                  <span className="text-xs font-bold text-green-500 mb-1">是</span>
-                  <div className="w-px h-3 bg-gold/40" />
-                  <div className="border border-border rounded-lg px-4 py-2 text-center text-sm text-foreground font-medium bg-muted/50 max-w-[200px]">
-                    你是否被視為<br />「問題人物」？
-                  </div>
-                  <div className="w-px h-3 bg-gold/40" />
-                  <div className="flex w-full max-w-xs">
-                    <div className="flex-1 flex flex-col items-center">
-                      <span className="text-xs font-bold text-green-500 mb-1">是</span>
-                      <div className="bg-gold/15 border border-gold/30 rounded-lg px-3 py-2 text-center">
-                        <p className="text-gold text-xs font-bold">路徑 A</p>
-                        <p className="text-foreground text-xs">緊急修復</p>
-                      </div>
-                    </div>
-                    <div className="flex-1 flex flex-col items-center">
-                      <span className="text-xs font-bold text-destructive mb-1">否</span>
-                      <div className="w-px h-2 bg-gold/40" />
-                      <div className="border border-border rounded-lg px-3 py-2 text-center text-xs text-foreground font-medium bg-muted/50">
-                        有人在<br />阻擋你嗎？
-                      </div>
-                      <div className="w-px h-3 bg-gold/40" />
-                      <div className="flex gap-2">
-                        <div className="flex flex-col items-center">
-                          <span className="text-xs font-bold text-green-500 mb-1">是</span>
-                          <div className="bg-gold/15 border border-gold/30 rounded-lg px-2 py-1.5 text-center">
-                            <p className="text-gold text-xs font-bold">路徑 B</p>
-                            <p className="text-foreground text-[10px]">對手管理</p>
-                          </div>
-                        </div>
-                        <div className="flex flex-col items-center">
-                          <span className="text-xs font-bold text-destructive mb-1">否</span>
-                          <div className="bg-gold/15 border border-gold/30 rounded-lg px-2 py-1.5 text-center">
-                            <p className="text-gold text-xs font-bold">路徑 C</p>
-                            <p className="text-foreground text-[10px]">能量重導</p>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-                <div className="flex-1 flex flex-col items-center">
-                  <span className="text-xs font-bold text-destructive mb-1">否</span>
-                  <div className="w-px h-3 bg-gold/40" />
-                  <div className="border border-border rounded-lg px-4 py-2 text-center text-sm text-foreground font-medium bg-muted/50 max-w-[200px]">
-                    你知道你的<br />職涯想要什麼嗎？
-                  </div>
-                  <div className="w-px h-3 bg-gold/40" />
-                  <div className="flex w-full max-w-xs justify-center gap-4">
-                    <div className="flex flex-col items-center">
-                      <span className="text-xs font-bold text-destructive mb-1">否</span>
-                      <div className="bg-gold/15 border border-gold/30 rounded-lg px-3 py-2 text-center">
-                        <p className="text-gold text-xs font-bold">路徑 D</p>
-                        <p className="text-foreground text-xs">目標清晰化</p>
-                      </div>
-                    </div>
-                    <div className="flex flex-col items-center">
-                      <span className="text-xs font-bold text-green-500 mb-1">是</span>
-                      <div className="bg-gold/15 border border-gold/30 rounded-lg px-3 py-2 text-center">
-                        <p className="text-gold text-xs font-bold">路徑 E</p>
-                        <p className="text-foreground text-xs">建立政治影響力</p>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
+          <DecisionTreeZh />
 
           {/* PATH A-E */}
           {[
