@@ -1,35 +1,18 @@
 
 
-## Make Decision Tree Interactive
+## Fix "Quick Reference: All 36 Secrets" Desktop Layout
 
-### Current State
-Lines 904-985 of `OfficePoliticsGuide.tsx` contain a static CSS-based decision tree showing all branches at once.
+### Problem
+On mobile, the single-column list looks fine. On desktop, the 2-column grid (`sm:grid-cols-2`) makes the 36 items look sparse and poorly formatted — long sentences wrap awkwardly across narrow columns.
 
-### Plan
-Replace the static tree with a step-by-step interactive component where the user clicks YES/NO buttons to navigate through questions, revealing one question at a time until they reach their PATH result.
+### Fix
+Switch to a 3-column grid on medium+ screens and add numbered cards with subtle borders for better visual structure on desktop:
 
-**Flow:**
-```text
-Q1: Are you in political trouble right now?
-  YES → Q2: Are you seen as "The Problem"?
-    YES → PATH A: Emergency Repair
-    NO  → Q3: Is someone blocking you?
-      YES → PATH B: Adversary Management
-      NO  → PATH C: Energy Redirect
-  NO  → Q4: Do you know what you want from your career?
-    NO  → PATH D: Goal Clarity
-    YES → PATH E: Build Political Power
-```
-
-**Implementation:**
-- Add `useState` to track current step (q1, q2, q3, q4, or a result path)
-- Each step shows the question with YES/NO buttons styled in the existing design system (executive-green, gold accents)
-- When a result is reached, show the PATH card with a "Start over" button
-- Animate transitions with a simple fade
-- Keep the same container styling (bg-card, border, rounded-xl)
-- Result cards link/scroll to the corresponding PATH section below using anchor IDs (already present as `path-a` through `path-e`)
+- Change `grid sm:grid-cols-2 gap-x-6 gap-y-2` → `grid sm:grid-cols-2 md:grid-cols-3 gap-3`
+- Wrap each item in a compact card with border styling (similar to the "10 Golden Rules" pattern in the Resume Quick Reference page)
+- Each card: gold number badge + secret text, with `bg-background border border-border rounded-lg p-3`
 
 ### Files Changed
-- `src/pages/OfficePoliticsGuide.tsx` — replace lines 904-985 with interactive state machine
-- Also update `src/pages/OfficePoliticsGuideZhTw.tsx` if the same tree exists there
+1. **`src/pages/CareerGameGuide.tsx`** — lines 1237-1279: update grid classes and item styling
+2. **`src/pages/CareerGameGuideZhTw.tsx`** — lines 803-816: same changes with Chinese content
 
