@@ -769,27 +769,41 @@ const FortyEightLawsGuideZhTw = () => {
 
             <h3 className="font-heading text-xl text-foreground mt-10 mb-4">法則 1：永遠不要蓋過你的上司</h3>
             <p className="text-muted-foreground leading-relaxed mb-6">它被列為法則 1 是有原因的。這是職場中最常見的錯誤。</p>
-            <p className="text-muted-foreground leading-relaxed mb-6">書中的故事：路易十四的財政大臣 Nicolas Fouquet 舉辦了一場華麗到讓國王感覺被比下去的宴會。三週後，Fouquet 被逮捕。他餘生都在監獄中度過。</p>
-            <p className="text-muted-foreground leading-relaxed mb-6">職場版本沒那麼戲劇化，但結果類似。如果你做出優秀的工作成果，又因此獲得高度關注，你冒著觸發主管不安全感的風險。</p>
+            <p className="text-muted-foreground leading-relaxed mb-6">書中的故事：路易十四的財政大臣 Nicolas Fouquet 舉辦了一場華麗到讓國王感覺被比下去的宴會。花園比國王的壯觀，食物更豐盛，娛樂更精彩。三週後，Fouquet 被逮捕。他餘生都在監獄中度過。</p>
+            <p className="text-muted-foreground leading-relaxed mb-6">職場版本沒那麼戲劇化，但結果類似。如果你做出優秀的工作成果，又因此獲得高度關注，你冒著觸發主管不安全感的風險。結果不是坐牢。是被邊緣化、被跳過升遷、或被管理出局。</p>
+            <p className="text-muted-foreground leading-relaxed mb-6">解決辦法不是做差一點。是在成功的同時讓你的主管也分享到光環。記錄你的貢獻。但在公開場合讓你的主管發光。這個教訓在好萊塢上演了很多年。為一位導演寫了大量對白，功勞全歸導演。當時很刺痛。但組織就是這樣運作的。幕後的人打基礎。台前的人拿聚光燈。聰明的做法是在後台當關鍵人物，而不是在台上被嫉妒。</p>
             <Reversal>如果你的主管正在走下坡或即將離開，超越他們會加速他們被替換。但你需要在他們之上有盟友，以及萬一失敗的退路計畫。</Reversal>
             <div className="mt-6">
               <ActionStep checked={safeActions[3]} onToggle={() => toggleAction(3)}>
-                這週找一個方法主動讓你的主管看起來好。傳給他們一份重點摘要，是他們能轉寄給他們主管的那種。目標：讓他們把你和「讓我工作更輕鬆的人」劃上等號。
+                這週找一個方法主動讓你的主管看起來好。傳給他們一份重點摘要，是他們能轉寄給他們主管的那種。準備一張他們在下次主管會議中能用的投影片。目標：讓他們把你和「讓我工作更輕鬆的人」劃上等號。
               </ActionStep>
             </div>
 
             <h3 className="font-heading text-xl text-foreground mt-10 mb-4">法則 4：永遠少說一點</h3>
-            <p className="text-muted-foreground leading-relaxed mb-6">大多數人在會議中話太多。重複要點。加上修飾語。用廢話填補沉默。每多一句話都稀釋了你的訊息。</p>
+            <p className="text-muted-foreground leading-relaxed mb-6">法則 1 管的是你做什麼。法則 4 管的是你說什麼。</p>
+            <p className="text-muted-foreground leading-relaxed mb-6">想想季辛吉助手 Winston Lord 的故事。Lord 起草了一份報告。季辛吉退回去，只寫了一句：「這是你能做到的最好的嗎？」Lord 重寫了。季辛吉又退回來，同樣的話。Lord 第三次重寫。提交時他說：「是的，這是我能做到的最好的。」季辛吉回答：「好。現在我來讀。」</p>
+            <p className="text-muted-foreground leading-relaxed mb-6">大多數人在會議中話太多。重複要點。加上修飾語。用廢話填補沉默。每多一句話都稀釋了你的訊息，讓你看起來更不自信。</p>
+            <p className="text-muted-foreground leading-relaxed mb-6">做法：精準地說。當你向主管或團隊報告時，目標三句話。</p>
+
+            <DiagramBox title="三句話報告格式">
+              <div className="space-y-2">
+                <p><strong>發生了什麼：</strong>[一句話描述進度/成果]</p>
+                <p><strong>下一步：</strong>[一句話描述接下來的計畫]</p>
+                <p><strong>需要什麼：</strong>[一句話描述障礙/請求]</p>
+              </div>
+              <p className="mt-4 text-muted-foreground">用這個格式寫 email 更新、站會報告、進度報告。三句話。不囉唆。</p>
+            </DiagramBox>
+
             <ActionStep checked={safeActions[4]} onToggle={() => toggleAction(4)}>
-              在你的下一次會議中，用三句話格式準備你的報告：發生了什麼。下一步。需要什麼。計時。如果超過 60 秒，再精簡。
+              在你的下一次會議中，用上面的三句話格式準備你的報告。開會前先寫下來。計時。如果超過 60 秒，再精簡。每週練習，直到變成自動反應。
             </ActionStep>
 
             <h3 className="font-heading text-xl text-foreground mt-10 mb-4">法則 22：運用投降策略</h3>
-            <p className="text-muted-foreground leading-relaxed mb-6">「當你處於弱勢，絕對不要為了面子而戰。選擇投降。投降讓你有時間恢復。」</p>
-            <p className="text-muted-foreground leading-relaxed mb-6">爛主管會被輪調走。組織改組會發生。耐心是武器。在小事上優雅退讓的員工，會在大事上贏得信任。</p>
-            <ActionStep checked={safeActions[5]} onToggle={() => toggleAction(5)}>
-              下次和主管意見不同之前，先問自己：「這件事 6 個月後還重要嗎？」如果不重要，退讓。把你的信用額度留給真正值得打的仗。
-            </ActionStep>
+            <p className="text-muted-foreground leading-relaxed mb-6">法則 1 教你讓主管發光。法則 4 教你精準。法則 22 教你何時退讓。</p>
+            <p className="text-muted-foreground leading-relaxed mb-6">當你的主管做錯了，你也知道他錯了，本能反應是反擊。是頂回去。是證明你的觀點。但在公開場合跟主管對幹，很少幫你拿到升遷。更常讓你得到「很難搞」的名聲。</p>
+            <p className="text-foreground leading-relaxed mb-6 italic">「當你處於弱勢，絕對不要為了面子而戰。選擇投降。投降讓你有時間恢復，有時間等對方的權力衰退。」</p>
+            <p className="text-muted-foreground leading-relaxed mb-6">爛主管會被輪調走。組織改組會發生。領導層會換人。耐心是武器。在小事上優雅退讓的員工，會在大事上贏得信任。每場仗都打的員工，很快就用光了別人對他的善意。</p>
+            <p className="text-muted-foreground leading-relaxed mb-6">這不代表當軟柿子。這代表分辨哪些仗值得打，哪些退讓能保存你的精力和位置。如果情況涉及倫理或法律底線，正確的做法是記錄和向上反映，不是投降。</p>
 
             <BossManagementMatrix />
 
@@ -804,27 +818,35 @@ const FortyEightLawsGuideZhTw = () => {
               <SectionNumber num="03" />
               <div className="pt-3"><h2 className="font-heading text-2xl md:text-3xl text-foreground">建立你的聲譽</h2></div>
             </div>
-            <p className="text-muted-foreground leading-relaxed mb-6">你的聲譽比你先走進每一個房間。「聲譽是權力的基石。光靠聲譽你就能威懾和勝出。一旦聲譽滑落，你就會暴露弱點，從四面八方遭到攻擊。」</p>
+            <p className="text-foreground text-lg leading-relaxed mb-6">你的聲譽比你先走進每一個房間。它走進每一場面試、每一次新團隊會議、每一個升遷委員會。在任何人讀你的履歷之前，他們已經從別人口中聽過你了。</p>
+            <p className="text-foreground leading-relaxed mb-6 italic">「聲譽是權力的基石。光靠聲譽你就能威懾和勝出。一旦聲譽滑落，你就會暴露弱點，從四面八方遭到攻擊。」</p>
+            <p className="text-muted-foreground leading-relaxed mb-6">三個面向決定你在職場的聲譽：你保護它的能力、你的能見度、以及你如何處理別人的嫉妒。</p>
 
             <h3 className="font-heading text-xl text-foreground mt-10 mb-4">法則 5：用生命守護你的聲譽</h3>
-            <p className="text-muted-foreground leading-relaxed mb-6">聲譽是複利累積的。一個糟糕的瞬間傳播得比 100 件好事更快。</p>
+            <p className="text-muted-foreground leading-relaxed mb-6">聲譽是複利累積的。一個糟糕的瞬間傳播得比 100 件好事更快。在研討會上一句不專業的話、LinkedIn 上一篇抱怨前公司的文章、一封措辭不當被轉寄的 email。這些在專業人脈網路中傳播的速度，比任何成就都快。</p>
+            <p className="text-muted-foreground leading-relaxed mb-4">守護聲譽的規則：</p>
             <ul className="space-y-2 mb-6">
               {["永遠不要說前公司、前主管、前同事的壞話。面試中不行。LinkedIn 上不行。下班聚會不行。", "假設每封 email 都會被轉寄。寫之前想清楚。", "假設每則 Slack 訊息都會被截圖。打字前想清楚。"].map((item, i) => (
                 <li key={i} className="flex items-start gap-3"><GoldCheckBadge /><span className="text-foreground text-sm">{item}</span></li>
               ))}
             </ul>
+            <p className="text-muted-foreground leading-relaxed mb-6">聲譽是你職涯中最有價值的資產。也是最容易摧毀的。</p>
             <ActionStep checked={safeActions[6]} onToggle={() => toggleAction(6)}>
-              現在就 Google 你自己。檢查 LinkedIn、社群媒體和任何公開資訊。如果搜尋結果不符合你想成為的專業形象，今天就修正。
+              現在就 Google 你自己。檢查 LinkedIn、社群媒體和任何公開資訊。如果搜尋結果不符合你想成為的專業形象，今天就修正。刪掉舊貼文。更新你的 LinkedIn 標題。問一個信任的朋友：「別人第一次見到我之後，會怎麼描述我？」如果答案讓你意外，你有工作要做。
             </ActionStep>
 
             <h3 className="font-heading text-xl text-foreground mt-10 mb-4">法則 6：不惜一切代價吸引注意</h3>
-            <p className="text-muted-foreground leading-relaxed mb-6">「一切都是以外表來評斷。看不見的東西，等於不存在。」安靜做事，期待成果自己說話的人，每次都會被跳過。</p>
+            <p className="text-muted-foreground leading-relaxed mb-6">守護聲譽讓你安全。但只有安全沒有能見度，只會讓你原地踏步。道理很直白：「一切都是以外表來評斷。看不見的東西，等於不存在。」</p>
+            <p className="text-muted-foreground leading-relaxed mb-6">安靜做事，期待成果自己說話的人，每次都會被跳過。不是因為工作做得差。是因為沒有人看到。</p>
+            <p className="text-muted-foreground leading-relaxed mb-6">做法很具體：主動參與能讓新人看到你名字的專案。自己報告自己的工作成果，不要讓別人代為報告。高層來訪時舉手。寫有你名字的內部更新和總結。</p>
             <ActionStep checked={safeActions[7]} onToggle={() => toggleAction(7)}>
-              找出一個你在做事但別人拿到能見度的專案。在下一次團隊會議中主動報告它。每月做一次。一季之內，高層主管會知道你的名字。
+              找出一個你在做事但別人拿到能見度的專案。在下一次團隊會議中主動報告它，或寫一份有你名字的書面總結。每月做一次。一季之內，高層主管會知道你的名字。
             </ActionStep>
 
             <h3 className="font-heading text-xl text-foreground mt-10 mb-4">法則 46：永遠不要表現得太完美</h3>
-            <p className="text-muted-foreground leading-relaxed mb-6">嫉妒是「最常見的人類情緒，也是最少被討論的。」解藥是策略性的脆弱。公開而提早地承認錯誤。大方地分享功勞。</p>
+            <p className="text-muted-foreground leading-relaxed mb-6">聲譽和能見度會產生一個新問題：嫉妒。</p>
+            <p className="text-muted-foreground leading-relaxed mb-6">嫉妒是「最常見的人類情緒，也是最少被討論的。」那個總是贏、總是交出成果、總是被表揚、從不顯露脆弱的同事，會成為目標。不是公開的。是悄悄的。透過私下的批評、隱瞞的資訊、微妙的打壓。</p>
+            <p className="text-muted-foreground leading-relaxed mb-6">解藥是策略性的脆弱。公開而提早地承認錯誤。讓別人看到你請求協助。大方地分享功勞。不要假裝弱點。人們一眼看穿表演出來的謙虛。但讓別人看到你的人性，和你的能力並存。</p>
 
             <ReputationFlywheel />
 
@@ -843,21 +865,26 @@ const FortyEightLawsGuideZhTw = () => {
             <p className="text-muted-foreground leading-relaxed mb-6">聲譽讓人尊重你。無可取代讓人害怕失去你。兩者加在一起，是職涯安全感的基礎。</p>
 
             <h3 className="font-heading text-xl text-foreground mt-10 mb-4">法則 11：學會讓人依賴你</h3>
+            <p className="text-muted-foreground leading-relaxed mb-6">這是職涯安全感最重要的一條法則。</p>
             <p className="text-foreground leading-relaxed mb-6 italic">「要維持你的獨立，你必須始終被需要、被想要。越多人依賴你，你的自由度越大。」</p>
+            <p className="text-muted-foreground leading-relaxed mb-6">具體做法：掌握一個流程、一個客戶關係、或一個沒有其他人完全理解的知識領域。成為出問題時被打電話的那個人。在跨部門建立關係，讓你的價值延伸到直屬團隊之外。一旦你累積了不可或缺的紀錄，你就贏得了開口要更多的底氣。但要有耐心。讓它透過過程自然累積。</p>
             <Reversal>不要因為恐懼而囤積資訊。囤積的人會變成瓶頸。瓶頸最終會被繞過和移除。分享到足夠慷慨的程度。保留到足夠關鍵的程度。</Reversal>
             <div className="mt-6">
               <ActionStep checked={safeActions[8]} onToggle={() => toggleAction(8)}>
-                找出你在工作中做的一件沒有其他人完全理解的事情。如果你請假兩週，團隊會很吃力嗎？如果不會，選擇一個流程、一個客戶關係、或一個知識領域，深入到比團隊中任何人都深。
+                找出你在工作中做的一件沒有其他人完全理解的事情。如果你請假兩週，團隊會很吃力嗎？如果會，你有一定程度的不可取代性。如果不會，開始建立它。選擇一個流程、一個客戶關係、或一個知識領域，深入到比團隊中任何人都深。
               </ActionStep>
             </div>
 
             <h3 className="font-heading text-xl text-foreground mt-10 mb-4">法則 23：集中你的力量</h3>
-            <p className="text-muted-foreground leading-relaxed mb-6">「你從一座礦挖得越深，獲得越多，遠勝過在多座淺礦之間跳來跳去。」</p>
+            <p className="text-muted-foreground leading-relaxed mb-6">法則 11 告訴你要深入。法則 23 告訴你深入的方向。</p>
+            <p className="text-foreground leading-relaxed mb-6 italic">「強度每次都勝過廣度。當你在尋找能提升你的力量來源時，找到那個關鍵的贊助人，那頭能長期供你牛奶的肥牛。」</p>
+            <p className="text-muted-foreground leading-relaxed mb-6">大多數人把自己攤在太多專案、太多委員會、太多「有也不錯」的事情上。結果：每件事都做得普普通通，沒有一件做得出色。</p>
+            <p className="text-muted-foreground leading-relaxed mb-6">選定兩到三個優先事項。其餘的推掉。在少數高影響力的交付項目上做到深入，勝過在十幾個無人記住的事情上做到廣泛。</p>
             <ActionStep checked={safeActions[9]} onToggle={() => toggleAction(9)}>
-              數一數你現在正在參與的活躍專案有幾個。如果超過 5 個，你太分散了。挑出影響力和能見度最高的 2-3 個。減少你對其他專案的投入。
+              數一數你現在正在參與的活躍專案有幾個。如果超過 5 個，你太分散了。挑出影響力和能見度最高的 2-3 個。對其餘的說不。「我很想幫忙，但我目前在 [高影響力專案] 上已經滿載了。下一季可以再看看嗎？」推掉是一項職涯技能。
             </ActionStep>
 
-            <DiagramBox title="職涯成功的 3 條法則">
+            <DiagramBox title="職涯安全感的 3 條法則">
               <ol className="space-y-3 list-decimal list-inside">
                 <li><strong>法則 11：讓人依賴你</strong> — 讓你變得不可或缺。</li>
                 <li><strong>法則 13：訴諸他人的利益</strong> — 幫你拿到你想要的。</li>
@@ -907,16 +934,20 @@ const FortyEightLawsGuideZhTw = () => {
               <div className="pt-3"><h2 className="font-heading text-2xl md:text-3xl text-foreground">爭取你想要的</h2></div>
             </div>
             <p className="text-muted-foreground leading-relaxed mb-6">你找到了方向。你做好了向上管理。你建立了聲譽。你讓自己不可取代。現在你需要把這一切轉換成加薪、升遷、和值得拿到的專案。</p>
+            <p className="text-muted-foreground leading-relaxed mb-6">三條法則涵蓋這個過程：怎麼包裝你的請求、怎麼證明你的案例、以及過程中怎麼展現自己。</p>
 
             <h3 className="font-heading text-xl text-foreground mt-10 mb-4">法則 13：訴諸他人的利益，而非同情或感恩</h3>
             <p className="text-foreground leading-relaxed mb-6 italic">「如果你需要向盟友求助，不要費心提醒他你過去幫過他什麼。他會找到方法忽略你。」</p>
-            <p className="text-muted-foreground leading-relaxed mb-6">換個說法：「這是我交出的成果。這是我接下來計畫交出的成果。這是讓我做到最好的職位和薪資水準。」每一句話都聚焦在他們得到什麼。</p>
+            <p className="text-muted-foreground leading-relaxed mb-6">走進加薪談話時，永遠不要說「我在這裡三年了，我值得加薪。」沒有人因為年資而升遷。要展示的是：升你對他們有什麼好處。</p>
+            <p className="text-muted-foreground leading-relaxed mb-6">先證明你是不可或缺的。累積紀錄。讓案例不言自明。「到時候一切順理成章，你提出來，自然有道理。」</p>
+            <p className="text-muted-foreground leading-relaxed mb-6">換個說法：「這是我交出的成果。這是我接下來計畫交出的成果。這是讓我做到最好的職位和薪資水準。」每一句話都聚焦在他們得到什麼，不是你值得什麼。</p>
             <ActionStep checked={safeActions[10]} onToggle={() => toggleAction(10)}>
               現在就用這個框架寫你的加薪請求。三句話。你交出了什麼（附數字）。你接下來計畫交出什麼。你需要什麼才能做到最好。先不要寄出。花一週精修。然後約一場會議。
             </ActionStep>
 
             <h3 className="font-heading text-xl text-foreground mt-10 mb-4">法則 9：用行動勝出，永遠不要用爭論</h3>
-            <p className="text-muted-foreground leading-relaxed mb-6">不要爭論你為什麼該升遷。用證據建立案例。每週追蹤你的成果。記錄一份戰績文件。</p>
+            <p className="text-muted-foreground leading-relaxed mb-6">法則 13 告訴你怎麼包裝請求。法則 9 告訴你帶什麼上場。</p>
+            <p className="text-muted-foreground leading-relaxed mb-6">不要爭論你為什麼該升遷。用證據建立案例。每週追蹤你的成果。記錄一份戰績文件。績效考核到來時，你拿出 12 個月有文件紀錄的影響力，而不是在那裡努力回想你做了什麼。</p>
 
             <BragDocTemplate />
 
@@ -925,17 +956,21 @@ const FortyEightLawsGuideZhTw = () => {
             </ActionStep>
 
             <h3 className="font-heading text-xl text-foreground mt-10 mb-4">法則 30：讓成就看起來毫不費力</h3>
-            <p className="text-foreground leading-relaxed mb-6 italic">「你的行動必須看起來自然且毫不費力。所有的辛苦和練習都必須隱藏起來。」</p>
-            <p className="text-muted-foreground leading-relaxed mb-6">沉穩的能力傳達領導潛力。壓力外顯傳達你還沒準備好承擔更多責任。</p>
+            <p className="text-muted-foreground leading-relaxed mb-6">法則 13 包裝請求。法則 9 提供證據。法則 30 管的是整個過程中你的姿態。</p>
+            <p className="text-foreground leading-relaxed mb-6 italic">「你的行動必須看起來自然而輕鬆。所有的辛苦、練習和巧妙的技巧，都必須被隱藏。」</p>
+            <p className="text-muted-foreground leading-relaxed mb-6">沉穩的能力展現傳達領導潛力。明顯的恐慌和壓力傳達你還沒準備好承擔更多責任。同樣的簡報，冷靜交出的人看起來比一邊報告一邊強調自己加了多少班的人更適合升遷。</p>
+            <p className="text-muted-foreground leading-relaxed mb-6">交出成果。讓成果自己說話。不要在每一份產出上附加「這真的很辛苦」的敘事。如果你需要更多資源或更多時間，清楚而專業地提出要求。不要當烈士。</p>
             <ActionStep checked={safeActions[12]} onToggle={() => toggleAction(12)}>
               下次專案交付時，移除所有「辛苦語言」。不提加班、週末、或壓力。報告成果。描述影響。停在那裡。觀察當你展現沉穩而非疲憊時，人們的反應有什麼不同。
             </ActionStep>
 
             <h3 className="font-heading text-xl text-foreground mt-10 mb-4">加薪時機公式</h3>
-            <p className="text-muted-foreground leading-relaxed mb-4"><strong className="text-foreground">最佳時機：</strong>在一場明顯的勝利之後。成功的產品發布、強勁的季度成果、被高層讚揚的專案完成。</p>
-            <p className="text-muted-foreground leading-relaxed mb-4"><strong className="text-foreground">最差時機：</strong>預算凍結、裁員、或主管承受壓力時。</p>
-            <p className="text-muted-foreground leading-relaxed mb-6"><strong className="text-foreground">格式：</strong>不要突擊你的主管。約一場專門的會議。帶著你的戰績文件、一個明確的數字、和一個聚焦於未來影響力的理由。</p>
+            <p className="text-muted-foreground leading-relaxed mb-6">先證明你不可或缺，然後再開口。</p>
+            <p className="text-muted-foreground leading-relaxed mb-4"><strong className="text-foreground">最佳時機：</strong>在一個明顯的勝利之後。一次成功的產品上線、一個強勁的季度成果、一個被高層讚揚的專案完成。你的主管在這個位置上比較容易說好。趁著勢頭。</p>
+            <p className="text-muted-foreground leading-relaxed mb-4"><strong className="text-foreground">最差時機：</strong>預算凍結期間、裁員期間、或你的主管正在承受壓力的時候。即使你的理由很充分，組織情境也會擋住一個「好」的回答。</p>
+            <p className="text-muted-foreground leading-relaxed mb-6"><strong className="text-foreground">格式：</strong>不要突襲你的主管。要求一場專門的會議。帶著你的戰績文件、一個明確的數字、和一個以未來影響力為框架的理由。</p>
             <p className="text-muted-foreground leading-relaxed">薪資談判策略，請參考 <Link to="/zh-tw/salary-starter-kit" className="text-gold hover:underline">薪資談判指南</Link>。</p>
+            <p className="text-muted-foreground leading-relaxed mt-6">爭取你想要的，不只需要對主管的策略。還需要解讀你周圍更廣泛的人際和聯盟網路。那就是政治。</p>
           </div>
         </section>
 
@@ -946,32 +981,55 @@ const FortyEightLawsGuideZhTw = () => {
               <SectionNumber num="06" />
               <div className="pt-3"><h2 className="font-heading text-2xl md:text-3xl text-foreground">在辦公室政治中生存</h2></div>
             </div>
-            <p className="text-muted-foreground leading-relaxed mb-6">「要在你的領域做得好，你必須懂得跟人打交道。這佔了任何權力情境至少一半以上的比重。」</p>
+            <p className="text-foreground text-lg leading-relaxed mb-6">人的問題就是權力的問題。「要在你的領域做得好，你必須懂得跟人打交道。這佔了任何權力情境至少一半以上的比重。」</p>
+            <p className="text-muted-foreground leading-relaxed mb-6">辦公室政治不是工作的腐敗。是人類群體的運作方式。每個組織都有聯盟、對立、不成文規定、以及按不同規則行事的人。三條法則涵蓋：看懂局勢、選擇盟友、挑選戰場。</p>
 
             <h3 className="font-heading text-xl text-foreground mt-10 mb-4">法則 19：了解你在跟誰打交道</h3>
-            <p className="text-muted-foreground leading-relaxed mb-6">在任何組織中，你都會遇到五種危險的人：自大型、不安全型、多疑型、算計型、記仇型。</p>
-            <p className="text-muted-foreground leading-relaxed mb-6">在你做出任何重大動作之前，問三個問題：誰從中得利？誰從中受損？我的話被最壞的方式解讀，會變成什麼？</p>
+            <p className="text-muted-foreground leading-relaxed mb-4">在任何組織中，你都會遇到五種危險的人。</p>
+            <ol className="space-y-2 mb-6 list-decimal list-inside">
+              <li className="text-foreground text-sm"><strong>自大型。</strong>對感知到的冒犯進行報復。</li>
+              <li className="text-foreground text-sm"><strong>不安全型。</strong>把一切都當針對自己。</li>
+              <li className="text-foreground text-sm"><strong>多疑型。</strong>到處看到敵人。</li>
+              <li className="text-foreground text-sm"><strong>算計型。</strong>每一次互動都精心設計，為了自己的利益。</li>
+              <li className="text-foreground text-sm"><strong>記仇型。</strong>永遠記恨。</li>
+            </ol>
+            <p className="text-muted-foreground leading-relaxed mb-4">在你做出任何重大動作之前，問三個問題：</p>
+            <ol className="space-y-1 mb-6 list-decimal list-inside text-foreground text-sm">
+              <li>誰從中得利？</li>
+              <li>誰從中受損？</li>
+              <li>我的話被最壞的方式解讀，會變成什麼？</li>
+            </ol>
+            <p className="text-muted-foreground leading-relaxed mb-6">如果三個都回答不出來，先慢下來。</p>
             <ActionStep checked={safeActions[13]} onToggle={() => toggleAction(13)}>
-              在你下一封敏感的 email、會議邀請或向上反映之前，暫停，在紙上回答那三個問題。養成習慣。這個過濾器防止的職涯傷害，比本指南中任何其他習慣都多。
+              在你下一封敏感的 email、會議邀請或向上反映之前，暫停，在紙上回答那三個問題。在桌上貼一張便條：「誰得利？誰受損？最壞的解讀？」養成習慣。這個過濾器防止的職涯傷害，比本指南中任何其他習慣都多。
             </ActionStep>
 
             <h3 className="font-heading text-xl text-foreground mt-10 mb-4">法則 10：遠離不幸和倒楣的人</h3>
-            <p className="text-muted-foreground leading-relaxed mb-6">「你會死於別人的苦難。情緒狀態像疾病一樣有傳染力。」有意識地選擇你的午餐桌、你的 Slack 頻道、和你的盟友。</p>
+            <p className="text-muted-foreground leading-relaxed mb-6">知道你在跟誰打交道之後，下一個問題是你跟誰共度時間。</p>
+            <p className="text-foreground leading-relaxed mb-6 italic">「你會死於別人的苦難。情緒狀態像疾病一樣有傳染力。」</p>
+            <p className="text-muted-foreground leading-relaxed mb-6">職場中，負面情緒傳播的速度比能力快。午餐桌上的慣性抱怨者、每場會議都散播冷嘲熱諷的團隊成員、對所有人說閒話的同事。跟這些人待在一起，你的聲譽也會被拖下水。</p>
+            <p className="text-muted-foreground leading-relaxed mb-6">有意識地選擇你的午餐桌、你的 Slack 頻道、和你的盟友。對所有人友善。但把你的時間和精力投入在建設的人身上，不是拆台的人。</p>
+            <ActionStep checked={safeActions[14]} onToggle={() => toggleAction(14)}>
+              盤點你的 5 個最主要的工作關係。你最常跟誰相處？他們是建設者還是抱怨者？如果超過兩個是慣性抱怨者，開始拉開距離。換個位置吃午餐。加入不同的 Slack 頻道。距離塑造觀感。刻意選擇。
+            </ActionStep>
 
             <h3 className="font-heading text-xl text-foreground mt-10 mb-4">法則 38：想怎麼想都行，但表現得跟別人一樣</h3>
-            <p className="text-muted-foreground leading-relaxed mb-6">不要當那個對每一項政策都反對的叛逆者。即使你是對的，持續叛逆的代價是孤立。</p>
+            <p className="text-muted-foreground leading-relaxed mb-6">法則 19 和 10 教你看人和選圈子。法則 38 教你怎麼在圈子裡運作。</p>
+            <p className="text-foreground leading-relaxed mb-6 italic">「如果你大張旗鼓地反對時代潮流，炫耀你的非主流想法和不正統的做法，人們會認為你只是想要引人注目，並且看不起他們。」</p>
+            <p className="text-muted-foreground leading-relaxed mb-6">不要當那個對每一項政策都反對、挑戰每一個規範、鄙視每一個公司傳統的叛逆者。即使你是對的，持續叛逆的代價是孤立。</p>
+            <p className="text-muted-foreground leading-relaxed mb-6">這對內向的人格外相關。「第一件事是不要試著成為你不是的人。如果你是內向的，愛上這一點。」但要學會遊戲的社交規則。理解文化。在其中運作，同時私下保持你自己的判斷。</p>
             <Reversal>沒有界線的順從會變成軟弱。知道你的底線在哪裡。有些山頭值得為之犧牲。刻意選擇。</Reversal>
             <div className="mt-6">
-              <ActionStep checked={safeActions[14]} onToggle={() => toggleAction(14)}>
-                寫下你的三條不可妥協的專業底線。例如：「我不會對客戶說謊。」「我不會把別人的功勞據為己有。」「我不會對安全問題保持沉默。」在壓力來臨之前就知道你的底線。
+              <ActionStep checked={safeActions[15]} onToggle={() => toggleAction(15)}>
+                寫下你的三條不可妥協的專業底線。這些是無論壓力多大你都不會跨越的線：倫理的、個人的、或專業的。例如：「我不會對客戶說謊。」「我不會把別人的功勞據為己有。」「我不會對安全問題保持沉默。」在壓力來臨之前就知道你的底線，是正直和遺憾之間的差別。
               </ActionStep>
             </div>
 
             <DiagramBox title="辦公室權力地圖">
               <div className="space-y-4">
-                <div><p className="font-medium mb-1">誰有真正的影響力？（不是頭銜。是誰的話人們真的在聽？）</p></div>
-                <div><p className="font-medium mb-1">誰和誰是盟友？</p></div>
-                <div><p className="font-medium mb-1">誰和誰有衝突？</p></div>
+                <div><p className="font-medium mb-1">誰有真正的影響力？（不是頭銜。是誰的話人們真的在聽？）</p><p className="text-muted-foreground">列出組織中真正有影響力的 3 個人。</p></div>
+                <div><p className="font-medium mb-1">誰和誰是盟友？</p><p className="text-muted-foreground">畫出關鍵的聯盟。</p></div>
+                <div><p className="font-medium mb-1">誰和誰有衝突？</p><p className="text-muted-foreground">找出正在發生的緊張關係。</p></div>
                 <div>
                   <p className="font-medium mb-1">你在哪裡？</p>
                   <ul className="text-muted-foreground space-y-1 ml-4 list-disc">
@@ -987,6 +1045,9 @@ const FortyEightLawsGuideZhTw = () => {
             <p className="text-muted-foreground leading-relaxed mt-6">
               完整的政治生存框架，請參考 <Link to="/zh-tw/office-politics-guide" className="text-gold hover:underline">辦公室政治指南</Link>。
             </p>
+            <p className="text-muted-foreground leading-relaxed mt-4">
+              政治保護你。但你的職涯還需要一個比當前這一季更長遠的方向。那就是長期賽局。
+            </p>
           </div>
         </section>
 
@@ -997,35 +1058,43 @@ const FortyEightLawsGuideZhTw = () => {
               <SectionNumber num="07" />
               <div className="pt-3"><h2 className="font-heading text-2xl md:text-3xl text-foreground">打長期戰</h2></div>
             </div>
-            <p className="text-muted-foreground leading-relaxed mb-6">《乘勝追擊的48條法則》在 1998 年出版。作者寫這本書時 39 歲。他之前那 50 多份「失敗」的工作，成了整本書的基礎。</p>
+            <p className="text-foreground text-lg leading-relaxed mb-6 italic">「人生中真正的成功和真正的權力，是持續 10 年、20 年、30 年的。」</p>
+            <p className="text-muted-foreground leading-relaxed mb-6">《乘勝追擊的48條法則》在 1998 年出版。作者寫這本書時 39 歲。他之前那 50 多份「失敗」的工作，成了整本書的基礎。每段職涯在中途都看起來很亂。問題是這些混亂是否在朝著某個方向累積。</p>
             <p className="text-foreground leading-relaxed mb-6 italic">「大多數人想要簡單、直接、筆直的路通往完美的位置和成功。但你必須歡迎走錯路和犯錯。它們讓你意識到自己的缺點。它們拓寬你的經驗。它們讓你更堅韌。」</p>
+            <p className="text-muted-foreground leading-relaxed mb-6">四條法則涵蓋：規劃、時機、適應力、和知道何時停下。</p>
 
             <h3 className="font-heading text-xl text-foreground mt-10 mb-4">法則 29：規劃到最後一步</h3>
+            <p className="text-muted-foreground leading-relaxed mb-6">這是職涯成功三大法則之一。</p>
             <p className="text-foreground leading-relaxed mb-6 italic">「結局就是一切。一路規劃到結局，把所有可能的後果、障礙、和可能逆轉你辛苦成果的命運轉折都考慮進去。」</p>
-            <ActionStep checked={safeActions[15]} onToggle={() => toggleAction(15)}>
+            <p className="text-muted-foreground leading-relaxed mb-6">從你五年後想到達的位置倒推回來。每一份工作都是跳板，不是終點。接受一個新職位之前，問自己：「這份工作是否讓我更接近我想到達的地方？」</p>
+            <ActionStep checked={safeActions[16]} onToggle={() => toggleAction(16)}>
               寫下你 5 年後理想的職稱。然後列出你的履歷缺少的 3 項技能或經驗。現在看你目前的工作：它是否填補了其中任何缺口？如果是，加倍投入。如果不是，開始規劃你的下一步。
             </ActionStep>
 
             <h3 className="font-heading text-xl text-foreground mt-10 mb-4">法則 35：掌握時機的藝術</h3>
+            <p className="text-muted-foreground leading-relaxed mb-6">規劃給你方向。時機決定你的行動是否著陸。</p>
             <p className="text-foreground leading-relaxed mb-6 italic">「永遠不要顯得匆忙。匆忙暴露你對自己缺乏控制，也對時間缺乏控制。」</p>
+            <p className="text-muted-foreground leading-relaxed mb-6">時機管控三個職涯決定：何時留下、何時離開、何時開始新事物。太多人離職太早（在建立紀錄之前）或太晚（在停止成長之後）。最佳的時間點是待得夠久來建立聲譽，但在工作變成死時間之前離開。</p>
+            <p className="text-muted-foreground leading-relaxed mb-6">職涯早期，為學習速度優化。「二十幾歲的時候，不要太看重錢和加薪。真正重要的是責任感和經驗。是更大的格局。」後來，為定位優化。讓你的行動時機配合市場對你技能組合的需求。</p>
             <Reversal>耐心如果待太久不成長，會變成停滯。如果你在同一個職位待了三年沒有發展，問題不是時機。是這份工作。</Reversal>
             <div className="mt-6">
-              <ActionStep checked={safeActions[16]} onToggle={() => toggleAction(16)}>
-                誠實回答：你在目前的工作還在學習嗎？如果答案已經是「沒有」超過 6 個月，開始準備離開。更新你的履歷。啟動你的人脈。不要等完美時機。
+              <ActionStep checked={safeActions[17]} onToggle={() => toggleAction(17)}>
+                誠實回答：你在目前的工作還在學習嗎？如果答案已經是「沒有」超過 6 個月，開始準備離開。更新你的履歷。啟動你的人脈。不要等完美時機。離開的正確時間，是在你走投無路之前。
               </ActionStep>
             </div>
 
             <h3 className="font-heading text-xl text-foreground mt-10 mb-4">法則 48：保持無形</h3>
-            <p className="text-muted-foreground leading-relaxed mb-6">「接受這個事實：沒有什麼是確定的，沒有法則是固定的。保護自己最好的方式，是像水一樣流動和無形。」</p>
-            <ActionStep checked={safeActions[17]} onToggle={() => toggleAction(17)}>
-              寫下一項超出你目前工作職責但值得在未來 6 個月學習的技能。不是因為你的主管要求。是因為市場在 3-5 年後會獎勵它。從每週 30 分鐘開始。
+            <p className="text-muted-foreground leading-relaxed mb-6">規劃設定目的地。時機控制節奏。但路徑本身永遠不會是直的。「接受這個事實：沒有什麼是確定的，沒有法則是固定的。保護自己最好的方式，是像水一樣流動和無形。」</p>
+            <p className="text-muted-foreground leading-relaxed mb-6">這本書本身就是證明。新聞業、電視、劇場、電影、偵探社、飯店。每份工作在當時看起來都是隨機的。加在一起，它們提供了寫書需要的每一項技能。寫作教會組織思緒。歷史教會想法。那些隨機的工作教會了人類心理學。</p>
+            <p className="text-muted-foreground leading-relaxed mb-6">如果你起步較晚？「你必須培養適合這個方向轉變的新技能組合，並找到方法將它們和你之前的技能融合。在這個過程中，沒有任何東西是浪費的。」</p>
+            <ActionStep checked={safeActions[18]} onToggle={() => toggleAction(18)}>
+              寫下一項超出你目前工作職責但值得在未來 6 個月學習的技能。不是因為你的主管要求。是因為市場在 3-5 年後會獎勵它。從每週 30 分鐘開始。這就是無形的起點。
             </ActionStep>
 
             <h3 className="font-heading text-xl text-foreground mt-10 mb-4">法則 47：在勝利中學會停下</h3>
             <p className="text-foreground leading-relaxed mb-6 italic">「勝利的那一刻，往往是最危險的時刻。在勝利的熱潮中，傲慢和過度自信會推著你越過你原本瞄準的目標。」</p>
-            <ActionStep checked={safeActions[18]} onToggle={() => toggleAction(18)}>
-              在你下一次勝利之後，抵抗立刻推進下一件事的衝動。花 30 天在你的新層級建立關係。跟三個你之前接觸不到的新同儕約 1:1 咖啡。先鞏固你的位置，再擴張。
-            </ActionStep>
+            <p className="text-muted-foreground leading-relaxed mb-6">拿到升遷了？不要立刻開始爭取下一次。先鞏固。在你的新層級建立關係。先證明你屬於這個層級，再推進。</p>
+            <p className="text-muted-foreground leading-relaxed mb-6">分清鞏固和混日子的差別。鞏固是有意識的：為下一步行動建立基礎。混日子是被動的：你停止成長了。</p>
 
             <DiagramBox title="職涯時間軸">
               <div className="space-y-6">
