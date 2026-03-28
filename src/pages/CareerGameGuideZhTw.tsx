@@ -699,6 +699,8 @@ const CareerGameGuideZhTw = () => {
               <div key={i} className="flex items-start gap-3"><GoldCheckBadge /><span className="text-muted-foreground text-sm">{rule}</span></div>
             ))}
           </div>
+          <p className="text-muted-foreground leading-relaxed mt-4 mb-4">書中還提供了按導師技能領域（溝通、利害關係人管理、主管氣場、領導力）組織的具體對話提示。這些是你帶到下一次輔導會議的現成問題。</p>
+          <p className="text-muted-foreground leading-relaxed">你的人脈在成長。你的關係在建立。現在到了這些關係被考驗的時候：意見分歧。</p>
         </div>
       </section>
 
