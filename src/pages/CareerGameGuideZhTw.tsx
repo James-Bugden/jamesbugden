@@ -955,9 +955,10 @@ const CareerGameGuideZhTw = () => {
             <div className="bg-card border border-border rounded-xl p-5 md:p-6">
               <h3 className="font-heading text-lg text-foreground mb-3">第 1 步：評估你現在的位置（本週）</h3>
               <InteractiveChecklist guideKey="career_game_step1_zh" lang="zh" items={[
-                { label: "完成 20 項技能自我評估。自評 1-10 分。找到你的尖峰技能。", href: "#spikes" },
-                { label: "追蹤你一整週的工作。標記 BAU / 高影響力 / 自我發展。對照 40/40/20 目標。", href: "#work" },
-                { label: "寫你的 11 清單。五件你想被知道的事。五件你不想的。一個使命宣言。", href: "#brand" },
+                { label: "完成 20 項技能自我評估（自評 1-10 分）。找到你的尖峰技能。", href: "#spikes" },
+                { label: "追蹤 5 天的所有工作。標記：BAU / 高影響力 / 自我發展。計算百分比，對照 40/40/20 目標。", href: "#work" },
+                { label: "寫你的 11 清單（5 想被知道 / 5 不想 / 1 使命）。", href: "#brand" },
+                { label: "開始使用成就追蹤表。", href: "#promotion" },
               ]} />
             </div>
             <div className="bg-card border border-border rounded-xl p-5 md:p-6">
