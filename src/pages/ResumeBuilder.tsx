@@ -410,6 +410,7 @@ const ResumeBuilder = () => {
   const t = useT();
   const builderAiUsage = useBuilderAiUsage();
   const navigateTo = useNavigate();
+  const { isLoggedIn } = useAuth();
   const [searchParams, setSearchParams] = useSearchParams();
   const localizedSectionTypes = useMemo(() => getLocalizedSectionTypes(lang), [lang]);
 
