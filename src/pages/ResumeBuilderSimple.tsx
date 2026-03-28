@@ -474,6 +474,7 @@ const ResumeBuilderSimple = () => {
   const t = useT();
   const { importLimitReached, recordImport } = useBuilderAiUsage();
   const navigateTo = useNavigate();
+  const { isLoggedIn } = useAuth();
   const [searchParams, setSearchParams] = useSearchParams();
   const localizedSectionTypes = useMemo(() => getLocalizedSectionTypes(lang), [lang]);
 
