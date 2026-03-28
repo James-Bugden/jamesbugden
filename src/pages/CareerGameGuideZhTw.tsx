@@ -451,10 +451,15 @@ const CareerGameGuideZhTw = () => {
           </div>
 
           <h3 className="font-heading text-xl text-foreground mb-3">秘密 8：如果你沒有產生影響力，你不會看到進展</h3>
-          <p className="text-muted-foreground leading-relaxed mb-6">看看 Steve。優秀的數據技能。好的聲譽。但他很少被選入高影響力的專案。他被稱為「那個做數據的人」，而不是一個交付成果的人。當作者把他放到她的團隊時，Steve 提出了一個出色的方案並獨立執行。這個專案為公司節省了數百萬元的成本，並推動了超過 30% 的效率提升。Steve 第一次不再只是那個做數據的人。他成為了交付影響力的人。</p>
+          <p className="text-muted-foreground leading-relaxed mb-4">看看 Steve。優秀的數據技能。好的聲譽。但他很少被選入高影響力的專案。他被稱為「那個做數據的人」，而不是一個交付成果的人。</p>
+          <p className="text-muted-foreground leading-relaxed mb-4">當作者把他放到她的團隊時，她請每個人提出組織裡哪裡出了問題的想法。Steve 提出了一個出色的方案。她把專案分配給他。Steve 和各利害關係人群組合作，建立了框架，快速迭代，並和業務夥伴驗證結果。這個專案為公司節省了數百萬元的成本，並推動了超過 30% 的效率提升。</p>
+          <p className="text-muted-foreground leading-relaxed mb-6">Steve 第一次不再只是那個做數據的人。他成為了交付影響力的人。重點：把工作做好是不夠的。你需要推動可衡量的影響力。然後你需要確保對的人知道這件事。</p>
 
           <h3 className="font-heading text-xl text-foreground mb-3">秘密 9：沒有人需要的技能毫無價值</h3>
-          <p className="text-muted-foreground leading-relaxed mb-6">如果你有一項技能但身邊沒有人需要它，它不會幫你升遷。把你的優勢帶到最需要的地方。不要強迫自己進入一個不重視你所帶來的價值的環境。</p>
+          <p className="text-muted-foreground leading-relaxed mb-4">這裡有一個我很喜歡的問題：「如果一棵樹在森林裡倒了，周圍沒有人，有誰會在乎？」如果你有一項技能但身邊沒有人需要它，它不會幫你升遷。</p>
+          <p className="text-muted-foreground leading-relaxed mb-4">作者在混亂的環境中表現最好。結構讓她無聊。她在事情一團亂、沒人知道該怎麼辦的時候最能發揮價值。她選擇正在大改組、混亂或快速變化的公司。</p>
+          <p className="text-muted-foreground leading-relaxed mb-4">書中分享了一個技能錯配的故事。作者離開了一個類似新創的文化，去了一家「金字招牌」公司，一個人人都認得的名字。她拒絕了一家小公司的財務長職位，選擇了這家大公司的副總裁角色。結果完全不合適。公司官僚、行動緩慢、抗拒創新。領導層把她的天生優勢當成問題。她的成果導向被視為急躁。她的社交被說成不恰當。這段經歷讓她學到的企業政治比整個職涯其餘時間加起來還多。但她很痛苦。</p>
+          <p className="text-muted-foreground leading-relaxed mb-6">結論：把你的優勢帶到最需要的地方。不要強迫自己進入一個不重視你所帶來的價值的環境。</p>
 
           <Collapsible title="20 項技能清單">
             <ol className="list-decimal list-inside space-y-1 text-muted-foreground text-sm mt-3">
