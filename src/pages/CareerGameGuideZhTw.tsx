@@ -920,7 +920,8 @@ const CareerGameGuideZhTw = () => {
           </div>
 
           <h3 className="font-heading text-xl text-foreground mb-3">秘密 32：從有毒工作環境中恢復需要時間</h3>
-          <p className="text-muted-foreground leading-relaxed">就像從一段糟糕的感情中恢復一樣，離開有毒環境後你需要時間重建。回到你的尖峰技能和 11 清單。重新認識自己，不要讓過去的毒性影響你的自我認知。重新寫你的品牌宣言，開始再次把它融入對話中。</p>
+          <p className="text-muted-foreground leading-relaxed mb-4">就像從一段糟糕的感情中恢復一樣，離開有毒環境後你需要時間重建。回到你的尖峰技能和 11 清單。在沒有毒性塑造你自我形象的情況下重新認識自己。重新建立你的品牌宣言，開始把它編織進對話中。</p>
+          <p className="text-muted-foreground leading-relaxed">你學會了如何玩這場遊戲、管理團隊、保護你的心理健康。還剩一個問題：你想走多遠？</p>
         </div>
       </section>
 
