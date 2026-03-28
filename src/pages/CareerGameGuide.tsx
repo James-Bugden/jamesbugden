@@ -1,4 +1,5 @@
 import { Clock, ChevronDown, Menu, Briefcase, Target, TrendingUp, Users, Brain, Shield, Star, AlertTriangle, ArrowRight, Lightbulb } from "lucide-react";
+import { SkillAssessment, ElevenList, ElevatorPitch, InfluencerList, AccomplishmentTracker, OneOnOnePrep, BAUTransformer, CompetencyReScore, FortyFortyTwentyReview } from "@/components/career-game/InteractiveTemplates";
 import { InteractiveChecklist } from "@/components/guides/InteractiveChecklist";
 import { Link } from "react-router-dom";
 import GoldCheckBadge from "@/components/GoldCheckBadge";
@@ -591,6 +592,8 @@ const CareerGameGuide = () => {
             </ol>
           </Collapsible>
 
+          <SkillAssessment lang="en" />
+
           <p className="text-muted-foreground leading-relaxed mt-4 mb-4">
             Your "spikes" are the skills that stand 1-2 points above the rest. These are your differentiators. The areas where you go from average to extraordinary. Two skills require special attention regardless of where they fall: communication and collaboration. If either of these lands in your bottom four, fix them first. Nothing else matters if people don't want to work with you.
           </p>
@@ -634,6 +637,8 @@ const CareerGameGuide = () => {
             <p className="text-muted-foreground text-sm italic">"I want to help companies solve complex problems and drive improved efficiencies while building the next generation of leaders."</p>
           </div>
 
+          <ElevenList lang="en" />
+
           <p className="text-muted-foreground leading-relaxed mb-6">
             Compare your 11-List with your spikes from the self-assessment. You should see overlap. People who value productivity tend to spike in drives for results. People who value empathy tend to spike in integrity and moral character. Your personal brand should align with who you already are. Not who you want to be. The goal is not to create a personal brand that is vastly different from who you naturally are. You want to stick closely to what you are good at and then become great.
           </p>
@@ -645,6 +650,7 @@ const CareerGameGuide = () => {
           <p className="text-muted-foreground leading-relaxed mt-4 mb-4">
             Once you have your 11-List, create a one-to-two sentence elevator pitch. Memorize it. Use it everywhere.
           </p>
+          <ElevatorPitch lang="en" />
           <div className="bg-muted/30 border border-border rounded-xl p-5 mb-4">
             <p className="text-foreground text-sm font-semibold mb-2">Brand statement example:</p>
             <p className="text-muted-foreground text-sm italic">"I am the individual who you put in the black hole of your business, where you have no idea what is going on. I bring organization, results, and clarity to that part of the business so it can scale. I do this as a passionate people leader who is focused on creating the next generation of great leaders for the company."</p>
@@ -725,6 +731,8 @@ const CareerGameGuide = () => {
           <p className="text-muted-foreground leading-relaxed mb-4">
             You're not bragging. You're informing. Think about your last workday. What percentage of your activities did your boss witness? 20%? 50%? For the remaining percentage, your boss has no idea what you did or the effort it required. Start an accomplishment tracker. Update it weekly. Use it in one-on-ones to connect your work to business outcomes.
           </p>
+
+          <AccomplishmentTracker lang="en" />
 
           <h3 className="font-heading text-xl text-foreground mb-3">Secret 14: Work that your boss doesn't know about doesn't matter</h3>
           <p className="text-muted-foreground leading-relaxed mb-4">
@@ -827,6 +835,7 @@ const CareerGameGuide = () => {
           <p className="text-muted-foreground leading-relaxed mb-4">
             Score 20-25 people in your organization across eight criteria: Relationship strength, Seniority, Risk to your progression, Power in the organization, Ability to give you exposure, Fear factor, Validation power, and Future influence on your career. Total and rank everyone. Remove anyone more than two levels above you (put them on a "reach" list). Focus on your top five accessible contacts.
           </p>
+          <InfluencerList lang="en" />
           <p className="text-muted-foreground leading-relaxed mb-4">
             Schedule coffee chats or mentoring sessions within 30 days. If reaching out directly feels inappropriate in your company culture, ask your boss: "As part of my desire to continue to grow, I'm trying to expand my network. I've noticed that [X person] is great at [Y skill]. I'd love to meet with them to learn. Would you be willing to help me make a connection?"
           </p>
@@ -1181,6 +1190,7 @@ const CareerGameGuide = () => {
                 { label: "Track your work for one full week. Tag everything as BAU, high-impact, or self-development. Calculate your percentages. Compare to the 40/40/20 target.", href: "#work" },
                 { label: "Write your 11-List. Five things you want to be known for. Five things you don't. One mission statement.", href: "#brand" },
               ]} />
+              <FortyFortyTwentyReview lang="en" />
             </div>
             <div className="bg-card border border-border rounded-xl p-5 md:p-6">
               <h3 className="font-heading text-lg text-foreground mb-3">Step 2: Get a Reality Check (Within 30 Days)</h3>
@@ -1189,6 +1199,7 @@ const CareerGameGuide = () => {
                 { label: "Ask three people (boss, peer, stakeholder) to score you on the 20-skill assessment. Average the results.", href: "#spikes" },
                 { label: "Have the conversation: \"What would it take for you to feel comfortable advocating for my promotion in the next cycle?\"", href: "#promotion" },
               ]} />
+              <CompetencyReScore lang="en" />
             </div>
             <div className="bg-card border border-border rounded-xl p-5 md:p-6">
               <h3 className="font-heading text-lg text-foreground mb-3">Step 3: Build Your Brand (Within 60 Days)</h3>
@@ -1213,6 +1224,9 @@ const CareerGameGuide = () => {
                 { label: "Set up biweekly one-on-ones with your boss (if you don't have them). Use the 10/10/10 structure: inform, escalate, advocate.", href: "#promotion" },
                 { label: "Identify one BAU task you can bundle, rebrand, or automate into high-impact work this quarter.", href: "#work" },
               ]} />
+              <AccomplishmentTracker lang="en" />
+              <OneOnOnePrep lang="en" />
+              <BAUTransformer lang="en" />
             </div>
             <div className="bg-card border border-border rounded-xl p-5 md:p-6">
               <h3 className="font-heading text-lg text-foreground mb-3">Step 6: Check Yourself Every 90 Days</h3>
@@ -1222,6 +1236,8 @@ const CareerGameGuide = () => {
                 { label: "Update your accomplishment tracker. Share wins with your boss." },
                 { label: "Warm up one dormant network contact per quarter.", href: "#network" },
               ]} />
+              <CompetencyReScore lang="en" />
+              <FortyFortyTwentyReview lang="en" />
             </div>
           </div>
 

@@ -1,4 +1,5 @@
 import { Clock, ChevronDown, Menu, AlertTriangle } from "lucide-react";
+import { SkillAssessment, ElevenList, ElevatorPitch, InfluencerList, AccomplishmentTracker, OneOnOnePrep, BAUTransformer, CompetencyReScore, FortyFortyTwentyReview } from "@/components/career-game/InteractiveTemplates";
 
 import { InteractiveChecklist } from "@/components/guides/InteractiveChecklist";
 import { Link } from "react-router-dom";
@@ -491,6 +492,8 @@ const CareerGameGuideZhTw = () => {
             </ol>
           </Collapsible>
 
+          <SkillAssessment lang="zh" />
+
           <p className="text-muted-foreground leading-relaxed mt-4 mb-4">你的「尖峰技能」是比其他分數高出 1-2 分的技能。這些是你的差異化因素。讓你從普通變成卓越的領域。</p>
           <p className="text-muted-foreground leading-relaxed mb-4">作者的尖峰技能範例：解決問題、追求結果、推動變革。</p>
           <p className="text-muted-foreground leading-relaxed mb-4">有兩項技能需要特別注意，無論它們落在哪裡：溝通和協作。如果其中任何一項落在你的最低四名，先修這些。如果人們不想和你共事，其他什麼都不重要。</p>
@@ -527,10 +530,13 @@ const CareerGameGuideZhTw = () => {
             <p className="text-foreground text-sm italic">「我想幫助公司解決複雜問題、推動效率改善，同時培養下一代領導者。」</p>
           </div>
 
+          <ElevenList lang="zh" />
+
           <h3 className="font-heading text-xl text-foreground mb-3">秘密 10：別人在工作中如何看你，直接在你的掌控中</h3>
           <InfoBox title="我的看法" variant="gold"><p>我不完全同意這一條。你無法控制別人怎麼看你。人們帶著自己的偏見、情緒和假設進入每一次互動。但這個想法的精神是對的。即使你無法控制結果，你也應該嘗試影響認知。如果你從不描述你的價值，別人會自己填空。這很少對你有利。</p></InfoBox>
           <p className="text-muted-foreground leading-relaxed mt-4 mb-4">重要的是：把你的 11 清單和自我評估的尖峰技能做比較。你應該會看到重疊。重視生產力的人傾向在追求結果上得分較高。重視同理心的人傾向在正直和道德品格上得分較高。你的個人品牌應該和你現在的樣子一致。不是你想成為的樣子。目標不是創造一個和你大不相同的個人品牌。你要緊貼自己擅長的，然後變得卓越。</p>
           <p className="text-muted-foreground leading-relaxed mb-4">有了 11 清單後，寫一到兩句的電梯簡報。背下來。到處使用。</p>
+          <ElevatorPitch lang="zh" />
           <div className="bg-muted/30 border border-border rounded-xl p-5 mb-4">
             <p className="text-foreground text-sm font-medium mb-2">書中的品牌宣言範例：</p>
             <p className="text-foreground text-sm italic">「我是你丟進公司黑洞裡的人。那個沒人知道發生什麼事的地方。我帶來組織、成果和清晰度，讓那個部分的業務能夠擴展。我以一個熱情的人才領導者的身份做這件事，專注於為公司培養下一代優秀的領導者。」</p>
@@ -593,6 +599,7 @@ const CareerGameGuideZhTw = () => {
           <h3 className="font-heading text-xl text-foreground mb-3">學會展示自己（換個說法：你在彙報，不是在吹牛）</h3>
           <p className="text-muted-foreground leading-relaxed mb-4">你不是在吹牛。你在彙報。想想你上一個工作日。你老闆親眼見到了你多少比例的活動？20%？50%？其餘的部分，你老闆完全不知道你做了什麼或花了多少心力。</p>
           <p className="text-muted-foreground leading-relaxed mb-4">開始使用成就追蹤表。每週更新。在一對一會議中用它來把你的工作和業務成果連結起來。</p>
+          <AccomplishmentTracker lang="zh" />
           <Collapsible title="每週成就追蹤表">
             <p className="text-muted-foreground text-xs mt-3 mb-2">每週五更新。帶到你的一對一會議。</p>
             <div className="overflow-x-auto">
@@ -702,6 +709,7 @@ const CareerGameGuideZhTw = () => {
 
           <h3 className="font-heading text-xl text-foreground mb-3">秘密 19：沒有人脈你會失敗</h3>
           <p className="text-muted-foreground leading-relaxed mb-4">為你組織中的 20-25 人按八個標準評分：關係強度、職級、對你晉升的風險、在組織中的權力、能給你曝光的能力、威嚇度、背書力、對你職涯的未來影響力。總分排名。移除比你高兩個以上層級的人（放到「目標」清單）。專注於你的前五位可接觸對象。</p>
+          <InfluencerList lang="zh" />
           <p className="text-muted-foreground leading-relaxed mb-4">在 30 天內安排咖啡聊天或指導會議。如果在你的公司文化中直接聯繫感覺不太合適，問你的老闆：「作為我持續成長的一部分，我正在擴展我的人脈。我注意到 [某人] 在 [某項技能] 方面非常出色。我很想和他們見面學習。你願意幫我介紹嗎？」</p>
 
           <h3 className="font-heading text-xl text-foreground mb-3">秘密 20：幫助你的人會比你幫助的人更喜歡你</h3>
@@ -1013,6 +1021,7 @@ const CareerGameGuideZhTw = () => {
                 { label: "寫你的 11 清單（5 想被知道 / 5 不想 / 1 使命）。", href: "#brand" },
                 { label: "開始使用成就追蹤表。", href: "#promotion" },
               ]} />
+              <FortyFortyTwentyReview lang="zh" />
             </div>
             <div className="bg-card border border-border rounded-xl p-5 md:p-6">
               <h3 className="font-heading text-lg text-foreground mb-3">第 2 步：做一次現實檢驗（30 天內）</h3>
@@ -1022,6 +1031,7 @@ const CareerGameGuideZhTw = () => {
                 { label: "問：「你需要什麼條件才會替我爭取升遷？」", href: "#promotion" },
                 { label: "如果還沒有，安排每兩週一次一對一會議。" },
               ]} />
+              <CompetencyReScore lang="zh" />
             </div>
             <div className="bg-card border border-border rounded-xl p-5 md:p-6">
               <h3 className="font-heading text-lg text-foreground mb-3">第 3 步：建立你的品牌（60 天內）</h3>
@@ -1048,6 +1058,9 @@ const CareerGameGuideZhTw = () => {
                 { label: "安排每兩週一對一會議（如果還沒有的話）。用 10/10/10 結構：彙報、上報、爭取。", href: "#promotion" },
                 { label: "找出一項 BAU 任務，這個季度可以整合、重新定位或自動化為高影響力工作。", href: "#work" },
               ]} />
+              <AccomplishmentTracker lang="zh" />
+              <OneOnOnePrep lang="zh" />
+              <BAUTransformer lang="zh" />
             </div>
             <div className="bg-card border border-border rounded-xl p-5 md:p-6">
               <h3 className="font-heading text-lg text-foreground mb-3">第 6 步：每 90 天檢視自己</h3>
@@ -1058,6 +1071,8 @@ const CareerGameGuideZhTw = () => {
                 { label: "重新和老闆做職能比較。", href: "#spikes" },
                 { label: "檢視並更新你的 11 清單和電梯簡報。", href: "#brand" },
               ]} />
+              <CompetencyReScore lang="zh" />
+              <FortyFortyTwentyReview lang="zh" />
             </div>
           </div>
 
