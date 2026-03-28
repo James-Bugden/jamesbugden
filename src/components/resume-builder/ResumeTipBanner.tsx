@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { Lightbulb, ChevronDown } from "lucide-react";
-import { SECTION_TIPS } from "./resumeTips";
+import { SECTION_TIPS, SECTION_TIPS_ZH_TW } from "./resumeTips";
+import { useResumeBuilderLang } from "./i18n";
 import { cn } from "@/lib/utils";
 
 interface ResumeTipBannerProps {
@@ -8,7 +9,9 @@ interface ResumeTipBannerProps {
 }
 
 export function ResumeTipBanner({ sectionType }: ResumeTipBannerProps) {
-  const tip = SECTION_TIPS[sectionType];
+  const lang = useResumeBuilderLang();
+  const tips = lang === "zh-tw" ? SECTION_TIPS_ZH_TW : SECTION_TIPS;
+  const tip = tips[sectionType];
   const [expanded, setExpanded] = useState(false);
 
   if (!tip) return null;
