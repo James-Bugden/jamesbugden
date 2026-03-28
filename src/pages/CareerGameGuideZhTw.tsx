@@ -529,7 +529,6 @@ const CareerGameGuideZhTw = () => {
             <p className="text-foreground text-sm font-medium mb-2">使命範例：</p>
             <p className="text-foreground text-sm italic">「我想幫助公司解決複雜問題、推動效率改善，同時培養下一代領導者。」</p>
           </div>
-          </div>
 
           <ElevenList lang="zh" />
 
