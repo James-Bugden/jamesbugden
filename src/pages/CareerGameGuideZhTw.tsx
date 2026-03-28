@@ -709,6 +709,7 @@ const CareerGameGuideZhTw = () => {
 
           <h3 className="font-heading text-xl text-foreground mb-3">秘密 19：沒有人脈你會失敗</h3>
           <p className="text-muted-foreground leading-relaxed mb-4">為你組織中的 20-25 人按八個標準評分：關係強度、職級、對你晉升的風險、在組織中的權力、能給你曝光的能力、威嚇度、背書力、對你職涯的未來影響力。總分排名。移除比你高兩個以上層級的人（放到「目標」清單）。專注於你的前五位可接觸對象。</p>
+          <InfluencerList lang="zh" />
           <p className="text-muted-foreground leading-relaxed mb-4">在 30 天內安排咖啡聊天或指導會議。如果在你的公司文化中直接聯繫感覺不太合適，問你的老闆：「作為我持續成長的一部分，我正在擴展我的人脈。我注意到 [某人] 在 [某項技能] 方面非常出色。我很想和他們見面學習。你願意幫我介紹嗎？」</p>
 
           <h3 className="font-heading text-xl text-foreground mb-3">秘密 20：幫助你的人會比你幫助的人更喜歡你</h3>
