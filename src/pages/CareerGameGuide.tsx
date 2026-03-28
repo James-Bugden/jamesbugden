@@ -648,6 +648,7 @@ const CareerGameGuide = () => {
           <p className="text-muted-foreground leading-relaxed mt-4 mb-4">
             Once you have your 11-List, create a one-to-two sentence elevator pitch. Memorize it. Use it everywhere.
           </p>
+          <ElevatorPitch lang="en" />
           <div className="bg-muted/30 border border-border rounded-xl p-5 mb-4">
             <p className="text-foreground text-sm font-semibold mb-2">Brand statement example:</p>
             <p className="text-muted-foreground text-sm italic">"I am the individual who you put in the black hole of your business, where you have no idea what is going on. I bring organization, results, and clarity to that part of the business so it can scale. I do this as a passionate people leader who is focused on creating the next generation of great leaders for the company."</p>
