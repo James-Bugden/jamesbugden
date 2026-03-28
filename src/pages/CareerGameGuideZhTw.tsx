@@ -396,7 +396,26 @@ const CareerGameGuideZhTw = () => {
           <p className="text-muted-foreground leading-relaxed mb-4">追蹤你一週做的所有事情。標記每項任務。理想的比例：40% BAU、40-50% 高影響力工作、10-20% 自我發展。</p>
           <WorkSplitDiagram />
 
-          <p className="text-muted-foreground leading-relaxed mt-6 mb-8">如果你是高度技術性的角色（工程師、科學家、開發人員），你的 BAU 比例會更高。這是預期的。但目標仍然是盡可能向影響力工作傾斜。</p>
+          <Collapsible title="範例：一位行銷分析師分類她的一週">
+            <div className="overflow-x-auto mt-3">
+              <table className="w-full text-sm text-left">
+                <thead><tr className="border-b border-border"><th className="py-2 pr-3 text-foreground font-semibold">任務</th><th className="py-2 pr-3 text-foreground font-semibold">類別</th><th className="py-2 text-foreground font-semibold">行動</th></tr></thead>
+                <tbody className="text-muted-foreground">
+                  <tr className="border-b border-border/50"><td className="py-2 pr-3">拉出每週廣告報表</td><td className="py-2 pr-3">BAU</td><td className="py-2">自動化 → 建立儀表板</td></tr>
+                  <tr className="border-b border-border/50"><td className="py-2 pr-3">回答 12 個臨時數據需求</td><td className="py-2 pr-3">BAU</td><td className="py-2">整合 → 建立自助查詢工具</td></tr>
+                  <tr className="border-b border-border/50"><td className="py-2 pr-3">從報表建立主管摘要</td><td className="py-2 pr-3">BAU</td><td className="py-2">重新定位 → 「為管理層提供數據驅動決策」</td></tr>
+                  <tr className="border-b border-border/50"><td className="py-2 pr-3">帶領跨團隊歸因分析專案</td><td className="py-2 pr-3">高影響力</td><td className="py-2">保留 → 推動策略</td></tr>
+                  <tr className="border-b border-border/50"><td className="py-2 pr-3">向副總裁報告分析結果</td><td className="py-2 pr-3">高影響力</td><td className="py-2">保留 → 高能見度</td></tr>
+                  <tr className="border-b border-border/50"><td className="py-2 pr-3">完成 Google Analytics 認證</td><td className="py-2 pr-3">自我發展</td><td className="py-2">保留 → 強化尖峰技能</td></tr>
+                  <tr><td className="py-2 pr-3">組織團隊午餐學習會</td><td className="py-2 pr-3">自我發展</td><td className="py-2">保留 → 文化建設</td></tr>
+                </tbody>
+              </table>
+            </div>
+            <p className="text-muted-foreground text-xs mt-3"><strong className="text-foreground">之前：</strong>70% BAU / 20% 高影響力 / 10% 自我發展</p>
+            <p className="text-muted-foreground text-xs"><strong className="text-foreground">之後：</strong>40% BAU / 40% 高影響力 / 20% 自我發展（同樣的時數，更好的分配）</p>
+          </Collapsible>
+
+          <p className="text-muted-foreground leading-relaxed mt-6 mb-8">如果你的工作高度技術性（工程師、科學家、開發人員），你的 BAU 比例會更高。這很正常。但目標仍然是盡量把時間轉移到高影響力的工作上。</p>
 
           <h3 className="font-heading text-xl text-foreground mb-3">秘密 5：你必須建立和維持健康的界限</h3>
           <p className="text-muted-foreground leading-relaxed mb-4">目標不是工作更多。也不是工作更努力。目標是更好地安排你的時間。這從界限開始。把它們寫下來。範例：週末不工作。準時下班，不留加班。一定要吃午飯。家人生病時不工作。</p>
