@@ -537,6 +537,7 @@ const CareerGameGuideZhTw = () => {
           <InfoBox title="我的看法" variant="gold"><p>我不完全同意這一條。你無法控制別人怎麼看你。人們帶著自己的偏見、情緒和假設進入每一次互動。但這個想法的精神是對的。即使你無法控制結果，你也應該嘗試影響認知。如果你從不描述你的價值，別人會自己填空。這很少對你有利。</p></InfoBox>
           <p className="text-muted-foreground leading-relaxed mt-4 mb-4">重要的是：把你的 11 清單和自我評估的尖峰技能做比較。你應該會看到重疊。重視生產力的人傾向在追求結果上得分較高。重視同理心的人傾向在正直和道德品格上得分較高。你的個人品牌應該和你現在的樣子一致。不是你想成為的樣子。目標不是創造一個和你大不相同的個人品牌。你要緊貼自己擅長的，然後變得卓越。</p>
           <p className="text-muted-foreground leading-relaxed mb-4">有了 11 清單後，寫一到兩句的電梯簡報。背下來。到處使用。</p>
+          <ElevatorPitch lang="zh" />
           <div className="bg-muted/30 border border-border rounded-xl p-5 mb-4">
             <p className="text-foreground text-sm font-medium mb-2">書中的品牌宣言範例：</p>
             <p className="text-foreground text-sm italic">「我是你丟進公司黑洞裡的人。那個沒人知道發生什麼事的地方。我帶來組織、成果和清晰度，讓那個部分的業務能夠擴展。我以一個熱情的人才領導者的身份做這件事，專注於為公司培養下一代優秀的領導者。」</p>
