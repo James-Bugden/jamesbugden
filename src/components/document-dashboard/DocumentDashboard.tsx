@@ -468,19 +468,9 @@ export function DocumentDashboard({ onOpenDocument, onImport }: DocumentDashboar
 
       <div className="flex-1 flex flex-col md:flex-row overflow-hidden">
       <header className="md:hidden px-4 py-3 bg-white border-b space-y-3" style={{ borderColor: BRAND.border }}>
-        <div className="flex items-center justify-between">
-          <div>
-            <h1 className="text-[16px] font-bold tracking-tight" style={{ fontFamily: "'Source Sans 3', sans-serif", color: BRAND.text }}>{t("resumeBuilderTitle")}</h1>
-            <p className="text-[11px]" style={{ color: BRAND.textSecondary }}>{t("resumeBuilderTagline")}</p>
-          </div>
-          <div className="flex items-center gap-2">
-            <button
-              onClick={() => navigate(lang === "zh-tw" ? "/resume" : "/zh-tw/resume")}
-              className="px-3 py-1.5 text-sm font-semibold bg-gold/20 hover:bg-gold/30 text-gold border border-gold/40 rounded-md transition-all duration-200 hover:scale-105"
-            >
-              {lang === "zh-tw" ? "English" : "中文"}
-            </button>
-          </div>
+        <div>
+          <h1 className="text-[16px] font-bold tracking-tight" style={{ fontFamily: "'Source Sans 3', sans-serif", color: BRAND.text }}>{t("resumeBuilderTitle")}</h1>
+          <p className="text-[11px]" style={{ color: BRAND.textSecondary }}>{t("resumeBuilderTagline")}</p>
         </div>
         <DesignPhilosophy />
       </header>
