@@ -455,6 +455,7 @@ const CareerGameGuideZhTw = () => {
           </div>
           <p className="text-muted-foreground leading-relaxed mb-4">同一個人。同一個專案。完全不同的認知。規則：不要描述你做了什麼。描述沒有你就不會發生什麼。</p>
           <InfoBox title="我的看法" variant="gold"><p>這就是一份收到回電的履歷和一份被跳過的履歷之間的差別。我掃描履歷時找的是影響力語言。「管理一個團隊」什麼都沒告訴我。「透過重組客戶流程將團隊營收提升 40%」告訴我一切。</p></InfoBox>
+          <p className="text-muted-foreground leading-relaxed mt-6">你已經知道工作的類型。你知道如何談論它們。現在你需要找出你最擅長什麼，確保你的公司需要它。</p>
         </div>
       </section>
 
