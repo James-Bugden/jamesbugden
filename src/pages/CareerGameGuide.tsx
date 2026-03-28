@@ -835,6 +835,7 @@ const CareerGameGuide = () => {
           <p className="text-muted-foreground leading-relaxed mb-4">
             Score 20-25 people in your organization across eight criteria: Relationship strength, Seniority, Risk to your progression, Power in the organization, Ability to give you exposure, Fear factor, Validation power, and Future influence on your career. Total and rank everyone. Remove anyone more than two levels above you (put them on a "reach" list). Focus on your top five accessible contacts.
           </p>
+          <InfluencerList lang="en" />
           <p className="text-muted-foreground leading-relaxed mb-4">
             Schedule coffee chats or mentoring sessions within 30 days. If reaching out directly feels inappropriate in your company culture, ask your boss: "As part of my desire to continue to grow, I'm trying to expand my network. I've noticed that [X person] is great at [Y skill]. I'd love to meet with them to learn. Would you be willing to help me make a connection?"
           </p>
