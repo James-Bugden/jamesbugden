@@ -399,22 +399,24 @@ const CareerGameGuideZhTw = () => {
           <p className="text-muted-foreground leading-relaxed mt-6 mb-8">如果你是高度技術性的角色（工程師、科學家、開發人員），你的 BAU 比例會更高。這是預期的。但目標仍然是盡可能向影響力工作傾斜。</p>
 
           <h3 className="font-heading text-xl text-foreground mb-3">秘密 5：你必須建立和維持健康的界限</h3>
-          <p className="text-muted-foreground leading-relaxed mb-4">目標不是工作更多。也不是工作更努力。目標是更好地安排你的時間。這從界限開始。把它們寫下來。範例：週末不工作。下午五點後不工作。一定要吃午飯。家人生病時不工作。</p>
-          <p className="text-muted-foreground leading-relaxed mb-4">當你的工作超載時，用這三個步驟：</p>
+          <p className="text-muted-foreground leading-relaxed mb-4">目標不是工作更多。也不是工作更努力。目標是更好地安排你的時間。這從界限開始。把它們寫下來。範例：週末不工作。準時下班，不留加班。一定要吃午飯。家人生病時不工作。</p>
+          <p className="text-muted-foreground leading-relaxed mb-4">當你的工作量超載時，用以下三步驟處理：</p>
           <div className="space-y-3 mb-4">
             <div className="bg-background border border-border rounded-xl p-4">
-              <p className="text-foreground font-semibold text-sm mb-1">排序：</p>
-              <p className="text-muted-foreground text-sm">不要說「好，我來處理。」改說「我知道這很重要。考慮到我手上的 A、B、C 任務，你覺得我可以先放下 C 來騰出時間嗎？」</p>
+              <p className="text-foreground font-semibold text-sm mb-1">排序（Prioritize）：</p>
+              <p className="text-muted-foreground text-sm">不要再說「好的，我來處理。」改說「我理解這是高優先事項。考慮到我手上的 A、B、C 任務，你同意我把 C 的優先順序降低來騰出空間嗎？」</p>
             </div>
             <div className="bg-background border border-border rounded-xl p-4">
-              <p className="text-foreground font-semibold text-sm mb-1">整合：</p>
-              <p className="text-muted-foreground text-sm">把重複的需求合併。如果你一直收到數據需求，建一個自助式儀表板，而不是一一回答。</p>
+              <p className="text-foreground font-semibold text-sm mb-1">整合（Bundle）：</p>
+              <p className="text-muted-foreground text-sm">把重複的需求合併。如果你收到幾十個數據需求，建一個自助儀表板，而不是逐一回覆。</p>
             </div>
             <div className="bg-background border border-border rounded-xl p-4">
-              <p className="text-foreground font-semibold text-sm mb-1">重新定位：</p>
-              <p className="text-muted-foreground text-sm">原本是「跑一份每週報表」變成「透過自動化儀表板實現數據驅動的決策」。同樣的工作。不同的包裝。更大的影響力。</p>
+              <p className="text-foreground font-semibold text-sm mb-1">重新定位（Rebrand）：</p>
+              <p className="text-muted-foreground text-sm">原本是「跑週報」的工作變成「透過自動化儀表板實現數據驅動的決策」。同樣的工作。不同的描述。更大的影響力。</p>
             </div>
           </div>
+          <p className="text-muted-foreground leading-relaxed mb-4">書中分享了一個個人故事。作者有 12 個專案在週五截止，同一天是團隊活動日。她在辦公室裡哭，打算不去參加。她的老闆讓她坐下來，讓她列出每項任務。然後劃掉三項、圈出兩項在活動前完成，其餘分散到接下來兩週。</p>
+          <p className="text-muted-foreground leading-relaxed mb-4">他的回應：「我真希望早點知道你在做這麼多不同的任務。我本來能把一些分配給其他人。」這直接帶出下一個秘密。</p>
 
           <h3 className="font-heading text-xl text-foreground mt-8 mb-3">秘密 6：你的老闆不知道你在做什麼</h3>
           <p className="text-muted-foreground leading-relaxed mb-4">就這樣。再好的主管也不會追蹤你的所有任務。讓他們了解你的工作狀況是你的責任。</p>
@@ -449,10 +451,15 @@ const CareerGameGuideZhTw = () => {
           </div>
 
           <h3 className="font-heading text-xl text-foreground mb-3">秘密 8：如果你沒有產生影響力，你不會看到進展</h3>
-          <p className="text-muted-foreground leading-relaxed mb-6">看看 Steve。優秀的數據技能。好的聲譽。但他很少被選入高影響力的專案。他被稱為「那個做數據的人」，而不是一個交付成果的人。當作者把他放到她的團隊時，Steve 提出了一個出色的方案並獨立執行。這個專案為公司節省了數百萬元的成本，並推動了超過 30% 的效率提升。Steve 第一次不再只是那個做數據的人。他成為了交付影響力的人。</p>
+          <p className="text-muted-foreground leading-relaxed mb-4">看看 Steve。優秀的數據技能。好的聲譽。但他很少被選入高影響力的專案。他被稱為「那個做數據的人」，而不是一個交付成果的人。</p>
+          <p className="text-muted-foreground leading-relaxed mb-4">當作者把他放到她的團隊時，她請每個人提出組織裡哪裡出了問題的想法。Steve 提出了一個出色的方案。她把專案分配給他。Steve 和各利害關係人群組合作，建立了框架，快速迭代，並和業務夥伴驗證結果。這個專案為公司節省了數百萬元的成本，並推動了超過 30% 的效率提升。</p>
+          <p className="text-muted-foreground leading-relaxed mb-6">Steve 第一次不再只是那個做數據的人。他成為了交付影響力的人。重點：把工作做好是不夠的。你需要推動可衡量的影響力。然後你需要確保對的人知道這件事。</p>
 
           <h3 className="font-heading text-xl text-foreground mb-3">秘密 9：沒有人需要的技能毫無價值</h3>
-          <p className="text-muted-foreground leading-relaxed mb-6">如果你有一項技能但身邊沒有人需要它，它不會幫你升遷。把你的優勢帶到最需要的地方。不要強迫自己進入一個不重視你所帶來的價值的環境。</p>
+          <p className="text-muted-foreground leading-relaxed mb-4">這裡有一個我很喜歡的問題：「如果一棵樹在森林裡倒了，周圍沒有人，有誰會在乎？」如果你有一項技能但身邊沒有人需要它，它不會幫你升遷。</p>
+          <p className="text-muted-foreground leading-relaxed mb-4">作者在混亂的環境中表現最好。結構讓她無聊。她在事情一團亂、沒人知道該怎麼辦的時候最能發揮價值。她選擇正在大改組、混亂或快速變化的公司。</p>
+          <p className="text-muted-foreground leading-relaxed mb-4">書中分享了一個技能錯配的故事。作者離開了一個類似新創的文化，去了一家「金字招牌」公司，一個人人都認得的名字。她拒絕了一家小公司的財務長職位，選擇了這家大公司的副總裁角色。結果完全不合適。公司官僚、行動緩慢、抗拒創新。領導層把她的天生優勢當成問題。她的成果導向被視為急躁。她的社交被說成不恰當。這段經歷讓她學到的企業政治比整個職涯其餘時間加起來還多。但她很痛苦。</p>
+          <p className="text-muted-foreground leading-relaxed mb-6">結論：把你的優勢帶到最需要的地方。不要強迫自己進入一個不重視你所帶來的價值的環境。</p>
 
           <Collapsible title="20 項技能清單">
             <ol className="list-decimal list-inside space-y-1 text-muted-foreground text-sm mt-3">
@@ -490,16 +497,40 @@ const CareerGameGuideZhTw = () => {
               <ul className="space-y-1 text-muted-foreground text-sm"><li>自私</li><li>微管理</li><li>短視</li><li>搶功勞</li><li>糟糕的領導</li></ul>
             </div>
           </div>
+          <div className="bg-muted/30 border border-border rounded-xl p-5 mb-6">
+            <p className="text-foreground text-sm font-medium mb-2">使命範例：</p>
+            <p className="text-foreground text-sm italic">「我想幫助公司解決複雜問題、推動效率改善，同時培養下一代領導者。」</p>
+          </div>
 
           <h3 className="font-heading text-xl text-foreground mb-3">秘密 10：別人在工作中如何看你，直接在你的掌控中</h3>
-          <p className="text-muted-foreground leading-relaxed mb-4">你的個人品牌應該和你現在的樣子一致。不是你想成為的樣子。有了 11 清單後，寫一到兩句的電梯簡報。背下來。到處使用。隨著時間推移，會發生回聲效應。當你持續一致地描述自己時，你周圍的人開始用同樣的語言來描述你。</p>
+          <InfoBox title="我的看法" variant="gold"><p>我不完全同意這一條。你無法控制別人怎麼看你。人們帶著自己的偏見、情緒和假設進入每一次互動。但這個想法的精神是對的。即使你無法控制結果，你也應該嘗試影響認知。如果你從不描述你的價值，別人會自己填空。這很少對你有利。</p></InfoBox>
+          <p className="text-muted-foreground leading-relaxed mt-4 mb-4">重要的是：把你的 11 清單和自我評估的尖峰技能做比較。你應該會看到重疊。重視生產力的人傾向在追求結果上得分較高。重視同理心的人傾向在正直和道德品格上得分較高。你的個人品牌應該和你現在的樣子一致。不是你想成為的樣子。目標不是創造一個和你大不相同的個人品牌。你要緊貼自己擅長的，然後變得卓越。</p>
+          <p className="text-muted-foreground leading-relaxed mb-4">有了 11 清單後，寫一到兩句的電梯簡報。背下來。到處使用。</p>
+          <div className="bg-muted/30 border border-border rounded-xl p-5 mb-4">
+            <p className="text-foreground text-sm font-medium mb-2">書中的品牌宣言範例：</p>
+            <p className="text-foreground text-sm italic">「我是你丟進公司黑洞裡的人。那個沒人知道發生什麼事的地方。我帶來組織、成果和清晰度，讓那個部分的業務能夠擴展。我以一個熱情的人才領導者的身份做這件事，專注於為公司培養下一代優秀的領導者。」</p>
+          </div>
+          <p className="text-muted-foreground leading-relaxed mb-4">然後從你的使命宣言中挑出三到五個關鍵詞。把它們寫在桌上的便利貼上。把這些詞編織進每一次的自我介紹、專案啟動會議和績效討論中。</p>
+          <p className="text-muted-foreground leading-relaxed mb-4">隨著時間推移，會發生一件有力的事。這叫做回聲效應。當你持續一致地描述自己時，你周圍的人開始用同樣的語言來描述你。他們把你的品牌像回聲一樣傳遞給你和其他人。</p>
+          <div className="bg-muted/30 border border-border rounded-xl p-5 mb-4">
+            <p className="text-foreground text-sm italic">「在過去十年裡管理過我的每個人都會說：『Kendall 很會交付成果，溝通很有效。我把她丟進沒人搞得懂的問題裡。』每一個人。大概用完全相同的措辭。」</p>
+          </div>
 
           <h3 className="font-heading text-xl text-foreground mb-3">秘密 11：你的品牌會在你之前進入會議室，在你離開後很久才離開</h3>
-          <p className="text-muted-foreground leading-relaxed mb-4">95% 關於你職涯、升遷和發展的對話，發生在你不在場的時候。你需要你的品牌在你永遠不會進入的會議室裡替你工作。</p>
+          <p className="text-muted-foreground leading-relaxed mb-4">95% 關於你職涯、升遷和發展的對話，發生在你不在場的時候。</p>
+          <p className="text-muted-foreground leading-relaxed mb-4">書中分享了一個替團隊成員爭取升遷的故事。公司要求有一位高階主管擔任「贊助人」，一位副總裁或以上層級的人願意為候選人辯護。作者直到要交文件時才知道這個要求。然後發生了一件了不起的事。一位高階主管主動聯繫並提出擔任贊助人。接下來 24 小時內，又有四位副總裁主動提出。這位候選人的個人品牌走在他前面。各部門的領導者都願意替他說話。</p>
+          <p className="text-muted-foreground leading-relaxed mb-4">重點：你需要你的品牌在你永遠不會進入的會議室裡替你工作。做到這一點的方法是：一致的語言、一致的交付，以及一個聽過你的品牌且能確認的人脈網絡。</p>
           <InfoBox title="我的看法" variant="gold"><p>當用人主管告訴我「我需要一個很會某件事的人」，我腦中立刻浮現那些用這種方式描述自己的候選人。如果你從來沒有告訴我你有什麼不同，你不會被想到。你的品牌就是你的行銷。做得好，機會會找到你，而不是你找機會。</p></InfoBox>
 
           <h3 className="font-heading text-xl text-foreground mt-8 mb-3">冒牌者症候群：重新定義</h3>
-          <p className="text-muted-foreground leading-relaxed">冒牌者症候群不是缺乏信心。而是對自己學習新事物的能力缺乏信念。大多數人只在知道所有答案時才感到有信心。但信心應該是相信自己有能力搞清楚事情。你目前擁有的每一項技能，都曾經是從零開始學的。下一個也一樣。</p>
+          <p className="text-muted-foreground leading-relaxed mb-4">書中有一段關於冒牌者症候群的觀點，是我在其他地方沒聽過的。冒牌者症候群不是缺乏信心。而是對自己學習新事物的能力缺乏信念。大多數人只在知道所有答案時才感到有信心。但信心應該是相信自己有能力搞清楚事情。你目前擁有的每一項技能，都曾經是從零開始學的。下一個也一樣。</p>
+          <p className="text-muted-foreground leading-relaxed mb-2">當你沒有答案時，試試這些說法：</p>
+          <div className="space-y-2 mb-4">
+            <div className="bg-muted/30 border border-border rounded-lg p-3"><p className="text-foreground text-sm italic">「這是個好問題。我蠻確定答案是 X，但讓我確認一下再回覆你。」</p></div>
+            <div className="bg-muted/30 border border-border rounded-lg p-3"><p className="text-foreground text-sm italic">「這是個有趣的觀點。讓我把利害關係人召集起來討論，我們會在週五前提供更新。」</p></div>
+            <div className="bg-muted/30 border border-border rounded-lg p-3"><p className="text-foreground text-sm italic">「好問題。[同事 X]，你是這個領域的專家，你來回答好嗎？」</p></div>
+          </div>
+          <p className="text-muted-foreground leading-relaxed">你的品牌建立了。你的尖峰技能明確了。現在你需要了解升遷系統在關門後是怎麼運作的，這樣你才能停止空等，開始規劃。</p>
         </div>
       </section>
 
@@ -924,25 +955,29 @@ const CareerGameGuideZhTw = () => {
             <div className="bg-card border border-border rounded-xl p-5 md:p-6">
               <h3 className="font-heading text-lg text-foreground mb-3">第 1 步：評估你現在的位置（本週）</h3>
               <InteractiveChecklist guideKey="career_game_step1_zh" lang="zh" items={[
-                { label: "完成 20 項技能自我評估。自評 1-10 分。找到你的尖峰技能。", href: "#spikes" },
-                { label: "追蹤你一整週的工作。標記 BAU / 高影響力 / 自我發展。對照 40/40/20 目標。", href: "#work" },
-                { label: "寫你的 11 清單。五件你想被知道的事。五件你不想的。一個使命宣言。", href: "#brand" },
+                { label: "完成 20 項技能自我評估（自評 1-10 分）。找到你的尖峰技能。", href: "#spikes" },
+                { label: "追蹤 5 天的所有工作。標記：BAU / 高影響力 / 自我發展。計算百分比，對照 40/40/20 目標。", href: "#work" },
+                { label: "寫你的 11 清單（5 想被知道 / 5 不想 / 1 使命）。", href: "#brand" },
+                { label: "開始使用成就追蹤表。", href: "#promotion" },
               ]} />
             </div>
             <div className="bg-card border border-border rounded-xl p-5 md:p-6">
               <h3 className="font-heading text-lg text-foreground mb-3">第 2 步：做一次現實檢驗（30 天內）</h3>
               <InteractiveChecklist guideKey="career_game_step2_zh" lang="zh" items={[
-                { label: "給你的老闆一張空白的職能表。請他們為你評分。比較他們的分數和你的。" },
-                { label: "請三個人（老闆、同事、利害關係人）做 20 項技能評估。平均結果。", href: "#spikes" },
-                { label: "問：「你需要什麼條件才會在下一個週期替我爭取升遷？」", href: "#promotion" },
+                { label: "給老闆一張空白職能表。請他們為你評分。比較分數。找出差距。寫行動計畫。" },
+                { label: "讓 3 個人做 20 項技能評估。平均結果。", href: "#spikes" },
+                { label: "問：「你需要什麼條件才會替我爭取升遷？」", href: "#promotion" },
+                { label: "如果還沒有，安排每兩週一次一對一會議。" },
               ]} />
             </div>
             <div className="bg-card border border-border rounded-xl p-5 md:p-6">
               <h3 className="font-heading text-lg text-foreground mb-3">第 3 步：建立你的品牌（60 天內）</h3>
               <InteractiveChecklist guideKey="career_game_step3_zh" lang="zh" items={[
-                { label: "寫你的兩句電梯簡報。背下來。", href: "#brand" },
-                { label: "從你的使命宣言中挑出三到五個關鍵詞。寫在便利貼上，放在每天看得到的地方。" },
-                { label: "開始在會議、一對一和電子郵件中使用你的品牌語言。到第 20 次，它會變得自然。", href: "#brand" },
+                { label: "寫你的 2 句電梯簡報。背下來。", href: "#brand" },
+                { label: "挑 3-5 個品牌關鍵詞。寫在便利貼上。" },
+                { label: "在 5 場以上的會議或對話中使用品牌語言。", href: "#brand" },
+                { label: "找出 1 項 BAU 任務來整合、重新定位或自動化。", href: "#work" },
+                { label: "更新成就追蹤表（應該有 8 項以上）。" },
               ]} />
             </div>
             <div className="bg-card border border-border rounded-xl p-5 md:p-6">
@@ -964,10 +999,11 @@ const CareerGameGuideZhTw = () => {
             <div className="bg-card border border-border rounded-xl p-5 md:p-6">
               <h3 className="font-heading text-lg text-foreground mb-3">第 6 步：每 90 天檢視自己</h3>
               <InteractiveChecklist guideKey="career_game_step6_zh" lang="zh" items={[
-                { label: "重新評估你的職能。差距在縮小嗎？", href: "#spikes" },
-                { label: "檢視你的 40/40/20 工作分配。比例有改變嗎？", href: "#work" },
-                { label: "更新成就追蹤表。和老闆分享成績。" },
-                { label: "每季重新聯繫一位淡出的人脈。", href: "#network" },
+                { label: "每週更新成就追蹤表。" },
+                { label: "在一對一中分享成績（10/10/10 結構）。", href: "#promotion" },
+                { label: "每季重新聯繫 1 位淡出的人脈。", href: "#network" },
+                { label: "重新和老闆做職能比較。", href: "#spikes" },
+                { label: "檢視並更新你的 11 清單和電梯簡報。", href: "#brand" },
               ]} />
             </div>
           </div>
