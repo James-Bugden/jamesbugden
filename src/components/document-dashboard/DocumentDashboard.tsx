@@ -73,6 +73,7 @@ type SidebarTab = "resume" | "cover_letter" | "job_tracker";
 export function DocumentDashboard({ onOpenDocument, onImport }: DocumentDashboardProps) {
   const t = useT();
   const lang = useResumeBuilderLang();
+  const { isLoggedIn } = useAuth();
   const { importCount, importLimit, loading: usageLoading } = useBuilderAiUsage();
   const { used: analyzerUsed, limit: analyzerLimit } = useAnalyzerUsage();
 
