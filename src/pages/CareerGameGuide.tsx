@@ -637,6 +637,8 @@ const CareerGameGuide = () => {
             <p className="text-muted-foreground text-sm italic">"I want to help companies solve complex problems and drive improved efficiencies while building the next generation of leaders."</p>
           </div>
 
+          <ElevenList lang="en" />
+
           <p className="text-muted-foreground leading-relaxed mb-6">
             Compare your 11-List with your spikes from the self-assessment. You should see overlap. People who value productivity tend to spike in drives for results. People who value empathy tend to spike in integrity and moral character. Your personal brand should align with who you already are. Not who you want to be. The goal is not to create a personal brand that is vastly different from who you naturally are. You want to stick closely to what you are good at and then become great.
           </p>
