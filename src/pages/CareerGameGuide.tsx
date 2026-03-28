@@ -1234,6 +1234,8 @@ const CareerGameGuide = () => {
                 { label: "Update your accomplishment tracker. Share wins with your boss." },
                 { label: "Warm up one dormant network contact per quarter.", href: "#network" },
               ]} />
+              <CompetencyReScore lang="en" />
+              <FortyFortyTwentyReview lang="en" />
             </div>
           </div>
 
