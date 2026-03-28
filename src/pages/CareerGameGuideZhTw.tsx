@@ -1023,12 +1023,15 @@ const CareerGameGuideZhTw = () => {
               ]} />
               <FortyFortyTwentyReview lang="zh" />
             </div>
+            <div className="bg-card border border-border rounded-xl p-5 md:p-6">
+              <h3 className="font-heading text-lg text-foreground mb-3">第 2 步：做一次現實檢驗（30 天內）</h3>
               <InteractiveChecklist guideKey="career_game_step2_zh" lang="zh" items={[
                 { label: "給老闆一張空白職能表。請他們為你評分。比較分數。找出差距。寫行動計畫。" },
                 { label: "讓 3 個人做 20 項技能評估。平均結果。", href: "#spikes" },
                 { label: "問：「你需要什麼條件才會替我爭取升遷？」", href: "#promotion" },
                 { label: "如果還沒有，安排每兩週一次一對一會議。" },
               ]} />
+              <CompetencyReScore lang="zh" />
             </div>
             <div className="bg-card border border-border rounded-xl p-5 md:p-6">
               <h3 className="font-heading text-lg text-foreground mb-3">第 3 步：建立你的品牌（60 天內）</h3>
@@ -1055,6 +1058,9 @@ const CareerGameGuideZhTw = () => {
                 { label: "安排每兩週一對一會議（如果還沒有的話）。用 10/10/10 結構：彙報、上報、爭取。", href: "#promotion" },
                 { label: "找出一項 BAU 任務，這個季度可以整合、重新定位或自動化為高影響力工作。", href: "#work" },
               ]} />
+              <AccomplishmentTracker lang="zh" />
+              <OneOnOnePrep lang="zh" />
+              <BAUTransformer lang="zh" />
             </div>
             <div className="bg-card border border-border rounded-xl p-5 md:p-6">
               <h3 className="font-heading text-lg text-foreground mb-3">第 6 步：每 90 天檢視自己</h3>
@@ -1065,6 +1071,8 @@ const CareerGameGuideZhTw = () => {
                 { label: "重新和老闆做職能比較。", href: "#spikes" },
                 { label: "檢視並更新你的 11 清單和電梯簡報。", href: "#brand" },
               ]} />
+              <CompetencyReScore lang="zh" />
+              <FortyFortyTwentyReview lang="zh" />
             </div>
           </div>
 
