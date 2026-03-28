@@ -964,9 +964,10 @@ const CareerGameGuideZhTw = () => {
             <div className="bg-card border border-border rounded-xl p-5 md:p-6">
               <h3 className="font-heading text-lg text-foreground mb-3">第 2 步：做一次現實檢驗（30 天內）</h3>
               <InteractiveChecklist guideKey="career_game_step2_zh" lang="zh" items={[
-                { label: "給你的老闆一張空白的職能表。請他們為你評分。比較他們的分數和你的。" },
-                { label: "請三個人（老闆、同事、利害關係人）做 20 項技能評估。平均結果。", href: "#spikes" },
-                { label: "問：「你需要什麼條件才會在下一個週期替我爭取升遷？」", href: "#promotion" },
+                { label: "給老闆一張空白職能表。請他們為你評分。比較分數。找出差距。寫行動計畫。" },
+                { label: "讓 3 個人做 20 項技能評估。平均結果。", href: "#spikes" },
+                { label: "問：「你需要什麼條件才會替我爭取升遷？」", href: "#promotion" },
+                { label: "如果還沒有，安排每兩週一次一對一會議。" },
               ]} />
             </div>
             <div className="bg-card border border-border rounded-xl p-5 md:p-6">
