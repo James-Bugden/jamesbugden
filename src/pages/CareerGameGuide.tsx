@@ -1201,6 +1201,8 @@ const CareerGameGuide = () => {
               ]} />
               <CompetencyReScore lang="en" />
             </div>
+            <div className="bg-card border border-border rounded-xl p-5 md:p-6">
+              <h3 className="font-heading text-lg text-foreground mb-3">Step 3: Build Your Brand (Within 60 Days)</h3>
               <InteractiveChecklist guideKey="career_game_step3_en" lang="en" items={[
                 { label: "Write your two-sentence elevator pitch. Memorize it.", href: "#brand" },
                 { label: "Pick three to five words from your mission statement. Put them on a sticky note where you can see them daily." },
