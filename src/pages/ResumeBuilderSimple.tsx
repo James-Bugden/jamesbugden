@@ -29,7 +29,9 @@ import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import FeedbackBox from "@/components/FeedbackBox";
 import { useResumeBuilderLang, useT, getLocalizedSectionTypes } from "@/components/resume-builder/i18n";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
+import { useAuth } from "@/contexts/AuthContext";
+import { LogIn } from "lucide-react";
 import { AnalyzerPromptDialog } from "@/components/resume-builder/AnalyzerPromptDialog";
 import { SEO } from "@/components/SEO";
 
@@ -472,6 +474,7 @@ const ResumeBuilderSimple = () => {
   const t = useT();
   const { importLimitReached, recordImport } = useBuilderAiUsage();
   const navigateTo = useNavigate();
+  const { isLoggedIn } = useAuth();
   const [searchParams, setSearchParams] = useSearchParams();
   const localizedSectionTypes = useMemo(() => getLocalizedSectionTypes(lang), [lang]);
 
@@ -861,26 +864,57 @@ const ResumeBuilderSimple = () => {
   return (
     <div className="h-screen flex flex-col" style={{ backgroundColor: BRAND.cream }}>
       <SEO />
-      {/* ── Top bar — simplified, no tabs ──────────────────── */}
-      <div className="sticky top-0 z-30 bg-white border-b" style={{ borderColor: BRAND.border }}>
-        <div className="flex items-center justify-between px-3 sm:px-4 h-12 sm:h-14">
-          <div className="flex items-center gap-2 sm:gap-3 min-w-0 flex-1">
-            <TooltipProvider delayDuration={300}>
-              <Tooltip>
-                <TooltipTrigger asChild>
-                  <button onClick={handleBackToDashboard} className="flex items-center gap-1 text-sm transition-colors flex-shrink-0 hover:opacity-80 min-h-[44px] min-w-[44px] justify-center sm:justify-start sm:min-w-0" style={{ color: BRAND.textSecondary }}>
-                    <ArrowLeft className="w-4 h-4 sm:w-3.5 sm:h-3.5" />
-                    <span className="hidden sm:inline">{t("dashboard")}</span>
-                  </button>
-                </TooltipTrigger>
-                <TooltipContent side="bottom" className="text-xs">{t("dashboard")}</TooltipContent>
-              </Tooltip>
-            </TooltipProvider>
-            <span className="text-gray-300 hidden sm:inline">|</span>
+      {/* ── Top bar — cream nav matching analyzer ──────────────── */}
+      <div className="sticky top-0 z-30" style={{ backgroundColor: BRAND.cream, borderBottom: '1px solid rgba(43,71,52,0.1)' }}>
+        {/* Row 1: Brand + nav */}
+        <div className="flex items-center justify-between px-3 sm:px-5 h-12 sm:h-14">
+          <Link to={lang === "zh-tw" ? "/zh-tw" : "/"} className="font-heading text-base md:text-lg font-bold tracking-wide whitespace-nowrap" style={{ color: BRAND.green }}>
+            JAMES BUGDEN
+          </Link>
+          <div className="flex items-center gap-2">
+            <Link to={lang === "zh-tw" ? "/zh-tw" : "/"} className="text-sm transition-colors hover:opacity-80 hidden sm:inline" style={{ color: BRAND.textSecondary }}>
+              {lang === "zh-tw" ? "← 首頁" : "← Home"}
+            </Link>
+            {!isLoggedIn && (
+              <Link
+                to="/login"
+                state={{ from: lang === "zh-tw" ? "/zh-tw/resume-simple" : "/resume-simple" }}
+                className="inline-flex items-center gap-1.5 text-xs font-semibold px-3 py-1.5 rounded-full transition-all hover:opacity-80"
+                style={{ backgroundColor: BRAND.green, color: BRAND.cream }}
+              >
+                <LogIn className="w-3.5 h-3.5" />
+                {lang === "zh-tw" ? "登入" : "Sign in"}
+              </Link>
+            )}
+            {isLoggedIn && (
+              <Link
+                to={lang === "zh-tw" ? "/zh-tw/dashboard" : "/dashboard"}
+                className="text-xs font-semibold px-3 py-1.5 rounded-full transition-all hover:opacity-80"
+                style={{ backgroundColor: BRAND.green, color: BRAND.cream }}
+              >
+                {lang === "zh-tw" ? "我的專區" : "Dashboard"}
+              </Link>
+            )}
+            <button
+              onClick={() => navigateTo(lang === "zh-tw" ? "/resume-simple" : "/zh-tw/resume-simple")}
+              className="text-xs font-semibold px-3 py-1.5 rounded-full transition-all hover:opacity-80"
+              style={{ border: `1px solid ${BRAND.gold}`, color: BRAND.gold }}
+            >
+              {lang === "zh-tw" ? "EN" : "中文"}
+            </button>
+          </div>
+        </div>
+
+        {/* Row 2: doc name + download */}
+        <div className="flex items-center justify-between px-3 sm:px-5 pb-2 gap-2">
+          <div className="flex items-center gap-2 min-w-0">
+            <button onClick={handleBackToDashboard} className="text-xs transition-colors hover:opacity-80 flex-shrink-0" style={{ color: BRAND.textSecondary }}>
+              <ArrowLeft className="w-3.5 h-3.5" />
+            </button>
             {editingName ? (
               <input autoFocus value={nameValue} onChange={(e) => setNameValue(e.target.value)} onBlur={handleRenameSave}
                 onKeyDown={(e) => { if (e.key === "Enter") handleRenameSave(); if (e.key === "Escape") setEditingName(false); }}
-                className="text-sm font-medium bg-gray-50 border rounded px-2 py-1 outline-none min-w-[100px] max-w-[160px]"
+                className="text-sm font-medium bg-white border rounded px-2 py-1 outline-none min-w-[100px] max-w-[160px]"
                 style={{ color: BRAND.text, borderColor: BRAND.border }}
               />
             ) : (
@@ -891,23 +925,10 @@ const ResumeBuilderSimple = () => {
                 {currentDocName}
               </button>
             )}
-          </div>
-
-          <div className="flex items-center gap-2 sm:gap-3 flex-shrink-0">
             <div className="hidden sm:block"><SaveIndicator saving={saving} /></div>
-            <button
-              onClick={() => navigateTo(lang === "zh-tw" ? "/resume-simple" : "/zh-tw/resume-simple")}
-              className="flex items-center gap-1 px-2.5 py-1.5 text-xs font-semibold rounded-md transition-colors hover:opacity-80"
-              style={{ backgroundColor: `${BRAND.gold}20`, color: BRAND.gold, border: `1px solid ${BRAND.gold}40` }}
-            >
-              <Globe className="w-3.5 h-3.5" />
-              <span className="hidden sm:inline">{lang === "zh-tw" ? "EN" : "中文"}</span>
-              <span className="sm:hidden">{lang === "zh-tw" ? "EN" : "中"}</span>
-            </button>
-            <DownloadDropdown downloading={downloading} pageFormat="a4" docName={currentDocName} onDownload={handleDownload} />
           </div>
+          <DownloadDropdown downloading={downloading} pageFormat="a4" docName={currentDocName} onDownload={handleDownload} />
         </div>
-        {/* No tab row — content only */}
       </div>
 
       {/* ── Editor body ────────────────────────────────── */}
