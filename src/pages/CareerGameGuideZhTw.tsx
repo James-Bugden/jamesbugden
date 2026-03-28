@@ -659,7 +659,9 @@ const CareerGameGuideZhTw = () => {
           </InfoBox>
 
           <h3 className="font-heading text-xl text-foreground mt-8 mb-3">秘密 17：建立你的領導力，不只讓你成功，也讓你的團隊成功</h3>
-          <p className="text-muted-foreground leading-relaxed">這是知道自己位置和採取行動之間的橋樑。你的個人技能讓你走到這裡。領導力技能讓你到達下一個層級。光是做好自己的工作和幫助團隊做好他們的工作是不夠的。你需要持續成長和發展自己與你的人才，同時讓你的領導層了解這些工作。這讓你在職涯中走得更遠，並帶著你的團隊一起前進。</p>
+          <p className="text-muted-foreground leading-relaxed mb-4">這是連接「知道你在哪裡」和「採取行動」之間的橋樑。你的個人技能讓你走到這裡。領導力技能讓你到達下一個層級。</p>
+          <p className="text-muted-foreground leading-relaxed mb-4">光是把工作做好、幫助團隊做好是不夠的。你需要持續成長和發展自己與你的人才，同時讓你的領導層了解這些工作。這讓你在職涯中走得更遠，也帶著你的團隊一起成長。</p>
+          <p className="text-muted-foreground leading-relaxed">接下來三個部分涵蓋如何建立成長的基礎設施：你的人脈、你的衝突解決技能，以及你的管理方法。</p>
         </div>
       </section>
 
