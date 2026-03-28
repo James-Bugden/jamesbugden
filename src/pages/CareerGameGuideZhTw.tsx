@@ -951,7 +951,8 @@ const CareerGameGuideZhTw = () => {
           <p className="text-muted-foreground leading-relaxed mb-6">注意「意外的職涯」——不帶意圖地接受任何出現的機會。但典型的職涯建議也需要翻轉。它不總是一條直線往上的梯子。它是一個職涯格子，往上、往旁邊、斜向移動。書中描述的最成功的人在多個部門、產業和職級擔任過職位。他們跟隨自己的技能進入任何能產生最大影響力的角色。</p>
 
           <h3 className="font-heading text-xl text-foreground mb-3">秘密 35：只有你直屬主管的文化才重要</h3>
-          <p className="text-muted-foreground leading-relaxed mb-4">有一個概念叫「幽靈文化」。這是執行長認為存在的文化。印在海報上的、貼在網站上的、在面試中引用的。現實是：大多數員工體驗到的是他們直屬團隊和主管的次文化。更廣泛的公司文化可能存在於頂層，但很少能一致地向下傳遞。</p>
+          <p className="text-muted-foreground leading-relaxed mb-4">有一個叫「幽靈文化」的概念。這是執行長認為存在的文化。印在海報上、張貼在網站上、在採訪中被引用的那個。現實是：大多數員工體驗到的文化是他們直屬團隊和主管的次文化。更廣泛的公司文化可能在高層存在，但很少一致地滲透下來。</p>
+          <p className="text-muted-foreground leading-relaxed mb-4">在評估一份工作時，用人主管對職涯發展、回饋和工作生活平衡的做法，比公司招聘頁面上的任何東西都重要。</p>
           <p className="text-muted-foreground leading-relaxed mb-4">評估文化的有力面試問題：</p>
           <div className="space-y-2 mb-4">
             {[
