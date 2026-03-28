@@ -878,6 +878,7 @@ const CareerGameGuideZhTw = () => {
               <p className="text-muted-foreground text-sm">把你的目標組織成三個類別。超過三個會讓人不知所措。少於三個看起來你沒有認真思考。三是人們在一次會議中能消化的理想數字。</p>
             </div>
           </div>
+          <p className="text-muted-foreground leading-relaxed mt-6">你有了管理方法。但如果你已經倦怠、困在有毒的環境中，或被太多責任壓得喘不過氣，這些都不管用。讓我們處理這些。</p>
         </div>
       </section>
 
