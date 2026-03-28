@@ -741,6 +741,7 @@ export function DocumentDashboard({ onOpenDocument, onImport }: DocumentDashboar
           </AlertDialogFooter>
         </AlertDialogContent>
       </AlertDialog>
+      </div>
     </div>
   );
 }
