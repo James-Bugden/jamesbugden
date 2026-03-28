@@ -529,6 +529,9 @@ const CareerGameGuideZhTw = () => {
             <p className="text-foreground text-sm font-medium mb-2">使命範例：</p>
             <p className="text-foreground text-sm italic">「我想幫助公司解決複雜問題、推動效率改善，同時培養下一代領導者。」</p>
           </div>
+          </div>
+
+          <ElevenList lang="zh" />
 
           <h3 className="font-heading text-xl text-foreground mb-3">秘密 10：別人在工作中如何看你，直接在你的掌控中</h3>
           <InfoBox title="我的看法" variant="gold"><p>我不完全同意這一條。你無法控制別人怎麼看你。人們帶著自己的偏見、情緒和假設進入每一次互動。但這個想法的精神是對的。即使你無法控制結果，你也應該嘗試影響認知。如果你從不描述你的價值，別人會自己填空。這很少對你有利。</p></InfoBox>
