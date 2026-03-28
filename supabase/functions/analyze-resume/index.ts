@@ -224,9 +224,41 @@ Deno.serve(async (req) => {
       throw new Error('LOVABLE_API_KEY not configured');
     }
 
-    const outputLanguageInstruction = language === 'zh-TW'
-      ? 'Respond ENTIRELY in Traditional Chinese (繁體中文). All field values, findings, summaries, bullet rewrites, and improvement descriptions must be in Traditional Chinese. When referencing named principles, keep the principle name in English in parentheses after the Chinese name, e.g. "三R模型 (Three R Model)".'
-      : 'Respond ENTIRELY in English. All field values, findings, summaries, bullet rewrites, and improvement descriptions must be in English.';
+    // Detect resume language via CJK character density
+    const cjkMatch = resumeText.match(/[\u4e00-\u9fff\u3400-\u4dbf]/g);
+    const cjkCount = cjkMatch ? cjkMatch.length : 0;
+    const totalChars = resumeText.replace(/\s/g, '').length;
+    const isChineseResume = totalChars > 0 && (cjkCount / totalChars) > 0.15;
+
+    const pageLang = language || 'en';
+    const sameLanguage = (pageLang === 'zh-TW' && isChineseResume) || (pageLang !== 'zh-TW' && !isChineseResume);
+
+    let outputLanguageInstruction: string;
+    let userReminder: string;
+
+    if (pageLang === 'zh-TW' && isChineseResume) {
+      // Both Chinese
+      outputLanguageInstruction = `CRITICAL INSTRUCTION: You MUST respond ENTIRELY in Traditional Chinese (繁體中文). Every single field value in your JSON output — including all findings, summaries, bullet rewrites, explanations, verdicts, descriptions, and overall_verdict — MUST be written in Traditional Chinese. The ONLY exceptions are proper nouns (company names, tool names) and the JSON keys themselves. When referencing named principles, keep the English name in parentheses after the Chinese translation, e.g. "三R模型 (Three R Model)".`;
+      userReminder = `提醒：你的整個 JSON 回應必須使用繁體中文。`;
+    } else if (pageLang === 'zh-TW' && !isChineseResume) {
+      // Chinese UI, English resume
+      outputLanguageInstruction = `CRITICAL INSTRUCTION: This resume is in English but the user's interface is in Traditional Chinese (繁體中文). Follow these rules strictly:
+- The "improved" field in bullet_rewrites[], summary_rewrite, and bullet_rewrite MUST be in English (matching the resume language).
+- ALL other fields — including findings[].text, findings[].evidence, summary, overall_verdict, top_priorities[].title, top_priorities[].description, bullet_rewrites[].explanation, summary_rewrite.explanation, bullet_rewrite.changes[] — MUST be in Traditional Chinese (繁體中文).
+- When referencing named principles, keep the English name in parentheses, e.g. "三R模型 (Three R Model)".`;
+      userReminder = `REMINDER: The "improved" rewrites must stay in English. All explanations, findings, verdicts, and descriptions must be in 繁體中文.`;
+    } else if (pageLang !== 'zh-TW' && isChineseResume) {
+      // English UI, Chinese resume
+      outputLanguageInstruction = `CRITICAL INSTRUCTION: This resume is in Chinese but the user's interface is in English. Follow these rules strictly:
+- The "improved" field in bullet_rewrites[], summary_rewrite, and bullet_rewrite MUST be in Traditional Chinese (繁體中文) (matching the resume language).
+- ALL other fields — including findings[].text, findings[].evidence, summary, overall_verdict, top_priorities[].title, top_priorities[].description, bullet_rewrites[].explanation, summary_rewrite.explanation, bullet_rewrite.changes[] — MUST be in English.
+- When referencing named principles, use the English name.`;
+      userReminder = `REMINDER: The "improved" rewrites must stay in Traditional Chinese. All explanations, findings, verdicts, and descriptions must be in English.`;
+    } else {
+      // Both English
+      outputLanguageInstruction = `CRITICAL INSTRUCTION: You MUST respond ENTIRELY in English. Every single field value in your JSON output must be in English.`;
+      userReminder = `REMINDER: Your entire JSON response must be in English.`;
+    }
 
     const response = await fetch('https://ai.gateway.lovable.dev/v1/chat/completions', {
       method: 'POST',
@@ -242,11 +274,11 @@ Deno.serve(async (req) => {
         messages: [
           {
             role: 'system',
-            content: `${systemPrompt}\n\n${outputLanguageInstruction}`
+            content: `${outputLanguageInstruction}\n\n${systemPrompt}`
           },
           {
             role: 'user',
-            content: `Analyze this resume and return ONLY a valid JSON object. Do not include any text outside the JSON. Make sure all strings are properly escaped (especially quotes within strings).\n\nResume:\n\n${resumeText.substring(0, 15000)}`
+            content: `Analyze this resume and return ONLY a valid JSON object. Do not include any text outside the JSON. Make sure all strings are properly escaped (especially quotes within strings).\n\n${userReminder}\n\nResume:\n\n${resumeText.substring(0, 15000)}`
           }
         ],
       }),
