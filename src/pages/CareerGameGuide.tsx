@@ -1190,6 +1190,7 @@ const CareerGameGuide = () => {
                 { label: "Track your work for one full week. Tag everything as BAU, high-impact, or self-development. Calculate your percentages. Compare to the 40/40/20 target.", href: "#work" },
                 { label: "Write your 11-List. Five things you want to be known for. Five things you don't. One mission statement.", href: "#brand" },
               ]} />
+              <FortyFortyTwentyReview lang="en" />
             </div>
             <div className="bg-card border border-border rounded-xl p-5 md:p-6">
               <h3 className="font-heading text-lg text-foreground mb-3">Step 2: Get a Reality Check (Within 30 Days)</h3>
