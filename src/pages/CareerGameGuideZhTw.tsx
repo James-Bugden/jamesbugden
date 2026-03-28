@@ -396,7 +396,26 @@ const CareerGameGuideZhTw = () => {
           <p className="text-muted-foreground leading-relaxed mb-4">追蹤你一週做的所有事情。標記每項任務。理想的比例：40% BAU、40-50% 高影響力工作、10-20% 自我發展。</p>
           <WorkSplitDiagram />
 
-          <p className="text-muted-foreground leading-relaxed mt-6 mb-8">如果你是高度技術性的角色（工程師、科學家、開發人員），你的 BAU 比例會更高。這是預期的。但目標仍然是盡可能向影響力工作傾斜。</p>
+          <Collapsible title="範例：一位行銷分析師分類她的一週">
+            <div className="overflow-x-auto mt-3">
+              <table className="w-full text-sm text-left">
+                <thead><tr className="border-b border-border"><th className="py-2 pr-3 text-foreground font-semibold">任務</th><th className="py-2 pr-3 text-foreground font-semibold">類別</th><th className="py-2 text-foreground font-semibold">行動</th></tr></thead>
+                <tbody className="text-muted-foreground">
+                  <tr className="border-b border-border/50"><td className="py-2 pr-3">拉出每週廣告報表</td><td className="py-2 pr-3">BAU</td><td className="py-2">自動化 → 建立儀表板</td></tr>
+                  <tr className="border-b border-border/50"><td className="py-2 pr-3">回答 12 個臨時數據需求</td><td className="py-2 pr-3">BAU</td><td className="py-2">整合 → 建立自助查詢工具</td></tr>
+                  <tr className="border-b border-border/50"><td className="py-2 pr-3">從報表建立主管摘要</td><td className="py-2 pr-3">BAU</td><td className="py-2">重新定位 → 「為管理層提供數據驅動決策」</td></tr>
+                  <tr className="border-b border-border/50"><td className="py-2 pr-3">帶領跨團隊歸因分析專案</td><td className="py-2 pr-3">高影響力</td><td className="py-2">保留 → 推動策略</td></tr>
+                  <tr className="border-b border-border/50"><td className="py-2 pr-3">向副總裁報告分析結果</td><td className="py-2 pr-3">高影響力</td><td className="py-2">保留 → 高能見度</td></tr>
+                  <tr className="border-b border-border/50"><td className="py-2 pr-3">完成 Google Analytics 認證</td><td className="py-2 pr-3">自我發展</td><td className="py-2">保留 → 強化尖峰技能</td></tr>
+                  <tr><td className="py-2 pr-3">組織團隊午餐學習會</td><td className="py-2 pr-3">自我發展</td><td className="py-2">保留 → 文化建設</td></tr>
+                </tbody>
+              </table>
+            </div>
+            <p className="text-muted-foreground text-xs mt-3"><strong className="text-foreground">之前：</strong>70% BAU / 20% 高影響力 / 10% 自我發展</p>
+            <p className="text-muted-foreground text-xs"><strong className="text-foreground">之後：</strong>40% BAU / 40% 高影響力 / 20% 自我發展（同樣的時數，更好的分配）</p>
+          </Collapsible>
+
+          <p className="text-muted-foreground leading-relaxed mt-6 mb-8">如果你的工作高度技術性（工程師、科學家、開發人員），你的 BAU 比例會更高。這很正常。但目標仍然是盡量把時間轉移到高影響力的工作上。</p>
 
           <h3 className="font-heading text-xl text-foreground mb-3">秘密 5：你必須建立和維持健康的界限</h3>
           <p className="text-muted-foreground leading-relaxed mb-4">目標不是工作更多。也不是工作更努力。目標是更好地安排你的時間。這從界限開始。把它們寫下來。範例：週末不工作。準時下班，不留加班。一定要吃午飯。家人生病時不工作。</p>
@@ -436,6 +455,7 @@ const CareerGameGuideZhTw = () => {
           </div>
           <p className="text-muted-foreground leading-relaxed mb-4">同一個人。同一個專案。完全不同的認知。規則：不要描述你做了什麼。描述沒有你就不會發生什麼。</p>
           <InfoBox title="我的看法" variant="gold"><p>這就是一份收到回電的履歷和一份被跳過的履歷之間的差別。我掃描履歷時找的是影響力語言。「管理一個團隊」什麼都沒告訴我。「透過重組客戶流程將團隊營收提升 40%」告訴我一切。</p></InfoBox>
+          <p className="text-muted-foreground leading-relaxed mt-6">你已經知道工作的類型。你知道如何談論它們。現在你需要找出你最擅長什麼，確保你的公司需要它。</p>
         </div>
       </section>
 
@@ -461,6 +481,8 @@ const CareerGameGuideZhTw = () => {
           <p className="text-muted-foreground leading-relaxed mb-4">書中分享了一個技能錯配的故事。作者離開了一個類似新創的文化，去了一家「金字招牌」公司，一個人人都認得的名字。她拒絕了一家小公司的財務長職位，選擇了這家大公司的副總裁角色。結果完全不合適。公司官僚、行動緩慢、抗拒創新。領導層把她的天生優勢當成問題。她的成果導向被視為急躁。她的社交被說成不恰當。這段經歷讓她學到的企業政治比整個職涯其餘時間加起來還多。但她很痛苦。</p>
           <p className="text-muted-foreground leading-relaxed mb-6">結論：把你的優勢帶到最需要的地方。不要強迫自己進入一個不重視你所帶來的價值的環境。</p>
 
+          <h3 className="font-heading text-xl text-foreground mb-3">自我評估</h3>
+          <p className="text-muted-foreground leading-relaxed mb-4">以下是一個 20 項技能評分練習。每項技能自評 1-10 分（10 = 你比任何人都強，1 = 從未展現過）。然後讓三個人幫你評分：你的老闆、一位同事和一位利害關係人。將分數平均後排名。</p>
           <Collapsible title="20 項技能清單">
             <ol className="list-decimal list-inside space-y-1 text-muted-foreground text-sm mt-3">
               {["高度正直/誠實", "技術/專業經驗", "解決問題/分析問題", "創新", "學習敏捷度/自我發展", "追求結果", "設定挑戰性目標", "主動積極", "有力的溝通", "激勵/激發他人", "建立關係", "協作和團隊合作", "策略思維", "推動變革", "客戶和外部導向", "培養他人", "堅強的道德品格", "決策力", "冒險精神", "重視多元化"].map((skill, i) => (
@@ -469,8 +491,11 @@ const CareerGameGuideZhTw = () => {
             </ol>
           </Collapsible>
 
-          <p className="text-muted-foreground leading-relaxed mt-4 mb-4">你的「尖峰技能」是比其他分數高出 1-2 分的技能。有兩項技能需要特別注意：溝通和協作。如果其中任何一項落在你的最低四名，先修這些。</p>
+          <p className="text-muted-foreground leading-relaxed mt-4 mb-4">你的「尖峰技能」是比其他分數高出 1-2 分的技能。這些是你的差異化因素。讓你從普通變成卓越的領域。</p>
+          <p className="text-muted-foreground leading-relaxed mb-4">作者的尖峰技能範例：解決問題、追求結果、推動變革。</p>
+          <p className="text-muted-foreground leading-relaxed mb-4">有兩項技能需要特別注意，無論它們落在哪裡：溝通和協作。如果其中任何一項落在你的最低四名，先修這些。如果人們不想和你共事，其他什麼都不重要。</p>
           <InfoBox title="我的看法" variant="gold"><p>當我評估候選人時，我找的是尖峰技能。我不想要一個「什麼都還可以」的人。我要一個在兩三件事上出類拔萃的人。告訴我你有什麼不同。如果你說不出來，我會轉向能說出來的人。</p></InfoBox>
+          <p className="text-muted-foreground leading-relaxed mt-4">你找到了你的尖峰技能。現在你需要把它們包裝成一個品牌，讓人記住、重複、在你不在場時替你代言。</p>
         </div>
       </section>
 
@@ -565,8 +590,28 @@ const CareerGameGuideZhTw = () => {
             ))}
           </div>
 
-          <h3 className="font-heading text-xl text-foreground mb-3">學會「自誇」（重新定義：你是在彙報）</h3>
-          <p className="text-muted-foreground leading-relaxed mb-4">你不是在自誇。你是在彙報。想想你上一個工作日。你的老闆親眼見證了你多少百分比的工作？20%？50%？剩下的部分，你的老闆完全不知道你做了什麼或者需要多少努力。開始做一個成就追蹤表。每週更新。在一對一會議中用它把你的工作和業務成果連結起來。</p>
+          <h3 className="font-heading text-xl text-foreground mb-3">學會展示自己（換個說法：你在彙報，不是在吹牛）</h3>
+          <p className="text-muted-foreground leading-relaxed mb-4">你不是在吹牛。你在彙報。想想你上一個工作日。你老闆親眼見到了你多少比例的活動？20%？50%？其餘的部分，你老闆完全不知道你做了什麼或花了多少心力。</p>
+          <p className="text-muted-foreground leading-relaxed mb-4">開始使用成就追蹤表。每週更新。在一對一會議中用它來把你的工作和業務成果連結起來。</p>
+          <Collapsible title="每週成就追蹤表">
+            <p className="text-muted-foreground text-xs mt-3 mb-2">每週五更新。帶到你的一對一會議。</p>
+            <div className="overflow-x-auto">
+              <table className="w-full text-sm text-left">
+                <thead><tr className="border-b border-border"><th className="py-2 pr-3 text-foreground font-semibold">日期</th><th className="py-2 pr-3 text-foreground font-semibold">做了什麼</th><th className="py-2 pr-3 text-foreground font-semibold">影響/成果</th><th className="py-2 pr-3 text-foreground font-semibold">誰知道？</th><th className="py-2 text-foreground font-semibold">類型</th></tr></thead>
+                <tbody className="text-muted-foreground">
+                  {[1,2,3,4,5].map(r => (
+                    <tr key={r} className="border-b border-border/50"><td className="py-2 pr-3">____</td><td className="py-2 pr-3">____</td><td className="py-2 pr-3">____</td><td className="py-2 pr-3">____</td><td className="py-2">[B/I/D]</td></tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+            <p className="text-muted-foreground text-xs mt-3">類型說明：B = BAU（日常營運）｜I = 高影響力｜D = 自我發展</p>
+            <div className="mt-3 space-y-1 text-muted-foreground text-xs">
+              <p>• 如果「誰知道？」這欄是空的，這週告訴你的老闆</p>
+              <p>• 如果所有記錄都標記「B」，找一項任務來整合或重新定位</p>
+              <p>• 如果這個月零筆「D」記錄，投資你自己</p>
+            </div>
+          </Collapsible>
 
           <h3 className="font-heading text-xl text-foreground mb-3">秘密 14：你老闆不知道的工作等於不存在</h3>
           <p className="text-muted-foreground leading-relaxed mb-4">保護你的資產。當你犯了錯，帶著計畫去找你的老闆。不要藏起來希望它自己消失。</p>
@@ -634,7 +679,9 @@ const CareerGameGuideZhTw = () => {
           </InfoBox>
 
           <h3 className="font-heading text-xl text-foreground mt-8 mb-3">秘密 17：建立你的領導力，不只讓你成功，也讓你的團隊成功</h3>
-          <p className="text-muted-foreground leading-relaxed">這是知道自己位置和採取行動之間的橋樑。你的個人技能讓你走到這裡。領導力技能讓你到達下一個層級。光是做好自己的工作和幫助團隊做好他們的工作是不夠的。你需要持續成長和發展自己與你的人才，同時讓你的領導層了解這些工作。這讓你在職涯中走得更遠，並帶著你的團隊一起前進。</p>
+          <p className="text-muted-foreground leading-relaxed mb-4">這是連接「知道你在哪裡」和「採取行動」之間的橋樑。你的個人技能讓你走到這裡。領導力技能讓你到達下一個層級。</p>
+          <p className="text-muted-foreground leading-relaxed mb-4">光是把工作做好、幫助團隊做好是不夠的。你需要持續成長和發展自己與你的人才，同時讓你的領導層了解這些工作。這讓你在職涯中走得更遠，也帶著你的團隊一起成長。</p>
+          <p className="text-muted-foreground leading-relaxed">接下來三個部分涵蓋如何建立成長的基礎設施：你的人脈、你的衝突解決技能，以及你的管理方法。</p>
         </div>
       </section>
 
@@ -672,6 +719,8 @@ const CareerGameGuideZhTw = () => {
               <div key={i} className="flex items-start gap-3"><GoldCheckBadge /><span className="text-muted-foreground text-sm">{rule}</span></div>
             ))}
           </div>
+          <p className="text-muted-foreground leading-relaxed mt-4 mb-4">書中還提供了按導師技能領域（溝通、利害關係人管理、主管氣場、領導力）組織的具體對話提示。這些是你帶到下一次輔導會議的現成問題。</p>
+          <p className="text-muted-foreground leading-relaxed">你的人脈在成長。你的關係在建立。現在到了這些關係被考驗的時候：意見分歧。</p>
         </div>
       </section>
 
@@ -754,6 +803,7 @@ const CareerGameGuideZhTw = () => {
               <li><strong className="text-foreground">事後覆盤。</strong>你的觸發因素被觸發了嗎？你說了什麼？下次你會改變什麼？目標不是消除你的觸發因素。目標是阻止它們在當下控制你的行為。</li>
             </ol>
           </Collapsible>
+          <p className="text-muted-foreground leading-relaxed mt-6">你學會了如何溝通、表達不同意見和解決衝突。職涯遊戲的下一步是大多數人面臨的最大技能跳躍：從個人貢獻者轉變為管理者。</p>
         </div>
       </section>
 
@@ -848,6 +898,7 @@ const CareerGameGuideZhTw = () => {
               <p className="text-muted-foreground text-sm">把你的目標組織成三個類別。超過三個會讓人不知所措。少於三個看起來你沒有認真思考。三是人們在一次會議中能消化的理想數字。</p>
             </div>
           </div>
+          <p className="text-muted-foreground leading-relaxed mt-6">你有了管理方法。但如果你已經倦怠、困在有毒的環境中，或被太多責任壓得喘不過氣，這些都不管用。讓我們處理這些。</p>
         </div>
       </section>
 
@@ -889,7 +940,8 @@ const CareerGameGuideZhTw = () => {
           </div>
 
           <h3 className="font-heading text-xl text-foreground mb-3">秘密 32：從有毒工作環境中恢復需要時間</h3>
-          <p className="text-muted-foreground leading-relaxed">就像從一段糟糕的感情中恢復一樣，離開有毒環境後你需要時間重建。回到你的尖峰技能和 11 清單。重新認識自己，不要讓過去的毒性影響你的自我認知。重新寫你的品牌宣言，開始再次把它融入對話中。</p>
+          <p className="text-muted-foreground leading-relaxed mb-4">就像從一段糟糕的感情中恢復一樣，離開有毒環境後你需要時間重建。回到你的尖峰技能和 11 清單。在沒有毒性塑造你自我形象的情況下重新認識自己。重新建立你的品牌宣言，開始把它編織進對話中。</p>
+          <p className="text-muted-foreground leading-relaxed">你學會了如何玩這場遊戲、管理團隊、保護你的心理健康。還剩一個問題：你想走多遠？</p>
         </div>
       </section>
 
@@ -919,7 +971,8 @@ const CareerGameGuideZhTw = () => {
           <p className="text-muted-foreground leading-relaxed mb-6">注意「意外的職涯」——不帶意圖地接受任何出現的機會。但典型的職涯建議也需要翻轉。它不總是一條直線往上的梯子。它是一個職涯格子，往上、往旁邊、斜向移動。書中描述的最成功的人在多個部門、產業和職級擔任過職位。他們跟隨自己的技能進入任何能產生最大影響力的角色。</p>
 
           <h3 className="font-heading text-xl text-foreground mb-3">秘密 35：只有你直屬主管的文化才重要</h3>
-          <p className="text-muted-foreground leading-relaxed mb-4">有一個概念叫「幽靈文化」。這是執行長認為存在的文化。印在海報上的、貼在網站上的、在面試中引用的。現實是：大多數員工體驗到的是他們直屬團隊和主管的次文化。更廣泛的公司文化可能存在於頂層，但很少能一致地向下傳遞。</p>
+          <p className="text-muted-foreground leading-relaxed mb-4">有一個叫「幽靈文化」的概念。這是執行長認為存在的文化。印在海報上、張貼在網站上、在採訪中被引用的那個。現實是：大多數員工體驗到的文化是他們直屬團隊和主管的次文化。更廣泛的公司文化可能在高層存在，但很少一致地滲透下來。</p>
+          <p className="text-muted-foreground leading-relaxed mb-4">在評估一份工作時，用人主管對職涯發展、回饋和工作生活平衡的做法，比公司招聘頁面上的任何東西都重要。</p>
           <p className="text-muted-foreground leading-relaxed mb-4">評估文化的有力面試問題：</p>
           <div className="space-y-2 mb-4">
             {[
