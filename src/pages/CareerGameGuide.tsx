@@ -1,4 +1,5 @@
 import { Clock, ChevronDown, Menu, Briefcase, Target, TrendingUp, Users, Brain, Shield, Star, AlertTriangle, ArrowRight, Lightbulb } from "lucide-react";
+import { SkillAssessment, ElevenList, ElevatorPitch, InfluencerList, AccomplishmentTracker, OneOnOnePrep, BAUTransformer, CompetencyReScore, FortyFortyTwentyReview } from "@/components/career-game/InteractiveTemplates";
 import { InteractiveChecklist } from "@/components/guides/InteractiveChecklist";
 import { Link } from "react-router-dom";
 import GoldCheckBadge from "@/components/GoldCheckBadge";
