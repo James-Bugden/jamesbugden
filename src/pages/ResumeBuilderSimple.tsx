@@ -29,7 +29,9 @@ import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import FeedbackBox from "@/components/FeedbackBox";
 import { useResumeBuilderLang, useT, getLocalizedSectionTypes } from "@/components/resume-builder/i18n";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
+import { useAuth } from "@/contexts/AuthContext";
+import { LogIn } from "lucide-react";
 import { AnalyzerPromptDialog } from "@/components/resume-builder/AnalyzerPromptDialog";
 import { SEO } from "@/components/SEO";
 
