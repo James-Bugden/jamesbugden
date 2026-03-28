@@ -590,8 +590,28 @@ const CareerGameGuideZhTw = () => {
             ))}
           </div>
 
-          <h3 className="font-heading text-xl text-foreground mb-3">學會「自誇」（重新定義：你是在彙報）</h3>
-          <p className="text-muted-foreground leading-relaxed mb-4">你不是在自誇。你是在彙報。想想你上一個工作日。你的老闆親眼見證了你多少百分比的工作？20%？50%？剩下的部分，你的老闆完全不知道你做了什麼或者需要多少努力。開始做一個成就追蹤表。每週更新。在一對一會議中用它把你的工作和業務成果連結起來。</p>
+          <h3 className="font-heading text-xl text-foreground mb-3">學會展示自己（換個說法：你在彙報，不是在吹牛）</h3>
+          <p className="text-muted-foreground leading-relaxed mb-4">你不是在吹牛。你在彙報。想想你上一個工作日。你老闆親眼見到了你多少比例的活動？20%？50%？其餘的部分，你老闆完全不知道你做了什麼或花了多少心力。</p>
+          <p className="text-muted-foreground leading-relaxed mb-4">開始使用成就追蹤表。每週更新。在一對一會議中用它來把你的工作和業務成果連結起來。</p>
+          <Collapsible title="每週成就追蹤表">
+            <p className="text-muted-foreground text-xs mt-3 mb-2">每週五更新。帶到你的一對一會議。</p>
+            <div className="overflow-x-auto">
+              <table className="w-full text-sm text-left">
+                <thead><tr className="border-b border-border"><th className="py-2 pr-3 text-foreground font-semibold">日期</th><th className="py-2 pr-3 text-foreground font-semibold">做了什麼</th><th className="py-2 pr-3 text-foreground font-semibold">影響/成果</th><th className="py-2 pr-3 text-foreground font-semibold">誰知道？</th><th className="py-2 text-foreground font-semibold">類型</th></tr></thead>
+                <tbody className="text-muted-foreground">
+                  {[1,2,3,4,5].map(r => (
+                    <tr key={r} className="border-b border-border/50"><td className="py-2 pr-3">____</td><td className="py-2 pr-3">____</td><td className="py-2 pr-3">____</td><td className="py-2 pr-3">____</td><td className="py-2">[B/I/D]</td></tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+            <p className="text-muted-foreground text-xs mt-3">類型說明：B = BAU（日常營運）｜I = 高影響力｜D = 自我發展</p>
+            <div className="mt-3 space-y-1 text-muted-foreground text-xs">
+              <p>• 如果「誰知道？」這欄是空的，這週告訴你的老闆</p>
+              <p>• 如果所有記錄都標記「B」，找一項任務來整合或重新定位</p>
+              <p>• 如果這個月零筆「D」記錄，投資你自己</p>
+            </div>
+          </Collapsible>
 
           <h3 className="font-heading text-xl text-foreground mb-3">秘密 14：你老闆不知道的工作等於不存在</h3>
           <p className="text-muted-foreground leading-relaxed mb-4">保護你的資產。當你犯了錯，帶著計畫去找你的老闆。不要藏起來希望它自己消失。</p>
