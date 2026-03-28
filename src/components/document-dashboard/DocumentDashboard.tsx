@@ -34,8 +34,10 @@ import {
   DocType,
 } from "@/lib/documentStore";
 import { cn } from "@/lib/utils";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 import { useT, useResumeBuilderLang, SAMPLE_RESUME_DATA_ZH_TW } from "@/components/resume-builder/i18n";
+import { useAuth } from "@/contexts/AuthContext";
+import { LogIn } from "lucide-react";
 import { toast } from "@/hooks/use-toast";
 
 import { TemplateGalleryModal } from "@/components/resume-builder/TemplateGalleryModal";
