@@ -1,36 +1,30 @@
 
 
-## Track Guide Visit Frequency
+## Translate Resume Builder Tip Banners to Chinese
 
 ### Problem
-Currently, guide progress (scroll %) is tracked only in localStorage. There's no server-side record of how often each guide is visited, so you can't combine visit frequency with thumbs up/down ratings to identify truly valuable content.
+The `ResumeTipBanner` component (showing tips like "The Hell Yea! Test", "XYZ / CAR Framework", etc.) pulls from `SECTION_TIPS` in `resumeTips.ts`, which is English-only. The Chinese resume builder renders the same English tips.
 
 ### Solution
-Add a `trackEvent("guide_view", guideId)` call inside `useTrackGuideProgress` so every guide page load logs to the `event_tracks` table. This requires zero new tables — it reuses the existing event tracking infrastructure.
+Make `ResumeTipBanner` language-aware by adding Chinese translations to the tips data and using the current lang context.
 
-Then surface a "Most Visited Guides" section in the Admin Dashboard's Analytics tab, showing visit counts per guide alongside their thumbs up/down ratio from the `feedback` table.
+### Changes
 
-### Implementation
+**1. `src/components/resume-builder/resumeTips.ts`**
+- Add a parallel `SECTION_TIPS_ZH_TW` export with Chinese translations for all 7 section tips (summary, experience, skills, education, projects, certificates, languages)
+- Translations:
+  - "The Hell Yea! Test" → "「太棒了！」測試"
+  - "XYZ / CAR Framework" → "XYZ / CAR 架構"
+  - "Mirror the Job Description" → "對照職位描述"
+  - "Consistent Formatting" → "格式一致"
+  - "Show, Don't Tell" → "展示，別只說"
+  - "Relevance Over Quantity" → "質量重於數量"
+  - "Be Honest About Proficiency" → "如實表述熟練度"
+- Also translate all `summary` and `details` strings
+- Translate `GENERAL_TIPS` → `GENERAL_TIPS_ZH_TW`
 
-**1. `src/hooks/useReadingProgress.ts`** — Add `trackEvent` call in `useTrackGuideProgress`
-- Import `trackEvent` from `@/lib/trackEvent`
-- Fire `trackEvent("guide_view", guideId)` once on mount (inside the existing `useEffect`, before the scroll listener)
-- This automatically logs guide ID, page URL, and timestamp
-
-**2. `src/pages/AdminDashboard.tsx`** — Add "Guide Engagement" card to Analytics tab
-- Query `event_tracks` where `event_type = 'guide_view'`, group by `event_name`, count visits
-- Query `feedback` where `type = 'inline_rating'`, group by `context`, compute thumbs-up ratio
-- Join the two datasets client-side by mapping guide IDs
-- Display a table: Guide Name | Visits | 👍 | 👎 | Approval % — sorted by visits descending
-- This gives the combined view: high-visit + high-approval = most valuable guides
-
-### Why this works
-- No new database tables or migrations needed
-- Reuses `event_tracks` (already has public insert + admin select RLS)
-- Reuses `feedback` table for ratings
-- One-line addition to the shared hook means all 36 guide pages are instrumented automatically
-
-### Files changed
-1. `src/hooks/useReadingProgress.ts` — add trackEvent call
-2. `src/pages/AdminDashboard.tsx` — add Guide Engagement analytics card
+**2. `src/components/resume-builder/ResumeTipBanner.tsx`**
+- Import `useResumeBuilderLang` from `i18n`
+- Import `SECTION_TIPS_ZH_TW` from `resumeTips`
+- Select tip source based on lang: `lang === "zh-tw" ? SECTION_TIPS_ZH_TW : SECTION_TIPS`
 
