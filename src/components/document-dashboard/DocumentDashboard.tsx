@@ -424,8 +424,49 @@ export function DocumentDashboard({ onOpenDocument, onImport }: DocumentDashboar
   const mainTitle = activeTab === "resume" ? t("myResumes") : activeTab === "cover_letter" ? t("myCoverLetters") : t("jobTracker");
 
   return (
-    <div className="h-screen flex flex-col md:flex-row" style={{ backgroundColor: BRAND.cream }}>
-      {/* ── Mobile Header ─────────────────────────── */}
+    <div className="h-screen flex flex-col" style={{ backgroundColor: BRAND.cream }}>
+      {/* ── Cream top header (matches Resume Analyzer) ── */}
+      <header className="sticky top-0 z-50" style={{ backgroundColor: '#FDFBF7', borderBottom: '1px solid rgba(43,71,52,0.1)' }}>
+        <div className="container mx-auto max-w-5xl flex items-center justify-between h-14 px-5">
+          <Link to={lang === "zh-tw" ? "/zh-tw" : "/"} className="font-heading text-base md:text-lg font-bold tracking-wide whitespace-nowrap" style={{ color: '#2b4734' }}>
+            JAMES BUGDEN
+          </Link>
+          <div className="flex items-center gap-2">
+            <Link to={lang === "zh-tw" ? "/zh-tw" : "/"} className="text-sm transition-colors hover:opacity-80 hidden sm:inline" style={{ color: '#6B6B6B' }}>
+              {lang === "zh-tw" ? "← 首頁" : "← Home"}
+            </Link>
+            {!isLoggedIn && (
+              <Link
+                to="/login"
+                state={{ from: lang === "zh-tw" ? "/zh-tw/resume" : "/resume" }}
+                className="inline-flex items-center gap-1.5 text-xs font-semibold px-3 py-1.5 rounded-full transition-all hover:opacity-80"
+                style={{ backgroundColor: '#2b4734', color: '#FDFBF7' }}
+              >
+                <LogIn className="w-3.5 h-3.5" />
+                {lang === "zh-tw" ? "登入" : "Sign in"}
+              </Link>
+            )}
+            {isLoggedIn && (
+              <Link
+                to={lang === "zh-tw" ? "/zh-tw/dashboard" : "/dashboard"}
+                className="text-xs font-semibold px-3 py-1.5 rounded-full transition-all hover:opacity-80"
+                style={{ backgroundColor: '#2b4734', color: '#FDFBF7' }}
+              >
+                {lang === "zh-tw" ? "我的專區" : "Dashboard"}
+              </Link>
+            )}
+            <button
+              onClick={() => navigate(lang === "zh-tw" ? "/resume" : "/zh-tw/resume")}
+              className="text-xs font-semibold px-3 py-1.5 rounded-full transition-all hover:bg-gold hover:text-white"
+              style={{ border: '1px solid #D4930D', color: '#D4930D' }}
+            >
+              {lang === "zh-tw" ? "EN" : "中文"}
+            </button>
+          </div>
+        </div>
+      </header>
+
+      <div className="flex-1 flex flex-col md:flex-row overflow-hidden">
       <header className="md:hidden px-4 py-3 bg-white border-b space-y-3" style={{ borderColor: BRAND.border }}>
         <div className="flex items-center justify-between">
           <div>
