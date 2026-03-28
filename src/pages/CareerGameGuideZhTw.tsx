@@ -973,9 +973,11 @@ const CareerGameGuideZhTw = () => {
             <div className="bg-card border border-border rounded-xl p-5 md:p-6">
               <h3 className="font-heading text-lg text-foreground mb-3">第 3 步：建立你的品牌（60 天內）</h3>
               <InteractiveChecklist guideKey="career_game_step3_zh" lang="zh" items={[
-                { label: "寫你的兩句電梯簡報。背下來。", href: "#brand" },
-                { label: "從你的使命宣言中挑出三到五個關鍵詞。寫在便利貼上，放在每天看得到的地方。" },
-                { label: "開始在會議、一對一和電子郵件中使用你的品牌語言。到第 20 次，它會變得自然。", href: "#brand" },
+                { label: "寫你的 2 句電梯簡報。背下來。", href: "#brand" },
+                { label: "挑 3-5 個品牌關鍵詞。寫在便利貼上。" },
+                { label: "在 5 場以上的會議或對話中使用品牌語言。", href: "#brand" },
+                { label: "找出 1 項 BAU 任務來整合、重新定位或自動化。", href: "#work" },
+                { label: "更新成就追蹤表（應該有 8 項以上）。" },
               ]} />
             </div>
             <div className="bg-card border border-border rounded-xl p-5 md:p-6">
