@@ -1021,9 +1021,8 @@ const CareerGameGuideZhTw = () => {
                 { label: "寫你的 11 清單（5 想被知道 / 5 不想 / 1 使命）。", href: "#brand" },
                 { label: "開始使用成就追蹤表。", href: "#promotion" },
               ]} />
+              <FortyFortyTwentyReview lang="zh" />
             </div>
-            <div className="bg-card border border-border rounded-xl p-5 md:p-6">
-              <h3 className="font-heading text-lg text-foreground mb-3">第 2 步：做一次現實檢驗（30 天內）</h3>
               <InteractiveChecklist guideKey="career_game_step2_zh" lang="zh" items={[
                 { label: "給老闆一張空白職能表。請他們為你評分。比較分數。找出差距。寫行動計畫。" },
                 { label: "讓 3 個人做 20 項技能評估。平均結果。", href: "#spikes" },
