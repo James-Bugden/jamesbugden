@@ -1224,9 +1224,10 @@ const CareerGameGuide = () => {
                 { label: "Set up biweekly one-on-ones with your boss (if you don't have them). Use the 10/10/10 structure: inform, escalate, advocate.", href: "#promotion" },
                 { label: "Identify one BAU task you can bundle, rebrand, or automate into high-impact work this quarter.", href: "#work" },
               ]} />
+              <AccomplishmentTracker lang="en" />
+              <OneOnOnePrep lang="en" />
+              <BAUTransformer lang="en" />
             </div>
-            <div className="bg-card border border-border rounded-xl p-5 md:p-6">
-              <h3 className="font-heading text-lg text-foreground mb-3">Step 6: Check Yourself Every 90 Days</h3>
               <InteractiveChecklist guideKey="career_game_step6_en" lang="en" items={[
                 { label: "Re-score your competencies. Are you closing the gaps?", href: "#spikes" },
                 { label: "Review your 40/40/20 work split. Has the balance shifted?", href: "#work" },
