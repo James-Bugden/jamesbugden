@@ -592,6 +592,8 @@ const CareerGameGuide = () => {
             </ol>
           </Collapsible>
 
+          <SkillAssessment lang="en" />
+
           <p className="text-muted-foreground leading-relaxed mt-4 mb-4">
             Your "spikes" are the skills that stand 1-2 points above the rest. These are your differentiators. The areas where you go from average to extraordinary. Two skills require special attention regardless of where they fall: communication and collaboration. If either of these lands in your bottom four, fix them first. Nothing else matters if people don't want to work with you.
           </p>
