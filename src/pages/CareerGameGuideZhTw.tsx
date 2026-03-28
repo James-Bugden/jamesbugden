@@ -492,6 +492,8 @@ const CareerGameGuideZhTw = () => {
             </ol>
           </Collapsible>
 
+          <SkillAssessment lang="zh" />
+
           <p className="text-muted-foreground leading-relaxed mt-4 mb-4">你的「尖峰技能」是比其他分數高出 1-2 分的技能。這些是你的差異化因素。讓你從普通變成卓越的領域。</p>
           <p className="text-muted-foreground leading-relaxed mb-4">作者的尖峰技能範例：解決問題、追求結果、推動變革。</p>
           <p className="text-muted-foreground leading-relaxed mb-4">有兩項技能需要特別注意，無論它們落在哪裡：溝通和協作。如果其中任何一項落在你的最低四名，先修這些。如果人們不想和你共事，其他什麼都不重要。</p>
