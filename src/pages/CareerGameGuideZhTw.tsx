@@ -999,10 +999,11 @@ const CareerGameGuideZhTw = () => {
             <div className="bg-card border border-border rounded-xl p-5 md:p-6">
               <h3 className="font-heading text-lg text-foreground mb-3">第 6 步：每 90 天檢視自己</h3>
               <InteractiveChecklist guideKey="career_game_step6_zh" lang="zh" items={[
-                { label: "重新評估你的職能。差距在縮小嗎？", href: "#spikes" },
-                { label: "檢視你的 40/40/20 工作分配。比例有改變嗎？", href: "#work" },
-                { label: "更新成就追蹤表。和老闆分享成績。" },
-                { label: "每季重新聯繫一位淡出的人脈。", href: "#network" },
+                { label: "每週更新成就追蹤表。" },
+                { label: "在一對一中分享成績（10/10/10 結構）。", href: "#promotion" },
+                { label: "每季重新聯繫 1 位淡出的人脈。", href: "#network" },
+                { label: "重新和老闆做職能比較。", href: "#spikes" },
+                { label: "檢視並更新你的 11 清單和電梯簡報。", href: "#brand" },
               ]} />
             </div>
           </div>
