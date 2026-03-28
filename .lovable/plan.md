@@ -1,30 +1,38 @@
 
 
-## Translate Resume Builder Tip Banners to Chinese
+## Match Resume Builder Header to Resume Analyzer Style
 
-### Problem
-The `ResumeTipBanner` component (showing tips like "The Hell Yea! Test", "XYZ / CAR Framework", etc.) pulls from `SECTION_TIPS` in `resumeTips.ts`, which is English-only. The Chinese resume builder renders the same English tips.
+### What changes
+Replace the current white top bar in both Resume Builder (`/resume`) and Resume Builder Simple (`/resume-simple`) with the cream-colored header from Resume Analyzer, featuring the "JAMES BUGDEN" brand name, "← Home" link, Dashboard pill button, and language toggle.
 
-### Solution
-Make `ResumeTipBanner` language-aware by adding Chinese translations to the tips data and using the current lang context.
+### Design (matching Resume Analyzer exactly)
+- Cream background (`#FDFBF7`) with subtle bottom border
+- Left: "JAMES BUGDEN" brand link (→ home or /zh-tw)
+- Right: "← Home" text link | Dashboard pill (green, logged in) or Sign in pill (not logged in) | Language toggle pill (gold outline)
 
-### Changes
+### Files changed
 
-**1. `src/components/resume-builder/resumeTips.ts`**
-- Add a parallel `SECTION_TIPS_ZH_TW` export with Chinese translations for all 7 section tips (summary, experience, skills, education, projects, certificates, languages)
-- Translations:
-  - "The Hell Yea! Test" → "「太棒了！」測試"
-  - "XYZ / CAR Framework" → "XYZ / CAR 架構"
-  - "Mirror the Job Description" → "對照職位描述"
-  - "Consistent Formatting" → "格式一致"
-  - "Show, Don't Tell" → "展示，別只說"
-  - "Relevance Over Quantity" → "質量重於數量"
-  - "Be Honest About Proficiency" → "如實表述熟練度"
-- Also translate all `summary` and `details` strings
-- Translate `GENERAL_TIPS` → `GENERAL_TIPS_ZH_TW`
+**1. `src/pages/ResumeBuilder.tsx`** (lines ~955-1015)
+- Replace the current white `sticky top-0` header (Row 1) with the analyzer-style cream header
+- Keep Row 2 (Content/Customize toggle tabs) below it, but move it inside the cream header block
+- Add `useAuth` import for login state
+- Left side: `<Link to={home}>JAMES BUGDEN</Link>`
+- Right side: "← Home" link, Dashboard/Sign-in pill, language toggle pill, download button
+- Remove the old ArrowLeft + doc name pattern from the header (doc name can stay in Row 2 or be accessed via the doc switcher)
 
-**2. `src/components/resume-builder/ResumeTipBanner.tsx`**
-- Import `useResumeBuilderLang` from `i18n`
-- Import `SECTION_TIPS_ZH_TW` from `resumeTips`
-- Select tip source based on lang: `lang === "zh-tw" ? SECTION_TIPS_ZH_TW : SECTION_TIPS`
+**2. `src/pages/ResumeBuilderSimple.tsx`** (lines ~865-911)
+- Same cream header treatment
+- Already has language toggle — just restyle to match
+
+**3. Both EN and ZH-TW versions** work automatically since `ResumeBuilderZhTw` and `ResumeBuilderSimpleZhTw` wrap the same components with the lang context.
+
+### Header layout (both builders)
+```text
+┌─────────────────────────────────────────────────┐
+│ JAMES BUGDEN          ← Home  [Dashboard] [中文] │  ← cream bg
+│            [Content] [Customize]                 │  ← tab row (full builder only)
+└─────────────────────────────────────────────────┘
+```
+
+The doc name editing + doc switcher dropdown + download button remain in the tab row or as a secondary bar below the brand header, preserving all existing functionality.
 
