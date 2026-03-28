@@ -783,6 +783,7 @@ const CareerGameGuideZhTw = () => {
               <li><strong className="text-foreground">事後覆盤。</strong>你的觸發因素被觸發了嗎？你說了什麼？下次你會改變什麼？目標不是消除你的觸發因素。目標是阻止它們在當下控制你的行為。</li>
             </ol>
           </Collapsible>
+          <p className="text-muted-foreground leading-relaxed mt-6">你學會了如何溝通、表達不同意見和解決衝突。職涯遊戲的下一步是大多數人面臨的最大技能跳躍：從個人貢獻者轉變為管理者。</p>
         </div>
       </section>
 
