@@ -1,4 +1,5 @@
 import { Clock, ChevronDown, Menu, AlertTriangle } from "lucide-react";
+import { SkillAssessment, ElevenList, ElevatorPitch, InfluencerList, AccomplishmentTracker, OneOnOnePrep, BAUTransformer, CompetencyReScore, FortyFortyTwentyReview } from "@/components/career-game/InteractiveTemplates";
 
 import { InteractiveChecklist } from "@/components/guides/InteractiveChecklist";
 import { Link } from "react-router-dom";
