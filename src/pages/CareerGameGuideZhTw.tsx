@@ -599,6 +599,7 @@ const CareerGameGuideZhTw = () => {
           <h3 className="font-heading text-xl text-foreground mb-3">學會展示自己（換個說法：你在彙報，不是在吹牛）</h3>
           <p className="text-muted-foreground leading-relaxed mb-4">你不是在吹牛。你在彙報。想想你上一個工作日。你老闆親眼見到了你多少比例的活動？20%？50%？其餘的部分，你老闆完全不知道你做了什麼或花了多少心力。</p>
           <p className="text-muted-foreground leading-relaxed mb-4">開始使用成就追蹤表。每週更新。在一對一會議中用它來把你的工作和業務成果連結起來。</p>
+          <AccomplishmentTracker lang="zh" />
           <Collapsible title="每週成就追蹤表">
             <p className="text-muted-foreground text-xs mt-3 mb-2">每週五更新。帶到你的一對一會議。</p>
             <div className="overflow-x-auto">
