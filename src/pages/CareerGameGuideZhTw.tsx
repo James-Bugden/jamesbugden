@@ -399,22 +399,24 @@ const CareerGameGuideZhTw = () => {
           <p className="text-muted-foreground leading-relaxed mt-6 mb-8">如果你是高度技術性的角色（工程師、科學家、開發人員），你的 BAU 比例會更高。這是預期的。但目標仍然是盡可能向影響力工作傾斜。</p>
 
           <h3 className="font-heading text-xl text-foreground mb-3">秘密 5：你必須建立和維持健康的界限</h3>
-          <p className="text-muted-foreground leading-relaxed mb-4">目標不是工作更多。也不是工作更努力。目標是更好地安排你的時間。這從界限開始。把它們寫下來。範例：週末不工作。下午五點後不工作。一定要吃午飯。家人生病時不工作。</p>
-          <p className="text-muted-foreground leading-relaxed mb-4">當你的工作超載時，用這三個步驟：</p>
+          <p className="text-muted-foreground leading-relaxed mb-4">目標不是工作更多。也不是工作更努力。目標是更好地安排你的時間。這從界限開始。把它們寫下來。範例：週末不工作。準時下班，不留加班。一定要吃午飯。家人生病時不工作。</p>
+          <p className="text-muted-foreground leading-relaxed mb-4">當你的工作量超載時，用以下三步驟處理：</p>
           <div className="space-y-3 mb-4">
             <div className="bg-background border border-border rounded-xl p-4">
-              <p className="text-foreground font-semibold text-sm mb-1">排序：</p>
-              <p className="text-muted-foreground text-sm">不要說「好，我來處理。」改說「我知道這很重要。考慮到我手上的 A、B、C 任務，你覺得我可以先放下 C 來騰出時間嗎？」</p>
+              <p className="text-foreground font-semibold text-sm mb-1">排序（Prioritize）：</p>
+              <p className="text-muted-foreground text-sm">不要再說「好的，我來處理。」改說「我理解這是高優先事項。考慮到我手上的 A、B、C 任務，你同意我把 C 的優先順序降低來騰出空間嗎？」</p>
             </div>
             <div className="bg-background border border-border rounded-xl p-4">
-              <p className="text-foreground font-semibold text-sm mb-1">整合：</p>
-              <p className="text-muted-foreground text-sm">把重複的需求合併。如果你一直收到數據需求，建一個自助式儀表板，而不是一一回答。</p>
+              <p className="text-foreground font-semibold text-sm mb-1">整合（Bundle）：</p>
+              <p className="text-muted-foreground text-sm">把重複的需求合併。如果你收到幾十個數據需求，建一個自助儀表板，而不是逐一回覆。</p>
             </div>
             <div className="bg-background border border-border rounded-xl p-4">
-              <p className="text-foreground font-semibold text-sm mb-1">重新定位：</p>
-              <p className="text-muted-foreground text-sm">原本是「跑一份每週報表」變成「透過自動化儀表板實現數據驅動的決策」。同樣的工作。不同的包裝。更大的影響力。</p>
+              <p className="text-foreground font-semibold text-sm mb-1">重新定位（Rebrand）：</p>
+              <p className="text-muted-foreground text-sm">原本是「跑週報」的工作變成「透過自動化儀表板實現數據驅動的決策」。同樣的工作。不同的描述。更大的影響力。</p>
             </div>
           </div>
+          <p className="text-muted-foreground leading-relaxed mb-4">書中分享了一個個人故事。作者有 12 個專案在週五截止，同一天是團隊活動日。她在辦公室裡哭，打算不去參加。她的老闆讓她坐下來，讓她列出每項任務。然後劃掉三項、圈出兩項在活動前完成，其餘分散到接下來兩週。</p>
+          <p className="text-muted-foreground leading-relaxed mb-4">他的回應：「我真希望早點知道你在做這麼多不同的任務。我本來能把一些分配給其他人。」這直接帶出下一個秘密。</p>
 
           <h3 className="font-heading text-xl text-foreground mt-8 mb-3">秘密 6：你的老闆不知道你在做什麼</h3>
           <p className="text-muted-foreground leading-relaxed mb-4">就這樣。再好的主管也不會追蹤你的所有任務。讓他們了解你的工作狀況是你的責任。</p>
