@@ -499,14 +499,29 @@ const CareerGameGuideZhTw = () => {
           </div>
 
           <h3 className="font-heading text-xl text-foreground mb-3">秘密 10：別人在工作中如何看你，直接在你的掌控中</h3>
-          <p className="text-muted-foreground leading-relaxed mb-4">你的個人品牌應該和你現在的樣子一致。不是你想成為的樣子。有了 11 清單後，寫一到兩句的電梯簡報。背下來。到處使用。隨著時間推移，會發生回聲效應。當你持續一致地描述自己時，你周圍的人開始用同樣的語言來描述你。</p>
+          <InfoBox title="我的看法" variant="gold"><p>我不完全同意這一條。你無法控制別人怎麼看你。人們帶著自己的偏見、情緒和假設進入每一次互動。但這個想法的精神是對的。即使你無法控制結果，你也應該嘗試影響認知。如果你從不描述你的價值，別人會自己填空。這很少對你有利。</p></InfoBox>
+          <p className="text-muted-foreground leading-relaxed mt-4 mb-4">重要的是：把你的 11 清單和自我評估的尖峰技能做比較。你應該會看到重疊。重視生產力的人傾向在追求結果上得分較高。重視同理心的人傾向在正直和道德品格上得分較高。你的個人品牌應該和你現在的樣子一致。不是你想成為的樣子。目標不是創造一個和你大不相同的個人品牌。你要緊貼自己擅長的，然後變得卓越。</p>
+          <p className="text-muted-foreground leading-relaxed mb-4">有了 11 清單後，寫一到兩句的電梯簡報。背下來。到處使用。然後從你的使命宣言中挑出三到五個關鍵詞。把它們寫在桌上的便利貼上。把這些詞編織進每一次的自我介紹、專案啟動會議和績效討論中。</p>
+          <p className="text-muted-foreground leading-relaxed mb-4">隨著時間推移，會發生一件有力的事。這叫做回聲效應。當你持續一致地描述自己時，你周圍的人開始用同樣的語言來描述你。他們把你的品牌像回聲一樣傳遞給你和其他人。</p>
+          <div className="bg-muted/30 border border-border rounded-xl p-5 mb-4">
+            <p className="text-foreground text-sm italic">「在過去十年裡管理過我的每個人都會說：『Kendall 很會交付成果，溝通很有效。我把她丟進沒人搞得懂的問題裡。』每一個人。大概用完全相同的措辭。」</p>
+          </div>
 
           <h3 className="font-heading text-xl text-foreground mb-3">秘密 11：你的品牌會在你之前進入會議室，在你離開後很久才離開</h3>
-          <p className="text-muted-foreground leading-relaxed mb-4">95% 關於你職涯、升遷和發展的對話，發生在你不在場的時候。你需要你的品牌在你永遠不會進入的會議室裡替你工作。</p>
+          <p className="text-muted-foreground leading-relaxed mb-4">95% 關於你職涯、升遷和發展的對話，發生在你不在場的時候。</p>
+          <p className="text-muted-foreground leading-relaxed mb-4">書中分享了一個替團隊成員爭取升遷的故事。公司要求有一位高階主管擔任「贊助人」，一位副總裁或以上層級的人願意為候選人辯護。作者直到要交文件時才知道這個要求。然後發生了一件了不起的事。一位高階主管主動聯繫並提出擔任贊助人。接下來 24 小時內，又有四位副總裁主動提出。這位候選人的個人品牌走在他前面。各部門的領導者都願意替他說話。</p>
+          <p className="text-muted-foreground leading-relaxed mb-4">重點：你需要你的品牌在你永遠不會進入的會議室裡替你工作。做到這一點的方法是：一致的語言、一致的交付，以及一個聽過你的品牌且能確認的人脈網絡。</p>
           <InfoBox title="我的看法" variant="gold"><p>當用人主管告訴我「我需要一個很會某件事的人」，我腦中立刻浮現那些用這種方式描述自己的候選人。如果你從來沒有告訴我你有什麼不同，你不會被想到。你的品牌就是你的行銷。做得好，機會會找到你，而不是你找機會。</p></InfoBox>
 
           <h3 className="font-heading text-xl text-foreground mt-8 mb-3">冒牌者症候群：重新定義</h3>
-          <p className="text-muted-foreground leading-relaxed">冒牌者症候群不是缺乏信心。而是對自己學習新事物的能力缺乏信念。大多數人只在知道所有答案時才感到有信心。但信心應該是相信自己有能力搞清楚事情。你目前擁有的每一項技能，都曾經是從零開始學的。下一個也一樣。</p>
+          <p className="text-muted-foreground leading-relaxed mb-4">書中有一段關於冒牌者症候群的觀點，是我在其他地方沒聽過的。冒牌者症候群不是缺乏信心。而是對自己學習新事物的能力缺乏信念。大多數人只在知道所有答案時才感到有信心。但信心應該是相信自己有能力搞清楚事情。你目前擁有的每一項技能，都曾經是從零開始學的。下一個也一樣。</p>
+          <p className="text-muted-foreground leading-relaxed mb-2">當你沒有答案時，試試這些說法：</p>
+          <div className="space-y-2 mb-4">
+            <div className="bg-muted/30 border border-border rounded-lg p-3"><p className="text-foreground text-sm italic">「這是個好問題。我蠻確定答案是 X，但讓我確認一下再回覆你。」</p></div>
+            <div className="bg-muted/30 border border-border rounded-lg p-3"><p className="text-foreground text-sm italic">「這是個有趣的觀點。讓我把利害關係人召集起來討論，我們會在週五前提供更新。」</p></div>
+            <div className="bg-muted/30 border border-border rounded-lg p-3"><p className="text-foreground text-sm italic">「好問題。[同事 X]，你是這個領域的專家，你來回答好嗎？」</p></div>
+          </div>
+          <p className="text-muted-foreground leading-relaxed">你的品牌建立了。你的尖峰技能明確了。現在你需要了解升遷系統在關門後是怎麼運作的，這樣你才能停止空等，開始規劃。</p>
         </div>
       </section>
 
