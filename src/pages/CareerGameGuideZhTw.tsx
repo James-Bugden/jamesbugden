@@ -481,6 +481,8 @@ const CareerGameGuideZhTw = () => {
           <p className="text-muted-foreground leading-relaxed mb-4">書中分享了一個技能錯配的故事。作者離開了一個類似新創的文化，去了一家「金字招牌」公司，一個人人都認得的名字。她拒絕了一家小公司的財務長職位，選擇了這家大公司的副總裁角色。結果完全不合適。公司官僚、行動緩慢、抗拒創新。領導層把她的天生優勢當成問題。她的成果導向被視為急躁。她的社交被說成不恰當。這段經歷讓她學到的企業政治比整個職涯其餘時間加起來還多。但她很痛苦。</p>
           <p className="text-muted-foreground leading-relaxed mb-6">結論：把你的優勢帶到最需要的地方。不要強迫自己進入一個不重視你所帶來的價值的環境。</p>
 
+          <h3 className="font-heading text-xl text-foreground mb-3">自我評估</h3>
+          <p className="text-muted-foreground leading-relaxed mb-4">以下是一個 20 項技能評分練習。每項技能自評 1-10 分（10 = 你比任何人都強，1 = 從未展現過）。然後讓三個人幫你評分：你的老闆、一位同事和一位利害關係人。將分數平均後排名。</p>
           <Collapsible title="20 項技能清單">
             <ol className="list-decimal list-inside space-y-1 text-muted-foreground text-sm mt-3">
               {["高度正直/誠實", "技術/專業經驗", "解決問題/分析問題", "創新", "學習敏捷度/自我發展", "追求結果", "設定挑戰性目標", "主動積極", "有力的溝通", "激勵/激發他人", "建立關係", "協作和團隊合作", "策略思維", "推動變革", "客戶和外部導向", "培養他人", "堅強的道德品格", "決策力", "冒險精神", "重視多元化"].map((skill, i) => (
@@ -489,8 +491,11 @@ const CareerGameGuideZhTw = () => {
             </ol>
           </Collapsible>
 
-          <p className="text-muted-foreground leading-relaxed mt-4 mb-4">你的「尖峰技能」是比其他分數高出 1-2 分的技能。有兩項技能需要特別注意：溝通和協作。如果其中任何一項落在你的最低四名，先修這些。</p>
+          <p className="text-muted-foreground leading-relaxed mt-4 mb-4">你的「尖峰技能」是比其他分數高出 1-2 分的技能。這些是你的差異化因素。讓你從普通變成卓越的領域。</p>
+          <p className="text-muted-foreground leading-relaxed mb-4">作者的尖峰技能範例：解決問題、追求結果、推動變革。</p>
+          <p className="text-muted-foreground leading-relaxed mb-4">有兩項技能需要特別注意，無論它們落在哪裡：溝通和協作。如果其中任何一項落在你的最低四名，先修這些。如果人們不想和你共事，其他什麼都不重要。</p>
           <InfoBox title="我的看法" variant="gold"><p>當我評估候選人時，我找的是尖峰技能。我不想要一個「什麼都還可以」的人。我要一個在兩三件事上出類拔萃的人。告訴我你有什麼不同。如果你說不出來，我會轉向能說出來的人。</p></InfoBox>
+          <p className="text-muted-foreground leading-relaxed mt-4">你找到了你的尖峰技能。現在你需要把它們包裝成一個品牌，讓人記住、重複、在你不在場時替你代言。</p>
         </div>
       </section>
 
