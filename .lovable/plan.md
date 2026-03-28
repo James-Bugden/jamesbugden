@@ -1,35 +1,34 @@
 
 
-## Smart Language Output for Resume Analyzer
+## Add Cream Header to Resume Builder Dashboard View
 
-### The Rules
-1. **Same page + same resume language** → everything in that language
-2. **Cross-language** (page language ≠ resume language) → rewrite suggestions match the resume language, but explanations/reasons/UI stay in the page language
+### Problem
+The `/resume` and `/zh-tw/resume` dashboard view (document list) is missing the cream-colored top navigation bar with "← Home", "Dashboard/我的專區", and language toggle that exists on the resume editor view and the Resume Analyzer. The user wants consistent navigation across all resume builder views.
 
-### How
-The edge function already receives `language` (page lang). We add a second signal: detect the resume's language from the text itself, then build the prompt instruction accordingly.
+### Solution
+Add the same cream header bar to the `DocumentDashboard` component, matching the Resume Analyzer's exact style.
 
 ### Changes
 
-**`supabase/functions/analyze-resume/index.ts`**
+**`src/components/document-dashboard/DocumentDashboard.tsx`**
 
-Replace the current `outputLanguageInstruction` block (lines 227-229) with logic for 4 scenarios:
+1. Import `useAuth` from `@/contexts/AuthContext`, `Link` from `react-router-dom`, and `LogIn` from `lucide-react`
+2. Add the cream header bar at the top of the return JSX (before the existing `h-screen flex` wrapper), or wrap everything in a new outer container:
+   - Cream background (`#FDFBF7`), sticky, border-bottom
+   - Left: "JAMES BUGDEN" brand link (→ `/` or `/zh-tw`)
+   - Right: "← Home" / "← 首頁" link, Dashboard pill (green, logged in) or Sign in pill (not logged in), language toggle pill (gold outline with "EN" or "中文")
+3. The existing mobile header and sidebar language toggle remain functional but the top cream header provides consistent navigation on both mobile and desktop
+4. Adjust the main container height from `h-screen` to account for the new header (use `flex-1` inside a `h-screen flex flex-col` wrapper)
 
-1. Detect resume language using a simple heuristic (count CJK characters — if >15% of characters are CJK, it's Chinese)
-2. Build a nuanced instruction:
+### Header layout
+```text
+┌─────────────────────────────────────────────────────────┐
+│ JAMES BUGDEN              ← Home  [Dashboard]  [中文]   │  ← cream header
+├─────────────────────────────────────────────────────────┤
+│ [Sidebar] │ Main content (document cards)               │
+└─────────────────────────────────────────────────────────┘
+```
 
-| Page lang | Resume lang | Instruction |
-|-----------|-------------|-------------|
-| zh-TW | Chinese | Everything in 繁體中文 |
-| zh-TW | English | `bullet_rewrites[].improved`, `summary_rewrite.improved`, `bullet_rewrite.improved` → English. Everything else (findings, explanations, verdicts, priorities, summaries, `overall_verdict`) → 繁體中文 |
-| en | English | Everything in English |
-| en | Chinese | `bullet_rewrites[].improved`, `summary_rewrite.improved`, `bullet_rewrite.improved` → 繁體中文. Everything else → English |
-
-3. Prepend this instruction at the **top** of the system prompt (not appended at the end) for stronger enforcement
-4. Add a reinforcing reminder at the end of the user message
-
-No frontend changes needed — the edge function handles all the logic.
-
-### Files changed
-1. `supabase/functions/analyze-resume/index.ts` — replace language instruction with 4-scenario logic + resume language detection
+### Files
+1. `src/components/document-dashboard/DocumentDashboard.tsx` — add cream header, wrap layout
 
