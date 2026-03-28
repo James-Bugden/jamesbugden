@@ -730,6 +730,8 @@ const CareerGameGuide = () => {
             You're not bragging. You're informing. Think about your last workday. What percentage of your activities did your boss witness? 20%? 50%? For the remaining percentage, your boss has no idea what you did or the effort it required. Start an accomplishment tracker. Update it weekly. Use it in one-on-ones to connect your work to business outcomes.
           </p>
 
+          <AccomplishmentTracker lang="en" />
+
           <h3 className="font-heading text-xl text-foreground mb-3">Secret 14: Work that your boss doesn't know about doesn't matter</h3>
           <p className="text-muted-foreground leading-relaxed mb-4">
             Cover your assets. When you make a mistake, come to your boss with a plan. Don't hide it and hope it goes away.
