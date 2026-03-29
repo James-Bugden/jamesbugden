@@ -490,14 +490,34 @@ async function actionBackfill(
     }
   }
 
-  // Follower count for end of chunk
+  // Follower count — stamp current count on ALL dates in this chunk
   const followerCount = await fetchFollowerCount(userId, token);
   if (followerCount !== null) {
-    const lastDate = chunkEnd.toISOString().split("T")[0];
-    await sb
-      .from("threads_user_insights")
-      .update({ follower_count: followerCount })
-      .eq("metric_date", lastDate);
+    const metricDates = Object.keys(insightsData?.data ? (() => {
+      const dates: Record<string, boolean> = {};
+      for (const m of insightsData.data) {
+        if (m.values) for (const v of m.values) {
+          const d = v.end_time?.split("T")[0];
+          if (d) dates[d] = true;
+        }
+      }
+      return dates;
+    })() : {});
+    
+    // If we have specific dates, update them all; otherwise just update the chunk end
+    if (metricDates.length > 0) {
+      for (const date of metricDates) {
+        await sb.from("threads_user_insights")
+          .update({ follower_count: followerCount })
+          .eq("metric_date", date)
+          .eq("follower_count", 0);
+      }
+    } else {
+      const lastDate = chunkEnd.toISOString().split("T")[0];
+      await sb.from("threads_user_insights")
+        .update({ follower_count: followerCount })
+        .eq("metric_date", lastDate);
+    }
   }
 
   const nextFrom = chunkEnd >= now ? null : chunkEnd.toISOString().split("T")[0];
