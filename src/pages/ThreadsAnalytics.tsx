@@ -473,12 +473,10 @@ export default function ThreadsAnalytics() {
                 : "Never"}
             </span>
             <div className="ml-auto flex flex-wrap gap-2">
-              {(insightCount.data || 0) < 30 && (
-                <Button variant="outline" size="sm" onClick={handleBackfill} disabled={backfilling}>
-                  {backfilling && <RefreshCw className="w-3 h-3 animate-spin mr-1" />}
-                  Backfill
-                </Button>
-              )}
+              <Button variant="outline" size="sm" onClick={handleBackfill} disabled={backfilling}>
+                {backfilling && <RefreshCw className="w-3 h-3 animate-spin mr-1" />}
+                Backfill
+              </Button>
               <Button variant="outline" size="sm" onClick={handleSyncDemographics} disabled={syncingDemographics}>
                 {syncingDemographics && <RefreshCw className="w-3 h-3 animate-spin mr-1" />}
                 Demographics
