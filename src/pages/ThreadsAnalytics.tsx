@@ -408,7 +408,7 @@ export default function ThreadsAnalytics() {
                         contentStyle={{ background: "hsl(var(--background))", border: "1px solid hsl(var(--border))", borderRadius: 8, fontSize: 12 }}
                       />
                       <Legend />
-                      <Line yAxisId="left" type="monotone" dataKey="views" name="Profile Views" stroke="hsl(var(--primary))" strokeWidth={2} dot={false} />
+                      <Line yAxisId="left" type="monotone" dataKey="views" name="Views" stroke="hsl(var(--primary))" strokeWidth={2} dot={false} />
                       <Line yAxisId="left" type="monotone" dataKey="interactions" name="Interactions" stroke="#f59e0b" strokeWidth={2} dot={false} />
                       <Line yAxisId="right" type="monotone" dataKey="rollingEng" name="7d Avg Eng %" stroke="#8b5cf6" strokeWidth={1.5} strokeDasharray="5 5" dot={false} />
                     </LineChart>
