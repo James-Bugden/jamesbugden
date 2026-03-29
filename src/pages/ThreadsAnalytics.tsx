@@ -291,6 +291,29 @@ export default function ThreadsAnalytics() {
     }
   };
 
+  const handleRefreshAll = async () => {
+    setRefreshingAll(true);
+    try {
+      let totalRefreshed = 0;
+      for (let i = 0; i < 10; i++) {
+        const { data, error } = await supabase.functions.invoke("threads-sync", {
+          body: { action: "refresh-all-insights" },
+        });
+        if (error) throw error;
+        totalRefreshed += data?.refreshed || 0;
+        if ((data?.remaining || 0) === 0) break;
+        toast.info(`Refreshed ${totalRefreshed} posts, ${data?.remaining} remaining...`);
+      }
+      toast.success(`Refreshed insights for ${totalRefreshed} posts`);
+      postsAgg.refetch();
+      postTrend.refetch();
+    } catch (e: any) {
+      toast.error(e.message || "Refresh failed");
+    } finally {
+      setRefreshingAll(false);
+    }
+  };
+
   // Chart data derived from posts
   const trendData = postTrend.data || [];
   const chartWithRolling = trendData.map((row, i) => {
