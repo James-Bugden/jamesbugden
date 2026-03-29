@@ -144,7 +144,14 @@ function DemographicsSection() {
     );
   }
 
-  if (!data?.length) return null;
+  if (!data?.length) return (
+    <Card>
+      <CardContent className="p-6 text-center text-muted-foreground">
+        <p className="text-sm mb-3">No demographics data yet.</p>
+        <p className="text-xs">Click <strong>Demographics</strong> in the sync bar below to fetch audience data.</p>
+      </CardContent>
+    </Card>
+  );
 
   const byType = (type: string) => data.filter(d => d.breakdown_type === type);
   const fetchedAt = data[0]?.fetched_at
