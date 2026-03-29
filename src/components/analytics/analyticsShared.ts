@@ -92,6 +92,41 @@ export function useInsightsForReach() {
   });
 }
 
+export type FollowerDelta = {
+  date: string;
+  followers: number;
+  delta: number;
+};
+
+export function useFollowerDeltas(range: DateRange) {
+  return useQuery({
+    queryKey: ["threads-follower-deltas", range],
+    queryFn: async () => {
+      const { data, error } = await supabase
+        .from("threads_user_insights")
+        .select("metric_date, follower_count")
+        .order("metric_date", { ascending: true })
+        .limit(1000);
+      if (error) throw error;
+      const rows = (data || []).filter(r => r.follower_count && r.follower_count > 0);
+      if (rows.length < 2) return { deltas: [] as FollowerDelta[], netGain: 0, current: rows[rows.length - 1]?.follower_count || 0 };
+
+      const start = rangeStart(range);
+      const deltas: FollowerDelta[] = [];
+      for (let i = 1; i < rows.length; i++) {
+        const d: FollowerDelta = {
+          date: rows[i].metric_date,
+          followers: rows[i].follower_count!,
+          delta: rows[i].follower_count! - rows[i - 1].follower_count!,
+        };
+        if (!start || d.date >= start) deltas.push(d);
+      }
+      const netGain = deltas.reduce((s, d) => s + d.delta, 0);
+      return { deltas, netGain, current: rows[rows.length - 1].follower_count! };
+    },
+  });
+}
+
 export type PostDerivedDay = {
   date: string;
   views: number;

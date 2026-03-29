@@ -4,8 +4,7 @@ import { useAuth } from "@/contexts/AuthContext";
 import { supabase } from "@/integrations/supabase/client";
 import { useQuery } from "@tanstack/react-query";
 import { Helmet } from "react-helmet-async";
-import { usePostDerivedTrend } from "@/components/analytics/analyticsShared";
-import { useAllPosts } from "@/components/analytics/analyticsShared";
+import { usePostDerivedTrend, useAllPosts, useFollowerDeltas } from "@/components/analytics/analyticsShared";
 import { ContentStrategySection } from "@/components/analytics/ContentAnalysisSections";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Button } from "@/components/ui/button";
@@ -17,7 +16,8 @@ import {
   BarChart3, RefreshCw, Database, ArrowLeft, ChevronDown, Info,
 } from "lucide-react";
 import {
-  LineChart, Line, AreaChart, Area, XAxis, YAxis, CartesianGrid,
+  LineChart, Line, AreaChart, Area, BarChart, Bar, ComposedChart, Cell,
+  XAxis, YAxis, CartesianGrid,
   Tooltip as RechartsTooltip, ResponsiveContainer, ReferenceLine,
 } from "recharts";
 import { toast } from "sonner";
@@ -179,6 +179,7 @@ export default function ThreadsAnalytics() {
   const lastSync = useLastSync();
   const allPostsQ = useAllPosts(range);
   const allPosts = allPostsQ.data || [];
+  const followerDeltas = useFollowerDeltas(range);
 
   // Admin check
   const [isAdmin, setIsAdmin] = useState(false);
@@ -331,7 +332,7 @@ export default function ThreadsAnalytics() {
           <SectionHeading>Overview</SectionHeading>
 
           {/* KPI Cards */}
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
+          <div className="grid grid-cols-2 md:grid-cols-5 gap-3">
             <MetricCard icon={BarChart3} label="Total Posts" 
               value={postsAgg.data ? fmt(postsAgg.data.totalPosts) : "—"}
               tooltip="Total number of posts in the selected time period." />
@@ -345,6 +346,10 @@ export default function ThreadsAnalytics() {
             <MetricCard icon={Eye} label="Avg Views/Post" 
               value={postsAgg.data ? fmt(Math.round(postsAgg.data.avgViews)) : "—"}
               tooltip="Average number of views per post. Higher means your content is reaching more people." />
+            <MetricCard icon={Users} label="Followers Gained" 
+              value={followerDeltas.data ? (followerDeltas.data.netGain >= 0 ? "+" : "") + fmt(followerDeltas.data.netGain) : "—"}
+              tooltip="Net followers gained in this period, based on daily snapshots. Run Backfill to populate historical data."
+              color={followerDeltas.data && followerDeltas.data.netGain > 0 ? "#22c55e" : followerDeltas.data && followerDeltas.data.netGain < 0 ? "#ef4444" : undefined} />
           </div>
 
           {/* Date Range */}
@@ -385,20 +390,22 @@ export default function ThreadsAnalytics() {
             </CardContent>
           </Card>
 
-          {/* Follower Growth Chart */}
+          {/* Follower Growth Chart with daily change bars */}
           <Card>
             <CardContent className="p-4 md:p-6">
               <h3 className="text-sm font-medium text-muted-foreground mb-1">Follower Growth</h3>
               <p className="text-xs text-muted-foreground mb-4">
-                {follower.data ? `Currently ${fmt(follower.data.current)} followers.` : ""} 
-                {followerData.length <= 1 ? " Data accumulates with daily syncs and backfills." : ""}
+                {follower.data ? `Currently ${fmt(follower.data.current)} followers.` : ""}
+                {followerDeltas.data && followerDeltas.data.deltas.length > 0
+                  ? ` Net ${followerDeltas.data.netGain >= 0 ? "+" : ""}${followerDeltas.data.netGain} in this period.`
+                  : " Data accumulates with daily syncs and backfills."}
               </p>
               {followerHistory.isLoading ? (
-                <Skeleton className="h-[250px]" />
-              ) : followerData.length > 1 ? (
-                <div className="h-[250px]">
+                <Skeleton className="h-[300px]" />
+              ) : followerDeltas.data && followerDeltas.data.deltas.length > 1 ? (
+                <div className="h-[300px]">
                   <ResponsiveContainer width="100%" height="100%">
-                    <AreaChart data={followerData}>
+                    <ComposedChart data={followerDeltas.data.deltas}>
                       <defs>
                         <linearGradient id="followerGrad" x1="0" y1="0" x2="0" y2="1">
                           <stop offset="5%" stopColor="#22c55e" stopOpacity={0.3} />
@@ -407,9 +414,35 @@ export default function ThreadsAnalytics() {
                       </defs>
                       <CartesianGrid strokeDasharray="3 3" className="stroke-border" />
                       <XAxis dataKey="date" tick={{ fontSize: 11 }} tickFormatter={(v) => v.slice(5)} />
+                      <YAxis yAxisId="left" tick={{ fontSize: 11 }} domain={["dataMin - 100", "dataMax + 100"]} />
+                      <YAxis yAxisId="right" orientation="right" tick={{ fontSize: 10 }} />
+                      <RechartsTooltip contentStyle={{ background: "hsl(var(--background))", border: "1px solid hsl(var(--border))", borderRadius: 8, fontSize: 12 }}
+                        formatter={(v: number, name: string) => [name === "Daily Change" ? (v >= 0 ? "+" : "") + v : fmt(v), name]} />
+                      <Area yAxisId="left" type="monotone" dataKey="followers" name="Followers" stroke="#22c55e" fill="url(#followerGrad)" strokeWidth={2} />
+                      <Bar yAxisId="right" dataKey="delta" name="Daily Change" radius={[2, 2, 0, 0]}>
+                        {followerDeltas.data.deltas.map((d, i) => (
+                          <Cell key={i} fill={d.delta >= 0 ? "#22c55e" : "#ef4444"} opacity={0.6} />
+                        ))}
+                      </Bar>
+                      <ReferenceLine yAxisId="right" y={0} stroke="hsl(var(--border))" />
+                    </ComposedChart>
+                  </ResponsiveContainer>
+                </div>
+              ) : followerData.length > 1 ? (
+                <div className="h-[250px]">
+                  <ResponsiveContainer width="100%" height="100%">
+                    <AreaChart data={followerData}>
+                      <defs>
+                        <linearGradient id="followerGrad2" x1="0" y1="0" x2="0" y2="1">
+                          <stop offset="5%" stopColor="#22c55e" stopOpacity={0.3} />
+                          <stop offset="95%" stopColor="#22c55e" stopOpacity={0} />
+                        </linearGradient>
+                      </defs>
+                      <CartesianGrid strokeDasharray="3 3" className="stroke-border" />
+                      <XAxis dataKey="date" tick={{ fontSize: 11 }} tickFormatter={(v) => v.slice(5)} />
                       <YAxis tick={{ fontSize: 11 }} domain={["dataMin - 100", "dataMax + 100"]} />
                       <RechartsTooltip contentStyle={{ background: "hsl(var(--background))", border: "1px solid hsl(var(--border))", borderRadius: 8, fontSize: 12 }} />
-                      <Area type="monotone" dataKey="followers" name="Followers" stroke="#22c55e" fill="url(#followerGrad)" strokeWidth={2} />
+                      <Area type="monotone" dataKey="followers" name="Followers" stroke="#22c55e" fill="url(#followerGrad2)" strokeWidth={2} />
                     </AreaChart>
                   </ResponsiveContainer>
                 </div>
