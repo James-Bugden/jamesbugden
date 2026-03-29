@@ -269,16 +269,47 @@ function PostingTimeHeatmap({ posts }: { posts: ThreadsPost[] }) {
     return intensity > 0.4 ? "text-white" : "";
   };
 
+  // Derive best time callout
+  const bestSlot = useMemo(() => {
+    let best = { day: "", hour: 0, avgEng: 0 };
+    for (const [key, cell] of Object.entries(grid)) {
+      if (cell.count === 0) continue;
+      const avgE = cell.totalEng / cell.count;
+      if (avgE > best.avgEng) {
+        const [day, hour] = key.split("-");
+        best = { day, hour: Number(hour), avgEng: avgE };
+      }
+    }
+    return best.day ? best : null;
+  }, [grid]);
+
+  const engLevel = (avgE: number) => {
+    if (maxEng === 0) return "No data";
+    const ratio = avgE / maxEng;
+    if (ratio > 0.7) return "Great engagement";
+    if (ratio > 0.4) return "Good engagement";
+    if (ratio > 0.2) return "Some engagement";
+    return "Low engagement";
+  };
+
   return (
     <div className="bg-white rounded-xl border border-gray-100 p-6 shadow-sm space-y-4">
       <div className="flex items-center gap-3">
         <div className="w-9 h-9 rounded-xl bg-blue-50 flex items-center justify-center">
           <Clock className="w-5 h-5 text-blue-500" />
         </div>
-        <div>
+        <div className="flex-1">
           <h3 className="text-sm font-semibold text-gray-900">Best Time to Post</h3>
-          <p className="text-xs text-gray-400">Avg engagement by day & hour (Taipei time). Darker = higher engagement.</p>
+          <p className="text-xs text-gray-400">Darker = higher engagement (Taipei time)</p>
         </div>
+        {bestSlot && (
+          <div className="text-right">
+            <p className="text-xs font-semibold text-blue-600">
+              {bestSlot.day} {bestSlot.hour.toString().padStart(2, "0")}:00
+            </p>
+            <p className="text-[10px] text-gray-400">Your best slot</p>
+          </div>
+        )}
       </div>
 
       <div className="overflow-x-auto">
@@ -315,9 +346,7 @@ function PostingTimeHeatmap({ posts }: { posts: ThreadsPost[] }) {
                       <TooltipContent side="top" className="text-xs">
                         <p className="font-semibold">{day} {hour}:00</p>
                         {count > 0 ? (
-                          <>
-                            <p>{count} post{count > 1 ? "s" : ""} · {pct(avgE)} eng · {fmt(avgV)} avg views</p>
-                          </>
+                          <p>{count} post{count > 1 ? "s" : ""} · {engLevel(avgE)} · {fmt(avgV)} avg views</p>
                         ) : (
                           <p className="text-gray-400">No posts at this time</p>
                         )}
