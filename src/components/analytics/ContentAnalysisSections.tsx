@@ -611,7 +611,7 @@ export default function ContentAnalysisSections({ range }: { range: DateRange })
 
   return (
     <div className="space-y-5">
-      <BestForTable posts={posts} followerDeltas={followerDeltas} />
+      <BestForCards posts={posts} followerDeltas={followerDeltas} />
       <MediaTypeSection posts={posts} overallAvgEng={overallAvgEng} />
       <PostingTimeHeatmap posts={posts} />
       <PostFrequencySection posts={posts} />
