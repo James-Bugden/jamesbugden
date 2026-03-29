@@ -430,16 +430,18 @@ function PostFrequencySection({ posts }: { posts: ThreadsPost[] }) {
   );
 }
 
-// ── Tag Breakdown Chart ────────────────────────────────────────────
+// ── Tag Breakdown Chart (simplified) ───────────────────────────────
 function TagBreakdownChart({ posts, field }: { posts: ThreadsPost[]; field: "content_topic" | "content_format" | "content_tone" | "content_cta" | "content_audience" }) {
-  const { data: chartData, overallAvgPct } = useMemo(() => {
+  const { data: chartData, bestLabel } = useMemo(() => {
     const tagged = posts.filter(p => p[field]);
-    if (!tagged.length) return { data: [], overallAvgPct: 0 };
+    if (!tagged.length) return { data: [], bestLabel: "" };
     const map: Record<string, number[]> = {};
     for (const p of tagged) { const val = p[field]!; if (!map[val]) map[val] = []; map[val].push(Number(p.engagement_rate)); }
     const overallAvg = avg(tagged.map(p => Number(p.engagement_rate)));
-    const d = Object.entries(map).map(([label, rates]) => ({ label, avgEng: +(avg(rates) * 100).toFixed(3), count: rates.length, aboveAvg: avg(rates) >= overallAvg })).sort((a, b) => b.avgEng - a.avgEng);
-    return { data: d, overallAvgPct: +(overallAvg * 100).toFixed(3) };
+    const d = Object.entries(map).map(([label, rates]) => ({
+      label, avgEng: +(avg(rates) * 100).toFixed(3), count: rates.length, aboveAvg: avg(rates) >= overallAvg,
+    })).sort((a, b) => b.avgEng - a.avgEng);
+    return { data: d, bestLabel: d[0]?.label || "" };
   }, [posts, field]);
 
   if (!chartData.length) return (
@@ -449,29 +451,32 @@ function TagBreakdownChart({ posts, field }: { posts: ThreadsPost[]; field: "con
     </div>
   );
 
+  const maxEng = Math.max(...chartData.map(d => d.avgEng), 0.01);
+
   return (
-    <div className="h-[300px]">
-      <ResponsiveContainer width="100%" height="100%">
-        <BarChart data={chartData} layout="vertical" margin={{ left: 10, right: 50 }}>
-          <CartesianGrid strokeDasharray="3 3" stroke={gridStroke} horizontal={false} />
-          <XAxis type="number" tick={axisTickStyle} tickFormatter={v => v.toFixed(1) + "%"} axisLine={false} tickLine={false} />
-          <YAxis dataKey="label" type="category" width={120} tick={{ fontSize: 11, fill: "#374151" }} axisLine={false} tickLine={false} />
-          <RechartsTooltip contentStyle={tipStyle}
-            formatter={(v: number) => [v.toFixed(2) + "% engagement"]}
-            labelFormatter={(l) => l} />
-          <ReferenceLine x={overallAvgPct} stroke="#f59e0b" strokeDasharray="6 4" strokeWidth={1.5} />
-          <Bar dataKey="avgEng" name="Engagement %" radius={[0, 6, 6, 0]}
-            label={({ x, y, width, height, index }: any) => {
-              const count = chartData[index]?.count ?? 0;
-              return <text x={x + width + 6} y={y + height / 2} dy={4} fontSize={10} fill="#9ca3af">{count}</text>;
-            }}
-          >
-            {chartData.map((d, i) => (
-              <Cell key={i} fill={d.aboveAvg ? "#22c55e" : "#cbd5e1"} />
-            ))}
-          </Bar>
-        </BarChart>
-      </ResponsiveContainer>
+    <div className="space-y-3">
+      {bestLabel && (
+        <p className="text-xs text-gray-500">
+          Your best {field.replace("content_", "")}: <span className="font-semibold text-gray-900">{bestLabel}</span>
+        </p>
+      )}
+      <div className="space-y-2">
+        {chartData.map((d) => (
+          <div key={d.label} className="flex items-center gap-3">
+            <span className="text-xs text-gray-700 w-28 truncate font-medium text-right">{d.label}</span>
+            <div className="flex-1 h-5 bg-gray-50 rounded-full overflow-hidden relative">
+              <div
+                className={`h-full rounded-full ${d.aboveAvg ? "bg-emerald-400" : "bg-gray-300"}`}
+                style={{ width: `${Math.max((d.avgEng / maxEng) * 100, 4)}%` }}
+              />
+            </div>
+            <span className="text-[11px] font-semibold text-gray-900 w-14 text-right">{d.count} posts</span>
+            <span className={`text-[10px] font-medium px-1.5 py-0.5 rounded-full w-20 text-center ${d.aboveAvg ? "bg-emerald-50 text-emerald-600" : "bg-gray-50 text-gray-400"}`}>
+              {d.aboveAvg ? "Above avg" : "Below avg"}
+            </span>
+          </div>
+        ))}
+      </div>
     </div>
   );
 }
