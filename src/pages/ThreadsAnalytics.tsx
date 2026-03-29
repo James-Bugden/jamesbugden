@@ -11,18 +11,18 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible";
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
 import {
-  Eye, Heart, MessageCircle, Repeat2, Users, TrendingUp,
-  BarChart3, RefreshCw, Database, ArrowLeft, ChevronDown,
+  Eye, Heart, MessageCircle, Users, TrendingUp,
+  BarChart3, RefreshCw, Database, ArrowLeft, ChevronDown, Info,
 } from "lucide-react";
 import {
   LineChart, Line, AreaChart, Area, XAxis, YAxis, CartesianGrid,
-  Tooltip, ResponsiveContainer, Legend,
+  Tooltip as RechartsTooltip, ResponsiveContainer, ReferenceLine,
 } from "recharts";
 import { toast } from "sonner";
 import ContentAnalysisSections from "@/components/analytics/ContentAnalysisSections";
 import PostDetailSections from "@/components/analytics/PostDetailSections";
-import TimingSections from "@/components/analytics/TimingSections";
 import LinksDemographicsSections from "@/components/analytics/LinksDemographicsSections";
 
 // ── Types ──────────────────────────────────────────────────────────
@@ -66,9 +66,8 @@ function usePostsAggregates(range: DateRange) {
       const totalPosts = rows.length;
       const totalViews = rows.reduce((s, r) => s + (r.views || 0), 0);
       const avgEng = rows.length ? rows.reduce((s, r) => s + Number(r.engagement_rate || 0), 0) / rows.length : 0;
-      const avgVir = rows.length ? rows.reduce((s, r) => s + Number(r.virality_rate || 0), 0) / rows.length : 0;
-      const avgConv = rows.length ? rows.reduce((s, r) => s + Number(r.conversation_rate || 0), 0) / rows.length : 0;
-      return { totalPosts, totalViews, avgEng, avgVir, avgConv };
+      const avgViews = rows.length ? totalViews / rows.length : 0;
+      return { totalPosts, totalViews, avgEng, avgViews };
     },
   });
 }
@@ -134,18 +133,29 @@ function SectionHeading({ children }: { children: React.ReactNode }) {
 }
 
 // ── Metric Card ────────────────────────────────────────────────────
-function MetricCard({ icon: Icon, label, value, sub, color }: {
-  icon: any; label: string; value: string; sub?: string; color?: string;
+function MetricCard({ icon: Icon, label, value, tooltip, color }: {
+  icon: any; label: string; value: string; tooltip: string; color?: string;
 }) {
   return (
-    <Card>
-      <CardContent className="p-4 flex flex-col gap-1">
-        <Icon className="w-4 h-4 text-muted-foreground" />
-        <span className="text-2xl font-bold tracking-tight">{value}</span>
-        <span className="text-xs text-muted-foreground">{label}</span>
-        {sub && <span className="text-xs font-medium" style={{ color }}>{sub}</span>}
-      </CardContent>
-    </Card>
+    <TooltipProvider>
+      <Tooltip>
+        <TooltipTrigger asChild>
+          <Card className="cursor-help">
+            <CardContent className="p-4 flex flex-col gap-1">
+              <div className="flex items-center gap-1.5">
+                <Icon className="w-4 h-4 text-muted-foreground" />
+                <Info className="w-3 h-3 text-muted-foreground/50" />
+              </div>
+              <span className="text-2xl font-bold tracking-tight" style={color ? { color } : undefined}>{value}</span>
+              <span className="text-xs text-muted-foreground">{label}</span>
+            </CardContent>
+          </Card>
+        </TooltipTrigger>
+        <TooltipContent side="bottom" className="max-w-[200px]">
+          <p className="text-xs">{tooltip}</p>
+        </TooltipContent>
+      </Tooltip>
+    </TooltipProvider>
   );
 }
 
@@ -282,18 +292,22 @@ export default function ThreadsAnalytics() {
     finally { setRefreshingAll(false); }
   };
 
-  // Chart data
+  // Chart data — single Y-axis, views + avg reference line
   const trendData = postTrend.data || [];
-  const chartWithRolling = trendData.map((row, i) => {
-    const window = trendData.slice(Math.max(0, i - 6), i + 1);
-    const totalViews = window.reduce((s, w) => s + w.views, 0);
-    const totalInteractions = window.reduce((s, w) => s + w.likes + w.replies + w.reposts + w.quotes, 0);
-    const rollingEng = totalViews > 0 ? (totalInteractions / totalViews) * 100 : 0;
-    return { ...row, interactions: row.likes + row.replies + row.reposts + row.quotes, rollingEng: Math.round(rollingEng * 100) / 100 };
-  });
+  const avgViews = trendData.length ? trendData.reduce((s, d) => s + d.views, 0) / trendData.length : 0;
+  const chartData = trendData.map((row) => ({
+    date: row.date,
+    views: row.views,
+    engPct: +(row.engagementRate * 100).toFixed(3),
+  }));
+  const avgEngPct = trendData.length ? +(trendData.reduce((s, d) => s + d.engagementRate, 0) / trendData.length * 100).toFixed(3) : 0;
 
   const followerData = followerHistory.data || [];
   const ranges: DateRange[] = ["7d", "30d", "90d", "all"];
+
+  // Engagement rate color indicator
+  const engValue = postsAgg.data?.avgEng || 0;
+  const engColor = engValue >= 0.015 ? "#22c55e" : engValue >= 0.008 ? "#f59e0b" : "#ef4444";
 
   return (
     <>
@@ -316,13 +330,21 @@ export default function ThreadsAnalytics() {
           {/* ─── OVERVIEW ─────────────────────────────────────── */}
           <SectionHeading>Overview</SectionHeading>
 
-          {/* KPI Cards — responsive grid */}
-          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-3">
-            <MetricCard icon={BarChart3} label="Total Posts" value={postsAgg.data ? fmt(postsAgg.data.totalPosts) : "—"} />
-            <MetricCard icon={Eye} label="Total Views" value={postsAgg.data ? fmt(postsAgg.data.totalViews) : "—"} />
-            <MetricCard icon={Heart} label="Avg Engagement" value={postsAgg.data ? pct(postsAgg.data.avgEng) : "—"} />
-            <MetricCard icon={Repeat2} label="Avg Virality" value={postsAgg.data ? pct(postsAgg.data.avgVir) : "—"} />
-            <MetricCard icon={Users} label="Followers" value={follower.data ? fmt(follower.data.current) : "—"} color="#22c55e" />
+          {/* KPI Cards */}
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
+            <MetricCard icon={BarChart3} label="Total Posts" 
+              value={postsAgg.data ? fmt(postsAgg.data.totalPosts) : "—"}
+              tooltip="Total number of posts in the selected time period." />
+            <MetricCard icon={Eye} label="Total Views" 
+              value={postsAgg.data ? fmt(postsAgg.data.totalViews) : "—"}
+              tooltip="Combined views across all posts in this period." />
+            <MetricCard icon={TrendingUp} label="Engagement Rate" 
+              value={postsAgg.data ? pct(postsAgg.data.avgEng) : "—"}
+              tooltip="Likes + replies + reposts + quotes divided by views. Above 1.5% is great, 0.8-1.5% is average."
+              color={engColor} />
+            <MetricCard icon={Eye} label="Avg Views/Post" 
+              value={postsAgg.data ? fmt(Math.round(postsAgg.data.avgViews)) : "—"}
+              tooltip="Average number of views per post. Higher means your content is reaching more people." />
           </div>
 
           {/* Date Range */}
@@ -337,25 +359,25 @@ export default function ThreadsAnalytics() {
           {/* What to Post Next — top priority */}
           {allPosts.length > 0 && <ContentStrategySection posts={allPosts} />}
 
-          {/* Engagement Trend */}
+          {/* Engagement Trend — single Y-axis */}
           <Card>
             <CardContent className="p-4 md:p-6">
-              <h3 className="text-sm font-medium text-muted-foreground mb-4">Engagement Trend</h3>
+              <h3 className="text-sm font-medium text-muted-foreground mb-1">Engagement Trend</h3>
+              <p className="text-xs text-muted-foreground mb-4">Daily engagement rate (%). The dashed line is your average.</p>
               {postTrend.isLoading ? (
                 <Skeleton className="h-[300px]" />
               ) : (
                 <div className="h-[300px]">
                   <ResponsiveContainer width="100%" height="100%">
-                    <LineChart data={chartWithRolling}>
+                    <LineChart data={chartData}>
                       <CartesianGrid strokeDasharray="3 3" className="stroke-border" />
                       <XAxis dataKey="date" tick={{ fontSize: 11 }} tickFormatter={(v) => v.slice(5)} />
-                      <YAxis yAxisId="left" tick={{ fontSize: 11 }} />
-                      <YAxis yAxisId="right" orientation="right" tick={{ fontSize: 11 }} />
-                      <Tooltip contentStyle={{ background: "hsl(var(--background))", border: "1px solid hsl(var(--border))", borderRadius: 8, fontSize: 12 }} />
-                      <Legend />
-                      <Line yAxisId="left" type="monotone" dataKey="views" name="Views" stroke="hsl(var(--primary))" strokeWidth={2} dot={false} />
-                      <Line yAxisId="left" type="monotone" dataKey="interactions" name="Interactions" stroke="#f59e0b" strokeWidth={2} dot={false} />
-                      <Line yAxisId="right" type="monotone" dataKey="rollingEng" name="7d Avg Eng %" stroke="#8b5cf6" strokeWidth={1.5} strokeDasharray="5 5" dot={false} />
+                      <YAxis tick={{ fontSize: 11 }} tickFormatter={v => v + "%"} />
+                      <RechartsTooltip contentStyle={{ background: "hsl(var(--background))", border: "1px solid hsl(var(--border))", borderRadius: 8, fontSize: 12 }} 
+                        formatter={(v: number, name: string) => [v.toFixed(3) + "%", name]} />
+                      <ReferenceLine y={avgEngPct} stroke="#f59e0b" strokeDasharray="6 4" strokeWidth={1.5}
+                        label={{ value: `Avg ${avgEngPct.toFixed(2)}%`, position: "right", fontSize: 10, fill: "#f59e0b" }} />
+                      <Line type="monotone" dataKey="engPct" name="Engagement %" stroke="hsl(var(--primary))" strokeWidth={2} dot={false} />
                     </LineChart>
                   </ResponsiveContainer>
                 </div>
@@ -366,7 +388,11 @@ export default function ThreadsAnalytics() {
           {/* Follower Growth Chart */}
           <Card>
             <CardContent className="p-4 md:p-6">
-              <h3 className="text-sm font-medium text-muted-foreground mb-4">Follower Growth</h3>
+              <h3 className="text-sm font-medium text-muted-foreground mb-1">Follower Growth</h3>
+              <p className="text-xs text-muted-foreground mb-4">
+                {follower.data ? `Currently ${fmt(follower.data.current)} followers.` : ""} 
+                {followerData.length <= 1 ? " Data accumulates with daily syncs and backfills." : ""}
+              </p>
               {followerHistory.isLoading ? (
                 <Skeleton className="h-[250px]" />
               ) : followerData.length > 1 ? (
@@ -382,7 +408,7 @@ export default function ThreadsAnalytics() {
                       <CartesianGrid strokeDasharray="3 3" className="stroke-border" />
                       <XAxis dataKey="date" tick={{ fontSize: 11 }} tickFormatter={(v) => v.slice(5)} />
                       <YAxis tick={{ fontSize: 11 }} domain={["dataMin - 100", "dataMax + 100"]} />
-                      <Tooltip contentStyle={{ background: "hsl(var(--background))", border: "1px solid hsl(var(--border))", borderRadius: 8, fontSize: 12 }} />
+                      <RechartsTooltip contentStyle={{ background: "hsl(var(--background))", border: "1px solid hsl(var(--border))", borderRadius: 8, fontSize: 12 }} />
                       <Area type="monotone" dataKey="followers" name="Followers" stroke="#22c55e" fill="url(#followerGrad)" strokeWidth={2} />
                     </AreaChart>
                   </ResponsiveContainer>
@@ -390,7 +416,7 @@ export default function ThreadsAnalytics() {
               ) : (
                 <div className="text-center py-8 text-muted-foreground">
                   <p className="text-sm">No follower history yet.</p>
-                  <p className="text-xs mt-1">Click <strong>Backfill</strong> in Data Management to start tracking, then daily syncs will accumulate data.</p>
+                  <p className="text-xs mt-1">Click <strong>Backfill</strong> below to start tracking.</p>
                 </div>
               )}
             </CardContent>
@@ -404,9 +430,8 @@ export default function ThreadsAnalytics() {
           <SectionHeading>Post Explorer</SectionHeading>
           <PostDetailSections range={range} />
 
-          {/* ─── TIMING & AUDIENCE ────────────────────────────── */}
-          <SectionHeading>Timing & Audience</SectionHeading>
-          <TimingSections range={range} />
+          {/* ─── AUDIENCE ─────────────────────────────────────── */}
+          <SectionHeading>Audience & Links</SectionHeading>
           <LinksDemographicsSections />
 
           {/* ─── DATA MANAGEMENT ──────────────────────────────── */}
