@@ -91,3 +91,61 @@ export function useInsightsForReach() {
     },
   });
 }
+
+export type PostDerivedDay = {
+  date: string;
+  views: number;
+  likes: number;
+  replies: number;
+  reposts: number;
+  quotes: number;
+  shares: number;
+  posts: number;
+  engagementRate: number;
+};
+
+export function usePostDerivedTrend(range: DateRange) {
+  return useQuery({
+    queryKey: ["threads-post-derived-trend", range],
+    queryFn: async () => {
+      let q = supabase
+        .from("threads_posts")
+        .select("posted_at, views, likes, replies, reposts, quotes, shares, engagement_rate")
+        .order("posted_at", { ascending: true });
+      const start = rangeStart(range);
+      if (start) q = q.gte("posted_at", start);
+      const { data, error } = await q.limit(1000);
+      if (error) throw error;
+
+      const byDate: Record<string, { views: number; likes: number; replies: number; reposts: number; quotes: number; shares: number; engSum: number; count: number }> = {};
+      for (const row of data || []) {
+        if (!row.posted_at) continue;
+        const date = row.posted_at.split("T")[0];
+        if (!byDate[date]) byDate[date] = { views: 0, likes: 0, replies: 0, reposts: 0, quotes: 0, shares: 0, engSum: 0, count: 0 };
+        const b = byDate[date];
+        b.views += row.views || 0;
+        b.likes += row.likes || 0;
+        b.replies += row.replies || 0;
+        b.reposts += row.reposts || 0;
+        b.quotes += row.quotes || 0;
+        b.shares += row.shares || 0;
+        b.engSum += Number(row.engagement_rate || 0);
+        b.count++;
+      }
+
+      return Object.entries(byDate)
+        .sort(([a], [b]) => a.localeCompare(b))
+        .map(([date, b]): PostDerivedDay => ({
+          date,
+          views: b.views,
+          likes: b.likes,
+          replies: b.replies,
+          reposts: b.reposts,
+          quotes: b.quotes,
+          shares: b.shares,
+          posts: b.count,
+          engagementRate: b.count > 0 ? b.engSum / b.count : 0,
+        }));
+    },
+  });
+}

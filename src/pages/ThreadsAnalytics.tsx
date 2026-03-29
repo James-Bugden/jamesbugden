@@ -4,6 +4,7 @@ import { useAuth } from "@/contexts/AuthContext";
 import { supabase } from "@/integrations/supabase/client";
 import { useQuery } from "@tanstack/react-query";
 import { Helmet } from "react-helmet-async";
+import { usePostDerivedTrend } from "@/components/analytics/analyticsShared";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
@@ -69,20 +70,6 @@ function usePostsAggregates(range: DateRange) {
   });
 }
 
-function useInsights(range: DateRange) {
-  return useQuery({
-    queryKey: ["threads-insights", range],
-    queryFn: async () => {
-      let q = supabase.from("threads_user_insights").select("*").order("metric_date", { ascending: true });
-      const start = rangeStart(range);
-      if (start) q = q.gte("metric_date", start);
-      const { data, error } = await q;
-      if (error) throw error;
-      return data || [];
-    },
-  });
-}
-
 function useFollowerGrowth() {
   return useQuery({
     queryKey: ["threads-follower-growth"],
@@ -123,18 +110,6 @@ function useLastSync() {
         .limit(1)
         .single();
       return data?.updated_at || null;
-    },
-  });
-}
-
-function useInsightCount() {
-  return useQuery({
-    queryKey: ["threads-insight-count"],
-    queryFn: async () => {
-      const { count } = await supabase
-        .from("threads_user_insights")
-        .select("id", { count: "exact", head: true });
-      return count || 0;
     },
   });
 }
@@ -184,12 +159,12 @@ export default function ThreadsAnalytics() {
   const [analyzingImages, setAnalyzingImages] = useState(false);
   const [syncingDemographics, setSyncingDemographics] = useState(false);
   const [taggingContent, setTaggingContent] = useState(false);
+  const [refreshingAll, setRefreshingAll] = useState(false);
 
   const postsAgg = usePostsAggregates(range);
-  const insights = useInsights(range);
+  const postTrend = usePostDerivedTrend(range);
   const follower = useFollowerGrowth();
   const lastSync = useLastSync();
-  const insightCount = useInsightCount();
 
   // Admin check
   const [isAdmin, setIsAdmin] = useState(false);
@@ -234,7 +209,7 @@ export default function ThreadsAnalytics() {
       toast.success(`Synced ${data?.posts || 0} posts, analyzed ${data?.analyzed || 0} images`);
       // Refetch
       postsAgg.refetch();
-      insights.refetch();
+      postTrend.refetch();
       follower.refetch();
       lastSync.refetch();
     } catch (e: any) {
@@ -261,8 +236,7 @@ export default function ThreadsAnalytics() {
         if (!fromDate) break;
       }
       toast.success(`Backfill complete — ${totalDays} days processed`);
-      insights.refetch();
-      insightCount.refetch();
+      postTrend.refetch();
     } catch (e: any) {
       toast.error(e.message || "Backfill failed");
     } finally {
@@ -317,27 +291,49 @@ export default function ThreadsAnalytics() {
     }
   };
 
-  // Chart data
-  const chartData = (insights.data || []).map((row) => ({
-    date: row.metric_date,
-    views: row.profile_views,
-    interactions: (row.total_likes || 0) + (row.total_replies || 0) + (row.total_reposts || 0) + (row.total_quotes || 0),
-    followers: row.follower_count,
-  }));
+  const handleRefreshAll = async () => {
+    setRefreshingAll(true);
+    try {
+      let totalRefreshed = 0;
+      for (let i = 0; i < 10; i++) {
+        const { data, error } = await supabase.functions.invoke("threads-sync", {
+          body: { action: "refresh-all-insights" },
+        });
+        if (error) throw error;
+        totalRefreshed += data?.refreshed || 0;
+        if ((data?.remaining || 0) === 0) break;
+        toast.info(`Refreshed ${totalRefreshed} posts, ${data?.remaining} remaining...`);
+      }
+      toast.success(`Refreshed insights for ${totalRefreshed} posts`);
+      postsAgg.refetch();
+      postTrend.refetch();
+    } catch (e: any) {
+      toast.error(e.message || "Refresh failed");
+    } finally {
+      setRefreshingAll(false);
+    }
+  };
 
-  // 7-day rolling average engagement
-  const chartWithRolling = chartData.map((row, i) => {
-    const window = chartData.slice(Math.max(0, i - 6), i + 1);
+  // Chart data derived from posts
+  const trendData = postTrend.data || [];
+  const chartWithRolling = trendData.map((row, i) => {
+    const window = trendData.slice(Math.max(0, i - 6), i + 1);
     const totalViews = window.reduce((s, w) => s + w.views, 0);
-    const totalInteractions = window.reduce((s, w) => s + w.interactions, 0);
+    const totalInteractions = window.reduce((s, w) => s + w.likes + w.replies + w.reposts + w.quotes, 0);
     const rollingEng = totalViews > 0 ? (totalInteractions / totalViews) * 100 : 0;
-    return { ...row, rollingEng: Math.round(rollingEng * 100) / 100 };
+    return { ...row, interactions: row.likes + row.replies + row.reposts + row.quotes, rollingEng: Math.round(rollingEng * 100) / 100 };
   });
 
-  // Sparkline data (last 30 days from insights)
-  const spark30 = (insights.data || []).slice(-30);
-  const sparkViews = spark30.map((r) => ({ v: r.profile_views }));
-  const sparkFollowers = spark30.map((r) => ({ v: r.follower_count }));
+  // Cumulative engagement as follower growth proxy
+  const cumulativeData = trendData.reduce<{ date: string; cumViews: number; cumEngagement: number }[]>((acc, row) => {
+    const prev = acc.length ? acc[acc.length - 1] : { cumViews: 0, cumEngagement: 0 };
+    acc.push({ date: row.date, cumViews: prev.cumViews + row.views, cumEngagement: prev.cumEngagement + row.likes + row.replies + row.reposts + row.quotes });
+    return acc;
+  }, []);
+
+  // Sparkline data from post trend
+  const spark30 = trendData.slice(-30);
+  const sparkViews = spark30.map((r) => ({ v: r.views }));
 
   const ranges: DateRange[] = ["7d", "30d", "90d", "all"];
 
@@ -392,8 +388,6 @@ export default function ThreadsAnalytics() {
               icon={Users}
               label="Followers"
               value={follower.data ? fmt(follower.data.current) : "—"}
-              sparkData={sparkFollowers}
-              sparkKey="v"
               color="#22c55e"
             />
             <MetricCard
@@ -423,7 +417,7 @@ export default function ThreadsAnalytics() {
           <Card>
             <CardContent className="p-4 md:p-6">
               <h3 className="text-sm font-medium text-muted-foreground mb-4">Engagement Trend</h3>
-              {insights.isLoading ? (
+              {postTrend.isLoading ? (
                 <Skeleton className="h-[300px]" />
               ) : (
                 <div className="h-[300px]">
@@ -437,7 +431,7 @@ export default function ThreadsAnalytics() {
                         contentStyle={{ background: "hsl(var(--background))", border: "1px solid hsl(var(--border))", borderRadius: 8, fontSize: 12 }}
                       />
                       <Legend />
-                      <Line yAxisId="left" type="monotone" dataKey="views" name="Profile Views" stroke="hsl(var(--primary))" strokeWidth={2} dot={false} />
+                      <Line yAxisId="left" type="monotone" dataKey="views" name="Views" stroke="hsl(var(--primary))" strokeWidth={2} dot={false} />
                       <Line yAxisId="left" type="monotone" dataKey="interactions" name="Interactions" stroke="#f59e0b" strokeWidth={2} dot={false} />
                       <Line yAxisId="right" type="monotone" dataKey="rollingEng" name="7d Avg Eng %" stroke="#8b5cf6" strokeWidth={1.5} strokeDasharray="5 5" dot={false} />
                     </LineChart>
@@ -447,29 +441,32 @@ export default function ThreadsAnalytics() {
             </CardContent>
           </Card>
 
-          {/* Section 4: Follower Growth */}
+          {/* Section 4: Cumulative Engagement Growth */}
           <Card>
             <CardContent className="p-4 md:p-6">
-              <h3 className="text-sm font-medium text-muted-foreground mb-4">Follower Growth</h3>
-              {insights.isLoading ? (
+              <h3 className="text-sm font-medium text-muted-foreground mb-4">Cumulative Engagement Growth</h3>
+              {postTrend.isLoading ? (
                 <Skeleton className="h-[250px]" />
               ) : (
                 <div className="h-[250px]">
                   <ResponsiveContainer width="100%" height="100%">
-                    <AreaChart data={chartData}>
+                    <AreaChart data={cumulativeData}>
                       <defs>
-                        <linearGradient id="followerGradient" x1="0" y1="0" x2="0" y2="1">
+                        <linearGradient id="cumGradient" x1="0" y1="0" x2="0" y2="1">
                           <stop offset="5%" stopColor="#22c55e" stopOpacity={0.3} />
                           <stop offset="95%" stopColor="#22c55e" stopOpacity={0} />
                         </linearGradient>
                       </defs>
                       <CartesianGrid strokeDasharray="3 3" className="stroke-border" />
                       <XAxis dataKey="date" tick={{ fontSize: 11 }} tickFormatter={(v) => v.slice(5)} />
-                      <YAxis tick={{ fontSize: 11 }} />
+                      <YAxis yAxisId="left" tick={{ fontSize: 11 }} />
+                      <YAxis yAxisId="right" orientation="right" tick={{ fontSize: 11 }} />
                       <Tooltip
                         contentStyle={{ background: "hsl(var(--background))", border: "1px solid hsl(var(--border))", borderRadius: 8, fontSize: 12 }}
                       />
-                      <Area type="monotone" dataKey="followers" name="Followers" stroke="#22c55e" fill="url(#followerGradient)" strokeWidth={2} />
+                      <Legend />
+                      <Area yAxisId="left" type="monotone" dataKey="cumViews" name="Cumulative Views" stroke="hsl(var(--primary))" fill="url(#cumGradient)" strokeWidth={2} />
+                      <Area yAxisId="right" type="monotone" dataKey="cumEngagement" name="Cumulative Engagement" stroke="#22c55e" fill="none" strokeWidth={2} />
                     </AreaChart>
                   </ResponsiveContainer>
                 </div>
@@ -499,12 +496,14 @@ export default function ThreadsAnalytics() {
                 : "Never"}
             </span>
             <div className="ml-auto flex flex-wrap gap-2">
-              {(insightCount.data || 0) < 30 && (
-                <Button variant="outline" size="sm" onClick={handleBackfill} disabled={backfilling}>
-                  {backfilling && <RefreshCw className="w-3 h-3 animate-spin mr-1" />}
-                  Backfill
-                </Button>
-              )}
+              <Button variant="outline" size="sm" onClick={handleRefreshAll} disabled={refreshingAll}>
+                {refreshingAll && <RefreshCw className="w-3 h-3 animate-spin mr-1" />}
+                Refresh All Insights
+              </Button>
+              <Button variant="outline" size="sm" onClick={handleBackfill} disabled={backfilling}>
+                {backfilling && <RefreshCw className="w-3 h-3 animate-spin mr-1" />}
+                Backfill
+              </Button>
               <Button variant="outline" size="sm" onClick={handleSyncDemographics} disabled={syncingDemographics}>
                 {syncingDemographics && <RefreshCw className="w-3 h-3 animate-spin mr-1" />}
                 Demographics
