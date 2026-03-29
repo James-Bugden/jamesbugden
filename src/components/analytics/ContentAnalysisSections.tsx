@@ -69,22 +69,25 @@ function MediaTypeSection({ posts, overallAvgEng }: { posts: ThreadsPost[]; over
 // ── Section 6: Post length ─────────────────────────────────────────
 function PostLengthSection({ posts }: { posts: ThreadsPost[] }) {
   const buckets = useMemo(() => {
+    const validPosts = posts.filter(p => p.text_length != null && p.text_length > 0);
     const b = [
       { label: "Short (<100)", min: 0, max: 100, posts: [] as ThreadsPost[] },
       { label: "Medium (100-280)", min: 100, max: 280, posts: [] as ThreadsPost[] },
       { label: "Long (280-500)", min: 280, max: 500, posts: [] as ThreadsPost[] },
       { label: "Extra Long (500+)", min: 500, max: Infinity, posts: [] as ThreadsPost[] },
     ];
-    for (const p of posts) {
-      const len = p.text_length || 0;
+    for (const p of validPosts) {
+      const len = p.text_length!;
       const bucket = b.find(x => len >= x.min && len < x.max);
       if (bucket) bucket.posts.push(p);
     }
-    return b.map(x => ({
-      label: x.label,
-      avgEng: avg(x.posts.map(p => Number(p.engagement_rate))) * 100,
-      count: x.posts.length,
-    }));
+    return b
+      .filter(x => x.posts.length > 0)
+      .map(x => ({
+        label: x.label,
+        avgEng: avg(x.posts.map(p => Number(p.engagement_rate))) * 100,
+        count: x.posts.length,
+      }));
   }, [posts]);
 
   return (
