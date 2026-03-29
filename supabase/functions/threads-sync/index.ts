@@ -673,25 +673,27 @@ serve(async (req) => {
     }
 
     const token = authHeader.replace("Bearer ", "");
-    const isCronCall = token === Deno.env.get("SUPABASE_ANON_KEY");
+    const anonKey = Deno.env.get("SUPABASE_ANON_KEY") || Deno.env.get("SUPABASE_PUBLISHABLE_KEY") || "";
+    const serviceKey = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY") || "";
+    const isCronCall = token === anonKey || token === serviceKey;
 
     if (!isCronCall) {
+      // Verify user JWT and check admin
       const sb = createClient(
         Deno.env.get("SUPABASE_URL")!,
-        Deno.env.get("SUPABASE_ANON_KEY")!,
+        anonKey,
         { global: { headers: { Authorization: authHeader } } }
       );
 
-      const { data: claimsData, error: claimsError } = await sb.auth.getClaims(token);
-      if (claimsError || !claimsData?.claims) {
+      const { data: { user }, error: userError } = await sb.auth.getUser(token);
+      if (userError || !user) {
         return new Response(JSON.stringify({ error: "Unauthorized" }), {
           status: 401,
           headers: { ...corsHeaders, "Content-Type": "application/json" },
         });
       }
 
-      const userId = claimsData.claims.sub as string;
-      const { data: isAdmin } = await supabaseAdmin().rpc("is_admin", { _user_id: userId });
+      const { data: isAdmin } = await supabaseAdmin().rpc("is_admin", { _user_id: user.id });
       if (!isAdmin) {
         return new Response(JSON.stringify({ error: "Forbidden" }), {
           status: 403,
