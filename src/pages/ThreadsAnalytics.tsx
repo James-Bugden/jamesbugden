@@ -744,7 +744,7 @@ export default function ThreadsAnalytics() {
                             const net = followerDeltas.data!.netGain;
                             return ` Net ${net >= 0 ? "+" : ""}${net} in this period.`;
                           }
-                          if (deltas.length > 0) return " Tracking started — growth will appear after daily syncs.";
+                          if (deltas.length > 0) return " Stable — no change in this period.";
                           return " Run Backfill to start tracking.";
                         })()}
                       </p>
