@@ -52,6 +52,7 @@ function MediaTypeSection({ posts, overallAvgEng }: { posts: ThreadsPost[]; over
                   <span className="text-sm font-medium">{MEDIA_LABELS[type] || type}</span>
                 </div>
                 <div className="text-2xl font-bold">{pct(avgEng)}</div>
+                <div className="text-[10px] text-muted-foreground/70 -mt-0.5">avg engagement rate</div>
                 <div className="text-xs text-muted-foreground">{items.length} posts · {fmt(Math.round(avgViews))} avg views</div>
                 <div className={`text-xs font-medium ${diff >= 0 ? "text-green-600" : "text-red-500"}`}>
                   {diff >= 0 ? "+" : ""}{diff.toFixed(1)}% vs avg
