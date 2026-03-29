@@ -431,18 +431,47 @@ function PostFrequencySection({ posts }: { posts: ThreadsPost[] }) {
 }
 
 // ── Tag Breakdown Chart (simplified) ───────────────────────────────
-function TagBreakdownChart({ posts, field }: { posts: ThreadsPost[]; field: "content_topic" | "content_format" | "content_tone" | "content_cta" | "content_audience" }) {
-  const { data: chartData, bestLabel } = useMemo(() => {
+function TagBreakdownChart({ posts, field, followerDeltas }: { posts: ThreadsPost[]; field: "content_topic" | "content_format" | "content_tone" | "content_cta" | "content_audience"; followerDeltas?: FollowerDelta[] }) {
+  const { data: chartData, bestLabel, bestGrowthLabel } = useMemo(() => {
     const tagged = posts.filter(p => p[field]);
-    if (!tagged.length) return { data: [], bestLabel: "" };
+    if (!tagged.length) return { data: [], bestLabel: "", bestGrowthLabel: "" };
     const map: Record<string, number[]> = {};
     for (const p of tagged) { const val = p[field]!; if (!map[val]) map[val] = []; map[val].push(Number(p.engagement_rate)); }
     const overallAvg = avg(tagged.map(p => Number(p.engagement_rate)));
-    const d = Object.entries(map).map(([label, rates]) => ({
-      label, avgEng: +(avg(rates) * 100).toFixed(3), count: rates.length, aboveAvg: avg(rates) >= overallAvg,
-    })).sort((a, b) => b.avgEng - a.avgEng);
-    return { data: d, bestLabel: d[0]?.label || "" };
-  }, [posts, field]);
+
+    // Growth correlation: which tag values correlate with follower gain days?
+    const growthByTag: Record<string, { totalDelta: number; postCount: number }> = {};
+    if (followerDeltas && followerDeltas.some(d => d.delta !== 0)) {
+      const deltaByDate: Record<string, number> = {};
+      for (const fd of followerDeltas) deltaByDate[fd.date] = fd.delta;
+      for (const p of tagged) {
+        if (!p.posted_at || !p[field]) continue;
+        const postDate = p.posted_at.split("T")[0];
+        // Check ±1 day around post for follower changes
+        const d = new Date(postDate);
+        let delta = deltaByDate[postDate] || 0;
+        const nextDay = new Date(d); nextDay.setDate(nextDay.getDate() + 1);
+        delta += deltaByDate[nextDay.toISOString().split("T")[0]] || 0;
+        const tag = p[field]!;
+        if (!growthByTag[tag]) growthByTag[tag] = { totalDelta: 0, postCount: 0 };
+        growthByTag[tag].totalDelta += delta;
+        growthByTag[tag].postCount += 1;
+      }
+    }
+
+    const d = Object.entries(map).map(([label, rates]) => {
+      const growth = growthByTag[label];
+      const growthPerPost = growth && growth.postCount > 0 ? growth.totalDelta / growth.postCount : null;
+      return {
+        label, avgEng: +(avg(rates) * 100).toFixed(3), count: rates.length, aboveAvg: avg(rates) >= overallAvg,
+        growthPerPost,
+      };
+    }).sort((a, b) => b.avgEng - a.avgEng);
+
+    const bestGrowth = [...d].filter(x => x.growthPerPost !== null).sort((a, b) => (b.growthPerPost || 0) - (a.growthPerPost || 0))[0];
+
+    return { data: d, bestLabel: d[0]?.label || "", bestGrowthLabel: bestGrowth?.label || "" };
+  }, [posts, field, followerDeltas]);
 
   if (!chartData.length) return (
     <div className="flex flex-col items-center justify-center py-12 text-gray-400">
@@ -452,14 +481,22 @@ function TagBreakdownChart({ posts, field }: { posts: ThreadsPost[]; field: "con
   );
 
   const maxEng = Math.max(...chartData.map(d => d.avgEng), 0.01);
+  const hasGrowthData = chartData.some(d => d.growthPerPost !== null && d.growthPerPost !== 0);
 
   return (
     <div className="space-y-3">
-      {bestLabel && (
-        <p className="text-xs text-gray-500">
-          Your best {field.replace("content_", "")}: <span className="font-semibold text-gray-900">{bestLabel}</span>
-        </p>
-      )}
+      <div className="flex flex-wrap gap-x-6 gap-y-1">
+        {bestLabel && (
+          <p className="text-xs text-gray-500">
+            Best for engagement: <span className="font-semibold text-gray-900">{bestLabel}</span>
+          </p>
+        )}
+        {hasGrowthData && bestGrowthLabel && (
+          <p className="text-xs text-gray-500">
+            Best for growth: <span className="font-semibold text-emerald-600">{bestGrowthLabel}</span>
+          </p>
+        )}
+      </div>
       <div className="space-y-2">
         {chartData.map((d) => (
           <div key={d.label} className="flex items-center gap-3">
@@ -471,9 +508,17 @@ function TagBreakdownChart({ posts, field }: { posts: ThreadsPost[]; field: "con
               />
             </div>
             <span className="text-[11px] font-semibold text-gray-900 w-14 text-right">{d.count} posts</span>
-            <span className={`text-[10px] font-medium px-1.5 py-0.5 rounded-full w-20 text-center ${d.aboveAvg ? "bg-emerald-50 text-emerald-600" : "bg-gray-50 text-gray-400"}`}>
-              {d.aboveAvg ? "Above avg" : "Below avg"}
-            </span>
+            {hasGrowthData && d.growthPerPost !== null ? (
+              <span className={`text-[10px] font-medium px-1.5 py-0.5 rounded-full w-20 text-center ${
+                d.growthPerPost > 0 ? "bg-emerald-50 text-emerald-600" : d.growthPerPost < 0 ? "bg-red-50 text-red-500" : "bg-gray-50 text-gray-400"
+              }`}>
+                {d.growthPerPost > 0 ? "+" : ""}{d.growthPerPost.toFixed(1)} fol/post
+              </span>
+            ) : (
+              <span className={`text-[10px] font-medium px-1.5 py-0.5 rounded-full w-20 text-center ${d.aboveAvg ? "bg-emerald-50 text-emerald-600" : "bg-gray-50 text-gray-400"}`}>
+                {d.aboveAvg ? "Above avg" : "Below avg"}
+              </span>
+            )}
           </div>
         ))}
       </div>
