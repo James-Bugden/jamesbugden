@@ -153,33 +153,55 @@ function MediaTypeSection({ posts, overallAvgEng }: { posts: ThreadsPost[]; over
     return Object.entries(map).sort((a, b) => b[1].length - a[1].length);
   }, [posts]);
 
+  // Find the best format
+  const bestType = useMemo(() => {
+    let best = { type: "", avg: 0 };
+    for (const [type, items] of groups) {
+      const a = avg(items.map(p => Number(p.engagement_rate)));
+      if (a > best.avg) best = { type, avg: a };
+    }
+    return best.type;
+  }, [groups]);
+
+  // Max avg views for bar scaling
+  const maxViews = useMemo(() => Math.max(...groups.map(([, items]) => avg(items.map(p => p.views))), 1), [groups]);
+
   return (
     <div className="bg-white rounded-xl border border-gray-100 p-6 shadow-sm">
-      <h3 className="text-sm font-semibold text-gray-900 mb-1">Performance by Type</h3>
-      <p className="text-xs text-gray-400 mb-5 flex items-center gap-3">
-        <span className="inline-flex items-center gap-1"><span className="w-2 h-2 rounded-full bg-emerald-500" />Above avg</span>
-        <span className="inline-flex items-center gap-1"><span className="w-2 h-2 rounded-full bg-red-400" />Below avg</span>
-      </p>
-      <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
+      <h3 className="text-sm font-semibold text-gray-900 mb-4">Performance by Format</h3>
+      <div className="space-y-3">
         {groups.map(([type, items]) => {
           const avgEng = avg(items.map(p => Number(p.engagement_rate)));
           const avgViews = avg(items.map(p => p.views));
           const isAbove = avgEng >= overallAvgEng;
+          const isBest = type === bestType;
           const Icon = MEDIA_ICONS[type] || Type;
-          const diff = overallAvgEng > 0 ? Math.round(((avgEng - overallAvgEng) / overallAvgEng) * 100) : 0;
+          const barWidth = Math.max((avgViews / maxViews) * 100, 8);
+          const rating = avgEng >= overallAvgEng * 1.3 ? "High" : avgEng >= overallAvgEng * 0.7 ? "Medium" : "Low";
+          const ratingColor = rating === "High" ? "text-emerald-600 bg-emerald-50" : rating === "Medium" ? "text-amber-600 bg-amber-50" : "text-red-500 bg-red-50";
+
           return (
-            <div key={type} className={`rounded-xl border-2 p-5 space-y-2 transition-colors ${isAbove ? "border-emerald-100 bg-emerald-50/30" : "border-gray-100 bg-gray-50/30"}`}>
-              <div className="flex items-center gap-2">
-                <div className={`w-8 h-8 rounded-lg flex items-center justify-center ${isAbove ? "bg-emerald-100" : "bg-gray-100"}`}>
-                  <Icon className={`w-4 h-4 ${isAbove ? "text-emerald-600" : "text-gray-400"}`} />
+            <div key={type} className={`rounded-xl border p-4 transition-colors ${isBest ? "border-emerald-200 bg-emerald-50/30" : "border-gray-100"}`}>
+              <div className="flex items-center justify-between mb-2">
+                <div className="flex items-center gap-2">
+                  <div className={`w-7 h-7 rounded-lg flex items-center justify-center ${isBest ? "bg-emerald-100" : "bg-gray-100"}`}>
+                    <Icon className={`w-3.5 h-3.5 ${isBest ? "text-emerald-600" : "text-gray-400"}`} />
+                  </div>
+                  <span className="text-sm font-semibold text-gray-900">{MEDIA_LABELS[type] || type}</span>
+                  {isBest && <span className="text-[10px] font-bold text-emerald-600 bg-emerald-100 px-2 py-0.5 rounded-full">Your best format</span>}
                 </div>
-                <span className="text-sm font-semibold text-gray-900">{MEDIA_LABELS[type] || type}</span>
+                <div className="flex items-center gap-2">
+                  <span className={`text-[10px] font-semibold px-2 py-0.5 rounded-full ${ratingColor}`}>{rating}</span>
+                  <span className="text-xs text-gray-400">{items.length} posts</span>
+                </div>
               </div>
-              <div className="text-3xl font-bold text-gray-900">{pct(avgEng)}</div>
-              <div className={`text-xs font-medium ${isAbove ? "text-emerald-600" : "text-red-400"}`}>
-                {diff > 0 ? "+" : ""}{diff}% vs avg
+              {/* Visual bar */}
+              <div className="flex items-center gap-3">
+                <div className="flex-1 h-2 bg-gray-100 rounded-full overflow-hidden">
+                  <div className={`h-full rounded-full ${isAbove ? "bg-emerald-400" : "bg-gray-300"}`} style={{ width: `${barWidth}%` }} />
+                </div>
+                <span className="text-xs font-medium text-gray-600 whitespace-nowrap">{fmt(Math.round(avgViews))} avg views</span>
               </div>
-              <div className="text-xs text-gray-400">{items.length} posts · {fmt(Math.round(avgViews))} avg views</div>
             </div>
           );
         })}
@@ -247,16 +269,47 @@ function PostingTimeHeatmap({ posts }: { posts: ThreadsPost[] }) {
     return intensity > 0.4 ? "text-white" : "";
   };
 
+  // Derive best time callout
+  const bestSlot = useMemo(() => {
+    let best = { day: "", hour: 0, avgEng: 0 };
+    for (const [key, cell] of Object.entries(grid)) {
+      if (cell.count === 0) continue;
+      const avgE = cell.totalEng / cell.count;
+      if (avgE > best.avgEng) {
+        const [day, hour] = key.split("-");
+        best = { day, hour: Number(hour), avgEng: avgE };
+      }
+    }
+    return best.day ? best : null;
+  }, [grid]);
+
+  const engLevel = (avgE: number) => {
+    if (maxEng === 0) return "No data";
+    const ratio = avgE / maxEng;
+    if (ratio > 0.7) return "Great engagement";
+    if (ratio > 0.4) return "Good engagement";
+    if (ratio > 0.2) return "Some engagement";
+    return "Low engagement";
+  };
+
   return (
     <div className="bg-white rounded-xl border border-gray-100 p-6 shadow-sm space-y-4">
       <div className="flex items-center gap-3">
         <div className="w-9 h-9 rounded-xl bg-blue-50 flex items-center justify-center">
           <Clock className="w-5 h-5 text-blue-500" />
         </div>
-        <div>
+        <div className="flex-1">
           <h3 className="text-sm font-semibold text-gray-900">Best Time to Post</h3>
-          <p className="text-xs text-gray-400">Avg engagement by day & hour (Taipei time). Darker = higher engagement.</p>
+          <p className="text-xs text-gray-400">Darker = higher engagement (Taipei time)</p>
         </div>
+        {bestSlot && (
+          <div className="text-right">
+            <p className="text-xs font-semibold text-blue-600">
+              {bestSlot.day} {bestSlot.hour.toString().padStart(2, "0")}:00
+            </p>
+            <p className="text-[10px] text-gray-400">Your best slot</p>
+          </div>
+        )}
       </div>
 
       <div className="overflow-x-auto">
@@ -293,9 +346,7 @@ function PostingTimeHeatmap({ posts }: { posts: ThreadsPost[] }) {
                       <TooltipContent side="top" className="text-xs">
                         <p className="font-semibold">{day} {hour}:00</p>
                         {count > 0 ? (
-                          <>
-                            <p>{count} post{count > 1 ? "s" : ""} · {pct(avgE)} eng · {fmt(avgV)} avg views</p>
-                          </>
+                          <p>{count} post{count > 1 ? "s" : ""} · {engLevel(avgE)} · {fmt(avgV)} avg views</p>
                         ) : (
                           <p className="text-gray-400">No posts at this time</p>
                         )}
@@ -379,16 +430,18 @@ function PostFrequencySection({ posts }: { posts: ThreadsPost[] }) {
   );
 }
 
-// ── Tag Breakdown Chart ────────────────────────────────────────────
+// ── Tag Breakdown Chart (simplified) ───────────────────────────────
 function TagBreakdownChart({ posts, field }: { posts: ThreadsPost[]; field: "content_topic" | "content_format" | "content_tone" | "content_cta" | "content_audience" }) {
-  const { data: chartData, overallAvgPct } = useMemo(() => {
+  const { data: chartData, bestLabel } = useMemo(() => {
     const tagged = posts.filter(p => p[field]);
-    if (!tagged.length) return { data: [], overallAvgPct: 0 };
+    if (!tagged.length) return { data: [], bestLabel: "" };
     const map: Record<string, number[]> = {};
     for (const p of tagged) { const val = p[field]!; if (!map[val]) map[val] = []; map[val].push(Number(p.engagement_rate)); }
     const overallAvg = avg(tagged.map(p => Number(p.engagement_rate)));
-    const d = Object.entries(map).map(([label, rates]) => ({ label, avgEng: +(avg(rates) * 100).toFixed(3), count: rates.length, aboveAvg: avg(rates) >= overallAvg })).sort((a, b) => b.avgEng - a.avgEng);
-    return { data: d, overallAvgPct: +(overallAvg * 100).toFixed(3) };
+    const d = Object.entries(map).map(([label, rates]) => ({
+      label, avgEng: +(avg(rates) * 100).toFixed(3), count: rates.length, aboveAvg: avg(rates) >= overallAvg,
+    })).sort((a, b) => b.avgEng - a.avgEng);
+    return { data: d, bestLabel: d[0]?.label || "" };
   }, [posts, field]);
 
   if (!chartData.length) return (
@@ -398,29 +451,32 @@ function TagBreakdownChart({ posts, field }: { posts: ThreadsPost[]; field: "con
     </div>
   );
 
+  const maxEng = Math.max(...chartData.map(d => d.avgEng), 0.01);
+
   return (
-    <div className="h-[300px]">
-      <ResponsiveContainer width="100%" height="100%">
-        <BarChart data={chartData} layout="vertical" margin={{ left: 10, right: 50 }}>
-          <CartesianGrid strokeDasharray="3 3" stroke={gridStroke} horizontal={false} />
-          <XAxis type="number" tick={axisTickStyle} tickFormatter={v => v.toFixed(1) + "%"} axisLine={false} tickLine={false} />
-          <YAxis dataKey="label" type="category" width={120} tick={{ fontSize: 11, fill: "#374151" }} axisLine={false} tickLine={false} />
-          <RechartsTooltip contentStyle={tipStyle}
-            formatter={(v: number) => [v.toFixed(2) + "% engagement"]}
-            labelFormatter={(l) => l} />
-          <ReferenceLine x={overallAvgPct} stroke="#f59e0b" strokeDasharray="6 4" strokeWidth={1.5} />
-          <Bar dataKey="avgEng" name="Engagement %" radius={[0, 6, 6, 0]}
-            label={({ x, y, width, height, index }: any) => {
-              const count = chartData[index]?.count ?? 0;
-              return <text x={x + width + 6} y={y + height / 2} dy={4} fontSize={10} fill="#9ca3af">{count}</text>;
-            }}
-          >
-            {chartData.map((d, i) => (
-              <Cell key={i} fill={d.aboveAvg ? "#22c55e" : "#cbd5e1"} />
-            ))}
-          </Bar>
-        </BarChart>
-      </ResponsiveContainer>
+    <div className="space-y-3">
+      {bestLabel && (
+        <p className="text-xs text-gray-500">
+          Your best {field.replace("content_", "")}: <span className="font-semibold text-gray-900">{bestLabel}</span>
+        </p>
+      )}
+      <div className="space-y-2">
+        {chartData.map((d) => (
+          <div key={d.label} className="flex items-center gap-3">
+            <span className="text-xs text-gray-700 w-28 truncate font-medium text-right">{d.label}</span>
+            <div className="flex-1 h-5 bg-gray-50 rounded-full overflow-hidden relative">
+              <div
+                className={`h-full rounded-full ${d.aboveAvg ? "bg-emerald-400" : "bg-gray-300"}`}
+                style={{ width: `${Math.max((d.avgEng / maxEng) * 100, 4)}%` }}
+              />
+            </div>
+            <span className="text-[11px] font-semibold text-gray-900 w-14 text-right">{d.count} posts</span>
+            <span className={`text-[10px] font-medium px-1.5 py-0.5 rounded-full w-20 text-center ${d.aboveAvg ? "bg-emerald-50 text-emerald-600" : "bg-gray-50 text-gray-400"}`}>
+              {d.aboveAvg ? "Above avg" : "Below avg"}
+            </span>
+          </div>
+        ))}
+      </div>
     </div>
   );
 }
@@ -456,118 +512,81 @@ function TagInsightsTabs({ posts }: { posts: ThreadsPost[] }) {
   );
 }
 
-// ── Best For comparison table ──────────────────────────────────────
-function BestForTable({ posts, followerDeltas }: { posts: ThreadsPost[]; followerDeltas?: { date: string; delta: number }[] }) {
-  const data = useMemo(() => {
+// ── Best For Winner Cards ──────────────────────────────────────────
+function BestForCards({ posts, followerDeltas }: { posts: ThreadsPost[]; followerDeltas?: { date: string; delta: number }[] }) {
+  const winners = useMemo(() => {
     const mediaGroups: Record<string, ThreadsPost[]> = {};
     for (const p of posts) { const t = p.media_type || "OTHER"; if (!mediaGroups[t]) mediaGroups[t] = []; mediaGroups[t].push(p); }
+    const eligible = Object.entries(mediaGroups).filter(([, items]) => items.length >= 3);
+    if (eligible.length < 2) return null;
 
-    let growthByType: Record<string, number> | null = null;
+    const byViews = eligible.sort((a, b) => avg(b[1].map(p => p.views)) - avg(a[1].map(p => p.views)))[0];
+    const byEng = [...eligible].sort((a, b) => avg(b[1].map(p => Number(p.engagement_rate))) - avg(a[1].map(p => Number(p.engagement_rate))))[0];
+
+    const cards: { icon: any; iconColor: string; bgColor: string; title: string; winner: string; metric: string; detail: string }[] = [
+      {
+        icon: Eye, iconColor: "#3b82f6", bgColor: "bg-blue-50",
+        title: "Best for Reach",
+        winner: MEDIA_LABELS[byViews[0]] || byViews[0],
+        metric: `${fmt(Math.round(avg(byViews[1].map(p => p.views))))} avg views`,
+        detail: `Based on ${byViews[1].length} posts`,
+      },
+      {
+        icon: Heart, iconColor: "#ec4899", bgColor: "bg-pink-50",
+        title: "Best for Engagement",
+        winner: MEDIA_LABELS[byEng[0]] || byEng[0],
+        metric: `${pct(avg(byEng[1].map(p => Number(p.engagement_rate))))} rate`,
+        detail: `Based on ${byEng[1].length} posts`,
+      },
+    ];
+
+    // Growth card (if data available)
     if (followerDeltas && followerDeltas.length > 0 && followerDeltas.some(d => d.delta !== 0)) {
-      growthByType = {};
       const weekPosts: Record<string, ThreadsPost[]> = {};
       for (const p of posts) { if (!p.posted_at) continue; const d = new Date(p.posted_at); const ws = new Date(d); ws.setDate(d.getDate() - d.getDay()); const key = ws.toISOString().split("T")[0]; if (!weekPosts[key]) weekPosts[key] = []; weekPosts[key].push(p); }
       const weekDeltas: Record<string, number> = {};
       for (const fd of followerDeltas) { const d = new Date(fd.date); const ws = new Date(d); ws.setDate(d.getDate() - d.getDay()); const key = ws.toISOString().split("T")[0]; weekDeltas[key] = (weekDeltas[key] || 0) + fd.delta; }
-      const typeWeeks: Record<string, { totalDelta: number; totalPosts: number }> = {};
-      for (const [week, weekPostsList] of Object.entries(weekPosts)) {
+      const typeGrowth: Record<string, { delta: number; posts: number }> = {};
+      for (const [week, wp] of Object.entries(weekPosts)) {
         const delta = weekDeltas[week] || 0;
-        const total = weekPostsList.length;
+        const total = wp.length;
         if (total === 0) continue;
-        const typeCounts: Record<string, number> = {};
-        for (const p of weekPostsList) typeCounts[p.media_type || "OTHER"] = (typeCounts[p.media_type || "OTHER"] || 0) + 1;
-        for (const [type, count] of Object.entries(typeCounts)) { if (!typeWeeks[type]) typeWeeks[type] = { totalDelta: 0, totalPosts: 0 }; typeWeeks[type].totalDelta += delta * (count / total); typeWeeks[type].totalPosts += count; }
+        const tc: Record<string, number> = {};
+        for (const p of wp) tc[p.media_type || "OTHER"] = (tc[p.media_type || "OTHER"] || 0) + 1;
+        for (const [type, count] of Object.entries(tc)) { if (!typeGrowth[type]) typeGrowth[type] = { delta: 0, posts: 0 }; typeGrowth[type].delta += delta * (count / total); typeGrowth[type].posts += count; }
       }
-      for (const [type, tw] of Object.entries(typeWeeks)) { growthByType[type] = tw.totalPosts > 0 ? tw.totalDelta / tw.totalPosts : 0; }
+      const growthEntries = Object.entries(typeGrowth).filter(([t]) => (mediaGroups[t]?.length || 0) >= 3);
+      if (growthEntries.length > 0) {
+        const best = growthEntries.sort((a, b) => (b[1].delta / b[1].posts) - (a[1].delta / a[1].posts))[0];
+        const perPost = best[1].delta / best[1].posts;
+        cards.push({
+          icon: Users, iconColor: "#22c55e", bgColor: "bg-emerald-50",
+          title: "Best for Growth",
+          winner: MEDIA_LABELS[best[0]] || best[0],
+          metric: `${perPost >= 0 ? "+" : ""}${perPost.toFixed(1)} followers/post`,
+          detail: `Estimated from ${best[1].posts} posts`,
+        });
+      }
     }
 
-    const rows = Object.entries(mediaGroups).filter(([, items]) => items.length >= 3).map(([type, items]) => ({
-      type, label: MEDIA_LABELS[type] || type, count: items.length,
-      avgViews: Math.round(avg(items.map(p => p.views))),
-      avgEng: avg(items.map(p => Number(p.engagement_rate))),
-      growthPerPost: growthByType?.[type] ?? null,
-    }));
-
-    const byViews = [...rows].sort((a, b) => b.avgViews - a.avgViews);
-    const byEng = [...rows].sort((a, b) => b.avgEng - a.avgEng);
-    const byGrowth = growthByType ? [...rows].sort((a, b) => (b.growthPerPost ?? -Infinity) - (a.growthPerPost ?? -Infinity)) : [];
-    const showGrowth = growthByType !== null;
-
-    return rows.map(r => ({
-      ...r,
-      viewsRank: byViews.findIndex(x => x.type === r.type) + 1,
-      engRank: byEng.findIndex(x => x.type === r.type) + 1,
-      growthRank: showGrowth ? byGrowth.findIndex(x => x.type === r.type) + 1 : null,
-    })).sort((a, b) => a.engRank - b.engRank);
+    return cards;
   }, [posts, followerDeltas]);
 
-  if (data.length < 2) return null;
-
-  const rankBadge = (rank: number) => {
-    if (rank === 1) return <span className="inline-flex items-center justify-center w-6 h-6 rounded-full text-[11px] font-bold bg-amber-100 text-amber-700">🥇</span>;
-    if (rank === 2) return <span className="inline-flex items-center justify-center w-6 h-6 rounded-full text-[11px] font-bold bg-gray-100 text-gray-500">🥈</span>;
-    return <span className="inline-flex items-center justify-center w-6 h-6 rounded-full text-[10px] font-bold bg-gray-50 text-gray-400">#{rank}</span>;
-  };
+  if (!winners) return null;
 
   return (
-    <div className="bg-white rounded-xl border border-gray-100 p-6 shadow-sm space-y-5">
-      <div className="flex items-center gap-3">
-        <div className="w-9 h-9 rounded-xl bg-amber-50 flex items-center justify-center">
-          <Trophy className="w-5 h-5 text-amber-500" />
+    <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+      {winners.map((w) => (
+        <div key={w.title} className={`${w.bgColor} rounded-xl border border-gray-100 p-5 space-y-2`}>
+          <div className="flex items-center gap-2">
+            <w.icon className="w-4 h-4" style={{ color: w.iconColor }} />
+            <span className="text-xs font-medium text-gray-500">{w.title}</span>
+          </div>
+          <p className="text-xl font-bold text-gray-900">{w.winner}</p>
+          <p className="text-sm font-semibold" style={{ color: w.iconColor }}>{w.metric}</p>
+          <p className="text-[10px] text-gray-400">{w.detail}</p>
         </div>
-        <div>
-          <h3 className="text-sm font-semibold text-gray-900">Best For: Views vs Engagement vs Growth</h3>
-          <p className="text-xs text-gray-400">Which content types perform best for each goal</p>
-        </div>
-      </div>
-
-      <div className="overflow-x-auto">
-        <table className="w-full text-sm">
-          <thead>
-            <tr className="border-b border-gray-100">
-              <th className="text-left py-3 pr-4 font-medium text-gray-500 text-xs uppercase tracking-wider">Format</th>
-              <th className="text-center py-3 px-4 font-medium text-gray-500 text-xs uppercase tracking-wider"><Eye className="w-3.5 h-3.5 inline mr-1 -mt-0.5" />Views</th>
-              <th className="text-center py-3 px-4 font-medium text-gray-500 text-xs uppercase tracking-wider"><Heart className="w-3.5 h-3.5 inline mr-1 -mt-0.5" />Engagement</th>
-              {data.some(d => d.growthRank !== null) && <th className="text-center py-3 px-4 font-medium text-gray-500 text-xs uppercase tracking-wider"><Users className="w-3.5 h-3.5 inline mr-1 -mt-0.5" />Growth*</th>}
-              <th className="text-right py-3 pl-4 font-medium text-gray-500 text-xs uppercase tracking-wider">Posts</th>
-            </tr>
-          </thead>
-          <tbody>
-            {data.map((d, i) => (
-              <tr key={d.type} className={`border-b border-gray-50 hover:bg-gray-50/50 transition-colors ${i % 2 === 0 ? "bg-gray-50/30" : ""}`}>
-                <td className="py-3.5 pr-4 font-semibold text-gray-900">{d.label}</td>
-                <td className="py-3.5 px-4 text-center">
-                  <div className="flex items-center justify-center gap-2">
-                    {rankBadge(d.viewsRank)}
-                    <span className="text-gray-700 font-medium">{fmt(d.avgViews)}</span>
-                  </div>
-                </td>
-                <td className="py-3.5 px-4 text-center">
-                  <div className="flex items-center justify-center gap-2">
-                    {rankBadge(d.engRank)}
-                    <span className="text-gray-700 font-medium">{pct(d.avgEng)}</span>
-                  </div>
-                </td>
-                {data.some(x => x.growthRank !== null) && (
-                  <td className="py-3.5 px-4 text-center">
-                    {d.growthRank !== null ? (
-                      <div className="flex items-center justify-center gap-2">
-                        {rankBadge(d.growthRank)}
-                        <span className="text-gray-700 font-medium">{d.growthPerPost !== null ? (d.growthPerPost >= 0 ? "+" : "") + d.growthPerPost.toFixed(1) + "/post" : "—"}</span>
-                      </div>
-                    ) : "—"}
-                  </td>
-                )}
-                <td className="py-3.5 pl-4 text-right text-gray-400 font-medium">{d.count}</td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      </div>
-
-      {data.some(d => d.growthRank !== null) && (
-        <p className="text-[10px] text-gray-400 italic">*Growth is estimated by correlating weekly follower changes with post types published that week.</p>
-      )}
+      ))}
     </div>
   );
 }
@@ -592,7 +611,7 @@ export default function ContentAnalysisSections({ range }: { range: DateRange })
 
   return (
     <div className="space-y-5">
-      <BestForTable posts={posts} followerDeltas={followerDeltas} />
+      <BestForCards posts={posts} followerDeltas={followerDeltas} />
       <MediaTypeSection posts={posts} overallAvgEng={overallAvgEng} />
       <PostingTimeHeatmap posts={posts} />
       <PostFrequencySection posts={posts} />
