@@ -183,6 +183,7 @@ export default function ThreadsAnalytics() {
   const [backfilling, setBackfilling] = useState(false);
   const [analyzingImages, setAnalyzingImages] = useState(false);
   const [syncingDemographics, setSyncingDemographics] = useState(false);
+  const [taggingContent, setTaggingContent] = useState(false);
 
   const postsAgg = usePostsAggregates(range);
   const insights = useInsights(range);
