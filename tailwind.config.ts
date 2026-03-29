@@ -88,6 +88,7 @@ export default {
   				'serif'
   			],
   			sans: [
+  				'Inter',
   				'ui-sans-serif',
   				'system-ui',
   				'sans-serif',
