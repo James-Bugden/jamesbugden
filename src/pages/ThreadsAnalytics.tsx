@@ -301,6 +301,22 @@ export default function ThreadsAnalytics() {
     }
   };
 
+  const handleTagContent = async () => {
+    setTaggingContent(true);
+    try {
+      const { data, error } = await supabase.functions.invoke("threads-sync", {
+        body: { action: "tag-content" },
+      });
+      if (error) throw error;
+      toast.success(`Tagged ${data?.tagged || 0} posts, ${data?.remaining || 0} remaining`);
+      postsAgg.refetch();
+    } catch (e: any) {
+      toast.error(e.message || "Content tagging failed");
+    } finally {
+      setTaggingContent(false);
+    }
+  };
+
   // Chart data
   const chartData = (insights.data || []).map((row) => ({
     date: row.metric_date,
