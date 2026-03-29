@@ -572,6 +572,9 @@ serve(async (req) => {
       case "backfill":
         result = await actionBackfill(sb, userId, accessToken, fromDate);
         break;
+      case "tag-content":
+        result = await actionTagContent(sb);
+        break;
       default:
         result = await actionSync(sb, userId, accessToken);
         break;

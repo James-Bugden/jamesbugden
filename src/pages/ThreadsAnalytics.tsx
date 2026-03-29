@@ -496,6 +496,10 @@ export default function ThreadsAnalytics() {
                 {analyzingImages && <RefreshCw className="w-3 h-3 animate-spin mr-1" />}
                 Analyze Images
               </Button>
+              <Button variant="outline" size="sm" onClick={handleTagContent} disabled={taggingContent}>
+                {taggingContent && <RefreshCw className="w-3 h-3 animate-spin mr-1" />}
+                Tag Content
+              </Button>
               <Button size="sm" onClick={handleSync} disabled={syncing}>
                 {syncing ? <RefreshCw className="w-3 h-3 animate-spin mr-1" /> : <RefreshCw className="w-3 h-3 mr-1" />}
                 Sync Now
