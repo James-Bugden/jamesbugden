@@ -659,7 +659,45 @@ function ContentStrategySection({ posts }: { posts: ThreadsPost[] }) {
       });
     }
 
-    // 6. Top 10% sweet spot summary
+    // 6. Best content topic (from AI tags)
+    const topicMap: Record<string, number[]> = {};
+    for (const p of posts) {
+      if (p.content_topic) {
+        if (!topicMap[p.content_topic]) topicMap[p.content_topic] = [];
+        topicMap[p.content_topic].push(Number(p.engagement_rate));
+      }
+    }
+    const bestTopic = Object.entries(topicMap)
+      .filter(([, v]) => v.length >= 2)
+      .sort((a, b) => avg(b[1]) - avg(a[1]))[0];
+    if (bestTopic) {
+      recs.push({
+        icon: <TrendingUp className="w-4 h-4" />,
+        title: `Best topic: ${bestTopic[0]}`,
+        detail: `${pct(avg(bestTopic[1]))} avg engagement across ${bestTopic[1].length} posts.`,
+      });
+    }
+
+    // 7. Best content format (from AI tags)
+    const fmtMap: Record<string, number[]> = {};
+    for (const p of posts) {
+      if (p.content_format) {
+        if (!fmtMap[p.content_format]) fmtMap[p.content_format] = [];
+        fmtMap[p.content_format].push(Number(p.engagement_rate));
+      }
+    }
+    const bestFmt = Object.entries(fmtMap)
+      .filter(([, v]) => v.length >= 2)
+      .sort((a, b) => avg(b[1]) - avg(a[1]))[0];
+    if (bestFmt) {
+      recs.push({
+        icon: <Layers className="w-4 h-4" />,
+        title: `Best format: ${bestFmt[0]}`,
+        detail: `${pct(avg(bestFmt[1]))} avg engagement across ${bestFmt[1].length} posts.`,
+      });
+    }
+
+    // 8. Top 10% sweet spot summary
     const sorted = [...posts].sort((a, b) => Number(b.engagement_rate) - Number(a.engagement_rate));
     const top10 = sorted.slice(0, Math.max(Math.ceil(posts.length * 0.1), 1));
     const topMediaCounts: Record<string, number> = {};
