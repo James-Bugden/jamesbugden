@@ -50,7 +50,14 @@ function LinkClicksSection() {
   const pageData = filtered.slice(page * perPage, (page + 1) * perPage);
 
   if (isLoading) return <Skeleton className="h-[300px] rounded-lg" />;
-  if (!data?.length) return null;
+  if (!data?.length) return (
+    <Card>
+      <CardContent className="p-6 text-center text-muted-foreground">
+        <MousePointerClick className="w-8 h-8 mx-auto mb-2 opacity-50" />
+        <p className="text-sm">No link click data yet. Click <strong>Sync Now</strong> to fetch.</p>
+      </CardContent>
+    </Card>
+  );
 
   return (
     <Card>
