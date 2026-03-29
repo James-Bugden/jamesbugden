@@ -6,11 +6,9 @@ import { Badge } from "@/components/ui/badge";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import {
   BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer,
-  Legend, ComposedChart, Line, Cell,
+  ReferenceLine, Cell,
 } from "recharts";
-import { ExternalLink, Image as ImageIcon, Type, Video, Layers, Lightbulb, Clock, Hash, TrendingUp } from "lucide-react";
-import { useQuery } from "@tanstack/react-query";
-import { supabase } from "@/integrations/supabase/client";
+import { Image as ImageIcon, Type, Video, Layers, Lightbulb, Clock, Hash, TrendingUp } from "lucide-react";
 import { type DateRange, type ThreadsPost, useAllPosts, fmt, pct } from "./analyticsShared";
 
 // ── tooltip style ──────────────────────────────────────────────────
@@ -18,41 +16,50 @@ const tipStyle = { background: "hsl(var(--background))", border: "1px solid hsl(
 
 // ── helpers ────────────────────────────────────────────────────────
 function avg(arr: number[]) { return arr.length ? arr.reduce((a, b) => a + b, 0) / arr.length : 0; }
-function truncate(s: string | null, n: number) { if (!s) return ""; return s.length > n ? s.slice(0, n) + "…" : s; }
 
 const MEDIA_ICONS: Record<string, any> = { TEXT_POST: Type, IMAGE: ImageIcon, CAROUSEL_ALBUM: Layers, VIDEO: Video };
 const MEDIA_LABELS: Record<string, string> = { TEXT_POST: "Text", IMAGE: "Image", CAROUSEL_ALBUM: "Carousel", VIDEO: "Video" };
 
 // ── Content Strategy Section (exported separately for reuse) ──────
 export function ContentStrategySection({ posts }: { posts: ThreadsPost[] }) {
+  const overallAvgEng = useMemo(() => avg(posts.map(p => Number(p.engagement_rate))), [posts]);
+
   const recommendations = useMemo(() => {
     if (!posts.length) return [];
-    const recs: { icon: React.ReactNode; title: string; detail: string }[] = [];
+    const recs: { priority: number; icon: React.ReactNode; title: string; detail: string }[] = [];
+    let priority = 1;
 
-    // 1. Best media type
+    // 1. Best media type — plain language
     const mediaMap: Record<string, number[]> = {};
     for (const p of posts) {
       const t = p.media_type || "OTHER";
       if (!mediaMap[t]) mediaMap[t] = [];
       mediaMap[t].push(Number(p.engagement_rate));
     }
-    const bestMedia = Object.entries(mediaMap)
+    const sortedMedia = Object.entries(mediaMap)
       .filter(([, v]) => v.length >= 3)
-      .sort((a, b) => avg(b[1]) - avg(a[1]))[0];
-    if (bestMedia) {
+      .sort((a, b) => avg(b[1]) - avg(a[1]));
+    if (sortedMedia.length > 0) {
+      const [bestType, bestRates] = sortedMedia[0];
+      const bestAvg = avg(bestRates);
+      const diff = overallAvgEng > 0 ? Math.round(((bestAvg - overallAvgEng) / overallAvgEng) * 100) : 0;
+      const label = MEDIA_LABELS[bestType] || bestType;
       recs.push({
+        priority: priority++,
         icon: <ImageIcon className="w-4 h-4" />,
-        title: `Focus on ${MEDIA_LABELS[bestMedia[0]] || bestMedia[0]} posts`,
-        detail: `${pct(avg(bestMedia[1]))} avg engagement across ${bestMedia[1].length} posts — your best performing format.`,
+        title: `Post more ${label}s`,
+        detail: diff > 0
+          ? `${label} posts get ${diff}% more engagement than your average. You've posted ${bestRates.length} so far.`
+          : `${label} posts are your top format with ${pct(bestAvg)} engagement across ${bestRates.length} posts.`,
       });
     }
 
-    // 2. Optimal post length
+    // 2. Optimal post length — plain language
     const lengthBuckets = [
-      { label: "Short (<100 chars)", min: 0, max: 100 },
-      { label: "Medium (100-280 chars)", min: 100, max: 280 },
-      { label: "Long (280-500 chars)", min: 280, max: 500 },
-      { label: "Extra long (500+ chars)", min: 500, max: Infinity },
+      { label: "under 100 characters", range: "Short", min: 0, max: 100 },
+      { label: "100-280 characters", range: "Medium", min: 100, max: 280 },
+      { label: "280-500 characters", range: "Long", min: 280, max: 500 },
+      { label: "over 500 characters", range: "Extra long", min: 500, max: Infinity },
     ];
     const bestBucket = lengthBuckets
       .map(b => {
@@ -63,16 +70,18 @@ export function ContentStrategySection({ posts }: { posts: ThreadsPost[] }) {
       .sort((a, b) => b.avgViews - a.avgViews)[0];
     if (bestBucket) {
       recs.push({
+        priority: priority++,
         icon: <Type className="w-4 h-4" />,
-        title: `Keep posts ${bestBucket.label.split("(")[1]?.replace(")", "") || bestBucket.label}`,
-        detail: `${fmt(Math.round(bestBucket.avgViews))} avg views — highest reach across ${bestBucket.count} posts.`,
+        title: `Keep it ${bestBucket.range.toLowerCase()}`,
+        detail: `Posts ${bestBucket.label} get ${fmt(Math.round(bestBucket.avgViews))} avg views — the highest reach across your ${bestBucket.count} posts of this length.`,
       });
     }
 
-    // 3. Best posting day + hour
+    // 3. Best posting day + hour — plain language
     const dayMap: Record<string, number[]> = {};
     const hourMap: Record<number, number[]> = {};
     const days = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
+    const fullDays: Record<string, string> = { Sun: "Sunday", Mon: "Monday", Tue: "Tuesday", Wed: "Wednesday", Thu: "Thursday", Fri: "Friday", Sat: "Saturday" };
     for (const p of posts) {
       if (!p.posted_at) continue;
       const d = new Date(p.posted_at);
@@ -87,10 +96,14 @@ export function ContentStrategySection({ posts }: { posts: ThreadsPost[] }) {
     const bestDay = Object.entries(dayMap).filter(([, v]) => v.length >= 3).sort((a, b) => avg(b[1]) - avg(a[1]))[0];
     const bestHour = Object.entries(hourMap).filter(([, v]) => v.length >= 3).sort((a, b) => avg(b[1]) - avg(a[1]))[0];
     if (bestDay) {
+      const dayAvg = avg(bestDay[1]);
+      const dayDiff = overallAvgEng > 0 ? Math.round(((dayAvg - overallAvgEng) / overallAvgEng) * 100) : 0;
+      const timeStr = bestHour ? ` around ${Number(bestHour[0]).toString().padStart(2, "0")}:00` : "";
       recs.push({
+        priority: priority++,
         icon: <Clock className="w-4 h-4" />,
-        title: `Post on ${bestDay[0]}s${bestHour ? ` around ${Number(bestHour[0]).toString().padStart(2, "0")}:00` : ""}`,
-        detail: `${bestDay[0]}s average ${pct(avg(bestDay[1]))} engagement (${bestDay[1].length} posts).`,
+        title: `Best time: ${fullDays[bestDay[0]] || bestDay[0]} ${bestHour ? "mornings" : ""}`,
+        detail: `Your ${bestDay[0]} posts${timeStr} get ${dayDiff > 0 ? dayDiff + "% higher" : "the best"} engagement (${pct(dayAvg)} vs ${pct(overallAvgEng)} average).`,
       });
     }
 
@@ -104,31 +117,19 @@ export function ContentStrategySection({ posts }: { posts: ThreadsPost[] }) {
     }
     const bestTopic = Object.entries(topicMap).filter(([, v]) => v.length >= 2).sort((a, b) => avg(b[1]) - avg(a[1]))[0];
     if (bestTopic) {
+      const topicAvg = avg(bestTopic[1]);
+      const diff = overallAvgEng > 0 ? Math.round(((topicAvg - overallAvgEng) / overallAvgEng) * 100) : 0;
       recs.push({
+        priority: priority++,
         icon: <TrendingUp className="w-4 h-4" />,
-        title: `Best topic: ${bestTopic[0]}`,
-        detail: `${pct(avg(bestTopic[1]))} avg engagement across ${bestTopic[1].length} posts.`,
+        title: `Write about "${bestTopic[0]}"`,
+        detail: diff > 0
+          ? `Posts about ${bestTopic[0]} get ${diff}% more engagement than average (${bestTopic[1].length} posts).`
+          : `Your top-performing topic with ${pct(topicAvg)} engagement across ${bestTopic[1].length} posts.`,
       });
     }
 
-    // 5. Best content format (AI tags)
-    const fmtMap: Record<string, number[]> = {};
-    for (const p of posts) {
-      if (p.content_format) {
-        if (!fmtMap[p.content_format]) fmtMap[p.content_format] = [];
-        fmtMap[p.content_format].push(Number(p.engagement_rate));
-      }
-    }
-    const bestFmt = Object.entries(fmtMap).filter(([, v]) => v.length >= 2).sort((a, b) => avg(b[1]) - avg(a[1]))[0];
-    if (bestFmt) {
-      recs.push({
-        icon: <Layers className="w-4 h-4" />,
-        title: `Best format: ${bestFmt[0]}`,
-        detail: `${pct(avg(bestFmt[1]))} avg engagement across ${bestFmt[1].length} posts.`,
-      });
-    }
-
-    // 6. Best hashtag
+    // 5. Best hashtag — plain language
     const hashMap: Record<string, number[]> = {};
     for (const p of posts) {
       if (p.hashtag) {
@@ -139,13 +140,14 @@ export function ContentStrategySection({ posts }: { posts: ThreadsPost[] }) {
     const bestHash = Object.entries(hashMap).filter(([, v]) => v.length >= 2).sort((a, b) => avg(b[1]) - avg(a[1]))[0];
     if (bestHash) {
       recs.push({
+        priority: priority++,
         icon: <Hash className="w-4 h-4" />,
         title: `Use #${bestHash[0]}`,
-        detail: `${pct(avg(bestHash[1]))} avg engagement across ${bestHash[1].length} posts.`,
+        detail: `Posts with this hashtag average ${pct(avg(bestHash[1]))} engagement (${bestHash[1].length} posts).`,
       });
     }
 
-    // 7. Top 10% sweet spot
+    // 6. Top 10% sweet spot — plain language
     const sorted = [...posts].sort((a, b) => Number(b.engagement_rate) - Number(a.engagement_rate));
     const top10 = sorted.slice(0, Math.max(Math.ceil(posts.length * 0.1), 1));
     const topMediaCounts: Record<string, number> = {};
@@ -155,14 +157,19 @@ export function ContentStrategySection({ posts }: { posts: ThreadsPost[] }) {
     }
     const dominantMedia = Object.entries(topMediaCounts).sort((a, b) => b[1] - a[1])[0];
     const topAvgLen = avg(top10.map(p => p.text_length || 0));
-    recs.push({
-      icon: <TrendingUp className="w-4 h-4" />,
-      title: `Your top 10% sweet spot`,
-      detail: `${dominantMedia ? `${Math.round((dominantMedia[1] / top10.length) * 100)}% are ${MEDIA_LABELS[dominantMedia[0]] || dominantMedia[0]}` : ""}, avg length ${Math.round(topAvgLen)} chars, avg ${pct(avg(top10.map(p => Number(p.engagement_rate))))} engagement.`,
-    });
+    if (dominantMedia) {
+      const mediaLabel = MEDIA_LABELS[dominantMedia[0]] || dominantMedia[0];
+      const pctTop = Math.round((dominantMedia[1] / top10.length) * 100);
+      recs.push({
+        priority: priority++,
+        icon: <TrendingUp className="w-4 h-4" />,
+        title: "Your winning formula",
+        detail: `Your top 10% posts are ${pctTop}% ${mediaLabel}, ~${Math.round(topAvgLen)} chars long, and average ${pct(avg(top10.map(p => Number(p.engagement_rate))))} engagement.`,
+      });
+    }
 
     return recs;
-  }, [posts]);
+  }, [posts, overallAvgEng]);
 
   if (!recommendations.length) return null;
 
@@ -174,12 +181,15 @@ export function ContentStrategySection({ posts }: { posts: ThreadsPost[] }) {
           <h3 className="text-sm font-semibold">What to Post Next</h3>
         </div>
         <p className="text-xs text-muted-foreground">
-          Data-driven recommendations based on {posts.length} posts analyzed.
+          Actionable recommendations based on your {posts.length} posts.
         </p>
         <div className="grid gap-3 md:grid-cols-2">
           {recommendations.map((r, i) => (
             <div key={i} className="flex gap-3 border rounded-lg p-3 bg-background">
-              <div className="mt-0.5 text-muted-foreground">{r.icon}</div>
+              <div className="flex flex-col items-center gap-1 shrink-0">
+                <span className="text-xs font-bold text-amber-600 bg-amber-100 dark:bg-amber-900 rounded-full w-5 h-5 flex items-center justify-center">{r.priority}</span>
+                <div className="text-muted-foreground">{r.icon}</div>
+              </div>
               <div className="min-w-0">
                 <p className="text-sm font-medium">{r.title}</p>
                 <p className="text-xs text-muted-foreground mt-0.5">{r.detail}</p>
@@ -192,7 +202,7 @@ export function ContentStrategySection({ posts }: { posts: ThreadsPost[] }) {
   );
 }
 
-// ── Media type performance ─────────────────────────────────────────
+// ── Media type performance (simplified) ────────────────────────────
 function MediaTypeSection({ posts, overallAvgEng }: { posts: ThreadsPost[]; overallAvgEng: number }) {
   const groups = useMemo(() => {
     const map: Record<string, ThreadsPost[]> = {};
@@ -207,26 +217,24 @@ function MediaTypeSection({ posts, overallAvgEng }: { posts: ThreadsPost[]; over
   return (
     <Card>
       <CardContent className="p-4 md:p-6">
-        <h3 className="text-sm font-medium text-muted-foreground mb-1">Content Performance by Media Type</h3>
-        <p className="text-xs text-muted-foreground mb-4">Percentages show <strong>average engagement rate</strong> for each format.</p>
+        <h3 className="text-sm font-medium text-muted-foreground mb-1">Content Performance by Type</h3>
+        <p className="text-xs text-muted-foreground mb-4">How each post format performs. <span className="inline-block w-2 h-2 rounded-full bg-green-500 align-middle" /> = above average, <span className="inline-block w-2 h-2 rounded-full bg-red-400 align-middle" /> = below.</p>
         <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
           {groups.map(([type, items]) => {
             const avgEng = avg(items.map(p => Number(p.engagement_rate)));
             const avgViews = avg(items.map(p => p.views));
-            const diff = overallAvgEng > 0 ? ((avgEng - overallAvgEng) / overallAvgEng) * 100 : 0;
+            const isAbove = avgEng >= overallAvgEng;
             const Icon = MEDIA_ICONS[type] || Type;
             return (
               <div key={type} className="border rounded-lg p-4 space-y-1">
                 <div className="flex items-center gap-2">
                   <Icon className="w-4 h-4 text-muted-foreground" />
                   <span className="text-sm font-medium">{MEDIA_LABELS[type] || type}</span>
+                  <span className={`w-2 h-2 rounded-full ml-auto ${isAbove ? "bg-green-500" : "bg-red-400"}`} />
                 </div>
                 <div className="text-2xl font-bold">{pct(avgEng)}</div>
-                <div className="text-[10px] text-muted-foreground/70 -mt-0.5">avg engagement rate</div>
+                <div className="text-[10px] text-muted-foreground/70 -mt-0.5">engagement rate</div>
                 <div className="text-xs text-muted-foreground">{items.length} posts · {fmt(Math.round(avgViews))} avg views</div>
-                <div className={`text-xs font-medium ${diff >= 0 ? "text-green-600" : "text-red-500"}`}>
-                  {diff >= 0 ? "+" : ""}{diff.toFixed(1)}% vs avg
-                </div>
               </div>
             );
           })}
@@ -236,9 +244,9 @@ function MediaTypeSection({ posts, overallAvgEng }: { posts: ThreadsPost[]; over
   );
 }
 
-// ── Post frequency ─────────────────────────────────────────────────
+// ── Post frequency (simplified — no dual axis, no rolling avg) ────
 function PostFrequencySection({ posts }: { posts: ThreadsPost[] }) {
-  const { weeklyData, avgFreq, highWeekEng, lowWeekEng, threshold } = useMemo(() => {
+  const { weeklyData, avgFreq, bestWeekPosts } = useMemo(() => {
     const weekMap: Record<string, ThreadsPost[]> = {};
     for (const p of posts) {
       if (!p.posted_at) continue;
@@ -258,94 +266,37 @@ function PostFrequencySection({ posts }: { posts: ThreadsPost[] }) {
       }))
       .sort((a, b) => a.week.localeCompare(b.week));
 
-    const weeklyData = weeks.map((w, i) => {
-      const window = weeks.slice(Math.max(0, i - 3), i + 1);
-      const rolling = avg(window.map(x => x.avgEng));
-      return { ...w, rolling: +rolling.toFixed(3) };
-    });
-
     const avgFreqVal = weeks.length ? avg(weeks.map(w => w.count)) : 0;
-    const thresholdVal = Math.ceil(avgFreqVal);
-    const highWeeks = weeks.filter(w => w.count >= thresholdVal);
-    const lowWeeks = weeks.filter(w => w.count < thresholdVal);
+    // Find the posting frequency of best engagement weeks
+    const sortedByEng = [...weeks].sort((a, b) => b.avgEng - a.avgEng);
+    const topWeeks = sortedByEng.slice(0, Math.max(3, Math.ceil(weeks.length * 0.2)));
+    const bestWeekAvgPosts = avg(topWeeks.map(w => w.count));
 
     return {
-      weeklyData,
+      weeklyData: weeks,
       avgFreq: +avgFreqVal.toFixed(1),
-      highWeekEng: +(avg(highWeeks.map(w => w.avgEng))).toFixed(3),
-      lowWeekEng: +(avg(lowWeeks.map(w => w.avgEng))).toFixed(3),
-      threshold: thresholdVal,
+      bestWeekPosts: +bestWeekAvgPosts.toFixed(1),
     };
   }, [posts]);
 
   return (
     <Card>
       <CardContent className="p-4 md:p-6 space-y-4">
-        <h3 className="text-sm font-medium text-muted-foreground">Post Frequency Analysis</h3>
+        <h3 className="text-sm font-medium text-muted-foreground">Post Frequency</h3>
         <p className="text-sm text-muted-foreground">
-          Average: <span className="font-semibold text-foreground">{avgFreq} posts/week</span>.
-          Weeks with {threshold}+ posts: <span className="text-green-600 font-medium">{highWeekEng}%</span> avg eng
-          vs <span className="text-amber-600 font-medium">{lowWeekEng}%</span> on lighter weeks.
+          You post <span className="font-semibold text-foreground">{avgFreq}×/week</span> on average. 
+          Your best-performing weeks had about <span className="font-semibold text-foreground">{bestWeekPosts} posts</span>.
         </p>
-        <div className="h-[280px]">
+        <div className="h-[250px]">
           <ResponsiveContainer width="100%" height="100%">
-            <ComposedChart data={weeklyData}>
+            <BarChart data={weeklyData}>
               <CartesianGrid strokeDasharray="3 3" className="stroke-border" />
               <XAxis dataKey="week" tick={{ fontSize: 10 }} tickFormatter={v => v.slice(5)} />
-              <YAxis yAxisId="left" tick={{ fontSize: 11 }} />
-              <YAxis yAxisId="right" orientation="right" tick={{ fontSize: 11 }} tickFormatter={v => v + "%"} />
+              <YAxis tick={{ fontSize: 11 }} />
               <Tooltip contentStyle={tipStyle} />
-              <Legend />
-              <Bar yAxisId="left" dataKey="count" name="Posts/week" fill="hsl(var(--primary))" opacity={0.3} radius={[4, 4, 0, 0]} />
-              <Line yAxisId="right" type="monotone" dataKey="avgEng" name="Engagement %" stroke="#f59e0b" strokeWidth={2} dot={false} />
-              <Line yAxisId="right" type="monotone" dataKey="rolling" name="Rolling Avg" stroke="#8b5cf6" strokeWidth={1.5} strokeDasharray="5 5" dot={false} />
-            </ComposedChart>
-          </ResponsiveContainer>
-        </div>
-      </CardContent>
-    </Card>
-  );
-}
-
-// ── Post length ────────────────────────────────────────────────────
-function PostLengthSection({ posts }: { posts: ThreadsPost[] }) {
-  const buckets = useMemo(() => {
-    const validPosts = posts.filter(p => p.text_length != null && p.text_length > 0);
-    const b = [
-      { label: "Short (<100)", min: 0, max: 100, posts: [] as ThreadsPost[] },
-      { label: "Medium (100-280)", min: 100, max: 280, posts: [] as ThreadsPost[] },
-      { label: "Long (280-500)", min: 280, max: 500, posts: [] as ThreadsPost[] },
-      { label: "Extra Long (500+)", min: 500, max: Infinity, posts: [] as ThreadsPost[] },
-    ];
-    for (const p of validPosts) {
-      const len = p.text_length!;
-      const bucket = b.find(x => len >= x.min && len < x.max);
-      if (bucket) bucket.posts.push(p);
-    }
-    return b
-      .filter(x => x.posts.length > 0)
-      .map(x => ({
-        label: x.label,
-        avgEng: avg(x.posts.map(p => Number(p.engagement_rate))) * 100,
-        count: x.posts.length,
-      }));
-  }, [posts]);
-
-  return (
-    <Card>
-      <CardContent className="p-4 md:p-6">
-        <h3 className="text-sm font-medium text-muted-foreground mb-1">Avg Engagement Rate by Post Length</h3>
-        <p className="text-xs text-muted-foreground mb-4">Bar values show average engagement rate. Labels show post count.</p>
-        <div className="h-[220px]">
-          <ResponsiveContainer width="100%" height="100%">
-            <BarChart data={buckets} layout="vertical">
-              <CartesianGrid strokeDasharray="3 3" className="stroke-border" />
-              <XAxis type="number" tick={{ fontSize: 11 }} tickFormatter={v => v.toFixed(2) + "%"} />
-              <YAxis dataKey="label" type="category" width={130} tick={{ fontSize: 11 }} />
-              <Tooltip contentStyle={tipStyle} formatter={(v: number) => v.toFixed(3) + "%"} />
-              <Bar dataKey="avgEng" name="Avg Engagement %" fill="hsl(var(--primary))" radius={[0, 4, 4, 0]}
-                label={{ position: "right", fontSize: 10, formatter: (_: any, __: any, index: number) => `${buckets[index]?.count || 0} posts` }}
-              />
+              <ReferenceLine y={avgFreq} stroke="#f59e0b" strokeDasharray="6 4" strokeWidth={1.5}
+                label={{ value: `Avg ${avgFreq}`, position: "right", fontSize: 10, fill: "#f59e0b" }} />
+              <Bar dataKey="count" name="Posts/week" fill="hsl(var(--primary))" opacity={0.7} radius={[4, 4, 0, 0]} />
             </BarChart>
           </ResponsiveContainer>
         </div>
@@ -354,68 +305,11 @@ function PostLengthSection({ posts }: { posts: ThreadsPost[] }) {
   );
 }
 
-// ── Hashtag performance ────────────────────────────────────────────
-function HashtagSection({ posts }: { posts: ThreadsPost[] }) {
-  const rows = useMemo(() => {
-    const map: Record<string, ThreadsPost[]> = {};
-    for (const p of posts) {
-      if (p.hashtag) {
-        if (!map[p.hashtag]) map[p.hashtag] = [];
-        map[p.hashtag].push(p);
-      }
-    }
-    return Object.entries(map)
-      .filter(([, v]) => v.length >= 2)
-      .map(([tag, items]) => ({
-        tag: "#" + tag,
-        count: items.length,
-        avgViews: Math.round(avg(items.map(p => p.views))),
-        avgEng: avg(items.map(p => Number(p.engagement_rate))),
-        avgVir: avg(items.map(p => Number(p.virality_rate))),
-      }))
-      .sort((a, b) => b.avgEng - a.avgEng);
-  }, [posts]);
-
-  if (!rows.length) return null;
-
-  return (
-    <Card>
-      <CardContent className="p-4 md:p-6 space-y-4">
-        <h3 className="text-sm font-medium text-muted-foreground">Hashtag Performance (2+ posts)</h3>
-        <div className="overflow-x-auto">
-          <table className="w-full text-sm">
-            <thead>
-              <tr className="border-b text-left text-muted-foreground">
-                <th className="p-2">Hashtag</th>
-                <th className="p-2 text-right">Posts</th>
-                <th className="p-2 text-right">Avg Views</th>
-                <th className="p-2 text-right">Avg Eng</th>
-                <th className="p-2 text-right">Avg Virality</th>
-              </tr>
-            </thead>
-            <tbody>
-              {rows.map(r => (
-                <tr key={r.tag} className="border-b">
-                  <td className="p-2 font-medium">{r.tag}</td>
-                  <td className="p-2 text-right">{r.count}</td>
-                  <td className="p-2 text-right">{fmt(r.avgViews)}</td>
-                  <td className="p-2 text-right">{pct(r.avgEng)}</td>
-                  <td className="p-2 text-right">{pct(r.avgVir)}</td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
-      </CardContent>
-    </Card>
-  );
-}
-
 // ── Consolidated Tag Insights (tabbed) ─────────────────────────────
 function TagBreakdownChart({ posts, field }: { posts: ThreadsPost[]; field: "content_topic" | "content_format" | "content_tone" | "content_cta" | "content_audience" }) {
-  const data = useMemo(() => {
+  const { data: chartData, overallAvgPct } = useMemo(() => {
     const tagged = posts.filter(p => p[field]);
-    if (!tagged.length) return [];
+    if (!tagged.length) return { data: [], overallAvgPct: 0 };
     const map: Record<string, number[]> = {};
     for (const p of tagged) {
       const val = p[field]!;
@@ -423,7 +317,7 @@ function TagBreakdownChart({ posts, field }: { posts: ThreadsPost[]; field: "con
       map[val].push(Number(p.engagement_rate));
     }
     const overallAvg = avg(tagged.map(p => Number(p.engagement_rate)));
-    return Object.entries(map)
+    const d = Object.entries(map)
       .map(([label, rates]) => ({
         label,
         avgEng: +(avg(rates) * 100).toFixed(3),
@@ -431,22 +325,25 @@ function TagBreakdownChart({ posts, field }: { posts: ThreadsPost[]; field: "con
         aboveAvg: avg(rates) >= overallAvg,
       }))
       .sort((a, b) => b.avgEng - a.avgEng);
+    return { data: d, overallAvgPct: +(overallAvg * 100).toFixed(3) };
   }, [posts, field]);
 
-  if (!data.length) return <p className="text-sm text-muted-foreground text-center py-8">No tagged data. Click "Tag Content" to generate.</p>;
+  if (!chartData.length) return <p className="text-sm text-muted-foreground text-center py-8">No tagged data. Click "Tag Content" to generate.</p>;
 
   return (
     <div className="h-[280px]">
       <ResponsiveContainer width="100%" height="100%">
-        <BarChart data={data} layout="vertical">
+        <BarChart data={chartData} layout="vertical">
           <CartesianGrid strokeDasharray="3 3" className="stroke-border" />
           <XAxis type="number" tick={{ fontSize: 11 }} tickFormatter={v => v.toFixed(2) + "%"} />
           <YAxis dataKey="label" type="category" width={140} tick={{ fontSize: 10 }} />
-          <Tooltip contentStyle={tipStyle} formatter={(v: number) => v.toFixed(3) + "%"} />
+          <Tooltip contentStyle={tipStyle} formatter={(v: number) => v.toFixed(3) + "% engagement"} />
+          <ReferenceLine x={overallAvgPct} stroke="#f59e0b" strokeDasharray="6 4" strokeWidth={1.5}
+            label={{ value: "Avg", position: "top", fontSize: 9, fill: "#f59e0b" }} />
           <Bar dataKey="avgEng" name="Avg Engagement %" radius={[0, 4, 4, 0]}
-            label={{ position: "right", fontSize: 9, formatter: (_: any, __: any, index: number) => `${data[index]?.count || 0}` }}
+            label={{ position: "right", fontSize: 9, formatter: (_: any, __: any, index: number) => `${chartData[index]?.count || 0} posts` }}
           >
-            {data.map((d, i) => (
+            {chartData.map((d, i) => (
               <Cell key={i} fill={d.aboveAvg ? "#22c55e" : "#94a3b8"} />
             ))}
           </Bar>
@@ -468,7 +365,8 @@ function TagInsightsTabs({ posts }: { posts: ThreadsPost[] }) {
   return (
     <Card>
       <CardContent className="p-4 md:p-6 space-y-4">
-        <h3 className="text-sm font-medium text-muted-foreground">AI Tag Insights — Avg Engagement by Category</h3>
+        <h3 className="text-sm font-medium text-muted-foreground">AI Tag Insights</h3>
+        <p className="text-xs text-muted-foreground">Engagement rate by category. Green bars = above your average. Yellow line = your overall average.</p>
         <Tabs defaultValue="content_topic">
           <TabsList className="w-full justify-start">
             {tabs.map(t => (
@@ -495,7 +393,7 @@ export default function ContentAnalysisSections({ range }: { range: DateRange })
   if (postsQ.isLoading) {
     return (
       <div className="space-y-6">
-        {Array.from({ length: 3 }).map((_, i) => (
+        {Array.from({ length: 2 }).map((_, i) => (
           <Skeleton key={i} className="h-[300px] rounded-lg" />
         ))}
       </div>
@@ -519,8 +417,6 @@ export default function ContentAnalysisSections({ range }: { range: DateRange })
       <MediaTypeSection posts={posts} overallAvgEng={overallAvgEng} />
       <PostFrequencySection posts={posts} />
       {hasTaggedPosts && <TagInsightsTabs posts={posts} />}
-      <PostLengthSection posts={posts} />
-      <HashtagSection posts={posts} />
     </div>
   );
 }
