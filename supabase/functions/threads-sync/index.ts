@@ -490,12 +490,20 @@ async function actionBackfill(
     }
   }
 
-  // Follower count for end of chunk
+  // Follower count — stamp current count on ALL dates in this chunk so chart has baseline
   const followerCount = await fetchFollowerCount(userId, token);
-  if (followerCount !== null) {
+  if (followerCount !== null && daysProcessed > 0) {
+    // Update all rows in this chunk that have follower_count = 0
+    const chunkStartStr = startDate.toISOString().split("T")[0];
+    const chunkEndStr = chunkEnd.toISOString().split("T")[0];
+    await sb.from("threads_user_insights")
+      .update({ follower_count: followerCount })
+      .gte("metric_date", chunkStartStr)
+      .lte("metric_date", chunkEndStr)
+      .eq("follower_count", 0);
+  } else if (followerCount !== null) {
     const lastDate = chunkEnd.toISOString().split("T")[0];
-    await sb
-      .from("threads_user_insights")
+    await sb.from("threads_user_insights")
       .update({ follower_count: followerCount })
       .eq("metric_date", lastDate);
   }
