@@ -159,12 +159,12 @@ export default function ThreadsAnalytics() {
   const [analyzingImages, setAnalyzingImages] = useState(false);
   const [syncingDemographics, setSyncingDemographics] = useState(false);
   const [taggingContent, setTaggingContent] = useState(false);
+  const [refreshingAll, setRefreshingAll] = useState(false);
 
   const postsAgg = usePostsAggregates(range);
-  const insights = useInsights(range);
+  const postTrend = usePostDerivedTrend(range);
   const follower = useFollowerGrowth();
   const lastSync = useLastSync();
-  const insightCount = useInsightCount();
 
   // Admin check
   const [isAdmin, setIsAdmin] = useState(false);
