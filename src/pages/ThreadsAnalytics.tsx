@@ -236,8 +236,7 @@ export default function ThreadsAnalytics() {
         if (!fromDate) break;
       }
       toast.success(`Backfill complete — ${totalDays} days processed`);
-      insights.refetch();
-      insightCount.refetch();
+      postTrend.refetch();
     } catch (e: any) {
       toast.error(e.message || "Backfill failed");
     } finally {
