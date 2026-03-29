@@ -544,6 +544,168 @@ function ReachRatioSection({ posts }: { posts: ThreadsPost[] }) {
   );
 }
 
+// ── Content Strategy Section ───────────────────────────────────────
+function ContentStrategySection({ posts }: { posts: ThreadsPost[] }) {
+  const recommendations = useMemo(() => {
+    if (!posts.length) return [];
+    const recs: { icon: React.ReactNode; title: string; detail: string }[] = [];
+
+    // 1. Best media type by avg engagement
+    const mediaMap: Record<string, number[]> = {};
+    for (const p of posts) {
+      const t = p.media_type || "OTHER";
+      if (!mediaMap[t]) mediaMap[t] = [];
+      mediaMap[t].push(Number(p.engagement_rate));
+    }
+    const bestMedia = Object.entries(mediaMap)
+      .filter(([, v]) => v.length >= 3)
+      .sort((a, b) => avg(b[1]) - avg(a[1]))[0];
+    if (bestMedia) {
+      recs.push({
+        icon: <ImageIcon className="w-4 h-4" />,
+        title: `Focus on ${MEDIA_LABELS[bestMedia[0]] || bestMedia[0]} posts`,
+        detail: `${pct(avg(bestMedia[1]))} avg engagement across ${bestMedia[1].length} posts — your best performing format.`,
+      });
+    }
+
+    // 2. Optimal post length
+    const lengthBuckets = [
+      { label: "Short (<100 chars)", min: 0, max: 100 },
+      { label: "Medium (100-280 chars)", min: 100, max: 280 },
+      { label: "Long (280-500 chars)", min: 280, max: 500 },
+      { label: "Extra long (500+ chars)", min: 500, max: Infinity },
+    ];
+    const bestBucket = lengthBuckets
+      .map(b => {
+        const items = posts.filter(p => (p.text_length || 0) >= b.min && (p.text_length || 0) < b.max);
+        return { ...b, avgViews: avg(items.map(p => p.views)), count: items.length };
+      })
+      .filter(b => b.count >= 3)
+      .sort((a, b) => b.avgViews - a.avgViews)[0];
+    if (bestBucket) {
+      recs.push({
+        icon: <Type className="w-4 h-4" />,
+        title: `Keep posts ${bestBucket.label.split("(")[1]?.replace(")", "") || bestBucket.label}`,
+        detail: `${fmt(Math.round(bestBucket.avgViews))} avg views — highest reach across ${bestBucket.count} posts.`,
+      });
+    }
+
+    // 3. Best posting day + hour (Taiwan time UTC+8)
+    const dayMap: Record<string, number[]> = {};
+    const hourMap: Record<number, number[]> = {};
+    const days = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
+    for (const p of posts) {
+      if (!p.posted_at) continue;
+      const d = new Date(p.posted_at);
+      const tw = new Date(d.getTime() + 8 * 60 * 60 * 1000);
+      const day = days[tw.getUTCDay()];
+      const hour = tw.getUTCHours();
+      if (!dayMap[day]) dayMap[day] = [];
+      dayMap[day].push(Number(p.engagement_rate));
+      if (!hourMap[hour]) hourMap[hour] = [];
+      hourMap[hour].push(Number(p.engagement_rate));
+    }
+    const bestDay = Object.entries(dayMap)
+      .filter(([, v]) => v.length >= 3)
+      .sort((a, b) => avg(b[1]) - avg(a[1]))[0];
+    const bestHour = Object.entries(hourMap)
+      .filter(([, v]) => v.length >= 3)
+      .sort((a, b) => avg(b[1]) - avg(a[1]))[0];
+    if (bestDay) {
+      recs.push({
+        icon: <Clock className="w-4 h-4" />,
+        title: `Post on ${bestDay[0]}s${bestHour ? ` around ${Number(bestHour[0]).toString().padStart(2, "0")}:00` : ""}`,
+        detail: `${bestDay[0]}s average ${pct(avg(bestDay[1]))} engagement (${bestDay[1].length} posts).`,
+      });
+    }
+
+    // 4. Top image tag
+    const tagMap: Record<string, number[]> = {};
+    for (const p of posts) {
+      if (p.image_tags) {
+        for (const tag of p.image_tags) {
+          if (!tagMap[tag]) tagMap[tag] = [];
+          tagMap[tag].push(Number(p.engagement_rate));
+        }
+      }
+    }
+    const bestTag = Object.entries(tagMap)
+      .filter(([, v]) => v.length >= 2)
+      .sort((a, b) => avg(b[1]) - avg(a[1]))[0];
+    if (bestTag) {
+      recs.push({
+        icon: <ImageIcon className="w-4 h-4" />,
+        title: `Use "${bestTag[0]}" style images`,
+        detail: `${pct(avg(bestTag[1]))} avg engagement across ${bestTag[1].length} posts with this tag.`,
+      });
+    }
+
+    // 5. Best hashtag
+    const hashMap: Record<string, number[]> = {};
+    for (const p of posts) {
+      if (p.hashtag) {
+        if (!hashMap[p.hashtag]) hashMap[p.hashtag] = [];
+        hashMap[p.hashtag].push(Number(p.engagement_rate));
+      }
+    }
+    const bestHash = Object.entries(hashMap)
+      .filter(([, v]) => v.length >= 2)
+      .sort((a, b) => avg(b[1]) - avg(a[1]))[0];
+    if (bestHash) {
+      recs.push({
+        icon: <Hash className="w-4 h-4" />,
+        title: `Use #${bestHash[0]}`,
+        detail: `${pct(avg(bestHash[1]))} avg engagement across ${bestHash[1].length} posts.`,
+      });
+    }
+
+    // 6. Top 10% sweet spot summary
+    const sorted = [...posts].sort((a, b) => Number(b.engagement_rate) - Number(a.engagement_rate));
+    const top10 = sorted.slice(0, Math.max(Math.ceil(posts.length * 0.1), 1));
+    const topMediaCounts: Record<string, number> = {};
+    for (const p of top10) {
+      const t = p.media_type || "OTHER";
+      topMediaCounts[t] = (topMediaCounts[t] || 0) + 1;
+    }
+    const dominantMedia = Object.entries(topMediaCounts).sort((a, b) => b[1] - a[1])[0];
+    const topAvgLen = avg(top10.map(p => p.text_length || 0));
+    recs.push({
+      icon: <TrendingUp className="w-4 h-4" />,
+      title: `Your top 10% sweet spot`,
+      detail: `${dominantMedia ? `${Math.round((dominantMedia[1] / top10.length) * 100)}% are ${MEDIA_LABELS[dominantMedia[0]] || dominantMedia[0]}` : ""}, avg length ${Math.round(topAvgLen)} chars, avg ${pct(avg(top10.map(p => Number(p.engagement_rate))))} engagement.`,
+    });
+
+    return recs;
+  }, [posts]);
+
+  if (!recommendations.length) return null;
+
+  return (
+    <Card className="border-amber-200 dark:border-amber-800 bg-amber-50/30 dark:bg-amber-950/20">
+      <CardContent className="p-4 md:p-6 space-y-4">
+        <div className="flex items-center gap-2">
+          <Lightbulb className="w-5 h-5 text-amber-500" />
+          <h3 className="text-sm font-semibold">What to Post Next</h3>
+        </div>
+        <p className="text-xs text-muted-foreground">
+          Data-driven recommendations based on {posts.length} posts analyzed.
+        </p>
+        <div className="grid gap-3 md:grid-cols-2">
+          {recommendations.map((r, i) => (
+            <div key={i} className="flex gap-3 border rounded-lg p-3 bg-background">
+              <div className="mt-0.5 text-muted-foreground">{r.icon}</div>
+              <div className="min-w-0">
+                <p className="text-sm font-medium">{r.title}</p>
+                <p className="text-xs text-muted-foreground mt-0.5">{r.detail}</p>
+              </div>
+            </div>
+          ))}
+        </div>
+      </CardContent>
+    </Card>
+  );
+}
+
 // ── Main export ────────────────────────────────────────────────────
 export default function ContentAnalysisSections({ range }: { range: DateRange }) {
   const postsQ = useAllPosts(range);
@@ -573,11 +735,10 @@ export default function ContentAnalysisSections({ range }: { range: DateRange })
 
   return (
     <div className="space-y-6">
+      <ContentStrategySection posts={posts} />
       <MediaTypeSection posts={posts} overallAvgEng={overallAvgEng} />
       <PostLengthSection posts={posts} />
-      <LanguageSection posts={posts} />
       <EngagementBreakdownSection posts={posts} />
-      <OriginalVsQuoteSection posts={posts} />
       <HashtagSection posts={posts} />
       <ImageContentSection posts={posts} />
       <PostFrequencySection posts={posts} />

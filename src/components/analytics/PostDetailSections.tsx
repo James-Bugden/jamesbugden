@@ -89,7 +89,7 @@ function TopPostsSection({ posts }: { posts: ThreadsPost[] }) {
     if (langFilter !== "all") result = result.filter(p => p.detected_language === langFilter);
     if (tagFilter !== "all") result = result.filter(p => p.image_tags?.includes(tagFilter));
     result.sort((a, b) => Number(b[sortBy]) - Number(a[sortBy]));
-    return result.slice(0, 20);
+    return result.slice(0, 50);
   }, [posts, sortBy, search, langFilter, tagFilter]);
 
   const toggle = (id: string) => setExpanded(prev => {
