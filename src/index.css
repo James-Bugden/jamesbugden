@@ -507,6 +507,17 @@
 .no-scrollbar::-webkit-scrollbar { display: none; }
 .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
 
+/* Analytics dashboard — use Inter for all headings */
+.analytics-dashboard h1,
+.analytics-dashboard h2,
+.analytics-dashboard h3,
+.analytics-dashboard h4,
+.analytics-dashboard h5,
+.analytics-dashboard h6 {
+  font-family: 'Inter', ui-sans-serif, system-ui, sans-serif;
+  letter-spacing: -0.01em;
+}
+
 /* Print styles for Resume Analysis report */
 @media print {
   @page {
