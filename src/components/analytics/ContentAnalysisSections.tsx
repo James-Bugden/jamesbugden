@@ -8,7 +8,7 @@ import {
   Legend, ScatterChart, Scatter, ZAxis, Cell, ComposedChart, Line,
   ReferenceLine,
 } from "recharts";
-import { ExternalLink, Image as ImageIcon, Type, Video, Layers } from "lucide-react";
+import { ExternalLink, Image as ImageIcon, Type, Video, Layers, Lightbulb, Clock, Hash, TrendingUp } from "lucide-react";
 import { type DateRange, type ThreadsPost, useAllPosts, useInsightsForReach, fmt, pct } from "./analyticsShared";
 
 // ── tooltip style ──────────────────────────────────────────────────
