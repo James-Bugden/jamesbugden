@@ -591,6 +591,66 @@ Return: {"topic":"...","format":"...","tone":"...","cta":"...","audience":"..."}
   return { tagged: taggedCount, remaining: count || 0 };
 }
 
+// ── Action: refresh-all-insights ──────────────────────────────────
+async function actionRefreshAllInsights(
+  sb: ReturnType<typeof supabaseAdmin>,
+  token: string
+) {
+  console.log("=== ACTION: refresh-all-insights ===");
+
+  // Get all posts, ordered by oldest first (prioritize never-fetched)
+  const { data: posts } = await sb
+    .from("threads_posts")
+    .select("id, media_id, views")
+    .order("views", { ascending: true })
+    .limit(50);
+
+  if (!posts?.length) {
+    return { refreshed: 0, remaining: 0 };
+  }
+
+  const mediaIds = posts.map((p: any) => p.media_id);
+  const insightsMap = await batchFetchInsights(mediaIds, token, 5);
+
+  let refreshed = 0;
+  for (const post of posts) {
+    const insights = insightsMap.get(post.media_id);
+    if (!insights) continue;
+
+    const totalEngagement = (insights.likes ?? 0) + (insights.replies ?? 0) + (insights.reposts ?? 0) + (insights.quotes ?? 0) + (insights.shares ?? 0);
+    const views = insights.views ?? 0;
+    const engRate = views > 0 ? totalEngagement / views : 0;
+    const virRate = views > 0 ? ((insights.reposts ?? 0) + (insights.quotes ?? 0)) / views : 0;
+    const convRate = views > 0 ? (insights.replies ?? 0) / views : 0;
+
+    await sb
+      .from("threads_posts")
+      .update({
+        views,
+        likes: insights.likes ?? 0,
+        replies: insights.replies ?? 0,
+        reposts: insights.reposts ?? 0,
+        quotes: insights.quotes ?? 0,
+        shares: insights.shares ?? 0,
+        engagement_rate: engRate,
+        virality_rate: virRate,
+        conversation_rate: convRate,
+        updated_at: new Date().toISOString(),
+      })
+      .eq("id", post.id);
+    refreshed++;
+  }
+
+  // Count posts still with 0 views
+  const { count } = await sb
+    .from("threads_posts")
+    .select("id", { count: "exact", head: true })
+    .eq("views", 0);
+
+  console.log(`Refreshed ${refreshed}, remaining with 0 views: ${count || 0}`);
+  return { refreshed, remaining: count || 0 };
+}
+
 // ── HTTP handler ───────────────────────────────────────────────────
 serve(async (req) => {
   if (req.method === "OPTIONS") {
