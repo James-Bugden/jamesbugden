@@ -496,6 +496,10 @@ export default function ThreadsAnalytics() {
                 : "Never"}
             </span>
             <div className="ml-auto flex flex-wrap gap-2">
+              <Button variant="outline" size="sm" onClick={handleRefreshAll} disabled={refreshingAll}>
+                {refreshingAll && <RefreshCw className="w-3 h-3 animate-spin mr-1" />}
+                Refresh All Insights
+              </Button>
               <Button variant="outline" size="sm" onClick={handleBackfill} disabled={backfilling}>
                 {backfilling && <RefreshCw className="w-3 h-3 animate-spin mr-1" />}
                 Backfill
