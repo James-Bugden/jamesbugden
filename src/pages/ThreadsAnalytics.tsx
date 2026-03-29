@@ -16,7 +16,7 @@ import {
   BarChart3, RefreshCw, Database, ArrowLeft, ChevronDown, Info,
 } from "lucide-react";
 import {
-  LineChart, Line, AreaChart, Area, BarChart, Bar, ComposedChart,
+  LineChart, Line, AreaChart, Area, BarChart, Bar, ComposedChart, Cell,
   XAxis, YAxis, CartesianGrid,
   Tooltip as RechartsTooltip, ResponsiveContainer, ReferenceLine,
 } from "recharts";
