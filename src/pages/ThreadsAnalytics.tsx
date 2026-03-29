@@ -481,26 +481,23 @@ export default function ThreadsAnalytics() {
                 ? new Date(lastSync.data).toLocaleString()
                 : "Never"}
             </span>
-            <div className="ml-auto flex gap-2">
+            <div className="ml-auto flex flex-wrap gap-2">
               {(insightCount.data || 0) < 30 && (
-                <Button
-                  variant="outline"
-                  size="sm"
-                  onClick={handleBackfill}
-                  disabled={backfilling}
-                >
-                  {backfilling ? (
-                    <RefreshCw className="w-3 h-3 animate-spin mr-1" />
-                  ) : null}
+                <Button variant="outline" size="sm" onClick={handleBackfill} disabled={backfilling}>
+                  {backfilling && <RefreshCw className="w-3 h-3 animate-spin mr-1" />}
                   Backfill
                 </Button>
               )}
+              <Button variant="outline" size="sm" onClick={handleSyncDemographics} disabled={syncingDemographics}>
+                {syncingDemographics && <RefreshCw className="w-3 h-3 animate-spin mr-1" />}
+                Demographics
+              </Button>
+              <Button variant="outline" size="sm" onClick={handleAnalyzeImages} disabled={analyzingImages}>
+                {analyzingImages && <RefreshCw className="w-3 h-3 animate-spin mr-1" />}
+                Analyze Images
+              </Button>
               <Button size="sm" onClick={handleSync} disabled={syncing}>
-                {syncing ? (
-                  <RefreshCw className="w-3 h-3 animate-spin mr-1" />
-                ) : (
-                  <RefreshCw className="w-3 h-3 mr-1" />
-                )}
+                {syncing ? <RefreshCw className="w-3 h-3 animate-spin mr-1" /> : <RefreshCw className="w-3 h-3 mr-1" />}
                 Sync Now
               </Button>
             </div>
