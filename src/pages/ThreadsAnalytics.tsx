@@ -465,62 +465,70 @@ export default function ThreadsAnalytics() {
                       <h3 className="text-sm font-medium text-gray-900 mb-1">Follower Growth</h3>
                       <p className="text-xs text-gray-500 mb-4">
                         {follower.data ? `${fmt(follower.data.current)} followers.` : ""}
-                        {followerDeltas.data && followerDeltas.data.deltas.length > 0
-                          ? ` Net ${followerDeltas.data.netGain >= 0 ? "+" : ""}${followerDeltas.data.netGain} in this period.`
-                          : " Run Backfill to start tracking."}
+                        {(() => {
+                          const deltas = followerDeltas.data?.deltas || [];
+                          const hasRealChanges = deltas.some(d => d.delta !== 0);
+                          if (hasRealChanges) {
+                            const net = followerDeltas.data!.netGain;
+                            return ` Net ${net >= 0 ? "+" : ""}${net} in this period.`;
+                          }
+                          if (deltas.length > 0) return " Tracking started — growth will appear after daily syncs.";
+                          return " Run Backfill to start tracking.";
+                        })()}
                       </p>
                       {followerHistory.isLoading ? (
                         <Skeleton className="h-[280px]" />
-                      ) : followerDeltas.data && followerDeltas.data.deltas.length > 1 ? (
-                        <div className="h-[280px]">
-                          <ResponsiveContainer width="100%" height="100%">
-                            <ComposedChart data={followerDeltas.data.deltas}>
-                              <defs>
-                                <linearGradient id="followerGrad" x1="0" y1="0" x2="0" y2="1">
-                                  <stop offset="5%" stopColor="#22c55e" stopOpacity={0.3} />
-                                  <stop offset="95%" stopColor="#22c55e" stopOpacity={0} />
-                                </linearGradient>
-                              </defs>
-                              <CartesianGrid strokeDasharray="3 3" stroke="#f0f0f0" />
-                              <XAxis dataKey="date" tick={{ fontSize: 10, fill: "#9ca3af" }} tickFormatter={(v) => v.slice(5)} />
-                              <YAxis yAxisId="left" tick={{ fontSize: 10, fill: "#9ca3af" }} domain={["dataMin - 100", "dataMax + 100"]} />
-                              <YAxis yAxisId="right" orientation="right" tick={{ fontSize: 10, fill: "#9ca3af" }} />
-                              <RechartsTooltip contentStyle={tipStyle}
-                                formatter={(v: number, name: string) => [name === "Daily Change" ? (v >= 0 ? "+" : "") + v : fmt(v), name]} />
-                              <Area yAxisId="left" type="monotone" dataKey="followers" name="Followers" stroke="#22c55e" fill="url(#followerGrad)" strokeWidth={2} />
-                              <Bar yAxisId="right" dataKey="delta" name="Daily Change" radius={[2, 2, 0, 0]}>
-                                {followerDeltas.data.deltas.map((d, i) => (
-                                  <Cell key={i} fill={d.delta >= 0 ? "#22c55e" : "#ef4444"} opacity={0.6} />
-                                ))}
-                              </Bar>
-                              <ReferenceLine yAxisId="right" y={0} stroke="#e5e7eb" />
-                            </ComposedChart>
-                          </ResponsiveContainer>
-                        </div>
-                      ) : followerData.length > 1 ? (
-                        <div className="h-[280px]">
-                          <ResponsiveContainer width="100%" height="100%">
-                            <AreaChart data={followerData}>
-                              <defs>
-                                <linearGradient id="followerGrad2" x1="0" y1="0" x2="0" y2="1">
-                                  <stop offset="5%" stopColor="#22c55e" stopOpacity={0.3} />
-                                  <stop offset="95%" stopColor="#22c55e" stopOpacity={0} />
-                                </linearGradient>
-                              </defs>
-                              <CartesianGrid strokeDasharray="3 3" stroke="#f0f0f0" />
-                              <XAxis dataKey="date" tick={{ fontSize: 10, fill: "#9ca3af" }} tickFormatter={(v) => v.slice(5)} />
-                              <YAxis tick={{ fontSize: 10, fill: "#9ca3af" }} domain={["dataMin - 100", "dataMax + 100"]} />
-                              <RechartsTooltip contentStyle={tipStyle} />
-                              <Area type="monotone" dataKey="followers" name="Followers" stroke="#22c55e" fill="url(#followerGrad2)" strokeWidth={2} />
-                            </AreaChart>
-                          </ResponsiveContainer>
-                        </div>
-                      ) : (
-                        <div className="text-center py-12 text-gray-400">
-                          <p className="text-sm">No follower history yet.</p>
-                          <p className="text-xs mt-1">Go to <button onClick={() => setActiveSection("settings")} className="text-blue-500 underline">Settings</button> and run Backfill.</p>
-                        </div>
-                      )}
+                      ) : (() => {
+                        const deltas = followerDeltas.data?.deltas || [];
+                        const hasRealChanges = deltas.some(d => d.delta !== 0);
+                        const realDeltas = hasRealChanges ? deltas : [];
+
+                        if (realDeltas.length > 1) {
+                          return (
+                            <div className="h-[280px]">
+                              <ResponsiveContainer width="100%" height="100%">
+                                <ComposedChart data={realDeltas}>
+                                  <defs>
+                                    <linearGradient id="followerGrad" x1="0" y1="0" x2="0" y2="1">
+                                      <stop offset="5%" stopColor="#22c55e" stopOpacity={0.3} />
+                                      <stop offset="95%" stopColor="#22c55e" stopOpacity={0} />
+                                    </linearGradient>
+                                  </defs>
+                                  <CartesianGrid strokeDasharray="3 3" stroke="#f0f0f0" />
+                                  <XAxis dataKey="date" tick={{ fontSize: 10, fill: "#9ca3af" }} tickFormatter={(v) => v.slice(5)} />
+                                  <YAxis yAxisId="left" tick={{ fontSize: 10, fill: "#9ca3af" }} domain={["dataMin - 100", "dataMax + 100"]} />
+                                  <YAxis yAxisId="right" orientation="right" tick={{ fontSize: 10, fill: "#9ca3af" }} />
+                                  <RechartsTooltip contentStyle={tipStyle}
+                                    formatter={(v: number, name: string) => [name === "Daily Change" ? (v >= 0 ? "+" : "") + v : fmt(v), name]} />
+                                  <Area yAxisId="left" type="monotone" dataKey="followers" name="Followers" stroke="#22c55e" fill="url(#followerGrad)" strokeWidth={2} />
+                                  <Bar yAxisId="right" dataKey="delta" name="Daily Change" radius={[2, 2, 0, 0]}>
+                                    {realDeltas.map((d, i) => (
+                                      <Cell key={i} fill={d.delta >= 0 ? "#22c55e" : "#ef4444"} opacity={0.6} />
+                                    ))}
+                                  </Bar>
+                                  <ReferenceLine yAxisId="right" y={0} stroke="#e5e7eb" />
+                                </ComposedChart>
+                              </ResponsiveContainer>
+                            </div>
+                          );
+                        }
+
+                        // No real changes yet — show current count with a message
+                        return (
+                          <div className="text-center py-12">
+                            <div className="text-4xl font-bold text-gray-900 mb-2">
+                              {follower.data ? fmt(follower.data.current) : "—"}
+                            </div>
+                            <p className="text-sm text-gray-500">Current followers</p>
+                            <p className="text-xs text-gray-400 mt-3 max-w-xs mx-auto">
+                              Daily syncs will capture follower changes over time. The growth chart will appear once there are real changes to show.
+                            </p>
+                            <button onClick={() => setActiveSection("settings")} className="text-xs text-blue-500 underline mt-2">
+                              Go to Settings → Sync
+                            </button>
+                          </div>
+                        );
+                      })()}
                     </div>
                   </div>
                 </>
