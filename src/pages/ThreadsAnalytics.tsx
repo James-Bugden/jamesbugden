@@ -209,7 +209,7 @@ export default function ThreadsAnalytics() {
       toast.success(`Synced ${data?.posts || 0} posts, analyzed ${data?.analyzed || 0} images`);
       // Refetch
       postsAgg.refetch();
-      insights.refetch();
+      postTrend.refetch();
       follower.refetch();
       lastSync.refetch();
     } catch (e: any) {
