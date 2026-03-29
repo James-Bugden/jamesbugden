@@ -751,15 +751,20 @@ export default function ThreadsAnalytics() {
                       {followerHistory.isLoading ? (
                         <Skeleton className="h-[280px] rounded-lg" />
                       ) : (() => {
+                        const historyData = followerHistory.data || [];
                         const deltas = followerDeltas.data?.deltas || [];
-                        const hasRealChanges = deltas.some(d => d.delta !== 0);
-                        const realDeltas = hasRealChanges ? deltas : [];
 
-                        if (realDeltas.length > 1) {
+                        if (historyData.length > 1) {
+                          // Merge history with deltas for the bar chart
+                          const chartData = historyData.map(h => {
+                            const delta = deltas.find(d => d.date === h.date);
+                            return { ...h, delta: delta?.delta || 0 };
+                          });
+
                           return (
                             <div className="h-[280px]">
                               <ResponsiveContainer width="100%" height="100%">
-                                <ComposedChart data={realDeltas}>
+                                <ComposedChart data={chartData}>
                                   <defs>
                                     <linearGradient id="followerGrad" x1="0" y1="0" x2="0" y2="1">
                                       <stop offset="0%" stopColor="#22c55e" stopOpacity={0.2} />
@@ -769,13 +774,13 @@ export default function ThreadsAnalytics() {
                                   <CartesianGrid strokeDasharray="3 3" stroke={gridStroke} vertical={false} />
                                   <XAxis dataKey="date" tick={axisTickStyle} tickFormatter={(v) => v.slice(5)} axisLine={false} tickLine={false} />
                                   <YAxis yAxisId="left" tick={axisTickStyle} domain={["dataMin - 100", "dataMax + 100"]} axisLine={false} tickLine={false} />
-                                  <YAxis yAxisId="right" orientation="right" tick={axisTickStyle} axisLine={false} tickLine={false} />
+                                  <YAxis yAxisId="right" orientation="right" tick={axisTickStyle} axisLine={false} tickLine={false} hide />
                                   <RechartsTooltip contentStyle={tipStyle}
                                     formatter={(v: number, name: string) => [name === "Daily Change" ? (v >= 0 ? "+" : "") + v : fmt(v), name]} />
                                   <Area yAxisId="left" type="monotone" dataKey="followers" name="Followers" stroke="#22c55e" fill="url(#followerGrad)" strokeWidth={2.5} />
                                   <Bar yAxisId="right" dataKey="delta" name="Daily Change" radius={[3, 3, 0, 0]}>
-                                    {realDeltas.map((d, i) => (
-                                      <Cell key={i} fill={d.delta >= 0 ? "#22c55e" : "#ef4444"} opacity={0.7} />
+                                    {chartData.map((d, i) => (
+                                      <Cell key={i} fill={d.delta >= 0 ? "#22c55e" : "#ef4444"} opacity={d.delta === 0 ? 0 : 0.7} />
                                     ))}
                                   </Bar>
                                   <ReferenceLine yAxisId="right" y={0} stroke="#e5e7eb" />
@@ -795,7 +800,7 @@ export default function ThreadsAnalytics() {
                             </div>
                             <p className="text-sm text-gray-500">Current followers</p>
                             <p className="text-xs text-gray-400 mt-4 max-w-[240px] text-center leading-relaxed">
-                              Daily syncs capture follower changes. The chart appears once real growth data is recorded.
+                              Run Backfill in Settings to start tracking follower history.
                             </p>
                             <button onClick={() => setActiveSection("settings")} className="text-xs text-blue-500 hover:text-blue-600 font-medium mt-3 transition-colors">
                               Go to Settings → Sync
