@@ -153,33 +153,55 @@ function MediaTypeSection({ posts, overallAvgEng }: { posts: ThreadsPost[]; over
     return Object.entries(map).sort((a, b) => b[1].length - a[1].length);
   }, [posts]);
 
+  // Find the best format
+  const bestType = useMemo(() => {
+    let best = { type: "", avg: 0 };
+    for (const [type, items] of groups) {
+      const a = avg(items.map(p => Number(p.engagement_rate)));
+      if (a > best.avg) best = { type, avg: a };
+    }
+    return best.type;
+  }, [groups]);
+
+  // Max avg views for bar scaling
+  const maxViews = useMemo(() => Math.max(...groups.map(([, items]) => avg(items.map(p => p.views))), 1), [groups]);
+
   return (
     <div className="bg-white rounded-xl border border-gray-100 p-6 shadow-sm">
-      <h3 className="text-sm font-semibold text-gray-900 mb-1">Performance by Type</h3>
-      <p className="text-xs text-gray-400 mb-5 flex items-center gap-3">
-        <span className="inline-flex items-center gap-1"><span className="w-2 h-2 rounded-full bg-emerald-500" />Above avg</span>
-        <span className="inline-flex items-center gap-1"><span className="w-2 h-2 rounded-full bg-red-400" />Below avg</span>
-      </p>
-      <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
+      <h3 className="text-sm font-semibold text-gray-900 mb-4">Performance by Format</h3>
+      <div className="space-y-3">
         {groups.map(([type, items]) => {
           const avgEng = avg(items.map(p => Number(p.engagement_rate)));
           const avgViews = avg(items.map(p => p.views));
           const isAbove = avgEng >= overallAvgEng;
+          const isBest = type === bestType;
           const Icon = MEDIA_ICONS[type] || Type;
-          const diff = overallAvgEng > 0 ? Math.round(((avgEng - overallAvgEng) / overallAvgEng) * 100) : 0;
+          const barWidth = Math.max((avgViews / maxViews) * 100, 8);
+          const rating = avgEng >= overallAvgEng * 1.3 ? "High" : avgEng >= overallAvgEng * 0.7 ? "Medium" : "Low";
+          const ratingColor = rating === "High" ? "text-emerald-600 bg-emerald-50" : rating === "Medium" ? "text-amber-600 bg-amber-50" : "text-red-500 bg-red-50";
+
           return (
-            <div key={type} className={`rounded-xl border-2 p-5 space-y-2 transition-colors ${isAbove ? "border-emerald-100 bg-emerald-50/30" : "border-gray-100 bg-gray-50/30"}`}>
-              <div className="flex items-center gap-2">
-                <div className={`w-8 h-8 rounded-lg flex items-center justify-center ${isAbove ? "bg-emerald-100" : "bg-gray-100"}`}>
-                  <Icon className={`w-4 h-4 ${isAbove ? "text-emerald-600" : "text-gray-400"}`} />
+            <div key={type} className={`rounded-xl border p-4 transition-colors ${isBest ? "border-emerald-200 bg-emerald-50/30" : "border-gray-100"}`}>
+              <div className="flex items-center justify-between mb-2">
+                <div className="flex items-center gap-2">
+                  <div className={`w-7 h-7 rounded-lg flex items-center justify-center ${isBest ? "bg-emerald-100" : "bg-gray-100"}`}>
+                    <Icon className={`w-3.5 h-3.5 ${isBest ? "text-emerald-600" : "text-gray-400"}`} />
+                  </div>
+                  <span className="text-sm font-semibold text-gray-900">{MEDIA_LABELS[type] || type}</span>
+                  {isBest && <span className="text-[10px] font-bold text-emerald-600 bg-emerald-100 px-2 py-0.5 rounded-full">Your best format</span>}
                 </div>
-                <span className="text-sm font-semibold text-gray-900">{MEDIA_LABELS[type] || type}</span>
+                <div className="flex items-center gap-2">
+                  <span className={`text-[10px] font-semibold px-2 py-0.5 rounded-full ${ratingColor}`}>{rating}</span>
+                  <span className="text-xs text-gray-400">{items.length} posts</span>
+                </div>
               </div>
-              <div className="text-3xl font-bold text-gray-900">{pct(avgEng)}</div>
-              <div className={`text-xs font-medium ${isAbove ? "text-emerald-600" : "text-red-400"}`}>
-                {diff > 0 ? "+" : ""}{diff}% vs avg
+              {/* Visual bar */}
+              <div className="flex items-center gap-3">
+                <div className="flex-1 h-2 bg-gray-100 rounded-full overflow-hidden">
+                  <div className={`h-full rounded-full ${isAbove ? "bg-emerald-400" : "bg-gray-300"}`} style={{ width: `${barWidth}%` }} />
+                </div>
+                <span className="text-xs font-medium text-gray-600 whitespace-nowrap">{fmt(Math.round(avgViews))} avg views</span>
               </div>
-              <div className="text-xs text-gray-400">{items.length} posts · {fmt(Math.round(avgViews))} avg views</div>
             </div>
           );
         })}
