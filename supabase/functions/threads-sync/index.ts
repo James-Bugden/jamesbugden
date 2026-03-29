@@ -490,34 +490,22 @@ async function actionBackfill(
     }
   }
 
-  // Follower count — stamp current count on ALL dates in this chunk
+  // Follower count — stamp current count on ALL dates in this chunk so chart has baseline
   const followerCount = await fetchFollowerCount(userId, token);
-  if (followerCount !== null) {
-    const metricDates = Object.keys(insightsData?.data ? (() => {
-      const dates: Record<string, boolean> = {};
-      for (const m of insightsData.data) {
-        if (m.values) for (const v of m.values) {
-          const d = v.end_time?.split("T")[0];
-          if (d) dates[d] = true;
-        }
-      }
-      return dates;
-    })() : {});
-    
-    // If we have specific dates, update them all; otherwise just update the chunk end
-    if (metricDates.length > 0) {
-      for (const date of metricDates) {
-        await sb.from("threads_user_insights")
-          .update({ follower_count: followerCount })
-          .eq("metric_date", date)
-          .eq("follower_count", 0);
-      }
-    } else {
-      const lastDate = chunkEnd.toISOString().split("T")[0];
-      await sb.from("threads_user_insights")
-        .update({ follower_count: followerCount })
-        .eq("metric_date", lastDate);
-    }
+  if (followerCount !== null && daysProcessed > 0) {
+    // Update all rows in this chunk that have follower_count = 0
+    const chunkStartStr = startDate.toISOString().split("T")[0];
+    const chunkEndStr = chunkEnd.toISOString().split("T")[0];
+    await sb.from("threads_user_insights")
+      .update({ follower_count: followerCount })
+      .gte("metric_date", chunkStartStr)
+      .lte("metric_date", chunkEndStr)
+      .eq("follower_count", 0);
+  } else if (followerCount !== null) {
+    const lastDate = chunkEnd.toISOString().split("T")[0];
+    await sb.from("threads_user_insights")
+      .update({ follower_count: followerCount })
+      .eq("metric_date", lastDate);
   }
 
   const nextFrom = chunkEnd >= now ? null : chunkEnd.toISOString().split("T")[0];
