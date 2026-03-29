@@ -17,6 +17,9 @@ import {
 } from "recharts";
 import { toast } from "sonner";
 import ContentAnalysisSections from "@/components/analytics/ContentAnalysisSections";
+import PostDetailSections from "@/components/analytics/PostDetailSections";
+import TimingSections from "@/components/analytics/TimingSections";
+import LinksDemographicsSections from "@/components/analytics/LinksDemographicsSections";
 
 // ── Types ──────────────────────────────────────────────────────────
 type DateRange = "7d" | "30d" | "90d" | "all";
