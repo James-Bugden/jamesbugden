@@ -407,11 +407,202 @@ function TagInsightsTabs({ posts }: { posts: ThreadsPost[] }) {
   );
 }
 
+// ── Best For comparison table ──────────────────────────────────────
+function BestForTable({ posts, followerDeltas }: { posts: ThreadsPost[]; followerDeltas?: { date: string; delta: number }[] }) {
+  const data = useMemo(() => {
+    // Group posts by media type
+    const mediaGroups: Record<string, ThreadsPost[]> = {};
+    for (const p of posts) {
+      const t = p.media_type || "OTHER";
+      if (!mediaGroups[t]) mediaGroups[t] = [];
+      mediaGroups[t].push(p);
+    }
+
+    // Calculate weekly follower growth per media type (estimated)
+    let growthByType: Record<string, number> | null = null;
+    if (followerDeltas && followerDeltas.length > 0) {
+      growthByType = {};
+      // Group posts and deltas by week
+      const weekPosts: Record<string, ThreadsPost[]> = {};
+      for (const p of posts) {
+        if (!p.posted_at) continue;
+        const d = new Date(p.posted_at);
+        const ws = new Date(d); ws.setDate(d.getDate() - d.getDay());
+        const key = ws.toISOString().split("T")[0];
+        if (!weekPosts[key]) weekPosts[key] = [];
+        weekPosts[key].push(p);
+      }
+      const weekDeltas: Record<string, number> = {};
+      for (const fd of followerDeltas) {
+        const d = new Date(fd.date);
+        const ws = new Date(d); ws.setDate(d.getDate() - d.getDay());
+        const key = ws.toISOString().split("T")[0];
+        weekDeltas[key] = (weekDeltas[key] || 0) + fd.delta;
+      }
+      // For each type, sum the weekly deltas weighted by proportion of posts
+      const typeWeeks: Record<string, { totalDelta: number; totalPosts: number }> = {};
+      for (const [week, weekPostsList] of Object.entries(weekPosts)) {
+        const delta = weekDeltas[week] || 0;
+        const total = weekPostsList.length;
+        if (total === 0) continue;
+        const typeCounts: Record<string, number> = {};
+        for (const p of weekPostsList) typeCounts[p.media_type || "OTHER"] = (typeCounts[p.media_type || "OTHER"] || 0) + 1;
+        for (const [type, count] of Object.entries(typeCounts)) {
+          if (!typeWeeks[type]) typeWeeks[type] = { totalDelta: 0, totalPosts: 0 };
+          typeWeeks[type].totalDelta += delta * (count / total);
+          typeWeeks[type].totalPosts += count;
+        }
+      }
+      for (const [type, tw] of Object.entries(typeWeeks)) {
+        growthByType[type] = tw.totalPosts > 0 ? tw.totalDelta / tw.totalPosts : 0;
+      }
+    }
+
+    // Build rows
+    const rows = Object.entries(mediaGroups)
+      .filter(([, items]) => items.length >= 3)
+      .map(([type, items]) => ({
+        type,
+        label: MEDIA_LABELS[type] || type,
+        count: items.length,
+        avgViews: Math.round(avg(items.map(p => p.views))),
+        avgEng: avg(items.map(p => Number(p.engagement_rate))),
+        growthPerPost: growthByType?.[type] ?? null,
+      }));
+
+    // Rank each dimension
+    const byViews = [...rows].sort((a, b) => b.avgViews - a.avgViews);
+    const byEng = [...rows].sort((a, b) => b.avgEng - a.avgEng);
+    const byGrowth = growthByType ? [...rows].sort((a, b) => (b.growthPerPost ?? -Infinity) - (a.growthPerPost ?? -Infinity)) : [];
+
+    return rows.map(r => ({
+      ...r,
+      viewsRank: byViews.findIndex(x => x.type === r.type) + 1,
+      engRank: byEng.findIndex(x => x.type === r.type) + 1,
+      growthRank: byGrowth.length ? byGrowth.findIndex(x => x.type === r.type) + 1 : null,
+    })).sort((a, b) => a.engRank - b.engRank);
+  }, [posts, followerDeltas]);
+
+  // Same for topics
+  const topicData = useMemo(() => {
+    const topicGroups: Record<string, ThreadsPost[]> = {};
+    for (const p of posts) {
+      if (p.content_topic) {
+        if (!topicGroups[p.content_topic]) topicGroups[p.content_topic] = [];
+        topicGroups[p.content_topic].push(p);
+      }
+    }
+    const rows = Object.entries(topicGroups)
+      .filter(([, items]) => items.length >= 3)
+      .map(([topic, items]) => ({
+        topic,
+        count: items.length,
+        avgViews: Math.round(avg(items.map(p => p.views))),
+        avgEng: avg(items.map(p => Number(p.engagement_rate))),
+      }));
+    const byViews = [...rows].sort((a, b) => b.avgViews - a.avgViews);
+    const byEng = [...rows].sort((a, b) => b.avgEng - a.avgEng);
+    return rows.map(r => ({
+      ...r,
+      viewsRank: byViews.findIndex(x => x.topic === r.topic) + 1,
+      engRank: byEng.findIndex(x => x.topic === r.topic) + 1,
+    })).sort((a, b) => a.engRank - b.engRank);
+  }, [posts]);
+
+  if (data.length < 2) return null;
+
+  const rankBadge = (rank: number) => {
+    const colors = rank === 1 ? "bg-amber-100 text-amber-700 dark:bg-amber-900 dark:text-amber-300" : rank === 2 ? "bg-slate-100 text-slate-600 dark:bg-slate-800 dark:text-slate-300" : "bg-muted text-muted-foreground";
+    return <span className={`inline-flex items-center justify-center w-5 h-5 rounded-full text-[10px] font-bold ${colors}`}>#{rank}</span>;
+  };
+
+  return (
+    <Card>
+      <CardContent className="p-4 md:p-6 space-y-4">
+        <div className="flex items-center gap-2">
+          <Trophy className="w-4 h-4 text-amber-500" />
+          <h3 className="text-sm font-semibold">Best For: Views vs Engagement vs Growth</h3>
+        </div>
+        <p className="text-xs text-muted-foreground">Which content types perform best for each goal. Use this to decide what to post based on what you want to optimize.</p>
+
+        {/* Format table */}
+        <div className="overflow-x-auto">
+          <table className="w-full text-xs">
+            <thead>
+              <tr className="border-b">
+                <th className="text-left py-2 pr-4 font-medium text-muted-foreground">Format</th>
+                <th className="text-center py-2 px-3 font-medium text-muted-foreground"><Eye className="w-3 h-3 inline mr-1" />Views</th>
+                <th className="text-center py-2 px-3 font-medium text-muted-foreground"><Heart className="w-3 h-3 inline mr-1" />Engagement</th>
+                {data.some(d => d.growthRank !== null) && (
+                  <th className="text-center py-2 px-3 font-medium text-muted-foreground"><Users className="w-3 h-3 inline mr-1" />Growth*</th>
+                )}
+                <th className="text-right py-2 pl-3 font-medium text-muted-foreground">Posts</th>
+              </tr>
+            </thead>
+            <tbody>
+              {data.map(d => (
+                <tr key={d.type} className="border-b border-border/50">
+                  <td className="py-2 pr-4 font-medium">{d.label}</td>
+                  <td className="py-2 px-3 text-center">{rankBadge(d.viewsRank)} <span className="ml-1">{fmt(d.avgViews)}</span></td>
+                  <td className="py-2 px-3 text-center">{rankBadge(d.engRank)} <span className="ml-1">{pct(d.avgEng)}</span></td>
+                  {data.some(x => x.growthRank !== null) && (
+                    <td className="py-2 px-3 text-center">
+                      {d.growthRank !== null ? (
+                        <>{rankBadge(d.growthRank)} <span className="ml-1">{d.growthPerPost !== null ? (d.growthPerPost >= 0 ? "+" : "") + d.growthPerPost.toFixed(1) + "/post" : "—"}</span></>
+                      ) : "—"}
+                    </td>
+                  )}
+                  <td className="py-2 pl-3 text-right text-muted-foreground">{d.count}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+
+        {/* Topic table */}
+        {topicData.length >= 2 && (
+          <>
+            <h4 className="text-xs font-medium text-muted-foreground mt-4">By Topic</h4>
+            <div className="overflow-x-auto">
+              <table className="w-full text-xs">
+                <thead>
+                  <tr className="border-b">
+                    <th className="text-left py-2 pr-4 font-medium text-muted-foreground">Topic</th>
+                    <th className="text-center py-2 px-3 font-medium text-muted-foreground"><Eye className="w-3 h-3 inline mr-1" />Views</th>
+                    <th className="text-center py-2 px-3 font-medium text-muted-foreground"><Heart className="w-3 h-3 inline mr-1" />Engagement</th>
+                    <th className="text-right py-2 pl-3 font-medium text-muted-foreground">Posts</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {topicData.map(d => (
+                    <tr key={d.topic} className="border-b border-border/50">
+                      <td className="py-2 pr-4 font-medium capitalize">{d.topic}</td>
+                      <td className="py-2 px-3 text-center">{rankBadge(d.viewsRank)} <span className="ml-1">{fmt(d.avgViews)}</span></td>
+                      <td className="py-2 px-3 text-center">{rankBadge(d.engRank)} <span className="ml-1">{pct(d.avgEng)}</span></td>
+                      <td className="py-2 pl-3 text-right text-muted-foreground">{d.count}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          </>
+        )}
+
+        {data.some(d => d.growthRank !== null) && (
+          <p className="text-[10px] text-muted-foreground italic">*Growth is estimated by correlating weekly follower changes with post types published that week.</p>
+        )}
+      </CardContent>
+    </Card>
+  );
+}
+
 // ── Main export ────────────────────────────────────────────────────
 export default function ContentAnalysisSections({ range }: { range: DateRange }) {
   const postsQ = useAllPosts(range);
   const posts = postsQ.data || [];
   const hasTaggedPosts = posts.some(p => p.content_tagged_at);
+  const followerDeltasQ = useFollowerDeltas(range);
+  const followerDeltas = followerDeltasQ.data?.deltas || [];
 
   if (postsQ.isLoading) {
     return (
@@ -437,6 +628,7 @@ export default function ContentAnalysisSections({ range }: { range: DateRange })
 
   return (
     <div className="space-y-6">
+      <BestForTable posts={posts} followerDeltas={followerDeltas} />
       <MediaTypeSection posts={posts} overallAvgEng={overallAvgEng} />
       <PostFrequencySection posts={posts} />
       {hasTaggedPosts && <TagInsightsTabs posts={posts} />}
