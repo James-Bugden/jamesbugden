@@ -665,15 +665,16 @@ serve(async (req) => {
   try {
     // Auth check — allow cron/service calls + admin users
     const authHeader = req.headers.get("Authorization") || "";
-    const cronSecret = req.headers.get("x-cron-secret");
     const token = authHeader.replace("Bearer ", "");
     
-    // Allow if: service role key, anon key, or x-cron-secret header matches service role
-    const serviceKey = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY") || "";
-    const anonKey = Deno.env.get("SUPABASE_ANON_KEY") || "";
-    const isCronCall = token === serviceKey || token === anonKey || cronSecret === serviceKey;
+    // Check all possible key env vars
+    const knownKeys = [
+      Deno.env.get("SUPABASE_SERVICE_ROLE_KEY"),
+      Deno.env.get("SUPABASE_ANON_KEY"),
+      Deno.env.get("SUPABASE_PUBLISHABLE_KEY"),
+    ].filter(Boolean) as string[];
     
-    console.log(`Auth check: hasBearer=${!!authHeader}, isCron=${isCronCall}, tokenLen=${token.length}, serviceKeyLen=${serviceKey.length}, anonKeyLen=${anonKey.length}`);
+    const isCronCall = knownKeys.some(k => token === k);
 
     if (!isCronCall) {
       if (!authHeader.startsWith("Bearer ")) {
@@ -684,15 +685,15 @@ serve(async (req) => {
       }
       
       // Verify user JWT and check admin
+      const anonKey = Deno.env.get("SUPABASE_ANON_KEY") || Deno.env.get("SUPABASE_PUBLISHABLE_KEY") || token;
       const sb = createClient(
         Deno.env.get("SUPABASE_URL")!,
-        anonKey || token,
+        anonKey,
         { global: { headers: { Authorization: authHeader } } }
       );
 
       const { data: { user }, error: userError } = await sb.auth.getUser(token);
       if (userError || !user) {
-        console.log("Auth failed: getUser error", userError?.message);
         return new Response(JSON.stringify({ error: "Unauthorized" }), {
           status: 401,
           headers: { ...corsHeaders, "Content-Type": "application/json" },
