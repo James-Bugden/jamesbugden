@@ -720,20 +720,25 @@ export default function ThreadsAnalytics() {
                   <div className="grid grid-cols-2 md:grid-cols-5 gap-4">
                     <KpiCard label="Total Posts" subtitle="How many times you posted" icon={FileText} iconColor="#6366f1"
                       value={postsAgg.data ? fmt(postsAgg.data.totalPosts) : "—"}
-                      periodDelta={postsDelta} periodLabel={periodLabel} />
+                      periodDelta={postsDelta} periodLabel={periodLabel}
+                      sparkData={postTrend.data?.map(d => d.posts)} />
                     <KpiCard label="Total Views" subtitle="How many people saw your posts" icon={Eye} iconColor="#3b82f6"
                       value={postsAgg.data ? fmt(postsAgg.data.totalViews) : "—"}
-                      periodDelta={viewsDelta} periodLabel={periodLabel} />
+                      periodDelta={viewsDelta} periodLabel={periodLabel}
+                      sparkData={postTrend.data?.map(d => d.views)} />
                     <KpiCard label="Engagement" subtitle="Likes, replies & shares per view" icon={Heart} iconColor={engValue >= 0.015 ? "#22c55e" : engValue >= 0.008 ? "#f59e0b" : "#ef4444"}
                       value={postsAgg.data ? pct(postsAgg.data.avgEng) : "—"}
                       progressValue={engValue} progressMax={0.03}
-                      periodDelta={engDelta} periodLabel={periodLabel} />
+                      periodDelta={engDelta} periodLabel={periodLabel}
+                      sparkData={postTrend.data?.map(d => d.engagementRate)} />
                     <KpiCard label="Avg Views/Post" subtitle="Reach per post on average" icon={BarChart3} iconColor="#8b5cf6"
                       value={postsAgg.data ? fmt(Math.round(postsAgg.data.avgViews)) : "—"}
-                      periodDelta={avgViewsDelta} periodLabel={periodLabel} />
+                      periodDelta={avgViewsDelta} periodLabel={periodLabel}
+                      sparkData={postTrend.data?.map(d => d.views / Math.max(d.posts, 1))} />
                     <KpiCard label="Followers Gained" subtitle="New followers in this period" icon={Users} iconColor="#22c55e"
                       value={followerDeltas.data ? (followerDeltas.data.netGain === 0 ? "No change yet" : (followerDeltas.data.netGain >= 0 ? "+" : "") + fmt(followerDeltas.data.netGain)) : "—"}
-                      delta={followerDeltas.data && followerDeltas.data.netGain > 0 ? "Growing" : followerDeltas.data && followerDeltas.data.netGain < 0 ? "Declining" : undefined} />
+                      delta={followerDeltas.data && followerDeltas.data.netGain > 0 ? "Growing" : followerDeltas.data && followerDeltas.data.netGain < 0 ? "Declining" : undefined}
+                      sparkData={followerDeltas.data?.deltas?.map(d => d.followers)} />
                   </div>
 
                   {/* Top Performer */}
