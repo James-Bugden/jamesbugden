@@ -291,27 +291,26 @@ export default function ThreadsAnalytics() {
     }
   };
 
-  // Chart data
-  const chartData = (insights.data || []).map((row) => ({
-    date: row.metric_date,
-    views: row.profile_views,
-    interactions: (row.total_likes || 0) + (row.total_replies || 0) + (row.total_reposts || 0) + (row.total_quotes || 0),
-    followers: row.follower_count,
-  }));
-
-  // 7-day rolling average engagement
-  const chartWithRolling = chartData.map((row, i) => {
-    const window = chartData.slice(Math.max(0, i - 6), i + 1);
+  // Chart data derived from posts
+  const trendData = postTrend.data || [];
+  const chartWithRolling = trendData.map((row, i) => {
+    const window = trendData.slice(Math.max(0, i - 6), i + 1);
     const totalViews = window.reduce((s, w) => s + w.views, 0);
-    const totalInteractions = window.reduce((s, w) => s + w.interactions, 0);
+    const totalInteractions = window.reduce((s, w) => s + w.likes + w.replies + w.reposts + w.quotes, 0);
     const rollingEng = totalViews > 0 ? (totalInteractions / totalViews) * 100 : 0;
-    return { ...row, rollingEng: Math.round(rollingEng * 100) / 100 };
+    return { ...row, interactions: row.likes + row.replies + row.reposts + row.quotes, rollingEng: Math.round(rollingEng * 100) / 100 };
   });
 
-  // Sparkline data (last 30 days from insights)
-  const spark30 = (insights.data || []).slice(-30);
-  const sparkViews = spark30.map((r) => ({ v: r.profile_views }));
-  const sparkFollowers = spark30.map((r) => ({ v: r.follower_count }));
+  // Cumulative engagement as follower growth proxy
+  const cumulativeData = trendData.reduce<{ date: string; cumViews: number; cumEngagement: number }[]>((acc, row) => {
+    const prev = acc.length ? acc[acc.length - 1] : { cumViews: 0, cumEngagement: 0 };
+    acc.push({ date: row.date, cumViews: prev.cumViews + row.views, cumEngagement: prev.cumEngagement + row.likes + row.replies + row.reposts + row.quotes });
+    return acc;
+  }, []);
+
+  // Sparkline data from post trend
+  const spark30 = trendData.slice(-30);
+  const sparkViews = spark30.map((r) => ({ v: r.views }));
 
   const ranges: DateRange[] = ["7d", "30d", "90d", "all"];
 
