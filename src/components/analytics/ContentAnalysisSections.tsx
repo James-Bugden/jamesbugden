@@ -660,7 +660,7 @@ export default function ContentAnalysisSections({ range }: { range: DateRange })
       <MediaTypeSection posts={posts} overallAvgEng={overallAvgEng} />
       <PostingTimeHeatmap posts={posts} />
       <PostFrequencySection posts={posts} />
-      {hasTaggedPosts && <TagInsightsTabs posts={posts} />}
+      {hasTaggedPosts && <TagInsightsTabs posts={posts} followerDeltas={followerDeltas} />}
     </div>
   );
 }
