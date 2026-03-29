@@ -37,7 +37,8 @@ function MediaTypeSection({ posts, overallAvgEng }: { posts: ThreadsPost[]; over
   return (
     <Card>
       <CardContent className="p-4 md:p-6">
-        <h3 className="text-sm font-medium text-muted-foreground mb-4">Content Performance by Media Type</h3>
+        <h3 className="text-sm font-medium text-muted-foreground mb-1">Content Performance by Media Type</h3>
+        <p className="text-xs text-muted-foreground mb-4">Percentages show <strong>average engagement rate</strong> (interactions ÷ views) for each format.</p>
         <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
           {groups.map(([type, items]) => {
             const avgEng = avg(items.map(p => Number(p.engagement_rate)));
