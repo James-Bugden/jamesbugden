@@ -13,6 +13,7 @@ const EXCLUDED_PREFIXES = [
   "/review",
   "/jobs",
   "/tracker",
+  "/analytics",
 ];
 
 const SiteLayout = ({ children }: { children: React.ReactNode }) => {
