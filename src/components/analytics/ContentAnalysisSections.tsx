@@ -4,12 +4,13 @@ import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Badge } from "@/components/ui/badge";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
 import {
-  BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer,
+  BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip as RechartsTooltip, ResponsiveContainer,
   ReferenceLine, Cell,
 } from "recharts";
-import { Image as ImageIcon, Type, Video, Layers, Lightbulb, Clock, Hash, TrendingUp } from "lucide-react";
-import { type DateRange, type ThreadsPost, useAllPosts, fmt, pct } from "./analyticsShared";
+import { Image as ImageIcon, Type, Video, Layers, Lightbulb, Clock, Hash, TrendingUp, Info, Trophy, Eye, Heart, Users } from "lucide-react";
+import { type DateRange, type ThreadsPost, type FollowerDelta, useAllPosts, useFollowerDeltas, fmt, pct } from "./analyticsShared";
 
 // ── tooltip style ──────────────────────────────────────────────────
 const tipStyle = { background: "hsl(var(--background))", border: "1px solid hsl(var(--border))", borderRadius: 8, fontSize: 12 };
