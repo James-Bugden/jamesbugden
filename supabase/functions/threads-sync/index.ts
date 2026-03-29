@@ -352,13 +352,18 @@ async function actionDemographics(sb: ReturnType<typeof supabaseAdmin>, userId: 
 
   for (const breakdownType of ["country", "city", "age", "gender"]) {
     const demoData = await fetchDemographics(userId, token, breakdownType);
+    console.log(`Demographics ${breakdownType} raw response:`, JSON.stringify(demoData).slice(0, 500));
     if (demoData?.data) {
       for (const metric of demoData.data) {
         const breakdowns = metric.total_value?.breakdowns?.[0]?.results || [];
-        const total = breakdowns.reduce((s: number, r: any) => s + (r.count || 0), 0);
+        // The API may use "value" or "count" for the numeric field
+        const getCount = (r: any) => r.value ?? r.count ?? 0;
+        const total = breakdowns.reduce((s: number, r: any) => s + getCount(r), 0);
+        console.log(`  ${breakdownType}: ${breakdowns.length} entries, total=${total}`);
         for (const result of breakdowns) {
           const value = result.dimension_values?.[0] || "unknown";
-          const pctVal = total > 0 ? (result.count / total) * 100 : 0;
+          const numVal = getCount(result);
+          const pctVal = total > 0 ? (numVal / total) * 100 : 0;
           await sb.from("threads_demographics").upsert(
             {
               breakdown_type: breakdownType,
