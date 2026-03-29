@@ -141,6 +141,17 @@ function DemographicsSection() {
     </Card>
   );
 
+  // Check if all values are 0 (API returned structure but no actual data)
+  const hasRealData = data.some(d => Number(d.percentage) > 0);
+  if (!hasRealData) return (
+    <Card>
+      <CardContent className="p-6 text-center text-muted-foreground">
+        <p className="text-sm">Demographics data was fetched but all values are 0%.</p>
+        <p className="text-xs mt-1">Try clicking <strong>Demographics</strong> in Data Management to re-sync. The Threads API may need more followers before providing breakdown data.</p>
+      </CardContent>
+    </Card>
+  );
+
   const byType = (type: string) => data.filter(d => d.breakdown_type === type);
   const fetchedAt = data[0]?.fetched_at ? new Date(data[0].fetched_at).toLocaleDateString() : "—";
 
