@@ -394,7 +394,7 @@ export default function ThreadsAnalytics() {
           <Card>
             <CardContent className="p-4 md:p-6">
               <h3 className="text-sm font-medium text-muted-foreground mb-4">Engagement Trend</h3>
-              {insights.isLoading ? (
+              {postTrend.isLoading ? (
                 <Skeleton className="h-[300px]" />
               ) : (
                 <div className="h-[300px]">
