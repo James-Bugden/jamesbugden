@@ -246,16 +246,57 @@ export default function ThreadsAnalytics() {
   const handleBackfill = async () => {
     setBackfilling(true);
     try {
-      const { error } = await supabase.functions.invoke("threads-sync", {
-        body: { action: "backfill" },
-      });
-      if (error) throw error;
-      toast.success("Backfill complete");
+      let fromDate: string | undefined;
+      let totalDays = 0;
+      // Process chunks until done
+      for (let i = 0; i < 20; i++) {
+        const { data, error } = await supabase.functions.invoke("threads-sync", {
+          body: { action: "backfill", fromDate },
+        });
+        if (error) throw error;
+        totalDays += data?.daysProcessed || 0;
+        if (data?.done) break;
+        fromDate = data?.nextFrom;
+        if (!fromDate) break;
+      }
+      toast.success(`Backfill complete — ${totalDays} days processed`);
       insights.refetch();
+      insightCount.refetch();
     } catch (e: any) {
       toast.error(e.message || "Backfill failed");
     } finally {
       setBackfilling(false);
+    }
+  };
+
+  const handleAnalyzeImages = async () => {
+    setAnalyzingImages(true);
+    try {
+      const { data, error } = await supabase.functions.invoke("threads-sync", {
+        body: { action: "analyze-images" },
+      });
+      if (error) throw error;
+      toast.success(`Analyzed ${data?.analyzed || 0} images, ${data?.remaining || 0} remaining`);
+      postsAgg.refetch();
+    } catch (e: any) {
+      toast.error(e.message || "Image analysis failed");
+    } finally {
+      setAnalyzingImages(false);
+    }
+  };
+
+  const handleSyncDemographics = async () => {
+    setSyncingDemographics(true);
+    try {
+      const { data, error } = await supabase.functions.invoke("threads-sync", {
+        body: { action: "demographics" },
+      });
+      if (error) throw error;
+      toast.success(`Demographics synced — ${data?.demographics || 0} entries`);
+    } catch (e: any) {
+      toast.error(e.message || "Demographics sync failed");
+    } finally {
+      setSyncingDemographics(false);
     }
   };
 
