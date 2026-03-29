@@ -9,7 +9,9 @@ import {
   ReferenceLine,
 } from "recharts";
 import { ExternalLink, Image as ImageIcon, Type, Video, Layers, Lightbulb, Clock, Hash, TrendingUp } from "lucide-react";
-import { type DateRange, type ThreadsPost, useAllPosts, useInsightsForReach, fmt, pct } from "./analyticsShared";
+import { useQuery } from "@tanstack/react-query";
+import { supabase } from "@/integrations/supabase/client";
+import { type DateRange, type ThreadsPost, useAllPosts, fmt, pct } from "./analyticsShared";
 
 // ── tooltip style ──────────────────────────────────────────────────
 const tipStyle = { background: "hsl(var(--background))", border: "1px solid hsl(var(--border))", borderRadius: 8, fontSize: 12 };
@@ -37,7 +39,8 @@ function MediaTypeSection({ posts, overallAvgEng }: { posts: ThreadsPost[]; over
   return (
     <Card>
       <CardContent className="p-4 md:p-6">
-        <h3 className="text-sm font-medium text-muted-foreground mb-4">Content Performance by Media Type</h3>
+        <h3 className="text-sm font-medium text-muted-foreground mb-1">Content Performance by Media Type</h3>
+        <p className="text-xs text-muted-foreground mb-4">Percentages show <strong>average engagement rate</strong> (interactions ÷ views) for each format.</p>
         <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
           {groups.map(([type, items]) => {
             const avgEng = avg(items.map(p => Number(p.engagement_rate)));
@@ -51,6 +54,7 @@ function MediaTypeSection({ posts, overallAvgEng }: { posts: ThreadsPost[]; over
                   <span className="text-sm font-medium">{MEDIA_LABELS[type] || type}</span>
                 </div>
                 <div className="text-2xl font-bold">{pct(avgEng)}</div>
+                <div className="text-[10px] text-muted-foreground/70 -mt-0.5">avg engagement rate</div>
                 <div className="text-xs text-muted-foreground">{items.length} posts · {fmt(Math.round(avgViews))} avg views</div>
                 <div className={`text-xs font-medium ${diff >= 0 ? "text-green-600" : "text-red-500"}`}>
                   {diff >= 0 ? "+" : ""}{diff.toFixed(1)}% vs avg
@@ -67,28 +71,32 @@ function MediaTypeSection({ posts, overallAvgEng }: { posts: ThreadsPost[]; over
 // ── Section 6: Post length ─────────────────────────────────────────
 function PostLengthSection({ posts }: { posts: ThreadsPost[] }) {
   const buckets = useMemo(() => {
+    const validPosts = posts.filter(p => p.text_length != null && p.text_length > 0);
     const b = [
       { label: "Short (<100)", min: 0, max: 100, posts: [] as ThreadsPost[] },
       { label: "Medium (100-280)", min: 100, max: 280, posts: [] as ThreadsPost[] },
       { label: "Long (280-500)", min: 280, max: 500, posts: [] as ThreadsPost[] },
       { label: "Extra Long (500+)", min: 500, max: Infinity, posts: [] as ThreadsPost[] },
     ];
-    for (const p of posts) {
-      const len = p.text_length || 0;
+    for (const p of validPosts) {
+      const len = p.text_length!;
       const bucket = b.find(x => len >= x.min && len < x.max);
       if (bucket) bucket.posts.push(p);
     }
-    return b.map(x => ({
-      label: x.label,
-      avgEng: avg(x.posts.map(p => Number(p.engagement_rate))) * 100,
-      count: x.posts.length,
-    }));
+    return b
+      .filter(x => x.posts.length > 0)
+      .map(x => ({
+        label: x.label,
+        avgEng: avg(x.posts.map(p => Number(p.engagement_rate))) * 100,
+        count: x.posts.length,
+      }));
   }, [posts]);
 
   return (
     <Card>
       <CardContent className="p-4 md:p-6">
-        <h3 className="text-sm font-medium text-muted-foreground mb-4">Performance by Post Length</h3>
+        <h3 className="text-sm font-medium text-muted-foreground mb-1">Avg Engagement Rate by Post Length</h3>
+        <p className="text-xs text-muted-foreground mb-4">Bar values show average engagement rate. Labels show post count per bucket.</p>
         <div className="h-[220px]">
           <ResponsiveContainer width="100%" height="100%">
             <BarChart data={buckets} layout="vertical">
@@ -428,47 +436,35 @@ function PostFrequencySection({ posts }: { posts: ThreadsPost[] }) {
   );
 }
 
-// ── Section 12: Reach ratio ────────────────────────────────────────
+// ── Section 12: Reach ratio (uses current follower count) ──────────
 function ReachRatioSection({ posts }: { posts: ThreadsPost[] }) {
-  const insightsQ = useInsightsForReach();
-  const insightsDates = insightsQ.data || [];
+  // Try to get current follower count from latest insight row
+  const followerQ = useQuery({
+    queryKey: ["threads-current-followers"],
+    queryFn: async () => {
+      const { data } = await supabase
+        .from("threads_user_insights")
+        .select("follower_count")
+        .order("metric_date", { ascending: false })
+        .limit(1)
+        .single();
+      return data?.follower_count || 0;
+    },
+  });
 
-  const { avgReach, scatterData, breakouts } = useMemo(() => {
-    if (!insightsDates.length) return { avgReach: 0, scatterData: [], breakouts: [] };
+  const currentFollowers = followerQ.data || 0;
 
-    // For each post, find nearest follower_count
-    const getFollowers = (postedAt: string | null) => {
-      if (!postedAt || !insightsDates.length) return 0;
-      const d = postedAt.split("T")[0];
-      let closest = insightsDates[0];
-      let minDiff = Infinity;
-      for (const ins of insightsDates) {
-        const diff = Math.abs(new Date(ins.metric_date).getTime() - new Date(d).getTime());
-        if (diff < minDiff) { minDiff = diff; closest = ins; }
-      }
-      return closest.follower_count || 1;
-    };
+  const { avgReach, breakouts } = useMemo(() => {
+    if (!currentFollowers || currentFollowers <= 0) return { avgReach: 0, breakouts: [] };
 
     const withReach = posts
       .filter(p => p.views > 0)
-      .map(p => {
-        const followers = getFollowers(p.posted_at);
-        return {
-          ...p,
-          followers,
-          reachRatio: followers > 0 ? p.views / followers : 0,
-        };
-      });
+      .map(p => ({
+        ...p,
+        reachRatio: p.views / currentFollowers,
+      }));
 
     const avgReach = avg(withReach.map(p => p.reachRatio));
-
-    const scatterData = withReach.map(p => ({
-      followers: p.followers,
-      views: p.views,
-      eng: Number(p.engagement_rate),
-      text: truncate(p.text_content, 60),
-      permalink: p.permalink,
-    }));
 
     const breakouts = [...withReach]
       .sort((a, b) => b.reachRatio - a.reachRatio)
@@ -480,39 +476,30 @@ function ReachRatioSection({ posts }: { posts: ThreadsPost[] }) {
         permalink: p.permalink,
       }));
 
-    return { avgReach, scatterData, breakouts };
-  }, [posts, insightsDates]);
+    return { avgReach, breakouts };
+  }, [posts, currentFollowers]);
 
-  if (insightsQ.isLoading) return <Skeleton className="h-[400px] rounded-lg" />;
+  if (followerQ.isLoading) return <Skeleton className="h-[200px] rounded-lg" />;
+
+  if (!currentFollowers) {
+    return (
+      <Card>
+        <CardContent className="p-6 text-center text-muted-foreground">
+          <p className="text-sm">Reach ratio requires follower data.</p>
+          <p className="text-xs mt-1">Click <strong>Sync Now</strong> or <strong>Backfill</strong> to populate follower counts.</p>
+        </CardContent>
+      </Card>
+    );
+  }
 
   return (
     <Card>
       <CardContent className="p-4 md:p-6 space-y-4">
         <h3 className="text-sm font-medium text-muted-foreground">Reach Ratio Analysis</h3>
+        <p className="text-xs text-muted-foreground">Views per post ÷ current follower count ({fmt(currentFollowers)})</p>
         <div className="border rounded-lg p-4 text-center">
           <div className="text-3xl font-bold">{avgReach.toFixed(1)}×</div>
           <p className="text-sm text-muted-foreground">Your posts reach {avgReach.toFixed(1)}× your follower count on average</p>
-        </div>
-
-        <div className="h-[300px]">
-          <ResponsiveContainer width="100%" height="100%">
-            <ScatterChart>
-              <CartesianGrid strokeDasharray="3 3" className="stroke-border" />
-              <XAxis type="number" dataKey="followers" name="Followers" tick={{ fontSize: 11 }} tickFormatter={v => fmt(v)} />
-              <YAxis type="number" dataKey="views" name="Views" tick={{ fontSize: 11 }} tickFormatter={v => fmt(v)} />
-              <ZAxis type="number" dataKey="eng" range={[20, 200]} />
-              <Tooltip contentStyle={tipStyle} formatter={(v: number, name: string) => [fmt(v), name]} />
-              <ReferenceLine
-                segment={[{ x: 0, y: 0 }, { x: Math.max(...scatterData.map(d => d.followers), 1), y: Math.max(...scatterData.map(d => d.followers), 1) }]}
-                stroke="#94a3b8" strokeDasharray="5 5" label="1:1"
-              />
-              <Scatter name="Posts" data={scatterData}>
-                {scatterData.map((d, i) => (
-                  <Cell key={i} fill={d.eng > 0.05 ? "#22c55e" : d.eng > 0.02 ? "#f59e0b" : "#94a3b8"} />
-                ))}
-              </Scatter>
-            </ScatterChart>
-          </ResponsiveContainer>
         </div>
 
         {breakouts.length > 0 && (
@@ -836,7 +823,7 @@ export default function ContentAnalysisSections({ range }: { range: DateRange })
       )}
       <MediaTypeSection posts={posts} overallAvgEng={overallAvgEng} />
       <PostLengthSection posts={posts} />
-      <EngagementBreakdownSection posts={posts} />
+      
       <HashtagSection posts={posts} />
       <ImageContentSection posts={posts} />
       <PostFrequencySection posts={posts} />

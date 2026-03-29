@@ -145,10 +145,14 @@ function DemographicsSection() {
   }
 
   if (!data?.length) return (
-    <Card>
-      <CardContent className="p-6 text-center text-muted-foreground">
-        <p className="text-sm mb-3">No demographics data yet.</p>
-        <p className="text-xs">Click <strong>Demographics</strong> in the sync bar below to fetch audience data.</p>
+    <Card className="border-amber-200 dark:border-amber-800 bg-amber-50/30 dark:bg-amber-950/20">
+      <CardContent className="p-8 text-center space-y-3">
+        <div className="text-4xl">📊</div>
+        <p className="text-sm font-medium">No demographics data yet</p>
+        <p className="text-xs text-muted-foreground max-w-md mx-auto">
+          Scroll down to the sync bar and click the <strong>"Demographics"</strong> button to fetch your audience breakdown (country, city, age, gender).
+        </p>
+        <p className="text-xs text-muted-foreground">↓ Look for the sync controls at the bottom of this page</p>
       </CardContent>
     </Card>
   );

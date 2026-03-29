@@ -390,13 +390,15 @@ export default function ThreadsAnalytics() {
               value={follower.data ? fmt(follower.data.current) : "—"}
               color="#22c55e"
             />
-            <MetricCard
-              icon={TrendingUp}
-              label="Follower Growth (30d)"
-              value={follower.data ? (follower.data.diff >= 0 ? "+" : "") + fmt(follower.data.diff) : "—"}
-              sub={follower.data ? (follower.data.pctChange >= 0 ? "+" : "") + (follower.data.pctChange * 100).toFixed(1) + "%" : undefined}
-              color={follower.data && follower.data.diff >= 0 ? "#22c55e" : "#ef4444"}
-            />
+            {follower.data && follower.data.diff !== 0 && (
+              <MetricCard
+                icon={TrendingUp}
+                label="Follower Growth (30d)"
+                value={(follower.data.diff >= 0 ? "+" : "") + fmt(follower.data.diff)}
+                sub={(follower.data.pctChange >= 0 ? "+" : "") + (follower.data.pctChange * 100).toFixed(1) + "%"}
+                color={follower.data.diff >= 0 ? "#22c55e" : "#ef4444"}
+              />
+            )}
           </div>
 
           {/* Section 2: Date Range */}
