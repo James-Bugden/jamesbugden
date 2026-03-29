@@ -313,7 +313,7 @@ function PostFrequencySection({ posts }: { posts: ThreadsPost[] }) {
               <CartesianGrid strokeDasharray="3 3" className="stroke-border" />
               <XAxis dataKey="period" tick={{ fontSize: 10 }} tickFormatter={v => view === "weekly" ? v.slice(5) : v} />
               <YAxis tick={{ fontSize: 11 }} />
-              <Tooltip contentStyle={tipStyle} />
+              <RechartsTooltip contentStyle={tipStyle} />
               <ReferenceLine y={avgFreq} stroke="#f59e0b" strokeDasharray="6 4" strokeWidth={1.5}
                 label={{ value: `Avg ${avgFreq}`, position: "right", fontSize: 10, fill: "#f59e0b" }} />
               <Bar dataKey="count" name={`Posts/${label}`} fill="hsl(var(--primary))" opacity={0.7} radius={[4, 4, 0, 0]} />
