@@ -356,6 +356,10 @@ async function actionDemographics(sb: ReturnType<typeof supabaseAdmin>, userId: 
     if (demoData?.data) {
       for (const metric of demoData.data) {
         const breakdowns = metric.total_value?.breakdowns?.[0]?.results || [];
+        // Log first result to debug field names
+        if (breakdowns.length > 0) {
+          console.log(`  ${breakdownType} sample result:`, JSON.stringify(breakdowns[0]));
+        }
         // The API may use "value" or "count" for the numeric field
         const getCount = (r: any) => r.value ?? r.count ?? 0;
         const total = breakdowns.reduce((s: number, r: any) => s + getCount(r), 0);
