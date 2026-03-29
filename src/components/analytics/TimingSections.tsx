@@ -196,7 +196,6 @@ export default function TimingSections({ range }: { range: DateRange }) {
 
   return (
     <div className="space-y-6">
-      <HeatmapSection posts={posts} />
       <DayOfWeekSection posts={posts} />
     </div>
   );
