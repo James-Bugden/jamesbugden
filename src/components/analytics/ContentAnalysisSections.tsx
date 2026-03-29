@@ -821,7 +821,7 @@ export default function ContentAnalysisSections({ range }: { range: DateRange })
       )}
       <MediaTypeSection posts={posts} overallAvgEng={overallAvgEng} />
       <PostLengthSection posts={posts} />
-      <EngagementBreakdownSection posts={posts} />
+      
       <HashtagSection posts={posts} />
       <ImageContentSection posts={posts} />
       <PostFrequencySection posts={posts} />
