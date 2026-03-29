@@ -522,7 +522,7 @@ export default function ThreadsAnalytics() {
         <meta name="robots" content="noindex" />
       </Helmet>
 
-      <div className="min-h-screen bg-[#f8f9fb] flex">
+      <div className="analytics-dashboard min-h-screen bg-[#f8f9fb] flex">
         {/* ─── SIDEBAR ──────────────────────────────────────── */}
         <aside className={`${sidebarOpen ? "w-56" : "w-14"} hidden md:flex flex-col border-r border-gray-200/80 bg-white shrink-0 transition-all duration-200`}>
           <div className="h-14 flex items-center px-4 border-b border-gray-100 gap-2">
