@@ -5,12 +5,15 @@ import { supabase } from "@/integrations/supabase/client";
 import { useQuery } from "@tanstack/react-query";
 import { Helmet } from "react-helmet-async";
 import { usePostDerivedTrend } from "@/components/analytics/analyticsShared";
+import { useAllPosts } from "@/components/analytics/analyticsShared";
+import { ContentStrategySection } from "@/components/analytics/ContentAnalysisSections";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
+import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible";
 import {
   Eye, Heart, MessageCircle, Repeat2, Users, TrendingUp,
-  BarChart3, RefreshCw, Database, ArrowLeft,
+  BarChart3, RefreshCw, Database, ArrowLeft, ChevronDown,
 } from "lucide-react";
 import {
   LineChart, Line, AreaChart, Area, XAxis, YAxis, CartesianGrid,
@@ -80,21 +83,26 @@ function useFollowerGrowth() {
         .order("metric_date", { ascending: false })
         .limit(1)
         .single();
-
-      const thirtyDaysAgo = daysAgo(30);
-      const { data: older } = await supabase
-        .from("threads_user_insights")
-        .select("follower_count")
-        .lte("metric_date", thirtyDaysAgo)
-        .order("metric_date", { ascending: false })
-        .limit(1)
-        .single();
-
       const current = latest?.follower_count || 0;
-      const prev = older?.follower_count || current;
-      const diff = current - prev;
-      const pctChange = prev > 0 ? diff / prev : 0;
-      return { current, diff, pctChange };
+      return { current };
+    },
+  });
+}
+
+function useFollowerHistory() {
+  return useQuery({
+    queryKey: ["threads-follower-history"],
+    queryFn: async () => {
+      const { data, error } = await supabase
+        .from("threads_user_insights")
+        .select("metric_date, follower_count")
+        .order("metric_date", { ascending: true })
+        .limit(1000);
+      if (error) throw error;
+      return (data || []).filter(r => r.follower_count && r.follower_count > 0).map(r => ({
+        date: r.metric_date,
+        followers: r.follower_count!,
+      }));
     },
   });
 }
@@ -114,33 +122,25 @@ function useLastSync() {
   });
 }
 
-// ── Sparkline ──────────────────────────────────────────────────────
-function Sparkline({ data, dataKey, color = "hsl(var(--primary))" }: { data: any[]; dataKey: string; color?: string }) {
-  if (!data.length) return null;
+// ── Section Heading ────────────────────────────────────────────────
+function SectionHeading({ children }: { children: React.ReactNode }) {
   return (
-    <div className="w-[60px] h-[20px]">
-      <ResponsiveContainer width="100%" height="100%">
-        <LineChart data={data}>
-          <Line type="monotone" dataKey={dataKey} stroke={color} strokeWidth={1.5} dot={false} />
-        </LineChart>
-      </ResponsiveContainer>
+    <div className="flex items-center gap-3 pt-4">
+      <div className="h-px flex-1 bg-border" />
+      <span className="text-xs font-medium tracking-widest uppercase text-muted-foreground">{children}</span>
+      <div className="h-px flex-1 bg-border" />
     </div>
   );
 }
 
 // ── Metric Card ────────────────────────────────────────────────────
-function MetricCard({
-  icon: Icon, label, value, sub, sparkData, sparkKey, color,
-}: {
-  icon: any; label: string; value: string; sub?: string; sparkData?: any[]; sparkKey?: string; color?: string;
+function MetricCard({ icon: Icon, label, value, sub, color }: {
+  icon: any; label: string; value: string; sub?: string; color?: string;
 }) {
   return (
-    <Card className="min-w-[150px] flex-shrink-0">
+    <Card>
       <CardContent className="p-4 flex flex-col gap-1">
-        <div className="flex items-center justify-between">
-          <Icon className="w-4 h-4 text-muted-foreground" />
-          {sparkData && sparkKey && <Sparkline data={sparkData} dataKey={sparkKey} color={color} />}
-        </div>
+        <Icon className="w-4 h-4 text-muted-foreground" />
         <span className="text-2xl font-bold tracking-tight">{value}</span>
         <span className="text-xs text-muted-foreground">{label}</span>
         {sub && <span className="text-xs font-medium" style={{ color }}>{sub}</span>}
@@ -160,11 +160,15 @@ export default function ThreadsAnalytics() {
   const [syncingDemographics, setSyncingDemographics] = useState(false);
   const [taggingContent, setTaggingContent] = useState(false);
   const [refreshingAll, setRefreshingAll] = useState(false);
+  const [syncOpen, setSyncOpen] = useState(false);
 
   const postsAgg = usePostsAggregates(range);
   const postTrend = usePostDerivedTrend(range);
   const follower = useFollowerGrowth();
+  const followerHistory = useFollowerHistory();
   const lastSync = useLastSync();
+  const allPostsQ = useAllPosts(range);
+  const allPosts = allPostsQ.data || [];
 
   // Admin check
   const [isAdmin, setIsAdmin] = useState(false);
@@ -183,8 +187,8 @@ export default function ThreadsAnalytics() {
     return (
       <div className="min-h-screen bg-background p-6 space-y-6">
         <Skeleton className="h-8 w-48" />
-        <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-7 gap-4">
-          {Array.from({ length: 7 }).map((_, i) => (
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+          {Array.from({ length: 4 }).map((_, i) => (
             <Skeleton key={i} className="h-28 rounded-lg" />
           ))}
         </div>
@@ -207,16 +211,9 @@ export default function ThreadsAnalytics() {
       const { data, error } = await supabase.functions.invoke("threads-sync");
       if (error) throw error;
       toast.success(`Synced ${data?.posts || 0} posts, analyzed ${data?.analyzed || 0} images`);
-      // Refetch
-      postsAgg.refetch();
-      postTrend.refetch();
-      follower.refetch();
-      lastSync.refetch();
-    } catch (e: any) {
-      toast.error(e.message || "Sync failed");
-    } finally {
-      setSyncing(false);
-    }
+      postsAgg.refetch(); postTrend.refetch(); follower.refetch(); lastSync.refetch();
+    } catch (e: any) { toast.error(e.message || "Sync failed"); }
+    finally { setSyncing(false); }
   };
 
   const handleBackfill = async () => {
@@ -224,11 +221,8 @@ export default function ThreadsAnalytics() {
     try {
       let fromDate: string | undefined;
       let totalDays = 0;
-      // Process chunks until done
       for (let i = 0; i < 20; i++) {
-        const { data, error } = await supabase.functions.invoke("threads-sync", {
-          body: { action: "backfill", fromDate },
-        });
+        const { data, error } = await supabase.functions.invoke("threads-sync", { body: { action: "backfill", fromDate } });
         if (error) throw error;
         totalDays += data?.daysProcessed || 0;
         if (data?.done) break;
@@ -237,58 +231,38 @@ export default function ThreadsAnalytics() {
       }
       toast.success(`Backfill complete — ${totalDays} days processed`);
       postTrend.refetch();
-    } catch (e: any) {
-      toast.error(e.message || "Backfill failed");
-    } finally {
-      setBackfilling(false);
-    }
+    } catch (e: any) { toast.error(e.message || "Backfill failed"); }
+    finally { setBackfilling(false); }
   };
 
   const handleAnalyzeImages = async () => {
     setAnalyzingImages(true);
     try {
-      const { data, error } = await supabase.functions.invoke("threads-sync", {
-        body: { action: "analyze-images" },
-      });
+      const { data, error } = await supabase.functions.invoke("threads-sync", { body: { action: "analyze-images" } });
       if (error) throw error;
       toast.success(`Analyzed ${data?.analyzed || 0} images, ${data?.remaining || 0} remaining`);
-      postsAgg.refetch();
-    } catch (e: any) {
-      toast.error(e.message || "Image analysis failed");
-    } finally {
-      setAnalyzingImages(false);
-    }
+    } catch (e: any) { toast.error(e.message || "Image analysis failed"); }
+    finally { setAnalyzingImages(false); }
   };
 
   const handleSyncDemographics = async () => {
     setSyncingDemographics(true);
     try {
-      const { data, error } = await supabase.functions.invoke("threads-sync", {
-        body: { action: "demographics" },
-      });
+      const { data, error } = await supabase.functions.invoke("threads-sync", { body: { action: "demographics" } });
       if (error) throw error;
       toast.success(`Demographics synced — ${data?.demographics || 0} entries`);
-    } catch (e: any) {
-      toast.error(e.message || "Demographics sync failed");
-    } finally {
-      setSyncingDemographics(false);
-    }
+    } catch (e: any) { toast.error(e.message || "Demographics sync failed"); }
+    finally { setSyncingDemographics(false); }
   };
 
   const handleTagContent = async () => {
     setTaggingContent(true);
     try {
-      const { data, error } = await supabase.functions.invoke("threads-sync", {
-        body: { action: "tag-content" },
-      });
+      const { data, error } = await supabase.functions.invoke("threads-sync", { body: { action: "tag-content" } });
       if (error) throw error;
       toast.success(`Tagged ${data?.tagged || 0} posts, ${data?.remaining || 0} remaining`);
-      postsAgg.refetch();
-    } catch (e: any) {
-      toast.error(e.message || "Content tagging failed");
-    } finally {
-      setTaggingContent(false);
-    }
+    } catch (e: any) { toast.error(e.message || "Content tagging failed"); }
+    finally { setTaggingContent(false); }
   };
 
   const handleRefreshAll = async () => {
@@ -296,25 +270,19 @@ export default function ThreadsAnalytics() {
     try {
       let totalRefreshed = 0;
       for (let i = 0; i < 10; i++) {
-        const { data, error } = await supabase.functions.invoke("threads-sync", {
-          body: { action: "refresh-all-insights" },
-        });
+        const { data, error } = await supabase.functions.invoke("threads-sync", { body: { action: "refresh-all-insights" } });
         if (error) throw error;
         totalRefreshed += data?.refreshed || 0;
         if ((data?.remaining || 0) === 0) break;
         toast.info(`Refreshed ${totalRefreshed} posts, ${data?.remaining} remaining...`);
       }
       toast.success(`Refreshed insights for ${totalRefreshed} posts`);
-      postsAgg.refetch();
-      postTrend.refetch();
-    } catch (e: any) {
-      toast.error(e.message || "Refresh failed");
-    } finally {
-      setRefreshingAll(false);
-    }
+      postsAgg.refetch(); postTrend.refetch();
+    } catch (e: any) { toast.error(e.message || "Refresh failed"); }
+    finally { setRefreshingAll(false); }
   };
 
-  // Chart data derived from posts
+  // Chart data
   const trendData = postTrend.data || [];
   const chartWithRolling = trendData.map((row, i) => {
     const window = trendData.slice(Math.max(0, i - 6), i + 1);
@@ -324,17 +292,7 @@ export default function ThreadsAnalytics() {
     return { ...row, interactions: row.likes + row.replies + row.reposts + row.quotes, rollingEng: Math.round(rollingEng * 100) / 100 };
   });
 
-  // Cumulative engagement as follower growth proxy
-  const cumulativeData = trendData.reduce<{ date: string; cumViews: number; cumEngagement: number }[]>((acc, row) => {
-    const prev = acc.length ? acc[acc.length - 1] : { cumViews: 0, cumEngagement: 0 };
-    acc.push({ date: row.date, cumViews: prev.cumViews + row.views, cumEngagement: prev.cumEngagement + row.likes + row.replies + row.reposts + row.quotes });
-    return acc;
-  }, []);
-
-  // Sparkline data from post trend
-  const spark30 = trendData.slice(-30);
-  const sparkViews = spark30.map((r) => ({ v: r.views }));
-
+  const followerData = followerHistory.data || [];
   const ranges: DateRange[] = ["7d", "30d", "90d", "all"];
 
   return (
@@ -354,68 +312,32 @@ export default function ThreadsAnalytics() {
         </div>
 
         <div className="max-w-[1400px] mx-auto px-4 md:px-8 py-6 space-y-6">
-          {/* Section 1: Overview Cards */}
-          <div className="flex gap-4 overflow-x-auto pb-2 -mx-4 px-4 md:mx-0 md:px-0">
-            <MetricCard
-              icon={BarChart3}
-              label="Total Posts"
-              value={postsAgg.data ? fmt(postsAgg.data.totalPosts) : "—"}
-            />
-            <MetricCard
-              icon={Eye}
-              label="Total Views"
-              value={postsAgg.data ? fmt(postsAgg.data.totalViews) : "—"}
-              sparkData={sparkViews}
-              sparkKey="v"
-              color="hsl(var(--primary))"
-            />
-            <MetricCard
-              icon={Heart}
-              label="Avg Engagement"
-              value={postsAgg.data ? pct(postsAgg.data.avgEng) : "—"}
-            />
-            <MetricCard
-              icon={Repeat2}
-              label="Virality (reposts+quotes/views)"
-              value={postsAgg.data ? pct(postsAgg.data.avgVir) : "—"}
-            />
-            <MetricCard
-              icon={MessageCircle}
-              label="Conversation (replies/views)"
-              value={postsAgg.data ? pct(postsAgg.data.avgConv) : "—"}
-            />
-            <MetricCard
-              icon={Users}
-              label="Followers"
-              value={follower.data ? fmt(follower.data.current) : "—"}
-              color="#22c55e"
-            />
-            {follower.data && follower.data.diff !== 0 && (
-              <MetricCard
-                icon={TrendingUp}
-                label="Follower Growth (30d)"
-                value={(follower.data.diff >= 0 ? "+" : "") + fmt(follower.data.diff)}
-                sub={(follower.data.pctChange >= 0 ? "+" : "") + (follower.data.pctChange * 100).toFixed(1) + "%"}
-                color={follower.data.diff >= 0 ? "#22c55e" : "#ef4444"}
-              />
-            )}
+
+          {/* ─── OVERVIEW ─────────────────────────────────────── */}
+          <SectionHeading>Overview</SectionHeading>
+
+          {/* KPI Cards — responsive grid */}
+          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-3">
+            <MetricCard icon={BarChart3} label="Total Posts" value={postsAgg.data ? fmt(postsAgg.data.totalPosts) : "—"} />
+            <MetricCard icon={Eye} label="Total Views" value={postsAgg.data ? fmt(postsAgg.data.totalViews) : "—"} />
+            <MetricCard icon={Heart} label="Avg Engagement" value={postsAgg.data ? pct(postsAgg.data.avgEng) : "—"} />
+            <MetricCard icon={Repeat2} label="Avg Virality" value={postsAgg.data ? pct(postsAgg.data.avgVir) : "—"} />
+            <MetricCard icon={Users} label="Followers" value={follower.data ? fmt(follower.data.current) : "—"} color="#22c55e" />
           </div>
 
-          {/* Section 2: Date Range */}
+          {/* Date Range */}
           <div className="flex gap-2">
             {ranges.map((r) => (
-              <Button
-                key={r}
-                variant={range === r ? "default" : "outline"}
-                size="sm"
-                onClick={() => setRange(r)}
-              >
+              <Button key={r} variant={range === r ? "default" : "outline"} size="sm" onClick={() => setRange(r)}>
                 {r === "all" ? "All Time" : r}
               </Button>
             ))}
           </div>
 
-          {/* Section 3: Engagement Trend */}
+          {/* What to Post Next — top priority */}
+          {allPosts.length > 0 && <ContentStrategySection posts={allPosts} />}
+
+          {/* Engagement Trend */}
           <Card>
             <CardContent className="p-4 md:p-6">
               <h3 className="text-sm font-medium text-muted-foreground mb-4">Engagement Trend</h3>
@@ -429,9 +351,7 @@ export default function ThreadsAnalytics() {
                       <XAxis dataKey="date" tick={{ fontSize: 11 }} tickFormatter={(v) => v.slice(5)} />
                       <YAxis yAxisId="left" tick={{ fontSize: 11 }} />
                       <YAxis yAxisId="right" orientation="right" tick={{ fontSize: 11 }} />
-                      <Tooltip
-                        contentStyle={{ background: "hsl(var(--background))", border: "1px solid hsl(var(--border))", borderRadius: 8, fontSize: 12 }}
-                      />
+                      <Tooltip contentStyle={{ background: "hsl(var(--background))", border: "1px solid hsl(var(--border))", borderRadius: 8, fontSize: 12 }} />
                       <Legend />
                       <Line yAxisId="left" type="monotone" dataKey="views" name="Views" stroke="hsl(var(--primary))" strokeWidth={2} dot={false} />
                       <Line yAxisId="left" type="monotone" dataKey="interactions" name="Interactions" stroke="#f59e0b" strokeWidth={2} dot={false} />
@@ -443,87 +363,95 @@ export default function ThreadsAnalytics() {
             </CardContent>
           </Card>
 
-          {/* Section 4: Cumulative Engagement Growth */}
+          {/* Follower Growth Chart */}
           <Card>
             <CardContent className="p-4 md:p-6">
-              <h3 className="text-sm font-medium text-muted-foreground mb-4">Cumulative Engagement Growth</h3>
-              {postTrend.isLoading ? (
+              <h3 className="text-sm font-medium text-muted-foreground mb-4">Follower Growth</h3>
+              {followerHistory.isLoading ? (
                 <Skeleton className="h-[250px]" />
-              ) : (
+              ) : followerData.length > 1 ? (
                 <div className="h-[250px]">
                   <ResponsiveContainer width="100%" height="100%">
-                    <AreaChart data={cumulativeData}>
+                    <AreaChart data={followerData}>
                       <defs>
-                        <linearGradient id="cumGradient" x1="0" y1="0" x2="0" y2="1">
+                        <linearGradient id="followerGrad" x1="0" y1="0" x2="0" y2="1">
                           <stop offset="5%" stopColor="#22c55e" stopOpacity={0.3} />
                           <stop offset="95%" stopColor="#22c55e" stopOpacity={0} />
                         </linearGradient>
                       </defs>
                       <CartesianGrid strokeDasharray="3 3" className="stroke-border" />
                       <XAxis dataKey="date" tick={{ fontSize: 11 }} tickFormatter={(v) => v.slice(5)} />
-                      <YAxis yAxisId="left" tick={{ fontSize: 11 }} />
-                      <YAxis yAxisId="right" orientation="right" tick={{ fontSize: 11 }} />
-                      <Tooltip
-                        contentStyle={{ background: "hsl(var(--background))", border: "1px solid hsl(var(--border))", borderRadius: 8, fontSize: 12 }}
-                      />
-                      <Legend />
-                      <Area yAxisId="left" type="monotone" dataKey="cumViews" name="Cumulative Views" stroke="hsl(var(--primary))" fill="url(#cumGradient)" strokeWidth={2} />
-                      <Area yAxisId="right" type="monotone" dataKey="cumEngagement" name="Cumulative Engagement" stroke="#22c55e" fill="none" strokeWidth={2} />
+                      <YAxis tick={{ fontSize: 11 }} domain={["dataMin - 100", "dataMax + 100"]} />
+                      <Tooltip contentStyle={{ background: "hsl(var(--background))", border: "1px solid hsl(var(--border))", borderRadius: 8, fontSize: 12 }} />
+                      <Area type="monotone" dataKey="followers" name="Followers" stroke="#22c55e" fill="url(#followerGrad)" strokeWidth={2} />
                     </AreaChart>
                   </ResponsiveContainer>
+                </div>
+              ) : (
+                <div className="text-center py-8 text-muted-foreground">
+                  <p className="text-sm">No follower history yet.</p>
+                  <p className="text-xs mt-1">Click <strong>Backfill</strong> in Data Management to start tracking, then daily syncs will accumulate data.</p>
                 </div>
               )}
             </CardContent>
           </Card>
 
-          {/* Sections 5-12: Content Analysis */}
+          {/* ─── CONTENT STRATEGY ─────────────────────────────── */}
+          <SectionHeading>Content Strategy</SectionHeading>
           <ContentAnalysisSections range={range} />
 
-          {/* Sections 13-14: Post Details */}
+          {/* ─── POST EXPLORER ────────────────────────────────── */}
+          <SectionHeading>Post Explorer</SectionHeading>
           <PostDetailSections range={range} />
 
-          {/* Sections 15-16: Timing */}
+          {/* ─── TIMING & AUDIENCE ────────────────────────────── */}
+          <SectionHeading>Timing & Audience</SectionHeading>
           <TimingSections range={range} />
-
-          {/* Sections 17-18: Links & Demographics */}
           <LinksDemographicsSections />
 
-          {/* Section 19: Sync Status */}
-          <div className="flex flex-wrap items-center gap-3 border rounded-lg p-4 bg-muted/30">
-            <Database className="w-4 h-4 text-muted-foreground" />
-            <span className="text-sm text-muted-foreground">
-              Last sync:{" "}
-              {lastSync.data
-                ? new Date(lastSync.data).toLocaleString()
-                : "Never"}
-            </span>
-            <div className="ml-auto flex flex-wrap gap-2">
-              <Button variant="outline" size="sm" onClick={handleRefreshAll} disabled={refreshingAll}>
-                {refreshingAll && <RefreshCw className="w-3 h-3 animate-spin mr-1" />}
-                Refresh All Insights
-              </Button>
-              <Button variant="outline" size="sm" onClick={handleBackfill} disabled={backfilling}>
-                {backfilling && <RefreshCw className="w-3 h-3 animate-spin mr-1" />}
-                Backfill
-              </Button>
-              <Button variant="outline" size="sm" onClick={handleSyncDemographics} disabled={syncingDemographics}>
-                {syncingDemographics && <RefreshCw className="w-3 h-3 animate-spin mr-1" />}
-                Demographics
-              </Button>
-              <Button variant="outline" size="sm" onClick={handleAnalyzeImages} disabled={analyzingImages}>
-                {analyzingImages && <RefreshCw className="w-3 h-3 animate-spin mr-1" />}
-                Analyze Images
-              </Button>
-              <Button variant="outline" size="sm" onClick={handleTagContent} disabled={taggingContent}>
-                {taggingContent && <RefreshCw className="w-3 h-3 animate-spin mr-1" />}
-                Tag Content
-              </Button>
-              <Button size="sm" onClick={handleSync} disabled={syncing}>
-                {syncing ? <RefreshCw className="w-3 h-3 animate-spin mr-1" /> : <RefreshCw className="w-3 h-3 mr-1" />}
-                Sync Now
-              </Button>
-            </div>
-          </div>
+          {/* ─── DATA MANAGEMENT ──────────────────────────────── */}
+          <SectionHeading>Data Management</SectionHeading>
+          <Collapsible open={syncOpen} onOpenChange={setSyncOpen}>
+            <Card>
+              <CollapsibleTrigger asChild>
+                <button className="w-full flex items-center gap-3 p-4 text-left hover:bg-muted/30 transition-colors rounded-lg">
+                  <Database className="w-4 h-4 text-muted-foreground" />
+                  <span className="text-sm text-muted-foreground flex-1">
+                    Last sync: {lastSync.data ? new Date(lastSync.data).toLocaleString() : "Never"}
+                  </span>
+                  <ChevronDown className={`w-4 h-4 text-muted-foreground transition-transform ${syncOpen ? "rotate-180" : ""}`} />
+                </button>
+              </CollapsibleTrigger>
+              <CollapsibleContent>
+                <div className="px-4 pb-4 flex flex-wrap gap-2">
+                  <Button size="sm" onClick={handleSync} disabled={syncing}>
+                    {syncing ? <RefreshCw className="w-3 h-3 animate-spin mr-1" /> : <RefreshCw className="w-3 h-3 mr-1" />}
+                    Sync Now
+                  </Button>
+                  <Button variant="outline" size="sm" onClick={handleRefreshAll} disabled={refreshingAll}>
+                    {refreshingAll && <RefreshCw className="w-3 h-3 animate-spin mr-1" />}
+                    Refresh All Insights
+                  </Button>
+                  <Button variant="outline" size="sm" onClick={handleBackfill} disabled={backfilling}>
+                    {backfilling && <RefreshCw className="w-3 h-3 animate-spin mr-1" />}
+                    Backfill
+                  </Button>
+                  <Button variant="outline" size="sm" onClick={handleSyncDemographics} disabled={syncingDemographics}>
+                    {syncingDemographics && <RefreshCw className="w-3 h-3 animate-spin mr-1" />}
+                    Demographics
+                  </Button>
+                  <Button variant="outline" size="sm" onClick={handleAnalyzeImages} disabled={analyzingImages}>
+                    {analyzingImages && <RefreshCw className="w-3 h-3 animate-spin mr-1" />}
+                    Analyze Images
+                  </Button>
+                  <Button variant="outline" size="sm" onClick={handleTagContent} disabled={taggingContent}>
+                    {taggingContent && <RefreshCw className="w-3 h-3 animate-spin mr-1" />}
+                    Tag Content
+                  </Button>
+                </div>
+              </CollapsibleContent>
+            </Card>
+          </Collapsible>
         </div>
       </div>
     </>
