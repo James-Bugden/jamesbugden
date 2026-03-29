@@ -93,7 +93,8 @@ function PostLengthSection({ posts }: { posts: ThreadsPost[] }) {
   return (
     <Card>
       <CardContent className="p-4 md:p-6">
-        <h3 className="text-sm font-medium text-muted-foreground mb-4">Performance by Post Length</h3>
+        <h3 className="text-sm font-medium text-muted-foreground mb-1">Avg Engagement Rate by Post Length</h3>
+        <p className="text-xs text-muted-foreground mb-4">Bar values show average engagement rate. Labels show post count per bucket.</p>
         <div className="h-[220px]">
           <ResponsiveContainer width="100%" height="100%">
             <BarChart data={buckets} layout="vertical">
