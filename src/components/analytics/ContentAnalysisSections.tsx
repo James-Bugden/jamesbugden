@@ -526,7 +526,7 @@ function TagBreakdownChart({ posts, field, followerDeltas }: { posts: ThreadsPos
   );
 }
 
-function TagInsightsTabs({ posts }: { posts: ThreadsPost[] }) {
+function TagInsightsTabs({ posts, followerDeltas }: { posts: ThreadsPost[]; followerDeltas?: FollowerDelta[] }) {
   const tabs = [
     { value: "content_topic" as const, label: "Topic" },
     { value: "content_format" as const, label: "Format" },
@@ -549,7 +549,7 @@ function TagInsightsTabs({ posts }: { posts: ThreadsPost[] }) {
         </TabsList>
         {tabs.map(t => (
           <TabsContent key={t.value} value={t.value}>
-            <TagBreakdownChart posts={posts} field={t.value} />
+            <TagBreakdownChart posts={posts} field={t.value} followerDeltas={followerDeltas} />
           </TabsContent>
         ))}
       </Tabs>
