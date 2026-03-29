@@ -512,118 +512,81 @@ function TagInsightsTabs({ posts }: { posts: ThreadsPost[] }) {
   );
 }
 
-// ── Best For comparison table ──────────────────────────────────────
-function BestForTable({ posts, followerDeltas }: { posts: ThreadsPost[]; followerDeltas?: { date: string; delta: number }[] }) {
-  const data = useMemo(() => {
+// ── Best For Winner Cards ──────────────────────────────────────────
+function BestForCards({ posts, followerDeltas }: { posts: ThreadsPost[]; followerDeltas?: { date: string; delta: number }[] }) {
+  const winners = useMemo(() => {
     const mediaGroups: Record<string, ThreadsPost[]> = {};
     for (const p of posts) { const t = p.media_type || "OTHER"; if (!mediaGroups[t]) mediaGroups[t] = []; mediaGroups[t].push(p); }
+    const eligible = Object.entries(mediaGroups).filter(([, items]) => items.length >= 3);
+    if (eligible.length < 2) return null;
 
-    let growthByType: Record<string, number> | null = null;
+    const byViews = eligible.sort((a, b) => avg(b[1].map(p => p.views)) - avg(a[1].map(p => p.views)))[0];
+    const byEng = [...eligible].sort((a, b) => avg(b[1].map(p => Number(p.engagement_rate))) - avg(a[1].map(p => Number(p.engagement_rate))))[0];
+
+    const cards: { icon: any; iconColor: string; bgColor: string; title: string; winner: string; metric: string; detail: string }[] = [
+      {
+        icon: Eye, iconColor: "#3b82f6", bgColor: "bg-blue-50",
+        title: "Best for Reach",
+        winner: MEDIA_LABELS[byViews[0]] || byViews[0],
+        metric: `${fmt(Math.round(avg(byViews[1].map(p => p.views))))} avg views`,
+        detail: `Based on ${byViews[1].length} posts`,
+      },
+      {
+        icon: Heart, iconColor: "#ec4899", bgColor: "bg-pink-50",
+        title: "Best for Engagement",
+        winner: MEDIA_LABELS[byEng[0]] || byEng[0],
+        metric: `${pct(avg(byEng[1].map(p => Number(p.engagement_rate))))} rate`,
+        detail: `Based on ${byEng[1].length} posts`,
+      },
+    ];
+
+    // Growth card (if data available)
     if (followerDeltas && followerDeltas.length > 0 && followerDeltas.some(d => d.delta !== 0)) {
-      growthByType = {};
       const weekPosts: Record<string, ThreadsPost[]> = {};
       for (const p of posts) { if (!p.posted_at) continue; const d = new Date(p.posted_at); const ws = new Date(d); ws.setDate(d.getDate() - d.getDay()); const key = ws.toISOString().split("T")[0]; if (!weekPosts[key]) weekPosts[key] = []; weekPosts[key].push(p); }
       const weekDeltas: Record<string, number> = {};
       for (const fd of followerDeltas) { const d = new Date(fd.date); const ws = new Date(d); ws.setDate(d.getDate() - d.getDay()); const key = ws.toISOString().split("T")[0]; weekDeltas[key] = (weekDeltas[key] || 0) + fd.delta; }
-      const typeWeeks: Record<string, { totalDelta: number; totalPosts: number }> = {};
-      for (const [week, weekPostsList] of Object.entries(weekPosts)) {
+      const typeGrowth: Record<string, { delta: number; posts: number }> = {};
+      for (const [week, wp] of Object.entries(weekPosts)) {
         const delta = weekDeltas[week] || 0;
-        const total = weekPostsList.length;
+        const total = wp.length;
         if (total === 0) continue;
-        const typeCounts: Record<string, number> = {};
-        for (const p of weekPostsList) typeCounts[p.media_type || "OTHER"] = (typeCounts[p.media_type || "OTHER"] || 0) + 1;
-        for (const [type, count] of Object.entries(typeCounts)) { if (!typeWeeks[type]) typeWeeks[type] = { totalDelta: 0, totalPosts: 0 }; typeWeeks[type].totalDelta += delta * (count / total); typeWeeks[type].totalPosts += count; }
+        const tc: Record<string, number> = {};
+        for (const p of wp) tc[p.media_type || "OTHER"] = (tc[p.media_type || "OTHER"] || 0) + 1;
+        for (const [type, count] of Object.entries(tc)) { if (!typeGrowth[type]) typeGrowth[type] = { delta: 0, posts: 0 }; typeGrowth[type].delta += delta * (count / total); typeGrowth[type].posts += count; }
       }
-      for (const [type, tw] of Object.entries(typeWeeks)) { growthByType[type] = tw.totalPosts > 0 ? tw.totalDelta / tw.totalPosts : 0; }
+      const growthEntries = Object.entries(typeGrowth).filter(([t]) => (mediaGroups[t]?.length || 0) >= 3);
+      if (growthEntries.length > 0) {
+        const best = growthEntries.sort((a, b) => (b[1].delta / b[1].posts) - (a[1].delta / a[1].posts))[0];
+        const perPost = best[1].delta / best[1].posts;
+        cards.push({
+          icon: Users, iconColor: "#22c55e", bgColor: "bg-emerald-50",
+          title: "Best for Growth",
+          winner: MEDIA_LABELS[best[0]] || best[0],
+          metric: `${perPost >= 0 ? "+" : ""}${perPost.toFixed(1)} followers/post`,
+          detail: `Estimated from ${best[1].posts} posts`,
+        });
+      }
     }
 
-    const rows = Object.entries(mediaGroups).filter(([, items]) => items.length >= 3).map(([type, items]) => ({
-      type, label: MEDIA_LABELS[type] || type, count: items.length,
-      avgViews: Math.round(avg(items.map(p => p.views))),
-      avgEng: avg(items.map(p => Number(p.engagement_rate))),
-      growthPerPost: growthByType?.[type] ?? null,
-    }));
-
-    const byViews = [...rows].sort((a, b) => b.avgViews - a.avgViews);
-    const byEng = [...rows].sort((a, b) => b.avgEng - a.avgEng);
-    const byGrowth = growthByType ? [...rows].sort((a, b) => (b.growthPerPost ?? -Infinity) - (a.growthPerPost ?? -Infinity)) : [];
-    const showGrowth = growthByType !== null;
-
-    return rows.map(r => ({
-      ...r,
-      viewsRank: byViews.findIndex(x => x.type === r.type) + 1,
-      engRank: byEng.findIndex(x => x.type === r.type) + 1,
-      growthRank: showGrowth ? byGrowth.findIndex(x => x.type === r.type) + 1 : null,
-    })).sort((a, b) => a.engRank - b.engRank);
+    return cards;
   }, [posts, followerDeltas]);
 
-  if (data.length < 2) return null;
-
-  const rankBadge = (rank: number) => {
-    if (rank === 1) return <span className="inline-flex items-center justify-center w-6 h-6 rounded-full text-[11px] font-bold bg-amber-100 text-amber-700">🥇</span>;
-    if (rank === 2) return <span className="inline-flex items-center justify-center w-6 h-6 rounded-full text-[11px] font-bold bg-gray-100 text-gray-500">🥈</span>;
-    return <span className="inline-flex items-center justify-center w-6 h-6 rounded-full text-[10px] font-bold bg-gray-50 text-gray-400">#{rank}</span>;
-  };
+  if (!winners) return null;
 
   return (
-    <div className="bg-white rounded-xl border border-gray-100 p-6 shadow-sm space-y-5">
-      <div className="flex items-center gap-3">
-        <div className="w-9 h-9 rounded-xl bg-amber-50 flex items-center justify-center">
-          <Trophy className="w-5 h-5 text-amber-500" />
+    <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+      {winners.map((w) => (
+        <div key={w.title} className={`${w.bgColor} rounded-xl border border-gray-100 p-5 space-y-2`}>
+          <div className="flex items-center gap-2">
+            <w.icon className="w-4 h-4" style={{ color: w.iconColor }} />
+            <span className="text-xs font-medium text-gray-500">{w.title}</span>
+          </div>
+          <p className="text-xl font-bold text-gray-900">{w.winner}</p>
+          <p className="text-sm font-semibold" style={{ color: w.iconColor }}>{w.metric}</p>
+          <p className="text-[10px] text-gray-400">{w.detail}</p>
         </div>
-        <div>
-          <h3 className="text-sm font-semibold text-gray-900">Best For: Views vs Engagement vs Growth</h3>
-          <p className="text-xs text-gray-400">Which content types perform best for each goal</p>
-        </div>
-      </div>
-
-      <div className="overflow-x-auto">
-        <table className="w-full text-sm">
-          <thead>
-            <tr className="border-b border-gray-100">
-              <th className="text-left py-3 pr-4 font-medium text-gray-500 text-xs uppercase tracking-wider">Format</th>
-              <th className="text-center py-3 px-4 font-medium text-gray-500 text-xs uppercase tracking-wider"><Eye className="w-3.5 h-3.5 inline mr-1 -mt-0.5" />Views</th>
-              <th className="text-center py-3 px-4 font-medium text-gray-500 text-xs uppercase tracking-wider"><Heart className="w-3.5 h-3.5 inline mr-1 -mt-0.5" />Engagement</th>
-              {data.some(d => d.growthRank !== null) && <th className="text-center py-3 px-4 font-medium text-gray-500 text-xs uppercase tracking-wider"><Users className="w-3.5 h-3.5 inline mr-1 -mt-0.5" />Growth*</th>}
-              <th className="text-right py-3 pl-4 font-medium text-gray-500 text-xs uppercase tracking-wider">Posts</th>
-            </tr>
-          </thead>
-          <tbody>
-            {data.map((d, i) => (
-              <tr key={d.type} className={`border-b border-gray-50 hover:bg-gray-50/50 transition-colors ${i % 2 === 0 ? "bg-gray-50/30" : ""}`}>
-                <td className="py-3.5 pr-4 font-semibold text-gray-900">{d.label}</td>
-                <td className="py-3.5 px-4 text-center">
-                  <div className="flex items-center justify-center gap-2">
-                    {rankBadge(d.viewsRank)}
-                    <span className="text-gray-700 font-medium">{fmt(d.avgViews)}</span>
-                  </div>
-                </td>
-                <td className="py-3.5 px-4 text-center">
-                  <div className="flex items-center justify-center gap-2">
-                    {rankBadge(d.engRank)}
-                    <span className="text-gray-700 font-medium">{pct(d.avgEng)}</span>
-                  </div>
-                </td>
-                {data.some(x => x.growthRank !== null) && (
-                  <td className="py-3.5 px-4 text-center">
-                    {d.growthRank !== null ? (
-                      <div className="flex items-center justify-center gap-2">
-                        {rankBadge(d.growthRank)}
-                        <span className="text-gray-700 font-medium">{d.growthPerPost !== null ? (d.growthPerPost >= 0 ? "+" : "") + d.growthPerPost.toFixed(1) + "/post" : "—"}</span>
-                      </div>
-                    ) : "—"}
-                  </td>
-                )}
-                <td className="py-3.5 pl-4 text-right text-gray-400 font-medium">{d.count}</td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      </div>
-
-      {data.some(d => d.growthRank !== null) && (
-        <p className="text-[10px] text-gray-400 italic">*Growth is estimated by correlating weekly follower changes with post types published that week.</p>
-      )}
+      ))}
     </div>
   );
 }
