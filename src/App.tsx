@@ -86,6 +86,7 @@ const CareerGameGuide = lazy(() => import("./pages/CareerGameGuide"));
 const FortyEightLawsGuide = lazy(() => import("./pages/FortyEightLawsGuide"));
 const FortyEightLawsGuideZhTw = lazy(() => import("./pages/FortyEightLawsGuideZhTw"));
 const CareerGameGuideZhTw = lazy(() => import("./pages/CareerGameGuideZhTw"));
+const ThreadsAnalytics = lazy(() => import("./pages/ThreadsAnalytics"));
 const IkigaiGuide = lazy(() => import("./pages/IkigaiGuide"));
 const IkigaiGuideZhTw = lazy(() => import("./pages/IkigaiGuideZhTw"));
 const RecruiterGuide = lazy(() => import("./pages/RecruiterGuide"));
@@ -337,6 +338,7 @@ const App = () => (
             <Route path="/dashboard" element={<Dashboard />} />
             <Route path="/zh-tw/dashboard" element={<DashboardZhTw />} />
             
+            <Route path="/analytics" element={<ThreadsAnalytics />} />
             {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
             <Route path="*" element={<NotFound />} />
           </Routes>

@@ -377,6 +377,183 @@ export type Database = {
         }
         Relationships: []
       }
+      threads_demographics: {
+        Row: {
+          breakdown_type: string
+          breakdown_value: string
+          fetched_at: string | null
+          id: string
+          percentage: number | null
+        }
+        Insert: {
+          breakdown_type: string
+          breakdown_value: string
+          fetched_at?: string | null
+          id?: string
+          percentage?: number | null
+        }
+        Update: {
+          breakdown_type?: string
+          breakdown_value?: string
+          fetched_at?: string | null
+          id?: string
+          percentage?: number | null
+        }
+        Relationships: []
+      }
+      threads_link_clicks: {
+        Row: {
+          clicks: number | null
+          created_at: string | null
+          id: string
+          link_url: string
+          metric_date: string
+        }
+        Insert: {
+          clicks?: number | null
+          created_at?: string | null
+          id?: string
+          link_url: string
+          metric_date: string
+        }
+        Update: {
+          clicks?: number | null
+          created_at?: string | null
+          id?: string
+          link_url?: string
+          metric_date?: string
+        }
+        Relationships: []
+      }
+      threads_posts: {
+        Row: {
+          conversation_rate: number | null
+          created_at: string | null
+          detected_language: string | null
+          engagement_rate: number | null
+          fetched_at: string | null
+          hashtag: string | null
+          id: string
+          image_analyzed_at: string | null
+          image_description: string | null
+          image_tags: string[] | null
+          is_quote_post: boolean | null
+          likes: number | null
+          media_id: string
+          media_type: string | null
+          media_url: string | null
+          permalink: string | null
+          posted_at: string | null
+          quotes: number | null
+          replies: number | null
+          reposts: number | null
+          shares: number | null
+          shortcode: string | null
+          text_content: string | null
+          text_length: number | null
+          thumbnail_url: string | null
+          updated_at: string | null
+          views: number | null
+          virality_rate: number | null
+        }
+        Insert: {
+          conversation_rate?: number | null
+          created_at?: string | null
+          detected_language?: string | null
+          engagement_rate?: number | null
+          fetched_at?: string | null
+          hashtag?: string | null
+          id?: string
+          image_analyzed_at?: string | null
+          image_description?: string | null
+          image_tags?: string[] | null
+          is_quote_post?: boolean | null
+          likes?: number | null
+          media_id: string
+          media_type?: string | null
+          media_url?: string | null
+          permalink?: string | null
+          posted_at?: string | null
+          quotes?: number | null
+          replies?: number | null
+          reposts?: number | null
+          shares?: number | null
+          shortcode?: string | null
+          text_content?: string | null
+          text_length?: number | null
+          thumbnail_url?: string | null
+          updated_at?: string | null
+          views?: number | null
+          virality_rate?: number | null
+        }
+        Update: {
+          conversation_rate?: number | null
+          created_at?: string | null
+          detected_language?: string | null
+          engagement_rate?: number | null
+          fetched_at?: string | null
+          hashtag?: string | null
+          id?: string
+          image_analyzed_at?: string | null
+          image_description?: string | null
+          image_tags?: string[] | null
+          is_quote_post?: boolean | null
+          likes?: number | null
+          media_id?: string
+          media_type?: string | null
+          media_url?: string | null
+          permalink?: string | null
+          posted_at?: string | null
+          quotes?: number | null
+          replies?: number | null
+          reposts?: number | null
+          shares?: number | null
+          shortcode?: string | null
+          text_content?: string | null
+          text_length?: number | null
+          thumbnail_url?: string | null
+          updated_at?: string | null
+          views?: number | null
+          virality_rate?: number | null
+        }
+        Relationships: []
+      }
+      threads_user_insights: {
+        Row: {
+          created_at: string | null
+          follower_count: number | null
+          id: string
+          metric_date: string
+          profile_views: number | null
+          total_likes: number | null
+          total_quotes: number | null
+          total_replies: number | null
+          total_reposts: number | null
+        }
+        Insert: {
+          created_at?: string | null
+          follower_count?: number | null
+          id?: string
+          metric_date: string
+          profile_views?: number | null
+          total_likes?: number | null
+          total_quotes?: number | null
+          total_replies?: number | null
+          total_reposts?: number | null
+        }
+        Update: {
+          created_at?: string | null
+          follower_count?: number | null
+          id?: string
+          metric_date?: string
+          profile_views?: number | null
+          total_likes?: number | null
+          total_quotes?: number | null
+          total_replies?: number | null
+          total_reposts?: number | null
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
