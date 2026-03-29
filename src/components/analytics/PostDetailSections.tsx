@@ -89,7 +89,7 @@ function TopPostsSection({ posts }: { posts: ThreadsPost[] }) {
     if (langFilter !== "all") result = result.filter(p => p.detected_language === langFilter);
     if (tagFilter !== "all") result = result.filter(p => p.image_tags?.includes(tagFilter));
     result.sort((a, b) => Number(b[sortBy]) - Number(a[sortBy]));
-    return result.slice(0, 20);
+    return result.slice(0, 50);
   }, [posts, sortBy, search, langFilter, tagFilter]);
 
   const toggle = (id: string) => setExpanded(prev => {
@@ -98,10 +98,34 @@ function TopPostsSection({ posts }: { posts: ThreadsPost[] }) {
     return next;
   });
 
+  const summaryStats = useMemo(() => {
+    const engRates = posts.map(p => Number(p.engagement_rate)).sort((a, b) => a - b);
+    const median = engRates.length ? engRates[Math.floor(engRates.length / 2)] : 0;
+    const topEng = filtered.length ? Number(filtered[0]?.engagement_rate || 0) : 0;
+    const ratio = median > 0 ? (topEng / median).toFixed(1) : "—";
+    return { total: posts.length, median, topEng, ratio };
+  }, [posts, filtered]);
+
   return (
     <Card>
       <CardContent className="p-4 md:p-6 space-y-4">
         <h3 className="text-sm font-medium text-muted-foreground">Top Performing Posts</h3>
+
+        {/* Summary stats */}
+        <div className="grid grid-cols-3 gap-3">
+          <div className="border rounded-lg p-3 text-center">
+            <div className="text-xl font-bold">{summaryStats.total}</div>
+            <div className="text-[11px] text-muted-foreground">Posts Analyzed</div>
+          </div>
+          <div className="border rounded-lg p-3 text-center">
+            <div className="text-xl font-bold">{pct(summaryStats.median)}</div>
+            <div className="text-[11px] text-muted-foreground">Median Engagement</div>
+          </div>
+          <div className="border rounded-lg p-3 text-center">
+            <div className="text-xl font-bold text-green-600">{summaryStats.ratio}×</div>
+            <div className="text-[11px] text-muted-foreground">#1 vs Median</div>
+          </div>
+        </div>
 
         {/* Controls */}
         <div className="flex flex-wrap gap-2">
