@@ -420,6 +420,15 @@ export default function ThreadsAnalytics() {
           {/* Sections 5-12: Content Analysis */}
           <ContentAnalysisSections range={range} />
 
+          {/* Sections 13-14: Post Details */}
+          <PostDetailSections range={range} />
+
+          {/* Sections 15-16: Timing */}
+          <TimingSections range={range} />
+
+          {/* Sections 17-18: Links & Demographics */}
+          <LinksDemographicsSections />
+
           {/* Section 19: Sync Status */}
           <div className="flex flex-wrap items-center gap-3 border rounded-lg p-4 bg-muted/30">
             <Database className="w-4 h-4 text-muted-foreground" />
