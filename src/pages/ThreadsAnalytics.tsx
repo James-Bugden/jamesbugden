@@ -332,7 +332,7 @@ export default function ThreadsAnalytics() {
           <SectionHeading>Overview</SectionHeading>
 
           {/* KPI Cards */}
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
+          <div className="grid grid-cols-2 md:grid-cols-5 gap-3">
             <MetricCard icon={BarChart3} label="Total Posts" 
               value={postsAgg.data ? fmt(postsAgg.data.totalPosts) : "—"}
               tooltip="Total number of posts in the selected time period." />
@@ -346,6 +346,10 @@ export default function ThreadsAnalytics() {
             <MetricCard icon={Eye} label="Avg Views/Post" 
               value={postsAgg.data ? fmt(Math.round(postsAgg.data.avgViews)) : "—"}
               tooltip="Average number of views per post. Higher means your content is reaching more people." />
+            <MetricCard icon={Users} label="Followers Gained" 
+              value={followerDeltas.data ? (followerDeltas.data.netGain >= 0 ? "+" : "") + fmt(followerDeltas.data.netGain) : "—"}
+              tooltip="Net followers gained in this period, based on daily snapshots. Run Backfill to populate historical data."
+              color={followerDeltas.data && followerDeltas.data.netGain > 0 ? "#22c55e" : followerDeltas.data && followerDeltas.data.netGain < 0 ? "#ef4444" : undefined} />
           </div>
 
           {/* Date Range */}
