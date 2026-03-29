@@ -352,13 +352,22 @@ async function actionDemographics(sb: ReturnType<typeof supabaseAdmin>, userId: 
 
   for (const breakdownType of ["country", "city", "age", "gender"]) {
     const demoData = await fetchDemographics(userId, token, breakdownType);
+    console.log(`Demographics ${breakdownType} raw response:`, JSON.stringify(demoData).slice(0, 500));
     if (demoData?.data) {
       for (const metric of demoData.data) {
         const breakdowns = metric.total_value?.breakdowns?.[0]?.results || [];
-        const total = breakdowns.reduce((s: number, r: any) => s + (r.count || 0), 0);
+        // Log first result to debug field names
+        if (breakdowns.length > 0) {
+          console.log(`  ${breakdownType} sample result:`, JSON.stringify(breakdowns[0]));
+        }
+        // The API may use "value" or "count" for the numeric field
+        const getCount = (r: any) => r.value ?? r.count ?? 0;
+        const total = breakdowns.reduce((s: number, r: any) => s + getCount(r), 0);
+        console.log(`  ${breakdownType}: ${breakdowns.length} entries, total=${total}`);
         for (const result of breakdowns) {
           const value = result.dimension_values?.[0] || "unknown";
-          const pctVal = total > 0 ? (result.count / total) * 100 : 0;
+          const numVal = getCount(result);
+          const pctVal = total > 0 ? (numVal / total) * 100 : 0;
           await sb.from("threads_demographics").upsert(
             {
               breakdown_type: breakdownType,
@@ -658,41 +667,49 @@ serve(async (req) => {
   }
 
   try {
-    // Auth check
-    const authHeader = req.headers.get("Authorization");
-    if (!authHeader?.startsWith("Bearer ")) {
+    // Auth: verify_jwt is false (config.toml), so we handle auth manually.
+    // Allow: service role key, anon key, or authenticated admin user.
+    // For cron jobs, Supabase sends internal keys that may differ from project keys.
+    const authHeader = req.headers.get("Authorization") || "";
+    const token = authHeader.replace("Bearer ", "");
+    
+    let isAuthorized = false;
+    
+    // Check if token matches any known key
+    const knownKeys = [
+      Deno.env.get("SUPABASE_SERVICE_ROLE_KEY"),
+      Deno.env.get("SUPABASE_ANON_KEY"),
+      Deno.env.get("SUPABASE_PUBLISHABLE_KEY"),
+    ].filter(Boolean) as string[];
+    
+    if (knownKeys.some(k => token === k)) {
+      isAuthorized = true;
+    }
+    
+    // Check if it's a valid user JWT from an admin
+    if (!isAuthorized && authHeader.startsWith("Bearer ") && token.length > 100) {
+      try {
+        const anonKey = knownKeys[0] || "";
+        const sb = createClient(
+          Deno.env.get("SUPABASE_URL")!,
+          anonKey,
+          { global: { headers: { Authorization: authHeader } } }
+        );
+        const { data: { user } } = await sb.auth.getUser(token);
+        if (user) {
+          const { data: adminCheck } = await supabaseAdmin().rpc("is_admin", { _user_id: user.id });
+          isAuthorized = !!adminCheck;
+        }
+      } catch {
+        // Failed to verify — not authorized via user JWT
+      }
+    }
+    
+    if (!isAuthorized) {
       return new Response(JSON.stringify({ error: "Unauthorized" }), {
         status: 401,
         headers: { ...corsHeaders, "Content-Type": "application/json" },
       });
-    }
-
-    const token = authHeader.replace("Bearer ", "");
-    const isCronCall = token === Deno.env.get("SUPABASE_ANON_KEY");
-
-    if (!isCronCall) {
-      const sb = createClient(
-        Deno.env.get("SUPABASE_URL")!,
-        Deno.env.get("SUPABASE_ANON_KEY")!,
-        { global: { headers: { Authorization: authHeader } } }
-      );
-
-      const { data: claimsData, error: claimsError } = await sb.auth.getClaims(token);
-      if (claimsError || !claimsData?.claims) {
-        return new Response(JSON.stringify({ error: "Unauthorized" }), {
-          status: 401,
-          headers: { ...corsHeaders, "Content-Type": "application/json" },
-        });
-      }
-
-      const userId = claimsData.claims.sub as string;
-      const { data: isAdmin } = await supabaseAdmin().rpc("is_admin", { _user_id: userId });
-      if (!isAdmin) {
-        return new Response(JSON.stringify({ error: "Forbidden" }), {
-          status: 403,
-          headers: { ...corsHeaders, "Content-Type": "application/json" },
-        });
-      }
     }
 
     // Parse action
