@@ -729,6 +729,9 @@ serve(async (req) => {
       case "tag-content":
         result = await actionTagContent(sb);
         break;
+      case "refresh-all-insights":
+        result = await actionRefreshAllInsights(sb, accessToken);
+        break;
       default:
         result = await actionSync(sb, userId, accessToken);
         break;
