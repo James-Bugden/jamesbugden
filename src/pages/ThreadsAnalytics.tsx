@@ -365,8 +365,6 @@ export default function ThreadsAnalytics() {
               icon={Users}
               label="Followers"
               value={follower.data ? fmt(follower.data.current) : "—"}
-              sparkData={sparkFollowers}
-              sparkKey="v"
               color="#22c55e"
             />
             <MetricCard
