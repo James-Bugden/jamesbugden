@@ -12,9 +12,14 @@ import {
   Select, SelectContent, SelectItem, SelectTrigger, SelectValue,
 } from "@/components/ui/select";
 import {
-  Eye, Heart, TrendingUp,
+  Popover, PopoverContent, PopoverTrigger,
+} from "@/components/ui/popover";
+import { Calendar } from "@/components/ui/calendar";
+import {
+  Eye, Heart, TrendingUp, TrendingDown, ArrowUpRight,
   BarChart3, RefreshCw, ArrowLeft, Settings,
   LayoutDashboard, FileText, PieChart, ChevronLeft, ChevronRight, Users,
+  CalendarIcon, Zap, Database, Tag, Image as ImageIcon, Globe,
 } from "lucide-react";
 import {
   LineChart, Line, AreaChart, Area, ComposedChart, Cell, Bar,
@@ -22,12 +27,14 @@ import {
   Tooltip as RechartsTooltip, ResponsiveContainer, ReferenceLine,
 } from "recharts";
 import { toast } from "sonner";
+import { format } from "date-fns";
+import { cn } from "@/lib/utils";
 import ContentAnalysisSections from "@/components/analytics/ContentAnalysisSections";
 import PostDetailSections from "@/components/analytics/PostDetailSections";
 import LinksDemographicsSections from "@/components/analytics/LinksDemographicsSections";
 
 // ── Types ──────────────────────────────────────────────────────────
-type DateRange = "7d" | "30d" | "90d" | "all";
+type DateRange = "7d" | "30d" | "90d" | "all" | "custom";
 type Section = "overview" | "content" | "posts" | "audience" | "settings";
 
 // ── Helpers ────────────────────────────────────────────────────────
@@ -47,21 +54,51 @@ function daysAgo(d: number): string {
   return date.toISOString().split("T")[0];
 }
 
-function rangeStart(range: DateRange): string | null {
+function rangeStart(range: DateRange, customFrom?: string): string | null {
   if (range === "7d") return daysAgo(7);
   if (range === "30d") return daysAgo(30);
   if (range === "90d") return daysAgo(90);
+  if (range === "custom" && customFrom) return customFrom;
+  return null;
+}
+
+function rangeEnd(range: DateRange, customTo?: string): string | null {
+  if (range === "custom" && customTo) return customTo;
+  return null;
+}
+
+function rangeDays(range: DateRange): number | null {
+  if (range === "7d") return 7;
+  if (range === "30d") return 30;
+  if (range === "90d") return 90;
+  return null;
+}
+
+function rangePrevStart(range: DateRange, customFrom?: string, customTo?: string): string | null {
+  const days = rangeDays(range);
+  if (days) return daysAgo(days * 2);
+  if (range === "custom" && customFrom && customTo) {
+    const from = new Date(customFrom);
+    const to = new Date(customTo);
+    const diff = Math.ceil((to.getTime() - from.getTime()) / (1000 * 60 * 60 * 24));
+    const prevFrom = new Date(from);
+    prevFrom.setDate(prevFrom.getDate() - diff);
+    return prevFrom.toISOString().split("T")[0];
+  }
   return null;
 }
 
 // ── Data hooks ─────────────────────────────────────────────────────
-function usePostsAggregates(range: DateRange) {
+function usePostsAggregates(range: DateRange, customFrom?: string, customTo?: string) {
   return useQuery({
-    queryKey: ["threads-posts-agg", range],
+    queryKey: ["threads-posts-agg", range, customFrom, customTo],
     queryFn: async () => {
+      // Current period
       let q = supabase.from("threads_posts").select("views, likes, replies, reposts, quotes, shares, engagement_rate, virality_rate, conversation_rate, posted_at");
-      const start = rangeStart(range);
+      const start = rangeStart(range, customFrom);
+      const end = rangeEnd(range, customTo);
       if (start) q = q.gte("posted_at", start);
+      if (end) q = q.lte("posted_at", end + "T23:59:59");
       const { data, error } = await q;
       if (error) throw error;
       const rows = data || [];
@@ -69,7 +106,24 @@ function usePostsAggregates(range: DateRange) {
       const totalViews = rows.reduce((s, r) => s + (r.views || 0), 0);
       const avgEng = rows.length ? rows.reduce((s, r) => s + Number(r.engagement_rate || 0), 0) / rows.length : 0;
       const avgViews = rows.length ? totalViews / rows.length : 0;
-      return { totalPosts, totalViews, avgEng, avgViews };
+
+      // Previous period
+      const prevStart = rangePrevStart(range, customFrom, customTo);
+      let prev = { totalPosts: 0, totalViews: 0, avgEng: 0, avgViews: 0 };
+      if (prevStart && start) {
+        let pq = supabase.from("threads_posts").select("views, engagement_rate, posted_at");
+        pq = pq.gte("posted_at", prevStart).lt("posted_at", start);
+        const { data: pd } = await pq;
+        const pr = pd || [];
+        if (pr.length > 0) {
+          prev.totalPosts = pr.length;
+          prev.totalViews = pr.reduce((s, r) => s + (r.views || 0), 0);
+          prev.avgEng = pr.reduce((s, r) => s + Number(r.engagement_rate || 0), 0) / pr.length;
+          prev.avgViews = prev.totalViews / pr.length;
+        }
+      }
+
+      return { totalPosts, totalViews, avgEng, avgViews, prev };
     },
   });
 }
@@ -123,9 +177,17 @@ function useLastSync() {
   });
 }
 
+// ── Delta badge helper ─────────────────────────────────────────────
+function calcDelta(current: number, previous: number): string | null {
+  if (!previous || previous === 0) return null;
+  const change = ((current - previous) / previous) * 100;
+  const prefix = change >= 0 ? "+" : "";
+  return `${prefix}${change.toFixed(1)}%`;
+}
+
 // ── KPI Card ───────────────────────────────────────────────────────
-function KpiCard({ label, value, delta, icon: Icon, iconColor }: {
-  label: string; value: string; delta?: string; icon: any; iconColor?: string;
+function KpiCard({ label, value, delta, periodDelta, periodLabel, icon: Icon, iconColor }: {
+  label: string; value: string; delta?: string; periodDelta?: string | null; periodLabel?: string; icon: any; iconColor?: string;
 }) {
   return (
     <div className="bg-white rounded-xl border border-gray-100 p-5 flex flex-col gap-2 shadow-sm hover:shadow-md transition-shadow">
@@ -136,20 +198,89 @@ function KpiCard({ label, value, delta, icon: Icon, iconColor }: {
         </div>
       </div>
       <span className="text-3xl font-bold text-gray-900 tracking-tight">{value}</span>
-      {delta && (
-        <span className={`text-xs font-semibold inline-flex items-center gap-1 ${
-          delta.startsWith("+") || delta === "Great" ? "text-emerald-600"
-          : delta.startsWith("-") || delta === "Low" ? "text-red-500"
-          : "text-amber-500"
-        }`}>
-          <span className={`w-1.5 h-1.5 rounded-full ${
-            delta.startsWith("+") || delta === "Great" ? "bg-emerald-500"
-            : delta.startsWith("-") || delta === "Low" ? "bg-red-500"
-            : "bg-amber-500"
-          }`} />
-          {delta}
-        </span>
-      )}
+      <div className="flex items-center gap-2 flex-wrap">
+        {delta && (
+          <span className={`text-xs font-semibold inline-flex items-center gap-1 ${
+            delta.startsWith("+") || delta === "Great" || delta === "Growing" ? "text-emerald-600"
+            : delta.startsWith("-") || delta === "Low" || delta === "Declining" ? "text-red-500"
+            : "text-amber-500"
+          }`}>
+            <span className={`w-1.5 h-1.5 rounded-full ${
+              delta.startsWith("+") || delta === "Great" || delta === "Growing" ? "bg-emerald-500"
+              : delta.startsWith("-") || delta === "Low" || delta === "Declining" ? "bg-red-500"
+              : "bg-amber-500"
+            }`} />
+            {delta}
+          </span>
+        )}
+        {periodDelta && (
+          <span className={`text-[10px] font-medium px-1.5 py-0.5 rounded-full ${
+            periodDelta.startsWith("+") ? "bg-emerald-50 text-emerald-600" : periodDelta.startsWith("-") ? "bg-red-50 text-red-500" : "bg-gray-50 text-gray-400"
+          }`}>
+            {periodDelta}
+            {periodLabel && <span className="text-gray-400 ml-0.5">{periodLabel}</span>}
+          </span>
+        )}
+      </div>
+    </div>
+  );
+}
+
+// ── Top Performer Card ─────────────────────────────────────────────
+function TopPerformerCard({ posts }: { posts: any[] }) {
+  if (!posts.length) return null;
+  const top = [...posts].sort((a, b) => (b.views || 0) - (a.views || 0))[0];
+  if (!top) return null;
+  const text = top.text_content ? (top.text_content.length > 120 ? top.text_content.slice(0, 120) + "…" : top.text_content) : "No text";
+
+  return (
+    <div className="bg-gradient-to-r from-amber-50 to-orange-50 rounded-xl border border-amber-100 p-5 flex gap-4 items-start shadow-sm">
+      <div className="shrink-0">
+        {top.media_url || top.thumbnail_url ? (
+          <img src={top.media_url || top.thumbnail_url} alt="" className="w-16 h-16 rounded-lg object-cover border border-amber-200/50" />
+        ) : (
+          <div className="w-16 h-16 rounded-lg bg-amber-100 flex items-center justify-center">
+            <Zap className="w-6 h-6 text-amber-500" />
+          </div>
+        )}
+      </div>
+      <div className="flex-1 min-w-0">
+        <div className="flex items-center gap-2 mb-1">
+          <span className="text-[10px] font-bold uppercase tracking-wider text-amber-600 bg-amber-100 px-2 py-0.5 rounded-full">⚡ Top Performer</span>
+        </div>
+        <p className="text-sm text-gray-700 leading-relaxed line-clamp-2">{text}</p>
+        <div className="flex items-center gap-4 mt-2 text-xs text-gray-500">
+          <span className="flex items-center gap-1"><Eye className="w-3 h-3" />{fmt(top.views || 0)}</span>
+          <span className="flex items-center gap-1"><Heart className="w-3 h-3" />{fmt(top.likes || 0)}</span>
+          <span className="font-medium text-amber-600">{pct(Number(top.engagement_rate || 0))} eng</span>
+          {top.permalink && (
+            <a href={top.permalink} target="_blank" rel="noopener noreferrer" className="flex items-center gap-0.5 text-blue-500 hover:text-blue-600 font-medium ml-auto">
+              View <ArrowUpRight className="w-3 h-3" />
+            </a>
+          )}
+        </div>
+      </div>
+    </div>
+  );
+}
+
+// ── Onboarding Card ────────────────────────────────────────────────
+function OnboardingCard({ icon: Icon, iconColor, title, description, actionLabel, onAction, loading }: {
+  icon: any; iconColor: string; title: string; description: string; actionLabel: string; onAction: () => void; loading?: boolean;
+}) {
+  return (
+    <div className="bg-white rounded-xl border-2 border-dashed border-gray-200 p-6 flex items-center gap-5 hover:border-blue-200 transition-colors">
+      <div className="w-12 h-12 rounded-xl flex items-center justify-center shrink-0" style={{ backgroundColor: iconColor + "15" }}>
+        <Icon className="w-6 h-6" style={{ color: iconColor }} />
+      </div>
+      <div className="flex-1 min-w-0">
+        <h4 className="text-sm font-semibold text-gray-900">{title}</h4>
+        <p className="text-xs text-gray-500 mt-0.5">{description}</p>
+      </div>
+      <Button size="sm" onClick={onAction} disabled={loading} className="shrink-0 h-8 px-4 text-xs bg-blue-600 hover:bg-blue-700 text-white rounded-lg">
+        {loading && <RefreshCw className="w-3 h-3 animate-spin mr-1" />}
+        {actionLabel}
+      </Button>
     </div>
   );
 }
@@ -173,6 +304,8 @@ export default function ThreadsAnalytics() {
   const { isLoggedIn, isLoading: authLoading } = useAuth();
   const navigate = useNavigate();
   const [range, setRange] = useState<DateRange>("30d");
+  const [customFrom, setCustomFrom] = useState<Date | undefined>();
+  const [customTo, setCustomTo] = useState<Date | undefined>();
   const [activeSection, setActiveSection] = useState<Section>("overview");
   const [sidebarOpen, setSidebarOpen] = useState(true);
   const [syncing, setSyncing] = useState(false);
@@ -182,14 +315,25 @@ export default function ThreadsAnalytics() {
   const [taggingContent, setTaggingContent] = useState(false);
   const [refreshingAll, setRefreshingAll] = useState(false);
 
-  const postsAgg = usePostsAggregates(range);
-  const postTrend = usePostDerivedTrend(range);
+  const customFromStr = customFrom ? format(customFrom, "yyyy-MM-dd") : undefined;
+  const customToStr = customTo ? format(customTo, "yyyy-MM-dd") : undefined;
+
+  // Pass effective range to hooks that support it
+  const effectiveRange = range === "custom" ? "all" : range;
+
+  const postsAgg = usePostsAggregates(range, customFromStr, customToStr);
+  const postTrend = usePostDerivedTrend(effectiveRange as any);
   const follower = useFollowerGrowth();
   const followerHistory = useFollowerHistory();
   const lastSync = useLastSync();
-  const allPostsQ = useAllPosts(range);
+  const allPostsQ = useAllPosts(effectiveRange as any);
   const allPosts = allPostsQ.data || [];
-  const followerDeltas = useFollowerDeltas(range);
+  const followerDeltas = useFollowerDeltas(effectiveRange as any);
+
+  // Filter posts for custom range
+  const filteredPosts = range === "custom" && customFromStr && customToStr
+    ? allPosts.filter(p => p.posted_at && p.posted_at >= customFromStr && p.posted_at <= customToStr + "T23:59:59")
+    : allPosts;
 
   // Admin check
   const [isAdmin, setIsAdmin] = useState(false);
@@ -225,6 +369,14 @@ export default function ThreadsAnalytics() {
       </div>
     );
   }
+
+  // ── Onboarding checks ──────────────────────────────────────────
+  const hasNoPosts = !allPostsQ.isLoading && allPosts.length === 0;
+  const hasNoTags = !allPostsQ.isLoading && allPosts.length > 0 && !allPosts.some(p => p.content_tagged_at);
+  const hasNoDemographics = activeSection === "audience"; // demographics check handled in that component
+
+  // ── Period labels ──────────────────────────────────────────────
+  const periodLabel = range === "7d" ? "vs prev 7d" : range === "30d" ? "vs prev 30d" : range === "90d" ? "vs prev 90d" : range === "custom" ? "vs prev period" : "";
 
   // ── Action handlers ────────────────────────────────────────────
   const handleSync = async () => {
@@ -316,6 +468,28 @@ export default function ThreadsAnalytics() {
   const engValue = postsAgg.data?.avgEng || 0;
   const engLabel = engValue >= 0.015 ? "Great" : engValue >= 0.008 ? "Average" : "Low";
 
+  // Period deltas
+  const prev = postsAgg.data?.prev;
+  const postsDelta = prev && prev.totalPosts > 0 ? calcDelta(postsAgg.data!.totalPosts, prev.totalPosts) : null;
+  const viewsDelta = prev && prev.totalViews > 0 ? calcDelta(postsAgg.data!.totalViews, prev.totalViews) : null;
+  const engDelta = prev && prev.avgEng > 0 ? calcDelta(postsAgg.data!.avgEng, prev.avgEng) : null;
+  const avgViewsDelta = prev && prev.avgViews > 0 ? calcDelta(postsAgg.data!.avgViews, prev.avgViews) : null;
+
+  // Handle range selection
+  const handleRangeChange = (v: string) => {
+    if (v === "custom") {
+      setRange("custom");
+      if (!customFrom) {
+        const d30 = new Date();
+        d30.setDate(d30.getDate() - 30);
+        setCustomFrom(d30);
+        setCustomTo(new Date());
+      }
+    } else {
+      setRange(v as DateRange);
+    }
+  };
+
   return (
     <>
       <Helmet>
@@ -397,7 +571,7 @@ export default function ThreadsAnalytics() {
                   Synced {new Date(lastSync.data).toLocaleDateString()}
                 </span>
               )}
-              <Select value={range} onValueChange={(v) => setRange(v as DateRange)}>
+              <Select value={range} onValueChange={handleRangeChange}>
                 <SelectTrigger className="w-[140px] h-8 text-xs bg-gray-50 border-gray-200 rounded-lg">
                   <SelectValue />
                 </SelectTrigger>
@@ -406,8 +580,37 @@ export default function ThreadsAnalytics() {
                   <SelectItem value="30d">Last 30 days</SelectItem>
                   <SelectItem value="90d">Last 90 days</SelectItem>
                   <SelectItem value="all">All time</SelectItem>
+                  <SelectItem value="custom">Custom range</SelectItem>
                 </SelectContent>
               </Select>
+              {/* Custom date pickers */}
+              {range === "custom" && (
+                <div className="hidden sm:flex items-center gap-1.5">
+                  <Popover>
+                    <PopoverTrigger asChild>
+                      <Button variant="outline" size="sm" className={cn("h-8 text-xs rounded-lg border-gray-200", !customFrom && "text-gray-400")}>
+                        <CalendarIcon className="w-3 h-3 mr-1" />
+                        {customFrom ? format(customFrom, "MMM d") : "From"}
+                      </Button>
+                    </PopoverTrigger>
+                    <PopoverContent className="w-auto p-0" align="start">
+                      <Calendar mode="single" selected={customFrom} onSelect={setCustomFrom} initialFocus className={cn("p-3 pointer-events-auto")} />
+                    </PopoverContent>
+                  </Popover>
+                  <span className="text-xs text-gray-400">→</span>
+                  <Popover>
+                    <PopoverTrigger asChild>
+                      <Button variant="outline" size="sm" className={cn("h-8 text-xs rounded-lg border-gray-200", !customTo && "text-gray-400")}>
+                        <CalendarIcon className="w-3 h-3 mr-1" />
+                        {customTo ? format(customTo, "MMM d") : "To"}
+                      </Button>
+                    </PopoverTrigger>
+                    <PopoverContent className="w-auto p-0" align="start">
+                      <Calendar mode="single" selected={customTo} onSelect={setCustomTo} initialFocus className={cn("p-3 pointer-events-auto")} />
+                    </PopoverContent>
+                  </Popover>
+                </div>
+              )}
               <Button size="sm" onClick={handleSync} disabled={syncing} className="h-8 text-xs bg-blue-600 hover:bg-blue-700 text-white rounded-lg shadow-sm">
                 {syncing ? <RefreshCw className="w-3.5 h-3.5 animate-spin mr-1.5" /> : <RefreshCw className="w-3.5 h-3.5 mr-1.5" />}
                 Sync
@@ -422,24 +625,55 @@ export default function ThreadsAnalytics() {
               {/* ─── OVERVIEW ─────────────────────────────────── */}
               {activeSection === "overview" && (
                 <>
+                  {/* Onboarding cards */}
+                  {hasNoPosts && (
+                    <OnboardingCard
+                      icon={Database}
+                      iconColor="#3b82f6"
+                      title="No posts synced yet"
+                      description="Connect your Threads account and sync your first posts to start seeing analytics."
+                      actionLabel="Sync Now"
+                      onAction={handleSync}
+                      loading={syncing}
+                    />
+                  )}
+                  {hasNoTags && !hasNoPosts && (
+                    <OnboardingCard
+                      icon={Tag}
+                      iconColor="#06b6d4"
+                      title="Unlock AI insights"
+                      description="Tag your posts with AI to see content strategy recommendations, topic breakdowns, and more."
+                      actionLabel="Tag Content"
+                      onAction={handleTagContent}
+                      loading={taggingContent}
+                    />
+                  )}
+
                   {/* KPI Row */}
                   <div className="grid grid-cols-2 md:grid-cols-5 gap-4">
                     <KpiCard label="Total Posts" icon={FileText} iconColor="#6366f1"
-                      value={postsAgg.data ? fmt(postsAgg.data.totalPosts) : "—"} />
+                      value={postsAgg.data ? fmt(postsAgg.data.totalPosts) : "—"}
+                      periodDelta={postsDelta} periodLabel={periodLabel} />
                     <KpiCard label="Total Views" icon={Eye} iconColor="#3b82f6"
-                      value={postsAgg.data ? fmt(postsAgg.data.totalViews) : "—"} />
+                      value={postsAgg.data ? fmt(postsAgg.data.totalViews) : "—"}
+                      periodDelta={viewsDelta} periodLabel={periodLabel} />
                     <KpiCard label="Engagement" icon={Heart} iconColor={engValue >= 0.015 ? "#22c55e" : engValue >= 0.008 ? "#f59e0b" : "#ef4444"}
                       value={postsAgg.data ? pct(postsAgg.data.avgEng) : "—"}
-                      delta={engLabel} />
+                      delta={engLabel}
+                      periodDelta={engDelta} periodLabel={periodLabel} />
                     <KpiCard label="Avg Views/Post" icon={BarChart3} iconColor="#8b5cf6"
-                      value={postsAgg.data ? fmt(Math.round(postsAgg.data.avgViews)) : "—"} />
+                      value={postsAgg.data ? fmt(Math.round(postsAgg.data.avgViews)) : "—"}
+                      periodDelta={avgViewsDelta} periodLabel={periodLabel} />
                     <KpiCard label="Followers Gained" icon={Users} iconColor="#22c55e"
                       value={followerDeltas.data ? (followerDeltas.data.netGain >= 0 ? "+" : "") + fmt(followerDeltas.data.netGain) : "—"}
                       delta={followerDeltas.data && followerDeltas.data.netGain > 0 ? "Growing" : followerDeltas.data && followerDeltas.data.netGain < 0 ? "Declining" : undefined} />
                   </div>
 
+                  {/* Top Performer */}
+                  {filteredPosts.length > 0 && <TopPerformerCard posts={filteredPosts} />}
+
                   {/* What to Post Next */}
-                  {allPosts.length > 0 && <ContentStrategySection posts={allPosts} />}
+                  {filteredPosts.length > 0 && <ContentStrategySection posts={filteredPosts} />}
 
                   {/* Charts 2-col grid */}
                   <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
@@ -551,12 +785,12 @@ export default function ThreadsAnalytics() {
 
               {/* ─── CONTENT ──────────────────────────────────── */}
               {activeSection === "content" && (
-                <ContentAnalysisSections range={range} />
+                <ContentAnalysisSections range={effectiveRange as any} />
               )}
 
               {/* ─── POSTS ────────────────────────────────────── */}
               {activeSection === "posts" && (
-                <PostDetailSections range={range} />
+                <PostDetailSections range={effectiveRange as any} />
               )}
 
               {/* ─── AUDIENCE ─────────────────────────────────── */}

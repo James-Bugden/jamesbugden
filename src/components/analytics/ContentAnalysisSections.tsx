@@ -2,6 +2,9 @@ import { useState, useMemo } from "react";
 import { Badge } from "@/components/ui/badge";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import {
+  Tooltip as UITooltip, TooltipContent, TooltipProvider, TooltipTrigger,
+} from "@/components/ui/tooltip";
+import {
   BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip as RechartsTooltip, ResponsiveContainer,
   ReferenceLine, Cell,
 } from "recharts";
@@ -180,6 +183,141 @@ function MediaTypeSection({ posts, overallAvgEng }: { posts: ThreadsPost[]; over
             </div>
           );
         })}
+      </div>
+    </div>
+  );
+}
+
+// ── Posting Time Heatmap ───────────────────────────────────────────
+function PostingTimeHeatmap({ posts }: { posts: ThreadsPost[] }) {
+  const days = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"];
+  const hours = Array.from({ length: 16 }, (_, i) => i + 6); // 6am to 9pm
+
+  const { grid, maxEng, maxCount } = useMemo(() => {
+    const grid: Record<string, { totalEng: number; count: number; totalViews: number }> = {};
+    let maxEng = 0;
+    let maxCount = 0;
+
+    for (const p of posts) {
+      if (!p.posted_at) continue;
+      const d = new Date(p.posted_at);
+      // Convert to Taipei time (UTC+8)
+      const tw = new Date(d.getTime() + 8 * 60 * 60 * 1000);
+      const dayIndex = tw.getUTCDay(); // 0=Sun
+      const dayName = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"][dayIndex];
+      const hour = tw.getUTCHours();
+      const key = `${dayName}-${hour}`;
+
+      if (!grid[key]) grid[key] = { totalEng: 0, count: 0, totalViews: 0 };
+      grid[key].totalEng += Number(p.engagement_rate || 0);
+      grid[key].count += 1;
+      grid[key].totalViews += p.views || 0;
+    }
+
+    for (const cell of Object.values(grid)) {
+      const avgE = cell.count > 0 ? cell.totalEng / cell.count : 0;
+      if (avgE > maxEng) maxEng = avgE;
+      if (cell.count > maxCount) maxCount = cell.count;
+    }
+
+    return { grid, maxEng, maxCount };
+  }, [posts]);
+
+  if (!posts.length) return null;
+
+  const getColor = (day: string, hour: number) => {
+    const key = `${day}-${hour}`;
+    const cell = grid[key];
+    if (!cell || cell.count === 0) return "bg-gray-50";
+    const avgE = cell.totalEng / cell.count;
+    const intensity = maxEng > 0 ? avgE / maxEng : 0;
+    if (intensity > 0.8) return "bg-blue-600";
+    if (intensity > 0.6) return "bg-blue-500";
+    if (intensity > 0.4) return "bg-blue-400";
+    if (intensity > 0.2) return "bg-blue-200";
+    return "bg-blue-100";
+  };
+
+  const getTextColor = (day: string, hour: number) => {
+    const key = `${day}-${hour}`;
+    const cell = grid[key];
+    if (!cell || cell.count === 0) return "";
+    const avgE = cell.totalEng / cell.count;
+    const intensity = maxEng > 0 ? avgE / maxEng : 0;
+    return intensity > 0.4 ? "text-white" : "";
+  };
+
+  return (
+    <div className="bg-white rounded-xl border border-gray-100 p-6 shadow-sm space-y-4">
+      <div className="flex items-center gap-3">
+        <div className="w-9 h-9 rounded-xl bg-blue-50 flex items-center justify-center">
+          <Clock className="w-5 h-5 text-blue-500" />
+        </div>
+        <div>
+          <h3 className="text-sm font-semibold text-gray-900">Best Time to Post</h3>
+          <p className="text-xs text-gray-400">Avg engagement by day & hour (Taipei time). Darker = higher engagement.</p>
+        </div>
+      </div>
+
+      <div className="overflow-x-auto">
+        <div className="min-w-[600px]">
+          {/* Hour labels */}
+          <div className="flex mb-1">
+            <div className="w-10 shrink-0" />
+            {hours.map(h => (
+              <div key={h} className="flex-1 text-center text-[10px] text-gray-400 font-medium">
+                {h.toString().padStart(2, "0")}
+              </div>
+            ))}
+          </div>
+
+          {/* Grid rows */}
+          <TooltipProvider delayDuration={100}>
+            {days.map(day => (
+              <div key={day} className="flex gap-0.5 mb-0.5">
+                <div className="w-10 shrink-0 text-[11px] text-gray-500 font-medium flex items-center">{day}</div>
+                {hours.map(hour => {
+                  const key = `${day}-${hour}`;
+                  const cell = grid[key];
+                  const count = cell?.count || 0;
+                  const avgE = count > 0 ? cell.totalEng / count : 0;
+                  const avgV = count > 0 ? Math.round(cell.totalViews / count) : 0;
+
+                  return (
+                    <UITooltip key={hour}>
+                      <TooltipTrigger asChild>
+                        <div className={`flex-1 aspect-square rounded-sm cursor-default transition-all hover:ring-2 hover:ring-blue-300 ${getColor(day, hour)} ${getTextColor(day, hour)} flex items-center justify-center`}>
+                          {count > 0 && <span className="text-[8px] font-bold opacity-70">{count}</span>}
+                        </div>
+                      </TooltipTrigger>
+                      <TooltipContent side="top" className="text-xs">
+                        <p className="font-semibold">{day} {hour}:00</p>
+                        {count > 0 ? (
+                          <>
+                            <p>{count} post{count > 1 ? "s" : ""} · {pct(avgE)} eng · {fmt(avgV)} avg views</p>
+                          </>
+                        ) : (
+                          <p className="text-gray-400">No posts at this time</p>
+                        )}
+                      </TooltipContent>
+                    </UITooltip>
+                  );
+                })}
+              </div>
+            ))}
+          </TooltipProvider>
+
+          {/* Legend */}
+          <div className="flex items-center gap-2 mt-3 justify-end">
+            <span className="text-[10px] text-gray-400">Low</span>
+            <div className="flex gap-0.5">
+              {["bg-gray-50", "bg-blue-100", "bg-blue-200", "bg-blue-400", "bg-blue-500", "bg-blue-600"].map(c => (
+                <div key={c} className={`w-4 h-3 rounded-sm ${c}`} />
+              ))}
+            </div>
+            <span className="text-[10px] text-gray-400">High</span>
+          </div>
+        </div>
       </div>
     </div>
   );
@@ -456,6 +594,7 @@ export default function ContentAnalysisSections({ range }: { range: DateRange })
     <div className="space-y-5">
       <BestForTable posts={posts} followerDeltas={followerDeltas} />
       <MediaTypeSection posts={posts} overallAvgEng={overallAvgEng} />
+      <PostingTimeHeatmap posts={posts} />
       <PostFrequencySection posts={posts} />
       {hasTaggedPosts && <TagInsightsTabs posts={posts} />}
     </div>
