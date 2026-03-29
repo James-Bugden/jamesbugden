@@ -663,30 +663,36 @@ serve(async (req) => {
   }
 
   try {
-    // Auth check
-    const authHeader = req.headers.get("Authorization");
-    if (!authHeader?.startsWith("Bearer ")) {
-      return new Response(JSON.stringify({ error: "Unauthorized" }), {
-        status: 401,
-        headers: { ...corsHeaders, "Content-Type": "application/json" },
-      });
-    }
-
+    // Auth check — allow cron/service calls + admin users
+    const authHeader = req.headers.get("Authorization") || "";
+    const cronSecret = req.headers.get("x-cron-secret");
     const token = authHeader.replace("Bearer ", "");
-    const anonKey = Deno.env.get("SUPABASE_ANON_KEY") || Deno.env.get("SUPABASE_PUBLISHABLE_KEY") || "";
+    
+    // Allow if: service role key, anon key, or x-cron-secret header matches service role
     const serviceKey = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY") || "";
-    const isCronCall = token === anonKey || token === serviceKey;
+    const anonKey = Deno.env.get("SUPABASE_ANON_KEY") || "";
+    const isCronCall = token === serviceKey || token === anonKey || cronSecret === serviceKey;
+    
+    console.log(`Auth check: hasBearer=${!!authHeader}, isCron=${isCronCall}, tokenLen=${token.length}, serviceKeyLen=${serviceKey.length}, anonKeyLen=${anonKey.length}`);
 
     if (!isCronCall) {
+      if (!authHeader.startsWith("Bearer ")) {
+        return new Response(JSON.stringify({ error: "Unauthorized" }), {
+          status: 401,
+          headers: { ...corsHeaders, "Content-Type": "application/json" },
+        });
+      }
+      
       // Verify user JWT and check admin
       const sb = createClient(
         Deno.env.get("SUPABASE_URL")!,
-        anonKey,
+        anonKey || token,
         { global: { headers: { Authorization: authHeader } } }
       );
 
       const { data: { user }, error: userError } = await sb.auth.getUser(token);
       if (userError || !user) {
+        console.log("Auth failed: getUser error", userError?.message);
         return new Response(JSON.stringify({ error: "Unauthorized" }), {
           status: 401,
           headers: { ...corsHeaders, "Content-Type": "application/json" },
