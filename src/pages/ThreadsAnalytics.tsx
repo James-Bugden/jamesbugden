@@ -185,10 +185,49 @@ function calcDelta(current: number, previous: number): string | null {
   return `${prefix}${change.toFixed(1)}%`;
 }
 
+// ── Mini Sparkline ─────────────────────────────────────────────────
+function MiniSparkline({ data, color }: { data: number[]; color: string }) {
+  if (data.length < 2) return null;
+  const min = Math.min(...data);
+  const max = Math.max(...data);
+  const range = max - min || 1;
+  const w = 120;
+  const h = 36;
+  const pad = 2;
+  const points = data.map((v, i) => {
+    const x = pad + (i / (data.length - 1)) * (w - pad * 2);
+    const y = h - pad - ((v - min) / range) * (h - pad * 2);
+    return `${x},${y}`;
+  });
+  const uid = `spark-${color.replace("#", "")}`;
+  return (
+    <svg viewBox={`0 0 ${w} ${h}`} className="w-full h-[36px] mt-1" preserveAspectRatio="none">
+      <defs>
+        <linearGradient id={uid} x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0%" stopColor={color} stopOpacity={0.25} />
+          <stop offset="100%" stopColor={color} stopOpacity={0.02} />
+        </linearGradient>
+      </defs>
+      <polygon
+        points={`${pad},${h} ${points.join(" ")} ${w - pad},${h}`}
+        fill={`url(#${uid})`}
+      />
+      <polyline
+        points={points.join(" ")}
+        fill="none"
+        stroke={color}
+        strokeWidth="2"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+    </svg>
+  );
+}
+
 // ── KPI Card ───────────────────────────────────────────────────────
-function KpiCard({ label, subtitle, value, delta, periodDelta, periodLabel, icon: Icon, iconColor, progressValue, progressMax }: {
+function KpiCard({ label, subtitle, value, delta, periodDelta, periodLabel, icon: Icon, iconColor, progressValue, progressMax, sparkData }: {
   label: string; subtitle?: string; value: string; delta?: string; periodDelta?: string | null; periodLabel?: string; icon: any; iconColor?: string;
-  progressValue?: number; progressMax?: number;
+  progressValue?: number; progressMax?: number; sparkData?: number[];
 }) {
   // Human-readable period delta
   const readableDelta = periodDelta ? (() => {
