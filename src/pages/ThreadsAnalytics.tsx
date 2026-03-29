@@ -286,6 +286,9 @@ function KpiCard({ label, subtitle, value, delta, periodDelta, periodLabel, icon
           </span>
         )}
       </div>
+      {sparkData && sparkData.length >= 2 && (
+        <MiniSparkline data={sparkData} color={iconColor || "#3b82f6"} />
+      )}
     </div>
   );
 }
