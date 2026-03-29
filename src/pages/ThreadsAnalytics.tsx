@@ -16,6 +16,7 @@ import {
   Tooltip, ResponsiveContainer, Legend,
 } from "recharts";
 import { toast } from "sonner";
+import ContentAnalysisSections from "@/components/analytics/ContentAnalysisSections";
 
 // ── Types ──────────────────────────────────────────────────────────
 type DateRange = "7d" | "30d" | "90d" | "all";
