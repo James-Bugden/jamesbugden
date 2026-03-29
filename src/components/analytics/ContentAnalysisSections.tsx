@@ -9,7 +9,9 @@ import {
   ReferenceLine,
 } from "recharts";
 import { ExternalLink, Image as ImageIcon, Type, Video, Layers, Lightbulb, Clock, Hash, TrendingUp } from "lucide-react";
-import { type DateRange, type ThreadsPost, useAllPosts, useInsightsForReach, fmt, pct } from "./analyticsShared";
+import { useQuery } from "@tanstack/react-query";
+import { supabase } from "@/integrations/supabase/client";
+import { type DateRange, type ThreadsPost, useAllPosts, fmt, pct } from "./analyticsShared";
 
 // ── tooltip style ──────────────────────────────────────────────────
 const tipStyle = { background: "hsl(var(--background))", border: "1px solid hsl(var(--border))", borderRadius: 8, fontSize: 12 };
