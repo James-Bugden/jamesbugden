@@ -162,54 +162,6 @@ function EngagementBreakdownSection({ posts }: { posts: ThreadsPost[] }) {
   );
 }
 
-// ── Section 9: Original vs quote posts ─────────────────────────────
-function OriginalVsQuoteSection({ posts }: { posts: ThreadsPost[] }) {
-  const stats = useMemo(() => {
-    const orig = posts.filter(p => !p.is_quote_post);
-    const quote = posts.filter(p => p.is_quote_post);
-    const calc = (arr: ThreadsPost[]) => ({
-      count: arr.length,
-      avgViews: avg(arr.map(p => p.views)),
-      avgEng: avg(arr.map(p => Number(p.engagement_rate))),
-      avgVir: avg(arr.map(p => Number(p.virality_rate))),
-      avgConv: avg(arr.map(p => Number(p.conversation_rate))),
-    });
-    const o = calc(orig);
-    const q = calc(quote);
-    const ratio = q.avgEng > 0 ? (o.avgEng / q.avgEng).toFixed(1) : "∞";
-    const better = o.avgEng >= q.avgEng ? "Original" : "Quote";
-    return { orig: o, quote: q, ratio, better };
-  }, [posts]);
-
-  const StatCard = ({ label, data }: { label: string; data: typeof stats.orig }) => (
-    <div className="border rounded-lg p-4 flex-1 min-w-[180px] space-y-1">
-      <h4 className="text-sm font-medium">{label}</h4>
-      <div className="text-xs text-muted-foreground space-y-0.5">
-        <div>{data.count} posts</div>
-        <div>Avg views: {fmt(Math.round(data.avgViews))}</div>
-        <div>Engagement: {pct(data.avgEng)}</div>
-        <div>Virality: {pct(data.avgVir)}</div>
-        <div>Conversation: {pct(data.avgConv)}</div>
-      </div>
-    </div>
-  );
-
-  return (
-    <Card>
-      <CardContent className="p-4 md:p-6 space-y-4">
-        <h3 className="text-sm font-medium text-muted-foreground">Original vs Quote Posts</h3>
-        <div className="flex flex-col md:flex-row gap-4">
-          <StatCard label="📝 Original Posts" data={stats.orig} />
-          <StatCard label="🔁 Quote Posts" data={stats.quote} />
-        </div>
-        <p className="text-sm text-muted-foreground">
-          {stats.better} posts get <span className="font-semibold text-foreground">{stats.ratio}×</span> more engagement on average.
-        </p>
-      </CardContent>
-    </Card>
-  );
-}
-
 // ── Section 10: Hashtag performance ────────────────────────────────
 function HashtagSection({ posts }: { posts: ThreadsPost[] }) {
   const rows = useMemo(() => {
