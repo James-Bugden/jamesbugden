@@ -341,7 +341,10 @@ function TagBreakdownChart({ posts, field }: { posts: ThreadsPost[]; field: "con
           <ReferenceLine x={overallAvgPct} stroke="#f59e0b" strokeDasharray="6 4" strokeWidth={1.5}
             label={{ value: "Avg", position: "top", fontSize: 9, fill: "#f59e0b" }} />
           <Bar dataKey="avgEng" name="Avg Engagement %" radius={[0, 4, 4, 0]}
-            label={{ position: "right", fontSize: 9, formatter: (_: any, __: any, index: number) => `${chartData[index]?.count || 0} posts` }}
+            label={({ x, y, width, height, index }: any) => {
+              const count = chartData[index]?.count ?? 0;
+              return <text x={x + width + 4} y={y + height / 2} dy={4} fontSize={9} fill="hsl(var(--muted-foreground))">{count} posts</text>;
+            }}
           >
             {chartData.map((d, i) => (
               <Cell key={i} fill={d.aboveAvg ? "#22c55e" : "#94a3b8"} />
