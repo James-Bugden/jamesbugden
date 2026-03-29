@@ -186,18 +186,44 @@ function calcDelta(current: number, previous: number): string | null {
 }
 
 // ── KPI Card ───────────────────────────────────────────────────────
-function KpiCard({ label, value, delta, periodDelta, periodLabel, icon: Icon, iconColor }: {
-  label: string; value: string; delta?: string; periodDelta?: string | null; periodLabel?: string; icon: any; iconColor?: string;
+function KpiCard({ label, subtitle, value, delta, periodDelta, periodLabel, icon: Icon, iconColor, progressValue, progressMax }: {
+  label: string; subtitle?: string; value: string; delta?: string; periodDelta?: string | null; periodLabel?: string; icon: any; iconColor?: string;
+  progressValue?: number; progressMax?: number;
 }) {
+  // Human-readable period delta
+  const readableDelta = periodDelta ? (() => {
+    const arrow = periodDelta.startsWith("+") ? "↑" : periodDelta.startsWith("-") ? "↓" : "";
+    const num = periodDelta.replace(/^[+-]/, "");
+    const label = periodLabel?.replace("vs prev ", "from last ") || "";
+    return `${arrow} ${num} ${label}`.trim();
+  })() : null;
+
   return (
     <div className="bg-white rounded-xl border border-gray-100 p-5 flex flex-col gap-2 shadow-sm hover:shadow-md transition-shadow">
       <div className="flex items-center justify-between">
-        <span className="text-xs font-medium text-gray-500 uppercase tracking-wider">{label}</span>
+        <div>
+          <span className="text-xs font-medium text-gray-500 uppercase tracking-wider">{label}</span>
+          {subtitle && <p className="text-[10px] text-gray-400 mt-0.5">{subtitle}</p>}
+        </div>
         <div className="w-8 h-8 rounded-lg flex items-center justify-center" style={{ backgroundColor: (iconColor || "#3b82f6") + "15" }}>
           <Icon className="w-4 h-4" style={{ color: iconColor || "#3b82f6" }} />
         </div>
       </div>
       <span className="text-3xl font-bold text-gray-900 tracking-tight">{value}</span>
+      {/* Progress bar for engagement context */}
+      {progressValue !== undefined && progressMax !== undefined && (
+        <div className="flex items-center gap-2">
+          <div className="flex-1 h-1.5 bg-gray-100 rounded-full overflow-hidden">
+            <div
+              className={`h-full rounded-full transition-all ${progressValue >= 0.015 ? "bg-emerald-500" : progressValue >= 0.008 ? "bg-amber-400" : "bg-red-400"}`}
+              style={{ width: `${Math.min((progressValue / progressMax) * 100, 100)}%` }}
+            />
+          </div>
+          <span className="text-[10px] text-gray-400 whitespace-nowrap">
+            {progressValue >= 0.015 ? "Great" : progressValue >= 0.008 ? "Average" : "Low"}
+          </span>
+        </div>
+      )}
       <div className="flex items-center gap-2 flex-wrap">
         {delta && (
           <span className={`text-xs font-semibold inline-flex items-center gap-1 ${
@@ -213,12 +239,11 @@ function KpiCard({ label, value, delta, periodDelta, periodLabel, icon: Icon, ic
             {delta}
           </span>
         )}
-        {periodDelta && (
+        {readableDelta && (
           <span className={`text-[10px] font-medium px-1.5 py-0.5 rounded-full ${
-            periodDelta.startsWith("+") ? "bg-emerald-50 text-emerald-600" : periodDelta.startsWith("-") ? "bg-red-50 text-red-500" : "bg-gray-50 text-gray-400"
+            readableDelta.startsWith("↑") ? "bg-emerald-50 text-emerald-600" : readableDelta.startsWith("↓") ? "bg-red-50 text-red-500" : "bg-gray-50 text-gray-400"
           }`}>
-            {periodDelta}
-            {periodLabel && <span className="text-gray-400 ml-0.5">{periodLabel}</span>}
+            {readableDelta}
           </span>
         )}
       </div>
