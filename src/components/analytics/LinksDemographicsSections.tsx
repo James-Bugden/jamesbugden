@@ -50,7 +50,14 @@ function LinkClicksSection() {
   const pageData = filtered.slice(page * perPage, (page + 1) * perPage);
 
   if (isLoading) return <Skeleton className="h-[300px] rounded-lg" />;
-  if (!data?.length) return null;
+  if (!data?.length) return (
+    <Card>
+      <CardContent className="p-6 text-center text-muted-foreground">
+        <MousePointerClick className="w-8 h-8 mx-auto mb-2 opacity-50" />
+        <p className="text-sm">No link click data yet. Click <strong>Sync Now</strong> to fetch.</p>
+      </CardContent>
+    </Card>
+  );
 
   return (
     <Card>
@@ -137,7 +144,14 @@ function DemographicsSection() {
     );
   }
 
-  if (!data?.length) return null;
+  if (!data?.length) return (
+    <Card>
+      <CardContent className="p-6 text-center text-muted-foreground">
+        <p className="text-sm mb-3">No demographics data yet.</p>
+        <p className="text-xs">Click <strong>Demographics</strong> in the sync bar below to fetch audience data.</p>
+      </CardContent>
+    </Card>
+  );
 
   const byType = (type: string) => data.filter(d => d.breakdown_type === type);
   const fetchedAt = data[0]?.fetched_at
