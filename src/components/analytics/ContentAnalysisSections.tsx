@@ -706,10 +706,61 @@ function ContentStrategySection({ posts }: { posts: ThreadsPost[] }) {
   );
 }
 
+// ── Content Tag Breakdown Charts ───────────────────────────────────
+function TagBreakdownChart({ posts, field, title }: { posts: ThreadsPost[]; field: "content_topic" | "content_format" | "content_tone" | "content_cta" | "content_audience"; title: string }) {
+  const data = useMemo(() => {
+    const tagged = posts.filter(p => p[field]);
+    if (!tagged.length) return [];
+    const map: Record<string, number[]> = {};
+    for (const p of tagged) {
+      const val = p[field]!;
+      if (!map[val]) map[val] = [];
+      map[val].push(Number(p.engagement_rate));
+    }
+    const overallAvg = avg(tagged.map(p => Number(p.engagement_rate)));
+    return Object.entries(map)
+      .map(([label, rates]) => ({
+        label,
+        avgEng: +(avg(rates) * 100).toFixed(3),
+        count: rates.length,
+        aboveAvg: avg(rates) >= overallAvg,
+      }))
+      .sort((a, b) => b.avgEng - a.avgEng);
+  }, [posts, field]);
+
+  if (!data.length) return null;
+
+  return (
+    <Card>
+      <CardContent className="p-4 md:p-6 space-y-4">
+        <h3 className="text-sm font-medium text-muted-foreground">{title}</h3>
+        <div className="h-[280px]">
+          <ResponsiveContainer width="100%" height="100%">
+            <BarChart data={data} layout="vertical">
+              <CartesianGrid strokeDasharray="3 3" className="stroke-border" />
+              <XAxis type="number" tick={{ fontSize: 11 }} tickFormatter={v => v.toFixed(2) + "%"} />
+              <YAxis dataKey="label" type="category" width={140} tick={{ fontSize: 10 }} />
+              <Tooltip contentStyle={tipStyle} formatter={(v: number) => v.toFixed(3) + "%"} />
+              <Bar dataKey="avgEng" name="Avg Engagement %"  radius={[0, 4, 4, 0]}
+                label={{ position: "right", fontSize: 9, formatter: (_: any, __: any, index: number) => `${data[index]?.count || 0}` }}
+              >
+                {data.map((d, i) => (
+                  <Cell key={i} fill={d.aboveAvg ? "#22c55e" : "#94a3b8"} />
+                ))}
+              </Bar>
+            </BarChart>
+          </ResponsiveContainer>
+        </div>
+      </CardContent>
+    </Card>
+  );
+}
+
 // ── Main export ────────────────────────────────────────────────────
 export default function ContentAnalysisSections({ range }: { range: DateRange }) {
   const postsQ = useAllPosts(range);
   const posts = postsQ.data || [];
+  const hasTaggedPosts = posts.some(p => p.content_tagged_at);
 
   if (postsQ.isLoading) {
     return (
@@ -736,6 +787,15 @@ export default function ContentAnalysisSections({ range }: { range: DateRange })
   return (
     <div className="space-y-6">
       <ContentStrategySection posts={posts} />
+      {hasTaggedPosts && (
+        <>
+          <TagBreakdownChart posts={posts} field="content_topic" title="Topic Performance" />
+          <TagBreakdownChart posts={posts} field="content_format" title="Format Performance" />
+          <TagBreakdownChart posts={posts} field="content_tone" title="Tone Performance" />
+          <TagBreakdownChart posts={posts} field="content_cta" title="CTA Effectiveness" />
+          <TagBreakdownChart posts={posts} field="content_audience" title="Audience Fit" />
+        </>
+      )}
       <MediaTypeSection posts={posts} overallAvgEng={overallAvgEng} />
       <PostLengthSection posts={posts} />
       <EngagementBreakdownSection posts={posts} />
