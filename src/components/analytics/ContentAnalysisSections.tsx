@@ -244,59 +244,78 @@ function MediaTypeSection({ posts, overallAvgEng }: { posts: ThreadsPost[]; over
   );
 }
 
-// ── Post frequency (simplified — no dual axis, no rolling avg) ────
+// ── Post frequency with weekly/monthly toggle ────────────────────
 function PostFrequencySection({ posts }: { posts: ThreadsPost[] }) {
-  const { weeklyData, avgFreq, bestWeekPosts } = useMemo(() => {
-    const weekMap: Record<string, ThreadsPost[]> = {};
+  const [view, setView] = useState<"weekly" | "monthly">("weekly");
+
+  const { data: chartData, avgFreq, bestPeriodPosts, label } = useMemo(() => {
+    const periodMap: Record<string, ThreadsPost[]> = {};
     for (const p of posts) {
       if (!p.posted_at) continue;
       const d = new Date(p.posted_at);
-      const weekStart = new Date(d);
-      weekStart.setDate(d.getDate() - d.getDay());
-      const key = weekStart.toISOString().split("T")[0];
-      if (!weekMap[key]) weekMap[key] = [];
-      weekMap[key].push(p);
+      let key: string;
+      if (view === "weekly") {
+        const weekStart = new Date(d);
+        weekStart.setDate(d.getDate() - d.getDay());
+        key = weekStart.toISOString().split("T")[0];
+      } else {
+        key = `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, "0")}`;
+      }
+      if (!periodMap[key]) periodMap[key] = [];
+      periodMap[key].push(p);
     }
 
-    const weeks = Object.entries(weekMap)
-      .map(([week, items]) => ({
-        week,
+    const periods = Object.entries(periodMap)
+      .map(([period, items]) => ({
+        period,
         count: items.length,
         avgEng: avg(items.map(p => Number(p.engagement_rate))) * 100,
       }))
-      .sort((a, b) => a.week.localeCompare(b.week));
+      .sort((a, b) => a.period.localeCompare(b.period));
 
-    const avgFreqVal = weeks.length ? avg(weeks.map(w => w.count)) : 0;
-    // Find the posting frequency of best engagement weeks
-    const sortedByEng = [...weeks].sort((a, b) => b.avgEng - a.avgEng);
-    const topWeeks = sortedByEng.slice(0, Math.max(3, Math.ceil(weeks.length * 0.2)));
-    const bestWeekAvgPosts = avg(topWeeks.map(w => w.count));
+    const avgVal = periods.length ? avg(periods.map(w => w.count)) : 0;
+    const sortedByEng = [...periods].sort((a, b) => b.avgEng - a.avgEng);
+    const topPeriods = sortedByEng.slice(0, Math.max(3, Math.ceil(periods.length * 0.2)));
+    const bestAvg = avg(topPeriods.map(w => w.count));
 
     return {
-      weeklyData: weeks,
-      avgFreq: +avgFreqVal.toFixed(1),
-      bestWeekPosts: +bestWeekAvgPosts.toFixed(1),
+      data: periods,
+      avgFreq: +avgVal.toFixed(1),
+      bestPeriodPosts: +bestAvg.toFixed(1),
+      label: view === "weekly" ? "week" : "month",
     };
-  }, [posts]);
+  }, [posts, view]);
 
   return (
     <Card>
       <CardContent className="p-4 md:p-6 space-y-4">
-        <h3 className="text-sm font-medium text-muted-foreground">Post Frequency</h3>
+        <div className="flex items-center justify-between">
+          <h3 className="text-sm font-medium text-muted-foreground">Post Frequency</h3>
+          <div className="flex gap-1 bg-muted rounded-md p-0.5">
+            <button
+              onClick={() => setView("weekly")}
+              className={`px-2.5 py-1 text-xs rounded transition-colors ${view === "weekly" ? "bg-background text-foreground shadow-sm font-medium" : "text-muted-foreground hover:text-foreground"}`}
+            >Weekly</button>
+            <button
+              onClick={() => setView("monthly")}
+              className={`px-2.5 py-1 text-xs rounded transition-colors ${view === "monthly" ? "bg-background text-foreground shadow-sm font-medium" : "text-muted-foreground hover:text-foreground"}`}
+            >Monthly</button>
+          </div>
+        </div>
         <p className="text-sm text-muted-foreground">
-          You post <span className="font-semibold text-foreground">{avgFreq}×/week</span> on average. 
-          Your best-performing weeks had about <span className="font-semibold text-foreground">{bestWeekPosts} posts</span>.
+          You post <span className="font-semibold text-foreground">{avgFreq}×/{label}</span> on average.
+          Your best-performing {label}s had about <span className="font-semibold text-foreground">{bestPeriodPosts} posts</span>.
         </p>
         <div className="h-[250px]">
           <ResponsiveContainer width="100%" height="100%">
-            <BarChart data={weeklyData}>
+            <BarChart data={chartData}>
               <CartesianGrid strokeDasharray="3 3" className="stroke-border" />
-              <XAxis dataKey="week" tick={{ fontSize: 10 }} tickFormatter={v => v.slice(5)} />
+              <XAxis dataKey="period" tick={{ fontSize: 10 }} tickFormatter={v => view === "weekly" ? v.slice(5) : v} />
               <YAxis tick={{ fontSize: 11 }} />
               <Tooltip contentStyle={tipStyle} />
               <ReferenceLine y={avgFreq} stroke="#f59e0b" strokeDasharray="6 4" strokeWidth={1.5}
                 label={{ value: `Avg ${avgFreq}`, position: "right", fontSize: 10, fill: "#f59e0b" }} />
-              <Bar dataKey="count" name="Posts/week" fill="hsl(var(--primary))" opacity={0.7} radius={[4, 4, 0, 0]} />
+              <Bar dataKey="count" name={`Posts/${label}`} fill="hsl(var(--primary))" opacity={0.7} radius={[4, 4, 0, 0]} />
             </BarChart>
           </ResponsiveContainer>
         </div>
