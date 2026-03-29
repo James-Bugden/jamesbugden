@@ -181,6 +181,8 @@ export default function ThreadsAnalytics() {
   const [range, setRange] = useState<DateRange>("30d");
   const [syncing, setSyncing] = useState(false);
   const [backfilling, setBackfilling] = useState(false);
+  const [analyzingImages, setAnalyzingImages] = useState(false);
+  const [syncingDemographics, setSyncingDemographics] = useState(false);
 
   const postsAgg = usePostsAggregates(range);
   const insights = useInsights(range);
