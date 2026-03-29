@@ -357,7 +357,7 @@ function TagBreakdownChart({ posts, field }: { posts: ThreadsPost[]; field: "con
           <CartesianGrid strokeDasharray="3 3" className="stroke-border" />
           <XAxis type="number" tick={{ fontSize: 11 }} tickFormatter={v => v.toFixed(2) + "%"} />
           <YAxis dataKey="label" type="category" width={140} tick={{ fontSize: 10 }} />
-          <Tooltip contentStyle={tipStyle} formatter={(v: number) => v.toFixed(3) + "% engagement"} />
+          <RechartsTooltip contentStyle={tipStyle} formatter={(v: number) => v.toFixed(3) + "% engagement"} />
           <ReferenceLine x={overallAvgPct} stroke="#f59e0b" strokeDasharray="6 4" strokeWidth={1.5}
             label={{ value: "Avg", position: "top", fontSize: 9, fill: "#f59e0b" }} />
           <Bar dataKey="avgEng" name="Avg Engagement %" radius={[0, 4, 4, 0]}
