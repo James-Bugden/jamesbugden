@@ -663,50 +663,49 @@ serve(async (req) => {
   }
 
   try {
-    // Auth check — allow cron/service calls + admin users
+    // Auth: verify_jwt is false (config.toml), so we handle auth manually.
+    // Allow: service role key, anon key, or authenticated admin user.
+    // For cron jobs, Supabase sends internal keys that may differ from project keys.
     const authHeader = req.headers.get("Authorization") || "";
     const token = authHeader.replace("Bearer ", "");
     
-    // Check all possible key env vars
+    let isAuthorized = false;
+    
+    // Check if token matches any known key
     const knownKeys = [
       Deno.env.get("SUPABASE_SERVICE_ROLE_KEY"),
       Deno.env.get("SUPABASE_ANON_KEY"),
       Deno.env.get("SUPABASE_PUBLISHABLE_KEY"),
     ].filter(Boolean) as string[];
     
-    const isCronCall = knownKeys.some(k => token === k);
-
-    if (!isCronCall) {
-      if (!authHeader.startsWith("Bearer ")) {
-        return new Response(JSON.stringify({ error: "Unauthorized" }), {
-          status: 401,
-          headers: { ...corsHeaders, "Content-Type": "application/json" },
-        });
+    if (knownKeys.some(k => token === k)) {
+      isAuthorized = true;
+    }
+    
+    // Check if it's a valid user JWT from an admin
+    if (!isAuthorized && authHeader.startsWith("Bearer ") && token.length > 100) {
+      try {
+        const anonKey = knownKeys[0] || "";
+        const sb = createClient(
+          Deno.env.get("SUPABASE_URL")!,
+          anonKey,
+          { global: { headers: { Authorization: authHeader } } }
+        );
+        const { data: { user } } = await sb.auth.getUser(token);
+        if (user) {
+          const { data: adminCheck } = await supabaseAdmin().rpc("is_admin", { _user_id: user.id });
+          isAuthorized = !!adminCheck;
+        }
+      } catch {
+        // Failed to verify — not authorized via user JWT
       }
-      
-      // Verify user JWT and check admin
-      const anonKey = Deno.env.get("SUPABASE_ANON_KEY") || Deno.env.get("SUPABASE_PUBLISHABLE_KEY") || token;
-      const sb = createClient(
-        Deno.env.get("SUPABASE_URL")!,
-        anonKey,
-        { global: { headers: { Authorization: authHeader } } }
-      );
-
-      const { data: { user }, error: userError } = await sb.auth.getUser(token);
-      if (userError || !user) {
-        return new Response(JSON.stringify({ error: "Unauthorized" }), {
-          status: 401,
-          headers: { ...corsHeaders, "Content-Type": "application/json" },
-        });
-      }
-
-      const { data: isAdmin } = await supabaseAdmin().rpc("is_admin", { _user_id: user.id });
-      if (!isAdmin) {
-        return new Response(JSON.stringify({ error: "Forbidden" }), {
-          status: 403,
-          headers: { ...corsHeaders, "Content-Type": "application/json" },
-        });
-      }
+    }
+    
+    if (!isAuthorized) {
+      return new Response(JSON.stringify({ error: "Unauthorized" }), {
+        status: 401,
+        headers: { ...corsHeaders, "Content-Type": "application/json" },
+      });
     }
 
     // Parse action
