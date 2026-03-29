@@ -70,20 +70,6 @@ function usePostsAggregates(range: DateRange) {
   });
 }
 
-function useInsights(range: DateRange) {
-  return useQuery({
-    queryKey: ["threads-insights", range],
-    queryFn: async () => {
-      let q = supabase.from("threads_user_insights").select("*").order("metric_date", { ascending: true });
-      const start = rangeStart(range);
-      if (start) q = q.gte("metric_date", start);
-      const { data, error } = await q;
-      if (error) throw error;
-      return data || [];
-    },
-  });
-}
-
 function useFollowerGrowth() {
   return useQuery({
     queryKey: ["threads-follower-growth"],
@@ -124,18 +110,6 @@ function useLastSync() {
         .limit(1)
         .single();
       return data?.updated_at || null;
-    },
-  });
-}
-
-function useInsightCount() {
-  return useQuery({
-    queryKey: ["threads-insight-count"],
-    queryFn: async () => {
-      const { count } = await supabase
-        .from("threads_user_insights")
-        .select("id", { count: "exact", head: true });
-      return count || 0;
     },
   });
 }
