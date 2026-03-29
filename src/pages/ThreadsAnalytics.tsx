@@ -185,10 +185,49 @@ function calcDelta(current: number, previous: number): string | null {
   return `${prefix}${change.toFixed(1)}%`;
 }
 
+// ── Mini Sparkline ─────────────────────────────────────────────────
+function MiniSparkline({ data, color }: { data: number[]; color: string }) {
+  if (data.length < 2) return null;
+  const min = Math.min(...data);
+  const max = Math.max(...data);
+  const range = max - min || 1;
+  const w = 120;
+  const h = 36;
+  const pad = 2;
+  const points = data.map((v, i) => {
+    const x = pad + (i / (data.length - 1)) * (w - pad * 2);
+    const y = h - pad - ((v - min) / range) * (h - pad * 2);
+    return `${x},${y}`;
+  });
+  const uid = `spark-${color.replace("#", "")}`;
+  return (
+    <svg viewBox={`0 0 ${w} ${h}`} className="w-full h-[36px] mt-1" preserveAspectRatio="none">
+      <defs>
+        <linearGradient id={uid} x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0%" stopColor={color} stopOpacity={0.25} />
+          <stop offset="100%" stopColor={color} stopOpacity={0.02} />
+        </linearGradient>
+      </defs>
+      <polygon
+        points={`${pad},${h} ${points.join(" ")} ${w - pad},${h}`}
+        fill={`url(#${uid})`}
+      />
+      <polyline
+        points={points.join(" ")}
+        fill="none"
+        stroke={color}
+        strokeWidth="2"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+    </svg>
+  );
+}
+
 // ── KPI Card ───────────────────────────────────────────────────────
-function KpiCard({ label, subtitle, value, delta, periodDelta, periodLabel, icon: Icon, iconColor, progressValue, progressMax }: {
+function KpiCard({ label, subtitle, value, delta, periodDelta, periodLabel, icon: Icon, iconColor, progressValue, progressMax, sparkData }: {
   label: string; subtitle?: string; value: string; delta?: string; periodDelta?: string | null; periodLabel?: string; icon: any; iconColor?: string;
-  progressValue?: number; progressMax?: number;
+  progressValue?: number; progressMax?: number; sparkData?: number[];
 }) {
   // Human-readable period delta
   const readableDelta = periodDelta ? (() => {
@@ -247,6 +286,9 @@ function KpiCard({ label, subtitle, value, delta, periodDelta, periodLabel, icon
           </span>
         )}
       </div>
+      {sparkData && sparkData.length >= 2 && (
+        <MiniSparkline data={sparkData} color={iconColor || "#3b82f6"} />
+      )}
     </div>
   );
 }
@@ -678,20 +720,25 @@ export default function ThreadsAnalytics() {
                   <div className="grid grid-cols-2 md:grid-cols-5 gap-4">
                     <KpiCard label="Total Posts" subtitle="How many times you posted" icon={FileText} iconColor="#6366f1"
                       value={postsAgg.data ? fmt(postsAgg.data.totalPosts) : "—"}
-                      periodDelta={postsDelta} periodLabel={periodLabel} />
+                      periodDelta={postsDelta} periodLabel={periodLabel}
+                      sparkData={postTrend.data?.map(d => d.posts)} />
                     <KpiCard label="Total Views" subtitle="How many people saw your posts" icon={Eye} iconColor="#3b82f6"
                       value={postsAgg.data ? fmt(postsAgg.data.totalViews) : "—"}
-                      periodDelta={viewsDelta} periodLabel={periodLabel} />
+                      periodDelta={viewsDelta} periodLabel={periodLabel}
+                      sparkData={postTrend.data?.map(d => d.views)} />
                     <KpiCard label="Engagement" subtitle="Likes, replies & shares per view" icon={Heart} iconColor={engValue >= 0.015 ? "#22c55e" : engValue >= 0.008 ? "#f59e0b" : "#ef4444"}
                       value={postsAgg.data ? pct(postsAgg.data.avgEng) : "—"}
                       progressValue={engValue} progressMax={0.03}
-                      periodDelta={engDelta} periodLabel={periodLabel} />
+                      periodDelta={engDelta} periodLabel={periodLabel}
+                      sparkData={postTrend.data?.map(d => d.engagementRate)} />
                     <KpiCard label="Avg Views/Post" subtitle="Reach per post on average" icon={BarChart3} iconColor="#8b5cf6"
                       value={postsAgg.data ? fmt(Math.round(postsAgg.data.avgViews)) : "—"}
-                      periodDelta={avgViewsDelta} periodLabel={periodLabel} />
+                      periodDelta={avgViewsDelta} periodLabel={periodLabel}
+                      sparkData={postTrend.data?.map(d => d.views / Math.max(d.posts, 1))} />
                     <KpiCard label="Followers Gained" subtitle="New followers in this period" icon={Users} iconColor="#22c55e"
                       value={followerDeltas.data ? (followerDeltas.data.netGain === 0 ? "No change yet" : (followerDeltas.data.netGain >= 0 ? "+" : "") + fmt(followerDeltas.data.netGain)) : "—"}
-                      delta={followerDeltas.data && followerDeltas.data.netGain > 0 ? "Growing" : followerDeltas.data && followerDeltas.data.netGain < 0 ? "Declining" : undefined} />
+                      delta={followerDeltas.data && followerDeltas.data.netGain > 0 ? "Growing" : followerDeltas.data && followerDeltas.data.netGain < 0 ? "Declining" : undefined}
+                      sparkData={followerDeltas.data?.deltas?.map(d => d.followers)} />
                   </div>
 
                   {/* Top Performer */}
