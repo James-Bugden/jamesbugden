@@ -179,6 +179,7 @@ export default function ThreadsAnalytics() {
   const lastSync = useLastSync();
   const allPostsQ = useAllPosts(range);
   const allPosts = allPostsQ.data || [];
+  const followerDeltas = useFollowerDeltas(range);
 
   // Admin check
   const [isAdmin, setIsAdmin] = useState(false);
