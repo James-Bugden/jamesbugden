@@ -390,20 +390,22 @@ export default function ThreadsAnalytics() {
             </CardContent>
           </Card>
 
-          {/* Follower Growth Chart */}
+          {/* Follower Growth Chart with daily change bars */}
           <Card>
             <CardContent className="p-4 md:p-6">
               <h3 className="text-sm font-medium text-muted-foreground mb-1">Follower Growth</h3>
               <p className="text-xs text-muted-foreground mb-4">
-                {follower.data ? `Currently ${fmt(follower.data.current)} followers.` : ""} 
-                {followerData.length <= 1 ? " Data accumulates with daily syncs and backfills." : ""}
+                {follower.data ? `Currently ${fmt(follower.data.current)} followers.` : ""}
+                {followerDeltas.data && followerDeltas.data.deltas.length > 0
+                  ? ` Net ${followerDeltas.data.netGain >= 0 ? "+" : ""}${followerDeltas.data.netGain} in this period.`
+                  : " Data accumulates with daily syncs and backfills."}
               </p>
               {followerHistory.isLoading ? (
-                <Skeleton className="h-[250px]" />
-              ) : followerData.length > 1 ? (
-                <div className="h-[250px]">
+                <Skeleton className="h-[300px]" />
+              ) : followerDeltas.data && followerDeltas.data.deltas.length > 1 ? (
+                <div className="h-[300px]">
                   <ResponsiveContainer width="100%" height="100%">
-                    <AreaChart data={followerData}>
+                    <ComposedChart data={followerDeltas.data.deltas}>
                       <defs>
                         <linearGradient id="followerGrad" x1="0" y1="0" x2="0" y2="1">
                           <stop offset="5%" stopColor="#22c55e" stopOpacity={0.3} />
@@ -412,9 +414,35 @@ export default function ThreadsAnalytics() {
                       </defs>
                       <CartesianGrid strokeDasharray="3 3" className="stroke-border" />
                       <XAxis dataKey="date" tick={{ fontSize: 11 }} tickFormatter={(v) => v.slice(5)} />
+                      <YAxis yAxisId="left" tick={{ fontSize: 11 }} domain={["dataMin - 100", "dataMax + 100"]} />
+                      <YAxis yAxisId="right" orientation="right" tick={{ fontSize: 10 }} />
+                      <RechartsTooltip contentStyle={{ background: "hsl(var(--background))", border: "1px solid hsl(var(--border))", borderRadius: 8, fontSize: 12 }}
+                        formatter={(v: number, name: string) => [name === "Daily Change" ? (v >= 0 ? "+" : "") + v : fmt(v), name]} />
+                      <Area yAxisId="left" type="monotone" dataKey="followers" name="Followers" stroke="#22c55e" fill="url(#followerGrad)" strokeWidth={2} />
+                      <Bar yAxisId="right" dataKey="delta" name="Daily Change" radius={[2, 2, 0, 0]}>
+                        {followerDeltas.data.deltas.map((d, i) => (
+                          <Cell key={i} fill={d.delta >= 0 ? "#22c55e" : "#ef4444"} opacity={0.6} />
+                        ))}
+                      </Bar>
+                      <ReferenceLine yAxisId="right" y={0} stroke="hsl(var(--border))" />
+                    </ComposedChart>
+                  </ResponsiveContainer>
+                </div>
+              ) : followerData.length > 1 ? (
+                <div className="h-[250px]">
+                  <ResponsiveContainer width="100%" height="100%">
+                    <AreaChart data={followerData}>
+                      <defs>
+                        <linearGradient id="followerGrad2" x1="0" y1="0" x2="0" y2="1">
+                          <stop offset="5%" stopColor="#22c55e" stopOpacity={0.3} />
+                          <stop offset="95%" stopColor="#22c55e" stopOpacity={0} />
+                        </linearGradient>
+                      </defs>
+                      <CartesianGrid strokeDasharray="3 3" className="stroke-border" />
+                      <XAxis dataKey="date" tick={{ fontSize: 11 }} tickFormatter={(v) => v.slice(5)} />
                       <YAxis tick={{ fontSize: 11 }} domain={["dataMin - 100", "dataMax + 100"]} />
                       <RechartsTooltip contentStyle={{ background: "hsl(var(--background))", border: "1px solid hsl(var(--border))", borderRadius: 8, fontSize: 12 }} />
-                      <Area type="monotone" dataKey="followers" name="Followers" stroke="#22c55e" fill="url(#followerGrad)" strokeWidth={2} />
+                      <Area type="monotone" dataKey="followers" name="Followers" stroke="#22c55e" fill="url(#followerGrad2)" strokeWidth={2} />
                     </AreaChart>
                   </ResponsiveContainer>
                 </div>
