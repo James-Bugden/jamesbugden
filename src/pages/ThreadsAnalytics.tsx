@@ -16,6 +16,7 @@ import {
   Tooltip, ResponsiveContainer, Legend,
 } from "recharts";
 import { toast } from "sonner";
+import ContentAnalysisSections from "@/components/analytics/ContentAnalysisSections";
 
 // ── Types ──────────────────────────────────────────────────────────
 type DateRange = "7d" | "30d" | "90d" | "all";
@@ -412,6 +413,9 @@ export default function ThreadsAnalytics() {
               )}
             </CardContent>
           </Card>
+
+          {/* Sections 5-12: Content Analysis */}
+          <ContentAnalysisSections range={range} />
 
           {/* Section 19: Sync Status */}
           <div className="flex flex-wrap items-center gap-3 border rounded-lg p-4 bg-muted/30">
