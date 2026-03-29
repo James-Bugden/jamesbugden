@@ -52,9 +52,15 @@ export type ThreadsPost = {
   engagement_rate: number;
   virality_rate: number;
   conversation_rate: number;
+  content_topic: string | null;
+  content_format: string | null;
+  content_tone: string | null;
+  content_cta: string | null;
+  content_audience: string | null;
+  content_tagged_at: string | null;
 };
 
-const POST_FIELDS = "id, media_id, text_content, media_type, permalink, shortcode, is_quote_post, posted_at, media_url, thumbnail_url, views, likes, replies, reposts, quotes, shares, image_description, image_tags, image_analyzed_at, text_length, detected_language, hashtag, engagement_rate, virality_rate, conversation_rate";
+const POST_FIELDS = "id, media_id, text_content, media_type, permalink, shortcode, is_quote_post, posted_at, media_url, thumbnail_url, views, likes, replies, reposts, quotes, shares, image_description, image_tags, image_analyzed_at, text_length, detected_language, hashtag, engagement_rate, virality_rate, conversation_rate, content_topic, content_format, content_tone, content_cta, content_audience, content_tagged_at";
 
 export function useAllPosts(range: DateRange) {
   return useQuery({

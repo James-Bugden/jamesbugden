@@ -497,6 +497,100 @@ async function actionBackfill(
   return { done: !nextFrom, nextFrom, daysProcessed };
 }
 
+// ── Action: tag-content (AI classification) ───────────────────────
+async function actionTagContent(sb: ReturnType<typeof supabaseAdmin>) {
+  console.log("=== ACTION: tag-content ===");
+
+  const { data: untagged } = await sb
+    .from("threads_posts")
+    .select("id, text_content")
+    .not("text_content", "is", null)
+    .is("content_tagged_at", null)
+    .limit(15);
+
+  if (!untagged?.length) {
+    const { count } = await sb
+      .from("threads_posts")
+      .select("id", { count: "exact", head: true })
+      .not("text_content", "is", null)
+      .is("content_tagged_at", null);
+    console.log("No untagged posts");
+    return { tagged: 0, remaining: count || 0 };
+  }
+
+  const apiKey = Deno.env.get("LOVABLE_API_KEY");
+  if (!apiKey) throw new Error("LOVABLE_API_KEY not configured");
+
+  let taggedCount = 0;
+  for (const post of untagged) {
+    if (!post.text_content) continue;
+    try {
+      const res = await fetch("https://ai.gateway.lovable.dev/v1/chat/completions", {
+        method: "POST",
+        headers: {
+          Authorization: `Bearer ${apiKey}`,
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          model: "google/gemini-2.5-flash-lite",
+          messages: [
+            {
+              role: "system",
+              content: `You classify social media posts for a career coaching account. Return ONLY valid JSON with these exact keys. Pick ONE value per key from the allowed options.
+
+topic: resume-tips, interview-prep, salary-negotiation, career-pivot, linkedin, job-search, mindset, office-politics, personal-branding, recruiter-insights, work-life, motivation, industry-trends, other
+format: listicle, story, hot-take, question, tip, myth-bust, before-after, case-study, announcement, thread, quote-commentary, poll, other
+tone: motivational, educational, provocative, humorous, vulnerable, authoritative, conversational
+cta: follow, save, share, comment, link-click, dm, none
+audience: job-seekers, career-changers, professionals, new-grads, managers, general
+
+Return: {"topic":"...","format":"...","tone":"...","cta":"...","audience":"..."}`
+            },
+            { role: "user", content: post.text_content.slice(0, 1000) }
+          ],
+        }),
+      });
+
+      if (!res.ok) {
+        console.error("AI error:", res.status);
+        await delay(1000);
+        continue;
+      }
+
+      const data = await res.json();
+      const text = data.choices?.[0]?.message?.content || "";
+      const jsonMatch = text.match(/\{[\s\S]*\}/);
+      if (jsonMatch) {
+        const tags = JSON.parse(jsonMatch[0]);
+        await sb
+          .from("threads_posts")
+          .update({
+            content_topic: tags.topic || null,
+            content_format: tags.format || null,
+            content_tone: tags.tone || null,
+            content_cta: tags.cta || null,
+            content_audience: tags.audience || null,
+            content_tagged_at: new Date().toISOString(),
+          })
+          .eq("id", post.id);
+        taggedCount++;
+      }
+    } catch (e) {
+      console.error("Tag error for post:", post.id, e);
+    }
+    await delay(300);
+  }
+
+  const { count } = await sb
+    .from("threads_posts")
+    .select("id", { count: "exact", head: true })
+    .not("text_content", "is", null)
+    .is("content_tagged_at", null);
+
+  console.log(`Tagged ${taggedCount}, remaining: ${count || 0}`);
+  return { tagged: taggedCount, remaining: count || 0 };
+}
+
 // ── HTTP handler ───────────────────────────────────────────────────
 serve(async (req) => {
   if (req.method === "OPTIONS") {
@@ -571,6 +665,9 @@ serve(async (req) => {
         break;
       case "backfill":
         result = await actionBackfill(sb, userId, accessToken, fromDate);
+        break;
+      case "tag-content":
+        result = await actionTagContent(sb);
         break;
       default:
         result = await actionSync(sb, userId, accessToken);

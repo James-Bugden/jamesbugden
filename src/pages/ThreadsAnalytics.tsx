@@ -183,6 +183,7 @@ export default function ThreadsAnalytics() {
   const [backfilling, setBackfilling] = useState(false);
   const [analyzingImages, setAnalyzingImages] = useState(false);
   const [syncingDemographics, setSyncingDemographics] = useState(false);
+  const [taggingContent, setTaggingContent] = useState(false);
 
   const postsAgg = usePostsAggregates(range);
   const insights = useInsights(range);
@@ -297,6 +298,22 @@ export default function ThreadsAnalytics() {
       toast.error(e.message || "Demographics sync failed");
     } finally {
       setSyncingDemographics(false);
+    }
+  };
+
+  const handleTagContent = async () => {
+    setTaggingContent(true);
+    try {
+      const { data, error } = await supabase.functions.invoke("threads-sync", {
+        body: { action: "tag-content" },
+      });
+      if (error) throw error;
+      toast.success(`Tagged ${data?.tagged || 0} posts, ${data?.remaining || 0} remaining`);
+      postsAgg.refetch();
+    } catch (e: any) {
+      toast.error(e.message || "Content tagging failed");
+    } finally {
+      setTaggingContent(false);
     }
   };
 
@@ -495,6 +512,10 @@ export default function ThreadsAnalytics() {
               <Button variant="outline" size="sm" onClick={handleAnalyzeImages} disabled={analyzingImages}>
                 {analyzingImages && <RefreshCw className="w-3 h-3 animate-spin mr-1" />}
                 Analyze Images
+              </Button>
+              <Button variant="outline" size="sm" onClick={handleTagContent} disabled={taggingContent}>
+                {taggingContent && <RefreshCw className="w-3 h-3 animate-spin mr-1" />}
+                Tag Content
               </Button>
               <Button size="sm" onClick={handleSync} disabled={syncing}>
                 {syncing ? <RefreshCw className="w-3 h-3 animate-spin mr-1" /> : <RefreshCw className="w-3 h-3 mr-1" />}

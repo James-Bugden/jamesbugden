@@ -427,6 +427,12 @@ export type Database = {
       }
       threads_posts: {
         Row: {
+          content_audience: string | null
+          content_cta: string | null
+          content_format: string | null
+          content_tagged_at: string | null
+          content_tone: string | null
+          content_topic: string | null
           conversation_rate: number | null
           created_at: string | null
           detected_language: string | null
@@ -457,6 +463,12 @@ export type Database = {
           virality_rate: number | null
         }
         Insert: {
+          content_audience?: string | null
+          content_cta?: string | null
+          content_format?: string | null
+          content_tagged_at?: string | null
+          content_tone?: string | null
+          content_topic?: string | null
           conversation_rate?: number | null
           created_at?: string | null
           detected_language?: string | null
@@ -487,6 +499,12 @@ export type Database = {
           virality_rate?: number | null
         }
         Update: {
+          content_audience?: string | null
+          content_cta?: string | null
+          content_format?: string | null
+          content_tagged_at?: string | null
+          content_tone?: string | null
+          content_topic?: string | null
           conversation_rate?: number | null
           created_at?: string | null
           detected_language?: string | null
