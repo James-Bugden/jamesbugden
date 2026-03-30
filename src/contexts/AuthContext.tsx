@@ -2,7 +2,7 @@ import { createContext, useContext, useEffect, useState, useCallback, useRef, ty
 import { supabase } from "@/integrations/supabase/client";
 import type { User, Session } from "@supabase/supabase-js";
 import { syncToMailerLite } from "@/lib/mailerlite";
-import { syncLocalToServer } from "@/lib/documentStore";
+import { syncLocalToServer, clearLocalDocuments, loadFromServer } from "@/lib/documentStore";
 
 interface AuthContextValue {
   user: User | null;
@@ -26,19 +26,34 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const syncedRef = useRef<Set<string>>(new Set());
 
   useEffect(() => {
+    const ACTIVE_USER_KEY = "james_careers_active_user";
+
     const { data: { subscription } } = supabase.auth.onAuthStateChange(
       (event, session) => {
         setSession(session);
 
+        if (event === "SIGNED_OUT") {
+          clearLocalDocuments();
+          localStorage.removeItem(ACTIVE_USER_KEY);
+        }
+
         // Sync OAuth users to MailerLite on sign-in (once per session)
         if (event === "SIGNED_IN" && session?.user?.email) {
           const uid = session.user.id;
+          const previousUser = localStorage.getItem(ACTIVE_USER_KEY);
+
+          // Clear stale local data if switching accounts
+          if (previousUser && previousUser !== uid) {
+            clearLocalDocuments();
+          }
+          localStorage.setItem(ACTIVE_USER_KEY, uid);
+
           if (!syncedRef.current.has(uid)) {
             syncedRef.current.add(uid);
             const name = session.user.user_metadata?.full_name || session.user.user_metadata?.name || "";
             syncToMailerLite(session.user.email, name);
-            // Sync local documents to server on first login
-            syncLocalToServer();
+            // Sync local documents to server on first login, then load server docs
+            syncLocalToServer().then(() => loadFromServer());
           }
         }
       }
@@ -53,6 +68,8 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   }, []);
 
   const signOut = useCallback(async () => {
+    clearLocalDocuments();
+    localStorage.removeItem("james_careers_active_user");
     try {
       await supabase.auth.signOut();
     } catch {
