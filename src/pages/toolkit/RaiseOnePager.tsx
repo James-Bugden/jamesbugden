@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import { ArrowLeft, Copy, Share2, Check, Printer } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useToast } from "@/hooks/use-toast";
+import { usePrintUsage } from "@/hooks/usePrintUsage";
 import { nativeShare } from "@/lib/share";
 import { trackEvent } from "@/lib/trackEvent";
 import ToolkitHeader from "@/components/toolkit/ToolkitHeader";
@@ -48,6 +49,7 @@ const RaiseOnePager = () => {
   const { toast } = useToast();
   const [copied, setCopied] = useState(false);
   const [shared, setShared] = useState(false);
+  const { gatedPrint: printPage, printLimitReached } = usePrintUsage();
 
   const copyTemplate = () => {
     const templateText = `RAISE REQUEST ONE-PAGER
@@ -92,9 +94,6 @@ TALKING POINTS
     }
   };
 
-  const printPage = () => {
-    window.print();
-  };
 
   return (
       <div className="min-h-screen bg-background">
@@ -298,8 +297,9 @@ TALKING POINTS
       {/* Action Buttons */}
       <section className="pb-12 px-5 md:px-6 print:hidden">
         <div className="container mx-auto max-w-5xl flex flex-col sm:flex-row gap-4 justify-center">
-          <Button 
+          <Button
             onClick={printPage}
+            disabled={printLimitReached}
             className="bg-executive hover:bg-executive-light text-cream px-6 py-3 h-auto"
           >
             <Printer className="w-4 h-4 mr-2" />

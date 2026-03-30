@@ -241,6 +241,30 @@ export async function syncLocalToServer(): Promise<{ synced: number }> {
   }
 }
 
+/**
+ * Clear all document-related localStorage keys.
+ * Called on sign-out and before loading a different user's documents.
+ */
+export function clearLocalDocuments() {
+  localStorage.removeItem(STORAGE_KEY);
+  localStorage.removeItem("james_careers_resume");
+  localStorage.removeItem("james_careers_customize");
+  localStorage.removeItem("james_careers_cover_letter");
+  localStorage.removeItem("james_careers_cover_letter_customize");
+  localStorage.removeItem(SEEDED_KEY);
+}
+
+/**
+ * Load the current user's documents from the server into localStorage.
+ * Returns true if server docs were loaded, false otherwise.
+ */
+export async function loadFromServer(): Promise<boolean> {
+  const serverDocs = await fetchServerDocuments();
+  if (!serverDocs || serverDocs.length === 0) return false;
+  save(serverDocs);
+  return true;
+}
+
 // Seed example resume on first visit
 const SEEDED_KEY = "james_careers_example_seeded";
 

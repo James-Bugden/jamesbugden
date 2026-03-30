@@ -11,6 +11,7 @@ import { toast } from "@/hooks/use-toast";
 import InlineRating from "@/components/feedback/InlineRating";
 import { useIsMobile } from "@/hooks/use-mobile";
 import { trackShare } from "@/lib/trackShare";
+import { usePrintUsage } from "@/hooks/usePrintUsage";
 
 type Language = "en" | "zh-TW";
 const t = (lang: Language, en: string, zh: string) => lang === "en" ? en : zh;
@@ -534,6 +535,7 @@ export default function ResumeResults({
   const isMobile = useIsMobile();
   const location = useLocation();
   const { isLoggedIn } = useAuth();
+  const { gatedPrint, printLimitReached } = usePrintUsage();
   const needsWork = analysis.sections.filter(s => s.score < 7).length;
 
   return (
@@ -544,7 +546,8 @@ export default function ResumeResults({
         {isUnlocked && (
           <div className="flex justify-center gap-3" data-print-hide>
             <Button
-              onClick={() => window.print()}
+              onClick={gatedPrint}
+              disabled={printLimitReached}
               size="lg"
               className="gap-2 text-white font-bold px-8 py-3 text-base rounded-lg shadow-md"
               style={{ backgroundColor: '#2b4734' }}
@@ -811,7 +814,8 @@ export default function ResumeResults({
         {isUnlocked && (
           <div className="flex justify-center" data-print-hide>
             <Button
-              onClick={() => window.print()}
+              onClick={gatedPrint}
+              disabled={printLimitReached}
               size="lg"
               className="gap-2 text-white font-bold px-8 py-3 text-base rounded-lg shadow-md"
               style={{ backgroundColor: '#2b4734' }}

@@ -51,10 +51,12 @@ export function EmailGateOverlay({
 
   return (
     <div className="relative rounded-xl overflow-hidden">
-      {/* Blurred content with gradient fade */}
+      {/* Placeholder skeleton — no real content rendered */}
       <div className="pointer-events-none select-none relative" aria-hidden>
-        <div style={{ filter: "blur(6px)", maxHeight: "300px", overflow: "hidden" }}>
-          {children}
+        <div className="space-y-4 px-4 py-6" style={{ maxHeight: "300px", overflow: "hidden" }}>
+          {[...Array(5)].map((_, i) => (
+            <div key={i} className="h-4 rounded bg-muted/40" style={{ width: `${70 + (i % 3) * 10}%` }} />
+          ))}
         </div>
         <div className="absolute bottom-0 left-0 right-0 h-24 bg-gradient-to-t from-background to-transparent" />
       </div>

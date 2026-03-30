@@ -8,6 +8,7 @@ import { ScrollToTop } from "./components/ScrollToTop";
 import { HelmetProvider } from "react-helmet-async";
 import { AuthProvider, useAuth } from "./contexts/AuthContext";
 import MobileBottomNav from "./components/MobileBottomNav";
+import SiteLayout from "./components/SiteLayout";
 import AuthRoute from "./components/AuthRoute";
 import { useLocation } from "react-router-dom";
 import { ThemeProvider } from "next-themes";
@@ -182,173 +183,172 @@ function MobileNavWrapper() {
 
 const App = () => (
   <ThemeProvider attribute="class" defaultTheme="light" enableSystem={false}>
-  <HelmetProvider>
-  <QueryClientProvider client={queryClient}>
-    <TooltipProvider>
-      <Toaster />
-      <Sonner />
-      <BrowserRouter>
-        <AuthProvider>
-        <ScrollToTop />
-        <Suspense fallback={<PageLoader />}>
-          <SiteLayout>
-          <Routes>
-            <Route path="/" element={<Index />} />
-            <Route path="/zh-tw" element={<IndexZhTw />} />
-            <Route path="/experiment" element={<Navigate to="/" replace />} />
-            <Route path="/zh-tw/experiment" element={<Navigate to="/zh-tw" replace />} />
-            <Route path="/admin/login" element={<AdminLogin />} />
-            <Route path="/admin/import-questions" element={<ImportQuestions />} />
-            <Route
-              path="/admin"
-              element={
-                <ProtectedRoute requireAdmin={true}>
-                  <AdminDashboard />
-                </ProtectedRoute>
-              }
-            />
-            <Route path="/admin/reviews" element={<Navigate to="/admin?tab=reviews" replace />} />
-            <Route path="/admin/salary-checks" element={<Navigate to="/admin?tab=salary" replace />} />
-            <Route path="/review" element={<ClientReviewGate />} />
-            <Route path="/resume-guide" element={<ResumeGuide />} />
-            <Route path="/zh-tw/resume-guide" element={<ResumeGuideZhTw />} />
-            <Route path="/interview-prep-guide" element={<InterviewPrepGuide />} />
-            <Route path="/zh-tw/interview-prep-guide" element={<InterviewPrepGuideZhTw />} />
-            
-            <Route path="/interview-preparation-guide" element={<InterviewPreparationGuide />} />
-            
-            <Route path="/zh-tw/interview-preparation-guide" element={<InterviewPreparationGuideZhTw />} />
-            <Route path="/zh-tw/linkedin-guide" element={<LinkedInGuideZhTw />} />
-            <Route path="/linkedin-guide" element={<LinkedInGuide />} />
-            <Route path="/zh-tw/linkedin-branding-guide" element={<LinkedInBrandingGuideZhTw />} />
-            <Route path="/linkedin-branding-guide" element={<LinkedInBrandingGuide />} />
-            <Route path="/zh-tw/pivot-method-guide" element={<PivotMethodGuideZhTw />} />
-            <Route path="/pivot-method-guide" element={<PivotMethodGuide />} />
-            <Route path="/pivot-method-mini-guide" element={<PivotMethodMiniGuide />} />
-            <Route path="/zh-tw/pivot-method-mini-guide" element={<PivotMethodMiniGuideZhTw />} />
-            <Route path="/guides" element={<GuidesPage />} />
-            <Route path="/zh-tw/guides" element={<GuidesPageZhTw />} />
-            <Route path="/salary-starter-kit" element={<SalaryStarterKit />} />
-            <Route path="/zh-tw/salary-starter-kit" element={<SalaryStarterKitZhTw />} />
-            <Route path="/quiz" element={<Quiz />} />
-            <Route path="/zh-tw/quiz" element={<QuizZhTw />} />
-            <Route path="/offer-calculator" element={<OfferCompass />} />
-            <Route path="/offer-calculator/compare" element={<OfferCompassCompare />} />
-            <Route path="/zh-tw/offer-calculator" element={<OfferCompassZhTw />} />
-            {/* Redirects from old URLs */}
-            <Route path="/offer-compass" element={<Navigate to="/offer-calculator" replace />} />
-            <Route path="/offer-compass/compare" element={<Navigate to="/offer-calculator/compare" replace />} />
-            <Route path="/zh-tw/offer-compass" element={<Navigate to="/zh-tw/offer-calculator" replace />} />
-            {/* Salary Negotiation Toolkit */}
-            <Route path="/toolkit" element={<ToolkitIndex />} />
-            <Route path="/toolkit/scripts" element={<DeflectionScripts />} />
-            <Route path="/toolkit/offer-response" element={<OfferResponse />} />
-            <Route path="/toolkit/counteroffer" element={<CounterofferEmail />} />
-            <Route path="/toolkit/calculator" element={<CompensationCalculator />} />
-            <Route path="/toolkit/calculator-interactive" element={<CompCalculatorInteractive />} />
-            <Route path="/toolkit/pushback" element={<PushbackCheatSheet />} />
-            <Route path="/toolkit/raise" element={<RaiseOnePager />} />
-            <Route path="/toolkit/log" element={<AchievementLog />} />
-            {/* Traditional Chinese Toolkit */}
-            <Route path="/zh-tw/toolkit" element={<ToolkitIndexZhTw />} />
-            <Route path="/zh-tw/toolkit/scripts" element={<DeflectionScriptsZhTw />} />
-            <Route path="/zh-tw/toolkit/offer-response" element={<OfferResponseZhTw />} />
-            <Route path="/zh-tw/toolkit/counteroffer" element={<CounterofferEmailZhTw />} />
-            <Route path="/zh-tw/toolkit/calculator" element={<CompensationCalculatorZhTw />} />
-            <Route path="/zh-tw/toolkit/calculator-interactive" element={<CompCalculatorInteractiveZhTw />} />
-            <Route path="/zh-tw/toolkit/pushback" element={<PushbackCheatSheetZhTw />} />
-            <Route path="/zh-tw/toolkit/raise" element={<RaiseOnePagerZhTw />} />
-            <Route path="/zh-tw/toolkit/log" element={<AchievementLogZhTw />} />
-            {/* Client Review Pages */}
-            <Route path="/reviews/charlene-lee" element={<CharleneLeeReview />} />
-            <Route path="/zh-tw/reviews/charlene-lee" element={<CharleneLeeReviewZhTw />} />
-            <Route path="/reviews/chien-jung-liu" element={<ChienJungLiuReview />} />
-            <Route path="/zh-tw/reviews/chien-jung-liu" element={<ChienJungLiuReviewZhTw />} />
-            <Route path="/reviews/james-bugden" element={<JamesBugdenReview />} />
-            <Route path="/zh-tw/reviews/james-bugden" element={<JamesBugdenReviewZhTw />} />
-            <Route path="/reviews/sam-lee" element={<SamLeeReview />} />
-            <Route path="/zh-tw/reviews/sam-lee" element={<SamLeeReviewZhTw />} />
-            <Route path="/reviews/roger-lee" element={<RogerLeeReview />} />
-            <Route path="/zh-tw/reviews/roger-lee" element={<RogerLeeReviewZhTw />} />
-            <Route path="/reviews/pin-wei-wu" element={<PinWeiWuReview />} />
-            <Route path="/zh-tw/reviews/pin-wei-wu" element={<PinWeiWuReviewZhTw />} />
-            <Route path="/reviews/peihua-yeh" element={<PeihuaYehReview />} />
-            <Route path="/zh-tw/reviews/peihua-yeh" element={<PeihuaYehReviewZhTw />} />
-            <Route path="/reviews/silvia-chen" element={<SilviaChenReview />} />
-            <Route path="/zh-tw/reviews/silvia-chen" element={<SilviaChenReviewZhTw />} />
-            <Route path="/reviews/youting-chen" element={<YoutingChenReview />} />
-            <Route path="/zh-tw/reviews/youting-chen" element={<YoutingChenReviewZhTw />} />
-            <Route path="/reviews/roy-tsai" element={<RoyTsaiReview />} />
-            <Route path="/zh-tw/reviews/roy-tsai" element={<RoyTsaiReviewZhTw />} />
-            <Route path="/reviews/janelle-cheng" element={<JanelleChengReview />} />
-            <Route path="/zh-tw/reviews/janelle-cheng" element={<JanelleChengReviewZhTw />} />
-            <Route path="/reviews/willy-lin" element={<WillyLinReview />} />
-            <Route path="/zh-tw/reviews/willy-lin" element={<WillyLinReviewZhTw />} />
-            <Route path="/reviews/hope-chen" element={<HopeChenReview />} />
-            <Route path="/zh-tw/reviews/hope-chen" element={<HopeChenReviewZhTw />} />
-            <Route path="/reviews/rema-rao" element={<RemaRaoReview />} />
-            <Route path="/resume-quick-reference" element={<ResumeQuickReference />} />
-            <Route path="/zh-tw/resume-quick-reference" element={<ResumeQuickReferenceZhTw />} />
-            <Route path="/hr-interview-guide" element={<RecruiterScreenGuide />} />
-            <Route path="/zh-tw/hr-interview-guide" element={<RecruiterScreenGuideZhTw />} />
-            {/* Redirects from old URLs */}
-            <Route path="/recruiter-screen-guide" element={<Navigate to="/hr-interview-guide" replace />} />
-            <Route path="/zh-tw/recruiter-screen-guide" element={<Navigate to="/zh-tw/hr-interview-guide" replace />} />
-            <Route path="/ai-job-search-guide" element={<AiJobSearchGuide />} />
-            <Route path="/zh-tw/ai-job-search-guide" element={<AiJobSearchGuideZhTw />} />
-            <Route path="/job-offer-guide" element={<JobOfferGuide />} />
-            <Route path="/zh-tw/job-offer-guide" element={<JobOfferGuideZhTw />} />
-            <Route path="/problem-solving-guide" element={<ProblemSolvingGuide />} />
-            <Route path="/zh-tw/problem-solving-guide" element={<ProblemSolvingGuideZhTw />} />
-            <Route path="/office-politics-guide" element={<OfficePoliticsGuide />} />
-            <Route path="/zh-tw/office-politics-guide" element={<OfficePoliticsGuideZhTw />} />
-            <Route path="/career-game-guide" element={<CareerGameGuide />} />
-            <Route path="/zh-tw/career-game-guide" element={<CareerGameGuideZhTw />} />
-            <Route path="/48-laws-guide" element={<FortyEightLawsGuide />} />
-            <Route path="/zh-tw/48-laws-guide" element={<FortyEightLawsGuideZhTw />} />
-            <Route path="/ikigai-guide" element={<IkigaiGuide />} />
-            <Route path="/zh-tw/ikigai-guide" element={<IkigaiGuideZhTw />} />
-            <Route path="/recruiter-guide" element={<RecruiterGuide />} />
-            <Route path="/zh-tw/recruiter-guide" element={<RecruiterGuideZhTw />} />
-            <Route path="/interview-questions" element={<InterviewQuestionBank />} />
-            <Route path="/zh-tw/interview-questions" element={<InterviewQuestionBankZhTw />} />
-            <Route path="/resume-analyzer" element={<ResumeAnalyzer />} />
-            <Route path="/zh-tw/resume-analyzer" element={<ResumeAnalyzerZhTw />} />
-            <Route path="/resume" element={<AuthRoute lang="en"><ResumeBuilder /></AuthRoute>} />
-            <Route path="/zh-tw/resume" element={<AuthRoute lang="zh"><ResumeBuilderZhTw /></AuthRoute>} />
-            <Route path="/resume-simple" element={<AuthRoute lang="en"><ResumeBuilderSimple /></AuthRoute>} />
-            <Route path="/zh-tw/resume-simple" element={<AuthRoute lang="zh"><ResumeBuilderSimpleZhTw /></AuthRoute>} />
-            <Route path="/jobs" element={<JobTracker />} />
-            <Route path="/tracker" element={<TrackerPage />} />
-            <Route path="/salary" element={<AuthRoute lang="en"><SalaryDatabase /></AuthRoute>} />
-            <Route path="/salary/explore" element={<AuthRoute lang="en"><SalaryExplore /></AuthRoute>} />
-            <Route path="/zh-tw/salary" element={<AuthRoute lang="zh"><SalaryDatabaseZhTw /></AuthRoute>} />
-            <Route path="/zh-tw/salary/explore" element={<AuthRoute lang="zh"><SalaryExploreZhTw /></AuthRoute>} />
-            <Route path="/salary/compare" element={<AuthRoute lang="en"><SalaryCompare /></AuthRoute>} />
-            <Route path="/zh-tw/salary/compare" element={<AuthRoute lang="zh"><SalaryCompareZhTw /></AuthRoute>} />
-            <Route path="/salary/insights" element={<AuthRoute lang="en"><SalaryInsights /></AuthRoute>} />
-            <Route path="/zh-tw/salary/insights" element={<AuthRoute lang="zh"><SalaryInsightsZhTw /></AuthRoute>} />
-            <Route path="/site-directory" element={<SiteDirectory />} />
-            <Route path="/join" element={<Join />} />
-            <Route path="/zh-tw/join" element={<JoinZhTw />} />
-            <Route path="/login" element={<Login />} />
-            <Route path="/signup" element={<Signup />} />
-            <Route path="/reset-password" element={<ResetPassword />} />
-            <Route path="/dashboard" element={<Dashboard />} />
-            <Route path="/zh-tw/dashboard" element={<DashboardZhTw />} />
-            
-            <Route path="/analytics" element={<ThreadsAnalytics />} />
-            {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
-            <Route path="*" element={<NotFound />} />
-          </Routes>
-          </SiteLayout>
-        </Suspense>
-        <MobileNavWrapper />
-        </AuthProvider>
-      </BrowserRouter>
-    </TooltipProvider>
-  </QueryClientProvider>
-  </HelmetProvider>
+    <HelmetProvider>
+      <QueryClientProvider client={queryClient}>
+        <TooltipProvider>
+          <Toaster />
+          <Sonner />
+          <BrowserRouter>
+            <AuthProvider>
+              <ScrollToTop />
+              <Suspense fallback={<PageLoader />}>
+                <SiteLayout>
+                  <Routes>
+                    <Route path="/" element={<Index />} />
+                    <Route path="/zh-tw" element={<IndexZhTw />} />
+                    <Route path="/experiment" element={<Navigate to="/" replace />} />
+                    <Route path="/zh-tw/experiment" element={<Navigate to="/zh-tw" replace />} />
+                    <Route path="/admin/login" element={<AdminLogin />} />
+                    <Route path="/admin/import-questions" element={<ImportQuestions />} />
+                    <Route
+                      path="/admin"
+                      element={
+                        <ProtectedRoute requireAdmin={true}>
+                          <AdminDashboard />
+                        </ProtectedRoute>
+                      }
+                    />
+                    <Route path="/admin/reviews" element={<Navigate to="/admin?tab=reviews" replace />} />
+                    <Route path="/admin/salary-checks" element={<Navigate to="/admin?tab=salary" replace />} />
+                    <Route path="/review" element={<ClientReviewGate />} />
+                    <Route path="/resume-guide" element={<ResumeGuide />} />
+                    <Route path="/zh-tw/resume-guide" element={<ResumeGuideZhTw />} />
+                    <Route path="/interview-prep-guide" element={<InterviewPrepGuide />} />
+                    <Route path="/zh-tw/interview-prep-guide" element={<InterviewPrepGuideZhTw />} />
+
+                    <Route path="/interview-preparation-guide" element={<InterviewPreparationGuide />} />
+
+                    <Route path="/zh-tw/interview-preparation-guide" element={<InterviewPreparationGuideZhTw />} />
+                    <Route path="/zh-tw/linkedin-guide" element={<LinkedInGuideZhTw />} />
+                    <Route path="/linkedin-guide" element={<LinkedInGuide />} />
+                    <Route path="/zh-tw/linkedin-branding-guide" element={<LinkedInBrandingGuideZhTw />} />
+                    <Route path="/linkedin-branding-guide" element={<LinkedInBrandingGuide />} />
+                    <Route path="/zh-tw/pivot-method-guide" element={<PivotMethodGuideZhTw />} />
+                    <Route path="/pivot-method-guide" element={<PivotMethodGuide />} />
+                    <Route path="/pivot-method-mini-guide" element={<PivotMethodMiniGuide />} />
+                    <Route path="/zh-tw/pivot-method-mini-guide" element={<PivotMethodMiniGuideZhTw />} />
+                    <Route path="/guides" element={<GuidesPage />} />
+                    <Route path="/zh-tw/guides" element={<GuidesPageZhTw />} />
+                    <Route path="/salary-starter-kit" element={<SalaryStarterKit />} />
+                    <Route path="/zh-tw/salary-starter-kit" element={<SalaryStarterKitZhTw />} />
+                    <Route path="/quiz" element={<Quiz />} />
+                    <Route path="/zh-tw/quiz" element={<QuizZhTw />} />
+                    <Route path="/offer-calculator" element={<OfferCompass />} />
+                    <Route path="/offer-calculator/compare" element={<OfferCompassCompare />} />
+                    <Route path="/zh-tw/offer-calculator" element={<OfferCompassZhTw />} />
+                    {/* Redirects from old URLs */}
+                    <Route path="/offer-compass" element={<Navigate to="/offer-calculator" replace />} />
+                    <Route path="/offer-compass/compare" element={<Navigate to="/offer-calculator/compare" replace />} />
+                    <Route path="/zh-tw/offer-compass" element={<Navigate to="/zh-tw/offer-calculator" replace />} />
+                    {/* Salary Negotiation Toolkit */}
+                    <Route path="/toolkit" element={<ToolkitIndex />} />
+                    <Route path="/toolkit/scripts" element={<DeflectionScripts />} />
+                    <Route path="/toolkit/offer-response" element={<OfferResponse />} />
+                    <Route path="/toolkit/counteroffer" element={<CounterofferEmail />} />
+                    <Route path="/toolkit/calculator" element={<CompensationCalculator />} />
+                    <Route path="/toolkit/calculator-interactive" element={<CompCalculatorInteractive />} />
+                    <Route path="/toolkit/pushback" element={<PushbackCheatSheet />} />
+                    <Route path="/toolkit/raise" element={<RaiseOnePager />} />
+                    <Route path="/toolkit/log" element={<AchievementLog />} />
+                    {/* Traditional Chinese Toolkit */}
+                    <Route path="/zh-tw/toolkit" element={<ToolkitIndexZhTw />} />
+                    <Route path="/zh-tw/toolkit/scripts" element={<DeflectionScriptsZhTw />} />
+                    <Route path="/zh-tw/toolkit/offer-response" element={<OfferResponseZhTw />} />
+                    <Route path="/zh-tw/toolkit/counteroffer" element={<CounterofferEmailZhTw />} />
+                    <Route path="/zh-tw/toolkit/calculator" element={<CompensationCalculatorZhTw />} />
+                    <Route path="/zh-tw/toolkit/calculator-interactive" element={<CompCalculatorInteractiveZhTw />} />
+                    <Route path="/zh-tw/toolkit/pushback" element={<PushbackCheatSheetZhTw />} />
+                    <Route path="/zh-tw/toolkit/raise" element={<RaiseOnePagerZhTw />} />
+                    <Route path="/zh-tw/toolkit/log" element={<AchievementLogZhTw />} />
+                    {/* Client Review Pages */}
+                    <Route path="/reviews/charlene-lee" element={<CharleneLeeReview />} />
+                    <Route path="/zh-tw/reviews/charlene-lee" element={<CharleneLeeReviewZhTw />} />
+                    <Route path="/reviews/chien-jung-liu" element={<ChienJungLiuReview />} />
+                    <Route path="/zh-tw/reviews/chien-jung-liu" element={<ChienJungLiuReviewZhTw />} />
+                    <Route path="/reviews/james-bugden" element={<JamesBugdenReview />} />
+                    <Route path="/zh-tw/reviews/james-bugden" element={<JamesBugdenReviewZhTw />} />
+                    <Route path="/reviews/sam-lee" element={<SamLeeReview />} />
+                    <Route path="/zh-tw/reviews/sam-lee" element={<SamLeeReviewZhTw />} />
+                    <Route path="/reviews/roger-lee" element={<RogerLeeReview />} />
+                    <Route path="/zh-tw/reviews/roger-lee" element={<RogerLeeReviewZhTw />} />
+                    <Route path="/reviews/pin-wei-wu" element={<PinWeiWuReview />} />
+                    <Route path="/zh-tw/reviews/pin-wei-wu" element={<PinWeiWuReviewZhTw />} />
+                    <Route path="/reviews/peihua-yeh" element={<PeihuaYehReview />} />
+                    <Route path="/zh-tw/reviews/peihua-yeh" element={<PeihuaYehReviewZhTw />} />
+                    <Route path="/reviews/silvia-chen" element={<SilviaChenReview />} />
+                    <Route path="/zh-tw/reviews/silvia-chen" element={<SilviaChenReviewZhTw />} />
+                    <Route path="/reviews/youting-chen" element={<YoutingChenReview />} />
+                    <Route path="/zh-tw/reviews/youting-chen" element={<YoutingChenReviewZhTw />} />
+                    <Route path="/reviews/roy-tsai" element={<RoyTsaiReview />} />
+                    <Route path="/zh-tw/reviews/roy-tsai" element={<RoyTsaiReviewZhTw />} />
+                    <Route path="/reviews/janelle-cheng" element={<JanelleChengReview />} />
+                    <Route path="/zh-tw/reviews/janelle-cheng" element={<JanelleChengReviewZhTw />} />
+                    <Route path="/reviews/willy-lin" element={<WillyLinReview />} />
+                    <Route path="/zh-tw/reviews/willy-lin" element={<WillyLinReviewZhTw />} />
+                    <Route path="/reviews/hope-chen" element={<HopeChenReview />} />
+                    <Route path="/zh-tw/reviews/hope-chen" element={<HopeChenReviewZhTw />} />
+                    <Route path="/reviews/rema-rao" element={<RemaRaoReview />} />
+                    <Route path="/resume-quick-reference" element={<ResumeQuickReference />} />
+                    <Route path="/zh-tw/resume-quick-reference" element={<ResumeQuickReferenceZhTw />} />
+                    <Route path="/hr-interview-guide" element={<RecruiterScreenGuide />} />
+                    <Route path="/zh-tw/hr-interview-guide" element={<RecruiterScreenGuideZhTw />} />
+                    {/* Redirects from old URLs */}
+                    <Route path="/recruiter-screen-guide" element={<Navigate to="/hr-interview-guide" replace />} />
+                    <Route path="/zh-tw/recruiter-screen-guide" element={<Navigate to="/zh-tw/hr-interview-guide" replace />} />
+                    <Route path="/ai-job-search-guide" element={<AiJobSearchGuide />} />
+                    <Route path="/zh-tw/ai-job-search-guide" element={<AiJobSearchGuideZhTw />} />
+                    <Route path="/job-offer-guide" element={<JobOfferGuide />} />
+                    <Route path="/zh-tw/job-offer-guide" element={<JobOfferGuideZhTw />} />
+                    <Route path="/problem-solving-guide" element={<ProblemSolvingGuide />} />
+                    <Route path="/zh-tw/problem-solving-guide" element={<ProblemSolvingGuideZhTw />} />
+                    <Route path="/office-politics-guide" element={<OfficePoliticsGuide />} />
+                    <Route path="/zh-tw/office-politics-guide" element={<OfficePoliticsGuideZhTw />} />
+                    <Route path="/career-game-guide" element={<CareerGameGuide />} />
+                    <Route path="/zh-tw/career-game-guide" element={<CareerGameGuideZhTw />} />
+                    <Route path="/48-laws-guide" element={<FortyEightLawsGuide />} />
+                    <Route path="/zh-tw/48-laws-guide" element={<FortyEightLawsGuideZhTw />} />
+                    <Route path="/ikigai-guide" element={<IkigaiGuide />} />
+                    <Route path="/zh-tw/ikigai-guide" element={<IkigaiGuideZhTw />} />
+                    <Route path="/recruiter-guide" element={<RecruiterGuide />} />
+                    <Route path="/zh-tw/recruiter-guide" element={<RecruiterGuideZhTw />} />
+                    <Route path="/interview-questions" element={<InterviewQuestionBank />} />
+                    <Route path="/zh-tw/interview-questions" element={<InterviewQuestionBankZhTw />} />
+                    <Route path="/resume-analyzer" element={<ResumeAnalyzer />} />
+                    <Route path="/zh-tw/resume-analyzer" element={<ResumeAnalyzerZhTw />} />
+                    <Route path="/resume" element={<AuthRoute lang="en"><ResumeBuilder /></AuthRoute>} />
+                    <Route path="/zh-tw/resume" element={<AuthRoute lang="zh"><ResumeBuilderZhTw /></AuthRoute>} />
+                    <Route path="/resume-simple" element={<AuthRoute lang="en"><ResumeBuilderSimple /></AuthRoute>} />
+                    <Route path="/zh-tw/resume-simple" element={<AuthRoute lang="zh"><ResumeBuilderSimpleZhTw /></AuthRoute>} />
+                    <Route path="/jobs" element={<JobTracker />} />
+                    <Route path="/tracker" element={<TrackerPage />} />
+                    <Route path="/salary" element={<AuthRoute lang="en"><SalaryDatabase /></AuthRoute>} />
+                    <Route path="/salary/explore" element={<AuthRoute lang="en"><SalaryExplore /></AuthRoute>} />
+                    <Route path="/zh-tw/salary" element={<AuthRoute lang="zh"><SalaryDatabaseZhTw /></AuthRoute>} />
+                    <Route path="/zh-tw/salary/explore" element={<AuthRoute lang="zh"><SalaryExploreZhTw /></AuthRoute>} />
+                    <Route path="/salary/compare" element={<AuthRoute lang="en"><SalaryCompare /></AuthRoute>} />
+                    <Route path="/zh-tw/salary/compare" element={<AuthRoute lang="zh"><SalaryCompareZhTw /></AuthRoute>} />
+                    <Route path="/salary/insights" element={<AuthRoute lang="en"><SalaryInsights /></AuthRoute>} />
+                    <Route path="/zh-tw/salary/insights" element={<AuthRoute lang="zh"><SalaryInsightsZhTw /></AuthRoute>} />
+                    <Route path="/site-directory" element={<SiteDirectory />} />
+                    <Route path="/join" element={<Join />} />
+                    <Route path="/zh-tw/join" element={<JoinZhTw />} />
+                    <Route path="/login" element={<Login />} />
+                    <Route path="/signup" element={<Signup />} />
+                    <Route path="/reset-password" element={<ResetPassword />} />
+                    <Route path="/dashboard" element={<Dashboard />} />
+                    <Route path="/zh-tw/dashboard" element={<DashboardZhTw />} />
+
+                    {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
+                    <Route path="*" element={<NotFound />} />
+                  </Routes>
+                </SiteLayout>
+              </Suspense>
+              <MobileNavWrapper />
+            </AuthProvider>
+          </BrowserRouter>
+        </TooltipProvider>
+      </QueryClientProvider>
+    </HelmetProvider>
   </ThemeProvider>
 );
 
