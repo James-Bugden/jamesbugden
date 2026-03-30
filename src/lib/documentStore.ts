@@ -3,6 +3,7 @@ import { CustomizeSettings, DEFAULT_CUSTOMIZE } from "@/components/resume-builde
 import { CoverLetterData, CoverLetterCustomize, DEFAULT_COVER_LETTER_DATA, DEFAULT_COVER_LETTER_CUSTOMIZE } from "@/components/cover-letter/types";
 import { applyTemplatePreset } from "@/components/resume-builder/templatePresets";
 import { EXAMPLE_RESUME_EN, EXAMPLE_RESUME_ZH_TW } from "@/lib/exampleResumeData";
+import { supabase } from "@/integrations/supabase/client";
 
 export type DocType = "resume" | "cover_letter";
 
@@ -56,6 +57,8 @@ export function createDocument(type: DocType, name?: string, baseData?: Partial<
   };
   docs.push(doc);
   save(docs);
+  // Fire-and-forget server registration
+  registerDocumentOnServer(doc);
   return doc;
 }
 
@@ -63,8 +66,11 @@ export function updateDocument(id: string, updates: Partial<SavedDocument>): Sav
   const docs = load();
   const idx = docs.findIndex((d) => d.id === id);
   if (idx === -1) return undefined;
-  docs[idx] = { ...docs[idx], ...updates, updatedAt: new Date().toISOString() };
+  const updatedAt = new Date().toISOString();
+  docs[idx] = { ...docs[idx], ...updates, updatedAt };
   save(docs);
+  // Fire-and-forget server sync
+  updateDocumentOnServer(id, { ...updates, updatedAt });
   return docs[idx];
 }
 
@@ -79,10 +85,160 @@ export function duplicateDocument(id: string, newName?: string): SavedDocument |
 
 export function deleteDocument(id: string) {
   save(load().filter((d) => d.id !== id));
+  // Fire-and-forget server unregistration
+  unregisterDocumentOnServer(id);
 }
 
 export function renameDocument(id: string, name: string) {
   updateDocument(id, { name });
+}
+
+/**
+ * Check the server-side document count before allowing creation.
+ * Returns true if under limit, false if at/over limit.
+ */
+export async function checkServerDocumentLimit(type: DocType): Promise<boolean> {
+  try {
+    const { data: sessionData } = await supabase.auth.getSession();
+    const userId = sessionData?.session?.user?.id;
+    if (!userId) return true; // Not logged in — let client-side limit apply
+
+    const { data: count } = await supabase.rpc("count_user_documents", {
+      p_user_id: userId,
+      p_type: type,
+    });
+    return (count as number ?? 0) < 2;
+  } catch {
+    return true; // On error, fall through to client-side check
+  }
+}
+
+/**
+ * Register a document on the server after local creation (with full content).
+ */
+async function registerDocumentOnServer(doc: SavedDocument): Promise<void> {
+  try {
+    const { data: sessionData } = await supabase.auth.getSession();
+    const userId = sessionData?.session?.user?.id;
+    if (!userId) return;
+
+    await supabase.from("user_documents").insert({
+      id: doc.id,
+      user_id: userId,
+      type: doc.type,
+      name: doc.name,
+      data: doc.data,
+      settings: doc.settings,
+      linked_job_id: doc.linkedJobId || null,
+    });
+  } catch {
+    // Best-effort — document still created locally
+  }
+}
+
+/**
+ * Update a document's content on the server.
+ */
+async function updateDocumentOnServer(id: string, updates: Partial<SavedDocument> & { updatedAt?: string }): Promise<void> {
+  try {
+    const serverUpdates: Record<string, unknown> = { updated_at: updates.updatedAt || new Date().toISOString() };
+    if (updates.name !== undefined) serverUpdates.name = updates.name;
+    if (updates.data !== undefined) serverUpdates.data = updates.data;
+    if (updates.settings !== undefined) serverUpdates.settings = updates.settings;
+    if (updates.linkedJobId !== undefined) serverUpdates.linked_job_id = updates.linkedJobId;
+
+    await supabase.from("user_documents").update(serverUpdates).eq("id", id);
+  } catch {
+    // Best-effort
+  }
+}
+
+/**
+ * Remove a document record from the server.
+ */
+async function unregisterDocumentOnServer(id: string): Promise<void> {
+  try {
+    await supabase.from("user_documents").delete().eq("id", id);
+  } catch {
+    // Best-effort
+  }
+}
+
+/**
+ * Fetch all documents from the server for the current user.
+ * Returns null if not authenticated or on error.
+ */
+export async function fetchServerDocuments(): Promise<SavedDocument[] | null> {
+  try {
+    const { data: sessionData } = await supabase.auth.getSession();
+    if (!sessionData?.session?.user?.id) return null;
+
+    const { data, error } = await supabase
+      .from("user_documents")
+      .select("*")
+      .order("updated_at", { ascending: false });
+
+    if (error || !data) return null;
+
+    return data.map((row: any) => ({
+      id: row.id,
+      type: row.type as DocType,
+      name: row.name,
+      data: row.data,
+      settings: row.settings,
+      createdAt: row.created_at,
+      updatedAt: row.updated_at,
+      linkedJobId: row.linked_job_id || undefined,
+    }));
+  } catch {
+    return null;
+  }
+}
+
+/**
+ * Sync local documents to the server on first login.
+ * Only uploads if the server has no documents for this user.
+ */
+export async function syncLocalToServer(): Promise<{ synced: number }> {
+  try {
+    const { data: sessionData } = await supabase.auth.getSession();
+    const userId = sessionData?.session?.user?.id;
+    if (!userId) return { synced: 0 };
+
+    // Check if server already has documents
+    const { data: existing } = await supabase
+      .from("user_documents")
+      .select("id")
+      .limit(1);
+
+    if (existing && existing.length > 0) return { synced: 0 };
+
+    // Upload local documents to server
+    const localDocs = load();
+    if (localDocs.length === 0) return { synced: 0 };
+
+    const rows = localDocs.map((doc) => ({
+      id: doc.id,
+      user_id: userId,
+      type: doc.type,
+      name: doc.name,
+      data: doc.data,
+      settings: doc.settings,
+      linked_job_id: doc.linkedJobId || null,
+      created_at: doc.createdAt,
+      updated_at: doc.updatedAt,
+    }));
+
+    const { error } = await supabase.from("user_documents").insert(rows);
+    if (error) {
+      console.error("Document sync error:", error);
+      return { synced: 0 };
+    }
+
+    return { synced: rows.length };
+  } catch {
+    return { synced: 0 };
+  }
 }
 
 // Seed example resume on first visit

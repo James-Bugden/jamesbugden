@@ -8,8 +8,7 @@ import { ScrollToTop } from "./components/ScrollToTop";
 import { HelmetProvider } from "react-helmet-async";
 import { AuthProvider, useAuth } from "./contexts/AuthContext";
 import MobileBottomNav from "./components/MobileBottomNav";
-import SiteLayout from "./components/SiteLayout";
-import LoginGate from "./components/LoginGate";
+import AuthRoute from "./components/AuthRoute";
 import { useLocation } from "react-router-dom";
 import { ThemeProvider } from "next-themes";
 
@@ -315,20 +314,20 @@ const App = () => (
             <Route path="/zh-tw/interview-questions" element={<InterviewQuestionBankZhTw />} />
             <Route path="/resume-analyzer" element={<ResumeAnalyzer />} />
             <Route path="/zh-tw/resume-analyzer" element={<ResumeAnalyzerZhTw />} />
-            <Route path="/resume" element={<LoginGate lang="en"><ResumeBuilder /></LoginGate>} />
-            <Route path="/zh-tw/resume" element={<LoginGate lang="zh"><ResumeBuilderZhTw /></LoginGate>} />
-            <Route path="/resume-simple" element={<LoginGate lang="en"><ResumeBuilderSimple /></LoginGate>} />
-            <Route path="/zh-tw/resume-simple" element={<LoginGate lang="zh"><ResumeBuilderSimpleZhTw /></LoginGate>} />
+            <Route path="/resume" element={<AuthRoute lang="en"><ResumeBuilder /></AuthRoute>} />
+            <Route path="/zh-tw/resume" element={<AuthRoute lang="zh"><ResumeBuilderZhTw /></AuthRoute>} />
+            <Route path="/resume-simple" element={<AuthRoute lang="en"><ResumeBuilderSimple /></AuthRoute>} />
+            <Route path="/zh-tw/resume-simple" element={<AuthRoute lang="zh"><ResumeBuilderSimpleZhTw /></AuthRoute>} />
             <Route path="/jobs" element={<JobTracker />} />
             <Route path="/tracker" element={<TrackerPage />} />
-            <Route path="/salary" element={<LoginGate lang="en"><SalaryDatabase /></LoginGate>} />
-            <Route path="/salary/explore" element={<LoginGate lang="en"><SalaryExplore /></LoginGate>} />
-            <Route path="/zh-tw/salary" element={<LoginGate lang="zh"><SalaryDatabaseZhTw /></LoginGate>} />
-            <Route path="/zh-tw/salary/explore" element={<LoginGate lang="zh"><SalaryExploreZhTw /></LoginGate>} />
-            <Route path="/salary/compare" element={<LoginGate lang="en"><SalaryCompare /></LoginGate>} />
-            <Route path="/zh-tw/salary/compare" element={<LoginGate lang="zh"><SalaryCompareZhTw /></LoginGate>} />
-            <Route path="/salary/insights" element={<LoginGate lang="en"><SalaryInsights /></LoginGate>} />
-            <Route path="/zh-tw/salary/insights" element={<LoginGate lang="zh"><SalaryInsightsZhTw /></LoginGate>} />
+            <Route path="/salary" element={<AuthRoute lang="en"><SalaryDatabase /></AuthRoute>} />
+            <Route path="/salary/explore" element={<AuthRoute lang="en"><SalaryExplore /></AuthRoute>} />
+            <Route path="/zh-tw/salary" element={<AuthRoute lang="zh"><SalaryDatabaseZhTw /></AuthRoute>} />
+            <Route path="/zh-tw/salary/explore" element={<AuthRoute lang="zh"><SalaryExploreZhTw /></AuthRoute>} />
+            <Route path="/salary/compare" element={<AuthRoute lang="en"><SalaryCompare /></AuthRoute>} />
+            <Route path="/zh-tw/salary/compare" element={<AuthRoute lang="zh"><SalaryCompareZhTw /></AuthRoute>} />
+            <Route path="/salary/insights" element={<AuthRoute lang="en"><SalaryInsights /></AuthRoute>} />
+            <Route path="/zh-tw/salary/insights" element={<AuthRoute lang="zh"><SalaryInsightsZhTw /></AuthRoute>} />
             <Route path="/site-directory" element={<SiteDirectory />} />
             <Route path="/join" element={<Join />} />
             <Route path="/zh-tw/join" element={<JoinZhTw />} />

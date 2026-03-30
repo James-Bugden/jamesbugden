@@ -1,4 +1,4 @@
-import React, { useEffect, useLayoutEffect, useMemo, useRef, useState, useCallback } from "react";
+import React, { useEffect, useMemo, useRef, useState, useCallback } from "react";
 import DOMPurify from "dompurify";
 import { toast } from "sonner";
 import {
@@ -11,7 +11,6 @@ import {
   ZoomIn,
   ZoomOut,
   RotateCcw,
-  Scissors,
   Linkedin,
   Globe,
   IdCard,
@@ -37,24 +36,6 @@ function getPageDims(format?: string) {
   return { wMM: d.w, hMM: d.h, wPX: d.w * PX_PER_MM, hPX: d.h * PX_PER_MM };
 }
 
-export interface ResumeExportMetrics {
-  sourceElement: HTMLElement | null;
-  pageCount: number;
-  contentOriginPX: number;
-  usablePerPagePX: number;
-  pageHeightPX: number;
-  marginYPX: number;
-  marginXPX: number;
-  /** Footer config */
-  footerName: string;
-  footerEmail: string;
-  showPageNumbers: boolean;
-  bodyFont: string;
-  footerColor: string;
-  footerFontSizePt: number;
-  backgroundColor: string;
-}
-
 interface ResumePreviewProps {
   data: ResumeData;
   customize?: CustomizeSettings;
@@ -63,7 +44,6 @@ interface ResumePreviewProps {
   onColorChange?: (field: string, color: string) => void;
   onContentEdit?: (sectionId: string, entryId: string, field: string, html: string) => void;
   onPageCount?: (count: number) => void;
-  exportMetricsRef?: React.MutableRefObject<ResumeExportMetrics | null>;
 }
 
 /* ── Relative font-size helpers ──────────────────────────────── */
@@ -253,8 +233,8 @@ function renderSectionEntries(section: ResumeSection, customize?: CustomizeSetti
     return <HtmlBlock html={section.entries?.[0]?.fields?.description} sectionId={section.id} entryId={section.entries?.[0]?.id} fontSize={bodyPt(base)} className="mt-[1mm] [&_p]:mb-[1.2mm] [&_ul]:list-disc [&_ul]:pl-[5mm] [&_ol]:list-decimal [&_ol]:pl-[5mm]" />;
   }
 
-  if (section.type === "skills") {
-    const raw = section.entries?.[0]?.fields?.skills || "";
+  if (section.type === "skills" || section.type === "interests") {
+    const raw = section.entries?.[0]?.fields?.skills || section.entries?.[0]?.fields?.interests || "";
     const items = raw.split(",").map((s) => s.trim()).filter(Boolean);
     if (!items.length) return null;
 
@@ -276,16 +256,26 @@ function renderSectionEntries(section: ResumeSection, customize?: CustomizeSetti
     const sepChar = sep === "pipe" ? " | " : sep === "none" ? "  " : " · ";
 
     if (layout === "grid") {
+      // Group items into rows of 3 so each row is a block-level element
+      // that the pagination algorithm can push past page boundaries
+      const rows: string[][] = [];
+      for (let i = 0; i < items.length; i += 3) {
+        rows.push(items.slice(i, i + 3));
+      }
       return (
-        <div className="grid grid-cols-3 gap-x-[3mm] gap-y-[1mm] mt-[1.2mm]">
-          {items.map((item, i) => (
-            <div key={`${item}-${i}`} className="flex items-center gap-[1.5mm]">
-              {sep !== "newline" && sep !== "none" && (
-                <span style={{ fontSize: skillPt(base), color: "var(--resume-accent)" }}>
-                  {sep === "pipe" ? "|" : "·"}
-                </span>
-              )}
-              <span style={{ fontSize: skillPt(base), color: "var(--resume-body)" }}>{formatItem(item)}</span>
+        <div className="mt-[1.2mm]" style={{ display: "flex", flexDirection: "column", gap: "1mm" }}>
+          {rows.map((row, ri) => (
+            <div key={ri} style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr", gap: "0 3mm" }}>
+              {row.map((item, ci) => (
+                <div key={`${item}-${ri}-${ci}`} className="flex items-center gap-[1.5mm]">
+                  {sep !== "newline" && sep !== "none" && (
+                    <span style={{ fontSize: skillPt(base), color: "var(--resume-accent)" }}>
+                      {sep === "pipe" ? "|" : "·"}
+                    </span>
+                  )}
+                  <span style={{ fontSize: skillPt(base), color: "var(--resume-body)" }}>{formatItem(item)}</span>
+                </div>
+              ))}
             </div>
           ))}
         </div>
@@ -1010,31 +1000,6 @@ function getColorForRole(role: string, customize?: CustomizeSettings): string {
   return (customize as any)[field] ?? "#000000";
 }
 
-/* ── Atomic block traversal for pagination ──────────────── */
-const PAGINATION_BLOCK_TAGS = new Set(['li', 'p', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'blockquote', 'pre', 'tr']);
-
-function getAtomicBlocks(parent: Element): HTMLElement[] {
-  const blocks: HTMLElement[] = [];
-  function walk(node: Element) {
-    for (let i = 0; i < node.children.length; i++) {
-      const child = node.children[i] as HTMLElement;
-      // Don't skip data-page-item children — traverse into them
-      if (PAGINATION_BLOCK_TAGS.has(child.tagName.toLowerCase())) {
-        blocks.push(child);
-      } else {
-        walk(child);
-      }
-    }
-  }
-  walk(parent);
-  return blocks;
-}
-
-interface PaginationMutations {
-  items: number[];
-  children: Map<number, { idx: number; mt: number }[]>;
-}
-
 export const ResumePreview = React.memo(function ResumePreview({
   data,
   customize,
@@ -1043,20 +1008,11 @@ export const ResumePreview = React.memo(function ResumePreview({
   onColorChange,
   onContentEdit,
   onPageCount,
-  exportMetricsRef,
 }: ResumePreviewProps) {
   const containerRef = useRef<HTMLDivElement>(null);
-  const hiddenFlowRef = useRef<HTMLDivElement>(null);
-  const visiblePageRefs = useRef<(HTMLDivElement | null)[]>([]);
-  const pageFrameRefs = useRef<(HTMLDivElement | null)[]>([]);
-  const [mutations, setMutations] = useState<PaginationMutations | null>(null);
-  const [manualBreaks, setManualBreaks] = useState<Set<number>>(new Set());
-  const [fixedPages, setFixedPages] = useState<Set<number>>(new Set());
 
   const [autoScale, setAutoScale] = useState(0.65);
   const [zoomOffset, setZoomOffset] = useState(0);
-  const [pageCount, setPageCount] = useState(1);
-  const [currentPage, setCurrentPage] = useState(1);
 
   const [colorTarget, setColorTarget] = useState<{ rect: DOMRect; role: string } | null>(null);
   const [formatToolbar, setFormatToolbar] = useState<{ rect: DOMRect } | null>(null);
@@ -1080,250 +1036,6 @@ export const ResumePreview = React.memo(function ResumePreview({
     ro.observe(el);
     return () => ro.disconnect();
   }, [dims.wPX]);
-
-  const marginYPX = (customize?.marginY ?? 16) * PX_PER_MM;
-  const headerReservePX = HEADER_SAFE_MM * PX_PER_MM;
-  const footerReservePX = FOOTER_SAFE_MM * PX_PER_MM;
-  const usablePerPage = dims.hPX - 2 * marginYPX - headerReservePX - footerReservePX;
-  const contentOriginPX = marginYPX + headerReservePX;
-
-  /* ── Pagination: measure hidden flow, collect mutations ── */
-  useEffect(() => {
-    const root = hiddenFlowRef.current;
-    if (!root) return;
-
-    // Reset all previous mutations
-    root.querySelectorAll('[data-page-item]').forEach(el => {
-      (el as HTMLElement).style.marginTop = '';
-    });
-    root.querySelectorAll('[data-page-break-child]').forEach(el => {
-      (el as HTMLElement).style.marginTop = '';
-      el.removeAttribute('data-page-break-child');
-    });
-
-    let raf1: number;
-    let raf2: number;
-    raf1 = requestAnimationFrame(() => {
-      raf2 = requestAnimationFrame(() => {
-        const BOUNDARY_TOLERANCE = 4;
-
-        const runPass = (): boolean => {
-          let changed = false;
-          const rootRect = root.getBoundingClientRect();
-          const items = root.querySelectorAll('[data-page-item]');
-
-          items.forEach((el, itemIdx) => {
-            // Skip container-level items that have nested data-page-items
-            if (el.querySelector('[data-page-item]')) return;
-
-            const rect = el.getBoundingClientRect();
-            const elTop = rect.top - rootRect.top - contentOriginPX;
-            const elBottom = elTop + rect.height;
-            const pageIdx = Math.floor(Math.max(0, elTop) / usablePerPage);
-            const pageBottom = (pageIdx + 1) * usablePerPage;
-
-            // Manual break: force-push to next page
-            if (manualBreaks.has(itemIdx) && elTop < pageBottom && elTop > pageBottom - usablePerPage) {
-              const push = pageBottom - elTop + 1;
-              const existing = parseFloat((el as HTMLElement).style.marginTop) || 0;
-              if (existing < push) {
-                (el as HTMLElement).style.marginTop = `${push}px`;
-                changed = true;
-              }
-              return;
-            }
-
-            if (elTop < pageBottom && elBottom >= pageBottom + BOUNDARY_TOLERANCE) {
-              // Orphan heading protection: push section headings near page bottom
-              const tagName = (el as HTMLElement).tagName?.toLowerCase();
-              if (tagName === 'h2' || tagName === 'h3') {
-                const spaceRemaining = pageBottom - elTop;
-                if (spaceRemaining < 40) {
-                  const push = pageBottom - elTop + 1;
-                  const existing = parseFloat((el as HTMLElement).style.marginTop) || 0;
-                  (el as HTMLElement).style.marginTop = `${existing + push}px`;
-                  changed = true;
-                  return;
-                }
-              }
-
-              if (rect.height < usablePerPage * 0.25) {
-                const push = pageBottom - elTop + 1;
-                const existing = parseFloat((el as HTMLElement).style.marginTop) || 0;
-                (el as HTMLElement).style.marginTop = `${existing + push}px`;
-                changed = true;
-              } else {
-                // Large entry — deep child traversal
-                const children = getAtomicBlocks(el);
-                for (const child of children) {
-                  const cr = child.getBoundingClientRect();
-                  const cTop = cr.top - rootRect.top - contentOriginPX;
-                  const cBottom = cTop + cr.height;
-                  const cPageIdx = Math.floor(Math.max(0, cTop) / usablePerPage);
-                  const cPageBottom = (cPageIdx + 1) * usablePerPage;
-
-                  if (cTop < cPageBottom && cBottom >= cPageBottom + BOUNDARY_TOLERANCE && cr.height < usablePerPage * 0.3) {
-                    const push = cPageBottom - cTop + 1;
-                    const existing = parseFloat(child.style.marginTop) || 0;
-                    child.style.marginTop = `${existing + push}px`;
-                    child.setAttribute('data-page-break-child', 'true');
-                    changed = true;
-                  }
-                }
-              }
-            }
-          });
-
-          return changed;
-        };
-
-        // Convergence loop — up to 8 passes
-        for (let pass = 0; pass < 8; pass++) {
-          if (!runPass()) break;
-        }
-
-        // Collect mutations for replication to visible pages
-        const items = root.querySelectorAll('[data-page-item]');
-        const muts: PaginationMutations = { items: [], children: new Map() };
-
-        items.forEach((el, idx) => {
-          muts.items[idx] = parseFloat((el as HTMLElement).style.marginTop) || 0;
-          const blocks = getAtomicBlocks(el);
-          const childMuts: { idx: number; mt: number }[] = [];
-          blocks.forEach((block, bidx) => {
-            const mt = parseFloat(block.style.marginTop) || 0;
-            if (mt) childMuts.push({ idx: bidx, mt });
-          });
-          if (childMuts.length) muts.children.set(idx, childMuts);
-        });
-
-        setMutations(muts);
-
-        const totalH = root.scrollHeight - contentOriginPX - (marginYPX + footerReservePX);
-        const rawPages = totalH / usablePerPage;
-        let pages = Math.max(1, rawPages <= 1.005 ? 1 : Math.ceil(rawPages));
-
-        // Trim trailing empty pages: check if last page has any real content
-        if (pages >= 2) {
-          const rootRect = root.getBoundingClientRect();
-          const allItems = root.querySelectorAll('[data-page-item]');
-          let lastContentBottom = 0;
-          allItems.forEach(el => {
-            if (el.querySelector('[data-page-item]')) return; // skip containers
-            const rect = el.getBoundingClientRect();
-            const elBottom = rect.top - rootRect.top - contentOriginPX + rect.height;
-            if (rect.height > 0) lastContentBottom = Math.max(lastContentBottom, elBottom);
-          });
-          const neededPages = Math.max(1, lastContentBottom <= usablePerPage * 1.005 ? 1 : Math.ceil(lastContentBottom / usablePerPage));
-          pages = Math.min(pages, neededPages);
-        }
-        setPageCount(pages);
-
-        // (whitespace warning removed)
-      });
-    });
-
-    return () => {
-      cancelAnimationFrame(raf1);
-      cancelAnimationFrame(raf2);
-    };
-  }, [data, customize, dims.hPX, marginYPX, headerReservePX, footerReservePX, usablePerPage, contentOriginPX, manualBreaks]);
-
-  // Reset manual breaks when data/customize changes (user edited content)
-  const prevDataRef = useRef(data);
-  const prevCustomizeRef = useRef(customize);
-  useEffect(() => {
-    if (prevDataRef.current !== data || prevCustomizeRef.current !== customize) {
-      prevDataRef.current = data;
-      prevCustomizeRef.current = customize;
-      setManualBreaks(new Set());
-      setFixedPages(new Set());
-    }
-  }, [data, customize]);
-
-  useEffect(() => {
-    onPageCount?.(pageCount);
-  }, [pageCount, onPageCount]);
-
-  // Expose export metrics
-  useEffect(() => {
-    if (exportMetricsRef) {
-      const c = customize;
-      exportMetricsRef.current = {
-        sourceElement: hiddenFlowRef.current,
-        pageCount,
-        contentOriginPX,
-        usablePerPagePX: usablePerPage,
-        pageHeightPX: dims.hPX,
-        marginYPX,
-        marginXPX: (c?.marginX ?? 16) * PX_PER_MM,
-        footerName: c?.showFooterName ? (data.personalDetails?.fullName || "") : "",
-        footerEmail: c?.showFooterEmail ? (data.personalDetails?.email || "") : "",
-        showPageNumbers: !!c?.showPageNumbers,
-        bodyFont: c?.bodyFont || "'Source Sans 3', sans-serif",
-        footerColor: c?.datesColor || "#6B7280",
-        footerFontSizePt: (c?.fontSize ?? 10.5) - 3,
-        backgroundColor: c?.a4Background || "#ffffff",
-      };
-    }
-  }, [exportMetricsRef, pageCount, contentOriginPX, usablePerPage, dims.hPX, marginYPX, data, customize]);
-
-  /* ── Clear stale margins immediately when data/customize changes ── */
-  useEffect(() => {
-    const clearRefs = (ref: HTMLElement | null) => {
-      if (!ref) return;
-      ref.querySelectorAll('[data-page-item]').forEach(el => {
-        (el as HTMLElement).style.marginTop = '';
-      });
-      ref.querySelectorAll('[data-page-break-child]').forEach(el => {
-        (el as HTMLElement).style.marginTop = '';
-      });
-    };
-    visiblePageRefs.current.forEach(clearRefs);
-  }, [data, customize]);
-
-  /* ── Apply pagination mutations to visible pages (sync before paint) ── */
-  useLayoutEffect(() => {
-    if (!mutations) return;
-
-    const applyMutationsToRef = (ref: HTMLElement | null) => {
-      if (!ref) return;
-      const items = ref.querySelectorAll('[data-page-item]');
-      items.forEach((el, idx) => {
-        const mt = mutations.items[idx] || 0;
-        (el as HTMLElement).style.marginTop = mt ? `${mt}px` : '';
-        const blocks = getAtomicBlocks(el);
-        blocks.forEach(block => { block.style.marginTop = ''; });
-      });
-      mutations.children.forEach((childMuts, parentIdx) => {
-        if (!items[parentIdx]) return;
-        const blocks = getAtomicBlocks(items[parentIdx]);
-        childMuts.forEach(({ idx, mt }) => {
-          if (blocks[idx]) {
-            blocks[idx].style.marginTop = `${mt}px`;
-          }
-        });
-      });
-    };
-
-    visiblePageRefs.current.forEach(applyMutationsToRef);
-  }, [mutations, pageCount]);
-
-  useEffect(() => {
-    const el = containerRef.current;
-    if (!el) return;
-
-    const onScroll = () => {
-      const visualTop = el.scrollTop / scale;
-      const pageWithGaps = dims.hPX + 40;
-      const page = Math.min(pageCount, Math.max(1, Math.floor(visualTop / pageWithGaps) + 1));
-      setCurrentPage(page);
-    };
-
-    el.addEventListener("scroll", onScroll, { passive: true });
-    onScroll();
-    return () => el.removeEventListener("scroll", onScroll);
-  }, [scale, dims.hPX, pageCount]);
 
   const handlePreviewClick = useCallback((e: React.MouseEvent) => {
     const sel = window.getSelection();
@@ -1405,8 +1117,6 @@ export const ResumePreview = React.memo(function ResumePreview({
     setFormatToolbar(null);
   }, [onContentEdit]);
 
-  const totalScaledHeight = pageCount * dims.hPX + (pageCount - 1) * 40;
-
   return (
     <div ref={containerRef} className="h-full overflow-y-auto relative" style={{ backgroundColor: "#f3f4f6" }}>
       {onColorChange && (
@@ -1425,155 +1135,18 @@ export const ResumePreview = React.memo(function ResumePreview({
         `}</style>
       )}
 
-      {/* Hidden measurement div */}
-      <div
-        ref={hiddenFlowRef}
-        id={pdfTargetId}
-        data-hidden-flow
-        style={{
-          position: "absolute",
-          width: `${dims.wPX}px`,
-          left: "-9999px",
-          top: 0,
-          pointerEvents: "none",
-          zIndex: -1,
-        }}
-      >
-        <A4Page data={data} customize={customize} />
-      </div>
-
-
-
       <div className="flex justify-center py-8 px-6" onClick={handlePreviewClick}>
         <div
           style={{
             width: `${dims.wPX}px`,
             transformOrigin: "top center",
             transform: `scale(${scale})`,
-            marginBottom: `${-(1 - scale) * totalScaledHeight}px`,
+            marginBottom: `${-(1 - scale) * dims.hPX}px`,
           }}
         >
-
-          {Array.from({ length: pageCount }, (_, i) => (
-            <React.Fragment key={i}>
-              {i > 0 && (
-                <div className="group/break" style={{ position: "relative", zIndex: 2 }}>
-                  <div style={{ display: "flex", alignItems: "center", justifyContent: "center", padding: "16px 0", gap: "8px", background: "#f3f4f6" }}>
-                    <div style={{ flex: 1, height: "1px", background: "repeating-linear-gradient(90deg, #d1d5db 0, #d1d5db 6px, transparent 6px, transparent 12px)" }} />
-                    <Scissors style={{ width: "14px", height: "14px", color: "#9ca3af", transform: "rotate(180deg)" }} />
-                    <div style={{ flex: 1, height: "1px", background: "repeating-linear-gradient(90deg, #d1d5db 0, #d1d5db 6px, transparent 6px, transparent 12px)" }} />
-                  </div>
-                  <button
-                    onClick={() => {
-                      const root = hiddenFlowRef.current;
-                      if (!root) return;
-
-                      // Reset margins first so we measure un-paginated positions
-                      // (same as what the pagination useEffect does before its passes)
-                      root.querySelectorAll('[data-page-item]').forEach(el => {
-                        (el as HTMLElement).style.marginTop = '';
-                      });
-                      root.querySelectorAll('[data-page-break-child]').forEach(el => {
-                        (el as HTMLElement).style.marginTop = '';
-                        el.removeAttribute('data-page-break-child');
-                      });
-
-                      // Force layout reflow so measurements reflect un-paginated state
-                      void root.offsetHeight;
-
-                      const items = root.querySelectorAll('[data-page-item]');
-                      const rootRect = root.getBoundingClientRect();
-                      const pageBottom = i * usablePerPage;
-                      const newBreaks = new Set(manualBreaks);
-                      items.forEach((el, idx) => {
-                        if (el.querySelector('[data-page-item]')) return;
-                        const rect = el.getBoundingClientRect();
-                        const elTop = rect.top - rootRect.top - contentOriginPX;
-                        const elBottom = elTop + rect.height;
-                        if (elTop < pageBottom && elBottom > pageBottom + 2) {
-                          newBreaks.add(idx);
-                        }
-                      });
-                      setManualBreaks(newBreaks);
-                      setFixedPages(prev => new Set(prev).add(i));
-                    }}
-                    className="absolute left-1/2 -translate-x-1/2 -bottom-3 opacity-0 group-hover/break:opacity-100 transition-opacity"
-                    style={{
-                      fontSize: "11px",
-                      padding: "2px 10px",
-                      borderRadius: "9999px",
-                      border: "1px solid #d1d5db",
-                      background: fixedPages.has(i) ? "#d1fae5" : "#fff",
-                      color: fixedPages.has(i) ? "#065f46" : "#6b7280",
-                      cursor: "pointer",
-                      whiteSpace: "nowrap",
-                      zIndex: 10,
-                    }}
-                  >
-                    {fixedPages.has(i) ? "✓ Fixed" : "↕ Fix overlap"}
-                  </button>
-                </div>
-              )}
-
-              <div
-                ref={el => { pageFrameRefs.current[i] = el; }}
-                className="shadow-2xl rounded-sm"
-                style={{
-                  width: `${dims.wPX}px`,
-                  height: `${dims.hPX}px`,
-                  overflow: "hidden",
-                  backgroundColor: customize?.a4Background || "#ffffff",
-                  position: "relative",
-                }}
-              >
-                <div style={{
-                  position: "absolute",
-                  top: `${marginYPX + headerReservePX}px`,
-                  left: 0,
-                  width: `${dims.wPX}px`,
-                  height: `${usablePerPage}px`,
-                  overflow: "hidden",
-                }}>
-                  <div
-                    ref={el => { visiblePageRefs.current[i] = el; }}
-                    style={{
-                      width: `${dims.wPX}px`,
-                      transform: `translateY(${-(marginYPX + headerReservePX + i * usablePerPage)}px)`,
-                    }}
-                  >
-                    <A4Page data={data} customize={customize} onEditSection={onEditSection} />
-                  </div>
-                </div>
-
-                {(customize?.showPageNumbers || customize?.showFooterEmail || customize?.showFooterName) && (
-                  <div
-                    style={{
-                      position: "absolute",
-                      bottom: `${marginYPX}px`,
-                      left: `${(customize?.marginX ?? 16) * PX_PER_MM}px`,
-                      right: `${(customize?.marginX ?? 16) * PX_PER_MM}px`,
-                      display: "flex",
-                      justifyContent: "space-between",
-                      alignItems: "center",
-                      fontSize: `${(customize?.fontSize ?? 10.5) - 3}pt`,
-                      color: customize?.datesColor || "#6B7280",
-                      fontFamily: customize?.bodyFont || "'Source Sans 3', sans-serif",
-                      backgroundColor: customize?.a4Background || "#ffffff",
-                      zIndex: 5,
-                    }}
-                  >
-                    <span>{customize?.showFooterName ? (data.personalDetails?.fullName || "") : ""}</span>
-                    <span>
-                      {[
-                        customize?.showFooterEmail ? data.personalDetails?.email : "",
-                        customize?.showPageNumbers ? `Page ${i + 1} of ${pageCount}` : "",
-                      ].filter(Boolean).join(" · ")}
-                    </span>
-                  </div>
-                )}
-              </div>
-            </React.Fragment>
-          ))}
+          <div className="shadow-2xl rounded-sm" style={{ backgroundColor: customize?.a4Background || "#ffffff" }}>
+            <A4Page data={data} customize={customize} onEditSection={onEditSection} />
+          </div>
         </div>
       </div>
 
@@ -1627,9 +1200,6 @@ export const ResumePreview = React.memo(function ResumePreview({
               <RotateCcw className="w-3 h-3" />
             </button>
           )}
-
-          <div className="w-px h-4 bg-gray-200 mx-0.5" />
-          <span className="text-xs text-gray-500 px-1.5">Page {currentPage} of {pageCount}</span>
         </div>
       </div>
     </div>

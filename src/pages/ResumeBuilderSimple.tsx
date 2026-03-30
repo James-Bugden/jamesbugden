@@ -4,7 +4,7 @@ import { useSearchParams } from "react-router-dom";
 import { SortableContext, verticalListSortingStrategy, arrayMove } from "@dnd-kit/sortable";
 import { restrictToVerticalAxis } from "@dnd-kit/modifiers";
 import { SortableSectionCard } from "@/components/resume-builder/SortableSectionCard";
-import { Plus, Eye, Undo2, Redo2, Check, Loader2, Upload, ArrowLeft, FileText, Download, Globe, Settings2, Lightbulb, Minus, ChevronDown } from "lucide-react";
+import { Plus, Eye, Undo2, Redo2, Check, Loader2, Upload, ArrowLeft, FileText, Download, Globe, Settings2, Lightbulb, Minus, ChevronDown, Home } from "lucide-react";
 import { Tooltip, TooltipTrigger, TooltipContent, TooltipProvider } from "@/components/ui/tooltip";
 import { PersonalDetailsCard } from "@/components/resume-builder/PersonalDetailsCard";
 import { SectionCard } from "@/components/resume-builder/SectionCard";
@@ -21,7 +21,6 @@ import { supabase } from "@/integrations/supabase/client";
 import { useBuilderAiUsage } from "@/hooks/useBuilderAiUsage";
 import { CustomizeSettings, DEFAULT_CUSTOMIZE } from "@/components/resume-builder/customizeTypes";
 import { exportResumePdfServer } from "@/lib/serverPdfExport";
-import { ResumeExportMetrics } from "@/components/resume-builder/ResumePreview";
 import { useIsMobile } from "@/hooks/use-mobile";
 import { Skeleton } from "@/components/ui/skeleton";
 import { toast } from "@/hooks/use-toast";
@@ -252,7 +251,7 @@ function DownloadDropdown({ downloading, pageFormat, docName, onDownload }: {
         {downloading ? t("generating") : t("download")}
       </Button>
       {open && !downloading && (
-        <div className="absolute right-0 top-full mt-2 bg-white rounded-xl shadow-xl border z-30 w-[280px] p-4 animate-scale-in" style={{ borderColor: BRAND.border }}>
+        <div className="absolute right-0 top-full mt-2 bg-white rounded-xl shadow-xl border z-30 w-[calc(100vw-2rem)] sm:w-[280px] max-w-[280px] p-4 animate-scale-in" style={{ borderColor: BRAND.border }}>
           <div className="space-y-3">
             <div>
               <label className="block text-xs font-semibold mb-1" style={{ color: BRAND.textSecondary }}>{t("filename")}</label>
@@ -506,7 +505,6 @@ const ResumeBuilderSimple = () => {
   const [nameValue, setNameValue] = useState("");
   const [editorImportOpen, setEditorImportOpen] = useState(false);
   const isMobile = useIsMobile();
-  const exportMetricsRef = useRef<ResumeExportMetrics | null>(null);
   const [analyzerImporting, setAnalyzerImporting] = useState(false);
 
   // Auto-import from Resume Analyzer
@@ -660,20 +658,13 @@ const ResumeBuilderSimple = () => {
 
   const handleDownload = async (filename?: string) => {
     if (downloading) return;
-    const metrics = exportMetricsRef.current;
-    if (!metrics?.sourceElement) {
-      toast({ title: "Export failed", description: "Preview not ready yet. Please wait a moment and try again.", variant: "destructive" });
-      return;
-    }
     setDownloading(true);
     const fn = filename || (data.personalDetails.fullName || "Resume").replace(/\s+/g, "_") + "_Resume";
     try {
       await exportResumePdfServer({
-        sourceElement: metrics.sourceElement,
-        fileName: fn,
-        pageFormat: (customize.pageFormat || "a4") as "a4" | "letter",
+        data,
         customize,
-        personalDetails: data.personalDetails,
+        fileName: fn,
       });
     } catch (err) {
       console.error("PDF export error:", err);
@@ -934,11 +925,11 @@ const ResumeBuilderSimple = () => {
       {/* ── Editor body ────────────────────────────────── */}
       <div className="flex-1 overflow-hidden">
         <div className="hidden lg:flex h-full">
-          <div className="w-[40%] min-w-[340px] max-w-[480px] flex-shrink-0 h-full overflow-y-auto bg-white border-r" style={{ borderColor: BRAND.border }}>
+          <div className="w-[40%] min-w-[300px] max-w-[480px] flex-shrink-0 h-full overflow-y-auto bg-white border-r" style={{ borderColor: BRAND.border }}>
             {editorContent}
           </div>
           <div className="flex-1 h-full relative">
-            <ResumePreview data={data} customize={customize} pdfTargetId="resume-pdf-target" onEditSection={handleEditSection} onContentEdit={handleContentEdit} exportMetricsRef={exportMetricsRef} />
+            <ResumePreview data={data} customize={customize} pdfTargetId="resume-pdf-target" onEditSection={handleEditSection} onContentEdit={handleContentEdit} />
             <div className="absolute bottom-4 left-4 z-20">
               <FeedbackBox subject="Resume Builder Feedback" locale={lang} />
             </div>
@@ -958,7 +949,7 @@ const ResumeBuilderSimple = () => {
 
         {mobilePreview && (
           <MobilePreviewOverlay onClose={() => setMobilePreview(false)} onDownload={() => handleDownload()} downloading={downloading}>
-            <ResumePreview data={data} customize={customize} pdfTargetId="resume-pdf-target" onEditSection={handleEditSection} onContentEdit={handleContentEdit} exportMetricsRef={exportMetricsRef} />
+            <ResumePreview data={data} customize={customize} pdfTargetId="resume-pdf-target" onEditSection={handleEditSection} onContentEdit={handleContentEdit} />
           </MobilePreviewOverlay>
         )}
       </div>
