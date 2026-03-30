@@ -98,7 +98,7 @@ export function ResumeTopNav({ activeTab, onTabChange, docName, activeDocId, all
             <ChevronDown className="w-3.5 h-3.5" />
           </button>
           {dropdownOpen && allDocs && allDocs.length > 0 && (
-            <div className="absolute right-0 top-full mt-1 bg-white rounded-lg shadow-lg border py-1 z-20 min-w-[240px]" style={{ borderColor: BRAND.border }}>
+            <div className="absolute right-0 top-full mt-1 bg-white rounded-lg shadow-lg border py-1 z-20 min-w-[240px] max-w-[calc(100vw-2rem)]" style={{ borderColor: BRAND.border }}>
               {allDocs.map((doc) => {
                 const isActive = doc.id === activeDocId;
                 const rd = doc.data as ResumeData;
@@ -145,7 +145,7 @@ export function ResumeTopNav({ activeTab, onTabChange, docName, activeDocId, all
           </Button>
 
           {dlDropdownOpen && !downloading && (
-            <div className="absolute right-0 top-full mt-2 bg-white rounded-xl shadow-xl border z-30 w-[280px] p-4" style={{ borderColor: BRAND.border }}>
+            <div className="absolute right-0 top-full mt-2 bg-white rounded-xl shadow-xl border z-30 w-[calc(100vw-2rem)] sm:w-[280px] max-w-[280px] p-4" style={{ borderColor: BRAND.border }}>
               <div className="space-y-3">
                 <div>
                   <label className="block text-xs font-semibold mb-1" style={{ color: BRAND.textSec }}>Filename</label>

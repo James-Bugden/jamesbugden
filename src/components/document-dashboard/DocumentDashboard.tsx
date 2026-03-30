@@ -21,6 +21,7 @@ import {
   Heart,
   Info,
   BarChart3,
+  Home,
 } from "lucide-react";
 import {
   SavedDocument,
@@ -354,7 +355,7 @@ export function DocumentDashboard({ onOpenDocument, onImport }: DocumentDashboar
             <MoreVertical className="w-4 h-4" />
           </button>
           {menuOpenId === doc.id && (
-            <div className="absolute right-0 top-7 bg-white rounded-lg shadow-lg border py-1 z-20 min-w-[130px]" style={{ borderColor: BRAND.border }} onClick={(e) => e.stopPropagation()}>
+            <div className="absolute right-0 top-7 bg-white rounded-lg shadow-lg border py-1 z-20 min-w-[130px] max-w-[calc(100vw-2rem)]" style={{ borderColor: BRAND.border }} onClick={(e) => e.stopPropagation()}>
               <button onClick={() => handleRenameStart(doc)} className="w-full flex items-center gap-2 px-3 py-1.5 text-[12px] hover:bg-gray-50" style={{ color: BRAND.text }}>
                 <Pencil className="w-3 h-3" /> {t("renameAction")}
               </button>
@@ -478,6 +479,14 @@ export function DocumentDashboard({ onOpenDocument, onImport }: DocumentDashboar
       {/* ── Left Sidebar (hidden on mobile) ───────── */}
       <aside className="hidden md:flex w-[200px] flex-shrink-0 bg-white border-r flex-col h-full" style={{ borderColor: BRAND.border }}>
         <div className="px-5 pt-5 pb-2">
+          <button
+            onClick={() => navigate("/")}
+            className="flex items-center gap-1.5 text-[11px] font-medium mb-2 hover:opacity-70 transition-colors"
+            style={{ color: BRAND.textSecondary }}
+          >
+            <Home className="w-3.5 h-3.5" />
+            {lang === "zh-tw" ? "回到首頁" : "Back to Home"}
+          </button>
           <h1 className="text-[18px] font-bold tracking-tight" style={{ fontFamily: "'Source Sans 3', sans-serif", color: BRAND.text }}>{t("resumeBuilderTitle")}</h1>
           <p className="text-[11px] mt-0.5" style={{ color: BRAND.textSecondary }}>{t("resumeBuilderTagline")}</p>
         </div>

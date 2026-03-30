@@ -190,9 +190,11 @@ export default function AmIUnderpaidTab({ lang }: { lang: SalaryLang }) {
           <PercentileGauge min={result.min} max={result.max} med={result.med} salary={salaryNum} onSalaryChange={(v) => setSalary(v.toLocaleString("en-US"))} lang={lang} />
 
           {/* Verdict */}
-          <p className={cn("text-xl font-bold", zone.color)} dangerouslySetInnerHTML={{
-            __html: verdictText().replace(/\*\*(.*?)\*\*/g, "<strong>$1</strong>")
-          }} />
+          <p className={cn("text-xl font-bold", zone.color)}>
+            {verdictText().split(/\*\*(.*?)\*\*/g).map((part, i) =>
+              i % 2 === 1 ? <strong key={i}>{part}</strong> : part
+            )}
+          </p>
 
           {/* Comparison stats */}
           <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">

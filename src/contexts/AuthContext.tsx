@@ -2,6 +2,7 @@ import { createContext, useContext, useEffect, useState, useCallback, useRef, ty
 import { supabase } from "@/integrations/supabase/client";
 import type { User, Session } from "@supabase/supabase-js";
 import { syncToMailerLite } from "@/lib/mailerlite";
+import { syncLocalToServer } from "@/lib/documentStore";
 
 interface AuthContextValue {
   user: User | null;
@@ -36,6 +37,8 @@ export function AuthProvider({ children }: { children: ReactNode }) {
             syncedRef.current.add(uid);
             const name = session.user.user_metadata?.full_name || session.user.user_metadata?.name || "";
             syncToMailerLite(session.user.email, name);
+            // Sync local documents to server on first login
+            syncLocalToServer();
           }
         }
       }

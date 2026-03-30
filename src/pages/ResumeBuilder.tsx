@@ -4,7 +4,7 @@ import { useSearchParams } from "react-router-dom";
 import { SortableContext, verticalListSortingStrategy, arrayMove } from "@dnd-kit/sortable";
 import { restrictToVerticalAxis } from "@dnd-kit/modifiers" ;
 import { SortableSectionCard } from "@/components/resume-builder/SortableSectionCard";
-import { Plus, Eye, Undo2, Redo2, Check, Loader2, Upload, ArrowLeft, FileText, Palette, Download, MoreVertical, ChevronDown } from "lucide-react";
+import { Plus, Eye, Undo2, Redo2, Check, Loader2, Upload, ArrowLeft, FileText, Palette, Download, MoreVertical, ChevronDown, Home } from "lucide-react";
 import { Tooltip, TooltipTrigger, TooltipContent, TooltipProvider } from "@/components/ui/tooltip";
 import { PersonalDetailsCard } from "@/components/resume-builder/PersonalDetailsCard";
 import { SectionCard } from "@/components/resume-builder/SectionCard";
@@ -21,7 +21,7 @@ import { CompletenessScore } from "@/components/resume-builder/CompletenessScore
 import { AnalyzerCTA } from "@/components/resume-builder/AnalyzerCTA";
 import { DesignPhilosophy } from "@/components/resume-builder/DesignPhilosophy";
 
-import { SavedDocument, DocType, updateDocument, getAllDocuments, renameDocument, createDocument, deleteDocument } from "@/lib/documentStore";
+import { SavedDocument, DocType, updateDocument, getAllDocuments, renameDocument, createDocument, deleteDocument, checkServerDocumentLimit } from "@/lib/documentStore";
 import { AlertDialog, AlertDialogContent, AlertDialogHeader, AlertDialogTitle, AlertDialogDescription, AlertDialogFooter, AlertDialogCancel, AlertDialogAction } from "@/components/ui/alert-dialog";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Label } from "@/components/ui/label";
@@ -29,7 +29,6 @@ import { supabase } from "@/integrations/supabase/client";
 import { useBuilderAiUsage } from "@/hooks/useBuilderAiUsage";
 import { applyTemplatePreset } from "@/components/resume-builder/templatePresets";
 import { exportResumePdfServer } from "@/lib/serverPdfExport";
-import { ResumeExportMetrics } from "@/components/resume-builder/ResumePreview";
 import { useIsMobile } from "@/hooks/use-mobile";
 import { Skeleton } from "@/components/ui/skeleton";
 import { toast } from "@/hooks/use-toast";
@@ -361,7 +360,7 @@ function DownloadDropdown({ downloading, pageFormat, docName, onDownload }: {
       </Button>
 
       {open && !downloading && (
-        <div className="absolute right-0 top-full mt-2 bg-white rounded-xl shadow-xl border z-30 w-[280px] p-4 animate-scale-in" style={{ borderColor: BRAND.border }}>
+        <div className="absolute right-0 sm:right-0 left-auto top-full mt-2 bg-white rounded-xl shadow-xl border z-30 w-[calc(100vw-2rem)] sm:w-[280px] max-w-[280px] p-4 animate-scale-in" style={{ borderColor: BRAND.border }}>
           <div className="space-y-3">
             <div>
               <label className="block text-xs font-semibold mb-1" style={{ color: BRAND.textSecondary }}>{t("filename")}</label>
@@ -370,7 +369,7 @@ function DownloadDropdown({ downloading, pageFormat, docName, onDownload }: {
                   type="text"
                   value={filename}
                   onChange={(e) => setFilename(e.target.value)}
-                  className="flex-1 px-3 py-2 text-sm border rounded-l-lg outline-none bg-white"
+                  className="flex-1 min-w-0 px-3 py-2 text-sm border rounded-l-lg outline-none bg-white"
                   style={{ borderColor: BRAND.border, color: BRAND.text }}
                 />
                 <span className="px-3 py-2 text-sm bg-gray-50 border border-l-0 rounded-r-lg" style={{ color: BRAND.textSecondary, borderColor: BRAND.border }}>.pdf</span>
@@ -438,7 +437,6 @@ const ResumeBuilder = () => {
   const [nameValue, setNameValue] = useState("");
   const [editorImportOpen, setEditorImportOpen] = useState(false);
   const isMobile = useIsMobile();
-  const exportMetricsRef = useRef<ResumeExportMetrics | null>(null);
   const [analyzerImporting, setAnalyzerImporting] = useState(false);
   const [pageCount, setPageCount] = useState(1);
   const [showPageWarning, setShowPageWarning] = useState(false);
@@ -525,7 +523,9 @@ const ResumeBuilder = () => {
         const allDocs = getAllDocuments();
         const resumes = allDocs.filter((d) => d.type === "resume");
 
-        if (resumes.length >= RESUME_LIMIT) {
+        // Check both local and server-side limits
+        const serverAllowed = await checkServerDocumentLimit("resume");
+        if (resumes.length >= RESUME_LIMIT || !serverAllowed) {
           // At limit — ask user which to replace
           setPendingAnalyzerData({ data: parsed, settings: classicSettings, name: docName, suggestions: sug });
           setReplaceTargetId(resumes[0]?.id || null);
@@ -537,6 +537,7 @@ const ResumeBuilder = () => {
         // Under limit — create normally
         const doc = createDocument("resume", docName);
         updateDocument(doc.id, { data: parsed, settings: classicSettings });
+        refreshDocs();
         store.setData(parsed);
         store.updateCustomize(classicSettings);
         builderAiUsage.recordImport();
@@ -659,25 +660,22 @@ const ResumeBuilder = () => {
     setActiveDocId(null);
   };
 
-  const activeDoc = activeDocId ? getAllDocuments().find((d) => d.id === activeDocId) : null;
-  const allDocs = getAllDocuments();
+  // Keep document list in state to avoid re-reading localStorage on every render
+  // (which creates new object refs and causes preview flicker on unrelated state changes like rename typing)
+  const [docListVersion, setDocListVersion] = useState(0);
+  const refreshDocs = useCallback(() => setDocListVersion((v) => v + 1), []);
+  const allDocs = useMemo(() => getAllDocuments(), [docListVersion]);
+  const activeDoc = useMemo(() => activeDocId ? allDocs.find((d) => d.id === activeDocId) ?? null : null, [allDocs, activeDocId]);
 
   const handleDownload = async (filename?: string) => {
     if (downloading) return;
-    const metrics = exportMetricsRef.current;
-    if (!metrics?.sourceElement) {
-      toast({ title: "Export failed", description: "Preview not ready yet. Please wait a moment and try again.", variant: "destructive" });
-      return;
-    }
     setDownloading(true);
     const fn = filename || (data.personalDetails.fullName || "Resume").replace(/\s+/g, "_") + "_Resume";
     try {
       await exportResumePdfServer({
-        sourceElement: metrics.sourceElement,
-        fileName: fn,
-        pageFormat: (customize.pageFormat || "a4") as "a4" | "letter",
+        data,
         customize,
-        personalDetails: data.personalDetails,
+        fileName: fn,
       });
       setShowPdfSurvey(true);
     } catch (err) {
@@ -733,6 +731,10 @@ const ResumeBuilder = () => {
     }));
   }, [setData]);
 
+  const handleColorChange = useCallback((field: string, color: string) => {
+    updateCustomize({ [field]: color } as any);
+  }, [updateCustomize]);
+
   const handleImported = useCallback((doc: SavedDocument) => {
     if (doc.type === "resume") {
       const classicSettings = { ...applyTemplatePreset(doc.settings as any, "classic"), fontSize: 9, lineHeight: 1.2, marginY: 7 };
@@ -777,6 +779,7 @@ const ResumeBuilder = () => {
   const handleRenameSave = () => {
     if (activeDocId && nameValue.trim()) {
       renameDocument(activeDocId, nameValue.trim());
+      refreshDocs();
     }
     setEditingName(false);
   };
@@ -807,8 +810,11 @@ const ResumeBuilder = () => {
 
   if (viewMode === "cover-letter-editor") {
     return (
-      <div className="h-screen flex flex-col" style={{ backgroundColor: BRAND.cream }}>
+      <div className="h-screen flex flex-col overflow-x-hidden" style={{ backgroundColor: BRAND.cream }}>
         <div className="flex items-center gap-3 px-4 py-2 bg-white border-b" style={{ borderColor: BRAND.border }}>
+          <button onClick={() => navigateTo("/")} className="text-sm hover:opacity-80 transition-colors flex items-center" style={{ color: BRAND.textSecondary }}>
+            <Home className="w-3.5 h-3.5" />
+          </button>
           <button onClick={handleBackToDashboard} className="text-sm hover:opacity-80 transition-colors flex items-center gap-1" style={{ color: BRAND.textSecondary }}>
             <ArrowLeft className="w-3.5 h-3.5" /> {t("dashboard")}
           </button>
@@ -1012,14 +1018,20 @@ const ResumeBuilder = () => {
                 style={{ color: BRAND.text, borderColor: BRAND.border }}
               />
             ) : (
-              <button
-                onClick={() => { setEditingName(true); setNameValue(currentDocName); }}
-                className="text-sm font-medium transition-colors truncate max-w-[120px] sm:max-w-[160px] hover:opacity-70"
-                style={{ color: BRAND.text }}
-                title={t("clickToRename")}
-              >
-                {currentDocName}
-              </button>
+              <TooltipProvider delayDuration={300}>
+                <Tooltip>
+                  <TooltipTrigger asChild>
+                    <button
+                      onClick={() => { setEditingName(true); setNameValue(currentDocName); }}
+                      className="text-sm font-medium transition-colors truncate max-w-[120px] sm:max-w-[200px] hover:opacity-70"
+                      style={{ color: BRAND.text }}
+                    >
+                      {currentDocName}
+                    </button>
+                  </TooltipTrigger>
+                  <TooltipContent side="bottom" className="text-xs">{currentDocName} — {t("clickToRename")}</TooltipContent>
+                </Tooltip>
+              </TooltipProvider>
             )}
             <div className="hidden sm:block"><SaveIndicator saving={saving} /></div>
           </div>
@@ -1068,11 +1080,11 @@ const ResumeBuilder = () => {
       <div className="flex-1 overflow-hidden">
         {/* Desktop: 40/60 split */}
         <div className="hidden lg:flex h-full">
-          <div className="w-[40%] min-w-[340px] max-w-[480px] flex-shrink-0 h-full overflow-y-auto bg-white border-r" style={{ borderColor: BRAND.border }} ref={editorScrollRef}>
+          <div className="w-[40%] min-w-[300px] max-w-[480px] flex-shrink-0 h-full overflow-y-auto bg-white border-r" style={{ borderColor: BRAND.border }} ref={editorScrollRef}>
             {editorContent}
           </div>
           <div className="flex-1 h-full relative">
-            <ResumePreview data={data} customize={customize} pdfTargetId="resume-pdf-target" onEditSection={handleEditSection} onColorChange={(f, c) => updateCustomize({ [f]: c } as any)} onContentEdit={handleContentEdit} onPageCount={handlePageCount} exportMetricsRef={exportMetricsRef} />
+            <ResumePreview data={data} customize={customize} pdfTargetId="resume-pdf-target" onEditSection={handleEditSection} onColorChange={handleColorChange} onContentEdit={handleContentEdit} onPageCount={handlePageCount} />
             <AnalyzerSuggestionsPanel
               suggestions={analyzerSuggestions}
               onApply={(s) => {
@@ -1099,7 +1111,7 @@ const ResumeBuilder = () => {
         {!mobilePreview && (
           <button
             onClick={() => setMobilePreview(true)}
-            className="lg:hidden fixed bottom-24 right-4 z-40 w-14 h-14 rounded-full shadow-lg flex items-center justify-center hover:shadow-xl active:scale-95 transition-all"
+            className="lg:hidden fixed bottom-6 right-4 z-30 w-14 h-14 rounded-full shadow-lg flex items-center justify-center hover:shadow-xl active:scale-95 transition-all"
             style={{ backgroundColor: BRAND.green, border: `1px solid ${BRAND.border}` }}
             aria-label={t("preview")}
           >
@@ -1110,7 +1122,7 @@ const ResumeBuilder = () => {
         {/* Mobile preview overlay */}
         {mobilePreview && (
           <MobilePreviewOverlay onClose={() => setMobilePreview(false)} onDownload={() => handleDownload()} downloading={downloading}>
-            <ResumePreview data={data} customize={customize} pdfTargetId="resume-pdf-target" onEditSection={handleEditSection} onColorChange={(f, c) => updateCustomize({ [f]: c } as any)} onContentEdit={handleContentEdit} onPageCount={handlePageCount} exportMetricsRef={exportMetricsRef} />
+            <ResumePreview data={data} customize={customize} pdfTargetId="resume-pdf-target" onEditSection={handleEditSection} onColorChange={handleColorChange} onContentEdit={handleContentEdit} onPageCount={handlePageCount} />
             <AnalyzerSuggestionsPanel
               suggestions={analyzerSuggestions}
               onApply={(s) => {
@@ -1214,6 +1226,7 @@ const ResumeBuilder = () => {
                 deleteDocument(replaceTargetId);
                 const doc = createDocument("resume", pendingAnalyzerData.name);
                 updateDocument(doc.id, { data: pendingAnalyzerData.data, settings: pendingAnalyzerData.settings });
+                refreshDocs();
                 store.setData(pendingAnalyzerData.data);
                 store.updateCustomize(pendingAnalyzerData.settings);
                 builderAiUsage.recordImport();
