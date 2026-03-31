@@ -103,7 +103,7 @@ export async function checkServerDocumentLimit(type: DocType): Promise<boolean> 
     const userId = sessionData?.session?.user?.id;
     if (!userId) return true; // Not logged in — let client-side limit apply
 
-    const { data: count } = await supabase.rpc("count_user_documents", {
+    const { data: count } = await (supabase as any).rpc("count_user_documents", {
       p_user_id: userId,
       p_type: type,
     });
@@ -122,7 +122,7 @@ async function registerDocumentOnServer(doc: SavedDocument): Promise<void> {
     const userId = sessionData?.session?.user?.id;
     if (!userId) return;
 
-    await supabase.from("user_documents").insert({
+    await (supabase as any).from("user_documents").insert({
       id: doc.id,
       user_id: userId,
       type: doc.type,
@@ -147,7 +147,7 @@ async function updateDocumentOnServer(id: string, updates: Partial<SavedDocument
     if (updates.settings !== undefined) serverUpdates.settings = updates.settings;
     if (updates.linkedJobId !== undefined) serverUpdates.linked_job_id = updates.linkedJobId;
 
-    await supabase.from("user_documents").update(serverUpdates).eq("id", id);
+    await (supabase as any).from("user_documents").update(serverUpdates).eq("id", id);
   } catch {
     // Best-effort
   }
@@ -158,7 +158,7 @@ async function updateDocumentOnServer(id: string, updates: Partial<SavedDocument
  */
 async function unregisterDocumentOnServer(id: string): Promise<void> {
   try {
-    await supabase.from("user_documents").delete().eq("id", id);
+    await (supabase as any).from("user_documents").delete().eq("id", id);
   } catch {
     // Best-effort
   }
@@ -173,7 +173,7 @@ export async function fetchServerDocuments(): Promise<SavedDocument[] | null> {
     const { data: sessionData } = await supabase.auth.getSession();
     if (!sessionData?.session?.user?.id) return null;
 
-    const { data, error } = await supabase
+    const { data, error } = await (supabase as any)
       .from("user_documents")
       .select("*")
       .order("updated_at", { ascending: false });
@@ -206,7 +206,7 @@ export async function syncLocalToServer(): Promise<{ synced: number }> {
     if (!userId) return { synced: 0 };
 
     // Check if server already has documents
-    const { data: existing } = await supabase
+    const { data: existing } = await (supabase as any)
       .from("user_documents")
       .select("id")
       .limit(1);
@@ -229,7 +229,7 @@ export async function syncLocalToServer(): Promise<{ synced: number }> {
       updated_at: doc.updatedAt,
     }));
 
-    const { error } = await supabase.from("user_documents").insert(rows);
+    const { error } = await (supabase as any).from("user_documents").insert(rows);
     if (error) {
       console.error("Document sync error:", error);
       return { synced: 0 };
