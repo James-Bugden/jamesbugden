@@ -1,54 +1,32 @@
 
 
-# Chinese Translation Audit — Dashboard
+# Fix: "Old UI" Flash When Switching Languages
 
-## Current Status: Mostly Accurate, 5 Issues Found
+## Root Cause
 
-### Issue 1: PhaseBar — Hardcoded English labels
-**File:** `src/components/dashboard/PhaseBar.tsx` (lines 5-9)
-- Phase labels are hardcoded English: `"Applying"`, `"Interviewing"`, `"Negotiating"`
-- Progress text `"complete"` is also hardcoded English (line 70)
-- **Fix:** Accept a `lang` prop and use localized labels:
-  - Applying → 投遞申請
-  - Interviewing → 面試準備
-  - Negotiating → 薪資談判
-  - `{completedCount}/{totalCount} complete` → `{completedCount}/{totalCount} 已完成`
+When switching between `/dashboard` and `/zh-tw/dashboard`, React unmounts the entire `Dashboard` component and remounts a new instance. This resets `useProfile()` to `loading: true` and `profile: null`.
 
-### Issue 2: JourneySection — Collapsed summary text is English-only
-**File:** `src/components/dashboard/JourneySection.tsx` (lines 286-296)
-- `buildSummary()` outputs English: `"3 resources: 2 guides, 1 template"`
-- **Fix:** Localize:
-  - "resources" → "項資源"
-  - "guide/guides" → "指南"
-  - "template/templates" → "範本"
-  - "calculator/calculators" → "計算器"
+During the ~200-500ms profile re-fetch:
+- `profile?.career_phase` is `null` → **PhaseBar doesn't render**
+- `careerPhase` is `null` → **Journey sections lose their expand/collapse/highlight behavior**
+- The dashboard briefly renders without any phase-aware features — which looks exactly like the "old UI"
 
-### Issue 3: PickUpWhereYouLeftOff — Phase label in "next-phase" suggestion is English
-**File:** `src/components/dashboard/PickUpWhereYouLeftOff.tsx` (lines 57-63)
-- `phaseLabel` uses raw English phase name: `phase.charAt(0).toUpperCase() + phase.slice(1)`
-- Chinese output becomes: `"準備好進入Interviewing了嗎？"` — mixes Chinese and English
-- **Fix:** Map phase IDs to Chinese labels: `{ applying: "投遞申請", interviewing: "面試準備", negotiating: "薪資談判" }`
+## Fix
 
-### Issue 4: NpsPulse locale mismatch
-**File:** `src/pages/Dashboard.tsx`
-- NpsPulse expects `"zh-tw"` but we pass `lang === "zh" ? "zh-tw" : "en"` — this is correct now.
-- However, `NpsPulse` component's LABELS object uses key `"zh-tw"` (confirmed from the component code). This is fine.
+**Show `DashboardSkeleton` while profile is loading too** (not just auth loading). This prevents the brief flash of the un-personalized dashboard.
 
-### Issue 5: Minor — "offer" in OnboardingPhaseModal should be capitalized
-**File:** `src/components/OnboardingPhaseModal.tsx` (line 23)
-- `"我已經收到 offer"` — in Taiwan context, "Offer" is typically capitalized as it's a loanword. Minor stylistic preference, not a bug.
+### File: `src/pages/Dashboard.tsx`
 
----
+Change line 279 from:
+```tsx
+if (isLoading) return <DashboardSkeleton />;
+```
+to:
+```tsx
+if (isLoading || profileLoading) return <DashboardSkeleton />;
+```
 
-## Summary of Changes
+This ensures the skeleton stays visible until both auth AND profile data are ready, so the dashboard never renders in the "old" state without the phase bar and journey highlights.
 
-| File | Change |
-|------|--------|
-| `PhaseBar.tsx` | Add `lang` prop, localize pill labels + "complete" text |
-| `JourneySection.tsx` | Localize `buildSummary()` output |
-| `PickUpWhereYouLeftOff.tsx` | Map phase IDs to Chinese labels in "next-phase" suggestion |
-| `Dashboard.tsx` | Pass `lang` to `PhaseBar` |
-| `OnboardingPhaseModal.tsx` | Capitalize "Offer" (minor) |
-
-All other translations (tool names, journey item titles/descriptions, WhatsNewModal, section headings, search UI, CTA text) are accurate and natural-sounding Traditional Chinese for a Taiwan audience.
+### One-line change, one file.
 
