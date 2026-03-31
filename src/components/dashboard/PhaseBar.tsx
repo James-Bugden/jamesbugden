@@ -30,20 +30,19 @@ function PhaseBarInner({ activePhase, completedCount, totalCount, onPhaseChange 
                 )}
                 <button
                   onClick={() => onPhaseChange(phase.id)}
-                  className="relative px-3 sm:px-4 py-1.5 rounded-full text-xs sm:text-sm font-semibold transition-all duration-200 whitespace-nowrap border"
+                  className="relative px-3 sm:px-4 py-1.5 rounded-full text-xs sm:text-sm font-semibold transition-all duration-200 whitespace-nowrap"
                   style={{
-                    backgroundColor: isActive ? "#1B3A2F" : "transparent",
-                    color: isActive ? "#FBF7F0" : "#2C2C2C",
-                    borderColor: isActive ? "#1B3A2F" : "#E5E0D8",
+                    backgroundColor: isActive ? "#1B3A2F" : "#E8F0EB",
+                    color: isActive ? "#FBF7F0" : "#234E3E",
                   }}
                   onMouseEnter={(e) => {
                     if (!isActive) {
-                      (e.currentTarget as HTMLButtonElement).style.backgroundColor = "rgba(27,58,47,0.06)";
+                      (e.currentTarget as HTMLButtonElement).style.backgroundColor = "#D6E5DA";
                     }
                   }}
                   onMouseLeave={(e) => {
                     if (!isActive) {
-                      (e.currentTarget as HTMLButtonElement).style.backgroundColor = "transparent";
+                      (e.currentTarget as HTMLButtonElement).style.backgroundColor = "#E8F0EB";
                     }
                   }}
                 >

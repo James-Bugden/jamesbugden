@@ -223,9 +223,9 @@ export default function JourneySection({
     <div
       className="mb-10 rounded-xl transition-all duration-300"
       style={{
-        borderLeft: isCurrentPhase ? "4px solid #C9A961" : "4px solid transparent",
+        borderLeft: isCurrentPhase ? "3px solid #D4A843" : "3px solid transparent",
         paddingLeft: isCurrentPhase ? "12px" : "0px",
-        backgroundColor: isCurrentPhase ? "rgba(201, 169, 97, 0.04)" : "transparent",
+        backgroundColor: isCurrentPhase ? "rgba(212, 168, 67, 0.04)" : "transparent",
       }}
     >
       <button
