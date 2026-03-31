@@ -206,7 +206,7 @@ export async function syncLocalToServer(): Promise<{ synced: number }> {
     if (!userId) return { synced: 0 };
 
     // Check if server already has documents
-    const { data: existing } = await supabase
+    const { data: existing } = await (supabase as any)
       .from("user_documents")
       .select("id")
       .limit(1);
