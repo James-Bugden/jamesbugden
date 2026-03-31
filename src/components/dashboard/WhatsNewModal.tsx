@@ -76,7 +76,7 @@ export default function WhatsNewModal({ lang }: { lang: "en" | "zh" }) {
           <button
             onClick={dismiss}
             className="w-full py-3 rounded-xl text-sm font-bold transition-opacity hover:opacity-90"
-            style={{ backgroundColor: "#1B3A2F", color: "#FBF7F0" }}
+            style={{ backgroundColor: "#234E3E", color: "#FBF7F0" }}
           >
             {t.cta}
           </button>
