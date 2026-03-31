@@ -155,7 +155,7 @@ const i18n = {
     newBody: "A recruiter's complete guide to using ChatGPT at every stage of your job search.",
     checkItOut: "Try it now",
     toolsHeading: "Your Tools",
-    toolsSub: "Interactive tools built with real recruiting data. Use them as many times as you need.",
+    toolsSub: "Interactive tools built with real recruiting data.",
     launch: "Launch",
     resourcesHeading: "Your Journey",
     resourcesSub: "Step-by-step playbooks for every stage of your career move. Written by a recruiter, not a career blogger.",
