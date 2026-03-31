@@ -176,8 +176,28 @@ export default function JourneySection({
   onTrack,
   allItems,
   hasSeen,
+  careerPhase,
 }: JourneySectionProps) {
-  const [collapsed, setCollapsed] = useLocalStorage(`journey_collapsed_${tag}`, false);
+  // Determine default collapsed state based on career phase
+  const getDefaultCollapsed = () => {
+    if (tag === "end-to-end") return false; // always expanded
+    if (!careerPhase) return false;
+    if (tag === careerPhase) return false; // current phase expanded
+    if (careerPhase === "applying") return tag === "interviewing" || tag === "negotiating";
+    if (careerPhase === "interviewing") return tag === "negotiating";
+    return false; // negotiating = all expanded
+  };
+
+  const [manualToggle, setManualToggle] = useState<boolean | null>(null);
+  const collapsed = manualToggle !== null ? manualToggle : getDefaultCollapsed();
+
+  // Reset manual toggle when phase changes
+  useEffect(() => {
+    setManualToggle(null);
+  }, [careerPhase]);
+
+  const isCurrentPhase = careerPhase === tag && tag !== "end-to-end";
+
   const { isComplete } = useReadingProgress();
 
   const primaryItems = items.filter((i) => !i.miniOf);
@@ -186,15 +206,40 @@ export default function JourneySection({
   const completedCount = primaryItems.filter((i) => isComplete(i.id)).length;
   const totalCount = primaryItems.length;
 
+  // Build summary for collapsed state
+  const buildSummary = () => {
+    const types = primaryItems.reduce<Record<string, number>>((acc, i) => {
+      acc[i.contentType] = (acc[i.contentType] || 0) + 1;
+      return acc;
+    }, {});
+    const parts: string[] = [];
+    if (types.guide) parts.push(`${types.guide} ${types.guide === 1 ? "guide" : "guides"}`);
+    if (types.template) parts.push(`${types.template} ${types.template === 1 ? "template" : "templates"}`);
+    if (types.calculator) parts.push(`${types.calculator} ${types.calculator === 1 ? "calculator" : "calculators"}`);
+    return `${totalCount} resources: ${parts.join(", ")}`;
+  };
+
   return (
-    <div className="mb-10">
+    <div
+      className="mb-10 rounded-xl transition-all duration-300"
+      style={{
+        borderLeft: isCurrentPhase ? "4px solid #C9A961" : "4px solid transparent",
+        paddingLeft: isCurrentPhase ? "12px" : "0px",
+        backgroundColor: isCurrentPhase ? "rgba(201, 169, 97, 0.04)" : "transparent",
+      }}
+    >
       <button
-        onClick={() => setCollapsed((v) => !v)}
+        onClick={() => setManualToggle((v) => (v !== null ? !v : !getDefaultCollapsed()))}
         className="w-full flex items-center gap-3 mb-4 group text-left"
       >
         <span className="text-foreground" style={{ color }}>{icon}</span>
         <span className="font-heading text-lg md:text-xl font-bold text-foreground flex-1">
           {label}
+          {isCurrentPhase && (
+            <span className="ml-2 text-xs font-semibold px-2 py-0.5 rounded-full align-middle" style={{ backgroundColor: "rgba(201, 169, 97, 0.15)", color: "#C9A961" }}>
+              {lang === "zh" ? "目前階段" : "current phase"}
+            </span>
+          )}
         </span>
         <span
           className="text-xs font-semibold px-2.5 py-1 rounded-full"
@@ -203,24 +248,34 @@ export default function JourneySection({
           {completedCount}/{totalCount}
         </span>
         {collapsed ? (
-          <ChevronDown className="w-4 h-4 text-muted-foreground" />
+          <ChevronDown className="w-4 h-4 text-muted-foreground transition-transform duration-200" />
         ) : (
-          <ChevronUp className="w-4 h-4 text-muted-foreground" />
+          <ChevronUp className="w-4 h-4 text-muted-foreground transition-transform duration-200" />
         )}
       </button>
 
-      {!collapsed && (
-        <>
-          {pinnedItems.map((item) => (
+      {/* Collapsed summary */}
+      {collapsed && (
+        <p className="text-xs ml-8 -mt-2 mb-2 text-muted-foreground">{buildSummary()}</p>
+      )}
+
+      {/* Expandable content */}
+      <div
+        className="overflow-hidden transition-all duration-300 ease-in-out"
+        style={{
+          maxHeight: collapsed ? "0px" : "5000px",
+          opacity: collapsed ? 0 : 1,
+        }}
+      >
+        {pinnedItems.map((item) => (
+          <JourneyCard key={item.id} item={item} lang={lang} onTrack={onTrack} allItems={allItems} hasSeen={hasSeen} />
+        ))}
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+          {regularItems.map((item) => (
             <JourneyCard key={item.id} item={item} lang={lang} onTrack={onTrack} allItems={allItems} hasSeen={hasSeen} />
           ))}
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-            {regularItems.map((item) => (
-              <JourneyCard key={item.id} item={item} lang={lang} onTrack={onTrack} allItems={allItems} hasSeen={hasSeen} />
-            ))}
-          </div>
-        </>
-      )}
+        </div>
+      </div>
     </div>
   );
 }
