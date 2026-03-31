@@ -13,6 +13,8 @@ import { useAnalyzerUsage } from "@/hooks/useAnalyzerUsage";
 import OnboardingChecklist from "@/components/OnboardingChecklist";
 import DashboardSkeleton from "@/components/DashboardSkeleton";
 import NpsPulse from "@/components/feedback/NpsPulse";
+import { useProfile } from "@/hooks/useProfile";
+import OnboardingPhaseModal from "@/components/OnboardingPhaseModal";
 import JourneySection, { type JourneyItem, type GuideTag, useSeenNewItems } from "@/components/dashboard/JourneySection";
 import { SEO } from "@/components/SEO";
 
