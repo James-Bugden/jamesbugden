@@ -16,7 +16,7 @@ interface Props {
   lang?: "en" | "zh";
 }
 
-function PhaseBarInner({ activePhase, completedCount, totalCount, onPhaseChange }: Props) {
+function PhaseBarInner({ activePhase, completedCount, totalCount, onPhaseChange, lang = "en" }: Props) {
   return (
     <div className="border-b" style={{ backgroundColor: "#FBF7F0", borderColor: "#E5E0D8" }}>
       <div className="max-w-[1200px] mx-auto px-4 md:px-8 py-3 flex flex-col sm:flex-row items-center justify-between gap-2 sm:gap-4">
