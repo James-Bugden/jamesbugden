@@ -3,6 +3,7 @@ import { ThumbsUp, ThumbsDown, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { supabase } from "@/integrations/supabase/client";
+import { useAuth } from "@/contexts/AuthContext";
 import { motion, AnimatePresence } from "framer-motion";
 
 interface MicroSurveyProps {
@@ -22,6 +23,7 @@ export default function MicroSurvey({ actionKey, question, locale = "en" }: Micr
   const [rating, setRating] = useState<1 | -1 | null>(null);
   const [comment, setComment] = useState("");
   const [submitted, setSubmitted] = useState(false);
+  const { user } = useAuth();
   const t = LABELS[locale];
 
   useEffect(() => {
@@ -54,6 +56,11 @@ export default function MicroSurvey({ actionKey, question, locale = "en" }: Micr
         type: "micro_survey",
         rating: r,
         context: actionKey,
+        user_id: user?.id || null,
+        metadata: {
+          has_comment: !!comment.trim(),
+          screen_width: window.innerWidth,
+        },
       } as any);
     } catch {}
     setTimeout(() => setVisible(false), 1500);

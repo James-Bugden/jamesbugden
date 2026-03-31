@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { ThumbsUp, ThumbsDown, Sparkles } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
+import { useAuth } from "@/contexts/AuthContext";
 
 interface InlineRatingProps {
   contentId: string;
@@ -14,6 +15,7 @@ export default function InlineRating({ contentId, locale = "en", label }: Inline
     const v = localStorage.getItem(storageKey);
     return v ? parseInt(v, 10) : null;
   });
+  const { user } = useAuth();
 
   const handleRate = async (r: 1 | -1) => {
     setRated(r);
@@ -26,6 +28,8 @@ export default function InlineRating({ contentId, locale = "en", label }: Inline
         type: "inline_rating",
         rating: r,
         context: contentId,
+        user_id: user?.id || null,
+        metadata: { screen_width: window.innerWidth },
       } as any);
     } catch {}
   };
