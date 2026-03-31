@@ -47,7 +47,7 @@ function PhaseBarInner({ activePhase, completedCount, totalCount, onPhaseChange,
                     }
                   }}
                 >
-                  {phase.label}
+                  {lang === "zh" ? phase.zh : phase.en}
                   {isActive && (
                     <motion.div
                       layoutId="phase-indicator"
