@@ -122,7 +122,7 @@ async function registerDocumentOnServer(doc: SavedDocument): Promise<void> {
     const userId = sessionData?.session?.user?.id;
     if (!userId) return;
 
-    await supabase.from("user_documents").insert({
+    await (supabase as any).from("user_documents").insert({
       id: doc.id,
       user_id: userId,
       type: doc.type,
