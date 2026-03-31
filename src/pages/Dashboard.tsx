@@ -360,7 +360,7 @@ export default function Dashboard({ lang = "en" }: { lang?: "en" | "zh" }) {
       </nav>
 
       {/* Welcome Banner */}
-      <section className="bg-background">
+      <section style={{ backgroundColor: "#FBF7F0" }}>
         <div className="max-w-[1200px] mx-auto px-4 md:px-8 py-8 md:py-10 flex flex-col md:flex-row md:items-center md:justify-between gap-4">
           <h1 className="font-heading text-2xl md:text-3xl text-foreground">{t.welcomeBack} {firstName}</h1>
           {!bannerDismissed && (
@@ -396,7 +396,7 @@ export default function Dashboard({ lang = "en" }: { lang?: "en" | "zh" }) {
       )}
 
       {/* Onboarding Checklist */}
-      <section className="bg-card">
+      <section style={{ backgroundColor: "#FBF7F0" }}>
         <div className="max-w-[1200px] mx-auto px-4 md:px-8 pt-6">
           <OnboardingChecklist lang={lang} />
         </div>
@@ -478,7 +478,7 @@ export default function Dashboard({ lang = "en" }: { lang?: "en" | "zh" }) {
                       <h3 className="text-[15px] font-bold text-foreground leading-snug">
                         {tool.title[lang]}
                         {["resume-analyzer", "resume-builder", "offer-calculator", "interview-questions"].includes(tool.id) && (
-                          <span className="ml-2 text-[10px] font-semibold uppercase tracking-wide px-1.5 py-0.5 rounded-full align-middle bg-gold/15 text-gold">Beta</span>
+                          <span className="ml-2 text-[10px] font-semibold uppercase tracking-wide px-1.5 py-0.5 rounded-full align-middle" style={{ backgroundColor: "#E8F0EB", color: "#234E3E" }}>Beta</span>
                         )}
                       </h3>
                       <p className="text-xs leading-relaxed text-muted-foreground mt-0.5 line-clamp-2">{tool.description[lang]}</p>

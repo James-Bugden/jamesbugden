@@ -27,18 +27,19 @@ function PhaseBarInner({ activePhase, completedCount, totalCount, onPhaseChange,
             return (
               <div key={phase.id} className="flex items-center gap-1 sm:gap-2">
                 {i > 0 && (
-                  <span className="text-xs select-none" style={{ color: "#C9A961" }}>→</span>
+                  <span className="text-xs select-none" style={{ color: "#D4A843" }}>→</span>
                 )}
                 <button
                   onClick={() => onPhaseChange(phase.id)}
-                  className="relative px-3 sm:px-4 py-1.5 rounded-full text-xs sm:text-sm font-semibold transition-all duration-200 whitespace-nowrap"
+                  className="relative px-4 py-1.5 rounded-[20px] text-xs sm:text-sm font-semibold transition-all duration-200 whitespace-nowrap"
                   style={{
-                    backgroundColor: isActive ? "#1B3A2F" : "#E8F0EB",
-                    color: isActive ? "#FBF7F0" : "#234E3E",
+                    backgroundColor: isActive ? "#234E3E" : "#E8F0EB",
+                    color: isActive ? "#E8F0EB" : "#234E3E",
+                    padding: "6px 16px",
                   }}
                   onMouseEnter={(e) => {
                     if (!isActive) {
-                      (e.currentTarget as HTMLButtonElement).style.backgroundColor = "#D6E5DA";
+                      (e.currentTarget as HTMLButtonElement).style.backgroundColor = "#D4E8DB";
                     }
                   }}
                   onMouseLeave={(e) => {
@@ -51,8 +52,8 @@ function PhaseBarInner({ activePhase, completedCount, totalCount, onPhaseChange,
                   {isActive && (
                     <motion.div
                       layoutId="phase-indicator"
-                      className="absolute inset-0 rounded-full -z-10"
-                      style={{ backgroundColor: "#1B3A2F" }}
+                      className="absolute inset-0 rounded-[20px] -z-10"
+                      style={{ backgroundColor: "#234E3E" }}
                       transition={{ type: "spring", stiffness: 400, damping: 30 }}
                     />
                   )}
@@ -62,12 +63,12 @@ function PhaseBarInner({ activePhase, completedCount, totalCount, onPhaseChange,
           })}
         </div>
 
-        {/* Progress count */}
+        {/* Progress count — own line on mobile */}
         <span
-          className="text-xs font-medium whitespace-nowrap shrink-0"
+          className="text-xs font-medium whitespace-nowrap shrink-0 w-full sm:w-auto text-center sm:text-right"
           style={{ color: "#6B7280" }}
         >
-          <span style={{ color: "#C9A961", fontWeight: 700 }}>{completedCount}</span>
+          <span style={{ color: "#D4A843", fontWeight: 700 }}>{completedCount}</span>
           /{totalCount} {lang === "zh" ? "已完成" : "complete"}
         </span>
       </div>
