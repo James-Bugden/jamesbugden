@@ -532,7 +532,7 @@ export default function Dashboard({ lang = "en" }: { lang?: "en" | "zh" }) {
       </section>
 
 
-      <NpsPulse locale="en" />
+      <NpsPulse locale={lang === "zh" ? "zh-tw" : "en"} />
     </>
   );
 }

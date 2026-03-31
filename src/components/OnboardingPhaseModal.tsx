@@ -2,28 +2,33 @@ import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import type { CareerPhase } from "@/hooks/useProfile";
 
-const PHASES: { id: CareerPhase; emoji: string; label: string; desc: string }[] = [
-  {
-    id: "applying",
-    emoji: "📋",
-    label: "Applying",
-    desc: "I'm searching for roles, updating my resume, and reaching out to companies.",
+const i18n = {
+  en: {
+    heading: "Where are you in your job search?",
+    sub: "This helps us show you the most relevant tools and guides first.\nYou can change this anytime.",
+    phases: [
+      { id: "applying" as CareerPhase, emoji: "📋", label: "Applying", desc: "I'm searching for roles, updating my resume, and reaching out to companies." },
+      { id: "interviewing" as CareerPhase, emoji: "🎙️", label: "Interviewing", desc: "I have interviews scheduled or I'm actively preparing for them." },
+      { id: "negotiating" as CareerPhase, emoji: "💰", label: "Negotiating", desc: "I've received an offer or I'm expecting one soon." },
+    ],
+    cta: "Continue",
+    saving: "Saving…",
   },
-  {
-    id: "interviewing",
-    emoji: "🎙️",
-    label: "Interviewing",
-    desc: "I have interviews scheduled or I'm actively preparing for them.",
+  zh: {
+    heading: "你目前在求職的哪個階段？",
+    sub: "這會幫助我們優先顯示最相關的工具和指南。\n你隨時可以更改。",
+    phases: [
+      { id: "applying" as CareerPhase, emoji: "📋", label: "投遞申請", desc: "我正在搜尋職缺、更新履歷、主動聯繫公司。" },
+      { id: "interviewing" as CareerPhase, emoji: "🎙️", label: "面試準備", desc: "我已經有面試安排，或正在積極準備中。" },
+      { id: "negotiating" as CareerPhase, emoji: "💰", label: "薪資談判", desc: "我已經收到 offer，或預計即將收到。" },
+    ],
+    cta: "繼續",
+    saving: "儲存中…",
   },
-  {
-    id: "negotiating",
-    emoji: "💰",
-    label: "Negotiating",
-    desc: "I've received an offer or I'm expecting one soon.",
-  },
-];
+};
 
 interface Props {
+  lang?: "en" | "zh";
   onSelect: (phase: CareerPhase) => Promise<void>;
 }
 
