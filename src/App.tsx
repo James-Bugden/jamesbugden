@@ -103,6 +103,8 @@ const SalaryInsights = lazy(() => import("./pages/SalaryInsights"));
 const SalaryInsightsZhTw = lazy(() => import("./pages/SalaryInsightsZhTw"));
 const Join = lazy(() => import("./pages/Join"));
 const JoinZhTw = lazy(() => import("./pages/JoinZhTw"));
+const Privacy = lazy(() => import("./pages/Privacy"));
+const Terms = lazy(() => import("./pages/Terms"));
 
 // Toolkit pages - English
 const ToolkitIndex = lazy(() => import("./pages/toolkit/ToolkitIndex"));
