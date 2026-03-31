@@ -42,6 +42,8 @@ export default function OnboardingPhaseModal({ lang = "en", onSelect }: Props) {
     await onSelect(selected);
   };
 
+  const t = i18n[lang];
+
   return (
     <AnimatePresence>
       <motion.div
@@ -58,21 +60,18 @@ export default function OnboardingPhaseModal({ lang = "en", onSelect }: Props) {
           className="w-full max-w-2xl rounded-2xl p-6 sm:p-8 shadow-2xl"
           style={{ backgroundColor: "#FBF7F0" }}
         >
-          {/* Heading */}
           <h2
             className="text-2xl sm:text-3xl font-bold text-center mb-2"
             style={{ fontFamily: "var(--font-heading)", color: "#1B3A2F" }}
           >
-            Where are you in your job search?
+            {t.heading}
           </h2>
-          <p className="text-sm sm:text-base text-center mb-8" style={{ color: "#6B7280" }}>
-            This helps us show you the most relevant tools and guides first.
-            <br className="hidden sm:inline" /> You can change this anytime.
+          <p className="text-sm sm:text-base text-center mb-8 whitespace-pre-line" style={{ color: "#6B7280" }}>
+            {t.sub}
           </p>
 
-          {/* Phase cards */}
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-8">
-            {PHASES.map((phase) => {
+            {t.phases.map((phase) => {
               const isSelected = selected === phase.id;
               return (
                 <button
@@ -88,17 +87,12 @@ export default function OnboardingPhaseModal({ lang = "en", onSelect }: Props) {
                   }}
                 >
                   <span className="text-3xl block mb-3">{phase.emoji}</span>
-                  <span
-                    className="text-base font-semibold block mb-1"
-                    style={{ color: "#1B3A2F" }}
-                  >
+                  <span className="text-base font-semibold block mb-1" style={{ color: "#1B3A2F" }}>
                     {phase.label}
                   </span>
                   <span className="text-sm leading-relaxed block" style={{ color: "#6B7280" }}>
                     {phase.desc}
                   </span>
-
-                  {/* Check indicator */}
                   {isSelected && (
                     <motion.div
                       initial={{ scale: 0 }}
@@ -116,17 +110,13 @@ export default function OnboardingPhaseModal({ lang = "en", onSelect }: Props) {
             })}
           </div>
 
-          {/* Continue button */}
           <button
             onClick={handleContinue}
             disabled={!selected || submitting}
             className="w-full py-3.5 rounded-xl text-sm font-semibold tracking-wide uppercase transition-all duration-200 disabled:opacity-40 disabled:cursor-not-allowed"
-            style={{
-              backgroundColor: "#1B3A2F",
-              color: "#FBF7F0",
-            }}
+            style={{ backgroundColor: "#1B3A2F", color: "#FBF7F0" }}
           >
-            {submitting ? "Saving…" : "Continue"}
+            {submitting ? t.saving : t.cta}
           </button>
         </motion.div>
       </motion.div>
