@@ -158,7 +158,7 @@ async function updateDocumentOnServer(id: string, updates: Partial<SavedDocument
  */
 async function unregisterDocumentOnServer(id: string): Promise<void> {
   try {
-    await supabase.from("user_documents").delete().eq("id", id);
+    await (supabase as any).from("user_documents").delete().eq("id", id);
   } catch {
     // Best-effort
   }
