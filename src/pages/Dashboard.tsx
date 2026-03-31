@@ -391,6 +391,7 @@ export default function Dashboard({ lang = "en" }: { lang?: "en" | "zh" }) {
           completedCount={journeyCompletedCount}
           totalCount={journeyItems.length}
           onPhaseChange={(phase) => updateProfile({ career_phase: phase })}
+          lang={lang}
         />
       )}
 

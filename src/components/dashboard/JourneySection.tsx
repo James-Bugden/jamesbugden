@@ -289,6 +289,12 @@ export default function JourneySection({
       return acc;
     }, {});
     const parts: string[] = [];
+    if (lang === "zh") {
+      if (types.guide) parts.push(`${types.guide} 個指南`);
+      if (types.template) parts.push(`${types.template} 個範本`);
+      if (types.calculator) parts.push(`${types.calculator} 個計算器`);
+      return `${totalCount} 項資源：${parts.join("、")}`;
+    }
     if (types.guide) parts.push(`${types.guide} ${types.guide === 1 ? "guide" : "guides"}`);
     if (types.template) parts.push(`${types.template} ${types.template === 1 ? "template" : "templates"}`);
     if (types.calculator) parts.push(`${types.calculator} ${types.calculator === 1 ? "calculator" : "calculators"}`);
