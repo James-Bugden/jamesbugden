@@ -10,11 +10,13 @@ import { useRecentlyUsed } from "@/hooks/useRecentlyUsed";
 import { useLocalStorage } from "@/hooks/useLocalStorage";
 import { useResumeAnalyses } from "@/hooks/useResumeAnalyses";
 import { useAnalyzerUsage } from "@/hooks/useAnalyzerUsage";
+import { useReadingProgress } from "@/hooks/useReadingProgress";
 import OnboardingChecklist from "@/components/OnboardingChecklist";
 import DashboardSkeleton from "@/components/DashboardSkeleton";
 import NpsPulse from "@/components/feedback/NpsPulse";
 import { useProfile } from "@/hooks/useProfile";
 import OnboardingPhaseModal from "@/components/OnboardingPhaseModal";
+import PhaseBar from "@/components/dashboard/PhaseBar";
 import JourneySection, { type JourneyItem, type GuideTag, useSeenNewItems } from "@/components/dashboard/JourneySection";
 import { SEO } from "@/components/SEO";
 
@@ -221,6 +223,12 @@ export default function Dashboard({ lang = "en" }: { lang?: "en" | "zh" }) {
 
   const showOnboarding = isLoggedIn && !profileLoading && profile && !profile.onboarding_completed && !profile.career_phase;
 
+  const { isComplete: isJourneyComplete } = useReadingProgress();
+  const journeyCompletedCount = useMemo(
+    () => journeyItems.filter((item) => isJourneyComplete(item.id)).length,
+    [isJourneyComplete],
+  );
+
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 10);
     window.addEventListener("scroll", onScroll, { passive: true });
@@ -367,6 +375,16 @@ export default function Dashboard({ lang = "en" }: { lang?: "en" | "zh" }) {
           )}
         </div>
       </section>
+
+      {/* Phase Selector Bar */}
+      {profile?.career_phase && (
+        <PhaseBar
+          activePhase={profile.career_phase}
+          completedCount={journeyCompletedCount}
+          totalCount={journeyItems.length}
+          onPhaseChange={(phase) => updateProfile({ career_phase: phase })}
+        />
+      )}
 
       {/* Onboarding Checklist */}
       <section className="bg-card">

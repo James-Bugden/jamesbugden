@@ -1,0 +1,79 @@
+import { memo } from "react";
+import { motion } from "framer-motion";
+import type { CareerPhase } from "@/hooks/useProfile";
+
+const PHASES: { id: CareerPhase; label: string }[] = [
+  { id: "applying", label: "Applying" },
+  { id: "interviewing", label: "Interviewing" },
+  { id: "negotiating", label: "Negotiating" },
+];
+
+interface Props {
+  activePhase: CareerPhase | null;
+  completedCount: number;
+  totalCount: number;
+  onPhaseChange: (phase: CareerPhase) => void;
+}
+
+function PhaseBarInner({ activePhase, completedCount, totalCount, onPhaseChange }: Props) {
+  return (
+    <div className="border-b" style={{ backgroundColor: "#FBF7F0", borderColor: "#E5E0D8" }}>
+      <div className="max-w-[1200px] mx-auto px-4 md:px-8 py-3 flex items-center justify-between gap-4">
+        {/* Pills with arrows */}
+        <div className="flex items-center gap-1 sm:gap-2 min-w-0">
+          {PHASES.map((phase, i) => {
+            const isActive = activePhase === phase.id;
+            return (
+              <div key={phase.id} className="flex items-center gap-1 sm:gap-2">
+                {i > 0 && (
+                  <span className="text-xs select-none" style={{ color: "#C9A961" }}>→</span>
+                )}
+                <button
+                  onClick={() => onPhaseChange(phase.id)}
+                  className="relative px-3 sm:px-4 py-1.5 rounded-full text-xs sm:text-sm font-semibold transition-all duration-200 whitespace-nowrap border"
+                  style={{
+                    backgroundColor: isActive ? "#1B3A2F" : "transparent",
+                    color: isActive ? "#FBF7F0" : "#2C2C2C",
+                    borderColor: isActive ? "#1B3A2F" : "#E5E0D8",
+                  }}
+                  onMouseEnter={(e) => {
+                    if (!isActive) {
+                      (e.currentTarget as HTMLButtonElement).style.backgroundColor = "rgba(27,58,47,0.06)";
+                    }
+                  }}
+                  onMouseLeave={(e) => {
+                    if (!isActive) {
+                      (e.currentTarget as HTMLButtonElement).style.backgroundColor = "transparent";
+                    }
+                  }}
+                >
+                  {phase.label}
+                  {isActive && (
+                    <motion.div
+                      layoutId="phase-indicator"
+                      className="absolute inset-0 rounded-full -z-10"
+                      style={{ backgroundColor: "#1B3A2F" }}
+                      transition={{ type: "spring", stiffness: 400, damping: 30 }}
+                    />
+                  )}
+                </button>
+              </div>
+            );
+          })}
+        </div>
+
+        {/* Progress count */}
+        <span
+          className="text-xs sm:text-sm font-medium whitespace-nowrap shrink-0"
+          style={{ color: "#6B7280" }}
+        >
+          <span style={{ color: "#C9A961", fontWeight: 700 }}>{completedCount}</span>
+          /{totalCount} complete
+        </span>
+      </div>
+    </div>
+  );
+}
+
+const PhaseBar = memo(PhaseBarInner);
+export default PhaseBar;
