@@ -32,7 +32,7 @@ interface Props {
   onSelect: (phase: CareerPhase) => Promise<void>;
 }
 
-export default function OnboardingPhaseModal({ onSelect }: Props) {
+export default function OnboardingPhaseModal({ lang = "en", onSelect }: Props) {
   const [selected, setSelected] = useState<CareerPhase | null>(null);
   const [submitting, setSubmitting] = useState(false);
 
