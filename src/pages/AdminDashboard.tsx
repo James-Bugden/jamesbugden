@@ -84,6 +84,8 @@ interface FeedbackItem {
   type: string | null;
   rating: number | null;
   context: string | null;
+  user_id: string | null;
+  metadata: Record<string, any> | null;
 }
 
 interface AccountUser {
