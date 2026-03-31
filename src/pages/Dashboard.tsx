@@ -571,6 +571,7 @@ export default function Dashboard({ lang = "en" }: { lang?: "en" | "zh" }) {
                   onTrack={trackResource}
                   allItems={journeyItems}
                   hasSeen={hasSeen}
+                  careerPhase={profile?.career_phase || null}
                 />
               );
             })}
