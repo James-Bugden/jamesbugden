@@ -51,6 +51,11 @@ export default function FeedbackBox({ locale = "en", subject: _subject }: Feedba
         page,
         locale,
         type: "general",
+        user_id: user?.id || null,
+        metadata: {
+          screen_width: window.innerWidth,
+          referrer: document.referrer || null,
+        },
       } as any);
       if (error) throw error;
       toast({ title: t.success, description: t.successDesc });
