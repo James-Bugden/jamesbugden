@@ -1220,7 +1220,6 @@ export default function AdminDashboard() {
               );
             })()}
           </TabsContent>
-          </TabsContent>
 
           {/* ── AI Usage Tab ─────────────────────────────────────────────── */}
           <TabsContent value="ai-usage">
