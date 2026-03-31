@@ -56,6 +56,11 @@ export default function MicroSurvey({ actionKey, question, locale = "en" }: Micr
         type: "micro_survey",
         rating: r,
         context: actionKey,
+        user_id: user?.id || null,
+        metadata: {
+          has_comment: !!comment.trim(),
+          screen_width: window.innerWidth,
+        },
       } as any);
     } catch {}
     setTimeout(() => setVisible(false), 1500);
