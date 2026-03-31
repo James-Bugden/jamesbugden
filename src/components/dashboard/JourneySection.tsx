@@ -219,6 +219,29 @@ export default function JourneySection({
     return `${totalCount} resources: ${parts.join(", ")}`;
   };
 
+  if (collapsed) {
+    return (
+      <div className="mb-6">
+        <button
+          onClick={() => setManualToggle((v) => (v !== null ? !v : !getDefaultCollapsed()))}
+          className="w-full flex items-center gap-3 p-4 rounded-lg border text-left transition-colors duration-200 hover:bg-[#FBF7F0]"
+          style={{ borderColor: "#e0ddd5", backgroundColor: "#fff" }}
+        >
+          <span style={{ color }}>{icon}</span>
+          <span className="font-heading text-lg font-bold text-foreground flex-1">{label}</span>
+          <span className="text-xs text-muted-foreground hidden sm:inline">{buildSummary()}</span>
+          <span
+            className="text-xs font-semibold px-2.5 py-1 rounded-full shrink-0"
+            style={{ backgroundColor: `${color}15`, color }}
+          >
+            {completedCount}/{totalCount}
+          </span>
+          <ChevronRight className="w-5 h-5 text-muted-foreground shrink-0" />
+        </button>
+      </div>
+    );
+  }
+
   return (
     <div
       className="mb-10 rounded-xl transition-all duration-300"
@@ -247,34 +270,16 @@ export default function JourneySection({
         >
           {completedCount}/{totalCount}
         </span>
-        {collapsed ? (
-          <ChevronDown className="w-4 h-4 text-muted-foreground transition-transform duration-200" />
-        ) : (
-          <ChevronUp className="w-4 h-4 text-muted-foreground transition-transform duration-200" />
-        )}
+        <ChevronRight className="w-4 h-4 text-muted-foreground rotate-90 transition-transform duration-200" />
       </button>
 
-      {/* Collapsed summary */}
-      {collapsed && (
-        <p className="text-xs ml-8 -mt-2 mb-2 text-muted-foreground">{buildSummary()}</p>
-      )}
-
-      {/* Expandable content */}
-      <div
-        className="overflow-hidden transition-all duration-300 ease-in-out"
-        style={{
-          maxHeight: collapsed ? "0px" : "5000px",
-          opacity: collapsed ? 0 : 1,
-        }}
-      >
-        {pinnedItems.map((item) => (
+      {pinnedItems.map((item) => (
+        <JourneyCard key={item.id} item={item} lang={lang} onTrack={onTrack} allItems={allItems} hasSeen={hasSeen} />
+      ))}
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+        {regularItems.map((item) => (
           <JourneyCard key={item.id} item={item} lang={lang} onTrack={onTrack} allItems={allItems} hasSeen={hasSeen} />
         ))}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-          {regularItems.map((item) => (
-            <JourneyCard key={item.id} item={item} lang={lang} onTrack={onTrack} allItems={allItems} hasSeen={hasSeen} />
-          ))}
-        </div>
       </div>
     </div>
   );
