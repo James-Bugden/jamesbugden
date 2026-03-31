@@ -233,6 +233,30 @@ export type Database = {
         }
         Relationships: []
       }
+      profiles: {
+        Row: {
+          career_phase: string | null
+          created_at: string | null
+          id: string
+          onboarding_completed: boolean | null
+          user_id: string
+        }
+        Insert: {
+          career_phase?: string | null
+          created_at?: string | null
+          id?: string
+          onboarding_completed?: boolean | null
+          user_id: string
+        }
+        Update: {
+          career_phase?: string | null
+          created_at?: string | null
+          id?: string
+          onboarding_completed?: boolean | null
+          user_id?: string
+        }
+        Relationships: []
+      }
       resume_analyses: {
         Row: {
           analysis_result: Json | null
