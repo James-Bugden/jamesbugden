@@ -13,6 +13,7 @@ interface Props {
   completedCount: number;
   totalCount: number;
   onPhaseChange: (phase: CareerPhase) => void;
+  lang?: "en" | "zh";
 }
 
 function PhaseBarInner({ activePhase, completedCount, totalCount, onPhaseChange }: Props) {
