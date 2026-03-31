@@ -222,6 +222,12 @@ export default function Dashboard({ lang = "en" }: { lang?: "en" | "zh" }) {
 
   const showOnboarding = isLoggedIn && !profileLoading && profile && !profile.onboarding_completed && !profile.career_phase;
 
+  const { isComplete: isJourneyComplete } = useReadingProgress();
+  const journeyCompletedCount = useMemo(
+    () => journeyItems.filter((item) => isJourneyComplete(item.id)).length,
+    [isJourneyComplete],
+  );
+
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 10);
     window.addEventListener("scroll", onScroll, { passive: true });
