@@ -28,6 +28,8 @@ export default function InlineRating({ contentId, locale = "en", label }: Inline
         type: "inline_rating",
         rating: r,
         context: contentId,
+        user_id: user?.id || null,
+        metadata: { screen_width: window.innerWidth },
       } as any);
     } catch {}
   };
