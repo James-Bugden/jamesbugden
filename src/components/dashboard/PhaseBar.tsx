@@ -2,10 +2,10 @@ import { memo } from "react";
 import { motion } from "framer-motion";
 import type { CareerPhase } from "@/hooks/useProfile";
 
-const PHASES: { id: CareerPhase; label: string }[] = [
-  { id: "applying", label: "Applying" },
-  { id: "interviewing", label: "Interviewing" },
-  { id: "negotiating", label: "Negotiating" },
+const PHASES: { id: CareerPhase; en: string; zh: string }[] = [
+  { id: "applying", en: "Applying", zh: "投遞申請" },
+  { id: "interviewing", en: "Interviewing", zh: "面試準備" },
+  { id: "negotiating", en: "Negotiating", zh: "薪資談判" },
 ];
 
 interface Props {
