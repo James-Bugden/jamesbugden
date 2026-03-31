@@ -1,27 +1,41 @@
 
 
-## Add Mini Sparkline Charts to KPI Cards
+## One-Time "What's New" Popup for Returning Users
 
-### What
-Each of the 5 KPI cards gets a small inline sparkline (SVG area chart, ~40px tall) showing the metric's daily trend. This gives instant visual context — is this number trending up, down, or flat?
+### What It Does
+A modal popup shown once to returning users (those who already completed onboarding) explaining the dashboard redesign. Dismissed permanently via localStorage flag.
 
-### Data Source
-`postTrend.data` (from `usePostDerivedTrend`) already provides daily breakdowns with `views`, `likes`, `replies`, `reposts`, `shares`, `engagementRate`, and `posts` count. `followerDeltas.data?.deltas` provides daily follower changes. All data is already fetched.
+### Show Conditions
+- User is logged in
+- `onboarding_completed` is TRUE (they've used the old dashboard)
+- localStorage key `james_careers_dashboard_v2_seen` is NOT set
 
-### Changes
+### Content
+**Heading:** "Your Dashboard Got an Upgrade"
 
-**`src/pages/ThreadsAnalytics.tsx`**
+**3 bullet points with icons:**
+1. **Phase-based navigation** — Your journey sections now highlight what's relevant to your current stage (Applying / Interviewing / Negotiating). Switch anytime with the pill bar at the top.
+2. **Pick up where you left off** — See your latest resume score, last viewed guide, and suggested next step in one glance.
+3. **Collapsible sections** — Future phases are tucked away but always accessible. Click to expand any section.
 
-1. **Add a `MiniSparkline` component** (~30 lines) that takes `data: number[]` and `color: string`, renders a pure SVG `<polyline>` + gradient `<linearGradient>` fill beneath. Fixed height 40px, full width of card. No axes, no labels — just the shape.
+**CTA button:** "Got it" (closes and sets localStorage flag)
 
-2. **Update `KpiCard`** to accept an optional `sparkData?: number[]` prop. Render `<MiniSparkline>` at the bottom of the card when data exists.
+### Design
+- Same modal pattern as `OnboardingPhaseModal` (centered, dark overlay, fade-in)
+- Forest green header area with a sparkle/refresh icon
+- Brand colors: forest green, gold, cream
+- Mobile: full-width with padding
 
-3. **Pass sparkline data to each KPI card:**
-   - Total Posts → `trendData.map(d => d.posts)`
-   - Total Views → `trendData.map(d => d.views)`
-   - Engagement → `trendData.map(d => d.engagementRate)`
-   - Avg Views/Post → `trendData.map(d => d.views / Math.max(d.posts, 1))`
-   - Followers Gained → `followerDeltas.data?.deltas.map(d => d.delta) || []`
+### Implementation
+1. **New component:** `src/components/dashboard/WhatsNewModal.tsx`
+   - Uses existing `Dialog`/`DialogContent` from UI library
+   - 3 icon+text rows for the changes
+   - Single "Got it" button that sets localStorage and closes
+   - Fade-in animation via existing dialog animations
 
-Each sparkline uses the same `iconColor` as its card's icon for visual consistency.
+2. **Dashboard.tsx:** Import and render `WhatsNewModal` alongside `OnboardingPhaseModal`
+   - Only show when `profile?.onboarding_completed === true` (so new users who just picked a phase don't see it)
+   - WhatsNewModal manages its own localStorage visibility state
+
+3. **Bilingual:** Support `lang` prop — show Chinese copy when `lang === "zh"`
 
