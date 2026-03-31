@@ -17,6 +17,7 @@ import OnboardingPhaseModal from "@/components/OnboardingPhaseModal";
 import PhaseBar from "@/components/dashboard/PhaseBar";
 import JourneySection, { type JourneyItem, type GuideTag, useSeenNewItems } from "@/components/dashboard/JourneySection";
 import PickUpWhereYouLeftOff from "@/components/dashboard/PickUpWhereYouLeftOff";
+import WhatsNewModal from "@/components/dashboard/WhatsNewModal";
 import { SEO } from "@/components/SEO";
 
 interface ToolItem {
