@@ -1,8 +1,6 @@
 import { useState, useEffect, useRef, useCallback, useMemo, memo, MouseEvent } from "react";
 import { useAuth } from "@/contexts/AuthContext";
 import { Navigate, Link } from "react-router-dom";
-import { Linkedin } from "lucide-react";
-import { InstagramIcon, ThreadsIcon } from "@/components/SocialIcons";
 import LanguageToggle from "@/components/LanguageToggle";
 import ThemeToggle from "@/components/ThemeToggle";
 import { ArrowRight, FileText, DollarSign, PenTool, Search, X, BarChart3, MessageSquare, Compass, ClipboardList, Mic, Banknote } from "lucide-react";
@@ -452,15 +450,17 @@ export default function Dashboard({ lang = "en" }: { lang?: "en" | "zh" }) {
           <div id="tools" style={{ scrollMarginTop: '80px' }}>
             <h2 className="font-heading text-2xl md:text-3xl mb-2 text-foreground">{t.toolsHeading}</h2>
             <p className="text-sm md:text-base mb-8 text-muted-foreground">{t.toolsSub}</p>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div className="relative">
+              {/* Mobile: horizontal scroll; Desktop: 2-col grid */}
+              <div className="flex sm:grid sm:grid-cols-2 gap-6 overflow-x-auto sm:overflow-visible snap-x snap-mandatory pb-2 sm:pb-0 -mx-4 px-4 sm:mx-0 sm:px-0">
               {tools.map((tool) => {
                 const badge = getProgressBadge(tool.id, lang, t);
                 return (
-                  <Link
+                    <Link
                     key={tool.path}
                     to={lang === "zh" && tool.zhPath ? tool.zhPath : tool.path}
                     onClick={() => trackTool(tool.id)}
-                    className="group rounded-2xl border-l-[4px] border-l-gold p-4 md:p-5 flex items-center gap-4 transition-all duration-200 hover:-translate-y-0.5 bg-card shadow-[var(--dash-card-shadow)] hover:shadow-[var(--dash-card-hover-shadow)]"
+                    className="group rounded-2xl border-l-[4px] border-l-gold p-4 md:p-5 flex items-center gap-4 transition-all duration-200 hover:-translate-y-0.5 bg-card shadow-[var(--dash-card-shadow)] hover:shadow-[var(--dash-card-hover-shadow)] min-w-[280px] sm:min-w-0 snap-start shrink-0 sm:shrink"
                   >
                     <span
                       className="w-9 h-9 rounded-full flex items-center justify-center shrink-0 text-foreground"
@@ -493,6 +493,9 @@ export default function Dashboard({ lang = "en" }: { lang?: "en" | "zh" }) {
                   </Link>
                 );
               })}
+              </div>
+              {/* Right-edge fade for mobile scroll */}
+              <div className="absolute top-0 right-0 bottom-0 w-8 bg-gradient-to-l from-card to-transparent pointer-events-none sm:hidden" />
             </div>
           </div>
 
@@ -524,25 +527,7 @@ export default function Dashboard({ lang = "en" }: { lang?: "en" | "zh" }) {
         </div>
       </section>
 
-      {/* Footer */}
-      <footer className="py-8 md:py-10 px-5 md:px-6 bg-card border-t border-border">
-        <div className="container mx-auto max-w-5xl flex flex-col items-center gap-4">
-          <div className="flex items-center gap-6">
-            <a href="https://www.linkedin.com/in/james-bugden/" target="_blank" rel="noopener noreferrer" className="text-muted-foreground hover:text-foreground transition-colors">
-              <Linkedin className="w-5 h-5" />
-            </a>
-            <a href="https://www.instagram.com/james.careers/" target="_blank" rel="noopener noreferrer" className="text-muted-foreground hover:text-foreground transition-colors">
-              <InstagramIcon className="w-5 h-5" />
-            </a>
-            <a href="https://www.threads.com/@james.careers" target="_blank" rel="noopener noreferrer" className="text-muted-foreground hover:text-foreground transition-colors">
-              <ThreadsIcon className="w-5 h-5" />
-            </a>
-          </div>
-          <span className="text-sm text-muted-foreground text-center w-full">
-            {t.footerCopyright}
-          </span>
-        </div>
-      </footer>
+
       <NpsPulse locale="en" />
     </>
   );
