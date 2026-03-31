@@ -15,6 +15,7 @@ import DashboardSkeleton from "@/components/DashboardSkeleton";
 import NpsPulse from "@/components/feedback/NpsPulse";
 import { useProfile } from "@/hooks/useProfile";
 import OnboardingPhaseModal from "@/components/OnboardingPhaseModal";
+import PhaseBar from "@/components/dashboard/PhaseBar";
 import JourneySection, { type JourneyItem, type GuideTag, useSeenNewItems } from "@/components/dashboard/JourneySection";
 import { SEO } from "@/components/SEO";
 
