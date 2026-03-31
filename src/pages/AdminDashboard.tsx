@@ -84,6 +84,8 @@ interface FeedbackItem {
   type: string | null;
   rating: number | null;
   context: string | null;
+  user_id: string | null;
+  metadata: Record<string, any> | null;
 }
 
 interface AccountUser {
@@ -955,127 +957,269 @@ export default function AdminDashboard() {
 
           {/* ── Feedback Tab ─────────────────────────────────────────────── */}
           <TabsContent value="feedback">
-            {/* Summary cards */}
             {(() => {
               const byType: Record<string, number> = {};
+              const npsItems = feedbackItems.filter(f => f.type === "nps");
               const npsScores: number[] = [];
               let thumbsUp = 0, thumbsDown = 0;
+              let promoters = 0, passives = 0, detractors = 0;
+              const npsComments: { score: number; message: string; date: string; category: string; metadata: Record<string, any> | null }[] = [];
+
               feedbackItems.forEach(f => {
                 const tp = f.type || "general";
                 byType[tp] = (byType[tp] || 0) + 1;
-                if (tp === "nps" && f.rating !== null) npsScores.push(f.rating);
+                if (tp === "nps" && f.rating !== null) {
+                  npsScores.push(f.rating);
+                  const cat = f.rating >= 9 ? "promoter" : f.rating >= 7 ? "passive" : "detractor";
+                  if (f.rating >= 9) promoters++;
+                  else if (f.rating >= 7) passives++;
+                  else detractors++;
+                  if (f.message && !f.message.startsWith("NPS score:")) {
+                    npsComments.push({ score: f.rating, message: f.message, date: f.created_at, category: cat, metadata: f.metadata });
+                  }
+                }
                 if ((tp === "micro_survey" || tp === "inline_rating") && f.rating !== null) {
                   if (f.rating > 0) thumbsUp++; else thumbsDown++;
                 }
               });
-              const avgNps = npsScores.length ? (npsScores.reduce((a, b) => a + b, 0) / npsScores.length).toFixed(1) : "—";
+
+              const totalNps = npsScores.length;
+              const avgNps = totalNps ? (npsScores.reduce((a, b) => a + b, 0) / totalNps).toFixed(1) : "—";
+              const npsScore = totalNps ? Math.round(((promoters - detractors) / totalNps) * 100) : 0;
+
+              const scoreDist = Array.from({ length: 11 }, (_, i) => ({
+                score: i,
+                count: npsScores.filter(s => s === i).length,
+              }));
+
+              const segmentStats = (category: string) => {
+                const items = npsItems.filter(f => {
+                  if (f.rating === null) return false;
+                  const cat = f.rating >= 9 ? "promoter" : f.rating >= 7 ? "passive" : "detractor";
+                  return cat === category;
+                });
+                const sessions = items.map(f => (f.metadata as any)?.session_count).filter(Boolean);
+                const days = items.map(f => (f.metadata as any)?.days_since_first_visit).filter(Boolean);
+                const pages = items.map(f => ((f.metadata as any)?.pages_this_session as any[])?.length).filter(Boolean);
+                const avg = (arr: number[]) => arr.length ? (arr.reduce((a, b) => a + b, 0) / arr.length).toFixed(1) : "—";
+                return { count: items.length, avgSessions: avg(sessions), avgDays: avg(days), avgPages: avg(pages) };
+              };
+
+              const promoterStats = segmentStats("promoter");
+              const passiveStats = segmentStats("passive");
+              const detractorStats = segmentStats("detractor");
+
               return (
-                <div className="grid grid-cols-2 md:grid-cols-5 gap-3 mb-4">
-                  {[
-                    { label: "General", value: byType.general || 0 },
-                    { label: "Micro Survey", value: byType.micro_survey || 0 },
-                    { label: "Inline Rating", value: byType.inline_rating || 0 },
-                    { label: "NPS Responses", value: byType.nps || 0 },
-                    { label: "Avg NPS", value: avgNps },
-                  ].map(s => (
-                    <div key={s.label} className="rounded-lg border border-border bg-card p-3 text-center">
-                      <p className="text-xs text-muted-foreground">{s.label}</p>
-                      <p className="text-xl font-bold text-foreground">{s.value}</p>
+                <div className="space-y-6">
+                  {/* NPS Score Hero */}
+                  <div className="grid grid-cols-2 md:grid-cols-6 gap-3">
+                    <div className="col-span-2 rounded-xl border border-border bg-card p-5 text-center">
+                      <p className="text-xs text-muted-foreground mb-1">NPS Score</p>
+                      <p className={`text-4xl font-bold ${npsScore >= 50 ? "text-emerald-600" : npsScore >= 0 ? "text-amber-600" : "text-destructive"}`}>
+                        {totalNps ? npsScore : "—"}
+                      </p>
+                      <p className="text-xs text-muted-foreground mt-1">{totalNps} responses</p>
                     </div>
-                  ))}
-                  {(thumbsUp + thumbsDown > 0) && (
-                    <div className="col-span-2 md:col-span-5 text-xs text-muted-foreground">
-                      👍 {thumbsUp} / 👎 {thumbsDown} ({((thumbsUp / (thumbsUp + thumbsDown)) * 100).toFixed(0)}% positive)
+                    <div className="rounded-lg border border-border bg-card p-3 text-center">
+                      <p className="text-xs text-muted-foreground">Avg Score</p>
+                      <p className="text-2xl font-bold text-foreground">{avgNps}</p>
+                    </div>
+                    <div className="rounded-lg border border-emerald-200 dark:border-emerald-800 bg-emerald-50 dark:bg-emerald-950/30 p-3 text-center">
+                      <p className="text-xs text-emerald-700 dark:text-emerald-400">Promoters (9-10)</p>
+                      <p className="text-2xl font-bold text-emerald-700 dark:text-emerald-400">{promoters}</p>
+                      <p className="text-xs text-emerald-600 dark:text-emerald-500">{totalNps ? Math.round((promoters / totalNps) * 100) : 0}%</p>
+                    </div>
+                    <div className="rounded-lg border border-amber-200 dark:border-amber-800 bg-amber-50 dark:bg-amber-950/30 p-3 text-center">
+                      <p className="text-xs text-amber-700 dark:text-amber-400">Passives (7-8)</p>
+                      <p className="text-2xl font-bold text-amber-700 dark:text-amber-400">{passives}</p>
+                      <p className="text-xs text-amber-600 dark:text-amber-500">{totalNps ? Math.round((passives / totalNps) * 100) : 0}%</p>
+                    </div>
+                    <div className="rounded-lg border border-red-200 dark:border-red-800 bg-red-50 dark:bg-red-950/30 p-3 text-center">
+                      <p className="text-xs text-red-700 dark:text-red-400">Detractors (0-6)</p>
+                      <p className="text-2xl font-bold text-red-700 dark:text-red-400">{detractors}</p>
+                      <p className="text-xs text-red-600 dark:text-red-500">{totalNps ? Math.round((detractors / totalNps) * 100) : 0}%</p>
+                    </div>
+                  </div>
+
+                  {/* Score Distribution + Behavioral Breakdown */}
+                  <div className="grid md:grid-cols-2 gap-4">
+                    <div className="rounded-xl border border-border bg-card p-4">
+                      <h3 className="text-sm font-semibold text-foreground mb-3">Score Distribution</h3>
+                      <div className="flex items-end gap-1 h-28">
+                        {scoreDist.map(d => {
+                          const maxCount = Math.max(...scoreDist.map(x => x.count), 1);
+                          const heightPct = (d.count / maxCount) * 100;
+                          const color = d.score >= 9 ? "bg-emerald-500" : d.score >= 7 ? "bg-amber-400" : "bg-red-400";
+                          return (
+                            <div key={d.score} className="flex-1 flex flex-col items-center gap-1">
+                              <span className="text-[10px] text-muted-foreground">{d.count || ""}</span>
+                              <div className={`w-full rounded-t ${color} transition-all`} style={{ height: `${Math.max(heightPct, 2)}%` }} />
+                              <span className="text-[10px] text-muted-foreground">{d.score}</span>
+                            </div>
+                          );
+                        })}
+                      </div>
+                    </div>
+
+                    <div className="rounded-xl border border-border bg-card p-4">
+                      <h3 className="text-sm font-semibold text-foreground mb-3">Behavioral Patterns by Segment</h3>
+                      <div className="overflow-auto">
+                        <table className="w-full text-xs">
+                          <thead>
+                            <tr className="border-b border-border">
+                              <th className="text-left py-1.5 text-muted-foreground font-medium">Segment</th>
+                              <th className="text-center py-1.5 text-muted-foreground font-medium">Count</th>
+                              <th className="text-center py-1.5 text-muted-foreground font-medium">Avg Sessions</th>
+                              <th className="text-center py-1.5 text-muted-foreground font-medium">Avg Days</th>
+                              <th className="text-center py-1.5 text-muted-foreground font-medium">Pages/Session</th>
+                            </tr>
+                          </thead>
+                          <tbody>
+                            {[
+                              { label: "Promoters", color: "text-emerald-600", ...promoterStats },
+                              { label: "Passives", color: "text-amber-600", ...passiveStats },
+                              { label: "Detractors", color: "text-red-500", ...detractorStats },
+                            ].map(row => (
+                              <tr key={row.label} className="border-b border-border/50">
+                                <td className={`py-2 font-medium ${row.color}`}>{row.label}</td>
+                                <td className="py-2 text-center text-foreground">{row.count}</td>
+                                <td className="py-2 text-center text-foreground">{row.avgSessions}</td>
+                                <td className="py-2 text-center text-foreground">{row.avgDays}</td>
+                                <td className="py-2 text-center text-foreground">{row.avgPages}</td>
+                              </tr>
+                            ))}
+                          </tbody>
+                        </table>
+                      </div>
+                      {!npsItems.some(f => f.metadata) && (
+                        <p className="text-xs text-muted-foreground mt-3 italic">Behavioral data will populate as new NPS responses come in.</p>
+                      )}
+                    </div>
+                  </div>
+
+                  {/* Comment Highlights */}
+                  {npsComments.length > 0 && (
+                    <div className="rounded-xl border border-border bg-card p-4">
+                      <h3 className="text-sm font-semibold text-foreground mb-3">Comment Highlights ({npsComments.length})</h3>
+                      <div className="space-y-2 max-h-48 overflow-y-auto">
+                        {npsComments.map((c, i) => (
+                          <div key={i} className="flex items-start gap-2 p-2 rounded-lg bg-muted/50">
+                            <span className={`shrink-0 text-xs font-semibold px-1.5 py-0.5 rounded ${
+                              c.category === "promoter" ? "bg-emerald-100 text-emerald-700 dark:bg-emerald-900 dark:text-emerald-300" :
+                              c.category === "passive" ? "bg-amber-100 text-amber-700 dark:bg-amber-900 dark:text-amber-300" :
+                              "bg-red-100 text-red-700 dark:bg-red-900 dark:text-red-300"
+                            }`}>
+                              {c.score}
+                            </span>
+                            <p className="text-sm text-foreground flex-1">{c.message}</p>
+                            <span className="text-[10px] text-muted-foreground whitespace-nowrap">{format(new Date(c.date), "MMM d")}</span>
+                          </div>
+                        ))}
+                      </div>
                     </div>
                   )}
+
+                  {/* Thumbs summary */}
+                  {(thumbsUp + thumbsDown > 0) && (
+                    <div className="rounded-lg border border-border bg-card p-3">
+                      <p className="text-xs text-muted-foreground">
+                        <span className="font-medium text-foreground">Micro Survey & Inline Ratings:</span>{" "}
+                        👍 {thumbsUp} / 👎 {thumbsDown} ({((thumbsUp / (thumbsUp + thumbsDown)) * 100).toFixed(0)}% positive)
+                      </p>
+                    </div>
+                  )}
+
+                  {/* All Feedback Table */}
+                  <div>
+                    <div className="flex items-center justify-between mb-4 flex-wrap gap-2">
+                      <div className="flex items-center gap-2">
+                        <p className="text-sm text-muted-foreground">{filteredFeedback.length} submissions</p>
+                        <select
+                          value={feedbackTypeFilter}
+                          onChange={e => setFeedbackTypeFilter(e.target.value)}
+                          className="text-xs border border-border rounded px-2 py-1 bg-background text-foreground"
+                        >
+                          <option value="all">All types</option>
+                          <option value="general">General</option>
+                          <option value="micro_survey">Micro Survey</option>
+                          <option value="inline_rating">Inline Rating</option>
+                          <option value="nps">NPS</option>
+                        </select>
+                      </div>
+                      <div className="relative">
+                        <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
+                        <Input placeholder="Search feedback…" value={feedbackSearch} onChange={e => setFeedbackSearch(e.target.value)} className="pl-9 w-64" />
+                      </div>
+                    </div>
+                    {feedbackLoading ? (
+                      <div className="flex justify-center py-12"><Loader2 className="w-6 h-6 animate-spin text-muted-foreground" /></div>
+                    ) : (
+                      <div className="rounded-md border border-border overflow-auto">
+                        <Table>
+                          <TableHeader>
+                            <TableRow>
+                              <TableHead className="w-[130px]">Date</TableHead>
+                              <TableHead className="w-[100px]">Type</TableHead>
+                              <TableHead className="w-[60px]">Rating</TableHead>
+                              <TableHead>Message</TableHead>
+                              <TableHead className="w-[140px]">Context</TableHead>
+                              <TableHead className="w-[160px]">Page</TableHead>
+                              <TableHead className="w-[60px]" />
+                            </TableRow>
+                          </TableHeader>
+                          <TableBody>
+                            {filteredFeedback.length === 0 ? (
+                              <TableRow><TableCell colSpan={7} className="text-center py-12 text-muted-foreground">No feedback yet</TableCell></TableRow>
+                            ) : filteredFeedback.map(f => (
+                              <TableRow key={f.id}>
+                                <TableCell className="text-xs text-muted-foreground whitespace-nowrap">{format(new Date(f.created_at), "MMM d, yyyy HH:mm")}</TableCell>
+                                <TableCell>
+                                  <span className={`text-xs px-2 py-0.5 rounded-full ${
+                                    f.type === "nps" ? "bg-blue-100 text-blue-700 dark:bg-blue-900 dark:text-blue-300" :
+                                    f.type === "micro_survey" ? "bg-green-100 text-green-700 dark:bg-green-900 dark:text-green-300" :
+                                    f.type === "inline_rating" ? "bg-amber-100 text-amber-700 dark:bg-amber-900 dark:text-amber-300" :
+                                    "bg-muted text-muted-foreground"
+                                  }`}>
+                                    {f.type || "general"}
+                                  </span>
+                                </TableCell>
+                                <TableCell className="text-sm text-center">
+                                  {f.rating !== null ? (
+                                    f.type === "nps" ? <span className="font-medium">{f.rating}/10</span> :
+                                    f.rating > 0 ? "👍" : "👎"
+                                  ) : "—"}
+                                </TableCell>
+                                <TableCell className="text-sm max-w-xs truncate">{f.message}</TableCell>
+                                <TableCell className="text-xs text-muted-foreground font-mono">{f.context || "—"}</TableCell>
+                                <TableCell className="text-xs text-muted-foreground font-mono truncate max-w-[160px]">{f.page}</TableCell>
+                                <TableCell>
+                                  <AlertDialog>
+                                    <AlertDialogTrigger asChild>
+                                      <Button variant="ghost" size="icon" className="h-8 w-8"><Trash2 className="w-4 h-4 text-destructive" /></Button>
+                                    </AlertDialogTrigger>
+                                    <AlertDialogContent>
+                                      <AlertDialogHeader>
+                                        <AlertDialogTitle>Delete feedback?</AlertDialogTitle>
+                                        <AlertDialogDescription>This cannot be undone.</AlertDialogDescription>
+                                      </AlertDialogHeader>
+                                      <AlertDialogFooter>
+                                        <AlertDialogCancel>Cancel</AlertDialogCancel>
+                                        <AlertDialogAction onClick={() => handleDeleteFeedback(f.id)}>Delete</AlertDialogAction>
+                                      </AlertDialogFooter>
+                                    </AlertDialogContent>
+                                  </AlertDialog>
+                                </TableCell>
+                              </TableRow>
+                            ))}
+                          </TableBody>
+                        </Table>
+                      </div>
+                    )}
+                  </div>
                 </div>
               );
             })()}
-
-            <div className="flex items-center justify-between mb-4 flex-wrap gap-2">
-              <div className="flex items-center gap-2">
-                <p className="text-sm text-muted-foreground">{filteredFeedback.length} submissions</p>
-                <select
-                  value={feedbackTypeFilter}
-                  onChange={e => setFeedbackTypeFilter(e.target.value)}
-                  className="text-xs border border-border rounded px-2 py-1 bg-background text-foreground"
-                >
-                  <option value="all">All types</option>
-                  <option value="general">General</option>
-                  <option value="micro_survey">Micro Survey</option>
-                  <option value="inline_rating">Inline Rating</option>
-                  <option value="nps">NPS</option>
-                </select>
-              </div>
-              <div className="relative">
-                <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
-                <Input placeholder="Search feedback…" value={feedbackSearch} onChange={e => setFeedbackSearch(e.target.value)} className="pl-9 w-64" />
-              </div>
-            </div>
-            {feedbackLoading ? (
-              <div className="flex justify-center py-12"><Loader2 className="w-6 h-6 animate-spin text-muted-foreground" /></div>
-            ) : (
-              <div className="rounded-md border border-border overflow-auto">
-                <Table>
-                  <TableHeader>
-                    <TableRow>
-                      <TableHead className="w-[130px]">Date</TableHead>
-                      <TableHead className="w-[100px]">Type</TableHead>
-                      <TableHead className="w-[60px]">Rating</TableHead>
-                      <TableHead>Message</TableHead>
-                      <TableHead className="w-[140px]">Context</TableHead>
-                      <TableHead className="w-[160px]">Page</TableHead>
-                      <TableHead className="w-[60px]" />
-                    </TableRow>
-                  </TableHeader>
-                  <TableBody>
-                    {filteredFeedback.length === 0 ? (
-                      <TableRow><TableCell colSpan={7} className="text-center py-12 text-muted-foreground">No feedback yet</TableCell></TableRow>
-                    ) : filteredFeedback.map(f => (
-                      <TableRow key={f.id}>
-                        <TableCell className="text-xs text-muted-foreground whitespace-nowrap">{format(new Date(f.created_at), "MMM d, yyyy HH:mm")}</TableCell>
-                        <TableCell>
-                          <span className={`text-xs px-2 py-0.5 rounded-full ${
-                            f.type === "nps" ? "bg-blue-100 text-blue-700 dark:bg-blue-900 dark:text-blue-300" :
-                            f.type === "micro_survey" ? "bg-green-100 text-green-700 dark:bg-green-900 dark:text-green-300" :
-                            f.type === "inline_rating" ? "bg-amber-100 text-amber-700 dark:bg-amber-900 dark:text-amber-300" :
-                            "bg-muted text-muted-foreground"
-                          }`}>
-                            {f.type || "general"}
-                          </span>
-                        </TableCell>
-                        <TableCell className="text-sm text-center">
-                          {f.rating !== null ? (
-                            f.type === "nps" ? <span className="font-medium">{f.rating}/10</span> :
-                            f.rating > 0 ? "👍" : "👎"
-                          ) : "—"}
-                        </TableCell>
-                        <TableCell className="text-sm max-w-xs truncate">{f.message}</TableCell>
-                        <TableCell className="text-xs text-muted-foreground font-mono">{f.context || "—"}</TableCell>
-                        <TableCell className="text-xs text-muted-foreground font-mono truncate max-w-[160px]">{f.page}</TableCell>
-                        <TableCell>
-                          <AlertDialog>
-                            <AlertDialogTrigger asChild>
-                              <Button variant="ghost" size="icon" className="h-8 w-8"><Trash2 className="w-4 h-4 text-destructive" /></Button>
-                            </AlertDialogTrigger>
-                            <AlertDialogContent>
-                              <AlertDialogHeader>
-                                <AlertDialogTitle>Delete feedback?</AlertDialogTitle>
-                                <AlertDialogDescription>This cannot be undone.</AlertDialogDescription>
-                              </AlertDialogHeader>
-                              <AlertDialogFooter>
-                                <AlertDialogCancel>Cancel</AlertDialogCancel>
-                                <AlertDialogAction onClick={() => handleDeleteFeedback(f.id)}>Delete</AlertDialogAction>
-                              </AlertDialogFooter>
-                            </AlertDialogContent>
-                          </AlertDialog>
-                        </TableCell>
-                      </TableRow>
-                    ))}
-                  </TableBody>
-                </Table>
-              </div>
-            )}
+          </TabsContent>
           </TabsContent>
 
           {/* ── AI Usage Tab ─────────────────────────────────────────────── */}
