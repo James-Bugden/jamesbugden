@@ -1,32 +1,33 @@
 
 
-# Fix: "Old UI" Flash When Switching Languages
+# Google OAuth — Final Checklist (No Code Changes Needed)
 
-## Root Cause
+The code is correct. The "redirect_uri is not allowed" error comes from the **Google Cloud Console** configuration, not from Lovable Cloud settings.
 
-When switching between `/dashboard` and `/zh-tw/dashboard`, React unmounts the entire `Dashboard` component and remounts a new instance. This resets `useProfile()` to `loading: true` and `profile: null`.
+## What You Need in Google Cloud Console
 
-During the ~200-500ms profile re-fetch:
-- `profile?.career_phase` is `null` → **PhaseBar doesn't render**
-- `careerPhase` is `null` → **Journey sections lose their expand/collapse/highlight behavior**
-- The dashboard briefly renders without any phase-aware features — which looks exactly like the "old UI"
+Go to [Google Cloud Console → Credentials](https://console.cloud.google.com/apis/credentials) → click your OAuth 2.0 Client ID → edit it.
 
-## Fix
+### 1. Authorized JavaScript Origins
+Add these exact entries:
+- `https://jamesbugden.com`
+- `https://www.jamesbugden.com`
 
-**Show `DashboardSkeleton` while profile is loading too** (not just auth loading). This prevents the brief flash of the un-personalized dashboard.
+### 2. Authorized Redirect URIs
+This is the critical one. You need to add the **Lovable Cloud OAuth callback URL**, which is visible in your Cloud Dashboard under **Users → Auth Settings → Sign In Methods → Google** (expand the Google section).
 
-### File: `src/pages/Dashboard.tsx`
+It will look something like:
+- `https://reahmeddjkivwzjsoqkn.supabase.co/auth/v1/callback`
 
-Change line 279 from:
-```tsx
-if (isLoading) return <DashboardSkeleton />;
-```
-to:
-```tsx
-if (isLoading || profileLoading) return <DashboardSkeleton />;
-```
+Add that exact URL to the "Authorized redirect URIs" in Google Cloud Console.
 
-This ensures the skeleton stays visible until both auth AND profile data are ready, so the dashboard never renders in the "old" state without the phase bar and journey highlights.
+**Also add** (for safety):
+- `https://jamesbugden.com`
+- `https://jamesbugden.com/**` won't work in Google Console — Google requires exact URIs
 
-### One-line change, one file.
+### 3. Verify in Lovable Cloud
+Open Cloud → Users → Auth Settings → Google and confirm the **callback URL** shown there matches what you added in Google Console.
+
+## Summary
+No code changes. The fix is adding the correct callback URI from Lovable Cloud's Google auth settings into Google Cloud Console's "Authorized redirect URIs" field.
 
