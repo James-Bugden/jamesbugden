@@ -376,6 +376,16 @@ export default function Dashboard({ lang = "en" }: { lang?: "en" | "zh" }) {
         </div>
       </section>
 
+      {/* Phase Selector Bar */}
+      {profile?.career_phase && (
+        <PhaseBar
+          activePhase={profile.career_phase}
+          completedCount={journeyCompletedCount}
+          totalCount={journeyItems.length}
+          onPhaseChange={(phase) => updateProfile({ career_phase: phase })}
+        />
+      )}
+
       {/* Onboarding Checklist */}
       <section className="bg-card">
         <div className="max-w-[1200px] mx-auto px-4 md:px-8 pt-6">
