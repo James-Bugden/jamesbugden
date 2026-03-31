@@ -196,7 +196,7 @@ export default function JourneySection({
     setManualToggle(null);
   }, [careerPhase]);
 
-  const isCurrentPhase = careerPhase === tag && tag !== "end-to-end";
+  const isCurrentPhase = !!careerPhase && careerPhase === (tag as string) && tag !== "end-to-end";
 
   const { isComplete } = useReadingProgress();
 
