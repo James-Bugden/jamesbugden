@@ -229,7 +229,7 @@ export async function syncLocalToServer(): Promise<{ synced: number }> {
       updated_at: doc.updatedAt,
     }));
 
-    const { error } = await supabase.from("user_documents").insert(rows);
+    const { error } = await (supabase as any).from("user_documents").insert(rows);
     if (error) {
       console.error("Document sync error:", error);
       return { synced: 0 };
