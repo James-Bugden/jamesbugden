@@ -276,7 +276,7 @@ export default function Dashboard({ lang = "en" }: { lang?: "en" | "zh" }) {
     return recentItems.map(r => allSearchable.find(s => s.id === r.id)).filter(Boolean) as SearchableItem[];
   }, [recentItems, allSearchable]);
 
-  if (isLoading) return <DashboardSkeleton />;
+  if (isLoading || profileLoading) return <DashboardSkeleton />;
   if (!isLoggedIn) {
     const dashPath = window.location.pathname;
     const isZhDash = dashPath.startsWith("/zh-tw") || dashPath.startsWith("/zh");
