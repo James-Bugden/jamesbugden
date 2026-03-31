@@ -138,9 +138,11 @@ export type Database = {
           id: string
           locale: string | null
           message: string
+          metadata: Json | null
           page: string | null
           rating: number | null
           type: string | null
+          user_id: string | null
         }
         Insert: {
           context?: string | null
@@ -148,9 +150,11 @@ export type Database = {
           id?: string
           locale?: string | null
           message: string
+          metadata?: Json | null
           page?: string | null
           rating?: number | null
           type?: string | null
+          user_id?: string | null
         }
         Update: {
           context?: string | null
@@ -158,9 +162,11 @@ export type Database = {
           id?: string
           locale?: string | null
           message?: string
+          metadata?: Json | null
           page?: string | null
           rating?: number | null
           type?: string | null
+          user_id?: string | null
         }
         Relationships: []
       }
