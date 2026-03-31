@@ -299,6 +299,7 @@ export default function Dashboard({ lang = "en" }: { lang?: "en" | "zh" }) {
 
       {showOnboarding && (
         <OnboardingPhaseModal
+          lang={lang}
           onSelect={async (phase) => {
             await updateProfile({ career_phase: phase, onboarding_completed: true });
           }}
@@ -532,7 +533,7 @@ export default function Dashboard({ lang = "en" }: { lang?: "en" | "zh" }) {
       </section>
 
 
-      <NpsPulse locale="en" />
+      <NpsPulse locale={lang === "zh" ? "zh-tw" : "en"} />
     </>
   );
 }
