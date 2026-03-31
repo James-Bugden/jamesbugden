@@ -50,11 +50,20 @@ const SiteFooter = () => {
           </div>
         </div>
 
-        {/* Copyright */}
-        <div className="border-t border-white/10 pt-4">
+        {/* Copyright & Legal */}
+        <div className="border-t border-white/10 pt-4 flex flex-col sm:flex-row items-start sm:items-center gap-2 sm:gap-4">
           <span className="text-xs text-cream-90">
             © {new Date().getFullYear()} James Bugden. {isZh ? "版權所有" : "All rights reserved"}.
           </span>
+          <div className="flex items-center gap-3 text-xs">
+            <Link to="/privacy" className="text-cream-70 hover:text-cream transition-colors">
+              {isZh ? "隱私權政策" : "Privacy Policy"}
+            </Link>
+            <span className="text-cream-70">·</span>
+            <Link to="/terms" className="text-cream-70 hover:text-cream transition-colors">
+              {isZh ? "服務條款" : "Terms of Service"}
+            </Link>
+          </div>
         </div>
       </div>
     </footer>

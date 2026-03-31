@@ -103,6 +103,8 @@ const SalaryInsights = lazy(() => import("./pages/SalaryInsights"));
 const SalaryInsightsZhTw = lazy(() => import("./pages/SalaryInsightsZhTw"));
 const Join = lazy(() => import("./pages/Join"));
 const JoinZhTw = lazy(() => import("./pages/JoinZhTw"));
+const Privacy = lazy(() => import("./pages/Privacy"));
+const Terms = lazy(() => import("./pages/Terms"));
 
 // Toolkit pages - English
 const ToolkitIndex = lazy(() => import("./pages/toolkit/ToolkitIndex"));
@@ -211,6 +213,8 @@ const App = () => (
                     <Route path="/admin/reviews" element={<Navigate to="/admin?tab=reviews" replace />} />
                     <Route path="/admin/salary-checks" element={<Navigate to="/admin?tab=salary" replace />} />
                     <Route path="/review" element={<ClientReviewGate />} />
+                    <Route path="/privacy" element={<Privacy />} />
+                    <Route path="/terms" element={<Terms />} />
                     <Route path="/resume-guide" element={<ResumeGuide />} />
                     <Route path="/zh-tw/resume-guide" element={<ResumeGuideZhTw />} />
                     <Route path="/interview-prep-guide" element={<InterviewPrepGuide />} />
