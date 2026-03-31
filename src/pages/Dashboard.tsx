@@ -495,6 +495,9 @@ export default function Dashboard({ lang = "en" }: { lang?: "en" | "zh" }) {
                   </Link>
                 );
               })}
+              </div>
+              {/* Right-edge fade for mobile scroll */}
+              <div className="absolute top-0 right-0 bottom-0 w-8 bg-gradient-to-l from-card to-transparent pointer-events-none sm:hidden" />
             </div>
           </div>
 
