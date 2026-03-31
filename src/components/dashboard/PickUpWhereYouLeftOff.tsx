@@ -55,7 +55,8 @@ function PickUpWhereYouLeftOffInner({ lang, latestAnalysis, lastViewedGuide, las
             type: "next" as const,
           };
         } else {
-          const phaseLabel = phase.charAt(0).toUpperCase() + phase.slice(1);
+          const phaseLabels: Record<string, string> = { applying: "投遞申請", interviewing: "面試準備", negotiating: "薪資談判" };
+          const phaseLabel = lang === "zh" ? phaseLabels[phase] : phase.charAt(0).toUpperCase() + phase.slice(1);
           return {
             text: lang === "zh"
               ? `準備好進入${phaseLabel}了嗎？從「${uncompleted.title[lang]}」開始`

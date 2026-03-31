@@ -68,7 +68,7 @@ function PhaseBarInner({ activePhase, completedCount, totalCount, onPhaseChange,
           style={{ color: "#6B7280" }}
         >
           <span style={{ color: "#C9A961", fontWeight: 700 }}>{completedCount}</span>
-          /{totalCount} complete
+          /{totalCount} {lang === "zh" ? "已完成" : "complete"}
         </span>
       </div>
     </div>

@@ -20,7 +20,7 @@ const i18n = {
     phases: [
       { id: "applying" as CareerPhase, emoji: "📋", label: "投遞申請", desc: "我正在搜尋職缺、更新履歷、主動聯繫公司。" },
       { id: "interviewing" as CareerPhase, emoji: "🎙️", label: "面試準備", desc: "我已經有面試安排，或正在積極準備中。" },
-      { id: "negotiating" as CareerPhase, emoji: "💰", label: "薪資談判", desc: "我已經收到 offer，或預計即將收到。" },
+      { id: "negotiating" as CareerPhase, emoji: "💰", label: "薪資談判", desc: "我已經收到 Offer，或預計即將收到。" },
     ],
     cta: "繼續",
     saving: "儲存中…",
