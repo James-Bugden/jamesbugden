@@ -1,6 +1,6 @@
 import { useState, memo, MouseEvent, useCallback, ReactNode, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { ChevronDown, ChevronUp, Check, ArrowRight, Sparkles, BookOpen, Wrench, Calculator } from "lucide-react";
+import { ChevronRight, Check, ArrowRight, Sparkles, BookOpen, Wrench, Calculator } from "lucide-react";
 import { useReadingProgress } from "@/hooks/useReadingProgress";
 import { useLocalStorage } from "@/hooks/useLocalStorage";
 import type { CareerPhase } from "@/hooks/useProfile";
