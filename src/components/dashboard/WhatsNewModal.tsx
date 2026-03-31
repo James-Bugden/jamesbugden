@@ -59,8 +59,8 @@ export default function WhatsNewModal({ lang }: { lang: "en" | "zh" }) {
             const Icon = ICONS[i];
             return (
               <div key={i} className="flex gap-3">
-                <div className="w-8 h-8 rounded-full shrink-0 flex items-center justify-center" style={{ backgroundColor: "rgba(201, 169, 97, 0.12)" }}>
-                  <Icon className="w-4 h-4" style={{ color: "#C9A961" }} />
+                <div className="w-8 h-8 rounded-full shrink-0 flex items-center justify-center" style={{ backgroundColor: "rgba(212, 168, 67, 0.12)" }}>
+                  <Icon className="w-4 h-4" style={{ color: "#D4A843" }} />
                 </div>
                 <div>
                   <p className="text-sm font-bold text-foreground">{item.title}</p>
