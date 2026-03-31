@@ -40,6 +40,7 @@ interface JourneySectionProps {
   onTrack: (id: string) => void;
   allItems: JourneyItem[];
   hasSeen: (id: string) => boolean;
+  careerPhase?: CareerPhase | null;
 }
 
 const CONTENT_TYPE_LABELS = {
