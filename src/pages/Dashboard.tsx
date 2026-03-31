@@ -10,6 +10,7 @@ import { useRecentlyUsed } from "@/hooks/useRecentlyUsed";
 import { useLocalStorage } from "@/hooks/useLocalStorage";
 import { useResumeAnalyses } from "@/hooks/useResumeAnalyses";
 import { useAnalyzerUsage } from "@/hooks/useAnalyzerUsage";
+import { useReadingProgress } from "@/hooks/useReadingProgress";
 import OnboardingChecklist from "@/components/OnboardingChecklist";
 import DashboardSkeleton from "@/components/DashboardSkeleton";
 import NpsPulse from "@/components/feedback/NpsPulse";
