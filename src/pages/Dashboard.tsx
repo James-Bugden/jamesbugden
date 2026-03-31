@@ -13,6 +13,8 @@ import { useAnalyzerUsage } from "@/hooks/useAnalyzerUsage";
 import OnboardingChecklist from "@/components/OnboardingChecklist";
 import DashboardSkeleton from "@/components/DashboardSkeleton";
 import NpsPulse from "@/components/feedback/NpsPulse";
+import { useProfile } from "@/hooks/useProfile";
+import OnboardingPhaseModal from "@/components/OnboardingPhaseModal";
 import JourneySection, { type JourneyItem, type GuideTag, useSeenNewItems } from "@/components/dashboard/JourneySection";
 import { SEO } from "@/components/SEO";
 
@@ -214,7 +216,10 @@ export default function Dashboard({ lang = "en" }: { lang?: "en" | "zh" }) {
   const [bannerDismissed, setBannerDismissed] = useLocalStorage("dashboard_banner_dismissed_v2", false);
   const { latest: latestAnalysis } = useResumeAnalyses();
   const { used: analyzerUsed, limit: analyzerLimit } = useAnalyzerUsage();
+  const { profile, loading: profileLoading, updateProfile } = useProfile();
   const t = i18n[lang];
+
+  const showOnboarding = isLoggedIn && !profileLoading && profile && !profile.onboarding_completed && !profile.career_phase;
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 10);
@@ -279,6 +284,14 @@ export default function Dashboard({ lang = "en" }: { lang?: "en" | "zh" }) {
   return (
     <>
       <SEO />
+
+      {showOnboarding && (
+        <OnboardingPhaseModal
+          onSelect={async (phase) => {
+            await updateProfile({ career_phase: phase, onboarding_completed: true });
+          }}
+        />
+      )}
 
       {/* Nav */}
       <nav className={`sticky top-0 z-50 bg-executive-green transition-shadow duration-300 ${scrolled ? 'shadow-lg shadow-black/20' : ''}`}>
