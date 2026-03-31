@@ -285,6 +285,14 @@ export default function Dashboard({ lang = "en" }: { lang?: "en" | "zh" }) {
     <>
       <SEO />
 
+      {showOnboarding && (
+        <OnboardingPhaseModal
+          onSelect={async (phase) => {
+            await updateProfile({ career_phase: phase, onboarding_completed: true });
+          }}
+        />
+      )}
+
       {/* Nav */}
       <nav className={`sticky top-0 z-50 bg-executive-green transition-shadow duration-300 ${scrolled ? 'shadow-lg shadow-black/20' : ''}`}>
         <div className="max-w-[1200px] mx-auto flex items-center justify-between px-4 md:px-8 h-14">
