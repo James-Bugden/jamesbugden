@@ -216,7 +216,10 @@ export default function Dashboard({ lang = "en" }: { lang?: "en" | "zh" }) {
   const [bannerDismissed, setBannerDismissed] = useLocalStorage("dashboard_banner_dismissed_v2", false);
   const { latest: latestAnalysis } = useResumeAnalyses();
   const { used: analyzerUsed, limit: analyzerLimit } = useAnalyzerUsage();
+  const { profile, loading: profileLoading, updateProfile } = useProfile();
   const t = i18n[lang];
+
+  const showOnboarding = isLoggedIn && !profileLoading && profile && !profile.onboarding_completed && !profile.career_phase;
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 10);
