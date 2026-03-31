@@ -360,7 +360,7 @@ export default function Dashboard({ lang = "en" }: { lang?: "en" | "zh" }) {
       </nav>
 
       {/* Welcome Banner */}
-      <section className="bg-background">
+      <section style={{ backgroundColor: "#FBF7F0" }}>
         <div className="max-w-[1200px] mx-auto px-4 md:px-8 py-8 md:py-10 flex flex-col md:flex-row md:items-center md:justify-between gap-4">
           <h1 className="font-heading text-2xl md:text-3xl text-foreground">{t.welcomeBack} {firstName}</h1>
           {!bannerDismissed && (
