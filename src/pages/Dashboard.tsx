@@ -494,46 +494,6 @@ export default function Dashboard({ lang = "en" }: { lang?: "en" | "zh" }) {
                 );
               })}
             </div>
-
-            {/* Latest Analysis Report */}
-            {latestAnalysis && (
-              <div className="mt-6 rounded-2xl border border-border p-5 flex items-center gap-4 bg-card shadow-[var(--dash-card-shadow)]">
-                <span className="w-10 h-10 rounded-full flex items-center justify-center shrink-0 bg-[#EEF2FF]">
-                  <BarChart3 className="w-5 h-5 text-foreground" />
-                </span>
-                <div className="flex-1 min-w-0">
-                  <p className="text-xs font-semibold uppercase tracking-wider text-muted-foreground mb-0.5">
-                    {lang === "zh" ? "最近的履歷分析" : "Latest Resume Analysis"}
-                  </p>
-                  <p className="text-sm font-bold text-foreground">
-                    {lang === "zh" ? "分數" : "Score"}: {latestAnalysis.overall_score}/100
-                    <span className="text-xs font-normal text-muted-foreground ml-2">
-                      {new Date(latestAnalysis.created_at).toLocaleDateString(lang === "zh" ? "zh-TW" : "en-US", { month: "short", day: "numeric" })}
-                    </span>
-                  </p>
-                </div>
-                <div className="flex gap-2 shrink-0">
-                  <button
-                    onClick={() => {
-                      if (latestAnalysis.analysis_result) {
-                        sessionStorage.setItem("resume-analysis-result", JSON.stringify(latestAnalysis.analysis_result));
-                        sessionStorage.setItem("resume-analysis-lang", latestAnalysis.language === "zh-TW" ? "zh-TW" : "en");
-                      }
-                      window.location.href = lang === "zh" ? "/zh-tw/resume-analyzer" : "/resume-analyzer";
-                    }}
-                    className="text-xs font-semibold px-3 py-1.5 rounded-lg transition-colors text-gold hover:bg-gold/10"
-                  >
-                    {lang === "zh" ? "查看報告" : "View Report"}
-                  </button>
-                  <Link
-                    to={lang === "zh" ? "/zh-tw/resume-analyzer" : "/resume-analyzer"}
-                    className="text-xs font-semibold px-3 py-1.5 rounded-lg transition-colors text-muted-foreground hover:bg-muted"
-                  >
-                    {lang === "zh" ? "重新分析" : "Retake"}
-                  </Link>
-                </div>
-              </div>
-            )}
           </div>
 
           {/* Resources / Journey Section */}
