@@ -1,0 +1,4 @@
+
+ALTER TABLE public.profiles
+ADD COLUMN IF NOT EXISTS last_viewed_guide TEXT DEFAULT NULL,
+ADD COLUMN IF NOT EXISTS last_viewed_guide_at TIMESTAMPTZ DEFAULT NULL;

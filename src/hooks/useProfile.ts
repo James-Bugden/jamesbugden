@@ -8,7 +8,11 @@ export interface UserProfile {
   user_id: string;
   career_phase: CareerPhase | null;
   onboarding_completed: boolean;
+  last_viewed_guide: string | null;
+  last_viewed_guide_at: string | null;
 }
+
+const SELECT_FIELDS = "user_id, career_phase, onboarding_completed, last_viewed_guide, last_viewed_guide_at";
 
 export function useProfile() {
   const { user } = useAuth();
@@ -20,18 +24,17 @@ export function useProfile() {
 
     supabase
       .from("profiles")
-      .select("user_id, career_phase, onboarding_completed")
+      .select(SELECT_FIELDS)
       .eq("user_id", user.id)
       .maybeSingle()
       .then(({ data }) => {
         if (data) {
           setProfile(data as unknown as UserProfile);
         } else {
-          // Auto-create a blank profile row
           supabase
             .from("profiles")
             .insert({ user_id: user.id })
-            .select("user_id, career_phase, onboarding_completed")
+            .select(SELECT_FIELDS)
             .single()
             .then(({ data: created }) => {
               if (created) setProfile(created as unknown as UserProfile);
@@ -42,13 +45,13 @@ export function useProfile() {
   }, [user]);
 
   const updateProfile = useCallback(
-    async (updates: { career_phase?: CareerPhase; onboarding_completed?: boolean }) => {
+    async (updates: Partial<Pick<UserProfile, "career_phase" | "onboarding_completed" | "last_viewed_guide" | "last_viewed_guide_at">>) => {
       if (!user) return;
       const { data } = await supabase
         .from("profiles")
         .update(updates)
         .eq("user_id", user.id)
-        .select("user_id, career_phase, onboarding_completed")
+        .select(SELECT_FIELDS)
         .single();
       if (data) setProfile(data as unknown as UserProfile);
     },
