@@ -430,36 +430,16 @@ export default function Dashboard({ lang = "en" }: { lang?: "en" | "zh" }) {
             </div>
           )}
 
-          {/* Recently Used */}
-          {!searchResults && recentCards.length > 0 && (
-            <div className="mb-8">
-              <p className="text-xs font-semibold uppercase tracking-widest mb-4 text-muted-foreground">
-                {t.recentlyUsed}
-              </p>
-              <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-                {recentCards.map(item => {
-                  const badge = getProgressBadge(item.id, lang, t);
-                  return (
-                    <Link
-                      key={item.id}
-                      to={item.path}
-                      className="rounded-2xl border-l-[3px] border-l-gold p-4 transition-all duration-200 hover:-translate-y-0.5 flex items-center gap-3 bg-card shadow-[var(--dash-card-shadow)] hover:shadow-[var(--dash-card-hover-shadow)]"
-                    >
-                      <div className="min-w-0">
-                        <h4 className="text-sm font-bold text-foreground">{item.title[lang]}</h4>
-                        <p className="text-xs mt-0.5 text-muted-foreground">{item.type === "tool" ? t.navTools : t.navResources}</p>
-                        {badge && (
-                          <span className="text-[10px] font-semibold mt-1 inline-block px-1.5 py-0.5 rounded-full bg-gold/15 text-gold">
-                            {badge}
-                          </span>
-                        )}
-                      </div>
-                      <ArrowRight className="w-4 h-4 ml-auto shrink-0 text-gold" />
-                    </Link>
-                  );
-                })}
-              </div>
-            </div>
+          {/* Pick Up Where You Left Off */}
+          {!searchResults && (
+            <PickUpWhereYouLeftOff
+              lang={lang}
+              latestAnalysis={latestAnalysis}
+              lastViewedGuide={profile?.last_viewed_guide || null}
+              lastViewedGuideAt={profile?.last_viewed_guide_at || null}
+              careerPhase={profile?.career_phase || null}
+              journeyItems={journeyItems}
+            />
           )}
         </div>
         <div className="max-w-[1200px] mx-auto px-4 md:px-8 py-8 md:py-12">
