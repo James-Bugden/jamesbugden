@@ -38,6 +38,7 @@ export default function FeedbackBox({ locale = "en", subject: _subject }: Feedba
   const [text, setText] = useState("");
   const [sending, setSending] = useState(false);
   const { toast } = useToast();
+  const { user } = useAuth();
   const t = LABELS[locale];
 
   const handleSend = async () => {
