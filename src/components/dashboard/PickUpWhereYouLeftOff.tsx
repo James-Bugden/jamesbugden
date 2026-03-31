@@ -41,7 +41,6 @@ function PickUpWhereYouLeftOffInner({ lang, latestAnalysis, lastViewedGuide, las
 
     const phaseIdx = PHASE_ORDER.indexOf(careerPhase);
 
-    // Check current and subsequent phases
     for (let i = phaseIdx; i < PHASE_ORDER.length; i++) {
       const phase = PHASE_ORDER[i];
       const phaseItems = journeyItems.filter((item) => (item.tag as string) === phase && !item.miniOf);
@@ -68,7 +67,6 @@ function PickUpWhereYouLeftOffInner({ lang, latestAnalysis, lastViewedGuide, las
       }
     }
 
-    // All done!
     return { text: lang === "zh" ? "🎉 全部完成！你準備好了！" : "🎉 All complete! You're ready!", path: null, type: "done" as const };
   }, [careerPhase, journeyItems, isComplete, lang]);
 
@@ -78,14 +76,14 @@ function PickUpWhereYouLeftOffInner({ lang, latestAnalysis, lastViewedGuide, las
   if (scoreCard) {
     cards.push(
       <div key="score" className="rounded-2xl p-5 flex items-center gap-4 bg-card shadow-[0_2px_12px_rgba(0,0,0,0.06)] border border-border">
-        <div className="w-14 h-14 rounded-full flex items-center justify-center shrink-0" style={{ backgroundColor: "rgba(201,169,97,0.12)" }}>
-          <BarChart3 className="w-6 h-6 text-gold" />
+        <div className="w-14 h-14 rounded-full flex items-center justify-center shrink-0" style={{ backgroundColor: "rgba(212,168,67,0.12)" }}>
+          <BarChart3 className="w-6 h-6" style={{ color: "#D4A843" }} />
         </div>
         <div className="flex-1 min-w-0">
           <p className="text-2xl font-bold text-foreground">{scoreCard.score}<span className="text-sm font-normal text-muted-foreground">/100</span></p>
           <p className="text-xs text-muted-foreground">{lang === "zh" ? "履歷分數" : "Resume Score"} · {scoreCard.date}</p>
           <div className="flex gap-3 mt-2">
-            <Link to={lang === "zh" ? "/zh-tw/resume-analyzer" : "/resume-analyzer"} className="text-xs font-semibold text-gold hover:underline">
+            <Link to={lang === "zh" ? "/zh-tw/resume-analyzer" : "/resume-analyzer"} className="text-xs font-semibold hover:underline" style={{ color: "#D4A843" }}>
               {lang === "zh" ? "查看報告" : "View Report"}
             </Link>
             <Link to={lang === "zh" ? "/zh-tw/resume-analyzer" : "/resume-analyzer"} className="text-xs font-semibold text-muted-foreground hover:underline">
@@ -101,36 +99,41 @@ function PickUpWhereYouLeftOffInner({ lang, latestAnalysis, lastViewedGuide, las
   if (guideCard) {
     cards.push(
       <Link key="guide" to={guideCard.path} className="rounded-2xl p-5 flex items-center gap-4 bg-card shadow-[0_2px_12px_rgba(0,0,0,0.06)] border border-border hover:-translate-y-0.5 transition-all duration-200">
-        <div className="w-14 h-14 rounded-full flex items-center justify-center shrink-0" style={{ backgroundColor: "rgba(27,58,47,0.08)" }}>
-          <BookOpen className="w-6 h-6 text-executive-green" />
+        <div className="w-14 h-14 rounded-full flex items-center justify-center shrink-0" style={{ backgroundColor: "rgba(35,78,62,0.08)" }}>
+          <BookOpen className="w-6 h-6" style={{ color: "#234E3E" }} />
         </div>
         <div className="flex-1 min-w-0">
           <p className="text-xs font-semibold uppercase tracking-wider text-muted-foreground mb-1">{lang === "zh" ? "繼續閱讀" : "Continue Reading"}</p>
           <p className="text-sm font-bold text-foreground line-clamp-2">{guideCard.title}</p>
         </div>
-        <ArrowRight className="w-4 h-4 shrink-0 text-gold" />
+        <ArrowRight className="w-4 h-4 shrink-0" style={{ color: "#D4A843" }} />
       </Link>
     );
   }
 
-  // Card 3
+  // Card 3 — Suggested Next
   if (nextStep) {
     cards.push(
       nextStep.path ? (
-        <Link key="next" to={nextStep.path} className="rounded-2xl p-5 flex items-center gap-4 bg-card shadow-[0_2px_12px_rgba(0,0,0,0.06)] border border-border hover:-translate-y-0.5 transition-all duration-200" style={{ borderLeft: "2px solid #D4A843" }}>
-          <div className="w-14 h-14 rounded-full flex items-center justify-center shrink-0" style={{ backgroundColor: "rgba(201,169,97,0.08)" }}>
-            <Sparkles className="w-6 h-6 text-gold" />
+        <Link
+          key="next"
+          to={nextStep.path}
+          className="rounded-2xl p-5 flex items-center gap-4 shadow-[0_2px_12px_rgba(0,0,0,0.06)] border border-border hover:-translate-y-0.5 transition-all duration-200"
+          style={{ backgroundColor: "#FDF6E7", borderLeft: "3px solid #D4A843" }}
+        >
+          <div className="w-14 h-14 rounded-full flex items-center justify-center shrink-0" style={{ backgroundColor: "rgba(212,168,67,0.12)" }}>
+            <Sparkles className="w-6 h-6" style={{ color: "#D4A843" }} />
           </div>
           <div className="flex-1 min-w-0">
             <p className="text-xs font-semibold uppercase tracking-wider text-muted-foreground mb-1">{lang === "zh" ? "建議下一步" : "Suggested Next"}</p>
-            <p className="text-sm font-bold text-gold line-clamp-2">{nextStep.text}</p>
+            <p className="text-sm font-bold line-clamp-2" style={{ color: "#D4A843" }}>{nextStep.text}</p>
           </div>
-          <ArrowRight className="w-5 h-5 shrink-0 text-gold" />
+          <ArrowRight className="w-5 h-5 shrink-0" style={{ color: "#D4A843" }} />
         </Link>
       ) : (
         <div key="next" className="rounded-2xl p-5 flex items-center gap-4 bg-card shadow-[0_2px_12px_rgba(0,0,0,0.06)] border border-border">
-          <div className="w-14 h-14 rounded-full flex items-center justify-center shrink-0" style={{ backgroundColor: "rgba(201,169,97,0.12)" }}>
-            <PartyPopper className="w-6 h-6 text-gold" />
+          <div className="w-14 h-14 rounded-full flex items-center justify-center shrink-0" style={{ backgroundColor: "rgba(212,168,67,0.12)" }}>
+            <PartyPopper className="w-6 h-6" style={{ color: "#D4A843" }} />
           </div>
           <div className="flex-1 min-w-0">
             <p className="text-sm font-bold text-foreground">{nextStep.text}</p>

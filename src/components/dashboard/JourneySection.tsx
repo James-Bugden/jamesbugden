@@ -60,6 +60,15 @@ const CONTENT_TYPE_LABELS = {
   calculator: { en: "Calculator", zh: "計算器", Icon: Calculator },
 };
 
+/* ── Badge colors ── */
+const BADGE_COLORS = {
+  contentType: { bg: "#234E3E", color: "#E8F0EB" },
+  new: { bg: "#D4A843", color: "#1A1A18" },
+  beta: { bg: "#E8F0EB", color: "#234E3E" },
+  startHere: { bg: "#D4A843", color: "#1A1A18" },
+  counter: { bg: "#E8F0EB", color: "#234E3E" },
+};
+
 /* ── Full Card (desktop) ── */
 const JourneyCard = memo(function JourneyCard({
   item,
@@ -99,9 +108,13 @@ const JourneyCard = memo(function JourneyCard({
       <Link
         to={path}
         onClick={() => onTrack(item.id)}
-        className="relative block rounded-2xl border-l-[4px] border-l-gold p-6 md:p-7 mb-4 transition-all duration-200 hover:-translate-y-0.5 bg-card shadow-[var(--dash-card-shadow)] hover:shadow-[var(--dash-card-hover-shadow)]"
+        className="relative block rounded-2xl border-l-[4px] p-6 md:p-7 mb-4 transition-all duration-200 hover:-translate-y-0.5 bg-card shadow-[var(--dash-card-shadow)] hover:shadow-[var(--dash-card-hover-shadow)]"
+        style={{ borderLeftColor: "#D4A843" }}
       >
-        <span className="absolute top-4 right-4 text-[11px] font-bold px-2.5 py-0.5 rounded-full uppercase tracking-wide bg-gold text-white">
+        <span
+          className="absolute top-4 right-4 text-[11px] font-bold px-2.5 py-0.5 rounded-full uppercase tracking-wide"
+          style={{ backgroundColor: BADGE_COLORS.startHere.bg, color: BADGE_COLORS.startHere.color }}
+        >
           {item.pinnedLabel?.[lang] || (lang === "zh" ? "從這開始" : "START HERE")}
         </span>
         <span className="text-2xl mb-3 block">📖</span>
@@ -121,8 +134,8 @@ const JourneyCard = memo(function JourneyCard({
         onClick={handleToggle}
         className="absolute top-3 right-3 w-5 h-5 rounded border-2 flex items-center justify-center transition-colors z-10"
         style={{
-          borderColor: completed ? "hsl(var(--gold))" : "hsl(var(--muted-foreground) / 0.3)",
-          backgroundColor: completed ? "hsl(var(--gold))" : "transparent",
+          borderColor: completed ? "#D4A843" : "hsl(var(--muted-foreground) / 0.3)",
+          backgroundColor: completed ? "#D4A843" : "transparent",
         }}
         aria-label={completed ? (lang === "zh" ? "已完成" : "Done") : "Mark as done"}
       >
@@ -131,11 +144,17 @@ const JourneyCard = memo(function JourneyCard({
 
       <div>
         <div className="flex items-center gap-2 mb-3">
-          <span className="inline-flex items-center gap-1 text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-full bg-muted text-muted-foreground">
+          <span
+            className="inline-flex items-center gap-1 text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-full"
+            style={{ backgroundColor: BADGE_COLORS.contentType.bg, color: BADGE_COLORS.contentType.color }}
+          >
             <typeInfo.Icon className="w-3 h-3" /> {typeInfo[lang]}
           </span>
           {item.isNew && !hasSeen(item.id) && (
-            <span className="inline-flex items-center gap-0.5 text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-full bg-gold/15 text-gold">
+            <span
+              className="inline-flex items-center gap-0.5 text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-full"
+              style={{ backgroundColor: BADGE_COLORS.new.bg, color: BADGE_COLORS.new.color }}
+            >
               <Sparkles className="w-3 h-3" /> {lang === "zh" ? "新" : "NEW"}
             </span>
           )}
@@ -143,7 +162,7 @@ const JourneyCard = memo(function JourneyCard({
             <span
               className="text-[10px] font-semibold"
               style={{
-                color: completed ? "hsl(var(--gold))" : "hsl(var(--dash-text-secondary))",
+                color: completed ? "#D4A843" : "hsl(var(--dash-text-secondary))",
               }}
             >
               {completed ? (lang === "zh" ? "已完成" : "Done") : `${progress}% ${lang === "zh" ? "已讀" : "read"}`}
@@ -161,7 +180,8 @@ const JourneyCard = memo(function JourneyCard({
               onTrack(miniGuide.id);
               navigate(miniPath);
             }}
-            className="inline-flex items-center gap-1 mt-3 text-xs font-medium transition-colors hover:opacity-80 text-gold"
+            className="inline-flex items-center gap-1 mt-3 text-xs font-medium transition-colors hover:opacity-80"
+            style={{ color: "#D4A843" }}
           >
             {lang === "zh" ? "想看精簡版？點這裡 →" : "Want the mini guide version? Click here →"}
           </button>
@@ -170,8 +190,8 @@ const JourneyCard = memo(function JourneyCard({
 
       <div className="absolute bottom-0 left-0 right-0 h-[3px] bg-border">
         <div
-          className="h-full transition-all duration-500 bg-gold"
-          style={{ width: `${progress}%` }}
+          className="h-full transition-all duration-500"
+          style={{ width: `${progress}%`, backgroundColor: "#D4A843" }}
         />
       </div>
     </Link>
@@ -212,8 +232,8 @@ const CompactRow = memo(function CompactRow({
         }}
         className="w-5 h-5 rounded border-2 flex items-center justify-center shrink-0 transition-colors"
         style={{
-          borderColor: completed ? "hsl(var(--gold))" : "hsl(var(--muted-foreground) / 0.3)",
-          backgroundColor: completed ? "hsl(var(--gold))" : "transparent",
+          borderColor: completed ? "#D4A843" : "hsl(var(--muted-foreground) / 0.3)",
+          backgroundColor: completed ? "#D4A843" : "transparent",
         }}
         aria-label={completed ? (lang === "zh" ? "已完成" : "Done") : "Mark as done"}
       >
@@ -227,11 +247,17 @@ const CompactRow = memo(function CompactRow({
 
       {/* Badges */}
       <div className="flex items-center gap-1.5 shrink-0">
-        <span className="inline-flex items-center gap-0.5 text-[9px] font-bold uppercase tracking-wider px-1.5 py-0.5 rounded-full bg-muted text-muted-foreground">
+        <span
+          className="inline-flex items-center gap-0.5 text-[9px] font-bold uppercase tracking-wider px-1.5 py-0.5 rounded-full"
+          style={{ backgroundColor: BADGE_COLORS.contentType.bg, color: BADGE_COLORS.contentType.color }}
+        >
           <typeInfo.Icon className="w-2.5 h-2.5" /> {typeInfo[lang]}
         </span>
         {item.isNew && !hasSeen(item.id) && (
-          <span className="inline-flex items-center gap-0.5 text-[9px] font-bold uppercase tracking-wider px-1.5 py-0.5 rounded-full bg-gold/15 text-gold">
+          <span
+            className="inline-flex items-center gap-0.5 text-[9px] font-bold uppercase tracking-wider px-1.5 py-0.5 rounded-full"
+            style={{ backgroundColor: BADGE_COLORS.new.bg, color: BADGE_COLORS.new.color }}
+          >
             <Sparkles className="w-2.5 h-2.5" />
           </span>
         )}
@@ -257,7 +283,6 @@ export default function JourneySection({
   const isMobile = useIsSmallScreen();
 
   const getDefaultCollapsed = () => {
-    // End-to-end: collapsed on mobile, expanded on desktop
     if (tag === "end-to-end") return isMobile;
     if (!careerPhase) return false;
     if (tag === careerPhase) return false;
@@ -316,7 +341,7 @@ export default function JourneySection({
           <span className="text-xs text-muted-foreground hidden sm:inline">{buildSummary()}</span>
           <span
             className="text-xs font-semibold px-2.5 py-1 rounded-full shrink-0"
-            style={{ backgroundColor: `${color}15`, color }}
+            style={{ backgroundColor: BADGE_COLORS.counter.bg, color: BADGE_COLORS.counter.color }}
           >
             {completedCount}/{totalCount}
           </span>
@@ -343,14 +368,17 @@ export default function JourneySection({
         <span className="font-heading text-lg md:text-xl font-bold text-foreground flex-1">
           {label}
           {isCurrentPhase && (
-            <span className="ml-2 text-xs font-semibold px-2 py-0.5 rounded-full align-middle" style={{ backgroundColor: "rgba(201, 169, 97, 0.15)", color: "#C9A961" }}>
+            <span
+              className="ml-2 text-xs font-semibold px-2 py-0.5 rounded-full align-middle"
+              style={{ backgroundColor: "rgba(212, 168, 67, 0.15)", color: "#D4A843" }}
+            >
               {lang === "zh" ? "目前階段" : "current phase"}
             </span>
           )}
         </span>
         <span
           className="text-xs font-semibold px-2.5 py-1 rounded-full"
-          style={{ backgroundColor: `${color}15`, color }}
+          style={{ backgroundColor: BADGE_COLORS.counter.bg, color: BADGE_COLORS.counter.color }}
         >
           {completedCount}/{totalCount}
         </span>
