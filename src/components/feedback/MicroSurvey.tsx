@@ -23,6 +23,7 @@ export default function MicroSurvey({ actionKey, question, locale = "en" }: Micr
   const [rating, setRating] = useState<1 | -1 | null>(null);
   const [comment, setComment] = useState("");
   const [submitted, setSubmitted] = useState(false);
+  const { user } = useAuth();
   const t = LABELS[locale];
 
   useEffect(() => {
