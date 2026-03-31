@@ -478,7 +478,7 @@ export default function Dashboard({ lang = "en" }: { lang?: "en" | "zh" }) {
                       <h3 className="text-[15px] font-bold text-foreground leading-snug">
                         {tool.title[lang]}
                         {["resume-analyzer", "resume-builder", "offer-calculator", "interview-questions"].includes(tool.id) && (
-                          <span className="ml-2 text-[10px] font-semibold uppercase tracking-wide px-1.5 py-0.5 rounded-full align-middle bg-gold/15 text-gold">Beta</span>
+                          <span className="ml-2 text-[10px] font-semibold uppercase tracking-wide px-1.5 py-0.5 rounded-full align-middle" style={{ backgroundColor: "#E8F0EB", color: "#234E3E" }}>Beta</span>
                         )}
                       </h3>
                       <p className="text-xs leading-relaxed text-muted-foreground mt-0.5 line-clamp-2">{tool.description[lang]}</p>
