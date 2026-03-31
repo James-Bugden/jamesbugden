@@ -15,6 +15,7 @@ export default function InlineRating({ contentId, locale = "en", label }: Inline
     const v = localStorage.getItem(storageKey);
     return v ? parseInt(v, 10) : null;
   });
+  const { user } = useAuth();
 
   const handleRate = async (r: 1 | -1) => {
     setRated(r);
