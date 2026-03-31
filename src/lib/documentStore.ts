@@ -147,7 +147,7 @@ async function updateDocumentOnServer(id: string, updates: Partial<SavedDocument
     if (updates.settings !== undefined) serverUpdates.settings = updates.settings;
     if (updates.linkedJobId !== undefined) serverUpdates.linked_job_id = updates.linkedJobId;
 
-    await supabase.from("user_documents").update(serverUpdates).eq("id", id);
+    await (supabase as any).from("user_documents").update(serverUpdates).eq("id", id);
   } catch {
     // Best-effort
   }
