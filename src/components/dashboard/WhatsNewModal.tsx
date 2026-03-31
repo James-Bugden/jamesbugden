@@ -45,9 +45,9 @@ export default function WhatsNewModal({ lang }: { lang: "en" | "zh" }) {
     <Dialog open onOpenChange={(v) => { if (!v) dismiss(); }}>
       <DialogContent className="max-w-md p-0 overflow-hidden border-0 gap-0">
         {/* Header */}
-        <div className="px-6 pt-8 pb-5 text-center" style={{ backgroundColor: "#1B3A2F" }}>
-          <div className="w-12 h-12 rounded-full mx-auto mb-4 flex items-center justify-center" style={{ backgroundColor: "rgba(201, 169, 97, 0.2)" }}>
-            <Sparkles className="w-6 h-6" style={{ color: "#C9A961" }} />
+        <div className="px-6 pt-8 pb-5 text-center" style={{ backgroundColor: "#234E3E" }}>
+          <div className="w-12 h-12 rounded-full mx-auto mb-4 flex items-center justify-center" style={{ backgroundColor: "rgba(212, 168, 67, 0.2)" }}>
+            <Sparkles className="w-6 h-6" style={{ color: "#D4A843" }} />
           </div>
           <h2 className="text-xl font-heading font-bold" style={{ color: "#FBF7F0" }}>{t.heading}</h2>
           <p className="text-sm mt-1" style={{ color: "rgba(251, 247, 240, 0.7)" }}>{t.sub}</p>
