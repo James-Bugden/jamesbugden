@@ -256,7 +256,11 @@ export default function Dashboard({ lang = "en" }: { lang?: "en" | "zh" }) {
   }, []);
 
   const { markSeen, hasSeen } = useSeenNewItems();
-  const trackResource = useCallback((id: string) => { markSeen(id); trackItem(id, "guide"); }, [trackItem, markSeen]);
+  const trackResource = useCallback((id: string) => {
+    markSeen(id);
+    trackItem(id, "guide");
+    updateProfile({ last_viewed_guide: id, last_viewed_guide_at: new Date().toISOString() });
+  }, [trackItem, markSeen, updateProfile]);
   const trackTool = useCallback((id: string) => trackItem(id, "tool"), [trackItem]);
 
   const allSearchable = useMemo(() => buildSearchable(lang), [lang]);
