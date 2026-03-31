@@ -173,7 +173,7 @@ export async function fetchServerDocuments(): Promise<SavedDocument[] | null> {
     const { data: sessionData } = await supabase.auth.getSession();
     if (!sessionData?.session?.user?.id) return null;
 
-    const { data, error } = await supabase
+    const { data, error } = await (supabase as any)
       .from("user_documents")
       .select("*")
       .order("updated_at", { ascending: false });
