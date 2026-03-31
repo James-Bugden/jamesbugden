@@ -238,6 +238,8 @@ export type Database = {
           career_phase: string | null
           created_at: string | null
           id: string
+          last_viewed_guide: string | null
+          last_viewed_guide_at: string | null
           onboarding_completed: boolean | null
           user_id: string
         }
@@ -245,6 +247,8 @@ export type Database = {
           career_phase?: string | null
           created_at?: string | null
           id?: string
+          last_viewed_guide?: string | null
+          last_viewed_guide_at?: string | null
           onboarding_completed?: boolean | null
           user_id: string
         }
@@ -252,6 +256,8 @@ export type Database = {
           career_phase?: string | null
           created_at?: string | null
           id?: string
+          last_viewed_guide?: string | null
+          last_viewed_guide_at?: string | null
           onboarding_completed?: boolean | null
           user_id?: string
         }
