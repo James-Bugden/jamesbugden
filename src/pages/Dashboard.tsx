@@ -396,7 +396,7 @@ export default function Dashboard({ lang = "en" }: { lang?: "en" | "zh" }) {
       )}
 
       {/* Onboarding Checklist */}
-      <section className="bg-card">
+      <section style={{ backgroundColor: "#FBF7F0" }}>
         <div className="max-w-[1200px] mx-auto px-4 md:px-8 pt-6">
           <OnboardingChecklist lang={lang} />
         </div>
