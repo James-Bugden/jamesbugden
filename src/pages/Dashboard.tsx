@@ -458,11 +458,11 @@ export default function Dashboard({ lang = "en" }: { lang?: "en" | "zh" }) {
               {tools.map((tool) => {
                 const badge = getProgressBadge(tool.id, lang, t);
                 return (
-                  <Link
+                    <Link
                     key={tool.path}
                     to={lang === "zh" && tool.zhPath ? tool.zhPath : tool.path}
                     onClick={() => trackTool(tool.id)}
-                    className="group rounded-2xl border-l-[4px] border-l-gold p-4 md:p-5 flex items-center gap-4 transition-all duration-200 hover:-translate-y-0.5 bg-card shadow-[var(--dash-card-shadow)] hover:shadow-[var(--dash-card-hover-shadow)]"
+                    className="group rounded-2xl border-l-[4px] border-l-gold p-4 md:p-5 flex items-center gap-4 transition-all duration-200 hover:-translate-y-0.5 bg-card shadow-[var(--dash-card-shadow)] hover:shadow-[var(--dash-card-hover-shadow)] min-w-[280px] sm:min-w-0 snap-start shrink-0 sm:shrink"
                   >
                     <span
                       className="w-9 h-9 rounded-full flex items-center justify-center shrink-0 text-foreground"

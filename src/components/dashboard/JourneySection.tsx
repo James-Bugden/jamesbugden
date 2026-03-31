@@ -5,6 +5,17 @@ import { useReadingProgress } from "@/hooks/useReadingProgress";
 import { useLocalStorage } from "@/hooks/useLocalStorage";
 import type { CareerPhase } from "@/hooks/useProfile";
 
+function useIsSmallScreen() {
+  const [small, setSmall] = useState(() => typeof window !== "undefined" && window.innerWidth < 640);
+  useEffect(() => {
+    const mql = window.matchMedia("(max-width: 639px)");
+    const onChange = () => setSmall(mql.matches);
+    mql.addEventListener("change", onChange);
+    return () => mql.removeEventListener("change", onChange);
+  }, []);
+  return small;
+}
+
 export function useSeenNewItems() {
   const [seen, setSeen] = useLocalStorage<string[]>("dashboard_seen_new", []);
   const markSeen = useCallback((id: string) => {
@@ -49,6 +60,7 @@ const CONTENT_TYPE_LABELS = {
   calculator: { en: "Calculator", zh: "計算器", Icon: Calculator },
 };
 
+/* ── Full Card (desktop) ── */
 const JourneyCard = memo(function JourneyCard({
   item,
   lang,
@@ -166,6 +178,70 @@ const JourneyCard = memo(function JourneyCard({
   );
 });
 
+/* ── Compact Row (mobile) ── */
+const CompactRow = memo(function CompactRow({
+  item,
+  lang,
+  onTrack,
+  hasSeen,
+}: {
+  item: JourneyItem;
+  lang: "en" | "zh";
+  onTrack: (id: string) => void;
+  hasSeen: (id: string) => boolean;
+}) {
+  const navigate = useNavigate();
+  const path = lang === "zh" && item.zhPath ? item.zhPath : item.enPath;
+  const { isComplete, toggleComplete } = useReadingProgress();
+  const completed = isComplete(item.id);
+  const typeInfo = CONTENT_TYPE_LABELS[item.contentType];
+
+  return (
+    <div
+      className="flex items-center gap-3 py-3 border-b border-border last:border-b-0 cursor-pointer active:bg-muted/40 transition-colors"
+      onClick={() => {
+        onTrack(item.id);
+        navigate(path);
+      }}
+    >
+      {/* Checkbox */}
+      <button
+        onClick={(e) => {
+          e.stopPropagation();
+          toggleComplete(item.id);
+        }}
+        className="w-5 h-5 rounded border-2 flex items-center justify-center shrink-0 transition-colors"
+        style={{
+          borderColor: completed ? "hsl(var(--gold))" : "hsl(var(--muted-foreground) / 0.3)",
+          backgroundColor: completed ? "hsl(var(--gold))" : "transparent",
+        }}
+        aria-label={completed ? (lang === "zh" ? "已完成" : "Done") : "Mark as done"}
+      >
+        {completed && <Check className="w-3 h-3 text-white dark:text-background" strokeWidth={3} />}
+      </button>
+
+      {/* Title */}
+      <span className={`flex-1 text-sm font-medium min-w-0 ${completed ? "line-through text-muted-foreground" : "text-foreground"}`}>
+        {item.title[lang]}
+      </span>
+
+      {/* Badges */}
+      <div className="flex items-center gap-1.5 shrink-0">
+        <span className="inline-flex items-center gap-0.5 text-[9px] font-bold uppercase tracking-wider px-1.5 py-0.5 rounded-full bg-muted text-muted-foreground">
+          <typeInfo.Icon className="w-2.5 h-2.5" /> {typeInfo[lang]}
+        </span>
+        {item.isNew && !hasSeen(item.id) && (
+          <span className="inline-flex items-center gap-0.5 text-[9px] font-bold uppercase tracking-wider px-1.5 py-0.5 rounded-full bg-gold/15 text-gold">
+            <Sparkles className="w-2.5 h-2.5" />
+          </span>
+        )}
+      </div>
+
+      <ChevronRight className="w-4 h-4 text-muted-foreground shrink-0" />
+    </div>
+  );
+});
+
 export default function JourneySection({
   tag,
   label,
@@ -178,20 +254,21 @@ export default function JourneySection({
   hasSeen,
   careerPhase,
 }: JourneySectionProps) {
-  // Determine default collapsed state based on career phase
+  const isMobile = useIsSmallScreen();
+
   const getDefaultCollapsed = () => {
-    if (tag === "end-to-end") return false; // always expanded
+    // End-to-end: collapsed on mobile, expanded on desktop
+    if (tag === "end-to-end") return isMobile;
     if (!careerPhase) return false;
-    if (tag === careerPhase) return false; // current phase expanded
+    if (tag === careerPhase) return false;
     if (careerPhase === "applying") return tag === "interviewing" || tag === "negotiating";
     if (careerPhase === "interviewing") return tag === "negotiating";
-    return false; // negotiating = all expanded
+    return false;
   };
 
   const [manualToggle, setManualToggle] = useState<boolean | null>(null);
   const collapsed = manualToggle !== null ? manualToggle : getDefaultCollapsed();
 
-  // Reset manual toggle when phase changes
   useEffect(() => {
     setManualToggle(null);
   }, [careerPhase]);
@@ -206,7 +283,6 @@ export default function JourneySection({
   const completedCount = primaryItems.filter((i) => isComplete(i.id)).length;
   const totalCount = primaryItems.length;
 
-  // Build summary for collapsed state
   const buildSummary = () => {
     const types = primaryItems.reduce<Record<string, number>>((acc, i) => {
       acc[i.contentType] = (acc[i.contentType] || 0) + 1;
@@ -224,8 +300,10 @@ export default function JourneySection({
       <div className="mb-6">
         <button
           onClick={() => setManualToggle((v) => (v !== null ? !v : !getDefaultCollapsed()))}
-          className="w-full flex items-center gap-3 p-4 rounded-lg border text-left transition-colors duration-200 hover:bg-[#FBF7F0]"
+          className="w-full flex items-center gap-3 p-4 rounded-lg border text-left transition-colors duration-200"
           style={{ borderColor: "#e0ddd5", backgroundColor: "#fff" }}
+          onMouseEnter={(e) => { (e.currentTarget as HTMLButtonElement).style.backgroundColor = "#FBF7F0"; }}
+          onMouseLeave={(e) => { (e.currentTarget as HTMLButtonElement).style.backgroundColor = "#fff"; }}
         >
           <span style={{ color }}>{icon}</span>
           <span className="font-heading text-lg font-bold text-foreground flex-1">{label}</span>
@@ -273,14 +351,28 @@ export default function JourneySection({
         <ChevronRight className="w-4 h-4 text-muted-foreground rotate-90 transition-transform duration-200" />
       </button>
 
-      {pinnedItems.map((item) => (
-        <JourneyCard key={item.id} item={item} lang={lang} onTrack={onTrack} allItems={allItems} hasSeen={hasSeen} />
-      ))}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-        {regularItems.map((item) => (
-          <JourneyCard key={item.id} item={item} lang={lang} onTrack={onTrack} allItems={allItems} hasSeen={hasSeen} />
-        ))}
-      </div>
+      {/* Mobile: compact list */}
+      {isMobile ? (
+        <div className="bg-card rounded-xl border border-border px-3">
+          {pinnedItems.map((item) => (
+            <CompactRow key={item.id} item={item} lang={lang} onTrack={onTrack} hasSeen={hasSeen} />
+          ))}
+          {regularItems.map((item) => (
+            <CompactRow key={item.id} item={item} lang={lang} onTrack={onTrack} hasSeen={hasSeen} />
+          ))}
+        </div>
+      ) : (
+        <>
+          {pinnedItems.map((item) => (
+            <JourneyCard key={item.id} item={item} lang={lang} onTrack={onTrack} allItems={allItems} hasSeen={hasSeen} />
+          ))}
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+            {regularItems.map((item) => (
+              <JourneyCard key={item.id} item={item} lang={lang} onTrack={onTrack} allItems={allItems} hasSeen={hasSeen} />
+            ))}
+          </div>
+        </>
+      )}
     </div>
   );
 }

@@ -18,9 +18,9 @@ interface Props {
 function PhaseBarInner({ activePhase, completedCount, totalCount, onPhaseChange }: Props) {
   return (
     <div className="border-b" style={{ backgroundColor: "#FBF7F0", borderColor: "#E5E0D8" }}>
-      <div className="max-w-[1200px] mx-auto px-4 md:px-8 py-3 flex items-center justify-between gap-4">
+      <div className="max-w-[1200px] mx-auto px-4 md:px-8 py-3 flex flex-col sm:flex-row items-center justify-between gap-2 sm:gap-4">
         {/* Pills with arrows */}
-        <div className="flex items-center gap-1 sm:gap-2 min-w-0">
+        <div className="flex items-center justify-between sm:justify-start gap-1 sm:gap-2 w-full sm:w-auto min-w-0">
           {PHASES.map((phase, i) => {
             const isActive = activePhase === phase.id;
             return (
@@ -63,7 +63,7 @@ function PhaseBarInner({ activePhase, completedCount, totalCount, onPhaseChange 
 
         {/* Progress count */}
         <span
-          className="text-xs sm:text-sm font-medium whitespace-nowrap shrink-0"
+          className="text-xs font-medium whitespace-nowrap shrink-0"
           style={{ color: "#6B7280" }}
         >
           <span style={{ color: "#C9A961", fontWeight: 700 }}>{completedCount}</span>
