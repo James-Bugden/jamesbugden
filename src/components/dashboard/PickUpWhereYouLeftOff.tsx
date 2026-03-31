@@ -116,15 +116,15 @@ function PickUpWhereYouLeftOffInner({ lang, latestAnalysis, lastViewedGuide, las
   if (nextStep) {
     cards.push(
       nextStep.path ? (
-        <Link key="next" to={nextStep.path} className="rounded-2xl p-5 flex items-center gap-4 bg-card shadow-[0_2px_12px_rgba(0,0,0,0.06)] border border-border hover:-translate-y-0.5 transition-all duration-200">
+        <Link key="next" to={nextStep.path} className="rounded-2xl p-5 flex items-center gap-4 bg-card shadow-[0_2px_12px_rgba(0,0,0,0.06)] border border-border hover:-translate-y-0.5 transition-all duration-200" style={{ borderLeft: "2px solid #D4A843" }}>
           <div className="w-14 h-14 rounded-full flex items-center justify-center shrink-0" style={{ backgroundColor: "rgba(201,169,97,0.08)" }}>
             <Sparkles className="w-6 h-6 text-gold" />
           </div>
           <div className="flex-1 min-w-0">
             <p className="text-xs font-semibold uppercase tracking-wider text-muted-foreground mb-1">{lang === "zh" ? "建議下一步" : "Suggested Next"}</p>
-            <p className="text-sm font-bold text-foreground line-clamp-2">{nextStep.text}</p>
+            <p className="text-sm font-bold text-gold line-clamp-2">{nextStep.text}</p>
           </div>
-          <ArrowRight className="w-4 h-4 shrink-0 text-gold" />
+          <ArrowRight className="w-5 h-5 shrink-0 text-gold" />
         </Link>
       ) : (
         <div key="next" className="rounded-2xl p-5 flex items-center gap-4 bg-card shadow-[0_2px_12px_rgba(0,0,0,0.06)] border border-border">
