@@ -8,7 +8,7 @@ import { Plus, Eye, Undo2, Redo2, Check, Loader2, Upload, ArrowLeft, FileText, D
 import { Tooltip, TooltipTrigger, TooltipContent, TooltipProvider } from "@/components/ui/tooltip";
 import { PersonalDetailsCard } from "@/components/resume-builder/PersonalDetailsCard";
 import { SectionCard } from "@/components/resume-builder/SectionCard";
-import { ResumePreview } from "@/components/resume-builder/ResumePreview";
+import { ResumePdfPreview } from "@/components/resume-builder/ResumePdfPreview";
 import { useResumeStore } from "@/components/resume-builder/useResumeStore";
 import { getDefaultFieldsForType, ResumeSection } from "@/components/resume-builder/types";
 import { DocumentDashboard } from "@/components/document-dashboard/DocumentDashboard";
@@ -929,7 +929,7 @@ const ResumeBuilderSimple = () => {
             {editorContent}
           </div>
           <div className="flex-1 h-full relative">
-            <ResumePreview data={data} customize={customize} pdfTargetId="resume-pdf-target" onEditSection={handleEditSection} onContentEdit={handleContentEdit} />
+            <ResumePdfPreview data={data} customize={customize} />
             <div className="absolute bottom-4 left-4 z-20">
               <FeedbackBox subject="Resume Builder Feedback" locale={lang} />
             </div>
@@ -949,7 +949,7 @@ const ResumeBuilderSimple = () => {
 
         {mobilePreview && (
           <MobilePreviewOverlay onClose={() => setMobilePreview(false)} onDownload={() => handleDownload()} downloading={downloading}>
-            <ResumePreview data={data} customize={customize} pdfTargetId="resume-pdf-target" onEditSection={handleEditSection} onContentEdit={handleContentEdit} />
+            <ResumePdfPreview data={data} customize={customize} />
           </MobilePreviewOverlay>
         )}
       </div>

@@ -772,11 +772,11 @@ function SectionsTab({ settings, onChange, sections }: { settings: CustomizeSett
             <CheckboxRow label="Group promotions" checked={settings.groupPromotions ?? false} onChange={(v) => onChange({ groupPromotions: v })} />
           </>
         ) : (
-          <p className="text-xs" style={{ color: B.textSec }}>Add an Ex defaultOpen={false}perience section first</p>
+          <p className="text-xs" style={{ color: B.textSec }}>Add an Experience section first</p>
         )}
       </SettingCard>
 
- defaultOpen={false}      {/* Footer (moved from separate ta defaultOpen={false}b) */}
+      {/* Footer */}
       <SettingCard title="Footer">
         <div className="space-y-3">
           <CheckboxRow label="Page numbers" checked={settings.showPageNumbers} onChange={(v) => onChange({ showPageNumbers: v })} />

@@ -848,15 +848,23 @@ function PdfSkillsSection({
     for (let i = 0; i < items.length; i += 3) {
       rows.push(items.slice(i, i + 3));
     }
+    // Note: outer View uses explicit marginBottom per row instead of `gap`.
+    // react-pdf treats Views with `gap` as non-splittable across pages;
+    // explicit margins allow row-by-row page-break flow.
+    // Rows are NOT wrap={false} — skills are single-line so they won't visually
+    // split, but keeping them wrappable lets react-pdf find break points between
+    // rows rather than moving the entire grid to the next page.
+    // No marginTop here — the heading's own marginBottom: mm(2) provides the gap.
+    // Adding marginTop increases the minimum chunk needed to start on page 1,
+    // which causes oscillation (section jumps to page 2) near page boundaries.
     return (
-      <View style={{ marginTop: mm(1.2), gap: mm(1) }}>
+      <View wrap={true}>
         {rows.map((row, ri) => (
           <View
             key={ri}
-            wrap={false}
             style={{
               flexDirection: "row",
-              gap: mm(3),
+              marginBottom: ri < rows.length - 1 ? mm(1) : 0,
             }}
           >
             {row.map((item, ci) => (
@@ -866,11 +874,11 @@ function PdfSkillsSection({
                   flex: 1,
                   flexDirection: "row",
                   alignItems: "center",
-                  gap: mm(1.5),
+                  marginRight: ci < 2 ? mm(3) : 0,
                 }}
               >
                 {sep !== "newline" && sep !== "none" && (
-                  <Text style={{ fontSize: fs, color: colors.accent }}>
+                  <Text style={{ fontSize: fs, color: colors.accent, marginRight: mm(1.5) }}>
                     {sep === "pipe" ? "|" : "·"}
                   </Text>
                 )}
@@ -878,6 +886,10 @@ function PdfSkillsSection({
                   {formatItem(item)}
                 </Text>
               </View>
+            ))}
+            {/* Pad incomplete rows so all rows have 3 flex:1 cells — keeps column widths consistent */}
+            {Array.from({ length: 3 - row.length }).map((_, pi) => (
+              <View key={`pad-${ri}-${pi}`} style={{ flex: 1 }} />
             ))}
           </View>
         ))}
@@ -1765,6 +1777,9 @@ function PdfSectionEntries({
  * - Only entry *title rows* use `wrap={false}` so the title/date line stays
  *   together. Description content (PdfHtmlBlock) wraps freely line by line.
  */
+// Section types that use small grid rows (~5mm) — hoisted to avoid per-render allocation
+const SHORT_ROW_TYPES = new Set(["skills", "languages", "interests", "certificates", "courses", "awards"]);
+
 function PdfSectionBlock({
   section,
   c,
@@ -1773,6 +1788,7 @@ function PdfSectionBlock({
   fontFamily,
   lineHeight,
   sectionSpacing,
+  isFirst,
 }: {
   section: ResumeSection;
   c?: CustomizeSettings;
@@ -1781,16 +1797,29 @@ function PdfSectionBlock({
   fontFamily: string;
   lineHeight: number;
   sectionSpacing: number;
+  isFirst?: boolean;
 }) {
   const title =
     section.type === "custom" && section.entries?.[0]?.fields?.sectionTitle
       ? section.entries[0].fields.sectionTitle
       : section.title;
 
+  // Skills/languages/interests rows are wrap={false} so they won't orphan.
+  // Setting minPresenceAhead=0 lets the heading anchor wherever it fits;
+  // rows flow naturally without pushing the entire section to the next page.
+  // Other section types keep 20pt to prevent orphan headings.
+  const headingPresence = SHORT_ROW_TYPES.has(section.type) ? 0 : 20;
+
   return (
-    <View style={{ marginBottom: mm(sectionSpacing) }}>
+    // marginTop (not marginBottom) keeps trailing margin OUT of endOfPresence.
+    // react-pdf's breakingImprovesPresence heuristic fires when
+    //   endOfPresence = top + height + marginBottom > pageHeight
+    // even if the section content alone fits on the page. Using marginTop means
+    //   endOfPresence = top + height  (no trailing margin added)
+    // so the heuristic can't push the section to page 2 when there's room for it.
+    <View wrap={true} style={{ marginTop: isFirst ? 0 : mm(sectionSpacing) }}>
       {section.showHeading !== false && (
-        <View minPresenceAhead={20}>
+        <View minPresenceAhead={headingPresence}>
           <PdfSectionHeading
             title={title}
             c={c}
@@ -1843,7 +1872,10 @@ export function ResumePDF({ data, customize }: ResumePDFProps) {
   const marginX = c?.marginX ?? 16;
   const marginY = c?.marginY ?? 16;
   const headerSafe = 4;
-  const footerSafe = 4;
+  // When footer is shown, increase bottom clearance so content doesn't overlap it.
+  // Footer sits at bottom: mm(marginY + 1); text height ≈ 3mm → needs ~8mm total safe zone.
+  const hasFooter = !!(c?.showPageNumbers || c?.showFooterEmail || c?.showFooterName);
+  const footerSafe = hasFooter ? 8 : 4;
 
   // Section ordering
   const orderedSections = normalizeSectionOrder(safe.sections, c);
@@ -2104,7 +2136,7 @@ export function ResumePDF({ data, customize }: ResumePDFProps) {
           >
             {/* Sidebar */}
             <View style={{ flex: ratio }}>
-              {sidebarSections.map((section) => (
+              {sidebarSections.map((section, i) => (
                 <PdfSectionBlock
                   key={section.id}
                   section={section}
@@ -2114,13 +2146,14 @@ export function ResumePDF({ data, customize }: ResumePDFProps) {
                   fontFamily={bodyFontFamily}
                   lineHeight={lineHeight}
                   sectionSpacing={sectionSpacing}
+                  isFirst={i === 0}
                 />
               ))}
             </View>
 
             {/* Main */}
             <View style={{ flex: 12 - ratio }}>
-              {mainSections.map((section) => (
+              {mainSections.map((section, i) => (
                 <PdfSectionBlock
                   key={section.id}
                   section={section}
@@ -2130,13 +2163,14 @@ export function ResumePDF({ data, customize }: ResumePDFProps) {
                   fontFamily={bodyFontFamily}
                   lineHeight={lineHeight}
                   sectionSpacing={sectionSpacing}
+                  isFirst={i === 0}
                 />
               ))}
             </View>
           </View>
         ) : (
           <>
-            {mainSections.map((section) => (
+            {mainSections.map((section, i) => (
               <PdfSectionBlock
                 key={section.id}
                 section={section}
@@ -2146,6 +2180,7 @@ export function ResumePDF({ data, customize }: ResumePDFProps) {
                 fontFamily={bodyFontFamily}
                 lineHeight={lineHeight}
                 sectionSpacing={sectionSpacing}
+                isFirst={i === 0}
               />
             ))}
           </>
@@ -2163,17 +2198,17 @@ export function ResumePDF({ data, customize }: ResumePDFProps) {
               justifyContent: "space-between",
               alignItems: "center",
             }}
-            fixed
           >
             <Text
+              fixed
               style={{
                 fontSize: smallPt(baseFontSize),
                 color: colors.dates,
               }}
-            >
-              {c?.showFooterName ? p.fullName : ""}
-            </Text>
+              render={() => (c?.showFooterName ? p.fullName : "")}
+            />
             <Text
+              fixed
               style={{
                 fontSize: smallPt(baseFontSize),
                 color: colors.dates,

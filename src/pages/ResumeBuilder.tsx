@@ -9,7 +9,7 @@ import { Tooltip, TooltipTrigger, TooltipContent, TooltipProvider } from "@/comp
 import { PersonalDetailsCard } from "@/components/resume-builder/PersonalDetailsCard";
 import { SectionCard } from "@/components/resume-builder/SectionCard";
 import { AddContentModal } from "@/components/resume-builder/AddContentModal";
-import { ResumePreview } from "@/components/resume-builder/ResumePreview";
+import { ResumePdfPreview } from "@/components/resume-builder/ResumePdfPreview";
 import { CustomizePanel } from "@/components/resume-builder/CustomizePanel";
 import { useResumeStore } from "@/components/resume-builder/useResumeStore";
 import { SECTION_TYPES, getDefaultFieldsForType, ResumeSection, DEFAULT_RESUME_DATA } from "@/components/resume-builder/types";
@@ -1071,11 +1071,6 @@ const ResumeBuilder = () => {
         </div>
       </div>
 
-      {/* ── Multi-page export warning ──────────────────── */}
-      <div className="mx-3 sm:mx-4 mb-2 px-3 py-2 rounded-lg bg-amber-50 border border-amber-200 text-xs leading-relaxed text-amber-700">
-        {t("exportMultiPageNote")}
-      </div>
-
       {/* ── Editor body ────────────────────────────────── */}
       <div className="flex-1 overflow-hidden">
         {/* Desktop: 40/60 split */}
@@ -1084,7 +1079,7 @@ const ResumeBuilder = () => {
             {editorContent}
           </div>
           <div className="flex-1 h-full relative">
-            <ResumePreview data={data} customize={customize} pdfTargetId="resume-pdf-target" onEditSection={handleEditSection} onColorChange={handleColorChange} onContentEdit={handleContentEdit} onPageCount={handlePageCount} />
+            <ResumePdfPreview data={data} customize={customize} onPageCount={handlePageCount} />
             <AnalyzerSuggestionsPanel
               suggestions={analyzerSuggestions}
               onApply={(s) => {
@@ -1122,7 +1117,7 @@ const ResumeBuilder = () => {
         {/* Mobile preview overlay */}
         {mobilePreview && (
           <MobilePreviewOverlay onClose={() => setMobilePreview(false)} onDownload={() => handleDownload()} downloading={downloading}>
-            <ResumePreview data={data} customize={customize} pdfTargetId="resume-pdf-target" onEditSection={handleEditSection} onColorChange={handleColorChange} onContentEdit={handleContentEdit} onPageCount={handlePageCount} />
+            <ResumePdfPreview data={data} customize={customize} onPageCount={handlePageCount} />
             <AnalyzerSuggestionsPanel
               suggestions={analyzerSuggestions}
               onApply={(s) => {
