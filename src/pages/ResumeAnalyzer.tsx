@@ -119,7 +119,7 @@ export default function ResumeAnalyzer({ defaultLang = "en" }: { defaultLang?: L
       disableWorker: true,
       useWorkerFetch: false,
       isEvalSupported: false,
-    }).promise;
+    } as any).promise;
     let text = "";
     for (let i = 1; i <= pdf.numPages; i++) {
       const page = await pdf.getPage(i);

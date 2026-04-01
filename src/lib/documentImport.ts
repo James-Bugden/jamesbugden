@@ -17,7 +17,7 @@ export async function extractTextFromPdf(file: File): Promise<string> {
     disableWorker: true,
     useWorkerFetch: false,
     isEvalSupported: false,
-  }).promise;
+  } as any).promise;
   const pages: string[] = [];
 
   for (let i = 1; i <= pdf.numPages; i++) {

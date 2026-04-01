@@ -10,7 +10,7 @@ export async function renderPdfToImage(file: File, scale = 1.5): Promise<string>
     disableWorker: true,
     useWorkerFetch: false,
     isEvalSupported: false,
-  }).promise;
+  } as any).promise;
   const page = await pdf.getPage(1);
   const viewport = page.getViewport({ scale });
 
