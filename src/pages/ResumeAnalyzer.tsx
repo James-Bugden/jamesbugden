@@ -237,6 +237,8 @@ export default function ResumeAnalyzer({ defaultLang = "en" }: { defaultLang?: L
           } catch {
             // Non-critical — continue without image
           }
+        } else if (ext === "txt") {
+          text = await file.text();
         } else {
           text = await extractTextFromDOCX(file);
         }
