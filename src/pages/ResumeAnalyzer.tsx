@@ -114,8 +114,12 @@ export default function ResumeAnalyzer({ defaultLang = "en" }: { defaultLang?: L
 
   const extractTextFromPDF = useCallback(async (file: File): Promise<string> => {
     const pdfjsLib = await import("pdfjs-dist");
-    pdfjsLib.GlobalWorkerOptions.workerSrc = "";
-    const pdf = await pdfjsLib.getDocument({ data: new Uint8Array(await file.arrayBuffer()) }).promise;
+    const pdf = await pdfjsLib.getDocument({
+      data: new Uint8Array(await file.arrayBuffer()),
+      disableWorker: true,
+      useWorkerFetch: false,
+      isEvalSupported: false,
+    } as any).promise;
     let text = "";
     for (let i = 1; i <= pdf.numPages; i++) {
       const page = await pdf.getPage(i);
