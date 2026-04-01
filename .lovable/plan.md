@@ -1,40 +1,32 @@
 
 
-# PDF Import Debugging — Investigation Summary
+# Fix: "What's New" Modal Showing Every Login
 
 ## What I Found
 
-After reviewing the full import pipeline, **the code is structurally intact**. No recent changes appear to have broken the PDF upload flow itself. Here's the chain:
+The `WhatsNewModal` code is logically correct — it uses `localStorage.getItem("james_careers_dashboard_v2_seen")` to check if dismissed, and `localStorage.setItem()` on dismiss. The dismiss handler fires on both the "Got it" button and the X/overlay close.
 
-1. **File selection** → `ImportModal.tsx` accepts `.pdf` files via drag-drop or file picker
-2. **Text extraction** → `extractTextFromPdf()` uses `pdfjs-dist` (v4.10.38, installed)
-3. **Parsing** → `parseResumeWithFallback()` tries AI first (`resume-ai` edge function), falls back to heuristic
-4. **Saving** → `createDocument()` saves to localStorage, then fire-and-forget syncs to server
+**Why it keeps showing**: localStorage is domain-scoped. If you're accessing the site from different origins (e.g. `jamesbugden.com` vs `jamesbugden.lovable.app` vs preview URL), each has its own localStorage. Also, clearing browser data or using incognito mode wipes it.
 
-## Likely Cause: Missing `user_documents` Table
+## Fix: Persist Dismissal in the User Profile (Database)
 
-The network logs show a **404 error** on `user_documents` table — it doesn't exist in the database. While this shouldn't block the import (errors are caught silently), it could cause issues if:
-- The `DocumentDashboard` fails to load/render properly after import
-- The document list fetch errors out and interferes with state
+Instead of relying only on localStorage, store the flag in the user's profile so it persists across devices, browsers, and domains.
 
-## Possible Secondary Issue: AI Parse Edge Function
+### Step 1: Add `whats_new_v2_seen` column to `profiles` table
+Run a migration to add a boolean column `whats_new_v2_seen` (default `false`) to the `profiles` table.
 
-The `resume-ai` edge function is called during import. If it's failing silently, the fallback heuristic parser runs instead — but if _both_ fail, the import would error out. Need to verify this function is deployed and working.
+### Step 2: Update `WhatsNewModal` to check profile + localStorage
+- Accept `profile` and `updateProfile` as props (already available in `Dashboard.tsx`)
+- Show modal only if **both** `localStorage` AND `profile.whats_new_v2_seen` are falsy
+- On dismiss: set localStorage **and** call `updateProfile({ whats_new_v2_seen: true })`
 
-## Recommended Plan
-
-### Step 1: Create the `user_documents` table
-Run a migration to create the missing `user_documents` table with proper columns (`id`, `user_id`, `type`, `name`, `data`, `settings`, `linked_job_id`, `created_at`, `updated_at`) and RLS policies. This fixes the 404 errors.
-
-### Step 2: Verify `resume-ai` edge function
-Check the edge function logs to confirm it's deployed and responding correctly when a PDF is imported.
-
-### Step 3: Test end-to-end
-Upload a PDF through the import modal and verify the full flow works.
+### Step 3: Update Dashboard.tsx to pass profile props
+Pass `profile` and `updateProfile` to `WhatsNewModal` in both the English and Chinese dashboard renders.
 
 ## Technical Details
 
-- **Files involved**: `src/lib/documentStore.ts`, `src/components/document-dashboard/ImportModal.tsx`, `src/lib/documentImport.ts`, `supabase/functions/resume-ai/index.ts`
-- **Migration needed**: `CREATE TABLE public.user_documents (...)` with RLS policies for authenticated users
-- **No code changes** needed to the import flow itself — the logic is correct
+**Files changed**:
+- `supabase/migrations/` — new migration adding `whats_new_v2_seen boolean default false`
+- `src/components/dashboard/WhatsNewModal.tsx` — accept profile props, dual-check logic
+- `src/pages/Dashboard.tsx` — pass profile/updateProfile to WhatsNewModal
 
