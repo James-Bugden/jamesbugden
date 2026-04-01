@@ -68,8 +68,10 @@ export function ImportModal({ open, onClose, type, onImported }: ImportModalProp
         text = await extractTextFromPdf(file);
       } else if (ext === "docx" || ext === "doc") {
         text = await extractTextFromDocx(file);
+      } else if (ext === "txt") {
+        text = await file.text();
       } else {
-        toast({ title: "Unsupported format", description: "Please upload a PDF or DOCX file.", variant: "destructive" });
+        toast({ title: "Unsupported format", description: "Please upload a PDF, DOCX, or TXT file.", variant: "destructive" });
         setLoading(false);
         return;
       }
