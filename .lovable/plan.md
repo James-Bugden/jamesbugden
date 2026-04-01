@@ -1,33 +1,40 @@
 
 
-# Google OAuth — Final Checklist (No Code Changes Needed)
+# PDF Import Debugging — Investigation Summary
 
-The code is correct. The "redirect_uri is not allowed" error comes from the **Google Cloud Console** configuration, not from Lovable Cloud settings.
+## What I Found
 
-## What You Need in Google Cloud Console
+After reviewing the full import pipeline, **the code is structurally intact**. No recent changes appear to have broken the PDF upload flow itself. Here's the chain:
 
-Go to [Google Cloud Console → Credentials](https://console.cloud.google.com/apis/credentials) → click your OAuth 2.0 Client ID → edit it.
+1. **File selection** → `ImportModal.tsx` accepts `.pdf` files via drag-drop or file picker
+2. **Text extraction** → `extractTextFromPdf()` uses `pdfjs-dist` (v4.10.38, installed)
+3. **Parsing** → `parseResumeWithFallback()` tries AI first (`resume-ai` edge function), falls back to heuristic
+4. **Saving** → `createDocument()` saves to localStorage, then fire-and-forget syncs to server
 
-### 1. Authorized JavaScript Origins
-Add these exact entries:
-- `https://jamesbugden.com`
-- `https://www.jamesbugden.com`
+## Likely Cause: Missing `user_documents` Table
 
-### 2. Authorized Redirect URIs
-This is the critical one. You need to add the **Lovable Cloud OAuth callback URL**, which is visible in your Cloud Dashboard under **Users → Auth Settings → Sign In Methods → Google** (expand the Google section).
+The network logs show a **404 error** on `user_documents` table — it doesn't exist in the database. While this shouldn't block the import (errors are caught silently), it could cause issues if:
+- The `DocumentDashboard` fails to load/render properly after import
+- The document list fetch errors out and interferes with state
 
-It will look something like:
-- `https://reahmeddjkivwzjsoqkn.supabase.co/auth/v1/callback`
+## Possible Secondary Issue: AI Parse Edge Function
 
-Add that exact URL to the "Authorized redirect URIs" in Google Cloud Console.
+The `resume-ai` edge function is called during import. If it's failing silently, the fallback heuristic parser runs instead — but if _both_ fail, the import would error out. Need to verify this function is deployed and working.
 
-**Also add** (for safety):
-- `https://jamesbugden.com`
-- `https://jamesbugden.com/**` won't work in Google Console — Google requires exact URIs
+## Recommended Plan
 
-### 3. Verify in Lovable Cloud
-Open Cloud → Users → Auth Settings → Google and confirm the **callback URL** shown there matches what you added in Google Console.
+### Step 1: Create the `user_documents` table
+Run a migration to create the missing `user_documents` table with proper columns (`id`, `user_id`, `type`, `name`, `data`, `settings`, `linked_job_id`, `created_at`, `updated_at`) and RLS policies. This fixes the 404 errors.
 
-## Summary
-No code changes. The fix is adding the correct callback URI from Lovable Cloud's Google auth settings into Google Cloud Console's "Authorized redirect URIs" field.
+### Step 2: Verify `resume-ai` edge function
+Check the edge function logs to confirm it's deployed and responding correctly when a PDF is imported.
+
+### Step 3: Test end-to-end
+Upload a PDF through the import modal and verify the full flow works.
+
+## Technical Details
+
+- **Files involved**: `src/lib/documentStore.ts`, `src/components/document-dashboard/ImportModal.tsx`, `src/lib/documentImport.ts`, `supabase/functions/resume-ai/index.ts`
+- **Migration needed**: `CREATE TABLE public.user_documents (...)` with RLS policies for authenticated users
+- **No code changes** needed to the import flow itself — the logic is correct
 
