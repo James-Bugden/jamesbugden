@@ -17,6 +17,7 @@ import MicroSurvey from "@/components/feedback/MicroSurvey";
 import { useAuth } from "@/contexts/AuthContext";
 import { useResumeAnalyses } from "@/hooks/useResumeAnalyses";
 import { renderPdfToImage } from "@/lib/renderPdfToImage";
+import pdfjsWorkerUrl from "pdfjs-dist/build/pdf.worker.min.mjs?url";
 import jamesPhoto from "@/assets/james-bugden.jpg";
 import { SEO } from "@/components/SEO";
 
