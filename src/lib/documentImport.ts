@@ -10,14 +10,12 @@ export async function extractTextFromDocx(file: File): Promise<string> {
 /** Extract plain text from a PDF file using pdf.js */
 export async function extractTextFromPdf(file: File): Promise<string> {
   const pdfjsLib = await import("pdfjs-dist");
+  pdfjsLib.GlobalWorkerOptions.workerSrc = "";
 
   const arrayBuffer = await file.arrayBuffer();
   const pdf = await pdfjsLib.getDocument({
     data: arrayBuffer,
-    disableWorker: true,
-    useWorkerFetch: false,
-    isEvalSupported: false,
-  } as any).promise;
+  }).promise;
   const pages: string[] = [];
 
   for (let i = 1; i <= pdf.numPages; i++) {

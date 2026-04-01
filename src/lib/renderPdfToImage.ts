@@ -3,14 +3,12 @@
  */
 export async function renderPdfToImage(file: File, scale = 1.5): Promise<string> {
   const pdfjsLib = await import("pdfjs-dist");
+  pdfjsLib.GlobalWorkerOptions.workerSrc = "";
 
   const arrayBuffer = await file.arrayBuffer();
   const pdf = await pdfjsLib.getDocument({
     data: arrayBuffer,
-    disableWorker: true,
-    useWorkerFetch: false,
-    isEvalSupported: false,
-  } as any).promise;
+  }).promise;
   const page = await pdf.getPage(1);
   const viewport = page.getViewport({ scale });
 
