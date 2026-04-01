@@ -137,8 +137,8 @@ export default function ResumeAnalyzer({ defaultLang = "en" }: { defaultLang?: L
 
   const handleFileSelect = useCallback((selectedFile: File) => {
     const ext = selectedFile.name.split(".").pop()?.toLowerCase();
-    if (!["pdf", "docx"].includes(ext || "")) {
-      setError(t(lang, "Please upload a PDF or DOCX file.", "請上傳 PDF 或 DOCX 檔案。"));
+    if (!["pdf", "docx", "txt"].includes(ext || "")) {
+      setError(t(lang, "Please upload a PDF, DOCX, or TXT file.", "請上傳 PDF、DOCX 或 TXT 檔案。"));
       return;
     }
     if (selectedFile.size > 5 * 1024 * 1024) {
