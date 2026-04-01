@@ -24,7 +24,7 @@ import { SEO } from "@/components/SEO";
 
 type Screen = "upload" | "analyzing" | "results" | "history";
 type Language = "en" | "zh-TW";
-type InputMethod = "upload_pdf" | "upload_docx" | "paste";
+type InputMethod = "upload_pdf" | "upload_docx" | "upload_txt" | "paste";
 
 const t = (lang: Language, en: string, zh: string) => lang === "en" ? en : zh;
 
@@ -137,8 +137,8 @@ export default function ResumeAnalyzer({ defaultLang = "en" }: { defaultLang?: L
 
   const handleFileSelect = useCallback((selectedFile: File) => {
     const ext = selectedFile.name.split(".").pop()?.toLowerCase();
-    if (!["pdf", "docx"].includes(ext || "")) {
-      setError(t(lang, "Please upload a PDF or DOCX file.", "請上傳 PDF 或 DOCX 檔案。"));
+    if (!["pdf", "docx", "txt"].includes(ext || "")) {
+      setError(t(lang, "Please upload a PDF, DOCX, or TXT file.", "請上傳 PDF、DOCX 或 TXT 檔案。"));
       return;
     }
     if (selectedFile.size > 5 * 1024 * 1024) {
@@ -146,7 +146,7 @@ export default function ResumeAnalyzer({ defaultLang = "en" }: { defaultLang?: L
       return;
     }
     setFile(selectedFile);
-    setInputMethod(ext === "pdf" ? "upload_pdf" : "upload_docx");
+    setInputMethod(ext === "pdf" ? "upload_pdf" : ext === "txt" ? "upload_txt" : "upload_docx");
     setError("");
   }, [lang]);
 
@@ -181,7 +181,16 @@ export default function ResumeAnalyzer({ defaultLang = "en" }: { defaultLang?: L
       clearInterval(progressInterval);
 
       if (fnError || data?.error) {
-        throw new Error(data?.error || fnError?.message || "Analysis failed");
+        const status = (fnError as any)?.context?.status;
+        const errorMsg = data?.error || fnError?.message || "Analysis failed";
+        console.error("Edge function error:", { status, errorMsg, fnError, data });
+        if (status === 429 || data?.error?.includes?.("limit")) {
+          throw new Error("RATE_LIMIT");
+        }
+        if (status === 401) {
+          throw new Error("AUTH_EXPIRED");
+        }
+        throw new Error(errorMsg);
       }
 
       const result = data as AnalysisResult;
@@ -192,8 +201,15 @@ export default function ResumeAnalyzer({ defaultLang = "en" }: { defaultLang?: L
     } catch (err: any) {
       clearInterval(stepInterval);
       clearInterval(progressInterval);
-      console.error("Analysis error:", err);
-      setError(t(lang, "Something went wrong with the analysis. Please try again.", "分析過程發生錯誤。請再試一次。"));
+      const msg = String(err?.message || "");
+      console.error("Analysis error:", msg, err);
+      if (msg === "RATE_LIMIT") {
+        setError(t(lang, "You've reached your monthly analysis limit. Please try again next month.", "你已達到本月分析上限。請下月再試。"));
+      } else if (msg === "AUTH_EXPIRED") {
+        setError(t(lang, "Your session expired. Please sign in again and retry.", "你的登入已過期，請重新登入後再試。"));
+      } else {
+        setError(t(lang, `Analysis failed: ${msg}. Please try again.`, `分析失敗：${msg}。請再試一次。`));
+      }
       setScreen("upload");
       return null;
     }
@@ -221,6 +237,8 @@ export default function ResumeAnalyzer({ defaultLang = "en" }: { defaultLang?: L
           } catch {
             // Non-critical — continue without image
           }
+        } else if (ext === "txt") {
+          text = await file.text();
         } else {
           text = await extractTextFromDOCX(file);
         }
