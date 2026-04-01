@@ -1,9 +1,9 @@
 import { useState } from "react";
 import { Dialog, DialogContent } from "@/components/ui/dialog";
 import { Sparkles, Navigation, Clock, ChevronDown } from "lucide-react";
+import type { UserProfile } from "@/hooks/useProfile";
 
 const KEY = "james_careers_dashboard_v2_seen";
-
 const i18n = {
   en: {
     heading: "Your Dashboard Got an Upgrade",
