@@ -54,9 +54,9 @@ export default function WhatsNewModal({ lang, profile, updateProfile }: Props) {
 
   return (
     <Dialog open onOpenChange={(v) => { if (!v) dismiss(); }}>
-      <DialogContent className="max-w-md p-0 overflow-hidden border-0 gap-0">
+      <DialogContent className="max-w-md p-0 overflow-hidden border-0 gap-0 max-h-[90dvh] flex flex-col">
         {/* Header */}
-        <div className="px-6 pt-8 pb-5 text-center" style={{ backgroundColor: "#234E3E" }}>
+        <div className="px-4 pt-6 pb-4 sm:px-6 sm:pt-8 sm:pb-5 text-center shrink-0" style={{ backgroundColor: "#234E3E" }}>
           <div className="w-12 h-12 rounded-full mx-auto mb-4 flex items-center justify-center" style={{ backgroundColor: "rgba(212, 168, 67, 0.2)" }}>
             <Sparkles className="w-6 h-6" style={{ color: "#D4A843" }} />
           </div>
@@ -65,7 +65,7 @@ export default function WhatsNewModal({ lang, profile, updateProfile }: Props) {
         </div>
 
         {/* Items */}
-        <div className="px-6 py-6 space-y-5">
+        <div className="px-4 py-4 sm:px-6 sm:py-6 space-y-3 sm:space-y-5 overflow-y-auto flex-1">
           {t.items.map((item, i) => {
             const Icon = ICONS[i];
             return (
@@ -83,7 +83,7 @@ export default function WhatsNewModal({ lang, profile, updateProfile }: Props) {
         </div>
 
         {/* CTA */}
-        <div className="px-6 pb-6">
+        <div className="px-4 pb-4 sm:px-6 sm:pb-6 shrink-0">
           <button
             onClick={dismiss}
             className="w-full py-3 rounded-xl text-sm font-bold transition-opacity hover:opacity-90"
