@@ -24,7 +24,7 @@ import { SEO } from "@/components/SEO";
 
 type Screen = "upload" | "analyzing" | "results" | "history";
 type Language = "en" | "zh-TW";
-type InputMethod = "upload_pdf" | "upload_docx" | "paste";
+type InputMethod = "upload_pdf" | "upload_docx" | "upload_txt" | "paste";
 
 const t = (lang: Language, en: string, zh: string) => lang === "en" ? en : zh;
 
