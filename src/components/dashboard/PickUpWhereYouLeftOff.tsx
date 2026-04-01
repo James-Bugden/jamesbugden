@@ -86,6 +86,9 @@ function PickUpWhereYouLeftOffInner({ lang, latestAnalysis, lastViewedGuide, las
             <Link to={lang === "zh" ? "/zh-tw/resume-analyzer?report=latest" : "/resume-analyzer?report=latest"} className="text-xs font-semibold hover:underline" style={{ color: "#D4A843" }}>
               {lang === "zh" ? "查看報告" : "View Report"}
             </Link>
+            <Link to={lang === "zh" ? "/zh-tw/resume-analyzer?view=history" : "/resume-analyzer?view=history"} className="text-xs font-semibold text-muted-foreground hover:underline">
+              {lang === "zh" ? "歷史紀錄" : "History"}
+            </Link>
             <Link to={lang === "zh" ? "/zh-tw/resume-analyzer" : "/resume-analyzer"} className="text-xs font-semibold text-muted-foreground hover:underline">
               {lang === "zh" ? "重新分析" : "Retake"}
             </Link>

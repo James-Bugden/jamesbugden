@@ -21,7 +21,7 @@ import jamesPhoto from "@/assets/james-bugden.jpg";
 import { SEO } from "@/components/SEO";
 
 
-type Screen = "upload" | "analyzing" | "results";
+type Screen = "upload" | "analyzing" | "results" | "history";
 type Language = "en" | "zh-TW";
 type InputMethod = "upload_pdf" | "upload_docx" | "paste";
 
@@ -31,7 +31,7 @@ export default function ResumeAnalyzer({ defaultLang = "en" }: { defaultLang?: L
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
   const { isLoggedIn, user } = useAuth();
-  const { latest, saveAnalysis } = useResumeAnalyses();
+  const { latest, analyses, loading: analysesLoading, saveAnalysis } = useResumeAnalyses();
   const { used, limit, limitReached, recordUsage } = useAnalyzerUsage();
   const [lang, setLang] = useState<Language>(defaultLang);
   const [screen, setScreen] = useState<Screen>("upload");
@@ -68,15 +68,19 @@ export default function ResumeAnalyzer({ defaultLang = "en" }: { defaultLang?: L
     }
   }, [isLoggedIn, analysisResult]);
 
-  // Load saved report when arriving with ?report=latest
+  // Load saved report when arriving with ?report=latest or show history
   const reportLoaded = useRef(false);
   useEffect(() => {
+    if (searchParams.get("view") === "history" && isLoggedIn) {
+      setScreen("history");
+      return;
+    }
     if (searchParams.get("report") === "latest" && latest?.analysis_result && !reportLoaded.current) {
       reportLoaded.current = true;
       setAnalysisResult(latest.analysis_result as AnalysisResult);
       setScreen("results");
     }
-  }, [searchParams, latest]);
+  }, [searchParams, latest, isLoggedIn]);
 
 
   const autoTriggered = useRef(false);
@@ -674,6 +678,56 @@ export default function ResumeAnalyzer({ defaultLang = "en" }: { defaultLang?: L
               setScreen("upload");
             }}
           />
+        )}
+        {/* SCREEN: HISTORY */}
+        {screen === "history" && (
+          <div className="py-8 md:py-14 px-5">
+            <div className="container mx-auto max-w-2xl">
+              <div className="flex items-center justify-between mb-6">
+                <h1 className="text-xl font-bold text-foreground">{t(lang, "Analysis History", "分析紀錄")}</h1>
+                <button
+                  onClick={() => { setScreen("upload"); navigate(lang === "zh-TW" ? "/zh-tw/resume-analyzer" : "/resume-analyzer", { replace: true }); }}
+                  className="text-xs font-semibold px-3 py-1.5 rounded-full transition-all hover:opacity-80"
+                  style={{ backgroundColor: '#2b4734', color: '#FDFBF7' }}
+                >
+                  {t(lang, "New Analysis", "新分析")}
+                </button>
+              </div>
+              {analysesLoading ? (
+                <p className="text-sm text-muted-foreground">{t(lang, "Loading…", "載入中…")}</p>
+              ) : analyses.length === 0 ? (
+                <p className="text-sm text-muted-foreground">{t(lang, "No analyses yet. Upload a resume to get started!", "尚無分析紀錄。上傳履歷開始吧！")}</p>
+              ) : (
+                <div className="space-y-3">
+                  {analyses.map((a) => {
+                    const date = new Date(a.created_at).toLocaleDateString(lang === "zh-TW" ? "zh-TW" : "en-US", { year: "numeric", month: "short", day: "numeric", hour: "2-digit", minute: "2-digit" });
+                    const score = a.overall_score ?? 0;
+                    const color = score >= 80 ? "#22c55e" : score >= 60 ? "#D4A843" : score >= 40 ? "#f97316" : "#ef4444";
+                    return (
+                      <button
+                        key={a.id}
+                        onClick={() => {
+                          setAnalysisResult(a.analysis_result as AnalysisResult);
+                          setScreen("results");
+                          navigate(lang === "zh-TW" ? "/zh-tw/resume-analyzer" : "/resume-analyzer", { replace: true });
+                        }}
+                        className="w-full rounded-xl p-4 flex items-center gap-4 bg-card border border-border hover:-translate-y-0.5 transition-all duration-200 text-left shadow-sm"
+                      >
+                        <div className="w-12 h-12 rounded-full flex items-center justify-center shrink-0" style={{ backgroundColor: `${color}18` }}>
+                          <span className="text-lg font-bold" style={{ color }}>{score}</span>
+                        </div>
+                        <div className="flex-1 min-w-0">
+                          <p className="text-sm font-semibold text-foreground">{t(lang, "Score", "分數")}: {score}/100</p>
+                          <p className="text-xs text-muted-foreground">{date} · {a.language === "zh-TW" ? "中文" : "English"}</p>
+                        </div>
+                        <ChevronRight className="w-4 h-4 text-muted-foreground shrink-0" />
+                      </button>
+                    );
+                  })}
+                </div>
+              )}
+            </div>
+          </div>
         )}
         {showMicroSurvey && <MicroSurvey actionKey="resume_analysis" locale={lang === "zh-TW" ? "zh-tw" : "en"} />}
       </main>
