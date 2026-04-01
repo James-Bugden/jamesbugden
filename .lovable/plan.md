@@ -1,35 +1,30 @@
 
 
-# Fix: PDF Upload "Could not read file" Error
+# Fix: PDF Upload Still Failing — `disableWorker` Is Ignored in pdfjs-dist v4
 
 ## Root Cause
-The PDF.js worker URL is set to a CDN `.mjs` file, but the `try/catch` around the assignment is useless — assigning a string to `workerSrc` never throws. The actual failure happens asynchronously when `getDocument()` tries to spawn the worker and it fails (CORS, blocked `.mjs`, version mismatch). This triggers the outer catch with the generic error.
+The `disableWorker` option was removed from PDF.js in version 2.0. The project uses **pdfjs-dist v4.10.38**, so passing `disableWorker: true` in the `getDocument()` options does absolutely nothing — it's silently ignored. The library still attempts to spawn a web worker, which fails due to CORS/blocked scripts.
 
 ## Solution
-Set `workerSrc = ""` to force main-thread parsing (no worker). This is slower but universally reliable. The worker URL approach is fragile across environments.
+Set `pdfjsLib.GlobalWorkerOptions.workerSrc = ""` **before** calling `getDocument()`. This is the correct v4 way to force main-thread parsing. Remove the non-functional `disableWorker`, `useWorkerFetch`, and `isEvalSupported` options.
 
-### Step 1: Simplify `extractTextFromPDF` in `src/pages/ResumeAnalyzer.tsx`
-Replace lines 115-133 with:
+### Files to Change (3 files, same pattern)
+
+**1. `src/pages/ResumeAnalyzer.tsx`** (lines 115-130)
+Add `pdfjsLib.GlobalWorkerOptions.workerSrc = "";` after the import, remove the dead options from `getDocument()`.
+
+**2. `src/lib/documentImport.ts`** (lines 11-20)
+Same fix — add `workerSrc = ""` after import, simplify `getDocument()` call.
+
+**3. `src/lib/renderPdfToImage.ts`** (lines 4-13)
+Same fix.
+
+### Code Pattern (applied to all 3 files)
 ```typescript
-const extractTextFromPDF = useCallback(async (file: File): Promise<string> => {
-  const pdfjsLib = await import("pdfjs-dist");
-  pdfjsLib.GlobalWorkerOptions.workerSrc = "";
-  const pdf = await pdfjsLib.getDocument({ data: new Uint8Array(await file.arrayBuffer()) }).promise;
-  let text = "";
-  for (let i = 1; i <= pdf.numPages; i++) {
-    const page = await pdf.getPage(i);
-    const content = await page.getTextContent();
-    text += content.items.map((item: any) => ("str" in item ? item.str : "")).join(" ") + "\n";
-  }
-  return text.trim();
-}, []);
+const pdfjsLib = await import("pdfjs-dist");
+pdfjsLib.GlobalWorkerOptions.workerSrc = "";
+const pdf = await pdfjsLib.getDocument({
+  data: new Uint8Array(await file.arrayBuffer()),
+}).promise;
 ```
-
-Key changes:
-- Force `workerSrc = ""` (main-thread parsing, always works)
-- Safer item mapping with `"str" in item` check
-- Remove the useless try/catch around the property assignment
-
-### Files Changed
-- `src/pages/ResumeAnalyzer.tsx` — simplified `extractTextFromPDF`
 
