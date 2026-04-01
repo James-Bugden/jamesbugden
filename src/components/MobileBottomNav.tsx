@@ -43,7 +43,7 @@ const HIDDEN_ON_PATHS = [
   "/problem-solving-guide", "/recruiter-guide", "/hr-interview-guide",
   "/career-game-guide", "/ai-job-search-guide",
   "/job-offer-guide", "/salary-starter-kit", "/salary",
-  "/review",
+  "/review", "/resume",
 ];
 
 function shouldHideNav(pathname: string): boolean {
