@@ -29,8 +29,9 @@ const t = (lang: Language, en: string, zh: string) => lang === "en" ? en : zh;
 
 export default function ResumeAnalyzer({ defaultLang = "en" }: { defaultLang?: Language }) {
   const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
   const { isLoggedIn, user } = useAuth();
-  const { saveAnalysis } = useResumeAnalyses();
+  const { latest, saveAnalysis } = useResumeAnalyses();
   const { used, limit, limitReached, recordUsage } = useAnalyzerUsage();
   const [lang, setLang] = useState<Language>(defaultLang);
   const [screen, setScreen] = useState<Screen>("upload");
