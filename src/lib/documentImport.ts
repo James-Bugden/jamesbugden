@@ -1,4 +1,5 @@
 import mammoth from "mammoth";
+import pdfjsWorkerUrl from "pdfjs-dist/build/pdf.worker.min.mjs?url";
 
 /** Extract plain text from a DOCX file */
 export async function extractTextFromDocx(file: File): Promise<string> {
