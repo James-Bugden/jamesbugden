@@ -83,7 +83,7 @@ function PickUpWhereYouLeftOffInner({ lang, latestAnalysis, lastViewedGuide, las
           <p className="text-2xl font-bold text-foreground">{scoreCard.score}<span className="text-sm font-normal text-muted-foreground">/100</span></p>
           <p className="text-xs text-muted-foreground">{lang === "zh" ? "履歷分數" : "Resume Score"} · {scoreCard.date}</p>
           <div className="flex gap-3 mt-2">
-            <Link to={lang === "zh" ? "/zh-tw/resume-analyzer" : "/resume-analyzer"} className="text-xs font-semibold hover:underline" style={{ color: "#D4A843" }}>
+            <Link to={lang === "zh" ? "/zh-tw/resume-analyzer?report=latest" : "/resume-analyzer?report=latest"} className="text-xs font-semibold hover:underline" style={{ color: "#D4A843" }}>
               {lang === "zh" ? "查看報告" : "View Report"}
             </Link>
             <Link to={lang === "zh" ? "/zh-tw/resume-analyzer" : "/resume-analyzer"} className="text-xs font-semibold text-muted-foreground hover:underline">
