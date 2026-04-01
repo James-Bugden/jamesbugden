@@ -68,8 +68,10 @@ export function ImportModal({ open, onClose, type, onImported }: ImportModalProp
         text = await extractTextFromPdf(file);
       } else if (ext === "docx" || ext === "doc") {
         text = await extractTextFromDocx(file);
+      } else if (ext === "txt") {
+        text = await file.text();
       } else {
-        toast({ title: "Unsupported format", description: "Please upload a PDF or DOCX file.", variant: "destructive" });
+        toast({ title: "Unsupported format", description: "Please upload a PDF, DOCX, or TXT file.", variant: "destructive" });
         setLoading(false);
         return;
       }
@@ -164,10 +166,10 @@ export function ImportModal({ open, onClose, type, onImported }: ImportModalProp
     const file = e.dataTransfer.files?.[0];
     if (file) {
       const ext = file.name.split(".").pop()?.toLowerCase();
-      if (ext === "pdf" || ext === "docx" || ext === "doc") {
+      if (ext === "pdf" || ext === "docx" || ext === "doc" || ext === "txt") {
         setSelectedFile(file);
       } else {
-        toast({ title: "Unsupported format", description: "Please upload a PDF or DOCX file.", variant: "destructive" });
+        toast({ title: "Unsupported format", description: "Please upload a PDF, DOCX, or TXT file.", variant: "destructive" });
       }
     }
   }, []);
@@ -221,7 +223,7 @@ export function ImportModal({ open, onClose, type, onImported }: ImportModalProp
         <input
           ref={fileRef}
           type="file"
-          accept=".pdf,.docx,.doc"
+          accept=".pdf,.docx,.doc,.txt"
           className="hidden"
           onChange={(e) => {
             const file = e.target.files?.[0];
@@ -312,7 +314,7 @@ export function ImportModal({ open, onClose, type, onImported }: ImportModalProp
                   <p className="text-[13px] font-medium text-gray-700">
                     Drop your file here or <span className="text-gray-900 underline">browse</span>
                   </p>
-                  <p className="text-[11px] text-gray-400 mt-0.5">Supports PDF and DOCX</p>
+                  <p className="text-[11px] text-gray-400 mt-0.5">Supports PDF, DOCX, and TXT</p>
                 </div>
               </div>
             )
