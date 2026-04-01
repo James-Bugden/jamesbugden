@@ -29,8 +29,15 @@ const i18n = {
 
 const ICONS = [Navigation, Clock, ChevronDown];
 
-export default function WhatsNewModal({ lang }: { lang: "en" | "zh" }) {
-  const [open, setOpen] = useState(() => !localStorage.getItem(KEY));
+interface Props {
+  lang: "en" | "zh";
+  profile?: UserProfile | null;
+  updateProfile?: (updates: Partial<Pick<UserProfile, "career_phase" | "onboarding_completed" | "last_viewed_guide" | "last_viewed_guide_at">>) => Promise<void>;
+}
+
+export default function WhatsNewModal({ lang, profile, updateProfile }: Props) {
+  const alreadySeen = !!localStorage.getItem(KEY) || !!(profile as any)?.whats_new_v2_seen;
+  const [open, setOpen] = useState(() => !alreadySeen);
 
   if (!open) return null;
 
@@ -38,6 +45,10 @@ export default function WhatsNewModal({ lang }: { lang: "en" | "zh" }) {
 
   const dismiss = () => {
     localStorage.setItem(KEY, "1");
+    // Persist to DB so it sticks across devices/domains
+    if (updateProfile) {
+      (updateProfile as any)({ whats_new_v2_seen: true });
+    }
     setOpen(false);
   };
 

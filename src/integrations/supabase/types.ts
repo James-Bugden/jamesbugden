@@ -242,6 +242,7 @@ export type Database = {
           last_viewed_guide_at: string | null
           onboarding_completed: boolean | null
           user_id: string
+          whats_new_v2_seen: boolean
         }
         Insert: {
           career_phase?: string | null
@@ -251,6 +252,7 @@ export type Database = {
           last_viewed_guide_at?: string | null
           onboarding_completed?: boolean | null
           user_id: string
+          whats_new_v2_seen?: boolean
         }
         Update: {
           career_phase?: string | null
@@ -260,6 +262,7 @@ export type Database = {
           last_viewed_guide_at?: string | null
           onboarding_completed?: boolean | null
           user_id?: string
+          whats_new_v2_seen?: boolean
         }
         Relationships: []
       }

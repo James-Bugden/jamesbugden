@@ -307,7 +307,7 @@ export default function Dashboard({ lang = "en" }: { lang?: "en" | "zh" }) {
       )}
 
       {!showOnboarding && profile?.onboarding_completed && (
-        <WhatsNewModal lang={lang} />
+        <WhatsNewModal lang={lang} profile={profile} updateProfile={updateProfile} />
       )}
 
       <nav className={`sticky top-0 z-50 bg-executive-green transition-shadow duration-300 ${scrolled ? 'shadow-lg shadow-black/20' : ''}`}>

@@ -1,0 +1,1 @@
+ALTER TABLE public.profiles ADD COLUMN whats_new_v2_seen boolean NOT NULL DEFAULT false;
