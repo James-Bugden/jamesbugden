@@ -608,6 +608,42 @@ export type Database = {
         }
         Relationships: []
       }
+      user_documents: {
+        Row: {
+          created_at: string
+          data: Json
+          id: string
+          linked_job_id: string | null
+          name: string
+          settings: Json
+          type: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          data?: Json
+          id?: string
+          linked_job_id?: string | null
+          name?: string
+          settings?: Json
+          type?: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          data?: Json
+          id?: string
+          linked_job_id?: string | null
+          name?: string
+          settings?: Json
+          type?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
@@ -620,6 +656,10 @@ export type Database = {
       }
       count_resume_analyses_this_month: {
         Args: { p_email: string }
+        Returns: number
+      }
+      count_user_documents: {
+        Args: { p_type: string; p_user_id: string }
         Returns: number
       }
       is_admin: { Args: { _user_id: string }; Returns: boolean }
