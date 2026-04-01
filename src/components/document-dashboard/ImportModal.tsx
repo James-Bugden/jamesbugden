@@ -223,7 +223,7 @@ export function ImportModal({ open, onClose, type, onImported }: ImportModalProp
         <input
           ref={fileRef}
           type="file"
-          accept=".pdf,.docx,.doc"
+          accept=".pdf,.docx,.doc,.txt"
           className="hidden"
           onChange={(e) => {
             const file = e.target.files?.[0];
