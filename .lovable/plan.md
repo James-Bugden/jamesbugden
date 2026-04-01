@@ -1,30 +1,27 @@
 
 
-# Fix: PDF Upload Still Failing — `disableWorker` Is Ignored in pdfjs-dist v4
+# Fix: PDF Import Using Bundled Worker URL (pdfjs-dist v4)
 
-## Root Cause
-The `disableWorker` option was removed from PDF.js in version 2.0. The project uses **pdfjs-dist v4.10.38**, so passing `disableWorker: true` in the `getDocument()` options does absolutely nothing — it's silently ignored. The library still attempts to spawn a web worker, which fails due to CORS/blocked scripts.
+## Problem
+Setting `GlobalWorkerOptions.workerSrc = ""` does not disable the worker in pdfjs-dist v4 — it leaves PDF.js with a broken worker path, causing all PDF uploads to fail silently.
 
 ## Solution
-Set `pdfjsLib.GlobalWorkerOptions.workerSrc = ""` **before** calling `getDocument()`. This is the correct v4 way to force main-thread parsing. Remove the non-functional `disableWorker`, `useWorkerFetch`, and `isEvalSupported` options.
+Use Vite's `?url` import suffix to get a proper URL to the bundled worker file. This gives PDF.js a valid worker it can spawn, which is the correct approach for pdfjs-dist v4 in a Vite project.
 
-### Files to Change (3 files, same pattern)
+## Changes (3 files, same pattern)
 
-**1. `src/pages/ResumeAnalyzer.tsx`** (lines 115-130)
-Add `pdfjsLib.GlobalWorkerOptions.workerSrc = "";` after the import, remove the dead options from `getDocument()`.
-
-**2. `src/lib/documentImport.ts`** (lines 11-20)
-Same fix — add `workerSrc = ""` after import, simplify `getDocument()` call.
-
-**3. `src/lib/renderPdfToImage.ts`** (lines 4-13)
-Same fix.
-
-### Code Pattern (applied to all 3 files)
+### Pattern
 ```typescript
+import pdfjsWorkerUrl from "pdfjs-dist/build/pdf.worker.min.mjs?url";
+// ...
 const pdfjsLib = await import("pdfjs-dist");
-pdfjsLib.GlobalWorkerOptions.workerSrc = "";
-const pdf = await pdfjsLib.getDocument({
-  data: new Uint8Array(await file.arrayBuffer()),
-}).promise;
+pdfjsLib.GlobalWorkerOptions.workerSrc = pdfjsWorkerUrl;
 ```
+
+### Files
+1. **`src/lib/documentImport.ts`** — Add the static `?url` import at the top. Use `pdfjsWorkerUrl` in `extractTextFromPdf`.
+2. **`src/pages/ResumeAnalyzer.tsx`** — Same static import, use in `extractTextFromPDF` callback.
+3. **`src/lib/renderPdfToImage.ts`** — Same static import, use in `renderPdfToImage`.
+
+The `?url` import is a Vite feature that bundles the worker file as a static asset and returns its URL at build time — no CDN, no CORS issues.
 
