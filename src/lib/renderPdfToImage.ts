@@ -1,9 +1,11 @@
+import pdfjsWorkerUrl from "pdfjs-dist/build/pdf.worker.min.mjs?url";
+
 /**
  * Render the first page of a PDF file to a data URL image.
  */
 export async function renderPdfToImage(file: File, scale = 1.5): Promise<string> {
   const pdfjsLib = await import("pdfjs-dist");
-  pdfjsLib.GlobalWorkerOptions.workerSrc = "";
+  pdfjsLib.GlobalWorkerOptions.workerSrc = pdfjsWorkerUrl;
 
   const arrayBuffer = await file.arrayBuffer();
   const pdf = await pdfjsLib.getDocument({
