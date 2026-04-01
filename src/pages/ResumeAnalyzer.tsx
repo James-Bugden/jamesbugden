@@ -68,7 +68,17 @@ export default function ResumeAnalyzer({ defaultLang = "en" }: { defaultLang?: L
     }
   }, [isLoggedIn, analysisResult]);
 
-  // Auto-analyze when arriving from builder/dashboard with pre-loaded text
+  // Load saved report when arriving with ?report=latest
+  const reportLoaded = useRef(false);
+  useEffect(() => {
+    if (searchParams.get("report") === "latest" && latest?.analysis_result && !reportLoaded.current) {
+      reportLoaded.current = true;
+      setAnalysisResult(latest.analysis_result as AnalysisResult);
+      setScreen("results");
+    }
+  }, [searchParams, latest]);
+
+
   const autoTriggered = useRef(false);
   useEffect(() => {
     const autoText = sessionStorage.getItem("analyzer-auto-text");
