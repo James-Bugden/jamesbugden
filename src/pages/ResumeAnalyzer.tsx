@@ -68,15 +68,19 @@ export default function ResumeAnalyzer({ defaultLang = "en" }: { defaultLang?: L
     }
   }, [isLoggedIn, analysisResult]);
 
-  // Load saved report when arriving with ?report=latest
+  // Load saved report when arriving with ?report=latest or show history
   const reportLoaded = useRef(false);
   useEffect(() => {
+    if (searchParams.get("view") === "history" && isLoggedIn) {
+      setScreen("history");
+      return;
+    }
     if (searchParams.get("report") === "latest" && latest?.analysis_result && !reportLoaded.current) {
       reportLoaded.current = true;
       setAnalysisResult(latest.analysis_result as AnalysisResult);
       setScreen("results");
     }
-  }, [searchParams, latest]);
+  }, [searchParams, latest, isLoggedIn]);
 
 
   const autoTriggered = useRef(false);
