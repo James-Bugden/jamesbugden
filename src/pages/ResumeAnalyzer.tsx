@@ -307,7 +307,23 @@ export default function ResumeAnalyzer({ defaultLang = "en" }: { defaultLang?: L
       }
     } catch (err: any) {
       console.error("Extract error:", err);
-      setError(t(lang, "Could not read file. Please try pasting instead.", "無法讀取檔案。請改用貼上方式。"));
+      const msg = String(err?.message || err || "");
+      if (/password/i.test(msg)) {
+        setError(t(lang,
+          "This PDF is password-protected. Please remove the password and re-upload, or paste the text instead.",
+          "此 PDF 有密碼保護。請移除密碼後重新上傳，或改用貼上方式。"
+        ));
+      } else if (/invalid pdf/i.test(msg) || /bad pdf/i.test(msg)) {
+        setError(t(lang,
+          "This file doesn't appear to be a valid PDF. Please check the file and try again.",
+          "此檔案似乎不是有效的 PDF。請檢查檔案後再試。"
+        ));
+      } else {
+        setError(t(lang,
+          "Could not read this file. Try a different PDF or paste your resume text instead.",
+          "無法讀取此檔案。請換一個 PDF 或改用貼上方式。"
+        ));
+      }
     }
   }, [file, pasteText, lang, extractTextFromPDF, extractTextFromDOCX, startAnalysis]);
 
