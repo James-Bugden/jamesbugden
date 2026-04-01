@@ -1,32 +1,23 @@
 
 
-# Fix: "What's New" Modal Showing Every Login
+# Fix: "View Report" Link on Dashboard
 
-## What I Found
+## Problem
+The "View Report" link in the Resume Score card navigates to `/resume-analyzer`, which always shows the upload screen. There's no mechanism to load a previously saved analysis from the database.
 
-The `WhatsNewModal` code is logically correct — it uses `localStorage.getItem("james_careers_dashboard_v2_seen")` to check if dismissed, and `localStorage.setItem()` on dismiss. The dismiss handler fires on both the "Got it" button and the X/overlay close.
+## Solution
+Add a `?report=latest` query parameter support to `ResumeAnalyzer.tsx` so the dashboard link can deep-link to a saved report.
 
-**Why it keeps showing**: localStorage is domain-scoped. If you're accessing the site from different origins (e.g. `jamesbugden.com` vs `jamesbugden.lovable.app` vs preview URL), each has its own localStorage. Also, clearing browser data or using incognito mode wipes it.
+### Step 1: Update `PickUpWhereYouLeftOff.tsx`
+Change the "View Report" link from `/resume-analyzer` to `/resume-analyzer?report=latest` (and `/zh-tw/resume-analyzer?report=latest` for Chinese).
 
-## Fix: Persist Dismissal in the User Profile (Database)
+### Step 2: Update `ResumeAnalyzer.tsx`
+Add a `useEffect` that checks for `?report=latest` on mount. If present and user is logged in:
+- Fetch the latest analysis from the `resume_analyses` table (using the existing `useResumeAnalyses` hook's `latest` value)
+- Set `analysisResult` from `latest.analysis_result` and `setScreen("results")`
+- This reuses the existing `useResumeAnalyses` hook — no new data fetching needed
 
-Instead of relying only on localStorage, store the flag in the user's profile so it persists across devices, browsers, and domains.
-
-### Step 1: Add `whats_new_v2_seen` column to `profiles` table
-Run a migration to add a boolean column `whats_new_v2_seen` (default `false`) to the `profiles` table.
-
-### Step 2: Update `WhatsNewModal` to check profile + localStorage
-- Accept `profile` and `updateProfile` as props (already available in `Dashboard.tsx`)
-- Show modal only if **both** `localStorage` AND `profile.whats_new_v2_seen` are falsy
-- On dismiss: set localStorage **and** call `updateProfile({ whats_new_v2_seen: true })`
-
-### Step 3: Update Dashboard.tsx to pass profile props
-Pass `profile` and `updateProfile` to `WhatsNewModal` in both the English and Chinese dashboard renders.
-
-## Technical Details
-
-**Files changed**:
-- `supabase/migrations/` — new migration adding `whats_new_v2_seen boolean default false`
-- `src/components/dashboard/WhatsNewModal.tsx` — accept profile props, dual-check logic
-- `src/pages/Dashboard.tsx` — pass profile/updateProfile to WhatsNewModal
+### Files Changed
+- `src/components/dashboard/PickUpWhereYouLeftOff.tsx` — update link href
+- `src/pages/ResumeAnalyzer.tsx` — add query param handling to load saved analysis
 
