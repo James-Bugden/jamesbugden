@@ -1103,7 +1103,7 @@ const ResumeBuilder = () => {
         </div>
 
         {/* Mobile/tablet: editor only */}
-        <div className="lg:hidden h-full overflow-y-auto bg-white">
+        <div className="lg:hidden h-full overflow-y-auto bg-white pb-20">
           {editorContent}
         </div>
 

@@ -165,7 +165,7 @@ const HIDDEN_NAV_PATHS = [
   "/pivot-method-mini-guide", "/guides", "/ikigai-guide", "/office-politics-guide",
   "/problem-solving-guide", "/recruiter-guide", "/hr-interview-guide",
   "/career-game-guide", "/ai-job-search-guide", "/interview-questions",
-  "/job-offer-guide", "/salary-starter-kit", "/review", "/join", "/48-laws-guide",
+  "/job-offer-guide", "/salary-starter-kit", "/review", "/join", "/48-laws-guide", "/resume",
 ];
 
 function MobileNavWrapper() {
