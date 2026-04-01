@@ -146,7 +146,7 @@ export default function ResumeAnalyzer({ defaultLang = "en" }: { defaultLang?: L
       return;
     }
     setFile(selectedFile);
-    setInputMethod(ext === "pdf" ? "upload_pdf" : "upload_docx");
+    setInputMethod(ext === "pdf" ? "upload_pdf" : ext === "txt" ? "upload_txt" : "upload_docx");
     setError("");
   }, [lang]);
 
