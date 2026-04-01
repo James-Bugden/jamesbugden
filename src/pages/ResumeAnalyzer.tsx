@@ -201,8 +201,15 @@ export default function ResumeAnalyzer({ defaultLang = "en" }: { defaultLang?: L
     } catch (err: any) {
       clearInterval(stepInterval);
       clearInterval(progressInterval);
-      console.error("Analysis error:", err);
-      setError(t(lang, "Something went wrong with the analysis. Please try again.", "分析過程發生錯誤。請再試一次。"));
+      const msg = String(err?.message || "");
+      console.error("Analysis error:", msg, err);
+      if (msg === "RATE_LIMIT") {
+        setError(t(lang, "You've reached your monthly analysis limit. Please try again next month.", "你已達到本月分析上限。請下月再試。"));
+      } else if (msg === "AUTH_EXPIRED") {
+        setError(t(lang, "Your session expired. Please sign in again and retry.", "你的登入已過期，請重新登入後再試。"));
+      } else {
+        setError(t(lang, `Analysis failed: ${msg}. Please try again.`, `分析失敗：${msg}。請再試一次。`));
+      }
       setScreen("upload");
       return null;
     }
