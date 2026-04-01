@@ -1,6 +1,6 @@
 import { useState, useCallback, useRef, useEffect } from "react";
 import { toast } from "@/hooks/use-toast";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useNavigate, useSearchParams } from "react-router-dom";
 import { Upload, FileText, Sparkles, BarChart3, CloudUpload, X, Check, Lock, ArrowRight, ShieldCheck, ChevronRight, AlertTriangle, LogIn } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -29,8 +29,9 @@ const t = (lang: Language, en: string, zh: string) => lang === "en" ? en : zh;
 
 export default function ResumeAnalyzer({ defaultLang = "en" }: { defaultLang?: Language }) {
   const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
   const { isLoggedIn, user } = useAuth();
-  const { saveAnalysis } = useResumeAnalyses();
+  const { latest, saveAnalysis } = useResumeAnalyses();
   const { used, limit, limitReached, recordUsage } = useAnalyzerUsage();
   const [lang, setLang] = useState<Language>(defaultLang);
   const [screen, setScreen] = useState<Screen>("upload");
@@ -67,7 +68,17 @@ export default function ResumeAnalyzer({ defaultLang = "en" }: { defaultLang?: L
     }
   }, [isLoggedIn, analysisResult]);
 
-  // Auto-analyze when arriving from builder/dashboard with pre-loaded text
+  // Load saved report when arriving with ?report=latest
+  const reportLoaded = useRef(false);
+  useEffect(() => {
+    if (searchParams.get("report") === "latest" && latest?.analysis_result && !reportLoaded.current) {
+      reportLoaded.current = true;
+      setAnalysisResult(latest.analysis_result as AnalysisResult);
+      setScreen("results");
+    }
+  }, [searchParams, latest]);
+
+
   const autoTriggered = useRef(false);
   useEffect(() => {
     const autoText = sessionStorage.getItem("analyzer-auto-text");
