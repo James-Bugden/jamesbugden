@@ -10,9 +10,10 @@ export interface UserProfile {
   onboarding_completed: boolean;
   last_viewed_guide: string | null;
   last_viewed_guide_at: string | null;
+  whats_new_v2_seen: boolean;
 }
 
-const SELECT_FIELDS = "user_id, career_phase, onboarding_completed, last_viewed_guide, last_viewed_guide_at";
+const SELECT_FIELDS = "user_id, career_phase, onboarding_completed, last_viewed_guide, last_viewed_guide_at, whats_new_v2_seen";
 
 export function useProfile() {
   const { user } = useAuth();
