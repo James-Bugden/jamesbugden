@@ -181,7 +181,16 @@ export default function ResumeAnalyzer({ defaultLang = "en" }: { defaultLang?: L
       clearInterval(progressInterval);
 
       if (fnError || data?.error) {
-        throw new Error(data?.error || fnError?.message || "Analysis failed");
+        const status = (fnError as any)?.context?.status;
+        const errorMsg = data?.error || fnError?.message || "Analysis failed";
+        console.error("Edge function error:", { status, errorMsg, fnError, data });
+        if (status === 429 || data?.error?.includes?.("limit")) {
+          throw new Error("RATE_LIMIT");
+        }
+        if (status === 401) {
+          throw new Error("AUTH_EXPIRED");
+        }
+        throw new Error(errorMsg);
       }
 
       const result = data as AnalysisResult;
