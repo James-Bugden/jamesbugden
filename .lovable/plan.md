@@ -1,24 +1,23 @@
 
 
-# Fix: WhatsNewModal Not Closable on Mobile
+# Fix: Resume Builder Editor Cut Off on Mobile
 
 ## Problem
-On small screens (320px viewport), the DialogContent fills the entire screen. The default Dialog close button (X) is hidden or clipped, and the "Got it" button is pushed below the fold, leaving users stuck.
+On mobile, the Resume Builder editor content is cut off at the bottom. The root cause is a combination of:
+
+1. **MobileBottomNav overlap**: The `/resume` path is not in `HIDDEN_NAV_PATHS`, so logged-in users see a fixed bottom nav bar (64px) plus a 64px spacer `div`. The Resume Builder uses `h-screen` for its layout, but the bottom nav sits on top of it, hiding the last ~64px of content.
+
+2. **Too many fixed elements eating vertical space**: The sticky top bar (2 rows: brand row ~48-56px + doc name row ~40px), plus the always-visible export warning banner (~50px), plus the BrandingFooter — all reduce the scrollable editor area significantly on small screens.
 
 ## Solution
-Two changes to `src/components/dashboard/WhatsNewModal.tsx`:
 
-1. **Add `max-h-[90dvh] overflow-y-auto`** to DialogContent so it scrolls within the viewport instead of overflowing
-2. **Make the CTA button sticky** at the bottom so it's always visible even if content scrolls
-3. **Reduce spacing on mobile** — smaller padding and tighter item gaps to fit more content above the fold
+### 1. Hide MobileBottomNav on `/resume` paths
+Add `/resume` to `HIDDEN_NAV_PATHS` in `src/App.tsx`. The Resume Builder has its own navigation (back arrow, dashboard link, preview button) so the global bottom nav is redundant and harmful here.
 
-### Changes
+### 2. Add bottom padding to mobile editor
+Add `pb-20` to the mobile editor container (`lg:hidden` div at line 1106) to ensure the "Add Content" button and bottom sections are fully reachable, accounting for any browser chrome.
 
-**`src/components/dashboard/WhatsNewModal.tsx`**
+### Files Changed
+- **`src/App.tsx`** — Add `"/resume"` to `HIDDEN_NAV_PATHS` array
+- **`src/pages/ResumeBuilder.tsx`** — Add `pb-20` to the mobile editor `div` (line 1106)
 
-- DialogContent: add `max-h-[90dvh] flex flex-col` classes
-- Header: reduce mobile padding (`px-4 pt-6 pb-4 sm:px-6 sm:pt-8 sm:pb-5`)
-- Items container: add `overflow-y-auto flex-1`, reduce mobile spacing (`space-y-3 sm:space-y-5 px-4 py-4 sm:px-6 sm:py-6`)
-- CTA container: add `sticky bottom-0 bg-background` with reduced mobile padding (`px-4 pb-4 sm:px-6 sm:pb-6`)
-
-This ensures the button is always reachable and the content scrolls if needed on small
