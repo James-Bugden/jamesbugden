@@ -114,20 +114,13 @@ export default function ResumeAnalyzer({ defaultLang = "en" }: { defaultLang?: L
 
   const extractTextFromPDF = useCallback(async (file: File): Promise<string> => {
     const pdfjsLib = await import("pdfjs-dist");
-    // Try CDN worker; fall back to main-thread parsing if it fails
-    try {
-      pdfjsLib.GlobalWorkerOptions.workerSrc = `https://cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjsLib.version}/pdf.worker.min.mjs`;
-    } catch {
-      console.warn("PDF.js worker init failed, using main-thread fallback");
-      pdfjsLib.GlobalWorkerOptions.workerSrc = "";
-    }
-    const arrayBuffer = await file.arrayBuffer();
-    const pdf = await pdfjsLib.getDocument({ data: new Uint8Array(arrayBuffer) }).promise;
+    pdfjsLib.GlobalWorkerOptions.workerSrc = "";
+    const pdf = await pdfjsLib.getDocument({ data: new Uint8Array(await file.arrayBuffer()) }).promise;
     let text = "";
     for (let i = 1; i <= pdf.numPages; i++) {
       const page = await pdf.getPage(i);
       const content = await page.getTextContent();
-      text += content.items.map((item: any) => item.str).join(" ") + "\n";
+      text += content.items.map((item: any) => ("str" in item ? item.str : "")).join(" ") + "\n";
     }
     return text.trim();
   }, []);
