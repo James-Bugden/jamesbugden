@@ -314,7 +314,7 @@ export function ImportModal({ open, onClose, type, onImported }: ImportModalProp
                   <p className="text-[13px] font-medium text-gray-700">
                     Drop your file here or <span className="text-gray-900 underline">browse</span>
                   </p>
-                  <p className="text-[11px] text-gray-400 mt-0.5">Supports PDF and DOCX</p>
+                  <p className="text-[11px] text-gray-400 mt-0.5">Supports PDF, DOCX, and TXT</p>
                 </div>
               </div>
             )
