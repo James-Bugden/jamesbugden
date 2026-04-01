@@ -166,10 +166,10 @@ export function ImportModal({ open, onClose, type, onImported }: ImportModalProp
     const file = e.dataTransfer.files?.[0];
     if (file) {
       const ext = file.name.split(".").pop()?.toLowerCase();
-      if (ext === "pdf" || ext === "docx" || ext === "doc") {
+      if (ext === "pdf" || ext === "docx" || ext === "doc" || ext === "txt") {
         setSelectedFile(file);
       } else {
-        toast({ title: "Unsupported format", description: "Please upload a PDF or DOCX file.", variant: "destructive" });
+        toast({ title: "Unsupported format", description: "Please upload a PDF, DOCX, or TXT file.", variant: "destructive" });
       }
     }
   }, []);
