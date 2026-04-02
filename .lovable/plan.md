@@ -1,23 +1,60 @@
+# Create Unlimited Test Account
 
+## Overview
 
-# Fix: Resume Builder Editor Cut Off on Mobile
+Create a new test account with email/password, then bypass all usage limits for admin users across both client-side hooks and server-side edge functions.
 
-## Problem
-On mobile, the Resume Builder editor content is cut off at the bottom. The root cause is a combination of:
+## Steps
 
-1. **MobileBottomNav overlap**: The `/resume` path is not in `HIDDEN_NAV_PATHS`, so logged-in users see a fixed bottom nav bar (64px) plus a 64px spacer `div`. The Resume Builder uses `h-screen` for its layout, but the bottom nav sits on top of it, hiding the last ~64px of content.
+### Step 1: Create the test account
 
-2. **Too many fixed elements eating vertical space**: The sticky top bar (2 rows: brand row ~48-56px + doc name row ~40px), plus the always-visible export warning banner (~50px), plus the BrandingFooter — all reduce the scrollable editor area significantly on small screens.
+- Sign up a new account via the app's `/join` page with a test email you provide (e.g. `test@jamesbugden.com`)
+- After email verification, add the account to the `admin_users` table so it gets the admin flag
 
-## Solution
+### Step 2: Add admin bypass to edge functions
 
-### 1. Hide MobileBottomNav on `/resume` paths
-Add `/resume` to `HIDDEN_NAV_PATHS` in `src/App.tsx`. The Resume Builder has its own navigation (back arrow, dashboard link, preview button) so the global bottom nav is redundant and harmful here.
+Modify the rate-limit checks in 3 edge functions to skip limits for admin users:
 
-### 2. Add bottom padding to mobile editor
-Add `pb-20` to the mobile editor container (`lg:hidden` div at line 1106) to ensure the "Add Content" button and bottom sections are fully reachable, accounting for any browser chrome.
+`**supabase/functions/analyze-resume/index.ts**` — After getting `userId`, check `is_admin(userId)` via RPC. If admin, skip the monthly limit check.
 
-### Files Changed
-- **`src/App.tsx`** — Add `"/resume"` to `HIDDEN_NAV_PATHS` array
-- **`src/pages/ResumeBuilder.tsx`** — Add `pb-20` to the mobile editor `div` (line 1106)
+`**supabase/functions/parse-resume-to-builder/index.ts**` — Same admin bypass before the import limit check.
 
+`**supabase/functions/generate-pdf/index.ts**` — Same admin bypass before the PDF export limit check.
+
+The pattern added to each function (after userId is resolved):
+
+```typescript
+// Check if user is admin (unlimited usage)
+const { data: isAdmin } = await supabase.rpc("is_admin", { _user_id: userId });
+if (isAdmin) { /* skip rate limit check */ }
+```
+
+### Step 3: Add admin bypass to client-side hooks
+
+`**src/hooks/useAnalyzerUsage.ts**` — Check `is_admin` RPC, if true set `limitReached` to always false.
+
+`**src/hooks/useBuilderAiUsage.ts**` — Same admin check, bypass import and AI tool limits.
+
+`**src/lib/documentStore.ts**` — In `checkServerDocumentLimit`, check admin status and return true (no limit) for admins.
+
+### Step 4: Insert admin record
+
+After you create and verify the test account, I'll insert a row into `admin_users` with the test user's ID and email.
+
+## Files Changed
+
+- `supabase/functions/analyze-resume/index.ts`
+- `supabase/functions/parse-resume-to-builder/index.ts`
+- `supabase/functions/generate-pdf/index.ts`
+- `src/hooks/useAnalyzerUsage.ts`
+- `src/hooks/useBuilderAiUsage.ts`
+- `src/lib/documentStore.ts`
+
+## What You Need To Do
+
+Tell me what email and password you'd like for the test account, and I'll set everything up.  
+  
+make sure the limits are not being blocked from teh server also   
+  
+[test@test.com](mailto:test@test.com)  
+test12345
