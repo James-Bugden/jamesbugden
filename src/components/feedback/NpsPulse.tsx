@@ -72,6 +72,7 @@ function collectBehavioralContext() {
 
 export default function NpsPulse({ locale = "en" }: NpsPulseProps) {
   const { isLoggedIn, user } = useAuth();
+  const { profile, updateProfile } = useProfile();
   const [open, setOpen] = useState(false);
   const [score, setScore] = useState<number | null>(null);
   const [comment, setComment] = useState("");
