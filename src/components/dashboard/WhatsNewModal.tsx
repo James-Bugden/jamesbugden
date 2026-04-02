@@ -32,7 +32,7 @@ const ICONS = [Navigation, Clock, ChevronDown];
 interface Props {
   lang: "en" | "zh";
   profile?: UserProfile | null;
-  updateProfile?: (updates: Partial<Pick<UserProfile, "career_phase" | "onboarding_completed" | "last_viewed_guide" | "last_viewed_guide_at">>) => Promise<void>;
+  updateProfile?: (updates: Partial<Pick<UserProfile, "career_phase" | "onboarding_completed" | "last_viewed_guide" | "last_viewed_guide_at" | "nps_last_shown_at">>) => Promise<void>;
 }
 
 export default function WhatsNewModal({ lang, profile, updateProfile }: Props) {

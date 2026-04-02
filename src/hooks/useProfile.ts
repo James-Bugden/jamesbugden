@@ -11,9 +11,10 @@ export interface UserProfile {
   last_viewed_guide: string | null;
   last_viewed_guide_at: string | null;
   whats_new_v2_seen: boolean;
+  nps_last_shown_at: string | null;
 }
 
-const SELECT_FIELDS = "user_id, career_phase, onboarding_completed, last_viewed_guide, last_viewed_guide_at, whats_new_v2_seen";
+const SELECT_FIELDS = "user_id, career_phase, onboarding_completed, last_viewed_guide, last_viewed_guide_at, whats_new_v2_seen, nps_last_shown_at";
 
 export function useProfile() {
   const { user } = useAuth();
@@ -46,7 +47,7 @@ export function useProfile() {
   }, [user]);
 
   const updateProfile = useCallback(
-    async (updates: Partial<Pick<UserProfile, "career_phase" | "onboarding_completed" | "last_viewed_guide" | "last_viewed_guide_at">>) => {
+    async (updates: Partial<Pick<UserProfile, "career_phase" | "onboarding_completed" | "last_viewed_guide" | "last_viewed_guide_at" | "nps_last_shown_at">>) => {
       if (!user) return;
       const { data } = await supabase
         .from("profiles")

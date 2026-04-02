@@ -4,6 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/contexts/AuthContext";
+import { useProfile } from "@/hooks/useProfile";
 
 const SESSION_COUNT_KEY = "nps_session_count";
 const LAST_NPS_KEY = "nps_last_shown";
@@ -71,6 +72,7 @@ function collectBehavioralContext() {
 
 export default function NpsPulse({ locale = "en" }: NpsPulseProps) {
   const { isLoggedIn, user } = useAuth();
+  const { profile, updateProfile } = useProfile();
   const [open, setOpen] = useState(false);
   const [score, setScore] = useState<number | null>(null);
   const [comment, setComment] = useState("");
@@ -98,18 +100,25 @@ export default function NpsPulse({ locale = "en" }: NpsPulseProps) {
 
     if (count < MIN_SESSIONS) return;
 
-    // Check cooldown
-    const lastShown = localStorage.getItem(LAST_NPS_KEY);
-    if (lastShown && Date.now() - parseInt(lastShown, 10) < NPS_COOLDOWN_MS) return;
+    // Check cooldown — prefer cloud timestamp, fall back to localStorage
+    const cloudTs = profile?.nps_last_shown_at ? new Date(profile.nps_last_shown_at).getTime() : 0;
+    const localTs = parseInt(localStorage.getItem(LAST_NPS_KEY) || "0", 10);
+    const lastShownTs = Math.max(cloudTs, localTs);
+
+    if (lastShownTs && Date.now() - lastShownTs < NPS_COOLDOWN_MS) return;
 
     // Show after delay
     const timer = setTimeout(() => setOpen(true), 5000);
     return () => clearTimeout(timer);
-  }, [isLoggedIn]);
+  }, [isLoggedIn, profile]);
 
   const dismiss = () => {
     setOpen(false);
+    const now = new Date().toISOString();
     localStorage.setItem(LAST_NPS_KEY, String(Date.now()));
+    if (updateProfile) {
+      updateProfile({ nps_last_shown_at: now });
+    }
   };
 
   const handleScoreSelect = (s: number) => {
@@ -126,7 +135,11 @@ export default function NpsPulse({ locale = "en" }: NpsPulseProps) {
   const submit = async () => {
     if (score === null) return;
     setSubmitted(true);
+    const now = new Date().toISOString();
     localStorage.setItem(LAST_NPS_KEY, String(Date.now()));
+    if (updateProfile) {
+      updateProfile({ nps_last_shown_at: now });
+    }
 
     const behavioral = collectBehavioralContext();
     const npsCategory = score >= 9 ? "promoter" : score >= 7 ? "passive" : "detractor";

@@ -240,6 +240,7 @@ export type Database = {
           id: string
           last_viewed_guide: string | null
           last_viewed_guide_at: string | null
+          nps_last_shown_at: string | null
           onboarding_completed: boolean | null
           user_id: string
           whats_new_v2_seen: boolean
@@ -250,6 +251,7 @@ export type Database = {
           id?: string
           last_viewed_guide?: string | null
           last_viewed_guide_at?: string | null
+          nps_last_shown_at?: string | null
           onboarding_completed?: boolean | null
           user_id: string
           whats_new_v2_seen?: boolean
@@ -260,6 +262,7 @@ export type Database = {
           id?: string
           last_viewed_guide?: string | null
           last_viewed_guide_at?: string | null
+          nps_last_shown_at?: string | null
           onboarding_completed?: boolean | null
           user_id?: string
           whats_new_v2_seen?: boolean

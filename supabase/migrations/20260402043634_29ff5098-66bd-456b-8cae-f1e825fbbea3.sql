@@ -1,0 +1,1 @@
+ALTER TABLE public.profiles ADD COLUMN nps_last_shown_at timestamp with time zone DEFAULT NULL;
