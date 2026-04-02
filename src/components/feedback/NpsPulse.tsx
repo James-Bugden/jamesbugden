@@ -135,7 +135,11 @@ export default function NpsPulse({ locale = "en" }: NpsPulseProps) {
   const submit = async () => {
     if (score === null) return;
     setSubmitted(true);
+    const now = new Date().toISOString();
     localStorage.setItem(LAST_NPS_KEY, String(Date.now()));
+    if (updateProfile) {
+      updateProfile({ nps_last_shown_at: now });
+    }
 
     const behavioral = collectBehavioralContext();
     const npsCategory = score >= 9 ? "promoter" : score >= 7 ? "passive" : "detractor";
