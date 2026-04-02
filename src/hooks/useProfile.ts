@@ -47,7 +47,7 @@ export function useProfile() {
   }, [user]);
 
   const updateProfile = useCallback(
-    async (updates: Partial<Pick<UserProfile, "career_phase" | "onboarding_completed" | "last_viewed_guide" | "last_viewed_guide_at">>) => {
+    async (updates: Partial<Pick<UserProfile, "career_phase" | "onboarding_completed" | "last_viewed_guide" | "last_viewed_guide_at" | "nps_last_shown_at">>) => {
       if (!user) return;
       const { data } = await supabase
         .from("profiles")
