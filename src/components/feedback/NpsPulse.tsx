@@ -114,7 +114,11 @@ export default function NpsPulse({ locale = "en" }: NpsPulseProps) {
 
   const dismiss = () => {
     setOpen(false);
+    const now = new Date().toISOString();
     localStorage.setItem(LAST_NPS_KEY, String(Date.now()));
+    if (updateProfile) {
+      updateProfile({ nps_last_shown_at: now });
+    }
   };
 
   const handleScoreSelect = (s: number) => {
