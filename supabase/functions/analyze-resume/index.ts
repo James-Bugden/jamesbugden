@@ -283,7 +283,7 @@ Deno.serve(async (req) => {
           },
           {
             role: 'user',
-            content: `Analyze this resume and return ONLY a valid JSON object. Do not include any text outside the JSON. Make sure all strings are properly escaped (especially quotes within strings).\n\n${userReminder}\n\nResume:\n\n${resumeText.substring(0, 15000)}`
+            content: `Today's date is ${new Date().toISOString().slice(0, 10)}. Use this to determine whether dates in the resume are in the past or future.\n\nAnalyze this resume and return ONLY a valid JSON object. Do not include any text outside the JSON. Make sure all strings are properly escaped (especially quotes within strings).\n\n${userReminder}\n\nResume:\n\n${resumeText.substring(0, 15000)}`
           }
         ],
       }),
