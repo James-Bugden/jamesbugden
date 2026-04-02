@@ -163,8 +163,8 @@ export const ResumePdfPreview = React.memo(function ResumePdfPreview({
         const element = React.createElement(ResumePDF, {
           data: debouncedData,
           customize: debouncedCustomize,
-        } as any);
-        const blob = await pdf(element).toBlob();
+        });
+        const blob = await pdf(element as any).toBlob();
         if (cancelled) return;
 
         // 3. Pass blob directly to pdfjs (ArrayBuffer, not a URL — blob URLs
