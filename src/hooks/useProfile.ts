@@ -14,7 +14,7 @@ export interface UserProfile {
   nps_last_shown_at: string | null;
 }
 
-const SELECT_FIELDS = "user_id, career_phase, onboarding_completed, last_viewed_guide, last_viewed_guide_at, whats_new_v2_seen";
+const SELECT_FIELDS = "user_id, career_phase, onboarding_completed, last_viewed_guide, last_viewed_guide_at, whats_new_v2_seen, nps_last_shown_at";
 
 export function useProfile() {
   const { user } = useAuth();
