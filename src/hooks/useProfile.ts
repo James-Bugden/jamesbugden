@@ -11,6 +11,7 @@ export interface UserProfile {
   last_viewed_guide: string | null;
   last_viewed_guide_at: string | null;
   whats_new_v2_seen: boolean;
+  nps_last_shown_at: string | null;
 }
 
 const SELECT_FIELDS = "user_id, career_phase, onboarding_completed, last_viewed_guide, last_viewed_guide_at, whats_new_v2_seen";
