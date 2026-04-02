@@ -196,18 +196,23 @@ Deno.serve(async (req) => {
       userId = user.id;
     }
 
-    // --- Server-side usage limit ---
-    const { count: usageCount, error: usageError } = await supabase
-      .from('resume_analyses')
-      .select('id', { count: 'exact', head: true })
-      .eq('user_id', userId)
-      .gte('created_at', `${new Date().getFullYear()}-${String(new Date().getMonth() + 1).padStart(2, '0')}-01T00:00:00.000Z`);
+    // --- Admin bypass ---
+    const { data: isAdmin } = await supabase.rpc("is_admin", { _user_id: userId });
 
-    if (!usageError && typeof usageCount === 'number' && usageCount >= MONTHLY_LIMIT) {
-      return new Response(
-        JSON.stringify({ error: 'Monthly analysis limit reached', limit: MONTHLY_LIMIT, used: usageCount }),
-        { status: 429, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
-      );
+    // --- Server-side usage limit ---
+    if (!isAdmin) {
+      const { count: usageCount, error: usageError } = await supabase
+        .from('resume_analyses')
+        .select('id', { count: 'exact', head: true })
+        .eq('user_id', userId)
+        .gte('created_at', `${new Date().getFullYear()}-${String(new Date().getMonth() + 1).padStart(2, '0')}-01T00:00:00.000Z`);
+
+      if (!usageError && typeof usageCount === 'number' && usageCount >= MONTHLY_LIMIT) {
+        return new Response(
+          JSON.stringify({ error: 'Monthly analysis limit reached', limit: MONTHLY_LIMIT, used: usageCount }),
+          { status: 429, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+        );
+      }
     }
 
     const { resumeText, language } = await req.json();

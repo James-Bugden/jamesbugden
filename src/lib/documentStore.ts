@@ -101,7 +101,11 @@ export async function checkServerDocumentLimit(type: DocType): Promise<boolean> 
   try {
     const { data: sessionData } = await supabase.auth.getSession();
     const userId = sessionData?.session?.user?.id;
-    if (!userId) return true; // Not logged in — let client-side limit apply
+    if (!userId) return true;
+
+    // Admin bypass
+    const { data: isAdmin } = await supabase.rpc("is_admin", { _user_id: userId });
+    if (isAdmin) return true;
 
     const { data: count } = await (supabase as any).rpc("count_user_documents", {
       p_user_id: userId,
@@ -109,7 +113,7 @@ export async function checkServerDocumentLimit(type: DocType): Promise<boolean> 
     });
     return (count as number ?? 0) < 2;
   } catch {
-    return true; // On error, fall through to client-side check
+    return true;
   }
 }
 

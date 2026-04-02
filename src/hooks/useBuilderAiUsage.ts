@@ -52,10 +52,10 @@ export function useBuilderAiUsage() {
   return {
     importCount,
     importLimit: IMPORT_LIMIT,
-    importLimitReached: importCount >= IMPORT_LIMIT,
+    importLimitReached: isAdmin ? false : importCount >= IMPORT_LIMIT,
     aiToolCount,
     aiToolLimit: AI_TOOL_LIMIT,
-    aiToolLimitReached: aiToolCount >= AI_TOOL_LIMIT,
+    aiToolLimitReached: isAdmin ? false : aiToolCount >= AI_TOOL_LIMIT,
     loading,
     recordImport,
     recordAiTool,

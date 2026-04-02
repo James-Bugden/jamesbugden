@@ -40,22 +40,28 @@ Deno.serve(async (req) => {
 
     const userId = claimsData.claims.sub as string;
 
-    // ── Rate limit check ──
-    const { data: countData } = await supabase.rpc("count_ai_usage_this_month", {
-      p_user_id: userId,
-      p_usage_type: USAGE_TYPE,
-    });
+    // ── Admin bypass ──
+    const { data: isAdmin } = await supabase.rpc("is_admin", { _user_id: userId });
 
-    const currentCount = (countData as number) ?? 0;
-    if (currentCount >= IMPORT_MONTHLY_LIMIT) {
-      return new Response(
-        JSON.stringify({
-          error: "Monthly import limit reached",
-          limit: IMPORT_MONTHLY_LIMIT,
-          used: currentCount,
-        }),
-        { status: 429, headers: { ...corsHeaders, "Content-Type": "application/json" } },
-      );
+    // ── Rate limit check ──
+    let currentCount = 0;
+    if (!isAdmin) {
+      const { data: countData } = await supabase.rpc("count_ai_usage_this_month", {
+        p_user_id: userId,
+        p_usage_type: USAGE_TYPE,
+      });
+
+      currentCount = (countData as number) ?? 0;
+      if (currentCount >= IMPORT_MONTHLY_LIMIT) {
+        return new Response(
+          JSON.stringify({
+            error: "Monthly import limit reached",
+            limit: IMPORT_MONTHLY_LIMIT,
+            used: currentCount,
+          }),
+          { status: 429, headers: { ...corsHeaders, "Content-Type": "application/json" } },
+        );
+      }
     }
 
     // ── Parse request ──
