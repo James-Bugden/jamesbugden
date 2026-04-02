@@ -10,6 +10,7 @@ export function useBuilderAiUsage() {
   const [importCount, setImportCount] = useState(0);
   const [aiToolCount, setAiToolCount] = useState(0);
   const [loading, setLoading] = useState(true);
+  const [isAdmin, setIsAdmin] = useState(false);
 
   const fetchCounts = useCallback(async () => {
     if (!user) {
@@ -17,12 +18,14 @@ export function useBuilderAiUsage() {
       return;
     }
     try {
-      const [importRes, toolRes] = await Promise.all([
+      const [importRes, toolRes, adminRes] = await Promise.all([
         supabase.rpc("count_ai_usage_this_month", { p_user_id: user.id, p_usage_type: "import" }),
         supabase.rpc("count_ai_usage_this_month", { p_user_id: user.id, p_usage_type: "ai_tool" }),
+        supabase.rpc("is_admin", { _user_id: user.id }),
       ]);
       setImportCount(importRes.data ?? 0);
       setAiToolCount(toolRes.data ?? 0);
+      if (adminRes.data) setIsAdmin(true);
     } catch (e) {
       console.error("Failed to fetch AI usage counts:", e);
     } finally {
