@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { ChevronDown, ChevronUp, CheckCircle2, Circle } from "lucide-react";
+import { ChevronDown, ChevronUp, CheckCircle2, Circle, AlertTriangle } from "lucide-react";
 import { ResumeData } from "./types";
 import { cn } from "@/lib/utils";
 import { useT } from "./i18n";
@@ -12,6 +12,21 @@ interface CheckItem {
   label: string;
   points: number;
   passed: boolean;
+}
+
+interface DateWarning {
+  label: string;
+  entryName: string;
+}
+
+const MONTHS_INDEX: Record<string, number> = {
+  January: 0, February: 1, March: 2, April: 3, May: 4, June: 5,
+  July: 6, August: 7, September: 8, October: 9, November: 10, December: 11,
+};
+
+function monthToNum(m: string | undefined): number {
+  if (!m) return 0;
+  return MONTHS_INDEX[m] ?? 0;
 }
 
 function useComputeChecks(data: ResumeData): CheckItem[] {
@@ -58,10 +73,43 @@ function useComputeChecks(data: ResumeData): CheckItem[] {
   ];
 }
 
+function useComputeDateWarnings(data: ResumeData): DateWarning[] {
+  const t = useT();
+  const warnings: DateWarning[] = [];
+  const dateTypes = ["experience", "education", "projects", "organisations"];
+
+  for (const section of data.sections) {
+    if (!dateTypes.includes(section.type)) continue;
+    for (const entry of section.entries) {
+      const { startYear, endYear, startMonth, endMonth, currentlyHere } = entry.fields;
+      const name =
+        entry.fields.position || entry.fields.degree || entry.fields.name || entry.fields.title || "—";
+
+      // Missing end date
+      if (startYear && !endYear && currentlyHere !== "true") {
+        warnings.push({ label: t("dateWarnMissing"), entryName: name });
+      }
+
+      // Inconsistent: end before start
+      if (startYear && endYear) {
+        const sy = parseInt(startYear, 10);
+        const ey = parseInt(endYear, 10);
+        if (!isNaN(sy) && !isNaN(ey)) {
+          if (ey < sy || (ey === sy && monthToNum(endMonth) < monthToNum(startMonth))) {
+            warnings.push({ label: t("dateWarnInconsistent"), entryName: name });
+          }
+        }
+      }
+    }
+  }
+  return warnings;
+}
+
 export function CompletenessScore({ data }: CompletenessScoreProps) {
   const t = useT();
   const [expanded, setExpanded] = useState(false);
   const checks = useComputeChecks(data);
+  const dateWarnings = useComputeDateWarnings(data);
   const earned = checks.filter((c) => c.passed).reduce((s, c) => s + c.points, 0);
   const total = checks.reduce((s, c) => s + c.points, 0);
   const pct = Math.round((earned / total) * 100);
@@ -123,6 +171,24 @@ export function CompletenessScore({ data }: CompletenessScoreProps) {
               <span className="ml-auto text-gray-300 text-[10px]">+{c.points}</span>
             </li>
           ))}
+
+          {dateWarnings.length > 0 && (
+            <>
+              <li className="flex items-center gap-1.5 text-[10px] font-semibold text-amber-600 pt-2 border-t border-gray-100 mt-2">
+                <AlertTriangle className="w-3.5 h-3.5" />
+                {t("dateWarnings")}
+              </li>
+              {dateWarnings.map((w, i) => (
+                <li key={`warn-${i}`} className="flex items-center gap-2 text-xs">
+                  <AlertTriangle className="w-4 h-4 text-amber-500 flex-shrink-0" />
+                  <span className="text-gray-700">{w.label}</span>
+                  <span className="ml-auto text-gray-400 text-[10px] truncate max-w-[120px]" title={w.entryName}>
+                    {w.entryName}
+                  </span>
+                </li>
+              ))}
+            </>
+          )}
         </ul>
       )}
     </div>
