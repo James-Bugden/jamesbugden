@@ -341,6 +341,9 @@ export const translations = {
     scoreCheckContact: "Contact info complete",
     scoreCheckSkills: "Skills section exists",
     scoreCheckQuantified: "Quantified achievements",
+    dateWarnings: "Date warnings",
+    dateWarnMissing: "Missing end date",
+    dateWarnInconsistent: "End date is before start date",
 
     // Analyzer CTA
     analyzerCtaTitle: "Want to know how your resume scores?",
