@@ -341,6 +341,9 @@ export const translations = {
     scoreCheckContact: "Contact info complete",
     scoreCheckSkills: "Skills section exists",
     scoreCheckQuantified: "Quantified achievements",
+    dateWarnings: "Date warnings",
+    dateWarnMissing: "Missing end date",
+    dateWarnInconsistent: "End date is before start date",
 
     // Analyzer CTA
     analyzerCtaTitle: "Want to know how your resume scores?",
@@ -716,6 +719,9 @@ export const translations = {
     scoreCheckContact: "聯絡資訊完整",
     scoreCheckSkills: "技能區塊存在",
     scoreCheckQuantified: "量化成就",
+    dateWarnings: "日期警告",
+    dateWarnMissing: "缺少結束日期",
+    dateWarnInconsistent: "結束日期早於開始日期",
 
     // Analyzer CTA
     analyzerCtaTitle: "想知道你的履歷得幾分嗎？",
