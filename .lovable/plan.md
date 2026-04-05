@@ -1,56 +1,32 @@
 
 
-# Plan: Analytics Data Export API
+# Add Date Consistency Warnings to Resume Completeness Score
 
-## Overview
-Create a single edge function that returns all your admin dashboard analytics data as JSON. Your AI agent can call it with a simple HTTPS GET request using an API key for authentication.
+## What changes
+Enhance the existing `CompletenessScore` component to detect and warn about two new date issues, shown as warning items (amber) below the existing checklist when expanded.
 
-## What data the API will expose
-Based on your existing tables, the endpoint will return:
-- **Resume leads** — submissions, scores, segmentation data
-- **Email gate leads** — email captures by source
-- **Salary checks** — salary lookup logs
-- **Event tracks** — CTA clicks, template copies, calculator usage
-- **Share clicks** — share button usage by channel
-- **Feedback** — user feedback and NPS responses
-- **Threads analytics** — posts, engagement metrics, follower trends, demographics (if you want this included)
+### New warnings detected
+1. **Missing end dates** — Experience/education/project entries that have a start date but no end date and are not marked "Currently here"
+2. **Inconsistent dates** — Entries where end date is before start date (comparing year, then month)
 
-## How it works
+### Implementation
 
-### 1. Create edge function `supabase/functions/analytics-export/index.ts`
-- Accepts GET requests with query params for filtering (e.g., `?range=30d`, `?tables=resume_leads,event_tracks`)
-- Authenticates via a custom API key in the `X-API-Key` header (a secret you set, separate from user auth)
-- Uses the Supabase service role to query all tables (bypasses RLS)
-- Returns a single JSON object with all requested data
+#### 1. `src/components/resume-builder/CompletenessScore.tsx`
+- Add a `DateWarning` interface: `{ label: string; entryName: string }`
+- Add a `useComputeDateWarnings(data)` hook that scans experience, education, projects, and organisations sections for:
+  - Entries with `startYear` but missing `endYear` and `currentlyHere !== "true"` → "Missing end date"
+  - Entries where `endYear < startYear` or (same year and `endMonth < startMonth`) → "End date before start date"
+- Render warnings as amber `AlertTriangle` icon items below the existing checklist when expanded
+- Warnings do not affect the score percentage — they are advisory only
 
-### 2. Add a secret for the API key
-- Create a new secret `ANALYTICS_API_KEY` — a random string you share with your AI agent
-- The edge function checks `X-API-Key` header against this secret
+#### 2. `src/components/resume-builder/i18n.tsx`
+- Add new translation keys for both EN and zh-TW:
+  - `dateWarnMissing`: "Missing end date" / "缺少結束日期"
+  - `dateWarnInconsistent`: "End date is before start date" / "結束日期早於開始日期"
+  - `dateWarnings`: "Date warnings" / "日期警告"
 
-### 3. Example usage from your AI agent
-```
-GET https://<project>.supabase.co/functions/v1/analytics-export?range=30d
-Headers:
-  X-API-Key: <your-analytics-api-key>
-```
-
-Response:
-```json
-{
-  "range": "30d",
-  "resume_leads": { "total": 142, "rows": [...] },
-  "event_tracks": { "total": 580, "rows": [...] },
-  "share_clicks": { "total": 89, "rows": [...] },
-  ...
-}
-```
-
-## Security
-- No user auth required — uses a dedicated API key checked in code
-- Service role used server-side only (never exposed to client)
-- Optional: IP allowlist or rate limiting can be added later
-
-## Files changed
-- **New**: `supabase/functions/analytics-export/index.ts`
-- **Secret**: `ANALYTICS_API_KEY` (you provide or we generate one)
+### Visual design
+- Warning items use `AlertTriangle` icon in amber (`text-amber-500`) instead of the green check / gray circle
+- Entry name (position/company or degree/institution) shown alongside the warning for easy identification
+- Grouped under a small "⚠ Date warnings" subheading within the expanded checklist
 
