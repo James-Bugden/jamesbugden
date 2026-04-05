@@ -1,60 +1,56 @@
-# Create Unlimited Test Account
+
+
+# Plan: Analytics Data Export API
 
 ## Overview
+Create a single edge function that returns all your admin dashboard analytics data as JSON. Your AI agent can call it with a simple HTTPS GET request using an API key for authentication.
 
-Create a new test account with email/password, then bypass all usage limits for admin users across both client-side hooks and server-side edge functions.
+## What data the API will expose
+Based on your existing tables, the endpoint will return:
+- **Resume leads** — submissions, scores, segmentation data
+- **Email gate leads** — email captures by source
+- **Salary checks** — salary lookup logs
+- **Event tracks** — CTA clicks, template copies, calculator usage
+- **Share clicks** — share button usage by channel
+- **Feedback** — user feedback and NPS responses
+- **Threads analytics** — posts, engagement metrics, follower trends, demographics (if you want this included)
 
-## Steps
+## How it works
 
-### Step 1: Create the test account
+### 1. Create edge function `supabase/functions/analytics-export/index.ts`
+- Accepts GET requests with query params for filtering (e.g., `?range=30d`, `?tables=resume_leads,event_tracks`)
+- Authenticates via a custom API key in the `X-API-Key` header (a secret you set, separate from user auth)
+- Uses the Supabase service role to query all tables (bypasses RLS)
+- Returns a single JSON object with all requested data
 
-- Sign up a new account via the app's `/join` page with a test email you provide (e.g. `test@jamesbugden.com`)
-- After email verification, add the account to the `admin_users` table so it gets the admin flag
+### 2. Add a secret for the API key
+- Create a new secret `ANALYTICS_API_KEY` — a random string you share with your AI agent
+- The edge function checks `X-API-Key` header against this secret
 
-### Step 2: Add admin bypass to edge functions
-
-Modify the rate-limit checks in 3 edge functions to skip limits for admin users:
-
-`**supabase/functions/analyze-resume/index.ts**` — After getting `userId`, check `is_admin(userId)` via RPC. If admin, skip the monthly limit check.
-
-`**supabase/functions/parse-resume-to-builder/index.ts**` — Same admin bypass before the import limit check.
-
-`**supabase/functions/generate-pdf/index.ts**` — Same admin bypass before the PDF export limit check.
-
-The pattern added to each function (after userId is resolved):
-
-```typescript
-// Check if user is admin (unlimited usage)
-const { data: isAdmin } = await supabase.rpc("is_admin", { _user_id: userId });
-if (isAdmin) { /* skip rate limit check */ }
+### 3. Example usage from your AI agent
+```
+GET https://<project>.supabase.co/functions/v1/analytics-export?range=30d
+Headers:
+  X-API-Key: <your-analytics-api-key>
 ```
 
-### Step 3: Add admin bypass to client-side hooks
+Response:
+```json
+{
+  "range": "30d",
+  "resume_leads": { "total": 142, "rows": [...] },
+  "event_tracks": { "total": 580, "rows": [...] },
+  "share_clicks": { "total": 89, "rows": [...] },
+  ...
+}
+```
 
-`**src/hooks/useAnalyzerUsage.ts**` — Check `is_admin` RPC, if true set `limitReached` to always false.
+## Security
+- No user auth required — uses a dedicated API key checked in code
+- Service role used server-side only (never exposed to client)
+- Optional: IP allowlist or rate limiting can be added later
 
-`**src/hooks/useBuilderAiUsage.ts**` — Same admin check, bypass import and AI tool limits.
+## Files changed
+- **New**: `supabase/functions/analytics-export/index.ts`
+- **Secret**: `ANALYTICS_API_KEY` (you provide or we generate one)
 
-`**src/lib/documentStore.ts**` — In `checkServerDocumentLimit`, check admin status and return true (no limit) for admins.
-
-### Step 4: Insert admin record
-
-After you create and verify the test account, I'll insert a row into `admin_users` with the test user's ID and email.
-
-## Files Changed
-
-- `supabase/functions/analyze-resume/index.ts`
-- `supabase/functions/parse-resume-to-builder/index.ts`
-- `supabase/functions/generate-pdf/index.ts`
-- `src/hooks/useAnalyzerUsage.ts`
-- `src/hooks/useBuilderAiUsage.ts`
-- `src/lib/documentStore.ts`
-
-## What You Need To Do
-
-Tell me what email and password you'd like for the test account, and I'll set everything up.  
-  
-make sure the limits are not being blocked from teh server also   
-  
-[test@test.com](mailto:test@test.com)  
-test12345
