@@ -359,11 +359,12 @@ export default function InsightsTab({
 
       {/* ── DAU / WAU ── */}
       <div>
-        <div className="flex items-center gap-2 mb-4">
+        <div className="flex items-center gap-2 mb-1">
           <BarChart3 className="w-4 h-4 text-blue-600" />
           <h2 className="font-semibold text-foreground">Daily Active Sessions (30 days)</h2>
           <span className="text-xs text-muted-foreground">Today: {dauWau.todayDau} · WAU avg: {dauWau.wau}</span>
         </div>
+        <p className="text-xs text-muted-foreground mb-4">Unique page+event combinations per day — a proxy for how many distinct user sessions happen daily. WAU is the 7-day rolling average.</p>
         <Card>
           <CardContent className="p-4">
             <div className="h-40">
@@ -382,10 +383,11 @@ export default function InsightsTab({
 
       {/* ── Conversion Funnel ── */}
       <div>
-        <div className="flex items-center gap-2 mb-4">
+        <div className="flex items-center gap-2 mb-1">
           <TrendingUp className="w-4 h-4 text-violet-600" />
           <h2 className="font-semibold text-foreground">Conversion Funnel</h2>
         </div>
+        <p className="text-xs text-muted-foreground mb-4">Tracks the user journey from first contact to active usage: Email Gate (entered email) → Signed Up (created account) → Onboarded (completed setup) → Used Analyzer → Created a document. Percentages show step-to-step conversion.</p>
         <div className="grid grid-cols-5 gap-2">
           {funnel.map((f, i) => {
             const prevVal = i > 0 ? funnel[i - 1].value : f.value;
@@ -408,17 +410,17 @@ export default function InsightsTab({
             <p className="text-xs text-muted-foreground">Resume Analyzer → Signup Conversion</p>
             <p className="text-xl font-bold text-foreground">{analyzerConversion.rate}%</p>
           </div>
-          <p className="text-xs text-muted-foreground">{analyzerConversion.converted} of {analyzerConversion.total} unique analyzer users signed up</p>
+          <p className="text-xs text-muted-foreground">{analyzerConversion.converted} of {analyzerConversion.total} unique analyzer users signed up · Measures how effectively the free analyzer converts anonymous users into registered accounts.</p>
         </div>
       </div>
 
       {/* ── Retention Cohorts ── */}
       <div>
-        <div className="flex items-center gap-2 mb-4">
+        <div className="flex items-center gap-2 mb-1">
           <Users className="w-4 h-4 text-emerald-600" />
           <h2 className="font-semibold text-foreground">Weekly Retention Cohorts</h2>
-          <span className="text-xs text-muted-foreground">Users who returned ≥1 day after signup</span>
         </div>
+        <p className="text-xs text-muted-foreground mb-4">Groups users by the week they signed up and shows how many returned at least 1 day later. Higher retention % means users find ongoing value. Gray bars = total signups that week, green bars = users who came back.</p>
         {cohorts.length === 0 ? (
           <p className="text-sm text-muted-foreground">Not enough data yet</p>
         ) : (
@@ -450,11 +452,12 @@ export default function InsightsTab({
       {/* ── Score Distribution + Career Phase ── */}
       <div className="grid md:grid-cols-2 gap-4">
         <div>
-          <div className="flex items-center gap-2 mb-4">
+          <div className="flex items-center gap-2 mb-1">
             <FileText className="w-4 h-4 text-violet-600" />
             <h2 className="font-semibold text-foreground">Resume Score Distribution</h2>
             <span className="text-xs text-muted-foreground">{scoreDist.total} scores · avg {scoreDist.avg}</span>
           </div>
+          <p className="text-xs text-muted-foreground mb-4">Histogram of all resume analysis scores. Red (0-40) = needs major work, amber (41-70) = decent but improvable, green (71-100) = strong resumes. Shows where most users land and the quality gap.</p>
           <Card>
             <CardContent className="p-4">
               <div className="h-40">
@@ -476,10 +479,11 @@ export default function InsightsTab({
         </div>
 
         <div>
-          <div className="flex items-center gap-2 mb-4">
+          <div className="flex items-center gap-2 mb-1">
             <Users className="w-4 h-4 text-amber-600" />
             <h2 className="font-semibold text-foreground">Career Phase Breakdown</h2>
           </div>
+          <p className="text-xs text-muted-foreground mb-4">What stage users selected during onboarding — helps understand the audience mix and tailor content accordingly.</p>
           <Card>
             <CardContent className="p-4">
               <div className="space-y-2">
@@ -506,10 +510,11 @@ export default function InsightsTab({
       {/* ── Guide Completion + Popular Guides ── */}
       <div className="grid md:grid-cols-2 gap-4">
         <div>
-          <div className="flex items-center gap-2 mb-4">
+          <div className="flex items-center gap-2 mb-1">
             <BookOpen className="w-4 h-4 text-emerald-600" />
             <h2 className="font-semibold text-foreground">Guide Completion Rates</h2>
           </div>
+          <p className="text-xs text-muted-foreground mb-4">% of users who checked off ≥80% of a guide's checklist items. Low rates may indicate guides are too long or users only need specific sections.</p>
           <Card>
             <CardContent className="p-4">
               {guideCompletion.length === 0 ? (
@@ -533,10 +538,11 @@ export default function InsightsTab({
         </div>
 
         <div>
-          <div className="flex items-center gap-2 mb-4">
+          <div className="flex items-center gap-2 mb-1">
             <BookOpen className="w-4 h-4 text-violet-600" />
             <h2 className="font-semibold text-foreground">Popular Guides (by views)</h2>
           </div>
+          <p className="text-xs text-muted-foreground mb-4">Ranked by total page views tracked via events. Identifies which guides drive the most traffic and engagement.</p>
           <Card>
             <CardContent className="p-4">
               {popularGuides.length === 0 ? (
@@ -558,11 +564,12 @@ export default function InsightsTab({
 
       {/* ── Document Creation Trend ── */}
       <div>
-        <div className="flex items-center gap-2 mb-4">
+        <div className="flex items-center gap-2 mb-1">
           <FileText className="w-4 h-4 text-cyan-600" />
           <h2 className="font-semibold text-foreground">Document Creation (30 days)</h2>
           <span className="text-xs text-muted-foreground">{documents.length} total documents</span>
         </div>
+        <p className="text-xs text-muted-foreground mb-4">Daily count of new resumes and cover letters created by users. Stacked bars show the mix — useful for spotting growth trends and which tool is more popular.</p>
         <Card>
           <CardContent className="p-4">
             <div className="h-40">
@@ -582,10 +589,11 @@ export default function InsightsTab({
 
       {/* ── Feature Adoption ── */}
       <div>
-        <div className="flex items-center gap-2 mb-4">
+        <div className="flex items-center gap-2 mb-1">
           <Zap className="w-4 h-4 text-cyan-600" />
           <h2 className="font-semibold text-foreground">Feature Adoption (Unique Users)</h2>
         </div>
+        <p className="text-xs text-muted-foreground mb-4">How many distinct users have tried each AI-powered feature (analyze, import, AI rewrite, etc.) in the last 90 days. "Total uses" shows repeat engagement.</p>
         <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
           {featureAdoption.map(f => (
             <Card key={f.type}>
@@ -604,9 +612,10 @@ export default function InsightsTab({
       <div className="grid md:grid-cols-3 gap-4">
         <Card>
           <CardContent className="pt-5 pb-4 px-5">
-            <h3 className="font-medium text-xs text-muted-foreground uppercase tracking-wide mb-3 flex items-center gap-1">
+            <h3 className="font-medium text-xs text-muted-foreground uppercase tracking-wide mb-1 flex items-center gap-1">
               <BarChart3 className="w-3 h-3" /> Top Searched Roles
             </h3>
+            <p className="text-[10px] text-muted-foreground mb-3">Most frequently searched job titles in the Salary Checker — reveals what roles your audience cares about most.</p>
             {salaryDemand.topRoles.length === 0 ? (
               <p className="text-sm text-muted-foreground">No salary checks yet</p>
             ) : (
@@ -624,9 +633,10 @@ export default function InsightsTab({
 
         <Card>
           <CardContent className="pt-5 pb-4 px-5">
-            <h3 className="font-medium text-xs text-muted-foreground uppercase tracking-wide mb-3 flex items-center gap-1">
+            <h3 className="font-medium text-xs text-muted-foreground uppercase tracking-wide mb-1 flex items-center gap-1">
               <BarChart3 className="w-3 h-3" /> Top Sectors
             </h3>
+            <p className="text-[10px] text-muted-foreground mb-3">Industries users search for salary data — helps prioritize which sector data to expand.</p>
             {salaryDemand.topSectors.length === 0 ? (
               <p className="text-sm text-muted-foreground">No sector data</p>
             ) : (
@@ -644,9 +654,10 @@ export default function InsightsTab({
 
         <Card>
           <CardContent className="pt-5 pb-4 px-5">
-            <h3 className="font-medium text-xs text-muted-foreground uppercase tracking-wide mb-3 flex items-center gap-1">
+            <h3 className="font-medium text-xs text-muted-foreground uppercase tracking-wide mb-1 flex items-center gap-1">
               <Globe className="w-3 h-3" /> Language Split
             </h3>
+            <p className="text-[10px] text-muted-foreground mb-3">EN vs ZH-TW usage across resume analyzer and salary checker — guides localization investment decisions.</p>
             {langSplit.length === 0 ? (
               <p className="text-sm text-muted-foreground">No data</p>
             ) : (
@@ -669,11 +680,12 @@ export default function InsightsTab({
 
       {/* ── Share Virality ── */}
       <div>
-        <div className="flex items-center gap-2 mb-4">
+        <div className="flex items-center gap-2 mb-1">
           <Share2 className="w-4 h-4 text-indigo-600" />
           <h2 className="font-semibold text-foreground">Share Virality — Top Pages</h2>
           <span className="text-xs text-muted-foreground">{shareClicks.length} total shares</span>
         </div>
+        <p className="text-xs text-muted-foreground mb-4">Which pages users share most and via which channels (LinkedIn, WhatsApp, etc.). High share counts indicate content worth promoting further.</p>
         {shareVirality.length === 0 ? (
           <p className="text-sm text-muted-foreground">No share data yet</p>
         ) : (
