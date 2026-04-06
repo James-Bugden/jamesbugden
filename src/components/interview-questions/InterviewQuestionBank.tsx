@@ -195,6 +195,11 @@ export default function InterviewQuestionBank({ lang: initialLang }: { lang: Lan
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
 
+  // Track page view once
+  useEffect(() => {
+    trackEvent("qbank_view", "page_view", { lang });
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps
+
   // Fetch category counts once on mount
   useEffect(() => {
     const fetchCounts = async () => {
