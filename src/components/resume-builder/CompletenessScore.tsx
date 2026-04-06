@@ -73,6 +73,10 @@ function useComputeChecks(data: ResumeData): CheckItem[] {
   ];
 }
 
+function toMonthIndex(year: string, month: string | undefined): number {
+  return parseInt(year, 10) * 12 + monthToNum(month);
+}
+
 function useComputeDateWarnings(data: ResumeData): DateWarning[] {
   const t = useT();
   const warnings: DateWarning[] = [];
@@ -102,6 +106,37 @@ function useComputeDateWarnings(data: ResumeData): DateWarning[] {
       }
     }
   }
+
+  // Overlapping date ranges within experience sections
+  const expEntries = data.sections
+    .filter((s) => s.type === "experience")
+    .flatMap((s) => s.entries)
+    .filter((e) => e.fields.startYear)
+    .map((e) => ({
+      name: e.fields.position || e.fields.company || "—",
+      start: toMonthIndex(e.fields.startYear, e.fields.startMonth),
+      end: e.fields.currentlyHere === "true"
+        ? Infinity
+        : e.fields.endYear
+          ? toMonthIndex(e.fields.endYear, e.fields.endMonth)
+          : null,
+    }))
+    .filter((e) => e.end !== null) as { name: string; start: number; end: number }[];
+
+  for (let i = 0; i < expEntries.length; i++) {
+    for (let j = i + 1; j < expEntries.length; j++) {
+      const a = expEntries[i];
+      const b = expEntries[j];
+      // Two ranges overlap if a.start <= b.end AND b.start <= a.end
+      if (a.start <= b.end && b.start <= a.end) {
+        warnings.push({
+          label: t("dateWarnOverlap"),
+          entryName: `${a.name} & ${b.name}`,
+        });
+      }
+    }
+  }
+
   return warnings;
 }
 
