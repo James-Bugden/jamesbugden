@@ -564,11 +564,12 @@ export default function InsightsTab({
 
       {/* ── Document Creation Trend ── */}
       <div>
-        <div className="flex items-center gap-2 mb-4">
+        <div className="flex items-center gap-2 mb-1">
           <FileText className="w-4 h-4 text-cyan-600" />
           <h2 className="font-semibold text-foreground">Document Creation (30 days)</h2>
           <span className="text-xs text-muted-foreground">{documents.length} total documents</span>
         </div>
+        <p className="text-xs text-muted-foreground mb-4">Daily count of new resumes and cover letters created by users. Stacked bars show the mix — useful for spotting growth trends and which tool is more popular.</p>
         <Card>
           <CardContent className="p-4">
             <div className="h-40">
