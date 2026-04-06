@@ -332,6 +332,16 @@ export default function AdminDashboard() {
     setShareClicksLoading(false);
   };
 
+  const fetchDocuments = async () => {
+    const { data } = await supabase.from("user_documents").select("type, created_at, user_id").order("created_at", { ascending: false }).limit(1000);
+    if (data) setDocuments(data as any);
+  };
+
+  const fetchProfiles = async () => {
+    const { data } = await supabase.from("profiles").select("user_id, onboarding_completed, career_phase, created_at").limit(1000);
+    if (data) setProfileRows(data as any);
+  };
+
   const fetchEventTracks = async () => {
     setEventTracksLoading(true);
     const { data } = await supabase.from("event_tracks" as any).select("event_type, event_name, page, metadata, created_at").order("created_at", { ascending: false }).limit(1000);
