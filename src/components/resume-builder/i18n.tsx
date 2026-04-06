@@ -344,6 +344,7 @@ export const translations = {
     dateWarnings: "Date warnings",
     dateWarnMissing: "Missing end date",
     dateWarnInconsistent: "End date is before start date",
+    dateWarnOverlap: "Overlapping date ranges",
 
     // Analyzer CTA
     analyzerCtaTitle: "Want to know how your resume scores?",
