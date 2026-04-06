@@ -348,18 +348,34 @@ export default function InsightsTab({
 
 
   // ══════════════════════════════════════════════════════════════════════
-  // 9. Feature Adoption (unique users per AI feature)
+  // 9. Feature Usage Overview (all features, not just AI)
   // ══════════════════════════════════════════════════════════════════════
-  const featureAdoption = useMemo(() => {
-    const byType: Record<string, Set<string>> = {};
-    for (const r of aiUsageRows) {
-      if (!byType[r.usage_type]) byType[r.usage_type] = new Set();
-      byType[r.usage_type].add(r.user_id);
-    }
-    return Object.entries(byType)
-      .map(([type, users]) => ({ type: type.replace(/_/g, " "), users: users.size, uses: aiUsageRows.filter(r => r.usage_type === type).length }))
-      .sort((a, b) => b.users - a.users);
-  }, [aiUsageRows]);
+  const featureUsage = useMemo(() => {
+    const resumeUsers = new Set(documents.filter(d => d.type === "resume").map(d => d.user_id));
+    const coverLetterUsers = new Set(documents.filter(d => d.type === "cover_letter").map(d => d.user_id));
+    const analyzerUsers = new Set(resumeLeads.map(r => r.email));
+    const importUsers = new Set(aiUsageRows.filter(r => r.usage_type === "import").map(r => r.user_id));
+    const aiToolUsers = new Set(aiUsageRows.filter(r => r.usage_type === "ai_tool").map(r => r.user_id));
+    const qbankViews = eventTracks.filter(e => e.event_type === "qbank_view");
+    const guideViews = eventTracks.filter(e => e.event_type === "guide_view");
+    const guideUniqueNames = new Set(guideViews.map(e => e.event_name));
+    const salaryTotal = salaryChecks.length;
+    const printUsers = new Set(aiUsageRows.filter(r => r.usage_type === "print_export").map(r => r.user_id));
+
+    const features = [
+      { name: "Resume Builder", users: resumeUsers.size, actions: documents.filter(d => d.type === "resume").length, color: "hsl(var(--primary))", category: "documents" },
+      { name: "Cover Letter", users: coverLetterUsers.size, actions: documents.filter(d => d.type === "cover_letter").length, color: "#059669", category: "documents" },
+      { name: "Resume Analyzer", users: analyzerUsers.size, actions: resumeLeads.length, color: "#7c3aed", category: "documents" },
+      { name: "AI Import", users: importUsers.size, actions: aiUsageRows.filter(r => r.usage_type === "import").length, color: "#0891b2", category: "ai" },
+      { name: "AI Tools", users: aiToolUsers.size, actions: aiUsageRows.filter(r => r.usage_type === "ai_tool").length, color: "#2563eb", category: "ai" },
+      { name: "Question Bank", users: qbankViews.length, actions: eventTracks.filter(e => e.event_type?.startsWith("qbank_")).length, color: "#9333ea", category: "content" },
+      { name: "Guides", users: guideUniqueNames.size, actions: guideViews.length, color: "#a855f7", category: "content" },
+      { name: "Salary Checker", users: salaryTotal, actions: salaryTotal, color: "#d97706", category: "tools" },
+      { name: "Print/Export", users: printUsers.size, actions: aiUsageRows.filter(r => r.usage_type === "print_export").length, color: "#dc2626", category: "tools" },
+    ].sort((a, b) => b.users - a.users);
+
+    return features;
+  }, [documents, resumeLeads, aiUsageRows, eventTracks, salaryChecks]);
 
   // ══════════════════════════════════════════════════════════════════════
   // 10. Salary Checker Demand by Role & Sector
