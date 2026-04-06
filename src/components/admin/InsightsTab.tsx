@@ -272,6 +272,43 @@ export default function InsightsTab({
   }, [eventTracks, documents]);
 
   // ══════════════════════════════════════════════════════════════════════
+  // 6b. Guide → Action Conversion (guide view → doc creation within 24h)
+  // ══════════════════════════════════════════════════════════════════════
+  const guideConversion = useMemo(() => {
+    const viewEvents = eventTracks.filter(e => e.event_type === "guide_view");
+    const WINDOW_MS = 24 * 60 * 60 * 1000;
+    const perGuide: Record<string, { views: number; conversions: number }> = {};
+
+    for (const view of viewEvents) {
+      const guideId = view.event_name;
+      if (!perGuide[guideId]) perGuide[guideId] = { views: 0, conversions: 0 };
+      perGuide[guideId].views++;
+
+      const viewTime = new Date(view.created_at).getTime();
+      const converted = documents.some(d => {
+        const docTime = new Date(d.created_at).getTime();
+        return docTime >= viewTime && docTime <= viewTime + WINDOW_MS;
+      });
+      if (converted) perGuide[guideId].conversions++;
+    }
+
+    const totalViews = viewEvents.length;
+    const totalConversions = Object.values(perGuide).reduce((s, g) => s + g.conversions, 0);
+    const overallRate = totalViews > 0 ? Math.round((totalConversions / totalViews) * 100) : 0;
+
+    const perGuideArr = Object.entries(perGuide)
+      .map(([guide, { views, conversions }]) => ({
+        guide,
+        views,
+        conversions,
+        rate: views > 0 ? Math.round((conversions / views) * 100) : 0,
+      }))
+      .sort((a, b) => b.conversions - a.conversions);
+
+    return { totalViews, totalConversions, overallRate, perGuide: perGuideArr };
+  }, [eventTracks, documents]);
+
+  // ══════════════════════════════════════════════════════════════════════
   // 7. Document Creation Trends (30 days)
   // ══════════════════════════════════════════════════════════════════════
   const docTrend = useMemo(() => {
