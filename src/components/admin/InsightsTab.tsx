@@ -272,6 +272,43 @@ export default function InsightsTab({
   }, [eventTracks, documents]);
 
   // ══════════════════════════════════════════════════════════════════════
+  // 6b. Guide → Action Conversion (guide view → doc creation within 24h)
+  // ══════════════════════════════════════════════════════════════════════
+  const guideConversion = useMemo(() => {
+    const viewEvents = eventTracks.filter(e => e.event_type === "guide_view");
+    const WINDOW_MS = 24 * 60 * 60 * 1000;
+    const perGuide: Record<string, { views: number; conversions: number }> = {};
+
+    for (const view of viewEvents) {
+      const guideId = view.event_name;
+      if (!perGuide[guideId]) perGuide[guideId] = { views: 0, conversions: 0 };
+      perGuide[guideId].views++;
+
+      const viewTime = new Date(view.created_at).getTime();
+      const converted = documents.some(d => {
+        const docTime = new Date(d.created_at).getTime();
+        return docTime >= viewTime && docTime <= viewTime + WINDOW_MS;
+      });
+      if (converted) perGuide[guideId].conversions++;
+    }
+
+    const totalViews = viewEvents.length;
+    const totalConversions = Object.values(perGuide).reduce((s, g) => s + g.conversions, 0);
+    const overallRate = totalViews > 0 ? Math.round((totalConversions / totalViews) * 100) : 0;
+
+    const perGuideArr = Object.entries(perGuide)
+      .map(([guide, { views, conversions }]) => ({
+        guide,
+        views,
+        conversions,
+        rate: views > 0 ? Math.round((conversions / views) * 100) : 0,
+      }))
+      .sort((a, b) => b.conversions - a.conversions);
+
+    return { totalViews, totalConversions, overallRate, perGuide: perGuideArr };
+  }, [eventTracks, documents]);
+
+  // ══════════════════════════════════════════════════════════════════════
   // 7. Document Creation Trends (30 days)
   // ══════════════════════════════════════════════════════════════════════
   const docTrend = useMemo(() => {
@@ -629,6 +666,64 @@ export default function InsightsTab({
                       <Bar dataKey="count" name="Sessions" radius={[2, 2, 0, 0]}>
                         {guideEngagementMetrics.dropoff.map((_, i) => (
                           <Cell key={i} fill={i === 3 ? "#059669" : i === 2 ? "#d97706" : "#ef4444"} />
+                        ))}
+                      </Bar>
+                    </BarChart>
+                  </ResponsiveContainer>
+                </div>
+              )}
+            </CardContent>
+          </Card>
+        </div>
+      </div>
+
+      {/* ── Guide → Action Conversion ── */}
+      <div>
+        <div className="flex items-center gap-2 mb-4">
+          <TrendingUp className="w-4 h-4 text-emerald-600" />
+          <h2 className="font-semibold text-foreground">Guide → Action Conversion</h2>
+          <span className="text-xs text-muted-foreground">Users who created a document within 24h of viewing a guide</span>
+        </div>
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+          {/* Overall stat */}
+          <Card>
+            <CardContent className="p-4 text-center">
+              <p className="text-3xl font-bold text-emerald-600">{guideConversion.overallRate}%</p>
+              <p className="text-xs text-muted-foreground mt-1">Overall conversion rate</p>
+              <p className="text-[10px] text-muted-foreground">{guideConversion.totalConversions} conversions / {guideConversion.totalViews} guide views</p>
+            </CardContent>
+          </Card>
+
+          {/* Per-guide bar chart */}
+          <Card className="md:col-span-2">
+            <CardContent className="p-4">
+              <h3 className="text-xs font-medium text-muted-foreground uppercase tracking-wide mb-2">Conversion Rate by Guide</h3>
+              {guideConversion.perGuide.length === 0 ? (
+                <p className="text-sm text-muted-foreground">No conversion data yet</p>
+              ) : (
+                <div className="h-48">
+                  <ResponsiveContainer width="100%" height="100%">
+                    <BarChart
+                      data={guideConversion.perGuide.slice(0, 10)}
+                      layout="vertical"
+                      margin={{ top: 5, right: 20, left: 5, bottom: 0 }}
+                    >
+                      <XAxis type="number" tick={{ fontSize: 10 }} unit="%" domain={[0, 100]} />
+                      <YAxis
+                        type="category"
+                        dataKey="guide"
+                        tick={{ fontSize: 10 }}
+                        width={100}
+                        tickFormatter={v => v.replace(/^guide_/, "").replace(/_/g, " ").slice(0, 18)}
+                      />
+                      <Tooltip
+                        formatter={(value: number, _name: string, props: any) =>
+                          [`${value}% (${props.payload.conversions}/${props.payload.views})`, "Conversion"]
+                        }
+                      />
+                      <Bar dataKey="rate" name="Conversion %" radius={[0, 4, 4, 0]}>
+                        {guideConversion.perGuide.slice(0, 10).map((g, i) => (
+                          <Cell key={i} fill={g.rate >= 30 ? "#059669" : g.rate >= 15 ? "#d97706" : "#94a3b8"} />
                         ))}
                       </Bar>
                     </BarChart>
