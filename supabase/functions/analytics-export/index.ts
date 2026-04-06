@@ -98,6 +98,65 @@ Deno.serve(async (req) => {
       result[r.table] = r.data;
     }
 
+    // ── Guide Engagement Insights (from guide_exit events) ──────────
+    const includeInsights = url.searchParams.get("insights") !== "false";
+    if (includeInsights) {
+      const eventRows = (result.event_tracks as any)?.rows || [];
+
+      const exitEvents = eventRows.filter((e: any) => e.event_type === "guide_exit" && e.metadata);
+      const viewEvents = eventRows.filter((e: any) => e.event_type === "guide_view");
+
+      // Views per guide
+      const viewCounts: Record<string, number> = {};
+      viewEvents.forEach((e: any) => { viewCounts[e.event_name] = (viewCounts[e.event_name] || 0) + 1; });
+
+      // Exit data per guide
+      const exitData: Record<string, { scrollDepths: number[]; times: number[] }> = {};
+      for (const e of exitEvents) {
+        const meta = e.metadata;
+        const guideId = meta?.guide_id || e.event_name;
+        if (!exitData[guideId]) exitData[guideId] = { scrollDepths: [], times: [] };
+        if (typeof meta?.scroll_depth_pct === "number") exitData[guideId].scrollDepths.push(meta.scroll_depth_pct);
+        if (typeof meta?.time_on_page_sec === "number") exitData[guideId].times.push(meta.time_on_page_sec);
+      }
+
+      const allGuideIds = new Set([...Object.keys(viewCounts), ...Object.keys(exitData)]);
+      const guideMetrics = Array.from(allGuideIds).map(id => {
+        const data = exitData[id];
+        const visits = viewCounts[id] || 0;
+        const sessions = data?.scrollDepths.length || 0;
+        const completed = data?.scrollDepths.filter((d: number) => d >= 75).length || 0;
+        const avgScroll = sessions > 0 ? Math.round(data.scrollDepths.reduce((a: number, b: number) => a + b, 0) / sessions) : 0;
+        const avgTime = sessions > 0 ? Math.round(data.times.reduce((a: number, b: number) => a + b, 0) / sessions) : 0;
+        const bounced = data ? data.scrollDepths.filter((d: number, i: number) => d < 10 && data.times[i] < 15).length : 0;
+        return {
+          guide_id: id,
+          visits,
+          tracked_sessions: sessions,
+          avg_scroll_depth_pct: avgScroll,
+          avg_time_on_page_sec: avgTime,
+          completion_rate_pct: sessions > 0 ? Math.round((completed / sessions) * 100) : 0,
+          bounce_rate_pct: sessions > 0 ? Math.round((bounced / sessions) * 100) : 0,
+        };
+      }).sort((a, b) => b.visits - a.visits);
+
+      // Drop-off histogram
+      const allScrolls = exitEvents.map((e: any) => e.metadata?.scroll_depth_pct).filter((v: any): v is number => typeof v === "number");
+      const dropoff = {
+        "0_25": allScrolls.filter((d: number) => d < 25).length,
+        "25_50": allScrolls.filter((d: number) => d >= 25 && d < 50).length,
+        "50_75": allScrolls.filter((d: number) => d >= 50 && d < 75).length,
+        "75_100": allScrolls.filter((d: number) => d >= 75).length,
+      };
+
+      result.guide_engagement = {
+        total_exit_sessions: exitEvents.length,
+        total_views: viewEvents.length,
+        guides: guideMetrics,
+        scroll_dropoff_histogram: dropoff,
+      };
+    }
+
     return new Response(JSON.stringify(result), {
       headers: { ...corsHeaders, "Content-Type": "application/json" },
     });
