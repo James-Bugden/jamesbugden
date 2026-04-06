@@ -195,9 +195,9 @@ export default function InterviewQuestionBank({ lang: initialLang }: { lang: Lan
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
 
-  // Track page view
+  // Track page view once
   useEffect(() => {
-    trackEvent("qbank_view", "page_load", { lang });
+    trackEvent("qbank_view", "page_view", { lang });
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   // Fetch category counts once on mount
@@ -217,16 +217,16 @@ export default function InterviewQuestionBank({ lang: initialLang }: { lang: Lan
     fetchCounts();
   }, []);
 
-  // Debounce search + track
+  // Debounce search
   useEffect(() => {
     const timer = setTimeout(() => {
       setDebouncedSearch(search);
-      if (search.trim()) {
-        trackEvent("qbank_search", search.trim().toLowerCase().slice(0, 80), { lang });
+      if (search.length >= 2) {
+        trackEvent("qbank_search", "search", { term: search, lang });
       }
     }, 300);
     return () => clearTimeout(timer);
-  }, [search, lang]);
+  }, [search]); // eslint-disable-line react-hooks/exhaustive-deps
 
   // Sync URL params
   useEffect(() => {
@@ -312,19 +312,15 @@ export default function InterviewQuestionBank({ lang: initialLang }: { lang: Lan
   }, [hasMore, loading]);
 
   const toggleCategory = (key: string) => {
-    const isRemoving = selectedCategories.includes(key);
     setSelectedCategories(prev =>
-      isRemoving ? prev.filter(c => c !== key) : [...prev, key]
+      prev.includes(key) ? prev.filter(c => c !== key) : [...prev, key]
     );
-    if (!isRemoving) trackEvent("qbank_filter", "category", { category: key, lang });
   };
 
   const toggleDifficulty = (value: number) => {
-    const isRemoving = selectedDifficulties.includes(value);
     setSelectedDifficulties(prev =>
-      isRemoving ? prev.filter(d => d !== value) : [...prev, value]
+      prev.includes(value) ? prev.filter(d => d !== value) : [...prev, value]
     );
-    if (!isRemoving) trackEvent("qbank_filter", "difficulty", { difficulty: value, lang });
   };
 
   const toggleAudience = (key: string) => {
@@ -373,7 +369,7 @@ export default function InterviewQuestionBank({ lang: initialLang }: { lang: Lan
     const { data } = await query;
     if (data && data.length > 0) {
       setRandomQuestion(data[0] as Question);
-      trackEvent("qbank_action", "random_question", { question_id: data[0].id, category: data[0].category, lang });
+      trackEvent("qbank_action", "random_question", { category: (data[0] as Question).category, lang });
     }
   };
 
@@ -839,16 +835,16 @@ export default function InterviewQuestionBank({ lang: initialLang }: { lang: Lan
               const hasAnswer = !!(q.answer_en || q.answer_zh);
               const isExpanded = expandedIds.has(q.id);
               const toggleExpand = () => {
+                const willExpand = !isExpanded;
                 setExpandedIds(prev => {
                   const next = new Set(prev);
-                  if (next.has(q.id)) {
-                    next.delete(q.id);
-                  } else {
-                    next.add(q.id);
-                    trackEvent("qbank_action", "reveal_answer", { question_id: q.id, category: q.category, difficulty: q.difficulty, lang });
-                  }
+                  if (next.has(q.id)) next.delete(q.id);
+                  else next.add(q.id);
                   return next;
                 });
+                if (willExpand && hasAnswer) {
+                  trackEvent("qbank_action", "reveal_answer", { question_id: q.id, category: q.category, lang });
+                }
               };
 
               return (

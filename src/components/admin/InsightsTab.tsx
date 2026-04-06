@@ -5,7 +5,7 @@ import {
   BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer,
   AreaChart, Area, Cell, LineChart, Line,
 } from "recharts";
-import { TrendingUp, Users, FileText, Zap, Globe, Share2, BarChart3, BookOpen, AlertTriangle, Search } from "lucide-react";
+import { TrendingUp, Users, FileText, Zap, Globe, Share2, BarChart3, BookOpen, AlertTriangle } from "lucide-react";
 
 // ── Types ─────────────────────────────────────────────────────────────────────
 
@@ -344,65 +344,8 @@ export default function InsightsTab({
     return Object.entries(counts).sort((a, b) => b[1] - a[1]).map(([phase, count]) => ({ phase, count }));
   }, [profiles]);
 
-  // ══════════════════════════════════════════════════════════════════════
-  // 8b. Question Bank Summary
-  // ══════════════════════════════════════════════════════════════════════
-  const questionBankSummary = useMemo(() => {
-    const byCategory: Record<string, number> = {};
-    const byDifficulty: Record<number, number> = {};
-    for (const q of interviewQuestions) {
-      byCategory[q.category] = (byCategory[q.category] || 0) + 1;
-      byDifficulty[q.difficulty] = (byDifficulty[q.difficulty] || 0) + 1;
-    }
-    const categories = Object.entries(byCategory).sort((a, b) => b[1] - a[1]).map(([cat, count]) => ({ cat, count }));
-    const difficulties = Object.entries(byDifficulty).sort((a, b) => Number(a[0]) - Number(b[0])).map(([level, count]) => ({ level: Number(level), count }));
-    return { total: interviewQuestions.length, categories, difficulties };
-  }, [interviewQuestions]);
 
-  // ══════════════════════════════════════════════════════════════════════
-  // 8c. Question Bank User Usage (from event_tracks qbank_* events)
-  // ══════════════════════════════════════════════════════════════════════
-  const qbankUsage = useMemo(() => {
-    const qbEvents = eventTracks.filter(e => e.event_type.startsWith("qbank_"));
-    const pageViews = qbEvents.filter(e => e.event_type === "qbank_view").length;
-    const searches = qbEvents.filter(e => e.event_type === "qbank_search");
-    const reveals = qbEvents.filter(e => e.event_name === "reveal_answer");
-    const randoms = qbEvents.filter(e => e.event_name === "random_question");
-    const filters = qbEvents.filter(e => e.event_type === "qbank_filter");
 
-    // Top searched terms
-    const searchCounts: Record<string, number> = {};
-    searches.forEach(e => {
-      const term = e.event_name;
-      searchCounts[term] = (searchCounts[term] || 0) + 1;
-    });
-    const topSearches = Object.entries(searchCounts).sort((a, b) => b[1] - a[1]).slice(0, 10);
-
-    // Most revealed categories
-    const revealCats: Record<string, number> = {};
-    reveals.forEach(e => {
-      const cat = (e.metadata as any)?.category || "unknown";
-      revealCats[cat] = (revealCats[cat] || 0) + 1;
-    });
-    const topRevealCats = Object.entries(revealCats).sort((a, b) => b[1] - a[1]).slice(0, 8);
-
-    // Filter usage by type
-    const filterCats: Record<string, number> = {};
-    filters.forEach(e => {
-      const val = (e.metadata as any)?.category || (e.metadata as any)?.difficulty || e.event_name;
-      filterCats[String(val)] = (filterCats[String(val)] || 0) + 1;
-    });
-    const topFilters = Object.entries(filterCats).sort((a, b) => b[1] - a[1]).slice(0, 8);
-
-    // Language split
-    const langCounts: Record<string, number> = { en: 0, zh: 0 };
-    qbEvents.forEach(e => {
-      const l = (e.metadata as any)?.lang || "en";
-      langCounts[l] = (langCounts[l] || 0) + 1;
-    });
-
-    return { pageViews, searches: searches.length, reveals: reveals.length, randoms: randoms.length, topSearches, topRevealCats, topFilters, langCounts };
-  }, [eventTracks]);
 
   // ══════════════════════════════════════════════════════════════════════
   // 9. Feature Adoption (unique users per AI feature)
@@ -642,107 +585,120 @@ export default function InsightsTab({
         </div>
       </div>
 
-      {/* ── Question Bank User Usage ── */}
-      {qbankUsage.pageViews > 0 && (
-        <div>
-          <div className="flex items-center gap-2 mb-4">
-            <Search className="w-4 h-4 text-indigo-600" />
-            <h2 className="font-semibold text-foreground">Question Bank Usage</h2>
-            <span className="text-xs text-muted-foreground">{qbankUsage.pageViews} page views</span>
-          </div>
+      {/* ── Question Bank Usage ── */}
+      {(() => {
+        const qbEvents = eventTracks.filter(e => e.event_type?.startsWith("qbank_"));
+        if (qbEvents.length === 0) return null;
 
-          {/* Summary cards */}
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-3 mb-4">
-            <Card>
-              <CardContent className="p-3 text-center">
-                <p className="text-2xl font-bold text-foreground">{qbankUsage.pageViews}</p>
-                <p className="text-[11px] text-muted-foreground">Page Views</p>
-              </CardContent>
-            </Card>
-            <Card>
-              <CardContent className="p-3 text-center">
-                <p className="text-2xl font-bold text-foreground">{qbankUsage.searches}</p>
-                <p className="text-[11px] text-muted-foreground">Searches</p>
-              </CardContent>
-            </Card>
-            <Card>
-              <CardContent className="p-3 text-center">
-                <p className="text-2xl font-bold text-foreground">{qbankUsage.reveals}</p>
-                <p className="text-[11px] text-muted-foreground">Answer Reveals</p>
-              </CardContent>
-            </Card>
-            <Card>
-              <CardContent className="p-3 text-center">
-                <p className="text-2xl font-bold text-foreground">{qbankUsage.randoms}</p>
-                <p className="text-[11px] text-muted-foreground">Random Clicks</p>
-              </CardContent>
-            </Card>
-          </div>
+        const views = qbEvents.filter(e => e.event_type === "qbank_view").length;
+        const searches = qbEvents.filter(e => e.event_type === "qbank_search");
+        const reveals = qbEvents.filter(e => e.event_type === "qbank_action" && e.event_name === "reveal_answer").length;
+        const randoms = qbEvents.filter(e => e.event_type === "qbank_action" && e.event_name === "random_question").length;
 
-          <div className="grid md:grid-cols-3 gap-4">
-            {/* Top Searches */}
-            <Card>
-              <CardContent className="pt-5 pb-4 px-5">
-                <h3 className="font-medium text-xs text-muted-foreground uppercase tracking-wide mb-3">Top Search Terms</h3>
-                {qbankUsage.topSearches.length === 0 ? (
-                  <p className="text-sm text-muted-foreground">No searches yet</p>
-                ) : (
-                  <div className="space-y-1.5">
-                    {qbankUsage.topSearches.map(([term, count]) => (
+        // Top search terms
+        const termCounts: Record<string, number> = {};
+        searches.forEach(e => {
+          const term = (e.metadata as any)?.term;
+          if (term) termCounts[term] = (termCounts[term] || 0) + 1;
+        });
+        const topTerms = Object.entries(termCounts).sort((a, b) => b[1] - a[1]).slice(0, 8);
+
+        // Most revealed categories
+        const revealCats: Record<string, number> = {};
+        qbEvents.filter(e => e.event_name === "reveal_answer").forEach(e => {
+          const cat = (e.metadata as any)?.category;
+          if (cat) revealCats[cat] = (revealCats[cat] || 0) + 1;
+        });
+        const topRevealCats = Object.entries(revealCats).sort((a, b) => b[1] - a[1]).slice(0, 6);
+
+        // Language split
+        const langCounts: Record<string, number> = { en: 0, zh: 0 };
+        qbEvents.filter(e => e.event_type === "qbank_view").forEach(e => {
+          const l = (e.metadata as any)?.lang || "en";
+          langCounts[l] = (langCounts[l] || 0) + 1;
+        });
+        const totalLang = langCounts.en + langCounts.zh || 1;
+
+        return (
+          <div>
+            <div className="flex items-center gap-2 mb-4">
+              <BookOpen className="w-4 h-4 text-violet-600" />
+              <h2 className="font-semibold text-foreground">Question Bank Usage</h2>
+              <span className="text-xs text-muted-foreground">{qbEvents.length} events</span>
+            </div>
+            <p className="text-xs text-muted-foreground mb-3">
+              Tracks page views, searches, answer reveals, and random question clicks on the Interview Question Bank.
+            </p>
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-3 mb-4">
+              {[
+                { label: "Page Views", value: views },
+                { label: "Searches", value: searches.length },
+                { label: "Answer Reveals", value: reveals },
+                { label: "Random Clicks", value: randoms },
+              ].map(s => (
+                <Card key={s.label}>
+                  <CardContent className="p-3 text-center">
+                    <p className="text-2xl font-bold text-foreground">{s.value}</p>
+                    <p className="text-[11px] text-muted-foreground">{s.label}</p>
+                  </CardContent>
+                </Card>
+              ))}
+            </div>
+            <div className="grid md:grid-cols-3 gap-4">
+              {/* Top search terms */}
+              <Card>
+                <CardContent className="pt-4 pb-3 px-4">
+                  <h3 className="font-medium text-xs text-muted-foreground uppercase tracking-wide mb-2">Top Searches</h3>
+                  <div className="space-y-1">
+                    {topTerms.map(([term, count]) => (
                       <div key={term} className="flex items-center justify-between text-sm">
-                        <span className="truncate text-muted-foreground">{term}</span>
+                        <span className="truncate">{term}</span>
                         <span className="font-semibold tabular-nums">{count}</span>
                       </div>
                     ))}
+                    {topTerms.length === 0 && <p className="text-xs text-muted-foreground">No searches yet</p>}
                   </div>
-                )}
-              </CardContent>
-            </Card>
-
-            {/* Most Revealed Categories */}
-            <Card>
-              <CardContent className="pt-5 pb-4 px-5">
-                <h3 className="font-medium text-xs text-muted-foreground uppercase tracking-wide mb-3">Most Revealed Categories</h3>
-                {qbankUsage.topRevealCats.length === 0 ? (
-                  <p className="text-sm text-muted-foreground">No reveals yet</p>
-                ) : (
-                  <div className="space-y-1.5">
-                    {qbankUsage.topRevealCats.map(([cat, count]) => (
+                </CardContent>
+              </Card>
+              {/* Most revealed categories */}
+              <Card>
+                <CardContent className="pt-4 pb-3 px-4">
+                  <h3 className="font-medium text-xs text-muted-foreground uppercase tracking-wide mb-2">Most Revealed Categories</h3>
+                  <div className="space-y-1">
+                    {topRevealCats.map(([cat, count]) => (
                       <div key={cat} className="flex items-center justify-between text-sm">
-                        <span className="truncate text-muted-foreground capitalize">{cat.replace(/_/g, " ")}</span>
+                        <span className="capitalize truncate">{cat.replace(/_/g, " ")}</span>
                         <span className="font-semibold tabular-nums">{count}</span>
                       </div>
                     ))}
+                    {topRevealCats.length === 0 && <p className="text-xs text-muted-foreground">No reveals yet</p>}
                   </div>
-                )}
-              </CardContent>
-            </Card>
-
-            {/* Language Split */}
-            <Card>
-              <CardContent className="pt-5 pb-4 px-5">
-                <h3 className="font-medium text-xs text-muted-foreground uppercase tracking-wide mb-3">Language Split</h3>
-                <div className="space-y-2">
-                  {Object.entries(qbankUsage.langCounts).filter(([, c]) => c > 0).map(([lang, count]) => {
-                    const total = Object.values(qbankUsage.langCounts).reduce((a, b) => a + b, 0);
-                    const pct = total > 0 ? Math.round((count / total) * 100) : 0;
-                    return (
-                      <div key={lang} className="flex items-center gap-3">
-                        <span className="text-sm font-medium w-12">{lang.toUpperCase()}</span>
-                        <div className="flex-1 h-5 bg-muted rounded overflow-hidden">
-                          <div className="h-full bg-indigo-500 rounded" style={{ width: `${pct}%` }} />
+                </CardContent>
+              </Card>
+              {/* Language split */}
+              <Card>
+                <CardContent className="pt-4 pb-3 px-4">
+                  <h3 className="font-medium text-xs text-muted-foreground uppercase tracking-wide mb-2">Language Split</h3>
+                  <div className="space-y-2">
+                    {(["en", "zh"] as const).map(l => {
+                      const pct = Math.round((langCounts[l] / totalLang) * 100);
+                      return (
+                        <div key={l} className="flex items-center gap-2">
+                          <span className="text-sm w-8">{l.toUpperCase()}</span>
+                          <div className="flex-1 h-4 bg-muted rounded overflow-hidden">
+                            <div className="h-full bg-violet-500 rounded" style={{ width: `${pct}%` }} />
+                          </div>
+                          <span className="text-sm font-semibold tabular-nums w-10 text-right">{pct}%</span>
                         </div>
-                        <span className="text-sm tabular-nums">{pct}%</span>
-                        <span className="text-xs text-muted-foreground">({count})</span>
-                      </div>
-                    );
-                  })}
-                </div>
-              </CardContent>
-            </Card>
+                      );
+                    })}
+                  </div>
+                </CardContent>
+              </Card>
+            </div>
           </div>
-        </div>
-      )}
+        );
+      })()}
 
       {/* ── Guide Engagement (scroll-based) + Drop-off ── */}
       <div>
