@@ -416,11 +416,11 @@ export default function InsightsTab({
 
       {/* ── Retention Cohorts ── */}
       <div>
-        <div className="flex items-center gap-2 mb-4">
+        <div className="flex items-center gap-2 mb-1">
           <Users className="w-4 h-4 text-emerald-600" />
           <h2 className="font-semibold text-foreground">Weekly Retention Cohorts</h2>
-          <span className="text-xs text-muted-foreground">Users who returned ≥1 day after signup</span>
         </div>
+        <p className="text-xs text-muted-foreground mb-4">Groups users by the week they signed up and shows how many returned at least 1 day later. Higher retention % means users find ongoing value. Gray bars = total signups that week, green bars = users who came back.</p>
         {cohorts.length === 0 ? (
           <p className="text-sm text-muted-foreground">Not enough data yet</p>
         ) : (
