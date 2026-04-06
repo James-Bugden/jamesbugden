@@ -452,11 +452,12 @@ export default function InsightsTab({
       {/* ── Score Distribution + Career Phase ── */}
       <div className="grid md:grid-cols-2 gap-4">
         <div>
-          <div className="flex items-center gap-2 mb-4">
+          <div className="flex items-center gap-2 mb-1">
             <FileText className="w-4 h-4 text-violet-600" />
             <h2 className="font-semibold text-foreground">Resume Score Distribution</h2>
             <span className="text-xs text-muted-foreground">{scoreDist.total} scores · avg {scoreDist.avg}</span>
           </div>
+          <p className="text-xs text-muted-foreground mb-4">Histogram of all resume analysis scores. Red (0-40) = needs major work, amber (41-70) = decent but improvable, green (71-100) = strong resumes. Shows where most users land and the quality gap.</p>
           <Card>
             <CardContent className="p-4">
               <div className="h-40">
