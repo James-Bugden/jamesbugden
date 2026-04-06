@@ -633,9 +633,10 @@ export default function InsightsTab({
 
         <Card>
           <CardContent className="pt-5 pb-4 px-5">
-            <h3 className="font-medium text-xs text-muted-foreground uppercase tracking-wide mb-3 flex items-center gap-1">
+            <h3 className="font-medium text-xs text-muted-foreground uppercase tracking-wide mb-1 flex items-center gap-1">
               <BarChart3 className="w-3 h-3" /> Top Sectors
             </h3>
+            <p className="text-[10px] text-muted-foreground mb-3">Industries users search for salary data — helps prioritize which sector data to expand.</p>
             {salaryDemand.topSectors.length === 0 ? (
               <p className="text-sm text-muted-foreground">No sector data</p>
             ) : (
