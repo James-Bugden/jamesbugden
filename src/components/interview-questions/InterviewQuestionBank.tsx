@@ -307,9 +307,11 @@ export default function InterviewQuestionBank({ lang: initialLang }: { lang: Lan
   }, [hasMore, loading]);
 
   const toggleCategory = (key: string) => {
+    const isRemoving = selectedCategories.includes(key);
     setSelectedCategories(prev =>
-      prev.includes(key) ? prev.filter(c => c !== key) : [...prev, key]
+      isRemoving ? prev.filter(c => c !== key) : [...prev, key]
     );
+    if (!isRemoving) trackEvent("qbank_filter", "category", { category: key, lang });
   };
 
   const toggleDifficulty = (value: number) => {
