@@ -242,6 +242,7 @@ export default function AdminDashboard() {
     fetchDocuments();
     fetchProfiles();
     fetchGuideProgress();
+    fetchInterviewQuestions();
   }, []);
 
   const fetchCounts = async () => {
