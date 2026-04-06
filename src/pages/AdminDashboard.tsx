@@ -1565,6 +1565,18 @@ export default function AdminDashboard() {
               );
             })()}
           </TabsContent>
+
+          {/* ── Insights Tab ─────────────────────────────────────────────── */}
+          <TabsContent value="insights">
+            <InsightsTab
+              accounts={accounts}
+              resumeLeads={resumeLeads}
+              aiUsageRows={aiUsageRows}
+              documents={documents}
+              profiles={profileRows}
+              emailLeadsCount={counts.emails}
+            />
+          </TabsContent>
         </Tabs>
       </main>
     </div>
