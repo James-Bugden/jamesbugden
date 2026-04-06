@@ -47,6 +47,7 @@ interface EventTrack {
   event_name: string;
   page: string;
   created_at: string;
+  metadata?: Record<string, any> | null;
 }
 
 interface ShareClick {
