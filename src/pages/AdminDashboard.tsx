@@ -29,6 +29,7 @@ import { format, subDays, startOfDay } from "date-fns";
 import { AreaChart, Area, BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer } from "recharts";
 import bcrypt from "bcryptjs";
 import { SEO } from "@/components/SEO";
+import InsightsTab from "@/components/admin/InsightsTab";
 
 // ── Types ───────────────────────────────────────────────────────────────────────
 
@@ -202,6 +203,12 @@ export default function AdminDashboard() {
   const [eventTracks, setEventTracks] = useState<{ event_type: string; event_name: string; page: string; metadata: any; created_at: string }[]>([]);
   const [eventTracksLoading, setEventTracksLoading] = useState(true);
 
+  // Documents state (for insights)
+  const [documents, setDocuments] = useState<{ type: string; created_at: string; user_id: string }[]>([]);
+
+  // Profiles state (for insights)
+  const [profileRows, setProfileRows] = useState<{ user_id: string; onboarding_completed: boolean | null; career_phase: string | null; created_at: string | null }[]>([]);
+
   // ── Data fetching ───────────────────────────────────────────────────────────
 
   useEffect(() => {
@@ -216,6 +223,8 @@ export default function AdminDashboard() {
     fetchAiUsage();
     fetchShareClicks();
     fetchEventTracks();
+    fetchDocuments();
+    fetchProfiles();
   }, []);
 
   const fetchCounts = async () => {
@@ -321,6 +330,16 @@ export default function AdminDashboard() {
     const { data } = await supabase.from("share_clicks" as any).select("channel, page, created_at").order("created_at", { ascending: false }).limit(1000);
     if (data) setShareClicks(data as any);
     setShareClicksLoading(false);
+  };
+
+  const fetchDocuments = async () => {
+    const { data } = await supabase.from("user_documents").select("type, created_at, user_id").order("created_at", { ascending: false }).limit(1000);
+    if (data) setDocuments(data as any);
+  };
+
+  const fetchProfiles = async () => {
+    const { data } = await supabase.from("profiles").select("user_id, onboarding_completed, career_phase, created_at").limit(1000);
+    if (data) setProfileRows(data as any);
   };
 
   const fetchEventTracks = async () => {
@@ -664,6 +683,7 @@ export default function AdminDashboard() {
               <span className="w-px h-5 bg-border mx-1 hidden md:block" />
               <TabsTrigger value="ai-usage">AI Usage</TabsTrigger>
               <TabsTrigger value="analytics">Analytics</TabsTrigger>
+              <TabsTrigger value="insights">Insights</TabsTrigger>
             </TabsList>
           </div>
 
@@ -1544,6 +1564,18 @@ export default function AdminDashboard() {
                 </div>
               );
             })()}
+          </TabsContent>
+
+          {/* ── Insights Tab ─────────────────────────────────────────────── */}
+          <TabsContent value="insights">
+            <InsightsTab
+              accounts={accounts}
+              resumeLeads={resumeLeads}
+              aiUsageRows={aiUsageRows}
+              documents={documents}
+              profiles={profileRows}
+              emailLeadsCount={counts.emails}
+            />
           </TabsContent>
         </Tabs>
       </main>
