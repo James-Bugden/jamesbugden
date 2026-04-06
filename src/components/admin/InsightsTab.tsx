@@ -410,7 +410,7 @@ export default function InsightsTab({
             <p className="text-xs text-muted-foreground">Resume Analyzer → Signup Conversion</p>
             <p className="text-xl font-bold text-foreground">{analyzerConversion.rate}%</p>
           </div>
-          <p className="text-xs text-muted-foreground">{analyzerConversion.converted} of {analyzerConversion.total} unique analyzer users signed up</p>
+          <p className="text-xs text-muted-foreground">{analyzerConversion.converted} of {analyzerConversion.total} unique analyzer users signed up · Measures how effectively the free analyzer converts anonymous users into registered accounts.</p>
         </div>
       </div>
 
