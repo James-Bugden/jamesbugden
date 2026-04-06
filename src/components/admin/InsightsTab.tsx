@@ -5,7 +5,7 @@ import {
   BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer,
   AreaChart, Area, Cell, LineChart, Line,
 } from "recharts";
-import { TrendingUp, Users, FileText, Zap, Globe, Share2, BarChart3, BookOpen, AlertTriangle } from "lucide-react";
+import { TrendingUp, Users, FileText, Zap, Globe, Share2, BarChart3, BookOpen, AlertTriangle, Search } from "lucide-react";
 
 // ── Types ─────────────────────────────────────────────────────────────────────
 
