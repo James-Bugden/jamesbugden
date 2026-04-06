@@ -1446,6 +1446,7 @@ export default function AdminDashboard() {
               shareClicks={shareClicks}
               salaryChecks={checks}
               guideProgress={guideProgressRows}
+              interviewQuestions={interviewQuestions}
               analyticsData={{
                 feedbackItems,
                 shareClicksLoading,
