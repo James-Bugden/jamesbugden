@@ -680,11 +680,12 @@ export default function InsightsTab({
 
       {/* ── Share Virality ── */}
       <div>
-        <div className="flex items-center gap-2 mb-4">
+        <div className="flex items-center gap-2 mb-1">
           <Share2 className="w-4 h-4 text-indigo-600" />
           <h2 className="font-semibold text-foreground">Share Virality — Top Pages</h2>
           <span className="text-xs text-muted-foreground">{shareClicks.length} total shares</span>
         </div>
+        <p className="text-xs text-muted-foreground mb-4">Which pages users share most and via which channels (LinkedIn, WhatsApp, etc.). High share counts indicate content worth promoting further.</p>
         {shareVirality.length === 0 ? (
           <p className="text-sm text-muted-foreground">No share data yet</p>
         ) : (
