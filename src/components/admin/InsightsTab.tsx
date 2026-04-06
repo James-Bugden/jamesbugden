@@ -214,28 +214,62 @@ export default function InsightsTab({
   // ══════════════════════════════════════════════════════════════════════
   // 6. Guide Completion Rates
   // ══════════════════════════════════════════════════════════════════════
-  const guideCompletion = useMemo(() => {
-    const byGuide: Record<string, { started: number; completed: number }> = {};
-    for (const gp of guideProgress) {
-      if (!byGuide[gp.guide_key]) byGuide[gp.guide_key] = { started: 0, completed: 0 };
-      byGuide[gp.guide_key].started++;
-      // Check if guide data has completion indicators
-      const data = gp.data;
-      if (data && typeof data === "object") {
-        const checked = Object.values(data).filter(v => v === true).length;
-        const total = Object.keys(data).length;
-        if (total > 0 && checked / total >= 0.8) byGuide[gp.guide_key].completed++;
-      }
+  // ══════════════════════════════════════════════════════════════════════
+  // 6. Guide Engagement from guide_exit events (scroll depth + time)
+  // ══════════════════════════════════════════════════════════════════════
+  const guideEngagementMetrics = useMemo(() => {
+    const exitEvents = eventTracks.filter(e => e.event_type === "guide_exit" && e.metadata);
+    const viewEvents = eventTracks.filter(e => e.event_type === "guide_view");
+
+    // Count views per guide
+    const viewCounts: Record<string, number> = {};
+    viewEvents.forEach(e => { viewCounts[e.event_name] = (viewCounts[e.event_name] || 0) + 1; });
+
+    // Aggregate exit data per guide
+    const exitData: Record<string, { scrollDepths: number[]; times: number[] }> = {};
+    for (const e of exitEvents) {
+      const meta = e.metadata as any;
+      const guideId = meta?.guide_id || e.event_name;
+      if (!exitData[guideId]) exitData[guideId] = { scrollDepths: [], times: [] };
+      if (typeof meta?.scroll_depth_pct === "number") exitData[guideId].scrollDepths.push(meta.scroll_depth_pct);
+      if (typeof meta?.time_on_page_sec === "number") exitData[guideId].times.push(meta.time_on_page_sec);
     }
-    return Object.entries(byGuide)
-      .map(([guide, { started, completed }]) => ({
-        guide: guide.replace(/_/g, " ").replace(/^guide /, ""),
-        started,
-        completed,
-        rate: started > 0 ? Math.round((completed / started) * 100) : 0,
-      }))
-      .sort((a, b) => b.started - a.started);
-  }, [guideProgress]);
+
+    const allGuideIds = new Set([...Object.keys(viewCounts), ...Object.keys(exitData)]);
+    const guides = Array.from(allGuideIds).map(id => {
+      const data = exitData[id];
+      const visits = viewCounts[id] || 0;
+      const sessions = data?.scrollDepths.length || 0;
+      const completed = data?.scrollDepths.filter(d => d >= 75).length || 0;
+      const avgScroll = sessions > 0 ? Math.round(data.scrollDepths.reduce((a, b) => a + b, 0) / sessions) : 0;
+      const avgTime = sessions > 0 ? Math.round(data.times.reduce((a, b) => a + b, 0) / sessions) : 0;
+      const bounced = data ? data.scrollDepths.filter((d, i) => d < 10 && data.times[i] < 15).length : 0;
+      const completionRate = sessions > 0 ? Math.round((completed / sessions) * 100) : 0;
+      const bounceRate = sessions > 0 ? Math.round((bounced / sessions) * 100) : 0;
+      return { guide: id, visits, sessions, avgScroll, avgTime, completed, completionRate, bounced, bounceRate };
+    }).sort((a, b) => b.visits - a.visits);
+
+    // Drop-off histogram buckets
+    const allScrolls = exitEvents.map(e => (e.metadata as any)?.scroll_depth_pct).filter((v): v is number => typeof v === "number");
+    const dropoff = [
+      { bucket: "0-25%", count: allScrolls.filter(d => d < 25).length },
+      { bucket: "25-50%", count: allScrolls.filter(d => d >= 25 && d < 50).length },
+      { bucket: "50-75%", count: allScrolls.filter(d => d >= 50 && d < 75).length },
+      { bucket: "75-100%", count: allScrolls.filter(d => d >= 75).length },
+    ];
+
+    // Guide → Action conversion (guide_exit followed by doc creation within 24h)
+    // We approximate by checking if any user_documents were created on the same day as guide views
+    const guideViewDays = new Set(viewEvents.map(e => e.created_at.slice(0, 10)));
+    const docDays = new Set(documents.map(d => d.created_at.slice(0, 10)));
+    const actionDays = [...guideViewDays].filter(d => docDays.has(d)).length;
+    const actionRate = guideViewDays.size > 0 ? Math.round((actionDays / guideViewDays.size) * 100) : 0;
+
+    // Return visitors (guides viewed 2+ times)
+    const returnVisitors = guides.filter(g => g.visits >= 2).length;
+
+    return { guides, dropoff, actionRate, returnVisitors, totalSessions: allScrolls.length };
+  }, [eventTracks, documents]);
 
   // ══════════════════════════════════════════════════════════════════════
   // 7. Document Creation Trends (30 days)
