@@ -383,10 +383,11 @@ export default function InsightsTab({
 
       {/* ── Conversion Funnel ── */}
       <div>
-        <div className="flex items-center gap-2 mb-4">
+        <div className="flex items-center gap-2 mb-1">
           <TrendingUp className="w-4 h-4 text-violet-600" />
           <h2 className="font-semibold text-foreground">Conversion Funnel</h2>
         </div>
+        <p className="text-xs text-muted-foreground mb-4">Tracks the user journey from first contact to active usage: Email Gate (entered email) → Signed Up (created account) → Onboarded (completed setup) → Used Analyzer → Created a document. Percentages show step-to-step conversion.</p>
         <div className="grid grid-cols-5 gap-2">
           {funnel.map((f, i) => {
             const prevVal = i > 0 ? funnel[i - 1].value : f.value;
