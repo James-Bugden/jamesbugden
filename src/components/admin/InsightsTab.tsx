@@ -68,6 +68,17 @@ interface GuideProgressRow {
   data: any;
 }
 
+interface FeedbackItem {
+  id: string;
+  message: string;
+  page: string | null;
+  type: string | null;
+  rating: number | null;
+  context: string | null;
+  metadata: Record<string, any> | null;
+  created_at: string;
+}
+
 export interface InsightsTabProps {
   accounts: AccountUser[];
   resumeLeads: ResumeLead[];
@@ -79,6 +90,11 @@ export interface InsightsTabProps {
   shareClicks: ShareClick[];
   salaryChecks: SalaryCheck[];
   guideProgress: GuideProgressRow[];
+  analyticsData?: {
+    feedbackItems: FeedbackItem[];
+    shareClicksLoading: boolean;
+    eventTracksLoading: boolean;
+  };
 }
 
 const COLORS = {
