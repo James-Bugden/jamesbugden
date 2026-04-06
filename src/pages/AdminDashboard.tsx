@@ -209,6 +209,9 @@ export default function AdminDashboard() {
   // Profiles state (for insights)
   const [profileRows, setProfileRows] = useState<{ user_id: string; onboarding_completed: boolean | null; career_phase: string | null; created_at: string | null }[]>([]);
 
+  // Guide progress state (for insights)
+  const [guideProgressRows, setGuideProgressRows] = useState<{ guide_key: string; user_id: string; data: any }[]>([]);
+
   // ── Data fetching ───────────────────────────────────────────────────────────
 
   useEffect(() => {
@@ -225,6 +228,7 @@ export default function AdminDashboard() {
     fetchEventTracks();
     fetchDocuments();
     fetchProfiles();
+    fetchGuideProgress();
   }, []);
 
   const fetchCounts = async () => {
@@ -347,6 +351,11 @@ export default function AdminDashboard() {
     const { data } = await supabase.from("event_tracks" as any).select("event_type, event_name, page, metadata, created_at").order("created_at", { ascending: false }).limit(1000);
     if (data) setEventTracks(data as any);
     setEventTracksLoading(false);
+  };
+
+  const fetchGuideProgress = async () => {
+    const { data } = await supabase.from("guide_progress").select("guide_key, user_id, data").limit(1000);
+    if (data) setGuideProgressRows(data as any);
   };
 
   const handleDeleteFeedback = async (id: string) => {
@@ -1575,6 +1584,10 @@ export default function AdminDashboard() {
               documents={documents}
               profiles={profileRows}
               emailLeadsCount={counts.emails}
+              eventTracks={eventTracks}
+              shareClicks={shareClicks}
+              salaryChecks={checks}
+              guideProgress={guideProgressRows}
             />
           </TabsContent>
         </Tabs>

@@ -1,0 +1,1 @@
+CREATE POLICY "Admins can view all guide progress" ON public.guide_progress FOR SELECT TO authenticated USING (public.is_admin(auth.uid()));
