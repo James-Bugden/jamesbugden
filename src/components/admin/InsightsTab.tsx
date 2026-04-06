@@ -359,11 +359,12 @@ export default function InsightsTab({
 
       {/* ── DAU / WAU ── */}
       <div>
-        <div className="flex items-center gap-2 mb-4">
+        <div className="flex items-center gap-2 mb-1">
           <BarChart3 className="w-4 h-4 text-blue-600" />
           <h2 className="font-semibold text-foreground">Daily Active Sessions (30 days)</h2>
           <span className="text-xs text-muted-foreground">Today: {dauWau.todayDau} · WAU avg: {dauWau.wau}</span>
         </div>
+        <p className="text-xs text-muted-foreground mb-4">Unique page+event combinations per day — a proxy for how many distinct user sessions happen daily. WAU is the 7-day rolling average.</p>
         <Card>
           <CardContent className="p-4">
             <div className="h-40">
