@@ -479,10 +479,11 @@ export default function InsightsTab({
         </div>
 
         <div>
-          <div className="flex items-center gap-2 mb-4">
+          <div className="flex items-center gap-2 mb-1">
             <Users className="w-4 h-4 text-amber-600" />
             <h2 className="font-semibold text-foreground">Career Phase Breakdown</h2>
           </div>
+          <p className="text-xs text-muted-foreground mb-4">What stage users selected during onboarding — helps understand the audience mix and tailor content accordingly.</p>
           <Card>
             <CardContent className="p-4">
               <div className="space-y-2">
