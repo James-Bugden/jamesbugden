@@ -510,10 +510,11 @@ export default function InsightsTab({
       {/* ── Guide Completion + Popular Guides ── */}
       <div className="grid md:grid-cols-2 gap-4">
         <div>
-          <div className="flex items-center gap-2 mb-4">
+          <div className="flex items-center gap-2 mb-1">
             <BookOpen className="w-4 h-4 text-emerald-600" />
             <h2 className="font-semibold text-foreground">Guide Completion Rates</h2>
           </div>
+          <p className="text-xs text-muted-foreground mb-4">% of users who checked off ≥80% of a guide's checklist items. Low rates may indicate guides are too long or users only need specific sections.</p>
           <Card>
             <CardContent className="p-4">
               {guideCompletion.length === 0 ? (
