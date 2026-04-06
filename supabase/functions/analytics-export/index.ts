@@ -149,11 +149,58 @@ Deno.serve(async (req) => {
         "75_100": allScrolls.filter((d: number) => d >= 75).length,
       };
 
+      // ── Guide → Action Conversion ──────────────────────────────
+      // Check if users created documents within 24h of viewing a guide
+      const { data: docRows } = await supabase
+        .from("user_documents")
+        .select("user_id, created_at")
+        .order("created_at", { ascending: false })
+        .limit(limit);
+
+      const docs = docRows || [];
+
+      // Build a map of guide_view timestamps per page (anonymous, so use created_at windows)
+      // For each guide_view, check if any document was created within 24h after
+      const CONVERSION_WINDOW_MS = 24 * 60 * 60 * 1000;
+      const guideConversions: Record<string, { views: number; conversions: number }> = {};
+
+      for (const view of viewEvents) {
+        const guideId = view.event_name;
+        if (!guideConversions[guideId]) guideConversions[guideId] = { views: 0, conversions: 0 };
+        guideConversions[guideId].views++;
+
+        const viewTime = new Date(view.created_at).getTime();
+        const converted = docs.some((d: any) => {
+          const docTime = new Date(d.created_at).getTime();
+          return docTime >= viewTime && docTime <= viewTime + CONVERSION_WINDOW_MS;
+        });
+        if (converted) guideConversions[guideId].conversions++;
+      }
+
+      const totalGuideViews = viewEvents.length;
+      const totalConversions = Object.values(guideConversions).reduce((s, g) => s + g.conversions, 0);
+
+      const guideConversionRates = Object.entries(guideConversions)
+        .map(([guide_id, { views, conversions }]) => ({
+          guide_id,
+          views,
+          conversions,
+          conversion_rate_pct: views > 0 ? Math.round((conversions / views) * 100) : 0,
+        }))
+        .sort((a, b) => b.conversions - a.conversions);
+
       result.guide_engagement = {
         total_exit_sessions: exitEvents.length,
         total_views: viewEvents.length,
         guides: guideMetrics,
         scroll_dropoff_histogram: dropoff,
+        guide_to_action: {
+          total_views: totalGuideViews,
+          total_conversions: totalConversions,
+          overall_conversion_rate_pct: totalGuideViews > 0 ? Math.round((totalConversions / totalGuideViews) * 100) : 0,
+          conversion_window_hours: 24,
+          per_guide: guideConversionRates,
+        },
       };
     }
 
