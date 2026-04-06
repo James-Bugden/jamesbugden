@@ -1584,6 +1584,10 @@ export default function AdminDashboard() {
               documents={documents}
               profiles={profileRows}
               emailLeadsCount={counts.emails}
+              eventTracks={eventTracks}
+              shareClicks={shareClicks}
+              salaryChecks={checks}
+              guideProgress={guideProgressRows}
             />
           </TabsContent>
         </Tabs>
