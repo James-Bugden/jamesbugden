@@ -353,6 +353,11 @@ export default function AdminDashboard() {
     setEventTracksLoading(false);
   };
 
+  const fetchGuideProgress = async () => {
+    const { data } = await supabase.from("guide_progress").select("guide_key, user_id, data").limit(1000);
+    if (data) setGuideProgressRows(data as any);
+  };
+
   const handleDeleteFeedback = async (id: string) => {
     const { error } = await supabase.from("feedback" as any).delete().eq("id", id);
     if (error) toast({ title: "Error", description: getSafeErrorMessage(error), variant: "destructive" });
