@@ -80,6 +80,8 @@ Deno.serve(async (req) => {
       threads_link_clicks: "metric_date",
       ai_usage_log: "created_at",
       resume_analyses: "created_at",
+      interview_questions: "id",
+      profiles: "created_at",
     };
 
     // Query all requested tables in parallel
