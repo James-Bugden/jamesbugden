@@ -836,8 +836,12 @@ export default function InterviewQuestionBank({ lang: initialLang }: { lang: Lan
               const toggleExpand = () => {
                 setExpandedIds(prev => {
                   const next = new Set(prev);
-                  if (next.has(q.id)) next.delete(q.id);
-                  else next.add(q.id);
+                  if (next.has(q.id)) {
+                    next.delete(q.id);
+                  } else {
+                    next.add(q.id);
+                    trackEvent("qbank_action", "reveal_answer", { question_id: q.id, category: q.category, difficulty: q.difficulty, lang });
+                  }
                   return next;
                 });
               };
