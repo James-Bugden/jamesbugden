@@ -68,6 +68,17 @@ interface GuideProgressRow {
   data: any;
 }
 
+interface FeedbackItem {
+  id: string;
+  message: string;
+  page: string | null;
+  type: string | null;
+  rating: number | null;
+  context: string | null;
+  metadata: Record<string, any> | null;
+  created_at: string;
+}
+
 export interface InsightsTabProps {
   accounts: AccountUser[];
   resumeLeads: ResumeLead[];
@@ -79,6 +90,11 @@ export interface InsightsTabProps {
   shareClicks: ShareClick[];
   salaryChecks: SalaryCheck[];
   guideProgress: GuideProgressRow[];
+  analyticsData?: {
+    feedbackItems: FeedbackItem[];
+    shareClicksLoading: boolean;
+    eventTracksLoading: boolean;
+  };
 }
 
 const COLORS = {
@@ -91,6 +107,7 @@ const COLORS = {
 export default function InsightsTab({
   accounts, resumeLeads, aiUsageRows, documents, profiles,
   emailLeadsCount, eventTracks, shareClicks, salaryChecks, guideProgress,
+  analyticsData,
 }: InsightsTabProps) {
 
   // ══════════════════════════════════════════════════════════════════════
@@ -681,6 +698,171 @@ export default function InsightsTab({
           </Card>
         )}
       </div>
+
+      {/* ── Raw Analytics (collapsible) ── */}
+      {analyticsData && !analyticsData.shareClicksLoading && !analyticsData.eventTracksLoading && (
+        <details className="mt-8">
+          <summary className="cursor-pointer text-sm font-semibold text-foreground hover:text-primary transition-colors select-none">
+            📊 Raw Analytics Data (Share Clicks & Events)
+          </summary>
+          <div className="mt-4 space-y-8">
+            {/* Share clicks */}
+            {(() => {
+              const byChannel: Record<string, number> = {};
+              const bySharePage: Record<string, number> = {};
+              shareClicks.forEach(c => {
+                byChannel[c.channel] = (byChannel[c.channel] || 0) + 1;
+                bySharePage[c.page] = (bySharePage[c.page] || 0) + 1;
+              });
+              const channelEntries = Object.entries(byChannel).sort((a, b) => b[1] - a[1]);
+              const sharePageEntries = Object.entries(bySharePage).sort((a, b) => b[1] - a[1]);
+
+              return (
+                <div>
+                  <div className="flex items-center gap-2 mb-4">
+                    <Share2 className="w-4 h-4 text-indigo-600" />
+                    <h2 className="font-semibold text-foreground">Share Clicks</h2>
+                    <span className="text-xs text-muted-foreground ml-1">{shareClicks.length} total</span>
+                  </div>
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+                    <Card>
+                      <CardContent className="pt-5 pb-4 px-5">
+                        <h3 className="font-medium text-xs text-muted-foreground uppercase tracking-wide mb-3">By Channel</h3>
+                        <div className="space-y-1.5">
+                          {channelEntries.map(([ch, count]) => (
+                            <div key={ch} className="flex items-center justify-between text-sm">
+                              <span className="capitalize">{ch}</span>
+                              <span className="font-semibold tabular-nums">{count}</span>
+                            </div>
+                          ))}
+                          {channelEntries.length === 0 && <p className="text-sm text-muted-foreground">No share clicks</p>}
+                        </div>
+                      </CardContent>
+                    </Card>
+                    <Card>
+                      <CardContent className="pt-5 pb-4 px-5">
+                        <h3 className="font-medium text-xs text-muted-foreground uppercase tracking-wide mb-3">Top Shared Pages</h3>
+                        <div className="space-y-1.5">
+                          {sharePageEntries.slice(0, 8).map(([pg, count]) => (
+                            <div key={pg} className="flex items-center justify-between text-sm gap-2">
+                              <span className="truncate text-muted-foreground" title={pg}>{pg}</span>
+                              <span className="font-semibold tabular-nums shrink-0">{count}</span>
+                            </div>
+                          ))}
+                          {sharePageEntries.length === 0 && <p className="text-sm text-muted-foreground">No share clicks</p>}
+                        </div>
+                      </CardContent>
+                    </Card>
+                  </div>
+                </div>
+              );
+            })()}
+
+            <div className="border-t border-border" />
+
+            {/* Guide Engagement */}
+            {(() => {
+              const guideViews: Record<string, number> = {};
+              eventTracks.filter(e => e.event_type === "guide_view").forEach(e => {
+                guideViews[e.event_name] = (guideViews[e.event_name] || 0) + 1;
+              });
+              const guideRatings: Record<string, { up: number; down: number }> = {};
+              (analyticsData.feedbackItems || []).filter(f => f.type === "inline_rating" && f.context).forEach(f => {
+                const key = f.context!;
+                if (!guideRatings[key]) guideRatings[key] = { up: 0, down: 0 };
+                if (f.rating === 1) guideRatings[key].up++;
+                else if (f.rating === -1) guideRatings[key].down++;
+              });
+              const allGuideIds = new Set([...Object.keys(guideViews), ...Object.keys(guideRatings)]);
+              const guideEngagement = Array.from(allGuideIds).map(id => ({
+                id,
+                visits: guideViews[id] || 0,
+                up: guideRatings[id]?.up || 0,
+                down: guideRatings[id]?.down || 0,
+                approval: guideRatings[id] ? Math.round((guideRatings[id].up / (guideRatings[id].up + guideRatings[id].down)) * 100) || 0 : null,
+              })).sort((a, b) => b.visits - a.visits);
+
+              return guideEngagement.length > 0 ? (
+                <div>
+                  <div className="flex items-center gap-2 mb-4">
+                    <BookOpen className="w-4 h-4 text-emerald-600" />
+                    <h2 className="font-semibold text-foreground">Guide Engagement</h2>
+                  </div>
+                  <Card>
+                    <CardContent className="p-4">
+                      <div className="space-y-1.5">
+                        {guideEngagement.map(g => (
+                          <div key={g.id} className="flex items-center gap-3 text-sm">
+                            <span className="capitalize text-muted-foreground truncate flex-1">{g.id.replace(/^guide_/, "").replace(/_/g, " ")}</span>
+                            <span className="tabular-nums font-semibold w-12 text-right">{g.visits}</span>
+                            <span className="text-emerald-600 tabular-nums w-8 text-right">{g.up}</span>
+                            <span className="text-red-500 tabular-nums w-8 text-right">{g.down}</span>
+                            <span className="tabular-nums w-12 text-right">{g.approval !== null ? `${g.approval}%` : "—"}</span>
+                          </div>
+                        ))}
+                      </div>
+                    </CardContent>
+                  </Card>
+                </div>
+              ) : null;
+            })()}
+
+            <div className="border-t border-border" />
+
+            {/* Event tracks */}
+            {(() => {
+              const byType: Record<string, number> = {};
+              const byName: Record<string, number> = {};
+              eventTracks.forEach(e => {
+                byType[e.event_type] = (byType[e.event_type] || 0) + 1;
+                byName[e.event_name] = (byName[e.event_name] || 0) + 1;
+              });
+              const typeEntries = Object.entries(byType).sort((a, b) => b[1] - a[1]);
+              const nameEntries = Object.entries(byName).sort((a, b) => b[1] - a[1]);
+
+              return (
+                <div>
+                  <div className="flex items-center gap-2 mb-4">
+                    <BarChart3 className="w-4 h-4 text-orange-600" />
+                    <h2 className="font-semibold text-foreground">User Events</h2>
+                    <span className="text-xs text-muted-foreground ml-1">{eventTracks.length} total</span>
+                  </div>
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <Card>
+                      <CardContent className="pt-5 pb-4 px-5">
+                        <h3 className="font-medium text-xs text-muted-foreground uppercase tracking-wide mb-3">By Type</h3>
+                        <div className="space-y-1.5">
+                          {typeEntries.map(([t, count]) => (
+                            <div key={t} className="flex items-center justify-between text-sm">
+                              <span className="capitalize">{t.replace(/_/g, " ")}</span>
+                              <span className="font-semibold tabular-nums">{count}</span>
+                            </div>
+                          ))}
+                          {typeEntries.length === 0 && <p className="text-sm text-muted-foreground">No events</p>}
+                        </div>
+                      </CardContent>
+                    </Card>
+                    <Card>
+                      <CardContent className="pt-5 pb-4 px-5">
+                        <h3 className="font-medium text-xs text-muted-foreground uppercase tracking-wide mb-3">By Action</h3>
+                        <div className="space-y-1.5">
+                          {nameEntries.map(([n, count]) => (
+                            <div key={n} className="flex items-center justify-between text-sm">
+                              <span className="capitalize">{n.replace(/_/g, " ")}</span>
+                              <span className="font-semibold tabular-nums">{count}</span>
+                            </div>
+                          ))}
+                          {nameEntries.length === 0 && <p className="text-sm text-muted-foreground">No events</p>}
+                        </div>
+                      </CardContent>
+                    </Card>
+                  </div>
+                </div>
+              );
+            })()}
+          </div>
+        </details>
+      )}
 
     </div>
   );
