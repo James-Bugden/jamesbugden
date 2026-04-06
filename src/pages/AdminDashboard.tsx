@@ -372,6 +372,11 @@ export default function AdminDashboard() {
     if (data) setGuideProgressRows(data as any);
   };
 
+  const fetchInterviewQuestions = async () => {
+    const { data } = await supabase.from("interview_questions").select("category, difficulty");
+    if (data) setInterviewQuestions(data as any);
+  };
+
   const handleDeleteFeedback = async (id: string) => {
     const { error } = await supabase.from("feedback" as any).delete().eq("id", id);
     if (error) toast({ title: "Error", description: getSafeErrorMessage(error), variant: "destructive" });
