@@ -9,6 +9,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { Linkedin } from "lucide-react";
 import { InstagramIcon, ThreadsIcon } from "@/components/SocialIcons";
 import { trackShare } from "@/lib/trackShare";
+import { trackEvent } from "@/lib/trackEvent";
 import { AuthHeaderButton } from "@/components/AuthHeaderButton";
 import { motion, AnimatePresence } from "framer-motion";
 import { SEO } from "@/components/SEO";
@@ -194,6 +195,11 @@ export default function InterviewQuestionBank({ lang: initialLang }: { lang: Lan
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
 
+  // Track page view
+  useEffect(() => {
+    trackEvent("qbank_view", "page_load", { lang });
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps
+
   // Fetch category counts once on mount
   useEffect(() => {
     const fetchCounts = async () => {
@@ -211,11 +217,16 @@ export default function InterviewQuestionBank({ lang: initialLang }: { lang: Lan
     fetchCounts();
   }, []);
 
-  // Debounce search
+  // Debounce search + track
   useEffect(() => {
-    const timer = setTimeout(() => setDebouncedSearch(search), 300);
+    const timer = setTimeout(() => {
+      setDebouncedSearch(search);
+      if (search.trim()) {
+        trackEvent("qbank_search", search.trim().toLowerCase().slice(0, 80), { lang });
+      }
+    }, 300);
     return () => clearTimeout(timer);
-  }, [search]);
+  }, [search, lang]);
 
   // Sync URL params
   useEffect(() => {
@@ -301,15 +312,19 @@ export default function InterviewQuestionBank({ lang: initialLang }: { lang: Lan
   }, [hasMore, loading]);
 
   const toggleCategory = (key: string) => {
+    const isRemoving = selectedCategories.includes(key);
     setSelectedCategories(prev =>
-      prev.includes(key) ? prev.filter(c => c !== key) : [...prev, key]
+      isRemoving ? prev.filter(c => c !== key) : [...prev, key]
     );
+    if (!isRemoving) trackEvent("qbank_filter", "category", { category: key, lang });
   };
 
   const toggleDifficulty = (value: number) => {
+    const isRemoving = selectedDifficulties.includes(value);
     setSelectedDifficulties(prev =>
-      prev.includes(value) ? prev.filter(d => d !== value) : [...prev, value]
+      isRemoving ? prev.filter(d => d !== value) : [...prev, value]
     );
+    if (!isRemoving) trackEvent("qbank_filter", "difficulty", { difficulty: value, lang });
   };
 
   const toggleAudience = (key: string) => {
@@ -358,6 +373,7 @@ export default function InterviewQuestionBank({ lang: initialLang }: { lang: Lan
     const { data } = await query;
     if (data && data.length > 0) {
       setRandomQuestion(data[0] as Question);
+      trackEvent("qbank_action", "random_question", { question_id: data[0].id, category: data[0].category, lang });
     }
   };
 
@@ -825,8 +841,12 @@ export default function InterviewQuestionBank({ lang: initialLang }: { lang: Lan
               const toggleExpand = () => {
                 setExpandedIds(prev => {
                   const next = new Set(prev);
-                  if (next.has(q.id)) next.delete(q.id);
-                  else next.add(q.id);
+                  if (next.has(q.id)) {
+                    next.delete(q.id);
+                  } else {
+                    next.add(q.id);
+                    trackEvent("qbank_action", "reveal_answer", { question_id: q.id, category: q.category, difficulty: q.difficulty, lang });
+                  }
                   return next;
                 });
               };
