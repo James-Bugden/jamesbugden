@@ -708,6 +708,108 @@ export default function InsightsTab({
         </div>
       )}
 
+      {/* ── Question Bank User Usage ── */}
+      {qbankUsage.pageViews > 0 && (
+        <div>
+          <div className="flex items-center gap-2 mb-4">
+            <Search className="w-4 h-4 text-indigo-600" />
+            <h2 className="font-semibold text-foreground">Question Bank Usage</h2>
+            <span className="text-xs text-muted-foreground">{qbankUsage.pageViews} page views</span>
+          </div>
+
+          {/* Summary cards */}
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-3 mb-4">
+            <Card>
+              <CardContent className="p-3 text-center">
+                <p className="text-2xl font-bold text-foreground">{qbankUsage.pageViews}</p>
+                <p className="text-[11px] text-muted-foreground">Page Views</p>
+              </CardContent>
+            </Card>
+            <Card>
+              <CardContent className="p-3 text-center">
+                <p className="text-2xl font-bold text-foreground">{qbankUsage.searches}</p>
+                <p className="text-[11px] text-muted-foreground">Searches</p>
+              </CardContent>
+            </Card>
+            <Card>
+              <CardContent className="p-3 text-center">
+                <p className="text-2xl font-bold text-foreground">{qbankUsage.reveals}</p>
+                <p className="text-[11px] text-muted-foreground">Answer Reveals</p>
+              </CardContent>
+            </Card>
+            <Card>
+              <CardContent className="p-3 text-center">
+                <p className="text-2xl font-bold text-foreground">{qbankUsage.randoms}</p>
+                <p className="text-[11px] text-muted-foreground">Random Clicks</p>
+              </CardContent>
+            </Card>
+          </div>
+
+          <div className="grid md:grid-cols-3 gap-4">
+            {/* Top Searches */}
+            <Card>
+              <CardContent className="pt-5 pb-4 px-5">
+                <h3 className="font-medium text-xs text-muted-foreground uppercase tracking-wide mb-3">Top Search Terms</h3>
+                {qbankUsage.topSearches.length === 0 ? (
+                  <p className="text-sm text-muted-foreground">No searches yet</p>
+                ) : (
+                  <div className="space-y-1.5">
+                    {qbankUsage.topSearches.map(([term, count]) => (
+                      <div key={term} className="flex items-center justify-between text-sm">
+                        <span className="truncate text-muted-foreground">{term}</span>
+                        <span className="font-semibold tabular-nums">{count}</span>
+                      </div>
+                    ))}
+                  </div>
+                )}
+              </CardContent>
+            </Card>
+
+            {/* Most Revealed Categories */}
+            <Card>
+              <CardContent className="pt-5 pb-4 px-5">
+                <h3 className="font-medium text-xs text-muted-foreground uppercase tracking-wide mb-3">Most Revealed Categories</h3>
+                {qbankUsage.topRevealCats.length === 0 ? (
+                  <p className="text-sm text-muted-foreground">No reveals yet</p>
+                ) : (
+                  <div className="space-y-1.5">
+                    {qbankUsage.topRevealCats.map(([cat, count]) => (
+                      <div key={cat} className="flex items-center justify-between text-sm">
+                        <span className="truncate text-muted-foreground capitalize">{cat.replace(/_/g, " ")}</span>
+                        <span className="font-semibold tabular-nums">{count}</span>
+                      </div>
+                    ))}
+                  </div>
+                )}
+              </CardContent>
+            </Card>
+
+            {/* Language Split */}
+            <Card>
+              <CardContent className="pt-5 pb-4 px-5">
+                <h3 className="font-medium text-xs text-muted-foreground uppercase tracking-wide mb-3">Language Split</h3>
+                <div className="space-y-2">
+                  {Object.entries(qbankUsage.langCounts).filter(([, c]) => c > 0).map(([lang, count]) => {
+                    const total = Object.values(qbankUsage.langCounts).reduce((a, b) => a + b, 0);
+                    const pct = total > 0 ? Math.round((count / total) * 100) : 0;
+                    return (
+                      <div key={lang} className="flex items-center gap-3">
+                        <span className="text-sm font-medium w-12">{lang.toUpperCase()}</span>
+                        <div className="flex-1 h-5 bg-muted rounded overflow-hidden">
+                          <div className="h-full bg-indigo-500 rounded" style={{ width: `${pct}%` }} />
+                        </div>
+                        <span className="text-sm tabular-nums">{pct}%</span>
+                        <span className="text-xs text-muted-foreground">({count})</span>
+                      </div>
+                    );
+                  })}
+                </div>
+              </CardContent>
+            </Card>
+          </div>
+        </div>
+      )}
+
       {/* ── Guide Engagement (scroll-based) + Drop-off ── */}
       <div>
         <div className="flex items-center gap-2 mb-2">
