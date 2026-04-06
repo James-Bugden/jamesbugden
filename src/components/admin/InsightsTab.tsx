@@ -924,24 +924,56 @@ export default function InsightsTab({
         </Card>
       </div>
 
-      {/* ── Feature Adoption ── */}
+      {/* ── Feature Usage Overview ── */}
       <div>
-        <div className="flex items-center gap-2 mb-4">
+        <div className="flex items-center gap-2 mb-1">
           <Zap className="w-4 h-4 text-cyan-600" />
-          <h2 className="font-semibold text-foreground">Feature Adoption (Unique Users)</h2>
+          <h2 className="font-semibold text-foreground">Feature Usage Overview</h2>
         </div>
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
-          {featureAdoption.map(f => (
-            <Card key={f.type}>
-              <CardContent className="p-3 text-center">
-                <p className="text-2xl font-bold text-foreground">{f.users}</p>
-                <p className="text-[11px] text-muted-foreground capitalize">{f.type}</p>
-                <p className="text-[10px] text-muted-foreground">{f.uses} total uses</p>
-              </CardContent>
-            </Card>
-          ))}
-          {featureAdoption.length === 0 && <p className="text-sm text-muted-foreground col-span-4">No AI usage data yet</p>}
-        </div>
+        <p className="text-xs text-muted-foreground mb-4">
+          Users / sessions per feature across the entire site. "Users" = unique user IDs (or unique sessions for anonymous features like Question Bank & Salary Checker). "Actions" = total usage count.
+        </p>
+
+        {featureUsage.length === 0 ? (
+          <p className="text-sm text-muted-foreground">No usage data yet</p>
+        ) : (
+          <>
+            {/* Horizontal bar chart */}
+            <div className="space-y-2 mb-6">
+              {featureUsage.map(f => {
+                const maxUsers = featureUsage[0]?.users || 1;
+                const pct = Math.max(4, (f.users / maxUsers) * 100);
+                return (
+                  <div key={f.name} className="flex items-center gap-3">
+                    <span className="text-xs text-muted-foreground w-28 shrink-0 text-right">{f.name}</span>
+                    <div className="flex-1 flex items-center gap-2">
+                      <div
+                        className="h-6 rounded-sm flex items-center px-2 text-[11px] font-semibold text-white transition-all"
+                        style={{ width: `${pct}%`, backgroundColor: f.color, minWidth: 32 }}
+                      >
+                        {f.users}
+                      </div>
+                      <span className="text-[10px] text-muted-foreground whitespace-nowrap">{f.actions} actions</span>
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+
+            {/* Stat cards grid */}
+            <div className="grid grid-cols-3 md:grid-cols-5 gap-2">
+              {featureUsage.map(f => (
+                <Card key={f.name} className="border-l-2" style={{ borderLeftColor: f.color }}>
+                  <CardContent className="p-2.5 text-center">
+                    <p className="text-lg font-bold text-foreground">{f.users}</p>
+                    <p className="text-[10px] text-muted-foreground leading-tight">{f.name}</p>
+                    <p className="text-[9px] text-muted-foreground">{f.actions} total</p>
+                  </CardContent>
+                </Card>
+              ))}
+            </div>
+          </>
+        )}
       </div>
 
       {/* ── Salary Demand + Language Split ── */}
