@@ -222,6 +222,9 @@ export default function AdminDashboard() {
   // Guide progress state (for insights)
   const [guideProgressRows, setGuideProgressRows] = useState<{ guide_key: string; user_id: string; data: any }[]>([]);
 
+  // Interview questions state (for insights)
+  const [interviewQuestions, setInterviewQuestions] = useState<{ category: string; difficulty: number }[]>([]);
+
   // ── Data fetching ───────────────────────────────────────────────────────────
 
   useEffect(() => {
