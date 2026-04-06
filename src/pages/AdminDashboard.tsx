@@ -228,6 +228,7 @@ export default function AdminDashboard() {
     fetchEventTracks();
     fetchDocuments();
     fetchProfiles();
+    fetchGuideProgress();
   }, []);
 
   const fetchCounts = async () => {
