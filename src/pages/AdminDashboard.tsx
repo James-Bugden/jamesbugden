@@ -662,7 +662,15 @@ export default function AdminDashboard() {
         {/* Overview Cards */}
         <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
           {statCards.map(s => (
-            <Card key={s.label} className="overflow-hidden">
+            <Card
+              key={s.label}
+              className={`overflow-hidden cursor-pointer transition-all hover:border-primary/30 hover:shadow-md ${
+                activeTab === s.nav.tab && (!s.nav.sub || activeSub === s.nav.sub)
+                  ? "ring-2 ring-primary/20"
+                  : ""
+              }`}
+              onClick={() => navigateTo(s.nav.tab, s.nav.sub)}
+            >
               <CardContent className="p-3">
                 <div className="flex items-center gap-2.5">
                   <s.icon className={`w-5 h-5 shrink-0 ${s.color}`} />
@@ -685,907 +693,738 @@ export default function AdminDashboard() {
           ))}
         </div>
 
-        {/* Tabs */}
+        {/* ══ Main Tabs ══ */}
         <Tabs value={activeTab} onValueChange={setActiveTab}>
-          <div className="overflow-x-auto -mx-4 px-4 md:mx-0 md:px-0">
-            <TabsList className="w-max md:w-full justify-start gap-0.5">
-              {/* People & Leads */}
-              <TabsTrigger value="accounts">Accounts</TabsTrigger>
-              <TabsTrigger value="resumes">Resume Leads</TabsTrigger>
-              <TabsTrigger value="emails">Email Leads</TabsTrigger>
-              {/* Content & Data */}
-              <span className="w-px h-5 bg-border mx-1 hidden md:block" />
-              <TabsTrigger value="reviews">Reviews</TabsTrigger>
-              <TabsTrigger value="salary">Salary</TabsTrigger>
-              <TabsTrigger value="feedback">Feedback</TabsTrigger>
-              {/* Analytics */}
-              <span className="w-px h-5 bg-border mx-1 hidden md:block" />
-              <TabsTrigger value="ai-usage">AI Usage</TabsTrigger>
-              <TabsTrigger value="analytics">Analytics</TabsTrigger>
-              <TabsTrigger value="insights">Insights</TabsTrigger>
-            </TabsList>
-          </div>
+          <TabsList className="w-full justify-start gap-0.5">
+            <TabsTrigger value="overview">Overview</TabsTrigger>
+            <TabsTrigger value="people">People</TabsTrigger>
+            <TabsTrigger value="data">Data</TabsTrigger>
+            <TabsTrigger value="insights">Insights</TabsTrigger>
+          </TabsList>
 
-          {/* ── Reviews Tab ──────────────────────────────────────────────── */}
-          <TabsContent value="reviews">
-            <div className="flex items-center justify-between mb-4">
-              <p className="text-sm text-muted-foreground">Manage password-protected review links</p>
-              <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
-                <DialogTrigger asChild>
-                  <Button size="sm"><Plus className="h-4 w-4 mr-1" /> Add Review</Button>
-                </DialogTrigger>
-                <DialogContent className="sm:max-w-md">
-                  <DialogHeader><DialogTitle>Add New Client Review</DialogTitle></DialogHeader>
-                  <form onSubmit={handleSubmitReview} className="space-y-4 mt-4">
-                    <div className="space-y-2">
-                      <Label htmlFor="clientName">Client Name</Label>
-                      <Input id="clientName" value={clientName} onChange={e => handleNameChange(e.target.value)} placeholder="Sarah Wang" required />
-                    </div>
-                    <div className="space-y-2">
-                      <Label htmlFor="clientId">Client ID</Label>
-                      <Input id="clientId" value={clientId} onChange={e => setClientId(e.target.value)} required />
-                      <p className="text-xs text-muted-foreground">Auto-generated. Edit if needed.</p>
-                    </div>
-                    <div className="space-y-2">
-                      <Label htmlFor="password">Password</Label>
-                      <Input id="password" value={password} onChange={e => setPassword(e.target.value)} required />
-                    </div>
-                    <div className="space-y-2">
-                      <Label htmlFor="reviewUrl">Review URL Path</Label>
-                      <Input id="reviewUrl" value={reviewUrl} onChange={e => setReviewUrl(e.target.value)} placeholder="/reviews/sarah-wang" required />
-                      <p className="text-xs text-muted-foreground">Internal path starting with /</p>
-                    </div>
-                    <Button type="submit" disabled={submitting} className="w-full">
-                      {submitting ? <><Loader2 className="mr-2 h-4 w-4 animate-spin" /> Creating...</> : "Generate Link"}
-                    </Button>
-                  </form>
-                </DialogContent>
-              </Dialog>
-            </div>
+          {/* ── Overview Tab ── */}
+          <TabsContent value="overview">
+            <div className="space-y-6">
+              {/* Recent Signups */}
+              <Card>
+                <CardContent className="p-4">
+                  <div className="flex items-center justify-between mb-3">
+                    <h3 className="text-sm font-semibold text-foreground">Recent Signups</h3>
+                    <Button variant="ghost" size="sm" onClick={() => navigateTo("people", "accounts")} className="text-xs">View all →</Button>
+                  </div>
+                  <div className="space-y-2">
+                    {accounts.slice(0, 5).map(a => (
+                      <div key={a.id} className="flex items-center justify-between text-sm">
+                        <span className="text-foreground">{a.email}</span>
+                        <span className="text-xs text-muted-foreground">{format(new Date(a.created_at), "MMM d")}</span>
+                      </div>
+                    ))}
+                    {accounts.length === 0 && <p className="text-sm text-muted-foreground">No accounts yet</p>}
+                  </div>
+                </CardContent>
+              </Card>
 
-            {reviewsLoading ? (
-              <div className="flex justify-center py-16"><Loader2 className="w-6 h-6 animate-spin text-muted-foreground" /></div>
-            ) : (
-              <div className="border border-border rounded-xl overflow-hidden">
-                <Table>
-                  <TableHeader>
-                    <TableRow>
-                      <TableHead>Client Name</TableHead>
-                      <TableHead>Link</TableHead>
-                      <TableHead>Last Viewed</TableHead>
-                      <TableHead className="text-right">Actions</TableHead>
-                    </TableRow>
-                  </TableHeader>
-                  <TableBody>
-                    {reviews.length === 0 ? (
-                      <TableRow><TableCell colSpan={4} className="text-center py-8 text-muted-foreground">No reviews yet</TableCell></TableRow>
-                    ) : reviews.map(r => (
-                      <TableRow key={r.id}>
-                        <TableCell className="font-medium">{r.client_name}</TableCell>
-                        <TableCell><code className="text-xs bg-muted px-2 py-1 rounded">{`${window.location.origin}/review/${r.id}`}</code></TableCell>
-                        <TableCell className="text-sm text-muted-foreground">
-                          {r.last_viewed_at ? format(new Date(r.last_viewed_at), "MMM d, yyyy h:mm a") : "Not viewed"}
-                        </TableCell>
-                        <TableCell className="text-right">
-                          <div className="flex items-center justify-end gap-2">
-                            <Button variant="outline" size="sm" onClick={() => copyToClipboard(r.id)}>
-                              {copiedId === r.id ? <Check className="h-4 w-4" /> : <Copy className="h-4 w-4" />}
-                            </Button>
-                            <AlertDialog>
-                              <AlertDialogTrigger asChild>
-                                <Button variant="outline" size="sm"><Trash2 className="h-4 w-4 text-destructive" /></Button>
-                              </AlertDialogTrigger>
-                              <AlertDialogContent>
-                                <AlertDialogHeader>
-                                  <AlertDialogTitle>Delete Review?</AlertDialogTitle>
-                                  <AlertDialogDescription>Permanently delete the link for {r.client_name}.</AlertDialogDescription>
-                                </AlertDialogHeader>
-                                <AlertDialogFooter>
-                                  <AlertDialogCancel>Cancel</AlertDialogCancel>
-                                  <AlertDialogAction onClick={() => handleDeleteReview(r.id)} className="bg-destructive hover:bg-destructive/90">Delete</AlertDialogAction>
-                                </AlertDialogFooter>
-                              </AlertDialogContent>
-                            </AlertDialog>
+              <div className="grid md:grid-cols-2 gap-4">
+                {/* Recent Resume Leads */}
+                <Card>
+                  <CardContent className="p-4">
+                    <div className="flex items-center justify-between mb-3">
+                      <h3 className="text-sm font-semibold text-foreground">Recent Resume Leads</h3>
+                      <Button variant="ghost" size="sm" onClick={() => navigateTo("people", "resumes")} className="text-xs">View all →</Button>
+                    </div>
+                    <div className="space-y-2">
+                      {resumeLeads.slice(0, 5).map(r => (
+                        <div key={r.id} className="flex items-center justify-between text-sm">
+                          <span className="text-foreground truncate max-w-[200px]">{r.email}</span>
+                          <span className="text-xs text-muted-foreground">{r.overall_score !== null ? `Score: ${r.overall_score}` : "—"}</span>
+                        </div>
+                      ))}
+                      {resumeLeads.length === 0 && <p className="text-sm text-muted-foreground">No resume leads yet</p>}
+                    </div>
+                  </CardContent>
+                </Card>
+
+                {/* Recent Feedback */}
+                <Card>
+                  <CardContent className="p-4">
+                    <div className="flex items-center justify-between mb-3">
+                      <h3 className="text-sm font-semibold text-foreground">Recent Feedback</h3>
+                      <Button variant="ghost" size="sm" onClick={() => navigateTo("data", "feedback")} className="text-xs">View all →</Button>
+                    </div>
+                    <div className="space-y-2">
+                      {feedbackItems.slice(0, 3).map(f => (
+                        <div key={f.id} className="text-sm">
+                          <div className="flex items-center gap-2">
+                            <span className={`text-[10px] px-1.5 py-0.5 rounded-full ${
+                              f.type === "nps" ? "bg-blue-100 text-blue-700 dark:bg-blue-900 dark:text-blue-300" :
+                              "bg-muted text-muted-foreground"
+                            }`}>{f.type || "general"}</span>
+                            {f.rating !== null && <span className="text-xs text-muted-foreground">{f.type === "nps" ? `${f.rating}/10` : f.rating > 0 ? "👍" : "👎"}</span>}
                           </div>
-                        </TableCell>
-                      </TableRow>
-                    ))}
-                  </TableBody>
-                </Table>
+                          <p className="text-muted-foreground text-xs truncate mt-1">{f.message}</p>
+                        </div>
+                      ))}
+                      {feedbackItems.length === 0 && <p className="text-sm text-muted-foreground">No feedback yet</p>}
+                    </div>
+                  </CardContent>
+                </Card>
               </div>
-            )}
-          </TabsContent>
-
-          {/* ── Salary Checks Tab ────────────────────────────────────────── */}
-          <TabsContent value="salary">
-            <div className="flex flex-col sm:flex-row gap-3 mb-4">
-              <div className="relative flex-1">
-                <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
-                <Input value={salarySearch} onChange={e => setSalarySearch(e.target.value)} placeholder="Search job title, role, sector..." className="pl-9 h-10" />
-              </div>
-              <Select value={verdictFilter} onValueChange={setVerdictFilter}>
-                <SelectTrigger className="w-48 h-10"><SelectValue placeholder="All verdicts" /></SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="all">All verdicts</SelectItem>
-                  {verdicts.map(v => <SelectItem key={v!} value={v!}>{v}</SelectItem>)}
-                </SelectContent>
-              </Select>
-              <Button variant="outline" size="sm" onClick={exportSalaryCsv} className="h-10"><Download className="w-4 h-4 mr-1" /> CSV</Button>
             </div>
-
-            {checksLoading ? (
-              <div className="flex justify-center py-16"><Loader2 className="w-6 h-6 animate-spin text-muted-foreground" /></div>
-            ) : (
-              <div className="border border-border rounded-xl overflow-hidden overflow-x-auto">
-                <Table>
-                  <TableHeader>
-                    <TableRow>
-                      <TableHead className="w-36"><SortHeader label="Date" k="created_at" /></TableHead>
-                      <TableHead><SortHeader label="Job Title" k="job_title" /></TableHead>
-                      <TableHead><SortHeader label="Role" k="role" /></TableHead>
-                      <TableHead>Sector</TableHead>
-                      <TableHead>Exp</TableHead>
-                      <TableHead className="text-right"><SortHeader label="Salary" k="salary" /></TableHead>
-                      <TableHead className="text-right">Median</TableHead>
-                      <TableHead>Verdict</TableHead>
-                      <TableHead>Lang</TableHead>
-                    </TableRow>
-                  </TableHeader>
-                  <TableBody>
-                    {filteredChecks.length === 0 ? (
-                      <TableRow><TableCell colSpan={9} className="text-center py-12 text-muted-foreground">No results</TableCell></TableRow>
-                    ) : filteredChecks.map(c => (
-                      <TableRow key={c.id}>
-                        <TableCell className="text-xs text-muted-foreground whitespace-nowrap">{format(new Date(c.created_at), "MMM d, HH:mm")}</TableCell>
-                        <TableCell className="font-medium text-sm max-w-48 truncate">{c.job_title}</TableCell>
-                        <TableCell className="text-sm">{c.role}</TableCell>
-                        <TableCell className="text-xs text-muted-foreground">{c.sector || "—"}</TableCell>
-                        <TableCell className="text-xs text-muted-foreground">{c.experience || "—"}</TableCell>
-                        <TableCell className="text-right text-sm font-semibold tabular-nums">{formatNTD(c.salary)}</TableCell>
-                        <TableCell className="text-right text-sm tabular-nums text-muted-foreground">{c.median ? formatNTD(c.median) : "—"}</TableCell>
-                        <TableCell className={`text-xs font-medium ${verdictColor(c.verdict)}`}>{c.verdict || "—"}</TableCell>
-                        <TableCell className="text-xs text-muted-foreground">{c.lang || "en"}</TableCell>
-                      </TableRow>
-                    ))}
-                  </TableBody>
-                </Table>
-              </div>
-            )}
           </TabsContent>
 
-          {/* ── Resume Leads Tab ─────────────────────────────────────────── */}
-          <TabsContent value="resumes">
-            <div className="flex flex-col sm:flex-row gap-3 mb-4">
-              <div className="relative flex-1">
-                <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
-                <Input value={resumeSearch} onChange={e => setResumeSearch(e.target.value)} placeholder="Search by email, name, job title, industry..." className="pl-9 h-10" />
-              </div>
-              <Select value={resumeSeniorityFilter} onValueChange={setResumeSeniorityFilter}>
-                <SelectTrigger className="w-40 h-10"><SelectValue placeholder="Seniority" /></SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="all">All Seniority</SelectItem>
-                  {resumeSeniorities.map(s => <SelectItem key={s} value={s!}>{s}</SelectItem>)}
-                </SelectContent>
-              </Select>
-              <Button variant="outline" size="sm" onClick={exportResumeCsv} className="h-10"><Download className="w-4 h-4 mr-1" /> CSV</Button>
-            </div>
-            <p className="text-sm text-muted-foreground mb-3">{filteredResumeLeads.length} of {resumeLeads.length} leads</p>
+          {/* ── People Tab ── */}
+          <TabsContent value="people">
+            <Tabs value={activeSub || "accounts"} onValueChange={(sub) => setActiveSub("people", sub)}>
+              <TabsList className="w-max bg-muted/50 h-8 gap-0">
+                <TabsTrigger value="accounts" className="text-xs h-7 px-3 rounded-full data-[state=active]:bg-primary data-[state=active]:text-primary-foreground">Accounts</TabsTrigger>
+                <TabsTrigger value="resumes" className="text-xs h-7 px-3 rounded-full data-[state=active]:bg-primary data-[state=active]:text-primary-foreground">Resume Leads</TabsTrigger>
+                <TabsTrigger value="emails" className="text-xs h-7 px-3 rounded-full data-[state=active]:bg-primary data-[state=active]:text-primary-foreground">Email Leads</TabsTrigger>
+              </TabsList>
 
-            {resumeLeadsLoading ? (
-              <div className="flex justify-center py-16"><Loader2 className="w-6 h-6 animate-spin text-muted-foreground" /></div>
-            ) : (
-              <div className="border border-border rounded-xl overflow-hidden overflow-x-auto">
-                <Table>
-                  <TableHeader>
-                    <TableRow>
-                      <TableHead className="w-36">Date</TableHead>
-                      <TableHead>Email</TableHead>
-                      <TableHead className="w-[120px]">Name</TableHead>
-                      <TableHead className="w-[120px]">Job Title</TableHead>
-                      <TableHead className="text-center">Score</TableHead>
-                      <TableHead>Seniority</TableHead>
-                      <TableHead>Yrs Exp</TableHead>
-                      <TableHead className="w-[100px]">Industry</TableHead>
-                      <TableHead>Lang</TableHead>
-                      <TableHead className="w-[180px]">Resume Preview</TableHead>
-                    </TableRow>
-                  </TableHeader>
-                  <TableBody>
-                    {filteredResumeLeads.length === 0 ? (
-                      <TableRow><TableCell colSpan={10} className="text-center py-12 text-muted-foreground">No resume leads found</TableCell></TableRow>
-                    ) : filteredResumeLeads.map(r => (
-                      <TableRow key={r.id}>
-                        <TableCell className="text-xs text-muted-foreground whitespace-nowrap">{format(new Date(r.created_at), "MMM d, HH:mm")}</TableCell>
-                        <TableCell className="text-sm max-w-[160px] truncate" title={r.email}>{r.email}</TableCell>
-                        <TableCell className="text-sm max-w-[120px] truncate" title={r.name || ""}>{r.name || "—"}</TableCell>
-                        <TableCell className="text-sm max-w-[120px] truncate" title={r.job_title || ""}>{r.job_title || "—"}</TableCell>
-                        <TableCell className="text-center text-sm font-semibold">{r.overall_score ?? "—"}</TableCell>
-                        <TableCell className="text-xs text-muted-foreground">{r.seniority_level || "—"}</TableCell>
-                        <TableCell className="text-xs text-muted-foreground">{r.years_experience || "—"}</TableCell>
-                        <TableCell className="text-xs text-muted-foreground max-w-[100px] truncate" title={r.industry || ""}>{r.industry || "—"}</TableCell>
-                        <TableCell className="text-xs text-muted-foreground">{r.language || "—"}</TableCell>
-                        <TableCell className="text-xs text-muted-foreground max-w-[180px] truncate" title={r.resume_text || ""}>{r.resume_text ? r.resume_text.slice(0, 60) + "…" : "—"}</TableCell>
-                      </TableRow>
-                    ))}
-                  </TableBody>
-                </Table>
-              </div>
-            )}
-          </TabsContent>
-
-          {/* ── Email Leads Tab ──────────────────────────────────────────── */}
-          <TabsContent value="emails">
-            <div className="flex items-center justify-between mb-4">
-              <p className="text-sm text-muted-foreground">{emailLeads.length} leads</p>
-              <Button variant="outline" size="sm" onClick={exportEmailCsv}><Download className="w-4 h-4 mr-1" /> CSV</Button>
-            </div>
-
-            {emailLeadsLoading ? (
-              <div className="flex justify-center py-16"><Loader2 className="w-6 h-6 animate-spin text-muted-foreground" /></div>
-            ) : (
-              <div className="border border-border rounded-xl overflow-hidden overflow-x-auto">
-                <Table>
-                  <TableHeader>
-                    <TableRow>
-                      <TableHead className="w-36">Date</TableHead>
-                      <TableHead>Email</TableHead>
-                      <TableHead>Source</TableHead>
-                    </TableRow>
-                  </TableHeader>
-                  <TableBody>
-                    {emailLeads.length === 0 ? (
-                      <TableRow><TableCell colSpan={3} className="text-center py-12 text-muted-foreground">No email leads yet</TableCell></TableRow>
-                    ) : emailLeads.map(e => (
-                      <TableRow key={e.id}>
-                        <TableCell className="text-xs text-muted-foreground whitespace-nowrap">{format(new Date(e.created_at), "MMM d, HH:mm")}</TableCell>
-                        <TableCell className="text-sm">{e.email}</TableCell>
-                        <TableCell className="text-xs text-muted-foreground">{e.source || "—"}</TableCell>
-                      </TableRow>
-                    ))}
-                  </TableBody>
-                </Table>
-              </div>
-            )}
-          </TabsContent>
-
-          {/* ── Accounts Tab ─────────────────────────────────────────────── */}
-          <TabsContent value="accounts">
-            <div className="flex flex-col sm:flex-row gap-3 mb-4">
-              <div className="relative flex-1">
-                <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
-                <Input value={accountSearch} onChange={e => setAccountSearch(e.target.value)} placeholder="Search by email or provider..." className="pl-9 h-10" />
-              </div>
-              <Button variant="outline" size="sm" onClick={exportAccountsCsv} className="h-10"><Download className="w-4 h-4 mr-1" /> CSV</Button>
-            </div>
-
-            {accountsLoading ? (
-              <div className="flex justify-center py-16"><Loader2 className="w-6 h-6 animate-spin text-muted-foreground" /></div>
-            ) : (
-              <div className="border border-border rounded-xl overflow-hidden overflow-x-auto">
-                <Table>
-                  <TableHeader>
-                    <TableRow>
-                      <TableHead className="w-36 cursor-pointer select-none hover:text-foreground transition-colors" onClick={() => setAccountSort(s => s.col === "created_at" ? { col: "created_at", dir: s.dir === "asc" ? "desc" : "asc" } : { col: "created_at", dir: "desc" })}>
-                        Created {accountSort.col === "created_at" ? (accountSort.dir === "asc" ? "↑" : "↓") : ""}
-                      </TableHead>
-                      <TableHead>Email</TableHead>
-                      <TableHead>Provider</TableHead>
-                      <TableHead>Confirmed</TableHead>
-                      <TableHead className="cursor-pointer select-none hover:text-foreground transition-colors" onClick={() => setAccountSort(s => s.col === "last_sign_in_at" ? { col: "last_sign_in_at", dir: s.dir === "asc" ? "desc" : "asc" } : { col: "last_sign_in_at", dir: "desc" })}>
-                        Last Sign In {accountSort.col === "last_sign_in_at" ? (accountSort.dir === "asc" ? "↑" : "↓") : ""}
-                      </TableHead>
-                    </TableRow>
-                  </TableHeader>
-                  <TableBody>
-                    {filteredAccounts.length === 0 ? (
-                      <TableRow><TableCell colSpan={5} className="text-center py-12 text-muted-foreground">No accounts found</TableCell></TableRow>
-                    ) : filteredAccounts.map(a => (
-                      <TableRow key={a.id}>
-                        <TableCell className="text-xs text-muted-foreground whitespace-nowrap">{format(new Date(a.created_at), "MMM d, yyyy")}</TableCell>
-                        <TableCell className="text-sm">{a.email}</TableCell>
-                        <TableCell className="text-xs text-muted-foreground capitalize">{a.provider}</TableCell>
-                        <TableCell>{a.email_confirmed ? <Check className="w-4 h-4 text-emerald-500" /> : <span className="text-xs text-muted-foreground">No</span>}</TableCell>
-                        <TableCell className="text-xs text-muted-foreground whitespace-nowrap">{a.last_sign_in_at ? format(new Date(a.last_sign_in_at), "MMM d, yyyy HH:mm") : "Never"}</TableCell>
-                      </TableRow>
-                    ))}
-                  </TableBody>
-                </Table>
-              </div>
-            )}
-          </TabsContent>
-
-          {/* ── Feedback Tab ─────────────────────────────────────────────── */}
-          <TabsContent value="feedback">
-            {(() => {
-              const byType: Record<string, number> = {};
-              const npsItems = feedbackItems.filter(f => f.type === "nps");
-              const npsScores: number[] = [];
-              let thumbsUp = 0, thumbsDown = 0;
-              let promoters = 0, passives = 0, detractors = 0;
-              const npsComments: { score: number; message: string; date: string; category: string; metadata: Record<string, any> | null }[] = [];
-
-              feedbackItems.forEach(f => {
-                const tp = f.type || "general";
-                byType[tp] = (byType[tp] || 0) + 1;
-                if (tp === "nps" && f.rating !== null) {
-                  npsScores.push(f.rating);
-                  const cat = f.rating >= 9 ? "promoter" : f.rating >= 7 ? "passive" : "detractor";
-                  if (f.rating >= 9) promoters++;
-                  else if (f.rating >= 7) passives++;
-                  else detractors++;
-                  if (f.message && !f.message.startsWith("NPS score:")) {
-                    npsComments.push({ score: f.rating, message: f.message, date: f.created_at, category: cat, metadata: f.metadata });
-                  }
-                }
-                if ((tp === "micro_survey" || tp === "inline_rating") && f.rating !== null) {
-                  if (f.rating > 0) thumbsUp++; else thumbsDown++;
-                }
-              });
-
-              const totalNps = npsScores.length;
-              const avgNps = totalNps ? (npsScores.reduce((a, b) => a + b, 0) / totalNps).toFixed(1) : "—";
-              const npsScore = totalNps ? Math.round(((promoters - detractors) / totalNps) * 100) : 0;
-
-              const scoreDist = Array.from({ length: 11 }, (_, i) => ({
-                score: i,
-                count: npsScores.filter(s => s === i).length,
-              }));
-
-              const segmentStats = (category: string) => {
-                const items = npsItems.filter(f => {
-                  if (f.rating === null) return false;
-                  const cat = f.rating >= 9 ? "promoter" : f.rating >= 7 ? "passive" : "detractor";
-                  return cat === category;
-                });
-                const sessions = items.map(f => (f.metadata as any)?.session_count).filter(Boolean);
-                const days = items.map(f => (f.metadata as any)?.days_since_first_visit).filter(Boolean);
-                const pages = items.map(f => ((f.metadata as any)?.pages_this_session as any[])?.length).filter(Boolean);
-                const avg = (arr: number[]) => arr.length ? (arr.reduce((a, b) => a + b, 0) / arr.length).toFixed(1) : "—";
-                return { count: items.length, avgSessions: avg(sessions), avgDays: avg(days), avgPages: avg(pages) };
-              };
-
-              const promoterStats = segmentStats("promoter");
-              const passiveStats = segmentStats("passive");
-              const detractorStats = segmentStats("detractor");
-
-              return (
-                <div className="space-y-6">
-                  {/* NPS Score Hero */}
-                  <div className="grid grid-cols-2 md:grid-cols-6 gap-3">
-                    <div className="col-span-2 rounded-xl border border-border bg-card p-5 text-center">
-                      <p className="text-xs text-muted-foreground mb-1">NPS Score</p>
-                      <p className={`text-4xl font-bold ${npsScore >= 50 ? "text-emerald-600" : npsScore >= 0 ? "text-amber-600" : "text-destructive"}`}>
-                        {totalNps ? npsScore : "—"}
-                      </p>
-                      <p className="text-xs text-muted-foreground mt-1">{totalNps} responses</p>
-                    </div>
-                    <div className="rounded-lg border border-border bg-card p-3 text-center">
-                      <p className="text-xs text-muted-foreground">Avg Score</p>
-                      <p className="text-2xl font-bold text-foreground">{avgNps}</p>
-                    </div>
-                    <div className="rounded-lg border border-emerald-200 dark:border-emerald-800 bg-emerald-50 dark:bg-emerald-950/30 p-3 text-center">
-                      <p className="text-xs text-emerald-700 dark:text-emerald-400">Promoters (9-10)</p>
-                      <p className="text-2xl font-bold text-emerald-700 dark:text-emerald-400">{promoters}</p>
-                      <p className="text-xs text-emerald-600 dark:text-emerald-500">{totalNps ? Math.round((promoters / totalNps) * 100) : 0}%</p>
-                    </div>
-                    <div className="rounded-lg border border-amber-200 dark:border-amber-800 bg-amber-50 dark:bg-amber-950/30 p-3 text-center">
-                      <p className="text-xs text-amber-700 dark:text-amber-400">Passives (7-8)</p>
-                      <p className="text-2xl font-bold text-amber-700 dark:text-amber-400">{passives}</p>
-                      <p className="text-xs text-amber-600 dark:text-amber-500">{totalNps ? Math.round((passives / totalNps) * 100) : 0}%</p>
-                    </div>
-                    <div className="rounded-lg border border-red-200 dark:border-red-800 bg-red-50 dark:bg-red-950/30 p-3 text-center">
-                      <p className="text-xs text-red-700 dark:text-red-400">Detractors (0-6)</p>
-                      <p className="text-2xl font-bold text-red-700 dark:text-red-400">{detractors}</p>
-                      <p className="text-xs text-red-600 dark:text-red-500">{totalNps ? Math.round((detractors / totalNps) * 100) : 0}%</p>
-                    </div>
+              {/* Accounts */}
+              <TabsContent value="accounts">
+                <div className="flex flex-col sm:flex-row gap-3 mb-4">
+                  <div className="relative flex-1">
+                    <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
+                    <Input value={accountSearch} onChange={e => setAccountSearch(e.target.value)} placeholder="Search by email or provider..." className="pl-9 h-10" />
                   </div>
-
-                  {/* Score Distribution + Behavioral Breakdown */}
-                  <div className="grid md:grid-cols-2 gap-4">
-                    <div className="rounded-xl border border-border bg-card p-4">
-                      <h3 className="text-sm font-semibold text-foreground mb-3">Score Distribution</h3>
-                      <div className="flex items-end gap-1 h-28">
-                        {scoreDist.map(d => {
-                          const maxCount = Math.max(...scoreDist.map(x => x.count), 1);
-                          const heightPct = (d.count / maxCount) * 100;
-                          const color = d.score >= 9 ? "bg-emerald-500" : d.score >= 7 ? "bg-amber-400" : "bg-red-400";
-                          return (
-                            <div key={d.score} className="flex-1 flex flex-col items-center gap-1">
-                              <span className="text-[10px] text-muted-foreground">{d.count || ""}</span>
-                              <div className={`w-full rounded-t ${color} transition-all`} style={{ height: `${Math.max(heightPct, 2)}%` }} />
-                              <span className="text-[10px] text-muted-foreground">{d.score}</span>
-                            </div>
-                          );
-                        })}
-                      </div>
-                    </div>
-
-                    <div className="rounded-xl border border-border bg-card p-4">
-                      <h3 className="text-sm font-semibold text-foreground mb-3">Behavioral Patterns by Segment</h3>
-                      <div className="overflow-auto">
-                        <table className="w-full text-xs">
-                          <thead>
-                            <tr className="border-b border-border">
-                              <th className="text-left py-1.5 text-muted-foreground font-medium">Segment</th>
-                              <th className="text-center py-1.5 text-muted-foreground font-medium">Count</th>
-                              <th className="text-center py-1.5 text-muted-foreground font-medium">Avg Sessions</th>
-                              <th className="text-center py-1.5 text-muted-foreground font-medium">Avg Days</th>
-                              <th className="text-center py-1.5 text-muted-foreground font-medium">Pages/Session</th>
-                            </tr>
-                          </thead>
-                          <tbody>
-                            {[
-                              { label: "Promoters", color: "text-emerald-600", ...promoterStats },
-                              { label: "Passives", color: "text-amber-600", ...passiveStats },
-                              { label: "Detractors", color: "text-red-500", ...detractorStats },
-                            ].map(row => (
-                              <tr key={row.label} className="border-b border-border/50">
-                                <td className={`py-2 font-medium ${row.color}`}>{row.label}</td>
-                                <td className="py-2 text-center text-foreground">{row.count}</td>
-                                <td className="py-2 text-center text-foreground">{row.avgSessions}</td>
-                                <td className="py-2 text-center text-foreground">{row.avgDays}</td>
-                                <td className="py-2 text-center text-foreground">{row.avgPages}</td>
-                              </tr>
-                            ))}
-                          </tbody>
-                        </table>
-                      </div>
-                      {!npsItems.some(f => f.metadata) && (
-                        <p className="text-xs text-muted-foreground mt-3 italic">Behavioral data will populate as new NPS responses come in.</p>
-                      )}
-                    </div>
-                  </div>
-
-                  {/* Comment Highlights */}
-                  {npsComments.length > 0 && (
-                    <div className="rounded-xl border border-border bg-card p-4">
-                      <h3 className="text-sm font-semibold text-foreground mb-3">Comment Highlights ({npsComments.length})</h3>
-                      <div className="space-y-2 max-h-48 overflow-y-auto">
-                        {npsComments.map((c, i) => (
-                          <div key={i} className="flex items-start gap-2 p-2 rounded-lg bg-muted/50">
-                            <span className={`shrink-0 text-xs font-semibold px-1.5 py-0.5 rounded ${
-                              c.category === "promoter" ? "bg-emerald-100 text-emerald-700 dark:bg-emerald-900 dark:text-emerald-300" :
-                              c.category === "passive" ? "bg-amber-100 text-amber-700 dark:bg-amber-900 dark:text-amber-300" :
-                              "bg-red-100 text-red-700 dark:bg-red-900 dark:text-red-300"
-                            }`}>
-                              {c.score}
-                            </span>
-                            <p className="text-sm text-foreground flex-1">{c.message}</p>
-                            <span className="text-[10px] text-muted-foreground whitespace-nowrap">{format(new Date(c.date), "MMM d")}</span>
-                          </div>
-                        ))}
-                      </div>
-                    </div>
-                  )}
-
-                  {/* Thumbs summary */}
-                  {(thumbsUp + thumbsDown > 0) && (
-                    <div className="rounded-lg border border-border bg-card p-3">
-                      <p className="text-xs text-muted-foreground">
-                        <span className="font-medium text-foreground">Micro Survey & Inline Ratings:</span>{" "}
-                        👍 {thumbsUp} / 👎 {thumbsDown} ({((thumbsUp / (thumbsUp + thumbsDown)) * 100).toFixed(0)}% positive)
-                      </p>
-                    </div>
-                  )}
-
-                  {/* All Feedback Table */}
-                  <div>
-                    <div className="flex items-center justify-between mb-4 flex-wrap gap-2">
-                      <div className="flex items-center gap-2">
-                        <p className="text-sm text-muted-foreground">{filteredFeedback.length} submissions</p>
-                        <select
-                          value={feedbackTypeFilter}
-                          onChange={e => setFeedbackTypeFilter(e.target.value)}
-                          className="text-xs border border-border rounded px-2 py-1 bg-background text-foreground"
-                        >
-                          <option value="all">All types</option>
-                          <option value="general">General</option>
-                          <option value="micro_survey">Micro Survey</option>
-                          <option value="inline_rating">Inline Rating</option>
-                          <option value="nps">NPS</option>
-                        </select>
-                      </div>
-                      <div className="relative">
-                        <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
-                        <Input placeholder="Search feedback…" value={feedbackSearch} onChange={e => setFeedbackSearch(e.target.value)} className="pl-9 w-64" />
-                      </div>
-                    </div>
-                    {feedbackLoading ? (
-                      <div className="flex justify-center py-12"><Loader2 className="w-6 h-6 animate-spin text-muted-foreground" /></div>
-                    ) : (
-                      <div className="rounded-md border border-border overflow-auto">
-                        <Table>
-                          <TableHeader>
-                            <TableRow>
-                              <TableHead className="w-[130px]">Date</TableHead>
-                              <TableHead className="w-[100px]">Type</TableHead>
-                              <TableHead className="w-[60px]">Rating</TableHead>
-                              <TableHead>Message</TableHead>
-                              <TableHead className="w-[140px]">Context</TableHead>
-                              <TableHead className="w-[160px]">Page</TableHead>
-                              <TableHead className="w-[60px]" />
-                            </TableRow>
-                          </TableHeader>
-                          <TableBody>
-                            {filteredFeedback.length === 0 ? (
-                              <TableRow><TableCell colSpan={7} className="text-center py-12 text-muted-foreground">No feedback yet</TableCell></TableRow>
-                            ) : filteredFeedback.map(f => (
-                              <TableRow key={f.id}>
-                                <TableCell className="text-xs text-muted-foreground whitespace-nowrap">{format(new Date(f.created_at), "MMM d, yyyy HH:mm")}</TableCell>
-                                <TableCell>
-                                  <span className={`text-xs px-2 py-0.5 rounded-full ${
-                                    f.type === "nps" ? "bg-blue-100 text-blue-700 dark:bg-blue-900 dark:text-blue-300" :
-                                    f.type === "micro_survey" ? "bg-green-100 text-green-700 dark:bg-green-900 dark:text-green-300" :
-                                    f.type === "inline_rating" ? "bg-amber-100 text-amber-700 dark:bg-amber-900 dark:text-amber-300" :
-                                    "bg-muted text-muted-foreground"
-                                  }`}>
-                                    {f.type || "general"}
-                                  </span>
-                                </TableCell>
-                                <TableCell className="text-sm text-center">
-                                  {f.rating !== null ? (
-                                    f.type === "nps" ? <span className="font-medium">{f.rating}/10</span> :
-                                    f.rating > 0 ? "👍" : "👎"
-                                  ) : "—"}
-                                </TableCell>
-                                <TableCell className="text-sm max-w-xs truncate">{f.message}</TableCell>
-                                <TableCell className="text-xs text-muted-foreground font-mono">{f.context || "—"}</TableCell>
-                                <TableCell className="text-xs text-muted-foreground font-mono truncate max-w-[160px]">{f.page}</TableCell>
-                                <TableCell>
-                                  <AlertDialog>
-                                    <AlertDialogTrigger asChild>
-                                      <Button variant="ghost" size="icon" className="h-8 w-8"><Trash2 className="w-4 h-4 text-destructive" /></Button>
-                                    </AlertDialogTrigger>
-                                    <AlertDialogContent>
-                                      <AlertDialogHeader>
-                                        <AlertDialogTitle>Delete feedback?</AlertDialogTitle>
-                                        <AlertDialogDescription>This cannot be undone.</AlertDialogDescription>
-                                      </AlertDialogHeader>
-                                      <AlertDialogFooter>
-                                        <AlertDialogCancel>Cancel</AlertDialogCancel>
-                                        <AlertDialogAction onClick={() => handleDeleteFeedback(f.id)}>Delete</AlertDialogAction>
-                                      </AlertDialogFooter>
-                                    </AlertDialogContent>
-                                  </AlertDialog>
-                                </TableCell>
-                              </TableRow>
-                            ))}
-                          </TableBody>
-                        </Table>
-                      </div>
-                    )}
-                  </div>
+                  <Button variant="outline" size="sm" onClick={exportAccountsCsv} className="h-10"><Download className="w-4 h-4 mr-1" /> CSV</Button>
                 </div>
-              );
-            })()}
+                {accountsLoading ? (
+                  <div className="flex justify-center py-16"><Loader2 className="w-6 h-6 animate-spin text-muted-foreground" /></div>
+                ) : (
+                  <div className="border border-border rounded-xl overflow-hidden overflow-x-auto">
+                    <Table>
+                      <TableHeader>
+                        <TableRow>
+                          <TableHead className="w-36 cursor-pointer select-none hover:text-foreground transition-colors" onClick={() => setAccountSort(s => s.col === "created_at" ? { col: "created_at", dir: s.dir === "asc" ? "desc" : "asc" } : { col: "created_at", dir: "desc" })}>
+                            Created {accountSort.col === "created_at" ? (accountSort.dir === "asc" ? "↑" : "↓") : ""}
+                          </TableHead>
+                          <TableHead>Email</TableHead>
+                          <TableHead>Provider</TableHead>
+                          <TableHead>Confirmed</TableHead>
+                          <TableHead className="cursor-pointer select-none hover:text-foreground transition-colors" onClick={() => setAccountSort(s => s.col === "last_sign_in_at" ? { col: "last_sign_in_at", dir: s.dir === "asc" ? "desc" : "asc" } : { col: "last_sign_in_at", dir: "desc" })}>
+                            Last Sign In {accountSort.col === "last_sign_in_at" ? (accountSort.dir === "asc" ? "↑" : "↓") : ""}
+                          </TableHead>
+                        </TableRow>
+                      </TableHeader>
+                      <TableBody>
+                        {filteredAccounts.length === 0 ? (
+                          <TableRow><TableCell colSpan={5} className="text-center py-12 text-muted-foreground">No accounts found</TableCell></TableRow>
+                        ) : filteredAccounts.map(a => (
+                          <TableRow key={a.id}>
+                            <TableCell className="text-xs text-muted-foreground whitespace-nowrap">{format(new Date(a.created_at), "MMM d, yyyy")}</TableCell>
+                            <TableCell className="text-sm">{a.email}</TableCell>
+                            <TableCell className="text-xs text-muted-foreground capitalize">{a.provider}</TableCell>
+                            <TableCell>{a.email_confirmed ? <Check className="w-4 h-4 text-emerald-500" /> : <span className="text-xs text-muted-foreground">No</span>}</TableCell>
+                            <TableCell className="text-xs text-muted-foreground whitespace-nowrap">{a.last_sign_in_at ? format(new Date(a.last_sign_in_at), "MMM d, yyyy HH:mm") : "Never"}</TableCell>
+                          </TableRow>
+                        ))}
+                      </TableBody>
+                    </Table>
+                  </div>
+                )}
+              </TabsContent>
+
+              {/* Resume Leads */}
+              <TabsContent value="resumes">
+                <div className="flex flex-col sm:flex-row gap-3 mb-4">
+                  <div className="relative flex-1">
+                    <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
+                    <Input value={resumeSearch} onChange={e => setResumeSearch(e.target.value)} placeholder="Search by email, name, job title, industry..." className="pl-9 h-10" />
+                  </div>
+                  <Select value={resumeSeniorityFilter} onValueChange={setResumeSeniorityFilter}>
+                    <SelectTrigger className="w-40 h-10"><SelectValue placeholder="Seniority" /></SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="all">All Seniority</SelectItem>
+                      {resumeSeniorities.map(s => <SelectItem key={s} value={s!}>{s}</SelectItem>)}
+                    </SelectContent>
+                  </Select>
+                  <Button variant="outline" size="sm" onClick={exportResumeCsv} className="h-10"><Download className="w-4 h-4 mr-1" /> CSV</Button>
+                </div>
+                <p className="text-sm text-muted-foreground mb-3">{filteredResumeLeads.length} of {resumeLeads.length} leads</p>
+                {resumeLeadsLoading ? (
+                  <div className="flex justify-center py-16"><Loader2 className="w-6 h-6 animate-spin text-muted-foreground" /></div>
+                ) : (
+                  <div className="border border-border rounded-xl overflow-hidden overflow-x-auto">
+                    <Table>
+                      <TableHeader>
+                        <TableRow>
+                          <TableHead className="w-36">Date</TableHead>
+                          <TableHead>Email</TableHead>
+                          <TableHead className="w-[120px]">Name</TableHead>
+                          <TableHead className="w-[120px]">Job Title</TableHead>
+                          <TableHead className="text-center">Score</TableHead>
+                          <TableHead>Seniority</TableHead>
+                          <TableHead>Yrs Exp</TableHead>
+                          <TableHead className="w-[100px]">Industry</TableHead>
+                          <TableHead>Lang</TableHead>
+                          <TableHead className="w-[180px]">Resume Preview</TableHead>
+                        </TableRow>
+                      </TableHeader>
+                      <TableBody>
+                        {filteredResumeLeads.length === 0 ? (
+                          <TableRow><TableCell colSpan={10} className="text-center py-12 text-muted-foreground">No resume leads found</TableCell></TableRow>
+                        ) : filteredResumeLeads.map(r => (
+                          <TableRow key={r.id}>
+                            <TableCell className="text-xs text-muted-foreground whitespace-nowrap">{format(new Date(r.created_at), "MMM d, HH:mm")}</TableCell>
+                            <TableCell className="text-sm max-w-[160px] truncate" title={r.email}>{r.email}</TableCell>
+                            <TableCell className="text-sm max-w-[120px] truncate" title={r.name || ""}>{r.name || "—"}</TableCell>
+                            <TableCell className="text-sm max-w-[120px] truncate" title={r.job_title || ""}>{r.job_title || "—"}</TableCell>
+                            <TableCell className="text-center text-sm font-semibold">{r.overall_score ?? "—"}</TableCell>
+                            <TableCell className="text-xs text-muted-foreground">{r.seniority_level || "—"}</TableCell>
+                            <TableCell className="text-xs text-muted-foreground">{r.years_experience || "—"}</TableCell>
+                            <TableCell className="text-xs text-muted-foreground max-w-[100px] truncate" title={r.industry || ""}>{r.industry || "—"}</TableCell>
+                            <TableCell className="text-xs text-muted-foreground">{r.language || "—"}</TableCell>
+                            <TableCell className="text-xs text-muted-foreground max-w-[180px] truncate" title={r.resume_text || ""}>{r.resume_text ? r.resume_text.slice(0, 60) + "…" : "—"}</TableCell>
+                          </TableRow>
+                        ))}
+                      </TableBody>
+                    </Table>
+                  </div>
+                )}
+              </TabsContent>
+
+              {/* Email Leads */}
+              <TabsContent value="emails">
+                <div className="flex items-center justify-between mb-4">
+                  <p className="text-sm text-muted-foreground">{emailLeads.length} leads</p>
+                  <Button variant="outline" size="sm" onClick={exportEmailCsv}><Download className="w-4 h-4 mr-1" /> CSV</Button>
+                </div>
+                {emailLeadsLoading ? (
+                  <div className="flex justify-center py-16"><Loader2 className="w-6 h-6 animate-spin text-muted-foreground" /></div>
+                ) : (
+                  <div className="border border-border rounded-xl overflow-hidden overflow-x-auto">
+                    <Table>
+                      <TableHeader>
+                        <TableRow>
+                          <TableHead className="w-36">Date</TableHead>
+                          <TableHead>Email</TableHead>
+                          <TableHead>Source</TableHead>
+                        </TableRow>
+                      </TableHeader>
+                      <TableBody>
+                        {emailLeads.length === 0 ? (
+                          <TableRow><TableCell colSpan={3} className="text-center py-12 text-muted-foreground">No email leads yet</TableCell></TableRow>
+                        ) : emailLeads.map(e => (
+                          <TableRow key={e.id}>
+                            <TableCell className="text-xs text-muted-foreground whitespace-nowrap">{format(new Date(e.created_at), "MMM d, HH:mm")}</TableCell>
+                            <TableCell className="text-sm">{e.email}</TableCell>
+                            <TableCell className="text-xs text-muted-foreground">{e.source || "—"}</TableCell>
+                          </TableRow>
+                        ))}
+                      </TableBody>
+                    </Table>
+                  </div>
+                )}
+              </TabsContent>
+            </Tabs>
           </TabsContent>
 
-          {/* ── AI Usage Tab ─────────────────────────────────────────────── */}
-          <TabsContent value="ai-usage">
-            {aiUsageLoading ? (
-              <div className="flex justify-center py-16"><Loader2 className="w-6 h-6 animate-spin text-muted-foreground" /></div>
-            ) : (
-              <div className="space-y-6">
-                {/* Summary cards */}
-                <div className="grid grid-cols-2 md:grid-cols-5 gap-4">
-                  <Card>
-                    <CardContent className="p-4 text-center">
-                      <p className="text-3xl font-bold text-foreground">{aiUsageStats.totalThisMonth}</p>
-                      <p className="text-xs text-muted-foreground">Total this month</p>
-                    </CardContent>
-                  </Card>
-                  <Card>
-                    <CardContent className="p-4 text-center">
-                      <p className="text-3xl font-bold text-emerald-600">${aiUsageStats.totalCost.toFixed(2)}</p>
-                      <p className="text-xs text-muted-foreground">Est. Cost (USD)</p>
-                    </CardContent>
-                  </Card>
-                  {aiUsageStats.typeData.slice(0, 3).map(t => (
-                    <Card key={t.type}>
-                      <CardContent className="p-4 text-center">
-                        <p className="text-3xl font-bold text-foreground">{t.count}</p>
-                        <p className="text-xs text-muted-foreground capitalize">{t.type.replace(/_/g, " ")}</p>
-                        <p className="text-xs text-muted-foreground">${t.cost.toFixed(2)}</p>
+          {/* ── Data Tab ── */}
+          <TabsContent value="data">
+            <Tabs value={activeSub || "reviews"} onValueChange={(sub) => setActiveSub("data", sub)}>
+              <TabsList className="w-max bg-muted/50 h-8 gap-0">
+                <TabsTrigger value="reviews" className="text-xs h-7 px-3 rounded-full data-[state=active]:bg-primary data-[state=active]:text-primary-foreground">Reviews</TabsTrigger>
+                <TabsTrigger value="salary" className="text-xs h-7 px-3 rounded-full data-[state=active]:bg-primary data-[state=active]:text-primary-foreground">Salary</TabsTrigger>
+                <TabsTrigger value="feedback" className="text-xs h-7 px-3 rounded-full data-[state=active]:bg-primary data-[state=active]:text-primary-foreground">Feedback</TabsTrigger>
+                <TabsTrigger value="ai-usage" className="text-xs h-7 px-3 rounded-full data-[state=active]:bg-primary data-[state=active]:text-primary-foreground">AI Usage</TabsTrigger>
+              </TabsList>
+
+              {/* Reviews */}
+              <TabsContent value="reviews">
+                <div className="flex items-center justify-between mb-4">
+                  <p className="text-sm text-muted-foreground">Manage password-protected review links</p>
+                  <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
+                    <DialogTrigger asChild>
+                      <Button size="sm"><Plus className="h-4 w-4 mr-1" /> Add Review</Button>
+                    </DialogTrigger>
+                    <DialogContent className="sm:max-w-md">
+                      <DialogHeader><DialogTitle>Add New Client Review</DialogTitle></DialogHeader>
+                      <form onSubmit={handleSubmitReview} className="space-y-4 mt-4">
+                        <div className="space-y-2">
+                          <Label htmlFor="clientName">Client Name</Label>
+                          <Input id="clientName" value={clientName} onChange={e => handleNameChange(e.target.value)} placeholder="Sarah Wang" required />
+                        </div>
+                        <div className="space-y-2">
+                          <Label htmlFor="clientId">Client ID</Label>
+                          <Input id="clientId" value={clientId} onChange={e => setClientId(e.target.value)} required />
+                          <p className="text-xs text-muted-foreground">Auto-generated. Edit if needed.</p>
+                        </div>
+                        <div className="space-y-2">
+                          <Label htmlFor="password">Password</Label>
+                          <Input id="password" value={password} onChange={e => setPassword(e.target.value)} required />
+                        </div>
+                        <div className="space-y-2">
+                          <Label htmlFor="reviewUrl">Review URL Path</Label>
+                          <Input id="reviewUrl" value={reviewUrl} onChange={e => setReviewUrl(e.target.value)} placeholder="/reviews/sarah-wang" required />
+                          <p className="text-xs text-muted-foreground">Internal path starting with /</p>
+                        </div>
+                        <Button type="submit" disabled={submitting} className="w-full">
+                          {submitting ? <><Loader2 className="mr-2 h-4 w-4 animate-spin" /> Creating...</> : "Generate Link"}
+                        </Button>
+                      </form>
+                    </DialogContent>
+                  </Dialog>
+                </div>
+                {reviewsLoading ? (
+                  <div className="flex justify-center py-16"><Loader2 className="w-6 h-6 animate-spin text-muted-foreground" /></div>
+                ) : (
+                  <div className="border border-border rounded-xl overflow-hidden">
+                    <Table>
+                      <TableHeader>
+                        <TableRow>
+                          <TableHead>Client Name</TableHead>
+                          <TableHead>Link</TableHead>
+                          <TableHead>Last Viewed</TableHead>
+                          <TableHead className="text-right">Actions</TableHead>
+                        </TableRow>
+                      </TableHeader>
+                      <TableBody>
+                        {reviews.length === 0 ? (
+                          <TableRow><TableCell colSpan={4} className="text-center py-8 text-muted-foreground">No reviews yet</TableCell></TableRow>
+                        ) : reviews.map(r => (
+                          <TableRow key={r.id}>
+                            <TableCell className="font-medium">{r.client_name}</TableCell>
+                            <TableCell><code className="text-xs bg-muted px-2 py-1 rounded">{`${window.location.origin}/review/${r.id}`}</code></TableCell>
+                            <TableCell className="text-sm text-muted-foreground">
+                              {r.last_viewed_at ? format(new Date(r.last_viewed_at), "MMM d, yyyy h:mm a") : "Not viewed"}
+                            </TableCell>
+                            <TableCell className="text-right">
+                              <div className="flex items-center justify-end gap-2">
+                                <Button variant="outline" size="sm" onClick={() => copyToClipboard(r.id)}>
+                                  {copiedId === r.id ? <Check className="h-4 w-4" /> : <Copy className="h-4 w-4" />}
+                                </Button>
+                                <AlertDialog>
+                                  <AlertDialogTrigger asChild>
+                                    <Button variant="outline" size="sm"><Trash2 className="h-4 w-4 text-destructive" /></Button>
+                                  </AlertDialogTrigger>
+                                  <AlertDialogContent>
+                                    <AlertDialogHeader>
+                                      <AlertDialogTitle>Delete Review?</AlertDialogTitle>
+                                      <AlertDialogDescription>Permanently delete the link for {r.client_name}.</AlertDialogDescription>
+                                    </AlertDialogHeader>
+                                    <AlertDialogFooter>
+                                      <AlertDialogCancel>Cancel</AlertDialogCancel>
+                                      <AlertDialogAction onClick={() => handleDeleteReview(r.id)} className="bg-destructive hover:bg-destructive/90">Delete</AlertDialogAction>
+                                    </AlertDialogFooter>
+                                  </AlertDialogContent>
+                                </AlertDialog>
+                              </div>
+                            </TableCell>
+                          </TableRow>
+                        ))}
+                      </TableBody>
+                    </Table>
+                  </div>
+                )}
+              </TabsContent>
+
+              {/* Salary */}
+              <TabsContent value="salary">
+                <div className="flex flex-col sm:flex-row gap-3 mb-4">
+                  <div className="relative flex-1">
+                    <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
+                    <Input value={salarySearch} onChange={e => setSalarySearch(e.target.value)} placeholder="Search job title, role, sector..." className="pl-9 h-10" />
+                  </div>
+                  <Select value={verdictFilter} onValueChange={setVerdictFilter}>
+                    <SelectTrigger className="w-48 h-10"><SelectValue placeholder="All verdicts" /></SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="all">All verdicts</SelectItem>
+                      {verdicts.map(v => <SelectItem key={v!} value={v!}>{v}</SelectItem>)}
+                    </SelectContent>
+                  </Select>
+                  <Button variant="outline" size="sm" onClick={exportSalaryCsv} className="h-10"><Download className="w-4 h-4 mr-1" /> CSV</Button>
+                </div>
+                {checksLoading ? (
+                  <div className="flex justify-center py-16"><Loader2 className="w-6 h-6 animate-spin text-muted-foreground" /></div>
+                ) : (
+                  <div className="border border-border rounded-xl overflow-hidden overflow-x-auto">
+                    <Table>
+                      <TableHeader>
+                        <TableRow>
+                          <TableHead className="w-36"><SortHeader label="Date" k="created_at" /></TableHead>
+                          <TableHead><SortHeader label="Job Title" k="job_title" /></TableHead>
+                          <TableHead><SortHeader label="Role" k="role" /></TableHead>
+                          <TableHead>Sector</TableHead>
+                          <TableHead>Exp</TableHead>
+                          <TableHead className="text-right"><SortHeader label="Salary" k="salary" /></TableHead>
+                          <TableHead className="text-right">Median</TableHead>
+                          <TableHead>Verdict</TableHead>
+                          <TableHead>Lang</TableHead>
+                        </TableRow>
+                      </TableHeader>
+                      <TableBody>
+                        {filteredChecks.length === 0 ? (
+                          <TableRow><TableCell colSpan={9} className="text-center py-12 text-muted-foreground">No results</TableCell></TableRow>
+                        ) : filteredChecks.map(c => (
+                          <TableRow key={c.id}>
+                            <TableCell className="text-xs text-muted-foreground whitespace-nowrap">{format(new Date(c.created_at), "MMM d, HH:mm")}</TableCell>
+                            <TableCell className="font-medium text-sm max-w-48 truncate">{c.job_title}</TableCell>
+                            <TableCell className="text-sm">{c.role}</TableCell>
+                            <TableCell className="text-xs text-muted-foreground">{c.sector || "—"}</TableCell>
+                            <TableCell className="text-xs text-muted-foreground">{c.experience || "—"}</TableCell>
+                            <TableCell className="text-right text-sm font-semibold tabular-nums">{formatNTD(c.salary)}</TableCell>
+                            <TableCell className="text-right text-sm tabular-nums text-muted-foreground">{c.median ? formatNTD(c.median) : "—"}</TableCell>
+                            <TableCell className={`text-xs font-medium ${verdictColor(c.verdict)}`}>{c.verdict || "—"}</TableCell>
+                            <TableCell className="text-xs text-muted-foreground">{c.lang || "en"}</TableCell>
+                          </TableRow>
+                        ))}
+                      </TableBody>
+                    </Table>
+                  </div>
+                )}
+              </TabsContent>
+
+              {/* Feedback */}
+              <TabsContent value="feedback">
+                {(() => {
+                  const byType: Record<string, number> = {};
+                  const npsItems = feedbackItems.filter(f => f.type === "nps");
+                  const npsScores: number[] = [];
+                  let thumbsUp = 0, thumbsDown = 0;
+                  let promoters = 0, passives = 0, detractors = 0;
+                  const npsComments: { score: number; message: string; date: string; category: string; metadata: Record<string, any> | null }[] = [];
+
+                  feedbackItems.forEach(f => {
+                    const tp = f.type || "general";
+                    byType[tp] = (byType[tp] || 0) + 1;
+                    if (tp === "nps" && f.rating !== null) {
+                      npsScores.push(f.rating);
+                      const cat = f.rating >= 9 ? "promoter" : f.rating >= 7 ? "passive" : "detractor";
+                      if (f.rating >= 9) promoters++;
+                      else if (f.rating >= 7) passives++;
+                      else detractors++;
+                      if (f.message && !f.message.startsWith("NPS score:")) {
+                        npsComments.push({ score: f.rating, message: f.message, date: f.created_at, category: cat, metadata: f.metadata });
+                      }
+                    }
+                    if ((tp === "micro_survey" || tp === "inline_rating") && f.rating !== null) {
+                      if (f.rating > 0) thumbsUp++; else thumbsDown++;
+                    }
+                  });
+
+                  const totalNps = npsScores.length;
+                  const avgNps = totalNps ? (npsScores.reduce((a, b) => a + b, 0) / totalNps).toFixed(1) : "—";
+                  const npsScore = totalNps ? Math.round(((promoters - detractors) / totalNps) * 100) : 0;
+
+                  const scoreDist = Array.from({ length: 11 }, (_, i) => ({
+                    score: i,
+                    count: npsScores.filter(s => s === i).length,
+                  }));
+
+                  const segmentStats = (category: string) => {
+                    const items = npsItems.filter(f => {
+                      if (f.rating === null) return false;
+                      const cat = f.rating >= 9 ? "promoter" : f.rating >= 7 ? "passive" : "detractor";
+                      return cat === category;
+                    });
+                    const sessions = items.map(f => (f.metadata as any)?.session_count).filter(Boolean);
+                    const days = items.map(f => (f.metadata as any)?.days_since_first_visit).filter(Boolean);
+                    const pages = items.map(f => ((f.metadata as any)?.pages_this_session as any[])?.length).filter(Boolean);
+                    const avg = (arr: number[]) => arr.length ? (arr.reduce((a, b) => a + b, 0) / arr.length).toFixed(1) : "—";
+                    return { count: items.length, avgSessions: avg(sessions), avgDays: avg(days), avgPages: avg(pages) };
+                  };
+
+                  const promoterStats = segmentStats("promoter");
+                  const passiveStats = segmentStats("passive");
+                  const detractorStats = segmentStats("detractor");
+
+                  return (
+                    <div className="space-y-6">
+                      <div className="grid grid-cols-2 md:grid-cols-6 gap-3">
+                        <div className="col-span-2 rounded-xl border border-border bg-card p-5 text-center">
+                          <p className="text-xs text-muted-foreground mb-1">NPS Score</p>
+                          <p className={`text-4xl font-bold ${npsScore >= 50 ? "text-emerald-600" : npsScore >= 0 ? "text-amber-600" : "text-destructive"}`}>
+                            {totalNps ? npsScore : "—"}
+                          </p>
+                          <p className="text-xs text-muted-foreground mt-1">{totalNps} responses</p>
+                        </div>
+                        <div className="rounded-lg border border-border bg-card p-3 text-center">
+                          <p className="text-xs text-muted-foreground">Avg Score</p>
+                          <p className="text-2xl font-bold text-foreground">{avgNps}</p>
+                        </div>
+                        <div className="rounded-lg border border-emerald-200 dark:border-emerald-800 bg-emerald-50 dark:bg-emerald-950/30 p-3 text-center">
+                          <p className="text-xs text-emerald-700 dark:text-emerald-400">Promoters (9-10)</p>
+                          <p className="text-2xl font-bold text-emerald-700 dark:text-emerald-400">{promoters}</p>
+                          <p className="text-xs text-emerald-600 dark:text-emerald-500">{totalNps ? Math.round((promoters / totalNps) * 100) : 0}%</p>
+                        </div>
+                        <div className="rounded-lg border border-amber-200 dark:border-amber-800 bg-amber-50 dark:bg-amber-950/30 p-3 text-center">
+                          <p className="text-xs text-amber-700 dark:text-amber-400">Passives (7-8)</p>
+                          <p className="text-2xl font-bold text-amber-700 dark:text-amber-400">{passives}</p>
+                          <p className="text-xs text-amber-600 dark:text-amber-500">{totalNps ? Math.round((passives / totalNps) * 100) : 0}%</p>
+                        </div>
+                        <div className="rounded-lg border border-red-200 dark:border-red-800 bg-red-50 dark:bg-red-950/30 p-3 text-center">
+                          <p className="text-xs text-red-700 dark:text-red-400">Detractors (0-6)</p>
+                          <p className="text-2xl font-bold text-red-700 dark:text-red-400">{detractors}</p>
+                          <p className="text-xs text-red-600 dark:text-red-500">{totalNps ? Math.round((detractors / totalNps) * 100) : 0}%</p>
+                        </div>
+                      </div>
+
+                      <div className="grid md:grid-cols-2 gap-4">
+                        <div className="rounded-xl border border-border bg-card p-4">
+                          <h3 className="text-sm font-semibold text-foreground mb-3">Score Distribution</h3>
+                          <div className="flex items-end gap-1 h-28">
+                            {scoreDist.map(d => {
+                              const maxCount = Math.max(...scoreDist.map(x => x.count), 1);
+                              const heightPct = (d.count / maxCount) * 100;
+                              const color = d.score >= 9 ? "bg-emerald-500" : d.score >= 7 ? "bg-amber-400" : "bg-red-400";
+                              return (
+                                <div key={d.score} className="flex-1 flex flex-col items-center gap-1">
+                                  <span className="text-[10px] text-muted-foreground">{d.count || ""}</span>
+                                  <div className={`w-full rounded-t ${color} transition-all`} style={{ height: `${Math.max(heightPct, 2)}%` }} />
+                                  <span className="text-[10px] text-muted-foreground">{d.score}</span>
+                                </div>
+                              );
+                            })}
+                          </div>
+                        </div>
+
+                        <div className="rounded-xl border border-border bg-card p-4">
+                          <h3 className="text-sm font-semibold text-foreground mb-3">Behavioral Patterns by Segment</h3>
+                          <div className="overflow-auto">
+                            <table className="w-full text-xs">
+                              <thead>
+                                <tr className="border-b border-border">
+                                  <th className="text-left py-1.5 text-muted-foreground font-medium">Segment</th>
+                                  <th className="text-center py-1.5 text-muted-foreground font-medium">Count</th>
+                                  <th className="text-center py-1.5 text-muted-foreground font-medium">Avg Sessions</th>
+                                  <th className="text-center py-1.5 text-muted-foreground font-medium">Avg Days</th>
+                                  <th className="text-center py-1.5 text-muted-foreground font-medium">Pages/Session</th>
+                                </tr>
+                              </thead>
+                              <tbody>
+                                {[
+                                  { label: "Promoters", color: "text-emerald-600", ...promoterStats },
+                                  { label: "Passives", color: "text-amber-600", ...passiveStats },
+                                  { label: "Detractors", color: "text-red-500", ...detractorStats },
+                                ].map(row => (
+                                  <tr key={row.label} className="border-b border-border/50">
+                                    <td className={`py-2 font-medium ${row.color}`}>{row.label}</td>
+                                    <td className="py-2 text-center text-foreground">{row.count}</td>
+                                    <td className="py-2 text-center text-foreground">{row.avgSessions}</td>
+                                    <td className="py-2 text-center text-foreground">{row.avgDays}</td>
+                                    <td className="py-2 text-center text-foreground">{row.avgPages}</td>
+                                  </tr>
+                                ))}
+                              </tbody>
+                            </table>
+                          </div>
+                          {!npsItems.some(f => f.metadata) && (
+                            <p className="text-xs text-muted-foreground mt-3 italic">Behavioral data will populate as new NPS responses come in.</p>
+                          )}
+                        </div>
+                      </div>
+
+                      {npsComments.length > 0 && (
+                        <div className="rounded-xl border border-border bg-card p-4">
+                          <h3 className="text-sm font-semibold text-foreground mb-3">Comment Highlights ({npsComments.length})</h3>
+                          <div className="space-y-2 max-h-48 overflow-y-auto">
+                            {npsComments.map((c, i) => (
+                              <div key={i} className="flex items-start gap-2 p-2 rounded-lg bg-muted/50">
+                                <span className={`shrink-0 text-xs font-semibold px-1.5 py-0.5 rounded ${
+                                  c.category === "promoter" ? "bg-emerald-100 text-emerald-700 dark:bg-emerald-900 dark:text-emerald-300" :
+                                  c.category === "passive" ? "bg-amber-100 text-amber-700 dark:bg-amber-900 dark:text-amber-300" :
+                                  "bg-red-100 text-red-700 dark:bg-red-900 dark:text-red-300"
+                                }`}>
+                                  {c.score}
+                                </span>
+                                <p className="text-sm text-foreground flex-1">{c.message}</p>
+                                <span className="text-[10px] text-muted-foreground whitespace-nowrap">{format(new Date(c.date), "MMM d")}</span>
+                              </div>
+                            ))}
+                          </div>
+                        </div>
+                      )}
+
+                      {(thumbsUp + thumbsDown > 0) && (
+                        <div className="rounded-lg border border-border bg-card p-3">
+                          <p className="text-xs text-muted-foreground">
+                            <span className="font-medium text-foreground">Micro Survey & Inline Ratings:</span>{" "}
+                            👍 {thumbsUp} / 👎 {thumbsDown} ({((thumbsUp / (thumbsUp + thumbsDown)) * 100).toFixed(0)}% positive)
+                          </p>
+                        </div>
+                      )}
+
+                      <div>
+                        <div className="flex items-center justify-between mb-4 flex-wrap gap-2">
+                          <div className="flex items-center gap-2">
+                            <p className="text-sm text-muted-foreground">{filteredFeedback.length} submissions</p>
+                            <select
+                              value={feedbackTypeFilter}
+                              onChange={e => setFeedbackTypeFilter(e.target.value)}
+                              className="text-xs border border-border rounded px-2 py-1 bg-background text-foreground"
+                            >
+                              <option value="all">All types</option>
+                              <option value="general">General</option>
+                              <option value="micro_survey">Micro Survey</option>
+                              <option value="inline_rating">Inline Rating</option>
+                              <option value="nps">NPS</option>
+                            </select>
+                          </div>
+                          <div className="relative">
+                            <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
+                            <Input placeholder="Search feedback…" value={feedbackSearch} onChange={e => setFeedbackSearch(e.target.value)} className="pl-9 w-64" />
+                          </div>
+                        </div>
+                        {feedbackLoading ? (
+                          <div className="flex justify-center py-12"><Loader2 className="w-6 h-6 animate-spin text-muted-foreground" /></div>
+                        ) : (
+                          <div className="rounded-md border border-border overflow-auto">
+                            <Table>
+                              <TableHeader>
+                                <TableRow>
+                                  <TableHead className="w-[130px]">Date</TableHead>
+                                  <TableHead className="w-[100px]">Type</TableHead>
+                                  <TableHead className="w-[60px]">Rating</TableHead>
+                                  <TableHead>Message</TableHead>
+                                  <TableHead className="w-[140px]">Context</TableHead>
+                                  <TableHead className="w-[160px]">Page</TableHead>
+                                  <TableHead className="w-[60px]" />
+                                </TableRow>
+                              </TableHeader>
+                              <TableBody>
+                                {filteredFeedback.length === 0 ? (
+                                  <TableRow><TableCell colSpan={7} className="text-center py-12 text-muted-foreground">No feedback yet</TableCell></TableRow>
+                                ) : filteredFeedback.map(f => (
+                                  <TableRow key={f.id}>
+                                    <TableCell className="text-xs text-muted-foreground whitespace-nowrap">{format(new Date(f.created_at), "MMM d, yyyy HH:mm")}</TableCell>
+                                    <TableCell>
+                                      <span className={`text-xs px-2 py-0.5 rounded-full ${
+                                        f.type === "nps" ? "bg-blue-100 text-blue-700 dark:bg-blue-900 dark:text-blue-300" :
+                                        f.type === "micro_survey" ? "bg-green-100 text-green-700 dark:bg-green-900 dark:text-green-300" :
+                                        f.type === "inline_rating" ? "bg-amber-100 text-amber-700 dark:bg-amber-900 dark:text-amber-300" :
+                                        "bg-muted text-muted-foreground"
+                                      }`}>
+                                        {f.type || "general"}
+                                      </span>
+                                    </TableCell>
+                                    <TableCell className="text-sm text-center">
+                                      {f.rating !== null ? (
+                                        f.type === "nps" ? <span className="font-medium">{f.rating}/10</span> :
+                                        f.rating > 0 ? "👍" : "👎"
+                                      ) : "—"}
+                                    </TableCell>
+                                    <TableCell className="text-sm max-w-xs truncate">{f.message}</TableCell>
+                                    <TableCell className="text-xs text-muted-foreground font-mono">{f.context || "—"}</TableCell>
+                                    <TableCell className="text-xs text-muted-foreground font-mono truncate max-w-[160px]">{f.page}</TableCell>
+                                    <TableCell>
+                                      <AlertDialog>
+                                        <AlertDialogTrigger asChild>
+                                          <Button variant="ghost" size="icon" className="h-8 w-8"><Trash2 className="w-4 h-4 text-destructive" /></Button>
+                                        </AlertDialogTrigger>
+                                        <AlertDialogContent>
+                                          <AlertDialogHeader>
+                                            <AlertDialogTitle>Delete feedback?</AlertDialogTitle>
+                                            <AlertDialogDescription>This cannot be undone.</AlertDialogDescription>
+                                          </AlertDialogHeader>
+                                          <AlertDialogFooter>
+                                            <AlertDialogCancel>Cancel</AlertDialogCancel>
+                                            <AlertDialogAction onClick={() => handleDeleteFeedback(f.id)}>Delete</AlertDialogAction>
+                                          </AlertDialogFooter>
+                                        </AlertDialogContent>
+                                      </AlertDialog>
+                                    </TableCell>
+                                  </TableRow>
+                                ))}
+                              </TableBody>
+                            </Table>
+                          </div>
+                        )}
+                      </div>
+                    </div>
+                  );
+                })()}
+              </TabsContent>
+
+              {/* AI Usage */}
+              <TabsContent value="ai-usage">
+                {aiUsageLoading ? (
+                  <div className="flex justify-center py-16"><Loader2 className="w-6 h-6 animate-spin text-muted-foreground" /></div>
+                ) : (
+                  <div className="space-y-6">
+                    <div className="grid grid-cols-2 md:grid-cols-5 gap-4">
+                      <Card>
+                        <CardContent className="p-4 text-center">
+                          <p className="text-3xl font-bold text-foreground">{aiUsageStats.totalThisMonth}</p>
+                          <p className="text-xs text-muted-foreground">Total this month</p>
+                        </CardContent>
+                      </Card>
+                      <Card>
+                        <CardContent className="p-4 text-center">
+                          <p className="text-3xl font-bold text-emerald-600">${aiUsageStats.totalCost.toFixed(2)}</p>
+                          <p className="text-xs text-muted-foreground">Est. Cost (USD)</p>
+                        </CardContent>
+                      </Card>
+                      {aiUsageStats.typeData.slice(0, 3).map(t => (
+                        <Card key={t.type}>
+                          <CardContent className="p-4 text-center">
+                            <p className="text-3xl font-bold text-foreground">{t.count}</p>
+                            <p className="text-xs text-muted-foreground capitalize">{t.type.replace(/_/g, " ")}</p>
+                            <p className="text-xs text-muted-foreground">${t.cost.toFixed(2)}</p>
+                          </CardContent>
+                        </Card>
+                      ))}
+                    </div>
+
+                    <Card>
+                      <CardContent className="p-4">
+                        <h3 className="text-sm font-semibold text-foreground mb-3">Daily Usage (30 days)</h3>
+                        <div className="h-48">
+                          <ResponsiveContainer width="100%" height="100%">
+                            <BarChart data={aiUsageStats.dailyByType} margin={{ top: 0, right: 0, left: -20, bottom: 0 }}>
+                              <XAxis dataKey="date" tick={{ fontSize: 10 }} tickFormatter={v => format(new Date(v), "M/d")} />
+                              <YAxis tick={{ fontSize: 10 }} allowDecimals={false} />
+                              <Tooltip labelFormatter={v => format(new Date(v as string), "MMM d, yyyy")} />
+                              <Bar dataKey="import" stackId="a" fill="#7c3aed" name="Import" />
+                              <Bar dataKey="ai_tool" stackId="a" fill="#0891b2" name="AI Tool" />
+                              <Bar dataKey="analyze" stackId="a" fill="#d97706" name="Analyze" />
+                            </BarChart>
+                          </ResponsiveContainer>
+                        </div>
                       </CardContent>
                     </Card>
-                  ))}
-                </div>
 
-                {/* Daily trend chart */}
-                <Card>
-                  <CardContent className="p-4">
-                    <h3 className="text-sm font-semibold text-foreground mb-3">Daily Usage (30 days)</h3>
-                    <div className="h-48">
-                      <ResponsiveContainer width="100%" height="100%">
-                        <BarChart data={aiUsageStats.dailyByType} margin={{ top: 0, right: 0, left: -20, bottom: 0 }}>
-                          <XAxis dataKey="date" tick={{ fontSize: 10 }} tickFormatter={v => format(new Date(v), "M/d")} />
-                          <YAxis tick={{ fontSize: 10 }} allowDecimals={false} />
-                          <Tooltip labelFormatter={v => format(new Date(v as string), "MMM d, yyyy")} />
-                          <Bar dataKey="import" stackId="a" fill="#7c3aed" name="Import" />
-                          <Bar dataKey="ai_tool" stackId="a" fill="#0891b2" name="AI Tool" />
-                          <Bar dataKey="analyze" stackId="a" fill="#d97706" name="Analyze" />
-                        </BarChart>
-                      </ResponsiveContainer>
-                    </div>
-                  </CardContent>
-                </Card>
-
-                {/* Top users table */}
-                <Card>
-                  <CardContent className="p-4">
-                    <h3 className="text-sm font-semibold text-foreground mb-3">Top Users This Month</h3>
-                    <div className="border border-border rounded-xl overflow-hidden">
-                      <Table>
-                        <TableHeader>
-                          <TableRow>
-                            <TableHead>User</TableHead>
-                            <TableHead className="text-center">Total</TableHead>
-                            <TableHead className="text-center">Est. Cost</TableHead>
-                            {aiUsageStats.typeData.map(t => (
-                              <TableHead key={t.type} className="text-center capitalize">{t.type.replace(/_/g, " ")}</TableHead>
-                            ))}
-                          </TableRow>
-                        </TableHeader>
-                        <TableBody>
-                          {aiUsageStats.topUsers.length === 0 ? (
-                            <TableRow><TableCell colSpan={3 + aiUsageStats.typeData.length} className="text-center py-12 text-muted-foreground">No usage this month</TableCell></TableRow>
-                          ) : aiUsageStats.topUsers.map(u => (
-                            <TableRow key={u.userId}>
-                              <TableCell className="text-sm font-mono">{topUserEmails[u.userId] || u.userId}</TableCell>
-                              <TableCell className="text-center font-semibold">{u.total}</TableCell>
-                              <TableCell className="text-center text-sm font-medium text-emerald-600">${u.cost.toFixed(2)}</TableCell>
-                              {aiUsageStats.typeData.map(t => (
-                                <TableCell key={t.type} className="text-center text-sm text-muted-foreground">{u.types[t.type] || 0}</TableCell>
-                              ))}
-                            </TableRow>
-                          ))}
-                        </TableBody>
-                      </Table>
-                    </div>
-                  </CardContent>
-                </Card>
-              </div>
-            )}
-          </TabsContent>
-
-          {/* ── Analytics Tab (Shares + Events combined) ─────────────── */}
-          <TabsContent value="analytics">
-            {(shareClicksLoading || eventTracksLoading) ? (
-              <div className="flex justify-center py-16"><Loader2 className="w-6 h-6 animate-spin text-muted-foreground" /></div>
-            ) : (() => {
-              // Share stats
-              const byChannel: Record<string, number> = {};
-              const bySharePage: Record<string, number> = {};
-              shareClicks.forEach(c => {
-                byChannel[c.channel] = (byChannel[c.channel] || 0) + 1;
-                bySharePage[c.page] = (bySharePage[c.page] || 0) + 1;
-              });
-              const channelEntries = Object.entries(byChannel).sort((a, b) => b[1] - a[1]);
-              const sharePageEntries = Object.entries(bySharePage).sort((a, b) => b[1] - a[1]);
-
-              // Event stats
-              const byType: Record<string, number> = {};
-              const byName: Record<string, number> = {};
-              eventTracks.forEach(e => {
-                byType[e.event_type] = (byType[e.event_type] || 0) + 1;
-                byName[e.event_name] = (byName[e.event_name] || 0) + 1;
-              });
-              const typeEntries = Object.entries(byType).sort((a, b) => b[1] - a[1]);
-              const nameEntries = Object.entries(byName).sort((a, b) => b[1] - a[1]);
-
-              return (
-                <div className="space-y-8">
-                  {/* ── Shares Section ── */}
-                  <div>
-                    <div className="flex items-center gap-2 mb-4">
-                      <Share2 className="w-4 h-4 text-indigo-600" />
-                      <h2 className="font-semibold text-foreground">Share Clicks</h2>
-                      <span className="text-xs text-muted-foreground ml-1">{shareClicks.length} total</span>
-                    </div>
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
-                      <Card>
-                        <CardContent className="pt-5 pb-4 px-5">
-                          <h3 className="font-medium text-xs text-muted-foreground uppercase tracking-wide mb-3">By Channel</h3>
-                          {channelEntries.length === 0 ? (
-                            <p className="text-muted-foreground text-sm">No share clicks yet</p>
-                          ) : (
-                            <div className="space-y-1.5">
-                              {channelEntries.map(([ch, count]) => (
-                                <div key={ch} className="flex items-center justify-between text-sm">
-                                  <span className="capitalize">{ch}</span>
-                                  <span className="font-semibold tabular-nums">{count}</span>
-                                </div>
-                              ))}
-                            </div>
-                          )}
-                        </CardContent>
-                      </Card>
-                      <Card>
-                        <CardContent className="pt-5 pb-4 px-5">
-                          <h3 className="font-medium text-xs text-muted-foreground uppercase tracking-wide mb-3">Top Shared Pages</h3>
-                          {sharePageEntries.length === 0 ? (
-                            <p className="text-muted-foreground text-sm">No share clicks yet</p>
-                          ) : (
-                            <div className="space-y-1.5">
-                              {sharePageEntries.slice(0, 8).map(([pg, count]) => (
-                                <div key={pg} className="flex items-center justify-between text-sm gap-2">
-                                  <span className="truncate text-muted-foreground" title={pg}>{pg}</span>
-                                  <span className="font-semibold tabular-nums shrink-0">{count}</span>
-                                </div>
-                              ))}
-                            </div>
-                          )}
-                        </CardContent>
-                      </Card>
-                    </div>
-                    {/* Recent shares table */}
-                    <div className="border border-border rounded-xl overflow-hidden overflow-x-auto">
-                      <Table>
-                        <TableHeader>
-                          <TableRow>
-                            <TableHead className="w-36">Date</TableHead>
-                            <TableHead className="w-28">Channel</TableHead>
-                            <TableHead>Page</TableHead>
-                          </TableRow>
-                        </TableHeader>
-                        <TableBody>
-                          {shareClicks.length === 0 ? (
-                            <TableRow><TableCell colSpan={3} className="text-center py-8 text-muted-foreground">No share clicks yet</TableCell></TableRow>
-                          ) : shareClicks.slice(0, 50).map((c, i) => (
-                            <TableRow key={i}>
-                              <TableCell className="text-xs text-muted-foreground whitespace-nowrap">{format(new Date(c.created_at), "MMM d, HH:mm")}</TableCell>
-                              <TableCell className="text-sm capitalize">{c.channel}</TableCell>
-                              <TableCell className="text-sm max-w-[300px] truncate" title={c.page}>{c.page}</TableCell>
-                            </TableRow>
-                          ))}
-                        </TableBody>
-                      </Table>
-                    </div>
-                  </div>
-
-                  {/* Divider */}
-                  <div className="border-t border-border" />
-
-                  {/* ── Guide Engagement Section ── */}
-                  {(() => {
-                    // Guide views from event_tracks
-                    const guideViews: Record<string, number> = {};
-                    eventTracks.filter(e => e.event_type === "guide_view").forEach(e => {
-                      guideViews[e.event_name] = (guideViews[e.event_name] || 0) + 1;
-                    });
-
-                    // Thumbs up/down from feedback (inline_rating type)
-                    const guideRatings: Record<string, { up: number; down: number }> = {};
-                    feedbackItems.filter(f => f.type === "inline_rating" && f.context).forEach(f => {
-                      const key = f.context!;
-                      if (!guideRatings[key]) guideRatings[key] = { up: 0, down: 0 };
-                      if (f.rating === 1) guideRatings[key].up++;
-                      else if (f.rating === -1) guideRatings[key].down++;
-                    });
-
-                    // Merge datasets
-                    const allGuideIds = new Set([...Object.keys(guideViews), ...Object.keys(guideRatings)]);
-                    const guideEngagement = Array.from(allGuideIds).map(id => ({
-                      id,
-                      visits: guideViews[id] || 0,
-                      up: guideRatings[id]?.up || 0,
-                      down: guideRatings[id]?.down || 0,
-                      approval: guideRatings[id] ? Math.round((guideRatings[id].up / (guideRatings[id].up + guideRatings[id].down)) * 100) || 0 : null,
-                    })).sort((a, b) => b.visits - a.visits);
-
-                    return guideEngagement.length > 0 ? (
-                      <div>
-                        <div className="flex items-center gap-2 mb-4">
-                          <FileText className="w-4 h-4 text-emerald-600" />
-                          <h2 className="font-semibold text-foreground">Guide Engagement</h2>
-                          <span className="text-xs text-muted-foreground ml-1">{Object.values(guideViews).reduce((a, b) => a + b, 0)} total views</span>
-                        </div>
-                        <div className="border border-border rounded-xl overflow-hidden overflow-x-auto">
+                    <Card>
+                      <CardContent className="p-4">
+                        <h3 className="text-sm font-semibold text-foreground mb-3">Top Users This Month</h3>
+                        <div className="border border-border rounded-xl overflow-hidden">
                           <Table>
                             <TableHeader>
                               <TableRow>
-                                <TableHead>Guide</TableHead>
-                                <TableHead className="w-20 text-right">Visits</TableHead>
-                                <TableHead className="w-16 text-right">👍</TableHead>
-                                <TableHead className="w-16 text-right">👎</TableHead>
-                                <TableHead className="w-24 text-right">Approval</TableHead>
+                                <TableHead>User</TableHead>
+                                <TableHead className="text-center">Total</TableHead>
+                                <TableHead className="text-center">Est. Cost</TableHead>
+                                {aiUsageStats.typeData.map(t => (
+                                  <TableHead key={t.type} className="text-center capitalize">{t.type.replace(/_/g, " ")}</TableHead>
+                                ))}
                               </TableRow>
                             </TableHeader>
                             <TableBody>
-                              {guideEngagement.map(g => (
-                                <TableRow key={g.id}>
-                                  <TableCell className="text-sm capitalize">{g.id.replace(/^guide_/, "").replace(/_/g, " ")}</TableCell>
-                                  <TableCell className="text-sm text-right font-semibold tabular-nums">{g.visits}</TableCell>
-                                  <TableCell className="text-sm text-right tabular-nums text-emerald-600">{g.up}</TableCell>
-                                  <TableCell className="text-sm text-right tabular-nums text-red-500">{g.down}</TableCell>
-                                  <TableCell className="text-sm text-right tabular-nums">{g.approval !== null ? `${g.approval}%` : "—"}</TableCell>
+                              {aiUsageStats.topUsers.length === 0 ? (
+                                <TableRow><TableCell colSpan={3 + aiUsageStats.typeData.length} className="text-center py-12 text-muted-foreground">No usage this month</TableCell></TableRow>
+                              ) : aiUsageStats.topUsers.map(u => (
+                                <TableRow key={u.userId}>
+                                  <TableCell className="text-sm font-mono">{topUserEmails[u.userId] || u.userId}</TableCell>
+                                  <TableCell className="text-center font-semibold">{u.total}</TableCell>
+                                  <TableCell className="text-center text-sm font-medium text-emerald-600">${u.cost.toFixed(2)}</TableCell>
+                                  {aiUsageStats.typeData.map(t => (
+                                    <TableCell key={t.type} className="text-center text-sm text-muted-foreground">{u.types[t.type] || 0}</TableCell>
+                                  ))}
                                 </TableRow>
                               ))}
                             </TableBody>
                           </Table>
                         </div>
-                      </div>
-                    ) : null;
-                  })()}
-
-                  {/* Divider */}
-                  <div className="border-t border-border" />
-
-                  {/* ── Events Section ── */}
-                  <div>
-                    <div className="flex items-center gap-2 mb-4">
-                      <MousePointerClick className="w-4 h-4 text-orange-600" />
-                      <h2 className="font-semibold text-foreground">User Events</h2>
-                      <span className="text-xs text-muted-foreground ml-1">{eventTracks.length} total</span>
-                    </div>
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
-                      <Card>
-                        <CardContent className="pt-5 pb-4 px-5">
-                          <h3 className="font-medium text-xs text-muted-foreground uppercase tracking-wide mb-3">By Type</h3>
-                          {typeEntries.length === 0 ? (
-                            <p className="text-muted-foreground text-sm">No events yet</p>
-                          ) : (
-                            <div className="space-y-1.5">
-                              {typeEntries.map(([t, count]) => (
-                                <div key={t} className="flex items-center justify-between text-sm">
-                                  <span className="capitalize">{t.replace(/_/g, " ")}</span>
-                                  <span className="font-semibold tabular-nums">{count}</span>
-                                </div>
-                              ))}
-                            </div>
-                          )}
-                        </CardContent>
-                      </Card>
-                      <Card>
-                        <CardContent className="pt-5 pb-4 px-5">
-                          <h3 className="font-medium text-xs text-muted-foreground uppercase tracking-wide mb-3">By Action</h3>
-                          {nameEntries.length === 0 ? (
-                            <p className="text-muted-foreground text-sm">No events yet</p>
-                          ) : (
-                            <div className="space-y-1.5">
-                              {nameEntries.map(([n, count]) => (
-                                <div key={n} className="flex items-center justify-between text-sm">
-                                  <span className="capitalize">{n.replace(/_/g, " ")}</span>
-                                  <span className="font-semibold tabular-nums">{count}</span>
-                                </div>
-                              ))}
-                            </div>
-                          )}
-                        </CardContent>
-                      </Card>
-                    </div>
-                    {/* Recent events table */}
-                    <div className="border border-border rounded-xl overflow-hidden overflow-x-auto">
-                      <Table>
-                        <TableHeader>
-                          <TableRow>
-                            <TableHead className="w-36">Date</TableHead>
-                            <TableHead className="w-24">Type</TableHead>
-                            <TableHead className="w-36">Action</TableHead>
-                            <TableHead>Page</TableHead>
-                          </TableRow>
-                        </TableHeader>
-                        <TableBody>
-                          {eventTracks.length === 0 ? (
-                            <TableRow><TableCell colSpan={4} className="text-center py-8 text-muted-foreground">No events yet</TableCell></TableRow>
-                          ) : eventTracks.slice(0, 50).map((e, i) => (
-                            <TableRow key={i}>
-                              <TableCell className="text-xs text-muted-foreground whitespace-nowrap">{format(new Date(e.created_at), "MMM d, HH:mm")}</TableCell>
-                              <TableCell className="text-sm capitalize">{e.event_type.replace(/_/g, " ")}</TableCell>
-                              <TableCell className="text-sm capitalize">{e.event_name.replace(/_/g, " ")}</TableCell>
-                              <TableCell className="text-sm max-w-[300px] truncate" title={e.page}>{e.page}</TableCell>
-                            </TableRow>
-                          ))}
-                        </TableBody>
-                      </Table>
-                    </div>
+                      </CardContent>
+                    </Card>
                   </div>
-                </div>
-              );
-            })()}
+                )}
+              </TabsContent>
+            </Tabs>
           </TabsContent>
 
-          {/* ── Insights Tab ─────────────────────────────────────────────── */}
+          {/* ── Insights Tab (merged with Analytics) ── */}
           <TabsContent value="insights">
             <InsightsTab
               accounts={accounts}
@@ -1598,6 +1437,11 @@ export default function AdminDashboard() {
               shareClicks={shareClicks}
               salaryChecks={checks}
               guideProgress={guideProgressRows}
+              analyticsData={{
+                feedbackItems,
+                shareClicksLoading,
+                eventTracksLoading,
+              }}
             />
           </TabsContent>
         </Tabs>
