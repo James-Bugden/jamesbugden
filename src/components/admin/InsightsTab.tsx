@@ -360,6 +360,51 @@ export default function InsightsTab({
   }, [interviewQuestions]);
 
   // ══════════════════════════════════════════════════════════════════════
+  // 8c. Question Bank User Usage (from event_tracks qbank_* events)
+  // ══════════════════════════════════════════════════════════════════════
+  const qbankUsage = useMemo(() => {
+    const qbEvents = eventTracks.filter(e => e.event_type.startsWith("qbank_"));
+    const pageViews = qbEvents.filter(e => e.event_type === "qbank_view").length;
+    const searches = qbEvents.filter(e => e.event_type === "qbank_search");
+    const reveals = qbEvents.filter(e => e.event_name === "reveal_answer");
+    const randoms = qbEvents.filter(e => e.event_name === "random_question");
+    const filters = qbEvents.filter(e => e.event_type === "qbank_filter");
+
+    // Top searched terms
+    const searchCounts: Record<string, number> = {};
+    searches.forEach(e => {
+      const term = e.event_name;
+      searchCounts[term] = (searchCounts[term] || 0) + 1;
+    });
+    const topSearches = Object.entries(searchCounts).sort((a, b) => b[1] - a[1]).slice(0, 10);
+
+    // Most revealed categories
+    const revealCats: Record<string, number> = {};
+    reveals.forEach(e => {
+      const cat = (e.metadata as any)?.category || "unknown";
+      revealCats[cat] = (revealCats[cat] || 0) + 1;
+    });
+    const topRevealCats = Object.entries(revealCats).sort((a, b) => b[1] - a[1]).slice(0, 8);
+
+    // Filter usage by type
+    const filterCats: Record<string, number> = {};
+    filters.forEach(e => {
+      const val = (e.metadata as any)?.category || (e.metadata as any)?.difficulty || e.event_name;
+      filterCats[String(val)] = (filterCats[String(val)] || 0) + 1;
+    });
+    const topFilters = Object.entries(filterCats).sort((a, b) => b[1] - a[1]).slice(0, 8);
+
+    // Language split
+    const langCounts: Record<string, number> = { en: 0, zh: 0 };
+    qbEvents.forEach(e => {
+      const l = (e.metadata as any)?.lang || "en";
+      langCounts[l] = (langCounts[l] || 0) + 1;
+    });
+
+    return { pageViews, searches: searches.length, reveals: reveals.length, randoms: randoms.length, topSearches, topRevealCats, topFilters, langCounts };
+  }, [eventTracks]);
+
+  // ══════════════════════════════════════════════════════════════════════
   // 9. Feature Adoption (unique users per AI feature)
   // ══════════════════════════════════════════════════════════════════════
   const featureAdoption = useMemo(() => {
