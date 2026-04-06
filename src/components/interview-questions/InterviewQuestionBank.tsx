@@ -212,11 +212,16 @@ export default function InterviewQuestionBank({ lang: initialLang }: { lang: Lan
     fetchCounts();
   }, []);
 
-  // Debounce search
+  // Debounce search + track
   useEffect(() => {
-    const timer = setTimeout(() => setDebouncedSearch(search), 300);
+    const timer = setTimeout(() => {
+      setDebouncedSearch(search);
+      if (search.trim()) {
+        trackEvent("qbank_search", search.trim().toLowerCase().slice(0, 80), { lang });
+      }
+    }, 300);
     return () => clearTimeout(timer);
-  }, [search]);
+  }, [search, lang]);
 
   // Sync URL params
   useEffect(() => {
