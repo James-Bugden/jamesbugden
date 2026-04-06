@@ -538,10 +538,11 @@ export default function InsightsTab({
         </div>
 
         <div>
-          <div className="flex items-center gap-2 mb-4">
+          <div className="flex items-center gap-2 mb-1">
             <BookOpen className="w-4 h-4 text-violet-600" />
             <h2 className="font-semibold text-foreground">Popular Guides (by views)</h2>
           </div>
+          <p className="text-xs text-muted-foreground mb-4">Ranked by total page views tracked via events. Identifies which guides drive the most traffic and engagement.</p>
           <Card>
             <CardContent className="p-4">
               {popularGuides.length === 0 ? (
