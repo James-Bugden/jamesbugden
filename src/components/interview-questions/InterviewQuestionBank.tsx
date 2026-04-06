@@ -219,9 +219,14 @@ export default function InterviewQuestionBank({ lang: initialLang }: { lang: Lan
 
   // Debounce search
   useEffect(() => {
-    const timer = setTimeout(() => setDebouncedSearch(search), 300);
+    const timer = setTimeout(() => {
+      setDebouncedSearch(search);
+      if (search.length >= 2) {
+        trackEvent("qbank_search", "search", { term: search, lang });
+      }
+    }, 300);
     return () => clearTimeout(timer);
-  }, [search]);
+  }, [search]); // eslint-disable-line react-hooks/exhaustive-deps
 
   // Sync URL params
   useEffect(() => {
