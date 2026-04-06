@@ -1,54 +1,69 @@
 
 
-# Admin Dashboard UI/UX Improvements
+# Upgrade Guide Engagement Tracking
 
-## Problems Identified
-1. **Reviews tab is hard to find** — it's the 4th tab in a row of 9, buried between "Email Leads" and "Salary". On mobile, it requires horizontal scrolling to reach.
-2. **Too many tabs** — 9 tabs (Accounts, Resume Leads, Email Leads, Reviews, Salary, Feedback, AI Usage, Analytics, Insights) create cognitive overload and make important sections easy to miss.
-3. **No visual hierarchy** — all tabs look identical; no way to distinguish management tools (Reviews) from analytics (Insights).
-4. **Overview cards don't link to tabs** — the stat cards at the top are passive; clicking them should navigate to the relevant tab.
+## Problem
+Guide completion is currently measured by checklist ticks in `guide_progress` — unreliable because most users read without checking boxes. You're missing the two strongest engagement signals: **scroll depth** and **time on page**.
 
-## Solution: Reorganize into 4 grouped tabs with sub-navigation
+## What already exists
+- `useTrackGuideProgress` fires a `guide_view` event to `event_tracks` on mount and tracks scroll % locally — but **never sends scroll depth or time to the database**
+- `event_tracks` table already accepts `metadata` (jsonb), so no schema changes needed
 
-### New tab structure
+## Plan
 
-```text
-┌─────────────┬─────────────┬─────────────┬─────────────┐
-│  Overview   │   People    │    Data     │  Insights   │
-└─────────────┴─────────────┴─────────────┴─────────────┘
+### Step 1: Enhance `useTrackGuideProgress` to track time + scroll depth server-side
+
+**File: `src/hooks/useReadingProgress.ts`**
+
+On unmount (or `beforeunload`), fire a single `guide_exit` event to `event_tracks` with metadata:
+```json
+{
+  "guide_id": "pivot-guide",
+  "scroll_depth_pct": 87,
+  "time_on_page_sec": 214
+}
 ```
 
-- **Overview** (default) — The stat cards grid (already exists) + a quick-glance section with: recent signups (last 5), recent resume leads (last 5), recent feedback (last 3). Clicking any card or "View all" links to the relevant tab.
-- **People** — Sub-tabs: Accounts | Resume Leads | Email Leads (existing content, unchanged)
-- **Data** — Sub-tabs: Reviews | Salary | Feedback | AI Usage (existing content, unchanged). **Reviews is now the first sub-tab** so it's immediately visible.
-- **Insights** — The existing Insights + Analytics tabs merged into one view (Insights charts at top, raw Analytics events below in a collapsible section)
+This uses the existing `trackEvent` → `event_tracks` pipeline. No new tables needed.
 
-### Clickable stat cards
-Each overview card becomes clickable, navigating to the relevant tab:
-- Accounts → People/Accounts
-- Resume Leads → People/Resume Leads
-- Email Leads → People/Email Leads
-- Salary → Data/Salary
-- Feedback → Data/Feedback
-- AI Usage → Data/AI Usage
-- Shares/Events → Insights
+- Track elapsed seconds via a simple `Date.now()` diff (start on mount, calc on unmount)
+- Use the existing `maxRef` for scroll depth
+- Fire on both `beforeunload` and React cleanup to catch tab closes
 
-### Technical details
-
-**File: `src/pages/AdminDashboard.tsx`**
-- Replace the single `Tabs` with a two-level navigation:
-  - Top level: 4 main tabs using existing `Tabs` component
-  - Inside People and Data tabs: nested `Tabs` for sub-sections
-- URL params: `?tab=data&sub=reviews` format to preserve deep-linking
-- Wrap each stat card in a clickable div that calls `setSearchParams`
-- Move the Analytics tab content (share clicks, event tracks tables) into a collapsible section within the Insights tab
-- Reviews sub-tab is first in the Data group, making it immediately visible
+### Step 2: Update Insights tab guide completion logic
 
 **File: `src/components/admin/InsightsTab.tsx`**
-- Add an optional `analyticsSection` prop that renders the raw Analytics tables (share clicks, event tracks) in a collapsible `<details>` at the bottom
 
-### Visual improvements
-- Stat cards get `cursor-pointer hover:border-primary/30` for click affordance
-- Active stat card gets a subtle highlight ring matching its color
-- Sub-tab bars use a smaller, pill-style variant to differentiate from main tabs
+Replace the checklist-based completion calculation with a multi-signal approach using `event_tracks` data:
+
+- **Scroll-based completion**: Guide is "completed" if any `guide_exit` event has `scroll_depth_pct >= 75`
+- **Time-based engagement**: Show average time on page per guide
+- **Visit frequency**: Count `guide_view` events per guide (already available)
+
+New chart columns:
+| Guide | Visits | Avg Time | Scroll ≥75% | Completion Rate |
+|-------|--------|----------|-------------|-----------------|
+
+### Step 3: Additional product metrics to add (as a PM)
+
+These are high-value metrics you're currently missing:
+
+1. **Drop-off points** — From `guide_exit` scroll depth, show a histogram of where users stop reading (25%, 50%, 75%, 100% buckets). Identifies which guides lose readers mid-way.
+
+2. **Return visits** — Users who view the same guide 2+ times (from `guide_view` events). High return = reference material; low return + low scroll = content issue.
+
+3. **Guide → Action conversion** — After reading a guide, did the user take action within 24h? (e.g., guide_view for "resume-guide" → resume_analyses or user_documents created). This is your most valuable content metric.
+
+4. **Bounce rate per guide** — `guide_exit` with `time_on_page_sec < 15` AND `scroll_depth_pct < 10`. These users landed and immediately left.
+
+5. **Reading speed** — `time_on_page_sec / estimated_word_count` helps identify if content is too dense or too light.
+
+All of these derive from the same `guide_exit` event + cross-referencing existing tables — no new infrastructure.
+
+## Files changed
+- `src/hooks/useReadingProgress.ts` — add time tracking + fire `guide_exit` event with scroll depth + time
+- `src/components/admin/InsightsTab.tsx` — replace checklist completion with scroll/time-based metrics, add drop-off histogram, bounce rate, guide→action conversion
+
+## No database changes needed
+Everything uses the existing `event_tracks` table and its `metadata` jsonb column.
 
