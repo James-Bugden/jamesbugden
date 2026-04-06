@@ -28,6 +28,8 @@ const ALL_TABLES = [
   "threads_link_clicks",
   "ai_usage_log",
   "resume_analyses",
+  "interview_questions",
+  "profiles",
 ] as const;
 
 Deno.serve(async (req) => {
