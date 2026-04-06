@@ -723,6 +723,7 @@ export const translations = {
     dateWarnings: "日期警告",
     dateWarnMissing: "缺少結束日期",
     dateWarnInconsistent: "結束日期早於開始日期",
+    dateWarnOverlap: "日期範圍重疊",
 
     // Analyzer CTA
     analyzerCtaTitle: "想知道你的履歷得幾分嗎？",
