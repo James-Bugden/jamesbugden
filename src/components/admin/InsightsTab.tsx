@@ -612,9 +612,10 @@ export default function InsightsTab({
       <div className="grid md:grid-cols-3 gap-4">
         <Card>
           <CardContent className="pt-5 pb-4 px-5">
-            <h3 className="font-medium text-xs text-muted-foreground uppercase tracking-wide mb-3 flex items-center gap-1">
+            <h3 className="font-medium text-xs text-muted-foreground uppercase tracking-wide mb-1 flex items-center gap-1">
               <BarChart3 className="w-3 h-3" /> Top Searched Roles
             </h3>
+            <p className="text-[10px] text-muted-foreground mb-3">Most frequently searched job titles in the Salary Checker — reveals what roles your audience cares about most.</p>
             {salaryDemand.topRoles.length === 0 ? (
               <p className="text-sm text-muted-foreground">No salary checks yet</p>
             ) : (
