@@ -369,6 +369,7 @@ export default function InterviewQuestionBank({ lang: initialLang }: { lang: Lan
     const { data } = await query;
     if (data && data.length > 0) {
       setRandomQuestion(data[0] as Question);
+      trackEvent("qbank_action", "random_question", { category: (data[0] as Question).category, lang });
     }
   };
 
