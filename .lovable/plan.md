@@ -1,32 +1,54 @@
 
 
-# Add Date Consistency Warnings to Resume Completeness Score
+# Admin Dashboard UI/UX Improvements
 
-## What changes
-Enhance the existing `CompletenessScore` component to detect and warn about two new date issues, shown as warning items (amber) below the existing checklist when expanded.
+## Problems Identified
+1. **Reviews tab is hard to find** — it's the 4th tab in a row of 9, buried between "Email Leads" and "Salary". On mobile, it requires horizontal scrolling to reach.
+2. **Too many tabs** — 9 tabs (Accounts, Resume Leads, Email Leads, Reviews, Salary, Feedback, AI Usage, Analytics, Insights) create cognitive overload and make important sections easy to miss.
+3. **No visual hierarchy** — all tabs look identical; no way to distinguish management tools (Reviews) from analytics (Insights).
+4. **Overview cards don't link to tabs** — the stat cards at the top are passive; clicking them should navigate to the relevant tab.
 
-### New warnings detected
-1. **Missing end dates** — Experience/education/project entries that have a start date but no end date and are not marked "Currently here"
-2. **Inconsistent dates** — Entries where end date is before start date (comparing year, then month)
+## Solution: Reorganize into 4 grouped tabs with sub-navigation
 
-### Implementation
+### New tab structure
 
-#### 1. `src/components/resume-builder/CompletenessScore.tsx`
-- Add a `DateWarning` interface: `{ label: string; entryName: string }`
-- Add a `useComputeDateWarnings(data)` hook that scans experience, education, projects, and organisations sections for:
-  - Entries with `startYear` but missing `endYear` and `currentlyHere !== "true"` → "Missing end date"
-  - Entries where `endYear < startYear` or (same year and `endMonth < startMonth`) → "End date before start date"
-- Render warnings as amber `AlertTriangle` icon items below the existing checklist when expanded
-- Warnings do not affect the score percentage — they are advisory only
+```text
+┌─────────────┬─────────────┬─────────────┬─────────────┐
+│  Overview   │   People    │    Data     │  Insights   │
+└─────────────┴─────────────┴─────────────┴─────────────┘
+```
 
-#### 2. `src/components/resume-builder/i18n.tsx`
-- Add new translation keys for both EN and zh-TW:
-  - `dateWarnMissing`: "Missing end date" / "缺少結束日期"
-  - `dateWarnInconsistent`: "End date is before start date" / "結束日期早於開始日期"
-  - `dateWarnings`: "Date warnings" / "日期警告"
+- **Overview** (default) — The stat cards grid (already exists) + a quick-glance section with: recent signups (last 5), recent resume leads (last 5), recent feedback (last 3). Clicking any card or "View all" links to the relevant tab.
+- **People** — Sub-tabs: Accounts | Resume Leads | Email Leads (existing content, unchanged)
+- **Data** — Sub-tabs: Reviews | Salary | Feedback | AI Usage (existing content, unchanged). **Reviews is now the first sub-tab** so it's immediately visible.
+- **Insights** — The existing Insights + Analytics tabs merged into one view (Insights charts at top, raw Analytics events below in a collapsible section)
 
-### Visual design
-- Warning items use `AlertTriangle` icon in amber (`text-amber-500`) instead of the green check / gray circle
-- Entry name (position/company or degree/institution) shown alongside the warning for easy identification
-- Grouped under a small "⚠ Date warnings" subheading within the expanded checklist
+### Clickable stat cards
+Each overview card becomes clickable, navigating to the relevant tab:
+- Accounts → People/Accounts
+- Resume Leads → People/Resume Leads
+- Email Leads → People/Email Leads
+- Salary → Data/Salary
+- Feedback → Data/Feedback
+- AI Usage → Data/AI Usage
+- Shares/Events → Insights
+
+### Technical details
+
+**File: `src/pages/AdminDashboard.tsx`**
+- Replace the single `Tabs` with a two-level navigation:
+  - Top level: 4 main tabs using existing `Tabs` component
+  - Inside People and Data tabs: nested `Tabs` for sub-sections
+- URL params: `?tab=data&sub=reviews` format to preserve deep-linking
+- Wrap each stat card in a clickable div that calls `setSearchParams`
+- Move the Analytics tab content (share clicks, event tracks tables) into a collapsible section within the Insights tab
+- Reviews sub-tab is first in the Data group, making it immediately visible
+
+**File: `src/components/admin/InsightsTab.tsx`**
+- Add an optional `analyticsSection` prop that renders the raw Analytics tables (share clicks, event tracks) in a collapsible `<details>` at the bottom
+
+### Visual improvements
+- Stat cards get `cursor-pointer hover:border-primary/30` for click affordance
+- Active stat card gets a subtle highlight ring matching its color
+- Sub-tab bars use a smaller, pill-style variant to differentiate from main tabs
 
