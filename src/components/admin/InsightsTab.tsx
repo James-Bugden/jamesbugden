@@ -80,6 +80,11 @@ interface FeedbackItem {
   created_at: string;
 }
 
+interface InterviewQuestion {
+  category: string;
+  difficulty: number;
+}
+
 export interface InsightsTabProps {
   accounts: AccountUser[];
   resumeLeads: ResumeLead[];
@@ -91,6 +96,7 @@ export interface InsightsTabProps {
   shareClicks: ShareClick[];
   salaryChecks: SalaryCheck[];
   guideProgress: GuideProgressRow[];
+  interviewQuestions?: InterviewQuestion[];
   analyticsData?: {
     feedbackItems: FeedbackItem[];
     shareClicksLoading: boolean;
