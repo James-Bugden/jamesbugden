@@ -654,9 +654,10 @@ export default function InsightsTab({
 
         <Card>
           <CardContent className="pt-5 pb-4 px-5">
-            <h3 className="font-medium text-xs text-muted-foreground uppercase tracking-wide mb-3 flex items-center gap-1">
+            <h3 className="font-medium text-xs text-muted-foreground uppercase tracking-wide mb-1 flex items-center gap-1">
               <Globe className="w-3 h-3" /> Language Split
             </h3>
+            <p className="text-[10px] text-muted-foreground mb-3">EN vs ZH-TW usage across resume analyzer and salary checker — guides localization investment decisions.</p>
             {langSplit.length === 0 ? (
               <p className="text-sm text-muted-foreground">No data</p>
             ) : (
