@@ -5,7 +5,7 @@ import {
   BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer,
   AreaChart, Area, Cell, LineChart, Line,
 } from "recharts";
-import { TrendingUp, Users, FileText, Zap, Globe, Share2, BarChart3, BookOpen } from "lucide-react";
+import { TrendingUp, Users, FileText, Zap, Globe, Share2, BarChart3, BookOpen, AlertTriangle } from "lucide-react";
 
 // ── Types ─────────────────────────────────────────────────────────────────────
 
@@ -47,6 +47,7 @@ interface EventTrack {
   event_name: string;
   page: string;
   created_at: string;
+  metadata?: Record<string, any> | null;
 }
 
 interface ShareClick {
@@ -213,28 +214,62 @@ export default function InsightsTab({
   // ══════════════════════════════════════════════════════════════════════
   // 6. Guide Completion Rates
   // ══════════════════════════════════════════════════════════════════════
-  const guideCompletion = useMemo(() => {
-    const byGuide: Record<string, { started: number; completed: number }> = {};
-    for (const gp of guideProgress) {
-      if (!byGuide[gp.guide_key]) byGuide[gp.guide_key] = { started: 0, completed: 0 };
-      byGuide[gp.guide_key].started++;
-      // Check if guide data has completion indicators
-      const data = gp.data;
-      if (data && typeof data === "object") {
-        const checked = Object.values(data).filter(v => v === true).length;
-        const total = Object.keys(data).length;
-        if (total > 0 && checked / total >= 0.8) byGuide[gp.guide_key].completed++;
-      }
+  // ══════════════════════════════════════════════════════════════════════
+  // 6. Guide Engagement from guide_exit events (scroll depth + time)
+  // ══════════════════════════════════════════════════════════════════════
+  const guideEngagementMetrics = useMemo(() => {
+    const exitEvents = eventTracks.filter(e => e.event_type === "guide_exit" && e.metadata);
+    const viewEvents = eventTracks.filter(e => e.event_type === "guide_view");
+
+    // Count views per guide
+    const viewCounts: Record<string, number> = {};
+    viewEvents.forEach(e => { viewCounts[e.event_name] = (viewCounts[e.event_name] || 0) + 1; });
+
+    // Aggregate exit data per guide
+    const exitData: Record<string, { scrollDepths: number[]; times: number[] }> = {};
+    for (const e of exitEvents) {
+      const meta = e.metadata as any;
+      const guideId = meta?.guide_id || e.event_name;
+      if (!exitData[guideId]) exitData[guideId] = { scrollDepths: [], times: [] };
+      if (typeof meta?.scroll_depth_pct === "number") exitData[guideId].scrollDepths.push(meta.scroll_depth_pct);
+      if (typeof meta?.time_on_page_sec === "number") exitData[guideId].times.push(meta.time_on_page_sec);
     }
-    return Object.entries(byGuide)
-      .map(([guide, { started, completed }]) => ({
-        guide: guide.replace(/_/g, " ").replace(/^guide /, ""),
-        started,
-        completed,
-        rate: started > 0 ? Math.round((completed / started) * 100) : 0,
-      }))
-      .sort((a, b) => b.started - a.started);
-  }, [guideProgress]);
+
+    const allGuideIds = new Set([...Object.keys(viewCounts), ...Object.keys(exitData)]);
+    const guides = Array.from(allGuideIds).map(id => {
+      const data = exitData[id];
+      const visits = viewCounts[id] || 0;
+      const sessions = data?.scrollDepths.length || 0;
+      const completed = data?.scrollDepths.filter(d => d >= 75).length || 0;
+      const avgScroll = sessions > 0 ? Math.round(data.scrollDepths.reduce((a, b) => a + b, 0) / sessions) : 0;
+      const avgTime = sessions > 0 ? Math.round(data.times.reduce((a, b) => a + b, 0) / sessions) : 0;
+      const bounced = data ? data.scrollDepths.filter((d, i) => d < 10 && data.times[i] < 15).length : 0;
+      const completionRate = sessions > 0 ? Math.round((completed / sessions) * 100) : 0;
+      const bounceRate = sessions > 0 ? Math.round((bounced / sessions) * 100) : 0;
+      return { guide: id, visits, sessions, avgScroll, avgTime, completed, completionRate, bounced, bounceRate };
+    }).sort((a, b) => b.visits - a.visits);
+
+    // Drop-off histogram buckets
+    const allScrolls = exitEvents.map(e => (e.metadata as any)?.scroll_depth_pct).filter((v): v is number => typeof v === "number");
+    const dropoff = [
+      { bucket: "0-25%", count: allScrolls.filter(d => d < 25).length },
+      { bucket: "25-50%", count: allScrolls.filter(d => d >= 25 && d < 50).length },
+      { bucket: "50-75%", count: allScrolls.filter(d => d >= 50 && d < 75).length },
+      { bucket: "75-100%", count: allScrolls.filter(d => d >= 75).length },
+    ];
+
+    // Guide → Action conversion (guide_exit followed by doc creation within 24h)
+    // We approximate by checking if any user_documents were created on the same day as guide views
+    const guideViewDays = new Set(viewEvents.map(e => e.created_at.slice(0, 10)));
+    const docDays = new Set(documents.map(d => d.created_at.slice(0, 10)));
+    const actionDays = [...guideViewDays].filter(d => docDays.has(d)).length;
+    const actionRate = guideViewDays.size > 0 ? Math.round((actionDays / guideViewDays.size) * 100) : 0;
+
+    // Return visitors (guides viewed 2+ times)
+    const returnVisitors = guides.filter(g => g.visits >= 2).length;
+
+    return { guides, dropoff, actionRate, returnVisitors, totalSessions: allScrolls.length };
+  }, [eventTracks, documents]);
 
   // ══════════════════════════════════════════════════════════════════════
   // 7. Document Creation Trends (30 days)
@@ -359,12 +394,11 @@ export default function InsightsTab({
 
       {/* ── DAU / WAU ── */}
       <div>
-        <div className="flex items-center gap-2 mb-1">
+        <div className="flex items-center gap-2 mb-4">
           <BarChart3 className="w-4 h-4 text-blue-600" />
           <h2 className="font-semibold text-foreground">Daily Active Sessions (30 days)</h2>
           <span className="text-xs text-muted-foreground">Today: {dauWau.todayDau} · WAU avg: {dauWau.wau}</span>
         </div>
-        <p className="text-xs text-muted-foreground mb-4">Unique page+event combinations per day — a proxy for how many distinct user sessions happen daily. WAU is the 7-day rolling average.</p>
         <Card>
           <CardContent className="p-4">
             <div className="h-40">
@@ -383,11 +417,10 @@ export default function InsightsTab({
 
       {/* ── Conversion Funnel ── */}
       <div>
-        <div className="flex items-center gap-2 mb-1">
+        <div className="flex items-center gap-2 mb-4">
           <TrendingUp className="w-4 h-4 text-violet-600" />
           <h2 className="font-semibold text-foreground">Conversion Funnel</h2>
         </div>
-        <p className="text-xs text-muted-foreground mb-4">Tracks the user journey from first contact to active usage: Email Gate (entered email) → Signed Up (created account) → Onboarded (completed setup) → Used Analyzer → Created a document. Percentages show step-to-step conversion.</p>
         <div className="grid grid-cols-5 gap-2">
           {funnel.map((f, i) => {
             const prevVal = i > 0 ? funnel[i - 1].value : f.value;
@@ -410,17 +443,17 @@ export default function InsightsTab({
             <p className="text-xs text-muted-foreground">Resume Analyzer → Signup Conversion</p>
             <p className="text-xl font-bold text-foreground">{analyzerConversion.rate}%</p>
           </div>
-          <p className="text-xs text-muted-foreground">{analyzerConversion.converted} of {analyzerConversion.total} unique analyzer users signed up · Measures how effectively the free analyzer converts anonymous users into registered accounts.</p>
+          <p className="text-xs text-muted-foreground">{analyzerConversion.converted} of {analyzerConversion.total} unique analyzer users signed up</p>
         </div>
       </div>
 
       {/* ── Retention Cohorts ── */}
       <div>
-        <div className="flex items-center gap-2 mb-1">
+        <div className="flex items-center gap-2 mb-4">
           <Users className="w-4 h-4 text-emerald-600" />
           <h2 className="font-semibold text-foreground">Weekly Retention Cohorts</h2>
+          <span className="text-xs text-muted-foreground">Users who returned ≥1 day after signup</span>
         </div>
-        <p className="text-xs text-muted-foreground mb-4">Groups users by the week they signed up and shows how many returned at least 1 day later. Higher retention % means users find ongoing value. Gray bars = total signups that week, green bars = users who came back.</p>
         {cohorts.length === 0 ? (
           <p className="text-sm text-muted-foreground">Not enough data yet</p>
         ) : (
@@ -452,12 +485,11 @@ export default function InsightsTab({
       {/* ── Score Distribution + Career Phase ── */}
       <div className="grid md:grid-cols-2 gap-4">
         <div>
-          <div className="flex items-center gap-2 mb-1">
+          <div className="flex items-center gap-2 mb-4">
             <FileText className="w-4 h-4 text-violet-600" />
             <h2 className="font-semibold text-foreground">Resume Score Distribution</h2>
             <span className="text-xs text-muted-foreground">{scoreDist.total} scores · avg {scoreDist.avg}</span>
           </div>
-          <p className="text-xs text-muted-foreground mb-4">Histogram of all resume analysis scores. Red (0-40) = needs major work, amber (41-70) = decent but improvable, green (71-100) = strong resumes. Shows where most users land and the quality gap.</p>
           <Card>
             <CardContent className="p-4">
               <div className="h-40">
@@ -479,11 +511,10 @@ export default function InsightsTab({
         </div>
 
         <div>
-          <div className="flex items-center gap-2 mb-1">
+          <div className="flex items-center gap-2 mb-4">
             <Users className="w-4 h-4 text-amber-600" />
             <h2 className="font-semibold text-foreground">Career Phase Breakdown</h2>
           </div>
-          <p className="text-xs text-muted-foreground mb-4">What stage users selected during onboarding — helps understand the audience mix and tailor content accordingly.</p>
           <Card>
             <CardContent className="p-4">
               <div className="space-y-2">
@@ -507,54 +538,101 @@ export default function InsightsTab({
         </div>
       </div>
 
-      {/* ── Guide Completion + Popular Guides ── */}
-      <div className="grid md:grid-cols-2 gap-4">
-        <div>
-          <div className="flex items-center gap-2 mb-1">
-            <BookOpen className="w-4 h-4 text-emerald-600" />
-            <h2 className="font-semibold text-foreground">Guide Completion Rates</h2>
-          </div>
-          <p className="text-xs text-muted-foreground mb-4">% of users who checked off ≥80% of a guide's checklist items. Low rates may indicate guides are too long or users only need specific sections.</p>
+      {/* ── Guide Engagement (scroll-based) + Drop-off ── */}
+      <div>
+        <div className="flex items-center gap-2 mb-2">
+          <BookOpen className="w-4 h-4 text-emerald-600" />
+          <h2 className="font-semibold text-foreground">Guide Engagement</h2>
+          <span className="text-xs text-muted-foreground">{guideEngagementMetrics.totalSessions} tracked sessions</span>
+        </div>
+        <p className="text-xs text-muted-foreground mb-4">
+          Completion = scroll ≥75%. Bounce = scroll &lt;10% AND time &lt;15s. Avg Time in seconds.
+        </p>
+
+        {/* Summary cards */}
+        <div className="grid grid-cols-3 gap-3 mb-4">
+          <Card>
+            <CardContent className="p-3 text-center">
+              <p className="text-2xl font-bold text-foreground">{guideEngagementMetrics.actionRate}%</p>
+              <p className="text-[11px] text-muted-foreground">Guide → Action Rate</p>
+              <p className="text-[10px] text-muted-foreground">Days with doc created after guide view</p>
+            </CardContent>
+          </Card>
+          <Card>
+            <CardContent className="p-3 text-center">
+              <p className="text-2xl font-bold text-foreground">{guideEngagementMetrics.returnVisitors}</p>
+              <p className="text-[11px] text-muted-foreground">Return Visitors</p>
+              <p className="text-[10px] text-muted-foreground">Guides viewed 2+ times</p>
+            </CardContent>
+          </Card>
+          <Card>
+            <CardContent className="p-3 text-center">
+              <p className="text-2xl font-bold text-foreground">{guideEngagementMetrics.totalSessions}</p>
+              <p className="text-[11px] text-muted-foreground">Exit Sessions</p>
+              <p className="text-[10px] text-muted-foreground">With scroll + time data</p>
+            </CardContent>
+          </Card>
+        </div>
+
+        <div className="grid md:grid-cols-2 gap-4">
+          {/* Per-guide table */}
           <Card>
             <CardContent className="p-4">
-              {guideCompletion.length === 0 ? (
-                <p className="text-sm text-muted-foreground">No guide progress data yet</p>
+              <h3 className="text-xs font-medium text-muted-foreground uppercase tracking-wide mb-3">Per Guide</h3>
+              {guideEngagementMetrics.guides.length === 0 ? (
+                <p className="text-sm text-muted-foreground">No guide_exit events yet. Data will appear once users scroll guides.</p>
               ) : (
-                <div className="space-y-2 max-h-64 overflow-y-auto">
-                  {guideCompletion.map(g => (
-                    <div key={g.guide} className="flex items-center gap-3">
-                      <span className="text-xs text-muted-foreground capitalize w-32 truncate" title={g.guide}>{g.guide}</span>
-                      <div className="flex-1 h-4 bg-muted rounded overflow-hidden">
-                        <div className="h-full bg-emerald-500 rounded" style={{ width: `${g.rate}%` }} />
-                      </div>
-                      <span className="text-xs tabular-nums text-foreground w-12 text-right">{g.rate}%</span>
-                      <span className="text-[10px] text-muted-foreground w-12 text-right">{g.completed}/{g.started}</span>
+                <div className="space-y-1.5 max-h-64 overflow-y-auto">
+                  <div className="flex items-center gap-2 text-[10px] text-muted-foreground uppercase tracking-wide pb-1 border-b border-border">
+                    <span className="flex-1">Guide</span>
+                    <span className="w-10 text-right">Views</span>
+                    <span className="w-10 text-right">Avg %</span>
+                    <span className="w-12 text-right">Avg Time</span>
+                    <span className="w-14 text-right">Complete</span>
+                    <span className="w-12 text-right">Bounce</span>
+                  </div>
+                  {guideEngagementMetrics.guides.map(g => (
+                    <div key={g.guide} className="flex items-center gap-2 text-sm">
+                      <span className="text-xs text-muted-foreground capitalize truncate flex-1" title={g.guide}>
+                        {g.guide.replace(/^guide_/, "").replace(/_/g, " ")}
+                      </span>
+                      <span className="tabular-nums w-10 text-right">{g.visits}</span>
+                      <span className="tabular-nums w-10 text-right">{g.avgScroll}%</span>
+                      <span className="tabular-nums w-12 text-right">{g.avgTime}s</span>
+                      <span className={`tabular-nums w-14 text-right ${g.completionRate >= 50 ? "text-emerald-600" : g.completionRate >= 25 ? "text-amber-600" : "text-red-500"}`}>
+                        {g.completionRate}%
+                      </span>
+                      <span className={`tabular-nums w-12 text-right ${g.bounceRate > 50 ? "text-red-500" : "text-muted-foreground"}`}>
+                        {g.bounceRate}%
+                      </span>
                     </div>
                   ))}
                 </div>
               )}
             </CardContent>
           </Card>
-        </div>
 
-        <div>
-          <div className="flex items-center gap-2 mb-1">
-            <BookOpen className="w-4 h-4 text-violet-600" />
-            <h2 className="font-semibold text-foreground">Popular Guides (by views)</h2>
-          </div>
-          <p className="text-xs text-muted-foreground mb-4">Ranked by total page views tracked via events. Identifies which guides drive the most traffic and engagement.</p>
+          {/* Drop-off histogram */}
           <Card>
             <CardContent className="p-4">
-              {popularGuides.length === 0 ? (
-                <p className="text-sm text-muted-foreground">No guide view data yet</p>
+              <h3 className="text-xs font-medium text-muted-foreground uppercase tracking-wide mb-1">Scroll Drop-off</h3>
+              <p className="text-[10px] text-muted-foreground mb-3">Where users stop reading across all guides</p>
+              {guideEngagementMetrics.totalSessions === 0 ? (
+                <p className="text-sm text-muted-foreground">No data yet</p>
               ) : (
-                <div className="space-y-1.5">
-                  {popularGuides.map(g => (
-                    <div key={g.guide} className="flex items-center justify-between text-sm">
-                      <span className="capitalize text-muted-foreground truncate">{g.guide}</span>
-                      <span className="font-semibold tabular-nums">{g.views}</span>
-                    </div>
-                  ))}
+                <div className="h-40">
+                  <ResponsiveContainer width="100%" height="100%">
+                    <BarChart data={guideEngagementMetrics.dropoff} margin={{ top: 5, right: 5, left: -20, bottom: 0 }}>
+                      <XAxis dataKey="bucket" tick={{ fontSize: 11 }} />
+                      <YAxis tick={{ fontSize: 10 }} allowDecimals={false} />
+                      <Tooltip />
+                      <Bar dataKey="count" name="Sessions" radius={[2, 2, 0, 0]}>
+                        {guideEngagementMetrics.dropoff.map((_, i) => (
+                          <Cell key={i} fill={i === 3 ? "#059669" : i === 2 ? "#d97706" : "#ef4444"} />
+                        ))}
+                      </Bar>
+                    </BarChart>
+                  </ResponsiveContainer>
                 </div>
               )}
             </CardContent>
@@ -562,14 +640,37 @@ export default function InsightsTab({
         </div>
       </div>
 
+      {/* ── Popular Guides (by views) ── */}
+      <div>
+        <div className="flex items-center gap-2 mb-4">
+          <BookOpen className="w-4 h-4 text-violet-600" />
+          <h2 className="font-semibold text-foreground">Popular Guides (by views)</h2>
+        </div>
+        <Card>
+          <CardContent className="p-4">
+            {popularGuides.length === 0 ? (
+              <p className="text-sm text-muted-foreground">No guide view data yet</p>
+            ) : (
+              <div className="space-y-1.5">
+                {popularGuides.map(g => (
+                  <div key={g.guide} className="flex items-center justify-between text-sm">
+                    <span className="capitalize text-muted-foreground truncate">{g.guide}</span>
+                    <span className="font-semibold tabular-nums">{g.views}</span>
+                  </div>
+                ))}
+              </div>
+            )}
+          </CardContent>
+        </Card>
+      </div>
+
       {/* ── Document Creation Trend ── */}
       <div>
-        <div className="flex items-center gap-2 mb-1">
+        <div className="flex items-center gap-2 mb-4">
           <FileText className="w-4 h-4 text-cyan-600" />
           <h2 className="font-semibold text-foreground">Document Creation (30 days)</h2>
           <span className="text-xs text-muted-foreground">{documents.length} total documents</span>
         </div>
-        <p className="text-xs text-muted-foreground mb-4">Daily count of new resumes and cover letters created by users. Stacked bars show the mix — useful for spotting growth trends and which tool is more popular.</p>
         <Card>
           <CardContent className="p-4">
             <div className="h-40">
@@ -589,11 +690,10 @@ export default function InsightsTab({
 
       {/* ── Feature Adoption ── */}
       <div>
-        <div className="flex items-center gap-2 mb-1">
+        <div className="flex items-center gap-2 mb-4">
           <Zap className="w-4 h-4 text-cyan-600" />
           <h2 className="font-semibold text-foreground">Feature Adoption (Unique Users)</h2>
         </div>
-        <p className="text-xs text-muted-foreground mb-4">How many distinct users have tried each AI-powered feature (analyze, import, AI rewrite, etc.) in the last 90 days. "Total uses" shows repeat engagement.</p>
         <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
           {featureAdoption.map(f => (
             <Card key={f.type}>
@@ -612,10 +712,9 @@ export default function InsightsTab({
       <div className="grid md:grid-cols-3 gap-4">
         <Card>
           <CardContent className="pt-5 pb-4 px-5">
-            <h3 className="font-medium text-xs text-muted-foreground uppercase tracking-wide mb-1 flex items-center gap-1">
+            <h3 className="font-medium text-xs text-muted-foreground uppercase tracking-wide mb-3 flex items-center gap-1">
               <BarChart3 className="w-3 h-3" /> Top Searched Roles
             </h3>
-            <p className="text-[10px] text-muted-foreground mb-3">Most frequently searched job titles in the Salary Checker — reveals what roles your audience cares about most.</p>
             {salaryDemand.topRoles.length === 0 ? (
               <p className="text-sm text-muted-foreground">No salary checks yet</p>
             ) : (
@@ -633,10 +732,9 @@ export default function InsightsTab({
 
         <Card>
           <CardContent className="pt-5 pb-4 px-5">
-            <h3 className="font-medium text-xs text-muted-foreground uppercase tracking-wide mb-1 flex items-center gap-1">
+            <h3 className="font-medium text-xs text-muted-foreground uppercase tracking-wide mb-3 flex items-center gap-1">
               <BarChart3 className="w-3 h-3" /> Top Sectors
             </h3>
-            <p className="text-[10px] text-muted-foreground mb-3">Industries users search for salary data — helps prioritize which sector data to expand.</p>
             {salaryDemand.topSectors.length === 0 ? (
               <p className="text-sm text-muted-foreground">No sector data</p>
             ) : (
@@ -654,10 +752,9 @@ export default function InsightsTab({
 
         <Card>
           <CardContent className="pt-5 pb-4 px-5">
-            <h3 className="font-medium text-xs text-muted-foreground uppercase tracking-wide mb-1 flex items-center gap-1">
+            <h3 className="font-medium text-xs text-muted-foreground uppercase tracking-wide mb-3 flex items-center gap-1">
               <Globe className="w-3 h-3" /> Language Split
             </h3>
-            <p className="text-[10px] text-muted-foreground mb-3">EN vs ZH-TW usage across resume analyzer and salary checker — guides localization investment decisions.</p>
             {langSplit.length === 0 ? (
               <p className="text-sm text-muted-foreground">No data</p>
             ) : (
@@ -680,12 +777,11 @@ export default function InsightsTab({
 
       {/* ── Share Virality ── */}
       <div>
-        <div className="flex items-center gap-2 mb-1">
+        <div className="flex items-center gap-2 mb-4">
           <Share2 className="w-4 h-4 text-indigo-600" />
           <h2 className="font-semibold text-foreground">Share Virality — Top Pages</h2>
           <span className="text-xs text-muted-foreground">{shareClicks.length} total shares</span>
         </div>
-        <p className="text-xs text-muted-foreground mb-4">Which pages users share most and via which channels (LinkedIn, WhatsApp, etc.). High share counts indicate content worth promoting further.</p>
         {shareVirality.length === 0 ? (
           <p className="text-sm text-muted-foreground">No share data yet</p>
         ) : (
