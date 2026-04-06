@@ -589,10 +589,11 @@ export default function InsightsTab({
 
       {/* ── Feature Adoption ── */}
       <div>
-        <div className="flex items-center gap-2 mb-4">
+        <div className="flex items-center gap-2 mb-1">
           <Zap className="w-4 h-4 text-cyan-600" />
           <h2 className="font-semibold text-foreground">Feature Adoption (Unique Users)</h2>
         </div>
+        <p className="text-xs text-muted-foreground mb-4">How many distinct users have tried each AI-powered feature (analyze, import, AI rewrite, etc.) in the last 90 days. "Total uses" shows repeat engagement.</p>
         <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
           {featureAdoption.map(f => (
             <Card key={f.type}>
