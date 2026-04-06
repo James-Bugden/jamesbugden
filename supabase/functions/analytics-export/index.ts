@@ -28,6 +28,8 @@ const ALL_TABLES = [
   "threads_link_clicks",
   "ai_usage_log",
   "resume_analyses",
+  "interview_questions",
+  "profiles",
 ] as const;
 
 Deno.serve(async (req) => {
@@ -78,6 +80,8 @@ Deno.serve(async (req) => {
       threads_link_clicks: "metric_date",
       ai_usage_log: "created_at",
       resume_analyses: "created_at",
+      interview_questions: "id",
+      profiles: "created_at",
     };
 
     // Query all requested tables in parallel
@@ -97,6 +101,34 @@ Deno.serve(async (req) => {
     for (const r of results) {
       result[r.table] = r.data;
     }
+
+    // ── Career Phase Breakdown ──────────────────────────────────────
+    const profileRows = (result.profiles as any)?.rows || [];
+    const phaseCounts: Record<string, number> = {};
+    for (const p of profileRows) {
+      const phase = p.career_phase || "not_set";
+      phaseCounts[phase] = (phaseCounts[phase] || 0) + 1;
+    }
+    result.career_phase_breakdown = {
+      total_users: profileRows.length,
+      phases: Object.entries(phaseCounts)
+        .map(([phase, count]) => ({ phase, count, pct: profileRows.length > 0 ? Math.round((count / profileRows.length) * 100) : 0 }))
+        .sort((a: any, b: any) => b.count - a.count),
+    };
+
+    // ── Question Bank Summary ───────────────────────────────────────
+    const qRows = (result.interview_questions as any)?.rows || [];
+    const categoryCounts: Record<string, number> = {};
+    const difficultyCounts: Record<number, number> = {};
+    for (const q of qRows) {
+      categoryCounts[q.category] = (categoryCounts[q.category] || 0) + 1;
+      difficultyCounts[q.difficulty] = (difficultyCounts[q.difficulty] || 0) + 1;
+    }
+    result.question_bank_summary = {
+      total_questions: qRows.length,
+      by_category: Object.entries(categoryCounts).sort((a: any, b: any) => b[1] - a[1]).map(([category, count]) => ({ category, count })),
+      by_difficulty: Object.entries(difficultyCounts).sort((a: any, b: any) => a[0] - b[0]).map(([level, count]) => ({ level: Number(level), count })),
+    };
 
     // ── Guide Engagement Insights (from guide_exit events) ──────────
     const includeInsights = url.searchParams.get("insights") !== "false";
