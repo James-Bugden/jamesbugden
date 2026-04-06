@@ -1,54 +1,41 @@
 
 
-# Admin Dashboard UI/UX Improvements
+# Add Comprehensive Feature Usage Dashboard
 
-## Problems Identified
-1. **Reviews tab is hard to find** — it's the 4th tab in a row of 9, buried between "Email Leads" and "Salary". On mobile, it requires horizontal scrolling to reach.
-2. **Too many tabs** — 9 tabs (Accounts, Resume Leads, Email Leads, Reviews, Salary, Feedback, AI Usage, Analytics, Insights) create cognitive overload and make important sections easy to miss.
-3. **No visual hierarchy** — all tabs look identical; no way to distinguish management tools (Reviews) from analytics (Insights).
-4. **Overview cards don't link to tabs** — the stat cards at the top are passive; clicking them should navigate to the relevant tab.
+## Problem
+The current "Feature Adoption" section only shows AI usage log entries (import, ai_tool). It doesn't show broader feature usage across the site — who's using the Resume Builder, Analyzer, Question Bank, Guides, Salary Checker, etc.
 
-## Solution: Reorganize into 4 grouped tabs with sub-navigation
+## Data sources available
+We can derive feature usage from existing tables without any schema changes:
 
-### New tab structure
+| Feature | Source | How to count |
+|---------|--------|-------------|
+| Resume Builder | `user_documents` (type="resume") | Unique user_ids with resume docs |
+| Cover Letter Builder | `user_documents` (type="cover_letter") | Unique user_ids with cover letter docs |
+| Resume Analyzer | `resume_analyses` | Unique user_ids |
+| Resume Import (AI) | `ai_usage_log` (usage_type="import") | Already tracked |
+| AI Tools | `ai_usage_log` (usage_type="ai_tool") | Already tracked |
+| Question Bank | `event_tracks` (event_type="qbank_view") | Unique pages/sessions |
+| Guides | `event_tracks` (event_type="guide_view") | Unique event_names |
+| Salary Checker | `salary_checks` | Total checks |
 
-```text
-┌─────────────┬─────────────┬─────────────┬─────────────┐
-│  Overview   │   People    │    Data     │  Insights   │
-└─────────────┴─────────────┴─────────────┴─────────────┘
-```
+## What changes
 
-- **Overview** (default) — The stat cards grid (already exists) + a quick-glance section with: recent signups (last 5), recent resume leads (last 5), recent feedback (last 3). Clicking any card or "View all" links to the relevant tab.
-- **People** — Sub-tabs: Accounts | Resume Leads | Email Leads (existing content, unchanged)
-- **Data** — Sub-tabs: Reviews | Salary | Feedback | AI Usage (existing content, unchanged). **Reviews is now the first sub-tab** so it's immediately visible.
-- **Insights** — The existing Insights + Analytics tabs merged into one view (Insights charts at top, raw Analytics events below in a collapsible section)
+### `src/pages/AdminDashboard.tsx`
+- Pass `resumeAnalyses`, `documents`, and `salaryChecks` to InsightsTab (some may already be passed)
 
-### Clickable stat cards
-Each overview card becomes clickable, navigating to the relevant tab:
-- Accounts → People/Accounts
-- Resume Leads → People/Resume Leads
-- Email Leads → People/Email Leads
-- Salary → Data/Salary
-- Feedback → Data/Feedback
-- AI Usage → Data/AI Usage
-- Shares/Events → Insights
+### `src/components/admin/InsightsTab.tsx`
+- Replace the current small "Feature Adoption (Unique Users)" card grid with a richer **Feature Usage Overview** section
+- New section shows a horizontal bar chart of unique users per feature, plus total usage counts
+- Features listed: Resume Builder, Cover Letter, Resume Analyzer, AI Import, AI Tools, Question Bank, Guides, Salary Checker
+- Each bar shows unique users (from user_id where available) and total actions
+- Color-coded by feature category (documents = green, AI = blue, content = purple, tools = amber)
 
-### Technical details
+### Visual layout
+- Horizontal bar chart (largest to smallest) showing unique users per feature
+- Small stat cards below showing total actions per feature
+- Replaces the existing minimal "Feature Adoption" grid
 
-**File: `src/pages/AdminDashboard.tsx`**
-- Replace the single `Tabs` with a two-level navigation:
-  - Top level: 4 main tabs using existing `Tabs` component
-  - Inside People and Data tabs: nested `Tabs` for sub-sections
-- URL params: `?tab=data&sub=reviews` format to preserve deep-linking
-- Wrap each stat card in a clickable div that calls `setSearchParams`
-- Move the Analytics tab content (share clicks, event tracks tables) into a collapsible section within the Insights tab
-- Reviews sub-tab is first in the Data group, making it immediately visible
-
-**File: `src/components/admin/InsightsTab.tsx`**
-- Add an optional `analyticsSection` prop that renders the raw Analytics tables (share clicks, event tracks) in a collapsible `<details>` at the bottom
-
-### Visual improvements
-- Stat cards get `cursor-pointer hover:border-primary/30` for click affordance
-- Active stat card gets a subtle highlight ring matching its color
-- Sub-tab bars use a smaller, pill-style variant to differentiate from main tabs
+## No database changes needed
+Everything derives from existing tables already passed as props or fetchable from existing data.
 
