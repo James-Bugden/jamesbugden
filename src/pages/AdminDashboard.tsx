@@ -630,14 +630,14 @@ export default function AdminDashboard() {
   }, [accounts]);
 
   const statCards = [
-    { label: "Accounts", value: counts.accounts, icon: UserCheck, color: "text-teal-600", sparkColor: "#0d9488", trend: accountTrend },
-    { label: "Resume Leads", value: counts.resumes, icon: Users, color: "text-violet-600", sparkColor: "#7c3aed", trend: trends.resumes || [] },
-    { label: "Email Leads", value: counts.emails, icon: Mail, color: "text-amber-600", sparkColor: "#d97706", trend: trends.emails || [] },
-    { label: "Salary Checks", value: counts.salary, icon: DollarSign, color: "text-emerald-600", sparkColor: "#059669", trend: trends.salary || [] },
-    { label: "Feedback", value: counts.feedback, icon: MessageSquare, color: "text-pink-600", sparkColor: "#db2777", trend: trends.feedback || [] },
-    { label: "AI Usage", value: aiUsageStats.totalThisMonth, icon: Activity, color: "text-cyan-600", sparkColor: "#0891b2", trend: aiUsageStats.dailyByType.map(d => ({ date: d.date, count: d.import + d.ai_tool + d.analyze })) },
-    { label: "Shares", value: shareClicks.length, icon: Share2, color: "text-indigo-600", sparkColor: "#4f46e5", trend: [] as { date: string; count: number }[] },
-    { label: "Events", value: eventTracks.length, icon: MousePointerClick, color: "text-orange-600", sparkColor: "#ea580c", trend: [] as { date: string; count: number }[] },
+    { label: "Accounts", value: counts.accounts, icon: UserCheck, color: "text-teal-600", sparkColor: "#0d9488", trend: accountTrend, nav: { tab: "people", sub: "accounts" } },
+    { label: "Resume Leads", value: counts.resumes, icon: Users, color: "text-violet-600", sparkColor: "#7c3aed", trend: trends.resumes || [], nav: { tab: "people", sub: "resumes" } },
+    { label: "Email Leads", value: counts.emails, icon: Mail, color: "text-amber-600", sparkColor: "#d97706", trend: trends.emails || [], nav: { tab: "people", sub: "emails" } },
+    { label: "Salary Checks", value: counts.salary, icon: DollarSign, color: "text-emerald-600", sparkColor: "#059669", trend: trends.salary || [], nav: { tab: "data", sub: "salary" } },
+    { label: "Feedback", value: counts.feedback, icon: MessageSquare, color: "text-pink-600", sparkColor: "#db2777", trend: trends.feedback || [], nav: { tab: "data", sub: "feedback" } },
+    { label: "AI Usage", value: aiUsageStats.totalThisMonth, icon: Activity, color: "text-cyan-600", sparkColor: "#0891b2", trend: aiUsageStats.dailyByType.map(d => ({ date: d.date, count: d.import + d.ai_tool + d.analyze })), nav: { tab: "data", sub: "ai-usage" } },
+    { label: "Shares", value: shareClicks.length, icon: Share2, color: "text-indigo-600", sparkColor: "#4f46e5", trend: [] as { date: string; count: number }[], nav: { tab: "insights" } },
+    { label: "Events", value: eventTracks.length, icon: MousePointerClick, color: "text-orange-600", sparkColor: "#ea580c", trend: [] as { date: string; count: number }[], nav: { tab: "insights" } },
   ];
 
   return (
