@@ -114,6 +114,7 @@ const COLORS = {
 export default function InsightsTab({
   accounts, resumeLeads, aiUsageRows, documents, profiles,
   emailLeadsCount, eventTracks, shareClicks, salaryChecks, guideProgress,
+  interviewQuestions = [],
   analyticsData,
 }: InsightsTabProps) {
 
