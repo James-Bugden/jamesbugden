@@ -139,8 +139,18 @@ const downloadCsv = (headers: string[], rows: (string | number | null)[][], file
 
 export default function AdminDashboard() {
   const [searchParams, setSearchParams] = useSearchParams();
-  const activeTab = searchParams.get("tab") || "reviews";
-  const setActiveTab = (tab: string) => setSearchParams({ tab }, { replace: true });
+  const activeTab = searchParams.get("tab") || "overview";
+  const activeSub = searchParams.get("sub") || "";
+  const setActiveTab = (tab: string) => {
+    const params: Record<string, string> = { tab };
+    setSearchParams(params, { replace: true });
+  };
+  const setActiveSub = (tab: string, sub: string) => setSearchParams({ tab, sub }, { replace: true });
+  const navigateTo = (tab: string, sub?: string) => {
+    const params: Record<string, string> = { tab };
+    if (sub) params.sub = sub;
+    setSearchParams(params, { replace: true });
+  };
 
   const navigate = useNavigate();
   const { toast } = useToast();
