@@ -80,6 +80,11 @@ interface FeedbackItem {
   created_at: string;
 }
 
+interface InterviewQuestion {
+  category: string;
+  difficulty: number;
+}
+
 export interface InsightsTabProps {
   accounts: AccountUser[];
   resumeLeads: ResumeLead[];
@@ -91,6 +96,7 @@ export interface InsightsTabProps {
   shareClicks: ShareClick[];
   salaryChecks: SalaryCheck[];
   guideProgress: GuideProgressRow[];
+  interviewQuestions?: InterviewQuestion[];
   analyticsData?: {
     feedbackItems: FeedbackItem[];
     shareClicksLoading: boolean;
@@ -108,6 +114,7 @@ const COLORS = {
 export default function InsightsTab({
   accounts, resumeLeads, aiUsageRows, documents, profiles,
   emailLeadsCount, eventTracks, shareClicks, salaryChecks, guideProgress,
+  interviewQuestions = [],
   analyticsData,
 }: InsightsTabProps) {
 
@@ -336,6 +343,21 @@ export default function InsightsTab({
     });
     return Object.entries(counts).sort((a, b) => b[1] - a[1]).map(([phase, count]) => ({ phase, count }));
   }, [profiles]);
+
+  // ══════════════════════════════════════════════════════════════════════
+  // 8b. Question Bank Summary
+  // ══════════════════════════════════════════════════════════════════════
+  const questionBankSummary = useMemo(() => {
+    const byCategory: Record<string, number> = {};
+    const byDifficulty: Record<number, number> = {};
+    for (const q of interviewQuestions) {
+      byCategory[q.category] = (byCategory[q.category] || 0) + 1;
+      byDifficulty[q.difficulty] = (byDifficulty[q.difficulty] || 0) + 1;
+    }
+    const categories = Object.entries(byCategory).sort((a, b) => b[1] - a[1]).map(([cat, count]) => ({ cat, count }));
+    const difficulties = Object.entries(byDifficulty).sort((a, b) => Number(a[0]) - Number(b[0])).map(([level, count]) => ({ level: Number(level), count }));
+    return { total: interviewQuestions.length, categories, difficulties };
+  }, [interviewQuestions]);
 
   // ══════════════════════════════════════════════════════════════════════
   // 9. Feature Adoption (unique users per AI feature)
@@ -574,6 +596,72 @@ export default function InsightsTab({
           </Card>
         </div>
       </div>
+
+      {/* ── Question Bank Summary ── */}
+      {questionBankSummary.total > 0 && (
+        <div className="grid md:grid-cols-2 gap-4">
+          <div>
+            <div className="flex items-center gap-2 mb-4">
+              <BookOpen className="w-4 h-4 text-indigo-600" />
+              <h2 className="font-semibold text-foreground">Question Bank by Category</h2>
+              <span className="text-xs text-muted-foreground">{questionBankSummary.total} total questions</span>
+            </div>
+            <Card>
+              <CardContent className="p-4">
+                <div className="h-48">
+                  <ResponsiveContainer width="100%" height="100%">
+                    <BarChart
+                      data={questionBankSummary.categories.slice(0, 10)}
+                      layout="vertical"
+                      margin={{ top: 5, right: 20, left: 5, bottom: 0 }}
+                    >
+                      <XAxis type="number" tick={{ fontSize: 10 }} allowDecimals={false} />
+                      <YAxis
+                        type="category"
+                        dataKey="cat"
+                        tick={{ fontSize: 10 }}
+                        width={100}
+                        tickFormatter={v => v.replace(/_/g, " ").slice(0, 20)}
+                      />
+                      <Tooltip />
+                      <Bar dataKey="count" name="Questions" fill="#6366f1" radius={[0, 4, 4, 0]} />
+                    </BarChart>
+                  </ResponsiveContainer>
+                </div>
+              </CardContent>
+            </Card>
+          </div>
+
+          <div>
+            <div className="flex items-center gap-2 mb-4">
+              <AlertTriangle className="w-4 h-4 text-amber-600" />
+              <h2 className="font-semibold text-foreground">Questions by Difficulty</h2>
+            </div>
+            <Card>
+              <CardContent className="p-4">
+                <div className="space-y-2">
+                  {questionBankSummary.difficulties.map(d => {
+                    const pct = questionBankSummary.total > 0 ? Math.round((d.count / questionBankSummary.total) * 100) : 0;
+                    const diffLabel = d.level === 1 ? "Easy" : d.level === 2 ? "Medium" : d.level === 3 ? "Hard" : `Level ${d.level}`;
+                    const barColor = d.level === 1 ? "#059669" : d.level === 2 ? "#d97706" : "#ef4444";
+                    return (
+                      <div key={d.level} className="flex items-center gap-3">
+                        <span className="text-sm text-muted-foreground w-16">{diffLabel}</span>
+                        <div className="flex-1 h-5 bg-muted rounded overflow-hidden">
+                          <div className="h-full rounded" style={{ width: `${pct}%`, backgroundColor: barColor }} />
+                        </div>
+                        <span className="text-sm font-semibold tabular-nums w-12 text-right">{d.count}</span>
+                        <span className="text-xs text-muted-foreground w-10 text-right">{pct}%</span>
+                      </div>
+                    );
+                  })}
+                  {questionBankSummary.difficulties.length === 0 && <p className="text-sm text-muted-foreground">No question data</p>}
+                </div>
+              </CardContent>
+            </Card>
+          </div>
+        </div>
+      )}
 
       {/* ── Guide Engagement (scroll-based) + Drop-off ── */}
       <div>

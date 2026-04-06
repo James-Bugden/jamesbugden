@@ -222,6 +222,9 @@ export default function AdminDashboard() {
   // Guide progress state (for insights)
   const [guideProgressRows, setGuideProgressRows] = useState<{ guide_key: string; user_id: string; data: any }[]>([]);
 
+  // Interview questions state (for insights)
+  const [interviewQuestions, setInterviewQuestions] = useState<{ category: string; difficulty: number }[]>([]);
+
   // ── Data fetching ───────────────────────────────────────────────────────────
 
   useEffect(() => {
@@ -239,6 +242,7 @@ export default function AdminDashboard() {
     fetchDocuments();
     fetchProfiles();
     fetchGuideProgress();
+    fetchInterviewQuestions();
   }, []);
 
   const fetchCounts = async () => {
@@ -366,6 +370,11 @@ export default function AdminDashboard() {
   const fetchGuideProgress = async () => {
     const { data } = await supabase.from("guide_progress").select("guide_key, user_id, data").limit(1000);
     if (data) setGuideProgressRows(data as any);
+  };
+
+  const fetchInterviewQuestions = async () => {
+    const { data } = await supabase.from("interview_questions").select("category, difficulty");
+    if (data) setInterviewQuestions(data as any);
   };
 
   const handleDeleteFeedback = async (id: string) => {
@@ -1437,6 +1446,7 @@ export default function AdminDashboard() {
               shareClicks={shareClicks}
               salaryChecks={checks}
               guideProgress={guideProgressRows}
+              interviewQuestions={interviewQuestions}
               analyticsData={{
                 feedbackItems,
                 shareClicksLoading,
