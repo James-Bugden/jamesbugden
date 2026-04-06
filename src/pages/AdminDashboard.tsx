@@ -683,6 +683,7 @@ export default function AdminDashboard() {
               <span className="w-px h-5 bg-border mx-1 hidden md:block" />
               <TabsTrigger value="ai-usage">AI Usage</TabsTrigger>
               <TabsTrigger value="analytics">Analytics</TabsTrigger>
+              <TabsTrigger value="insights">Insights</TabsTrigger>
             </TabsList>
           </div>
 
