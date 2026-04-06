@@ -29,6 +29,7 @@ import { format, subDays, startOfDay } from "date-fns";
 import { AreaChart, Area, BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer } from "recharts";
 import bcrypt from "bcryptjs";
 import { SEO } from "@/components/SEO";
+import InsightsTab from "@/components/admin/InsightsTab";
 
 // ── Types ───────────────────────────────────────────────────────────────────────
 
