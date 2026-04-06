@@ -209,6 +209,9 @@ export default function AdminDashboard() {
   // Profiles state (for insights)
   const [profileRows, setProfileRows] = useState<{ user_id: string; onboarding_completed: boolean | null; career_phase: string | null; created_at: string | null }[]>([]);
 
+  // Guide progress state (for insights)
+  const [guideProgressRows, setGuideProgressRows] = useState<{ guide_key: string; user_id: string; data: any }[]>([]);
+
   // ── Data fetching ───────────────────────────────────────────────────────────
 
   useEffect(() => {
