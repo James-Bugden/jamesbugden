@@ -344,20 +344,8 @@ export default function InsightsTab({
     return Object.entries(counts).sort((a, b) => b[1] - a[1]).map(([phase, count]) => ({ phase, count }));
   }, [profiles]);
 
-  // ══════════════════════════════════════════════════════════════════════
-  // 8b. Question Bank Summary
-  // ══════════════════════════════════════════════════════════════════════
-  const questionBankSummary = useMemo(() => {
-    const byCategory: Record<string, number> = {};
-    const byDifficulty: Record<number, number> = {};
-    for (const q of interviewQuestions) {
-      byCategory[q.category] = (byCategory[q.category] || 0) + 1;
-      byDifficulty[q.difficulty] = (byDifficulty[q.difficulty] || 0) + 1;
-    }
-    const categories = Object.entries(byCategory).sort((a, b) => b[1] - a[1]).map(([cat, count]) => ({ cat, count }));
-    const difficulties = Object.entries(byDifficulty).sort((a, b) => Number(a[0]) - Number(b[0])).map(([level, count]) => ({ level: Number(level), count }));
-    return { total: interviewQuestions.length, categories, difficulties };
-  }, [interviewQuestions]);
+
+
 
   // ══════════════════════════════════════════════════════════════════════
   // 9. Feature Adoption (unique users per AI feature)
