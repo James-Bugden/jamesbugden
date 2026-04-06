@@ -538,57 +538,130 @@ export default function InsightsTab({
         </div>
       </div>
 
-      {/* ── Guide Completion + Popular Guides ── */}
-      <div className="grid md:grid-cols-2 gap-4">
-        <div>
-          <div className="flex items-center gap-2 mb-4">
-            <BookOpen className="w-4 h-4 text-emerald-600" />
-            <h2 className="font-semibold text-foreground">Guide Completion Rates</h2>
-          </div>
+      {/* ── Guide Engagement (scroll-based) + Drop-off ── */}
+      <div>
+        <div className="flex items-center gap-2 mb-2">
+          <BookOpen className="w-4 h-4 text-emerald-600" />
+          <h2 className="font-semibold text-foreground">Guide Engagement</h2>
+          <span className="text-xs text-muted-foreground">{guideEngagementMetrics.totalSessions} tracked sessions</span>
+        </div>
+        <p className="text-xs text-muted-foreground mb-4">
+          Completion = scroll ≥75%. Bounce = scroll &lt;10% AND time &lt;15s. Avg Time in seconds.
+        </p>
+
+        {/* Summary cards */}
+        <div className="grid grid-cols-3 gap-3 mb-4">
           <Card>
-            <CardContent className="p-4">
-              {guideCompletion.length === 0 ? (
-                <p className="text-sm text-muted-foreground">No guide progress data yet</p>
-              ) : (
-                <div className="space-y-2 max-h-64 overflow-y-auto">
-                  {guideCompletion.map(g => (
-                    <div key={g.guide} className="flex items-center gap-3">
-                      <span className="text-xs text-muted-foreground capitalize w-32 truncate" title={g.guide}>{g.guide}</span>
-                      <div className="flex-1 h-4 bg-muted rounded overflow-hidden">
-                        <div className="h-full bg-emerald-500 rounded" style={{ width: `${g.rate}%` }} />
-                      </div>
-                      <span className="text-xs tabular-nums text-foreground w-12 text-right">{g.rate}%</span>
-                      <span className="text-[10px] text-muted-foreground w-12 text-right">{g.completed}/{g.started}</span>
-                    </div>
-                  ))}
-                </div>
-              )}
+            <CardContent className="p-3 text-center">
+              <p className="text-2xl font-bold text-foreground">{guideEngagementMetrics.actionRate}%</p>
+              <p className="text-[11px] text-muted-foreground">Guide → Action Rate</p>
+              <p className="text-[10px] text-muted-foreground">Days with doc created after guide view</p>
+            </CardContent>
+          </Card>
+          <Card>
+            <CardContent className="p-3 text-center">
+              <p className="text-2xl font-bold text-foreground">{guideEngagementMetrics.returnVisitors}</p>
+              <p className="text-[11px] text-muted-foreground">Return Visitors</p>
+              <p className="text-[10px] text-muted-foreground">Guides viewed 2+ times</p>
+            </CardContent>
+          </Card>
+          <Card>
+            <CardContent className="p-3 text-center">
+              <p className="text-2xl font-bold text-foreground">{guideEngagementMetrics.totalSessions}</p>
+              <p className="text-[11px] text-muted-foreground">Exit Sessions</p>
+              <p className="text-[10px] text-muted-foreground">With scroll + time data</p>
             </CardContent>
           </Card>
         </div>
 
-        <div>
-          <div className="flex items-center gap-2 mb-4">
-            <BookOpen className="w-4 h-4 text-violet-600" />
-            <h2 className="font-semibold text-foreground">Popular Guides (by views)</h2>
-          </div>
+        <div className="grid md:grid-cols-2 gap-4">
+          {/* Per-guide table */}
           <Card>
             <CardContent className="p-4">
-              {popularGuides.length === 0 ? (
-                <p className="text-sm text-muted-foreground">No guide view data yet</p>
+              <h3 className="text-xs font-medium text-muted-foreground uppercase tracking-wide mb-3">Per Guide</h3>
+              {guideEngagementMetrics.guides.length === 0 ? (
+                <p className="text-sm text-muted-foreground">No guide_exit events yet. Data will appear once users scroll guides.</p>
               ) : (
-                <div className="space-y-1.5">
-                  {popularGuides.map(g => (
-                    <div key={g.guide} className="flex items-center justify-between text-sm">
-                      <span className="capitalize text-muted-foreground truncate">{g.guide}</span>
-                      <span className="font-semibold tabular-nums">{g.views}</span>
+                <div className="space-y-1.5 max-h-64 overflow-y-auto">
+                  <div className="flex items-center gap-2 text-[10px] text-muted-foreground uppercase tracking-wide pb-1 border-b border-border">
+                    <span className="flex-1">Guide</span>
+                    <span className="w-10 text-right">Views</span>
+                    <span className="w-10 text-right">Avg %</span>
+                    <span className="w-12 text-right">Avg Time</span>
+                    <span className="w-14 text-right">Complete</span>
+                    <span className="w-12 text-right">Bounce</span>
+                  </div>
+                  {guideEngagementMetrics.guides.map(g => (
+                    <div key={g.guide} className="flex items-center gap-2 text-sm">
+                      <span className="text-xs text-muted-foreground capitalize truncate flex-1" title={g.guide}>
+                        {g.guide.replace(/^guide_/, "").replace(/_/g, " ")}
+                      </span>
+                      <span className="tabular-nums w-10 text-right">{g.visits}</span>
+                      <span className="tabular-nums w-10 text-right">{g.avgScroll}%</span>
+                      <span className="tabular-nums w-12 text-right">{g.avgTime}s</span>
+                      <span className={`tabular-nums w-14 text-right ${g.completionRate >= 50 ? "text-emerald-600" : g.completionRate >= 25 ? "text-amber-600" : "text-red-500"}`}>
+                        {g.completionRate}%
+                      </span>
+                      <span className={`tabular-nums w-12 text-right ${g.bounceRate > 50 ? "text-red-500" : "text-muted-foreground"}`}>
+                        {g.bounceRate}%
+                      </span>
                     </div>
                   ))}
                 </div>
               )}
             </CardContent>
           </Card>
+
+          {/* Drop-off histogram */}
+          <Card>
+            <CardContent className="p-4">
+              <h3 className="text-xs font-medium text-muted-foreground uppercase tracking-wide mb-1">Scroll Drop-off</h3>
+              <p className="text-[10px] text-muted-foreground mb-3">Where users stop reading across all guides</p>
+              {guideEngagementMetrics.totalSessions === 0 ? (
+                <p className="text-sm text-muted-foreground">No data yet</p>
+              ) : (
+                <div className="h-40">
+                  <ResponsiveContainer width="100%" height="100%">
+                    <BarChart data={guideEngagementMetrics.dropoff} margin={{ top: 5, right: 5, left: -20, bottom: 0 }}>
+                      <XAxis dataKey="bucket" tick={{ fontSize: 11 }} />
+                      <YAxis tick={{ fontSize: 10 }} allowDecimals={false} />
+                      <Tooltip />
+                      <Bar dataKey="count" name="Sessions" radius={[2, 2, 0, 0]}>
+                        {guideEngagementMetrics.dropoff.map((_, i) => (
+                          <Cell key={i} fill={i === 3 ? "#059669" : i === 2 ? "#d97706" : "#ef4444"} />
+                        ))}
+                      </Bar>
+                    </BarChart>
+                  </ResponsiveContainer>
+                </div>
+              )}
+            </CardContent>
+          </Card>
         </div>
+      </div>
+
+      {/* ── Popular Guides (by views) ── */}
+      <div>
+        <div className="flex items-center gap-2 mb-4">
+          <BookOpen className="w-4 h-4 text-violet-600" />
+          <h2 className="font-semibold text-foreground">Popular Guides (by views)</h2>
+        </div>
+        <Card>
+          <CardContent className="p-4">
+            {popularGuides.length === 0 ? (
+              <p className="text-sm text-muted-foreground">No guide view data yet</p>
+            ) : (
+              <div className="space-y-1.5">
+                {popularGuides.map(g => (
+                  <div key={g.guide} className="flex items-center justify-between text-sm">
+                    <span className="capitalize text-muted-foreground truncate">{g.guide}</span>
+                    <span className="font-semibold tabular-nums">{g.views}</span>
+                  </div>
+                ))}
+              </div>
+            )}
+          </CardContent>
+        </Card>
       </div>
 
       {/* ── Document Creation Trend ── */}
