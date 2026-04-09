@@ -1907,10 +1907,11 @@ export function ResumePDF({ data, customize }: ResumePDFProps) {
   const baseFontSize = c?.fontSize ?? 10.5;
   const lineHeight = c?.lineHeight ?? 1.5;
 
-  // Resolve font
-  const bodyFontFamily = ensureFontRegistered(
-    c?.bodyFont || "'Source Sans 3', sans-serif"
-  );
+  // Resolve font — use CJK font when Chinese characters are detected
+  const hasCJK = resumeHasCJK(safe);
+  const bodyFontFamily = hasCJK && REGISTERED_FONTS.has(CJK_FONT_FAMILY)
+    ? CJK_FONT_FAMILY
+    : ensureFontRegistered(c?.bodyFont || "'Source Sans 3', sans-serif");
 
   // Page dimensions
   const pageFormat = c?.pageFormat || "a4";
