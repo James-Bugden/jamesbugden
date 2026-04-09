@@ -18,6 +18,7 @@ import {
 import type { ResumeData, ResumeSection, ResumeSectionEntry } from "./types";
 import type { CustomizeSettings } from "./customizeTypes";
 import { SANS_FONTS, SERIF_FONTS, MONO_FONTS } from "./fontData";
+import { CJK_FONT_FAMILY, resumeHasCJK } from "@/lib/resumePdf/fontMap";
 
 /* ═══════════════════════════════════════════════════════════
    Font Registration
@@ -61,6 +62,47 @@ function fontsourceUrl(fontName: string, weight: number): string {
 
 const REGISTERED_FONTS = new Set<string>();
 const FONT_REGISTRATION_PROMISES = new Map<string, Promise<string>>();
+
+/* ── CJK font registration ────────────────────────────────── */
+
+/**
+ * Register Noto Sans TC for CJK glyph rendering in react-pdf.
+ * Uses the variable TTF from Google Fonts GitHub — large (~16 MB) but
+ * downloaded only when Chinese characters are detected in resume data.
+ */
+const CJK_FONT_URL =
+  "https://raw.githubusercontent.com/google/fonts/main/ofl/notosanstc/NotoSansTC%5Bwght%5D.ttf";
+
+let cjkRegistrationPromise: Promise<boolean> | null = null;
+
+async function registerCJKFont(): Promise<boolean> {
+  if (REGISTERED_FONTS.has(CJK_FONT_FAMILY)) return true;
+  if (cjkRegistrationPromise) return cjkRegistrationPromise;
+
+  cjkRegistrationPromise = (async () => {
+    try {
+      const resp = await fetch(CJK_FONT_URL, { method: "HEAD" });
+      if (!resp.ok) return false;
+
+      Font.register({
+        family: CJK_FONT_FAMILY,
+        fonts: [
+          { src: CJK_FONT_URL, fontWeight: 400 },
+          // Re-use the same variable font file for bold — the variable axes
+          // inside the TTF allow fontkit to select the correct weight.
+          { src: CJK_FONT_URL, fontWeight: 700 },
+        ],
+      });
+      REGISTERED_FONTS.add(CJK_FONT_FAMILY);
+      return true;
+    } catch (err) {
+      console.warn("[ResumePDF] CJK font registration failed:", err);
+      return false;
+    }
+  })();
+
+  return cjkRegistrationPromise;
+}
 
 /**
  * Register a Google Font for use in react-pdf.
