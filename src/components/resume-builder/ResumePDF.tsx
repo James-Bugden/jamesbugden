@@ -176,22 +176,30 @@ function ensureFontRegistered(cssFamily: string): string {
 /**
  * Pre-register all fonts needed for a given set of settings.
  * MUST be called and awaited before creating the PDF document.
+ *
+ * When `data` is provided, scans for CJK characters and registers
+ * Noto Sans TC so Chinese/Japanese/Korean text renders correctly.
  */
-export async function prepareFonts(c?: CustomizeSettings): Promise<void> {
+export async function prepareFonts(c?: CustomizeSettings, data?: ResumeData): Promise<void> {
   const families = new Set<string>();
   if (c?.bodyFont) families.add(c.bodyFont);
   if (c?.headingFont) families.add(c.headingFont);
 
-  const results = await Promise.all(
-    Array.from(families).map((f) => registerFontAsync(f))
-  );
+  const tasks: Promise<unknown>[] = Array.from(families).map((f) => registerFontAsync(f));
+
+  // Register CJK font if resume contains Chinese characters
+  if (data && resumeHasCJK(data)) {
+    tasks.push(registerCJKFont());
+  }
+
+  const results = await Promise.all(tasks);
 
   // Log which fonts were resolved for debugging
   const familyArr = Array.from(families);
   for (let i = 0; i < familyArr.length; i++) {
     const requested = extractFontName(familyArr[i]);
     const resolved = results[i];
-    if (resolved !== requested) {
+    if (typeof resolved === "string" && resolved !== requested) {
       console.warn(`[ResumePDF] Font "${requested}" not available, using "${resolved}"`);
     }
   }
