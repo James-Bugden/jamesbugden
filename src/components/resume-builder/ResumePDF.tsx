@@ -18,6 +18,7 @@ import {
 import type { ResumeData, ResumeSection, ResumeSectionEntry } from "./types";
 import type { CustomizeSettings } from "./customizeTypes";
 import { SANS_FONTS, SERIF_FONTS, MONO_FONTS } from "./fontData";
+import { CJK_FONT_FAMILY, resumeHasCJK } from "@/lib/resumePdf/fontMap";
 
 /* ═══════════════════════════════════════════════════════════
    Font Registration
@@ -61,6 +62,47 @@ function fontsourceUrl(fontName: string, weight: number): string {
 
 const REGISTERED_FONTS = new Set<string>();
 const FONT_REGISTRATION_PROMISES = new Map<string, Promise<string>>();
+
+/* ── CJK font registration ────────────────────────────────── */
+
+/**
+ * Register Noto Sans TC for CJK glyph rendering in react-pdf.
+ * Uses the variable TTF from Google Fonts GitHub — large (~16 MB) but
+ * downloaded only when Chinese characters are detected in resume data.
+ */
+const CJK_FONT_URL =
+  "https://raw.githubusercontent.com/google/fonts/main/ofl/notosanstc/NotoSansTC%5Bwght%5D.ttf";
+
+let cjkRegistrationPromise: Promise<boolean> | null = null;
+
+async function registerCJKFont(): Promise<boolean> {
+  if (REGISTERED_FONTS.has(CJK_FONT_FAMILY)) return true;
+  if (cjkRegistrationPromise) return cjkRegistrationPromise;
+
+  cjkRegistrationPromise = (async () => {
+    try {
+      const resp = await fetch(CJK_FONT_URL, { method: "HEAD" });
+      if (!resp.ok) return false;
+
+      Font.register({
+        family: CJK_FONT_FAMILY,
+        fonts: [
+          { src: CJK_FONT_URL, fontWeight: 400 },
+          // Re-use the same variable font file for bold — the variable axes
+          // inside the TTF allow fontkit to select the correct weight.
+          { src: CJK_FONT_URL, fontWeight: 700 },
+        ],
+      });
+      REGISTERED_FONTS.add(CJK_FONT_FAMILY);
+      return true;
+    } catch (err) {
+      console.warn("[ResumePDF] CJK font registration failed:", err);
+      return false;
+    }
+  })();
+
+  return cjkRegistrationPromise;
+}
 
 /**
  * Register a Google Font for use in react-pdf.
@@ -134,22 +176,30 @@ function ensureFontRegistered(cssFamily: string): string {
 /**
  * Pre-register all fonts needed for a given set of settings.
  * MUST be called and awaited before creating the PDF document.
+ *
+ * When `data` is provided, scans for CJK characters and registers
+ * Noto Sans TC so Chinese/Japanese/Korean text renders correctly.
  */
-export async function prepareFonts(c?: CustomizeSettings): Promise<void> {
+export async function prepareFonts(c?: CustomizeSettings, data?: ResumeData): Promise<void> {
   const families = new Set<string>();
   if (c?.bodyFont) families.add(c.bodyFont);
   if (c?.headingFont) families.add(c.headingFont);
 
-  const results = await Promise.all(
-    Array.from(families).map((f) => registerFontAsync(f))
-  );
+  const tasks: Promise<unknown>[] = Array.from(families).map((f) => registerFontAsync(f));
+
+  // Register CJK font if resume contains Chinese characters
+  if (data && resumeHasCJK(data)) {
+    tasks.push(registerCJKFont());
+  }
+
+  const results = await Promise.all(tasks);
 
   // Log which fonts were resolved for debugging
   const familyArr = Array.from(families);
   for (let i = 0; i < familyArr.length; i++) {
     const requested = extractFontName(familyArr[i]);
     const resolved = results[i];
-    if (resolved !== requested) {
+    if (typeof resolved === "string" && resolved !== requested) {
       console.warn(`[ResumePDF] Font "${requested}" not available, using "${resolved}"`);
     }
   }
@@ -1857,10 +1907,11 @@ export function ResumePDF({ data, customize }: ResumePDFProps) {
   const baseFontSize = c?.fontSize ?? 10.5;
   const lineHeight = c?.lineHeight ?? 1.5;
 
-  // Resolve font
-  const bodyFontFamily = ensureFontRegistered(
-    c?.bodyFont || "'Source Sans 3', sans-serif"
-  );
+  // Resolve font — use CJK font when Chinese characters are detected
+  const hasCJK = resumeHasCJK(safe);
+  const bodyFontFamily = hasCJK && REGISTERED_FONTS.has(CJK_FONT_FAMILY)
+    ? CJK_FONT_FAMILY
+    : ensureFontRegistered(c?.bodyFont || "'Source Sans 3', sans-serif");
 
   // Page dimensions
   const pageFormat = c?.pageFormat || "a4";

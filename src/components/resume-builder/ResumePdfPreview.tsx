@@ -156,7 +156,7 @@ export const ResumePdfPreview = React.memo(function ResumePdfPreview({
     const generate = async () => {
       try {
         // 1. Register fonts — required before react-pdf renders; cached after first call
-        await prepareFonts(debouncedCustomize);
+        await prepareFonts(debouncedCustomize, debouncedData);
         if (cancelled) return;
 
         // 2. Render PDF to blob via react-pdf (same path as the export)

@@ -27,7 +27,7 @@ export async function exportResumePdfServer({
 }: PdfExportOptions): Promise<void> {
   try {
     // Pre-register fonts before rendering
-    await prepareFonts(customize);
+    await prepareFonts(customize, data);
 
     const doc = React.createElement(ResumePDF, { data, customize } as any);
     const blob = await pdf(doc as any).toBlob();

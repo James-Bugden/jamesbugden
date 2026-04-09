@@ -42,6 +42,39 @@ const MONO_MAP: Record<string, string> = {
 
 const ALL_MAP = { ...SANS_MAP, ...SERIF_MAP, ...MONO_MAP };
 
+/** CJK font family name used by react-pdf when Chinese characters are detected */
+export const CJK_FONT_FAMILY = "Noto Sans TC";
+
+/** Detect whether a string contains CJK (Chinese/Japanese/Korean) characters */
+export function containsCJK(text: string): boolean {
+  return /[\u4e00-\u9fff\u3400-\u4dbf\uf900-\ufaff]/.test(text);
+}
+
+/**
+ * Scan all text fields in resume data and return true if any contain CJK.
+ */
+export function resumeHasCJK(data: {
+  personalDetails?: { fullName?: string; professionalTitle?: string; location?: string; extras?: { value?: string }[] };
+  sections?: { entries?: { fields?: Record<string, string> }[] }[];
+}): boolean {
+  const texts: string[] = [];
+  const pd = data?.personalDetails;
+  if (pd?.fullName) texts.push(pd.fullName);
+  if (pd?.professionalTitle) texts.push(pd.professionalTitle);
+  if (pd?.location) texts.push(pd.location);
+  for (const ex of pd?.extras || []) {
+    if (ex.value) texts.push(ex.value);
+  }
+  for (const sec of data?.sections || []) {
+    for (const entry of sec.entries || []) {
+      for (const v of Object.values(entry.fields || {})) {
+        if (v) texts.push(v);
+      }
+    }
+  }
+  return texts.some(containsCJK);
+}
+
 /**
  * Convert a CSS font-family string like "'Lora', serif" to a PDF-safe font name.
  */
