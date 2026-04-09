@@ -1,41 +1,53 @@
 
 
-# Add Comprehensive Feature Usage Dashboard
+# Fix: Skills Not Rendering in PDF Preview (Chinese Font Issue)
 
-## Problem
-The current "Feature Adoption" section only shows AI usage log entries (import, ai_tool). It doesn't show broader feature usage across the site — who's using the Resume Builder, Analyzer, Question Bank, Guides, Salary Checker, etc.
+## Root cause
 
-## Data sources available
-We can derive feature usage from existing tables without any schema changes:
+After thorough investigation, the skills section code is **correct** — data flows properly from TagInput → store → preview. The real issue is that the **PDF preview uses built-in fonts (Helvetica, Times-Roman, Courier)** that have **no Chinese glyph coverage**. This causes ALL Chinese text — including skills — to render as garbled/mojibake characters in the right-side preview.
 
-| Feature | Source | How to count |
-|---------|--------|-------------|
-| Resume Builder | `user_documents` (type="resume") | Unique user_ids with resume docs |
-| Cover Letter Builder | `user_documents` (type="cover_letter") | Unique user_ids with cover letter docs |
-| Resume Analyzer | `resume_analyses` | Unique user_ids |
-| Resume Import (AI) | `ai_usage_log` (usage_type="import") | Already tracked |
-| AI Tools | `ai_usage_log` (usage_type="ai_tool") | Already tracked |
-| Question Bank | `event_tracks` (event_type="qbank_view") | Unique pages/sessions |
-| Guides | `event_tracks` (event_type="guide_view") | Unique event_names |
-| Salary Checker | `salary_checks` | Total checks |
+The user sees skills "not showing" because the Chinese skill tags (技術招募, 人才策略規劃, etc.) are rendered as unreadable symbols, making them appear invisible or missing.
 
-## What changes
+## What this is NOT
 
-### `src/pages/AdminDashboard.tsx`
-- Pass `resumeAnalyses`, `documents`, and `salaryChecks` to InsightsTab (some may already be passed)
+- Not a data flow bug (TagInput correctly saves comma-separated values to `fields.skills`)
+- Not a rendering logic bug (both `ResumePreview.tsx` and `ResumePDF.tsx` correctly read and render skills)
+- Not a section filtering bug (`hasContent` correctly detects skills data)
 
-### `src/components/admin/InsightsTab.tsx`
-- Replace the current small "Feature Adoption (Unique Users)" card grid with a richer **Feature Usage Overview** section
-- New section shows a horizontal bar chart of unique users per feature, plus total usage counts
-- Features listed: Resume Builder, Cover Letter, Resume Analyzer, AI Import, AI Tools, Question Bank, Guides, Salary Checker
-- Each bar shows unique users (from user_id where available) and total actions
-- Color-coded by feature category (documents = green, AI = blue, content = purple, tools = amber)
+## Fix: Register CJK fonts for `@react-pdf/renderer`
 
-### Visual layout
-- Horizontal bar chart (largest to smallest) showing unique users per feature
-- Small stat cards below showing total actions per feature
-- Replaces the existing minimal "Feature Adoption" grid
+### `src/components/resume-builder/ResumePDF.tsx`
+- Register a CJK-compatible font (e.g., Noto Sans TC from Google Fonts CDN) with `@react-pdf/renderer`'s `Font.register()`
+- Use this font as fallback when Chinese characters are detected, or always use it for zh-TW locale
+- Register normal + bold weights
 
-## No database changes needed
-Everything derives from existing tables already passed as props or fetchable from existing data.
+### `src/lib/resumePdf/fontMap.ts`
+- Add a CJK font family constant (e.g., `"Noto Sans TC"`)
+- Update `toPdfFont()` to return the CJK font when the resume locale is zh-TW or when CJK characters are detected in content
+
+### Technical approach
+```typescript
+// In ResumePDF.tsx, register CJK font once
+import { Font } from "@react-pdf/renderer";
+
+Font.register({
+  family: "Noto Sans TC",
+  fonts: [
+    { src: "https://fonts.gstatic.com/s/notosanstc/v35/nKKQ...woff2" },
+    { src: "https://fonts.gstatic.com/s/notosanstc/v35/nKKQ...woff2", fontWeight: 700 },
+  ],
+});
+```
+
+- Detect CJK content via regex `/[\u4e00-\u9fff]/` on the resume data
+- When CJK detected, use `"Noto Sans TC"` as the body font family in the PDF
+- This fixes ALL Chinese text rendering (summary, experience, skills, etc.)
+
+### Files changed
+1. `src/components/resume-builder/ResumePDF.tsx` — register CJK font, add detection logic
+2. `src/lib/resumePdf/fontMap.ts` — add CJK font mapping
+3. `src/components/resume-builder/ResumePdfPreview.tsx` — ensure font loading completes before rendering
+
+## Scope
+This fixes the garbled Chinese text issue across the entire PDF preview, not just skills. Skills will then correctly appear as readable Chinese tags on the right-side preview.
 
