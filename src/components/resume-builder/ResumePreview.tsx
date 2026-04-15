@@ -811,7 +811,7 @@ export const A4Page = React.memo(function A4Page({
           minHeight: `${dims.hMM}mm`,
           padding: "var(--resume-pad-top) var(--resume-margin-x) var(--resume-pad-bottom)",
           position: "relative",
-          fontFamily: c?.bodyFont || "'Source Sans 3', sans-serif",
+          fontFamily: cjkSafeFont(c?.bodyFont, hasCJK),
           fontSize: "var(--resume-font-size)",
           lineHeight: "var(--resume-line-height)",
           boxSizing: "border-box",
