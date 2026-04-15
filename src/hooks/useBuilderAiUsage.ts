@@ -2,7 +2,7 @@ import { useState, useEffect, useCallback } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/contexts/AuthContext";
 
-const IMPORT_LIMIT = 2;
+const IMPORT_LIMIT = 10;
 const AI_TOOL_LIMIT = 6;
 
 export function useBuilderAiUsage() {

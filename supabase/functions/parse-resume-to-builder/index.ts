@@ -7,7 +7,7 @@ const corsHeaders = {
     "authorization, x-client-info, apikey, content-type, x-supabase-client-platform, x-supabase-client-platform-version, x-supabase-client-runtime, x-supabase-client-runtime-version",
 };
 
-const IMPORT_MONTHLY_LIMIT = 2;
+const IMPORT_MONTHLY_LIMIT = 10;
 const USAGE_TYPE = "import";
 
 Deno.serve(async (req) => {

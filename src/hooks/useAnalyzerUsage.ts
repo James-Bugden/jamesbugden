@@ -2,7 +2,7 @@ import { useState, useEffect, useCallback } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/contexts/AuthContext";
 
-const MONTHLY_LIMIT = 3;
+const MONTHLY_LIMIT = 10;
 
 export function useAnalyzerUsage() {
   const { user, isLoggedIn } = useAuth();
