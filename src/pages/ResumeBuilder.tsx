@@ -496,7 +496,7 @@ const ResumeBuilder = () => {
     (async () => {
       try {
         if (builderAiUsage.importLimitReached) {
-          toast({ title: lang === "zh-tw" ? "本月 AI 匯入額度已用完" : "Monthly AI import limit reached", description: lang === "zh-tw" ? "每月限 2 次 AI 匯入。額度下月初重置。" : "You can import up to 2 resumes per month with AI. Resets next month.", variant: "destructive" });
+          setShowImportLimitModal(true);
           setSearchParams({}, { replace: true });
           setAnalyzerImporting(false);
           return;
