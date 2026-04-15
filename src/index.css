@@ -52,7 +52,8 @@
     --dash-toolkit-bg: 36 14% 92%;
     --dash-gold-faded: 42 52% 56% / 0.15;
 
-    --font-heading: 'Playfair Display', 'Times New Roman', Georgia, serif;
+    --font-heading: 'Playfair Display', 'Noto Serif TC', 'Times New Roman', Georgia, serif;
+    --font-heading-cjk: 'Noto Serif TC', 'Playfair Display', 'Times New Roman', Georgia, serif;
     --font-body: 'DM Sans', -apple-system, BlinkMacSystemFont, 'SF Pro Text', 'Segoe UI', Roboto, sans-serif;
 
     --sidebar-background: 153 38% 17%;
@@ -143,6 +144,11 @@
 }
 
 @layer utilities {
+  /* CJK heading font — Noto Serif TC first so numerals + Chinese share same weight */
+  .font-heading-cjk {
+    font-family: var(--font-heading-cjk);
+  }
+
   /* Simple nav background - no pseudo-elements */
   .bg-nav-green {
     background: linear-gradient(135deg, hsl(153 38% 17%) 0%, hsl(153 30% 23%) 100%);
