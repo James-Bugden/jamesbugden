@@ -54,7 +54,7 @@ function SettingCard({ title, children, defaultOpen = true }: { title: string; c
       <div className="bg-white rounded-xl shadow-sm overflow-hidden">
         <CollapsibleTrigger asChild>
           <button className="w-full flex items-center justify-between px-5 py-3.5 hover:bg-gray-50/50 transition-colors">
-            <h3 className="text-sm font-bold" style={{ color: B.text, fontFamily: "var(--font-heading)" }}>{title}</h3>
+            <h3 className="text-base font-semibold" style={{ color: B.text }}>{title}</h3>
             <ChevronDown className={cn("w-4 h-4 transition-transform duration-200", open && "rotate-180")} style={{ color: B.textSec }} />
           </button>
         </CollapsibleTrigger>
