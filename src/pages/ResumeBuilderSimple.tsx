@@ -792,7 +792,9 @@ const ResumeBuilderSimple = () => {
         </div>
 
         {/* Personal Details */}
-        <PersonalDetailsCard details={data.personalDetails} onChange={(u) => { pushHistory(); updatePersonalDetails(u); }} />
+        <div id="personal-details-card" className="transition-all">
+          <PersonalDetailsCard details={data.personalDetails} onChange={(u) => { pushHistory(); updatePersonalDetails(u); }} />
+        </div>
 
         {/* Sections — dnd-kit sortable */}
         <DndContext sensors={sensors} collisionDetection={closestCenter} onDragEnd={handleDragEnd} modifiers={[restrictToVerticalAxis]}>
@@ -837,7 +839,20 @@ const ResumeBuilderSimple = () => {
 
         <DesignPhilosophy />
 
-        <CompletenessScore data={data} />
+        <CompletenessScore data={data} onNavigate={(target) => {
+          setTimeout(() => {
+            if (target === "personal") {
+              const el = document.getElementById("personal-details-card");
+              if (el) { el.scrollIntoView({ behavior: "smooth", block: "start" }); el.classList.add("ring-2", "ring-amber-400/70"); setTimeout(() => el.classList.remove("ring-2", "ring-amber-400/70"), 1200); }
+              return;
+            }
+            const section = data.sections.find(s => s.type === target);
+            if (section) {
+              const el = document.getElementById(`section-card-${section.id}`);
+              if (el) { el.scrollIntoView({ behavior: "smooth", block: "start" }); el.classList.add("ring-2", "ring-amber-400/70"); setTimeout(() => el.classList.remove("ring-2", "ring-amber-400/70"), 1200); }
+            }
+          }, 100);
+        }} />
 
         {/* Analyzer CTA */}
         <AnalyzerCTA fromAnalyzer={searchParams.get("from") === "analyzer" || !!sessionStorage.getItem("analyzer-resume-text")} resumeData={data} />
