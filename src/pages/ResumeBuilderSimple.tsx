@@ -240,10 +240,8 @@ function DownloadDropdown({ downloading, pageFormat, docName, onDownload }: {
   return (
     <div className="relative" ref={ref}>
       <Button
-        size="sm" className="text-white gap-1.5 transition-colors"
+        size="sm" className="text-white gap-1.5 transition-colors hover:opacity-90 active:opacity-80"
         style={{ backgroundColor: BRAND.green }}
-        onMouseEnter={(e) => (e.currentTarget.style.backgroundColor = BRAND.greenHover)}
-        onMouseLeave={(e) => (e.currentTarget.style.backgroundColor = BRAND.green)}
         onClick={() => { if (!downloading) setOpen(!open); }}
         disabled={downloading}
       >
@@ -264,9 +262,7 @@ function DownloadDropdown({ downloading, pageFormat, docName, onDownload }: {
               <span className="text-xs font-medium" style={{ color: BRAND.textSecondary }}>{t("paperSize")}</span>
               <span className="text-xs font-semibold" style={{ color: BRAND.text }}>A4</span>
             </div>
-            <Button className="w-full text-white transition-colors" style={{ backgroundColor: BRAND.green }}
-              onMouseEnter={(e) => (e.currentTarget.style.backgroundColor = BRAND.greenHover)}
-              onMouseLeave={(e) => (e.currentTarget.style.backgroundColor = BRAND.green)}
+            <Button className="w-full text-white transition-colors hover:opacity-90 active:opacity-80" style={{ backgroundColor: BRAND.green }}
               onClick={() => { setOpen(false); onDownload(filename); }}
             >
               <Download className="w-4 h-4 mr-2" /> {t("downloadPdf")}
