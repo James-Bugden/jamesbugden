@@ -748,11 +748,11 @@ const ResumeBuilder = () => {
   const editorScrollRef = useRef<HTMLDivElement>(null);
   const handleEditSection = useCallback((sectionId: string) => {
     setActiveTab("content");
+    if (!sectionId) return;
     setTimeout(() => {
       const el = document.getElementById(`section-card-${sectionId}`);
       if (el) {
         el.scrollIntoView({ behavior: "smooth", block: "start" });
-        // Highlight flash
         el.classList.add("ring-2", "ring-amber-400/70");
         setTimeout(() => el.classList.remove("ring-2", "ring-amber-400/70"), 1200);
       }
