@@ -32,6 +32,12 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       (event, session) => {
         setSession(session);
 
+        // If token refresh failed, clear stale tokens so guests don't see errors
+        if (event === "TOKEN_REFRESHED" && !session) {
+          supabase.auth.signOut().catch(() => {});
+          return;
+        }
+
         if (event === "SIGNED_OUT") {
           clearLocalDocuments();
           localStorage.removeItem(ACTIVE_USER_KEY);
@@ -61,6 +67,12 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
     supabase.auth.getSession().then(({ data: { session } }) => {
       setSession(session);
+      setIsLoading(false);
+    }).catch((err) => {
+      // Clear stale tokens (e.g. refresh_token_not_found) for guest users
+      if (err?.code === "refresh_token_not_found" || err?.message?.includes?.("Refresh Token Not Found")) {
+        supabase.auth.signOut().catch(() => {});
+      }
       setIsLoading(false);
     });
 
