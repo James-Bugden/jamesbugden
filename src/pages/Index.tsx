@@ -125,9 +125,9 @@ const Index = () => {
           aria-label="Main navigation"
         >
           <div className="container mx-auto px-4 sm:px-5 md:px-6 py-4 flex items-center justify-between">
-            <span className="font-heading text-base sm:text-lg md:text-xl font-bold tracking-tight whitespace-nowrap text-executive-green">
+            <Link to="/" className="font-heading text-base sm:text-lg md:text-xl font-bold tracking-tight whitespace-nowrap text-executive-green cursor-pointer" onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}>
               JAMES BUGDEN
-            </span>
+            </Link>
             <div className="flex items-center gap-2 sm:gap-4">
               <AuthHeaderButton variant="light" />
               <LanguageToggle variant="default" />
