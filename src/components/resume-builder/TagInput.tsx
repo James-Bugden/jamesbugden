@@ -1,4 +1,4 @@
-import { useState, KeyboardEvent } from "react";
+import { useState, useRef, KeyboardEvent } from "react";
 import { X } from "lucide-react";
 import { cn } from "@/lib/utils";
 
@@ -14,6 +14,7 @@ const SKILL_LEVELS = ["Beginner", "Intermediate", "Advanced", "Expert"];
 export function TagInput({ value, onChange, placeholder = "Type and press Enter", showLevel }: TagInputProps) {
   const [input, setInput] = useState("");
   const [dupeError, setDupeError] = useState(false);
+  const inputRef = useRef<HTMLInputElement>(null);
   const tags = value ? value.split(",").filter(Boolean) : [];
 
   const addTag = () => {
@@ -26,6 +27,7 @@ export function TagInput({ value, onChange, placeholder = "Type and press Enter"
     onChange([...tags, trimmed].join(","));
     setInput("");
     setDupeError(false);
+    requestAnimationFrame(() => inputRef.current?.focus());
   };
 
   const removeTag = (idx: number) => {
@@ -69,6 +71,7 @@ export function TagInput({ value, onChange, placeholder = "Type and press Enter"
             </span>
           ))}
           <input
+            ref={inputRef}
             value={input}
             onChange={(e) => handleChange(e.target.value)}
             onKeyDown={handleKeyDown}
