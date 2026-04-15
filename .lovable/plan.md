@@ -1,53 +1,31 @@
 
 
-# Fix: Skills Not Rendering in PDF Preview (Chinese Font Issue)
+# Fix: Stale Token Error & Misleading "Session Expired" for Guest Users
 
-## Root cause
+## Problem
+Two related issues:
+1. **Stale refresh tokens**: When a browser has leftover auth tokens (from a previous session or another user), Supabase tries to refresh them on page load and fails with "refresh_token_not_found". This error shows up in the console and can confuse the app state.
+2. **Wrong error message for guests**: When an unauthenticated user tries to use the Resume Analyzer, the edge function returns 401, and the frontend shows "Your session expired. Please sign in again" — but the user was never signed in.
 
-After thorough investigation, the skills section code is **correct** — data flows properly from TagInput → store → preview. The real issue is that the **PDF preview uses built-in fonts (Helvetica, Times-Roman, Courier)** that have **no Chinese glyph coverage**. This causes ALL Chinese text — including skills — to render as garbled/mojibake characters in the right-side preview.
+## Changes
 
-The user sees skills "not showing" because the Chinese skill tags (技術招募, 人才策略規劃, etc.) are rendered as unreadable symbols, making them appear invisible or missing.
+### 1. `src/contexts/AuthContext.tsx` — Handle stale token cleanup
+- Listen for the `TOKEN_REFRESHED` event failure by also checking for `SIGNED_OUT` triggered by token refresh failure
+- On `onAuthStateChange`, if event is `TOKEN_REFRESHED` but session is null (refresh failed), clear localStorage auth keys to prevent repeated failures
+- This ensures new/guest visitors with stale tokens in localStorage don't see errors
 
-## What this is NOT
+### 2. `src/pages/ResumeAnalyzer.tsx` — Better error message for 401
+- When catching a 401 from the edge function, check if the user is currently logged in (via `useAuth`)
+- If logged in → show "Your session expired. Please sign in again." (existing behavior)
+- If NOT logged in → show "Please sign in to analyze your resume." with a link/button to the login page
+- This prevents the confusing "session expired" message for first-time visitors
 
-- Not a data flow bug (TagInput correctly saves comma-separated values to `fields.skills`)
-- Not a rendering logic bug (both `ResumePreview.tsx` and `ResumePDF.tsx` correctly read and render skills)
-- Not a section filtering bug (`hasContent` correctly detects skills data)
+### 3. `src/contexts/AuthContext.tsx` — Graceful error suppression
+- Wrap the auth initialization to catch `AuthApiError` with code `refresh_token_not_found`
+- When this specific error occurs, call `supabase.auth.signOut()` silently to clear the invalid tokens
+- This prevents the error from propagating to the console and confusing the app
 
-## Fix: Register CJK fonts for `@react-pdf/renderer`
-
-### `src/components/resume-builder/ResumePDF.tsx`
-- Register a CJK-compatible font (e.g., Noto Sans TC from Google Fonts CDN) with `@react-pdf/renderer`'s `Font.register()`
-- Use this font as fallback when Chinese characters are detected, or always use it for zh-TW locale
-- Register normal + bold weights
-
-### `src/lib/resumePdf/fontMap.ts`
-- Add a CJK font family constant (e.g., `"Noto Sans TC"`)
-- Update `toPdfFont()` to return the CJK font when the resume locale is zh-TW or when CJK characters are detected in content
-
-### Technical approach
-```typescript
-// In ResumePDF.tsx, register CJK font once
-import { Font } from "@react-pdf/renderer";
-
-Font.register({
-  family: "Noto Sans TC",
-  fonts: [
-    { src: "https://fonts.gstatic.com/s/notosanstc/v35/nKKQ...woff2" },
-    { src: "https://fonts.gstatic.com/s/notosanstc/v35/nKKQ...woff2", fontWeight: 700 },
-  ],
-});
-```
-
-- Detect CJK content via regex `/[\u4e00-\u9fff]/` on the resume data
-- When CJK detected, use `"Noto Sans TC"` as the body font family in the PDF
-- This fixes ALL Chinese text rendering (summary, experience, skills, etc.)
-
-### Files changed
-1. `src/components/resume-builder/ResumePDF.tsx` — register CJK font, add detection logic
-2. `src/lib/resumePdf/fontMap.ts` — add CJK font mapping
-3. `src/components/resume-builder/ResumePdfPreview.tsx` — ensure font loading completes before rendering
-
-## Scope
-This fixes the garbled Chinese text issue across the entire PDF preview, not just skills. Skills will then correctly appear as readable Chinese tags on the right-side preview.
+## Files changed
+1. `src/contexts/AuthContext.tsx` — Add stale token detection and cleanup
+2. `src/pages/ResumeAnalyzer.tsx` — Context-aware error message for 401 (guest vs logged-in)
 
