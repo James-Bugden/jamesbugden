@@ -47,6 +47,7 @@ export default function ResumeAnalyzer({ defaultLang = "en" }: { defaultLang?: L
   const [progress, setProgress] = useState(0);
   const [resumeImageUrl, setResumeImageUrl] = useState<string | null>(null);
   const [showMicroSurvey, setShowMicroSurvey] = useState(false);
+  const [showLimitModal, setShowLimitModal] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
   
 
@@ -216,7 +217,7 @@ export default function ResumeAnalyzer({ defaultLang = "en" }: { defaultLang?: L
   const handleSubmitResume = useCallback(async () => {
     setError("");
     if (limitReached) {
-      setError(t(lang, "You've reached your monthly analysis limit. Please try again next month.", "你已達到本月分析上限。請下月再試。"));
+      setShowLimitModal(true);
       return;
     }
     try {
