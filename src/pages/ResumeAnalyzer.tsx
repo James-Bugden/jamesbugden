@@ -206,7 +206,13 @@ export default function ResumeAnalyzer({ defaultLang = "en" }: { defaultLang?: L
       if (msg === "RATE_LIMIT") {
         setError(t(lang, "You've reached your monthly analysis limit. Please try again next month.", "你已達到本月分析上限。請下月再試。"));
       } else if (msg === "AUTH_EXPIRED") {
-        setError(t(lang, "Your session expired. Please sign in again and retry.", "你的登入已過期，請重新登入後再試。"));
+        // Check current auth state to show appropriate message
+        const { data: { session: currentSession } } = await supabase.auth.getSession();
+        if (currentSession) {
+          setError(t(lang, "Your session expired. Please sign in again and retry.", "你的登入已過期，請重新登入後再試。"));
+        } else {
+          setError(t(lang, "Please sign in to analyze your resume.", "請先登入以使用履歷分析功能。"));
+        }
       } else {
         setError(t(lang, `Analysis failed: ${msg}. Please try again.`, `分析失敗：${msg}。請再試一次。`));
       }
