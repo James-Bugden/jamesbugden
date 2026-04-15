@@ -10,6 +10,7 @@ import { supabase } from "@/integrations/supabase/client";
 import ResumeResults from "@/components/resume-analyzer/ResumeResults";
 import { UsageLimitBanner } from "@/components/resume-analyzer/UsageLimitBanner";
 import { useAnalyzerUsage } from "@/hooks/useAnalyzerUsage";
+import { LimitReachedModal } from "@/components/LimitReachedModal";
 
 import type { AnalysisResult } from "@/components/resume-analyzer/types";
 import LogoScroll from "@/components/LogoScroll";
