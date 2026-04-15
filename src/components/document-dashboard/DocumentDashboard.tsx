@@ -490,7 +490,7 @@ export function DocumentDashboard({ onOpenDocument, onImport }: DocumentDashboar
           <h1 className="text-[18px] font-bold tracking-tight" style={{ fontFamily: "'Source Sans 3', sans-serif", color: BRAND.text }}>{t("resumeBuilderTitle")}</h1>
           <p className="text-[11px] mt-0.5" style={{ color: BRAND.textSecondary }}>{t("resumeBuilderTagline")}</p>
         </div>
-        <nav className="flex-1 px-2 space-y-0.5">
+        <nav className="px-2 space-y-0.5 pb-2">
           {sidebarItems.map((item) => (
             <button
               key={item.id}
