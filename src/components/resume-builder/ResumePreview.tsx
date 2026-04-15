@@ -802,6 +802,7 @@ export const A4Page = React.memo(function A4Page({
   return (
     <>
       <link rel="stylesheet" href={GOOGLE_FONTS_URL} />
+      {hasCJK && <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700&display=swap" />}
       <div
         data-color-role="background"
         className="text-gray-900"
