@@ -1,17 +1,19 @@
 import { useState } from "react";
-import { ChevronDown, ChevronUp, CheckCircle2, Circle, AlertTriangle } from "lucide-react";
+import { ChevronDown, ChevronUp, CheckCircle2, Circle, AlertTriangle, ChevronRight } from "lucide-react";
 import { ResumeData } from "./types";
 import { cn } from "@/lib/utils";
 import { useT } from "./i18n";
 
 interface CompletenessScoreProps {
   data: ResumeData;
+  onNavigate?: (target: string) => void;
 }
 
 interface CheckItem {
   label: string;
   points: number;
   passed: boolean;
+  target: string; // "personal" | section type like "summary", "experience", "skills"
 }
 
 interface DateWarning {
@@ -63,13 +65,13 @@ function useComputeChecks(data: ResumeData): CheckItem[] {
   const quantified = expEntries.some((e) => /\d+/.test(e.fields.description || ""));
 
   return [
-    { label: t("scoreCheckSummary"), points: 10, passed: hasSummary },
-    { label: t("scoreCheck2Exp"), points: 20, passed: has2Exp },
-    { label: t("scoreCheckDescriptions"), points: 15, passed: hasDescriptions },
-    { label: t("scoreCheckDates"), points: 10, passed: datesFilled },
-    { label: t("scoreCheckContact"), points: 15, passed: contactComplete },
-    { label: t("scoreCheckSkills"), points: 10, passed: hasSkills },
-    { label: t("scoreCheckQuantified"), points: 20, passed: quantified },
+    { label: t("scoreCheckSummary"), points: 10, passed: hasSummary, target: "summary" },
+    { label: t("scoreCheck2Exp"), points: 20, passed: has2Exp, target: "experience" },
+    { label: t("scoreCheckDescriptions"), points: 15, passed: hasDescriptions, target: "experience" },
+    { label: t("scoreCheckDates"), points: 10, passed: datesFilled, target: "experience" },
+    { label: t("scoreCheckContact"), points: 15, passed: contactComplete, target: "personal" },
+    { label: t("scoreCheckSkills"), points: 10, passed: hasSkills, target: "skills" },
+    { label: t("scoreCheckQuantified"), points: 20, passed: quantified, target: "experience" },
   ];
 }
 
@@ -140,7 +142,7 @@ function useComputeDateWarnings(data: ResumeData): DateWarning[] {
   return warnings;
 }
 
-export function CompletenessScore({ data }: CompletenessScoreProps) {
+export function CompletenessScore({ data, onNavigate }: CompletenessScoreProps) {
   const t = useT();
   const [expanded, setExpanded] = useState(false);
   const checks = useComputeChecks(data);
@@ -192,29 +194,40 @@ export function CompletenessScore({ data }: CompletenessScoreProps) {
       </button>
 
       {expanded && (
-        <ul className="mt-3 space-y-1.5 border-t border-gray-100 pt-3">
+        <ul className="mt-3 space-y-0.5 border-t border-gray-100 pt-3">
           {checks.map((c) => (
-            <li key={c.label} className="flex items-center gap-2 text-xs">
-              {c.passed ? (
-                <CheckCircle2 className="w-4 h-4 text-green-500 flex-shrink-0" />
-              ) : (
-                <Circle className="w-4 h-4 text-gray-300 flex-shrink-0" />
-              )}
-              <span className={cn(c.passed ? "text-gray-500 line-through" : "text-gray-700")}>
-                {c.label}
-              </span>
-              <span className="ml-auto text-gray-300 text-[10px]">+{c.points}</span>
+            <li key={c.label}>
+              <button
+                onClick={() => onNavigate?.(c.target)}
+                className={cn(
+                  "w-full flex items-center gap-2 text-xs py-1.5 px-1.5 rounded-lg transition-colors",
+                  onNavigate ? "cursor-pointer hover:bg-gray-50 active:bg-gray-100" : ""
+                )}
+              >
+                {c.passed ? (
+                  <CheckCircle2 className="w-4 h-4 text-green-500 flex-shrink-0" />
+                ) : (
+                  <Circle className="w-4 h-4 text-gray-300 flex-shrink-0" />
+                )}
+                <span className={cn("flex-1 text-left", c.passed ? "text-gray-500 line-through" : "text-gray-700")}>
+                  {c.label}
+                </span>
+                <span className="text-gray-300 text-[10px]">+{c.points}</span>
+                {onNavigate && !c.passed && (
+                  <ChevronRight className="w-3.5 h-3.5 text-gray-300 flex-shrink-0" />
+                )}
+              </button>
             </li>
           ))}
 
           {dateWarnings.length > 0 && (
             <>
-              <li className="flex items-center gap-1.5 text-[10px] font-semibold text-amber-600 pt-2 border-t border-gray-100 mt-2">
+              <li className="flex items-center gap-1.5 text-[10px] font-semibold text-amber-600 pt-2 border-t border-gray-100 mt-2 px-1.5">
                 <AlertTriangle className="w-3.5 h-3.5" />
                 {t("dateWarnings")}
               </li>
               {dateWarnings.map((w, i) => (
-                <li key={`warn-${i}`} className="flex items-center gap-2 text-xs">
+                <li key={`warn-${i}`} className="flex items-center gap-2 text-xs px-1.5 py-1">
                   <AlertTriangle className="w-4 h-4 text-amber-500 flex-shrink-0" />
                   <span className="text-gray-700">{w.label}</span>
                   <span className="ml-auto text-gray-400 text-[10px] truncate max-w-[120px]" title={w.entryName}>
