@@ -152,18 +152,11 @@ function SectionHeading({ title, customize, baseFontSize }: { title: string; cus
   const uppercase = customize?.headingUppercase !== false;
   const isCJK = containsCJK(title);
 
-  // For CJK text, prepend system CJK fonts so the browser doesn't try to render
-  // Chinese characters with a Latin-only Google Font (which produces mojibake).
-  const baseFont = customize?.headingFont || customize?.bodyFont || "";
-  const fontFamily = isCJK
-    ? `"Noto Sans TC", "Microsoft JhengHei", "PingFang TC", "Heiti TC", ${baseFont || "sans-serif"}`
-    : baseFont || undefined;
-
   const textStyle: React.CSSProperties = {
     fontSize,
     color: style === "background" ? "#fff" : "var(--resume-headings)",
     textTransform: (uppercase && !isCJK) ? "uppercase" : "none",
-    fontFamily,
+    fontFamily: cjkSafeFont(customize?.headingFont || customize?.bodyFont, isCJK),
     letterSpacing: isCJK ? "0.02em" : "0.08em",
   };
 
