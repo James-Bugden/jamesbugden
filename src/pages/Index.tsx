@@ -312,7 +312,7 @@ const Index = () => {
         {/* ── Create Account CTA ── */}
         {!isLoggedIn && (
           <LazySection>
-            <section className="py-16 md:py-24 px-5 md:px-6 bg-cream">
+            <section className="py-12 md:py-16 px-5 md:px-6 bg-cream">
               <div className="container mx-auto max-w-2xl text-center">
                 <h2 className="font-heading mb-4 text-foreground" style={{ fontSize: 'clamp(2rem, 4vw, 2.625rem)' }}>
                   Create your free account
