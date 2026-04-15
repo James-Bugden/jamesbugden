@@ -18,7 +18,7 @@ import {
 import type { ResumeData, ResumeSection, ResumeSectionEntry } from "./types";
 import type { CustomizeSettings } from "./customizeTypes";
 import { SANS_FONTS, SERIF_FONTS, MONO_FONTS } from "./fontData";
-import { CJK_FONT_FAMILY, resumeHasCJK } from "@/lib/resumePdf/fontMap";
+import { CJK_FONT_FAMILY, containsCJK, resumeHasCJK } from "@/lib/resumePdf/fontMap";
 
 /* ═══════════════════════════════════════════════════════════
    Font Registration
@@ -729,7 +729,8 @@ function PdfSectionHeading({
   const style = c?.headingStyle || "underline";
   const fontSize = headingSizePt(base, c?.headingSize || "m");
   const uppercase = c?.headingUppercase !== false;
-  const displayTitle = uppercase ? title.toUpperCase() : title;
+  const isCJK = containsCJK(title);
+  const displayTitle = (uppercase && !isCJK) ? title.toUpperCase() : title;
 
   const headingFontFamily = c?.headingFont
     ? ensureFontRegistered(c.headingFont)
@@ -738,9 +739,9 @@ function PdfSectionHeading({
   const textStyle = {
     fontSize,
     color: style === "background" ? "#ffffff" : colors.headings,
-    fontFamily: headingFontFamily,
+    fontFamily: isCJK ? CJK_FONT_FAMILY : headingFontFamily,
     fontWeight: 700 as const,
-    letterSpacing: fontSize * 0.08,
+    letterSpacing: isCJK ? fontSize * 0.02 : fontSize * 0.08,
   };
 
   if (style === "plain") {
@@ -2034,7 +2035,11 @@ export function ResumePDF({ data, customize }: ResumePDFProps) {
             // font subsetter builds the glyph set from the raw input string
             // BEFORE textTransform is applied, so uppercase glyphs get
             // excluded from the subset and render as blank.
-            const displayName = (p.fullName || "YOUR NAME").toUpperCase();
+            // Skip uppercase for CJK names — it garbles Chinese characters.
+            const nameIsCJK = containsCJK(p.fullName);
+            const displayName = nameIsCJK
+              ? (p.fullName || "YOUR NAME")
+              : (p.fullName || "YOUR NAME").toUpperCase();
             const nameEl = (
               <Text
                 style={{
@@ -2042,8 +2047,8 @@ export function ResumePDF({ data, customize }: ResumePDFProps) {
                   lineHeight: 1.3,
                   color: colors.name,
                   fontWeight: c?.nameBold !== false ? 700 : 400,
-                  fontFamily: nameFontFamily,
-                  letterSpacing: nameFontSize * 0.1,
+                  fontFamily: nameIsCJK ? CJK_FONT_FAMILY : nameFontFamily,
+                  letterSpacing: nameIsCJK ? nameFontSize * 0.02 : nameFontSize * 0.1,
                   textAlign,
                 }}
               >
