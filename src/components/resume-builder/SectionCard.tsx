@@ -101,7 +101,7 @@ function DeclarationForm({ entry, set, t }: { entry: ResumeSectionEntry; set: (f
           <div className="flex items-center gap-3">
             <img src={f.signature} alt="Signature" className="h-12 border border-gray-200 rounded-lg bg-white p-1" />
             <button onClick={() => setSigOpen(true)} className="text-xs font-medium hover:opacity-80" style={{ color: "#2b4734" }}>{t("redraw")}</button>
-            <button onClick={() => set("signature")("")} className="text-xs text-gray-400 hover:text-red-500">{t("remove")}</button>
+            <button onClick={() => set("signature")("")} className="text-xs text-red-500 hover:text-red-700 transition-colors">{t("remove")}</button>
           </div>
         ) : (
           <button
@@ -216,7 +216,7 @@ function EntryList({
               </span>
               <button
                 onClick={(e) => { e.stopPropagation(); removeEntry(entry.id); }}
-                className="p-1.5 text-gray-300 hover:text-red-500 opacity-0 group-hover:opacity-100 transition-all"
+                className="p-1.5 text-red-400 hover:text-red-600 opacity-0 group-hover:opacity-100 transition-all"
               >
                 <X className="w-3.5 h-3.5" />
               </button>
@@ -645,7 +645,7 @@ export function SectionCard({ section, onUpdate, onRemove }: {
         </button>
         <button
           onClick={(e) => { e.stopPropagation(); onRemove(); }}
-          className="p-1 text-gray-300 hover:text-red-500 opacity-0 group-hover:opacity-100 transition-all"
+          className="p-1 text-red-400 hover:text-red-600 opacity-0 group-hover:opacity-100 transition-all"
         >
           <Trash2 className="w-3.5 h-3.5" />
         </button>
