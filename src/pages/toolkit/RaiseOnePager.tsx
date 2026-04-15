@@ -331,6 +331,7 @@ TALKING POINTS
       </section>
 
       <ToolkitFooter />
+      <LimitReachedModal open={showPrintLimitModal} onClose={() => setShowPrintLimitModal(false)} limitType="prints" currentCount={printCount} planLimit={printLimit} lang="en" />
     </div>
   );
 };
