@@ -153,7 +153,7 @@ function SectionHeading({ title, customize, baseFontSize }: { title: string; cus
     fontSize,
     color: style === "background" ? "#fff" : "var(--resume-headings)",
     textTransform: uppercase ? "uppercase" : "none",
-    fontFamily: customize?.headingFont || customize?.bodyFont,
+    fontFamily: withCJK(customize?.headingFont || customize?.bodyFont),
     letterSpacing: "0.08em",
   };
 
@@ -807,7 +807,7 @@ export const A4Page = React.memo(function A4Page({
           minHeight: `${dims.hMM}mm`,
           padding: "var(--resume-pad-top) var(--resume-margin-x) var(--resume-pad-bottom)",
           position: "relative",
-          fontFamily: c?.bodyFont || "'Source Sans 3', sans-serif",
+          fontFamily: withCJK(c?.bodyFont),
           fontSize: "var(--resume-font-size)",
           lineHeight: "var(--resume-line-height)",
           boxSizing: "border-box",
@@ -838,7 +838,7 @@ export const A4Page = React.memo(function A4Page({
                     fontSize: NAME_SIZES[c?.nameSize || "s"],
                     color: "var(--resume-name)",
                     fontWeight: c?.nameBold !== false ? 700 : 400,
-                    fontFamily: c?.nameFont === "creative" ? c?.headingFont || c?.bodyFont : c?.bodyFont,
+                    fontFamily: withCJK(c?.nameFont === "creative" ? c?.headingFont || c?.bodyFont : c?.bodyFont),
                   }}
                 >
                   {p.fullName || "YOUR NAME"}
@@ -856,7 +856,7 @@ export const A4Page = React.memo(function A4Page({
                     fontSize: NAME_SIZES[c?.nameSize || "s"],
                     color: "var(--resume-name)",
                     fontWeight: c?.nameBold !== false ? 700 : 400,
-                    fontFamily: c?.nameFont === "creative" ? c?.headingFont || c?.bodyFont : c?.bodyFont,
+                    fontFamily: withCJK(c?.nameFont === "creative" ? c?.headingFont || c?.bodyFont : c?.bodyFont),
                   }}
                 >
                   {p.fullName || "YOUR NAME"}
