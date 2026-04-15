@@ -159,59 +159,54 @@ Deno.serve(async (req) => {
   }
 
   try {
-    // --- Auth check ---
+    // --- Auth check (optional — guests can analyze, full report gated in UI) ---
     const authHeader = req.headers.get('Authorization');
-    if (!authHeader?.startsWith('Bearer ')) {
-      return new Response(
-        JSON.stringify({ error: 'Unauthorized' }),
-        { status: 401, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+    let userId: string | null = null;
+
+    if (authHeader?.startsWith('Bearer ')) {
+      const supabaseAuth = createClient(
+        Deno.env.get('SUPABASE_URL')!,
+        Deno.env.get('SUPABASE_ANON_KEY')!,
+        { global: { headers: { Authorization: authHeader } } }
       );
+
+      const token = authHeader.replace('Bearer ', '');
+      try {
+        const { data: claimsData, error: claimsError } = await (supabaseAuth.auth as any).getClaims(token);
+        if (!claimsError && claimsData?.claims?.sub) {
+          userId = claimsData.claims.sub;
+        } else {
+          throw new Error('getClaims failed');
+        }
+      } catch {
+        const { data: { user } } = await supabaseAuth.auth.getUser();
+        if (user) userId = user.id;
+      }
     }
 
+    // Create a service-level client for DB operations (works for both guest and auth)
     const supabase = createClient(
       Deno.env.get('SUPABASE_URL')!,
-      Deno.env.get('SUPABASE_ANON_KEY')!,
-      { global: { headers: { Authorization: authHeader } } }
+      Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!
     );
 
-    let userId: string;
-    const token = authHeader.replace('Bearer ', '');
-    
-    try {
-      const { data: claimsData, error: claimsError } = await (supabase.auth as any).getClaims(token);
-      if (!claimsError && claimsData?.claims?.sub) {
-        userId = claimsData.claims.sub;
-      } else {
-        throw new Error('getClaims failed');
-      }
-    } catch {
-      // Fallback: try getUser
-      const { data: { user }, error: userError } = await supabase.auth.getUser();
-      if (userError || !user) {
-        return new Response(
-          JSON.stringify({ error: 'Unauthorized' }),
-          { status: 401, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
-        );
-      }
-      userId = user.id;
-    }
+    // --- Usage limit (only for authenticated users) ---
+    if (userId) {
+      const { data: isAdmin } = await supabase.rpc("is_admin", { _user_id: userId });
 
-    // --- Admin bypass ---
-    const { data: isAdmin } = await supabase.rpc("is_admin", { _user_id: userId });
+      if (!isAdmin) {
+        const { count: usageCount, error: usageError } = await supabase
+          .from('resume_analyses')
+          .select('id', { count: 'exact', head: true })
+          .eq('user_id', userId)
+          .gte('created_at', `${new Date().getFullYear()}-${String(new Date().getMonth() + 1).padStart(2, '0')}-01T00:00:00.000Z`);
 
-    // --- Server-side usage limit ---
-    if (!isAdmin) {
-      const { count: usageCount, error: usageError } = await supabase
-        .from('resume_analyses')
-        .select('id', { count: 'exact', head: true })
-        .eq('user_id', userId)
-        .gte('created_at', `${new Date().getFullYear()}-${String(new Date().getMonth() + 1).padStart(2, '0')}-01T00:00:00.000Z`);
-
-      if (!usageError && typeof usageCount === 'number' && usageCount >= MONTHLY_LIMIT) {
-        return new Response(
-          JSON.stringify({ error: 'Monthly analysis limit reached', limit: MONTHLY_LIMIT, used: usageCount }),
-          { status: 429, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
-        );
+        if (!usageError && typeof usageCount === 'number' && usageCount >= MONTHLY_LIMIT) {
+          return new Response(
+            JSON.stringify({ error: 'Monthly analysis limit reached', limit: MONTHLY_LIMIT, used: usageCount }),
+            { status: 429, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+          );
+        }
       }
     }
 
@@ -322,11 +317,13 @@ Deno.serve(async (req) => {
       analysis.overall_score = Math.round(analysis.overall_score);
     }
 
-    // Log AI usage after successful analysis
-    await supabase.from('ai_usage_log').insert({
-      user_id: userId,
-      usage_type: 'analyze',
-    });
+    // Log AI usage after successful analysis (only for authenticated users)
+    if (userId) {
+      await supabase.from('ai_usage_log').insert({
+        user_id: userId,
+        usage_type: 'analyze',
+      });
+    }
 
     return new Response(
       JSON.stringify(analysis),
