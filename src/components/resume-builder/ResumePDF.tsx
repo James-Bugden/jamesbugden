@@ -2035,7 +2035,11 @@ export function ResumePDF({ data, customize }: ResumePDFProps) {
             // font subsetter builds the glyph set from the raw input string
             // BEFORE textTransform is applied, so uppercase glyphs get
             // excluded from the subset and render as blank.
-            const displayName = (p.fullName || "YOUR NAME").toUpperCase();
+            // Skip uppercase for CJK names — it garbles Chinese characters.
+            const nameIsCJK = containsCJK(p.fullName);
+            const displayName = nameIsCJK
+              ? (p.fullName || "YOUR NAME")
+              : (p.fullName || "YOUR NAME").toUpperCase();
             const nameEl = (
               <Text
                 style={{
@@ -2043,8 +2047,8 @@ export function ResumePDF({ data, customize }: ResumePDFProps) {
                   lineHeight: 1.3,
                   color: colors.name,
                   fontWeight: c?.nameBold !== false ? 700 : 400,
-                  fontFamily: nameFontFamily,
-                  letterSpacing: nameFontSize * 0.1,
+                  fontFamily: nameIsCJK ? CJK_FONT_FAMILY : nameFontFamily,
+                  letterSpacing: nameIsCJK ? nameFontSize * 0.02 : nameFontSize * 0.1,
                   textAlign,
                 }}
               >
