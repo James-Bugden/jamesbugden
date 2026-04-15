@@ -290,7 +290,7 @@ CATEGORIES:
       <section className="pb-12 px-5 md:px-6 print:hidden">
         <div className="container mx-auto max-w-4xl flex flex-col sm:flex-row gap-4 justify-center">
           <Button
-            onClick={printPage}
+            onClick={handlePrint}
             disabled={printLimitReached}
             className="bg-executive hover:bg-executive-light text-cream px-6 py-3 h-auto"
           >
