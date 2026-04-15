@@ -132,6 +132,15 @@ function EntryList({
   const dragIdx = useRef<number | null>(null);
   const [overIdx, setOverIdx] = useState<number | null>(null);
 
+  const moveEntry = (idx: number, dir: -1 | 1) => {
+    const target = idx + dir;
+    if (target < 0 || target >= entries.length) return;
+    const updated = [...entries];
+    const [moved] = updated.splice(idx, 1);
+    updated.splice(target, 0, moved);
+    onReorder(updated);
+  };
+
   const handleDragStart = (idx: number) => (e: React.DragEvent) => {
     dragIdx.current = idx;
     e.dataTransfer.effectAllowed = "move";
