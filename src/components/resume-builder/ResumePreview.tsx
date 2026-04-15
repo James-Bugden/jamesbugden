@@ -1,4 +1,5 @@
 import React, { useEffect, useMemo, useRef, useState, useCallback } from "react";
+import { containsCJK } from "@/lib/resumePdf/fontMap";
 import DOMPurify from "dompurify";
 import { toast } from "sonner";
 import {
@@ -142,13 +143,14 @@ function SectionHeading({ title, customize, baseFontSize }: { title: string; cus
   const style = customize?.headingStyle || "underline";
   const fontSize = headingSizePt(baseFontSize, customize?.headingSize || "m");
   const uppercase = customize?.headingUppercase !== false;
+  const isCJK = containsCJK(title);
 
   const textStyle: React.CSSProperties = {
     fontSize,
     color: style === "background" ? "#fff" : "var(--resume-headings)",
-    textTransform: uppercase ? "uppercase" : "none",
+    textTransform: (uppercase && !isCJK) ? "uppercase" : "none",
     fontFamily: customize?.headingFont || customize?.bodyFont,
-    letterSpacing: "0.08em",
+    letterSpacing: isCJK ? "0.02em" : "0.08em",
   };
 
   if (style === "plain") {
