@@ -72,6 +72,12 @@ function entrySubtitlePt(base: number, size: string): string {
 function skillPt(base: number): string { return `${base - 2}pt`; }
 function smallPt(base: number): string { return `${base - 3}pt`; }
 
+/** Append CJK fallback fonts to any font-family value */
+function withCJK(font?: string): string {
+  const base = font || "'Source Sans 3', sans-serif";
+  return `${base}, ${CJK_FALLBACK}`;
+}
+
 function safeData(data?: ResumeData): ResumeData {
   return {
     personalDetails: {
