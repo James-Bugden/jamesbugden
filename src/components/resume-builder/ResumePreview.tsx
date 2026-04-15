@@ -1,5 +1,5 @@
 import React, { useEffect, useMemo, useRef, useState, useCallback } from "react";
-import { containsCJK } from "@/lib/resumePdf/fontMap";
+import { containsCJK, resumeHasCJK } from "@/lib/resumePdf/fontMap";
 import DOMPurify from "dompurify";
 import { toast } from "sonner";
 import {
