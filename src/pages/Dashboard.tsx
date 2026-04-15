@@ -458,7 +458,7 @@ export default function Dashboard({ lang = "en" }: { lang?: "en" | "zh" }) {
             <p className="text-sm md:text-base mb-8 text-muted-foreground">{t.toolsSub}</p>
             <div className="relative">
               {/* Mobile: horizontal scroll; Desktop: 2-col grid */}
-              <div className="flex sm:grid sm:grid-cols-2 gap-6 overflow-x-auto sm:overflow-visible snap-x snap-mandatory pb-2 sm:pb-0 -mx-4 px-4 sm:mx-0 sm:px-0">
+              <div className="flex flex-col sm:grid sm:grid-cols-2 gap-4 sm:gap-6">
               {tools.map((tool) => {
                 const badge = getProgressBadge(tool.id, lang, t);
                 return (
