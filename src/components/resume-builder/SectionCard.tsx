@@ -1,5 +1,5 @@
 import { useState, useRef, useCallback } from "react";
-import { ChevronDown, ChevronUp, GripVertical, Trash2, Plus, X, Pencil, Grid3X3, Circle, List } from "lucide-react";
+import { ChevronDown, ChevronUp, GripVertical, Trash2, Plus, X, Pencil, Grid3X3, Circle, List, ArrowUp, ArrowDown } from "lucide-react";
 import * as Icons from "lucide-react";
 import { Checkbox } from "@/components/ui/checkbox";
 import { ResumeSection, ResumeSectionEntry, SectionLayout, SectionSeparator, SubtitleStyle, getDefaultFieldsForType, SECTION_TYPES, PROFICIENCY_LEVELS } from "./types";
@@ -132,6 +132,15 @@ function EntryList({
   const dragIdx = useRef<number | null>(null);
   const [overIdx, setOverIdx] = useState<number | null>(null);
 
+  const moveEntry = (idx: number, dir: -1 | 1) => {
+    const target = idx + dir;
+    if (target < 0 || target >= entries.length) return;
+    const updated = [...entries];
+    const [moved] = updated.splice(idx, 1);
+    updated.splice(target, 0, moved);
+    onReorder(updated);
+  };
+
   const handleDragStart = (idx: number) => (e: React.DragEvent) => {
     dragIdx.current = idx;
     e.dataTransfer.effectAllowed = "move";
@@ -174,10 +183,34 @@ function EntryList({
           >
             {/* Entry row */}
             <div
-              className="flex items-center gap-2 px-1 py-2.5 cursor-pointer group"
+              className="flex items-center gap-1 px-1 py-1.5 cursor-pointer group"
               onClick={() => toggleEntryCollapse(entry.id)}
             >
-              <GripVertical className="w-3.5 h-3.5 text-gray-300 cursor-grab flex-shrink-0 opacity-0 group-hover:opacity-100 transition-opacity" />
+              {/* Drag handle — enlarged tap target */}
+              <div className="p-2.5 -m-1 cursor-grab flex-shrink-0 opacity-60 sm:opacity-0 group-hover:opacity-100 transition-opacity touch-none">
+                <GripVertical className="w-4 h-4 text-gray-400" />
+              </div>
+              {/* Move arrows for mobile */}
+              {entries.length > 1 && (
+                <div className="flex flex-col -my-1 flex-shrink-0">
+                  <button
+                    onClick={(e) => { e.stopPropagation(); moveEntry(idx, -1); }}
+                    disabled={idx === 0}
+                    className="p-1 text-gray-300 hover:text-gray-600 disabled:opacity-20 transition-colors"
+                    aria-label="Move up"
+                  >
+                    <ArrowUp className="w-3 h-3" />
+                  </button>
+                  <button
+                    onClick={(e) => { e.stopPropagation(); moveEntry(idx, 1); }}
+                    disabled={idx === entries.length - 1}
+                    className="p-1 text-gray-300 hover:text-gray-600 disabled:opacity-20 transition-colors"
+                    aria-label="Move down"
+                  >
+                    <ArrowDown className="w-3 h-3" />
+                  </button>
+                </div>
+              )}
               <span className="text-sm text-gray-700 flex-1 truncate">
                 {getEntrySummary(type, entry.fields, t)}
               </span>
