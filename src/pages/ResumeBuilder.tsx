@@ -433,6 +433,11 @@ const ResumeBuilder = () => {
       if (changed) store.setData({ ...data, sections: cleaned });
     }
     setActiveTabRaw(tab);
+    // Reset scroll position when switching tabs
+    setTimeout(() => {
+      editorScrollRef.current?.scrollTo({ top: 0, left: 0 });
+      window.scrollTo({ top: 0, left: 0 });
+    }, 0);
   }, [activeTab, data, store]);
   const [modalOpen, setModalOpen] = useState(false);
   const [viewMode, setViewMode] = useState<ViewMode>("dashboard");
