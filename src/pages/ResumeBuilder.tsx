@@ -42,6 +42,7 @@ import { LogIn } from "lucide-react";
 import { AnalyzerPromptDialog } from "@/components/resume-builder/AnalyzerPromptDialog";
 import { AnalyzerSuggestionsPanel, Suggestion, extractSuggestions, applySuggestionToData } from "@/components/resume-builder/AnalyzerSuggestionsPanel";
 import MicroSurvey from "@/components/feedback/MicroSurvey";
+import { LimitReachedModal } from "@/components/LimitReachedModal";
 import { SEO } from "@/components/SEO";
 
 type ViewMode = "dashboard" | "resume-editor" | "cover-letter-editor";
@@ -445,6 +446,7 @@ const ResumeBuilder = () => {
   const [replacePickerOpen, setReplacePickerOpen] = useState(false);
   const [pendingAnalyzerData, setPendingAnalyzerData] = useState<{ data: any; settings: any; name: string; suggestions: Suggestion[] } | null>(null);
   const [replaceTargetId, setReplaceTargetId] = useState<string | null>(null);
+  const [showImportLimitModal, setShowImportLimitModal] = useState(false);
 
   const RESUME_LIMIT = 2;
 
