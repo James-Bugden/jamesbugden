@@ -17,7 +17,7 @@ import {
 } from "lucide-react";
 import { ResumeData, ResumeSection } from "./types";
 import { CustomizeSettings } from "./customizeTypes";
-import { GOOGLE_FONTS_URL } from "./fontData";
+import { GOOGLE_FONTS_URL, CJK_FALLBACK } from "./fontData";
 import { InlineColorToolbar, ROLE_TO_FIELD } from "./InlineColorToolbar";
 import { InlineFormatToolbar } from "./InlineFormatToolbar";
 import { useIsMobile } from "@/hooks/use-mobile";
@@ -71,6 +71,12 @@ function entrySubtitlePt(base: number, size: string): string {
 
 function skillPt(base: number): string { return `${base - 2}pt`; }
 function smallPt(base: number): string { return `${base - 3}pt`; }
+
+/** Append CJK fallback fonts to any font-family value */
+function withCJK(font?: string): string {
+  const base = font || "'Source Sans 3', sans-serif";
+  return `${base}, ${CJK_FALLBACK}`;
+}
 
 function safeData(data?: ResumeData): ResumeData {
   return {
@@ -147,7 +153,7 @@ function SectionHeading({ title, customize, baseFontSize }: { title: string; cus
     fontSize,
     color: style === "background" ? "#fff" : "var(--resume-headings)",
     textTransform: uppercase ? "uppercase" : "none",
-    fontFamily: customize?.headingFont || customize?.bodyFont,
+    fontFamily: withCJK(customize?.headingFont || customize?.bodyFont),
     letterSpacing: "0.08em",
   };
 
@@ -801,7 +807,7 @@ export const A4Page = React.memo(function A4Page({
           minHeight: `${dims.hMM}mm`,
           padding: "var(--resume-pad-top) var(--resume-margin-x) var(--resume-pad-bottom)",
           position: "relative",
-          fontFamily: c?.bodyFont || "'Source Sans 3', sans-serif",
+          fontFamily: withCJK(c?.bodyFont),
           fontSize: "var(--resume-font-size)",
           lineHeight: "var(--resume-line-height)",
           boxSizing: "border-box",
@@ -832,7 +838,7 @@ export const A4Page = React.memo(function A4Page({
                     fontSize: NAME_SIZES[c?.nameSize || "s"],
                     color: "var(--resume-name)",
                     fontWeight: c?.nameBold !== false ? 700 : 400,
-                    fontFamily: c?.nameFont === "creative" ? c?.headingFont || c?.bodyFont : c?.bodyFont,
+                    fontFamily: withCJK(c?.nameFont === "creative" ? c?.headingFont || c?.bodyFont : c?.bodyFont),
                   }}
                 >
                   {p.fullName || "YOUR NAME"}
@@ -850,7 +856,7 @@ export const A4Page = React.memo(function A4Page({
                     fontSize: NAME_SIZES[c?.nameSize || "s"],
                     color: "var(--resume-name)",
                     fontWeight: c?.nameBold !== false ? 700 : 400,
-                    fontFamily: c?.nameFont === "creative" ? c?.headingFont || c?.bodyFont : c?.bodyFont,
+                    fontFamily: withCJK(c?.nameFont === "creative" ? c?.headingFont || c?.bodyFont : c?.bodyFont),
                   }}
                 >
                   {p.fullName || "YOUR NAME"}
