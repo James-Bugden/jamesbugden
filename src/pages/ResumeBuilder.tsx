@@ -653,6 +653,26 @@ const ResumeBuilder = () => {
     setTimeout(() => setLoading(false), 300);
   }, [store]);
 
+  // Close overflow menu on outside click
+  useEffect(() => {
+    if (!overflowMenuOpen) return;
+    const handler = (e: MouseEvent) => {
+      if (overflowRef.current && !overflowRef.current.contains(e.target as Node)) setOverflowMenuOpen(false);
+    };
+    document.addEventListener("mousedown", handler);
+    return () => document.removeEventListener("mousedown", handler);
+  }, [overflowMenuOpen]);
+
+  const handleResetResume = useCallback(() => {
+    store.setData({ ...DEFAULT_RESUME_DATA });
+    if (activeDocId) {
+      updateDocument(activeDocId, { data: { ...DEFAULT_RESUME_DATA } });
+    }
+    historyRef.current = { past: [], future: [] };
+    setResetConfirmOpen(false);
+    toast({ title: lang === "zh-tw" ? "履歷已重置 — 重新開始！" : "Resume reset — start fresh!" });
+  }, [store, activeDocId, lang]);
+
   const handleImport = (type: DocType) => {
     setImportType(type);
     setImporting(true);
