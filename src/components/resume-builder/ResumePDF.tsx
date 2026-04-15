@@ -134,8 +134,15 @@ async function registerFontAsync(cssFamily: string): Promise<string> {
     const testUrl = fontsourceUrl(fontName, 400);
     try {
       const testResp = await fetch(testUrl, { method: "HEAD" });
-      if (!testResp.ok) return "Helvetica";
-    } catch {
+      if (!testResp.ok) {
+        // Don't cache failures — allow retry on next call
+        FONT_REGISTRATION_PROMISES.delete(name);
+        console.warn(`[ResumePDF] Font "${name}" HEAD check failed (${testResp.status}), falling back to Helvetica`);
+        return "Helvetica";
+      }
+    } catch (fetchErr) {
+      FONT_REGISTRATION_PROMISES.delete(name);
+      console.warn(`[ResumePDF] Font "${name}" network error, falling back to Helvetica:`, fetchErr);
       return "Helvetica";
     }
 
@@ -150,7 +157,9 @@ async function registerFontAsync(cssFamily: string): Promise<string> {
       Font.register({ family: name, fonts });
       REGISTERED_FONTS.add(name);
       return name;
-    } catch {
+    } catch (regErr) {
+      FONT_REGISTRATION_PROMISES.delete(name);
+      console.warn(`[ResumePDF] Font.register("${name}") failed, falling back to Helvetica:`, regErr);
       return "Helvetica";
     }
   })();
