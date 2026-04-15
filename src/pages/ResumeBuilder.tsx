@@ -978,7 +978,7 @@ const ResumeBuilder = () => {
   ) : null;
 
   return (
-    <div className="h-screen flex flex-col" style={{ backgroundColor: BRAND.cream }}>
+    <div className="h-screen flex flex-col overflow-x-hidden" style={{ backgroundColor: BRAND.cream }}>
       <SEO />
       {/* ── Top bar — cream nav matching analyzer ─────────────── */}
       <div className="sticky top-0 z-30" style={{ backgroundColor: BRAND.cream, borderBottom: '1px solid rgba(43,71,52,0.1)' }}>
