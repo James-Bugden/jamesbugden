@@ -570,7 +570,7 @@ export default function ResumeAnalyzer({ defaultLang = "en" }: { defaultLang?: L
                   style={{ backgroundColor: '#FFFFFF', border: '1px solid rgba(43,71,52,0.1)', boxShadow: '0 8px 24px rgba(27,58,47,0.08)' }}
                 >
                   {/* Blurred overlay at bottom */}
-                  <div className="absolute bottom-0 left-0 right-0 h-28 z-10 flex items-end justify-center pb-4" style={{ background: 'linear-gradient(to top, #FFFFFF, rgba(255,255,255,0.9), transparent)' }}>
+                  <div className="absolute bottom-0 left-0 right-0 h-16 z-10 flex items-end justify-center pb-3" style={{ background: 'linear-gradient(to top, #FFFFFF 30%, rgba(255,255,255,0.85) 60%, transparent)' }}>
                     <span className="text-xs font-medium" style={{ color: '#6B6B6B' }}>{t(lang, "Upload your resume to see your full report", "上傳履歷查看完整報告")}</span>
                   </div>
 
