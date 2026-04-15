@@ -95,7 +95,7 @@ export default function SelfSegmentation() {
             Score My Resume Now
           </a>
           <p className="mt-2" style={{ color: '#6B6B6B', fontSize: '0.8125rem' }}>
-            Free · No sign-up required · Takes 60 seconds
+            Free · Takes 60 seconds
           </p>
         </div>
       </div>
