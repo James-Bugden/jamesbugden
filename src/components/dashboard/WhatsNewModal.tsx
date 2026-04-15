@@ -36,8 +36,10 @@ interface Props {
 }
 
 export default function WhatsNewModal({ lang, profile, updateProfile }: Props) {
+  // Don't show for brand-new users who haven't completed onboarding yet
+  const isNewUser = !profile || !profile.onboarding_completed;
   const alreadySeen = !!localStorage.getItem(KEY) || !!(profile as any)?.whats_new_v2_seen;
-  const [open, setOpen] = useState(() => !alreadySeen);
+  const [open, setOpen] = useState(() => !isNewUser && !alreadySeen);
 
   if (!open) return null;
 
