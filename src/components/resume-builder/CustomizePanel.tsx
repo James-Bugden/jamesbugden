@@ -3,7 +3,7 @@ import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/component
 import { Tooltip, TooltipTrigger, TooltipContent, TooltipProvider } from "@/components/ui/tooltip";
 import { cn } from "@/lib/utils";
 import { Minus, Plus, Check, Link, ExternalLink, Smile, Circle, AlignLeft, AlignCenter, AlignRight, GripVertical, Camera, ChevronDown } from "lucide-react";
-import { DndContext, closestCenter, PointerSensor, useSensor, useSensors, DragEndEvent } from "@dnd-kit/core";
+import { DndContext, closestCenter, PointerSensor, TouchSensor, useSensor, useSensors, DragEndEvent } from "@dnd-kit/core";
 import { SortableContext, verticalListSortingStrategy, useSortable, arrayMove } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
 import { restrictToVerticalAxis } from "@dnd-kit/modifiers";
@@ -800,7 +800,10 @@ function SectionReorderCard({ settings, onChange, sections }: { settings: Custom
 
   const sectionMap = new Map(sections.map((s) => [s.id, s]));
 
-  const sensors = useSensors(useSensor(PointerSensor, { activationConstraint: { distance: 4 } }));
+  const sensors = useSensors(
+    useSensor(PointerSensor, { activationConstraint: { distance: 4 } }),
+    useSensor(TouchSensor, { activationConstraint: { delay: 100, tolerance: 5 } }),
+  );
 
   const handleDragEnd = useCallback((event: DragEndEvent) => {
     const { active, over } = event;
@@ -851,8 +854,13 @@ function SortableSectionItem({ id, title, columns }: { id: string; title: string
       <TooltipProvider delayDuration={300}>
         <Tooltip>
           <TooltipTrigger asChild>
-            <div {...attributes} {...listeners} className="cursor-grab active:cursor-grabbing touch-none">
-              <GripVertical className="w-3.5 h-3.5" style={{ color: B.textSec }} />
+            <div
+              {...attributes}
+              {...listeners}
+              className="cursor-grab active:cursor-grabbing select-none flex items-center justify-center"
+              style={{ touchAction: "none", WebkitUserSelect: "none", WebkitTouchCallout: "none", minWidth: 44, minHeight: 44 }}
+            >
+              <GripVertical className="w-4 h-4" style={{ color: B.textSec }} />
             </div>
           </TooltipTrigger>
           <TooltipContent side="left" className="text-xs">Drag to reorder</TooltipContent>
