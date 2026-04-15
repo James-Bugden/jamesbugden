@@ -42,6 +42,7 @@ import { LogIn } from "lucide-react";
 import { AnalyzerPromptDialog } from "@/components/resume-builder/AnalyzerPromptDialog";
 import { AnalyzerSuggestionsPanel, Suggestion, extractSuggestions, applySuggestionToData } from "@/components/resume-builder/AnalyzerSuggestionsPanel";
 import MicroSurvey from "@/components/feedback/MicroSurvey";
+import { LimitReachedModal } from "@/components/LimitReachedModal";
 import { SEO } from "@/components/SEO";
 
 type ViewMode = "dashboard" | "resume-editor" | "cover-letter-editor";
@@ -445,6 +446,7 @@ const ResumeBuilder = () => {
   const [replacePickerOpen, setReplacePickerOpen] = useState(false);
   const [pendingAnalyzerData, setPendingAnalyzerData] = useState<{ data: any; settings: any; name: string; suggestions: Suggestion[] } | null>(null);
   const [replaceTargetId, setReplaceTargetId] = useState<string | null>(null);
+  const [showImportLimitModal, setShowImportLimitModal] = useState(false);
 
   const RESUME_LIMIT = 2;
 
@@ -494,7 +496,7 @@ const ResumeBuilder = () => {
     (async () => {
       try {
         if (builderAiUsage.importLimitReached) {
-          toast({ title: lang === "zh-tw" ? "本月 AI 匯入額度已用完" : "Monthly AI import limit reached", description: lang === "zh-tw" ? "每月限 2 次 AI 匯入。額度下月初重置。" : "You can import up to 2 resumes per month with AI. Resets next month.", variant: "destructive" });
+          setShowImportLimitModal(true);
           setSearchParams({}, { replace: true });
           setAnalyzerImporting(false);
           return;
@@ -1243,6 +1245,14 @@ const ResumeBuilder = () => {
         </AlertDialogContent>
       </AlertDialog>
       {showPdfSurvey && <MicroSurvey actionKey="resume_pdf_export" />}
+      <LimitReachedModal
+        open={showImportLimitModal}
+        onClose={() => setShowImportLimitModal(false)}
+        limitType={lang === "zh-tw" ? "AI 匯入" : "AI imports"}
+        currentCount={builderAiUsage.importCount}
+        planLimit={builderAiUsage.importLimit}
+        lang={lang === "zh-tw" ? "zh-TW" : "en"}
+      />
     </div>
   );
 };

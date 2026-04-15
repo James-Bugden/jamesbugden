@@ -10,6 +10,7 @@ import { supabase } from "@/integrations/supabase/client";
 import ResumeResults from "@/components/resume-analyzer/ResumeResults";
 import { UsageLimitBanner } from "@/components/resume-analyzer/UsageLimitBanner";
 import { useAnalyzerUsage } from "@/hooks/useAnalyzerUsage";
+import { LimitReachedModal } from "@/components/LimitReachedModal";
 
 import type { AnalysisResult } from "@/components/resume-analyzer/types";
 import LogoScroll from "@/components/LogoScroll";
@@ -46,6 +47,7 @@ export default function ResumeAnalyzer({ defaultLang = "en" }: { defaultLang?: L
   const [progress, setProgress] = useState(0);
   const [resumeImageUrl, setResumeImageUrl] = useState<string | null>(null);
   const [showMicroSurvey, setShowMicroSurvey] = useState(false);
+  const [showLimitModal, setShowLimitModal] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
   
 
@@ -215,7 +217,7 @@ export default function ResumeAnalyzer({ defaultLang = "en" }: { defaultLang?: L
   const handleSubmitResume = useCallback(async () => {
     setError("");
     if (limitReached) {
-      setError(t(lang, "You've reached your monthly analysis limit. Please try again next month.", "你已達到本月分析上限。請下月再試。"));
+      setShowLimitModal(true);
       return;
     }
     try {
@@ -761,6 +763,14 @@ export default function ResumeAnalyzer({ defaultLang = "en" }: { defaultLang?: L
           </div>
         )}
         {showMicroSurvey && <MicroSurvey actionKey="resume_analysis" locale={lang === "zh-TW" ? "zh-tw" : "en"} />}
+        <LimitReachedModal
+          open={showLimitModal}
+          onClose={() => setShowLimitModal(false)}
+          limitType={lang === "en" ? "AI analyses" : "AI 分析"}
+          currentCount={used}
+          planLimit={limit}
+          lang={lang}
+        />
       </main>
     </>
   );

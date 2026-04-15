@@ -4,6 +4,7 @@ import { ArrowLeft, Copy, Share2, Check, Printer } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useToast } from "@/hooks/use-toast";
 import { usePrintUsage } from "@/hooks/usePrintUsage";
+import { LimitReachedModal } from "@/components/LimitReachedModal";
 import { nativeShare } from "@/lib/share";
 import { trackEvent } from "@/lib/trackEvent";
 import ToolkitHeaderZhTw from "@/components/toolkit/ToolkitHeaderZhTw";
@@ -39,7 +40,13 @@ const AchievementLogZhTw = () => {
   const { toast } = useToast();
   const [copied, setCopied] = useState(false);
   const [shared, setShared] = useState(false);
-  const { gatedPrint, printLimitReached } = usePrintUsage();
+  const { gatedPrint, printLimitReached, printCount, printLimit } = usePrintUsage();
+  const [showPrintLimitModal, setShowPrintLimitModal] = useState(false);
+
+  const handlePrint = async () => {
+    const ok = await gatedPrint();
+    if (!ok) setShowPrintLimitModal(true);
+  };
 
   const copyTemplate = () => {
     const templateText = `每週成就記錄表
@@ -197,13 +204,14 @@ ________ 那週
 
       <section className="pb-12 px-5 md:px-6 print:hidden">
         <div className="container mx-auto max-w-4xl flex flex-col sm:flex-row gap-4 justify-center">
-          <Button onClick={gatedPrint} disabled={printLimitReached} className="bg-executive hover:bg-executive-light text-cream px-6 py-3 h-auto"><Printer className="w-4 h-4 mr-2" />列印</Button>
+          <Button onClick={handlePrint} disabled={printLimitReached} className="bg-executive hover:bg-executive-light text-cream px-6 py-3 h-auto"><Printer className="w-4 h-4 mr-2" />列印</Button>
           <Button onClick={copyTemplate} className="btn-gold px-6 py-3 h-auto">{copied ? <Check className="w-4 h-4 mr-2" /> : <Copy className="w-4 h-4 mr-2" />}{copied ? "已複製！" : "複製模板"}</Button>
           <Button onClick={shareUrl} variant="outline" className="border-executive text-executive hover:bg-executive/10 px-6 py-3 h-auto">{shared ? <Check className="w-4 h-4 mr-2" /> : <Share2 className="w-4 h-4 mr-2" />}{shared ? "已複製連結！" : "分享"}</Button>
         </div>
       </section>
 
       <ToolkitFooterZhTw />
+      <LimitReachedModal open={showPrintLimitModal} onClose={() => setShowPrintLimitModal(false)} limitType="列印" currentCount={printCount} planLimit={printLimit} lang="zh-TW" />
     </div>
   );
 };

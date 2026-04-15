@@ -4,6 +4,7 @@ import { ArrowLeft, Copy, Share2, Check, Printer } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useToast } from "@/hooks/use-toast";
 import { usePrintUsage } from "@/hooks/usePrintUsage";
+import { LimitReachedModal } from "@/components/LimitReachedModal";
 import { nativeShare } from "@/lib/share";
 import { trackEvent } from "@/lib/trackEvent";
 import ToolkitHeader from "@/components/toolkit/ToolkitHeader";
@@ -51,7 +52,13 @@ const AchievementLog = () => {
   const { toast } = useToast();
   const [copied, setCopied] = useState(false);
   const [shared, setShared] = useState(false);
-  const { gatedPrint: printPage, printLimitReached } = usePrintUsage();
+  const { gatedPrint: printPage, printLimitReached, printCount, printLimit } = usePrintUsage();
+  const [showPrintLimitModal, setShowPrintLimitModal] = useState(false);
+
+  const handlePrint = async () => {
+    const ok = await printPage();
+    if (!ok) setShowPrintLimitModal(true);
+  };
 
   const copyTemplate = () => {
     const templateText = `WEEKLY ACHIEVEMENT LOG
@@ -283,7 +290,7 @@ CATEGORIES:
       <section className="pb-12 px-5 md:px-6 print:hidden">
         <div className="container mx-auto max-w-4xl flex flex-col sm:flex-row gap-4 justify-center">
           <Button
-            onClick={printPage}
+            onClick={handlePrint}
             disabled={printLimitReached}
             className="bg-executive hover:bg-executive-light text-cream px-6 py-3 h-auto"
           >
@@ -309,6 +316,7 @@ CATEGORIES:
       </section>
 
       <ToolkitFooter />
+      <LimitReachedModal open={showPrintLimitModal} onClose={() => setShowPrintLimitModal(false)} limitType="prints" currentCount={printCount} planLimit={printLimit} lang="en" />
     </div>
   );
 };
