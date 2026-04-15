@@ -1110,6 +1110,30 @@ const ResumeBuilder = () => {
               docName={currentDocName}
               onDownload={handleDownload}
             />
+            {/* Overflow menu */}
+            <div className="relative" ref={overflowRef}>
+              <button
+                onClick={() => setOverflowMenuOpen(!overflowMenuOpen)}
+                className="p-2 rounded-lg hover:bg-white/60 transition-colors"
+                style={{ color: BRAND.textSecondary }}
+                aria-label="More options"
+              >
+                <MoreVertical className="w-4 h-4" />
+              </button>
+              {overflowMenuOpen && (
+                <div className="absolute right-0 top-full mt-1 bg-white rounded-lg shadow-xl border z-30 min-w-[200px] py-1" style={{ borderColor: BRAND.border }}>
+                  <div className="border-t my-1" style={{ borderColor: BRAND.border }} />
+                  <button
+                    onClick={() => { setOverflowMenuOpen(false); setResetConfirmOpen(true); }}
+                    className="w-full text-left px-4 py-2.5 text-sm flex items-center gap-2.5 hover:bg-red-50 transition-colors min-h-[44px]"
+                    style={{ color: "#dc2626" }}
+                  >
+                    <RotateCcw className="w-4 h-4" />
+                    {lang === "zh-tw" ? "重置履歷" : "Reset resume"}
+                  </button>
+                </div>
+              )}
+            </div>
           </div>
         </div>
       </div>
