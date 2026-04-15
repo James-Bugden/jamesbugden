@@ -73,6 +73,13 @@ function entrySubtitlePt(base: number, size: string): string {
 function skillPt(base: number): string { return `${base - 2}pt`; }
 function smallPt(base: number): string { return `${base - 3}pt`; }
 
+/** CJK-safe font-family: prepend system CJK fonts when text contains Chinese characters */
+const CJK_FALLBACK = '"Noto Sans TC", "Microsoft JhengHei", "PingFang TC", "Heiti TC"';
+function cjkSafeFont(font: string | undefined, hasCJK: boolean): string {
+  const base = font || "'Source Sans 3', sans-serif";
+  return hasCJK ? `${CJK_FALLBACK}, ${base}` : base;
+}
+
 function safeData(data?: ResumeData): ResumeData {
   return {
     personalDetails: {
