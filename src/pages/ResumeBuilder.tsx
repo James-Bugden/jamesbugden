@@ -680,9 +680,26 @@ const ResumeBuilder = () => {
         customize,
         fileName: fn,
       });
+      toast({ title: lang === "zh-tw" ? "PDF 已下載" : "PDF downloaded", description: `${fn}.pdf` });
       setShowPdfSurvey(true);
-    } catch (err) {
-      console.error("PDF export error:", err);
+    } catch (err: any) {
+      const errMsg = err?.message || "Unknown error";
+      console.error("[ResumeDownload] handleDownload failed:", errMsg, err?.stack);
+      toast({
+        title: lang === "zh-tw" ? "下載失敗" : "Download failed",
+        description: lang === "zh-tw"
+          ? "PDF 產生時發生錯誤。請再試一次。"
+          : "Something went wrong while preparing your download. Please try again.",
+        variant: "destructive",
+        action: (
+          <button
+            onClick={() => handleDownload(filename)}
+            className="text-xs font-semibold underline whitespace-nowrap"
+          >
+            {lang === "zh-tw" ? "重試" : "Try again"}
+          </button>
+        ),
+      });
     }
     setDownloading(false);
   };
