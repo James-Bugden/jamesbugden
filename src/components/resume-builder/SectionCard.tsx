@@ -51,8 +51,10 @@ function getEntrySummary(type: string, fields: Record<string, string>, t: (key: 
       return fields.name || t("newEntry");
     case "organisations":
       return [fields.name, fields.role].filter(Boolean).join(" — ") || t("newEntry");
+    case "languages":
+      return [fields.language, fields.proficiency].filter(Boolean).join(" — ") || t("newEntry");
     default:
-      return t("newEntry");
+      return fields.name || fields.title || fields.language || t("newEntry");
   }
 }
 
