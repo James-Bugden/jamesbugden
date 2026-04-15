@@ -161,7 +161,7 @@ export function PersonalDetailsCard({ details, onChange, collapsible }: Personal
                 {details.photo ? t("changePhoto") : t("uploadPhoto")}
               </button>
               {details.photo && (
-                <button onClick={() => onChange({ photo: "" })} className="text-xs text-gray-400 hover:text-red-500 flex items-center gap-1">
+                <button onClick={() => onChange({ photo: "" })} className="text-xs text-red-500 hover:text-red-700 flex items-center gap-1 transition-colors">
                   <Trash2 className="w-3 h-3" /> {t("remove")}
                 </button>
               )}
@@ -216,7 +216,7 @@ export function PersonalDetailsCard({ details, onChange, collapsible }: Personal
                 />
                 <button
                   onClick={() => removeExtra(extra.id)}
-                  className="h-10 w-10 flex items-center justify-center rounded-lg text-gray-400 hover:text-red-500 hover:bg-red-50 transition-colors flex-shrink-0"
+                  className="h-10 w-10 flex items-center justify-center rounded-lg text-red-500 hover:text-red-700 hover:bg-red-50 transition-colors flex-shrink-0"
                 >
                   ✕
                 </button>
