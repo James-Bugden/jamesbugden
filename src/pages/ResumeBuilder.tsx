@@ -4,7 +4,7 @@ import { useSearchParams } from "react-router-dom";
 import { SortableContext, verticalListSortingStrategy, arrayMove } from "@dnd-kit/sortable";
 import { restrictToVerticalAxis } from "@dnd-kit/modifiers" ;
 import { SortableSectionCard } from "@/components/resume-builder/SortableSectionCard";
-import { Plus, Eye, Undo2, Redo2, Check, Loader2, Upload, ArrowLeft, FileText, Palette, Download, MoreVertical, ChevronDown, Home } from "lucide-react";
+import { Plus, Eye, Undo2, Redo2, Check, Loader2, Upload, ArrowLeft, FileText, Palette, Download, MoreVertical, ChevronDown, Home, RotateCcw } from "lucide-react";
 import { Tooltip, TooltipTrigger, TooltipContent, TooltipProvider } from "@/components/ui/tooltip";
 import { PersonalDetailsCard } from "@/components/resume-builder/PersonalDetailsCard";
 import { SectionCard } from "@/components/resume-builder/SectionCard";
@@ -448,6 +448,9 @@ const ResumeBuilder = () => {
   const [pendingAnalyzerData, setPendingAnalyzerData] = useState<{ data: any; settings: any; name: string; suggestions: Suggestion[] } | null>(null);
   const [replaceTargetId, setReplaceTargetId] = useState<string | null>(null);
   const [showImportLimitModal, setShowImportLimitModal] = useState(false);
+  const [resetConfirmOpen, setResetConfirmOpen] = useState(false);
+  const [overflowMenuOpen, setOverflowMenuOpen] = useState(false);
+  const overflowRef = useRef<HTMLDivElement>(null);
 
   const RESUME_LIMIT = 2;
 
