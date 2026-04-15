@@ -211,6 +211,7 @@ ________ 那週
       </section>
 
       <ToolkitFooterZhTw />
+      <LimitReachedModal open={showPrintLimitModal} onClose={() => setShowPrintLimitModal(false)} limitType="列印" currentCount={printCount} planLimit={printLimit} lang="zh-TW" />
     </div>
   );
 };

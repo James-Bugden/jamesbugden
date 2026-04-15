@@ -155,7 +155,7 @@ _________________________________ | _________________________________
 
       <section className="pb-12 px-5 md:px-6 print:hidden">
         <div className="container mx-auto max-w-5xl flex flex-col sm:flex-row gap-4 justify-center">
-          <Button onClick={gatedPrint} disabled={printLimitReached} className="bg-executive hover:bg-executive-light text-cream px-6 py-3 h-auto"><Printer className="w-4 h-4 mr-2" />列印</Button>
+          <Button onClick={handlePrint} disabled={printLimitReached} className="bg-executive hover:bg-executive-light text-cream px-6 py-3 h-auto"><Printer className="w-4 h-4 mr-2" />列印</Button>
           <Button onClick={copyTemplate} className="btn-gold px-6 py-3 h-auto">{copied ? <Check className="w-4 h-4 mr-2" /> : <Copy className="w-4 h-4 mr-2" />}{copied ? "已複製！" : "複製模板"}</Button>
           <Button onClick={shareUrl} variant="outline" className="border-executive text-executive hover:bg-executive/10 px-6 py-3 h-auto">{shared ? <Check className="w-4 h-4 mr-2" /> : <Share2 className="w-4 h-4 mr-2" />}{shared ? "已複製連結！" : "分享"}</Button>
         </div>
