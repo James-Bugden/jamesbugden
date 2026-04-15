@@ -1,31 +1,31 @@
+# Change Import and Analyze Limits to 10/month
 
+## Changes needed
 
-# Fix: Stale Token Error & Misleading "Session Expired" for Guest Users
+Four files need limit constant updates:
 
-## Problem
-Two related issues:
-1. **Stale refresh tokens**: When a browser has leftover auth tokens (from a previous session or another user), Supabase tries to refresh them on page load and fails with "refresh_token_not_found". This error shows up in the console and can confuse the app state.
-2. **Wrong error message for guests**: When an unauthenticated user tries to use the Resume Analyzer, the edge function returns 401, and the frontend shows "Your session expired. Please sign in again" — but the user was never signed in.
+### 1. `src/hooks/useAnalyzerUsage.ts` (line 5)
 
-## Changes
+- Change `MONTHLY_LIMIT = 3` → `MONTHLY_LIMIT = 10`
 
-### 1. `src/contexts/AuthContext.tsx` — Handle stale token cleanup
-- Listen for the `TOKEN_REFRESHED` event failure by also checking for `SIGNED_OUT` triggered by token refresh failure
-- On `onAuthStateChange`, if event is `TOKEN_REFRESHED` but session is null (refresh failed), clear localStorage auth keys to prevent repeated failures
-- This ensures new/guest visitors with stale tokens in localStorage don't see errors
+### 2. `supabase/functions/analyze-resume/index.ts` (line 154)
 
-### 2. `src/pages/ResumeAnalyzer.tsx` — Better error message for 401
-- When catching a 401 from the edge function, check if the user is currently logged in (via `useAuth`)
-- If logged in → show "Your session expired. Please sign in again." (existing behavior)
-- If NOT logged in → show "Please sign in to analyze your resume." with a link/button to the login page
-- This prevents the confusing "session expired" message for first-time visitors
+- Change `MONTHLY_LIMIT = 3` → `MONTHLY_LIMIT = 10`
 
-### 3. `src/contexts/AuthContext.tsx` — Graceful error suppression
-- Wrap the auth initialization to catch `AuthApiError` with code `refresh_token_not_found`
-- When this specific error occurs, call `supabase.auth.signOut()` silently to clear the invalid tokens
-- This prevents the error from propagating to the console and confusing the app
+### 3. `src/hooks/useBuilderAiUsage.ts` (line 5)
 
-## Files changed
-1. `src/contexts/AuthContext.tsx` — Add stale token detection and cleanup
-2. `src/pages/ResumeAnalyzer.tsx` — Context-aware error message for 401 (guest vs logged-in)
+- Change `IMPORT_LIMIT = 2` → `IMPORT_LIMIT = 10`
 
+### 4. `supabase/functions/parse-resume-to-builder/index.ts` (line 10)
+
+- Change `IMPORT_MONTHLY_LIMIT = 2` → `IMPORT_MONTHLY_LIMIT = 10`
+
+### Deployment
+
+- Redeploy `analyze-resume` and `parse-resume-to-builder` edge functions after updating.
+
+No database changes needed. All limits are defined as constants in code.
+
+&nbsp;
+
+change on the UI where needed also so the users know also 
