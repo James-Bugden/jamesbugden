@@ -1,6 +1,7 @@
 import { Link, useLocation } from "react-router-dom";
 import { Linkedin } from "lucide-react";
 import { InstagramIcon, ThreadsIcon } from "@/components/SocialIcons";
+import ThemeToggle from "@/components/ThemeToggle";
 
 const SiteFooter = () => {
   const { pathname } = useLocation();
@@ -63,6 +64,9 @@ const SiteFooter = () => {
             <Link to="/terms" className="text-cream-70 hover:text-cream transition-colors">
               {isZh ? "服務條款" : "Terms of Service"}
             </Link>
+          </div>
+          <div className="sm:ml-auto">
+            <ThemeToggle variant="nav" />
           </div>
         </div>
       </div>
