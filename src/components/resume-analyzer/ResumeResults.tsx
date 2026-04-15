@@ -544,19 +544,7 @@ export default function ResumeResults({
 
         {/* Action bar */}
         {isUnlocked && (
-          <div className="flex justify-center gap-3" data-print-hide>
-            <Button
-              onClick={gatedPrint}
-              disabled={printLimitReached}
-              size="lg"
-              className="gap-2 text-white font-bold px-8 py-3 text-base rounded-lg shadow-md"
-              style={{ backgroundColor: '#2b4734' }}
-              onMouseEnter={(e) => (e.currentTarget.style.backgroundColor = '#1b3a2f')}
-              onMouseLeave={(e) => (e.currentTarget.style.backgroundColor = '#2b4734')}
-            >
-              <Download className="w-5 h-5" />
-              {t(lang, "Download PDF Report", "下載 PDF 報告")}
-            </Button>
+           <div className="flex justify-center gap-3" data-print-hide>
             {onReset && (
               <Button
                 onClick={onReset}
@@ -810,23 +798,6 @@ export default function ResumeResults({
           </div>{/* end blur wrapper */}
         </div>{/* end relative wrapper */}
 
-        {/* Download PDF — bottom */}
-        {isUnlocked && (
-          <div className="flex justify-center" data-print-hide>
-            <Button
-              onClick={gatedPrint}
-              disabled={printLimitReached}
-              size="lg"
-              className="gap-2 text-white font-bold px-8 py-3 text-base rounded-lg shadow-md"
-              style={{ backgroundColor: '#2b4734' }}
-              onMouseEnter={(e) => (e.currentTarget.style.backgroundColor = '#1b3a2f')}
-              onMouseLeave={(e) => (e.currentTarget.style.backgroundColor = '#2b4734')}
-            >
-              <Download className="w-5 h-5" />
-              {t(lang, "Download PDF Report", "下載 PDF 報告")}
-            </Button>
-          </div>
-        )}
 
         {/* Inline Rating */}
         <div className="flex justify-center">
