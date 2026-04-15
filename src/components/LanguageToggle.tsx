@@ -46,14 +46,12 @@ const LanguageToggle = ({ variant = "default" }: LanguageToggleProps) => {
   }
 
   return (
-    <Button 
-      variant="ghost" 
-      size="sm" 
+    <button 
       onClick={toggleLanguage}
-      className="text-sm font-medium"
+      className="px-3 py-1.5 text-sm font-semibold bg-gold/20 hover:bg-gold/30 text-gold border border-gold/40 rounded-md transition-all duration-200 hover:scale-105"
     >
       {isZhTw ? "English" : "中文"}
-    </Button>
+    </button>
   );
 };
 
