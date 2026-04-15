@@ -17,7 +17,7 @@ import {
 } from "lucide-react";
 import { ResumeData, ResumeSection } from "./types";
 import { CustomizeSettings } from "./customizeTypes";
-import { GOOGLE_FONTS_URL } from "./fontData";
+import { GOOGLE_FONTS_URL, CJK_FALLBACK } from "./fontData";
 import { InlineColorToolbar, ROLE_TO_FIELD } from "./InlineColorToolbar";
 import { InlineFormatToolbar } from "./InlineFormatToolbar";
 import { useIsMobile } from "@/hooks/use-mobile";
