@@ -1,5 +1,5 @@
 import { useState, useRef, useCallback } from "react";
-import { ChevronDown, ChevronUp, GripVertical, Trash2, Plus, X, Pencil, Grid3X3, Circle, List } from "lucide-react";
+import { ChevronDown, ChevronUp, GripVertical, Trash2, Plus, X, Pencil, Grid3X3, Circle, List, ArrowUp, ArrowDown } from "lucide-react";
 import * as Icons from "lucide-react";
 import { Checkbox } from "@/components/ui/checkbox";
 import { ResumeSection, ResumeSectionEntry, SectionLayout, SectionSeparator, SubtitleStyle, getDefaultFieldsForType, SECTION_TYPES, PROFICIENCY_LEVELS } from "./types";
