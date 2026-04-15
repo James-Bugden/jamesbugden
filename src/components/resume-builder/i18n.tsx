@@ -44,7 +44,7 @@ export const translations = {
     paperSize: "Paper size",
     usLetter: "US Letter",
     downloadPdf: "Download PDF",
-    exportMultiPageNote: "⚠️ PDF export for resumes longer than 1 page is currently being fixed. We're working on it!",
+    exportMultiPageNote: "⚠️ The resume builder still has quite a few bugs — I'm actively working on fixing them. Sorry for the inconvenience!",
 
     // Footer
     poweredBy: "Powered by",
@@ -423,7 +423,7 @@ export const translations = {
     paperSize: "紙張大小",
     usLetter: "美規 Letter",
     downloadPdf: "下載 PDF",
-    exportMultiPageNote: "⚠️ 超過 1 頁的履歷 PDF 匯出功能目前正在修復中，敬請期待！",
+    exportMultiPageNote: "⚠️ 履歷編輯器目前仍有一些問題，我正在努力修復中。造成不便，敬請見諒！",
 
     // Footer
     poweredBy: "由",
