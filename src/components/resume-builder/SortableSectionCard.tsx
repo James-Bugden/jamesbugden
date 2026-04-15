@@ -40,7 +40,8 @@ export function SortableSectionCard({ id, children }: SortableSectionCardProps) 
           <TooltipTrigger asChild>
             <div
               {...listeners}
-              className="flex items-center px-1 cursor-grab active:cursor-grabbing text-muted-foreground/30 hover:text-muted-foreground/60 hover:bg-muted/50 rounded-l-xl transition-colors"
+              className="flex items-center justify-center cursor-grab active:cursor-grabbing text-muted-foreground/30 hover:text-muted-foreground/60 hover:bg-muted/50 rounded-l-xl transition-colors select-none"
+              style={{ touchAction: "none", WebkitUserSelect: "none", WebkitTouchCallout: "none", minWidth: 44, minHeight: 44 }}
             >
               <GripVertical className="w-4 h-4" />
             </div>
