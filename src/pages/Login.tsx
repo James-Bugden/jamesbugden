@@ -4,7 +4,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { lovable } from "@/integrations/lovable/index";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Mail, Lock, ArrowLeft, Eye, EyeOff } from "lucide-react";
+import { Mail, Lock, Eye, EyeOff, AlertCircle, CheckCircle } from "lucide-react";
 import { useAuth } from "@/contexts/AuthContext";
 import { useEffect } from "react";
 import { SEO } from "@/components/SEO";
@@ -112,7 +112,7 @@ export default function Login() {
   };
 
   const t = {
-    title: isZhTw ? "登入" : "Sign In",
+    title: isZhTw ? "登入" : "Sign in to your account",
     subtitle: isZhTw ? "登入以使用所有工具" : "Sign in to access all tools",
     email: isZhTw ? "電子郵件" : "Email",
     password: isZhTw ? "密碼" : "Password",
@@ -121,8 +121,7 @@ export default function Login() {
     forgot: isZhTw ? "忘記密碼？" : "Forgot password?",
     noAccount: isZhTw ? "還沒有帳號？" : "Don't have an account?",
     signUp: isZhTw ? "建立帳號" : "Sign Up",
-    back: isZhTw ? "返回" : "Back",
-    forgotTitle: isZhTw ? "重設密碼" : "Reset Password",
+    forgotTitle: isZhTw ? "重設密碼" : "Reset your password",
     forgotSubtitle: isZhTw ? "輸入您的電子郵件，我們將發送重設連結" : "Enter your email and we'll send a reset link",
     sendLink: isZhTw ? "發送重設連結" : "Send Reset Link",
     resetSent: isZhTw ? "重設連結已發送！請檢查您的電子郵件。" : "Reset link sent! Check your email.",
@@ -130,64 +129,58 @@ export default function Login() {
   };
 
   return (
-    <div className="min-h-screen bg-background flex items-center justify-center px-4">
+    <div className="auth-page">
       <SEO />
-      <div className="w-full max-w-[400px]">
-        <div className="mb-6">
-          <Link to={isZhTw ? "/zh-tw" : "/"} className="inline-flex items-center gap-1.5 text-sm text-muted-foreground hover:text-foreground transition-colors">
-            <ArrowLeft className="w-4 h-4" />
-            {t.back}
-          </Link>
+      <div className="w-full" style={{ maxWidth: 440 }}>
+        {/* Logo */}
+        <div className="auth-logo">
+          <Link to={isZhTw ? "/zh-tw" : "/"}>JAMES BUGDEN</Link>
         </div>
 
-        <div className="bg-card border border-border rounded-xl shadow-lg p-8">
-          <h1 className="font-heading text-2xl font-bold text-foreground mb-1">
+        <div className="auth-card">
+          <h1 className="auth-title">
             {mode === "login" ? t.title : t.forgotTitle}
           </h1>
-          <p className="text-sm text-muted-foreground mb-6">
+          <p className="auth-subtitle">
             {mode === "login" ? t.subtitle : t.forgotSubtitle}
           </p>
 
           {mode === "login" ? (
             <>
-              <Button variant="outline" className="w-full h-11 mb-4 gap-2" onClick={handleGoogle}>
+              <Button variant="outline" className="w-full h-11 mb-4 gap-2 rounded-lg" onClick={handleGoogle}>
                 <svg className="w-5 h-5" viewBox="0 0 24 24"><path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92a5.06 5.06 0 01-2.2 3.32v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.1z" fill="#4285F4"/><path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"/><path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z" fill="#FBBC05"/><path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335"/></svg>
                 {t.google}
               </Button>
 
-              <div className="flex items-center gap-3 mb-4">
-                <div className="flex-1 h-px bg-border" />
-                <span className="text-xs text-muted-foreground">{t.or}</span>
-                <div className="flex-1 h-px bg-border" />
-              </div>
+              <div className="auth-divider"><span>{t.or}</span></div>
 
               <form onSubmit={handleLogin} className="space-y-3">
                 <div className="relative">
-                  <Mail className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
-                  <Input type="email" placeholder={t.email} value={email} onChange={e => setEmail(e.target.value)} className="pl-10 h-11" required />
+                  <Mail className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
+                  <Input type="email" placeholder={t.email} value={email} onChange={e => setEmail(e.target.value)} className="auth-input with-icon" required />
                 </div>
                 <div className="relative">
-                  <Lock className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
-                  <Input type={showPassword ? "text" : "password"} placeholder={t.password} value={password} onChange={e => setPassword(e.target.value)} className="pl-10 pr-10 h-11" required />
-                  <button type="button" onClick={() => setShowPassword(!showPassword)} className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground">
+                  <Lock className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
+                  <Input type={showPassword ? "text" : "password"} placeholder={t.password} value={password} onChange={e => setPassword(e.target.value)} className="auth-input with-icon with-right-icon" required />
+                  <button type="button" onClick={() => setShowPassword(!showPassword)} className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600">
                     {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
                   </button>
                 </div>
-                {error && <p className="text-xs text-destructive">{error}</p>}
-                <Button type="submit" className="w-full h-11 font-semibold" disabled={loading || isLockedOut}>
+                {error && <p className="auth-error"><AlertCircle className="w-3.5 h-3.5 flex-shrink-0" />{error}</p>}
+                <Button type="submit" className="auth-btn-primary" disabled={loading || isLockedOut}>
                   {isLockedOut
                     ? (isZhTw ? `請等待 ${lockoutRemaining} 秒` : `Wait ${lockoutRemaining}s`)
                     : loading ? "..." : t.signIn}
                 </Button>
               </form>
 
-              <button onClick={() => { setMode("forgot"); setError(""); }} className="text-xs text-muted-foreground hover:text-foreground mt-3 block">
+              <button onClick={() => { setMode("forgot"); setError(""); }} className="text-xs mt-3 block auth-link">
                 {t.forgot}
               </button>
 
-              <p className="text-sm text-muted-foreground mt-4 text-center">
+              <p className="text-sm text-gray-500 mt-4 text-center">
                 {t.noAccount}{" "}
-                <Link to="/join" state={location.state} className="text-foreground font-medium hover:underline">
+                <Link to="/join" state={location.state} className="auth-link">
                   {t.signUp}
                 </Link>
               </p>
@@ -196,22 +189,23 @@ export default function Login() {
             <>
               {resetSent ? (
                 <div className="text-center py-4">
-                  <p className="text-sm text-foreground">{t.resetSent}</p>
-                  <button onClick={() => { setMode("login"); setResetSent(false); }} className="text-sm text-muted-foreground hover:text-foreground mt-3">
+                  <CheckCircle className="w-10 h-10 mx-auto mb-4" style={{ color: '#16A34A' }} />
+                  <p className="auth-success justify-center">{t.resetSent}</p>
+                  <button onClick={() => { setMode("login"); setResetSent(false); }} className="text-sm auth-link mt-3">
                     ← {t.signIn}
                   </button>
                 </div>
               ) : (
                 <form onSubmit={handleForgotPassword} className="space-y-3">
                   <div className="relative">
-                    <Mail className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
-                    <Input type="email" placeholder={t.email} value={email} onChange={e => setEmail(e.target.value)} className="pl-10 h-11" required />
+                    <Mail className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
+                    <Input type="email" placeholder={t.email} value={email} onChange={e => setEmail(e.target.value)} className="auth-input with-icon" required />
                   </div>
-                  {error && <p className="text-xs text-destructive">{error}</p>}
-                  <Button type="submit" className="w-full h-11 font-semibold" disabled={loading}>
+                  {error && <p className="auth-error"><AlertCircle className="w-3.5 h-3.5 flex-shrink-0" />{error}</p>}
+                  <Button type="submit" className="auth-btn-primary" disabled={loading}>
                     {loading ? "..." : t.sendLink}
                   </Button>
-                  <button type="button" onClick={() => { setMode("login"); setError(""); }} className="text-xs text-muted-foreground hover:text-foreground block">
+                  <button type="button" onClick={() => { setMode("login"); setError(""); }} className="text-xs auth-link block">
                     ← {t.signIn}
                   </button>
                 </form>
