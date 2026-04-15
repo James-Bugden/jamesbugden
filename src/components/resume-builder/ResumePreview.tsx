@@ -721,6 +721,7 @@ export const A4Page = React.memo(function A4Page({
   const c = customize;
   const dims = getPageDims(c?.pageFormat);
   const baseFontSize = c?.fontSize ?? 10.5;
+  const hasCJK = useMemo(() => resumeHasCJK(safe), [safe]);
 
   const orderedSections = useMemo(() => normalizeSectionOrder(safe.sections, c), [safe.sections, c]);
   const enabledSections = orderedSections;
