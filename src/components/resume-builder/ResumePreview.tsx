@@ -984,9 +984,13 @@ export const A4Page = React.memo(function A4Page({
         )}
 
         {!hasRealContent && (
-          <div className="text-center py-[30mm]" style={{ color: "#9CA3AF", fontSize: "11pt" }}>
-            Add content to see your resume here
-          </div>
+          <button
+            onClick={() => onEditSection?.("")}
+            className="w-full text-center py-[30mm] cursor-pointer hover:opacity-70 transition-opacity"
+            style={{ color: "#9CA3AF", fontSize: "11pt" }}
+          >
+            Add content to see your resume here →
+          </button>
         )}
       </div>
     </>
