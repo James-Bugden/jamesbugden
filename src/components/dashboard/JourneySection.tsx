@@ -224,20 +224,31 @@ const CompactRow = memo(function CompactRow({
         navigate(path);
       }}
     >
-      {/* Checkbox */}
+      {/* Checkbox — 44x44 touch target */}
       <button
         onClick={(e) => {
           e.stopPropagation();
+          e.preventDefault();
           toggleComplete(item.id);
         }}
-        className="w-5 h-5 rounded border-2 flex items-center justify-center shrink-0 transition-colors"
-        style={{
-          borderColor: completed ? "#D4A843" : "hsl(var(--muted-foreground) / 0.3)",
-          backgroundColor: completed ? "#D4A843" : "transparent",
+        onTouchEnd={(e) => {
+          e.stopPropagation();
+          e.preventDefault();
+          toggleComplete(item.id);
         }}
+        className="shrink-0 flex items-center justify-center"
+        style={{ minWidth: 44, minHeight: 44, WebkitTapHighlightColor: "transparent" }}
         aria-label={completed ? (lang === "zh" ? "已完成" : "Done") : "Mark as done"}
       >
-        {completed && <Check className="w-3 h-3 text-white dark:text-background" strokeWidth={3} />}
+        <span
+          className="w-5 h-5 rounded border-2 flex items-center justify-center transition-colors"
+          style={{
+            borderColor: completed ? "#D4A843" : "hsl(var(--muted-foreground) / 0.3)",
+            backgroundColor: completed ? "#D4A843" : "transparent",
+          }}
+        >
+          {completed && <Check className="w-3 h-3 text-white dark:text-background" strokeWidth={3} />}
+        </span>
       </button>
 
       {/* Title */}
