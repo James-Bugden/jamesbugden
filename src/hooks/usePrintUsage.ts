@@ -1,14 +1,12 @@
 import { useState, useEffect, useCallback } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/contexts/AuthContext";
-import { useToast } from "@/hooks/use-toast";
 
 const PRINT_LIMIT = 50;
 const USAGE_TYPE = "print_export";
 
 export function usePrintUsage() {
   const { user } = useAuth();
-  const { toast } = useToast();
   const [printCount, setPrintCount] = useState(0);
   const [loading, setLoading] = useState(true);
 
@@ -34,18 +32,14 @@ export function usePrintUsage() {
     fetchCount();
   }, [fetchCount]);
 
-  const gatedPrint = useCallback(async () => {
+  /** Returns true if print executed, false if blocked by limit */
+  const gatedPrint = useCallback(async (): Promise<boolean> => {
     if (!user) {
       window.print();
-      return;
+      return true;
     }
     if (printCount >= PRINT_LIMIT) {
-      toast({
-        title: "Print limit reached",
-        description: `You've used ${PRINT_LIMIT} prints this month. Limit resets next month.`,
-        variant: "destructive",
-      });
-      return;
+      return false;
     }
     window.print();
     await supabase.from("ai_usage_log").insert({
@@ -53,7 +47,8 @@ export function usePrintUsage() {
       usage_type: USAGE_TYPE,
     });
     setPrintCount((c) => c + 1);
-  }, [user, printCount, toast]);
+    return true;
+  }, [user, printCount]);
 
   return {
     printCount,
