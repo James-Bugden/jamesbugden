@@ -2,6 +2,7 @@ import { useState, useRef } from "react";
 import { Pencil, Mail, Phone, MapPin, Camera, Trash2, ChevronDown, Globe, User } from "lucide-react";
 import { PersonalDetails, EXTRA_DETAIL_OPTIONS } from "./types";
 import { compressImage } from "@/lib/imageCompression";
+import { LocationAutocomplete } from "./LocationAutocomplete";
 import { cn } from "@/lib/utils";
 import { useT } from "./i18n";
 
@@ -196,7 +197,7 @@ export function PersonalDetailsCard({ details, onChange, collapsible }: Personal
               />
             </div>
 
-            <Field
+            <LocationAutocomplete
               label={t("location")}
               value={details.location}
               onChange={(v) => onChange({ location: v })}
