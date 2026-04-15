@@ -4,6 +4,7 @@ import { ArrowLeft, Copy, Share2, Check, Printer } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useToast } from "@/hooks/use-toast";
 import { usePrintUsage } from "@/hooks/usePrintUsage";
+import { LimitReachedModal } from "@/components/LimitReachedModal";
 import { nativeShare } from "@/lib/share";
 import { trackEvent } from "@/lib/trackEvent";
 import ToolkitHeaderZhTw from "@/components/toolkit/ToolkitHeaderZhTw";
@@ -49,7 +50,13 @@ const RaiseOnePagerZhTw = () => {
   const { toast } = useToast();
   const [copied, setCopied] = useState(false);
   const [shared, setShared] = useState(false);
-  const { gatedPrint, printLimitReached } = usePrintUsage();
+  const { gatedPrint, printLimitReached, printCount, printLimit } = usePrintUsage();
+  const [showPrintLimitModal, setShowPrintLimitModal] = useState(false);
+
+  const handlePrint = async () => {
+    const ok = await gatedPrint();
+    if (!ok) setShowPrintLimitModal(true);
+  };
 
   const copyTemplate = () => {
     const templateText = `加薪準備單
