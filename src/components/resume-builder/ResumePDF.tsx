@@ -729,7 +729,8 @@ function PdfSectionHeading({
   const style = c?.headingStyle || "underline";
   const fontSize = headingSizePt(base, c?.headingSize || "m");
   const uppercase = c?.headingUppercase !== false;
-  const displayTitle = uppercase ? title.toUpperCase() : title;
+  const isCJK = containsCJK(title);
+  const displayTitle = (uppercase && !isCJK) ? title.toUpperCase() : title;
 
   const headingFontFamily = c?.headingFont
     ? ensureFontRegistered(c.headingFont)
@@ -738,9 +739,9 @@ function PdfSectionHeading({
   const textStyle = {
     fontSize,
     color: style === "background" ? "#ffffff" : colors.headings,
-    fontFamily: headingFontFamily,
+    fontFamily: isCJK ? CJK_FONT_FAMILY : headingFontFamily,
     fontWeight: 700 as const,
-    letterSpacing: fontSize * 0.08,
+    letterSpacing: isCJK ? fontSize * 0.02 : fontSize * 0.08,
   };
 
   if (style === "plain") {
