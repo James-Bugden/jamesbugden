@@ -283,6 +283,20 @@ export function SectionCard({ section, onUpdate, onRemove }: {
 
   const toggleCollapse = () => onUpdate({ collapsed: !section.collapsed });
 
+  const isEntryEmpty = (entry: ResumeSectionEntry) => {
+    return Object.entries(entry.fields).every(([key, val]) => {
+      if (key === "currentlyHere") return true; // ignore boolean flags
+      return !val || val.trim() === "";
+    });
+  };
+
+  const cleanupEmptyEntries = useCallback(() => {
+    const filtered = section.entries.filter(e => !isEntryEmpty(e));
+    if (filtered.length < section.entries.length) {
+      onUpdate({ entries: filtered });
+    }
+  }, [section.entries, onUpdate]);
+
   const addEntry = () => {
     const newEntry: ResumeSectionEntry = {
       id: crypto.randomUUID(),
