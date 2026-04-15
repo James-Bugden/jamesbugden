@@ -32,6 +32,7 @@ import { exportResumePdfServer } from "@/lib/serverPdfExport";
 import { useIsMobile } from "@/hooks/use-mobile";
 import { Skeleton } from "@/components/ui/skeleton";
 import { toast } from "@/hooks/use-toast";
+import { ToastAction } from "@/components/ui/toast";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import FeedbackBox from "@/components/FeedbackBox";
@@ -740,12 +741,9 @@ const ResumeBuilder = () => {
           : "Something went wrong while preparing your download. Please try again.",
         variant: "destructive",
         action: (
-          <button
-            onClick={() => handleDownload(filename)}
-            className="text-xs font-semibold underline whitespace-nowrap"
-          >
+          <ToastAction altText={lang === "zh-tw" ? "重試" : "Try again"} onClick={() => handleDownload(filename)}>
             {lang === "zh-tw" ? "重試" : "Try again"}
-          </button>
+          </ToastAction>
         ),
       });
     }

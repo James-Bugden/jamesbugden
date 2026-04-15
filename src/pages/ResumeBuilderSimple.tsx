@@ -24,6 +24,7 @@ import { exportResumePdfServer } from "@/lib/serverPdfExport";
 import { useIsMobile } from "@/hooks/use-mobile";
 import { Skeleton } from "@/components/ui/skeleton";
 import { toast } from "@/hooks/use-toast";
+import { ToastAction } from "@/components/ui/toast";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import FeedbackBox from "@/components/FeedbackBox";
@@ -672,8 +673,20 @@ const ResumeBuilderSimple = () => {
         customize,
         fileName: fn,
       });
-    } catch (err) {
-      console.error("PDF export error:", err);
+    } catch (err: any) {
+      console.error("PDF export error:", err?.message, err?.stack);
+      toast({
+        title: lang === "zh-tw" ? "下載失敗" : "Download failed",
+        description: lang === "zh-tw"
+          ? "PDF 產生時發生錯誤。請再試一次。"
+          : "Something went wrong while preparing your download. Please try again.",
+        variant: "destructive",
+        action: (
+          <ToastAction altText={lang === "zh-tw" ? "重試" : "Try again"} onClick={() => handleDownload(filename)}>
+            {lang === "zh-tw" ? "重試" : "Try again"}
+          </ToastAction>
+        ),
+      });
     }
     setDownloading(false);
   };
