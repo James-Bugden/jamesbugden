@@ -317,7 +317,7 @@ function EditorSkeleton() {
 function BrandingFooter() {
   const t = useT();
   return (
-    <div className="py-3 px-4 text-center border-t bg-white" style={{ borderColor: BRAND.border }}>
+    <div className="py-3 pb-20 lg:pb-3 px-4 text-center border-t bg-white" style={{ borderColor: BRAND.border }}>
       <p className="text-[11px]" style={{ color: BRAND.textSecondary }}>
         {t("poweredBy")}{" "}
         <a href="https://james.careers" target="_blank" rel="noopener noreferrer" className="hover:opacity-80 font-medium transition-opacity" style={{ color: BRAND.gold }}>
