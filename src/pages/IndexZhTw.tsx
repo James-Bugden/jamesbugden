@@ -136,8 +136,8 @@ const IndexZhTw = () => {
                   </div>
                 </div>
 
-                <h1 className="font-heading-cjk leading-[1.12] tracking-tight mb-3 max-w-3xl mx-auto md:mx-0 text-foreground" style={{ fontSize: 'clamp(2.25rem, 5vw, 3.5rem)', lineHeight: 1.2, fontWeight: 700 }}>
-                  在夢想公司拿到年薪3百萬以上的&nbsp;Offer
+                <h1 className="font-heading leading-[1.12] tracking-tight mb-3 max-w-3xl mx-auto md:mx-0 text-foreground" style={{ fontSize: 'clamp(2.25rem, 5vw, 3.5rem)', lineHeight: 1.2 }}>
+                  {"\u5728\u5922\u60F3\u516C\u53F8\u62FF\u5230\u5E74\u85AA"}<span style={{ fontFamily: 'system-ui, sans-serif', position: 'relative', top: '-0.05em' }}>3</span>{"\u767E\u842C\u4EE5\u4E0A\u7684\u00A0Offer"}
                 </h1>
 
                 {/* Credential badge */}

@@ -41,23 +41,14 @@ export const MONO_FONTS: FontDef[] = [
   { name: "Source Code Pro", family: "'Source Code Pro', monospace" },
 ];
 
-/* CJK fallback fonts — always loaded for Chinese/Japanese/Korean support */
-export const CJK_FALLBACK = "'Noto Sans TC', 'Noto Sans SC', 'Noto Sans JP'";
-
-/* Google Fonts URL — load all at once (includes CJK fallbacks) */
+/* Google Fonts URL — load all at once */
 const ALL_FONT_NAMES = [
   ...SANS_FONTS,
   ...SERIF_FONTS,
   ...MONO_FONTS,
 ].map((f) => f.name.replace(/ /g, "+"));
 
-const CJK_FONT_PARAMS = [
-  "family=Noto+Sans+TC:wght@400;500;700",
-  "family=Noto+Sans+SC:wght@400;500;700",
-  "family=Noto+Sans+JP:wght@400;500;700",
-];
-
-export const GOOGLE_FONTS_URL = `https://fonts.googleapis.com/css2?${[...ALL_FONT_NAMES.map((n) => `family=${n}:wght@400;600;700`), ...CJK_FONT_PARAMS].join("&")}&display=swap`;
+export const GOOGLE_FONTS_URL = `https://fonts.googleapis.com/css2?${ALL_FONT_NAMES.map((n) => `family=${n}:wght@400;600;700`).join("&")}&display=swap`;
 
 export function getFontsForCategory(cat: FontCategory): FontDef[] {
   switch (cat) {

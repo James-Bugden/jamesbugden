@@ -26,8 +26,8 @@ export default function SelfSegmentationZhTw() {
     <section className="py-12 md:py-20 px-5 md:px-6" style={{ backgroundColor: '#FDFBF7' }}>
       <div className="container mx-auto max-w-4xl">
         <h2
-          className="font-heading-cjk text-center mb-10 md:mb-14"
-          style={{ color: '#1A1A1A', fontSize: 'clamp(2rem, 4vw, 2.625rem)', lineHeight: 1.2, fontWeight: 700 }}
+          className="font-heading text-center mb-10 md:mb-14"
+          style={{ color: '#1A1A1A', fontSize: 'clamp(2rem, 4vw, 2.625rem)', lineHeight: 1.2 }}
         >
           拿到年薪百萬以上 Offer 的 3 個步驟
         </h2>
