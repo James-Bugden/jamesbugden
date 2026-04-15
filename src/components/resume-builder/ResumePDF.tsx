@@ -18,7 +18,7 @@ import {
 import type { ResumeData, ResumeSection, ResumeSectionEntry } from "./types";
 import type { CustomizeSettings } from "./customizeTypes";
 import { SANS_FONTS, SERIF_FONTS, MONO_FONTS } from "./fontData";
-import { CJK_FONT_FAMILY, resumeHasCJK } from "@/lib/resumePdf/fontMap";
+import { CJK_FONT_FAMILY, containsCJK, resumeHasCJK } from "@/lib/resumePdf/fontMap";
 
 /* ═══════════════════════════════════════════════════════════
    Font Registration
