@@ -458,7 +458,7 @@ export default function Dashboard({ lang = "en" }: { lang?: "en" | "zh" }) {
             <p className="text-sm md:text-base mb-8 text-muted-foreground">{t.toolsSub}</p>
             <div className="relative">
               {/* Mobile: horizontal scroll; Desktop: 2-col grid */}
-              <div className="flex sm:grid sm:grid-cols-2 gap-6 overflow-x-auto sm:overflow-visible snap-x snap-mandatory pb-2 sm:pb-0 -mx-4 px-4 sm:mx-0 sm:px-0">
+              <div className="flex flex-col sm:grid sm:grid-cols-2 gap-4 sm:gap-6">
               {tools.map((tool) => {
                 const badge = getProgressBadge(tool.id, lang, t);
                 return (
@@ -466,7 +466,7 @@ export default function Dashboard({ lang = "en" }: { lang?: "en" | "zh" }) {
                     key={tool.path}
                     to={lang === "zh" && tool.zhPath ? tool.zhPath : tool.path}
                     onClick={() => trackTool(tool.id)}
-                    className="group rounded-2xl border-l-[4px] border-l-gold p-4 md:p-5 flex items-center gap-4 transition-all duration-200 hover:-translate-y-0.5 bg-card shadow-[var(--dash-card-shadow)] hover:shadow-[var(--dash-card-hover-shadow)] min-w-[280px] sm:min-w-0 snap-start shrink-0 sm:shrink"
+                    className="group rounded-2xl border-l-[4px] border-l-gold p-4 md:p-5 flex items-center gap-4 transition-all duration-200 hover:-translate-y-0.5 bg-card shadow-[var(--dash-card-shadow)] hover:shadow-[var(--dash-card-hover-shadow)]"
                   >
                     <span
                       className="w-9 h-9 rounded-full flex items-center justify-center shrink-0 text-foreground"
@@ -500,8 +500,7 @@ export default function Dashboard({ lang = "en" }: { lang?: "en" | "zh" }) {
                 );
               })}
               </div>
-              {/* Right-edge fade for mobile scroll */}
-              <div className="absolute top-0 right-0 bottom-0 w-8 bg-gradient-to-l from-card to-transparent pointer-events-none sm:hidden" />
+              {/* No horizontal scroll fade needed — cards stack vertically on mobile */}
             </div>
           </div>
 
