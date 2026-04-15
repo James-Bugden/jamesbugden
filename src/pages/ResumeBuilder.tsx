@@ -774,6 +774,31 @@ const ResumeBuilder = () => {
     }, 100);
   }, []);
 
+  const handleScoreNavigate = useCallback((target: string) => {
+    setActiveTab("content");
+    setTimeout(() => {
+      if (target === "personal") {
+        const el = document.getElementById("personal-details-card");
+        if (el) {
+          el.scrollIntoView({ behavior: "smooth", block: "start" });
+          el.classList.add("ring-2", "ring-amber-400/70");
+          setTimeout(() => el.classList.remove("ring-2", "ring-amber-400/70"), 1200);
+        }
+        return;
+      }
+      // Find section by type
+      const section = data.sections.find(s => s.type === target);
+      if (section) {
+        const el = document.getElementById(`section-card-${section.id}`);
+        if (el) {
+          el.scrollIntoView({ behavior: "smooth", block: "start" });
+          el.classList.add("ring-2", "ring-amber-400/70");
+          setTimeout(() => el.classList.remove("ring-2", "ring-amber-400/70"), 1200);
+        }
+      }
+    }, 100);
+  }, [data.sections]);
+
   const handleContentEdit = useCallback((sectionId: string, entryId: string, field: string, html: string) => {
     setData(prev => ({
       ...prev,
