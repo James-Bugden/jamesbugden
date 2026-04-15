@@ -204,8 +204,6 @@ export default function ResumeAnalyzer({ defaultLang = "en" }: { defaultLang?: L
         setError(t(lang, "You've reached your monthly analysis limit. Please try again next month.", "你已達到本月分析上限。請下月再試。"));
       } else {
         setError(t(lang, `Analysis failed: ${msg}. Please try again.`, `分析失敗：${msg}。請再試一次。`));
-      } else {
-        setError(t(lang, `Analysis failed: ${msg}. Please try again.`, `分析失敗：${msg}。請再試一次。`));
       }
       setScreen("upload");
       return null;
