@@ -417,6 +417,7 @@ const ResumeBuilder = () => {
   /* ── dnd-kit sensors (defined early, used later after pushHistory) ── */
   const sensors = useSensors(
     useSensor(PointerSensor, { activationConstraint: { distance: 5 } }),
+    useSensor(TouchSensor, { activationConstraint: { delay: 100, tolerance: 5 } }),
     useSensor(KeyboardSensor)
   );
   const sectionIds = useMemo(() => data.sections.map(s => s.id), [data.sections]);
