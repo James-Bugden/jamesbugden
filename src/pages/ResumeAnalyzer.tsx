@@ -763,6 +763,14 @@ export default function ResumeAnalyzer({ defaultLang = "en" }: { defaultLang?: L
           </div>
         )}
         {showMicroSurvey && <MicroSurvey actionKey="resume_analysis" locale={lang === "zh-TW" ? "zh-tw" : "en"} />}
+        <LimitReachedModal
+          open={showLimitModal}
+          onClose={() => setShowLimitModal(false)}
+          limitType={lang === "en" ? "AI analyses" : "AI 分析"}
+          currentCount={used}
+          planLimit={limit}
+          lang={lang}
+        />
       </main>
     </>
   );
