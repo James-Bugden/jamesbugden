@@ -418,7 +418,22 @@ const ResumeBuilder = () => {
   );
   const sectionIds = useMemo(() => data.sections.map(s => s.id), [data.sections]);
 
-  const [activeTab, setActiveTab] = useState("content");
+  const [activeTab, setActiveTabRaw] = useState("content");
+
+  // Clean up empty entries when switching away from content tab
+  const setActiveTab = useCallback((tab: string) => {
+    if (activeTab === "content" && tab !== "content") {
+      const cleaned = data.sections.map(s => {
+        const filtered = s.entries.filter(e =>
+          Object.entries(e.fields).some(([k, v]) => k !== "currentlyHere" && v && v.trim() !== "")
+        );
+        return filtered.length !== s.entries.length ? { ...s, entries: filtered } : s;
+      });
+      const changed = cleaned.some((s, i) => s !== data.sections[i]);
+      if (changed) store.setData({ ...data, sections: cleaned });
+    }
+    setActiveTabRaw(tab);
+  }, [activeTab, data, store]);
   const [modalOpen, setModalOpen] = useState(false);
   const [viewMode, setViewMode] = useState<ViewMode>("dashboard");
   const [activeDocId, setActiveDocId] = useState<string | null>(null);
