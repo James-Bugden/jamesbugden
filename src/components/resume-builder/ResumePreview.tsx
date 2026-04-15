@@ -838,12 +838,12 @@ export const A4Page = React.memo(function A4Page({
               >
                 <h1
                   data-color-role="name"
-                  className="font-bold uppercase tracking-[0.1em]"
+                  className={`font-bold ${containsCJK(p.fullName) ? '' : 'uppercase tracking-[0.1em]'}`}
                   style={{
                     fontSize: NAME_SIZES[c?.nameSize || "s"],
                     color: "var(--resume-name)",
                     fontWeight: c?.nameBold !== false ? 700 : 400,
-                    fontFamily: c?.nameFont === "creative" ? c?.headingFont || c?.bodyFont : c?.bodyFont,
+                    fontFamily: cjkSafeFont(c?.nameFont === "creative" ? c?.headingFont || c?.bodyFont : c?.bodyFont, containsCJK(p.fullName)),
                   }}
                 >
                   {p.fullName || "YOUR NAME"}
