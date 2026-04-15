@@ -740,12 +740,9 @@ const ResumeBuilder = () => {
           : "Something went wrong while preparing your download. Please try again.",
         variant: "destructive",
         action: (
-          <button
-            onClick={() => handleDownload(filename)}
-            className="text-xs font-semibold underline whitespace-nowrap"
-          >
+          <ToastAction altText={lang === "zh-tw" ? "重試" : "Try again"} onClick={() => handleDownload(filename)}>
             {lang === "zh-tw" ? "重試" : "Try again"}
-          </button>
+          </ToastAction>
         ),
       });
     }
