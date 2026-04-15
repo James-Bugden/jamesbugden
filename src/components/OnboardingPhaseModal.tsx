@@ -50,15 +50,15 @@ export default function OnboardingPhaseModal({ lang = "en", onSelect }: Props) {
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         exit={{ opacity: 0 }}
-        className="fixed inset-0 z-50 flex items-center justify-center p-4"
+        className="fixed inset-0 z-50 flex items-center justify-center px-4 py-6"
         style={{ backgroundColor: "rgba(27, 58, 47, 0.6)" }}
       >
         <motion.div
           initial={{ opacity: 0, scale: 0.95, y: 20 }}
           animate={{ opacity: 1, scale: 1, y: 0 }}
           transition={{ duration: 0.35, ease: "easeOut" }}
-          className="w-full max-w-2xl rounded-2xl p-6 sm:p-8 shadow-2xl"
-          style={{ backgroundColor: "#FBF7F0" }}
+          className="w-full max-w-2xl rounded-2xl px-5 py-6 sm:p-8 shadow-2xl overflow-y-auto"
+          style={{ backgroundColor: "#FBF7F0", maxHeight: "calc(100vh - 48px)" }}
         >
           <h2
             className="text-2xl sm:text-3xl font-bold text-center mb-2"
