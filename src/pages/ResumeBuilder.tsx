@@ -1245,6 +1245,14 @@ const ResumeBuilder = () => {
         </AlertDialogContent>
       </AlertDialog>
       {showPdfSurvey && <MicroSurvey actionKey="resume_pdf_export" />}
+      <LimitReachedModal
+        open={showImportLimitModal}
+        onClose={() => setShowImportLimitModal(false)}
+        limitType={lang === "zh-tw" ? "AI 匯入" : "AI imports"}
+        currentCount={builderAiUsage.importCount}
+        planLimit={builderAiUsage.importLimit}
+        lang={lang === "zh-tw" ? "zh-TW" : "en"}
+      />
     </div>
   );
 };
