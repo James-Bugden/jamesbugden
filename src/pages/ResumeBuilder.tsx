@@ -959,7 +959,9 @@ const ResumeBuilder = () => {
         )}
 
         {/* Personal Details */}
-        <PersonalDetailsCard details={data.personalDetails} onChange={(u) => { pushHistory(); updatePersonalDetails(u); }} />
+        <div id="personal-details-card" className="transition-all">
+          <PersonalDetailsCard details={data.personalDetails} onChange={(u) => { pushHistory(); updatePersonalDetails(u); }} />
+        </div>
 
         {/* Sections — dnd-kit sortable */}
         <DndContext sensors={sensors} collisionDetection={closestCenter} onDragEnd={handleDragEnd} modifiers={[restrictToVerticalAxis]}>
@@ -1003,7 +1005,7 @@ const ResumeBuilder = () => {
         )}
 
         {/* Completeness score */}
-        <CompletenessScore data={data} />
+        <CompletenessScore data={data} onNavigate={handleScoreNavigate} />
 
         {/* Analyzer CTA */}
         <AnalyzerCTA fromAnalyzer={searchParams.get("from") === "analyzer" || !!sessionStorage.getItem("analyzer-resume-text")} resumeData={data} />
