@@ -3,7 +3,7 @@ import { Link, useNavigate, useLocation } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Lock, ArrowLeft, Eye, EyeOff, CheckCircle } from "lucide-react";
+import { Lock, Eye, EyeOff, CheckCircle, AlertCircle } from "lucide-react";
 import { SEO } from "@/components/SEO";
 
 export default function ResetPassword() {
@@ -29,20 +29,18 @@ export default function ResetPassword() {
         successMsg: "正在為您導向…",
         invalidLink: "無效或已過期的重設連結。",
         backToLogin: "← 返回登入",
-        back: "返回",
         minLength: "密碼至少需要 6 個字元",
       }
     : {
         title: "Reset Password",
-        heading: "Set New Password",
+        heading: "Set new password",
         subtitle: "Enter your new password below.",
         placeholder: "New password (min. 6 characters)",
         submit: "Update Password",
-        successTitle: "Password Updated",
+        successTitle: "Password updated",
         successMsg: "Redirecting you now…",
         invalidLink: "Invalid or expired reset link.",
         backToLogin: "← Back to Sign In",
-        back: "Back",
         minLength: "Password must be at least 6 characters",
       };
 
@@ -81,57 +79,59 @@ export default function ResetPassword() {
 
   if (!hasToken && !success) {
     return (
-      <div className="min-h-screen bg-background flex items-center justify-center px-4">
-        <div className="w-full max-w-[400px] bg-card border border-border rounded-xl shadow-lg p-8 text-center">
-          <p className="text-sm text-muted-foreground">{t.invalidLink}</p>
-          <Link to="/login" className="text-sm text-foreground font-medium hover:underline mt-4 inline-block">
-            {t.backToLogin}
-          </Link>
+      <div className="auth-page">
+        <div className="w-full" style={{ maxWidth: 440 }}>
+          <div className="auth-logo">
+            <Link to="/">JAMES BUGDEN</Link>
+          </div>
+          <div className="auth-card text-center">
+            <p className="text-sm text-gray-500">{t.invalidLink}</p>
+            <Link to="/login" className="text-sm auth-link mt-4 inline-block">
+              {t.backToLogin}
+            </Link>
+          </div>
         </div>
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen bg-background flex items-center justify-center px-4">
+    <div className="auth-page">
       <SEO />
-      <div className="w-full max-w-[400px]">
-        <div className="mb-6">
-          <Link to="/login" className="inline-flex items-center gap-1.5 text-sm text-muted-foreground hover:text-foreground transition-colors">
-            <ArrowLeft className="w-4 h-4" />
-            {t.back}
-          </Link>
+      <div className="w-full" style={{ maxWidth: 440 }}>
+        <div className="auth-logo">
+          <Link to="/">JAMES BUGDEN</Link>
         </div>
 
-        <div className="bg-card border border-border rounded-xl shadow-lg p-8">
+        <div className="auth-card">
           {success ? (
             <div className="text-center py-4">
-              <CheckCircle className="w-10 h-10 text-foreground mx-auto mb-4" />
-              <h2 className="font-heading text-xl font-bold text-foreground mb-2">{t.successTitle}</h2>
-              <p className="text-sm text-muted-foreground">{t.successMsg}</p>
+              <CheckCircle className="w-10 h-10 mx-auto mb-4" style={{ color: '#16A34A' }} />
+              <h2 className="auth-title text-center" style={{ fontSize: 20 }}>{t.successTitle}</h2>
+              <p className="auth-subtitle text-center">{t.successMsg}</p>
             </div>
           ) : (
             <>
-              <h1 className="font-heading text-2xl font-bold text-foreground mb-1">{t.heading}</h1>
-              <p className="text-sm text-muted-foreground mb-6">{t.subtitle}</p>
+              <h1 className="auth-title">{t.heading}</h1>
+              <p className="auth-subtitle">{t.subtitle}</p>
 
               <form onSubmit={handleSubmit} className="space-y-3">
                 <div className="relative">
-                  <Lock className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
+                  <Lock className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
                   <Input
                     type={showPassword ? "text" : "password"}
                     placeholder={t.placeholder}
                     value={password}
                     onChange={e => setPassword(e.target.value)}
-                    className="pl-10 pr-10 h-11"
+                    className="auth-input with-icon with-right-icon"
                     required
                   />
-                  <button type="button" onClick={() => setShowPassword(!showPassword)} className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground">
+                  <button type="button" onClick={() => setShowPassword(!showPassword)} className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600">
                     {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
                   </button>
                 </div>
-                {error && <p className="text-xs text-destructive">{error}</p>}
-                <Button type="submit" className="w-full h-11 font-semibold" disabled={loading}>
+                {error && <p className="auth-error"><AlertCircle className="w-3.5 h-3.5 flex-shrink-0" />{error}</p>}
+                <Button type="submit" className="auth-btn-primary" disabled={loading}>
                   {loading ? "..." : t.submit}
                 </Button>
               </form>

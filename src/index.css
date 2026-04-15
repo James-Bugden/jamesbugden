@@ -582,3 +582,100 @@
     margin: 0 !important;
   }
 }
+
+/* ── Auth page branded styles ── */
+@layer components {
+  .auth-page {
+    @apply min-h-screen flex items-center justify-center px-4 py-8;
+    background-color: #FBF7F0;
+  }
+  .auth-card {
+    @apply w-full bg-white rounded-xl p-8;
+    max-width: 440px;
+    border-radius: 12px;
+    box-shadow: 0 1px 3px 0 rgb(0 0 0 / 0.05);
+  }
+  .auth-logo {
+    @apply flex justify-center mb-6;
+  }
+  .auth-logo a {
+    @apply font-heading text-sm tracking-[0.25em] transition-colors;
+    color: #1B3A2F;
+  }
+  .auth-logo a:hover {
+    color: #C9A961;
+  }
+  .auth-title {
+    @apply text-2xl font-bold mb-1;
+    font-family: 'Noto Serif TC', 'Playfair Display', Georgia, serif;
+    color: #1B3A2F;
+    font-size: 24px;
+  }
+  .auth-subtitle {
+    @apply text-sm mb-6;
+    color: #6B7280;
+  }
+  .auth-input {
+    border: 1px solid #E5E5E5 !important;
+    border-radius: 8px !important;
+    padding: 12px 16px !important;
+    font-size: 16px !important;
+    height: auto !important;
+    transition: border-color 0.2s;
+  }
+  .auth-input:focus {
+    border-color: #C9A961 !important;
+    box-shadow: 0 0 0 2px rgba(201, 169, 97, 0.15) !important;
+    outline: none !important;
+  }
+  .auth-input.with-icon {
+    padding-left: 40px !important;
+  }
+  .auth-input.with-right-icon {
+    padding-right: 40px !important;
+  }
+  .auth-btn-primary {
+    @apply w-full font-semibold transition-colors;
+    background-color: #1B3A2F !important;
+    color: white !important;
+    border-radius: 8px !important;
+    padding: 12px 24px !important;
+    font-size: 16px !important;
+    height: auto !important;
+    border: none !important;
+  }
+  .auth-btn-primary:hover:not(:disabled) {
+    background-color: #152e25 !important;
+  }
+  .auth-btn-primary:disabled {
+    opacity: 0.6;
+  }
+  .auth-link {
+    color: #1B3A2F;
+    font-weight: 500;
+  }
+  .auth-link:hover {
+    text-decoration: underline;
+  }
+  .auth-error {
+    @apply flex items-center gap-1.5 text-xs mt-1;
+    color: #DC2626;
+  }
+  .auth-success {
+    @apply flex items-center gap-1.5 text-sm;
+    color: #16A34A;
+  }
+  .auth-divider {
+    @apply flex items-center gap-3 my-4;
+  }
+  .auth-divider::before,
+  .auth-divider::after {
+    content: '';
+    @apply flex-1 h-px;
+    background: #E5E5E5;
+  }
+  .auth-divider span {
+    @apply text-xs;
+    color: #9CA3AF;
+  }
+}
