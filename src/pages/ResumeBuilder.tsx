@@ -1318,6 +1318,29 @@ const ResumeBuilder = () => {
         planLimit={builderAiUsage.importLimit}
         lang={lang === "zh-tw" ? "zh-TW" : "en"}
       />
+
+      {/* Reset resume confirmation */}
+      <AlertDialog open={resetConfirmOpen} onOpenChange={setResetConfirmOpen}>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>{lang === "zh-tw" ? "重置此履歷？" : "Reset this resume?"}</AlertDialogTitle>
+            <AlertDialogDescription>
+              {lang === "zh-tw"
+                ? "這將永久刪除此履歷中的所有內容。此操作無法復原。"
+                : "This will permanently delete all content in this resume. This cannot be undone."}
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel>{lang === "zh-tw" ? "取消" : "Cancel"}</AlertDialogCancel>
+            <AlertDialogAction
+              onClick={handleResetResume}
+              className="bg-red-600 hover:bg-red-700 text-white"
+            >
+              {lang === "zh-tw" ? "重置履歷" : "Reset resume"}
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
     </div>
   );
 };
