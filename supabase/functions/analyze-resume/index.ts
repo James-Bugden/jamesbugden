@@ -151,7 +151,7 @@ Count total bullets, count weak-pattern bullets, count bullets with metrics. Rep
 
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
 
-const MONTHLY_LIMIT = 3;
+const MONTHLY_LIMIT = 10;
 
 Deno.serve(async (req) => {
   if (req.method === 'OPTIONS') {
