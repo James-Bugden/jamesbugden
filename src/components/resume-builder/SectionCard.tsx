@@ -315,6 +315,13 @@ export function SectionCard({ section, onUpdate, onRemove }: {
   };
 
   const toggleEntryCollapse = (entryId: string) => {
+    const entry = section.entries.find(e => e.id === entryId);
+    const isCollapsing = entry && !(entry.collapsed ?? false);
+    // If collapsing (Done) and entry is empty, remove it silently
+    if (isCollapsing && entry && isEntryEmpty(entry)) {
+      onUpdate({ entries: section.entries.filter(e => e.id !== entryId) });
+      return;
+    }
     onUpdate({
       entries: section.entries.map((e) =>
         e.id === entryId ? { ...e, collapsed: !e.collapsed } : e
