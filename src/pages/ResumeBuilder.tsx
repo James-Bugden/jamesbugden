@@ -4,7 +4,7 @@ import { useSearchParams } from "react-router-dom";
 import { SortableContext, verticalListSortingStrategy, arrayMove } from "@dnd-kit/sortable";
 import { restrictToVerticalAxis } from "@dnd-kit/modifiers" ;
 import { SortableSectionCard } from "@/components/resume-builder/SortableSectionCard";
-import { Plus, Eye, Undo2, Redo2, Check, Loader2, Upload, ArrowLeft, FileText, Palette, Download, MoreVertical, ChevronDown, Home } from "lucide-react";
+import { Plus, Eye, Undo2, Redo2, Check, Loader2, Upload, ArrowLeft, FileText, Palette, Download, MoreVertical, ChevronDown, Home, RotateCcw } from "lucide-react";
 import { Tooltip, TooltipTrigger, TooltipContent, TooltipProvider } from "@/components/ui/tooltip";
 import { PersonalDetailsCard } from "@/components/resume-builder/PersonalDetailsCard";
 import { SectionCard } from "@/components/resume-builder/SectionCard";
@@ -448,6 +448,9 @@ const ResumeBuilder = () => {
   const [pendingAnalyzerData, setPendingAnalyzerData] = useState<{ data: any; settings: any; name: string; suggestions: Suggestion[] } | null>(null);
   const [replaceTargetId, setReplaceTargetId] = useState<string | null>(null);
   const [showImportLimitModal, setShowImportLimitModal] = useState(false);
+  const [resetConfirmOpen, setResetConfirmOpen] = useState(false);
+  const [overflowMenuOpen, setOverflowMenuOpen] = useState(false);
+  const overflowRef = useRef<HTMLDivElement>(null);
 
   const RESUME_LIMIT = 2;
 
@@ -649,6 +652,26 @@ const ResumeBuilder = () => {
     }
     setTimeout(() => setLoading(false), 300);
   }, [store]);
+
+  // Close overflow menu on outside click
+  useEffect(() => {
+    if (!overflowMenuOpen) return;
+    const handler = (e: MouseEvent) => {
+      if (overflowRef.current && !overflowRef.current.contains(e.target as Node)) setOverflowMenuOpen(false);
+    };
+    document.addEventListener("mousedown", handler);
+    return () => document.removeEventListener("mousedown", handler);
+  }, [overflowMenuOpen]);
+
+  const handleResetResume = useCallback(() => {
+    store.setData({ ...DEFAULT_RESUME_DATA });
+    if (activeDocId) {
+      updateDocument(activeDocId, { data: { ...DEFAULT_RESUME_DATA } });
+    }
+    historyRef.current = { past: [], future: [] };
+    setResetConfirmOpen(false);
+    toast({ title: lang === "zh-tw" ? "履歷已重置 — 重新開始！" : "Resume reset — start fresh!" });
+  }, [store, activeDocId, lang]);
 
   const handleImport = (type: DocType) => {
     setImportType(type);
@@ -1087,6 +1110,30 @@ const ResumeBuilder = () => {
               docName={currentDocName}
               onDownload={handleDownload}
             />
+            {/* Overflow menu */}
+            <div className="relative" ref={overflowRef}>
+              <button
+                onClick={() => setOverflowMenuOpen(!overflowMenuOpen)}
+                className="p-2 rounded-lg hover:bg-white/60 transition-colors"
+                style={{ color: BRAND.textSecondary }}
+                aria-label="More options"
+              >
+                <MoreVertical className="w-4 h-4" />
+              </button>
+              {overflowMenuOpen && (
+                <div className="absolute right-0 top-full mt-1 bg-white rounded-lg shadow-xl border z-30 min-w-[200px] py-1" style={{ borderColor: BRAND.border }}>
+                  <div className="border-t my-1" style={{ borderColor: BRAND.border }} />
+                  <button
+                    onClick={() => { setOverflowMenuOpen(false); setResetConfirmOpen(true); }}
+                    className="w-full text-left px-4 py-2.5 text-sm flex items-center gap-2.5 hover:bg-red-50 transition-colors min-h-[44px]"
+                    style={{ color: "#dc2626" }}
+                  >
+                    <RotateCcw className="w-4 h-4" />
+                    {lang === "zh-tw" ? "重置履歷" : "Reset resume"}
+                  </button>
+                </div>
+              )}
+            </div>
           </div>
         </div>
       </div>
@@ -1271,6 +1318,29 @@ const ResumeBuilder = () => {
         planLimit={builderAiUsage.importLimit}
         lang={lang === "zh-tw" ? "zh-TW" : "en"}
       />
+
+      {/* Reset resume confirmation */}
+      <AlertDialog open={resetConfirmOpen} onOpenChange={setResetConfirmOpen}>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>{lang === "zh-tw" ? "重置此履歷？" : "Reset this resume?"}</AlertDialogTitle>
+            <AlertDialogDescription>
+              {lang === "zh-tw"
+                ? "這將永久刪除此履歷中的所有內容。此操作無法復原。"
+                : "This will permanently delete all content in this resume. This cannot be undone."}
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel>{lang === "zh-tw" ? "取消" : "Cancel"}</AlertDialogCancel>
+            <AlertDialogAction
+              onClick={handleResetResume}
+              className="bg-red-600 hover:bg-red-700 text-white"
+            >
+              {lang === "zh-tw" ? "重置履歷" : "Reset resume"}
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
     </div>
   );
 };
