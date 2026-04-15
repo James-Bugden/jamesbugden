@@ -477,7 +477,7 @@ export function DocumentDashboard({ onOpenDocument, onImport }: DocumentDashboar
       </header>
 
       {/* ── Left Sidebar (hidden on mobile) ───────── */}
-      <aside className="hidden md:flex w-[200px] flex-shrink-0 bg-white border-r flex-col h-full" style={{ borderColor: BRAND.border }}>
+      <aside className="hidden md:flex w-[200px] flex-shrink-0 bg-white border-r flex-col h-full overflow-y-auto" style={{ borderColor: BRAND.border }}>
         <div className="px-5 pt-5 pb-2">
           <button
             onClick={() => navigate("/")}
