@@ -16,6 +16,6 @@ export function trackEvent(
     .from("event_tracks" as any)
     .insert({ event_type: eventType, event_name: eventName, page, metadata: metadata ?? {} })
     .then(({ error }) => {
-      if (error) console.warn("Event tracking failed:", error.message);
+      if (error && import.meta.env.DEV) console.warn("Event tracking failed:", error.message);
     });
 }

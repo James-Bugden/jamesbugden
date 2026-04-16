@@ -68,7 +68,16 @@ export function LimitReachedModal({
         </div>
 
         {/* Footer */}
-        <div className="px-5 py-4 flex justify-end" style={{ borderTop: "1px solid rgba(0,0,0,0.06)" }}>
+        <div className="px-5 py-4 flex items-center justify-between gap-3" style={{ borderTop: "1px solid rgba(0,0,0,0.06)" }}>
+          <a
+            href="https://jamesbugden.com/#contact"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="text-[13px] font-semibold px-4 py-2 rounded-lg text-white transition-colors"
+            style={{ backgroundColor: "#D4930D" }}
+          >
+            {tl(lang, "Contact for more", "聯繫取得更多額度")}
+          </a>
           <button
             onClick={onClose}
             className="text-[13px] font-medium px-4 py-2 rounded-lg transition-colors"

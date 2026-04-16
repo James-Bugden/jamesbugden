@@ -68,7 +68,7 @@ export function ResumeTopNav({ activeTab, onTabChange, docName, activeDocId, all
           return (
             <button
               key={tab.id}
-              onClick={() => onTabChange(tab.id)}
+              onClick={() => { onTabChange(tab.id); window.scrollTo({ top: 0, behavior: "smooth" }); }}
               className={cn(
                 "flex items-center gap-2 px-4 py-2 rounded-full text-sm font-medium transition-colors",
                 active ? "" : "hover:bg-gray-100"

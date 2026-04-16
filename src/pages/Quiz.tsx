@@ -205,7 +205,6 @@ export default function Quiz() {
     }
     setEmailError("");
     // TODO: Connect to MailerLite API
-    console.log({ email: email.trim(), source: "quiz", score: totalScore, dimensions: { english: answers[0], resume: answers[1], interview: answers[2], culturalFit: answers[3], compPresence: compPresenceAvg } });
     setEmailSubmitted(true);
     setTimeout(() => setScreen("results"), 800);
   };

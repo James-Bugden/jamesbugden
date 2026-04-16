@@ -235,8 +235,8 @@ export async function syncLocalToServer(): Promise<{ synced: number }> {
 
     const { error } = await (supabase as any).from("user_documents").insert(rows);
     if (error) {
-      console.error("Document sync error:", error);
-      return { synced: 0 };
+      if (import.meta.env.DEV) console.error("Document sync error:", error);
+      throw error;
     }
 
     return { synced: rows.length };

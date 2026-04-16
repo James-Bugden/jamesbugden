@@ -3,6 +3,7 @@ import { supabase } from "@/integrations/supabase/client";
 import type { User, Session } from "@supabase/supabase-js";
 import { syncToMailerLite } from "@/lib/mailerlite";
 import { syncLocalToServer, clearLocalDocuments, loadFromServer } from "@/lib/documentStore";
+import { toast } from "sonner";
 
 interface AuthContextValue {
   user: User | null;
@@ -59,7 +60,9 @@ export function AuthProvider({ children }: { children: ReactNode }) {
             const name = session.user.user_metadata?.full_name || session.user.user_metadata?.name || "";
             syncToMailerLite(session.user.email, name);
             // Sync local documents to server on first login, then load server docs
-            syncLocalToServer().then(() => loadFromServer());
+            syncLocalToServer()
+              .then(() => loadFromServer())
+              .catch(() => toast.error("Failed to sync your documents. Please refresh and try again."));
           }
         }
       }

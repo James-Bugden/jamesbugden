@@ -228,21 +228,23 @@ export default function AdminDashboard() {
   // ── Data fetching ───────────────────────────────────────────────────────────
 
   useEffect(() => {
-    fetchCounts();
-    fetchReviews();
-    fetchChecks();
-    fetchResumeLeads();
-    fetchEmailLeads();
-    fetchFeedback();
-    fetchAccounts();
-    fetchTrends();
-    fetchAiUsage();
-    fetchShareClicks();
-    fetchEventTracks();
-    fetchDocuments();
-    fetchProfiles();
-    fetchGuideProgress();
-    fetchInterviewQuestions();
+    Promise.all([
+      fetchCounts(),
+      fetchReviews(),
+      fetchChecks(),
+      fetchResumeLeads(),
+      fetchEmailLeads(),
+      fetchFeedback(),
+      fetchAccounts(),
+      fetchTrends(),
+      fetchAiUsage(),
+      fetchShareClicks(),
+      fetchEventTracks(),
+      fetchDocuments(),
+      fetchProfiles(),
+      fetchGuideProgress(),
+      fetchInterviewQuestions(),
+    ]);
   }, []);
 
   const fetchCounts = async () => {

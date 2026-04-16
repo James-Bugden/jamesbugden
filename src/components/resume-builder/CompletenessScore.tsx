@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useMemo } from "react";
 import { ChevronDown, ChevronUp, CheckCircle2, Circle, AlertTriangle, ChevronRight } from "lucide-react";
 import { ResumeData } from "./types";
 import { cn } from "@/lib/utils";
@@ -33,46 +33,48 @@ function monthToNum(m: string | undefined): number {
 
 function useComputeChecks(data: ResumeData): CheckItem[] {
   const t = useT();
-  const { personalDetails: pd, sections } = data;
+  return useMemo(() => {
+    const { personalDetails: pd, sections } = data;
 
-  const hasSummary = sections.some(
-    (s) => s.type === "summary" && s.entries.some((e) => (e.fields.description || "").trim().length > 10)
-  );
+    const hasSummary = sections.some(
+      (s) => s.type === "summary" && s.entries.some((e) => (e.fields.description || "").trim().length > 10)
+    );
 
-  const expEntries = sections
-    .filter((s) => s.type === "experience")
-    .flatMap((s) => s.entries);
-  const has2Exp = expEntries.length >= 2;
+    const expEntries = sections
+      .filter((s) => s.type === "experience")
+      .flatMap((s) => s.entries);
+    const has2Exp = expEntries.length >= 2;
 
-  const allDescribed = sections
-    .filter((s) => ["experience", "education", "projects"].includes(s.type))
-    .flatMap((s) => s.entries)
-    .every((e) => (e.fields.description || "").trim().length > 15);
-  const hasDescriptions = allDescribed && sections.some((s) =>
-    ["experience", "education", "projects"].includes(s.type) && s.entries.length > 0
-  );
+    const allDescribed = sections
+      .filter((s) => ["experience", "education", "projects"].includes(s.type))
+      .flatMap((s) => s.entries)
+      .every((e) => (e.fields.description || "").trim().length > 15);
+    const hasDescriptions = allDescribed && sections.some((s) =>
+      ["experience", "education", "projects"].includes(s.type) && s.entries.length > 0
+    );
 
-  const datesFilled = expEntries.length > 0 && expEntries.every(
-    (e) => e.fields.startYear && (e.fields.endYear || e.fields.currentlyHere === "true")
-  );
+    const datesFilled = expEntries.length > 0 && expEntries.every(
+      (e) => e.fields.startYear && (e.fields.endYear || e.fields.currentlyHere === "true")
+    );
 
-  const contactComplete = !!(pd.fullName && pd.email && pd.phone);
+    const contactComplete = !!(pd.fullName && pd.email && pd.phone);
 
-  const hasSkills = sections.some(
-    (s) => s.type === "skills" && s.entries.some((e) => (e.fields.skills || "").trim().length > 0)
-  );
+    const hasSkills = sections.some(
+      (s) => s.type === "skills" && s.entries.some((e) => (e.fields.skills || "").trim().length > 0)
+    );
 
-  const quantified = expEntries.some((e) => /\d+/.test(e.fields.description || ""));
+    const quantified = expEntries.some((e) => /\d+/.test(e.fields.description || ""));
 
-  return [
-    { label: t("scoreCheckSummary"), points: 10, passed: hasSummary, target: "summary" },
-    { label: t("scoreCheck2Exp"), points: 20, passed: has2Exp, target: "experience" },
-    { label: t("scoreCheckDescriptions"), points: 15, passed: hasDescriptions, target: "experience" },
-    { label: t("scoreCheckDates"), points: 10, passed: datesFilled, target: "experience" },
-    { label: t("scoreCheckContact"), points: 15, passed: contactComplete, target: "personal" },
-    { label: t("scoreCheckSkills"), points: 10, passed: hasSkills, target: "skills" },
-    { label: t("scoreCheckQuantified"), points: 20, passed: quantified, target: "experience" },
-  ];
+    return [
+      { label: t("scoreCheckSummary"), points: 10, passed: hasSummary, target: "summary" },
+      { label: t("scoreCheck2Exp"), points: 20, passed: has2Exp, target: "experience" },
+      { label: t("scoreCheckDescriptions"), points: 15, passed: hasDescriptions, target: "experience" },
+      { label: t("scoreCheckDates"), points: 10, passed: datesFilled, target: "experience" },
+      { label: t("scoreCheckContact"), points: 15, passed: contactComplete, target: "personal" },
+      { label: t("scoreCheckSkills"), points: 10, passed: hasSkills, target: "skills" },
+      { label: t("scoreCheckQuantified"), points: 20, passed: quantified, target: "experience" },
+    ];
+  }, [data, t]);
 }
 
 function toMonthIndex(year: string, month: string | undefined): number {
@@ -81,65 +83,63 @@ function toMonthIndex(year: string, month: string | undefined): number {
 
 function useComputeDateWarnings(data: ResumeData): DateWarning[] {
   const t = useT();
-  const warnings: DateWarning[] = [];
-  const dateTypes = ["experience", "education", "projects", "organisations"];
+  return useMemo(() => {
+    const warnings: DateWarning[] = [];
+    const dateTypes = ["experience", "education", "projects", "organisations"];
 
-  for (const section of data.sections) {
-    if (!dateTypes.includes(section.type)) continue;
-    for (const entry of section.entries) {
-      const { startYear, endYear, startMonth, endMonth, currentlyHere } = entry.fields;
-      const name =
-        entry.fields.position || entry.fields.degree || entry.fields.name || entry.fields.title || "—";
+    for (const section of data.sections) {
+      if (!dateTypes.includes(section.type)) continue;
+      for (const entry of section.entries) {
+        const { startYear, endYear, startMonth, endMonth, currentlyHere } = entry.fields;
+        const name =
+          entry.fields.position || entry.fields.degree || entry.fields.name || entry.fields.title || "—";
 
-      // Missing end date
-      if (startYear && !endYear && currentlyHere !== "true") {
-        warnings.push({ label: t("dateWarnMissing"), entryName: name });
-      }
+        if (startYear && !endYear && currentlyHere !== "true") {
+          warnings.push({ label: t("dateWarnMissing"), entryName: name });
+        }
 
-      // Inconsistent: end before start
-      if (startYear && endYear) {
-        const sy = parseInt(startYear, 10);
-        const ey = parseInt(endYear, 10);
-        if (!isNaN(sy) && !isNaN(ey)) {
-          if (ey < sy || (ey === sy && monthToNum(endMonth) < monthToNum(startMonth))) {
-            warnings.push({ label: t("dateWarnInconsistent"), entryName: name });
+        if (startYear && endYear) {
+          const sy = parseInt(startYear, 10);
+          const ey = parseInt(endYear, 10);
+          if (!isNaN(sy) && !isNaN(ey)) {
+            if (ey < sy || (ey === sy && monthToNum(endMonth) < monthToNum(startMonth))) {
+              warnings.push({ label: t("dateWarnInconsistent"), entryName: name });
+            }
           }
         }
       }
     }
-  }
 
-  // Overlapping date ranges within experience sections
-  const expEntries = data.sections
-    .filter((s) => s.type === "experience")
-    .flatMap((s) => s.entries)
-    .filter((e) => e.fields.startYear)
-    .map((e) => ({
-      name: e.fields.position || e.fields.company || "—",
-      start: toMonthIndex(e.fields.startYear, e.fields.startMonth),
-      end: e.fields.currentlyHere === "true"
-        ? Infinity
-        : e.fields.endYear
-          ? toMonthIndex(e.fields.endYear, e.fields.endMonth)
-          : null,
-    }))
-    .filter((e) => e.end !== null) as { name: string; start: number; end: number }[];
+    const expEntries = data.sections
+      .filter((s) => s.type === "experience")
+      .flatMap((s) => s.entries)
+      .filter((e) => e.fields.startYear)
+      .map((e) => ({
+        name: e.fields.position || e.fields.company || "—",
+        start: toMonthIndex(e.fields.startYear, e.fields.startMonth),
+        end: e.fields.currentlyHere === "true"
+          ? Infinity
+          : e.fields.endYear
+            ? toMonthIndex(e.fields.endYear, e.fields.endMonth)
+            : null,
+      }))
+      .filter((e) => e.end !== null) as { name: string; start: number; end: number }[];
 
-  for (let i = 0; i < expEntries.length; i++) {
-    for (let j = i + 1; j < expEntries.length; j++) {
-      const a = expEntries[i];
-      const b = expEntries[j];
-      // Two ranges overlap if a.start <= b.end AND b.start <= a.end
-      if (a.start <= b.end && b.start <= a.end) {
-        warnings.push({
-          label: t("dateWarnOverlap"),
-          entryName: `${a.name} & ${b.name}`,
-        });
+    for (let i = 0; i < expEntries.length; i++) {
+      for (let j = i + 1; j < expEntries.length; j++) {
+        const a = expEntries[i];
+        const b = expEntries[j];
+        if (a.start <= b.end && b.start <= a.end) {
+          warnings.push({
+            label: t("dateWarnOverlap"),
+            entryName: `${a.name} & ${b.name}`,
+          });
+        }
       }
     }
-  }
 
-  return warnings;
+    return warnings;
+  }, [data, t]);
 }
 
 export function CompletenessScore({ data, onNavigate }: CompletenessScoreProps) {
@@ -147,9 +147,11 @@ export function CompletenessScore({ data, onNavigate }: CompletenessScoreProps) 
   const [expanded, setExpanded] = useState(false);
   const checks = useComputeChecks(data);
   const dateWarnings = useComputeDateWarnings(data);
-  const earned = checks.filter((c) => c.passed).reduce((s, c) => s + c.points, 0);
-  const total = checks.reduce((s, c) => s + c.points, 0);
-  const pct = Math.round((earned / total) * 100);
+  const { earned, total, pct } = useMemo(() => {
+    const e = checks.filter((c) => c.passed).reduce((s, c) => s + c.points, 0);
+    const t = checks.reduce((s, c) => s + c.points, 0);
+    return { earned: e, total: t, pct: Math.round((e / t) * 100) };
+  }, [checks]);
 
   const radius = 28;
   const circumference = 2 * Math.PI * radius;

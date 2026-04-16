@@ -1,4 +1,4 @@
-import { useState, useCallback, useEffect, useRef, useMemo } from "react";
+import React, { useState, useCallback, useEffect, useRef, useMemo } from "react";
 import { DndContext, closestCenter, KeyboardSensor, PointerSensor, TouchSensor, useSensor, useSensors, DragEndEvent } from "@dnd-kit/core";
 import { useSearchParams } from "react-router-dom";
 import { SortableContext, verticalListSortingStrategy, arrayMove } from "@dnd-kit/sortable";
@@ -47,6 +47,24 @@ import { LimitReachedModal } from "@/components/LimitReachedModal";
 import { SEO } from "@/components/SEO";
 
 type ViewMode = "dashboard" | "resume-editor" | "cover-letter-editor";
+
+class PreviewErrorBoundary extends React.Component<{ children: React.ReactNode }, { hasError: boolean }> {
+  state = { hasError: false };
+  static getDerivedStateFromError() { return { hasError: true }; }
+  render() {
+    if (this.state.hasError) {
+      return (
+        <div className="flex flex-col items-center justify-center h-full gap-3 p-6 text-center">
+          <span className="text-sm font-medium text-red-600">Preview crashed</span>
+          <button onClick={() => this.setState({ hasError: false })} className="text-xs px-3 py-1.5 rounded-lg bg-gray-100 hover:bg-gray-200 transition-colors">
+            Try again
+          </button>
+        </div>
+      );
+    }
+    return this.props.children;
+  }
+}
 
 /* ── Brand colors ─────────────────────────────────────────── */
 const BRAND = {
@@ -1196,7 +1214,9 @@ const ResumeBuilder = () => {
             {editorContent}
           </div>
           <div className="flex-1 h-full relative">
-            <ResumePdfPreview data={data} customize={customize} onPageCount={handlePageCount} />
+            <PreviewErrorBoundary>
+              <ResumePdfPreview data={data} customize={customize} onPageCount={handlePageCount} />
+            </PreviewErrorBoundary>
             <AnalyzerSuggestionsPanel
               suggestions={analyzerSuggestions}
               onApply={(s) => {
@@ -1234,7 +1254,9 @@ const ResumeBuilder = () => {
         {/* Mobile preview overlay */}
         {mobilePreview && (
           <MobilePreviewOverlay onClose={() => setMobilePreview(false)} onDownload={() => handleDownload()} downloading={downloading}>
-            <ResumePdfPreview data={data} customize={customize} onPageCount={handlePageCount} />
+            <PreviewErrorBoundary>
+              <ResumePdfPreview data={data} customize={customize} onPageCount={handlePageCount} />
+            </PreviewErrorBoundary>
             <AnalyzerSuggestionsPanel
               suggestions={analyzerSuggestions}
               onApply={(s) => {
