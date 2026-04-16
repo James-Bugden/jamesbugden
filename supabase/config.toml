@@ -1,13 +1,13 @@
 project_id = "rpeaehxawjvbhdneglce"
 
-[functions.analyze-resume]
-verify_jwt = false
-
-[functions.threads-sync]
-verify_jwt = false
-
-[functions.analytics-export]
-verify_jwt = false
-
-[functions.process-email-queue]
-verify_jwt = true
+[functions]
+  [functions.analytics-export]
+    verify_jwt = false
+  [functions.analyze-resume]
+    verify_jwt = false
+  [functions.auth-email-hook]
+    verify_jwt = false
+  [functions.process-email-queue]
+    verify_jwt = true
+  [functions.threads-sync]
+    verify_jwt = false
