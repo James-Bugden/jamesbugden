@@ -27,7 +27,7 @@ export function useGuideStorage<T>(guideKey: string, initialValue: T) {
     try {
       localStorage.setItem(lsKey, JSON.stringify(value));
     } catch (e) {
-      console.warn("Failed to save to localStorage:", e);
+      if (import.meta.env.DEV) console.warn("Failed to save to localStorage:", e);
     }
   }, [lsKey, value]);
 
@@ -59,7 +59,7 @@ export function useGuideStorage<T>(guideKey: string, initialValue: T) {
           }
         }
       } catch (e) {
-        console.warn("Cloud sync failed:", e);
+        if (import.meta.env.DEV) console.warn("Cloud sync failed:", e);
       }
     })();
   }, [isLoggedIn, user, guideKey, lsKey, initialValue]);
@@ -77,7 +77,7 @@ export function useGuideStorage<T>(guideKey: string, initialValue: T) {
           { onConflict: "user_id,guide_key" }
         );
       } catch (e) {
-        console.warn("Cloud save failed:", e);
+        if (import.meta.env.DEV) console.warn("Cloud save failed:", e);
       }
     }, 1000);
 

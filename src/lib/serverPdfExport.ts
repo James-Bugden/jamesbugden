@@ -28,7 +28,7 @@ export async function exportResumePdfServer({
   try {
     await prepareFonts(customize, data);
   } catch (fontErr: any) {
-    console.error("[ResumeDownload] Font preparation failed:", fontErr?.message, fontErr?.stack);
+    if (import.meta.env.DEV) console.error("[ResumeDownload] Font preparation failed:", fontErr?.message, fontErr?.stack);
     throw new Error(`Font loading failed: ${fontErr?.message || "Unknown font error"}`);
   }
 
@@ -38,7 +38,7 @@ export async function exportResumePdfServer({
     const doc = React.createElement(ResumePDF, { data, customize } as any);
     blob = await pdf(doc as any).toBlob();
   } catch (renderErr: any) {
-    console.error("[ResumeDownload] PDF render failed:", renderErr?.message, renderErr?.stack);
+    if (import.meta.env.DEV) console.error("[ResumeDownload] PDF render failed:", renderErr?.message, renderErr?.stack);
     throw new Error(`PDF render failed: ${renderErr?.message || "Unknown render error"}`);
   }
 
@@ -56,7 +56,7 @@ export async function exportResumePdfServer({
     setTimeout(() => URL.revokeObjectURL(url), 500);
   } catch (dlErr: any) {
     URL.revokeObjectURL(url);
-    console.error("[ResumeDownload] Download trigger failed:", dlErr?.message, dlErr?.stack);
+    if (import.meta.env.DEV) console.error("[ResumeDownload] Download trigger failed:", dlErr?.message, dlErr?.stack);
     throw new Error(`Download trigger failed: ${dlErr?.message || "Unknown download error"}`);
   }
 }

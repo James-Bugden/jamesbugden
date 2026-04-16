@@ -751,7 +751,7 @@ const ResumeBuilder = () => {
       setShowPdfSurvey(true);
     } catch (err: any) {
       const errMsg = err?.message || "Unknown error";
-      console.error("[ResumeDownload] handleDownload failed:", errMsg, err?.stack);
+      if (import.meta.env.DEV) console.error("[ResumeDownload] handleDownload failed:", errMsg, err?.stack);
       toast({
         title: lang === "zh-tw" ? "下載失敗" : "Download failed",
         description: lang === "zh-tw"

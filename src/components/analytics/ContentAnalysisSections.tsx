@@ -312,7 +312,7 @@ function PostingTimeHeatmap({ posts }: { posts: ThreadsPost[] }) {
         )}
       </div>
 
-      <div className="overflow-x-auto">
+      <div className="overflow-x-auto max-w-full">
         <div className="min-w-[600px]">
           {/* Hour labels */}
           <div className="flex mb-1">

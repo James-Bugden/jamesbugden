@@ -27,7 +27,7 @@ export function useBuilderAiUsage() {
       setAiToolCount(toolRes.data ?? 0);
       if (adminRes.data) setIsAdmin(true);
     } catch (e) {
-      console.error("Failed to fetch AI usage counts:", e);
+      if (import.meta.env.DEV) console.error("Failed to fetch AI usage counts:", e);
     } finally {
       setLoading(false);
     }

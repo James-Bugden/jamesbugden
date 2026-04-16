@@ -30,7 +30,7 @@ export function useAnalyzerUsage() {
       }
       if (adminRes.data) setIsAdmin(true);
     } catch (e) {
-      console.error("Failed to fetch analyzer usage:", e);
+      if (import.meta.env.DEV) console.error("Failed to fetch analyzer usage:", e);
     } finally {
       setLoading(false);
     }

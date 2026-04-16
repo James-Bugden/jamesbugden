@@ -11,7 +11,7 @@ export function cn(...inputs: ClassValue[]) {
  */
 export const getSafeErrorMessage = (error: unknown): string => {
   // Log full error for debugging (only visible in dev console, not exposed to users)
-  console.error('Operation error:', error);
+  if (import.meta.env.DEV) console.error('Operation error:', error);
   
   const message = (error as { message?: string })?.message?.toLowerCase() || '';
   

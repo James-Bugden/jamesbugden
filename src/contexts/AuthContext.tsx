@@ -61,7 +61,12 @@ export function AuthProvider({ children }: { children: ReactNode }) {
             syncToMailerLite(session.user.email, name);
             // Sync local documents to server on first login, then load server docs
             syncLocalToServer()
-              .then(() => loadFromServer())
+              .then((result) => {
+                if (result && "error" in result) {
+                  toast.error("Failed to sync your documents. Please refresh and try again.");
+                }
+                return loadFromServer();
+              })
               .catch(() => toast.error("Failed to sync your documents. Please refresh and try again."));
           }
         }

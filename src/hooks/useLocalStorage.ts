@@ -14,7 +14,7 @@ export function useLocalStorage<T>(key: string, initialValue: T) {
     try {
       localStorage.setItem(key, JSON.stringify(storedValue));
     } catch (e) {
-      console.warn("Failed to save to localStorage:", e);
+      if (import.meta.env.DEV) console.warn("Failed to save to localStorage:", e);
     }
   }, [key, storedValue]);
 

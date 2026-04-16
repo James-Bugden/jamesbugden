@@ -197,7 +197,7 @@ export function LocationAutocomplete({ label, value, onChange, placeholder }: Lo
           {filtered.map((city, i) => (
             <li
               key={city}
-              onMouseDown={(e) => { e.preventDefault(); select(city); }}
+              onPointerDown={(e) => { e.preventDefault(); select(city); }}
               onMouseEnter={() => setHighlightIndex(i)}
               className={`flex items-center gap-2 px-3 py-2 text-sm cursor-pointer transition-colors ${
                 i === highlightIndex ? "bg-gray-100" : "hover:bg-gray-50"
