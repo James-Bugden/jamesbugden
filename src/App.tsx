@@ -70,6 +70,7 @@ const TrackerPage = lazy(() => import("./pages/TrackerPage"));
 const Login = lazy(() => import("./pages/Login"));
 const Signup = lazy(() => import("./pages/Signup"));
 const ResetPassword = lazy(() => import("./pages/ResetPassword"));
+const Unsubscribe = lazy(() => import("./pages/Unsubscribe"));
 const Dashboard = lazy(() => import("./pages/Dashboard"));
 const DashboardZhTw = lazy(() => import("./pages/DashboardZhTw"));
 const RecruiterScreenGuide = lazy(() => import("./pages/RecruiterScreenGuide"));
@@ -339,6 +340,7 @@ const App = () => (
                     <Route path="/login" element={<Login />} />
                     <Route path="/signup" element={<Signup />} />
                     <Route path="/reset-password" element={<ResetPassword />} />
+                    <Route path="/unsubscribe" element={<Unsubscribe />} />
                     <Route path="/dashboard" element={<Dashboard />} />
                     <Route path="/zh-tw/dashboard" element={<DashboardZhTw />} />
 
