@@ -1249,7 +1249,7 @@ export async function parseResumeWithFallback(
 
     warnings.push("AI returned empty sections, falling back to heuristic parser.");
   } catch (err) {
-    console.warn("AI parse failed, falling back to heuristic:", err);
+    if (import.meta.env.DEV) console.warn("AI parse failed, falling back to heuristic:", err);
     warnings.push("AI parsing unavailable, using heuristic parser.");
   }
 

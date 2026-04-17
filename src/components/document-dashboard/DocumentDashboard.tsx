@@ -33,6 +33,7 @@ import {
   migrateFromLegacy,
   seedExampleResume,
   DocType,
+  checkServerDocumentLimit,
 } from "@/lib/documentStore";
 import { cn } from "@/lib/utils";
 import { useNavigate, Link } from "react-router-dom";
@@ -202,9 +203,11 @@ export function DocumentDashboard({ onOpenDocument, onImport }: DocumentDashboar
     onOpenDocument(doc);
   };
 
-  const handleCreate = (type: DocType) => {
+  const handleCreate = async (type: DocType) => {
     if (type === "resume") {
-      if (resumeLimitReached) {
+      // Check both local and server-side counts (catches stale state from other tabs)
+      const serverAllowed = await checkServerDocumentLimit("resume");
+      if (resumeLimitReached || !serverAllowed) {
         openReplacePicker({ type: "create" });
         return;
       }
@@ -215,8 +218,9 @@ export function DocumentDashboard({ onOpenDocument, onImport }: DocumentDashboar
     onOpenDocument(doc);
   };
 
-  const handleDuplicate = (id: string) => {
-    if (resumeLimitReached) {
+  const handleDuplicate = async (id: string) => {
+    const serverAllowed = await checkServerDocumentLimit("resume");
+    if (resumeLimitReached || !serverAllowed) {
       openReplacePicker({ type: "duplicate", sourceId: id });
       return;
     }

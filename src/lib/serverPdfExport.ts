@@ -24,12 +24,24 @@ export async function exportResumePdfServer({
   customize,
   fileName = "Resume",
 }: PdfExportOptions): Promise<void> {
-  // Step 1: Font preparation
-  try {
-    await prepareFonts(customize, data);
-  } catch (fontErr: any) {
-    if (import.meta.env.DEV) console.error("[ResumeDownload] Font preparation failed:", fontErr?.message, fontErr?.stack);
-    throw new Error(`Font loading failed: ${fontErr?.message || "Unknown font error"}`);
+  // Step 1: Font preparation (with one retry on transient failure)
+  let fontPrepared = false;
+  let lastFontErr: any = null;
+  for (let attempt = 0; attempt < 2 && !fontPrepared; attempt++) {
+    try {
+      await prepareFonts(customize, data);
+      fontPrepared = true;
+    } catch (fontErr: any) {
+      lastFontErr = fontErr;
+      if (attempt === 0) {
+        // Brief backoff before retry
+        await new Promise((r) => setTimeout(r, 250));
+      }
+    }
+  }
+  if (!fontPrepared) {
+    if (import.meta.env.DEV) console.error("[ResumeDownload] Font preparation failed after retry:", lastFontErr?.message, lastFontErr?.stack);
+    throw new Error(`Font loading failed: ${lastFontErr?.message || "Unknown font error"}`);
   }
 
   // Step 2: PDF rendering

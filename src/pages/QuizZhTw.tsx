@@ -12,6 +12,7 @@ import {
   ResponsiveContainer,
 } from "recharts";
 import { SEO } from "@/components/SEO";
+import { syncToMailerLite } from "@/lib/mailerlite";
 
 /* ─── types ─── */
 type Screen = "intro" | "questions" | "email" | "results" | "results-minimal";
@@ -202,7 +203,7 @@ export default function QuizZhTw() {
       return;
     }
     setEmailError("");
-    // TODO: Connect to MailerLite API
+    syncToMailerLite(email.trim());
     setEmailSubmitted(true);
     setTimeout(() => setScreen("results"), 800);
   };
