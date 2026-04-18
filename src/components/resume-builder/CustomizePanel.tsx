@@ -501,6 +501,30 @@ function DesignTab({ settings, onChange }: { settings: CustomizeSettings; onChan
         </div>
 
         <CheckboxRow label="Uppercase headings" checked={settings.headingUppercase !== false} onChange={(v) => onChange({ headingUppercase: v })} />
+
+        {/* Section heading color — was wired in both renderers
+            (ResumePDF and ResumePreview read `c?.headingsColor`) but
+            previously had no UI control at all. Users were stuck on the
+            default #111827. */}
+        <div className="mt-3 pt-3 border-t border-gray-100">
+          <FieldLabel>Color</FieldLabel>
+          <ColorPickerRow
+            label="Section headings"
+            value={settings.headingsColor || "#111827"}
+            onChange={(v) => onChange({ headingsColor: v })}
+          />
+        </div>
+
+        {/* Heading font picker — headingFont is consumed by both
+            renderers (the bold heading at the top of each section) but
+            had no UI exposure. Use the same FontPicker as bodyFont. */}
+        <div className="mt-3 pt-3 border-t border-gray-100">
+          <FieldLabel>Heading font</FieldLabel>
+          <FontPicker
+            selectedFont={settings.headingFont || "'Lora', serif"}
+            onSelect={(f) => onChange({ headingFont: f })}
+          />
+        </div>
       </SettingCard>
 
       <SettingCard title={t("customizeLinkStyling")} defaultOpen={false}>
@@ -625,6 +649,18 @@ function HeaderTab({ settings, onChange }: { settings: CustomizeSettings; onChan
         <div className="mb-3">
           <CheckboxRow label="Name bold" checked={settings.nameBold} onChange={(v) => onChange({ nameBold: v })} />
         </div>
+
+        {/* Name color — wired in both renderers (ResumePDF line 2059
+            nameEl style.color, ResumePreview equivalent) but previously
+            had no UI. */}
+        <div className="pt-3 border-t border-gray-100">
+          <FieldLabel>Color</FieldLabel>
+          <ColorPickerRow
+            label="Name"
+            value={settings.nameColor || "#111827"}
+            onChange={(v) => onChange({ nameColor: v })}
+          />
+        </div>
       </SettingCard>
 
       <SettingCard title={t("customizeProfessionalTitle")} defaultOpen={false}>
@@ -649,6 +685,16 @@ function HeaderTab({ settings, onChange }: { settings: CustomizeSettings; onChan
           value={String(settings.titleSameLine)}
            onChange={(v) => onChange({ titleSameLine: v === "true" })}
          />
+
+        {/* Title color — wired in both renderers but previously had no UI. */}
+        <div className="mt-3 pt-3 border-t border-gray-100">
+          <FieldLabel>Color</FieldLabel>
+          <ColorPickerRow
+            label="Title"
+            value={settings.titleColor || "#6B7280"}
+            onChange={(v) => onChange({ titleColor: v })}
+          />
+        </div>
       </SettingCard>
 
       <SettingCard title={t("customizePhoto")} defaultOpen={false}>
