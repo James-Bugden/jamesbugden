@@ -95,11 +95,36 @@ function safeData(data?: ResumeData): ResumeData {
   };
 }
 
-function formatDateRange(fields: Record<string, string>) {
-  const start = [fields.startMonth?.slice(0, 3), fields.startYear].filter(Boolean).join(" ");
+// Short-form month labels for compact date display. Chinese uses "1 月"
+// format because it reads naturally in both "2024 1 月" (with leading year)
+// and bare "1 月" contexts.
+const EN_SHORT_MONTHS_DOM: Record<string, string> = {
+  January: "Jan", February: "Feb", March: "Mar", April: "Apr",
+  May: "May", June: "Jun", July: "Jul", August: "Aug",
+  September: "Sep", October: "Oct", November: "Nov", December: "Dec",
+};
+const ZH_NUM_MONTHS_DOM: Record<string, string> = {
+  January: "1 月", February: "2 月", March: "3 月", April: "4 月",
+  May: "5 月", June: "6 月", July: "7 月", August: "8 月",
+  September: "9 月", October: "10 月", November: "11 月", December: "12 月",
+};
+
+function formatDateRange(fields: Record<string, string>, lang?: string) {
+  const isZh = lang?.startsWith("zh");
+  const shortMonth = (m?: string) => {
+    if (!m) return "";
+    if (isZh) return ZH_NUM_MONTHS_DOM[m] ?? m;
+    return EN_SHORT_MONTHS_DOM[m] ?? m.slice(0, 3);
+  };
+  const fmt = (m?: string, y?: string) => {
+    const mm = shortMonth(m);
+    if (mm && y) return isZh ? `${y} ${mm}` : `${mm} ${y}`;
+    return mm || y || "";
+  };
+  const start = fmt(fields.startMonth, fields.startYear);
   const end = fields.currentlyHere === "true"
-    ? "Present"
-    : [fields.endMonth?.slice(0, 3), fields.endYear].filter(Boolean).join(" ");
+    ? (isZh ? "至今" : "Present")
+    : fmt(fields.endMonth, fields.endYear);
   return [start, end].filter(Boolean).join(" – ");
 }
 
@@ -330,11 +355,26 @@ function renderSectionEntries(section: ResumeSection, customize?: CustomizeSetti
     const sep = section.separator || c?.languagesSeparator || "bullet";
     const subStyle = section.subtitleStyle || "dash";
 
+    // Translate stored proficiency labels to match UI language.
+    const localizeProf = (prof: string): string => {
+      const isZh = c?.language?.startsWith("zh");
+      if (!isZh) return prof;
+      switch (prof) {
+        case "Native or bilingual proficiency": return "母語或雙語程度";
+        case "Full professional proficiency": return "完全專業程度";
+        case "Professional working proficiency": return "工作專業程度";
+        case "Limited working proficiency": return "有限工作程度";
+        case "Elementary proficiency": return "初級程度";
+        default: return prof;
+      }
+    };
+
     const formatLangLabel = (lang: string, prof: string) => {
-      if (!prof) return lang;
-      if (subStyle === "dash") return `${lang} — ${prof}`;
-      if (subStyle === "bracket") return `${lang} (${prof})`;
-      return `${lang}: ${prof}`;
+      const localized = localizeProf(prof);
+      if (!localized) return lang;
+      if (subStyle === "dash") return `${lang} — ${localized}`;
+      if (subStyle === "bracket") return `${lang} (${localized})`;
+      return `${lang}: ${localized}`;
     };
 
     const sepChar = sep === "pipe" ? " | " : sep === "none" ? "  " : " · ";
@@ -387,7 +427,7 @@ function renderSectionEntries(section: ResumeSection, customize?: CustomizeSetti
         {validEntries.map((entry) => (
           <div key={entry.id} className="flex items-center justify-between gap-[3mm]">
             <span style={{ fontSize: bodyPt(base), color: "var(--resume-body)", fontWeight: 600 }}>{entry.fields.language?.trim() || "Language"}</span>
-            <span data-color-role="dates" style={{ fontSize: datePt(base), color: "var(--resume-dates)" }}>{entry.fields.proficiency?.trim()}</span>
+            <span data-color-role="dates" style={{ fontSize: datePt(base), color: "var(--resume-dates)" }}>{localizeProf(entry.fields.proficiency?.trim() || "")}</span>
           </div>
         ))}
       </div>
@@ -517,7 +557,7 @@ function renderSectionEntries(section: ResumeSection, customize?: CustomizeSetti
               const order = c?.experienceOrder ?? "title-first";
               const primaryText = order === "title-first" ? (f.position || "") : (f.company || "");
               const secondaryText = order === "title-first" ? (f.company || "") : (f.position || "");
-              const date = formatDateRange(f) || f.date || "";
+              const date = formatDateRange(f, c?.language) || f.date || "";
 
               return (
                 <div key={entry.id} data-page-item>
@@ -551,10 +591,23 @@ function renderSectionEntries(section: ResumeSection, customize?: CustomizeSetti
 
             const firstEntry = group.entries[group.entries.length - 1];
             const lastEntry = group.entries[0];
-            const groupStart = [firstEntry.fields.startMonth?.slice(0, 3), firstEntry.fields.startYear].filter(Boolean).join(" ");
-            const groupEnd = lastEntry.fields.currentlyHere === "true"
-              ? "Present"
-              : [lastEntry.fields.endMonth?.slice(0, 3), lastEntry.fields.endYear].filter(Boolean).join(" ");
+            // Build a grouped "promotion" date range using the same locale-aware
+            // rendering as single entries (English vs Chinese month forms, and
+            // "Present" vs "至今"). Uses formatDateRange's helpers by feeding a
+            // start-only or end-only record.
+            const isZh = c?.language?.startsWith("zh");
+            const shortMo = (m?: string) =>
+              !m ? "" : (isZh ? (ZH_NUM_MONTHS_DOM[m] ?? m) : (EN_SHORT_MONTHS_DOM[m] ?? m.slice(0, 3)));
+            const pair = (m?: string, y?: string) => {
+              const mm = shortMo(m);
+              if (mm && y) return isZh ? `${y} ${mm}` : `${mm} ${y}`;
+              return mm || y || "";
+            };
+            const groupStart = pair(firstEntry.fields.startMonth, firstEntry.fields.startYear);
+            const groupEnd =
+              lastEntry.fields.currentlyHere === "true"
+                ? (isZh ? "至今" : "Present")
+                : pair(lastEntry.fields.endMonth, lastEntry.fields.endYear);
             const groupDateRange = [groupStart, groupEnd].filter(Boolean).join(" – ");
 
             return (
@@ -563,7 +616,7 @@ function renderSectionEntries(section: ResumeSection, customize?: CustomizeSetti
                 <div style={{ marginTop: "1.5mm", display: "flex", flexDirection: "column", gap: "2mm" }}>
                   {group.entries.map(entry => {
                     const f = entry.fields;
-                    const roleDate = formatDateRange(f) || f.date || "";
+                    const roleDate = formatDateRange(f, c?.language) || f.date || "";
                     return (
                       <div key={entry.id}>
                         <div className="flex items-start justify-between gap-[4mm]">
@@ -609,7 +662,7 @@ function renderSectionEntries(section: ResumeSection, customize?: CustomizeSetti
             secondaryText = f.company || f.institution || f.issuer || f.publisher || f.role || "";
           }
 
-          const date = formatDateRange(f) || f.date || "";
+          const date = formatDateRange(f, c?.language) || f.date || "";
 
           if (layout === "inline") {
             const headline = [primaryText, secondaryText].filter(Boolean).join(" · ");

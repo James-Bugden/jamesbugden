@@ -219,7 +219,9 @@ function CheckboxRow({ label, checked, onChange }: { label: string; checked: boo
 export function CustomizePanel({ settings, onChange, sections, resumeData }: CustomizePanelProps) {
   return (
     <div className="h-full flex flex-col">
-      <div className="flex-1 overflow-y-auto p-4 space-y-4" style={{ backgroundColor: "#f5f5f3" }}>
+      {/* Tighter padding on mobile reclaims ~16px of horizontal space so
+          thumbnails/sliders aren't cramped on narrow viewports. */}
+      <div className="flex-1 overflow-y-auto p-3 sm:p-4 space-y-3 sm:space-y-4" style={{ backgroundColor: "#f5f5f3" }}>
         <BasicsTab settings={settings} onChange={onChange} resumeData={resumeData} />
         <LayoutTab settings={settings} onChange={onChange} sections={sections} />
         <DesignTab settings={settings} onChange={onChange} />
@@ -251,7 +253,8 @@ function BasicsTab({ settings, onChange, resumeData }: { settings: CustomizeSett
 
       <SettingCard title={t("customizeApplyTemplate")}>
         <p className="text-xs mb-3" style={{ color: B.textSec }}>{t("customizeApplyTemplateHint")}</p>
-        <div className="grid grid-cols-2 gap-3 mb-3">
+        {/* 1 column on narrow mobile (thumbnails need room), 2 columns from sm up */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 mb-3">
           {TEMPLATE_LIST.map((t) => {
             const previewSettings = applyTemplatePreset(DEFAULT_CUSTOMIZE, t.id);
             const isSelected = settings.template === t.id;
@@ -458,7 +461,8 @@ function DesignTab({ settings, onChange }: { settings: CustomizeSettings; onChan
 
       <SettingCard title={t("customizeSectionHeadings")}>
         <FieldLabel>Style</FieldLabel>
-        <div className="grid grid-cols-4 gap-2 mb-4">
+        {/* 3 columns on narrow mobile so thumbs stay tappable, 4 from sm up */}
+        <div className="grid grid-cols-3 sm:grid-cols-4 gap-2 mb-4">
           <TooltipProvider delayDuration={300}>
           {HEADING_STYLES.map((hs) => (
             <Tooltip key={hs.id}>

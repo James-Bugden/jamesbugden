@@ -328,16 +328,38 @@ function safeData(data?: ResumeData): ResumeData {
   };
 }
 
-function formatDateRange(fields: Record<string, string>) {
-  const start = [fields.startMonth?.slice(0, 3), fields.startYear]
-    .filter(Boolean)
-    .join(" ");
-  const end =
-    fields.currentlyHere === "true"
-      ? "Present"
-      : [fields.endMonth?.slice(0, 3), fields.endYear]
-          .filter(Boolean)
-          .join(" ");
+// English → short (Jan, Feb, Mar) and Chinese → numeric (1 月, 2 月, 3 月)
+// for compact rendering in the PDF. The full month names are localized for
+// UI display via localizeMonth(); here we use shorter variants to save
+// horizontal space in the PDF right-aligned date column.
+const EN_SHORT_MONTHS: Record<string, string> = {
+  January: "Jan", February: "Feb", March: "Mar", April: "Apr",
+  May: "May", June: "Jun", July: "Jul", August: "Aug",
+  September: "Sep", October: "Oct", November: "Nov", December: "Dec",
+};
+const ZH_NUM_MONTHS: Record<string, string> = {
+  January: "1 月", February: "2 月", March: "3 月", April: "4 月",
+  May: "5 月", June: "6 月", July: "7 月", August: "8 月",
+  September: "9 月", October: "10 月", November: "11 月", December: "12 月",
+};
+
+function formatDateRange(fields: Record<string, string>, lang?: string) {
+  const isZh = lang?.startsWith("zh");
+  const shortMonth = (m?: string) => {
+    if (!m) return "";
+    if (isZh) return ZH_NUM_MONTHS[m] ?? m;
+    return EN_SHORT_MONTHS[m] ?? m.slice(0, 3);
+  };
+  const fmt = (m?: string, y?: string) => {
+    const mm = shortMonth(m);
+    if (mm && y) return isZh ? `${y} ${mm}` : `${mm} ${y}`;
+    return mm || y || "";
+  };
+  const start = fmt(fields.startMonth, fields.startYear);
+  const endIsPresent = fields.currentlyHere === "true";
+  const end = endIsPresent
+    ? (isZh ? "至今" : "Present")
+    : fmt(fields.endMonth, fields.endYear);
   return [start, end].filter(Boolean).join(" – ");
 }
 
@@ -1066,11 +1088,27 @@ function PdfLanguagesSection({
   const sep = section.separator || c?.languagesSeparator || "bullet";
   const subStyle = section.subtitleStyle || "dash";
 
+  // Translate proficiency labels to match UI language (storage stays English
+  // for backward-compat; display form is localized).
+  const localizeProf = (prof: string): string => {
+    const isZh = c?.language?.startsWith("zh");
+    if (!isZh) return prof;
+    switch (prof) {
+      case "Native or bilingual proficiency": return "母語或雙語程度";
+      case "Full professional proficiency": return "完全專業程度";
+      case "Professional working proficiency": return "工作專業程度";
+      case "Limited working proficiency": return "有限工作程度";
+      case "Elementary proficiency": return "初級程度";
+      default: return prof;
+    }
+  };
+
   const formatLangLabel = (lang: string, prof: string) => {
-    if (!prof) return lang;
-    if (subStyle === "dash") return `${lang} — ${prof}`;
-    if (subStyle === "bracket") return `${lang} (${prof})`;
-    return `${lang}: ${prof}`;
+    const localized = localizeProf(prof);
+    if (!localized) return lang;
+    if (subStyle === "dash") return `${lang} — ${localized}`;
+    if (subStyle === "bracket") return `${lang} (${localized})`;
+    return `${lang}: ${localized}`;
   };
 
   const sepChar = sep === "pipe" ? " | " : sep === "none" ? "  " : " · ";
@@ -1165,7 +1203,7 @@ function PdfLanguagesSection({
             {entry.fields.language?.trim() || "Language"}
           </Text>
           <Text style={{ fontSize: datePt(base), color: colors.dates }}>
-            {entry.fields.proficiency?.trim()}
+            {localizeProf(entry.fields.proficiency?.trim() || "")}
           </Text>
         </View>
       ))}
@@ -1357,7 +1395,7 @@ function PdfPatternedEntries({
               <View style={{ marginTop: mm(1.5), gap: mm(2) }}>
                 {group.entries.map((entry) => {
                   const f = entry.fields;
-                  const roleDate = formatDateRange(f) || f.date || "";
+                  const roleDate = formatDateRange(f, c?.language) || f.date || "";
                   return (
                     <View key={entry.id}>
                       <View
@@ -1501,7 +1539,7 @@ function PdfSingleEntry({
       f.company || f.institution || f.issuer || f.publisher || f.role || "";
   }
 
-  const date = formatDateRange(f) || f.date || "";
+  const date = formatDateRange(f, c?.language) || f.date || "";
 
   if (layout === "inline") {
     const headline = [primaryText, secondaryText].filter(Boolean).join(" · ");

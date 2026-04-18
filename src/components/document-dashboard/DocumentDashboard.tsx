@@ -26,6 +26,7 @@ import {
 import {
   SavedDocument,
   getAllDocuments,
+  onDocumentsUpdated,
   createDocument,
   deleteDocument,
   duplicateDocument,
@@ -102,6 +103,18 @@ export function DocumentDashboard({ onOpenDocument, onImport }: DocumentDashboar
     migrateFromLegacy();
     seedExampleResume(lang);
     refresh();
+  }, []);
+
+  // Listen for documents saved by OTHER tabs (BroadcastChannel). When
+  // another tab renames, duplicates, creates or deletes a resume, we
+  // refresh our in-memory list so the dashboard stays in sync without a
+  // manual reload. This is half of the BUG-A (multi-tab data loss) fix;
+  // the other half is the broadcast on every save in documentStore.ts.
+  useEffect(() => {
+    const unsubscribe = onDocumentsUpdated(() => {
+      refresh();
+    });
+    return unsubscribe;
   }, []);
 
   useEffect(() => {
