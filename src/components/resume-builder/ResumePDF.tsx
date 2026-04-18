@@ -294,6 +294,15 @@ function smallPt(base: number): number {
 
 /** Resolve CSS color variables to actual values */
 function resolveColors(c?: CustomizeSettings) {
+  // Blue-link toggle: when enabled, contact links render in the standard
+  // hyperlink blue (#2563eb). When disabled, they use the same `linkIconColor`
+  // as the icons beside them — a more understated look.
+  // Previously this customize control was wired to the UI but not read by
+  // any renderer, so toggling it did nothing.
+  const defaultLinkColor = c?.linkIconColor ?? "#4B5563";
+  const blueLinkColor = "#2563eb";
+  const linkColor = c?.linkBlue ? blueLinkColor : defaultLinkColor;
+
   return {
     accent: c?.accentColor ?? "#1e293b",
     name: c?.nameColor ?? "#111827",
@@ -303,7 +312,8 @@ function resolveColors(c?: CustomizeSettings) {
     subtitle: c?.subtitleColor ?? "#6B7280",
     body: c?.bodyColor ?? "#374151",
     background: c?.a4Background ?? "#ffffff",
-    linkIcon: c?.linkIconColor ?? "#4B5563",
+    linkIcon: defaultLinkColor,
+    link: linkColor,
   };
 }
 
@@ -1713,7 +1723,9 @@ function PdfSingleEntry({
           src={f.url || f.link || ""}
           style={{
             fontSize: subtitleFS,
-            color: colors.dates,
+            // Use colors.link so the `linkBlue` customize flag is honored here
+            // too. Was previously hardcoded to colors.dates which ignored the flag.
+            color: colors.link,
             marginTop: mm(0.5),
             textDecoration: c?.linkUnderline ? "underline" : "none",
           }}
@@ -2133,7 +2145,9 @@ export function ResumePDF({ data, customize }: ResumePDFProps) {
                           src={item.href}
                           style={{
                             fontSize: contactPt(baseFontSize),
-                            color: colors.linkIcon,
+                            // Use `colors.link` which respects the
+                            // `linkBlue` customize flag (blue vs body color).
+                            color: colors.link,
                             textDecoration: c?.linkUnderline
                               ? "underline"
                               : "none",
