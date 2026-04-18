@@ -15,6 +15,7 @@ import { ZoomIn, ZoomOut, RotateCcw } from "lucide-react";
 import { ResumePDF, prepareFonts } from "./ResumePDF";
 import type { ResumeData } from "./types";
 import type { CustomizeSettings } from "./customizeTypes";
+import { useT } from "./i18n";
 
 /* ── Page dimension helpers ─────────────────────────────────────── */
 
@@ -103,6 +104,7 @@ export const ResumePdfPreview = React.memo(function ResumePdfPreview({
   onPageCount,
 }: ResumePdfPreviewProps) {
   const containerRef = useRef<HTMLDivElement>(null);
+  const t = useT();
 
   // Zoom state — mirrors the DOM preview controls exactly
   const [autoScale, setAutoScale] = useState(0.65);
@@ -203,7 +205,7 @@ export const ResumePdfPreview = React.memo(function ResumePdfPreview({
       {/* Error state */}
       {errorMsg && !loading && pageImages.length === 0 && (
         <div className="absolute inset-0 flex flex-col items-center justify-center gap-3 z-10 p-6 text-center">
-          <span className="text-sm font-medium text-red-600">Preview failed</span>
+          <span className="text-sm font-medium text-red-600">{t("previewFailed")}</span>
           <span className="text-xs text-gray-500 max-w-xs break-all">{errorMsg}</span>
         </div>
       )}
@@ -212,7 +214,7 @@ export const ResumePdfPreview = React.memo(function ResumePdfPreview({
       {loading && pageImages.length === 0 && (
         <div className="absolute inset-0 flex flex-col items-center justify-center gap-3 z-10">
           <div className="w-6 h-6 border-2 border-gray-300 border-t-gray-600 rounded-full animate-spin" />
-          <span className="text-sm text-gray-500">Generating preview…</span>
+          <span className="text-sm text-gray-500">{t("generatingPreview")}</span>
         </div>
       )}
 
@@ -220,7 +222,7 @@ export const ResumePdfPreview = React.memo(function ResumePdfPreview({
       {loading && pageImages.length > 0 && (
         <div className="absolute top-3 right-3 z-10 flex items-center gap-1.5 bg-white/80 backdrop-blur-sm rounded-full px-2.5 py-1 shadow-sm border border-gray-200">
           <div className="w-3 h-3 border border-gray-400 border-t-gray-700 rounded-full animate-spin" />
-          <span className="text-xs text-gray-500">Updating…</span>
+          <span className="text-xs text-gray-500">{t("previewUpdating")}</span>
         </div>
       )}
 
