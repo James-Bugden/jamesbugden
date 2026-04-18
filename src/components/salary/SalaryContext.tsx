@@ -20,12 +20,18 @@ export function SalaryProvider({ children }: { children: React.ReactNode }) {
   const [fxRate, setFxRate] = useState(32);
 
   useEffect(() => {
+    // If the FX API is down we fall back to the hardcoded rate of 32 (close
+    // to the current TWD/USD rate). The silent fallback is intentional —
+    // user-facing USD values will be slightly stale but still meaningful,
+    // and a toast would be noise for a non-actionable issue.
     fetch("https://open.er-api.com/v6/latest/TWD")
       .then(r => r.json())
       .then(data => {
         if (data?.rates?.USD) setFxRate(Math.round(1 / data.rates.USD * 100) / 100);
       })
-      .catch(() => {});
+      .catch((err) => {
+        if (import.meta.env.DEV) console.warn("[SalaryContext] FX fetch failed, using fallback 32:", err);
+      });
   }, []);
 
   const formatSalary = useCallback((value: number) => {

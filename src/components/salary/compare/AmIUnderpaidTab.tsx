@@ -78,11 +78,15 @@ export default function AmIUnderpaidTab({ lang }: { lang: SalaryLang }) {
       verdict: zone.zone,
       median: result.med,
       lang: lang === "zh" ? "zh" : "en",
-    }).then(() => {});
+    }).then(({ error }) => {
+      if (error && import.meta.env.DEV) {
+        console.warn("[salary_checks] insert failed:", error.message);
+      }
+    });
   }, [showResult, zone, result, jobTitle, role, sector, exp, salaryNum, lang]);
 
   const verdictText = () => {
-    if (!result || !zone) return "";
+    if (!result || !zone || result.med <= 0) return "";
     const diff = ((salaryNum - result.med) / result.med) * 100;
     if (zone.zone === "below") return lang === "zh" ? `你的薪資**低於市場範圍**。` : `Your salary is **below the market range** for this role.`;
     if (zone.zone === "lower") return lang === "zh" ? `你的薪資**低於中位數 ${Math.abs(Math.round(diff))}%**。` : `Your salary is **${Math.abs(Math.round(diff))}% below the median** for this role.`;
