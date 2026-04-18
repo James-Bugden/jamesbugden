@@ -375,6 +375,8 @@ export default function Quiz() {
               value={email}
               onChange={(e) => { setEmail(e.target.value); setEmailError(""); }}
               placeholder="you@email.com"
+              aria-label="Email address"
+              autoComplete="email"
               className="flex-1 h-12 px-4 rounded-lg border text-base"
               style={{ borderColor: emailError ? "#C75146" : "#E5E5E5", backgroundColor: "#FFFFFF", color: "#1A1A1A", fontFamily: "'DM Sans', sans-serif" }}
             />
@@ -418,6 +420,8 @@ export default function Quiz() {
             value={email}
             onChange={(e) => setEmail(e.target.value)}
             placeholder="you@email.com"
+            aria-label="Email address"
+            autoComplete="email"
             className="h-8 px-3 rounded text-sm text-foreground"
             style={{ backgroundColor: "#FFFFFF", width: 180 }}
           />
@@ -520,7 +524,7 @@ export default function Quiz() {
         </div>
 
 
-        {/* Section 5 — Share */}
+        {/* Section 4 — Share */}
         <div className="flex items-center justify-center gap-3">
           <button
             onClick={shareLinkedIn}

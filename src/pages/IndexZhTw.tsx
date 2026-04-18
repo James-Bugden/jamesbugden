@@ -108,7 +108,7 @@ const IndexZhTw = () => {
           className={`transition-shadow duration-300 bg-cream ${
             scrolled ? "shadow-md shadow-black/8" : ""
           }`}
-          aria-label="Main navigation"
+          aria-label="主要導覽"
         >
           <div className="container mx-auto px-5 md:px-6 py-4 flex items-center justify-between">
             <Link to="/zh-tw" className="font-heading text-lg md:text-xl font-bold tracking-tight text-executive-green cursor-pointer" onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}>
