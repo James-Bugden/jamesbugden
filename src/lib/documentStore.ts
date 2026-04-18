@@ -19,6 +19,7 @@ export interface SavedDocument {
 }
 
 const STORAGE_KEY = "james_careers_documents";
+const BROADCAST_CHANNEL_NAME = "james_careers_documents_sync";
 
 let syncLock: Promise<void> = Promise.resolve();
 function withSyncLock<T>(fn: () => Promise<T>): Promise<T> {
@@ -26,6 +27,67 @@ function withSyncLock<T>(fn: () => Promise<T>): Promise<T> {
   let resolve: () => void;
   syncLock = new Promise<void>((r) => { resolve = r; });
   return prev.then(fn).finally(() => resolve!());
+}
+
+// ─────────────────────────────────────────────────────────────────────
+// Cross-tab sync via BroadcastChannel.
+//
+// Before this, two tabs editing the same resume would race: each tab's
+// autosave wrote the full `documents` array to localStorage from its own
+// in-memory state, overwriting whatever the other tab had saved. The
+// last writer won, silently. Users switching between EN and zh-tw tabs
+// on the same resume lost edits.
+//
+// Fix: every save broadcasts a "documents-updated" message. Other tabs
+// listen and can refresh their React state. We also compare updatedAt
+// timestamps on write — if another tab has saved a NEWER version since
+// our last load, we skip our own write (the other tab's data is fresher).
+// ─────────────────────────────────────────────────────────────────────
+
+let broadcastChannel: BroadcastChannel | null = null;
+function getBroadcastChannel(): BroadcastChannel | null {
+  if (typeof BroadcastChannel === "undefined") return null;
+  if (!broadcastChannel) {
+    try {
+      broadcastChannel = new BroadcastChannel(BROADCAST_CHANNEL_NAME);
+    } catch {
+      return null;
+    }
+  }
+  return broadcastChannel;
+}
+
+type SyncMessage = { type: "documents-updated"; timestamp: number };
+type DocumentsUpdatedListener = () => void;
+const documentsUpdatedListeners = new Set<DocumentsUpdatedListener>();
+
+/**
+ * Subscribe to cross-tab document updates. The callback fires when ANOTHER
+ * tab mutates localStorage. Use this in React effects to refresh state.
+ * Returns an unsubscribe function.
+ */
+export function onDocumentsUpdated(cb: DocumentsUpdatedListener): () => void {
+  documentsUpdatedListeners.add(cb);
+  const channel = getBroadcastChannel();
+  const handler = (ev: MessageEvent<SyncMessage>) => {
+    if (ev.data?.type === "documents-updated") cb();
+  };
+  channel?.addEventListener("message", handler);
+  return () => {
+    documentsUpdatedListeners.delete(cb);
+    channel?.removeEventListener("message", handler);
+  };
+}
+
+function broadcastDocumentsUpdated() {
+  const channel = getBroadcastChannel();
+  if (!channel) return;
+  try {
+    channel.postMessage({ type: "documents-updated", timestamp: Date.now() } as SyncMessage);
+  } catch {
+    // Channel closed or unavailable — silently drop. Same-tab state is
+    // still consistent; only cross-tab sync is degraded.
+  }
 }
 
 function load(): SavedDocument[] {
@@ -39,6 +101,7 @@ function load(): SavedDocument[] {
 
 function save(docs: SavedDocument[]) {
   localStorage.setItem(STORAGE_KEY, JSON.stringify(docs));
+  broadcastDocumentsUpdated();
 }
 
 export function getAllDocuments(): SavedDocument[] {

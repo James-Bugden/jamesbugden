@@ -10,6 +10,26 @@ import { TagInput } from "./TagInput";
 import { SignatureModal } from "./SignatureModal";
 import { cn } from "@/lib/utils";
 import { useT } from "./i18n";
+import { MONTHS } from "./types";
+
+/**
+ * Returns true when both start and end dates are fully set AND the end
+ * date is strictly before the start date. Returns false when either date
+ * is missing OR when currentlyHere is true (which makes end-date comparison
+ * moot).
+ */
+function isEndBeforeStart(f: Record<string, string>): boolean {
+  if (f.currentlyHere === "true") return false;
+  if (!f.startYear || !f.startMonth || !f.endYear || !f.endMonth) return false;
+  const startMonthIdx = MONTHS.indexOf(f.startMonth as any);
+  const endMonthIdx = MONTHS.indexOf(f.endMonth as any);
+  if (startMonthIdx < 0 || endMonthIdx < 0) return false;
+  const startY = parseInt(f.startYear, 10);
+  const endY = parseInt(f.endYear, 10);
+  if (Number.isNaN(startY) || Number.isNaN(endY)) return false;
+  if (endY !== startY) return endY < startY;
+  return endMonthIdx < startMonthIdx;
+}
 
 function getIcon(iconName: string) {
   const Icon = (Icons as any)[iconName];
@@ -197,7 +217,7 @@ function EntryList({
                     onClick={(e) => { e.stopPropagation(); moveEntry(idx, -1); }}
                     disabled={idx === 0}
                     className="p-1 text-gray-300 hover:text-gray-600 disabled:opacity-20 transition-colors"
-                    aria-label="Move up"
+                    aria-label={t("ariaMoveUp")}
                   >
                     <ArrowUp className="w-3 h-3" />
                   </button>
@@ -205,7 +225,7 @@ function EntryList({
                     onClick={(e) => { e.stopPropagation(); moveEntry(idx, 1); }}
                     disabled={idx === entries.length - 1}
                     className="p-1 text-gray-300 hover:text-gray-600 disabled:opacity-20 transition-colors"
-                    aria-label="Move down"
+                    aria-label={t("ariaMoveDown")}
                   >
                     <ArrowDown className="w-3 h-3" />
                   </button>
@@ -363,6 +383,11 @@ export function SectionCard({ section, onUpdate, onRemove }: {
                 <MonthYearPicker monthValue={f.endMonth || ""} yearValue={f.endYear || ""} onMonthChange={set("endMonth")} onYearChange={set("endYear")} showPresent={isCurrently} />
               </div>
             </div>
+            {isEndBeforeStart(f) && (
+              <p className="text-[11px] text-amber-600 -mt-2" role="alert">
+                ⚠ {t("dateRangeEndBeforeStart")}
+              </p>
+            )}
             <label className="flex items-center gap-2 text-sm text-gray-600 cursor-pointer py-1">
               <Checkbox checked={isCurrently} onCheckedChange={(v) => set("currentlyHere")(v ? "true" : "")} id={`currently-${entry.id}`} />
               {t("currentlyWorkingHere")}
@@ -392,6 +417,11 @@ export function SectionCard({ section, onUpdate, onRemove }: {
                 <MonthYearPicker monthValue={f.endMonth || ""} yearValue={f.endYear || ""} onMonthChange={set("endMonth")} onYearChange={set("endYear")} showPresent={f.currentlyHere === "true"} />
               </div>
             </div>
+            {isEndBeforeStart(f) && (
+              <p className="text-[11px] text-amber-600 -mt-2" role="alert">
+                ⚠ {t("dateRangeEndBeforeStart")}
+              </p>
+            )}
             <label className="flex items-center gap-2 text-sm text-gray-600 cursor-pointer py-1">
               <Checkbox checked={f.currentlyHere === "true"} onCheckedChange={(v) => set("currentlyHere")(v ? "true" : "")} id={`edu-currently-${entry.id}`} />
               {t("currentlyStudyingHere")}
@@ -444,9 +474,21 @@ export function SectionCard({ section, onUpdate, onRemove }: {
                   className="w-full px-3 py-2 text-sm border border-gray-200 rounded-lg outline-none bg-white focus:border-gray-400 transition-colors text-gray-800"
                 >
                   <option value="">{t("egProficiency")}</option>
-                  {PROFICIENCY_LEVELS.map((level) => (
-                    <option key={level} value={level}>{level}</option>
-                  ))}
+                  {PROFICIENCY_LEVELS.map((level) => {
+                    // Storage value stays English so existing user data keeps
+                    // working; display label is translated per current UI language.
+                    const labelKey = (
+                      level === "Native or bilingual proficiency" ? "proficiencyNativeOrBilingual" :
+                      level === "Full professional proficiency" ? "proficiencyFullProfessional" :
+                      level === "Professional working proficiency" ? "proficiencyProfessionalWorking" :
+                      level === "Limited working proficiency" ? "proficiencyLimitedWorking" :
+                      level === "Elementary proficiency" ? "proficiencyElementary" :
+                      null
+                    ) as any;
+                    return (
+                      <option key={level} value={level}>{labelKey ? t(labelKey) : level}</option>
+                    );
+                  })}
                 </select>
               </div>
             </div>
