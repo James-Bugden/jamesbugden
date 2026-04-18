@@ -343,7 +343,12 @@ function DownloadDropdown({ downloading, pageFormat, docName, onDownload }: {
   const ref = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    setFilename((docName || "Resume").replace(/\s+/g, "_") + "_Resume");
+    // Build a clean default filename. If the resume name already contains
+    // "Resume" (case-insensitive), don't append "_Resume" again — that's
+    // how we ended up with "Resume_Resume.pdf" / "Resume_2_Resume.pdf".
+    const base = (docName || "Resume").replace(/\s+/g, "_");
+    const alreadyHasResume = /resume/i.test(base);
+    setFilename(alreadyHasResume ? base : `${base}_Resume`);
   }, [docName]);
 
   useEffect(() => {
@@ -722,7 +727,11 @@ const ResumeBuilder = () => {
   const handleDownload = async (filename?: string) => {
     if (downloading) return;
     setDownloading(true);
-    const fn = filename || (data.personalDetails.fullName || "Resume").replace(/\s+/g, "_") + "_Resume";
+    // Build a clean default filename if none was passed in. Avoid appending
+    // "_Resume" if the user's name (or the placeholder) already contains it.
+    const baseName = (data.personalDetails.fullName || "Resume").replace(/\s+/g, "_");
+    const defaultFn = /resume/i.test(baseName) ? baseName : `${baseName}_Resume`;
+    const fn = filename || defaultFn;
     try {
       await exportResumePdfServer({
         data,

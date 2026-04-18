@@ -23,6 +23,7 @@ import { applyTemplatePreset, TEMPLATE_LIST } from "./templatePresets";
 import { FontPicker } from "./FontPicker";
 import { ResumeThumbnail } from "./ResumeThumbnail";
 import { DEFAULT_CUSTOMIZE } from "./customizeTypes";
+import { useT } from "./i18n";
 
 /* ── Brand colors ─────────────────────────────────────────── */
 const B = {
@@ -228,6 +229,7 @@ export function CustomizePanel({ settings, onChange, sections, resumeData }: Cus
 
 /* ── BASICS ─────────────────────────────────────────────────── */
 function BasicsTab({ settings, onChange, resumeData }: { settings: CustomizeSettings; onChange: (u: Partial<CustomizeSettings>) => void; resumeData?: ResumeData }) {
+  const t = useT();
 
   const handleTemplateSelect = (templateId: string) => {
     const newSettings = applyTemplatePreset(settings, templateId);
@@ -236,7 +238,7 @@ function BasicsTab({ settings, onChange, resumeData }: { settings: CustomizeSett
 
   return (
     <>
-      <SettingCard title="Language & Region">
+      <SettingCard title={t("customizeLanguageRegion")}>
         <div className="flex gap-3">
           <SelectField label="Language" value={settings.language} options={LANGUAGE_OPTIONS} onChange={(v) => onChange({ language: v })} />
           <SelectField label="Date Format" value={settings.dateFormat} options={DATE_FORMAT_OPTIONS} onChange={(v) => onChange({ dateFormat: v })} />
@@ -244,10 +246,10 @@ function BasicsTab({ settings, onChange, resumeData }: { settings: CustomizeSett
         </div>
       </SettingCard>
 
-      <SettingCard title="Apply a design template">
-        <p className="text-xs mb-3" style={{ color: B.textSec }}>Update your entire resume design with one click ✨</p>
+      <SettingCard title={t("customizeApplyTemplate")}>
+        <p className="text-xs mb-3" style={{ color: B.textSec }}>{t("customizeApplyTemplateHint")}</p>
         <div className="grid grid-cols-2 gap-3 mb-3">
-          {TEMPLATE_LIST.slice(0, 4).map((t) => {
+          {TEMPLATE_LIST.map((t) => {
             const previewSettings = applyTemplatePreset(DEFAULT_CUSTOMIZE, t.id);
             const isSelected = settings.template === t.id;
             return (
@@ -287,25 +289,26 @@ function BasicsTab({ settings, onChange, resumeData }: { settings: CustomizeSett
 
 /* ── LAYOUT & SPACING ───────────────────────────────────────── */
 function LayoutTab({ settings, onChange, sections }: { settings: CustomizeSettings; onChange: (u: Partial<CustomizeSettings>) => void; sections: ResumeData["sections"] }) {
+  const t = useT();
   return (
     <>
-      <SettingCard title="Layout">
-        <p className="text-xs text-gray-500">Single-column layout</p>
+      <SettingCard title={t("customizeLayout")}>
+        <p className="text-xs text-gray-500">{t("singleColumnLayout") || "Single-column layout"}</p>
       </SettingCard>
 
       <SectionReorderCard settings={settings} onChange={onChange} sections={sections} />
 
-      <SettingCard title="Spacing">
+      <SettingCard title={t("customizeSpacing")}>
         <div className="space-y-5">
-          <SliderRow label="Font Size" value={settings.fontSize} min={8} max={16} step={0.5} unit="pt" onChange={(v) => onChange({ fontSize: v })} />
-          <SliderRow label="Line Height" value={settings.lineHeight} min={1} max={2.2} step={0.1} unit="" onChange={(v) => onChange({ lineHeight: Math.round(v * 10) / 10 })} />
-          <SliderRow label="Left & Right Margin" value={settings.marginX} min={5} max={40} step={1} unit="mm" onChange={(v) => onChange({ marginX: v })} />
-          <SliderRow label="Top & Bottom Margin" value={settings.marginY} min={5} max={40} step={1} unit="mm" onChange={(v) => onChange({ marginY: v })} />
-          <SliderRow label="Space between Entries" value={settings.sectionSpacing} min={0} max={20} step={1} unit="mm" onChange={(v) => onChange({ sectionSpacing: v })} />
+          <SliderRow label={t("fontSize")} value={settings.fontSize} min={8} max={16} step={0.5} unit="pt" onChange={(v) => onChange({ fontSize: v })} />
+          <SliderRow label={t("lineHeight") || "Line Height"} value={settings.lineHeight} min={1} max={2.2} step={0.1} unit="" onChange={(v) => onChange({ lineHeight: Math.round(v * 10) / 10 })} />
+          <SliderRow label={t("leftRightMargin") || "Left & Right Margin"} value={settings.marginX} min={5} max={40} step={1} unit="mm" onChange={(v) => onChange({ marginX: v })} />
+          <SliderRow label={t("topBottomMargin") || "Top & Bottom Margin"} value={settings.marginY} min={5} max={40} step={1} unit="mm" onChange={(v) => onChange({ marginY: v })} />
+          <SliderRow label={t("spaceBetweenEntries") || "Space between Entries"} value={settings.sectionSpacing} min={0} max={20} step={1} unit="mm" onChange={(v) => onChange({ sectionSpacing: v })} />
         </div>
       </SettingCard>
 
-      <SettingCard title="Entry Layout" defaultOpen={false}>
+      <SettingCard title={t("customizeEntryLayout")} defaultOpen={false}>
         {/* Visual layout icons */}
         <div className="grid grid-cols-2 gap-2 mb-4">
           <TooltipProvider delayDuration={300}>
@@ -441,15 +444,16 @@ function HeadingStyleThumb({ id, accent }: { id: HeadingStyle; accent: string })
 
 /* ── DESIGN ─────────────────────────────────────────────────── */
 function DesignTab({ settings, onChange }: { settings: CustomizeSettings; onChange: (u: Partial<CustomizeSettings>) => void }) {
+  const t = useT();
   return (
     <>
-      <SettingCard title="Font">
+      <SettingCard title={t("customizeFontSection")}>
         <FontPicker selectedFont={settings.bodyFont} onSelect={(f) => onChange({ bodyFont: f })} />
       </SettingCard>
 
 
 
-      <SettingCard title="Section Headings">
+      <SettingCard title={t("customizeSectionHeadings")}>
         <FieldLabel>Style</FieldLabel>
         <div className="grid grid-cols-4 gap-2 mb-4">
           <TooltipProvider delayDuration={300}>
@@ -496,7 +500,7 @@ function DesignTab({ settings, onChange }: { settings: CustomizeSettings; onChan
         <CheckboxRow label="Uppercase headings" checked={settings.headingUppercase !== false} onChange={(v) => onChange({ headingUppercase: v })} />
       </SettingCard>
 
-      <SettingCard title="Link styling" defaultOpen={false}>
+      <SettingCard title={t("customizeLinkStyling")} defaultOpen={false}>
         <div className="space-y-3">
           <CheckboxRow label="Underline" checked={settings.linkUnderline} onChange={(v) => onChange({ linkUnderline: v })} />
           <CheckboxRow label="Blue color" checked={settings.linkBlue} onChange={(v) => onChange({ linkBlue: v })} />
@@ -536,9 +540,10 @@ function DesignTab({ settings, onChange }: { settings: CustomizeSettings; onChan
 
 /* ── HEADER ──────────────────────────────────────────────────── */
 function HeaderTab({ settings, onChange }: { settings: CustomizeSettings; onChange: (u: Partial<CustomizeSettings>) => void }) {
+  const t = useT();
   return (
     <>
-      <SettingCard title="Personal Details">
+      <SettingCard title={t("customizePersonalDetails")}>
         <FieldLabel>Align</FieldLabel>
         <div className="flex gap-3 mb-5">
           {([
@@ -594,7 +599,7 @@ function HeaderTab({ settings, onChange }: { settings: CustomizeSettings; onChan
         </div>
       </SettingCard>
 
-      <SettingCard title="Name">
+      <SettingCard title={t("customizeName")}>
         <FieldLabel>Size</FieldLabel>
         <div className="mb-3">
           <div className="flex gap-1.5">
@@ -619,7 +624,7 @@ function HeaderTab({ settings, onChange }: { settings: CustomizeSettings; onChan
         </div>
       </SettingCard>
 
-      <SettingCard title="Professional title" defaultOpen={false}>
+      <SettingCard title={t("customizeProfessionalTitle")} defaultOpen={false}>
         <FieldLabel>Size</FieldLabel>
         <div className="mb-3">
           <SegmentedControl
@@ -643,7 +648,7 @@ function HeaderTab({ settings, onChange }: { settings: CustomizeSettings; onChan
          />
       </SettingCard>
 
-      <SettingCard title="Photo" defaultOpen={false}>
+      <SettingCard title={t("customizePhoto")} defaultOpen={false}>
         <div className="space-y-4">
           <SwitchRow label="Show photo" checked={settings.showPhoto !== false} onChange={(v) => onChange({ showPhoto: v })} />
           {settings.showPhoto !== false && (
@@ -682,6 +687,7 @@ function HeaderTab({ settings, onChange }: { settings: CustomizeSettings; onChan
 
 /* ── SECTIONS ───────────────────────────────────────────────── */
 function SectionsTab({ settings, onChange, sections }: { settings: CustomizeSettings; onChange: (u: Partial<CustomizeSettings>) => void; sections: ResumeData["sections"] }) {
+  const t = useT();
   const hasSkills = sections.some(s => s.type === "skills");
   const hasLanguages = sections.some(s => s.type === "languages");
   const hasEducation = sections.some(s => s.type === "education");
@@ -691,7 +697,7 @@ function SectionsTab({ settings, onChange, sections }: { settings: CustomizeSett
   return (
     <>
       {/* Skills */}
-      <SettingCard title="Skills">
+      <SettingCard title={t("customizeSkills")}>
         {hasSkills ? (
             <SegmentedControl
               options={[
@@ -704,12 +710,12 @@ function SectionsTab({ settings, onChange, sections }: { settings: CustomizeSett
               onChange={(v) => onChange({ skillsSeparator: v as any })}
             />
         ) : (
-          <p className="text-xs" style={{ color: B.textSec }}>Add a Skills section first</p>
+          <p className="text-xs" style={{ color: B.textSec }}>{t("addSkillsFirst") || "Add a Skills section first"}</p>
         )}
       </SettingCard>
 
       {/* Languages */}
-      <SettingCard title="Languages">
+      <SettingCard title={t("customizeLanguagesSection")}>
         {hasLanguages ? (
           <>
             <SegmentedControl
@@ -723,19 +729,19 @@ function SectionsTab({ settings, onChange, sections }: { settings: CustomizeSett
             />
           </>
         ) : (
-          <p className="text-xs" style={{ color: B.textSec }}>Add a Languages section first</p>
+          <p className="text-xs" style={{ color: B.textSec }}>{t("addLanguagesFirst") || "Add a Languages section first"}</p>
         )}
       </SettingCard>
 
       {/* Profile */}
       {hasSummary && (
-        <SettingCard title="Profile">
+        <SettingCard title={t("customizeProfile")}>
           <CheckboxRow label="Show profile heading" checked={true} onChange={() => {}} />
         </SettingCard>
       )}
 
       {/* Education */}
-      <SettingCard title="Education">
+      <SettingCard title={t("customizeEducation")}>
         {hasEducation ? (
           <>
             <FieldLabel>Title & Subtitle Order</FieldLabel>
@@ -749,12 +755,12 @@ function SectionsTab({ settings, onChange, sections }: { settings: CustomizeSett
             />
           </>
         ) : (
-          <p className="text-xs" style={{ color: B.textSec }}>Add an Education section first</p>
+          <p className="text-xs" style={{ color: B.textSec }}>{t("addEducationFirst") || "Add an Education section first"}</p>
         )}
       </SettingCard>
 
       {/* Work Experience */}
-      <SettingCard title="Work Experience">
+      <SettingCard title={t("customizeWorkExperience")}>
         {hasExperience ? (
           <>
             <FieldLabel>Order title/subtitle</FieldLabel>
@@ -772,16 +778,16 @@ function SectionsTab({ settings, onChange, sections }: { settings: CustomizeSett
             <CheckboxRow label="Group promotions" checked={settings.groupPromotions ?? false} onChange={(v) => onChange({ groupPromotions: v })} />
           </>
         ) : (
-          <p className="text-xs" style={{ color: B.textSec }}>Add an Experience section first</p>
+          <p className="text-xs" style={{ color: B.textSec }}>{t("addExperienceFirst") || "Add an Experience section first"}</p>
         )}
       </SettingCard>
 
       {/* Footer */}
-      <SettingCard title="Footer">
+      <SettingCard title={t("customizeFooter")}>
         <div className="space-y-3">
-          <CheckboxRow label="Page numbers" checked={settings.showPageNumbers} onChange={(v) => onChange({ showPageNumbers: v })} />
-          <CheckboxRow label="Email" checked={settings.showFooterEmail ?? false} onChange={(v) => onChange({ showFooterEmail: v })} />
-          <CheckboxRow label="Name" checked={settings.showFooterName ?? false} onChange={(v) => onChange({ showFooterName: v })} />
+          <CheckboxRow label={t("footerPageNumbers") || "Page numbers"} checked={settings.showPageNumbers} onChange={(v) => onChange({ showPageNumbers: v })} />
+          <CheckboxRow label={t("footerEmail") || "Email"} checked={settings.showFooterEmail ?? false} onChange={(v) => onChange({ showFooterEmail: v })} />
+          <CheckboxRow label={t("footerName") || "Name"} checked={settings.showFooterName ?? false} onChange={(v) => onChange({ showFooterName: v })} />
         </div>
       </SettingCard>
     </>
@@ -790,6 +796,7 @@ function SectionsTab({ settings, onChange, sections }: { settings: CustomizeSett
 
 /* ── Section Reorder Card ──────────────────────────────────── */
 function SectionReorderCard({ settings, onChange, sections }: { settings: CustomizeSettings; onChange: (u: Partial<CustomizeSettings>) => void; sections: ResumeData["sections"] }) {
+  const t = useT();
   // Build ordered list: use sectionOrder if set, otherwise section natural order
   const order = settings.sectionOrder?.length
     ? settings.sectionOrder.filter((id) => sections.some((s) => s.id === id))
@@ -815,7 +822,7 @@ function SectionReorderCard({ settings, onChange, sections }: { settings: Custom
   }, [fullOrder, onChange]);
 
   return (
-    <SettingCard title="Change Section Layout">
+    <SettingCard title={t("customizeChangeSectionLayout")}>
       {fullOrder.length > 0 ? (
         <DndContext sensors={sensors} collisionDetection={closestCenter} modifiers={[restrictToVerticalAxis]} onDragEnd={handleDragEnd}>
           <SortableContext items={fullOrder} strategy={verticalListSortingStrategy}>

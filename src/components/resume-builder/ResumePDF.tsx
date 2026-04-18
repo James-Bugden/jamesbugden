@@ -67,11 +67,19 @@ const FONT_REGISTRATION_PROMISES = new Map<string, Promise<string>>();
 
 /**
  * Register Noto Sans TC for CJK glyph rendering in react-pdf.
- * Uses the variable TTF from Google Fonts GitHub — large (~16 MB) but
- * downloaded only when Chinese characters are detected in resume data.
+ *
+ * Uses the fontsource CDN which serves CORS-friendly static WOFF files
+ * for the Traditional Chinese subset. The previous GitHub raw URL
+ * (raw.githubusercontent.com) failed with "TypeError: Failed to fetch"
+ * because GitHub doesn't send CORS headers for binary font files.
+ *
+ * fontsource pattern (matches the Latin font setup in fontsourceUrl()):
+ *   https://cdn.jsdelivr.net/fontsource/fonts/noto-sans-tc@latest/chinese-traditional-{weight}-normal.woff
  */
-const CJK_FONT_URL =
-  "https://raw.githubusercontent.com/google/fonts/main/ofl/notosanstc/NotoSansTC%5Bwght%5D.ttf";
+const CJK_FONT_URL_400 =
+  "https://cdn.jsdelivr.net/fontsource/fonts/noto-sans-tc@latest/chinese-traditional-400-normal.woff";
+const CJK_FONT_URL_700 =
+  "https://cdn.jsdelivr.net/fontsource/fonts/noto-sans-tc@latest/chinese-traditional-700-normal.woff";
 
 let cjkRegistrationPromise: Promise<boolean> | null = null;
 
@@ -81,16 +89,19 @@ async function registerCJKFont(): Promise<boolean> {
 
   cjkRegistrationPromise = (async () => {
     try {
-      const resp = await fetch(CJK_FONT_URL, { method: "HEAD" });
-      if (!resp.ok) return false;
+      // Verify the font is reachable before registering. fontsource
+      // sends proper CORS headers so this works from the browser.
+      const resp = await fetch(CJK_FONT_URL_400, { method: "HEAD" });
+      if (!resp.ok) {
+        console.warn(`[ResumePDF] CJK font HEAD check failed (${resp.status})`);
+        return false;
+      }
 
       Font.register({
         family: CJK_FONT_FAMILY,
         fonts: [
-          { src: CJK_FONT_URL, fontWeight: 400 },
-          // Re-use the same variable font file for bold — the variable axes
-          // inside the TTF allow fontkit to select the correct weight.
-          { src: CJK_FONT_URL, fontWeight: 700 },
+          { src: CJK_FONT_URL_400, fontWeight: 400 },
+          { src: CJK_FONT_URL_700, fontWeight: 700 },
         ],
       });
       REGISTERED_FONTS.add(CJK_FONT_FAMILY);
