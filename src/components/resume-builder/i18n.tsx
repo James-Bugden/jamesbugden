@@ -118,6 +118,9 @@ export const translations = {
     footerPageNumbers: "Page numbers",
     footerEmail: "Email",
     footerName: "Name",
+    previewFailed: "Preview failed",
+    generatingPreview: "Generating preview…",
+    previewUpdating: "Updating…",
 
     // Add Content Modal
     addContentTitle: "Add Content",
@@ -536,6 +539,9 @@ export const translations = {
     footerPageNumbers: "頁碼",
     footerEmail: "電子郵件",
     footerName: "姓名",
+    previewFailed: "預覽失敗",
+    generatingPreview: "正在產生預覽…",
+    previewUpdating: "更新中…",
 
     // Add Content Modal
     addContentTitle: "新增內容",
