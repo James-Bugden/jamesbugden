@@ -1,4 +1,4 @@
-import { useState, useMemo } from "react";
+import { useState, useMemo, useEffect } from "react";
 import { cn } from "@/lib/utils";
 import { X, Check } from "lucide-react";
 import { TEMPLATE_LIST, TEMPLATE_PRESETS, applyTemplatePreset } from "./templatePresets";
@@ -27,6 +27,16 @@ export function TemplateGalleryModal({
 }: TemplateGalleryModalProps) {
   const t = useT();
   const [hoveredId, setHoveredId] = useState<string | null>(null);
+
+  // Close the modal when the user presses Escape (parity with other modals).
+  useEffect(() => {
+    if (!open) return;
+    const handler = (e: KeyboardEvent) => {
+      if (e.key === "Escape") onClose();
+    };
+    document.addEventListener("keydown", handler);
+    return () => document.removeEventListener("keydown", handler);
+  }, [open, onClose]);
 
   // Build settings for each template so thumbnails show user data in that style
   const previewData = resumeData || DEFAULT_RESUME_DATA;

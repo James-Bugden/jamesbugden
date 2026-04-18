@@ -194,7 +194,12 @@ export function DocumentDashboard({ onOpenDocument, onImport }: DocumentDashboar
         },
       ],
     };
-    const doc = createDocument("resume", undefined, {
+    // Pass a localized default name so Chinese users get "履歷 2" instead
+    // of "Resume 2". The sequence number matches createDocument's internal
+    // counting logic (count of existing docs of this type + 1).
+    const resumeCount = documents.filter((d) => d.type === "resume").length + 1;
+    const localizedName = `${t("defaultResumeNamePrefix")} ${resumeCount}`;
+    const doc = createDocument("resume", localizedName, {
       data: sampleData,
       settings: appliedSettings,
     });
@@ -211,7 +216,14 @@ export function DocumentDashboard({ onOpenDocument, onImport }: DocumentDashboar
       setTemplateModalOpen(true);
       return;
     }
-    const doc = createDocument(type);
+    // Localize the default name so it's e.g. "求職信 2" in zh-tw rather
+    // than the hardcoded English "Cover Letter 2".
+    const sameTypeCount = documents.filter((d) => d.type === type).length + 1;
+    const localizedName =
+      type === "cover_letter"
+        ? `${t("defaultCoverLetterNamePrefix")} ${sameTypeCount}`
+        : `${t("defaultResumeNamePrefix")} ${sameTypeCount}`;
+    const doc = createDocument(type, localizedName);
     onOpenDocument(doc);
   };
 
@@ -569,10 +581,14 @@ export function DocumentDashboard({ onOpenDocument, onImport }: DocumentDashboar
           {activeTab === "resume" && (
             <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-5">
               {/* New resume */}
+              {/* NOTE: must NOT use `disabled` here — disabled buttons swallow
+                  clicks, and the user gets zero feedback that they hit the
+                  2-resume limit. Instead, keep the click active and let
+                  handleCreate() open the replace-picker AlertDialog. */}
               <button
                 onClick={() => handleCreate("resume")}
-                disabled={resumeLimitReached}
-                className={`aspect-[210/297] rounded-lg border-[1.5px] border-dashed flex flex-col items-center justify-center gap-2 transition-colors ${resumeLimitReached ? "opacity-40 cursor-not-allowed bg-gray-50" : "bg-white/60 hover:bg-white"}`}
+                aria-disabled={resumeLimitReached}
+                className={`aspect-[210/297] rounded-lg border-[1.5px] border-dashed flex flex-col items-center justify-center gap-2 transition-colors ${resumeLimitReached ? "opacity-40 bg-gray-50 hover:bg-gray-100" : "bg-white/60 hover:bg-white"}`}
                 style={{ borderColor: BRAND.border, color: BRAND.textSecondary }}
                 onMouseEnter={(e) => { if (!resumeLimitReached) { e.currentTarget.style.borderColor = BRAND.green; e.currentTarget.style.color = BRAND.green; } }}
                 onMouseLeave={(e) => { e.currentTarget.style.borderColor = BRAND.border; e.currentTarget.style.color = BRAND.textSecondary; }}
@@ -582,10 +598,13 @@ export function DocumentDashboard({ onOpenDocument, onImport }: DocumentDashboar
               </button>
 
               {/* Import */}
+              {/* Same as the New resume button above: do NOT pass `disabled`,
+                  so the click handler can show the replace-picker when at
+                  the 2-resume limit instead of failing silently. */}
               <button
                 onClick={() => { if (resumeLimitReached) { openReplacePicker({ type: "import" }); return; } onImport("resume"); }}
-                disabled={resumeLimitReached}
-                className={`aspect-[210/297] rounded-lg border-[1.5px] border-dashed flex flex-col items-center justify-center gap-3 transition-colors ${resumeLimitReached ? "opacity-40 cursor-not-allowed bg-gray-50" : "bg-white/60 hover:bg-white"}`}
+                aria-disabled={resumeLimitReached}
+                className={`aspect-[210/297] rounded-lg border-[1.5px] border-dashed flex flex-col items-center justify-center gap-3 transition-colors ${resumeLimitReached ? "opacity-40 bg-gray-50 hover:bg-gray-100" : "bg-white/60 hover:bg-white"}`}
                 style={{ borderColor: BRAND.border, color: BRAND.textSecondary }}
                 onMouseEnter={(e) => { if (!resumeLimitReached) { e.currentTarget.style.borderColor = BRAND.green; e.currentTarget.style.color = BRAND.green; } }}
                 onMouseLeave={(e) => { e.currentTarget.style.borderColor = BRAND.border; e.currentTarget.style.color = BRAND.textSecondary; }}
@@ -666,27 +685,49 @@ export function DocumentDashboard({ onOpenDocument, onImport }: DocumentDashboar
           {/* Empty states */}
           {activeTab === "resume" && filteredResumes.length === 0 && (
             <div className="text-center py-16 mt-4">
-              <div className="w-20 h-20 mx-auto mb-4 rounded-full flex items-center justify-center" style={{ backgroundColor: BRAND.greenLight }}>
-                <FileText className="w-10 h-10" style={{ color: BRAND.green }} />
-              </div>
-              <p className="text-lg font-semibold mb-1" style={{ color: BRAND.text }}>{t("createYourFirstResume")}</p>
-              <p className="text-sm mb-6" style={{ color: BRAND.textSecondary }}>{t("startFromScratch")}</p>
-              <div className="flex items-center justify-center gap-3">
-                <button
-                  onClick={() => handleCreate("resume")}
-                  className="px-5 py-2.5 rounded-lg text-sm font-semibold text-white transition-opacity hover:opacity-90"
-                  style={{ backgroundColor: BRAND.green }}
-                >
-                  {t("createResume")}
-                </button>
-                <button
-                  onClick={() => onImport("resume")}
-                  className="px-5 py-2.5 rounded-lg text-sm font-semibold border bg-white hover:opacity-80 transition-colors"
-                  style={{ color: BRAND.green, borderColor: BRAND.green }}
-                >
-                  {t("importExistingCv")}
-                </button>
-              </div>
+              {searchQuery ? (
+                // Filtered to empty by search — show "no results" messaging
+                // instead of the misleading "create your first resume" CTA.
+                <>
+                  <div className="w-20 h-20 mx-auto mb-4 rounded-full flex items-center justify-center" style={{ backgroundColor: BRAND.greenLight }}>
+                    <Search className="w-10 h-10" style={{ color: BRAND.green }} />
+                  </div>
+                  <p className="text-lg font-semibold mb-1" style={{ color: BRAND.text }}>{t("noSearchResults")}</p>
+                  <p className="text-sm mb-6" style={{ color: BRAND.textSecondary }}>{t("trySearchingAgain")}</p>
+                  <button
+                    onClick={() => setSearchQuery("")}
+                    className="px-5 py-2.5 rounded-lg text-sm font-semibold border bg-white hover:opacity-80 transition-colors"
+                    style={{ color: BRAND.green, borderColor: BRAND.green }}
+                  >
+                    {t("clearSearch")}
+                  </button>
+                </>
+              ) : (
+                // Truly empty (no resumes at all) — show the create-first CTA.
+                <>
+                  <div className="w-20 h-20 mx-auto mb-4 rounded-full flex items-center justify-center" style={{ backgroundColor: BRAND.greenLight }}>
+                    <FileText className="w-10 h-10" style={{ color: BRAND.green }} />
+                  </div>
+                  <p className="text-lg font-semibold mb-1" style={{ color: BRAND.text }}>{t("createYourFirstResume")}</p>
+                  <p className="text-sm mb-6" style={{ color: BRAND.textSecondary }}>{t("startFromScratch")}</p>
+                  <div className="flex items-center justify-center gap-3">
+                    <button
+                      onClick={() => handleCreate("resume")}
+                      className="px-5 py-2.5 rounded-lg text-sm font-semibold text-white transition-opacity hover:opacity-90"
+                      style={{ backgroundColor: BRAND.green }}
+                    >
+                      {t("createResume")}
+                    </button>
+                    <button
+                      onClick={() => onImport("resume")}
+                      className="px-5 py-2.5 rounded-lg text-sm font-semibold border bg-white hover:opacity-80 transition-colors"
+                      style={{ color: BRAND.green, borderColor: BRAND.green }}
+                    >
+                      {t("importExistingCv")}
+                    </button>
+                  </div>
+                </>
+              )}
             </div>
           )}
 

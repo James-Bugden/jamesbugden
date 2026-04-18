@@ -23,7 +23,11 @@ export function ImportModal({ open, onClose, type, onImported }: ImportModalProp
   const lang = useResumeBuilderLang();
   const { importCount, importLimit, importLimitReached, loading: usageLoading } = useBuilderAiUsage();
   const [loading, setLoading] = useState(false);
-  const [loadingMessage, setLoadingMessage] = useState("Extracting text…");
+  // Initial loading message — replaced by progress messages from
+  // parseResumeWithFallback during the actual import flow.
+  const [loadingMessage, setLoadingMessage] = useState(
+    tl(lang, "Extracting text…", "正在擷取文字…")
+  );
   const [tab, setTab] = useState<ImportTab>("upload");
   const [pastedText, setPastedText] = useState("");
   const [dragActive, setDragActive] = useState(false);
@@ -190,9 +194,15 @@ export function ImportModal({ open, onClose, type, onImported }: ImportModalProp
     <Dialog open={open} onOpenChange={(o) => !o && handleClose()}>
       <DialogContent className="max-w-[480px] p-0 gap-0 overflow-hidden" style={{ borderRadius: "12px" }}>
         <DialogHeader className="px-6 pt-6 pb-0">
-          <DialogTitle className="text-[17px] font-semibold text-gray-900">Import Resume</DialogTitle>
+          <DialogTitle className="text-[17px] font-semibold text-gray-900">
+            {tl(lang, "Import Resume", "匯入履歷")}
+          </DialogTitle>
           <DialogDescription className="text-[13px] text-gray-500 mt-1">
-            Upload a file or paste text — we'll parse it into editable sections.
+            {tl(
+              lang,
+              "Upload a file or paste text — we'll parse it into editable sections.",
+              "上傳檔案或貼上文字——我們會解析並轉成可編輯的區塊。"
+            )}
           </DialogDescription>
         </DialogHeader>
 
@@ -206,7 +216,7 @@ export function ImportModal({ open, onClose, type, onImported }: ImportModalProp
                 : "text-gray-500 hover:text-gray-700"
             }`}
           >
-            <Upload className="w-3.5 h-3.5" /> Upload File
+            <Upload className="w-3.5 h-3.5" /> {tl(lang, "Upload File", "上傳檔案")}
           </button>
           <button
             onClick={() => setTab("paste")}
@@ -216,7 +226,7 @@ export function ImportModal({ open, onClose, type, onImported }: ImportModalProp
                 : "text-gray-500 hover:text-gray-700"
             }`}
           >
-            <ClipboardPaste className="w-3.5 h-3.5" /> Paste Text
+            <ClipboardPaste className="w-3.5 h-3.5" /> {tl(lang, "Paste Text", "貼上文字")}
           </button>
         </div>
 
@@ -292,7 +302,7 @@ export function ImportModal({ open, onClose, type, onImported }: ImportModalProp
                   className="w-full py-2.5 rounded-lg text-[13px] font-semibold text-white transition-colors"
                   style={{ backgroundColor: "#333", }}
                 >
-                  Import File
+                  {tl(lang, "Import File", "匯入檔案")}
                 </button>
               </div>
             ) : (
@@ -312,9 +322,19 @@ export function ImportModal({ open, onClose, type, onImported }: ImportModalProp
                 </div>
                 <div className="text-center">
                   <p className="text-[13px] font-medium text-gray-700">
-                    Drop your file here or <span className="text-gray-900 underline">browse</span>
+                    {lang === "zh-tw" ? (
+                      <>
+                        把檔案拖到這裡，或<span className="text-gray-900 underline">點此瀏覽</span>
+                      </>
+                    ) : (
+                      <>
+                        Drop your file here or <span className="text-gray-900 underline">browse</span>
+                      </>
+                    )}
                   </p>
-                  <p className="text-[11px] text-gray-400 mt-0.5">Supports PDF, DOCX, and TXT</p>
+                  <p className="text-[11px] text-gray-400 mt-0.5">
+                    {tl(lang, "Supports PDF, DOCX, and TXT", "支援 PDF、DOCX、TXT")}
+                  </p>
                 </div>
               </div>
             )
@@ -336,7 +356,13 @@ export function ImportModal({ open, onClose, type, onImported }: ImportModalProp
                   />
                   <div className="flex items-center justify-between">
                     <span className="text-[11px] text-gray-400">
-                      {pastedText.trim() ? `${pastedText.trim().split("\n").length} lines` : "Paste your resume text above"}
+                      {pastedText.trim()
+                        ? tl(
+                            lang,
+                            `${pastedText.trim().split("\n").length} lines`,
+                            `${pastedText.trim().split("\n").length} 行`
+                          )
+                        : tl(lang, "Paste your resume text above", "在上方貼上你的履歷文字")}
                     </span>
                     <button
                       onClick={handlePaste}
@@ -344,7 +370,7 @@ export function ImportModal({ open, onClose, type, onImported }: ImportModalProp
                       className="px-4 py-2 rounded-lg text-[13px] font-semibold text-white transition-colors disabled:opacity-40"
                       style={{ backgroundColor: "#333" }}
                     >
-                      Import Text
+                      {tl(lang, "Import Text", "匯入文字")}
                     </button>
                   </div>
                 </>
