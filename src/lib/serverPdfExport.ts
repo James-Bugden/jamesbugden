@@ -9,6 +9,7 @@ import { pdf } from "@react-pdf/renderer";
 import { ResumePDF, prepareFonts } from "@/components/resume-builder/ResumePDF";
 import type { ResumeData } from "@/components/resume-builder/types";
 import type { CustomizeSettings } from "@/components/resume-builder/customizeTypes";
+import { stripBlankPages } from "./resumePdf/stripBlankPages";
 
 interface PdfExportOptions {
   /** Resume data */
@@ -52,6 +53,23 @@ export async function exportResumePdfServer({
   } catch (renderErr: any) {
     if (import.meta.env.DEV) console.error("[ResumeDownload] PDF render failed:", renderErr?.message, renderErr?.stack);
     throw new Error(`PDF render failed: ${renderErr?.message || "Unknown render error"}`);
+  }
+
+  // Step 2b: Strip blank trailing pages.
+  // @react-pdf/renderer occasionally inserts a phantom empty page when the
+  // last section's content height lands near the Page's paddingBottom
+  // boundary (the `breakingImprovesPresence` heuristic). We detect and
+  // remove any pages with zero text content here so the downloaded file
+  // matches what the user expects.
+  try {
+    blob = await stripBlankPages(blob);
+  } catch (stripErr: any) {
+    // Non-fatal — if stripping fails, log and ship the original PDF
+    // rather than failing the whole export.
+    console.warn(
+      "[ResumeDownload] stripBlankPages failed (returning original PDF):",
+      stripErr?.message,
+    );
   }
 
   // Step 3: Trigger download

@@ -69,6 +69,17 @@ async function renderPdfPagesToImages(blob: Blob): Promise<string[]> {
   try {
     for (let i = 1; i <= pdfDoc.numPages; i++) {
       const page = await pdfDoc.getPage(i);
+
+      // Skip pages with zero text content. @react-pdf/renderer's
+      // breakingImprovesPresence heuristic occasionally inserts a phantom
+      // blank page at the end when the last section's content height lands
+      // near the paddingBottom boundary. Filtering here keeps the preview
+      // in sync with the post-stripped download.
+      const textContent = await page.getTextContent();
+      if (textContent.items.length === 0) {
+        continue;
+      }
+
       const viewport = page.getViewport({ scale: RENDER_SCALE });
 
       const canvas = document.createElement("canvas");
