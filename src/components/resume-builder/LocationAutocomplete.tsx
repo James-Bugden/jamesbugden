@@ -1,4 +1,4 @@
-import { useState, useRef, useEffect, useCallback } from "react";
+import { useState, useRef, useEffect, useCallback, useMemo } from "react";
 import { MapPin } from "lucide-react";
 
 /**
@@ -105,15 +105,24 @@ export function LocationAutocomplete({ label, value, onChange, placeholder }: Lo
   const [open, setOpen] = useState(false);
   const [query, setQuery] = useState(value);
   const [highlightIndex, setHighlightIndex] = useState(-1);
+  const [debouncedQuery, setDebouncedQuery] = useState(query);
   const containerRef = useRef<HTMLDivElement>(null);
   const listRef = useRef<HTMLUListElement>(null);
+  const debounceRef = useRef<ReturnType<typeof setTimeout>>();
 
   // Sync external value changes
   useEffect(() => { setQuery(value); }, [value]);
 
-  const filtered = query.length >= 2
-    ? CITIES.filter((_, i) => CITIES_LOWER[i].includes(query.toLowerCase())).slice(0, 8)
-    : [];
+  useEffect(() => {
+    debounceRef.current = setTimeout(() => setDebouncedQuery(query), 100);
+    return () => clearTimeout(debounceRef.current);
+  }, [query]);
+
+  const filtered = useMemo(() =>
+    debouncedQuery.length >= 2
+      ? CITIES.filter((_, i) => CITIES_LOWER[i].includes(debouncedQuery.toLowerCase())).slice(0, 8)
+      : [],
+    [debouncedQuery]);
 
   const showDropdown = open && filtered.length > 0;
 
@@ -188,7 +197,7 @@ export function LocationAutocomplete({ label, value, onChange, placeholder }: Lo
           {filtered.map((city, i) => (
             <li
               key={city}
-              onMouseDown={(e) => { e.preventDefault(); select(city); }}
+              onPointerDown={(e) => { e.preventDefault(); select(city); }}
               onMouseEnter={() => setHighlightIndex(i)}
               className={`flex items-center gap-2 px-3 py-2 text-sm cursor-pointer transition-colors ${
                 i === highlightIndex ? "bg-gray-100" : "hover:bg-gray-50"

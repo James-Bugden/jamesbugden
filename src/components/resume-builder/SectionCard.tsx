@@ -1,4 +1,4 @@
-import { useState, useRef, useCallback } from "react";
+import { useState, useRef, useCallback, useEffect } from "react";
 import { ChevronDown, ChevronUp, GripVertical, Trash2, Plus, X, Pencil, Grid3X3, Circle, List, ArrowUp, ArrowDown } from "lucide-react";
 import * as Icons from "lucide-react";
 import { Checkbox } from "@/components/ui/checkbox";
@@ -296,6 +296,10 @@ export function SectionCard({ section, onUpdate, onRemove }: {
       onUpdate({ entries: filtered });
     }
   }, [section.entries, onUpdate]);
+
+  useEffect(() => {
+    return () => { cleanupEmptyEntries(); };
+  }, []);
 
   const addEntry = () => {
     const newEntry: ResumeSectionEntry = {

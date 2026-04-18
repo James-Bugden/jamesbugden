@@ -12,6 +12,7 @@ import {
   ResponsiveContainer,
 } from "recharts";
 import { SEO } from "@/components/SEO";
+import { syncToMailerLite } from "@/lib/mailerlite";
 
 /* ─── types ─── */
 type Screen = "intro" | "questions" | "email" | "results" | "results-minimal";
@@ -204,8 +205,7 @@ export default function Quiz() {
       return;
     }
     setEmailError("");
-    // TODO: Connect to MailerLite API
-    console.log({ email: email.trim(), source: "quiz", score: totalScore, dimensions: { english: answers[0], resume: answers[1], interview: answers[2], culturalFit: answers[3], compPresence: compPresenceAvg } });
+    syncToMailerLite(email.trim());
     setEmailSubmitted(true);
     setTimeout(() => setScreen("results"), 800);
   };

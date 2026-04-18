@@ -184,7 +184,7 @@ export async function exportToPdf({ elementId, fileName, pageFormat = "a4" }: Ex
     pdf.save(safeName);
     toast({ title: "PDF downloaded", description: `${safeName} saved successfully.` });
   } catch (err) {
-    console.error("PDF export error:", err);
+    if (import.meta.env.DEV) console.error("PDF export error:", err);
     toast({ title: "Export failed", description: "Something went wrong generating the PDF.", variant: "destructive" });
   }
 }
@@ -363,7 +363,7 @@ export async function exportResumePages(config: ResumeExportConfig) {
     pdf.save(safeName);
     toast({ title: "PDF downloaded", description: `${safeName} saved successfully.` });
   } catch (err) {
-    console.error("Resume PDF export error:", err);
+    if (import.meta.env.DEV) console.error("Resume PDF export error:", err);
     toast({ title: "Export failed", description: "Something went wrong generating the PDF.", variant: "destructive" });
   } finally {
     // Always restore original styles

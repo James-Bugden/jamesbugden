@@ -185,7 +185,7 @@ export default function ResumeAnalyzer({ defaultLang = "en" }: { defaultLang?: L
       if (fnError || data?.error) {
         const status = (fnError as any)?.context?.status;
         const errorMsg = data?.error || fnError?.message || "Analysis failed";
-        console.error("Edge function error:", { status, errorMsg, fnError, data });
+        if (import.meta.env.DEV) console.error("Edge function error:", { status, errorMsg, fnError, data });
         if (status === 429 || data?.error?.includes?.("limit")) {
           throw new Error("RATE_LIMIT");
         }
@@ -201,7 +201,7 @@ export default function ResumeAnalyzer({ defaultLang = "en" }: { defaultLang?: L
       clearInterval(stepInterval);
       clearInterval(progressInterval);
       const msg = String(err?.message || "");
-      console.error("Analysis error:", msg, err);
+      if (import.meta.env.DEV) console.error("Analysis error:", msg, err);
       if (msg === "RATE_LIMIT") {
         setError(t(lang, "You've reached your monthly analysis limit. Please try again next month.", "你已達到本月分析上限。請下月再試。"));
       } else {
@@ -291,7 +291,7 @@ export default function ResumeAnalyzer({ defaultLang = "en" }: { defaultLang?: L
           user_agent: navigator.userAgent,
           resume_text: text,
         }).then(({ error }) => {
-          if (error) console.warn("Analytics insert failed:", error.message);
+          if (error && import.meta.env.DEV) console.warn("Analytics insert failed:", error.message);
         });
 
         // Auto-save analysis for logged-in users
@@ -317,7 +317,7 @@ export default function ResumeAnalyzer({ defaultLang = "en" }: { defaultLang?: L
         }, 800);
       }
     } catch (err: any) {
-      console.error("Extract error:", err);
+      if (import.meta.env.DEV) console.error("Extract error:", err);
       const msg = String(err?.message || err || "");
       if (/password/i.test(msg)) {
         setError(t(lang,

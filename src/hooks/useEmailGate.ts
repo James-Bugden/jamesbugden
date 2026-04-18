@@ -57,7 +57,7 @@ export function useEmailGate() {
       .from("email_gate_leads")
       .insert({ email, source: "offer-compass" })
       .then(({ error }) => {
-        if (error) console.error("Failed to save email lead:", error);
+        if (error && import.meta.env.DEV) console.error("Failed to save email lead:", error);
       });
   }, []);
 

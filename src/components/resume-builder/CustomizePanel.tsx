@@ -73,11 +73,14 @@ function FieldLabel({ children }: { children: React.ReactNode }) {
   return <label className="block text-xs font-semibold mb-1.5" style={{ color: B.text }}>{children}</label>;
 }
 
+let selectIdCounter = 0;
 function SelectField({ label, value, options, onChange }: { label: string; value: string; options: { value: string; label: string }[]; onChange: (v: string) => void }) {
+  const [id] = useState(() => `select-${++selectIdCounter}`);
   return (
     <div className="flex-1 min-w-0">
-      <FieldLabel>{label}</FieldLabel>
+      <label htmlFor={id} className="block text-xs font-semibold mb-1.5" style={{ color: B.text }}>{label}</label>
       <select
+        id={id}
         value={value}
         onChange={(e) => onChange(e.target.value)}
         className="w-full px-3 py-2 rounded-lg text-sm bg-white border outline-none appearance-none cursor-pointer"
@@ -117,11 +120,11 @@ function SliderRow({ label, value, min, max, step, unit, onChange }: { label: st
       <div className="flex items-center justify-between">
         <span className="text-xs font-semibold" style={{ color: B.text }}>{label}</span>
         <div className="flex items-center gap-1.5">
-          <button onClick={() => onChange(Math.max(min, +(value - step).toFixed(2)))} className="w-6 h-6 flex items-center justify-center rounded-md bg-gray-100 hover:bg-gray-200 transition-colors" style={{ color: B.textSec }}>
+          <button aria-label={`Decrease ${label}`} onClick={() => onChange(Math.max(min, +(value - step).toFixed(2)))} className="w-6 h-6 flex items-center justify-center rounded-md bg-gray-100 hover:bg-gray-200 transition-colors" style={{ color: B.textSec }}>
             <Minus className="w-3 h-3" />
           </button>
           <span className="text-xs w-14 text-center" style={{ color: B.text }}>{value}{unit}</span>
-          <button onClick={() => onChange(Math.min(max, +(value + step).toFixed(2)))} className="w-6 h-6 flex items-center justify-center rounded-md bg-gray-100 hover:bg-gray-200 transition-colors" style={{ color: B.textSec }}>
+          <button aria-label={`Increase ${label}`} onClick={() => onChange(Math.min(max, +(value + step).toFixed(2)))} className="w-6 h-6 flex items-center justify-center rounded-md bg-gray-100 hover:bg-gray-200 transition-colors" style={{ color: B.textSec }}>
             <Plus className="w-3 h-3" />
           </button>
         </div>

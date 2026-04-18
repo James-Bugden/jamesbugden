@@ -22,7 +22,7 @@ export function usePrintUsage() {
       });
       setPrintCount(data ?? 0);
     } catch (e) {
-      console.error("Failed to fetch print usage:", e);
+      if (import.meta.env.DEV) console.error("Failed to fetch print usage:", e);
     } finally {
       setLoading(false);
     }

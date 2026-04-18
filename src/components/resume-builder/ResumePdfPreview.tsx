@@ -178,7 +178,7 @@ export const ResumePdfPreview = React.memo(function ResumePdfPreview({
         onPageCountRef.current?.(images.length);
       } catch (err) {
         if (!cancelled) {
-          console.error("[ResumePdfPreview] render error:", err);
+          if (import.meta.env.DEV) console.error("[ResumePdfPreview] render error:", err);
           setErrorMsg(String(err));
         }
       } finally {

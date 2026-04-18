@@ -82,7 +82,7 @@
     --secondary-foreground: 39 20% 90%;
 
     --muted: 220 10% 20%;
-    --muted-foreground: 39 10% 65%;
+    --muted-foreground: 220 10% 75%;
 
     --accent: 42 52% 56%;
     --accent-foreground: 0 0% 100%;
@@ -132,6 +132,10 @@
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
     line-height: 1.7;
+  }
+
+  button, [role="button"], a, input, select, textarea {
+    touch-action: manipulation;
   }
 
   h1, h2, h3, h4, h5, h6 {

@@ -24,12 +24,24 @@ export async function exportResumePdfServer({
   customize,
   fileName = "Resume",
 }: PdfExportOptions): Promise<void> {
-  // Step 1: Font preparation
-  try {
-    await prepareFonts(customize, data);
-  } catch (fontErr: any) {
-    console.error("[ResumeDownload] Font preparation failed:", fontErr?.message, fontErr?.stack);
-    throw new Error(`Font loading failed: ${fontErr?.message || "Unknown font error"}`);
+  // Step 1: Font preparation (with one retry on transient failure)
+  let fontPrepared = false;
+  let lastFontErr: any = null;
+  for (let attempt = 0; attempt < 2 && !fontPrepared; attempt++) {
+    try {
+      await prepareFonts(customize, data);
+      fontPrepared = true;
+    } catch (fontErr: any) {
+      lastFontErr = fontErr;
+      if (attempt === 0) {
+        // Brief backoff before retry
+        await new Promise((r) => setTimeout(r, 250));
+      }
+    }
+  }
+  if (!fontPrepared) {
+    if (import.meta.env.DEV) console.error("[ResumeDownload] Font preparation failed after retry:", lastFontErr?.message, lastFontErr?.stack);
+    throw new Error(`Font loading failed: ${lastFontErr?.message || "Unknown font error"}`);
   }
 
   // Step 2: PDF rendering
@@ -38,7 +50,7 @@ export async function exportResumePdfServer({
     const doc = React.createElement(ResumePDF, { data, customize } as any);
     blob = await pdf(doc as any).toBlob();
   } catch (renderErr: any) {
-    console.error("[ResumeDownload] PDF render failed:", renderErr?.message, renderErr?.stack);
+    if (import.meta.env.DEV) console.error("[ResumeDownload] PDF render failed:", renderErr?.message, renderErr?.stack);
     throw new Error(`PDF render failed: ${renderErr?.message || "Unknown render error"}`);
   }
 
@@ -56,7 +68,7 @@ export async function exportResumePdfServer({
     setTimeout(() => URL.revokeObjectURL(url), 500);
   } catch (dlErr: any) {
     URL.revokeObjectURL(url);
-    console.error("[ResumeDownload] Download trigger failed:", dlErr?.message, dlErr?.stack);
+    if (import.meta.env.DEV) console.error("[ResumeDownload] Download trigger failed:", dlErr?.message, dlErr?.stack);
     throw new Error(`Download trigger failed: ${dlErr?.message || "Unknown download error"}`);
   }
 }

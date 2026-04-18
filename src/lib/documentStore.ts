@@ -20,6 +20,14 @@ export interface SavedDocument {
 
 const STORAGE_KEY = "james_careers_documents";
 
+let syncLock: Promise<void> = Promise.resolve();
+function withSyncLock<T>(fn: () => Promise<T>): Promise<T> {
+  const prev = syncLock;
+  let resolve: () => void;
+  syncLock = new Promise<void>((r) => { resolve = r; });
+  return prev.then(fn).finally(() => resolve!());
+}
+
 function load(): SavedDocument[] {
   try {
     const s = localStorage.getItem(STORAGE_KEY);
@@ -203,7 +211,11 @@ export async function fetchServerDocuments(): Promise<SavedDocument[] | null> {
  * Sync local documents to the server on first login.
  * Only uploads if the server has no documents for this user.
  */
-export async function syncLocalToServer(): Promise<{ synced: number }> {
+export function syncLocalToServer(): Promise<{ synced: number; error?: unknown }> {
+  return withSyncLock(_syncLocalToServer);
+}
+
+async function _syncLocalToServer(): Promise<{ synced: number; error?: unknown }> {
   try {
     const { data: sessionData } = await supabase.auth.getSession();
     const userId = sessionData?.session?.user?.id;
@@ -235,8 +247,8 @@ export async function syncLocalToServer(): Promise<{ synced: number }> {
 
     const { error } = await (supabase as any).from("user_documents").insert(rows);
     if (error) {
-      console.error("Document sync error:", error);
-      return { synced: 0 };
+      if (import.meta.env.DEV) console.error("Document sync error:", error);
+      return { synced: 0, error };
     }
 
     return { synced: rows.length };
@@ -262,7 +274,11 @@ export function clearLocalDocuments() {
  * Load the current user's documents from the server into localStorage.
  * Returns true if server docs were loaded, false otherwise.
  */
-export async function loadFromServer(): Promise<boolean> {
+export function loadFromServer(): Promise<boolean> {
+  return withSyncLock(_loadFromServer);
+}
+
+async function _loadFromServer(): Promise<boolean> {
   const serverDocs = await fetchServerDocuments();
   if (!serverDocs || serverDocs.length === 0) return false;
   save(serverDocs);

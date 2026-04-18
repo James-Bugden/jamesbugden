@@ -115,7 +115,7 @@ function TopPostsSection({ posts }: { posts: ThreadsPost[] }) {
           const eng = Number(p.engagement_rate);
           const isAboveAvg = eng >= medianEng;
           return (
-            <div key={p.id} className={`p-4 hover:bg-gray-50/50 transition-colors cursor-pointer ${i > 0 ? "border-t border-gray-50" : ""}`} onClick={() => toggle(p.id)}>
+            <button key={p.id} type="button" className={`w-full text-left p-4 hover:bg-gray-50/50 transition-colors cursor-pointer ${i > 0 ? "border-t border-gray-50" : ""}`} onClick={() => toggle(p.id)}>
               <div className="flex gap-4">
                 <div className="flex items-start gap-3 shrink-0">
                   <span className="text-sm font-bold text-gray-300 w-7 text-right pt-1">{i + 1}</span>
@@ -158,7 +158,7 @@ function TopPostsSection({ posts }: { posts: ThreadsPost[] }) {
                   </div>
                 </div>
               </div>
-            </div>
+            </button>
           );
         })}
       </div>

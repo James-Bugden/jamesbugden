@@ -75,7 +75,7 @@ export function TagInput({ value, onChange, placeholder = "Type and press Enter"
             value={input}
             onChange={(e) => handleChange(e.target.value)}
             onKeyDown={handleKeyDown}
-            onBlur={addTag}
+            onBlur={() => { if (input.trim()) addTag(); }}
             placeholder={tags.length === 0 ? placeholder : ""}
             className="flex-1 min-w-[120px] bg-transparent text-sm outline-none placeholder:text-gray-400 py-1"
           />

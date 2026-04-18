@@ -58,7 +58,7 @@ function LinkClicksSection() {
           {showAll ? "My links only" : "Show all"}
         </Button>
       </div>
-      <div className="overflow-x-auto">
+      <div className="overflow-x-auto max-w-full">
         <table className="w-full text-sm">
           <thead>
             <tr className="border-b border-gray-50 text-left text-gray-500">

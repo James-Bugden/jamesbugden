@@ -10,8 +10,9 @@ export function syncToMailerLite(email: string, name?: string): void {
     keepalive: true,
   })
     .then((res) => {
-      if (!res.ok) console.warn("[MailerLite] sync failed:", res.status);
-      else console.log("[MailerLite] subscriber synced");
+      if (!res.ok && import.meta.env.DEV) console.warn("[MailerLite] sync failed:", res.status);
     })
-    .catch((err) => console.warn("[MailerLite] sync error:", err));
+    .catch((err) => {
+      if (import.meta.env.DEV) console.warn("[MailerLite] sync error:", err);
+    });
 }

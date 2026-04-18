@@ -107,7 +107,8 @@ async function registerCJKFont(): Promise<boolean> {
       REGISTERED_FONTS.add(CJK_FONT_FAMILY);
       return true;
     } catch (err) {
-      console.warn("[ResumePDF] CJK font registration failed:", err);
+      if (import.meta.env.DEV) console.warn("[ResumePDF] CJK font registration failed:", err);
+      cjkRegistrationPromise = null; // allow retry
       return false;
     }
   })();
@@ -148,12 +149,12 @@ async function registerFontAsync(cssFamily: string): Promise<string> {
       if (!testResp.ok) {
         // Don't cache failures — allow retry on next call
         FONT_REGISTRATION_PROMISES.delete(name);
-        console.warn(`[ResumePDF] Font "${name}" HEAD check failed (${testResp.status}), falling back to Helvetica`);
+        if (import.meta.env.DEV) console.warn(`[ResumePDF] Font "${name}" HEAD check failed (${testResp.status}), falling back to Helvetica`);
         return "Helvetica";
       }
     } catch (fetchErr) {
       FONT_REGISTRATION_PROMISES.delete(name);
-      console.warn(`[ResumePDF] Font "${name}" network error, falling back to Helvetica:`, fetchErr);
+      if (import.meta.env.DEV) console.warn(`[ResumePDF] Font "${name}" network error, falling back to Helvetica:`, fetchErr);
       return "Helvetica";
     }
 
@@ -170,7 +171,7 @@ async function registerFontAsync(cssFamily: string): Promise<string> {
       return name;
     } catch (regErr) {
       FONT_REGISTRATION_PROMISES.delete(name);
-      console.warn(`[ResumePDF] Font.register("${name}") failed, falling back to Helvetica:`, regErr);
+      if (import.meta.env.DEV) console.warn(`[ResumePDF] Font.register("${name}") failed, falling back to Helvetica:`, regErr);
       return "Helvetica";
     }
   })();
@@ -220,7 +221,7 @@ export async function prepareFonts(c?: CustomizeSettings, data?: ResumeData): Pr
     const requested = extractFontName(familyArr[i]);
     const resolved = results[i];
     if (typeof resolved === "string" && resolved !== requested) {
-      console.warn(`[ResumePDF] Font "${requested}" not available, using "${resolved}"`);
+      if (import.meta.env.DEV) console.warn(`[ResumePDF] Font "${requested}" not available, using "${resolved}"`);
     }
   }
 }
