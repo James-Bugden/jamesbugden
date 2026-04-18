@@ -36,7 +36,13 @@ export const SERIF_FONTS: FontDef[] = [
 
 export const MONO_FONTS: FontDef[] = [
   { name: "Fira Code", family: "'Fira Code', monospace" },
-  { name: "JetBrains Mono", family: "'JetBrains Mono', monospace" },
+  // NOTE: "JetBrains Mono" was removed because fontkit (used by
+  // @react-pdf/renderer) throws `RangeError: Offset is outside the bounds
+  // of the DataView` when parsing fontsource's JetBrains Mono .woff file,
+  // even though the file is a valid WOFF. Reproduced in the headless
+  // matrix test (qa-tmp/matrix-headless.mjs). If fontkit is upgraded and
+  // the issue is resolved, JetBrains Mono can be re-added with a quick
+  // render-test to confirm.
   { name: "IBM Plex Mono", family: "'IBM Plex Mono', monospace" },
   { name: "Source Code Pro", family: "'Source Code Pro', monospace" },
 ];

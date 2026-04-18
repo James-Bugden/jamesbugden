@@ -142,28 +142,44 @@ async function registerFontAsync(cssFamily: string): Promise<string> {
     );
     const fontName = def?.name || name;
 
-    // Verify the font exists on fontsource CDN before registering
-    const testUrl = fontsourceUrl(fontName, 400);
+    // Verify EACH weight we plan to register actually exists on fontsource.
+    // Not every font ships every weight — e.g. Lato has 400 and 700 on
+    // fontsource but no 600 (HEAD returns 404). Previously we only HEAD-
+    // checked weight 400 and registered 400/600/700 blindly; react-pdf
+    // then failed at render time with "Unknown font format" when fetching
+    // the missing weight. Now we filter to available weights only.
+    const desiredWeights = [400, 600, 700];
+    const availableWeights: number[] = [];
     try {
-      const testResp = await fetch(testUrl, { method: "HEAD" });
-      if (!testResp.ok) {
-        // Don't cache failures — allow retry on next call
-        FONT_REGISTRATION_PROMISES.delete(name);
-        if (import.meta.env.DEV) console.warn(`[ResumePDF] Font "${name}" HEAD check failed (${testResp.status}), falling back to Helvetica`);
-        return "Helvetica";
+      const checks = await Promise.all(
+        desiredWeights.map(async (w) => {
+          try {
+            const r = await fetch(fontsourceUrl(fontName, w), { method: "HEAD" });
+            return r.ok ? w : null;
+          } catch {
+            return null;
+          }
+        }),
+      );
+      for (const w of checks) {
+        if (typeof w === "number") availableWeights.push(w);
       }
-    } catch (fetchErr) {
+    } catch {
+      // fall through — availableWeights stays empty
+    }
+
+    if (availableWeights.length === 0) {
+      // Nothing reachable — fall back to Helvetica.
       FONT_REGISTRATION_PROMISES.delete(name);
-      if (import.meta.env.DEV) console.warn(`[ResumePDF] Font "${name}" network error, falling back to Helvetica:`, fetchErr);
+      if (import.meta.env.DEV) console.warn(`[ResumePDF] Font "${name}" — no reachable weights on fontsource, falling back to Helvetica`);
       return "Helvetica";
     }
 
-    // Register with direct fontsource CDN URLs (static WOFF files)
-    const fonts: { src: string; fontWeight: number }[] = [
-      { src: fontsourceUrl(fontName, 400), fontWeight: 400 },
-      { src: fontsourceUrl(fontName, 600), fontWeight: 600 },
-      { src: fontsourceUrl(fontName, 700), fontWeight: 700 },
-    ];
+    // Register only the weights that actually exist.
+    const fonts: { src: string; fontWeight: number }[] = availableWeights.map((w) => ({
+      src: fontsourceUrl(fontName, w),
+      fontWeight: w,
+    }));
 
     try {
       Font.register({ family: name, fonts });
@@ -2047,12 +2063,20 @@ export function ResumePDF({ data, customize }: ResumePDFProps) {
             const photoSizeMM =
               { s: 12, m: 18, l: 24 }[c?.photoSize || "m"] || 18;
             const photoShape = c?.photoShape || "circle";
-            const photoBorderRadius =
+            // react-pdf's stylesheet parser has a bug at
+            //   @react-pdf/stylesheet/lib/index.js:204
+            // where `const radius = value ? transformUnit(...) : undefined`
+            // treats the number 0 as falsy and throws
+            // "Invalid border radius: undefined".
+            // Workaround: use `undefined` for square photos so the
+            // property is omitted from the style object entirely (default
+            // is no rounding, which is what we want).
+            const photoBorderRadius: number | undefined =
               photoShape === "circle"
                 ? mm(photoSizeMM / 2)
                 : photoShape === "rounded"
                   ? mm(2)
-                  : 0;
+                  : undefined;
 
             const nameFontSize = NAME_SIZES[c?.nameSize || "s"];
             // Apply uppercase in JS, not via textTransform — react-pdf's
@@ -2187,7 +2211,12 @@ export function ResumePDF({ data, customize }: ResumePDFProps) {
                     style={{
                       width: mm(photoSizeMM),
                       height: mm(photoSizeMM),
-                      borderRadius: photoBorderRadius,
+                      // Conditionally spread so the `borderRadius` key is
+                      // completely absent from the style object when we
+                      // want no rounding. react-pdf throws on both
+                      // `borderRadius: 0` and `borderRadius: undefined`
+                      // (see comment at photoBorderRadius declaration).
+                      ...(photoBorderRadius !== undefined ? { borderRadius: photoBorderRadius } : {}),
                       objectFit: "cover",
                     }}
                   />
