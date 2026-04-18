@@ -213,6 +213,7 @@ export default function Join() {
                       onChange={e => setEmail(e.target.value)}
                       className="pl-10 h-11"
                       required
+                      autoComplete="email"
                     />
                   </div>
                   <div>
@@ -226,6 +227,7 @@ export default function Join() {
                         onChange={e => setPassword(e.target.value)}
                         className="pl-10 pr-10 h-11"
                         required
+                        autoComplete="new-password"
                       />
                       <button
                         type="button"
