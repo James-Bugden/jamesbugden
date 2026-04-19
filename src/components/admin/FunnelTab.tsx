@@ -299,6 +299,8 @@ export default function FunnelTab() {
           </CardContent>
         </Card>
       </div>
+        </>
+      )}
 
       <Sheet open={!!openSource} onOpenChange={(o) => !o && setOpenSource(null)}>
         <SheetContent className="w-full sm:max-w-2xl overflow-y-auto">
