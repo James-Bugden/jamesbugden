@@ -30,6 +30,7 @@ import { AreaChart, Area, BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContai
 import bcrypt from "bcryptjs";
 import { SEO } from "@/components/SEO";
 import InsightsTab from "@/components/admin/InsightsTab";
+import FunnelTab from "@/components/admin/FunnelTab";
 
 // ── Types ───────────────────────────────────────────────────────────────────────
 
@@ -731,6 +732,7 @@ export default function AdminDashboard() {
             <TabsTrigger value="people">People</TabsTrigger>
             <TabsTrigger value="data">Data</TabsTrigger>
             <TabsTrigger value="insights">Insights</TabsTrigger>
+            <TabsTrigger value="funnel">Funnel</TabsTrigger>
           </TabsList>
 
           {/* ── Overview Tab ── */}
@@ -1475,6 +1477,11 @@ export default function AdminDashboard() {
                 eventTracksLoading,
               }}
             />
+          </TabsContent>
+
+          {/* ── Funnel Tab ── */}
+          <TabsContent value="funnel">
+            <FunnelTab />
           </TabsContent>
         </Tabs>
       </main>
