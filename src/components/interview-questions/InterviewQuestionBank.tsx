@@ -10,6 +10,7 @@ import { Linkedin } from "lucide-react";
 import { InstagramIcon, ThreadsIcon } from "@/components/SocialIcons";
 import { trackShare } from "@/lib/trackShare";
 import { trackEvent } from "@/lib/trackEvent";
+import { trackTool } from "@/lib/analytics";
 import { AuthHeaderButton } from "@/components/AuthHeaderButton";
 import { motion, AnimatePresence } from "framer-motion";
 import { SEO } from "@/components/SEO";
@@ -223,6 +224,7 @@ export default function InterviewQuestionBank({ lang: initialLang }: { lang: Lan
       setDebouncedSearch(search);
       if (search.length >= 2) {
         trackEvent("qbank_search", "search", { term: search, lang });
+        trackTool("interview_qbank", "search", { term: search.slice(0, 80) }, { lang });
       }
     }, 300);
     return () => clearTimeout(timer);
@@ -368,8 +370,10 @@ export default function InterviewQuestionBank({ lang: initialLang }: { lang: Lan
     query = query.order("id", { ascending: true }).range(randomOffset, randomOffset);
     const { data } = await query;
     if (data && data.length > 0) {
-      setRandomQuestion(data[0] as Question);
-      trackEvent("qbank_action", "random_question", { category: (data[0] as Question).category, lang });
+      const q = data[0] as Question;
+      setRandomQuestion(q);
+      trackEvent("qbank_action", "random_question", { category: q.category, lang });
+      trackTool("interview_qbank", "random_question", { question_id: q.id, category: q.category }, { lang });
     }
   };
 
@@ -383,6 +387,7 @@ export default function InterviewQuestionBank({ lang: initialLang }: { lang: Lan
 
   const handleTagClick = (tag: string) => {
     setSearch(tag);
+    trackTool("interview_qbank", "filter_by_tag", { tag: tag.slice(0, 60) }, { lang });
   };
 
   const handleCopyLink = async () => {
@@ -844,6 +849,7 @@ export default function InterviewQuestionBank({ lang: initialLang }: { lang: Lan
                 });
                 if (willExpand && hasAnswer) {
                   trackEvent("qbank_action", "reveal_answer", { question_id: q.id, category: q.category, lang });
+                  trackTool("interview_qbank", "reveal_answer", { question_id: q.id, category: q.category }, { lang });
                 }
               };
 
