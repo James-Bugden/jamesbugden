@@ -31,6 +31,7 @@ import { applyTemplatePreset } from "@/components/resume-builder/templatePresets
 import { exportResumePdfServer } from "@/lib/serverPdfExport";
 import { useIsMobile } from "@/hooks/use-mobile";
 import { Skeleton } from "@/components/ui/skeleton";
+import { trackTool, trackError } from "@/lib/analytics";
 import { toast } from "@/hooks/use-toast";
 import { ToastAction } from "@/components/ui/toast";
 import { cn } from "@/lib/utils";
@@ -749,11 +750,13 @@ const ResumeBuilder = () => {
   const handleDownload = async (filename?: string) => {
     if (downloading) return;
     setDownloading(true);
+    const exportStarted = performance.now();
     // Build a clean default filename if none was passed in. Avoid appending
     // "_Resume" if the user's name (or the placeholder) already contains it.
     const baseName = (data.personalDetails.fullName || "Resume").replace(/\s+/g, "_");
     const defaultFn = /resume/i.test(baseName) ? baseName : `${baseName}_Resume`;
     const fn = filename || defaultFn;
+    const sectionCount = (data.sections || []).length;
     try {
       await exportResumePdfServer({
         data,
@@ -762,9 +765,30 @@ const ResumeBuilder = () => {
       });
       toast({ title: lang === "zh-tw" ? "PDF 已下載" : "PDF downloaded", description: `${fn}.pdf` });
       setShowPdfSurvey(true);
+      trackTool(
+        "resume_builder",
+        "pdf_export",
+        {
+          template: customize?.template ?? null,
+          page_format: customize?.pageFormat ?? "a4",
+          section_count: sectionCount,
+          has_photo: !!data.personalDetails?.photoUrl,
+        },
+        { lang, durationMs: Math.round(performance.now() - exportStarted), success: true },
+      );
     } catch (err: any) {
       const errMsg = err?.message || "Unknown error";
       if (import.meta.env.DEV) console.error("[ResumeDownload] handleDownload failed:", errMsg, err?.stack);
+      trackError("pdf_export", `Resume PDF export failed: ${errMsg}`, {
+        stack: err?.stack,
+        metadata: { template: customize?.template, page_format: customize?.pageFormat, section_count: sectionCount, lang },
+      });
+      trackTool(
+        "resume_builder",
+        "pdf_export",
+        { error: errMsg.slice(0, 200) },
+        { lang, durationMs: Math.round(performance.now() - exportStarted), success: false },
+      );
       toast({
         title: lang === "zh-tw" ? "下載失敗" : "Download failed",
         description: lang === "zh-tw"

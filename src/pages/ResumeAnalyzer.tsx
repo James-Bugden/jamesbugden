@@ -337,6 +337,11 @@ export default function ResumeAnalyzer({ defaultLang = "en" }: { defaultLang?: L
     } catch (err: any) {
       if (import.meta.env.DEV) console.error("Extract error:", err);
       const msg = String(err?.message || err || "");
+      trackError("ai_call", `Resume analyzer failed: ${msg}`, {
+        stack: err?.stack,
+        metadata: { tool: "resume_analyzer", input_method: file ? "upload" : "paste", lang },
+      });
+      trackTool("resume_analyzer", "analysis_run", { error: msg.slice(0, 200) }, { lang, success: false });
       if (/password/i.test(msg)) {
         setError(t(lang,
           "This PDF is password-protected. Please remove the password and re-upload, or paste the text instead.",
