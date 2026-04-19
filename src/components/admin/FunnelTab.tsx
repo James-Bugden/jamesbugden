@@ -181,40 +181,68 @@ export default function FunnelTab() {
     setDrawerLoading(false);
   };
 
-  if (data.loading) {
-    return (
-      <div className="flex items-center justify-center py-12">
-        <Loader2 className="w-5 h-5 animate-spin text-muted-foreground" />
-      </div>
-    );
-  }
+  const rangeLabel = RANGES.find((r) => r.key === range)!.label;
 
   return (
     <div className="space-y-6">
+      <div className="flex items-center justify-between gap-3">
+        <p className="text-sm text-muted-foreground">
+          Showing data for the last <span className="font-medium text-foreground">{rangeLabel}</span>
+        </p>
+        <div className="inline-flex rounded-lg border border-border bg-card p-0.5" role="tablist" aria-label="Time range">
+          {RANGES.map((r) => {
+            const active = r.key === range;
+            return (
+              <button
+                key={r.key}
+                type="button"
+                role="tab"
+                aria-selected={active}
+                onClick={() => setRange(r.key)}
+                className={
+                  "px-3 py-1.5 text-xs font-medium rounded-md transition-colors " +
+                  (active
+                    ? "bg-primary text-primary-foreground"
+                    : "text-muted-foreground hover:text-foreground")
+                }
+              >
+                {r.label}
+              </button>
+            );
+          })}
+        </div>
+      </div>
+
+      {data.loading ? (
+        <div className="flex items-center justify-center py-12">
+          <Loader2 className="w-5 h-5 animate-spin text-muted-foreground" />
+        </div>
+      ) : (
+        <>
       <div className="grid grid-cols-2 md:grid-cols-5 gap-4">
         <KpiCard
           icon={<Activity className="w-4 h-4" />}
-          label="Sessions today"
-          value={data.sessionsToday.toLocaleString()}
+          label={`Sessions (${rangeLabel})`}
+          value={data.sessionsCount.toLocaleString()}
           className="md:col-span-2"
-          rightSlot={<Sparkline points={data.sessions7d} />}
+          rightSlot={<Sparkline points={data.sessionsSpark} />}
         />
         <KpiCard
           icon={<UserPlus className="w-4 h-4" />}
-          label="Signups today"
-          value={data.signupsToday.toLocaleString()}
+          label={`Signups (${rangeLabel})`}
+          value={data.signupsCount.toLocaleString()}
         />
         <KpiCard
           icon={<UserPlus className="w-4 h-4" />}
           label="Signup conversion"
           value={`${data.conversionPct}%`}
-          hint={`${data.signupsToday} / ${data.sessionsToday}`}
+          hint={`${data.signupsCount} / ${data.sessionsCount}`}
         />
         <KpiCard
           icon={<AlertTriangle className="w-4 h-4" />}
-          label="Errors (24h)"
-          value={data.errors24h.toLocaleString()}
-          tone={data.errors24h > 0 ? "warn" : "ok"}
+          label={`Errors (${rangeLabel})`}
+          value={data.errorsCount.toLocaleString()}
+          tone={data.errorsCount > 0 ? "warn" : "ok"}
         />
       </div>
 
