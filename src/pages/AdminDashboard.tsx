@@ -143,16 +143,23 @@ export default function AdminDashboard() {
   const [searchParams, setSearchParams] = useSearchParams();
   const activeTab = searchParams.get("tab") || "overview";
   const activeSub = searchParams.get("sub") || "";
+
+  // Filter param keys that are scoped to a sub-tab. Cleared whenever the user
+  // switches sub-tabs so filters from one panel don't bleed into another.
+  const FILTER_KEYS = ["q", "verdict", "type", "seniority", "sort", "dir"] as const;
+
   const setActiveTab = (tab: string) => {
     const sp = new URLSearchParams(searchParams);
     sp.set("tab", tab);
     sp.delete("sub");
+    FILTER_KEYS.forEach(k => sp.delete(k));
     setSearchParams(sp, { replace: true });
   };
   const setActiveSub = (tab: string, sub: string) => {
     const sp = new URLSearchParams(searchParams);
     sp.set("tab", tab);
     sp.set("sub", sub);
+    FILTER_KEYS.forEach(k => sp.delete(k));
     setSearchParams(sp, { replace: true });
   };
   const navigateTo = (tab: string, sub?: string) => {
@@ -160,8 +167,54 @@ export default function AdminDashboard() {
     sp.set("tab", tab);
     if (sub) sp.set("sub", sub);
     else sp.delete("sub");
+    FILTER_KEYS.forEach(k => sp.delete(k));
     setSearchParams(sp, { replace: true });
   };
+
+  // Generic helper: read/write a single URL param. Used by all filter inputs
+  // so they survive page reload and copy-link sharing.
+  const setParam = useCallback((key: string, value: string | null) => {
+    setSearchParams(prev => {
+      const sp = new URLSearchParams(prev);
+      if (value === null || value === "" || value === "all") sp.delete(key);
+      else sp.set(key, value);
+      return sp;
+    }, { replace: true });
+  }, [setSearchParams]);
+
+  // Filter values — read straight from the URL with sensible defaults.
+  const salarySearch = searchParams.get("q") || "";
+  const verdictFilter = searchParams.get("verdict") || "all";
+  const sortKey = (searchParams.get("sort") as SalarySortKey) || "created_at";
+  const sortAsc = searchParams.get("dir") === "asc";
+  const resumeSearch = searchParams.get("q") || "";
+  const resumeSeniorityFilter = searchParams.get("seniority") || "all";
+  const feedbackSearch = searchParams.get("q") || "";
+  const feedbackTypeFilter = searchParams.get("type") || "all";
+  const accountSearch = searchParams.get("q") || "";
+  const accountSort = useMemo(() => ({
+    col: (searchParams.get("sort") as "created_at" | "last_sign_in_at") || "created_at",
+    dir: (searchParams.get("dir") as "asc" | "desc") || "desc",
+  }), [searchParams]);
+
+  const setSalarySearch = (v: string) => setParam("q", v);
+  const setVerdictFilter = (v: string) => setParam("verdict", v);
+  const setSortKey = (v: SalarySortKey) => setParam("sort", v);
+  const setSortAsc = (v: boolean) => setParam("dir", v ? "asc" : "desc");
+  const setResumeSearch = (v: string) => setParam("q", v);
+  const setResumeSeniorityFilter = (v: string) => setParam("seniority", v);
+  const setFeedbackSearch = (v: string) => setParam("q", v);
+  const setFeedbackTypeFilter = (v: string) => setParam("type", v);
+  const setAccountSearch = (v: string) => setParam("q", v);
+  const setAccountSort = (v: { col: "created_at" | "last_sign_in_at"; dir: "asc" | "desc" }) => {
+    setSearchParams(prev => {
+      const sp = new URLSearchParams(prev);
+      sp.set("sort", v.col);
+      sp.set("dir", v.dir);
+      return sp;
+    }, { replace: true });
+  };
+
 
   const navigate = useNavigate();
   const { toast } = useToast();
@@ -182,19 +235,13 @@ export default function AdminDashboard() {
   const [reviewUrl, setReviewUrl] = useState("");
   const [submitting, setSubmitting] = useState(false);
 
-  // Salary state
+  // Salary state (filter values come from the URL — see top of component)
   const [checks, setChecks] = useState<SalaryCheck[]>([]);
   const [checksLoading, setChecksLoading] = useState(true);
-  const [salarySearch, setSalarySearch] = useState("");
-  const [verdictFilter, setVerdictFilter] = useState("all");
-  const [sortKey, setSortKey] = useState<SalarySortKey>("created_at");
-  const [sortAsc, setSortAsc] = useState(false);
 
   // Resume leads state
   const [resumeLeads, setResumeLeads] = useState<ResumeLead[]>([]);
   const [resumeLeadsLoading, setResumeLeadsLoading] = useState(true);
-  const [resumeSearch, setResumeSearch] = useState("");
-  const [resumeSeniorityFilter, setResumeSeniorityFilter] = useState("all");
 
   // Email leads state
   const [emailLeads, setEmailLeads] = useState<EmailLead[]>([]);
@@ -203,14 +250,10 @@ export default function AdminDashboard() {
   // Feedback state
   const [feedbackItems, setFeedbackItems] = useState<FeedbackItem[]>([]);
   const [feedbackLoading, setFeedbackLoading] = useState(true);
-  const [feedbackSearch, setFeedbackSearch] = useState("");
-  const [feedbackTypeFilter, setFeedbackTypeFilter] = useState<string>("all");
 
   // Accounts state
   const [accounts, setAccounts] = useState<AccountUser[]>([]);
   const [accountsLoading, setAccountsLoading] = useState(true);
-  const [accountSearch, setAccountSearch] = useState("");
-  const [accountSort, setAccountSort] = useState<{ col: "created_at" | "last_sign_in_at"; dir: "asc" | "desc" }>({ col: "created_at", dir: "desc" });
 
   // AI Usage state
   const [aiUsageRows, setAiUsageRows] = useState<AiUsageRow[]>([]);
@@ -843,13 +886,13 @@ export default function AdminDashboard() {
                     <Table>
                       <TableHeader>
                         <TableRow>
-                          <TableHead className="w-36 cursor-pointer select-none hover:text-foreground transition-colors" onClick={() => setAccountSort(s => s.col === "created_at" ? { col: "created_at", dir: s.dir === "asc" ? "desc" : "asc" } : { col: "created_at", dir: "desc" })}>
+                          <TableHead className="w-36 cursor-pointer select-none hover:text-foreground transition-colors" onClick={() => setAccountSort(accountSort.col === "created_at" ? { col: "created_at", dir: accountSort.dir === "asc" ? "desc" : "asc" } : { col: "created_at", dir: "desc" })}>
                             Created {accountSort.col === "created_at" ? (accountSort.dir === "asc" ? "↑" : "↓") : ""}
                           </TableHead>
                           <TableHead>Email</TableHead>
                           <TableHead>Provider</TableHead>
                           <TableHead>Confirmed</TableHead>
-                          <TableHead className="cursor-pointer select-none hover:text-foreground transition-colors" onClick={() => setAccountSort(s => s.col === "last_sign_in_at" ? { col: "last_sign_in_at", dir: s.dir === "asc" ? "desc" : "asc" } : { col: "last_sign_in_at", dir: "desc" })}>
+                          <TableHead className="cursor-pointer select-none hover:text-foreground transition-colors" onClick={() => setAccountSort(accountSort.col === "last_sign_in_at" ? { col: "last_sign_in_at", dir: accountSort.dir === "asc" ? "desc" : "asc" } : { col: "last_sign_in_at", dir: "desc" })}>
                             Last Sign In {accountSort.col === "last_sign_in_at" ? (accountSort.dir === "asc" ? "↑" : "↓") : ""}
                           </TableHead>
                         </TableRow>
