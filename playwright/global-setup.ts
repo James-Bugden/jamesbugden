@@ -27,13 +27,18 @@ async function globalSetup(config: FullConfig) {
   const email = process.env.QA_TEST_EMAIL;
   const password = process.env.QA_TEST_PASSWORD;
 
-  if (!email || !password) {
-    throw new Error(
-      "[global-setup] QA_TEST_EMAIL and QA_TEST_PASSWORD must be set in .env.test",
-    );
-  }
-
   fs.mkdirSync(AUTH_DIR, { recursive: true });
+
+  // No creds → write an empty storageState so guest-only specs (prod
+  // monitor, homepage smoke) can still run. Auth-required specs should
+  // gate themselves with test.skip(!process.env.QA_TEST_EMAIL, "no creds").
+  if (!email || !password) {
+    console.warn(
+      "[global-setup] QA_TEST_EMAIL / QA_TEST_PASSWORD not set — writing empty storageState. Auth-required specs will be skipped.",
+    );
+    fs.writeFileSync(AUTH_FILE, JSON.stringify({ cookies: [], origins: [] }));
+    return;
+  }
 
   const browser = await chromium.launch();
   const context = await browser.newContext();

@@ -1,0 +1,82 @@
+name: Production smoke monitor
+
+# Runs the guest smoke tests against jamesbugden.com every 15 minutes.
+# Emails ALERT_EMAIL_TO on failure.
+#
+# Required repository secrets (Settings → Secrets and variables → Actions):
+#   ALERT_EMAIL_TO     — where failure notifications go (your inbox)
+#   GMAIL_USERNAME     — the Gmail address that sends the alert
+#   GMAIL_APP_PASSWORD — Gmail "App Password" (NOT your regular password)
+#                        https://myaccount.google.com/apppasswords
+#
+# Optional (for auth-gated CJK preview check — leave unset to skip):
+#   QA_TEST_EMAIL     — login of a real account used only for tests
+#   QA_TEST_PASSWORD  — its password
+
+on:
+  schedule:
+    # Every 15 minutes. Cron is in UTC.
+    - cron: "*/15 * * * *"
+  workflow_dispatch:
+
+concurrency:
+  # If a previous run is still going when the next tick fires, cancel the
+  # older one so alerts reflect the current state of prod, not a stale view.
+  group: prod-monitor
+  cancel-in-progress: true
+
+jobs:
+  monitor:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    env:
+      QA_BASE_URL: https://jamesbugden.com
+      CI: "1"
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+
+      - name: Install deps
+        run: npm ci
+
+      - name: Install Playwright browsers
+        run: npx playwright install --with-deps chromium
+
+      - name: Run prod smoke
+        id: smoke
+        run: npx playwright test src/test/e2e/smoke.e2e.spec.ts
+        env:
+          QA_TEST_EMAIL: ${{ secrets.QA_TEST_EMAIL }}
+          QA_TEST_PASSWORD: ${{ secrets.QA_TEST_PASSWORD }}
+
+      - name: Upload Playwright report on failure
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: prod-smoke-report-${{ github.run_number }}
+          path: playwright-report
+          retention-days: 14
+
+      - name: Email on failure
+        if: failure()
+        uses: dawidd6/action-send-mail@v3
+        with:
+          server_address: smtp.gmail.com
+          server_port: 465
+          secure: true
+          username: ${{ secrets.GMAIL_USERNAME }}
+          password: ${{ secrets.GMAIL_APP_PASSWORD }}
+          subject: "[jamesbugden.com] Prod smoke FAILED (run #${{ github.run_number }})"
+          to: ${{ secrets.ALERT_EMAIL_TO }}
+          from: "jamesbugden.com monitor <${{ secrets.GMAIL_USERNAME }}>"
+          body: |
+            One or more production smoke tests failed.
+
+            Run: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
+            Artifact (screenshots + trace): available on the run page under "Artifacts".
+
+            This is an automated alert. Do not reply.
