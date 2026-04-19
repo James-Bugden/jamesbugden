@@ -31,6 +31,7 @@ import bcrypt from "bcryptjs";
 import { SEO } from "@/components/SEO";
 import InsightsTab from "@/components/admin/InsightsTab";
 import FunnelTab from "@/components/admin/FunnelTab";
+import CopyLinkButton from "@/components/admin/CopyLinkButton";
 
 // ── Types ───────────────────────────────────────────────────────────────────────
 
@@ -817,11 +818,14 @@ export default function AdminDashboard() {
           {/* ── People Tab ── */}
           <TabsContent value="people">
             <Tabs value={activeSub || "accounts"} onValueChange={(sub) => setActiveSub("people", sub)}>
-              <TabsList className="w-max bg-muted/50 h-8 gap-0">
-                <TabsTrigger value="accounts" className="text-xs h-7 px-3 rounded-full data-[state=active]:bg-primary data-[state=active]:text-primary-foreground">Accounts</TabsTrigger>
-                <TabsTrigger value="resumes" className="text-xs h-7 px-3 rounded-full data-[state=active]:bg-primary data-[state=active]:text-primary-foreground">Resume Leads</TabsTrigger>
-                <TabsTrigger value="emails" className="text-xs h-7 px-3 rounded-full data-[state=active]:bg-primary data-[state=active]:text-primary-foreground">Email Leads</TabsTrigger>
-              </TabsList>
+              <div className="flex items-center justify-between gap-3 mb-2">
+                <TabsList className="w-max bg-muted/50 h-8 gap-0">
+                  <TabsTrigger value="accounts" className="text-xs h-7 px-3 rounded-full data-[state=active]:bg-primary data-[state=active]:text-primary-foreground">Accounts</TabsTrigger>
+                  <TabsTrigger value="resumes" className="text-xs h-7 px-3 rounded-full data-[state=active]:bg-primary data-[state=active]:text-primary-foreground">Resume Leads</TabsTrigger>
+                  <TabsTrigger value="emails" className="text-xs h-7 px-3 rounded-full data-[state=active]:bg-primary data-[state=active]:text-primary-foreground">Email Leads</TabsTrigger>
+                </TabsList>
+                <CopyLinkButton />
+              </div>
 
               {/* Accounts */}
               <TabsContent value="accounts">
@@ -966,12 +970,15 @@ export default function AdminDashboard() {
           {/* ── Data Tab ── */}
           <TabsContent value="data">
             <Tabs value={activeSub || "reviews"} onValueChange={(sub) => setActiveSub("data", sub)}>
-              <TabsList className="w-max bg-muted/50 h-8 gap-0">
-                <TabsTrigger value="reviews" className="text-xs h-7 px-3 rounded-full data-[state=active]:bg-primary data-[state=active]:text-primary-foreground">Reviews</TabsTrigger>
-                <TabsTrigger value="salary" className="text-xs h-7 px-3 rounded-full data-[state=active]:bg-primary data-[state=active]:text-primary-foreground">Salary</TabsTrigger>
-                <TabsTrigger value="feedback" className="text-xs h-7 px-3 rounded-full data-[state=active]:bg-primary data-[state=active]:text-primary-foreground">Feedback</TabsTrigger>
-                <TabsTrigger value="ai-usage" className="text-xs h-7 px-3 rounded-full data-[state=active]:bg-primary data-[state=active]:text-primary-foreground">AI Usage</TabsTrigger>
-              </TabsList>
+              <div className="flex items-center justify-between gap-3 mb-2">
+                <TabsList className="w-max bg-muted/50 h-8 gap-0">
+                  <TabsTrigger value="reviews" className="text-xs h-7 px-3 rounded-full data-[state=active]:bg-primary data-[state=active]:text-primary-foreground">Reviews</TabsTrigger>
+                  <TabsTrigger value="salary" className="text-xs h-7 px-3 rounded-full data-[state=active]:bg-primary data-[state=active]:text-primary-foreground">Salary</TabsTrigger>
+                  <TabsTrigger value="feedback" className="text-xs h-7 px-3 rounded-full data-[state=active]:bg-primary data-[state=active]:text-primary-foreground">Feedback</TabsTrigger>
+                  <TabsTrigger value="ai-usage" className="text-xs h-7 px-3 rounded-full data-[state=active]:bg-primary data-[state=active]:text-primary-foreground">AI Usage</TabsTrigger>
+                </TabsList>
+                <CopyLinkButton />
+              </div>
 
               {/* Reviews */}
               <TabsContent value="reviews">
@@ -1468,6 +1475,9 @@ export default function AdminDashboard() {
 
           {/* ── Insights Tab (merged with Analytics) ── */}
           <TabsContent value="insights">
+            <div className="flex justify-end mb-2">
+              <CopyLinkButton />
+            </div>
             <InsightsTab
               accounts={accounts}
               resumeLeads={resumeLeads}
