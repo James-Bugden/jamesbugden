@@ -4,6 +4,7 @@ import { InstagramIcon, ThreadsIcon } from "@/components/SocialIcons";
 import LanguageToggle from "@/components/LanguageToggle";
 import { AuthHeaderButton } from "@/components/AuthHeaderButton";
 import { SEO } from "@/components/SEO";
+import { guideSchema } from "@/lib/guideSchema";
 
 
 interface GuideItem {
@@ -184,7 +185,15 @@ function GuideRow({ guide, isNested = false }: { guide: GuideItem; isNested?: bo
 const GuidesPage = () => {
   return (
     <div className="min-h-screen bg-background flex flex-col">
-      <SEO />
+      <SEO
+        title="Career Guides | James Bugden"
+        description="Practical, recruiter-tested guides for resumes, LinkedIn, interviews, offers, and career strategy. Free guides from a senior tech recruiter."
+        schemaJson={guideSchema({
+          path: "/guides",
+          title: "Career Guides | James Bugden",
+          description: "Practical, recruiter-tested guides for resumes, LinkedIn, interviews, offers, and career strategy.",
+        })}
+      />
       {/* Navigation */}
       <nav className="fixed top-0 left-0 right-0 z-50 bg-nav-green">
         <div className="container mx-auto px-5 md:px-6 py-4 flex items-center justify-between">

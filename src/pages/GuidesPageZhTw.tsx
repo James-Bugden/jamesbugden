@@ -4,6 +4,7 @@ import { InstagramIcon, ThreadsIcon } from "@/components/SocialIcons";
 import LanguageToggle from "@/components/LanguageToggle";
 import { AuthHeaderButton } from "@/components/AuthHeaderButton";
 import { SEO } from "@/components/SEO";
+import { guideSchema } from "@/lib/guideSchema";
 
 
 interface GuideItem {
@@ -184,7 +185,15 @@ function GuideRow({ guide, isNested = false }: { guide: GuideItem; isNested?: bo
 const GuidesPageZhTw = () => {
   return (
     <div className="min-h-screen bg-background flex flex-col">
-      <SEO />
+      <SEO
+        title="職涯指南 | James Bugden"
+        description="由資深科技招募官撰寫，經實戰驗證的履歷、LinkedIn、面試、Offer 談判與職涯策略指南。"
+        schemaJson={guideSchema({
+          path: "/zh-tw/guides",
+          title: "職涯指南 | James Bugden",
+          description: "由資深科技招募官撰寫，經實戰驗證的履歷、LinkedIn、面試、Offer 談判與職涯策略指南。",
+        })}
+      />
       {/* Navigation */}
       <nav className="fixed top-0 left-0 right-0 z-50 bg-nav-green">
         <div className="container mx-auto px-5 md:px-6 py-4 flex items-center justify-between">

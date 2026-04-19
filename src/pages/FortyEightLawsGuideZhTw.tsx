@@ -1331,6 +1331,7 @@ const FortyEightLawsGuideZhTw = () => {
       )}
 
       <InlineRating contentId="guide_48_laws_zhtw" locale="zh-tw" />
+      <GuideShareButtons isZhTw />
       <GuideBottomCTA lang="zh" />
     </div>
   );

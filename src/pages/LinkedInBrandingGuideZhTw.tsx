@@ -13,7 +13,7 @@ import { guideSchema } from "@/lib/guideSchema";
 import InlineRating from "@/components/feedback/InlineRating";
 
 const LinkedInBrandingGuideZhTw = () => {
-  useTrackGuideProgress("linkedin-brand");
+  useTrackGuideProgress("linkedin-brand-zh");
   const navigate = useNavigate();
 
 
