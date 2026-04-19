@@ -729,16 +729,11 @@ export default function AdminDashboard() {
         <Tabs value={activeTab} onValueChange={setActiveTab}>
           <TabsList className="w-full justify-start gap-0.5">
             <TabsTrigger value="overview">Overview</TabsTrigger>
-            <TabsTrigger value="funnel">Funnel</TabsTrigger>
             <TabsTrigger value="people">People</TabsTrigger>
             <TabsTrigger value="data">Data</TabsTrigger>
             <TabsTrigger value="insights">Insights</TabsTrigger>
+            <TabsTrigger value="funnel">Funnel</TabsTrigger>
           </TabsList>
-
-          {/* ── Funnel Tab ── */}
-          <TabsContent value="funnel">
-            <FunnelTab />
-          </TabsContent>
 
           {/* ── Overview Tab ── */}
           <TabsContent value="overview">
@@ -1482,6 +1477,11 @@ export default function AdminDashboard() {
                 eventTracksLoading,
               }}
             />
+          </TabsContent>
+
+          {/* ── Funnel Tab ── */}
+          <TabsContent value="funnel">
+            <FunnelTab />
           </TabsContent>
         </Tabs>
       </main>

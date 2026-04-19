@@ -116,31 +116,28 @@ export function startGuideRead(slug: string, lang: "en" | "zh" = "en") {
   const anon_id = getAnonId();
   const session_id = getSessionId();
   const startedAt = Date.now();
-  const rowId =
-    typeof crypto !== "undefined" && crypto.randomUUID
-      ? crypto.randomUUID()
-      : `${Date.now()}-${Math.random().toString(36).slice(2)}`;
-  let inserted = false;
+  let rowId: string | null = null;
   let ctaClicks = 0;
   let copyActions = 0;
 
   const insertPromise = (async () => {
     const user_id = await getUserId();
-    const { error } = await supabase
+    const { data, error } = await supabase
       .from("guide_reads" as any)
       .insert({
-        id: rowId,
         session_id,
         anon_id,
         user_id,
         guide_slug: slug,
         guide_lang: lang,
-      });
-    if (error) {
-      if (import.meta.env.DEV) console.warn("[analytics] guide_read insert failed:", error.message);
+      })
+      .select("id")
+      .single();
+    if (error || !data) {
+      if (import.meta.env.DEV) console.warn("[analytics] guide_read insert failed:", error?.message);
       return null;
     }
-    inserted = true;
+    rowId = (data as any).id as string;
     return rowId;
   })();
 
@@ -154,7 +151,7 @@ export function startGuideRead(slug: string, lang: "en" | "zh" = "en") {
     /** Finalize the row with scroll depth, time, and counters. */
     finalize: async (scrollDepthPct: number, markedComplete = false) => {
       await insertPromise;
-      if (!inserted) return;
+      if (!rowId) return;
       const time_on_page_sec = Math.round((Date.now() - startedAt) / 1000);
       supabase
         .from("guide_reads" as any)

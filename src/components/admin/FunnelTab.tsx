@@ -1,7 +1,15 @@
 import { useEffect, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { Card, CardContent } from "@/components/ui/card";
-import { Loader2, Activity, UserPlus, Wrench, AlertTriangle } from "lucide-react";
+import {
+  Sheet,
+  SheetContent,
+  SheetHeader,
+  SheetTitle,
+  SheetDescription,
+} from "@/components/ui/sheet";
+import { Loader2, Activity, UserPlus, Wrench, AlertTriangle, ChevronRight } from "lucide-react";
+import { format } from "date-fns";
 
 interface ToolStat {
   tool: string;
@@ -14,8 +22,20 @@ interface ErrorStat {
 }
 
 interface DayPoint {
-  day: string; // YYYY-MM-DD
+  day: string;
   count: number;
+}
+
+interface ErrorRow {
+  id: string;
+  created_at: string;
+  source: string;
+  message: string;
+  page: string | null;
+  stack: string | null;
+  metadata: any;
+  anon_id: string | null;
+  user_id: string | null;
 }
 
 interface FunnelData {
@@ -48,6 +68,9 @@ export default function FunnelTab() {
     sessions7d: [],
     loading: true,
   });
+  const [openSource, setOpenSource] = useState<string | null>(null);
+  const [drawerRows, setDrawerRows] = useState<ErrorRow[]>([]);
+  const [drawerLoading, setDrawerLoading] = useState(false);
 
   useEffect(() => {
     const load = async () => {
@@ -109,7 +132,6 @@ export default function FunnelTab() {
         .slice(0, 5);
       const errors24h = (errorsRes.data ?? []).length;
 
-      // Build a 7-day series, zero-filled for missing days
       const buckets: Record<string, number> = {};
       for (let i = 6; i >= 0; i--) {
         const d = new Date();
@@ -140,6 +162,23 @@ export default function FunnelTab() {
     load();
   }, []);
 
+  const openErrorDrawer = async (source: string) => {
+    setOpenSource(source);
+    setDrawerLoading(true);
+    setDrawerRows([]);
+    const { data: rows, error } = await supabase
+      .from("error_log")
+      .select("id, created_at, source, message, page, stack, metadata, anon_id, user_id")
+      .eq("source", source)
+      .order("created_at", { ascending: false })
+      .limit(20);
+    if (error) {
+      console.warn("[FunnelTab] error_log fetch failed:", error.message);
+    }
+    setDrawerRows((rows ?? []) as ErrorRow[]);
+    setDrawerLoading(false);
+  };
+
   if (data.loading) {
     return (
       <div className="flex items-center justify-center py-12">
@@ -150,7 +189,6 @@ export default function FunnelTab() {
 
   return (
     <div className="space-y-6">
-      {/* KPI Strip */}
       <div className="grid grid-cols-2 md:grid-cols-5 gap-4">
         <KpiCard
           icon={<Activity className="w-4 h-4" />}
@@ -179,7 +217,6 @@ export default function FunnelTab() {
       </div>
 
       <div className="grid md:grid-cols-2 gap-4">
-        {/* Top Tools */}
         <Card>
           <CardContent className="p-4">
             <div className="flex items-center gap-2 mb-3">
@@ -198,7 +235,6 @@ export default function FunnelTab() {
           </CardContent>
         </Card>
 
-        {/* Errors by source */}
         <Card>
           <CardContent className="p-4">
             <div className="flex items-center gap-2 mb-3">
@@ -210,19 +246,74 @@ export default function FunnelTab() {
             ) : (
               <div className="space-y-2">
                 {data.errorsBySource.map((e) => (
-                  <BarRow
+                  <button
                     key={e.source}
-                    label={e.source}
-                    value={e.count}
-                    max={data.errorsBySource[0].count}
-                    tone="warn"
-                  />
+                    type="button"
+                    onClick={() => openErrorDrawer(e.source)}
+                    className="w-full text-left rounded-md p-2 -m-2 transition-colors hover:bg-muted/60 focus:outline-none focus:ring-2 focus:ring-ring group"
+                    aria-label={`View latest errors for ${e.source}`}
+                  >
+                    <BarRow
+                      label={e.source}
+                      value={e.count}
+                      max={data.errorsBySource[0].count}
+                      tone="warn"
+                      trailing={
+                        <ChevronRight className="w-3.5 h-3.5 text-muted-foreground opacity-0 group-hover:opacity-100 transition-opacity" />
+                      }
+                    />
+                  </button>
                 ))}
               </div>
             )}
           </CardContent>
         </Card>
       </div>
+
+      <Sheet open={!!openSource} onOpenChange={(o) => !o && setOpenSource(null)}>
+        <SheetContent className="w-full sm:max-w-2xl overflow-y-auto">
+          <SheetHeader>
+            <SheetTitle className="flex items-center gap-2">
+              <AlertTriangle className="w-4 h-4 text-destructive" />
+              <span className="font-mono">{openSource}</span>
+            </SheetTitle>
+            <SheetDescription>Latest 20 errors for this source</SheetDescription>
+          </SheetHeader>
+          <div className="mt-4 space-y-3">
+            {drawerLoading ? (
+              <div className="flex justify-center py-8">
+                <Loader2 className="w-5 h-5 animate-spin text-muted-foreground" />
+              </div>
+            ) : drawerRows.length === 0 ? (
+              <p className="text-sm text-muted-foreground py-8 text-center">No rows found</p>
+            ) : (
+              drawerRows.map((r) => (
+                <div key={r.id} className="rounded-lg border border-border bg-card p-3 space-y-1.5">
+                  <div className="flex items-center justify-between gap-2 text-xs text-muted-foreground tabular-nums">
+                    <span>{format(new Date(r.created_at), "MMM d, HH:mm:ss")}</span>
+                    {r.page && <span className="truncate font-mono max-w-[60%]">{r.page}</span>}
+                  </div>
+                  <p className="text-sm text-foreground break-words">{r.message}</p>
+                  {r.stack && (
+                    <details className="text-xs text-muted-foreground">
+                      <summary className="cursor-pointer hover:text-foreground">Stack trace</summary>
+                      <pre className="mt-1 whitespace-pre-wrap break-all font-mono text-[11px] bg-muted/50 p-2 rounded max-h-48 overflow-auto">
+                        {r.stack}
+                      </pre>
+                    </details>
+                  )}
+                  {(r.anon_id || r.user_id) && (
+                    <div className="flex flex-wrap gap-2 text-[10px] text-muted-foreground font-mono pt-1">
+                      {r.user_id && <span>user: {r.user_id.slice(0, 8)}</span>}
+                      {r.anon_id && <span>anon: {r.anon_id.slice(0, 8)}</span>}
+                    </div>
+                  )}
+                </div>
+              ))
+            )}
+          </div>
+        </SheetContent>
+      </Sheet>
     </div>
   );
 }
@@ -311,18 +402,23 @@ function BarRow({
   value,
   max,
   tone = "default",
+  trailing,
 }: {
   label: string;
   value: number;
   max: number;
   tone?: "default" | "warn";
+  trailing?: React.ReactNode;
 }) {
   const pct = max > 0 ? Math.max(4, Math.round((value / max) * 100)) : 0;
   return (
     <div className="space-y-1">
-      <div className="flex items-center justify-between text-xs">
+      <div className="flex items-center justify-between text-xs gap-2">
         <span className="font-mono text-foreground truncate max-w-[70%]">{label}</span>
-        <span className="text-muted-foreground tabular-nums">{value.toLocaleString()}</span>
+        <span className="text-muted-foreground tabular-nums flex items-center gap-1">
+          {value.toLocaleString()}
+          {trailing}
+        </span>
       </div>
       <div className="h-1.5 rounded-full bg-muted overflow-hidden">
         <div

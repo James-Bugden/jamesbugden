@@ -93,15 +93,9 @@ export async function initSession(): Promise<string | null> {
       // ignore — private mode
     }
 
-    const newId =
-      typeof crypto !== "undefined" && crypto.randomUUID
-        ? crypto.randomUUID()
-        : `${Date.now()}-${Math.random().toString(36).slice(2)}`;
-
-    const { error } = await supabase
+    const { data, error } = await supabase
       .from("sessions" as any)
       .insert({
-        id: newId,
         anon_id: anonId,
         user_id: userId,
         entry_page: window.location.pathname,
@@ -116,20 +110,23 @@ export async function initSession(): Promise<string | null> {
         timezone: Intl.DateTimeFormat().resolvedOptions().timeZone,
         referrer: document.referrer || null,
         ...utm,
-      });
+      })
+      .select("id")
+      .single();
 
-    if (error) {
-      if (import.meta.env.DEV) console.warn("Session init failed:", error.message);
+    if (error || !data) {
+      if (import.meta.env.DEV) console.warn("Session init failed:", error?.message);
       initPromise = null;
       return null;
     }
 
-    currentSessionId = newId;
-    sessionStorage.setItem(SESSION_KEY, newId);
+    const id = (data as any).id as string;
+    currentSessionId = id;
+    sessionStorage.setItem(SESSION_KEY, id);
     sessionStorage.setItem(SESSION_STARTED_KEY, String(now));
     sessionStorage.setItem(SESSION_LAST_KEY, String(now));
     sessionStorage.setItem(PAGES_KEY, "1");
-    return newId;
+    return id;
   })();
 
   return initPromise;
