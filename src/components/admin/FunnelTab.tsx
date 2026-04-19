@@ -13,6 +13,11 @@ interface ErrorStat {
   count: number;
 }
 
+interface DayPoint {
+  day: string; // YYYY-MM-DD
+  count: number;
+}
+
 interface FunnelData {
   sessionsToday: number;
   signupsToday: number;
@@ -20,6 +25,7 @@ interface FunnelData {
   topTools: ToolStat[];
   errors24h: number;
   errorsBySource: ErrorStat[];
+  sessions7d: DayPoint[];
   loading: boolean;
 }
 
@@ -39,6 +45,7 @@ export default function FunnelTab() {
     topTools: [],
     errors24h: 0,
     errorsBySource: [],
+    sessions7d: [],
     loading: true,
   });
 
@@ -46,8 +53,11 @@ export default function FunnelTab() {
     const load = async () => {
       const todayStart = startOfTodayISO();
       const dayAgo = dayAgoISO();
+      const sevenDaysAgo = new Date(Date.now() - 7 * 24 * 60 * 60 * 1000);
+      sevenDaysAgo.setHours(0, 0, 0, 0);
+      const sevenDaysAgoISO = sevenDaysAgo.toISOString();
 
-      const [sessionsRes, signupsRes, toolsRes, errorsRes] = await Promise.all([
+      const [sessionsRes, signupsRes, toolsRes, errorsRes, sessions7dRes] = await Promise.all([
         supabase
           .from("sessions")
           .select("id", { count: "exact", head: true })
@@ -66,6 +76,11 @@ export default function FunnelTab() {
           .select("source")
           .gte("created_at", dayAgo)
           .limit(5000),
+        supabase
+          .from("sessions")
+          .select("started_at")
+          .gte("started_at", sevenDaysAgoISO)
+          .limit(10000),
       ]);
 
       const sessionsToday = sessionsRes.count ?? 0;
@@ -94,6 +109,23 @@ export default function FunnelTab() {
         .slice(0, 5);
       const errors24h = (errorsRes.data ?? []).length;
 
+      // Build a 7-day series, zero-filled for missing days
+      const buckets: Record<string, number> = {};
+      for (let i = 6; i >= 0; i--) {
+        const d = new Date();
+        d.setHours(0, 0, 0, 0);
+        d.setDate(d.getDate() - i);
+        buckets[d.toISOString().slice(0, 10)] = 0;
+      }
+      (sessions7dRes.data ?? []).forEach((row: any) => {
+        const key = new Date(row.started_at).toISOString().slice(0, 10);
+        if (key in buckets) buckets[key] += 1;
+      });
+      const sessions7d: DayPoint[] = Object.entries(buckets).map(([day, count]) => ({
+        day,
+        count,
+      }));
+
       setData({
         sessionsToday,
         signupsToday,
@@ -101,6 +133,7 @@ export default function FunnelTab() {
         topTools,
         errors24h,
         errorsBySource,
+        sessions7d,
         loading: false,
       });
     };
@@ -118,11 +151,13 @@ export default function FunnelTab() {
   return (
     <div className="space-y-6">
       {/* KPI Strip */}
-      <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+      <div className="grid grid-cols-2 md:grid-cols-5 gap-4">
         <KpiCard
           icon={<Activity className="w-4 h-4" />}
           label="Sessions today"
           value={data.sessionsToday.toLocaleString()}
+          className="md:col-span-2"
+          rightSlot={<Sparkline points={data.sessions7d} />}
         />
         <KpiCard
           icon={<UserPlus className="w-4 h-4" />}
@@ -198,31 +233,76 @@ function KpiCard({
   value,
   hint,
   tone = "default",
+  className = "",
+  rightSlot,
 }: {
   icon: React.ReactNode;
   label: string;
   value: string;
   hint?: string;
   tone?: "default" | "ok" | "warn";
+  className?: string;
+  rightSlot?: React.ReactNode;
 }) {
   return (
-    <Card>
+    <Card className={className}>
       <CardContent className="p-4">
-        <div className="flex items-center gap-1.5 text-xs text-muted-foreground mb-1">
-          {icon}
-          <span>{label}</span>
+        <div className="flex items-start justify-between gap-3">
+          <div className="min-w-0">
+            <div className="flex items-center gap-1.5 text-xs text-muted-foreground mb-1">
+              {icon}
+              <span>{label}</span>
+            </div>
+            <div
+              className={
+                "text-2xl font-semibold " +
+                (tone === "warn" ? "text-destructive" : "text-foreground")
+              }
+            >
+              {value}
+            </div>
+            {hint && <div className="text-xs text-muted-foreground mt-1">{hint}</div>}
+          </div>
+          {rightSlot && <div className="flex-1 min-w-0 max-w-[60%]">{rightSlot}</div>}
         </div>
-        <div
-          className={
-            "text-2xl font-semibold " +
-            (tone === "warn" ? "text-destructive" : "text-foreground")
-          }
-        >
-          {value}
-        </div>
-        {hint && <div className="text-xs text-muted-foreground mt-1">{hint}</div>}
       </CardContent>
     </Card>
+  );
+}
+
+function Sparkline({ points }: { points: { day: string; count: number }[] }) {
+  if (!points.length) return null;
+  const w = 160;
+  const h = 44;
+  const pad = 2;
+  const max = Math.max(1, ...points.map((p) => p.count));
+  const stepX = points.length > 1 ? (w - pad * 2) / (points.length - 1) : 0;
+  const coords = points.map((p, i) => {
+    const x = pad + i * stepX;
+    const y = h - pad - (p.count / max) * (h - pad * 2);
+    return [x, y] as const;
+  });
+  const path = coords.map(([x, y], i) => `${i === 0 ? "M" : "L"}${x.toFixed(1)},${y.toFixed(1)}`).join(" ");
+  const areaPath = `${path} L${coords[coords.length - 1][0].toFixed(1)},${h - pad} L${coords[0][0].toFixed(1)},${h - pad} Z`;
+  const last = coords[coords.length - 1];
+  const total7d = points.reduce((sum, p) => sum + p.count, 0);
+  const todayCount = points[points.length - 1]?.count ?? 0;
+  return (
+    <div className="flex flex-col items-end gap-1">
+      <svg
+        viewBox={`0 0 ${w} ${h}`}
+        className="w-full h-11 text-primary"
+        preserveAspectRatio="none"
+        aria-label={`Sessions over the last 7 days, ${total7d} total`}
+      >
+        <path d={areaPath} fill="currentColor" opacity={0.12} />
+        <path d={path} fill="none" stroke="currentColor" strokeWidth={1.5} strokeLinejoin="round" strokeLinecap="round" />
+        <circle cx={last[0]} cy={last[1]} r={2.5} fill="currentColor" />
+      </svg>
+      <div className="text-[10px] text-muted-foreground tabular-nums">
+        7d: {total7d.toLocaleString()} · today {todayCount.toLocaleString()}
+      </div>
+    </div>
   );
 }
 
