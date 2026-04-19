@@ -117,27 +117,74 @@ function loadPdfModule(): Promise<PdfModule> {
   return pdfModulePromise;
 }
 
-self.addEventListener("message", async (evt: MessageEvent<RenderRequest>) => {
-  const { id, data, customize } = evt.data;
+// Serial render queue.
+//
+// Why: the user edits a resume → debouncedData changes → useEffect re-fires
+// → `renderPdfInWorker()` posts a new message to the worker. If the worker
+// is still processing the previous message (7-15s for CJK), the new message
+// queues. Without serialization, running two `prepareFonts` / `pdf().toBlob()`
+// calls concurrently corrupts react-pdf's internal Font registry state and
+// the second call never resolves (observed: preview loader hangs until the
+// 120s main-thread timeout even though each call alone takes ~7s).
+//
+// Solution: drop superseded requests — if a newer message arrives while we're
+// processing an older one, skip the old one. Only render the LATEST data
+// the user is actually looking at. Dropped requests still get a response so
+// the main-thread's awaited promise doesn't hang.
+let processing = false;
+let pendingRequest: RenderRequest | null = null;
+
+async function processOne(req: RenderRequest) {
   try {
     const mod = await loadPdfModule();
     // awaitCJK: true — we're off the main thread, so fontkit's 30-75s
     // sync parse doesn't matter. Waiting ensures pdf().toBlob() renders
     // actual Chinese glyphs instead of Helvetica tofu.
-    await mod.prepareFonts(customize, data, { awaitCJK: true });
-    const element = mod.React.createElement(mod.ResumePDF, { data, customize });
+    await mod.prepareFonts(req.customize, req.data, { awaitCJK: true });
+    const element = mod.React.createElement(mod.ResumePDF, {
+      data: req.data,
+      customize: req.customize,
+    });
     const blob = await mod.pdf(element as unknown as React.ReactElement).toBlob();
-
-    const resp: RenderResponse = { id, ok: true, blob };
+    const resp: RenderResponse = { id: req.id, ok: true, blob };
     (self as unknown as Worker).postMessage(resp);
   } catch (err) {
     const resp: RenderResponse = {
-      id,
+      id: req.id,
       ok: false,
       error: err instanceof Error ? `${err.name}: ${err.message}` : String(err),
     };
     (self as unknown as Worker).postMessage(resp);
   }
+}
+
+async function runQueue() {
+  if (processing) return;
+  processing = true;
+  try {
+    while (pendingRequest) {
+      const next = pendingRequest;
+      pendingRequest = null;
+      await processOne(next);
+    }
+  } finally {
+    processing = false;
+  }
+}
+
+self.addEventListener("message", (evt: MessageEvent<RenderRequest>) => {
+  // If there's already a queued pending request, resolve it as superseded
+  // so its main-thread promise doesn't hang. We only ever keep the newest.
+  if (pendingRequest) {
+    const superseded: RenderResponse = {
+      id: pendingRequest.id,
+      ok: false,
+      error: "Superseded by newer render request",
+    };
+    (self as unknown as Worker).postMessage(superseded);
+  }
+  pendingRequest = evt.data;
+  runQueue();
 });
 
 // Keep TypeScript happy — this file is a module.
