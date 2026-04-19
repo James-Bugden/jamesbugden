@@ -189,6 +189,15 @@ export const ResumePdfPreview = React.memo(function ResumePdfPreview({
         const blob = await pdf(element).toBlob();
         if (cancelled) return;
 
+        // Test hook — expose the just-rendered PDF blob so e2e tests can
+        // inspect its bytes (e.g. assert a Noto CJK font dictionary is
+        // embedded for zh-tw content, catching the mojibake regression
+        // class). Single-assignment of a Blob ref; negligible memory cost
+        // and no impact on production behavior.
+        if (typeof window !== "undefined") {
+          (window as unknown as { __resumePreviewLastBlob?: Blob }).__resumePreviewLastBlob = blob;
+        }
+
         // 3. Pass blob directly to pdfjs. If it throws (observed on CJK
         //    resumes with embedded subset fonts), fall back to rendering
         //    the raw PDF in a native <iframe> — ugly chrome, but unbreakable.

@@ -28,7 +28,7 @@ async function openFirstResumeByTitle(page: Page, titleRegex: RegExp) {
 }
 
 test.describe("Preview smoke (post-CJK-fallback)", () => {
-  test("EN /resume: open Example Resume → editor loads → rasterized page image appears", async ({
+  test("EN /resume: open Example Resume → editor loads → rasterized page image appears @cross-browser @hidpi", async ({
     page,
   }) => {
     await page.goto("/resume");
@@ -60,6 +60,91 @@ test.describe("Preview smoke (post-CJK-fallback)", () => {
     await expect(rasterPage.or(iframeFallback)).toBeVisible({
       timeout: 60_000,
     });
+  });
+
+  test("zh-tw /resume: preview PDF embeds a Noto CJK font (mojibake regression sentinel)", async ({
+    page,
+  }) => {
+    // This test catches the class of bug where prepareFonts is called
+    // without the resume's `data`, so no CJK family is registered and the
+    // PDF falls back to Helvetica for every Chinese codepoint — rendering
+    // as mojibake (e.g. "Çñ€SÛßgO") in both the raster preview and the
+    // iframe fallback.
+    //
+    // Detection: the PDF blob exposed on window.__resumePreviewLastBlob
+    // must contain the string "Noto" in its bytes (font dictionary). A
+    // correctly-rendered zh-tw PDF always embeds one of NotoSansTC /
+    // NotoSansSC / NotoSansJP / NotoSansKR. A mojibake PDF embeds only
+    // Helvetica.
+
+    await page.goto("/zh-tw/resume");
+    await openFirstResumeByTitle(page, /Chinese James Bugden|王子豪|中文/);
+
+    // Wait for ANY preview path to complete — raster or iframe fallback.
+    const ready = page
+      .locator('img[alt^="Page "], iframe[src^="blob:"]')
+      .first();
+    await ready.waitFor({ state: "visible", timeout: 60_000 });
+    // Give awaitCJK a small head-start so the hook is populated with a
+    // CJK-aware render rather than whatever pre-debounce render fired first.
+    await page.waitForTimeout(2_000);
+
+    const markers = await page.evaluate(async () => {
+      const blob = (
+        window as unknown as { __resumePreviewLastBlob?: Blob }
+      ).__resumePreviewLastBlob;
+      if (!blob) return { present: false, noto: false, size: 0 };
+      const buf = await blob.arrayBuffer();
+      // PDF font dictionary entries are plain ASCII inside the binary —
+      // decoding as latin1 and substring-matching is safe and cheap.
+      const str = new TextDecoder("latin1").decode(buf);
+      return {
+        present: true,
+        size: buf.byteLength,
+        noto: /Noto/.test(str),
+        // Sanity — ALL PDFs should contain the magic header.
+        hasHeader: str.startsWith("%PDF-"),
+      };
+    });
+
+    expect(markers.present, "preview blob hook not populated").toBe(true);
+    expect(markers.hasHeader, "blob is not a PDF").toBe(true);
+    expect(markers.size).toBeGreaterThan(4_000);
+    expect(
+      markers.noto,
+      'preview PDF does not embed a Noto font — CJK content will render as mojibake. Regression in prepareFonts() call site.',
+    ).toBe(true);
+  });
+
+  test("EN /resume: preview PDF does NOT embed a Noto font (no unnecessary CJK cost)", async ({
+    page,
+  }) => {
+    // Counterpart to the zh-tw test — English resumes must NOT trigger CJK
+    // font registration (costs ~1.1MB). If this test fails, prepareFonts
+    // is over-eagerly registering Noto for Latin-only content.
+    await page.goto("/resume");
+    await openFirstResumeByTitle(page, /Example Resume/i);
+    await page.locator('img[alt^="Page "]').first().waitFor({
+      state: "visible",
+      timeout: 30_000,
+    });
+    await page.waitForTimeout(1_500);
+
+    const markers = await page.evaluate(async () => {
+      const blob = (
+        window as unknown as { __resumePreviewLastBlob?: Blob }
+      ).__resumePreviewLastBlob;
+      if (!blob) return { present: false, noto: false };
+      const buf = await blob.arrayBuffer();
+      const str = new TextDecoder("latin1").decode(buf);
+      return { present: true, noto: /Noto/.test(str) };
+    });
+
+    expect(markers.present, "preview blob hook not populated").toBe(true);
+    expect(
+      markers.noto,
+      "EN resume is registering a CJK font — prepareFonts is over-eager",
+    ).toBe(false);
   });
 
   test("zh-tw Customize panel: Font SettingCard is hidden (dead knob removed)", async ({
