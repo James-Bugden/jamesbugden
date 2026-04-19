@@ -33,7 +33,7 @@ import { useNavigate, Link } from "react-router-dom";
 import { useAuth } from "@/contexts/AuthContext";
 import { LogIn } from "lucide-react";
 import { AnalyzerPromptDialog } from "@/components/resume-builder/AnalyzerPromptDialog";
-import { BuggyNoticeDialog } from "@/components/resume-builder/BuggyNoticeDialog";
+// BuggyNoticeDialog import removed — see ResumeBuilder.tsx for rationale.
 import { SEO } from "@/components/SEO";
 
 type ViewMode = "dashboard" | "resume-editor";
@@ -997,7 +997,7 @@ const ResumeBuilderSimple = () => {
       <ImportModal open={editorImportOpen} onClose={() => setEditorImportOpen(false)} type="resume" onImported={handleEditorImported} />
       <MissingSummaryDialog open={missingSummaryOpen} onAdd={handleAddSummaryFromPrompt} onSkip={() => setMissingSummaryOpen(false)} />
       {viewMode === "resume-editor" && <AnalyzerPromptDialog fromAnalyzer={searchParams.get("from") === "analyzer" || !!sessionStorage.getItem("analyzer-resume-text")} />}
-      <BuggyNoticeDialog />
+      {/* <BuggyNoticeDialog /> — removed; see ResumeBuilder.tsx for rationale. */}
     </div>
   );
 };

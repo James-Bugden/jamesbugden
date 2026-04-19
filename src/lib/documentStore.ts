@@ -80,6 +80,18 @@ export function onDocumentsUpdated(cb: DocumentsUpdatedListener): () => void {
 }
 
 function broadcastDocumentsUpdated() {
+  // Fire same-tab listeners synchronously. Previously this set was never
+  // iterated, which meant any in-tab subscribers (e.g. a parent component
+  // holding doc-list state) wouldn't re-render when THIS tab mutated the
+  // store — only OTHER tabs would. That was the opposite of the intended
+  // behavior.
+  documentsUpdatedListeners.forEach((cb) => {
+    try { cb(); } catch (err) {
+      if (import.meta.env.DEV) console.warn("[documentStore] listener threw:", err);
+    }
+  });
+
+  // Then cross-tab via BroadcastChannel.
   const channel = getBroadcastChannel();
   if (!channel) return;
   try {

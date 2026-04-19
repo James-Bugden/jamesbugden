@@ -48,13 +48,22 @@ export function CoverLetterBuilder({ docId }: CoverLetterBuilderProps) {
     if (downloading) return;
     setDownloading(true);
     const name = data.personalDetails.fullName || "Cover_Letter";
-    await exportToPdf({
-      elementId: "cover-letter-pdf-target",
-      fileName: `${name.replace(/\s+/g, "_")}_Cover_Letter.pdf`,
-      pageFormat: (customize.pageFormat || "a4") as "a4" | "letter",
-    });
-    setDownloading(false);
-    setShowSurvey(true);
+    try {
+      await exportToPdf({
+        elementId: "cover-letter-pdf-target",
+        fileName: `${name.replace(/\s+/g, "_")}_Cover_Letter.pdf`,
+        pageFormat: (customize.pageFormat || "a4") as "a4" | "letter",
+      });
+      // Only show the micro-survey on a successful download. Previously
+      // this fired regardless of outcome, asking the user to rate an
+      // export that may have toasted an error to them.
+      setShowSurvey(true);
+    } catch (err) {
+      if (import.meta.env.DEV) console.warn("[CoverLetterBuilder] download failed:", err);
+      // exportToPdf toasts its own errors; don't double-toast here.
+    } finally {
+      setDownloading(false);
+    }
   };
 
   return (

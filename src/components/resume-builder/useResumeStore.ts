@@ -1,41 +1,19 @@
-import { useState, useEffect, useRef, useCallback } from "react";
+import { useState, useCallback } from "react";
 import { ResumeData, DEFAULT_RESUME_DATA } from "./types";
 import { CustomizeSettings, DEFAULT_CUSTOMIZE } from "./customizeTypes";
 
-const STORAGE_KEY = "james_careers_resume";
-const CUSTOMIZE_KEY = "james_careers_customize";
+// NOTE: this hook is a per-doc mutation buffer. The real source of truth is
+// the multi-doc store at `src/lib/documentStore.ts` (key: james_careers_documents).
+// ResumeBuilder calls `handleOpenDocument` on mount to populate this buffer
+// from the selected doc, and calls `updateDocument(...)` to persist changes.
+// Previously this hook also read/wrote `james_careers_resume` +
+// `james_careers_customize` (pre-multi-doc keys) which caused a flash of
+// stale content when switching between docs — the buffer would initialize
+// from doc A's data before the parent overwrote it with doc B. Removed.
 
 export function useResumeStore() {
-  const [data, setData] = useState<ResumeData>(() => {
-    try {
-      const stored = localStorage.getItem(STORAGE_KEY);
-      return stored ? JSON.parse(stored) : DEFAULT_RESUME_DATA;
-    } catch {
-      return DEFAULT_RESUME_DATA;
-    }
-  });
-
-  const [customize, setCustomize] = useState<CustomizeSettings>(() => {
-    try {
-      const stored = localStorage.getItem(CUSTOMIZE_KEY);
-      return stored ? { ...DEFAULT_CUSTOMIZE, ...JSON.parse(stored) } : DEFAULT_CUSTOMIZE;
-    } catch {
-      return DEFAULT_CUSTOMIZE;
-    }
-  });
-
-  const timerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
-
-  useEffect(() => {
-    if (timerRef.current) clearTimeout(timerRef.current);
-    timerRef.current = setTimeout(() => {
-      localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
-      localStorage.setItem(CUSTOMIZE_KEY, JSON.stringify(customize));
-    }, 500);
-    return () => {
-      if (timerRef.current) clearTimeout(timerRef.current);
-    };
-  }, [data, customize]);
+  const [data, setData] = useState<ResumeData>(DEFAULT_RESUME_DATA);
+  const [customize, setCustomize] = useState<CustomizeSettings>(DEFAULT_CUSTOMIZE);
 
   const updateCustomize = useCallback(
     (updates: Partial<CustomizeSettings>) => {

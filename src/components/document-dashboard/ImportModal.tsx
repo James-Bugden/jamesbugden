@@ -108,7 +108,7 @@ export function ImportModal({ open, onClose, type, onImported }: ImportModalProp
       onImported(doc);
       handleClose();
     } catch (err) {
-      console.error("Import error:", err);
+      if (import.meta.env.DEV) console.error("Import error:", err);
       toast({ title: "Import failed", description: "Could not extract text from the file. Try pasting the text instead.", variant: "destructive" });
     } finally {
       setLoading(false);
@@ -148,7 +148,7 @@ export function ImportModal({ open, onClose, type, onImported }: ImportModalProp
       onImported(doc);
       handleClose();
     } catch (err) {
-      console.error("Parse error:", err);
+      if (import.meta.env.DEV) console.error("Parse error:", err);
       toast({ title: "Parse error", description: "Something went wrong parsing the text. Please try again.", variant: "destructive" });
     } finally {
       setLoading(false);

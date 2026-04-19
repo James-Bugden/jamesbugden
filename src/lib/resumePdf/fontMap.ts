@@ -92,10 +92,10 @@ const RE_JP_KANA = /[\u3040-\u309f\u30a0-\u30ff\u31f0-\u31ff]/;
 const RE_KR_HANGUL = /[\uac00-\ud7af\u1100-\u11ff\u3130-\u318f\ua960-\ua97f\ud7b0-\ud7ff]/;
 
 /** High-frequency Simplified-only characters — strong SC signal. */
-const RE_SC_HINT = /[国个们这会来时对发说还没长见经过让钱学问东车飞书电视话图报军队动务华产开关业务师范头价买卖战争历历]/;
+const RE_SC_HINT = /[国个们这会来时对发说还没长见经过让钱学问东车飞书电视话图报军队动务华产开关业务师范头价买卖战争历]/;
 
 /** High-frequency Traditional-only characters — strong TC signal. */
-const RE_TC_HINT = /[國個們這會來時對發說還沒長見經過讓錢學問東車飛書電視話圖報軍隊動務華產開關業務師範頭價買賣戰爭歷歷]/;
+const RE_TC_HINT = /[國個們這會來時對發說還沒長見經過讓錢學問東車飛書電視話圖報軍隊動務華產開關業務師範頭價買賣戰爭歷]/;
 
 /** Detect whether a string contains any CJK-range character. */
 export function containsCJK(text: string): boolean {
