@@ -28,8 +28,11 @@ function getPageBaseWidth(format?: string): number {
   return PAGE_WIDTHS[format || "a4"] ?? PAGE_WIDTHS.a4;
 }
 
-// Pixel ratio used when rendering PDF pages via pdfjs (2× = retina-sharp)
-const RENDER_SCALE = 2;
+// Pixel ratio used when rendering PDF pages via pdfjs. 3× keeps pages sharp
+// up to the maximum displayScale of 1.5 on a DPR=2 retina display (1.5 × 2 = 3).
+// Memory cost is ~2.25× a 2× render, which is still trivial for typical
+// 1–2 page resumes and well worth it for readable zoomed-in text.
+const RENDER_SCALE = 3;
 
 /* ── Debounce hook ──────────────────────────────────────────────── */
 
@@ -161,6 +164,26 @@ export const ResumePdfPreview = React.memo(function ResumePdfPreview({
     });
     ro.observe(el);
     return () => ro.disconnect();
+  }, []);
+
+  // Ctrl / Cmd + mouse-wheel zooms the preview. Plain wheel continues to
+  // scroll the page stack vertically (native behaviour). We register the
+  // listener natively rather than via React's onWheel because React's
+  // synthetic wheel events are passive, so preventDefault() is a no-op on
+  // them — and we need preventDefault to stop the browser's own Ctrl+wheel
+  // page zoom from triggering at the same time.
+  useEffect(() => {
+    const el = containerRef.current;
+    if (!el) return;
+    const onWheel = (e: WheelEvent) => {
+      if (!(e.ctrlKey || e.metaKey)) return;
+      e.preventDefault();
+      // ~0.1 step per notch on typical mouse wheels (deltaY ≈ 100).
+      const delta = -e.deltaY * 0.001;
+      setZoomOffset((z) => Math.max(-0.4, Math.min(0.6, z + delta)));
+    };
+    el.addEventListener("wheel", onWheel, { passive: false });
+    return () => el.removeEventListener("wheel", onWheel);
   }, []);
 
   // Regenerate PDF whenever debounced data or customize changes.
@@ -328,15 +351,19 @@ export const ResumePdfPreview = React.memo(function ResumePdfPreview({
             <ZoomIn className="w-3.5 h-3.5" />
           </button>
 
-          {zoomOffset !== 0 && (
-            <button
-              onClick={handleReset}
-              className="w-7 h-7 rounded-full flex items-center justify-center text-gray-400 hover:bg-gray-100 transition-colors"
-              title="Reset zoom"
-            >
-              <RotateCcw className="w-3.5 h-3.5" />
-            </button>
-          )}
+          {/* Reset button always occupies its slot — toggling with `invisible`
+              (not conditional render) keeps the control group width stable so
+              the zoom-in / zoom-out buttons don't shift horizontally when the
+              reset appears after the first click. */}
+          <button
+            onClick={handleReset}
+            aria-hidden={zoomOffset === 0}
+            tabIndex={zoomOffset === 0 ? -1 : 0}
+            className={`w-7 h-7 rounded-full flex items-center justify-center text-gray-400 hover:bg-gray-100 transition-colors ${zoomOffset === 0 ? "invisible pointer-events-none" : ""}`}
+            title="Reset zoom"
+          >
+            <RotateCcw className="w-3.5 h-3.5" />
+          </button>
         </div>
       </div>
     </div>
