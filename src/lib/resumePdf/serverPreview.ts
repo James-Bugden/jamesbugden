@@ -1,21 +1,24 @@
 /**
  * Server-side preview rasterization — FlowCV-style.
  *
- * Sends a client-rendered PDF blob to the `render-resume-preview` Supabase
- * Edge Function (which uses Browserless to rasterize pages to PNG), then
- * returns the PNG data URLs the preview pane renders.
+ * Sends a client-rendered PDF blob to a server that rasterizes each page to
+ * a PNG, then returns the PNG data URLs for the preview pane.
+ *
+ * Two backends supported (decided at runtime):
+ *   - Fly.io service at VITE_PREVIEW_ENDPOINT_URL (preferred — avoids the
+ *     Lovable-owned Supabase project which blocks CLI deploys).
+ *   - Supabase Edge Function `render-resume-preview` (fallback — works if
+ *     that project's perms are ever unblocked).
  *
  * Why this path exists:
  *   - Client-side pdfjs rasterization freezes on CJK-heavy PDFs on slow
- *     devices. Offloading rasterization to Browserless (fast, CJK-safe)
- *     keeps the editor responsive.
+ *     devices. Offloading rasterization keeps the editor responsive.
  *   - PDF generation still happens on the client (same react-pdf pipeline
  *     as download), so server preview == downloaded file — no drift.
  *
  * Gating:
  *   - `VITE_PREVIEW_ENDPOINT_ENABLED=1` env flag OR
  *   - `?serverPreview=1` query param (for testing before flip)
- *   - OR call renderPagesServer() directly from feature code.
  *
  * Not-yet-authed callers get `ok: false`. Caller falls back to local path.
  */
@@ -27,10 +30,12 @@ export type ServerPreviewResult =
   | { ok: false; error: string };
 
 /**
- * Turn a PDF Blob into an array of page PNG data URLs via the Edge
- * Function. Safe to call on every debounce tick — server-side usage is
- * rate-limited (200/mo/user by default, see render-resume-preview
- * index.ts).
+ * Turn a PDF Blob into an array of page PNG data URLs.
+ *
+ * Routes to the Fly.io endpoint if `VITE_PREVIEW_ENDPOINT_URL` is set,
+ * otherwise falls back to the Supabase Edge Function name.
+ * Safe to call on every debounce tick — the server enforces its own rate
+ * limits.
  */
 export async function renderPagesServer(
   pdf: Blob,
@@ -40,10 +45,17 @@ export async function renderPagesServer(
   // ~200KB file runs the UI thread for ~40ms — FileReader yields to the
   // event loop and is safe for a debounced preview path.
   const pdfBase64 = await blobToBase64(pdf);
+  const body = { pdfBase64, pageFormat: opts.pageFormat ?? "a4" };
 
+  const flyUrl = (import.meta.env.VITE_PREVIEW_ENDPOINT_URL ?? "") as string;
+  if (flyUrl) {
+    return renderViaFly(flyUrl, body, opts.signal);
+  }
+
+  // Supabase fallback (currently 403 due to Lovable project perms)
   try {
     const { data, error } = await supabase.functions.invoke("render-resume-preview", {
-      body: { pdfBase64, pageFormat: opts.pageFormat ?? "a4" },
+      body,
     });
 
     if (error) {
@@ -53,6 +65,60 @@ export async function renderPagesServer(
       return { ok: false, error: "Server returned no pages" };
     }
     return { ok: true, pngs: data.pngs, pageCount: data.pageCount ?? data.pngs.length };
+  } catch (err) {
+    return { ok: false, error: err instanceof Error ? err.message : String(err) };
+  }
+}
+
+/**
+ * POST to the Fly.io endpoint with the user's Supabase JWT. Server verifies
+ * the token before accepting the render.
+ */
+async function renderViaFly(
+  url: string,
+  body: { pdfBase64: string; pageFormat: "a4" | "letter" },
+  signal?: AbortSignal,
+): Promise<ServerPreviewResult> {
+  let accessToken = "";
+  try {
+    const { data } = await supabase.auth.getSession();
+    accessToken = data.session?.access_token ?? "";
+  } catch {
+    /* unauthenticated path — server will reject and we'll fall back */
+  }
+
+  if (!accessToken) {
+    return { ok: false, error: "Not authenticated" };
+  }
+
+  try {
+    const res = await fetch(url, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${accessToken}`,
+      },
+      body: JSON.stringify(body),
+      signal,
+    });
+
+    if (!res.ok) {
+      const text = await res.text().catch(() => "");
+      return { ok: false, error: `HTTP ${res.status}: ${text.slice(0, 200)}` };
+    }
+
+    const json = (await res.json()) as {
+      pngs?: string[];
+      pageCount?: number;
+    };
+    if (!json.pngs?.length) {
+      return { ok: false, error: "Server returned no pages" };
+    }
+    return {
+      ok: true,
+      pngs: json.pngs,
+      pageCount: json.pageCount ?? json.pngs.length,
+    };
   } catch (err) {
     return { ok: false, error: err instanceof Error ? err.message : String(err) };
   }

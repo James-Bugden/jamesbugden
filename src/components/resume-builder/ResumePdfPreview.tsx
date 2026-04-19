@@ -152,9 +152,16 @@ export const ResumePdfPreview = React.memo(function ResumePdfPreview({
   const onPageCountRef = useRef(onPageCount);
   onPageCountRef.current = onPageCount;
 
-  // Debounce data and customize to avoid re-generating on every keystroke
+  // Debounce data and customize to avoid re-generating on every keystroke.
+  // Split rationale (2026-04-19):
+  //   - `data` changes come from typing in text fields — 600ms waits for the
+  //     user to pause, which is how they expect it to feel.
+  //   - `customize` changes come from discrete button/slider/swatch clicks —
+  //     users expect the preview to react quickly. 250ms is enough to batch
+  //     rapid slider scrubs without the 1-2s perceived lag the old 600ms
+  //     setting caused after a color or spacing change.
   const debouncedData = useDebounce(data, 600);
-  const debouncedCustomize = useDebounce(customize, 600);
+  const debouncedCustomize = useDebounce(customize, 250);
 
   // Derive base page width from immediate customize (not debounced) so the
   // display slot is correct for letter vs A4 even before the debounce fires

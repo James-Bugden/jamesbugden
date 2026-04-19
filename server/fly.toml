@@ -1,0 +1,38 @@
+# Fly.io config for the jamesbugden.com resume-preview service.
+#
+# Deploy from this directory with:
+#   flyctl launch --no-deploy     # first time only — creates the app
+#   flyctl secrets set SUPABASE_URL=... SUPABASE_ANON_KEY=...
+#   flyctl deploy
+
+app = "jamesbugden-preview"
+primary_region = "nrt"   # Tokyo — closest to Taiwan; swap if you're serving elsewhere
+
+[build]
+  dockerfile = "Dockerfile"
+
+[env]
+  PORT = "8080"
+  RASTER_DPI = "150"
+  MAX_PAGES = "5"
+  ALLOWED_ORIGINS = "https://jamesbugden.com,https://www.jamesbugden.com"
+
+[http_service]
+  internal_port = 8080
+  force_https = true
+  auto_stop_machines = "stop"
+  auto_start_machines = true
+  min_machines_running = 0
+  processes = ["app"]
+
+  [[http_service.checks]]
+    interval = "30s"
+    timeout = "5s"
+    grace_period = "10s"
+    method = "GET"
+    path = "/health"
+
+[[vm]]
+  memory = "512mb"
+  cpu_kind = "shared"
+  cpus = 1
