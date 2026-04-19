@@ -72,10 +72,12 @@ export default function Login() {
     if (isLockedOut) return;
     setError("");
     setLoading(true);
+    trackEvent("auth", "login_attempt", { method: "email" });
     const { error } = await supabase.auth.signInWithPassword({ email: email.trim(), password });
     setLoading(false);
     if (error) {
       attemptsRef.current += 1;
+      trackEvent("auth", "login_failed", { method: "email", reason: error.message });
       if (attemptsRef.current >= MAX_ATTEMPTS) {
         startLockout();
         setError(isZhTw
@@ -88,6 +90,7 @@ export default function Login() {
       }
     } else {
       attemptsRef.current = 0;
+      trackEvent("auth", "login_succeeded", { method: "email" });
     }
   };
 
@@ -110,6 +113,7 @@ export default function Login() {
     if (googleLoading) return;
     setError("");
     setGoogleLoading(true);
+    trackEvent("auth", "oauth_clicked", { provider: "google", flow: "login" });
     const from = location.state?.from;
     if (from) sessionStorage.setItem("auth_redirect", from);
     const { error } = await lovable.auth.signInWithOAuth("google", {
@@ -120,6 +124,7 @@ export default function Login() {
     if (error) {
       setError(error.message);
       setGoogleLoading(false);
+      trackEvent("auth", "oauth_failed", { provider: "google", flow: "login", reason: error.message });
     }
   };
 

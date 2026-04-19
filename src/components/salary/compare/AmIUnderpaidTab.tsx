@@ -83,6 +83,23 @@ export default function AmIUnderpaidTab({ lang }: { lang: SalaryLang }) {
         console.warn("[salary_checks] insert failed:", error.message);
       }
     });
+    // Tool completion event
+    import("@/lib/analytics").then(({ trackTool }) => {
+      trackTool(
+        "salary_check",
+        "salary_calculated",
+        {
+          job_title: jobTitle.trim(),
+          role,
+          sector: sector || null,
+          verdict: zone.zone,
+          salary: salaryNum,
+          median: result.med,
+          delta_pct: result.med > 0 ? Math.round(((salaryNum - result.med) / result.med) * 100) : null,
+        },
+        { lang: lang === "zh" ? "zh" : "en" },
+      );
+    });
   }, [showResult, zone, result, jobTitle, role, sector, exp, salaryNum, lang]);
 
   const verdictText = () => {
