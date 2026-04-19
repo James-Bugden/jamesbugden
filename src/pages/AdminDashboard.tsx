@@ -143,16 +143,23 @@ export default function AdminDashboard() {
   const [searchParams, setSearchParams] = useSearchParams();
   const activeTab = searchParams.get("tab") || "overview";
   const activeSub = searchParams.get("sub") || "";
+
+  // Filter param keys that are scoped to a sub-tab. Cleared whenever the user
+  // switches sub-tabs so filters from one panel don't bleed into another.
+  const FILTER_KEYS = ["q", "verdict", "type", "seniority", "sort", "dir"] as const;
+
   const setActiveTab = (tab: string) => {
     const sp = new URLSearchParams(searchParams);
     sp.set("tab", tab);
     sp.delete("sub");
+    FILTER_KEYS.forEach(k => sp.delete(k));
     setSearchParams(sp, { replace: true });
   };
   const setActiveSub = (tab: string, sub: string) => {
     const sp = new URLSearchParams(searchParams);
     sp.set("tab", tab);
     sp.set("sub", sub);
+    FILTER_KEYS.forEach(k => sp.delete(k));
     setSearchParams(sp, { replace: true });
   };
   const navigateTo = (tab: string, sub?: string) => {
@@ -160,8 +167,54 @@ export default function AdminDashboard() {
     sp.set("tab", tab);
     if (sub) sp.set("sub", sub);
     else sp.delete("sub");
+    FILTER_KEYS.forEach(k => sp.delete(k));
     setSearchParams(sp, { replace: true });
   };
+
+  // Generic helper: read/write a single URL param. Used by all filter inputs
+  // so they survive page reload and copy-link sharing.
+  const setParam = useCallback((key: string, value: string | null) => {
+    setSearchParams(prev => {
+      const sp = new URLSearchParams(prev);
+      if (value === null || value === "" || value === "all") sp.delete(key);
+      else sp.set(key, value);
+      return sp;
+    }, { replace: true });
+  }, [setSearchParams]);
+
+  // Filter values — read straight from the URL with sensible defaults.
+  const salarySearch = searchParams.get("q") || "";
+  const verdictFilter = searchParams.get("verdict") || "all";
+  const sortKey = (searchParams.get("sort") as SalarySortKey) || "created_at";
+  const sortAsc = searchParams.get("dir") === "asc";
+  const resumeSearch = searchParams.get("q") || "";
+  const resumeSeniorityFilter = searchParams.get("seniority") || "all";
+  const feedbackSearch = searchParams.get("q") || "";
+  const feedbackTypeFilter = searchParams.get("type") || "all";
+  const accountSearch = searchParams.get("q") || "";
+  const accountSort = useMemo(() => ({
+    col: (searchParams.get("sort") as "created_at" | "last_sign_in_at") || "created_at",
+    dir: (searchParams.get("dir") as "asc" | "desc") || "desc",
+  }), [searchParams]);
+
+  const setSalarySearch = (v: string) => setParam("q", v);
+  const setVerdictFilter = (v: string) => setParam("verdict", v);
+  const setSortKey = (v: SalarySortKey) => setParam("sort", v);
+  const setSortAsc = (v: boolean) => setParam("dir", v ? "asc" : "desc");
+  const setResumeSearch = (v: string) => setParam("q", v);
+  const setResumeSeniorityFilter = (v: string) => setParam("seniority", v);
+  const setFeedbackSearch = (v: string) => setParam("q", v);
+  const setFeedbackTypeFilter = (v: string) => setParam("type", v);
+  const setAccountSearch = (v: string) => setParam("q", v);
+  const setAccountSort = (v: { col: "created_at" | "last_sign_in_at"; dir: "asc" | "desc" }) => {
+    setSearchParams(prev => {
+      const sp = new URLSearchParams(prev);
+      sp.set("sort", v.col);
+      sp.set("dir", v.dir);
+      return sp;
+    }, { replace: true });
+  };
+
 
   const navigate = useNavigate();
   const { toast } = useToast();
