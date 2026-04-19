@@ -41,6 +41,7 @@ import { useNavigate, Link } from "react-router-dom";
 import { useAuth } from "@/contexts/AuthContext";
 import { LogIn } from "lucide-react";
 import { AnalyzerPromptDialog } from "@/components/resume-builder/AnalyzerPromptDialog";
+import { BuggyNoticeDialog } from "@/components/resume-builder/BuggyNoticeDialog";
 import { AnalyzerSuggestionsPanel, Suggestion, extractSuggestions, applySuggestionToData } from "@/components/resume-builder/AnalyzerSuggestionsPanel";
 import MicroSurvey from "@/components/feedback/MicroSurvey";
 import { LimitReachedModal } from "@/components/LimitReachedModal";
@@ -1301,6 +1302,7 @@ const ResumeBuilder = () => {
       {/* Import into existing resume */}
       <ImportModal open={editorImportOpen} onClose={() => setEditorImportOpen(false)} type="resume" onImported={handleEditorImported} />
       {viewMode === "resume-editor" && <AnalyzerPromptDialog fromAnalyzer={searchParams.get("from") === "analyzer" || !!sessionStorage.getItem("analyzer-resume-text")} />}
+      <BuggyNoticeDialog />
 
       {/* Replace picker dialog when at resume limit */}
       <AlertDialog open={replacePickerOpen} onOpenChange={setReplacePickerOpen}>
