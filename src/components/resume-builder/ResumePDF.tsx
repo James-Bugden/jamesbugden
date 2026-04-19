@@ -18,7 +18,19 @@ import {
 import type { ResumeData, ResumeSection, ResumeSectionEntry } from "./types";
 import type { CustomizeSettings } from "./customizeTypes";
 import { SANS_FONTS, SERIF_FONTS, MONO_FONTS } from "./fontData";
-import { CJK_FONT_FAMILY, containsCJK, resumeHasCJK } from "@/lib/resumePdf/fontMap";
+import {
+  CJK_FONT_FAMILY,
+  CJK_FONT_FAMILY_TC,
+  CJK_FONT_FAMILY_SC,
+  CJK_FONT_FAMILY_JP,
+  CJK_FONT_FAMILY_KR,
+  ALL_CJK_FAMILIES,
+  containsCJK,
+  resumeHasCJK,
+  resolveResumeCJKFamily,
+  pickCJKFamily,
+  type CJKFamily,
+} from "@/lib/resumePdf/fontMap";
 
 /* ═══════════════════════════════════════════════════════════
    Font Registration
@@ -66,54 +78,123 @@ const FONT_REGISTRATION_PROMISES = new Map<string, Promise<string>>();
 /* ── CJK font registration ────────────────────────────────── */
 
 /**
- * Register Noto Sans TC for CJK glyph rendering in react-pdf.
+ * CJK font URL registry.
  *
- * Uses the fontsource CDN which serves CORS-friendly static WOFF files
- * for the Traditional Chinese subset. The previous GitHub raw URL
- * (raw.githubusercontent.com) failed with "TypeError: Failed to fetch"
- * because GitHub doesn't send CORS headers for binary font files.
+ * Uses fontsource's legacy `/fontsource/fonts/...@latest/...` CDN path which
+ * ships the full script subset as a single ~1.4 MB WOFF file (confirmed via
+ * `curl -I` on 2026-04-19). CORS headers are correct. Do NOT switch to the
+ * `@fontsource/...` npm-package path — that one splits CJK glyphs across
+ * ~40 numeric chunk files per weight, which doesn't work with react-pdf
+ * (react-pdf embeds a single file per weight, doesn't do browser-style
+ * unicode-range lazy loading).
  *
- * fontsource pattern (matches the Latin font setup in fontsourceUrl()):
- *   https://cdn.jsdelivr.net/fontsource/fonts/noto-sans-tc@latest/chinese-traditional-{weight}-normal.woff
+ * Each family registers 400 (regular) + 700 (bold) to support bold headings
+ * without relying on faux-bolding. Total download when all 4 CJK families
+ * are triggered by a resume: ~12 MB. In practice 99% of resumes will only
+ * need one family (TC OR SC) so the real cost is ~3 MB per bilingual resume.
+ *
+ * If we ever need to reduce this, options are:
+ * 1. Drop weight 700 and let react-pdf faux-bold (slight visual artifact).
+ * 2. Self-host a tree-shaken subset with just the glyphs the resume uses
+ *    (complex — would need server-side subsetting pipeline).
+ * 3. Move CJK glyph rendering server-side via a Puppeteer edge function.
+ *
+ * See `C:\Users\jbbug\My Drive\Vault-Sync\James AI OS\CJK Font Pipeline Deep Dive.md`.
  */
-const CJK_FONT_URL_400 =
-  "https://cdn.jsdelivr.net/fontsource/fonts/noto-sans-tc@latest/chinese-traditional-400-normal.woff";
-const CJK_FONT_URL_700 =
-  "https://cdn.jsdelivr.net/fontsource/fonts/noto-sans-tc@latest/chinese-traditional-700-normal.woff";
+const CJK_URL_PATTERN = (pkg: string, subset: string, weight: number) =>
+  `https://cdn.jsdelivr.net/fontsource/fonts/${pkg}@latest/${subset}-${weight}-normal.woff`;
 
-let cjkRegistrationPromise: Promise<boolean> | null = null;
+const CJK_FONT_SOURCES: Record<CJKFamily, { url400: string; url700: string }> = {
+  [CJK_FONT_FAMILY_TC]: {
+    url400: CJK_URL_PATTERN("noto-sans-tc", "chinese-traditional", 400),
+    url700: CJK_URL_PATTERN("noto-sans-tc", "chinese-traditional", 700),
+  },
+  [CJK_FONT_FAMILY_SC]: {
+    url400: CJK_URL_PATTERN("noto-sans-sc", "chinese-simplified", 400),
+    url700: CJK_URL_PATTERN("noto-sans-sc", "chinese-simplified", 700),
+  },
+  [CJK_FONT_FAMILY_JP]: {
+    url400: CJK_URL_PATTERN("noto-sans-jp", "japanese", 400),
+    url700: CJK_URL_PATTERN("noto-sans-jp", "japanese", 700),
+  },
+  [CJK_FONT_FAMILY_KR]: {
+    url400: CJK_URL_PATTERN("noto-sans-kr", "korean", 400),
+    url700: CJK_URL_PATTERN("noto-sans-kr", "korean", 700),
+  },
+};
 
-async function registerCJKFont(): Promise<boolean> {
-  if (REGISTERED_FONTS.has(CJK_FONT_FAMILY)) return true;
-  if (cjkRegistrationPromise) return cjkRegistrationPromise;
+/**
+ * Per-family registration promises. Without this we'd double-fetch a 1.4 MB
+ * font every time the preview re-renders while the first fetch is still in
+ * flight. Keyed by family name so TC + SC can race in parallel.
+ */
+const cjkRegistrationPromises = new Map<CJKFamily, Promise<boolean>>();
 
-  cjkRegistrationPromise = (async () => {
+/**
+ * Register ONE CJK family. Idempotent, cached, CORS-safe.
+ *
+ * Safety:
+ * - HEAD-check before register so a 404/CORS fail doesn't produce a half-
+ *   registered font that crashes fontkit during render.
+ * - Font.register wrapped in try/catch. If fontkit's DataView parser throws
+ *   on the WOFF (the same class of bug that killed JetBrains Mono), we catch
+ *   it here and the family never enters REGISTERED_FONTS, so downstream
+ *   `REGISTERED_FONTS.has(family)` guards fall back to Helvetica instead
+ *   of crashing the preview.
+ * - Failed registrations are NOT cached — next prepareFonts() call will
+ *   retry (useful for transient CDN blips).
+ */
+async function registerCJKFamily(family: CJKFamily): Promise<boolean> {
+  if (REGISTERED_FONTS.has(family)) return true;
+  const cached = cjkRegistrationPromises.get(family);
+  if (cached) return cached;
+
+  const source = CJK_FONT_SOURCES[family];
+  const promise = (async () => {
     try {
-      // Verify the font is reachable before registering. fontsource
-      // sends proper CORS headers so this works from the browser.
-      const resp = await fetch(CJK_FONT_URL_400, { method: "HEAD" });
+      const resp = await fetch(source.url400, { method: "HEAD" });
       if (!resp.ok) {
-        console.warn(`[ResumePDF] CJK font HEAD check failed (${resp.status})`);
+        if (import.meta.env.DEV) console.warn(`[ResumePDF] ${family} HEAD check failed (${resp.status})`);
+        cjkRegistrationPromises.delete(family);
         return false;
       }
 
-      Font.register({
-        family: CJK_FONT_FAMILY,
-        fonts: [
-          { src: CJK_FONT_URL_400, fontWeight: 400 },
-          { src: CJK_FONT_URL_700, fontWeight: 700 },
-        ],
-      });
-      REGISTERED_FONTS.add(CJK_FONT_FAMILY);
+      try {
+        Font.register({
+          family,
+          fonts: [
+            { src: source.url400, fontWeight: 400 },
+            { src: source.url700, fontWeight: 700 },
+          ],
+        });
+      } catch (regErr) {
+        // fontkit parser crash (e.g. DataView offset out of bounds).
+        // Do NOT mark the family as registered — downstream guards will
+        // fall back to the Latin body font automatically.
+        if (import.meta.env.DEV) console.warn(`[ResumePDF] Font.register(${family}) threw:`, regErr);
+        cjkRegistrationPromises.delete(family);
+        return false;
+      }
+
+      REGISTERED_FONTS.add(family);
       return true;
     } catch (err) {
-      if (import.meta.env.DEV) console.warn("[ResumePDF] CJK font registration failed:", err);
-      cjkRegistrationPromise = null; // allow retry
+      if (import.meta.env.DEV) console.warn(`[ResumePDF] ${family} registration failed:`, err);
+      cjkRegistrationPromises.delete(family);
       return false;
     }
   })();
 
-  return cjkRegistrationPromise;
+  cjkRegistrationPromises.set(family, promise);
+  return promise;
+}
+
+/**
+ * Back-compat alias. Old callers used `registerCJKFont()` (TC only).
+ * Prefer `registerCJKFamily(family)` for new code.
+ */
+async function registerCJKFont(): Promise<boolean> {
+  return registerCJKFamily(CJK_FONT_FAMILY_TC);
 }
 
 /**
@@ -208,9 +289,22 @@ export async function prepareFonts(c?: CustomizeSettings, data?: ResumeData): Pr
 
   const tasks: Promise<unknown>[] = Array.from(families).map((f) => registerFontAsync(f));
 
-  // Register CJK font if resume contains Chinese characters
-  if (data && resumeHasCJK(data)) {
-    tasks.push(registerCJKFont());
+  // Register the CJK family (or families) the resume actually needs.
+  // resolveResumeCJKFamily() picks ONE primary family based on strongest
+  // script signal — we also register Noto Sans TC as a safety net when the
+  // primary is SC/JP so text that happens to be Traditional still renders.
+  if (data) {
+    const primary = resolveResumeCJKFamily(data);
+    if (primary) {
+      tasks.push(registerCJKFamily(primary));
+      // TC fallback: most Chinese resumes mix some Traditional glyphs even
+      // when the primary is SC. Register TC too so per-run detection
+      // (below) can pick it where appropriate. This is cheap — the HEAD
+      // check deduplicates concurrent fetches across families.
+      if (primary === CJK_FONT_FAMILY_SC) {
+        tasks.push(registerCJKFamily(CJK_FONT_FAMILY_TC));
+      }
+    }
   }
 
   // allSettled — one failed font (e.g. fontkit parser crash on a font, or a
@@ -794,15 +888,15 @@ function PdfSectionHeading({
     ? ensureFontRegistered(c.headingFont)
     : fontFamily;
 
-  // Only use CJK font if it actually registered; otherwise fall back to the
-  // chosen heading font (glyphs will render as tofu squares, which is much
-  // better than crashing the preview). Matches the guard at line ~1984 for
-  // body text.
-  const canUseCjk = isCJK && REGISTERED_FONTS.has(CJK_FONT_FAMILY);
+  // Pick the right CJK family for THIS heading (TC / SC / JP / KR per text),
+  // then only use it if actually registered. Otherwise fall back to the
+  // chosen heading font — glyphs render as tofu but the preview stays up.
+  const headingCjkFamily = isCJK ? pickCJKFamily(title) : null;
+  const canUseCjk = headingCjkFamily !== null && REGISTERED_FONTS.has(headingCjkFamily);
   const textStyle = {
     fontSize,
     color: style === "background" ? "#ffffff" : colors.headings,
-    fontFamily: canUseCjk ? CJK_FONT_FAMILY : headingFontFamily,
+    fontFamily: canUseCjk ? headingCjkFamily : headingFontFamily,
     fontWeight: 700 as const,
     letterSpacing: canUseCjk ? fontSize * 0.02 : fontSize * 0.08,
   };
@@ -1998,10 +2092,14 @@ export function ResumePDF({ data, customize }: ResumePDFProps) {
   const baseFontSize = c?.fontSize ?? 10.5;
   const lineHeight = c?.lineHeight ?? 1.5;
 
-  // Resolve font — use CJK font when Chinese characters are detected
-  const hasCJK = resumeHasCJK(safe);
-  const bodyFontFamily = hasCJK && REGISTERED_FONTS.has(CJK_FONT_FAMILY)
-    ? CJK_FONT_FAMILY
+  // Resolve body font. If the resume has any CJK content, pick the best CJK
+  // family (TC / SC / JP / KR) based on script signal, but only use it if it
+  // actually registered. Otherwise fall back to the user-chosen Latin body
+  // font — CJK glyphs will render as tofu squares, which is strictly better
+  // than crashing the preview.
+  const resolvedCjkFamily = resolveResumeCJKFamily(safe);
+  const bodyFontFamily = resolvedCjkFamily && REGISTERED_FONTS.has(resolvedCjkFamily)
+    ? resolvedCjkFamily
     : ensureFontRegistered(c?.bodyFont || "'Source Sans 3', sans-serif");
 
   // Page dimensions
@@ -2121,9 +2219,12 @@ export function ResumePDF({ data, customize }: ResumePDFProps) {
             const displayName = nameIsCJK
               ? (p.fullName || "YOUR NAME")
               : (p.fullName || "YOUR NAME").toUpperCase();
-            // Only use CJK font if it actually registered (same guard pattern
-            // as body + headings). Otherwise fall back to the chosen name font.
-            const nameCanUseCjk = nameIsCJK && REGISTERED_FONTS.has(CJK_FONT_FAMILY);
+            // Pick the right CJK family for THIS name (covers Chinese, Japanese
+            // and Korean names). Only use it if the specific family actually
+            // registered — otherwise the name falls back to the Latin name
+            // font (tofu but won't crash).
+            const nameCjkFamily = nameIsCJK ? pickCJKFamily(p.fullName || "") : null;
+            const nameCanUseCjk = nameCjkFamily !== null && REGISTERED_FONTS.has(nameCjkFamily);
             const nameEl = (
               <Text
                 style={{
@@ -2131,7 +2232,7 @@ export function ResumePDF({ data, customize }: ResumePDFProps) {
                   lineHeight: 1.3,
                   color: colors.name,
                   fontWeight: c?.nameBold !== false ? 700 : 400,
-                  fontFamily: nameCanUseCjk ? CJK_FONT_FAMILY : nameFontFamily,
+                  fontFamily: nameCanUseCjk ? nameCjkFamily : nameFontFamily,
                   letterSpacing: nameCanUseCjk ? nameFontSize * 0.02 : nameFontSize * 0.1,
                   textAlign,
                 }}
