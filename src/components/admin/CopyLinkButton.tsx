@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { Link2, Check } from "lucide-react";
+import { toast } from "sonner";
 import { cn } from "@/lib/utils";
 
 interface CopyLinkButtonProps {
@@ -35,9 +36,11 @@ export default function CopyLinkButton({
       }
       await navigator.clipboard.writeText(url.toString());
       setCopied(true);
+      toast.success("Link copied to clipboard");
       setTimeout(() => setCopied(false), 1500);
     } catch (e) {
       console.warn("[CopyLinkButton] clipboard write failed:", e);
+      toast.error("Could not copy link");
     }
   };
 
