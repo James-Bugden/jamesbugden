@@ -251,7 +251,7 @@ export default function FunnelTab() {
           <CardContent className="p-4">
             <div className="flex items-center gap-2 mb-3">
               <Wrench className="w-4 h-4 text-muted-foreground" />
-              <h3 className="text-sm font-semibold text-foreground">Top tools (24h)</h3>
+              <h3 className="text-sm font-semibold text-foreground">Top tools ({rangeLabel})</h3>
             </div>
             {data.topTools.length === 0 ? (
               <p className="text-sm text-muted-foreground">No tool completions yet</p>
