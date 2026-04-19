@@ -85,6 +85,13 @@ export async function initSession(): Promise<string | null> {
     const { data: userRes } = await supabase.auth.getUser();
     const userId = userRes?.user?.id ?? null;
     const utm = readUtm();
+    let isReturning = false;
+    try {
+      isReturning = localStorage.getItem(RETURNING_KEY) === "1";
+      if (!isReturning) localStorage.setItem(RETURNING_KEY, "1");
+    } catch {
+      // ignore — private mode
+    }
 
     const { data, error } = await supabase
       .from("sessions" as any)
@@ -94,6 +101,8 @@ export async function initSession(): Promise<string | null> {
         entry_page: window.location.pathname,
         exit_page: window.location.pathname,
         device_type: detectDevice(),
+        browser: detectBrowser(),
+        is_returning: isReturning,
         viewport_w: window.innerWidth,
         viewport_h: window.innerHeight,
         user_agent: navigator.userAgent.slice(0, 500),
