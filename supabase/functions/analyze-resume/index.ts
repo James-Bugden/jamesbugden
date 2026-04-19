@@ -210,7 +210,21 @@ Deno.serve(async (req) => {
       }
     }
 
-    const { resumeText, language } = await req.json();
+    // Parse the body defensively — malformed JSON should surface as a 400,
+    // not bubble up to the outer try/catch and log a 500 with
+    // sb-error-code: EDGE_FUNCTION_ERROR. The outer handler is for genuine
+    // failures (AI gateway down, DB errors); client-side input errors deserve
+    // a dedicated 4xx response.
+    let parsed: { resumeText?: string; language?: string };
+    try {
+      parsed = await req.json();
+    } catch {
+      return new Response(
+        JSON.stringify({ error: 'Invalid JSON body' }),
+        { status: 400, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+      );
+    }
+    const { resumeText, language } = parsed;
 
     if (!resumeText || resumeText.length < 100) {
       return new Response(

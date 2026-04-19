@@ -109,14 +109,7 @@ test.describe("Edge function contract — malformed bodies", () => {
     expect(res.status()).not.toBe(200);
   });
 
-  // KNOWN BUG — `analyze-resume` calls `await req.json()` without a try/catch,
-  // so malformed bodies propagate as a 500 with `sb-error-code: EDGE_FUNCTION_ERROR`
-  // instead of a clean 400. Low user-impact (legit clients always send JSON),
-  // but pollutes the edge function error log and violates the function's
-  // implicit contract. Fix: wrap the parse in try/catch inside
-  // supabase/functions/analyze-resume/index.ts and return 400 on SyntaxError.
-  // Re-enable this test once that lands.
-  test.fixme("analyze-resume: non-JSON body does not crash (5xx) the function", async ({
+  test("analyze-resume: non-JSON body does not crash (5xx) the function", async ({
     request,
   }) => {
     const res = await request.post(
