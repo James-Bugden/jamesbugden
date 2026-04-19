@@ -151,11 +151,13 @@ export default function FunnelTab() {
   return (
     <div className="space-y-6">
       {/* KPI Strip */}
-      <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+      <div className="grid grid-cols-2 md:grid-cols-5 gap-4">
         <KpiCard
           icon={<Activity className="w-4 h-4" />}
           label="Sessions today"
           value={data.sessionsToday.toLocaleString()}
+          className="md:col-span-2"
+          rightSlot={<Sparkline points={data.sessions7d} />}
         />
         <KpiCard
           icon={<UserPlus className="w-4 h-4" />}
@@ -231,31 +233,76 @@ function KpiCard({
   value,
   hint,
   tone = "default",
+  className = "",
+  rightSlot,
 }: {
   icon: React.ReactNode;
   label: string;
   value: string;
   hint?: string;
   tone?: "default" | "ok" | "warn";
+  className?: string;
+  rightSlot?: React.ReactNode;
 }) {
   return (
-    <Card>
+    <Card className={className}>
       <CardContent className="p-4">
-        <div className="flex items-center gap-1.5 text-xs text-muted-foreground mb-1">
-          {icon}
-          <span>{label}</span>
+        <div className="flex items-start justify-between gap-3">
+          <div className="min-w-0">
+            <div className="flex items-center gap-1.5 text-xs text-muted-foreground mb-1">
+              {icon}
+              <span>{label}</span>
+            </div>
+            <div
+              className={
+                "text-2xl font-semibold " +
+                (tone === "warn" ? "text-destructive" : "text-foreground")
+              }
+            >
+              {value}
+            </div>
+            {hint && <div className="text-xs text-muted-foreground mt-1">{hint}</div>}
+          </div>
+          {rightSlot && <div className="flex-1 min-w-0 max-w-[60%]">{rightSlot}</div>}
         </div>
-        <div
-          className={
-            "text-2xl font-semibold " +
-            (tone === "warn" ? "text-destructive" : "text-foreground")
-          }
-        >
-          {value}
-        </div>
-        {hint && <div className="text-xs text-muted-foreground mt-1">{hint}</div>}
       </CardContent>
     </Card>
+  );
+}
+
+function Sparkline({ points }: { points: { day: string; count: number }[] }) {
+  if (!points.length) return null;
+  const w = 160;
+  const h = 44;
+  const pad = 2;
+  const max = Math.max(1, ...points.map((p) => p.count));
+  const stepX = points.length > 1 ? (w - pad * 2) / (points.length - 1) : 0;
+  const coords = points.map((p, i) => {
+    const x = pad + i * stepX;
+    const y = h - pad - (p.count / max) * (h - pad * 2);
+    return [x, y] as const;
+  });
+  const path = coords.map(([x, y], i) => `${i === 0 ? "M" : "L"}${x.toFixed(1)},${y.toFixed(1)}`).join(" ");
+  const areaPath = `${path} L${coords[coords.length - 1][0].toFixed(1)},${h - pad} L${coords[0][0].toFixed(1)},${h - pad} Z`;
+  const last = coords[coords.length - 1];
+  const total7d = points.reduce((sum, p) => sum + p.count, 0);
+  const todayCount = points[points.length - 1]?.count ?? 0;
+  return (
+    <div className="flex flex-col items-end gap-1">
+      <svg
+        viewBox={`0 0 ${w} ${h}`}
+        className="w-full h-11 text-primary"
+        preserveAspectRatio="none"
+        aria-label={`Sessions over the last 7 days, ${total7d} total`}
+      >
+        <path d={areaPath} fill="currentColor" opacity={0.12} />
+        <path d={path} fill="none" stroke="currentColor" strokeWidth={1.5} strokeLinejoin="round" strokeLinecap="round" />
+        <circle cx={last[0]} cy={last[1]} r={2.5} fill="currentColor" />
+      </svg>
+      <div className="text-[10px] text-muted-foreground tabular-nums">
+        7d: {total7d.toLocaleString()} · today {todayCount.toLocaleString()}
+      </div>
+    </div>
   );
 }
 
