@@ -886,13 +886,13 @@ export default function AdminDashboard() {
                     <Table>
                       <TableHeader>
                         <TableRow>
-                          <TableHead className="w-36 cursor-pointer select-none hover:text-foreground transition-colors" onClick={() => setAccountSort(s => s.col === "created_at" ? { col: "created_at", dir: s.dir === "asc" ? "desc" : "asc" } : { col: "created_at", dir: "desc" })}>
+                          <TableHead className="w-36 cursor-pointer select-none hover:text-foreground transition-colors" onClick={() => setAccountSort(accountSort.col === "created_at" ? { col: "created_at", dir: accountSort.dir === "asc" ? "desc" : "asc" } : { col: "created_at", dir: "desc" })}>
                             Created {accountSort.col === "created_at" ? (accountSort.dir === "asc" ? "↑" : "↓") : ""}
                           </TableHead>
                           <TableHead>Email</TableHead>
                           <TableHead>Provider</TableHead>
                           <TableHead>Confirmed</TableHead>
-                          <TableHead className="cursor-pointer select-none hover:text-foreground transition-colors" onClick={() => setAccountSort(s => s.col === "last_sign_in_at" ? { col: "last_sign_in_at", dir: s.dir === "asc" ? "desc" : "asc" } : { col: "last_sign_in_at", dir: "desc" })}>
+                          <TableHead className="cursor-pointer select-none hover:text-foreground transition-colors" onClick={() => setAccountSort(accountSort.col === "last_sign_in_at" ? { col: "last_sign_in_at", dir: accountSort.dir === "asc" ? "desc" : "asc" } : { col: "last_sign_in_at", dir: "desc" })}>
                             Last Sign In {accountSort.col === "last_sign_in_at" ? (accountSort.dir === "asc" ? "↑" : "↓") : ""}
                           </TableHead>
                         </TableRow>
