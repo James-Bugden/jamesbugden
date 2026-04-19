@@ -142,10 +142,16 @@ export default function ResumeAnalyzer({ defaultLang = "en" }: { defaultLang?: L
     const ext = selectedFile.name.split(".").pop()?.toLowerCase();
     if (!["pdf", "docx", "txt"].includes(ext || "")) {
       setError(t(lang, "Please upload a PDF, DOCX, or TXT file.", "請上傳 PDF、DOCX 或 TXT 檔案。"));
+      trackError("file_upload", `Rejected file type: ${ext || "unknown"}`, {
+        metadata: { tool: "resume_analyzer", file_name: selectedFile.name, file_size: selectedFile.size, ext, lang },
+      });
       return;
     }
     if (selectedFile.size > 5 * 1024 * 1024) {
       setError(t(lang, "File size must be under 5MB.", "檔案大小須小於 5MB。"));
+      trackError("file_upload", `File too large: ${selectedFile.size} bytes`, {
+        metadata: { tool: "resume_analyzer", file_name: selectedFile.name, file_size: selectedFile.size, ext, lang },
+      });
       return;
     }
     setFile(selectedFile);
