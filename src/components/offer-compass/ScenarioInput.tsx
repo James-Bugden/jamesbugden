@@ -99,7 +99,7 @@ export default function ScenarioInput({ scenario, onChange, currency, onLoadExam
       {/* Offer Name */}
       <div className="space-y-2">
         <Label>Offer Name</Label>
-        <Input value={s.name} onChange={(e) => onChange({ name: e.target.value })} />
+        <Input value={s.name} onChange={(e) => onChange({ name: e.target.value })} aria-label="Offer name" />
       </div>
 
       {/* Base Salary */}

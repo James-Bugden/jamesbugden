@@ -10,6 +10,7 @@ export default function ResetPassword() {
   const navigate = useNavigate();
   const location = useLocation();
   const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
@@ -24,6 +25,7 @@ export default function ResetPassword() {
         heading: "設定新密碼",
         subtitle: "請在下方輸入您的新密碼。",
         placeholder: "新密碼（至少 6 個字元）",
+        confirmPlaceholder: "再次輸入新密碼",
         submit: "更新密碼",
         successTitle: "密碼已更新",
         successMsg: "正在為您導向…",
@@ -31,12 +33,14 @@ export default function ResetPassword() {
         backToLogin: "← 返回登入",
         back: "返回",
         minLength: "密碼至少需要 6 個字元",
+        mismatch: "兩次輸入的密碼不一致",
       }
     : {
         title: "Reset Password",
         heading: "Set New Password",
         subtitle: "Enter your new password below.",
         placeholder: "New password (min. 6 characters)",
+        confirmPlaceholder: "Confirm new password",
         submit: "Update Password",
         successTitle: "Password Updated",
         successMsg: "Redirecting you now…",
@@ -44,6 +48,7 @@ export default function ResetPassword() {
         backToLogin: "← Back to Sign In",
         back: "Back",
         minLength: "Password must be at least 6 characters",
+        mismatch: "Passwords do not match",
       };
 
   useEffect(() => {
@@ -66,6 +71,10 @@ export default function ResetPassword() {
     setError("");
     if (password.length < 6) {
       setError(t.minLength);
+      return;
+    }
+    if (password !== confirmPassword) {
+      setError(t.mismatch);
       return;
     }
     setLoading(true);
@@ -125,10 +134,23 @@ export default function ResetPassword() {
                     onChange={e => setPassword(e.target.value)}
                     className="pl-10 pr-10 h-11"
                     required
+                    autoComplete="new-password"
                   />
                   <button type="button" onClick={() => setShowPassword(!showPassword)} className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground">
                     {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
                   </button>
+                </div>
+                <div className="relative">
+                  <Lock className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
+                  <Input
+                    type={showPassword ? "text" : "password"}
+                    placeholder={t.confirmPlaceholder}
+                    value={confirmPassword}
+                    onChange={e => setConfirmPassword(e.target.value)}
+                    className="pl-10 h-11"
+                    required
+                    autoComplete="new-password"
+                  />
                 </div>
                 {error && <p className="text-xs text-destructive">{error}</p>}
                 <Button type="submit" className="w-full h-11 font-semibold" disabled={loading}>

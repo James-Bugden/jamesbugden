@@ -164,11 +164,11 @@ export default function Login() {
               <form onSubmit={handleLogin} className="space-y-3">
                 <div className="relative">
                   <Mail className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
-                  <Input type="email" placeholder={t.email} value={email} onChange={e => setEmail(e.target.value)} className="pl-10 h-11" required />
+                  <Input type="email" placeholder={t.email} value={email} onChange={e => setEmail(e.target.value)} className="pl-10 h-11" required autoComplete="email" />
                 </div>
                 <div className="relative">
                   <Lock className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
-                  <Input type={showPassword ? "text" : "password"} placeholder={t.password} value={password} onChange={e => setPassword(e.target.value)} className="pl-10 pr-10 h-11" required />
+                  <Input type={showPassword ? "text" : "password"} placeholder={t.password} value={password} onChange={e => setPassword(e.target.value)} className="pl-10 pr-10 h-11" required autoComplete="current-password" />
                   <button type="button" onClick={() => setShowPassword(!showPassword)} className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground">
                     {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
                   </button>
@@ -205,7 +205,7 @@ export default function Login() {
                 <form onSubmit={handleForgotPassword} className="space-y-3">
                   <div className="relative">
                     <Mail className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
-                    <Input type="email" placeholder={t.email} value={email} onChange={e => setEmail(e.target.value)} className="pl-10 h-11" required />
+                    <Input type="email" placeholder={t.email} value={email} onChange={e => setEmail(e.target.value)} className="pl-10 h-11" required autoComplete="email" />
                   </div>
                   {error && <p className="text-xs text-destructive">{error}</p>}
                   <Button type="submit" className="w-full h-11 font-semibold" disabled={loading}>
