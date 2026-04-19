@@ -92,43 +92,48 @@ export default function FunnelTab() {
   const [drawerLoading, setDrawerLoading] = useState(false);
 
   useEffect(() => {
+    let cancelled = false;
     const load = async () => {
-      const todayStart = startOfTodayISO();
-      const dayAgo = dayAgoISO();
-      const sevenDaysAgo = new Date(Date.now() - 7 * 24 * 60 * 60 * 1000);
-      sevenDaysAgo.setHours(0, 0, 0, 0);
-      const sevenDaysAgoISO = sevenDaysAgo.toISOString();
+      setData((d) => ({ ...d, loading: true }));
+      const cfg = RANGES[range];
+      const sinceISO = new Date(Date.now() - cfg.hours * 60 * 60 * 1000).toISOString();
+      const sparkStart = new Date();
+      sparkStart.setHours(0, 0, 0, 0);
+      sparkStart.setDate(sparkStart.getDate() - (cfg.sparkDays - 1));
+      const sparkStartISO = sparkStart.toISOString();
 
-      const [sessionsRes, signupsRes, toolsRes, errorsRes, sessions7dRes] = await Promise.all([
+      const [sessionsRes, signupsRes, toolsRes, errorsRes, sparkRes] = await Promise.all([
         supabase
           .from("sessions")
           .select("id", { count: "exact", head: true })
-          .gte("started_at", todayStart),
+          .gte("started_at", sinceISO),
         supabase
           .from("profiles")
           .select("id", { count: "exact", head: true })
-          .gte("created_at", todayStart),
+          .gte("created_at", sinceISO),
         supabase
           .from("tool_completions")
           .select("tool")
-          .gte("created_at", dayAgo)
+          .gte("created_at", sinceISO)
           .limit(5000),
         supabase
           .from("error_log")
           .select("source")
-          .gte("created_at", dayAgo)
+          .gte("created_at", sinceISO)
           .limit(5000),
         supabase
           .from("sessions")
           .select("started_at")
-          .gte("started_at", sevenDaysAgoISO)
-          .limit(10000),
+          .gte("started_at", sparkStartISO)
+          .limit(20000),
       ]);
 
-      const sessionsToday = sessionsRes.count ?? 0;
-      const signupsToday = signupsRes.count ?? 0;
+      if (cancelled) return;
+
+      const sessionsCount = sessionsRes.count ?? 0;
+      const signupsCount = signupsRes.count ?? 0;
       const conversionPct =
-        sessionsToday > 0 ? Math.round((signupsToday / sessionsToday) * 1000) / 10 : 0;
+        sessionsCount > 0 ? Math.round((signupsCount / sessionsCount) * 1000) / 10 : 0;
 
       const toolCounts: Record<string, number> = {};
       (toolsRes.data ?? []).forEach((row: any) => {
@@ -149,37 +154,40 @@ export default function FunnelTab() {
         .map(([source, count]) => ({ source, count }))
         .sort((a, b) => b.count - a.count)
         .slice(0, 5);
-      const errors24h = (errorsRes.data ?? []).length;
+      const errorsCount = (errorsRes.data ?? []).length;
 
       const buckets: Record<string, number> = {};
-      for (let i = 6; i >= 0; i--) {
+      for (let i = cfg.sparkDays - 1; i >= 0; i--) {
         const d = new Date();
         d.setHours(0, 0, 0, 0);
         d.setDate(d.getDate() - i);
         buckets[d.toISOString().slice(0, 10)] = 0;
       }
-      (sessions7dRes.data ?? []).forEach((row: any) => {
+      (sparkRes.data ?? []).forEach((row: any) => {
         const key = new Date(row.started_at).toISOString().slice(0, 10);
         if (key in buckets) buckets[key] += 1;
       });
-      const sessions7d: DayPoint[] = Object.entries(buckets).map(([day, count]) => ({
+      const sessionsSpark: DayPoint[] = Object.entries(buckets).map(([day, count]) => ({
         day,
         count,
       }));
 
       setData({
-        sessionsToday,
-        signupsToday,
+        sessionsCount,
+        signupsCount,
         conversionPct,
         topTools,
-        errors24h,
+        errorsCount,
         errorsBySource,
-        sessions7d,
+        sessionsSpark,
         loading: false,
       });
     };
     load();
-  }, []);
+    return () => {
+      cancelled = true;
+    };
+  }, [range]);
 
   const openErrorDrawer = async (source: string) => {
     setOpenSource(source);
