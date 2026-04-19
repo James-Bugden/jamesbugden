@@ -5,6 +5,7 @@ import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import { ScrollToTop } from "./components/ScrollToTop";
+import AnalyticsProvider from "./components/analytics/AnalyticsProvider";
 import { HelmetProvider } from "react-helmet-async";
 import { AuthProvider, useAuth } from "./contexts/AuthContext";
 import MobileBottomNav from "./components/MobileBottomNav";
@@ -195,6 +196,7 @@ const App = () => (
           <BrowserRouter>
             <AuthProvider>
               <ScrollToTop />
+              <AnalyticsProvider />
               <Suspense fallback={<PageLoader />}>
                 <SiteLayout>
                   <Routes>

@@ -21,6 +21,7 @@ import { renderPdfToImage } from "@/lib/renderPdfToImage";
 import pdfjsWorkerUrl from "pdfjs-dist/build/pdf.worker.min.mjs?url";
 import jamesPhoto from "@/assets/james-bugden.jpg";
 import { SEO } from "@/components/SEO";
+import { trackTool, trackError } from "@/lib/analytics";
 
 
 type Screen = "upload" | "analyzing" | "results" | "history";
