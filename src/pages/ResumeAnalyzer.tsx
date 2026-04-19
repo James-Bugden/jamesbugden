@@ -217,7 +217,9 @@ export default function ResumeAnalyzer({ defaultLang = "en" }: { defaultLang?: L
   // New flow: Upload → Analyzing → Results (no email gate)
   const handleSubmitResume = useCallback(async () => {
     setError("");
+    const analyzeStarted = performance.now();
     if (limitReached) {
+      trackTool("resume_analyzer", "limit_blocked", { used, limit }, { lang, success: false });
       setShowLimitModal(true);
       return;
     }
@@ -311,6 +313,21 @@ export default function ResumeAnalyzer({ defaultLang = "en" }: { defaultLang?: L
             ),
           });
         }
+
+        // Tool completion event — structured outcome for funnel analysis
+        trackTool(
+          "resume_analyzer",
+          "analysis_run",
+          {
+            overall_score: result.overall_score ?? null,
+            input_method: file ? `upload_${file.name.split(".").pop()?.toLowerCase()}` : "paste",
+            seniority_level: result.segmentation?.seniority_level ?? null,
+            industry: result.segmentation?.industry ?? null,
+            text_length: text.length,
+            is_logged_in: isLoggedIn,
+          },
+          { lang, durationMs: Math.round(performance.now() - analyzeStarted), success: true },
+        );
 
         setTimeout(() => {
           setScreen("results");
