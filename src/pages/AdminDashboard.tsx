@@ -23,7 +23,7 @@ import { getSafeErrorMessage } from "@/lib/utils";
 import {
   Loader2, Plus, Copy, Trash2, LogOut, Check, ArrowUpDown, Search, Download,
   FileText, DollarSign, Users, Mail, UserCheck, MessageSquare, Activity,
-  Share2, MousePointerClick,
+  Share2, MousePointerClick, BookOpen,
 } from "lucide-react";
 import { format, subDays, startOfDay } from "date-fns";
 import { AreaChart, Area, BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer } from "recharts";
@@ -676,6 +676,9 @@ export default function AdminDashboard() {
         <div className="max-w-7xl mx-auto px-4 h-14 flex items-center justify-between">
           <h1 className="font-heading font-bold text-foreground text-lg">Admin Dashboard</h1>
           <div className="flex items-center gap-2">
+            <Button variant="outline" size="sm" onClick={() => navigate("/admin/api-docs")}>
+              <BookOpen className="w-4 h-4 mr-2" /> API Docs
+            </Button>
             <Button variant="outline" size="sm" onClick={() => navigate("/analytics")}>
               <Activity className="w-4 h-4 mr-2" /> Threads Analytics
             </Button>
