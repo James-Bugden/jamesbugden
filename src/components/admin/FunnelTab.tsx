@@ -1,6 +1,8 @@
 import { useEffect, useState } from "react";
+import { useSearchParams } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { Card, CardContent } from "@/components/ui/card";
+import { cn } from "@/lib/utils";
 import {
   Sheet,
   SheetContent,
@@ -38,14 +40,6 @@ interface ErrorRow {
   user_id: string | null;
 }
 
-type RangeKey = "24h" | "7d" | "30d";
-
-const RANGES: { key: RangeKey; label: string; hours: number; sparkDays: number }[] = [
-  { key: "24h", label: "24h", hours: 24, sparkDays: 7 },
-  { key: "7d", label: "7d", hours: 24 * 7, sparkDays: 7 },
-  { key: "30d", label: "30d", hours: 24 * 30, sparkDays: 30 },
-];
-
 interface FunnelData {
   sessionsCount: number;
   signupsCount: number;
@@ -57,8 +51,32 @@ interface FunnelData {
   loading: boolean;
 }
 
+type RangeKey = "24h" | "7d" | "30d";
+
+const RANGES: Record<RangeKey, { label: string; hours: number; sparkDays: number }> = {
+  "24h": { label: "24h", hours: 24, sparkDays: 1 },
+  "7d": { label: "7d", hours: 24 * 7, sparkDays: 7 },
+  "30d": { label: "30d", hours: 24 * 30, sparkDays: 30 },
+};
+
+const isRangeKey = (v: string | null): v is RangeKey =>
+  v === "24h" || v === "7d" || v === "30d";
+
 export default function FunnelTab() {
-  const [range, setRange] = useState<RangeKey>("24h");
+  const [searchParams, setSearchParams] = useSearchParams();
+  const initialRange: RangeKey = isRangeKey(searchParams.get("range"))
+    ? (searchParams.get("range") as RangeKey)
+    : "24h";
+  const [range, setRangeState] = useState<RangeKey>(initialRange);
+
+  const setRange = (next: RangeKey) => {
+    setRangeState(next);
+    const sp = new URLSearchParams(searchParams);
+    if (next === "24h") sp.delete("range");
+    else sp.set("range", next);
+    setSearchParams(sp, { replace: true });
+  };
+
   const [data, setData] = useState<FunnelData>({
     sessionsCount: 0,
     signupsCount: 0,
@@ -74,9 +92,10 @@ export default function FunnelTab() {
   const [drawerLoading, setDrawerLoading] = useState(false);
 
   useEffect(() => {
-    const cfg = RANGES.find((r) => r.key === range)!;
+    let cancelled = false;
     const load = async () => {
       setData((d) => ({ ...d, loading: true }));
+      const cfg = RANGES[range];
       const sinceISO = new Date(Date.now() - cfg.hours * 60 * 60 * 1000).toISOString();
       const sparkStart = new Date();
       sparkStart.setHours(0, 0, 0, 0);
@@ -96,18 +115,20 @@ export default function FunnelTab() {
           .from("tool_completions")
           .select("tool")
           .gte("created_at", sinceISO)
-          .limit(10000),
+          .limit(5000),
         supabase
           .from("error_log")
           .select("source")
           .gte("created_at", sinceISO)
-          .limit(10000),
+          .limit(5000),
         supabase
           .from("sessions")
           .select("started_at")
           .gte("started_at", sparkStartISO)
           .limit(20000),
       ]);
+
+      if (cancelled) return;
 
       const sessionsCount = sessionsRes.count ?? 0;
       const signupsCount = signupsRes.count ?? 0;
@@ -133,6 +154,7 @@ export default function FunnelTab() {
         .map(([source, count]) => ({ source, count }))
         .sort((a, b) => b.count - a.count)
         .slice(0, 5);
+      const errorsCount = (errorsRes.data ?? []).length;
 
       const buckets: Record<string, number> = {};
       for (let i = cfg.sparkDays - 1; i >= 0; i--) {
@@ -155,13 +177,16 @@ export default function FunnelTab() {
         signupsCount,
         conversionPct,
         topTools,
-        errorsCount: (errorsRes.data ?? []).length,
+        errorsCount,
         errorsBySource,
         sessionsSpark,
         loading: false,
       });
     };
     load();
+    return () => {
+      cancelled = true;
+    };
   }, [range]);
 
   const openErrorDrawer = async (source: string) => {
@@ -181,36 +206,41 @@ export default function FunnelTab() {
     setDrawerLoading(false);
   };
 
-  const rangeLabel = RANGES.find((r) => r.key === range)!.label;
+  const rangeLabel = RANGES[range].label;
+
+  const RangeSelector = (
+    <div
+      role="tablist"
+      aria-label="Time range"
+      className="inline-flex items-center rounded-md border border-border bg-card p-0.5"
+    >
+      {(Object.keys(RANGES) as RangeKey[]).map((k) => (
+        <button
+          key={k}
+          type="button"
+          role="tab"
+          aria-selected={range === k}
+          onClick={() => setRange(k)}
+          className={cn(
+            "px-3 py-1 text-xs font-medium rounded-sm transition-colors",
+            range === k
+              ? "bg-primary text-primary-foreground"
+              : "text-muted-foreground hover:text-foreground"
+          )}
+        >
+          {RANGES[k].label}
+        </button>
+      ))}
+    </div>
+  );
 
   return (
     <div className="space-y-6">
-      <div className="flex items-center justify-between gap-3">
-        <p className="text-sm text-muted-foreground">
-          Showing data for the last <span className="font-medium text-foreground">{rangeLabel}</span>
-        </p>
-        <div className="inline-flex rounded-lg border border-border bg-card p-0.5" role="tablist" aria-label="Time range">
-          {RANGES.map((r) => {
-            const active = r.key === range;
-            return (
-              <button
-                key={r.key}
-                type="button"
-                role="tab"
-                aria-selected={active}
-                onClick={() => setRange(r.key)}
-                className={
-                  "px-3 py-1.5 text-xs font-medium rounded-md transition-colors " +
-                  (active
-                    ? "bg-primary text-primary-foreground"
-                    : "text-muted-foreground hover:text-foreground")
-                }
-              >
-                {r.label}
-              </button>
-            );
-          })}
-        </div>
+      <div className="flex items-center justify-between">
+        <h2 className="text-sm font-semibold text-muted-foreground uppercase tracking-wide">
+          Funnel
+        </h2>
+        {RangeSelector}
       </div>
 
       {data.loading ? (
@@ -269,7 +299,7 @@ export default function FunnelTab() {
           <CardContent className="p-4">
             <div className="flex items-center gap-2 mb-3">
               <AlertTriangle className="w-4 h-4 text-muted-foreground" />
-              <h3 className="text-sm font-semibold text-foreground">Errors by source (24h)</h3>
+              <h3 className="text-sm font-semibold text-foreground">Errors by source ({rangeLabel})</h3>
             </div>
             {data.errorsBySource.length === 0 ? (
               <p className="text-sm text-muted-foreground">No errors logged 🎉</p>
