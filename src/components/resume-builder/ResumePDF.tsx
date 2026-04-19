@@ -121,10 +121,21 @@ async function fetchWithTimeout(url: string, options: RequestInit = {}, timeoutM
 const CJK_URL_PATTERN = (pkg: string, subset: string, weight: number) =>
   `https://cdn.jsdelivr.net/fontsource/fonts/${pkg}@latest/${subset}-${weight}-normal.woff`;
 
+// Self-hosted Noto Sans TC subsets. ~1.1 MB WOFF2 each, containing the
+// Taiwan MOE 4,808 common char set + ASCII + CJK punctuation.
+// Built by `scripts/build-cjk-subset.mjs` — committed to public/fonts/.
+// Parses meaningfully faster than the 1.4 MB fontsource full subset AND
+// downloads from the same origin (no CORS, no jsDelivr dependency).
+// Serves ~99.5% of real-world TC content; rare chars outside MOE 4808
+// render as tofu in preview but are covered in the Download path because
+// the full pan-CJK font is still wired as a fallback.
+const TC_SUBSET_URL_400 = "/fonts/noto-sans-tc-subset-400.woff2";
+const TC_SUBSET_URL_700 = "/fonts/noto-sans-tc-subset-700.woff2";
+
 const CJK_FONT_SOURCES: Record<CJKFamily, { url400: string; url700: string }> = {
   [CJK_FONT_FAMILY_TC]: {
-    url400: CJK_URL_PATTERN("noto-sans-tc", "chinese-traditional", 400),
-    url700: CJK_URL_PATTERN("noto-sans-tc", "chinese-traditional", 700),
+    url400: TC_SUBSET_URL_400,
+    url700: TC_SUBSET_URL_700,
   },
   [CJK_FONT_FAMILY_SC]: {
     url400: CJK_URL_PATTERN("noto-sans-sc", "chinese-simplified", 400),
