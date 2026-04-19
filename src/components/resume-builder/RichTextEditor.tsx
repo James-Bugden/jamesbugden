@@ -20,7 +20,11 @@ export function RichTextEditor({ value, onChange, placeholder }: RichTextEditorP
 
   const editor = useEditor({
     extensions: [
-      StarterKit.configure({ heading: false }),
+      // StarterKit in @tiptap/starter-kit v3 ships its own Link + Underline.
+      // Exclude them here so we can re-register our configured versions
+      // below without triggering the "Duplicate extension names found"
+      // console warning that previously fired 10+ times on each mount.
+      StarterKit.configure({ heading: false, link: false, underline: false }),
       Underline,
       Link.configure({ openOnClick: false }),
     ],
