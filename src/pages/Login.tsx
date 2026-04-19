@@ -47,14 +47,15 @@ export default function Login() {
 
   useEffect(() => {
     if (isLoggedIn) {
-      const defaultDash = isZhTw ? "/zh-tw/dashboard" : "/dashboard";
-      const homePaths = ["/", "/zh-tw", "/zh-tw/"];
-      let redirectTo = location.state?.from || sessionStorage.getItem("auth_redirect") || defaultDash;
-      if (homePaths.includes(redirectTo)) redirectTo = defaultDash;
+      // Always land on the dashboard after sign-in, regardless of where the
+      // user came from. (Users explicitly asked for this — previously we
+      // respected `location.state.from` / `auth_redirect`, which sometimes
+      // sent them back to the homepage or the page they bounced off.)
       sessionStorage.removeItem("auth_redirect");
-      navigate(redirectTo, { replace: true });
+      const dashboard = isZhTw ? "/zh-tw/dashboard" : "/dashboard";
+      navigate(dashboard, { replace: true });
     }
-  }, [isLoggedIn, navigate, location.state, isZhTw]);
+  }, [isLoggedIn, navigate, isZhTw]);
 
   useEffect(() => {
     return () => { if (lockoutTimerRef.current) clearInterval(lockoutTimerRef.current); };
