@@ -30,6 +30,7 @@ import { AreaChart, Area, BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContai
 import bcrypt from "bcryptjs";
 import { SEO } from "@/components/SEO";
 import InsightsTab from "@/components/admin/InsightsTab";
+import FunnelTab from "@/components/admin/FunnelTab";
 
 // ── Types ───────────────────────────────────────────────────────────────────────
 
@@ -728,10 +729,16 @@ export default function AdminDashboard() {
         <Tabs value={activeTab} onValueChange={setActiveTab}>
           <TabsList className="w-full justify-start gap-0.5">
             <TabsTrigger value="overview">Overview</TabsTrigger>
+            <TabsTrigger value="funnel">Funnel</TabsTrigger>
             <TabsTrigger value="people">People</TabsTrigger>
             <TabsTrigger value="data">Data</TabsTrigger>
             <TabsTrigger value="insights">Insights</TabsTrigger>
           </TabsList>
+
+          {/* ── Funnel Tab ── */}
+          <TabsContent value="funnel">
+            <FunnelTab />
+          </TabsContent>
 
           {/* ── Overview Tab ── */}
           <TabsContent value="overview">
