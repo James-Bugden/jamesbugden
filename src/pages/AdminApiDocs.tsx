@@ -115,7 +115,7 @@ function CodeBlock({ code }: { code: string }) {
 export default function AdminApiDocs() {
   return (
     <div className="min-h-screen bg-background">
-      <SEO title="Analytics API Docs | Admin" description="Reference for the analytics-export edge function." noindex />
+      <SEO title="Analytics API Docs | Admin" description="Reference for the analytics-export edge function." noIndex />
 
       <div className="max-w-4xl mx-auto px-4 sm:px-6 py-10 space-y-8">
         <header className="space-y-2">
