@@ -34,6 +34,14 @@ export default defineConfig(({ mode }) => ({
       "@": path.resolve(__dirname, "./src"),
     },
   },
+  // Worker bundling: the PDF render worker (src/workers/pdfRenderer.worker.ts)
+  // uses dynamic import() to dodge module-init side effects from react-pdf
+  // before we shim `window`/`document`. Rollup defaults to IIFE for worker
+  // output, which is incompatible with code-splitting (dynamic imports).
+  // Use ES modules so the worker can code-split freely.
+  worker: {
+    format: "es",
+  },
   build: {
     rollupOptions: {
       output: {
