@@ -15,6 +15,7 @@ import { ZoomIn, ZoomOut, RotateCcw } from "lucide-react";
 import { ResumePDF, prepareFonts } from "./ResumePDF";
 import { resumeHasCJK } from "@/lib/resumePdf/fontMap";
 import { renderPdfInWorker } from "./pdfWorkerClient";
+import { renderPagesServer, serverPreviewEnabled } from "@/lib/resumePdf/serverPreview";
 import type { ResumeData } from "./types";
 import type { CustomizeSettings } from "./customizeTypes";
 import { useT } from "./i18n";
@@ -256,12 +257,30 @@ export const ResumePdfPreview = React.memo(function ResumePdfPreview({
               if (cancelled) return;
             }
 
-            // Rasterize PDF pages to <img> sources. Same code path for EN
-            // and CJK so the preview has identical look + feel (no PDF
-            // viewer chrome) and customization changes visibly refresh on
-            // every debounce tick.
-            const images = await renderPdfPagesToImages(blob);
-            if (cancelled) return;
+            // Rasterize PDF pages to <img> sources. Two paths:
+            //   1. Server-side via Supabase Edge Function (pdfjs-in-Deno) —
+            //      matches FlowCV's UX, no main-thread CJK hang. Gated on
+            //      ?serverPreview=1 or VITE_PREVIEW_ENDPOINT_ENABLED=1.
+            //   2. Client-side pdfjs — the current default, works for EN
+            //      resumes but can hang on CJK on slow devices.
+            // If the server path fails (network, rate limit, auth) the
+            // client path runs as a fallback so the preview never breaks.
+            let images: string[] | null = null;
+            if (serverPreviewEnabled()) {
+              const serverResult = await renderPagesServer(blob, {
+                pageFormat: debouncedCustomize?.pageFormat === "letter" ? "letter" : "a4",
+              });
+              if (cancelled) return;
+              if (serverResult.ok) {
+                images = serverResult.pngs;
+              } else if (import.meta.env.DEV) {
+                console.warn("[ResumePdfPreview] server preview failed, falling back to client:", serverResult.error);
+              }
+            }
+            if (!images) {
+              images = await renderPdfPagesToImages(blob);
+              if (cancelled) return;
+            }
             setPageImages(images);
             setErrorMsg(null);
             onPageCountRef.current?.(images.length);

@@ -19,3 +19,8 @@ project_id = "rpeaehxawjvbhdneglce"
     verify_jwt = true
   [functions.threads-sync]
     verify_jwt = false
+  [functions.render-resume-preview]
+    # Verify JWT inside the function (for admin bypass) rather than gateway-
+    # level — lets unauthenticated calls return a clean 401 JSON instead of
+    # the gateway's generic error page.
+    verify_jwt = false
