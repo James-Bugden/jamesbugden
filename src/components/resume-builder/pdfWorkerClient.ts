@@ -31,6 +31,22 @@ type RenderResult =
 let currentRender: { id: string; terminate: () => void } | null = null;
 let idCounter = 0;
 
+// Diagnostic ring buffer accessible from DevTools as window.__pdfWorkerLog.
+// Helps debug "why does the direct call succeed but the component call hang"
+// by giving a timestamped trace of every state transition. Remove once CJK
+// preview is stable.
+type LogEntry = { t: number; ev: string; id?: string; detail?: unknown };
+const boot = performance.now();
+const log: LogEntry[] = [];
+function trace(ev: string, id?: string, detail?: unknown) {
+  const entry: LogEntry = { t: Math.round(performance.now() - boot), ev, id, detail };
+  log.push(entry);
+  if (log.length > 200) log.shift();
+  if (typeof window !== "undefined") {
+    (window as unknown as { __pdfWorkerLog?: LogEntry[] }).__pdfWorkerLog = log;
+  }
+}
+
 /**
  * Render the resume to a PDF blob in a fresh Web Worker.
  *
@@ -43,12 +59,21 @@ export function renderPdfInWorker(
   customize: CustomizeSettings,
 ): { promise: Promise<RenderResult>; cancel: () => void } {
   const id = String(++idCounter);
+  trace("call", id);
 
-  // Kill any in-flight render. Its promise below will resolve as cancelled.
-  if (currentRender) {
-    currentRender.terminate();
-    currentRender = null;
-  }
+  // IMPORTANT: do NOT terminate in-flight workers.
+  //
+  // We tried terminating on new calls (commit cdf60b4) — that froze the
+  // preview because React's effect cleanup + re-run pattern caused every
+  // render to kill its own predecessor before it could complete. With
+  // debouncedData oscillating during the first ~second of mount the
+  // worker never got to finish a single render inside the 90s timeout.
+  //
+  // Instead, let ALL in-flight workers keep running. When the newest one
+  // resolves, its result is used; older results are dropped by the
+  // caller (which tracks the latest id via the return value). Cost:
+  // occasional parallel worker work for 5-10s until the old ones finish.
+  // Acceptable — only CJK users hit this path.
 
   const worker = new PdfRendererWorker();
   let settled = false;
@@ -57,7 +82,7 @@ export function renderPdfInWorker(
     const finish = (r: RenderResult) => {
       if (settled) return;
       settled = true;
-      // Tear down regardless of outcome — we don't reuse workers.
+      trace("finish", id, { ok: (r as { ok?: boolean }).ok, cancelled: "cancelled" in r });
       try { worker.terminate(); } catch { /* noop */ }
       if (currentRender?.id === id) currentRender = null;
       resolve(r);
@@ -65,33 +90,35 @@ export function renderPdfInWorker(
 
     worker.addEventListener("message", (evt: MessageEvent<any>) => {
       const msg = evt.data ?? {};
-      // Ignore responses for other ids (shouldn't happen since each worker
-      // handles exactly one request, but be defensive).
+      trace("worker:message", id, { msgId: msg?.id, ok: msg?.ok, size: msg?.blob?.size, errPrefix: msg?.error?.slice?.(0, 60) });
       if (msg.id !== id) return;
       if (msg.ok) finish({ ok: true, blob: msg.blob });
       else finish({ ok: false, error: msg.error ?? "Unknown worker error" });
     });
 
     worker.addEventListener("error", (evt) => {
+      trace("worker:error", id, { msg: evt.message?.slice?.(0, 80) });
       finish({ ok: false, error: evt.message || "Worker crashed" });
     });
 
-    // "messageerror" fires when postMessage data fails to deserialize.
     worker.addEventListener("messageerror", () => {
+      trace("worker:messageerror", id);
       finish({ ok: false, error: "Worker message deserialization failed" });
     });
 
     currentRender = {
       id,
-      terminate: () => finish({ ok: false, cancelled: true } as RenderResult),
+      terminate: () => { trace("terminate-requested", id); finish({ ok: false, cancelled: true } as RenderResult); },
     };
 
+    trace("postMessage", id);
     worker.postMessage({ id, data, customize });
   });
 
   return {
     promise,
     cancel: () => {
+      trace("cancel-requested", id);
       if (currentRender?.id === id) {
         currentRender.terminate();
         currentRender = null;
