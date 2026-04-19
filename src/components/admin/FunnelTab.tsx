@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { useSearchParams } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { Card, CardContent } from "@/components/ui/card";
 import {
@@ -58,7 +59,28 @@ interface FunnelData {
 }
 
 export default function FunnelTab() {
-  const [range, setRange] = useState<RangeKey>("24h");
+  const [searchParams, setSearchParams] = useSearchParams();
+  const urlRange = searchParams.get("range");
+  const initialRange: RangeKey =
+    urlRange === "7d" || urlRange === "30d" || urlRange === "24h" ? urlRange : "24h";
+  const [range, setRangeState] = useState<RangeKey>(initialRange);
+
+  const setRange = (next: RangeKey) => {
+    setRangeState(next);
+    const sp = new URLSearchParams(searchParams);
+    if (next === "24h") sp.delete("range");
+    else sp.set("range", next);
+    setSearchParams(sp, { replace: true });
+  };
+
+  // Sync range state if URL changes externally (back/forward, shared link)
+  useEffect(() => {
+    const v = searchParams.get("range");
+    const next: RangeKey = v === "7d" || v === "30d" || v === "24h" ? v : "24h";
+    if (next !== range) setRangeState(next);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [searchParams]);
+
   const [data, setData] = useState<FunnelData>({
     sessionsCount: 0,
     signupsCount: 0,
@@ -251,7 +273,7 @@ export default function FunnelTab() {
           <CardContent className="p-4">
             <div className="flex items-center gap-2 mb-3">
               <Wrench className="w-4 h-4 text-muted-foreground" />
-              <h3 className="text-sm font-semibold text-foreground">Top tools (24h)</h3>
+              <h3 className="text-sm font-semibold text-foreground">Top tools ({rangeLabel})</h3>
             </div>
             {data.topTools.length === 0 ? (
               <p className="text-sm text-muted-foreground">No tool completions yet</p>
@@ -269,7 +291,7 @@ export default function FunnelTab() {
           <CardContent className="p-4">
             <div className="flex items-center gap-2 mb-3">
               <AlertTriangle className="w-4 h-4 text-muted-foreground" />
-              <h3 className="text-sm font-semibold text-foreground">Errors by source (24h)</h3>
+              <h3 className="text-sm font-semibold text-foreground">Errors by source ({rangeLabel})</h3>
             </div>
             {data.errorsBySource.length === 0 ? (
               <p className="text-sm text-muted-foreground">No errors logged 🎉</p>
