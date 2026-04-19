@@ -213,16 +213,30 @@ export async function prepareFonts(c?: CustomizeSettings, data?: ResumeData): Pr
     tasks.push(registerCJKFont());
   }
 
-  const results = await Promise.all(tasks);
+  // allSettled — one failed font (e.g. fontkit parser crash on a font, or a
+  // transient CDN blip) must not reject the whole prepareFonts call and
+  // poison the preview. Unregistered fonts are handled downstream by the
+  // REGISTERED_FONTS.has(...) guards around every fontFamily assignment.
+  const settled = await Promise.allSettled(tasks);
 
   // Log which fonts were resolved for debugging
   const familyArr = Array.from(families);
   for (let i = 0; i < familyArr.length; i++) {
     const requested = extractFontName(familyArr[i]);
-    const resolved = results[i];
+    const outcome = settled[i];
+    if (outcome.status === "rejected") {
+      if (import.meta.env.DEV) console.warn(`[ResumePDF] Font "${requested}" registration rejected:`, outcome.reason);
+      continue;
+    }
+    const resolved = outcome.value;
     if (typeof resolved === "string" && resolved !== requested) {
       if (import.meta.env.DEV) console.warn(`[ResumePDF] Font "${requested}" not available, using "${resolved}"`);
     }
+  }
+  // Log CJK outcome too, if it was attempted
+  const cjkOutcome = settled[familyArr.length];
+  if (cjkOutcome && cjkOutcome.status === "rejected" && import.meta.env.DEV) {
+    console.warn("[ResumePDF] CJK font registration rejected:", cjkOutcome.reason);
   }
 }
 
@@ -780,12 +794,17 @@ function PdfSectionHeading({
     ? ensureFontRegistered(c.headingFont)
     : fontFamily;
 
+  // Only use CJK font if it actually registered; otherwise fall back to the
+  // chosen heading font (glyphs will render as tofu squares, which is much
+  // better than crashing the preview). Matches the guard at line ~1984 for
+  // body text.
+  const canUseCjk = isCJK && REGISTERED_FONTS.has(CJK_FONT_FAMILY);
   const textStyle = {
     fontSize,
     color: style === "background" ? "#ffffff" : colors.headings,
-    fontFamily: isCJK ? CJK_FONT_FAMILY : headingFontFamily,
+    fontFamily: canUseCjk ? CJK_FONT_FAMILY : headingFontFamily,
     fontWeight: 700 as const,
-    letterSpacing: isCJK ? fontSize * 0.02 : fontSize * 0.08,
+    letterSpacing: canUseCjk ? fontSize * 0.02 : fontSize * 0.08,
   };
 
   if (style === "plain") {
@@ -2102,6 +2121,9 @@ export function ResumePDF({ data, customize }: ResumePDFProps) {
             const displayName = nameIsCJK
               ? (p.fullName || "YOUR NAME")
               : (p.fullName || "YOUR NAME").toUpperCase();
+            // Only use CJK font if it actually registered (same guard pattern
+            // as body + headings). Otherwise fall back to the chosen name font.
+            const nameCanUseCjk = nameIsCJK && REGISTERED_FONTS.has(CJK_FONT_FAMILY);
             const nameEl = (
               <Text
                 style={{
@@ -2109,8 +2131,8 @@ export function ResumePDF({ data, customize }: ResumePDFProps) {
                   lineHeight: 1.3,
                   color: colors.name,
                   fontWeight: c?.nameBold !== false ? 700 : 400,
-                  fontFamily: nameIsCJK ? CJK_FONT_FAMILY : nameFontFamily,
-                  letterSpacing: nameIsCJK ? nameFontSize * 0.02 : nameFontSize * 0.1,
+                  fontFamily: nameCanUseCjk ? CJK_FONT_FAMILY : nameFontFamily,
+                  letterSpacing: nameCanUseCjk ? nameFontSize * 0.02 : nameFontSize * 0.1,
                   textAlign,
                 }}
               >
