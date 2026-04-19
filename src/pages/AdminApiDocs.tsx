@@ -244,6 +244,9 @@ export default function AdminApiDocs() {
           <CodeBlock code={FUNCTION_URL} />
         </Card>
 
+        {/* Test request */}
+        <TestRequestPanel />
+
         {/* Auth */}
         <Card className="p-5 space-y-3">
           <h2 className="font-heading text-lg text-foreground">Authentication</h2>
