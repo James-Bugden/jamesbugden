@@ -17,6 +17,7 @@ import {
   AccordionTrigger,
 } from "@/components/ui/accordion";
 import { SEO } from "@/components/SEO";
+import { trackEvent } from "@/lib/trackEvent";
 
 const UNLOCK_BADGES = [
   { icon: ScanSearch, label: "AI Resume Analyzer" },
