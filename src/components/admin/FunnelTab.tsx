@@ -38,34 +38,35 @@ interface ErrorRow {
   user_id: string | null;
 }
 
+type RangeKey = "24h" | "7d" | "30d";
+
+const RANGES: { key: RangeKey; label: string; hours: number; sparkDays: number }[] = [
+  { key: "24h", label: "24h", hours: 24, sparkDays: 7 },
+  { key: "7d", label: "7d", hours: 24 * 7, sparkDays: 7 },
+  { key: "30d", label: "30d", hours: 24 * 30, sparkDays: 30 },
+];
+
 interface FunnelData {
-  sessionsToday: number;
-  signupsToday: number;
+  sessionsCount: number;
+  signupsCount: number;
   conversionPct: number;
   topTools: ToolStat[];
-  errors24h: number;
+  errorsCount: number;
   errorsBySource: ErrorStat[];
-  sessions7d: DayPoint[];
+  sessionsSpark: DayPoint[];
   loading: boolean;
 }
 
-const startOfTodayISO = () => {
-  const d = new Date();
-  d.setHours(0, 0, 0, 0);
-  return d.toISOString();
-};
-
-const dayAgoISO = () => new Date(Date.now() - 24 * 60 * 60 * 1000).toISOString();
-
 export default function FunnelTab() {
+  const [range, setRange] = useState<RangeKey>("24h");
   const [data, setData] = useState<FunnelData>({
-    sessionsToday: 0,
-    signupsToday: 0,
+    sessionsCount: 0,
+    signupsCount: 0,
     conversionPct: 0,
     topTools: [],
-    errors24h: 0,
+    errorsCount: 0,
     errorsBySource: [],
-    sessions7d: [],
+    sessionsSpark: [],
     loading: true,
   });
   const [openSource, setOpenSource] = useState<string | null>(null);
@@ -73,43 +74,45 @@ export default function FunnelTab() {
   const [drawerLoading, setDrawerLoading] = useState(false);
 
   useEffect(() => {
+    const cfg = RANGES.find((r) => r.key === range)!;
     const load = async () => {
-      const todayStart = startOfTodayISO();
-      const dayAgo = dayAgoISO();
-      const sevenDaysAgo = new Date(Date.now() - 7 * 24 * 60 * 60 * 1000);
-      sevenDaysAgo.setHours(0, 0, 0, 0);
-      const sevenDaysAgoISO = sevenDaysAgo.toISOString();
+      setData((d) => ({ ...d, loading: true }));
+      const sinceISO = new Date(Date.now() - cfg.hours * 60 * 60 * 1000).toISOString();
+      const sparkStart = new Date();
+      sparkStart.setHours(0, 0, 0, 0);
+      sparkStart.setDate(sparkStart.getDate() - (cfg.sparkDays - 1));
+      const sparkStartISO = sparkStart.toISOString();
 
-      const [sessionsRes, signupsRes, toolsRes, errorsRes, sessions7dRes] = await Promise.all([
+      const [sessionsRes, signupsRes, toolsRes, errorsRes, sparkRes] = await Promise.all([
         supabase
           .from("sessions")
           .select("id", { count: "exact", head: true })
-          .gte("started_at", todayStart),
+          .gte("started_at", sinceISO),
         supabase
           .from("profiles")
           .select("id", { count: "exact", head: true })
-          .gte("created_at", todayStart),
+          .gte("created_at", sinceISO),
         supabase
           .from("tool_completions")
           .select("tool")
-          .gte("created_at", dayAgo)
-          .limit(5000),
+          .gte("created_at", sinceISO)
+          .limit(10000),
         supabase
           .from("error_log")
           .select("source")
-          .gte("created_at", dayAgo)
-          .limit(5000),
+          .gte("created_at", sinceISO)
+          .limit(10000),
         supabase
           .from("sessions")
           .select("started_at")
-          .gte("started_at", sevenDaysAgoISO)
-          .limit(10000),
+          .gte("started_at", sparkStartISO)
+          .limit(20000),
       ]);
 
-      const sessionsToday = sessionsRes.count ?? 0;
-      const signupsToday = signupsRes.count ?? 0;
+      const sessionsCount = sessionsRes.count ?? 0;
+      const signupsCount = signupsRes.count ?? 0;
       const conversionPct =
-        sessionsToday > 0 ? Math.round((signupsToday / sessionsToday) * 1000) / 10 : 0;
+        sessionsCount > 0 ? Math.round((signupsCount / sessionsCount) * 1000) / 10 : 0;
 
       const toolCounts: Record<string, number> = {};
       (toolsRes.data ?? []).forEach((row: any) => {
@@ -130,37 +133,36 @@ export default function FunnelTab() {
         .map(([source, count]) => ({ source, count }))
         .sort((a, b) => b.count - a.count)
         .slice(0, 5);
-      const errors24h = (errorsRes.data ?? []).length;
 
       const buckets: Record<string, number> = {};
-      for (let i = 6; i >= 0; i--) {
+      for (let i = cfg.sparkDays - 1; i >= 0; i--) {
         const d = new Date();
         d.setHours(0, 0, 0, 0);
         d.setDate(d.getDate() - i);
         buckets[d.toISOString().slice(0, 10)] = 0;
       }
-      (sessions7dRes.data ?? []).forEach((row: any) => {
+      (sparkRes.data ?? []).forEach((row: any) => {
         const key = new Date(row.started_at).toISOString().slice(0, 10);
         if (key in buckets) buckets[key] += 1;
       });
-      const sessions7d: DayPoint[] = Object.entries(buckets).map(([day, count]) => ({
+      const sessionsSpark: DayPoint[] = Object.entries(buckets).map(([day, count]) => ({
         day,
         count,
       }));
 
       setData({
-        sessionsToday,
-        signupsToday,
+        sessionsCount,
+        signupsCount,
         conversionPct,
         topTools,
-        errors24h,
+        errorsCount: (errorsRes.data ?? []).length,
         errorsBySource,
-        sessions7d,
+        sessionsSpark,
         loading: false,
       });
     };
     load();
-  }, []);
+  }, [range]);
 
   const openErrorDrawer = async (source: string) => {
     setOpenSource(source);
@@ -179,40 +181,68 @@ export default function FunnelTab() {
     setDrawerLoading(false);
   };
 
-  if (data.loading) {
-    return (
-      <div className="flex items-center justify-center py-12">
-        <Loader2 className="w-5 h-5 animate-spin text-muted-foreground" />
-      </div>
-    );
-  }
+  const rangeLabel = RANGES.find((r) => r.key === range)!.label;
 
   return (
     <div className="space-y-6">
+      <div className="flex items-center justify-between gap-3">
+        <p className="text-sm text-muted-foreground">
+          Showing data for the last <span className="font-medium text-foreground">{rangeLabel}</span>
+        </p>
+        <div className="inline-flex rounded-lg border border-border bg-card p-0.5" role="tablist" aria-label="Time range">
+          {RANGES.map((r) => {
+            const active = r.key === range;
+            return (
+              <button
+                key={r.key}
+                type="button"
+                role="tab"
+                aria-selected={active}
+                onClick={() => setRange(r.key)}
+                className={
+                  "px-3 py-1.5 text-xs font-medium rounded-md transition-colors " +
+                  (active
+                    ? "bg-primary text-primary-foreground"
+                    : "text-muted-foreground hover:text-foreground")
+                }
+              >
+                {r.label}
+              </button>
+            );
+          })}
+        </div>
+      </div>
+
+      {data.loading ? (
+        <div className="flex items-center justify-center py-12">
+          <Loader2 className="w-5 h-5 animate-spin text-muted-foreground" />
+        </div>
+      ) : (
+        <>
       <div className="grid grid-cols-2 md:grid-cols-5 gap-4">
         <KpiCard
           icon={<Activity className="w-4 h-4" />}
-          label="Sessions today"
-          value={data.sessionsToday.toLocaleString()}
+          label={`Sessions (${rangeLabel})`}
+          value={data.sessionsCount.toLocaleString()}
           className="md:col-span-2"
-          rightSlot={<Sparkline points={data.sessions7d} />}
+          rightSlot={<Sparkline points={data.sessionsSpark} />}
         />
         <KpiCard
           icon={<UserPlus className="w-4 h-4" />}
-          label="Signups today"
-          value={data.signupsToday.toLocaleString()}
+          label={`Signups (${rangeLabel})`}
+          value={data.signupsCount.toLocaleString()}
         />
         <KpiCard
           icon={<UserPlus className="w-4 h-4" />}
           label="Signup conversion"
           value={`${data.conversionPct}%`}
-          hint={`${data.signupsToday} / ${data.sessionsToday}`}
+          hint={`${data.signupsCount} / ${data.sessionsCount}`}
         />
         <KpiCard
           icon={<AlertTriangle className="w-4 h-4" />}
-          label="Errors (24h)"
-          value={data.errors24h.toLocaleString()}
-          tone={data.errors24h > 0 ? "warn" : "ok"}
+          label={`Errors (${rangeLabel})`}
+          value={data.errorsCount.toLocaleString()}
+          tone={data.errorsCount > 0 ? "warn" : "ok"}
         />
       </div>
 
@@ -269,6 +299,8 @@ export default function FunnelTab() {
           </CardContent>
         </Card>
       </div>
+        </>
+      )}
 
       <Sheet open={!!openSource} onOpenChange={(o) => !o && setOpenSource(null)}>
         <SheetContent className="w-full sm:max-w-2xl overflow-y-auto">
