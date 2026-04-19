@@ -293,44 +293,80 @@ function ensureFontRegistered(cssFamily: string): string {
 }
 
 /**
- * Pre-register all fonts needed for a given set of settings.
- * MUST be called and awaited before creating the PDF document.
+ * Event: fired when a CJK family finishes registering. Used by the preview
+ * component to trigger a re-render once the font is available. Without this,
+ * the first render uses Helvetica fallback (tofu for Chinese) and no
+ * re-render ever happens — the user is stuck with tofu even after the font
+ * loads.
  *
- * When `data` is provided, scans for CJK characters and registers
- * Noto Sans TC so Chinese/Japanese/Korean text renders correctly.
+ * Using a module-level Set of listeners instead of a BroadcastChannel so
+ * this is synchronous and cheap.
+ */
+const cjkReadyListeners = new Set<() => void>();
+export function onCJKFontReady(cb: () => void): () => void {
+  cjkReadyListeners.add(cb);
+  return () => cjkReadyListeners.delete(cb);
+}
+function emitCJKReady() {
+  cjkReadyListeners.forEach((cb) => {
+    try { cb(); } catch { /* noop */ }
+  });
+}
+
+/**
+ * Pre-register fonts needed for a given set of settings.
+ *
+ * IMPORTANT: this function AWAITS only the Latin font registrations (fast —
+ * 30 KB WOFFs). CJK font registration (1.4+ MB per weight) is dispatched
+ * WITHOUT await — it runs in the background and emits `onCJKFontReady()`
+ * when complete. The preview can render IMMEDIATELY with Latin glyphs
+ * (tofu for Chinese characters) and re-render once the CJK font arrives.
+ *
+ * Why: on slow CDN conditions, blocking the preview on a 1.4 MB CJK font
+ * download causes the whole preview pipeline to exceed the 45s timeout,
+ * leaving the user with a "預覽失敗" error and NO preview at all. Better
+ * UX: show tofu immediately + crisp text soon, never nothing.
+ *
+ * The render-site guards at lines 913, 2119, 2245 already fall back to
+ * Helvetica when `REGISTERED_FONTS.has(cjkFamily)` is false, so this
+ * change is safe — it just moves CJK registration from the critical
+ * path to the background.
  */
 export async function prepareFonts(c?: CustomizeSettings, data?: ResumeData): Promise<void> {
   const families = new Set<string>();
   if (c?.bodyFont) families.add(c.bodyFont);
   if (c?.headingFont) families.add(c.headingFont);
 
-  const tasks: Promise<unknown>[] = Array.from(families).map((f) => registerFontAsync(f));
+  // Latin fonts — await these. Tiny (30 KB per weight), fast to register.
+  const latinTasks = Array.from(families).map((f) => registerFontAsync(f));
 
-  // Register the CJK family (or families) the resume actually needs.
-  // resolveResumeCJKFamily() picks ONE primary family based on strongest
-  // script signal — we also register Noto Sans TC as a safety net when the
-  // primary is SC/JP so text that happens to be Traditional still renders.
+  // CJK fonts — fire-and-forget. Do NOT await. Emit a ready event when done
+  // so the preview can re-render with proper glyphs.
   if (data) {
     const primary = resolveResumeCJKFamily(data);
     if (primary) {
-      tasks.push(registerCJKFamily(primary));
-      // TC fallback: most Chinese resumes mix some Traditional glyphs even
-      // when the primary is SC. Register TC too so per-run detection
-      // (below) can pick it where appropriate. This is cheap — the HEAD
-      // check deduplicates concurrent fetches across families.
+      const cjkTasks: Promise<boolean>[] = [registerCJKFamily(primary)];
+      // TC fallback when primary is SC (some resumes mix).
       if (primary === CJK_FONT_FAMILY_SC) {
-        tasks.push(registerCJKFamily(CJK_FONT_FAMILY_TC));
+        cjkTasks.push(registerCJKFamily(CJK_FONT_FAMILY_TC));
       }
+      // Fire and forget. When all CJK registrations settle, emit the
+      // ready event so the preview re-renders.
+      Promise.allSettled(cjkTasks).then((results) => {
+        const anySucceeded = results.some((r) => r.status === "fulfilled" && r.value === true);
+        if (anySucceeded) emitCJKReady();
+        if (import.meta.env.DEV) {
+          results.forEach((r, i) => {
+            if (r.status === "rejected") console.warn(`[ResumePDF] CJK font ${i} registration rejected:`, r.reason);
+          });
+        }
+      });
     }
   }
 
-  // allSettled — one failed font (e.g. fontkit parser crash on a font, or a
-  // transient CDN blip) must not reject the whole prepareFonts call and
-  // poison the preview. Unregistered fonts are handled downstream by the
-  // REGISTERED_FONTS.has(...) guards around every fontFamily assignment.
-  const settled = await Promise.allSettled(tasks);
+  // Only await the Latin fonts so the critical path is fast.
+  const settled = await Promise.allSettled(latinTasks);
 
-  // Log which fonts were resolved for debugging
   const familyArr = Array.from(families);
   for (let i = 0; i < familyArr.length; i++) {
     const requested = extractFontName(familyArr[i]);
@@ -343,11 +379,6 @@ export async function prepareFonts(c?: CustomizeSettings, data?: ResumeData): Pr
     if (typeof resolved === "string" && resolved !== requested) {
       if (import.meta.env.DEV) console.warn(`[ResumePDF] Font "${requested}" not available, using "${resolved}"`);
     }
-  }
-  // Log CJK outcome too, if it was attempted
-  const cjkOutcome = settled[familyArr.length];
-  if (cjkOutcome && cjkOutcome.status === "rejected" && import.meta.env.DEV) {
-    console.warn("[ResumePDF] CJK font registration rejected:", cjkOutcome.reason);
   }
 }
 
