@@ -28,6 +28,18 @@ function detectDevice(): "mobile" | "tablet" | "desktop" {
   return "desktop";
 }
 
+function detectBrowser(): string {
+  const ua = navigator.userAgent;
+  if (/Edg\//.test(ua)) return "Edge";
+  if (/OPR\/|Opera/.test(ua)) return "Opera";
+  if (/Chrome\//.test(ua) && !/Chromium/.test(ua)) return "Chrome";
+  if (/Firefox\//.test(ua)) return "Firefox";
+  if (/Safari\//.test(ua) && !/Chrome/.test(ua)) return "Safari";
+  return "Other";
+}
+
+const RETURNING_KEY = "jb_has_visited";
+
 function readUtm(): Record<string, string | null> {
   const p = new URLSearchParams(window.location.search);
   return {
