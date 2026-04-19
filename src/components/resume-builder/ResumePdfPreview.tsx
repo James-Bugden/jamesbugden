@@ -111,6 +111,11 @@ export const ResumePdfPreview = React.memo(function ResumePdfPreview({
 
   // Page images from the last completed render
   const [pageImages, setPageImages] = useState<string[]>([]);
+  // Blob URL fallback — used only when pdfjs rasterization throws (observed
+  // on Chinese resumes where pdfjs chokes on embedded subset CJK fonts). The
+  // browser's native PDF viewer renders the blob reliably even when pdfjs
+  // cannot. Trade-off: shows the browser's PDF chrome. Better than crash.
+  const [pdfBlobUrl, setPdfBlobUrl] = useState<string | null>(null);
   // True while fonts are loading or PDF/pages are being generated
   const [loading, setLoading] = useState(true);
   const [errorMsg, setErrorMsg] = useState<string | null>(null);
@@ -120,9 +125,12 @@ export const ResumePdfPreview = React.memo(function ResumePdfPreview({
   const onPageCountRef = useRef(onPageCount);
   onPageCountRef.current = onPageCount;
 
-  // Debounce data and customize to avoid re-generating on every keystroke
-  const debouncedData = useDebounce(data, 600);
-  const debouncedCustomize = useDebounce(customize, 600);
+  // Debounce data and customize to avoid re-generating on every keystroke.
+  // Data (typing) uses 350ms — fast enough to feel live, slow enough not to
+  // thrash during long paste. Customize (slider release, color pick, dropdown)
+  // uses 200ms — discrete events, no reason to wait longer.
+  const debouncedData = useDebounce(data, 350);
+  const debouncedCustomize = useDebounce(customize, 200);
 
   // Derive base page width from immediate customize (not debounced) so the
   // display slot is correct for letter vs A4 even before the debounce fires
@@ -131,6 +139,14 @@ export const ResumePdfPreview = React.memo(function ResumePdfPreview({
   // Keep a ref so the ResizeObserver always reads the current page width
   const baseWidthRef = useRef(baseWidthPx);
   baseWidthRef.current = baseWidthPx;
+
+  // Revoke any outstanding iframe blob URL when the component unmounts.
+  useEffect(() => {
+    return () => {
+      if (pdfBlobUrl) URL.revokeObjectURL(pdfBlobUrl);
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   // Auto-scale to fit the container width
   useEffect(() => {
@@ -167,11 +183,29 @@ export const ResumePdfPreview = React.memo(function ResumePdfPreview({
         const blob = await pdf(element).toBlob();
         if (cancelled) return;
 
-        // 3. Pass blob directly to pdfjs (ArrayBuffer, not a URL — blob URLs
-        //    are main-thread only and are inaccessible from the pdfjs worker)
-        const images = await renderPdfPagesToImages(blob);
+        // 3. Pass blob directly to pdfjs. If it throws (observed on CJK
+        //    resumes with embedded subset fonts), fall back to rendering
+        //    the raw PDF in a native <iframe> — ugly chrome, but unbreakable.
+        let images: string[];
+        try {
+          images = await renderPdfPagesToImages(blob);
+        } catch (rasterErr) {
+          if (cancelled) return;
+          if (import.meta.env.DEV) console.warn("[ResumePdfPreview] pdfjs raster failed, falling back to iframe:", rasterErr);
+          const newUrl = URL.createObjectURL(blob);
+          setPdfBlobUrl((prev) => {
+            if (prev) URL.revokeObjectURL(prev);
+            return newUrl;
+          });
+          setPageImages([]);
+          setErrorMsg(null);
+          onPageCountRef.current?.(1);
+          return;
+        }
         if (cancelled) return;
         setPageImages(images);
+        // Clear any stale iframe fallback from a previous render.
+        setPdfBlobUrl((prev) => { if (prev) URL.revokeObjectURL(prev); return null; });
         setErrorMsg(null);
         onPageCountRef.current?.(images.length);
       } catch (err) {
@@ -201,7 +235,7 @@ export const ResumePdfPreview = React.memo(function ResumePdfPreview({
       style={{ backgroundColor: "#f3f4f6" }}
     >
       {/* Error state */}
-      {errorMsg && !loading && pageImages.length === 0 && (
+      {errorMsg && !loading && pageImages.length === 0 && !pdfBlobUrl && (
         <div className="absolute inset-0 flex flex-col items-center justify-center gap-3 z-10 p-6 text-center">
           <span className="text-sm font-medium text-red-600">Preview failed</span>
           <span className="text-xs text-gray-500 max-w-xs break-all">{errorMsg}</span>
@@ -209,7 +243,7 @@ export const ResumePdfPreview = React.memo(function ResumePdfPreview({
       )}
 
       {/* Loading overlay — shown on first load; pages remain visible during subsequent re-renders */}
-      {loading && pageImages.length === 0 && (
+      {loading && pageImages.length === 0 && !pdfBlobUrl && (
         <div className="absolute inset-0 flex flex-col items-center justify-center gap-3 z-10">
           <div className="w-6 h-6 border-2 border-gray-300 border-t-gray-600 rounded-full animate-spin" />
           <span className="text-sm text-gray-500">Generating preview…</span>
@@ -217,30 +251,44 @@ export const ResumePdfPreview = React.memo(function ResumePdfPreview({
       )}
 
       {/* Subtle refresh indicator while pages are present but re-rendering */}
-      {loading && pageImages.length > 0 && (
+      {loading && (pageImages.length > 0 || pdfBlobUrl) && (
         <div className="absolute top-3 right-3 z-10 flex items-center gap-1.5 bg-white/80 backdrop-blur-sm rounded-full px-2.5 py-1 shadow-sm border border-gray-200">
           <div className="w-3 h-3 border border-gray-400 border-t-gray-700 rounded-full animate-spin" />
           <span className="text-xs text-gray-500">Updating…</span>
         </div>
       )}
 
-      {/* Stacked pages */}
-      <div className="flex flex-col items-center py-8 px-6 gap-6">
-        {pageImages.map((src, i) => (
-          <div
-            key={i}
-            className="shadow-2xl rounded-sm overflow-hidden flex-shrink-0"
-            style={{ width: `${pageWidthPx}px` }}
-          >
-            <img
-              src={src}
-              alt={`Page ${i + 1}`}
-              draggable={false}
-              style={{ width: "100%", display: "block" }}
-            />
-          </div>
-        ))}
-      </div>
+      {/* Stacked pages (primary path — rasterized images) */}
+      {pageImages.length > 0 && (
+        <div className="flex flex-col items-center py-8 px-6 gap-6">
+          {pageImages.map((src, i) => (
+            <div
+              key={i}
+              className="shadow-2xl rounded-sm overflow-hidden flex-shrink-0"
+              style={{ width: `${pageWidthPx}px` }}
+            >
+              <img
+                src={src}
+                alt={`Page ${i + 1}`}
+                draggable={false}
+                style={{ width: "100%", display: "block" }}
+              />
+            </div>
+          ))}
+        </div>
+      )}
+
+      {/* Iframe fallback — shown only when pdfjs raster failed (CJK edge cases) */}
+      {pdfBlobUrl && pageImages.length === 0 && (
+        <div className="flex flex-col items-center py-8 px-6">
+          <iframe
+            src={pdfBlobUrl}
+            title="Resume preview"
+            className="shadow-2xl rounded-sm flex-shrink-0 border-0 bg-white"
+            style={{ width: `${pageWidthPx}px`, height: `${pageWidthPx * 1.414}px` }}
+          />
+        </div>
+      )}
 
       {/* Zoom controls — identical to the DOM preview */}
       <div className="sticky bottom-4 flex justify-center pointer-events-none z-10">

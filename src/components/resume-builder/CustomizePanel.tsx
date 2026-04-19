@@ -23,7 +23,7 @@ import { applyTemplatePreset, TEMPLATE_LIST } from "./templatePresets";
 import { FontPicker } from "./FontPicker";
 import { ResumeThumbnail } from "./ResumeThumbnail";
 import { DEFAULT_CUSTOMIZE } from "./customizeTypes";
-import { useT } from "./i18n";
+import { useT, useResumeBuilderLang } from "./i18n";
 
 /* ── Brand colors ─────────────────────────────────────────── */
 const B = {
@@ -451,11 +451,18 @@ function HeadingStyleThumb({ id, accent }: { id: HeadingStyle; accent: string })
 /* ── DESIGN ─────────────────────────────────────────────────── */
 function DesignTab({ settings, onChange }: { settings: CustomizeSettings; onChange: (u: Partial<CustomizeSettings>) => void }) {
   const t = useT();
+  const lang = useResumeBuilderLang();
+  // Font pickers only list Latin-script fonts; on the Chinese builder they
+  // don't affect CJK glyph rendering (which is driven by registered Noto CJK
+  // faces), so the control is a dead knob. Hide it to avoid user confusion.
+  const showFontPickers = lang !== "zh-tw";
   return (
     <>
-      <SettingCard title={t("customizeFontSection")}>
-        <FontPicker selectedFont={settings.bodyFont} onSelect={(f) => onChange({ bodyFont: f })} />
-      </SettingCard>
+      {showFontPickers && (
+        <SettingCard title={t("customizeFontSection")}>
+          <FontPicker selectedFont={settings.bodyFont} onSelect={(f) => onChange({ bodyFont: f })} />
+        </SettingCard>
+      )}
 
 
 
@@ -521,14 +528,17 @@ function DesignTab({ settings, onChange }: { settings: CustomizeSettings; onChan
 
         {/* Heading font picker — headingFont is consumed by both
             renderers (the bold heading at the top of each section) but
-            had no UI exposure. Use the same FontPicker as bodyFont. */}
-        <div className="mt-3 pt-3 border-t border-gray-100">
-          <FieldLabel>Heading font</FieldLabel>
-          <FontPicker
-            selectedFont={settings.headingFont || "'Lora', serif"}
-            onSelect={(f) => onChange({ headingFont: f })}
-          />
-        </div>
+            had no UI exposure. Use the same FontPicker as bodyFont.
+            Hidden on zh — see showFontPickers note above. */}
+        {showFontPickers && (
+          <div className="mt-3 pt-3 border-t border-gray-100">
+            <FieldLabel>Heading font</FieldLabel>
+            <FontPicker
+              selectedFont={settings.headingFont || "'Lora', serif"}
+              onSelect={(f) => onChange({ headingFont: f })}
+            />
+          </div>
+        )}
       </SettingCard>
 
       <SettingCard title={t("customizeLinkStyling")} defaultOpen={false}>
