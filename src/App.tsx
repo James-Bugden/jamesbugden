@@ -30,6 +30,7 @@ import NotFound from "./pages/NotFound";
 const AdminLogin = lazy(() => import("./pages/AdminLogin"));
 const ImportQuestions = lazy(() => import("./pages/ImportQuestions"));
 const AdminDashboard = lazy(() => import("./pages/AdminDashboard"));
+const AdminApiDocs = lazy(() => import("./pages/AdminApiDocs"));
 const ClientReviewGate = lazy(() => import("./pages/ClientReviewGate"));
 const ProtectedRoute = lazy(() => import("./components/ProtectedRoute"));
 const ResumeGuide = lazy(() => import("./pages/ResumeGuide"));
@@ -203,6 +204,14 @@ const App = () => (
                     <Route path="/zh-tw/experiment" element={<Navigate to="/zh-tw" replace />} />
                     <Route path="/admin/login" element={<AdminLogin />} />
                     <Route path="/admin/import-questions" element={<ImportQuestions />} />
+                    <Route
+                      path="/admin/api-docs"
+                      element={
+                        <ProtectedRoute requireAdmin={true}>
+                          <AdminApiDocs />
+                        </ProtectedRoute>
+                      }
+                    />
                     <Route
                       path="/admin"
                       element={
