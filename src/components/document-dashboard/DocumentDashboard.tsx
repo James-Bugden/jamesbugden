@@ -497,16 +497,12 @@ export function DocumentDashboard({ onOpenDocument, onImport }: DocumentDashboar
       </header>
 
       <div className="flex-1 flex flex-col md:flex-row overflow-hidden">
-      <header className="md:hidden px-4 py-3 bg-white border-b space-y-3" style={{ borderColor: BRAND.border }}>
-        <div>
-          <h1 className="text-[16px] font-bold tracking-tight" style={{ fontFamily: "'Source Sans 3', sans-serif", color: BRAND.text }}>{t("resumeBuilderTitle")}</h1>
-          <p className="text-[11px]" style={{ color: BRAND.textSecondary }}>{t("resumeBuilderTagline")}</p>
-        </div>
-        <DesignPhilosophy />
-      </header>
-
       {/* ── Left Sidebar (hidden on mobile) ───────── */}
-      <aside className="hidden md:flex w-[200px] flex-shrink-0 bg-white border-r flex-col h-full overflow-y-auto" style={{ borderColor: BRAND.border }}>
+      {/* Do NOT remove: sidebar width was widened from 200px to 260px so that
+          CJK and English sidebar labels + the expanded DesignPhilosophy tip
+          don't wrap into unreadable 5-char-wide columns. See bugfix on
+          2026-04-20. */}
+      <aside className="hidden md:flex w-[260px] flex-shrink-0 bg-white border-r flex-col h-full overflow-y-auto" style={{ borderColor: BRAND.border }}>
         <div className="px-5 pt-5 pb-2">
           <button
             onClick={() => navigate("/")}
@@ -564,6 +560,20 @@ export function DocumentDashboard({ onOpenDocument, onImport }: DocumentDashboar
 
       {/* ── Main Content ──────────────────────────── */}
       <main className="flex-1 overflow-y-auto">
+        {/* Do NOT remove or move back outside <main>: the mobile header lives
+            INSIDE the scrollable <main> on purpose. It used to be a flex
+            sibling of <main> in an overflow-hidden flex-col wrapper, which
+            squeezed <main> to height:0 when DesignPhilosophy was expanded
+            (~1008px tall), making the page totally unscrollable on mobile.
+            Keeping it here lets the tip scroll with the rest of the page.
+            See bugfix on 2026-04-20. */}
+        <header className="md:hidden px-4 py-3 bg-white border-b space-y-3" style={{ borderColor: BRAND.border }}>
+          <div>
+            <h1 className="text-[16px] font-bold tracking-tight" style={{ fontFamily: "'Source Sans 3', sans-serif", color: BRAND.text }}>{t("resumeBuilderTitle")}</h1>
+            <p className="text-[11px]" style={{ color: BRAND.textSecondary }}>{t("resumeBuilderTagline")}</p>
+          </div>
+          <DesignPhilosophy />
+        </header>
         <div className="max-w-[960px] mx-auto px-4 py-5 md:px-8 md:py-8">
           <div className="flex items-center justify-between mb-5 md:mb-6 gap-3">
             <h1 className="text-[18px] md:text-[22px] font-bold whitespace-nowrap flex items-center gap-2" style={{ fontFamily: "'Source Sans 3', sans-serif", color: BRAND.text }}>
