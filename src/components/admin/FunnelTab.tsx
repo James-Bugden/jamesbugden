@@ -269,7 +269,7 @@ export default function FunnelTab() {
           <CardContent className="p-4">
             <div className="flex items-center gap-2 mb-3">
               <AlertTriangle className="w-4 h-4 text-muted-foreground" />
-              <h3 className="text-sm font-semibold text-foreground">Errors by source (24h)</h3>
+              <h3 className="text-sm font-semibold text-foreground">Errors by source ({rangeLabel})</h3>
             </div>
             {data.errorsBySource.length === 0 ? (
               <p className="text-sm text-muted-foreground">No errors logged 🎉</p>
