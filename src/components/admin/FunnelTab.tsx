@@ -38,34 +38,35 @@ interface ErrorRow {
   user_id: string | null;
 }
 
+type RangeKey = "24h" | "7d" | "30d";
+
+const RANGES: { key: RangeKey; label: string; hours: number; sparkDays: number }[] = [
+  { key: "24h", label: "24h", hours: 24, sparkDays: 7 },
+  { key: "7d", label: "7d", hours: 24 * 7, sparkDays: 7 },
+  { key: "30d", label: "30d", hours: 24 * 30, sparkDays: 30 },
+];
+
 interface FunnelData {
-  sessionsToday: number;
-  signupsToday: number;
+  sessionsCount: number;
+  signupsCount: number;
   conversionPct: number;
   topTools: ToolStat[];
-  errors24h: number;
+  errorsCount: number;
   errorsBySource: ErrorStat[];
-  sessions7d: DayPoint[];
+  sessionsSpark: DayPoint[];
   loading: boolean;
 }
 
-const startOfTodayISO = () => {
-  const d = new Date();
-  d.setHours(0, 0, 0, 0);
-  return d.toISOString();
-};
-
-const dayAgoISO = () => new Date(Date.now() - 24 * 60 * 60 * 1000).toISOString();
-
 export default function FunnelTab() {
+  const [range, setRange] = useState<RangeKey>("24h");
   const [data, setData] = useState<FunnelData>({
-    sessionsToday: 0,
-    signupsToday: 0,
+    sessionsCount: 0,
+    signupsCount: 0,
     conversionPct: 0,
     topTools: [],
-    errors24h: 0,
+    errorsCount: 0,
     errorsBySource: [],
-    sessions7d: [],
+    sessionsSpark: [],
     loading: true,
   });
   const [openSource, setOpenSource] = useState<string | null>(null);
@@ -73,94 +74,64 @@ export default function FunnelTab() {
   const [drawerLoading, setDrawerLoading] = useState(false);
 
   useEffect(() => {
+    const cfg = RANGES.find((r) => r.key === range)!;
     const load = async () => {
-      const todayStart = startOfTodayISO();
-      const dayAgo = dayAgoISO();
-      const sevenDaysAgo = new Date(Date.now() - 7 * 24 * 60 * 60 * 1000);
-      sevenDaysAgo.setHours(0, 0, 0, 0);
-      const sevenDaysAgoISO = sevenDaysAgo.toISOString();
+      setData((d) => ({ ...d, loading: true }));
+      const sinceISO = new Date(Date.now() - cfg.hours * 60 * 60 * 1000).toISOString();
+      const sparkStart = new Date();
+      sparkStart.setHours(0, 0, 0, 0);
+      sparkStart.setDate(sparkStart.getDate() - (cfg.sparkDays - 1));
+      const sparkStartISO = sparkStart.toISOString();
 
-      const [sessionsRes, signupsRes, toolsRes, errorsRes, sessions7dRes] = await Promise.all([
+      const [sessionsRes, signupsRes, toolsRes, errorsRes, sparkRes] = await Promise.all([
         supabase
           .from("sessions")
           .select("id", { count: "exact", head: true })
-          .gte("started_at", todayStart),
+          .gte("started_at", sinceISO),
         supabase
           .from("profiles")
           .select("id", { count: "exact", head: true })
-          .gte("created_at", todayStart),
+          .gte("created_at", sinceISO),
         supabase
           .from("tool_completions")
           .select("tool")
-          .gte("created_at", dayAgo)
-          .limit(5000),
+          .gte("created_at", sinceISO)
+          .limit(10000),
         supabase
           .from("error_log")
           .select("source")
-          .gte("created_at", dayAgo)
-          .limit(5000),
+          .gte("created_at", sinceISO)
+          .limit(10000),
         supabase
           .from("sessions")
           .select("started_at")
-          .gte("started_at", sevenDaysAgoISO)
-          .limit(10000),
+          .gte("started_at", sparkStartISO)
+          .limit(20000),
       ]);
 
-      const sessionsToday = sessionsRes.count ?? 0;
-      const signupsToday = signupsRes.count ?? 0;
+      const sessionsCount = sessionsRes.count ?? 0;
+      const signupsCount = signupsRes.count ?? 0;
       const conversionPct =
-        sessionsToday > 0 ? Math.round((signupsToday / sessionsToday) * 1000) / 10 : 0;
-
-      const toolCounts: Record<string, number> = {};
-      (toolsRes.data ?? []).forEach((row: any) => {
-        const k = row.tool || "unknown";
-        toolCounts[k] = (toolCounts[k] || 0) + 1;
-      });
-      const topTools = Object.entries(toolCounts)
-        .map(([tool, count]) => ({ tool, count }))
-        .sort((a, b) => b.count - a.count)
-        .slice(0, 5);
-
-      const errorCounts: Record<string, number> = {};
-      (errorsRes.data ?? []).forEach((row: any) => {
-        const k = row.source || "unknown";
-        errorCounts[k] = (errorCounts[k] || 0) + 1;
-      });
-      const errorsBySource = Object.entries(errorCounts)
-        .map(([source, count]) => ({ source, count }))
-        .sort((a, b) => b.count - a.count)
-        .slice(0, 5);
-      const errors24h = (errorsRes.data ?? []).length;
-
-      const buckets: Record<string, number> = {};
-      for (let i = 6; i >= 0; i--) {
-        const d = new Date();
-        d.setHours(0, 0, 0, 0);
-        d.setDate(d.getDate() - i);
-        buckets[d.toISOString().slice(0, 10)] = 0;
-      }
-      (sessions7dRes.data ?? []).forEach((row: any) => {
-        const key = new Date(row.started_at).toISOString().slice(0, 10);
-        if (key in buckets) buckets[key] += 1;
-      });
-      const sessions7d: DayPoint[] = Object.entries(buckets).map(([day, count]) => ({
+        sessionsCount > 0 ? Math.round((signupsCount / sessionsCount) * 1000) / 10 : 0;
+...
+      const sessionsSpark: DayPoint[] = Object.entries(buckets).map(([day, count]) => ({
         day,
         count,
       }));
 
       setData({
-        sessionsToday,
-        signupsToday,
+        sessionsCount,
+        signupsCount,
         conversionPct,
         topTools,
-        errors24h,
+        errorsCount: (errorsRes.data ?? []).length,
         errorsBySource,
-        sessions7d,
+        sessionsSpark,
         loading: false,
       });
     };
     load();
-  }, []);
+  }, [range]);
 
   const openErrorDrawer = async (source: string) => {
     setOpenSource(source);
