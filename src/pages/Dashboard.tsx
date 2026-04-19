@@ -276,7 +276,13 @@ export default function Dashboard({ lang = "en" }: { lang?: "en" | "zh" }) {
     return recentItems.map(r => allSearchable.find(s => s.id === r.id)).filter(Boolean) as SearchableItem[];
   }, [recentItems, allSearchable]);
 
-  if (isLoading || profileLoading) return <DashboardSkeleton />;
+  // Show skeleton ONLY while we don't know if the user is authed. Profile
+  // is a secondary fetch — every downstream usage already optional-chains
+  // on `profile?.x` so missing-profile is safe. Blocking on profileLoading
+  // added ~300-500ms of skeleton time for no visual benefit. Sections that
+  // genuinely need a loaded profile (onboarding card) already gate
+  // themselves via `!profileLoading && profile && ...`.
+  if (isLoading) return <DashboardSkeleton />;
   if (!isLoggedIn) {
     const dashPath = window.location.pathname;
     const isZhDash = dashPath.startsWith("/zh-tw") || dashPath.startsWith("/zh");
