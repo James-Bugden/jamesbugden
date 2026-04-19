@@ -364,8 +364,25 @@ export default function AdminDashboard() {
 
   const fetchEventTracks = async () => {
     setEventTracksLoading(true);
-    const { data } = await supabase.from("event_tracks" as any).select("event_type, event_name, page, metadata, created_at").order("created_at", { ascending: false }).limit(1000);
-    if (data) setEventTracks(data as any);
+    // Page through results in 1000-row chunks to bypass Supabase's default
+    // PostgREST row cap. Bound to last 90 days so the admin view stays fast
+    // even as event volume grows.
+    const since = new Date(Date.now() - 90 * 24 * 60 * 60 * 1000).toISOString();
+    const PAGE = 1000;
+    const MAX_ROWS = 20000; // hard ceiling — refuse to load more than this
+    const all: any[] = [];
+    for (let from = 0; from < MAX_ROWS; from += PAGE) {
+      const { data, error } = await supabase
+        .from("event_tracks" as any)
+        .select("event_type, event_name, page, metadata, created_at")
+        .gte("created_at", since)
+        .order("created_at", { ascending: false })
+        .range(from, from + PAGE - 1);
+      if (error || !data || data.length === 0) break;
+      all.push(...data);
+      if (data.length < PAGE) break; // last page
+    }
+    setEventTracks(all as any);
     setEventTracksLoading(false);
   };
 
