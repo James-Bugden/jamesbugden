@@ -1105,6 +1105,38 @@ export const ResumePreview = React.memo(function ResumePreview({
     return () => ro.disconnect();
   }, [dims.wPX]);
 
+  /* ── CJK garbled-text detector — fires once per session if rendered preview
+        contains Unicode replacement chars (U+FFFD) or runs of '?' where
+        source data has CJK. Catches encoding regressions before users notice. */
+  useEffect(() => {
+    const el = containerRef.current;
+    if (!el) return;
+    const KEY = "jb_garbled_fired";
+    if (sessionStorage.getItem(KEY)) return;
+    const handle = window.setTimeout(async () => {
+      const text = el.innerText || "";
+      const hasReplacement = text.includes("\uFFFD");
+      // Detect ?-runs only if source data contains CJK
+      const dataStr = JSON.stringify(data);
+      const hasCJKSource = /[\u3400-\u9FFF\uF900-\uFAFF]/.test(dataStr);
+      const hasQuestionRun = hasCJKSource && /\?{3,}/.test(text);
+      if (hasReplacement || hasQuestionRun) {
+        sessionStorage.setItem(KEY, "1");
+        const { trackError } = await import("@/lib/analytics");
+        trackError("garbled_text", "Resume preview contains garbled text", {
+          metadata: {
+            tool: "resume_builder",
+            has_replacement_char: hasReplacement,
+            has_question_run: hasQuestionRun,
+            has_cjk_source: hasCJKSource,
+            sample: text.slice(0, 200),
+          },
+        });
+      }
+    }, 1500);
+    return () => window.clearTimeout(handle);
+  }, [data]);
+
   const handlePreviewClick = useCallback((e: React.MouseEvent) => {
     const sel = window.getSelection();
     if (sel && !sel.isCollapsed) return;
