@@ -1,10 +1,19 @@
 /**
  * Client-side wrapper around the PDF render Web Worker.
  *
- * Owns a single Worker instance, sends tagged render requests, and
- * resolves the matching response. Superseded requests resolve with
- * { cancelled: true } instead of hanging or throwing, so the preview
- * component can cleanly ignore stale renders when the user keeps typing.
+ * Spawns a FRESH worker per render and terminates it when done.
+ *
+ * Why not reuse a singleton? We tried that first (commit 1a03765) — the
+ * singleton rendered correctly when called directly via DevTools in prod
+ * but hung indefinitely when called from the preview component's useEffect.
+ * Fresh-per-render eliminates any worker-state-across-renders variable
+ * from the debugging surface. Cold-start cost is real (~8-12s for CJK
+ * because react-pdf + fontkit re-parse per render) but acceptable for a
+ * feature only CJK users hit; debounce already gates re-renders to once
+ * every 1.5s of user idle.
+ *
+ * If we ever want to bring back worker reuse, add a `keepAlive?: boolean`
+ * flag to `renderPdfInWorker` and only terminate when false.
  */
 
 import type { ResumeData } from "./types";
@@ -19,85 +28,84 @@ type RenderResult =
   | { ok: false; error: string }
   | { ok: false; cancelled: true };
 
-type Pending = {
-  resolve: (r: RenderResult) => void;
-};
-
-let worker: Worker | null = null;
-const pending = new Map<string, Pending>();
-let currentId = 0;
-
-function getWorker(): Worker {
-  if (worker) return worker;
-  worker = new PdfRendererWorker();
-  worker.addEventListener("message", (evt: MessageEvent<any>) => {
-    const { id, ok, blob, error } = evt.data ?? {};
-    const entry = pending.get(id);
-    if (!entry) return;
-    pending.delete(id);
-    if (ok) entry.resolve({ ok: true, blob });
-    else entry.resolve({ ok: false, error: error ?? "Unknown worker error" });
-  });
-  worker.addEventListener("error", (evt) => {
-    // If the worker itself dies, reject every pending render
-    const msg = evt.message || "Worker crashed";
-    pending.forEach((p) => p.resolve({ ok: false, error: msg }));
-    pending.clear();
-    worker = null;
-  });
-  return worker;
-}
+let currentRender: { id: string; terminate: () => void } | null = null;
+let idCounter = 0;
 
 /**
- * Render the resume to a PDF blob in the worker.
+ * Render the resume to a PDF blob in a fresh Web Worker.
  *
- * Calling this a second time before the first resolves will mark the
- * earlier call as cancelled — its promise resolves with { cancelled: true }
- * and the caller should discard the result. The worker still finishes
- * the old render (we don't have sync interruption), but by the time it
- * posts back the id won't match any pending entry.
+ * If called while a previous render is in flight, the previous render is
+ * terminated (worker killed) and its promise resolves with `cancelled: true`.
+ * Callers should check `"cancelled" in result` before touching `result.blob`.
  */
 export function renderPdfInWorker(
   data: ResumeData,
   customize: CustomizeSettings,
 ): { promise: Promise<RenderResult>; cancel: () => void } {
-  const id = String(++currentId);
-  const w = getWorker();
+  const id = String(++idCounter);
 
-  // Cancel any in-flight renders — preview updates supersede each other.
-  pending.forEach((entry, oldId) => {
-    pending.delete(oldId);
-    entry.resolve({ ok: false, cancelled: true });
-  });
+  // Kill any in-flight render. Its promise below will resolve as cancelled.
+  if (currentRender) {
+    currentRender.terminate();
+    currentRender = null;
+  }
+
+  const worker = new PdfRendererWorker();
+  let settled = false;
 
   const promise = new Promise<RenderResult>((resolve) => {
-    pending.set(id, { resolve });
+    const finish = (r: RenderResult) => {
+      if (settled) return;
+      settled = true;
+      // Tear down regardless of outcome — we don't reuse workers.
+      try { worker.terminate(); } catch { /* noop */ }
+      if (currentRender?.id === id) currentRender = null;
+      resolve(r);
+    };
+
+    worker.addEventListener("message", (evt: MessageEvent<any>) => {
+      const msg = evt.data ?? {};
+      // Ignore responses for other ids (shouldn't happen since each worker
+      // handles exactly one request, but be defensive).
+      if (msg.id !== id) return;
+      if (msg.ok) finish({ ok: true, blob: msg.blob });
+      else finish({ ok: false, error: msg.error ?? "Unknown worker error" });
+    });
+
+    worker.addEventListener("error", (evt) => {
+      finish({ ok: false, error: evt.message || "Worker crashed" });
+    });
+
+    // "messageerror" fires when postMessage data fails to deserialize.
+    worker.addEventListener("messageerror", () => {
+      finish({ ok: false, error: "Worker message deserialization failed" });
+    });
+
+    currentRender = {
+      id,
+      terminate: () => finish({ ok: false, cancelled: true } as RenderResult),
+    };
+
+    worker.postMessage({ id, data, customize });
   });
 
-  w.postMessage({ id, data, customize });
-
-  const cancel = () => {
-    const entry = pending.get(id);
-    if (entry) {
-      pending.delete(id);
-      entry.resolve({ ok: false, cancelled: true });
-    }
+  return {
+    promise,
+    cancel: () => {
+      if (currentRender?.id === id) {
+        currentRender.terminate();
+        currentRender = null;
+      }
+    },
   };
-
-  return { promise, cancel };
 }
 
 /**
- * Tear down the worker. Only useful on hot reload or when the app
- * unmounts the resume builder entirely. Normal preview re-renders
- * should NOT call this — reusing the worker preserves its Font.register
- * cache, saving multi-second font fetches.
+ * Tear down any in-flight worker. Call from component cleanup if needed.
  */
 export function disposePdfWorker(): void {
-  if (worker) {
-    worker.terminate();
-    worker = null;
+  if (currentRender) {
+    currentRender.terminate();
+    currentRender = null;
   }
-  pending.forEach((p) => p.resolve({ ok: false, cancelled: true }));
-  pending.clear();
 }
