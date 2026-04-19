@@ -597,12 +597,14 @@ export type Database = {
       sessions: {
         Row: {
           anon_id: string
+          browser: string | null
           device_type: string | null
           duration_sec: number | null
           ended_at: string | null
           entry_page: string | null
           exit_page: string | null
           id: string
+          is_returning: boolean
           language: string | null
           last_seen_at: string
           metadata: Json
@@ -610,6 +612,7 @@ export type Database = {
           referrer: string | null
           started_at: string
           timezone: string | null
+          tool_action_count: number
           user_agent: string | null
           user_id: string | null
           utm_campaign: string | null
@@ -622,12 +625,14 @@ export type Database = {
         }
         Insert: {
           anon_id: string
+          browser?: string | null
           device_type?: string | null
           duration_sec?: number | null
           ended_at?: string | null
           entry_page?: string | null
           exit_page?: string | null
           id?: string
+          is_returning?: boolean
           language?: string | null
           last_seen_at?: string
           metadata?: Json
@@ -635,6 +640,7 @@ export type Database = {
           referrer?: string | null
           started_at?: string
           timezone?: string | null
+          tool_action_count?: number
           user_agent?: string | null
           user_id?: string | null
           utm_campaign?: string | null
@@ -647,12 +653,14 @@ export type Database = {
         }
         Update: {
           anon_id?: string
+          browser?: string | null
           device_type?: string | null
           duration_sec?: number | null
           ended_at?: string | null
           entry_page?: string | null
           exit_page?: string | null
           id?: string
+          is_returning?: boolean
           language?: string | null
           last_seen_at?: string
           metadata?: Json
@@ -660,6 +668,7 @@ export type Database = {
           referrer?: string | null
           started_at?: string
           timezone?: string | null
+          tool_action_count?: number
           user_agent?: string | null
           user_id?: string | null
           utm_campaign?: string | null
