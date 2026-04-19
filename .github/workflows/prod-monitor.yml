@@ -1,7 +1,13 @@
 name: Production smoke monitor
 
-# Runs the guest smoke tests against jamesbugden.com every 15 minutes.
-# Emails ALERT_EMAIL_TO on failure.
+# Runs the guest smoke tests against jamesbugden.com AFTER each code change
+# lands on main. Waits a few minutes first to give Lovable time to deploy,
+# then verifies the live site is healthy. Emails ALERT_EMAIL_TO on failure.
+#
+# Does NOT run on a cron schedule — only when you actually push code — so
+# it doesn't burn Actions minutes or send spurious alerts when prod is idle.
+# Trigger manually via "Actions → Production smoke monitor → Run workflow"
+# if you want to check prod health at any other time.
 #
 # Required repository secrets (Settings → Secrets and variables → Actions):
 #   ALERT_EMAIL_TO     — where failure notifications go (your inbox)
@@ -14,9 +20,13 @@ name: Production smoke monitor
 #   QA_TEST_PASSWORD  — its password
 
 on:
-  schedule:
-    # Every 15 minutes. Cron is in UTC.
-    - cron: "*/15 * * * *"
+  push:
+    branches: [main]
+    # Don't bother re-running when only docs / Claude metadata change.
+    paths-ignore:
+      - "**/*.md"
+      - ".claude/**"
+      - "docs/**"
   workflow_dispatch:
 
 concurrency:
@@ -45,6 +55,14 @@ jobs:
 
       - name: Install Playwright browsers
         run: npx playwright install --with-deps chromium
+
+      # Give Lovable ~4 min to build + deploy the commit that triggered this
+      # run before we probe prod. Without this we'd be hitting the OLD live
+      # build and getting false-alarm emails. Adjust up if your typical
+      # Lovable deploy takes longer.
+      - name: Wait for Lovable deploy
+        if: github.event_name == 'push'
+        run: sleep 240
 
       - name: Run prod smoke
         id: smoke
