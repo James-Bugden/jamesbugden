@@ -113,7 +113,38 @@ export default function FunnelTab() {
       const signupsCount = signupsRes.count ?? 0;
       const conversionPct =
         sessionsCount > 0 ? Math.round((signupsCount / sessionsCount) * 1000) / 10 : 0;
-...
+
+      const toolCounts: Record<string, number> = {};
+      (toolsRes.data ?? []).forEach((row: any) => {
+        const k = row.tool || "unknown";
+        toolCounts[k] = (toolCounts[k] || 0) + 1;
+      });
+      const topTools = Object.entries(toolCounts)
+        .map(([tool, count]) => ({ tool, count }))
+        .sort((a, b) => b.count - a.count)
+        .slice(0, 5);
+
+      const errorCounts: Record<string, number> = {};
+      (errorsRes.data ?? []).forEach((row: any) => {
+        const k = row.source || "unknown";
+        errorCounts[k] = (errorCounts[k] || 0) + 1;
+      });
+      const errorsBySource = Object.entries(errorCounts)
+        .map(([source, count]) => ({ source, count }))
+        .sort((a, b) => b.count - a.count)
+        .slice(0, 5);
+
+      const buckets: Record<string, number> = {};
+      for (let i = cfg.sparkDays - 1; i >= 0; i--) {
+        const d = new Date();
+        d.setHours(0, 0, 0, 0);
+        d.setDate(d.getDate() - i);
+        buckets[d.toISOString().slice(0, 10)] = 0;
+      }
+      (sparkRes.data ?? []).forEach((row: any) => {
+        const key = new Date(row.started_at).toISOString().slice(0, 10);
+        if (key in buckets) buckets[key] += 1;
+      });
       const sessionsSpark: DayPoint[] = Object.entries(buckets).map(([day, count]) => ({
         day,
         count,
