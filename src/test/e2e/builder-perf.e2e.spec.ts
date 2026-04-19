@@ -102,7 +102,6 @@ test.describe("Builder — preview performance", () => {
 
     // Snapshot baseline heap.
     const before = await page.evaluate(
-      // @ts-expect-error — performance.memory is non-standard.
       () => (performance as any).memory?.usedJSHeapSize ?? 0,
     );
 
@@ -115,7 +114,6 @@ test.describe("Builder — preview performance", () => {
     await page.waitForTimeout(2_000);
 
     const after = await page.evaluate(
-      // @ts-expect-error — performance.memory is non-standard.
       () => (performance as any).memory?.usedJSHeapSize ?? 0,
     );
 
