@@ -1,9 +1,10 @@
 import { useState } from "react";
-import { Copy, Check, ExternalLink, BookOpen } from "lucide-react";
+import { Copy, Check, ExternalLink, BookOpen, Play, Loader2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
+import { Input } from "@/components/ui/input";
 import { SEO } from "@/components/SEO";
 
 const FUNCTION_URL =
@@ -112,6 +113,110 @@ function CodeBlock({ code }: { code: string }) {
   );
 }
 
+const STORAGE_KEY = "admin_analytics_api_key";
+
+function TestRequestPanel() {
+  const [apiKey, setApiKey] = useState<string>(() => {
+    try {
+      return sessionStorage.getItem(STORAGE_KEY) || "";
+    } catch {
+      return "";
+    }
+  });
+  const [loading, setLoading] = useState(false);
+  const [response, setResponse] = useState<string | null>(null);
+  const [status, setStatus] = useState<number | null>(null);
+  const [durationMs, setDurationMs] = useState<number | null>(null);
+  const [error, setError] = useState<string | null>(null);
+
+  const run = async () => {
+    if (!apiKey.trim()) {
+      setError("Enter your ANALYTICS_API_KEY first.");
+      return;
+    }
+    setLoading(true);
+    setError(null);
+    setResponse(null);
+    setStatus(null);
+    setDurationMs(null);
+    try {
+      sessionStorage.setItem(STORAGE_KEY, apiKey.trim());
+    } catch {
+      // ignore storage errors
+    }
+    const started = performance.now();
+    try {
+      const res = await fetch(`${FUNCTION_URL}?range=7d`, {
+        method: "GET",
+        headers: { "x-api-key": apiKey.trim() },
+      });
+      setStatus(res.status);
+      setDurationMs(Math.round(performance.now() - started));
+      const text = await res.text();
+      try {
+        setResponse(JSON.stringify(JSON.parse(text), null, 2));
+      } catch {
+        setResponse(text);
+      }
+    } catch (err) {
+      setError((err as Error).message || "Request failed");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  return (
+    <Card className="p-5 space-y-4">
+      <div className="flex items-center justify-between gap-3 flex-wrap">
+        <div>
+          <h2 className="font-heading text-lg text-foreground">Test request</h2>
+          <p className="text-xs text-muted-foreground">
+            Calls <code className="text-xs bg-muted px-1 py-0.5 rounded">?range=7d</code> with your key. Key is kept in this
+            tab&apos;s session storage only.
+          </p>
+        </div>
+        <Button onClick={run} disabled={loading} size="sm" className="gap-1.5">
+          {loading ? <Loader2 className="w-4 h-4 animate-spin" /> : <Play className="w-4 h-4" />}
+          {loading ? "Running..." : "Send request"}
+        </Button>
+      </div>
+
+      <div className="space-y-1.5">
+        <label className="text-xs font-medium text-muted-foreground">ANALYTICS_API_KEY</label>
+        <Input
+          type="password"
+          value={apiKey}
+          onChange={(e) => setApiKey(e.target.value)}
+          placeholder="Paste your API key"
+          autoComplete="off"
+          className="font-mono text-xs"
+        />
+      </div>
+
+      {error && (
+        <Alert variant="destructive">
+          <AlertTitle className="text-sm">Request failed</AlertTitle>
+          <AlertDescription className="text-xs">{error}</AlertDescription>
+        </Alert>
+      )}
+
+      {status !== null && (
+        <div className="flex items-center gap-2 text-xs">
+          <Badge variant={status >= 200 && status < 300 ? "secondary" : "destructive"}>HTTP {status}</Badge>
+          {durationMs !== null && <span className="text-muted-foreground">{durationMs} ms</span>}
+          {response && <CopyButton text={response} />}
+        </div>
+      )}
+
+      {response && (
+        <pre className="bg-muted text-foreground rounded-lg p-4 text-xs font-mono overflow-auto max-h-[480px] whitespace-pre">
+          {response}
+        </pre>
+      )}
+    </Card>
+  );
+}
+
 export default function AdminApiDocs() {
   return (
     <div className="min-h-screen bg-background">
@@ -138,6 +243,9 @@ export default function AdminApiDocs() {
           </div>
           <CodeBlock code={FUNCTION_URL} />
         </Card>
+
+        {/* Test request */}
+        <TestRequestPanel />
 
         {/* Auth */}
         <Card className="p-5 space-y-3">
