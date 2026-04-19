@@ -63,6 +63,30 @@ export default defineConfig({
       // Only run mobile-tagged specs on this project.
       grep: /@mobile/,
     },
+    // Cross-browser projects run only the specs tagged @cross-browser.
+    // Opt-in avoids 3×'ing the full run on every PR — critical-path only.
+    // Requires `npx playwright install firefox webkit` once per machine.
+    {
+      name: "firefox-desktop",
+      use: { ...devices["Desktop Firefox"], viewport: { width: 1440, height: 900 } },
+      grep: /@cross-browser/,
+    },
+    {
+      name: "webkit-desktop",
+      use: { ...devices["Desktop Safari"], viewport: { width: 1440, height: 900 } },
+      grep: /@cross-browser/,
+    },
+    // Retina/HiDPI project catches regressions where rasterized preview
+    // images bake in 1× pixel math (blurry on 2× devices). Opt-in via @hidpi.
+    {
+      name: "chromium-hidpi",
+      use: {
+        ...devices["Desktop Chrome"],
+        viewport: { width: 1440, height: 900 },
+        deviceScaleFactor: 2,
+      },
+      grep: /@hidpi/,
+    },
   ],
 
   // When LOCAL=1, boot the dev server automatically. Otherwise assume the
