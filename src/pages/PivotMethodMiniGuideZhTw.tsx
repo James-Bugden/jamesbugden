@@ -12,7 +12,7 @@ import { guideSchema } from "@/lib/guideSchema";
 import InlineRating from "@/components/feedback/InlineRating";
 
 const PivotMethodMiniGuideZhTw = () => {
-  useTrackGuideProgress("pivot-mini");
+  useTrackGuideProgress("pivot-mini-zh");
   const navigate = useNavigate();
   
   const toggleLanguage = () => {

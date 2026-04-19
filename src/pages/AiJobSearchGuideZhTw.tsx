@@ -556,7 +556,7 @@ const AiJobSearchGuideZhTw = () => {
             <ActionStep>下載一個乾淨的單欄履歷模板。避免有圖形、圖標、大頭照或多欄的模板。這些看起來漂亮但在 ATS（求職者追蹤系統）解析時會壞掉。</ActionStep>
             <RecruiterCheck>我審閱過數千份因為候選人用了華麗的雙欄模板而被 ATS 弄亂的履歷。系統讀不了它，所以顯示給我的是亂碼。如果我在前三秒內讀不了你的履歷，我就跳過。簡單打敗花俏。</RecruiterCheck>
             <div className="flex flex-wrap gap-3 mt-4">
-              <Link to="/zh-tw/resume-builder" className="inline-flex items-center gap-1.5 text-sm text-gold hover:underline font-medium">
+              <Link to="/zh-tw/resume" className="inline-flex items-center gap-1.5 text-sm text-gold hover:underline font-medium">
                 開啟履歷編輯器 →
               </Link>
               <Link to="/zh-tw/resume-guide" className="inline-flex items-center gap-1.5 text-sm text-gold hover:underline font-medium">

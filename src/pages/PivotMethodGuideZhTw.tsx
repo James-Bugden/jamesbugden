@@ -13,7 +13,7 @@ import { guideSchema } from "@/lib/guideSchema";
 import InlineRating from "@/components/feedback/InlineRating";
 
 const PivotMethodGuideZhTw = () => {
-  useTrackGuideProgress("pivot-guide");
+  useTrackGuideProgress("pivot-guide-zh");
   const navigate = useNavigate();
 
 

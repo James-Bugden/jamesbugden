@@ -14,7 +14,7 @@ import { guideSchema } from "@/lib/guideSchema";
 import InlineRating from "@/components/feedback/InlineRating";
 
 const InterviewPreparationGuideZhTw = () => {
-  useTrackGuideProgress("interview-full");
+  useTrackGuideProgress("interview-full-zh");
   const navigate = useNavigate();
 
 

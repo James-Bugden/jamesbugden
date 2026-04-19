@@ -386,7 +386,7 @@ const BulletComparison = () => (
 
 /* ─── Main Page Component ─── */
 const ResumeGuideZhTw = () => {
-  useTrackGuideProgress("resume-guide");
+  useTrackGuideProgress("resume-guide-zh");
   const navigate = useNavigate();
 
   return (

@@ -1602,6 +1602,8 @@ const FortyEightLawsGuide = () => {
 
       <InlineRating contentId="guide_48_laws" locale="en" />
 
+      <GuideShareButtons />
+
       <GuideBottomCTA lang="en" />
 
     </div>

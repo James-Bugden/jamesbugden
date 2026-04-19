@@ -131,7 +131,7 @@ const TableOfContentsZh = () => {
 };
 
 const RecruiterScreenGuideZhTw = () => {
-  useTrackGuideProgress("recruiter-screen");
+  useTrackGuideProgress("recruiter-screen-zh");
   const navigate = useNavigate();
 
   return (

@@ -141,7 +141,7 @@ const TableOfContents = () => {
         <button
           onClick={() => setOpen(!open)}
           className="w-11 h-11 rounded-full bg-executive-green text-cream shadow-lg flex items-center justify-center hover:scale-105 transition-transform"
-          aria-label="Contents"
+          aria-label="Table of contents"
         >
           <Menu className="w-5 h-5" />
         </button>
