@@ -977,29 +977,6 @@ const ResumeBuilder = () => {
           </TooltipProvider>
         </div>
 
-        {/* Page count warning after import */}
-        {showPageWarning && (
-          <div className="flex items-start gap-2 rounded-lg border border-amber-300 bg-amber-50 p-3 text-sm" style={{ color: BRAND.text }}>
-            <span className="text-amber-600 mt-0.5 flex-shrink-0">⚠️</span>
-            <div className="flex-1">
-              <p className="font-medium text-amber-800">
-                {lang === "zh-tw" ? "建議將履歷縮減為 2 頁以內" : "We recommend keeping your resume to 2 pages max"}
-              </p>
-              <p className="text-xs text-amber-700 mt-0.5">
-                {lang === "zh-tw"
-                  ? "大多數招募經理只花 6-10 秒瀏覽一份履歷。精簡內容能讓重點更突出。"
-                  : "Most recruiters spend 6–10 seconds scanning a resume. Trim to keep the strongest content visible."}
-              </p>
-            </div>
-            <button
-              onClick={() => setShowPageWarning(false)}
-              className="text-amber-400 hover:text-amber-600 transition-colors flex-shrink-0 mt-0.5"
-              aria-label="Dismiss"
-            >
-              ✕
-            </button>
-          </div>
-        )}
 
         {/* Personal Details */}
         <div id="personal-details-card" className="transition-all">
