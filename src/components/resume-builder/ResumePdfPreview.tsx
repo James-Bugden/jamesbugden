@@ -134,13 +134,15 @@ export const ResumePdfPreview = React.memo(function ResumePdfPreview({
   const [zoomOffset, setZoomOffset] = useState(0);
   const displayScale = Math.max(0.2, Math.min(1.5, autoScale + zoomOffset));
 
-  // Page images from the last completed render. SAME shape for EN and CJK —
-  // we removed the iframe/PDF-viewer path because users expect the preview
-  // to look like an image of the printed page (no viewer chrome) and to
-  // update live as they tweak customization settings. iframes cache their
-  // blob URL's internal document, which made customize changes invisible
-  // until the tab was reloaded.
+  // Page images from the last completed render (primary path — matches
+  // FlowCV look and supports live customize refresh).
   const [pageImages, setPageImages] = useState<string[]>([]);
+  // Blob URL fallback — used ONLY when pdfjs rasterization throws
+  // (observed on Chinese resumes where pdfjs chokes on the embedded
+  // subset CJK font). The browser's native PDF viewer renders the
+  // blob reliably even when pdfjs cannot. Trade-off: shows the
+  // browser's PDF chrome. Acceptable fallback vs "Preview crashed".
+  const [pdfBlobUrl, setPdfBlobUrl] = useState<string | null>(null);
   // True while fonts are loading or PDF/pages are being generated
   const [loading, setLoading] = useState(true);
   const [errorMsg, setErrorMsg] = useState<string | null>(null);
@@ -257,14 +259,13 @@ export const ResumePdfPreview = React.memo(function ResumePdfPreview({
               if (cancelled) return;
             }
 
-            // Rasterize PDF pages to <img> sources. Two paths:
-            //   1. Server-side via Supabase Edge Function (pdfjs-in-Deno) —
-            //      matches FlowCV's UX, no main-thread CJK hang. Gated on
-            //      ?serverPreview=1 or VITE_PREVIEW_ENDPOINT_ENABLED=1.
-            //   2. Client-side pdfjs — the current default, works for EN
-            //      resumes but can hang on CJK on slow devices.
-            // If the server path fails (network, rate limit, auth) the
-            // client path runs as a fallback so the preview never breaks.
+            // Rasterize PDF pages to <img> sources. Cascade:
+            //   1. Server-side (Supabase Edge Function) if flag enabled
+            //   2. Client-side pdfjs (default)
+            //   3. If pdfjs throws (observed on CJK with certain fonts),
+            //      fall back to rendering the raw PDF in a native <iframe>.
+            //      Shows PDF-viewer chrome, not ideal, but better than a
+            //      "Preview crashed" error screen.
             let images: string[] | null = null;
             if (serverPreviewEnabled()) {
               const serverResult = await renderPagesServer(blob, {
@@ -278,10 +279,26 @@ export const ResumePdfPreview = React.memo(function ResumePdfPreview({
               }
             }
             if (!images) {
-              images = await renderPdfPagesToImages(blob);
+              try {
+                images = await renderPdfPagesToImages(blob);
+              } catch (rasterErr) {
+                if (import.meta.env.DEV) console.warn("[ResumePdfPreview] pdfjs raster failed, falling back to iframe:", rasterErr);
+                // Revoke any previous iframe URL before creating a new one.
+                const newUrl = URL.createObjectURL(blob);
+                setPdfBlobUrl((prev) => {
+                  if (prev) URL.revokeObjectURL(prev);
+                  return newUrl;
+                });
+                setPageImages([]);
+                setErrorMsg(null);
+                onPageCountRef.current?.(1);
+                return;
+              }
               if (cancelled) return;
             }
             setPageImages(images);
+            // Clear any stale iframe fallback from a previous render.
+            setPdfBlobUrl((prev) => { if (prev) URL.revokeObjectURL(prev); return null; });
             setErrorMsg(null);
             onPageCountRef.current?.(images.length);
           })(),
