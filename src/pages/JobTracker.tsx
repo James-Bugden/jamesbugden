@@ -16,6 +16,7 @@ import KanbanBoard, { JobDetailPanel } from "@/components/job-tracker/KanbanBoar
 import TableView from "@/components/job-tracker/TableView";
 import OnboardingModal from "@/components/job-tracker/OnboardingModal";
 import { SEO } from "@/components/SEO";
+import { trackTool } from "@/lib/analytics";
 
 type View = "dashboard" | "board" | "table";
 
@@ -58,12 +59,14 @@ export default function JobTracker() {
   const handleAddJob = () => {
     createJob({ title: "New Application" });
     refresh();
+    trackTool("job_tracker", "job_added", { total_active: jobs.length + 1 });
     if (view === "dashboard") setView("table");
   };
 
   const handleExportCSV = () => {
     downloadCSV();
     toast.success("CSV downloaded ✓");
+    trackTool("job_tracker", "csv_export", { job_count: allJobs.length });
     setMenuOpen(false);
   };
 

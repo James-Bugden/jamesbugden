@@ -1,6 +1,7 @@
 import { useEffect, useCallback, useRef } from "react";
 import { useLocalStorage } from "./useLocalStorage";
 import { trackEvent } from "@/lib/trackEvent";
+import { startGuideRead } from "@/lib/analytics";
 
 type ProgressMap = Record<string, number>;
 
@@ -41,6 +42,9 @@ export function useTrackGuideProgress(guideId: string) {
     startTimeRef.current = Date.now();
 
     trackEvent("guide_view", guideId);
+    // Detect language from path for the dedicated guide_reads row
+    const lang: "en" | "zh" = window.location.pathname.startsWith("/zh-tw") ? "zh" : "en";
+    const reader = startGuideRead(guideId, lang);
 
     const onScroll = () => {
       const scrollable = document.documentElement.scrollHeight - window.innerHeight;
@@ -59,6 +63,8 @@ export function useTrackGuideProgress(guideId: string) {
           time_on_page_sec: timeOnPage,
         });
       }
+      // Always finalize the guide_reads row, even for tiny visits
+      reader.finalize(scrollDepth, false);
     };
 
     const onBeforeUnload = () => {
