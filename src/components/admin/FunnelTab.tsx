@@ -13,6 +13,11 @@ interface ErrorStat {
   count: number;
 }
 
+interface DayPoint {
+  day: string; // YYYY-MM-DD
+  count: number;
+}
+
 interface FunnelData {
   sessionsToday: number;
   signupsToday: number;
@@ -20,6 +25,7 @@ interface FunnelData {
   topTools: ToolStat[];
   errors24h: number;
   errorsBySource: ErrorStat[];
+  sessions7d: DayPoint[];
   loading: boolean;
 }
 
@@ -39,6 +45,7 @@ export default function FunnelTab() {
     topTools: [],
     errors24h: 0,
     errorsBySource: [],
+    sessions7d: [],
     loading: true,
   });
 
@@ -46,8 +53,11 @@ export default function FunnelTab() {
     const load = async () => {
       const todayStart = startOfTodayISO();
       const dayAgo = dayAgoISO();
+      const sevenDaysAgo = new Date(Date.now() - 7 * 24 * 60 * 60 * 1000);
+      sevenDaysAgo.setHours(0, 0, 0, 0);
+      const sevenDaysAgoISO = sevenDaysAgo.toISOString();
 
-      const [sessionsRes, signupsRes, toolsRes, errorsRes] = await Promise.all([
+      const [sessionsRes, signupsRes, toolsRes, errorsRes, sessions7dRes] = await Promise.all([
         supabase
           .from("sessions")
           .select("id", { count: "exact", head: true })
@@ -66,6 +76,11 @@ export default function FunnelTab() {
           .select("source")
           .gte("created_at", dayAgo)
           .limit(5000),
+        supabase
+          .from("sessions")
+          .select("started_at")
+          .gte("started_at", sevenDaysAgoISO)
+          .limit(10000),
       ]);
 
       const sessionsToday = sessionsRes.count ?? 0;
@@ -94,6 +109,23 @@ export default function FunnelTab() {
         .slice(0, 5);
       const errors24h = (errorsRes.data ?? []).length;
 
+      // Build a 7-day series, zero-filled for missing days
+      const buckets: Record<string, number> = {};
+      for (let i = 6; i >= 0; i--) {
+        const d = new Date();
+        d.setHours(0, 0, 0, 0);
+        d.setDate(d.getDate() - i);
+        buckets[d.toISOString().slice(0, 10)] = 0;
+      }
+      (sessions7dRes.data ?? []).forEach((row: any) => {
+        const key = new Date(row.started_at).toISOString().slice(0, 10);
+        if (key in buckets) buckets[key] += 1;
+      });
+      const sessions7d: DayPoint[] = Object.entries(buckets).map(([day, count]) => ({
+        day,
+        count,
+      }));
+
       setData({
         sessionsToday,
         signupsToday,
@@ -101,6 +133,7 @@ export default function FunnelTab() {
         topTools,
         errors24h,
         errorsBySource,
+        sessions7d,
         loading: false,
       });
     };
