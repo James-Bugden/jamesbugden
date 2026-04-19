@@ -9,7 +9,7 @@ import {
   SheetTitle,
   SheetDescription,
 } from "@/components/ui/sheet";
-import { Loader2, Activity, UserPlus, Wrench, AlertTriangle, ChevronRight } from "lucide-react";
+import { Loader2, Activity, UserPlus, Wrench, AlertTriangle, ChevronRight, Link2, Check } from "lucide-react";
 import { format } from "date-fns";
 
 interface ToolStat {
@@ -204,6 +204,23 @@ export default function FunnelTab() {
   };
 
   const rangeLabel = RANGES.find((r) => r.key === range)!.label;
+  const [copied, setCopied] = useState(false);
+
+  const copyShareLink = async () => {
+    try {
+      const url = new URL(window.location.href);
+      // Strip Lovable preview token from shared link
+      url.searchParams.delete("__lovable_token");
+      url.searchParams.set("tab", "funnel");
+      if (range === "24h") url.searchParams.delete("range");
+      else url.searchParams.set("range", range);
+      await navigator.clipboard.writeText(url.toString());
+      setCopied(true);
+      setTimeout(() => setCopied(false), 1500);
+    } catch (e) {
+      console.warn("[FunnelTab] clipboard write failed", e);
+    }
+  };
 
   return (
     <div className="space-y-6">
@@ -211,27 +228,48 @@ export default function FunnelTab() {
         <p className="text-sm text-muted-foreground">
           Showing data for the last <span className="font-medium text-foreground">{rangeLabel}</span>
         </p>
-        <div className="inline-flex rounded-lg border border-border bg-card p-0.5" role="tablist" aria-label="Time range">
-          {RANGES.map((r) => {
-            const active = r.key === range;
-            return (
-              <button
-                key={r.key}
-                type="button"
-                role="tab"
-                aria-selected={active}
-                onClick={() => setRange(r.key)}
-                className={
-                  "px-3 py-1.5 text-xs font-medium rounded-md transition-colors " +
-                  (active
-                    ? "bg-primary text-primary-foreground"
-                    : "text-muted-foreground hover:text-foreground")
-                }
-              >
-                {r.label}
-              </button>
-            );
-          })}
+        <div className="flex items-center gap-2">
+          <button
+            type="button"
+            onClick={copyShareLink}
+            aria-label="Copy shareable link to this view"
+            title={copied ? "Copied!" : "Copy link to this view"}
+            className="inline-flex items-center gap-1.5 px-2.5 py-1.5 text-xs font-medium rounded-md border border-border bg-card text-muted-foreground hover:text-foreground hover:bg-muted transition-colors"
+          >
+            {copied ? (
+              <>
+                <Check className="w-3.5 h-3.5 text-emerald-600" />
+                <span>Copied</span>
+              </>
+            ) : (
+              <>
+                <Link2 className="w-3.5 h-3.5" />
+                <span>Copy link</span>
+              </>
+            )}
+          </button>
+          <div className="inline-flex rounded-lg border border-border bg-card p-0.5" role="tablist" aria-label="Time range">
+            {RANGES.map((r) => {
+              const active = r.key === range;
+              return (
+                <button
+                  key={r.key}
+                  type="button"
+                  role="tab"
+                  aria-selected={active}
+                  onClick={() => setRange(r.key)}
+                  className={
+                    "px-3 py-1.5 text-xs font-medium rounded-md transition-colors " +
+                    (active
+                      ? "bg-primary text-primary-foreground"
+                      : "text-muted-foreground hover:text-foreground")
+                  }
+                >
+                  {r.label}
+                </button>
+              );
+            })}
+          </div>
         </div>
       </div>
 
