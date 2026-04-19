@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation, useSearchParams } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -20,6 +20,42 @@ const ClientReviewGate = () => {
   const [error, setError] = useState<string | null>(null);
 
   const navigate = useNavigate();
+  const location = useLocation();
+  const [searchParams] = useSearchParams();
+  // Prefer explicit ?lang=zh query param (so emails/Notion links can target
+  // per-client locale), otherwise fall back to /zh-tw/... pathname.
+  const langParam = searchParams.get("lang");
+  const isZhTw = langParam === "zh" || langParam === "zh-tw" || location.pathname.startsWith("/zh-tw");
+
+  const t = isZhTw
+    ? {
+        title: "履歷審閱存取",
+        subtitle: "請輸入您的密碼以檢視個人化審閱",
+        passwordLabel: "密碼",
+        passwordPlaceholder: "輸入您的密碼",
+        submit: "檢視我的審閱",
+        verifying: "驗證中…",
+        showPassword: "顯示密碼",
+        hidePassword: "隱藏密碼",
+        errorIncorrect: "密碼錯誤，請再試一次。",
+        errorInvalid: "審閱設定無效，請聯繫客服。",
+        needHelp: "需要協助？",
+        contactJames: "聯繫 James",
+      }
+    : {
+        title: "Resume Review Access",
+        subtitle: "Enter your password to access your personalized review",
+        passwordLabel: "Password",
+        passwordPlaceholder: "Enter your password",
+        submit: "View My Review",
+        verifying: "Verifying...",
+        showPassword: "Show password",
+        hidePassword: "Hide password",
+        errorIncorrect: "Incorrect password. Please try again.",
+        errorInvalid: "Invalid review configuration. Please contact support.",
+        needHelp: "Need help?",
+        contactJames: "Contact James",
+      };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -41,7 +77,7 @@ const ClientReviewGate = () => {
     }
 
     if (rpcError || !data || data.length === 0) {
-      setError("Incorrect password. Please try again.");
+      setError(t.errorIncorrect);
       setSubmitting(false);
       return;
     }
@@ -50,7 +86,7 @@ const ClientReviewGate = () => {
 
     // Validate review URL is internal only (defense in depth)
     if (!isInternalUrl(matchedReview.review_url)) {
-      setError("Invalid review configuration. Please contact support.");
+      setError(t.errorInvalid);
       setSubmitting(false);
       return;
     }
@@ -72,17 +108,17 @@ const ClientReviewGate = () => {
           <div className="text-center mb-8">
             <Lock className="h-8 w-8 mx-auto mb-6 text-foreground" strokeWidth={1.5} />
             <h1 className="font-heading text-3xl md:text-4xl text-foreground mb-3">
-              Resume Review Access
+              {t.title}
             </h1>
             <p className="text-muted-foreground">
-              Enter your password to access your personalized review
+              {t.subtitle}
             </p>
           </div>
 
           <form onSubmit={handleSubmit} className="space-y-6">
             <div className="space-y-2">
               <Label htmlFor="password" className="text-foreground font-medium">
-                Password
+                {t.passwordLabel}
               </Label>
               <div className="relative">
                 <Input
@@ -93,7 +129,7 @@ const ClientReviewGate = () => {
                     setPassword(e.target.value);
                     setError(null);
                   }}
-                  placeholder="Enter your password"
+                  placeholder={t.passwordPlaceholder}
                   required
                   autoComplete="current-password"
                   className={`h-14 text-base px-4 pr-12 bg-muted/50 border-border ${error ? "border-destructive" : ""}`}
@@ -102,7 +138,7 @@ const ClientReviewGate = () => {
                   type="button"
                   onClick={() => setShowPassword(!showPassword)}
                   className="absolute right-4 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground"
-                  aria-label={showPassword ? "Hide password" : "Show password"}
+                  aria-label={showPassword ? t.hidePassword : t.showPassword}
                 >
                   {showPassword ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
                 </button>
@@ -123,22 +159,22 @@ const ClientReviewGate = () => {
               {submitting ? (
                 <span className="flex items-center justify-center">
                   <Loader2 className="mr-2 h-5 w-5 animate-spin" />
-                  Verifying...
+                  {t.verifying}
                 </span>
               ) : (
-                "View My Review"
+                t.submit
               )}
             </button>
           </form>
         </div>
 
         <p className="text-center mt-8 text-muted-foreground">
-          Need help?{" "}
+          {t.needHelp}{" "}
           <a
             href="mailto:james@james.careers"
             className="text-foreground hover:underline font-medium"
           >
-            Contact James
+            {t.contactJames}
           </a>
         </p>
       </div>
