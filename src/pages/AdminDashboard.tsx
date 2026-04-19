@@ -778,6 +778,36 @@ export default function AdminDashboard() {
           ))}
         </div>
 
+        {/* ══ Breadcrumb (Tab → Sub-tab) ══ */}
+        {(() => {
+          const TAB_LABELS: Record<string, string> = {
+            overview: "Overview",
+            people: "People",
+            data: "Data",
+            insights: "Insights",
+            funnel: "Funnel",
+          };
+          const SUB_LABELS: Record<string, Record<string, string>> = {
+            people: { accounts: "Accounts", resumes: "Resume Leads", emails: "Email Leads" },
+            data: { reviews: "Reviews", salary: "Salary", feedback: "Feedback", "ai-usage": "AI Usage" },
+          };
+          const tabLabel = TAB_LABELS[activeTab] ?? activeTab;
+          const subLabel = activeSub ? SUB_LABELS[activeTab]?.[activeSub] ?? activeSub : null;
+          return (
+            <nav aria-label="Admin breadcrumb" className="flex items-center gap-1.5 text-xs text-muted-foreground mb-3">
+              <span>Admin</span>
+              <span aria-hidden="true">/</span>
+              <span className="text-foreground font-medium">{tabLabel}</span>
+              {subLabel && (
+                <>
+                  <span aria-hidden="true">/</span>
+                  <span className="text-foreground font-medium">{subLabel}</span>
+                </>
+              )}
+            </nav>
+          );
+        })()}
+
         {/* ══ Main Tabs ══ */}
         <Tabs value={activeTab} onValueChange={setActiveTab}>
           <TabsList className="w-full justify-start gap-0.5">
