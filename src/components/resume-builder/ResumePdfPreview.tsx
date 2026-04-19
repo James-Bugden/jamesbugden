@@ -12,7 +12,7 @@ import React, { useEffect, useRef, useState, useCallback } from "react";
 import { pdf } from "@react-pdf/renderer";
 import pdfjsWorkerUrl from "pdfjs-dist/build/pdf.worker.min.mjs?url";
 import { ZoomIn, ZoomOut, RotateCcw } from "lucide-react";
-import { ResumePDF, prepareFonts } from "./ResumePDF";
+import { ResumePDF, prepareFonts, onCJKFontReady } from "./ResumePDF";
 import type { ResumeData } from "./types";
 import type { CustomizeSettings } from "./customizeTypes";
 import { useT } from "./i18n";
@@ -154,6 +154,15 @@ export const ResumePdfPreview = React.memo(function ResumePdfPreview({
   const baseWidthRef = useRef(baseWidthPx);
   baseWidthRef.current = baseWidthPx;
 
+  // Bumps on CJK-font-ready. Used in the generate() effect dep array so
+  // when the async CJK font finishes registering (background task started
+  // inside prepareFonts), the preview re-generates with proper glyphs
+  // instead of Helvetica tofu.
+  const [cjkBump, setCjkBump] = useState(0);
+  useEffect(() => {
+    return onCJKFontReady(() => setCjkBump((n) => n + 1));
+  }, []);
+
   // Auto-scale to fit the container width
   useEffect(() => {
     const el = containerRef.current;
@@ -231,7 +240,10 @@ export const ResumePdfPreview = React.memo(function ResumePdfPreview({
 
     generate();
     return () => { cancelled = true; };
-  }, [debouncedData, debouncedCustomize]);
+    // cjkBump is incremented by onCJKFontReady when the async CJK font
+    // finishes registering. Including it here triggers a re-render of the
+    // preview with proper CJK glyphs (first render used Helvetica tofu).
+  }, [debouncedData, debouncedCustomize, cjkBump]);
 
   const handleZoomOut = useCallback(() => setZoomOffset((z) => Math.max(z - 0.1, -0.4)), []);
   const handleZoomIn  = useCallback(() => setZoomOffset((z) => Math.min(z + 0.1, 0.6)), []);
