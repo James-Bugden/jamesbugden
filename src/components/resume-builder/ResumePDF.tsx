@@ -75,6 +75,25 @@ function fontsourceUrl(fontName: string, weight: number): string {
 const REGISTERED_FONTS = new Set<string>();
 const FONT_REGISTRATION_PROMISES = new Map<string, Promise<string>>();
 
+/**
+ * fetch with a hard timeout. Browsers have no built-in timeout on `fetch()` —
+ * if the CDN hangs, the await never resolves and the preview's loader spins
+ * forever. AbortController lets us bail and treat the registration as failed,
+ * which then falls back to Helvetica via downstream guards.
+ *
+ * 8s is enough for slow networks but short enough that users don't wait
+ * minutes staring at "Generating preview...".
+ */
+async function fetchWithTimeout(url: string, options: RequestInit = {}, timeoutMs = 8000): Promise<Response> {
+  const controller = new AbortController();
+  const timer = setTimeout(() => controller.abort(), timeoutMs);
+  try {
+    return await fetch(url, { ...options, signal: controller.signal });
+  } finally {
+    clearTimeout(timer);
+  }
+}
+
 /* ── CJK font registration ────────────────────────────────── */
 
 /**
@@ -152,7 +171,7 @@ async function registerCJKFamily(family: CJKFamily): Promise<boolean> {
   const source = CJK_FONT_SOURCES[family];
   const promise = (async () => {
     try {
-      const resp = await fetch(source.url400, { method: "HEAD" });
+      const resp = await fetchWithTimeout(source.url400, { method: "HEAD" });
       if (!resp.ok) {
         if (import.meta.env.DEV) console.warn(`[ResumePDF] ${family} HEAD check failed (${resp.status})`);
         cjkRegistrationPromises.delete(family);
@@ -226,7 +245,7 @@ async function registerFontAsync(cssFamily: string): Promise<string> {
     // Verify the font exists on fontsource CDN before registering
     const testUrl = fontsourceUrl(fontName, 400);
     try {
-      const testResp = await fetch(testUrl, { method: "HEAD" });
+      const testResp = await fetchWithTimeout(testUrl, { method: "HEAD" });
       if (!testResp.ok) {
         // Don't cache failures — allow retry on next call
         FONT_REGISTRATION_PROMISES.delete(name);

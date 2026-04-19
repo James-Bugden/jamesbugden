@@ -167,26 +167,39 @@ export const ResumePdfPreview = React.memo(function ResumePdfPreview({
     setLoading(true);
 
     const generate = async () => {
+      // Hard global timeout — the loader must never spin forever. If any of
+      // the await steps below hangs (slow CDN, fontkit internal state, etc.)
+      // we surface an error after 25s instead of leaving the user stuck on
+      // "Generating preview...".
+      const timeoutPromise = new Promise<never>((_, reject) =>
+        setTimeout(() => reject(new Error("Preview generation timed out (25s). Check network or try a smaller resume.")), 25_000)
+      );
+
       try {
-        // 1. Register fonts — required before react-pdf renders; cached after first call
-        await prepareFonts(debouncedCustomize, debouncedData);
-        if (cancelled) return;
+        await Promise.race([
+          (async () => {
+            // 1. Register fonts — required before react-pdf renders; cached after first call
+            await prepareFonts(debouncedCustomize, debouncedData);
+            if (cancelled) return;
 
-        // 2. Render PDF to blob via react-pdf (same path as the export)
-        const element = React.createElement(ResumePDF, {
-          data: debouncedData,
-          customize: debouncedCustomize,
-        });
-        const blob = await pdf(element as any).toBlob();
-        if (cancelled) return;
+            // 2. Render PDF to blob via react-pdf (same path as the export)
+            const element = React.createElement(ResumePDF, {
+              data: debouncedData,
+              customize: debouncedCustomize,
+            });
+            const blob = await pdf(element as any).toBlob();
+            if (cancelled) return;
 
-        // 3. Pass blob directly to pdfjs (ArrayBuffer, not a URL — blob URLs
-        //    are main-thread only and are inaccessible from the pdfjs worker)
-        const images = await renderPdfPagesToImages(blob);
-        if (cancelled) return;
-        setPageImages(images);
-        setErrorMsg(null);
-        onPageCountRef.current?.(images.length);
+            // 3. Pass blob directly to pdfjs (ArrayBuffer, not a URL — blob URLs
+            //    are main-thread only and are inaccessible from the pdfjs worker)
+            const images = await renderPdfPagesToImages(blob);
+            if (cancelled) return;
+            setPageImages(images);
+            setErrorMsg(null);
+            onPageCountRef.current?.(images.length);
+          })(),
+          timeoutPromise,
+        ]);
       } catch (err) {
         if (!cancelled) {
           if (import.meta.env.DEV) console.error("[ResumePdfPreview] render error:", err);
