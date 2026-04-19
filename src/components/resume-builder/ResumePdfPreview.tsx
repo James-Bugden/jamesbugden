@@ -209,7 +209,7 @@ export const ResumePdfPreview = React.memo(function ResumePdfPreview({
           data: debouncedData,
           customize: debouncedCustomize,
         } as any);
-        const blob = await pdf(element).toBlob();
+        const blob = await pdf(element as any).toBlob();
         if (cancelled) return;
 
         // Test hook — expose the just-rendered PDF blob so e2e tests can

@@ -31,7 +31,6 @@ test.describe("Builder — edge cases", () => {
     // Guard: a successful XSS would create a window-level side effect.
     // If the payload fires, __xssFired becomes true.
     await page.addInitScript(() => {
-      // @ts-expect-error — test sentinel on window
       (window as any).__xssFired = false;
     });
 
@@ -60,7 +59,6 @@ test.describe("Builder — edge cases", () => {
     ).toBeVisible({ timeout: 20_000 });
 
     const fired = await page.evaluate(
-      // @ts-expect-error — test sentinel on window
       () => Boolean((window as any).__xssFired),
     );
     expect(fired, "XSS payload executed").toBe(false);
