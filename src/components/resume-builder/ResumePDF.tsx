@@ -698,6 +698,7 @@ interface PdfColors {
   body: string;
   background: string;
   linkIcon: string;
+  link: string;
 }
 
 /** Render parsed HTML nodes as react-pdf Text elements */
