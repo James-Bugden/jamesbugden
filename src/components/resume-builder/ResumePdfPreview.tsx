@@ -133,8 +133,14 @@ export const ResumePdfPreview = React.memo(function ResumePdfPreview({
   const [zoomOffset, setZoomOffset] = useState(0);
   const displayScale = Math.max(0.2, Math.min(1.5, autoScale + zoomOffset));
 
-  // Page images from the last completed render
+  // Page images from the last completed render (Latin path)
   const [pageImages, setPageImages] = useState<string[]>([]);
+  // Blob URL for CJK previews — rendered via an <iframe> instead of
+  // pdfjs rasterization because pdfjs's main-thread parse of CJK fonts
+  // in the PDF is prohibitively slow (60+ seconds on real resumes,
+  // confirmed via window.__pdfWorkerLog trace 2026-04-19). The browser's
+  // native PDF viewer handles CJK at full speed.
+  const [pdfBlobUrl, setPdfBlobUrl] = useState<string | null>(null);
   // True while fonts are loading or PDF/pages are being generated
   const [loading, setLoading] = useState(true);
   const [errorMsg, setErrorMsg] = useState<string | null>(null);
@@ -235,23 +241,38 @@ export const ResumePdfPreview = React.memo(function ResumePdfPreview({
                 throw new Error("error" in result ? result.error : "Worker render failed");
               }
               blob = result.blob;
-            } else {
-              // Latin path: main-thread render, skipCJK to avoid downloading
-              // the 1.4 MB CJK font we don't need.
-              await prepareFonts(debouncedCustomize, debouncedData, { skipCJK: true });
-              if (cancelled) return;
 
-              const element = React.createElement(ResumePDF, {
-                data: debouncedData,
-                customize: debouncedCustomize,
+              // For CJK we skip pdfjs rasterization — it's prohibitively
+              // slow on the main thread parsing embedded CJK fonts (60+s,
+              // times out the preview). Browser's native PDF viewer
+              // renders the blob in an <iframe> at full speed.
+              const newUrl = URL.createObjectURL(blob);
+              setPdfBlobUrl((prev) => {
+                if (prev) URL.revokeObjectURL(prev);
+                return newUrl;
               });
-              blob = await pdf(element as any).toBlob();
-              if (cancelled) return;
+              setPageImages([]);
+              setErrorMsg(null);
+              onPageCountRef.current?.(1);
+              return;
             }
+
+            // Latin path: main-thread render, skipCJK to avoid downloading
+            // the 1.4 MB CJK font we don't need.
+            await prepareFonts(debouncedCustomize, debouncedData, { skipCJK: true });
+            if (cancelled) return;
+
+            const element = React.createElement(ResumePDF, {
+              data: debouncedData,
+              customize: debouncedCustomize,
+            });
+            blob = await pdf(element as any).toBlob();
+            if (cancelled) return;
 
             const images = await renderPdfPagesToImages(blob);
             if (cancelled) return;
             setPageImages(images);
+            setPdfBlobUrl((prev) => { if (prev) URL.revokeObjectURL(prev); return null; });
             setErrorMsg(null);
             onPageCountRef.current?.(images.length);
           })(),
@@ -292,11 +313,23 @@ export const ResumePdfPreview = React.memo(function ResumePdfPreview({
       )}
 
       {/* Loading overlay — shown on first load; pages remain visible during subsequent re-renders */}
-      {loading && pageImages.length === 0 && (
+      {loading && pageImages.length === 0 && !pdfBlobUrl && (
         <div className="absolute inset-0 flex flex-col items-center justify-center gap-3 z-10">
           <div className="w-6 h-6 border-2 border-gray-300 border-t-gray-600 rounded-full animate-spin" />
           <span className="text-sm text-gray-500">{t("generatingPreview")}</span>
         </div>
+      )}
+
+      {/* CJK iframe preview — browser's native PDF viewer renders the
+          blob from the Web Worker. Bypasses pdfjs rasterization which
+          hangs on CJK-font PDFs. */}
+      {pdfBlobUrl && (
+        <iframe
+          src={pdfBlobUrl}
+          title={t("generatingPreview")}
+          className="w-full h-full border-0"
+          style={{ backgroundColor: "#f3f4f6" }}
+        />
       )}
 
       {/* Subtle refresh indicator while pages are present but re-rendering */}
