@@ -30,6 +30,10 @@ const ALL_TABLES = [
   "resume_analyses",
   "interview_questions",
   "profiles",
+  "sessions",
+  "guide_reads",
+  "tool_completions",
+  "error_log",
 ] as const;
 
 Deno.serve(async (req) => {
@@ -82,6 +86,10 @@ Deno.serve(async (req) => {
       resume_analyses: "created_at",
       interview_questions: "id",
       profiles: "created_at",
+      sessions: "started_at",
+      guide_reads: "started_at",
+      tool_completions: "created_at",
+      error_log: "created_at",
     };
 
     // Query all requested tables in parallel

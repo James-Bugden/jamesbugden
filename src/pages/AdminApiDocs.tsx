@@ -25,6 +25,10 @@ const TABLES = [
   "resume_analyses",
   "interview_questions",
   "profiles",
+  "sessions",
+  "guide_reads",
+  "tool_completions",
+  "error_log",
 ];
 
 const PARAMS: { name: string; required: boolean; values: string; description: string }[] = [

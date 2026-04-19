@@ -191,6 +191,53 @@ export type Database = {
         }
         Relationships: []
       }
+      error_log: {
+        Row: {
+          anon_id: string | null
+          created_at: string
+          id: string
+          message: string
+          metadata: Json
+          page: string | null
+          session_id: string | null
+          source: string
+          stack: string | null
+          user_id: string | null
+        }
+        Insert: {
+          anon_id?: string | null
+          created_at?: string
+          id?: string
+          message: string
+          metadata?: Json
+          page?: string | null
+          session_id?: string | null
+          source: string
+          stack?: string | null
+          user_id?: string | null
+        }
+        Update: {
+          anon_id?: string | null
+          created_at?: string
+          id?: string
+          message?: string
+          metadata?: Json
+          page?: string | null
+          session_id?: string | null
+          source?: string
+          stack?: string | null
+          user_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "error_log_session_id_fkey"
+            columns: ["session_id"]
+            isOneToOne: false
+            referencedRelation: "sessions"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       event_tracks: {
         Row: {
           created_at: string
@@ -280,6 +327,68 @@ export type Database = {
           user_id?: string
         }
         Relationships: []
+      }
+      guide_reads: {
+        Row: {
+          anon_id: string | null
+          copy_actions: number
+          cta_clicks: number
+          ended_at: string | null
+          guide_lang: string
+          guide_slug: string
+          id: string
+          marked_complete: boolean
+          metadata: Json
+          reached_bottom: boolean
+          scroll_depth_pct: number | null
+          session_id: string | null
+          started_at: string
+          time_on_page_sec: number | null
+          user_id: string | null
+        }
+        Insert: {
+          anon_id?: string | null
+          copy_actions?: number
+          cta_clicks?: number
+          ended_at?: string | null
+          guide_lang?: string
+          guide_slug: string
+          id?: string
+          marked_complete?: boolean
+          metadata?: Json
+          reached_bottom?: boolean
+          scroll_depth_pct?: number | null
+          session_id?: string | null
+          started_at?: string
+          time_on_page_sec?: number | null
+          user_id?: string | null
+        }
+        Update: {
+          anon_id?: string | null
+          copy_actions?: number
+          cta_clicks?: number
+          ended_at?: string | null
+          guide_lang?: string
+          guide_slug?: string
+          id?: string
+          marked_complete?: boolean
+          metadata?: Json
+          reached_bottom?: boolean
+          scroll_depth_pct?: number | null
+          session_id?: string | null
+          started_at?: string
+          time_on_page_sec?: number | null
+          user_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "guide_reads_session_id_fkey"
+            columns: ["session_id"]
+            isOneToOne: false
+            referencedRelation: "sessions"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       interview_questions: {
         Row: {
@@ -482,6 +591,84 @@ export type Database = {
           salary?: number
           sector?: string | null
           verdict?: string | null
+        }
+        Relationships: []
+      }
+      sessions: {
+        Row: {
+          anon_id: string
+          device_type: string | null
+          duration_sec: number | null
+          ended_at: string | null
+          entry_page: string | null
+          exit_page: string | null
+          id: string
+          language: string | null
+          last_seen_at: string
+          metadata: Json
+          pages_viewed: number
+          referrer: string | null
+          started_at: string
+          timezone: string | null
+          user_agent: string | null
+          user_id: string | null
+          utm_campaign: string | null
+          utm_content: string | null
+          utm_medium: string | null
+          utm_source: string | null
+          utm_term: string | null
+          viewport_h: number | null
+          viewport_w: number | null
+        }
+        Insert: {
+          anon_id: string
+          device_type?: string | null
+          duration_sec?: number | null
+          ended_at?: string | null
+          entry_page?: string | null
+          exit_page?: string | null
+          id?: string
+          language?: string | null
+          last_seen_at?: string
+          metadata?: Json
+          pages_viewed?: number
+          referrer?: string | null
+          started_at?: string
+          timezone?: string | null
+          user_agent?: string | null
+          user_id?: string | null
+          utm_campaign?: string | null
+          utm_content?: string | null
+          utm_medium?: string | null
+          utm_source?: string | null
+          utm_term?: string | null
+          viewport_h?: number | null
+          viewport_w?: number | null
+        }
+        Update: {
+          anon_id?: string
+          device_type?: string | null
+          duration_sec?: number | null
+          ended_at?: string | null
+          entry_page?: string | null
+          exit_page?: string | null
+          id?: string
+          language?: string | null
+          last_seen_at?: string
+          metadata?: Json
+          pages_viewed?: number
+          referrer?: string | null
+          started_at?: string
+          timezone?: string | null
+          user_agent?: string | null
+          user_id?: string | null
+          utm_campaign?: string | null
+          utm_content?: string | null
+          utm_medium?: string | null
+          utm_source?: string | null
+          utm_term?: string | null
+          viewport_h?: number | null
+          viewport_w?: number | null
         }
         Relationships: []
       }
@@ -724,6 +911,56 @@ export type Database = {
           total_reposts?: number | null
         }
         Relationships: []
+      }
+      tool_completions: {
+        Row: {
+          action: string
+          anon_id: string | null
+          created_at: string
+          duration_ms: number | null
+          id: string
+          lang: string | null
+          outcome: Json
+          session_id: string | null
+          success: boolean
+          tool: string
+          user_id: string | null
+        }
+        Insert: {
+          action: string
+          anon_id?: string | null
+          created_at?: string
+          duration_ms?: number | null
+          id?: string
+          lang?: string | null
+          outcome?: Json
+          session_id?: string | null
+          success?: boolean
+          tool: string
+          user_id?: string | null
+        }
+        Update: {
+          action?: string
+          anon_id?: string | null
+          created_at?: string
+          duration_ms?: number | null
+          id?: string
+          lang?: string | null
+          outcome?: Json
+          session_id?: string | null
+          success?: boolean
+          tool?: string
+          user_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "tool_completions_session_id_fkey"
+            columns: ["session_id"]
+            isOneToOne: false
+            referencedRelation: "sessions"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       user_documents: {
         Row: {
