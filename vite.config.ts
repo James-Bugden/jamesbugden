@@ -61,12 +61,30 @@ export default defineConfig(({ mode }) => ({
         // @tiptap, or recharts without first verifying no TDZ crash.
         manualChunks(id: string) {
           if (!id.includes("node_modules")) return undefined;
-          // lucide-react: the critical fix. 85+ icons → 1 chunk.
+          // The critical fix. 85+ icons → 1 chunk.
           if (id.includes("lucide-react")) return "vendor-lucide";
-          // pdfjs-dist: standalone, ~750 KB gz, only used by the
-          // resume-builder + analyzer — worth isolating.
+          // Standalone, ~750 KB gz, only used by the resume-builder + analyzer.
           if (id.includes("pdfjs-dist")) return "vendor-pdfjs";
+          // Consolidate the Radix UI primitives. On the current CDN, each
+          // tiny Radix sub-package was getting its own ~500-2000 byte chunk
+          // and each one took 20-25s to download — the resume-builder route
+          // pulls 10+ of these and the serial waterfall exceeded the 45s
+          // preview timeout. Collapsing them to one chunk cuts the serial
+          // dep chain drastically.
+          if (id.includes("@radix-ui/")) return "vendor-radix";
+          // Same story for framer-motion, cmdk, vaul — small-ish standalones
+          // that produced their own chunks.
+          if (id.includes("framer-motion") || id.includes("cmdk") || id.includes("vaul")) return "vendor-motion";
+          // tiptap — editor stack. Consolidate to reduce chunk count.
+          if (id.includes("@tiptap/")) return "vendor-editor";
+          // recharts — admin/salary charts. Single chunk.
+          if (id.includes("recharts")) return "vendor-charts";
+          // @dnd-kit — drag-drop UI. Single chunk.
+          if (id.includes("@dnd-kit/")) return "vendor-dnd";
           // Everything else stays in the default vendor chunk.
+          // Do NOT split mammoth / pdf-lib / jspdf / html2canvas — those
+          // have circular imports with lodash and produce TDZ crashes
+          // when split (see PR #17).
           return undefined;
         },
       },
