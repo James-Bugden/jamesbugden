@@ -824,7 +824,7 @@ export default function AdminDashboard() {
                   <TabsTrigger value="resumes" className="text-xs h-7 px-3 rounded-full data-[state=active]:bg-primary data-[state=active]:text-primary-foreground">Resume Leads</TabsTrigger>
                   <TabsTrigger value="emails" className="text-xs h-7 px-3 rounded-full data-[state=active]:bg-primary data-[state=active]:text-primary-foreground">Email Leads</TabsTrigger>
                 </TabsList>
-                <CopyLinkButton />
+                <CopyLinkButton paramsOverride={{ tab: "people", sub: activeSub || "accounts" }} />
               </div>
 
               {/* Accounts */}
@@ -977,7 +977,7 @@ export default function AdminDashboard() {
                   <TabsTrigger value="feedback" className="text-xs h-7 px-3 rounded-full data-[state=active]:bg-primary data-[state=active]:text-primary-foreground">Feedback</TabsTrigger>
                   <TabsTrigger value="ai-usage" className="text-xs h-7 px-3 rounded-full data-[state=active]:bg-primary data-[state=active]:text-primary-foreground">AI Usage</TabsTrigger>
                 </TabsList>
-                <CopyLinkButton />
+                <CopyLinkButton paramsOverride={{ tab: "data", sub: activeSub || "reviews" }} />
               </div>
 
               {/* Reviews */}
