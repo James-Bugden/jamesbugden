@@ -51,16 +51,17 @@ interface FunnelData {
   loading: boolean;
 }
 
-type RangeKey = "24h" | "7d" | "30d";
+type RangeKey = "24h" | "7d" | "30d" | "90d";
 
 const RANGES: Record<RangeKey, { label: string; hours: number; sparkDays: number }> = {
   "24h": { label: "24h", hours: 24, sparkDays: 1 },
   "7d": { label: "7d", hours: 24 * 7, sparkDays: 7 },
   "30d": { label: "30d", hours: 24 * 30, sparkDays: 30 },
+  "90d": { label: "90d", hours: 24 * 90, sparkDays: 90 },
 };
 
 const isRangeKey = (v: string | null): v is RangeKey =>
-  v === "24h" || v === "7d" || v === "30d";
+  v === "24h" || v === "7d" || v === "30d" || v === "90d";
 
 export default function FunnelTab() {
   const [searchParams, setSearchParams] = useSearchParams();
