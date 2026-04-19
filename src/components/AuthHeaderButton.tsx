@@ -7,10 +7,14 @@ interface AuthHeaderButtonProps {
 }
 
 export function AuthHeaderButton({ variant = "nav" }: AuthHeaderButtonProps) {
-  const { isLoggedIn, user, signOut, isLoading } = useAuth();
+  const { isLoggedIn, signOut, isLoading } = useAuth();
   const location = useLocation();
 
-  if (isLoading) return null;
+  // IMPORTANT: do NOT return null while isLoading. We previously did that to
+  // avoid the "Sign in → My Toolkit" flicker on first paint, but if AuthContext
+  // ever hangs (stale/refused supabase session fetch) the header button
+  // disappeared entirely. Render the "Sign in" state optimistically — it
+  // rehydrates to "My Toolkit" the moment the session resolves.
 
   const isNav = variant === "nav";
   const baseClass = isNav

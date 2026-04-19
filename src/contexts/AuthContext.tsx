@@ -29,9 +29,19 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   useEffect(() => {
     const ACTIVE_USER_KEY = "james_careers_active_user";
 
+    // Safety floor: if getSession() hangs (e.g., stuck refresh-token request),
+    // make sure isLoading falls through within 5s so AuthHeaderButton,
+    // Dashboard skeletons, and anything else gated on isLoading don't hang
+    // the UI forever. The real session (if any) still hydrates via
+    // onAuthStateChange when it arrives.
+    const loadingTimeout = setTimeout(() => setIsLoading(false), 5000);
+
     const { data: { subscription } } = supabase.auth.onAuthStateChange(
       (event, session) => {
         setSession(session);
+        // Any onAuthStateChange event means the auth client has a real answer
+        // — clear isLoading regardless of whether the session is present.
+        setIsLoading(false);
 
         // If token refresh failed, clear stale tokens so guests don't see errors
         if (event === "TOKEN_REFRESHED" && !session) {
@@ -76,15 +86,20 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     supabase.auth.getSession().then(({ data: { session } }) => {
       setSession(session);
       setIsLoading(false);
+      clearTimeout(loadingTimeout);
     }).catch((err) => {
       // Clear stale tokens (e.g. refresh_token_not_found) for guest users
       if (err?.code === "refresh_token_not_found" || err?.message?.includes?.("Refresh Token Not Found")) {
         supabase.auth.signOut().catch(() => {});
       }
       setIsLoading(false);
+      clearTimeout(loadingTimeout);
     });
 
-    return () => subscription.unsubscribe();
+    return () => {
+      clearTimeout(loadingTimeout);
+      subscription.unsubscribe();
+    };
   }, []);
 
   const signOut = useCallback(async () => {
