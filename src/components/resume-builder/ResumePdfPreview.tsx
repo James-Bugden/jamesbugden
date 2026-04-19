@@ -12,7 +12,7 @@ import React, { useEffect, useRef, useState, useCallback } from "react";
 import { pdf } from "@react-pdf/renderer";
 import pdfjsWorkerUrl from "pdfjs-dist/build/pdf.worker.min.mjs?url";
 import { ZoomIn, ZoomOut, RotateCcw } from "lucide-react";
-import { ResumePDF, prepareFonts, onCJKFontReady } from "./ResumePDF";
+import { ResumePDF, prepareFonts } from "./ResumePDF";
 import type { ResumeData } from "./types";
 import type { CustomizeSettings } from "./customizeTypes";
 import { useT } from "./i18n";
@@ -154,14 +154,26 @@ export const ResumePdfPreview = React.memo(function ResumePdfPreview({
   const baseWidthRef = useRef(baseWidthPx);
   baseWidthRef.current = baseWidthPx;
 
-  // Bumps on CJK-font-ready. Used in the generate() effect dep array so
-  // when the async CJK font finishes registering (background task started
-  // inside prepareFonts), the preview re-generates with proper glyphs
-  // instead of Helvetica tofu.
-  const [cjkBump, setCjkBump] = useState(0);
-  useEffect(() => {
-    return onCJKFontReady(() => setCjkBump((n) => n + 1));
-  }, []);
+  // PREVIEW-SIDE CJK POLICY (important, do NOT revert):
+  //
+  // We INTENTIONALLY do not subscribe to onCJKFontReady here. Why:
+  // fontkit's parse of the 1.4 MB Noto Sans TC/SC WOFF is synchronous
+  // and runs on the main thread. The first PDF render that actually
+  // uses a CJK family blocks the main thread for 30-75 SECONDS on real
+  // devices — long enough that the Promise.race timeout cannot fire
+  // (setTimeout callbacks are also queued on the main thread). Live
+  // Chrome MCP profiling confirmed this: `1+1` evals timed out after
+  // 45s while the user's preview was regenerating with CJK registered.
+  //
+  // So: the preview stays Latin-only for CJK content (tofu squares for
+  // Chinese glyphs), but IT STAYS RESPONSIVE. Users can still edit,
+  // scroll, click Download. The download path (serverPdfExport.ts)
+  // runs off the main thread and produces a correct PDF with crisp
+  // CJK glyphs.
+  //
+  // If you want in-preview CJK glyphs, the right fix is a Web Worker
+  // that runs react-pdf off the main thread — not re-enabling the
+  // re-render here.
 
   // Auto-scale to fit the container width
   useEffect(() => {
@@ -207,7 +219,11 @@ export const ResumePdfPreview = React.memo(function ResumePdfPreview({
         await Promise.race([
           (async () => {
             // 1. Register fonts — required before react-pdf renders; cached after first call
-            await prepareFonts(debouncedCustomize, debouncedData);
+            // skipCJK: true — see "PREVIEW-SIDE CJK POLICY" comment above.
+            // Preview renders Latin-only to avoid the fontkit main-thread
+            // block. Download path calls prepareFonts without skipCJK so
+            // the output PDF has proper CJK glyphs.
+            await prepareFonts(debouncedCustomize, debouncedData, { skipCJK: true });
             if (cancelled) return;
 
             // 2. Render PDF to blob via react-pdf (same path as the export)
@@ -240,10 +256,9 @@ export const ResumePdfPreview = React.memo(function ResumePdfPreview({
 
     generate();
     return () => { cancelled = true; };
-    // cjkBump is incremented by onCJKFontReady when the async CJK font
-    // finishes registering. Including it here triggers a re-render of the
-    // preview with proper CJK glyphs (first render used Helvetica tofu).
-  }, [debouncedData, debouncedCustomize, cjkBump]);
+    // No cjkBump in deps — see the "PREVIEW-SIDE CJK POLICY" comment
+    // above. Preview stays Latin-only to avoid a main-thread freeze.
+  }, [debouncedData, debouncedCustomize]);
 
   const handleZoomOut = useCallback(() => setZoomOffset((z) => Math.max(z - 0.1, -0.4)), []);
   const handleZoomIn  = useCallback(() => setZoomOffset((z) => Math.min(z + 0.1, 0.6)), []);

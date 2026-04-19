@@ -332,7 +332,11 @@ function emitCJKReady() {
  * change is safe — it just moves CJK registration from the critical
  * path to the background.
  */
-export async function prepareFonts(c?: CustomizeSettings, data?: ResumeData): Promise<void> {
+export async function prepareFonts(
+  c?: CustomizeSettings,
+  data?: ResumeData,
+  opts: { skipCJK?: boolean } = {},
+): Promise<void> {
   const families = new Set<string>();
   if (c?.bodyFont) families.add(c.bodyFont);
   if (c?.headingFont) families.add(c.headingFont);
@@ -340,9 +344,21 @@ export async function prepareFonts(c?: CustomizeSettings, data?: ResumeData): Pr
   // Latin fonts — await these. Tiny (30 KB per weight), fast to register.
   const latinTasks = Array.from(families).map((f) => registerFontAsync(f));
 
-  // CJK fonts — fire-and-forget. Do NOT await. Emit a ready event when done
-  // so the preview can re-render with proper glyphs.
-  if (data) {
+  // CJK fonts.
+  //
+  // skipCJK=true: caller is the in-editor preview. Do NOT register CJK at
+  // all — fontkit's synchronous parse of the 1.4 MB WOFF blocks the main
+  // thread for 30-75 seconds on first use, freezing the whole editor
+  // (confirmed via Chrome MCP profiling). Preview falls back to Latin
+  // rendering with tofu squares for CJK glyphs; the download path calls
+  // this function with skipCJK=false (or unset) so the downloaded PDF
+  // still contains crisp CJK.
+  //
+  // skipCJK=false (default): caller wants true CJK rendering. Used by
+  // the PDF download path. The main thread WILL block briefly while
+  // fontkit parses the font on first register; acceptable because
+  // downloads run once (not continuously during typing).
+  if (data && !opts.skipCJK) {
     const primary = resolveResumeCJKFamily(data);
     if (primary) {
       const cjkTasks: Promise<boolean>[] = [registerCJKFamily(primary)];
@@ -351,7 +367,8 @@ export async function prepareFonts(c?: CustomizeSettings, data?: ResumeData): Pr
         cjkTasks.push(registerCJKFamily(CJK_FONT_FAMILY_TC));
       }
       // Fire and forget. When all CJK registrations settle, emit the
-      // ready event so the preview re-renders.
+      // ready event so any callers (e.g. downloads) waiting for CJK
+      // can proceed.
       Promise.allSettled(cjkTasks).then((results) => {
         const anySucceeded = results.some((r) => r.status === "fulfilled" && r.value === true);
         if (anySucceeded) emitCJKReady();
