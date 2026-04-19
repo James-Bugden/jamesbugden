@@ -41,33 +41,50 @@ interface ErrorRow {
 }
 
 interface FunnelData {
-  sessionsToday: number;
-  signupsToday: number;
+  sessionsCount: number;
+  signupsCount: number;
   conversionPct: number;
   topTools: ToolStat[];
-  errors24h: number;
+  errorsCount: number;
   errorsBySource: ErrorStat[];
-  sessions7d: DayPoint[];
+  sessionsSpark: DayPoint[];
   loading: boolean;
 }
 
-const startOfTodayISO = () => {
-  const d = new Date();
-  d.setHours(0, 0, 0, 0);
-  return d.toISOString();
+type RangeKey = "24h" | "7d" | "30d";
+
+const RANGES: Record<RangeKey, { label: string; hours: number; sparkDays: number }> = {
+  "24h": { label: "24h", hours: 24, sparkDays: 1 },
+  "7d": { label: "7d", hours: 24 * 7, sparkDays: 7 },
+  "30d": { label: "30d", hours: 24 * 30, sparkDays: 30 },
 };
 
-const dayAgoISO = () => new Date(Date.now() - 24 * 60 * 60 * 1000).toISOString();
+const isRangeKey = (v: string | null): v is RangeKey =>
+  v === "24h" || v === "7d" || v === "30d";
 
 export default function FunnelTab() {
+  const [searchParams, setSearchParams] = useSearchParams();
+  const initialRange: RangeKey = isRangeKey(searchParams.get("range"))
+    ? (searchParams.get("range") as RangeKey)
+    : "24h";
+  const [range, setRangeState] = useState<RangeKey>(initialRange);
+
+  const setRange = (next: RangeKey) => {
+    setRangeState(next);
+    const sp = new URLSearchParams(searchParams);
+    if (next === "24h") sp.delete("range");
+    else sp.set("range", next);
+    setSearchParams(sp, { replace: true });
+  };
+
   const [data, setData] = useState<FunnelData>({
-    sessionsToday: 0,
-    signupsToday: 0,
+    sessionsCount: 0,
+    signupsCount: 0,
     conversionPct: 0,
     topTools: [],
-    errors24h: 0,
+    errorsCount: 0,
     errorsBySource: [],
-    sessions7d: [],
+    sessionsSpark: [],
     loading: true,
   });
   const [openSource, setOpenSource] = useState<string | null>(null);
