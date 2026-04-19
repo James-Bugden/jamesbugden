@@ -129,10 +129,10 @@ async function renderViaFly(
 }
 
 /**
- * Flag to opt in to the server path. Defaults to ON in prod because Lovable
- * has no UI for VITE_* env vars — can't flip it any other way. Query param
- * (`?serverPreview=0`) still provides a client-side kill switch for
- * debugging.
+ * Flag to opt in to the server path. Defaults to OFF — the Tokyo round-trip
+ * adds ~1-2s per preview tick which felt slow even for CJK, so local pdfjs
+ * stays the default and the iframe fallback handles the rare pdfjs crash.
+ * Opt in per-tab with `?serverPreview=1`.
  */
 export function serverPreviewEnabled(): boolean {
   if (typeof window === "undefined") return false;
@@ -140,8 +140,7 @@ export function serverPreviewEnabled(): boolean {
   if (qp.get("serverPreview") === "1") return true;
   if (qp.get("serverPreview") === "0") return false;
   const envFlag = (import.meta.env.VITE_PREVIEW_ENDPOINT_ENABLED ?? "") as string;
-  if (envFlag === "0" || envFlag === "false") return false;
-  return true;
+  return envFlag === "1" || envFlag === "true";
 }
 
 function blobToBase64(blob: Blob): Promise<string> {
