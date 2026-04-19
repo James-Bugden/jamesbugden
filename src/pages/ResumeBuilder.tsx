@@ -772,7 +772,7 @@ const ResumeBuilder = () => {
           template: customize?.template ?? null,
           page_format: customize?.pageFormat ?? "a4",
           section_count: sectionCount,
-          has_photo: !!data.personalDetails?.photoUrl,
+          has_photo: !!(data.personalDetails as any)?.photoUrl,
         },
         { lang, durationMs: Math.round(performance.now() - exportStarted), success: true },
       );
