@@ -180,10 +180,17 @@ export const ResumePdfPreview = React.memo(function ResumePdfPreview({
       // CDN stalls or react-pdf/fontkit hangs internally, we surface an
       // error instead of leaving the user staring at "Generating preview...".
       // Do NOT remove this — it is the backstop for the CJK infinite-loading bug.
+      // 45s backstop. CJK resumes pull 2.8 MB of Noto fonts (400 + 700
+      // weights × one family) plus run through fontkit subsetting, which
+      // can legitimately take 15-25s on slow networks before pdf().toBlob()
+      // even starts. 25s was too aggressive and produced false-positive
+      // "Preview generation timed out" errors for real resumes with real
+      // content. 45s gives the pipeline room to breathe while still
+      // preventing the "loader spins forever" failure mode.
       const timeoutPromise = new Promise<never>((_, reject) =>
         setTimeout(
-          () => reject(new Error("Preview generation timed out (25s). Check network or try a smaller resume.")),
-          25_000,
+          () => reject(new Error("Preview generation timed out (45s). Check network or try a smaller resume.")),
+          45_000,
         ),
       );
 

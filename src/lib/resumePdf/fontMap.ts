@@ -85,8 +85,26 @@ export type CJKFamily = typeof ALL_CJK_FAMILIES[number];
 /** Any CJK-Unified / CJK Ext A / CJK Compat range — the broadest "is CJK" test. */
 const RE_CJK_UNIFIED = /[\u3400-\u4dbf\u4e00-\u9fff\uf900-\ufaff]/;
 
-/** Japanese-specific kana (unambiguous). */
-const RE_JP_KANA = /[\u3040-\u309f\u30a0-\u30ff\u31f0-\u31ff]/;
+/**
+ * Japanese-specific kana (truly unambiguous — NOT shared with Chinese).
+ *
+ * Excludes U+30A0 (katakana-hiragana double hyphen), U+30FB (katakana
+ * middle dot ・), and U+30FC (prolonged sound mark ー). Those three look
+ * Japanese but are commonly used in Traditional Chinese names + business
+ * text (e.g. "台北・臺灣" as a location separator). Matching them as
+ * "Japanese" caused the resume-preview pipeline to register Noto Sans
+ * JP instead of Noto Sans TC for a Traditional Chinese resume, which
+ * starved the PDF of TC glyphs and timed out at 25s.
+ *
+ * Kept:
+ *   \u3040-\u309f — Hiragana (exclusively JP)
+ *   \u30a1-\u30fa — Katakana letters proper (ア through ン) minus U+30A0
+ *   \u31f0-\u31ff — Katakana phonetic extensions (JP-only)
+ *
+ * Do NOT widen without re-verifying against a Traditional Chinese resume
+ * that uses ・ or ー.
+ */
+const RE_JP_KANA = /[\u3040-\u309f\u30a1-\u30fa\u31f0-\u31ff]/;
 
 /** Korean hangul syllables + jamo + compat. */
 const RE_KR_HANGUL = /[\uac00-\ud7af\u1100-\u11ff\u3130-\u318f\ua960-\ua97f\ud7b0-\ud7ff]/;
