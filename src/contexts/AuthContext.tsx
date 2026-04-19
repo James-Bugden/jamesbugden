@@ -10,6 +10,15 @@ interface AuthContextValue {
   session: Session | null;
   isLoggedIn: boolean;
   isLoading: boolean;
+  /**
+   * True once supabase.auth.getSession() has actually resolved (or its
+   * onAuthStateChange fired), as opposed to the safety timeout giving up.
+   * Pages that redirect unauthenticated users (Dashboard) should gate on
+   * THIS, not on `!isLoading`, to avoid redirecting a user who IS logged
+   * in just because the session check is slow. isLoading is for UI
+   * gating; hasResolvedAuth is for routing decisions.
+   */
+  hasResolvedAuth: boolean;
   signOut: () => Promise<void>;
 }
 
@@ -18,12 +27,14 @@ const AuthContext = createContext<AuthContextValue>({
   session: null,
   isLoggedIn: false,
   isLoading: true,
+  hasResolvedAuth: false,
   signOut: async () => {},
 });
 
 export function AuthProvider({ children }: { children: ReactNode }) {
   const [session, setSession] = useState<Session | null>(null);
   const [isLoading, setIsLoading] = useState(true);
+  const [hasResolvedAuth, setHasResolvedAuth] = useState(false);
   const syncedRef = useRef<Set<string>>(new Set());
 
   useEffect(() => {
@@ -42,6 +53,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         // Any onAuthStateChange event means the auth client has a real answer
         // — clear isLoading regardless of whether the session is present.
         setIsLoading(false);
+        setHasResolvedAuth(true);
 
         // If token refresh failed, clear stale tokens so guests don't see errors
         if (event === "TOKEN_REFRESHED" && !session) {
@@ -86,6 +98,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     supabase.auth.getSession().then(({ data: { session } }) => {
       setSession(session);
       setIsLoading(false);
+      setHasResolvedAuth(true);
       clearTimeout(loadingTimeout);
     }).catch((err) => {
       // Clear stale tokens (e.g. refresh_token_not_found) for guest users
@@ -93,6 +106,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         supabase.auth.signOut().catch(() => {});
       }
       setIsLoading(false);
+      setHasResolvedAuth(true);
       clearTimeout(loadingTimeout);
     });
 
@@ -120,6 +134,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         session,
         isLoggedIn: !!session?.user,
         isLoading,
+        hasResolvedAuth,
         signOut,
       }}
     >

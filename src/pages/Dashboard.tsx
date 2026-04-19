@@ -208,7 +208,7 @@ const i18n = {
 
 /* ── Main Dashboard ── */
 export default function Dashboard({ lang = "en" }: { lang?: "en" | "zh" }) {
-  const { user, isLoggedIn, isLoading, signOut } = useAuth();
+  const { user, isLoggedIn, isLoading, hasResolvedAuth, signOut } = useAuth();
   const [scrolled, setScrolled] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
   const [activeSection, setActiveSection] = useState<string>("tools");
@@ -283,9 +283,15 @@ export default function Dashboard({ lang = "en" }: { lang?: "en" | "zh" }) {
   // genuinely need a loaded profile (onboarding card) already gate
   // themselves via `!profileLoading && profile && ...`.
   if (isLoading) return <DashboardSkeleton />;
+  // IMPORTANT: only redirect to /login once we've DEFINITIVELY heard back
+  // from supabase. hasResolvedAuth is true after the real getSession()
+  // or onAuthStateChange fires — NOT after the 5s safety timeout in
+  // AuthContext. Without this guard, a slow auth round-trip would kick
+  // logged-in users to /login (observed 2026-04-19 on the Chinese
+  // dashboard — user had a valid session but hit the login page).
+  if (!hasResolvedAuth) return <DashboardSkeleton />;
   if (!isLoggedIn) {
     const dashPath = window.location.pathname;
-    const isZhDash = dashPath.startsWith("/zh-tw") || dashPath.startsWith("/zh");
     return <Navigate to="/login" state={{ from: dashPath }} replace />;
   }
 
