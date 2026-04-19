@@ -37,38 +37,40 @@ export default defineConfig(({ mode }) => ({
   build: {
     rollupOptions: {
       output: {
-        // CRITICAL: without manualChunks, Rollup produces one chunk per
-        // lucide icon import (`save.js`, `sparkles.js`, ...) resulting in
-        // 80+ tiny files the browser loads serially. The `/resume` route
-        // was taking 30+ seconds to boot on real networks — users saw the
-        // "JAMES BUGDEN" spinner indefinitely. Grouping deps into named
-        // vendor chunks fixes the loading time + makes future bundle
-        // regressions visible in the build output.
+        // MINIMAL chunking — only split deps that are (a) huge and (b)
+        // have NO circular imports with other deps.
         //
-        // A function form of manualChunks lets us catch ANY node_modules
-        // import (including transitive) so a new dep added by Lovable's
-        // bot doesn't silently fall back to per-file splitting.
+        // Previous attempt split mammoth / pdf-lib / jspdf / html2canvas
+        // into their own chunks, which triggered a Temporal Dead Zone
+        // crash at load time:
+        //   ReferenceError: Cannot access '_' before initialization
+        //   at vendor-docx-*.js:1:1150
+        // …caused by circular imports between chunks (mammoth uses
+        // lodash; lodash modules end up in vendor-misc; a cycle at
+        // module-init time).
         //
-        // Do NOT remove this block. Fixes the "app stuck on splash
-        // screen" bug on production.
+        // The safe pattern: only split deps that are standalone
+        // internally. Everything else stays in one big vendor chunk
+        // so Rollup can resolve the dep graph naturally.
+        //
+        // Root cause we're solving: without ANY manualChunks, Rollup
+        // creates ONE FILE PER lucide-react icon (85+ files, 600 bytes
+        // each), which makes the app take 30s to boot.
+        //
+        // Do NOT split mammoth, pdf-lib, jspdf, html2canvas, html-to-image,
+        // @tiptap, or recharts without first verifying no TDZ crash.
         manualChunks(id: string) {
           if (!id.includes("node_modules")) return undefined;
+          // lucide-react: the critical fix. 85+ icons → 1 chunk.
           if (id.includes("lucide-react")) return "vendor-lucide";
-          if (id.includes("@react-pdf")) return "vendor-pdf-render";
-          if (id.includes("pdfjs-dist") || id.includes("pdf-lib")) return "vendor-pdf-parse";
-          if (id.includes("jspdf") || id.includes("html2canvas") || id.includes("html-to-image")) return "vendor-pdf-other";
-          if (id.includes("mammoth")) return "vendor-docx";
-          if (id.includes("@tiptap")) return "vendor-editor";
-          if (id.includes("recharts")) return "vendor-charts";
-          if (id.includes("framer-motion")) return "vendor-motion";
-          if (id.includes("@supabase")) return "vendor-supabase";
-          if (id.includes("@radix-ui")) return "vendor-radix";
-          if (id.includes("react-router")) return "vendor-router";
-          if (id.includes("react-dom") || id.includes("react/") || id.match(/node_modules\/react\/index/)) return "vendor-react";
-          return "vendor-misc";
+          // pdfjs-dist: standalone, ~750 KB gz, only used by the
+          // resume-builder + analyzer — worth isolating.
+          if (id.includes("pdfjs-dist")) return "vendor-pdfjs";
+          // Everything else stays in the default vendor chunk.
+          return undefined;
         },
       },
     },
-    chunkSizeWarningLimit: 1000,
+    chunkSizeWarningLimit: 2000,
   },
 }));
