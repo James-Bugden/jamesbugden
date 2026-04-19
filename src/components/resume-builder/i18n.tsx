@@ -121,6 +121,8 @@ export const translations = {
     previewFailed: "Preview failed",
     generatingPreview: "Generating preview…",
     previewUpdating: "Updating…",
+    previewZhPlaceholderTitle: "Preview unavailable for Chinese resumes",
+    previewZhPlaceholderBody: "Click Download to generate your PDF with full Chinese / Japanese / Korean glyphs. Preview rendering for CJK content is temporarily disabled to keep the editor responsive.",
 
     // Dates, months, language proficiency, and a11y labels
     presentDate: "Present",
@@ -561,6 +563,8 @@ export const translations = {
     previewFailed: "預覽失敗",
     generatingPreview: "正在產生預覽…",
     previewUpdating: "更新中…",
+    previewZhPlaceholderTitle: "中文履歷預覽暫時停用",
+    previewZhPlaceholderBody: "點擊「下載」即可產生包含完整中文字元的 PDF。為了讓編輯器保持流暢，中文預覽功能暫時停用。",
 
     // Dates, months, language proficiency, and a11y labels
     presentDate: "至今",
