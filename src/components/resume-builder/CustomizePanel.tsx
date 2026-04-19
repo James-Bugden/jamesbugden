@@ -2,7 +2,7 @@ import { useState, useCallback } from "react";
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible";
 import { Tooltip, TooltipTrigger, TooltipContent, TooltipProvider } from "@/components/ui/tooltip";
 import { cn } from "@/lib/utils";
-import { Minus, Plus, Check, Link, ExternalLink, Smile, Circle, AlignLeft, AlignCenter, AlignRight, GripVertical, Camera, ChevronDown } from "lucide-react";
+import { Minus, Plus, Check, Smile, Circle, AlignLeft, AlignCenter, AlignRight, GripVertical, Camera, ChevronDown } from "lucide-react";
 import { DndContext, closestCenter, PointerSensor, TouchSensor, useSensor, useSensors, DragEndEvent } from "@dnd-kit/core";
 import { SortableContext, verticalListSortingStrategy, useSortable, arrayMove } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
@@ -535,25 +535,12 @@ function DesignTab({ settings, onChange }: { settings: CustomizeSettings; onChan
         <div className="space-y-3">
           <CheckboxRow label="Underline" checked={settings.linkUnderline} onChange={(v) => onChange({ linkUnderline: v })} />
           <CheckboxRow label="Blue color" checked={settings.linkBlue} onChange={(v) => onChange({ linkBlue: v })} />
-          <CheckboxRow label="Link icon" checked={settings.linkIcon} onChange={(v) => onChange({ linkIcon: v })} />
-          {settings.linkIcon && (
-            <div className="flex gap-2 ml-6">
-              <button
-                onClick={() => onChange({ linkIconStyle: "link" })}
-                className="p-2 rounded-lg border-2"
-                style={settings.linkIconStyle === "link" ? { borderColor: B.green, backgroundColor: B.greenLighter } : { borderColor: B.border }}
-              >
-                <Link className="w-4 h-4" style={{ color: B.textSec }} />
-              </button>
-              <button
-                onClick={() => onChange({ linkIconStyle: "external" })}
-                className="p-2 rounded-lg border-2"
-                style={settings.linkIconStyle === "external" ? { borderColor: B.green, backgroundColor: B.greenLighter } : { borderColor: B.border }}
-              >
-                <ExternalLink className="w-4 h-4" style={{ color: B.textSec }} />
-              </button>
-            </div>
-          )}
+          {/* "Link icon" + icon-style picker removed — both wrote to settings
+              but neither was read by ResumePDF.tsx, so toggling them did
+              nothing visible in the PDF or preview. If we want per-link
+              icons later, they need to be wired through to the PDF render
+              (e.g. <Svg> children next to contactItems at ResumePDF.tsx
+              ~2163). Until then, don't surface controls that do nothing. */}
         </div>
 
         {settings.colorMode === "advanced" && (

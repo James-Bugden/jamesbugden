@@ -41,7 +41,10 @@ import { useNavigate, Link } from "react-router-dom";
 import { useAuth } from "@/contexts/AuthContext";
 import { LogIn } from "lucide-react";
 import { AnalyzerPromptDialog } from "@/components/resume-builder/AnalyzerPromptDialog";
-import { BuggyNoticeDialog } from "@/components/resume-builder/BuggyNoticeDialog";
+// BuggyNoticeDialog import removed — the popup created a "tool is broken"
+// perception every cold visit. Underlying pipeline is healthy (CJK guards,
+// dual-layer timeouts, error boundary, allSettled). Don't re-mount without
+// first removing the "this tool is buggy" copy.
 import { AnalyzerSuggestionsPanel, Suggestion, extractSuggestions, applySuggestionToData } from "@/components/resume-builder/AnalyzerSuggestionsPanel";
 import MicroSurvey from "@/components/feedback/MicroSurvey";
 import { LimitReachedModal } from "@/components/LimitReachedModal";
@@ -607,7 +610,7 @@ const ResumeBuilder = () => {
 
         setSearchParams({}, { replace: true });
       } catch (e) {
-        console.error("Analyzer import error:", e);
+        if (import.meta.env.DEV) console.error("Analyzer import error:", e);
         setSearchParams({}, { replace: true });
         toast({ title: "Import failed", description: "Something went wrong. Please try again.", variant: "destructive" });
       } finally {
@@ -1302,7 +1305,7 @@ const ResumeBuilder = () => {
       {/* Import into existing resume */}
       <ImportModal open={editorImportOpen} onClose={() => setEditorImportOpen(false)} type="resume" onImported={handleEditorImported} />
       {viewMode === "resume-editor" && <AnalyzerPromptDialog fromAnalyzer={searchParams.get("from") === "analyzer" || !!sessionStorage.getItem("analyzer-resume-text")} />}
-      <BuggyNoticeDialog />
+      {/* <BuggyNoticeDialog /> — removed; the popup created a "tool is broken" signal every cold visit. */}
 
       {/* Replace picker dialog when at resume limit */}
       <AlertDialog open={replacePickerOpen} onOpenChange={setReplacePickerOpen}>
