@@ -13,6 +13,7 @@ import { pdf } from "@react-pdf/renderer";
 import pdfjsWorkerUrl from "pdfjs-dist/build/pdf.worker.min.mjs?url";
 import { ZoomIn, ZoomOut, RotateCcw } from "lucide-react";
 import { ResumePDF, prepareFonts } from "./ResumePDF";
+import { resumeHasCJK } from "@/lib/resumePdf/fontMap";
 import type { ResumeData } from "./types";
 import type { CustomizeSettings } from "./customizeTypes";
 import { useT } from "./i18n";
@@ -190,10 +191,25 @@ export const ResumePdfPreview = React.memo(function ResumePdfPreview({
     return () => ro.disconnect();
   }, []);
 
+  // Flag: is the current debounced data CJK? If yes, we skip the PDF
+  // preview entirely and show a placeholder. react-pdf + fontkit cannot
+  // render CJK content on the main thread without freezing the browser
+  // for 30-75 seconds (see "PREVIEW-SIDE CJK POLICY" above). Users still
+  // get their work by clicking Download, which renders server-side.
+  const isCJKResume = React.useMemo(() => resumeHasCJK(debouncedData), [debouncedData]);
+
   // Regenerate PDF whenever debounced data or customize changes.
   // onPageCount is intentionally excluded from deps — accessed via ref above.
   useEffect(() => {
     let cancelled = false;
+    // CJK short-circuit: don't even try to render. Show placeholder.
+    if (isCJKResume) {
+      setLoading(false);
+      setPageImages([]);
+      setErrorMsg(null);
+      onPageCountRef.current?.(1); // pretend one page so page-count UI doesn't look broken
+      return;
+    }
     setLoading(true);
 
     const generate = async () => {
@@ -272,8 +288,23 @@ export const ResumePdfPreview = React.memo(function ResumePdfPreview({
       className="h-full overflow-y-auto relative"
       style={{ backgroundColor: "#f3f4f6" }}
     >
+      {/* CJK placeholder — preview cannot render CJK glyphs safely on the
+          main thread (fontkit sync parse blocks the browser). Users still
+          get their work by clicking Download, which renders server-side. */}
+      {isCJKResume && pageImages.length === 0 && !loading && (
+        <div className="absolute inset-0 flex flex-col items-center justify-center gap-3 z-10 p-6 text-center">
+          <span className="text-4xl">📄</span>
+          <span className="text-sm font-medium text-gray-700">
+            {t("previewZhPlaceholderTitle") || "Preview unavailable for Chinese resumes"}
+          </span>
+          <span className="text-xs text-gray-500 max-w-sm">
+            {t("previewZhPlaceholderBody") || "Click Download to generate your PDF with full Chinese / Japanese / Korean glyphs. Preview rendering for CJK content is temporarily disabled to keep the editor responsive."}
+          </span>
+        </div>
+      )}
+
       {/* Error state */}
-      {errorMsg && !loading && pageImages.length === 0 && (
+      {!isCJKResume && errorMsg && !loading && pageImages.length === 0 && (
         <div className="absolute inset-0 flex flex-col items-center justify-center gap-3 z-10 p-6 text-center">
           <span className="text-sm font-medium text-red-600">{t("previewFailed")}</span>
           <span className="text-xs text-gray-500 max-w-xs break-all">{errorMsg}</span>
