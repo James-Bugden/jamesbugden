@@ -220,11 +220,6 @@ export default function HomepageTestimonialsZhTw() {
   return (
     <section id="testimonials" className="py-12 md:py-20 px-5 md:px-6" style={{ backgroundColor: "#FFFFFF" }}>
       <div className="container mx-auto max-w-5xl">
-        <h2 className="font-heading text-center mb-6" style={{ color: "#1A1A1A", fontSize: "clamp(2rem, 4vw, 2.625rem)", lineHeight: 1.2 }}>
-          <span className="hidden sm:inline">在夢想公司拿到年薪 3 百萬以上的 Offer</span>
-          <span className="sm:hidden">在夢想公司拿到<br />年薪 3 百萬以上<br />的 Offer</span>
-        </h2>
-
         <TestimonialCard item={featured} featured />
 
         <div className="mt-4 grid grid-cols-1 md:grid-cols-2 gap-4">
