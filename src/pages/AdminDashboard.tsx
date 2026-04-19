@@ -143,14 +143,23 @@ export default function AdminDashboard() {
   const activeTab = searchParams.get("tab") || "overview";
   const activeSub = searchParams.get("sub") || "";
   const setActiveTab = (tab: string) => {
-    const params: Record<string, string> = { tab };
-    setSearchParams(params, { replace: true });
+    const sp = new URLSearchParams(searchParams);
+    sp.set("tab", tab);
+    sp.delete("sub");
+    setSearchParams(sp, { replace: true });
   };
-  const setActiveSub = (tab: string, sub: string) => setSearchParams({ tab, sub }, { replace: true });
+  const setActiveSub = (tab: string, sub: string) => {
+    const sp = new URLSearchParams(searchParams);
+    sp.set("tab", tab);
+    sp.set("sub", sub);
+    setSearchParams(sp, { replace: true });
+  };
   const navigateTo = (tab: string, sub?: string) => {
-    const params: Record<string, string> = { tab };
-    if (sub) params.sub = sub;
-    setSearchParams(params, { replace: true });
+    const sp = new URLSearchParams(searchParams);
+    sp.set("tab", tab);
+    if (sub) sp.set("sub", sub);
+    else sp.delete("sub");
+    setSearchParams(sp, { replace: true });
   };
 
   const navigate = useNavigate();
