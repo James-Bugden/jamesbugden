@@ -133,14 +133,13 @@ export const ResumePdfPreview = React.memo(function ResumePdfPreview({
   const [zoomOffset, setZoomOffset] = useState(0);
   const displayScale = Math.max(0.2, Math.min(1.5, autoScale + zoomOffset));
 
-  // Page images from the last completed render (Latin path)
+  // Page images from the last completed render. SAME shape for EN and CJK —
+  // we removed the iframe/PDF-viewer path because users expect the preview
+  // to look like an image of the printed page (no viewer chrome) and to
+  // update live as they tweak customization settings. iframes cache their
+  // blob URL's internal document, which made customize changes invisible
+  // until the tab was reloaded.
   const [pageImages, setPageImages] = useState<string[]>([]);
-  // Blob URL for CJK previews — rendered via an <iframe> instead of
-  // pdfjs rasterization because pdfjs's main-thread parse of CJK fonts
-  // in the PDF is prohibitively slow (60+ seconds on real resumes,
-  // confirmed via window.__pdfWorkerLog trace 2026-04-19). The browser's
-  // native PDF viewer handles CJK at full speed.
-  const [pdfBlobUrl, setPdfBlobUrl] = useState<string | null>(null);
   // True while fonts are loading or PDF/pages are being generated
   const [loading, setLoading] = useState(true);
   const [errorMsg, setErrorMsg] = useState<string | null>(null);
@@ -232,7 +231,9 @@ export const ResumePdfPreview = React.memo(function ResumePdfPreview({
             let blob: Blob;
 
             if (isCJKResume) {
-              // CJK path: fresh Web Worker per render.
+              // CJK path: fresh Web Worker per render. Worker does the
+              // react-pdf + fontkit work with the 400 KB MOE-4808 subset,
+              // so the main thread never freezes.
               const { promise } = renderPdfInWorker(debouncedData, debouncedCustomize);
               const result = await promise;
               if (cancelled) return;
@@ -241,38 +242,27 @@ export const ResumePdfPreview = React.memo(function ResumePdfPreview({
                 throw new Error("error" in result ? result.error : "Worker render failed");
               }
               blob = result.blob;
+            } else {
+              // Latin path: main-thread render, skipCJK to avoid downloading
+              // the 1.4 MB CJK font we don't need.
+              await prepareFonts(debouncedCustomize, debouncedData, { skipCJK: true });
+              if (cancelled) return;
 
-              // For CJK we skip pdfjs rasterization — it's prohibitively
-              // slow on the main thread parsing embedded CJK fonts (60+s,
-              // times out the preview). Browser's native PDF viewer
-              // renders the blob in an <iframe> at full speed.
-              const newUrl = URL.createObjectURL(blob);
-              setPdfBlobUrl((prev) => {
-                if (prev) URL.revokeObjectURL(prev);
-                return newUrl;
+              const element = React.createElement(ResumePDF, {
+                data: debouncedData,
+                customize: debouncedCustomize,
               });
-              setPageImages([]);
-              setErrorMsg(null);
-              onPageCountRef.current?.(1);
-              return;
+              blob = await pdf(element as any).toBlob();
+              if (cancelled) return;
             }
 
-            // Latin path: main-thread render, skipCJK to avoid downloading
-            // the 1.4 MB CJK font we don't need.
-            await prepareFonts(debouncedCustomize, debouncedData, { skipCJK: true });
-            if (cancelled) return;
-
-            const element = React.createElement(ResumePDF, {
-              data: debouncedData,
-              customize: debouncedCustomize,
-            });
-            blob = await pdf(element as any).toBlob();
-            if (cancelled) return;
-
+            // Rasterize PDF pages to <img> sources. Same code path for EN
+            // and CJK so the preview has identical look + feel (no PDF
+            // viewer chrome) and customization changes visibly refresh on
+            // every debounce tick.
             const images = await renderPdfPagesToImages(blob);
             if (cancelled) return;
             setPageImages(images);
-            setPdfBlobUrl((prev) => { if (prev) URL.revokeObjectURL(prev); return null; });
             setErrorMsg(null);
             onPageCountRef.current?.(images.length);
           })(),

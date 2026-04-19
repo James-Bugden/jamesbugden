@@ -437,8 +437,31 @@ export async function prepareFonts(
   }
 }
 
-// Disable hyphenation — resumes should not hyphenate words
-Font.registerHyphenationCallback((word) => [word]);
+// Line-break policy:
+//   - Latin words: never hyphenate/split (resumes shouldn't split "hypothesis"
+//     into "hypo-thesis", and URLs/emails must stay atomic).
+//   - CJK runs: every ideograph / kana / hangul character is a legal break
+//     point. Without this, @react-pdf treats a whole Chinese sentence as one
+//     unbreakable "word" (no whitespace) and overflows the page margin.
+//   - Mixed tokens like "Uber員工": Latin run stays atomic, each CJK char is
+//     a break point. Result: "Uber" never splits, line can wrap between 員/工.
+// Confirmed not to affect Latin-only resumes (they hit the fast-path return).
+const CJK_BREAK_RE = /[\u3000-\u303F\u3040-\u309F\u30A0-\u30FF\u3400-\u4DBF\u4E00-\u9FFF\uAC00-\uD7AF\uFF00-\uFFEF]/;
+Font.registerHyphenationCallback((word) => {
+  if (!CJK_BREAK_RE.test(word)) return [word];
+  const parts: string[] = [];
+  let latinRun = "";
+  for (const ch of word) {
+    if (CJK_BREAK_RE.test(ch)) {
+      if (latinRun) { parts.push(latinRun); latinRun = ""; }
+      parts.push(ch);
+    } else {
+      latinRun += ch;
+    }
+  }
+  if (latinRun) parts.push(latinRun);
+  return parts;
+});
 
 /* ═══════════════════════════════════════════════════════════
    Size & Color Helpers (mirroring ResumePreview.tsx)
