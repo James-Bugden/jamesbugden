@@ -235,19 +235,13 @@ export default function AdminDashboard() {
   const [reviewUrl, setReviewUrl] = useState("");
   const [submitting, setSubmitting] = useState(false);
 
-  // Salary state
+  // Salary state (filter values come from the URL — see top of component)
   const [checks, setChecks] = useState<SalaryCheck[]>([]);
   const [checksLoading, setChecksLoading] = useState(true);
-  const [salarySearch, setSalarySearch] = useState("");
-  const [verdictFilter, setVerdictFilter] = useState("all");
-  const [sortKey, setSortKey] = useState<SalarySortKey>("created_at");
-  const [sortAsc, setSortAsc] = useState(false);
 
   // Resume leads state
   const [resumeLeads, setResumeLeads] = useState<ResumeLead[]>([]);
   const [resumeLeadsLoading, setResumeLeadsLoading] = useState(true);
-  const [resumeSearch, setResumeSearch] = useState("");
-  const [resumeSeniorityFilter, setResumeSeniorityFilter] = useState("all");
 
   // Email leads state
   const [emailLeads, setEmailLeads] = useState<EmailLead[]>([]);
@@ -256,14 +250,10 @@ export default function AdminDashboard() {
   // Feedback state
   const [feedbackItems, setFeedbackItems] = useState<FeedbackItem[]>([]);
   const [feedbackLoading, setFeedbackLoading] = useState(true);
-  const [feedbackSearch, setFeedbackSearch] = useState("");
-  const [feedbackTypeFilter, setFeedbackTypeFilter] = useState<string>("all");
 
   // Accounts state
   const [accounts, setAccounts] = useState<AccountUser[]>([]);
   const [accountsLoading, setAccountsLoading] = useState(true);
-  const [accountSearch, setAccountSearch] = useState("");
-  const [accountSort, setAccountSort] = useState<{ col: "created_at" | "last_sign_in_at"; dir: "asc" | "desc" }>({ col: "created_at", dir: "desc" });
 
   // AI Usage state
   const [aiUsageRows, setAiUsageRows] = useState<AiUsageRow[]>([]);
