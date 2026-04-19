@@ -244,6 +244,147 @@ Deno.serve(async (req) => {
       };
     }
 
+    // ── Session Quality ─────────────────────────────────────────────
+    const sessionRows = (result.sessions as any)?.rows || [];
+    if (sessionRows.length > 0) {
+      const durations = sessionRows.map((s: any) => s.duration_sec).filter((v: any) => typeof v === "number" && v > 0);
+      const pages = sessionRows.map((s: any) => s.pages_viewed || 1);
+      const deviceCounts: Record<string, number> = {};
+      const browserCounts: Record<string, number> = {};
+      let returningCount = 0;
+      let multiToolSessions = 0;
+      let bouncedSessions = 0;
+      for (const s of sessionRows) {
+        const dev = s.device_type || "unknown";
+        deviceCounts[dev] = (deviceCounts[dev] || 0) + 1;
+        const br = s.browser || "unknown";
+        browserCounts[br] = (browserCounts[br] || 0) + 1;
+        if (s.is_returning) returningCount++;
+        if ((s.tool_action_count || 0) >= 2) multiToolSessions++;
+        if ((s.pages_viewed || 1) <= 1 && (s.duration_sec || 0) < 10) bouncedSessions++;
+      }
+      const avg = (arr: number[]) => arr.length ? Math.round(arr.reduce((a, b) => a + b, 0) / arr.length) : 0;
+      const sortedDur = [...durations].sort((a, b) => a - b);
+      const median = sortedDur.length ? sortedDur[Math.floor(sortedDur.length / 2)] : 0;
+      result.session_quality = {
+        total_sessions: sessionRows.length,
+        returning_sessions: returningCount,
+        returning_pct: Math.round((returningCount / sessionRows.length) * 100),
+        bounced_sessions: bouncedSessions,
+        bounce_rate_pct: Math.round((bouncedSessions / sessionRows.length) * 100),
+        multi_tool_sessions: multiToolSessions,
+        multi_tool_pct: Math.round((multiToolSessions / sessionRows.length) * 100),
+        avg_duration_sec: avg(durations),
+        median_duration_sec: median,
+        avg_pages_per_session: Math.round((pages.reduce((a: number, b: number) => a + b, 0) / pages.length) * 10) / 10,
+        by_device: Object.entries(deviceCounts).map(([device, count]) => ({ device, count })).sort((a: any, b: any) => b.count - a.count),
+        by_browser: Object.entries(browserCounts).map(([browser, count]) => ({ browser, count })).sort((a: any, b: any) => b.count - a.count),
+      };
+    }
+
+    // ── Tool Funnel ─────────────────────────────────────────────────
+    const toolRows = (result.tool_completions as any)?.rows || [];
+    if (toolRows.length > 0) {
+      const byTool: Record<string, { total: number; success: number; actions: Record<string, number>; durations: number[] }> = {};
+      for (const t of toolRows) {
+        if (!byTool[t.tool]) byTool[t.tool] = { total: 0, success: 0, actions: {}, durations: [] };
+        byTool[t.tool].total++;
+        if (t.success) byTool[t.tool].success++;
+        byTool[t.tool].actions[t.action] = (byTool[t.tool].actions[t.action] || 0) + 1;
+        if (typeof t.duration_ms === "number") byTool[t.tool].durations.push(t.duration_ms);
+      }
+      result.tool_funnel = {
+        total_completions: toolRows.length,
+        unique_anon_users: new Set(toolRows.map((t: any) => t.anon_id).filter(Boolean)).size,
+        unique_signed_in: new Set(toolRows.map((t: any) => t.user_id).filter(Boolean)).size,
+        by_tool: Object.entries(byTool).map(([tool, d]) => ({
+          tool,
+          total: d.total,
+          success: d.success,
+          success_rate_pct: d.total > 0 ? Math.round((d.success / d.total) * 100) : 0,
+          actions: Object.entries(d.actions).sort((a: any, b: any) => b[1] - a[1]).map(([action, count]) => ({ action, count })),
+          avg_duration_ms: d.durations.length ? Math.round(d.durations.reduce((a, b) => a + b, 0) / d.durations.length) : null,
+        })).sort((a, b) => b.total - a.total),
+      };
+    }
+
+    // ── Error Summary ──────────────────────────────────────────────
+    const errorRows = (result.error_log as any)?.rows || [];
+    if (errorRows.length > 0) {
+      const bySource: Record<string, number> = {};
+      const topMessages: Record<string, { count: number; source: string; sample_page: string | null }> = {};
+      for (const e of errorRows) {
+        bySource[e.source] = (bySource[e.source] || 0) + 1;
+        const key = `${e.source}::${(e.message || "").slice(0, 120)}`;
+        if (!topMessages[key]) topMessages[key] = { count: 0, source: e.source, sample_page: e.page };
+        topMessages[key].count++;
+      }
+      result.error_summary = {
+        total_errors: errorRows.length,
+        unique_sessions_with_errors: new Set(errorRows.map((e: any) => e.session_id).filter(Boolean)).size,
+        by_source: Object.entries(bySource).map(([source, count]) => ({ source, count })).sort((a: any, b: any) => b.count - a.count),
+        top_messages: Object.entries(topMessages)
+          .map(([key, v]) => ({ message: key.split("::")[1], source: v.source, count: v.count, sample_page: v.sample_page }))
+          .sort((a, b) => b.count - a.count)
+          .slice(0, 20),
+      };
+    }
+
+    // ── Multi-Tool Journeys (cross-tool engagement = NSM) ──────────
+    if (toolRows.length > 0) {
+      const sessionTools: Record<string, Set<string>> = {};
+      const sessionFirstTool: Record<string, { tool: string; ts: number }> = {};
+      for (const t of toolRows) {
+        if (!t.session_id) continue;
+        if (!sessionTools[t.session_id]) sessionTools[t.session_id] = new Set();
+        sessionTools[t.session_id].add(t.tool);
+        const ts = new Date(t.created_at).getTime();
+        if (!sessionFirstTool[t.session_id] || ts < sessionFirstTool[t.session_id].ts) {
+          sessionFirstTool[t.session_id] = { tool: t.tool, ts };
+        }
+      }
+      const totalSessionsWithTools = Object.keys(sessionTools).length;
+      const crossedSessions = Object.values(sessionTools).filter((s) => s.size >= 2).length;
+      const entryToolCounts: Record<string, number> = {};
+      for (const v of Object.values(sessionFirstTool)) {
+        entryToolCounts[v.tool] = (entryToolCounts[v.tool] || 0) + 1;
+      }
+      result.journey_metrics = {
+        sessions_with_any_tool: totalSessionsWithTools,
+        sessions_using_2plus_tools: crossedSessions,
+        cross_tool_pct: totalSessionsWithTools > 0 ? Math.round((crossedSessions / totalSessionsWithTools) * 100) : 0,
+        entry_tool_distribution: Object.entries(entryToolCounts).map(([tool, count]) => ({ tool, count })).sort((a: any, b: any) => b.count - a.count),
+      };
+    }
+
+    // ── Power Users (signed-in users with ≥3 resume analyses) ──────
+    const analysisRows = (result.resume_analyses as any)?.rows || [];
+    if (analysisRows.length > 0) {
+      const perUser: Record<string, { count: number; best: number; latest: number; first_at: string }> = {};
+      for (const a of analysisRows) {
+        if (!a.user_id) continue;
+        if (!perUser[a.user_id]) perUser[a.user_id] = { count: 0, best: 0, latest: 0, first_at: a.created_at };
+        perUser[a.user_id].count++;
+        const score = a.overall_score || 0;
+        if (score > perUser[a.user_id].best) perUser[a.user_id].best = score;
+        if (new Date(a.created_at).getTime() > new Date(perUser[a.user_id].first_at).getTime()) {
+          perUser[a.user_id].latest = score;
+        } else {
+          perUser[a.user_id].first_at = a.created_at;
+        }
+      }
+      const powerUsers = Object.entries(perUser).filter(([_, v]) => v.count >= 3);
+      result.power_users = {
+        total_analyzed_users: Object.keys(perUser).length,
+        power_user_count: powerUsers.length,
+        power_user_pct: Object.keys(perUser).length > 0 ? Math.round((powerUsers.length / Object.keys(perUser).length) * 100) : 0,
+        avg_analyses_per_power_user: powerUsers.length ? Math.round(powerUsers.reduce((s, [_, v]) => s + v.count, 0) / powerUsers.length * 10) / 10 : 0,
+        avg_score_lift: powerUsers.length
+          ? Math.round(powerUsers.reduce((s, [_, v]) => s + (v.best - (v.latest || v.best)), 0) / powerUsers.length)
+          : 0,
+      };
+    }
+
     return new Response(JSON.stringify(result), {
       headers: { ...corsHeaders, "Content-Type": "application/json" },
     });
