@@ -109,6 +109,7 @@ export default function Join() {
       return;
     }
     setLoading(true);
+    trackEvent("auth", "signup_attempt", { method: "email", utm_source: utmSource || null });
     const { error } = await supabase.auth.signUp({
       email: email.trim(),
       password,
@@ -124,18 +125,24 @@ export default function Join() {
     setLoading(false);
     if (error) {
       setError(error.message);
+      trackEvent("auth", "signup_failed", { method: "email", reason: error.message });
     } else {
       setSuccess(true);
       syncToMailerLite(email.trim());
+      trackEvent("auth", "signup_succeeded", { method: "email" });
     }
   };
 
   const handleGoogle = async () => {
     setError("");
+    trackEvent("auth", "oauth_clicked", { provider: "google", flow: "signup" });
     const { error } = await lovable.auth.signInWithOAuth("google", {
       redirect_uri: window.location.origin,
     });
-    if (error) setError(error.message);
+    if (error) {
+      setError(error.message);
+      trackEvent("auth", "oauth_failed", { provider: "google", flow: "signup", reason: error.message });
+    }
   };
 
   return (

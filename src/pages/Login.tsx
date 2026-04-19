@@ -8,6 +8,7 @@ import { Mail, Lock, ArrowLeft, Eye, EyeOff, Loader2 } from "lucide-react";
 import { useAuth } from "@/contexts/AuthContext";
 import { useEffect } from "react";
 import { SEO } from "@/components/SEO";
+import { trackEvent } from "@/lib/trackEvent";
 
 const MAX_ATTEMPTS = 5;
 const LOCKOUT_SECONDS = 60;
