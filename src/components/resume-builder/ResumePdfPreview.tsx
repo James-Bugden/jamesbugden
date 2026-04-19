@@ -29,8 +29,15 @@ function getPageBaseWidth(format?: string): number {
   return PAGE_WIDTHS[format || "a4"] ?? PAGE_WIDTHS.a4;
 }
 
-// Pixel ratio used when rendering PDF pages via pdfjs (2× = retina-sharp)
-const RENDER_SCALE = 2;
+// Render scale for pdfjs page rasterization.
+// Higher = sharper when the user zooms in (the preview supports 60%-160%
+// zoom via CSS transform, which upscales the rasterized image).
+// 2× was retina-sharp at 100% but visibly blurry past ~120% zoom.
+// 3× keeps text crisp up to ~150% zoom with ~2.25× the memory per page.
+// On retina screens, browser sub-pixel rendering adds additional sharpness
+// so we don't multiply by devicePixelRatio.
+// Do NOT lower this — fixes the "preview is low-res on zoom" bug.
+const RENDER_SCALE = 3;
 
 /* ── Debounce hook ──────────────────────────────────────────────── */
 
@@ -88,7 +95,9 @@ async function renderPdfPagesToImages(blob: Blob): Promise<string[]> {
       const ctx = canvas.getContext("2d")!;
 
       await page.render({ canvasContext: ctx, viewport }).promise;
-      images.push(canvas.toDataURL("image/jpeg", 0.93));
+      // JPEG 0.95 for noticeably crisper text at the cost of ~5% more bytes.
+      // PNG would be lossless but 3-5× larger data URLs; not worth it.
+      images.push(canvas.toDataURL("image/jpeg", 0.95));
       // Zero dimensions immediately after capture to release GPU-backed memory
       canvas.width = 0;
       canvas.height = 0;
@@ -167,26 +176,42 @@ export const ResumePdfPreview = React.memo(function ResumePdfPreview({
     setLoading(true);
 
     const generate = async () => {
+      // Global 25s timeout — the loader MUST never spin forever. If the font
+      // CDN stalls or react-pdf/fontkit hangs internally, we surface an
+      // error instead of leaving the user staring at "Generating preview...".
+      // Do NOT remove this — it is the backstop for the CJK infinite-loading bug.
+      const timeoutPromise = new Promise<never>((_, reject) =>
+        setTimeout(
+          () => reject(new Error("Preview generation timed out (25s). Check network or try a smaller resume.")),
+          25_000,
+        ),
+      );
+
       try {
-        // 1. Register fonts — required before react-pdf renders; cached after first call
-        await prepareFonts(debouncedCustomize, debouncedData);
-        if (cancelled) return;
+        await Promise.race([
+          (async () => {
+            // 1. Register fonts — required before react-pdf renders; cached after first call
+            await prepareFonts(debouncedCustomize, debouncedData);
+            if (cancelled) return;
 
-        // 2. Render PDF to blob via react-pdf (same path as the export)
-        const element = React.createElement(ResumePDF, {
-          data: debouncedData,
-          customize: debouncedCustomize,
-        });
-        const blob = await pdf(element as any).toBlob();
-        if (cancelled) return;
+            // 2. Render PDF to blob via react-pdf (same path as the export)
+            const element = React.createElement(ResumePDF, {
+              data: debouncedData,
+              customize: debouncedCustomize,
+            });
+            const blob = await pdf(element as any).toBlob();
+            if (cancelled) return;
 
-        // 3. Pass blob directly to pdfjs (ArrayBuffer, not a URL — blob URLs
-        //    are main-thread only and are inaccessible from the pdfjs worker)
-        const images = await renderPdfPagesToImages(blob);
-        if (cancelled) return;
-        setPageImages(images);
-        setErrorMsg(null);
-        onPageCountRef.current?.(images.length);
+            // 3. Pass blob directly to pdfjs (ArrayBuffer, not a URL — blob URLs
+            //    are main-thread only and are inaccessible from the pdfjs worker)
+            const images = await renderPdfPagesToImages(blob);
+            if (cancelled) return;
+            setPageImages(images);
+            setErrorMsg(null);
+            onPageCountRef.current?.(images.length);
+          })(),
+          timeoutPromise,
+        ]);
       } catch (err) {
         if (!cancelled) {
           if (import.meta.env.DEV) console.error("[ResumePdfPreview] render error:", err);
