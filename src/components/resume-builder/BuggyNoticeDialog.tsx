@@ -1,16 +1,15 @@
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogFooter } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { AlertTriangle } from "lucide-react";
+import { ResumeBuilderLangContext } from "@/components/resume-builder/i18n";
 
 const STORAGE_KEY_EN = "resume_builder_buggy_notice_v1_dismissed";
 const STORAGE_KEY_ZH = "resume_builder_buggy_notice_v1_dismissed_zh";
 
-interface Props {
-  lang?: "en" | "zh";
-}
-
-export function BuggyNoticeDialog({ lang = "en" }: Props) {
+export function BuggyNoticeDialog() {
+  const ctxLang = useContext(ResumeBuilderLangContext);
+  const lang: "en" | "zh" = ctxLang === "zh-tw" ? "zh" : "en";
   const [open, setOpen] = useState(false);
   const key = lang === "zh" ? STORAGE_KEY_ZH : STORAGE_KEY_EN;
 
