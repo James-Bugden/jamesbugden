@@ -171,8 +171,14 @@ export const ResumePdfPreview = React.memo(function ResumePdfPreview({
 
     const generate = async () => {
       try {
-        // 1. Register fonts — required before react-pdf renders; cached after first call
-        await prepareFonts(debouncedCustomize);
+        // 1. Register fonts — required before react-pdf renders; cached after first call.
+        //    Pass `data` so prepareFonts can detect CJK content and register the
+        //    matching Noto Sans family (TC/SC/JP/KR). Without this, Chinese
+        //    codepoints map to Helvetica glyphs and render as mojibake in the
+        //    preview and the iframe fallback. `awaitCJK: true` blocks the first
+        //    paint until the CJK font is registered (only matters when the
+        //    resume contains CJK — prepareFonts no-ops if there is none).
+        await prepareFonts(debouncedCustomize, debouncedData, { awaitCJK: true });
         if (cancelled) return;
 
         // 2. Render PDF to blob via react-pdf (same path as the export)
