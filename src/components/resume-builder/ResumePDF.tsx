@@ -121,10 +121,25 @@ async function fetchWithTimeout(url: string, options: RequestInit = {}, timeoutM
 const CJK_URL_PATTERN = (pkg: string, subset: string, weight: number) =>
   `https://cdn.jsdelivr.net/fontsource/fonts/${pkg}@latest/${subset}-${weight}-normal.woff`;
 
+// Self-hosted Noto Sans TC subset. ~1.1 MB WOFF2 each, containing the
+// Taiwan MOE 4,808 common char set + ASCII + CJK punctuation.
+// Built by `scripts/build-cjk-subset.mjs` — committed to public/fonts/.
+// ~5,400 glyphs vs ~20,000 for the fontsource pan-CJK fallback. Fontkit
+// parses this much faster; with the Web Worker render path (see
+// pdfRenderer.worker.ts) the sync parse no longer blocks the main thread
+// anyway, but the smaller subset still cuts first-render latency from
+// 30-75s to single-digit seconds.
+//
+// Serves ~99.5% of real-world TC content. Rare chars outside MOE 4808
+// render as tofu in preview but the Download path still uses the full
+// pan-CJK font via serverPdfExport.ts, so downloaded PDFs are complete.
+const TC_SUBSET_URL_400 = "/fonts/noto-sans-tc-subset-400.woff2";
+const TC_SUBSET_URL_700 = "/fonts/noto-sans-tc-subset-700.woff2";
+
 const CJK_FONT_SOURCES: Record<CJKFamily, { url400: string; url700: string }> = {
   [CJK_FONT_FAMILY_TC]: {
-    url400: CJK_URL_PATTERN("noto-sans-tc", "chinese-traditional", 400),
-    url700: CJK_URL_PATTERN("noto-sans-tc", "chinese-traditional", 700),
+    url400: TC_SUBSET_URL_400,
+    url700: TC_SUBSET_URL_700,
   },
   [CJK_FONT_FAMILY_SC]: {
     url400: CJK_URL_PATTERN("noto-sans-sc", "chinese-simplified", 400),
@@ -335,7 +350,7 @@ function emitCJKReady() {
 export async function prepareFonts(
   c?: CustomizeSettings,
   data?: ResumeData,
-  opts: { skipCJK?: boolean } = {},
+  opts: { skipCJK?: boolean; awaitCJK?: boolean } = {},
 ): Promise<void> {
   const families = new Set<string>();
   if (c?.bodyFont) families.add(c.bodyFont);
@@ -346,18 +361,23 @@ export async function prepareFonts(
 
   // CJK fonts.
   //
-  // skipCJK=true: caller is the in-editor preview. Do NOT register CJK at
-  // all — fontkit's synchronous parse of the 1.4 MB WOFF blocks the main
-  // thread for 30-75 seconds on first use, freezing the whole editor
-  // (confirmed via Chrome MCP profiling). Preview falls back to Latin
-  // rendering with tofu squares for CJK glyphs; the download path calls
-  // this function with skipCJK=false (or unset) so the downloaded PDF
-  // still contains crisp CJK.
+  // skipCJK=true: caller is the in-editor preview on the MAIN thread.
+  // Do NOT register CJK at all — fontkit's synchronous parse of the
+  // 1.4 MB WOFF blocks the main thread for 30-75 seconds on first use,
+  // freezing the whole editor (confirmed via Chrome MCP profiling).
+  // Preview falls back to Latin rendering with tofu squares for CJK
+  // glyphs.
   //
-  // skipCJK=false (default): caller wants true CJK rendering. Used by
-  // the PDF download path. The main thread WILL block briefly while
-  // fontkit parses the font on first register; acceptable because
-  // downloads run once (not continuously during typing).
+  // skipCJK=false, awaitCJK=false (default): caller wants the preview
+  // to show eventually but shouldn't block on CJK. Registration fires
+  // in the background and `onCJKFontReady()` notifies subscribers.
+  //
+  // skipCJK=false, awaitCJK=true: caller is the PDF download or the
+  // WEB WORKER preview. Wait until CJK registration resolves before
+  // returning so the subsequent pdf().toBlob() uses the real font
+  // instead of Helvetica fallback. Worker callers can safely await
+  // the 30-75s parse because they're not blocking the main thread.
+  let awaitedCjkTasks: Promise<boolean>[] | null = null;
   if (data && !opts.skipCJK) {
     const primary = resolveResumeCJKFamily(data);
     if (primary) {
@@ -366,23 +386,41 @@ export async function prepareFonts(
       if (primary === CJK_FONT_FAMILY_SC) {
         cjkTasks.push(registerCJKFamily(CJK_FONT_FAMILY_TC));
       }
-      // Fire and forget. When all CJK registrations settle, emit the
-      // ready event so any callers (e.g. downloads) waiting for CJK
-      // can proceed.
-      Promise.allSettled(cjkTasks).then((results) => {
-        const anySucceeded = results.some((r) => r.status === "fulfilled" && r.value === true);
-        if (anySucceeded) emitCJKReady();
-        if (import.meta.env.DEV) {
-          results.forEach((r, i) => {
-            if (r.status === "rejected") console.warn(`[ResumePDF] CJK font ${i} registration rejected:`, r.reason);
-          });
-        }
-      });
+      if (opts.awaitCJK) {
+        awaitedCjkTasks = cjkTasks;
+      } else {
+        // Fire and forget. When all CJK registrations settle, emit the
+        // ready event so any callers (e.g. downloads) waiting for CJK
+        // can proceed.
+        Promise.allSettled(cjkTasks).then((results) => {
+          const anySucceeded = results.some((r) => r.status === "fulfilled" && r.value === true);
+          if (anySucceeded) emitCJKReady();
+          if (import.meta.env.DEV) {
+            results.forEach((r, i) => {
+              if (r.status === "rejected") console.warn(`[ResumePDF] CJK font ${i} registration rejected:`, r.reason);
+            });
+          }
+        });
+      }
     }
   }
 
   // Only await the Latin fonts so the critical path is fast.
   const settled = await Promise.allSettled(latinTasks);
+
+  if (awaitedCjkTasks) {
+    // Worker / download path — wait for the actual font registration
+    // so fontkit has the glyphs before pdf().toBlob() runs. Emits the
+    // ready event afterward so any main-thread subscribers also learn.
+    const results = await Promise.allSettled(awaitedCjkTasks);
+    const anySucceeded = results.some((r) => r.status === "fulfilled" && r.value === true);
+    if (anySucceeded) emitCJKReady();
+    if (import.meta.env.DEV) {
+      results.forEach((r, i) => {
+        if (r.status === "rejected") console.warn(`[ResumePDF] CJK font ${i} registration rejected:`, r.reason);
+      });
+    }
+  }
 
   const familyArr = Array.from(families);
   for (let i = 0; i < familyArr.length; i++) {

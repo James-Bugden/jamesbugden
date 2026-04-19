@@ -14,6 +14,7 @@ import pdfjsWorkerUrl from "pdfjs-dist/build/pdf.worker.min.mjs?url";
 import { ZoomIn, ZoomOut, RotateCcw } from "lucide-react";
 import { ResumePDF, prepareFonts } from "./ResumePDF";
 import { resumeHasCJK } from "@/lib/resumePdf/fontMap";
+import { renderPdfInWorker } from "./pdfWorkerClient";
 import type { ResumeData } from "./types";
 import type { CustomizeSettings } from "./customizeTypes";
 import { useT } from "./i18n";
@@ -191,67 +192,74 @@ export const ResumePdfPreview = React.memo(function ResumePdfPreview({
     return () => ro.disconnect();
   }, []);
 
-  // Flag: is the current debounced data CJK? If yes, we skip the PDF
-  // preview entirely and show a placeholder. react-pdf + fontkit cannot
-  // render CJK content on the main thread without freezing the browser
-  // for 30-75 seconds (see "PREVIEW-SIDE CJK POLICY" above). Users still
-  // get their work by clicking Download, which renders server-side.
+  // Flag: is the current debounced data CJK? CJK previews run in a
+  // Web Worker so fontkit's sync parse of the 1.4 MB Noto WOFF doesn't
+  // freeze the main thread. Latin previews stay on the main thread
+  // where the font cache is already hot (cheaper + faster UX).
   const isCJKResume = React.useMemo(() => resumeHasCJK(debouncedData), [debouncedData]);
 
   // Regenerate PDF whenever debounced data or customize changes.
   // onPageCount is intentionally excluded from deps — accessed via ref above.
   useEffect(() => {
     let cancelled = false;
-    // CJK short-circuit: don't even try to render. Show placeholder.
-    if (isCJKResume) {
-      setLoading(false);
-      setPageImages([]);
-      setErrorMsg(null);
-      onPageCountRef.current?.(1); // pretend one page so page-count UI doesn't look broken
-      return;
-    }
     setLoading(true);
 
     const generate = async () => {
-      // Global 25s timeout — the loader MUST never spin forever. If the font
-      // CDN stalls or react-pdf/fontkit hangs internally, we surface an
-      // error instead of leaving the user staring at "Generating preview...".
-      // Do NOT remove this — it is the backstop for the CJK infinite-loading bug.
-      // 45s backstop. CJK resumes pull 2.8 MB of Noto fonts (400 + 700
-      // weights × one family) plus run through fontkit subsetting, which
-      // can legitimately take 15-25s on slow networks before pdf().toBlob()
-      // even starts. 25s was too aggressive and produced false-positive
-      // "Preview generation timed out" errors for real resumes with real
-      // content. 45s gives the pipeline room to breathe while still
-      // preventing the "loader spins forever" failure mode.
+      // Loader timeout backstop.
+      // CJK path (worker): first render fetches + parses a ~1.1 MB MOE-4808
+      // subset of Noto Sans TC via fontkit inside the worker. On slow
+      // networks + first cold parse this legitimately takes 30-90s before
+      // pdf().toBlob() completes. Subsequent renders hit the worker's font
+      // cache and resolve in <1s. Keep this generous — a false-timeout
+      // here leaves the user with "預覽失敗" even though the worker was
+      // about to return a valid PDF.
+      // Latin path (main thread): Latin font is 30 KB per weight from the
+      // fontsource CDN. Even slow networks resolve under 30s.
+      const timeoutMs = isCJKResume ? 120_000 : 45_000;
       const timeoutPromise = new Promise<never>((_, reject) =>
         setTimeout(
-          () => reject(new Error("Preview generation timed out (45s). Check network or try a smaller resume.")),
-          45_000,
+          () => reject(new Error(`Preview generation timed out (${timeoutMs / 1000}s). Check network or try a smaller resume.`)),
+          timeoutMs,
         ),
       );
 
       try {
         await Promise.race([
           (async () => {
-            // 1. Register fonts — required before react-pdf renders; cached after first call
-            // skipCJK: true — see "PREVIEW-SIDE CJK POLICY" comment above.
-            // Preview renders Latin-only to avoid the fontkit main-thread
-            // block. Download path calls prepareFonts without skipCJK so
-            // the output PDF has proper CJK glyphs.
-            await prepareFonts(debouncedCustomize, debouncedData, { skipCJK: true });
-            if (cancelled) return;
+            let blob: Blob;
 
-            // 2. Render PDF to blob via react-pdf (same path as the export)
-            const element = React.createElement(ResumePDF, {
-              data: debouncedData,
-              customize: debouncedCustomize,
-            });
-            const blob = await pdf(element as any).toBlob();
-            if (cancelled) return;
+            if (isCJKResume) {
+              // CJK path: render via Web Worker. The worker imports
+              // ResumePDF + prepareFonts itself and registers fonts in its
+              // own Font registry, keeping fontkit's sync parse off the
+              // main thread. The editor stays responsive even during the
+              // initial 30-75s font register.
+              const { promise } = renderPdfInWorker(debouncedData, debouncedCustomize);
+              const result = await promise;
+              if (cancelled) return;
+              if ("cancelled" in result && result.cancelled) return;
+              if (!result.ok) {
+                throw new Error("error" in result ? result.error : "Worker render failed");
+              }
+              blob = result.blob;
+            } else {
+              // Latin path: keep the existing main-thread render — cheaper
+              // than spinning up a worker when there's no CJK to parse.
+              // skipCJK: true so we don't accidentally download CJK fonts
+              // we don't need.
+              await prepareFonts(debouncedCustomize, debouncedData, { skipCJK: true });
+              if (cancelled) return;
 
-            // 3. Pass blob directly to pdfjs (ArrayBuffer, not a URL — blob URLs
-            //    are main-thread only and are inaccessible from the pdfjs worker)
+              const element = React.createElement(ResumePDF, {
+                data: debouncedData,
+                customize: debouncedCustomize,
+              });
+              blob = await pdf(element as any).toBlob();
+              if (cancelled) return;
+            }
+
+            // Pass blob directly to pdfjs (ArrayBuffer, not a URL — blob URLs
+            // are main-thread only and are inaccessible from the pdfjs worker)
             const images = await renderPdfPagesToImages(blob);
             if (cancelled) return;
             setPageImages(images);
@@ -272,9 +280,7 @@ export const ResumePdfPreview = React.memo(function ResumePdfPreview({
 
     generate();
     return () => { cancelled = true; };
-    // No cjkBump in deps — see the "PREVIEW-SIDE CJK POLICY" comment
-    // above. Preview stays Latin-only to avoid a main-thread freeze.
-  }, [debouncedData, debouncedCustomize]);
+  }, [debouncedData, debouncedCustomize, isCJKResume]);
 
   const handleZoomOut = useCallback(() => setZoomOffset((z) => Math.max(z - 0.1, -0.4)), []);
   const handleZoomIn  = useCallback(() => setZoomOffset((z) => Math.min(z + 0.1, 0.6)), []);
@@ -288,23 +294,8 @@ export const ResumePdfPreview = React.memo(function ResumePdfPreview({
       className="h-full overflow-y-auto relative"
       style={{ backgroundColor: "#f3f4f6" }}
     >
-      {/* CJK placeholder — preview cannot render CJK glyphs safely on the
-          main thread (fontkit sync parse blocks the browser). Users still
-          get their work by clicking Download, which renders server-side. */}
-      {isCJKResume && pageImages.length === 0 && !loading && (
-        <div className="absolute inset-0 flex flex-col items-center justify-center gap-3 z-10 p-6 text-center">
-          <span className="text-4xl">📄</span>
-          <span className="text-sm font-medium text-gray-700">
-            {t("previewZhPlaceholderTitle") || "Preview unavailable for Chinese resumes"}
-          </span>
-          <span className="text-xs text-gray-500 max-w-sm">
-            {t("previewZhPlaceholderBody") || "Click Download to generate your PDF with full Chinese / Japanese / Korean glyphs. Preview rendering for CJK content is temporarily disabled to keep the editor responsive."}
-          </span>
-        </div>
-      )}
-
       {/* Error state */}
-      {!isCJKResume && errorMsg && !loading && pageImages.length === 0 && (
+      {errorMsg && !loading && pageImages.length === 0 && (
         <div className="absolute inset-0 flex flex-col items-center justify-center gap-3 z-10 p-6 text-center">
           <span className="text-sm font-medium text-red-600">{t("previewFailed")}</span>
           <span className="text-xs text-gray-500 max-w-xs break-all">{errorMsg}</span>
