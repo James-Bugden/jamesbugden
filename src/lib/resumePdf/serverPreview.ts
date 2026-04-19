@@ -47,7 +47,11 @@ export async function renderPagesServer(
   const pdfBase64 = await blobToBase64(pdf);
   const body = { pdfBase64, pageFormat: opts.pageFormat ?? "a4" };
 
-  const flyUrl = (import.meta.env.VITE_PREVIEW_ENDPOINT_URL ?? "") as string;
+  // Default to the Fly.io rasterization endpoint. Lovable has no UI for
+  // VITE_* build-time env vars, so hardcoding is the simplest way to wire
+  // prod to the server renderer. Env var still overrides for staging/local.
+  const flyUrl = ((import.meta.env.VITE_PREVIEW_ENDPOINT_URL as string | undefined) ??
+    "https://jamesbugden-preview.fly.dev/render");
   if (flyUrl) {
     return renderViaFly(flyUrl, body, opts.signal);
   }
@@ -125,8 +129,10 @@ async function renderViaFly(
 }
 
 /**
- * Flag to opt in to the server path. Kept simple (env var OR query
- * param) so you can test on a single browser tab without redeploying.
+ * Flag to opt in to the server path. Defaults to ON in prod because Lovable
+ * has no UI for VITE_* env vars — can't flip it any other way. Query param
+ * (`?serverPreview=0`) still provides a client-side kill switch for
+ * debugging.
  */
 export function serverPreviewEnabled(): boolean {
   if (typeof window === "undefined") return false;
@@ -134,7 +140,8 @@ export function serverPreviewEnabled(): boolean {
   if (qp.get("serverPreview") === "1") return true;
   if (qp.get("serverPreview") === "0") return false;
   const envFlag = (import.meta.env.VITE_PREVIEW_ENDPOINT_ENABLED ?? "") as string;
-  return envFlag === "1" || envFlag === "true";
+  if (envFlag === "0" || envFlag === "false") return false;
+  return true;
 }
 
 function blobToBase64(blob: Blob): Promise<string> {
