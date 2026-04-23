@@ -3,7 +3,9 @@
  * Supports: <p>, <br>, <ul>, <ol>, <li>, <strong>/<b>, <em>/<i>, <u>, <a>, plain text.
  */
 import React from "react";
-import { Text, View, Link, Style } from "@react-pdf/renderer";
+import { Text, View, Link } from "@react-pdf/renderer";
+
+type Style = React.ComponentProps<typeof Text>["style"];
 
 interface ParseOpts {
   fontSize: number;
