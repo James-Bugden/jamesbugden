@@ -32,6 +32,7 @@ import { SEO } from "@/components/SEO";
 import InsightsTab from "@/components/admin/InsightsTab";
 import FunnelTab from "@/components/admin/FunnelTab";
 import CopyLinkButton from "@/components/admin/CopyLinkButton";
+import ResetFiltersButton from "@/components/admin/ResetFiltersButton";
 
 // ── Types ───────────────────────────────────────────────────────────────────────
 
@@ -907,6 +908,7 @@ export default function AdminDashboard() {
                     <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
                     <Input value={accountSearch} onChange={e => setAccountSearch(e.target.value)} placeholder="Search by email or provider..." className="pl-9 h-10" />
                   </div>
+                  <ResetFiltersButton filterKeys={["q", "sort", "dir"]} />
                   <Button variant="outline" size="sm" onClick={exportAccountsCsv} className="h-10"><Download className="w-4 h-4 mr-1" /> CSV</Button>
                 </div>
                 {accountsLoading ? (
@@ -959,6 +961,7 @@ export default function AdminDashboard() {
                       {resumeSeniorities.map(s => <SelectItem key={s} value={s!}>{s}</SelectItem>)}
                     </SelectContent>
                   </Select>
+                  <ResetFiltersButton filterKeys={["q", "seniority"]} />
                   <Button variant="outline" size="sm" onClick={exportResumeCsv} className="h-10"><Download className="w-4 h-4 mr-1" /> CSV</Button>
                 </div>
                 <p className="text-sm text-muted-foreground mb-3">{filteredResumeLeads.length} of {resumeLeads.length} leads</p>
@@ -1156,6 +1159,7 @@ export default function AdminDashboard() {
                       {verdicts.map(v => <SelectItem key={v!} value={v!}>{v}</SelectItem>)}
                     </SelectContent>
                   </Select>
+                  <ResetFiltersButton filterKeys={["q", "verdict", "sort", "dir"]} />
                   <Button variant="outline" size="sm" onClick={exportSalaryCsv} className="h-10"><Download className="w-4 h-4 mr-1" /> CSV</Button>
                 </div>
                 {checksLoading ? (
@@ -1388,6 +1392,7 @@ export default function AdminDashboard() {
                             <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
                             <Input placeholder="Search feedback…" value={feedbackSearch} onChange={e => setFeedbackSearch(e.target.value)} className="pl-9 w-64" />
                           </div>
+                          <ResetFiltersButton filterKeys={["q", "type"]} />
                         </div>
                         {feedbackLoading ? (
                           <div className="flex justify-center py-12"><Loader2 className="w-6 h-6 animate-spin text-muted-foreground" /></div>
