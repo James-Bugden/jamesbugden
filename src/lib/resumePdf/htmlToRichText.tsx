@@ -4,7 +4,8 @@
  */
 import React from "react";
 import { Text, View, Link } from "@react-pdf/renderer";
-import { Style } from "@react-pdf/types";
+
+type Style = React.ComponentProps<typeof Text>["style"];
 
 interface ParseOpts {
   fontSize: number;
