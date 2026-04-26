@@ -40,33 +40,46 @@ export default function GuideBottomCTA({ lang = "en" }: GuideBottomCTAProps) {
   if (isLoading || isLoggedIn) return null;
 
   return (
-    <section className="py-16 md:py-20 px-5 md:px-6 bg-executive-green">
-      <div className="container mx-auto max-w-2xl text-center">
-        <h2
-          className="font-heading mb-3 text-cream"
-          style={{ fontSize: "clamp(1.75rem, 4vw, 2.25rem)" }}
-        >
-          {t.heading}
-        </h2>
-        <p className="text-cream/80 mb-8 max-w-lg mx-auto">{t.sub}</p>
+    <section className="py-14 md:py-20 px-5 md:px-6 bg-paper-alt">
+      <div className="container mx-auto max-w-2xl">
+        {/* Hairline card matching site language */}
+        <div className="bg-card border border-border rounded-2xl p-8 md:p-12 text-center shadow-sm">
+          <p className="text-[11px] uppercase tracking-[0.2em] text-gold font-bold mb-4">
+            {lang === "zh" ? "免費" : "Free"}
+          </p>
+          <h2
+            className="font-heading text-foreground font-bold tracking-tight mb-3"
+            style={{ fontSize: "clamp(1.75rem, 4vw, 2.25rem)" }}
+          >
+            {t.heading}
+          </h2>
+          <p className="text-base md:text-lg text-muted-foreground mb-8 max-w-lg mx-auto leading-relaxed">
+            {t.sub}
+          </p>
 
-        <div className="flex flex-col gap-3 mb-8 text-left max-w-sm mx-auto">
-          {t.bullets.map((b) => (
-            <div key={b} className="flex items-center gap-3">
-              <CheckCircle2 className="w-5 h-5 flex-shrink-0 text-gold" />
-              <span className="text-cream">{b}</span>
-            </div>
-          ))}
+          <ul className="flex flex-col gap-2.5 mb-8 text-left max-w-sm mx-auto">
+            {t.bullets.map((b) => (
+              <li key={b} className="flex items-center gap-3">
+                <span
+                  className="inline-flex items-center justify-center w-5 h-5 rounded-full bg-gold-soft border border-gold/30 flex-shrink-0"
+                  aria-hidden
+                >
+                  <CheckCircle2 className="w-3.5 h-3.5 text-gold" strokeWidth={2.5} />
+                </span>
+                <span className="text-foreground">{b}</span>
+              </li>
+            ))}
+          </ul>
+
+          <Link
+            to={t.joinPath}
+            className="inline-flex items-center justify-center gap-2 px-7 py-3.5 rounded-lg font-bold bg-gold text-executive-green hover:bg-gold-dark hover:text-cream transition-colors text-base shadow-sm"
+          >
+            {t.cta}
+            <ArrowRight className="w-5 h-5" />
+          </Link>
+          <p className="text-xs text-muted-foreground mt-3">{t.note}</p>
         </div>
-
-        <Link
-          to={t.joinPath}
-          className="inline-flex items-center justify-center gap-2 px-8 py-3 rounded-lg font-bold text-white bg-gold hover:bg-gold/90 transition-colors text-lg"
-        >
-          {t.cta}
-          <ArrowRight className="w-5 h-5" />
-        </Link>
-        
       </div>
     </section>
   );
