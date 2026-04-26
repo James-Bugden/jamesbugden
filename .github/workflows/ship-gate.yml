@@ -65,7 +65,7 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 20
     env:
-      QA_BASE_URL: http://localhost:5173
+      QA_BASE_URL: http://localhost:8080
       LOCAL: "1"
       CI: "1"
     steps:
@@ -78,8 +78,17 @@ jobs:
         run: npm ci
       - name: Install Playwright browsers
         run: npx playwright install --with-deps chromium
-      - name: Run smoke specs
-        run: npx playwright test --grep "smoke" --grep-invert "@auth"
+      # Only the guest-mode public-surface smoke runs here. The "resume
+      # editor" and "CJK preview" describe blocks inside smoke.e2e.spec.ts
+      # require Supabase auth (Download button only appears in authed
+      # editor context) — those run in the existing E2E smoke workflow
+      # which has QA_TEST_EMAIL/PASSWORD secrets. Keeping ship-gate
+      # auth-free means it stays runnable from any fork or contributor.
+      - name: Run public-surface smoke
+        run: |
+          npx playwright test src/test/e2e/smoke.e2e.spec.ts \
+            --project=chromium-desktop \
+            --grep-invert "resume editor|CJK preview"
       - name: Upload Playwright report on failure
         if: failure()
         uses: actions/upload-artifact@v4
