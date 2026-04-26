@@ -5,15 +5,23 @@
 # across files invites half-configured branch protection rules.
 #
 # Why each job:
-#   static-checks    — type errors, lint failures, and banned patterns
-#                      (@ts-ignore, console.log, debugger, etc.). Cheapest
-#                      signal, runs first. Diff-aware so legacy doesn't block.
-#   smoke-tests      — Playwright e2e suite matching "*smoke*". Catches
-#                      regressions that type-check passes can't catch.
-#                      Boots local Vite dev server (LOCAL=1).
-#   lovable-guard    — only runs when the PR author is Lovable's bot.
-#                      Fails the PR if it touches paths reserved for
-#                      Claude/human-driven work (see AGENTS.md).
+#   static-checks       — type errors, lint failures, banned patterns
+#                         (@ts-ignore, console.log, debugger, etc.). Cheapest
+#                         signal, runs first. Diff-aware so legacy doesn't block.
+#   smoke-tests         — Playwright e2e suite matching "*smoke*". Catches
+#                         regressions that type-check passes can't catch.
+#                         Boots local Vite dev server (LOCAL=1).
+#   hallucination-check — diff-aware scan for invented imports, Supabase
+#                         tables/RPCs, and undeclared env vars. Catches
+#                         the classic AI failure mode of confidently
+#                         referencing things that don't exist.
+#   visual-regression   — Playwright pixel-diff baselines for guest-mode
+#                         marketing pages. Catches silent layout/CSS
+#                         breakage that text assertions miss. Skippable
+#                         by labelling the PR `visual-change-approved`.
+#   lovable-guard       — only runs when the PR author is Lovable's bot.
+#                         Fails the PR if it touches paths reserved for
+#                         Claude/human-driven work (see AGENTS.md).
 #
 # Each job uploads logs on failure for post-mortem.
 #
@@ -60,6 +68,20 @@ jobs:
       - name: Banned patterns (diff-aware)
         run: node scripts/banned-patterns.mjs --base origin/${{ github.base_ref || 'main' }}
 
+  hallucination-check:
+    name: hallucination check (diff-aware)
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0  # script needs the base ref for diff + grep
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+      - name: Run hallucination-check
+        run: node scripts/hallucination-check.mjs --base origin/${{ github.base_ref || 'main' }}
+
   smoke-tests:
     name: e2e smoke
     runs-on: ubuntu-latest
@@ -95,6 +117,41 @@ jobs:
         with:
           name: playwright-report
           path: playwright-report/
+          retention-days: 7
+
+  visual-regression:
+    name: visual regression (guest pages)
+    # Skip when the PR is intentionally a visual change; James updates
+    # baselines in the same PR and adds the `visual-change-approved` label.
+    # Push to main always runs so accidental drift surfaces.
+    if: ${{ !contains(github.event.pull_request.labels.*.name, 'visual-change-approved') }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    env:
+      QA_BASE_URL: http://localhost:8080
+      LOCAL: "1"
+      CI: "1"
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+      - name: Install
+        run: npm ci
+      - name: Install Playwright browsers
+        run: npx playwright install --with-deps chromium
+      - name: Run visual-regression project
+        run: npx playwright test --project=visual
+      - name: Upload visual diffs on failure
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: visual-diffs
+          # Includes actual/expected/diff PNGs for each failing test.
+          path: |
+            test-results/
+            playwright-report/
           retention-days: 7
 
   lovable-guard:

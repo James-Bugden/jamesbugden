@@ -87,6 +87,23 @@ export default defineConfig({
       },
       grep: /@hidpi/,
     },
+    // Visual regression project. Matches src/test/e2e/visual-regression.spec.ts
+    // (note: NOT *.e2e.spec.ts — keeps it out of the default smoke run).
+    // Snapshots stored next to the spec under visual-regression.spec.ts-snapshots/.
+    // Generate baselines: npx playwright test --project=visual --update-snapshots
+    {
+      name: "visual",
+      testMatch: /visual-regression\.spec\.ts$/,
+      use: {
+        ...devices["Desktop Chrome"],
+        viewport: { width: 1280, height: 720 },
+        // Guest mode — visual baselines should not depend on auth state.
+        storageState: { cookies: [], origins: [] },
+      },
+      // Visual diffs are stricter than functional tests — no retries
+      // (a flake here is signal, not noise to mask).
+      retries: 0,
+    },
   ],
 
   // When LOCAL=1, boot the dev server automatically. Otherwise assume the
