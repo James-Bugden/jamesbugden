@@ -197,7 +197,7 @@ const Index = () => {
             </p>
 
             {/* Stat row, green icons + Geist tabular numerics, hairline border-top */}
-            <div className="flex flex-col sm:flex-row items-center justify-center gap-6 sm:gap-14 pt-9 border-t border-border max-w-xl mx-auto">
+            <div className="flex flex-col sm:flex-row items-center justify-center gap-6 sm:gap-16 pt-9 border-t border-border w-full">
               <div className="flex items-center gap-3">
                 <div className="flex-shrink-0 w-11 h-11 rounded-lg flex items-center justify-center" style={{ background: 'hsl(var(--green-soft))' }}>
                   <ResumeStackIcon size={28} />
@@ -256,17 +256,17 @@ const Index = () => {
               </div>
             </div>
 
-            <div className="card-hairline-tinted p-6 md:p-8">
-              <div className="flex items-start gap-3 mb-4">
+            <div className="card-hairline-tinted p-6 md:p-8 text-center">
+              <div className="flex items-start gap-3 mb-5 max-w-xl mx-auto text-left">
                 <CheckCircle2 className="w-5 h-5 flex-shrink-0 mt-1 text-executive-green" strokeWidth={2} />
                 <p className="text-foreground text-[1.0625rem] leading-relaxed font-medium">
                   You don't need another job board. You need someone who's been on the other side of the table.
                 </p>
               </div>
-              <div className="max-w-md">
+              <div className="max-w-md mx-auto">
                 <MailerLiteForm formId="sM1X80" className="ml-embedded" buttonText="Get My Free Recruiting Tips" />
               </div>
-              <p className="mt-3 text-muted-foreground text-[0.8125rem]">
+              <p className="mt-3 text-muted-foreground text-[0.8125rem] text-center">
                 No spam, no fluff. Insider recruiting strategies every week.
               </p>
             </div>

@@ -246,14 +246,14 @@ const IndexZhTw = () => {
               </div>
             </div>
 
-            <div className="card-hairline-tinted p-6 md:p-8">
-              <div className="flex items-start gap-3 mb-4">
+            <div className="card-hairline-tinted p-6 md:p-8 text-center">
+              <div className="flex items-start gap-3 mb-5 max-w-xl mx-auto text-left">
                 <CheckCircle2 className="w-5 h-5 flex-shrink-0 mt-1 text-executive-green" strokeWidth={2} />
                 <p className="text-foreground text-[1.0625rem] leading-relaxed font-medium">
                   你不需要另一個求職平台。你需要一個坐在桌子另一邊的人。
                 </p>
               </div>
-              <div className="max-w-md">
+              <div className="max-w-md mx-auto">
                 <MailerLiteForm
                   formId="sM1X80"
                   className="ml-embedded"
@@ -264,7 +264,7 @@ const IndexZhTw = () => {
                   successCtaLink="/zh-tw/join"
                 />
               </div>
-              <p className="mt-3 text-muted-foreground text-[0.8125rem]">
+              <p className="mt-3 text-muted-foreground text-[0.8125rem] text-center">
                 不灌水、不廢話。每週一則招募內幕策略。
               </p>
             </div>
