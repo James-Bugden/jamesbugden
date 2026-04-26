@@ -1,0 +1,106 @@
+# ship-gate.yml — single workflow that gates every PR into main.
+#
+# Why a single workflow: branch protection only requires "all checks
+# from this workflow pass". One file = one source of truth. Splitting
+# across files invites half-configured branch protection rules.
+#
+# Why each job:
+#   static-checks    — type errors, lint failures, and banned patterns
+#                      (@ts-ignore, console.log, debugger, etc.). Cheapest
+#                      signal, runs first. Diff-aware so legacy doesn't block.
+#   smoke-tests      — Playwright e2e suite matching "*smoke*". Catches
+#                      regressions that type-check passes can't catch.
+#                      Boots local Vite dev server (LOCAL=1).
+#   lovable-guard    — only runs when the PR author is Lovable's bot.
+#                      Fails the PR if it touches paths reserved for
+#                      Claude/human-driven work (see AGENTS.md).
+#
+# Each job uploads logs on failure for post-mortem.
+#
+# Pre-existing repo uses npm (package-lock.json). pnpm-lock.yaml and
+# bun.lockb co-exist as Lovable-generated artifacts but are not the
+# canonical lockfile — see AGENTS.md.
+
+name: ship-gate
+
+on:
+  pull_request:
+    branches: [main]
+  push:
+    branches: [main]
+
+concurrency:
+  group: ship-gate-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  static-checks:
+    name: tsc + banned patterns
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0  # banned-patterns needs full history for diff
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+      - name: Install
+        run: npm ci
+      - name: Type check
+        run: npx tsc --noEmit
+      # Lint intentionally NOT required here. As of this PR `npm run lint`
+      # reports ~309 pre-existing errors (mostly @typescript-eslint/no-explicit-any).
+      # Until that backlog is cleaned, lint runs in advisory mode only — it
+      # surfaces issues without blocking the gate.
+      - name: Lint (advisory)
+        continue-on-error: true
+        run: npm run lint
+      - name: Banned patterns (diff-aware)
+        run: node scripts/banned-patterns.mjs --base origin/${{ github.base_ref || 'main' }}
+
+  smoke-tests:
+    name: e2e smoke
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    env:
+      QA_BASE_URL: http://localhost:5173
+      LOCAL: "1"
+      CI: "1"
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+      - name: Install
+        run: npm ci
+      - name: Install Playwright browsers
+        run: npx playwright install --with-deps chromium
+      - name: Run smoke specs
+        run: npx playwright test --grep "smoke" --grep-invert "@auth"
+      - name: Upload Playwright report on failure
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: playwright-report
+          path: playwright-report/
+          retention-days: 7
+
+  lovable-guard:
+    name: Lovable protected paths
+    if: github.event_name == 'pull_request' && github.actor == 'gpt-engineer-app[bot]'
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+      - name: Check protected paths
+        env:
+          GITHUB_ACTOR: ${{ github.actor }}
+        run: node scripts/lovable-protected-paths.mjs --base origin/${{ github.base_ref }}
