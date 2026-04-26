@@ -1,7 +1,7 @@
 import { useState, useEffect, useCallback, useRef } from "react";
 import { ChevronDown as ChevronDownIcon } from "lucide-react";
 import { useSearchParams, Link, useNavigate } from "react-router-dom";
-import { Search, Filter, ChevronDown, ArrowLeft, X, Shuffle, ChevronRight, Info, Mail, Copy, Eye, ChevronsDown, ChevronsUp, ArrowUp } from "lucide-react";
+import { Search, Filter, ChevronDown, ArrowLeft, X, Shuffle, ChevronRight, Info, Mail, Copy, Eye, ChevronsDown, ChevronsUp, ArrowUp, Share2 } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -10,6 +10,7 @@ import { Linkedin } from "lucide-react";
 import { InstagramIcon, ThreadsIcon } from "@/components/SocialIcons";
 import { trackShare } from "@/lib/trackShare";
 import { trackEvent } from "@/lib/trackEvent";
+import { buildCategoryShareLink } from "@/lib/qbankShare";
 import { AuthHeaderButton } from "@/components/AuthHeaderButton";
 import { motion, AnimatePresence } from "framer-motion";
 import { SEO } from "@/components/SEO";
@@ -321,6 +322,17 @@ export default function InterviewQuestionBank({ lang: initialLang }: { lang: Lan
     );
   };
 
+  const handleShareCategory = (key: string) => {
+    const { lineHref } = buildCategoryShareLink(key, window.location.origin);
+    trackEvent("qbank_share", "interview_question_share", {
+      category: key,
+      locale: "zh-tw",
+    });
+    // Open in a new tab so the in-flight event_tracks insert isn't cancelled
+    // by tearing down the current document via window.location.href.
+    window.open(lineHref, "_blank", "noopener,noreferrer");
+  };
+
   const toggleDifficulty = (value: number) => {
     setSelectedDifficulties(prev =>
       prev.includes(value) ? prev.filter(d => d !== value) : [...prev, value]
@@ -627,27 +639,40 @@ export default function InterviewQuestionBank({ lang: initialLang }: { lang: Lan
                 </p>
                 <div className="flex flex-wrap gap-2">
                   {CATEGORIES.map(cat => (
-                    <Tooltip key={cat.key}>
-                      <TooltipTrigger asChild>
+                    <div key={cat.key} className="inline-flex items-center gap-1">
+                      <Tooltip>
+                        <TooltipTrigger asChild>
+                          <button
+                            onClick={() => toggleCategory(cat.key)}
+                            aria-pressed={selectedCategories.includes(cat.key)}
+                            className={`px-3 py-1.5 rounded-full text-xs font-medium border transition-all ${
+                              selectedCategories.includes(cat.key)
+                                ? "bg-accent text-accent-foreground border-accent"
+                                : "bg-card text-muted-foreground border-border hover:border-accent/50"
+                            }`}
+                          >
+                            {lang === "zh" ? cat.zh : cat.en}
+                            {categoryCounts[cat.key] != null && (
+                              <span className="ml-1 opacity-60">({categoryCounts[cat.key]})</span>
+                            )}
+                          </button>
+                        </TooltipTrigger>
+                        <TooltipContent className="max-w-[220px] text-center">
+                          {lang === "zh" ? cat.desc_zh : cat.desc_en}
+                        </TooltipContent>
+                      </Tooltip>
+                      {lang === "zh" && (
                         <button
-                          onClick={() => toggleCategory(cat.key)}
-                          aria-pressed={selectedCategories.includes(cat.key)}
-                          className={`px-3 py-1.5 rounded-full text-xs font-medium border transition-all ${
-                            selectedCategories.includes(cat.key)
-                              ? "bg-accent text-accent-foreground border-accent"
-                              : "bg-card text-muted-foreground border-border hover:border-accent/50"
-                          }`}
+                          type="button"
+                          onClick={() => handleShareCategory(cat.key)}
+                          aria-label={`分享 ${cat.zh} 題庫到 LINE`}
+                          data-testid={`qbank-share-${cat.key}`}
+                          className="inline-flex items-center justify-center w-7 h-7 rounded-full border border-border bg-card text-muted-foreground hover:text-[#06C755] hover:border-[#06C755] transition-colors"
                         >
-                          {lang === "zh" ? cat.zh : cat.en}
-                          {categoryCounts[cat.key] != null && (
-                            <span className="ml-1 opacity-60">({categoryCounts[cat.key]})</span>
-                          )}
+                          <Share2 className="w-3.5 h-3.5" />
                         </button>
-                      </TooltipTrigger>
-                      <TooltipContent className="max-w-[220px] text-center">
-                        {lang === "zh" ? cat.desc_zh : cat.desc_en}
-                      </TooltipContent>
-                    </Tooltip>
+                      )}
+                    </div>
                   ))}
                 </div>
               </div>
