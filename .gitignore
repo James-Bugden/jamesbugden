@@ -32,3 +32,7 @@ qa-tmp/
 
 # Output of scripts/check-i18n-drift.js and other ad-hoc tooling
 tmp/
+
+# Claude Code dev tooling, never commit
+.claude/
+.superpowers/
