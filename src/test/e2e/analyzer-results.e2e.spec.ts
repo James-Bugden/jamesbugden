@@ -59,6 +59,31 @@ test.describe("Analyzer — results", () => {
     expect(bodyText.length, "results page should have meaningful content").toBeGreaterThan(200);
   });
 
+  test("results screen shows the cross-tool CTA linking to the interview prep guide", async ({
+    page,
+  }) => {
+    test.setTimeout(90_000);
+    await page.goto("/resume-analyzer");
+    await page.getByText(/paste text|貼上文字/i).first().click();
+    await page.locator("textarea").first().fill(LONG_SAMPLE);
+    await page
+      .getByRole("button", { name: /analyze my resume|分析我的履歷/i })
+      .first()
+      .click();
+
+    // Wait for results to render.
+    await expect(page.getByText(/score|分數|得分/i).first()).toBeVisible({
+      timeout: 60_000,
+    });
+
+    // The CTA renders a link whose accessible name contains "interview guide"
+    // (EN) and points at the EN prep guide URL.
+    const ctaLink = page.getByRole("link", { name: /interview guide/i });
+    await expect(ctaLink).toBeVisible();
+    const href = await ctaLink.getAttribute("href");
+    expect(href).toBe("/interview-preparation-guide");
+  });
+
   test("re-analyze button resets to upload screen", async ({ page }) => {
     test.setTimeout(90_000);
     await page.goto("/resume-analyzer");
