@@ -341,38 +341,47 @@ const IndexZhTw = () => {
           <FAQSection />
         </LazySection>
 
-        {/* ── Create Account CTA — green-deep with gold accent ── */}
+        {/* ── Create Account CTA — hairline card on paper-alt to match site language ── */}
         {!isLoggedIn && (
           <LazySection>
-            <section className="py-14 md:py-20 px-5 md:px-6 bg-executive-green relative overflow-hidden">
-              <div className="absolute top-0 left-0 right-0 h-[2px] bg-gold" />
-              <div className="container mx-auto max-w-3xl text-center relative">
-                <h2 className="font-heading mb-5 text-cream tracking-[-0.025em]" style={{ fontSize: 'clamp(2rem, 4vw, 2.75rem)', fontWeight: 600, lineHeight: 1.1 }}>
-                  免費建立帳號
-                </h2>
-                <p className="text-[1.0625rem] text-cream-90 mb-10 max-w-xl mx-auto leading-relaxed">
-                  免費取得所有職涯指南、履歷工具、薪資數據等完整資源。
-                </p>
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-3 mb-10 text-left max-w-3xl mx-auto">
-                  <div className="card-hairline p-4 flex items-start gap-3" style={{ background: 'hsl(153 73% 18%)', borderColor: 'hsl(153 73% 26%)' }}>
-                    <CheckCircle2 className="w-5 h-5 flex-shrink-0 mt-0.5 text-gold" />
-                    <span className="text-cream text-[15px]">10+ 份職涯與面試指南</span>
+            <section className="py-14 md:py-20 px-5 md:px-6 bg-paper-alt">
+              <div className="container mx-auto max-w-3xl">
+                <div className="bg-card border border-border rounded-2xl p-8 md:p-12 text-center shadow-sm">
+                  <p className="text-[11px] uppercase tracking-[0.2em] text-gold font-bold mb-4">免費</p>
+                  <h2 className="font-heading mb-3 text-foreground tracking-[-0.025em]" style={{ fontSize: 'clamp(1.75rem, 4vw, 2.5rem)', fontWeight: 700, lineHeight: 1.1, textWrap: 'balance' }}>
+                    免費建立帳號
+                  </h2>
+                  <p className="text-base md:text-lg text-muted-foreground mb-8 max-w-xl mx-auto leading-relaxed">
+                    免費取得所有職涯指南、履歷工具、薪資數據等完整資源。
+                  </p>
+                  <div className="grid grid-cols-1 md:grid-cols-3 gap-3 mb-8 text-left max-w-2xl mx-auto">
+                    <div className="bg-paper-alt border border-border rounded-xl p-4 flex items-start gap-3">
+                      <span className="inline-flex items-center justify-center w-5 h-5 rounded-full bg-gold-soft border border-gold/30 flex-shrink-0 mt-0.5" aria-hidden>
+                        <CheckCircle2 className="w-3.5 h-3.5 text-gold" strokeWidth={2.5} />
+                      </span>
+                      <span className="text-foreground text-[14px]">10+ 份職涯與面試指南</span>
+                    </div>
+                    <div className="bg-paper-alt border border-border rounded-xl p-4 flex items-start gap-3">
+                      <span className="inline-flex items-center justify-center w-5 h-5 rounded-full bg-gold-soft border border-gold/30 flex-shrink-0 mt-0.5" aria-hidden>
+                        <CheckCircle2 className="w-3.5 h-3.5 text-gold" strokeWidth={2.5} />
+                      </span>
+                      <span className="text-foreground text-[14px]">履歷建立器與 AI 分析工具</span>
+                    </div>
+                    <div className="bg-paper-alt border border-border rounded-xl p-4 flex items-start gap-3">
+                      <span className="inline-flex items-center justify-center w-5 h-5 rounded-full bg-gold-soft border border-gold/30 flex-shrink-0 mt-0.5" aria-hidden>
+                        <CheckCircle2 className="w-3.5 h-3.5 text-gold" strokeWidth={2.5} />
+                      </span>
+                      <span className="text-foreground text-[14px]">面試題庫與談判工具</span>
+                    </div>
                   </div>
-                  <div className="card-hairline p-4 flex items-start gap-3" style={{ background: 'hsl(153 73% 18%)', borderColor: 'hsl(153 73% 26%)' }}>
-                    <CheckCircle2 className="w-5 h-5 flex-shrink-0 mt-0.5 text-gold" />
-                    <span className="text-cream text-[15px]">履歷建立器與 AI 分析工具</span>
-                  </div>
-                  <div className="card-hairline p-4 flex items-start gap-3" style={{ background: 'hsl(153 73% 18%)', borderColor: 'hsl(153 73% 26%)' }}>
-                    <CheckCircle2 className="w-5 h-5 flex-shrink-0 mt-0.5 text-gold" />
-                    <span className="text-cream text-[15px]">面試題庫與談判工具</span>
-                  </div>
+                  <Link
+                    to="/zh-tw/join"
+                    className="inline-flex items-center justify-center gap-2 px-7 py-3.5 rounded-lg font-bold bg-gold text-executive-green hover:bg-gold-dark hover:text-cream transition-colors text-base shadow-sm"
+                  >
+                    免費取得完整資源
+                  </Link>
+                  <p className="text-xs text-muted-foreground mt-3">無需信用卡</p>
                 </div>
-                <Link
-                  to="/zh-tw/join"
-                  className="btn-saas-primary inline-flex"
-                >
-                  免費取得完整資源
-                </Link>
               </div>
             </section>
           </LazySection>
