@@ -6,7 +6,7 @@ import "./index.css";
 // CSS chunk was sticking on the CDN even after main bundle hash rotated.
 // Bumping this forces Vite to regenerate the entire chunk graph so the new
 // Geist-only font stack lands in production.
-const __BUILD_TAG__ = "2026-04-26T22:00:00Z-hiresign-rebrand";
+const __BUILD_TAG__ = "2026-04-26T22:30:00Z-tailwind-geist";
 if (typeof window !== "undefined") {
   (window as unknown as { __BUILD_TAG__?: string }).__BUILD_TAG__ = __BUILD_TAG__;
 }
