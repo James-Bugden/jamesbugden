@@ -77,6 +77,8 @@ export function InterviewGuideCTA({ lang, score, seniorityLevel }: InterviewGuid
         onClick={handleClick}
         className="inline-flex items-center gap-2 px-6 py-3 rounded-lg text-sm font-bold transition-colors text-white"
         style={{ backgroundColor: "hsl(var(--executive-green))" }}
+        onMouseEnter={(e) => (e.currentTarget.style.backgroundColor = "hsl(var(--accent))")}
+        onMouseLeave={(e) => (e.currentTarget.style.backgroundColor = "hsl(var(--executive-green))")}
       >
         {buttonText}
         <ArrowRight className="w-4 h-4" />

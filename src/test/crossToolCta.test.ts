@@ -34,6 +34,8 @@ describe("bucketScore", () => {
   it("clamps non-finite or out-of-range values to '<60'", () => {
     expect(bucketScore(NaN)).toBe("<60");
     expect(bucketScore(-10)).toBe("<60");
+    expect(bucketScore(Infinity)).toBe("<60");
+    expect(bucketScore(-Infinity)).toBe("<60");
   });
 });
 
@@ -55,6 +57,14 @@ describe("normalizeLevel", () => {
     expect(normalizeLevel("Staff engineer")).toBe("senior");
     expect(normalizeLevel("Principal engineer")).toBe("senior");
     expect(normalizeLevel("Tech Lead")).toBe("senior");
+  });
+
+  it("resolves Mid-Senior to 'senior' (senior wins over mid by precedence)", () => {
+    expect(normalizeLevel("Mid-Senior Engineer")).toBe("senior");
+  });
+
+  it("returns 'unknown' for non-English seniority strings (no Chinese keyword map)", () => {
+    expect(normalizeLevel("資深工程師")).toBe("unknown");
   });
 
   it("returns 'executive' for management/exec titles", () => {
