@@ -378,13 +378,13 @@ export default function ResumeAnalyzer({ defaultLang = "en" }: { defaultLang?: L
       <SEO />
 
       {/* Header — cream nav matching homepage */}
-      <header className="sticky top-0 z-50" style={{ backgroundColor: '#FDFBF7', borderBottom: '1px solid rgba(43,71,52,0.1)' }}>
+      <header className="sticky top-0 z-50" style={{ backgroundColor: 'hsl(var(--paper))', borderBottom: '1px solid rgba(43,71,52,0.1)' }}>
         <div className="container mx-auto max-w-5xl flex items-center justify-between h-14 px-5">
-          <Link to={lang === "zh-TW" ? "/zh-tw" : "/"} className="font-heading text-base md:text-lg font-bold tracking-wide whitespace-nowrap" style={{ color: '#2b4734' }}>
-            JAMES BUGDEN
+          <Link to={lang === "zh-TW" ? "/zh-tw" : "/"} className="font-heading text-base md:text-lg font-bold tracking-wide whitespace-nowrap" style={{ color: 'hsl(var(--executive-green))' }}>
+            hiresign
           </Link>
           <div className="flex items-center gap-2">
-            <Link to={lang === "zh-TW" ? "/zh-tw" : "/"} className="text-sm transition-colors hover:opacity-80 hidden sm:inline" style={{ color: '#6B6B6B' }}>
+            <Link to={lang === "zh-TW" ? "/zh-tw" : "/"} className="text-sm transition-colors hover:opacity-80 hidden sm:inline" style={{ color: 'hsl(var(--muted-foreground))' }}>
               {t(lang, "← Home", "← 首頁")}
             </Link>
             {!isLoggedIn && (
@@ -392,7 +392,7 @@ export default function ResumeAnalyzer({ defaultLang = "en" }: { defaultLang?: L
                 to="/login"
                 state={{ from: lang === "zh-TW" ? "/zh-tw/resume-analyzer" : "/resume-analyzer" }}
                 className="inline-flex items-center gap-1.5 text-xs font-semibold px-3 py-1.5 rounded-full transition-all hover:opacity-80"
-                style={{ backgroundColor: '#2b4734', color: '#FDFBF7' }}
+                style={{ backgroundColor: 'hsl(var(--executive-green))', color: 'hsl(var(--paper))' }}
               >
                 <LogIn className="w-3.5 h-3.5" />
                 {t(lang, "Sign in", "登入")}
@@ -402,7 +402,7 @@ export default function ResumeAnalyzer({ defaultLang = "en" }: { defaultLang?: L
               <Link
                 to={lang === "zh-TW" ? "/zh-tw/dashboard" : "/dashboard"}
                 className="text-xs font-semibold px-3 py-1.5 rounded-full transition-all hover:opacity-80"
-                style={{ backgroundColor: '#2b4734', color: '#FDFBF7' }}
+                style={{ backgroundColor: 'hsl(var(--executive-green))', color: 'hsl(var(--paper))' }}
               >
                 {t(lang, "Dashboard", "我的專區")}
               </Link>
@@ -410,7 +410,7 @@ export default function ResumeAnalyzer({ defaultLang = "en" }: { defaultLang?: L
             <button
               onClick={() => navigate(lang === "en" ? "/zh-tw/resume-analyzer" : "/resume-analyzer")}
               className="text-xs font-semibold px-3 py-1.5 rounded-full transition-all hover:bg-gold hover:text-white"
-              style={{ border: '1px solid #D4930D', color: '#D4930D' }}
+              style={{ border: '1px solid hsl(var(--gold))', color: 'hsl(var(--gold))' }}
             >
               {lang === "en" ? "中文" : "EN"}
             </button>
@@ -418,7 +418,7 @@ export default function ResumeAnalyzer({ defaultLang = "en" }: { defaultLang?: L
         </div>
       </header>
 
-      <main className="min-h-screen" style={{ backgroundColor: '#FDFBF7' }}>
+      <main className="min-h-screen" style={{ backgroundColor: 'hsl(var(--paper))' }}>
         {/* SCREEN 1: UPLOAD */}
         {screen === "upload" && (
           <div className="py-8 md:py-14 px-5">
@@ -428,7 +428,7 @@ export default function ResumeAnalyzer({ defaultLang = "en" }: { defaultLang?: L
                 <h1
                   className="font-heading mb-4"
                   style={{
-                    color: '#1A1A1A',
+                    color: 'hsl(var(--foreground))',
                     fontSize: 'clamp(2rem, 5vw, 3.5rem)',
                     lineHeight: lang === "zh-TW" ? 1.2 : 1.1,
                     fontWeight: 700,
@@ -438,18 +438,18 @@ export default function ResumeAnalyzer({ defaultLang = "en" }: { defaultLang?: L
                   <br />
                   {t(lang, "", "沒人看")}
                   {lang === "zh-TW" && <br />}
-                  <span style={{ color: '#D4930D' }}>{t(lang, "Fix Yours in 1 Minute.", "1 分鐘幫你修好")}</span>
+                  <span style={{ color: 'hsl(var(--gold))' }}>{t(lang, "Fix Yours in 1 Minute.", "1 分鐘幫你修好")}</span>
                 </h1>
-                <p className="text-base md:text-lg mb-5 max-w-xl mx-auto" style={{ color: '#6B6B6B' }}>
+                <p className="text-base md:text-lg mb-5 max-w-xl mx-auto" style={{ color: 'hsl(var(--muted-foreground))' }}>
                   {t(lang, "Start for free.", "免費開始")}
                 </p>
                 {/* Authority badge */}
                 <div
                   className="inline-flex items-center gap-2.5 px-4 py-2 rounded-full"
-                  style={{ backgroundColor: '#FFFFFF', border: '1px solid rgba(43,71,52,0.12)', boxShadow: '0 2px 8px rgba(0,0,0,0.04)' }}
+                  style={{ backgroundColor: 'hsl(var(--card))', border: '1px solid rgba(43,71,52,0.12)', boxShadow: '0 2px 8px rgba(0,0,0,0.04)' }}
                 >
                   <img src={jamesPhoto} alt="James Bugden" className="w-7 h-7 rounded-full object-cover" />
-                  <span className="text-xs" style={{ color: '#6B6B6B' }}>
+                  <span className="text-xs" style={{ color: 'hsl(var(--muted-foreground))' }}>
                     {t(lang,
                       "Built by James Bugden, Senior Recruiter who has reviewed 20,000+ resumes",
                       "由 James Bugden 打造，審閱超過 20,000 份履歷的資深招募官"
@@ -461,7 +461,7 @@ export default function ResumeAnalyzer({ defaultLang = "en" }: { defaultLang?: L
               {/* Upload Area */}
               <div
                 className="rounded-2xl p-6 md:p-8"
-                style={{ backgroundColor: '#FFFFFF', border: '1px solid rgba(43,71,52,0.1)', boxShadow: '0 4px 24px rgba(0,0,0,0.08)' }}
+                style={{ backgroundColor: 'hsl(var(--card))', border: '1px solid rgba(43,71,52,0.1)', boxShadow: '0 4px 24px rgba(0,0,0,0.08)' }}
               >
                 <Tabs defaultValue="upload" className="w-full">
                   <TabsList className="grid w-full grid-cols-2 mb-6">
@@ -477,14 +477,14 @@ export default function ResumeAnalyzer({ defaultLang = "en" }: { defaultLang?: L
                         onClick={() => fileInputRef.current?.click()}
                         className="border-2 border-dashed rounded-xl p-10 text-center cursor-pointer transition-all"
                         style={{ borderColor: 'rgba(43,71,52,0.2)' }}
-                        onMouseEnter={(e) => { e.currentTarget.style.borderColor = '#D4930D'; e.currentTarget.style.backgroundColor = 'rgba(212,147,13,0.03)'; }}
+                        onMouseEnter={(e) => { e.currentTarget.style.borderColor = 'hsl(var(--gold))'; e.currentTarget.style.backgroundColor = 'rgba(212,147,13,0.03)'; }}
                         onMouseLeave={(e) => { e.currentTarget.style.borderColor = 'rgba(43,71,52,0.2)'; e.currentTarget.style.backgroundColor = 'transparent'; }}
                       >
-                        <CloudUpload className="w-10 h-10 mx-auto mb-3" style={{ color: '#6B6B6B' }} />
-                        <p className="font-medium mb-1" style={{ color: '#1A1A1A' }}>
+                        <CloudUpload className="w-10 h-10 mx-auto mb-3" style={{ color: 'hsl(var(--muted-foreground))' }} />
+                        <p className="font-medium mb-1" style={{ color: 'hsl(var(--foreground))' }}>
                           {t(lang, "Drag & drop your resume here, or click to browse", "拖放你的履歷到這裡，或點擊瀏覽")}
                         </p>
-                        <p className="text-sm" style={{ color: '#6B6B6B' }}>
+                        <p className="text-sm" style={{ color: 'hsl(var(--muted-foreground))' }}>
                           {t(lang, "PDF or DOCX, max 5MB", "PDF 或 DOCX，最大 5MB")}
                         </p>
                         <input
@@ -497,10 +497,10 @@ export default function ResumeAnalyzer({ defaultLang = "en" }: { defaultLang?: L
                       </div>
                     ) : (
                       <div className="flex items-center gap-3 p-4 rounded-xl" style={{ backgroundColor: '#f5f3ee', border: '1px solid rgba(43,71,52,0.1)' }}>
-                        <Check className="w-5 h-5 shrink-0" style={{ color: '#2b4734' }} />
-                        <FileText className="w-5 h-5 shrink-0" style={{ color: '#6B6B6B' }} />
-                        <span className="text-sm font-medium truncate flex-1" style={{ color: '#1A1A1A' }}>{file.name}</span>
-                        <button onClick={() => { setFile(null); setError(""); }} style={{ color: '#6B6B6B' }} className="hover:opacity-70">
+                        <Check className="w-5 h-5 shrink-0" style={{ color: 'hsl(var(--executive-green))' }} />
+                        <FileText className="w-5 h-5 shrink-0" style={{ color: 'hsl(var(--muted-foreground))' }} />
+                        <span className="text-sm font-medium truncate flex-1" style={{ color: 'hsl(var(--foreground))' }}>{file.name}</span>
+                        <button onClick={() => { setFile(null); setError(""); }} style={{ color: 'hsl(var(--muted-foreground))' }} className="hover:opacity-70">
                           <X className="w-4 h-4" />
                         </button>
                       </div>
@@ -516,13 +516,13 @@ export default function ResumeAnalyzer({ defaultLang = "en" }: { defaultLang?: L
                         className="w-full min-h-[200px] p-4 rounded-xl text-sm resize-y focus:outline-none focus:ring-2"
                         style={{
                           border: '1px solid rgba(43,71,52,0.15)',
-                          backgroundColor: '#FDFBF7',
-                          color: '#1A1A1A',
+                          backgroundColor: 'hsl(var(--paper))',
+                          color: 'hsl(var(--foreground))',
                           // @ts-ignore
                           '--tw-ring-color': 'rgba(212,147,13,0.4)',
                         }}
                       />
-                      <span className="absolute bottom-3 right-3 text-xs" style={{ color: '#6B6B6B' }}>
+                      <span className="absolute bottom-3 right-3 text-xs" style={{ color: 'hsl(var(--muted-foreground))' }}>
                         {pasteText.length} {t(lang, "characters", "字元")}
                         {pasteText.length > 0 && pasteText.length < 200 && (
                           <span className="text-destructive ml-1">({t(lang, "min 200", "最少 200")})</span>
@@ -545,9 +545,9 @@ export default function ResumeAnalyzer({ defaultLang = "en" }: { defaultLang?: L
                   onClick={handleSubmitResume}
                   disabled={!canSubmit || limitReached}
                   className="w-full mt-4 h-12 text-base font-semibold rounded-lg text-white transition-colors disabled:opacity-40"
-                  style={{ backgroundColor: '#2b4734' }}
-                  onMouseEnter={(e) => { if (!e.currentTarget.disabled) e.currentTarget.style.backgroundColor = '#3a5a45'; }}
-                  onMouseLeave={(e) => { e.currentTarget.style.backgroundColor = '#2b4734'; }}
+                  style={{ backgroundColor: 'hsl(var(--executive-green))' }}
+                  onMouseEnter={(e) => { if (!e.currentTarget.disabled) e.currentTarget.style.backgroundColor = 'hsl(var(--executive-green-light))'; }}
+                  onMouseLeave={(e) => { e.currentTarget.style.backgroundColor = 'hsl(var(--executive-green))'; }}
                 >
                   {t(lang, "Analyze My Resume", "分析我的履歷")}
                 </button>
@@ -557,8 +557,8 @@ export default function ResumeAnalyzer({ defaultLang = "en" }: { defaultLang?: L
                   className="flex items-center justify-center gap-2 mt-4 px-4 py-2.5 rounded-full mx-auto w-fit"
                   style={{ backgroundColor: 'rgba(43,71,52,0.05)', border: '1px solid rgba(43,71,52,0.15)' }}
                 >
-                  <ShieldCheck className="w-4 h-4 shrink-0" style={{ color: '#2b4734' }} />
-                  <span className="text-xs font-medium" style={{ color: '#2b4734' }}>
+                  <ShieldCheck className="w-4 h-4 shrink-0" style={{ color: 'hsl(var(--executive-green))' }} />
+                  <span className="text-xs font-medium" style={{ color: 'hsl(var(--executive-green))' }}>
                     {t(lang, "100% Private — Your resume is never shared or sold", "100% 隱私保護 — 你的履歷不會外流，絕不轉賣")}
                   </span>
                 </div>
@@ -566,7 +566,7 @@ export default function ResumeAnalyzer({ defaultLang = "en" }: { defaultLang?: L
 
               {/* How It Works */}
               <div className="mt-10">
-                <h2 className="text-center font-heading text-lg font-semibold mb-6" style={{ color: '#1A1A1A' }}>
+                <h2 className="text-center font-heading text-lg font-semibold mb-6" style={{ color: 'hsl(var(--foreground))' }}>
                   {t(lang, "How It Works", "三步驟，快速搞定")}
                 </h2>
                 <div className="grid grid-cols-3 gap-4">
@@ -577,10 +577,10 @@ export default function ResumeAnalyzer({ defaultLang = "en" }: { defaultLang?: L
                   ].map((step, i) => (
                     <div key={i} className="flex flex-col items-center text-center gap-2">
                       <div className="w-12 h-12 rounded-full flex items-center justify-center" style={{ backgroundColor: 'rgba(212,147,13,0.1)' }}>
-                        <step.icon className="w-5 h-5" style={{ color: '#D4930D' }} />
+                        <step.icon className="w-5 h-5" style={{ color: 'hsl(var(--gold))' }} />
                       </div>
-                      <p className="font-semibold text-sm" style={{ color: '#1A1A1A' }}>{step.title}</p>
-                      <p className="text-xs leading-snug" style={{ color: '#6B6B6B' }}>{step.desc}</p>
+                      <p className="font-semibold text-sm" style={{ color: 'hsl(var(--foreground))' }}>{step.title}</p>
+                      <p className="text-xs leading-snug" style={{ color: 'hsl(var(--muted-foreground))' }}>{step.desc}</p>
                     </div>
                   ))}
                 </div>
@@ -588,28 +588,28 @@ export default function ResumeAnalyzer({ defaultLang = "en" }: { defaultLang?: L
 
               {/* Sample Results Preview */}
               <div className="mt-12">
-                <h2 className="text-center font-heading text-lg font-semibold mb-2" style={{ color: '#1A1A1A' }}>
+                <h2 className="text-center font-heading text-lg font-semibold mb-2" style={{ color: 'hsl(var(--foreground))' }}>
                   {t(lang, "See What You'll Get", "看看你會得到什麼")}
                 </h2>
-                <p className="text-center text-sm mb-6" style={{ color: '#6B6B6B' }}>
+                <p className="text-center text-sm mb-6" style={{ color: 'hsl(var(--muted-foreground))' }}>
                   {t(lang, "A detailed breakdown with actionable improvements", "詳細分析報告，附帶可執行的改善建議")}
                 </p>
                 <div
                   className="relative rounded-2xl p-5 md:p-7 overflow-hidden"
-                  style={{ backgroundColor: '#FFFFFF', border: '1px solid rgba(43,71,52,0.1)', boxShadow: '0 8px 24px rgba(27,58,47,0.08)' }}
+                  style={{ backgroundColor: 'hsl(var(--card))', border: '1px solid rgba(43,71,52,0.1)', boxShadow: '0 8px 24px rgba(27,58,47,0.08)' }}
                 >
                   {/* Blurred overlay at bottom */}
                   <div className="absolute bottom-0 left-0 right-0 h-16 z-10 flex items-end justify-center pb-3" style={{ background: 'linear-gradient(to top, #FFFFFF 30%, rgba(255,255,255,0.85) 60%, transparent)' }}>
-                    <span className="text-xs font-medium" style={{ color: '#6B6B6B' }}>{t(lang, "Upload your resume to see your full report", "上傳履歷查看完整報告")}</span>
+                    <span className="text-xs font-medium" style={{ color: 'hsl(var(--muted-foreground))' }}>{t(lang, "Upload your resume to see your full report", "上傳履歷查看完整報告")}</span>
                   </div>
 
                   {/* Mock score header */}
                   <div className="flex flex-col items-center mb-6">
-                    <div className="w-20 h-20 rounded-full flex items-center justify-center mb-2" style={{ border: '5px solid #16a34a' }}>
-                      <span className="font-heading text-2xl font-bold" style={{ color: '#16a34a' }}>B</span>
+                    <div className="w-20 h-20 rounded-full flex items-center justify-center mb-2" style={{ border: '5px solid hsl(var(--executive-green))' }}>
+                      <span className="font-heading text-2xl font-bold" style={{ color: 'hsl(var(--executive-green))' }}>B</span>
                     </div>
-                    <p className="font-heading text-lg font-bold" style={{ color: '#1A1A1A' }}>74 <span className="text-sm font-normal" style={{ color: '#6B6B6B' }}>/100</span></p>
-                    <p className="text-xs" style={{ color: '#6B6B6B' }}>{t(lang, "Overall Resume Score", "整體履歷評分")}</p>
+                    <p className="font-heading text-lg font-bold" style={{ color: 'hsl(var(--foreground))' }}>74 <span className="text-sm font-normal" style={{ color: 'hsl(var(--muted-foreground))' }}>/100</span></p>
+                    <p className="text-xs" style={{ color: 'hsl(var(--muted-foreground))' }}>{t(lang, "Overall Resume Score", "整體履歷評分")}</p>
                   </div>
 
                   {/* Mock section health check */}
@@ -625,20 +625,20 @@ export default function ResumeAnalyzer({ defaultLang = "en" }: { defaultLang?: L
                         <div className="flex items-center justify-between text-xs mb-1">
                           <div className="flex items-center gap-2">
                             {s.status === "strong" ? (
-                              <Check className="w-3.5 h-3.5" style={{ color: '#16a34a' }} />
+                              <Check className="w-3.5 h-3.5" style={{ color: 'hsl(var(--executive-green))' }} />
                             ) : s.status === "critical" ? (
                               <X className="w-3.5 h-3.5 text-destructive" />
                             ) : (
-                              <AlertTriangle className="w-3.5 h-3.5 text-yellow-500" />
+                              <AlertTriangle className="w-3.5 h-3.5 text-gold" />
                             )}
-                            <span className="font-medium" style={{ color: '#1A1A1A' }}>{s.label}</span>
+                            <span className="font-medium" style={{ color: 'hsl(var(--foreground))' }}>{s.label}</span>
                           </div>
-                          <span className={`font-semibold ${s.status === "strong" ? "" : s.status === "critical" ? "text-destructive" : "text-yellow-600"}`} style={s.status === "strong" ? { color: '#16a34a' } : undefined}>{s.score}/10</span>
+                          <span className={`font-semibold ${s.status === "strong" ? "" : s.status === "critical" ? "text-destructive" : "text-gold"}`} style={s.status === "strong" ? { color: 'hsl(var(--executive-green))' } : undefined}>{s.score}/10</span>
                         </div>
                         <div className="h-1.5 rounded-full overflow-hidden" style={{ backgroundColor: 'rgba(43,71,52,0.08)' }}>
                           <div
-                            className={`h-full rounded-full transition-all ${s.status === "critical" ? "bg-destructive" : s.status === "warning" ? "bg-yellow-500" : ""}`}
-                            style={{ width: `${s.score * 10}%`, ...(s.status === "strong" ? { backgroundColor: '#16a34a' } : {}) }}
+                            className={`h-full rounded-full transition-all ${s.status === "critical" ? "bg-destructive" : s.status === "warning" ? "bg-gold" : ""}`}
+                            style={{ width: `${s.score * 10}%`, ...(s.status === "strong" ? { backgroundColor: 'hsl(var(--executive-green))' } : {}) }}
                           />
                         </div>
                       </div>
@@ -650,7 +650,7 @@ export default function ResumeAnalyzer({ defaultLang = "en" }: { defaultLang?: L
 
               {/* FAQ Section */}
               <div className="mt-12">
-                <h2 className="text-center font-heading text-lg font-semibold mb-4" style={{ color: '#1A1A1A' }}>
+                <h2 className="text-center font-heading text-lg font-semibold mb-4" style={{ color: 'hsl(var(--foreground))' }}>
                   {t(lang, "Frequently Asked Questions", "你可能想問")}
                 </h2>
                 <Accordion type="single" collapsible className="w-full">
@@ -664,7 +664,7 @@ export default function ResumeAnalyzer({ defaultLang = "en" }: { defaultLang?: L
                   ].map((item, i) => (
                     <AccordionItem key={i} value={`faq-${i}`}>
                       <AccordionTrigger className="text-sm text-left font-medium">{item.q}</AccordionTrigger>
-                      <AccordionContent className="text-sm" style={{ color: '#6B6B6B' }}>{item.a}</AccordionContent>
+                      <AccordionContent className="text-sm" style={{ color: 'hsl(var(--muted-foreground))' }}>{item.a}</AccordionContent>
                     </AccordionItem>
                   ))}
                 </Accordion>
@@ -682,14 +682,14 @@ export default function ResumeAnalyzer({ defaultLang = "en" }: { defaultLang?: L
                   <circle cx="50" cy="50" r="45" fill="none" stroke="rgba(43,71,52,0.15)" strokeWidth="6" />
                   <circle
                     cx="50" cy="50" r="45" fill="none"
-                    stroke="#D4930D"
+                    stroke="hsl(var(--gold))"
                     strokeWidth="6"
                     strokeLinecap="round"
                     strokeDasharray={`${progress * 2.83} 283`}
                     className="transition-all duration-300"
                   />
                 </svg>
-                <span className="absolute inset-0 flex items-center justify-center font-heading text-xl font-bold" style={{ color: '#1A1A1A' }}>
+                <span className="absolute inset-0 flex items-center justify-center font-heading text-xl font-bold" style={{ color: 'hsl(var(--foreground))' }}>
                   {Math.round(progress)}%
                 </span>
               </div>
@@ -706,7 +706,7 @@ export default function ResumeAnalyzer({ defaultLang = "en" }: { defaultLang?: L
                         : ""
                     }`}
                     style={{
-                      color: i === analyzeStep ? '#1A1A1A' : i < analyzeStep ? '#6B6B6B' : 'rgba(107,107,107,0.4)',
+                      color: i === analyzeStep ? 'hsl(var(--foreground))' : i < analyzeStep ? 'hsl(var(--muted-foreground))' : 'rgba(107,107,107,0.4)',
                     }}
                   >
                     {i < analyzeStep ? "✓ " : i === analyzeStep ? "→ " : ""}{step}
@@ -750,7 +750,7 @@ export default function ResumeAnalyzer({ defaultLang = "en" }: { defaultLang?: L
                 <button
                   onClick={() => { setScreen("upload"); navigate(lang === "zh-TW" ? "/zh-tw/resume-analyzer" : "/resume-analyzer", { replace: true }); }}
                   className="text-xs font-semibold px-3 py-1.5 rounded-full transition-all hover:opacity-80"
-                  style={{ backgroundColor: '#2b4734', color: '#FDFBF7' }}
+                  style={{ backgroundColor: 'hsl(var(--executive-green))', color: 'hsl(var(--paper))' }}
                 >
                   {t(lang, "New Analysis", "新分析")}
                 </button>
@@ -764,7 +764,7 @@ export default function ResumeAnalyzer({ defaultLang = "en" }: { defaultLang?: L
                   {analyses.map((a) => {
                     const date = new Date(a.created_at).toLocaleDateString(lang === "zh-TW" ? "zh-TW" : "en-US", { year: "numeric", month: "short", day: "numeric", hour: "2-digit", minute: "2-digit" });
                     const score = a.overall_score ?? 0;
-                    const color = score >= 80 ? "#22c55e" : score >= 60 ? "#D4A843" : score >= 40 ? "#f97316" : "#ef4444";
+                    const color = score >= 80 ? "hsl(var(--executive-green))" : score >= 60 ? "hsl(var(--gold))" : score >= 40 ? "hsl(var(--gold-dark))" : "hsl(var(--destructive))";
                     return (
                       <button
                         key={a.id}

@@ -29,10 +29,10 @@ function matchRegion(sectionName: string) {
 }
 
 function getScoreColor(score: number) {
-  if (score <= 3) return "#dc2626";
-  if (score <= 5) return "#ea580c";
-  if (score <= 7) return "#d97706";
-  return "#16a34a";
+  if (score <= 3) return "hsl(var(--destructive))";
+  if (score <= 5) return "hsl(var(--gold-dark))";
+  if (score <= 7) return "hsl(var(--gold))";
+  return "hsl(var(--executive-green))";
 }
 
 function bandColor(score: number) {
@@ -98,7 +98,7 @@ export default function ResumeVisualSummary({
         )}
         {needsWork > 0 && (
           <div className="flex items-center gap-1.5">
-            <AlertTriangle className="w-3.5 h-3.5 text-yellow-500" />
+            <AlertTriangle className="w-3.5 h-3.5 text-gold" />
             <span className="text-xs text-muted-foreground">{needsWork} {t(lang, "needs work", "待改善")}</span>
           </div>
         )}

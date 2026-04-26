@@ -201,7 +201,7 @@ const IkigaiGuide = () => {
       {/* Navigation */}
       <nav className="fixed top-0 left-0 right-0 z-50 bg-nav-green">
         <div className="container mx-auto px-5 md:px-6 py-4 flex items-center justify-between">
-          <Link to="/" className="font-heading text-lg md:text-xl font-medium text-cream tracking-tight">JAMES BUGDEN</Link>
+          <Link to="/" className="font-heading text-lg md:text-xl font-medium text-cream tracking-tight">hiresign</Link>
           <div className="flex items-center gap-3">
             <AuthHeaderButton variant="nav" />
             <LanguageToggle variant="nav" />
@@ -215,11 +215,11 @@ const IkigaiGuide = () => {
           <h1 className="font-heading text-3xl md:text-5xl lg:text-6xl text-cream leading-tight mb-4" style={{ lineHeight: 1.2 }}>
             Ikigai: Build a Career You Won't Quit<br className="hidden sm:block" /> in 12 Months
           </h1>
-          <p className="text-lg md:text-xl text-cream/80 mb-4">Without Burning Out. Without Starting Over.</p>
+          <p className="text-lg md:text-xl text-cream/90 mb-4">Without Burning Out. Without Starting Over.</p>
           <div className="flex flex-col sm:flex-row items-center justify-center gap-2 sm:gap-4 mb-6">
-            <p className="text-base text-cream/60">By James Bugden, Career Coach · Senior Recruiter @ Uber</p>
+            <p className="text-base text-gold-soft/80">By James Bugden, Career Coach · Senior Recruiter @ Uber</p>
             <span className="hidden sm:inline text-cream/30">·</span>
-            <div className="flex items-center gap-1.5 text-cream/60">
+            <div className="flex items-center gap-1.5 text-gold-soft/80">
               <Clock className="w-4 h-4" />
               <span className="text-sm">35 min read</span>
             </div>
@@ -1030,7 +1030,7 @@ const IkigaiGuide = () => {
 
           <div className="bg-cream/5 border border-cream/10 rounded-xl p-5 md:p-6 mb-6">
             <h3 className="text-gold text-sm font-bold uppercase mb-3">Your Ikigai</h3>
-            <p className="text-cream/80 text-sm mb-4">The intersection of: What you love + What you're good at + What the world needs + What you're paid for</p>
+            <p className="text-cream/90 text-sm mb-4">The intersection of: What you love + What you're good at + What the world needs + What you're paid for</p>
 
             <h3 className="text-gold text-sm font-bold uppercase mb-3">5 Pillars of a Career That Lasts</h3>
             <ol className="space-y-2 mb-4">
@@ -1041,7 +1041,7 @@ const IkigaiGuide = () => {
                 "RESILIENCE: Embrace wabi-sabi. Build antifragility.",
                 "SUSTAINABLE PACE: Work at 80%. Protect rest. Pace yourself.",
               ].map((item, i) => (
-                <li key={i} className="text-cream/70 text-sm"><span className="text-gold font-bold mr-1">{i + 1}.</span> {item}</li>
+                <li key={i} className="text-cream/85 text-sm"><span className="text-gold font-bold mr-1">{i + 1}.</span> {item}</li>
               ))}
             </ol>
 
@@ -1056,7 +1056,7 @@ const IkigaiGuide = () => {
               ].map((item, i) => (
                 <li key={i} className="flex items-start gap-2">
                   <GoldCheckBadge />
-                  <span className="text-cream/70 text-sm">{item}</span>
+                  <span className="text-cream/85 text-sm">{item}</span>
                 </li>
               ))}
             </ul>
@@ -1196,15 +1196,15 @@ const IkigaiGuide = () => {
             <span className="text-cream/20 font-heading text-6xl md:text-7xl font-bold leading-none select-none">→</span>
             <div className="pt-3">
               <h2 className="font-heading text-2xl md:text-3xl text-cream mb-2">Resources</h2>
-              <p className="text-cream/60">Keep building your career</p>
+              <p className="text-gold-soft/80">Keep building your career</p>
             </div>
           </div>
 
           <div className="bg-cream/5 border border-cream/10 rounded-xl p-5 md:p-6 mb-8">
             <h3 className="text-gold text-sm font-bold uppercase mb-3">The Book</h3>
-            <p className="text-cream/80 text-sm italic mb-4">"Ikigai: The Japanese Secret to a Long and Happy Life" by Héctor García and Francesc Miralles</p>
+            <p className="text-cream/90 text-sm italic mb-4">"Ikigai: The Japanese Secret to a Long and Happy Life" by Héctor García and Francesc Miralles</p>
             <h3 className="text-gold text-sm font-bold uppercase mb-3">Also Referenced</h3>
-            <ul className="space-y-1 text-cream/70 text-sm">
+            <ul className="space-y-1 text-cream/85 text-sm">
               <li>• <em>Man's Search for Meaning</em> by Viktor Frankl</li>
               <li>• <em>Flow: The Psychology of Optimal Experience</em> by Mihaly Csikszentmihalyi</li>
               <li>• <em>Antifragile: Things That Gain from Disorder</em> by Nassim Nicholas Taleb</li>

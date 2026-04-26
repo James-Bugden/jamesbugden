@@ -102,7 +102,7 @@ export default function Unsubscribe() {
     <div className="min-h-screen bg-background flex items-center justify-center px-4">
       <SEO />
       <div className="w-full max-w-md bg-card border border-border rounded-xl shadow-lg p-8 text-center">
-        <p className="text-xs font-semibold tracking-[0.15em] text-executive-green mb-6">JAMES BUGDEN</p>
+        <p className="text-xs font-semibold tracking-[0.15em] text-executive-green mb-6">hiresign</p>
 
         {status === "loading" && (
           <p className="text-muted-foreground">{t.verifying}</p>

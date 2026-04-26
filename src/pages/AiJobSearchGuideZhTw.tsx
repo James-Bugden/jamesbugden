@@ -109,10 +109,10 @@ const ActionStep = ({ children }: { children: React.ReactNode }) => (
 );
 
 const CommonMistake = ({ title, children }: { title: string; children: React.ReactNode }) => (
-  <div className="bg-red-500/5 border border-red-500/20 rounded-xl p-4 md:p-5 my-6">
+  <div className="bg-destructive/5 border border-destructive/20 rounded-xl p-4 md:p-5 my-6">
     <div className="flex items-center gap-2 mb-2">
-      <XCircle className="w-5 h-5 text-red-500" />
-      <span className="text-sm font-semibold text-red-500">{title}</span>
+      <XCircle className="w-5 h-5 text-destructive" />
+      <span className="text-sm font-semibold text-destructive">{title}</span>
     </div>
     <div className="text-sm text-muted-foreground leading-relaxed">{children}</div>
   </div>
@@ -235,7 +235,7 @@ const AiJobSearchGuideZhTw = () => {
       {/* Navigation */}
       <nav className="fixed top-0 left-0 right-0 z-50 bg-nav-green">
         <div className="container mx-auto px-5 md:px-6 py-4 flex items-center justify-between">
-          <Link to="/zh-tw" className="font-heading text-lg md:text-xl font-medium text-cream tracking-tight">JAMES BUGDEN</Link>
+          <Link to="/zh-tw" className="font-heading text-lg md:text-xl font-medium text-cream tracking-tight">hiresign</Link>
           <div className="flex items-center gap-3 md:gap-4">
             <AuthHeaderButton variant="nav" />
             <LanguageToggle variant="nav" />
@@ -257,11 +257,11 @@ const AiJobSearchGuideZhTw = () => {
           <h1 className="font-heading text-3xl md:text-5xl lg:text-6xl text-cream leading-tight mb-4" style={{ lineHeight: 1.2 }}>
             如何用 AI 掌控你的<br className="hidden sm:block" />整個求職過程
           </h1>
-          <p className="text-lg md:text-xl text-cream/80 mb-3">
+          <p className="text-lg md:text-xl text-cream/90 mb-3">
             從職涯方向到最終 Offer，每個階段都用 ChatGPT
           </p>
           <div className="flex flex-col sm:flex-row items-center justify-center gap-2 sm:gap-4 mb-6">
-            <p className="text-base text-cream/60 italic">
+            <p className="text-base text-gold-soft/80 italic">
               根據 Jeremy Schifeling 的《Career Coach GPT》撰寫 · 指南作者：James Bugden
             </p>
           </div>
@@ -517,10 +517,10 @@ const AiJobSearchGuideZhTw = () => {
           <ActionStep>至少每週檢查一次你的 LinkedIn 訊息。對不感興趣的點「不用了，謝謝」。對感興趣的回覆。</ActionStep>
           <RecruiterCheck>LinkedIn 實際上會追蹤你的回覆率，並顯示給招募官看。當我看到候選人的個人檔案上寫「通常在 1 天內回覆」，我更有可能主動聯繫。它告訴我，我的訊息不會石沈大海。</RecruiterCheck>
 
-          <div className="bg-red-500/5 border border-red-500/20 rounded-xl p-5 md:p-6 my-6 space-y-4">
+          <div className="bg-destructive/5 border border-destructive/20 rounded-xl p-5 md:p-6 my-6 space-y-4">
             <div className="flex items-center gap-2 mb-2">
-              <XCircle className="w-5 h-5 text-red-500" />
-              <span className="font-semibold text-red-500">我每天看到的 5 個 LinkedIn 錯誤</span>
+              <XCircle className="w-5 h-5 text-destructive" />
+              <span className="font-semibold text-destructive">我每天看到的 5 個 LinkedIn 錯誤</span>
             </div>
             <ol className="list-decimal list-inside space-y-3 text-sm text-muted-foreground">
               <li><strong className="text-foreground">標題只是你的現職職稱。</strong>你在告訴招募官你現在是什麼，而不是你想要什麼。永遠要加入你的目標角色和關鍵技能。</li>

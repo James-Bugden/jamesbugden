@@ -1,10 +1,10 @@
-import { Mail, ClipboardList, Briefcase, BookOpen, CheckSquare, Star } from "lucide-react";
+import { Mail, Star } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { LucideIcon } from "lucide-react";
 import { Link } from "react-router-dom";
+import { ResumeStackIcon, ChecklistIcon, GuideBookIcon, OfferTrophyIcon } from "@/assets/illustrations/HiresignIcons";
 
 interface Resource {
-  icon: LucideIcon;
+  Icon: React.ComponentType<{ size?: number; className?: string }>;
   title: string;
   description: string;
   buttonText: string;
@@ -16,7 +16,7 @@ interface Resource {
 
 const resources: Resource[] = [
   {
-    icon: ClipboardList,
+    Icon: ResumeStackIcon,
     title: "招募人員履歷檢查清單",
     description: "我在 Uber 前 6 秒會檢查什麼",
     buttonText: "免費下載",
@@ -24,7 +24,7 @@ const resources: Resource[] = [
     featured: false,
   },
   {
-    icon: Briefcase,
+    Icon: ChecklistIcon,
     title: "面試準備表",
     description: "用我實證有效的方法準備任何面試",
     buttonText: "取得準備表",
@@ -32,7 +32,7 @@ const resources: Resource[] = [
     featured: false,
   },
   {
-    icon: BookOpen,
+    Icon: GuideBookIcon,
     title: "職涯指南合集",
     description: "LinkedIn、面試準備、職涯轉型完整指南",
     buttonText: "查看指南",
@@ -41,7 +41,7 @@ const resources: Resource[] = [
     isInternalLink: true,
   },
   {
-    icon: CheckSquare,
+    Icon: OfferTrophyIcon,
     title: "Offer 決策評分卡",
     description: "用我的決策框架客觀評估工作機會",
     buttonText: "取得評分卡",
@@ -63,7 +63,7 @@ const FreeResourcesSectionZhTw = () => {
         {/* 2x2 Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           {resources.map((resource, index) => {
-            const IconComponent = resource.icon;
+            const IconComponent = resource.Icon;
             return (
               <div
                 key={index}
@@ -86,8 +86,8 @@ const FreeResourcesSectionZhTw = () => {
                 )}
 
                 {/* Icon */}
-                <div className="w-14 h-14 md:w-16 md:h-16 rounded-xl bg-gold/10 flex items-center justify-center mb-6">
-                  <IconComponent className="w-7 h-7 md:w-8 md:h-8 text-gold" strokeWidth={1.5} />
+                <div className="w-16 h-16 md:w-20 md:h-20 rounded-xl bg-gold-soft border border-gold/25 flex items-center justify-center mb-6">
+                  <IconComponent size={48} className="md:scale-110" />
                 </div>
 
                 {/* Title */}

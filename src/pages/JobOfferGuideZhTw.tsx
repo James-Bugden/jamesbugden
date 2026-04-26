@@ -120,7 +120,7 @@ const JobOfferGuideZhTw = () => {
       {/* Navigation */}
       <nav className="fixed top-0 left-0 right-0 z-50 bg-nav-green">
         <div className="container mx-auto px-5 md:px-6 py-4 flex items-center justify-between">
-          <Link to="/zh-tw" className="font-heading text-lg md:text-xl font-medium text-cream tracking-tight">JAMES BUGDEN</Link>
+          <Link to="/zh-tw" className="font-heading text-lg md:text-xl font-medium text-cream tracking-tight">hiresign</Link>
           <div className="flex items-center gap-3">
             <AuthHeaderButton variant="nav" />
             <LanguageToggle variant="nav" />
@@ -134,11 +134,11 @@ const JobOfferGuideZhTw = () => {
           <h1 className="font-heading text-3xl md:text-5xl lg:text-6xl text-cream leading-tight mb-4" style={{ lineHeight: 1.2 }}>
             收到錄取通知？<br className="hidden sm:block" />如何做出不後悔的決定
           </h1>
-          <p className="text-lg md:text-xl text-cream/80 mb-3">評估、接受或放棄工作機會的完整指南</p>
+          <p className="text-lg md:text-xl text-cream/90 mb-3">評估、接受或放棄工作機會的完整指南</p>
           <div className="flex flex-col sm:flex-row items-center justify-center gap-2 sm:gap-4 mb-6">
-            <p className="text-base text-cream/60">James Bugden · 職涯教練 · Uber 資深 Recruiter</p>
+            <p className="text-base text-gold-soft/80">James Bugden · 職涯教練 · Uber 資深 Recruiter</p>
             <span className="hidden sm:inline text-cream/30">·</span>
-            <div className="flex items-center gap-1.5 text-cream/60">
+            <div className="flex items-center gap-1.5 text-gold-soft/80">
               <Clock className="w-4 h-4" />
               <span className="text-sm">閱讀時間 30 分鐘</span>
             </div>
@@ -497,15 +497,15 @@ const JobOfferGuideZhTw = () => {
             <div className="grid sm:grid-cols-3 gap-4">
               <div className="bg-cream/5 border border-cream/10 rounded-xl p-4 text-center">
                 <p className="text-cream font-heading text-2xl font-bold mb-1">~40%</p>
-                <p className="text-cream/70 text-xs">的資深主管認為接受反聘條件會損害你的職涯</p>
+                <p className="text-cream/85 text-xs">的資深主管認為接受反聘條件會損害你的職涯</p>
               </div>
               <div className="bg-cream/5 border border-cream/10 rounded-xl p-4 text-center">
                 <p className="text-cream font-heading text-2xl font-bold mb-1">5-25%</p>
-                <p className="text-cream/70 text-xs">反聘條件有好結果的估計機率</p>
+                <p className="text-cream/85 text-xs">反聘條件有好結果的估計機率</p>
               </div>
               <div className="bg-cream/5 border border-cream/10 rounded-xl p-4 text-center">
                 <p className="text-cream font-heading text-2xl font-bold mb-1">~80%</p>
-                <p className="text-cream/70 text-xs">表示接受會損害在目前公司的信任和名聲</p>
+                <p className="text-cream/85 text-xs">表示接受會損害在目前公司的信任和名聲</p>
               </div>
             </div>
           </div>
@@ -569,7 +569,7 @@ const JobOfferGuideZhTw = () => {
               ].map((item, i) => (
                 <div key={i} className="bg-cream/5 border border-cream/10 rounded-xl p-4 text-center">
                   <p className="text-gold text-xs font-bold uppercase mb-2">{item.label}</p>
-                  <p className="text-cream/70 text-xs">{item.desc}</p>
+                  <p className="text-cream/85 text-xs">{item.desc}</p>
                 </div>
               ))}
             </div>
@@ -776,11 +776,11 @@ const JobOfferGuideZhTw = () => {
             <span className="text-cream/20 font-heading text-6xl md:text-7xl font-bold leading-none select-none">→</span>
             <div className="pt-3">
               <h2 className="font-heading text-2xl md:text-3xl text-cream mb-2">更多資源</h2>
-              <p className="text-cream/60">持續提升你的求職實力</p>
+              <p className="text-gold-soft/80">持續提升你的求職實力</p>
             </div>
           </div>
 
-          <p className="text-cream/70 text-sm mb-8">
+          <p className="text-cream/85 text-sm mb-8">
             本指南取材自 13 篇《哈佛商業評論》關於工作機會、談判和職涯轉換的文章，作者包括 Bill Barnett、Hannah Riley Bowles、Rebecca Knight、Kelly O. Kay、Michael Cullen、Jodi Glickman、Rebecca Zucker、Marlo Lyons、Monne Williams、Amantha Imber、Amy Gallo、Samorn Selim 和 Amii Barnard-Bahn。
           </p>
 

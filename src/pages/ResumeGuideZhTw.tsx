@@ -199,7 +199,7 @@ const ResumeGauntlet = () => (
           <div className="bg-executive-green text-cream rounded-lg px-5 py-4 text-center min-w-[120px]">
             <p className="font-semibold text-sm">{item.label}</p>
             <p className="text-gold text-xs font-medium">{item.sub}</p>
-            <p className="text-cream/60 text-[10px] mt-1">{item.num}</p>
+            <p className="text-gold-soft/80 text-[10px] mt-1">{item.num}</p>
           </div>
           {i < 3 && <ChevronRight className="w-5 h-5 text-muted-foreground hidden md:block" />}
           <div className="md:hidden flex flex-col items-center">
@@ -397,7 +397,7 @@ const ResumeGuideZhTw = () => {
       <nav className="fixed top-0 left-0 right-0 z-50 bg-nav-green">
         <div className="container mx-auto px-5 md:px-6 py-4 flex items-center justify-between">
           <Link to="/zh-tw" className="font-heading text-lg md:text-xl font-medium text-cream tracking-tight">
-            JAMES BUGDEN
+            hiresign
           </Link>
           <div className="flex items-center gap-3 md:gap-4">
             <AuthHeaderButton variant="nav" />
@@ -421,13 +421,13 @@ const ResumeGuideZhTw = () => {
           <h1 className="font-heading text-3xl md:text-5xl lg:text-6xl text-cream leading-tight mb-4">
             完美履歷：10 條黃金法則
           </h1>
-          <p className="text-lg md:text-xl text-cream/80 mb-2">
+          <p className="text-lg md:text-xl text-cream/90 mb-2">
             讓你獲得理想公司面試機會的招募官指南
           </p>
-          <p className="text-base text-cream/60 mb-2">
+          <p className="text-base text-gold-soft/80 mb-2">
             基於 Dan Clay 所著《How to Write the Perfect Resume》
           </p>
-          <div className="flex items-center justify-center gap-1.5 text-cream/60">
+          <div className="flex items-center justify-center gap-1.5 text-gold-soft/80">
             <Clock className="w-4 h-4" />
             <span className="text-sm">15 分鐘閱讀</span>
           </div>

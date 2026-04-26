@@ -144,7 +144,7 @@ const RecruiterScreenGuide = () => {
       <nav className="fixed top-0 left-0 right-0 z-50 bg-nav-green">
         <div className="container mx-auto px-5 md:px-6 py-4 flex items-center justify-between">
           <Link to="/" className="font-heading text-lg md:text-xl font-medium text-cream tracking-tight">
-            JAMES BUGDEN
+            hiresign
           </Link>
           <div className="flex items-center gap-3">
             <AuthHeaderButton variant="nav" />
@@ -159,15 +159,15 @@ const RecruiterScreenGuide = () => {
           <h1 className="font-heading text-3xl md:text-5xl lg:text-6xl text-cream leading-tight mb-4" style={{ lineHeight: 1.2 }}>
             How to Pass the<br className="hidden sm:block" /> First Interview With HR
           </h1>
-          <p className="text-lg md:text-xl text-cream/80 mb-3">
+          <p className="text-lg md:text-xl text-cream/90 mb-3">
             A Senior Recruiter's End-to-End Playbook
           </p>
           <div className="flex flex-col sm:flex-row items-center justify-center gap-2 sm:gap-4 mb-6">
-            <p className="text-base text-cream/60">
+            <p className="text-base text-gold-soft/80">
               By James Bugden, Career Coach · Senior Recruiter @ Uber
             </p>
             <span className="hidden sm:inline text-cream/30">·</span>
-            <div className="flex items-center gap-1.5 text-cream/60">
+            <div className="flex items-center gap-1.5 text-gold-soft/80">
               <Clock className="w-4 h-4" />
               <span className="text-sm">25 min read</span>
             </div>
@@ -247,7 +247,7 @@ const RecruiterScreenGuide = () => {
             <p className="text-cream/50 text-xs text-center mb-4 font-sans">(What I fill out after your call)</p>
             <div className="grid md:grid-cols-2 gap-4 mb-6">
               <div className="bg-cream/5 border border-cream/10 rounded-lg p-4">
-                <p className="text-cream/60 text-xs uppercase mb-2">Pros</p>
+                <p className="text-gold-soft/80 text-xs uppercase mb-2">Pros</p>
                 <div className="space-y-2">
                   <div className="border-b border-cream/10 pb-1 text-cream/30">___________________</div>
                   <div className="border-b border-cream/10 pb-1 text-cream/30">___________________</div>
@@ -255,7 +255,7 @@ const RecruiterScreenGuide = () => {
                 </div>
               </div>
               <div className="bg-cream/5 border border-cream/10 rounded-lg p-4">
-                <p className="text-cream/60 text-xs uppercase mb-2">Cons</p>
+                <p className="text-gold-soft/80 text-xs uppercase mb-2">Cons</p>
                 <div className="space-y-2">
                   <div className="border-b border-cream/10 pb-1 text-cream/30">___________________</div>
                   <div className="border-b border-cream/10 pb-1 text-cream/30">___________________</div>
@@ -263,10 +263,10 @@ const RecruiterScreenGuide = () => {
                 </div>
               </div>
             </div>
-            <p className="text-cream/60 text-xs uppercase mb-3 text-center">Decision (pick one):</p>
+            <p className="text-gold-soft/80 text-xs uppercase mb-3 text-center">Decision (pick one):</p>
             <div className="flex flex-wrap justify-center gap-2">
               {["STRONG NO", "NO", "YES", "STRONG YES"].map((d) => (
-                <span key={d} className="px-3 py-1.5 border border-cream/20 rounded text-cream/70 text-xs">{d}</span>
+                <span key={d} className="px-3 py-1.5 border border-cream/20 rounded text-cream/85 text-xs">{d}</span>
               ))}
             </div>
             <p className="text-cream/40 text-xs text-center mt-4 font-sans italic">
@@ -492,7 +492,7 @@ const RecruiterScreenGuide = () => {
                 <div key={i} className="bg-cream/5 border border-cream/10 rounded-xl p-4 text-center">
                   <p className="text-gold text-xs font-bold uppercase mb-1">{item.label}</p>
                   <p className="text-cream font-heading text-xl font-bold mb-2">{item.pct}</p>
-                  <p className="text-cream/70 text-xs">{item.desc}</p>
+                  <p className="text-cream/85 text-xs">{item.desc}</p>
                 </div>
               ))}
             </div>
@@ -881,27 +881,27 @@ const RecruiterScreenGuide = () => {
                   <span className="px-2 py-0.5 bg-gold/20 text-gold text-xs font-bold rounded">Level 1</span>
                   <span className="text-cream font-semibold text-sm">Deflect</span>
                 </div>
-                <p className="text-cream/80 text-sm italic mb-2">"I'm looking for a role where I grow in both responsibility and compensation. I'd love to understand the full scope before settling on a number."</p>
+                <p className="text-cream/90 text-sm italic mb-2">"I'm looking for a role where I grow in both responsibility and compensation. I'd love to understand the full scope before settling on a number."</p>
                 <p className="text-cream/50 text-xs">Start here. Always.</p>
-                <p className="text-cream/60 text-xs mt-2">For current salary questions: "I'd prefer to keep the focus on what I bring to this role rather than what I earn now." In many states and localities, it's now illegal for employers to ask your current salary. You don't need to share it. Even where it's legal, volunteering it only limits you.</p>
+                <p className="text-gold-soft/80 text-xs mt-2">For current salary questions: "I'd prefer to keep the focus on what I bring to this role rather than what I earn now." In many states and localities, it's now illegal for employers to ask your current salary. You don't need to share it. Even where it's legal, volunteering it only limits you.</p>
               </div>
               <div className="bg-cream/5 border border-cream/10 rounded-xl p-4">
                 <div className="flex items-center gap-2 mb-2">
                   <span className="px-2 py-0.5 bg-gold/20 text-gold text-xs font-bold rounded">Level 2</span>
                   <span className="text-cream font-semibold text-sm">Flip it</span>
                 </div>
-                <p className="text-cream/80 text-sm italic mb-2">"I'd be happy to discuss what the company has budgeted for this role. If we're in the same range, I'm confident we'll find something that works for both sides."</p>
+                <p className="text-cream/90 text-sm italic mb-2">"I'd be happy to discuss what the company has budgeted for this role. If we're in the same range, I'm confident we'll find something that works for both sides."</p>
                 <p className="text-cream/50 text-xs">The phrase "in the same range" is deliberate. It's non-committal. You're not agreeing to accept a number in that range. You're signaling openness while keeping your options open.</p>
-                <p className="text-cream/60 text-xs mt-2">In my experience, 80% of the time the recruiter will share a range once you ask this way. If the recruiter shares a range, don't react right away. Say "that's helpful, thank you" and move on. You'll negotiate the specifics at the offer stage.</p>
+                <p className="text-gold-soft/80 text-xs mt-2">In my experience, 80% of the time the recruiter will share a range once you ask this way. If the recruiter shares a range, don't react right away. Say "that's helpful, thank you" and move on. You'll negotiate the specifics at the offer stage.</p>
               </div>
               <div className="bg-cream/5 border border-cream/10 rounded-xl p-4">
                 <div className="flex items-center gap-2 mb-2">
                   <span className="px-2 py-0.5 bg-gold/20 text-gold text-xs font-bold rounded">Level 3</span>
                   <span className="text-cream font-semibold text-sm">Anchor high</span>
                 </div>
-                <p className="text-cream/80 text-sm italic mb-2">"Based on my experience and current market rates for this type of role in [location], I'm targeting $140,000-$155,000. That said, I'm open depending on the full package including equity and bonus."</p>
+                <p className="text-cream/90 text-sm italic mb-2">"Based on my experience and current market rates for this type of role in [location], I'm targeting $140,000-$155,000. That said, I'm open depending on the full package including equity and bonus."</p>
                 <p className="text-cream/50 text-xs">Only if cornered. Anchor high. Frame as total comp (not base). Leave room for the full package.</p>
-                <p className="text-cream/60 text-xs mt-2">Before any screening call, research comp ranges on Levels.fyi, Glassdoor, Payscale, and LinkedIn Salary. Know the range for your role, level, and location. When you give a number backed by data, it carries more weight than a number pulled from thin air.</p>
+                <p className="text-gold-soft/80 text-xs mt-2">Before any screening call, research comp ranges on Levels.fyi, Glassdoor, Payscale, and LinkedIn Salary. Know the range for your role, level, and location. When you give a number backed by data, it carries more weight than a number pulled from thin air.</p>
               </div>
             </div>
           </div>
@@ -1135,7 +1135,7 @@ const RecruiterScreenGuide = () => {
             <p className="text-gold text-xs uppercase tracking-wider mb-4 text-center font-semibold">What Happens After You Hang Up</p>
             <div className="grid md:grid-cols-2 gap-6">
               <div>
-                <p className="text-cream/60 text-xs uppercase mb-3">You</p>
+                <p className="text-gold-soft/80 text-xs uppercase mb-3">You</p>
                 <div className="space-y-2">
                   <div className="bg-cream/5 border border-cream/10 rounded-lg p-3">
                     <p className="text-cream text-sm">Send follow-up email (2-4 hrs)</p>
@@ -1149,7 +1149,7 @@ const RecruiterScreenGuide = () => {
                 </div>
               </div>
               <div>
-                <p className="text-cream/60 text-xs uppercase mb-3">Recruiter</p>
+                <p className="text-gold-soft/80 text-xs uppercase mb-3">Recruiter</p>
                 <div className="space-y-2">
                   <div className="bg-cream/5 border border-cream/10 rounded-lg p-3">
                     <p className="text-cream text-sm">Fill out scorecard (pros, cons, decision)</p>
@@ -1451,7 +1451,7 @@ const RecruiterScreenGuide = () => {
               <h2 className="font-heading text-2xl md:text-3xl text-cream mb-2">
                 Additional Resources
               </h2>
-              <p className="text-cream/60">Keep levelling up your job search</p>
+              <p className="text-gold-soft/80">Keep levelling up your job search</p>
             </div>
           </div>
           <div className="grid sm:grid-cols-3 gap-4">

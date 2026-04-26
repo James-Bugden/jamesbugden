@@ -522,7 +522,7 @@ const FortyEightLawsGuide = () => {
       {/* Navigation */}
       <nav className="fixed top-0 left-0 right-0 z-50 bg-nav-green">
         <div className="container mx-auto px-5 md:px-6 py-4 flex items-center justify-between">
-          <Link to="/" className="font-heading text-lg md:text-xl font-medium text-cream tracking-tight">JAMES BUGDEN</Link>
+          <Link to="/" className="font-heading text-lg md:text-xl font-medium text-cream tracking-tight">hiresign</Link>
           <div className="flex items-center gap-3">
             <AuthHeaderButton variant="nav" />
             <LanguageToggle variant="nav" />
@@ -536,16 +536,16 @@ const FortyEightLawsGuide = () => {
           <h1 className="font-heading text-3xl md:text-5xl lg:text-6xl text-cream leading-tight mb-4" style={{ lineHeight: 1.2 }}>
             48 Laws of Power<br className="hidden sm:block" /> (Workplace Edition)
           </h1>
-          <p className="text-lg md:text-xl text-cream/80 mb-3">A Guide to Workplace Power, Office Politics, and Career Strategy</p>
+          <p className="text-lg md:text-xl text-cream/90 mb-3">A Guide to Workplace Power, Office Politics, and Career Strategy</p>
           <div className="flex flex-col sm:flex-row items-center justify-center gap-2 sm:gap-4 mb-6">
-            <p className="text-base text-cream/60">By James Bugden, Career Coach · Senior Recruiter @ Uber</p>
+            <p className="text-base text-gold-soft/80">By James Bugden, Career Coach · Senior Recruiter @ Uber</p>
             <span className="hidden sm:inline text-cream/30">·</span>
-            <div className="flex items-center gap-1.5 text-cream/60">
+            <div className="flex items-center gap-1.5 text-gold-soft/80">
               <Clock className="w-4 h-4" />
               <span className="text-sm">45 min read</span>
             </div>
             <span className="hidden sm:inline text-cream/30">·</span>
-            <div className="flex items-center gap-1.5 text-cream/60">
+            <div className="flex items-center gap-1.5 text-gold-soft/80">
               <FileText className="w-4 h-4" />
               <span className="text-sm">11 sections</span>
             </div>

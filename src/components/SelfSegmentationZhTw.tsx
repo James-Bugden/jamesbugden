@@ -1,21 +1,21 @@
-import { FileUp, Search, Trophy } from "lucide-react";
+import { UploadDocIcon, ScoreScanIcon, OfferTrophyIcon } from "@/assets/illustrations/HiresignIcons";
 
 const steps = [
   {
     num: 1,
-    icon: FileUp,
+    Icon: UploadDocIcon,
     headline: "上傳你的履歷",
     subtext: "把你的履歷放進免費 AI 分析器。60 秒內看到招募官看到的結果。",
   },
   {
     num: 2,
-    icon: Search,
+    Icon: ScoreScanIcon,
     headline: "取得你的分數和建議",
     subtext: "了解哪些有效、哪些沒用、怎麼改才能拿到更多面試。",
   },
   {
     num: 3,
-    icon: Trophy,
+    Icon: OfferTrophyIcon,
     headline: "拿到你的理想 Offer",
     subtext: "用一份通過篩選、送到用人主管桌上的履歷去投遞。",
   },
@@ -29,26 +29,30 @@ export default function SelfSegmentationZhTw() {
           className="font-heading text-center mb-10 md:mb-14"
           style={{ color: '#1A1A1A', fontSize: 'clamp(2rem, 4vw, 2.625rem)', lineHeight: 1.2 }}
         >
-          拿到年薪百萬以上 Offer 的 3 個步驟
+          60 秒拿到你的免費履歷分數。
         </h2>
 
+        {/* Steps */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-10 md:gap-0 relative mb-12">
+          {/* Connecting line — desktop only */}
           <div
             className="hidden md:block absolute top-[52px] left-[16.67%] right-[16.67%] h-[2px]"
             style={{ backgroundColor: 'rgba(43,71,52,0.15)' }}
           />
 
           {steps.map((step) => {
-            const Icon = step.icon;
+            const { Icon } = step;
             return (
               <div key={step.num} className="flex flex-col items-center text-center relative z-10">
+                {/* Numbered circle */}
                 <div
-                  className="w-[72px] h-[72px] rounded-full flex items-center justify-center text-2xl font-bold mb-5"
+                  className="w-[72px] h-[72px] rounded-full flex items-center justify-center text-2xl font-bold mb-5 tnum-geist"
                   style={{ backgroundColor: '#2b4734', color: '#FFFFFF' }}
                 >
                   {step.num}
                 </div>
 
+                {/* Connector arrow on mobile */}
                 {step.num < 3 && (
                   <div className="md:hidden flex justify-center -mt-2 mb-2">
                     <svg width="16" height="24" viewBox="0 0 16 24" fill="none">
@@ -57,12 +61,14 @@ export default function SelfSegmentationZhTw() {
                   </div>
                 )}
 
-                <Icon className="w-8 h-8 mb-4" style={{ color: '#2b4734' }} strokeWidth={1.5} />
+                {/* Custom on-brand illustrated icon */}
+                <Icon size={64} className="mb-4" />
 
-                <p className="font-bold text-lg mb-2" style={{ color: '#1A1A1A' }}>
+                {/* Text */}
+                <p className="font-heading text-lg mb-2 tracking-[-0.01em]" style={{ color: '#1A1A1A', fontWeight: 600 }}>
                   {step.headline}
                 </p>
-                <p className="text-base max-w-[260px]" style={{ color: '#6B6B6B' }}>
+                <p className="text-base max-w-[260px] leading-relaxed" style={{ color: '#6B6B6B' }}>
                   {step.subtext}
                 </p>
               </div>
@@ -70,6 +76,7 @@ export default function SelfSegmentationZhTw() {
           })}
         </div>
 
+        {/* CTA */}
         <div className="text-center">
           <a
             href="/zh-tw/resume-analyzer"
@@ -88,7 +95,7 @@ export default function SelfSegmentationZhTw() {
             立即檢測我的履歷
           </a>
           <p className="mt-2" style={{ color: '#6B6B6B', fontSize: '0.8125rem' }}>
-            免費 · 不需要註冊 · 60 秒完成
+            免費 · 60 秒完成
           </p>
         </div>
       </div>

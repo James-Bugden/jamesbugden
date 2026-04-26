@@ -28,7 +28,7 @@ const ResumeQuickReference = () => {
       <nav className="fixed top-0 left-0 right-0 z-50 bg-nav-green">
         <div className="container mx-auto px-5 md:px-6 py-4 flex items-center justify-between">
           <Link to="/" className="font-heading text-lg md:text-xl font-medium text-cream tracking-tight">
-            JAMES BUGDEN
+            hiresign
           </Link>
           <div className="flex items-center gap-3">
             <AuthHeaderButton variant="nav" />
@@ -43,15 +43,15 @@ const ResumeQuickReference = () => {
           <h1 className="font-heading text-3xl md:text-5xl lg:text-6xl text-cream leading-tight mb-4">
             The Perfect Resume:<br className="hidden sm:block" /> Quick Reference Guide
           </h1>
-          <p className="text-lg md:text-xl text-cream/80 mb-3">
+          <p className="text-lg md:text-xl text-cream/90 mb-3">
             Everything you need on one page. No fluff.
           </p>
           <div className="flex flex-col sm:flex-row items-center justify-center gap-2 sm:gap-4 mb-6">
-            <p className="text-base text-cream/60">
+            <p className="text-base text-gold-soft/80">
               By James Bugden, Senior Recruiter at Uber
             </p>
             <span className="hidden sm:inline text-cream/30">·</span>
-            <div className="flex items-center gap-1.5 text-cream/60">
+            <div className="flex items-center gap-1.5 text-gold-soft/80">
               <Clock className="w-4 h-4" />
               <span className="text-sm">3 min read</span>
             </div>
@@ -237,7 +237,7 @@ const ResumeQuickReference = () => {
           </div>
 
           <div className="bg-executive-green rounded-xl p-6 md:p-8 mb-8">
-            <p className="text-cream/60 text-xs uppercase tracking-wider mb-3 text-center">The Formula</p>
+            <p className="text-gold-soft/80 text-xs uppercase tracking-wider mb-3 text-center">The Formula</p>
             <p className="text-cream font-mono text-sm md:text-base text-center leading-relaxed">
               8 people × 2 hrs saved/week × $30/hr × 52 weeks
             </p>
@@ -391,7 +391,7 @@ const ResumeQuickReference = () => {
               <h2 className="font-heading text-2xl md:text-3xl text-cream mb-2">
                 More Free Guides
               </h2>
-              <p className="text-cream/60">Keep levelling up your job search</p>
+              <p className="text-gold-soft/80">Keep levelling up your job search</p>
             </div>
           </div>
           <div className="grid sm:grid-cols-3 gap-4">

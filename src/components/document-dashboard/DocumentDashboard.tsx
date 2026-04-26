@@ -53,17 +53,17 @@ import { CustomizeSettings } from "@/components/resume-builder/customizeTypes";
 import { AlertDialog, AlertDialogContent, AlertDialogHeader, AlertDialogTitle, AlertDialogDescription, AlertDialogFooter, AlertDialogCancel, AlertDialogAction } from "@/components/ui/alert-dialog";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 
-/* ── Brand colors ─────────────────────────────────────────── */
+/* ── Brand colors — Hiresign tokens ─────────────────────────────────────────── */
 const BRAND = {
-  green: "#2b4734",
-  greenHover: "#1f3a28",
-  greenLight: "#e8f0eb",
-  greenLighter: "#f2f7f4",
-  gold: "#D4930D",
-  cream: "#FDFBF7",
-  text: "#1A1A1A",
-  textSecondary: "#6B6B6B",
-  border: "#e5e7eb",
+  green: "hsl(var(--executive-green))",
+  greenHover: "hsl(var(--executive-green-light))",
+  greenLight: "hsl(var(--green-soft))",
+  greenLighter: "hsl(var(--paper-alt))",
+  gold: "hsl(var(--gold))",
+  cream: "hsl(var(--paper))",
+  text: "hsl(var(--foreground))",
+  textSecondary: "hsl(var(--muted-foreground))",
+  border: "hsl(var(--border))",
 };
 
 interface DocumentDashboardProps {
@@ -459,7 +459,7 @@ export function DocumentDashboard({ onOpenDocument, onImport }: DocumentDashboar
       <header className="sticky top-0 z-50" style={{ backgroundColor: '#FDFBF7', borderBottom: '1px solid rgba(43,71,52,0.1)' }}>
         <div className="container mx-auto max-w-5xl flex items-center justify-between h-14 px-5">
           <Link to={lang === "zh-tw" ? "/zh-tw" : "/"} className="font-heading text-base md:text-lg font-bold tracking-wide whitespace-nowrap" style={{ color: '#2b4734' }}>
-            JAMES BUGDEN
+            hiresign
           </Link>
           <div className="flex items-center gap-2">
             <Link to={lang === "zh-tw" ? "/zh-tw" : "/"} className="text-sm transition-colors hover:opacity-80 hidden sm:inline" style={{ color: '#6B6B6B' }}>
@@ -488,7 +488,7 @@ export function DocumentDashboard({ onOpenDocument, onImport }: DocumentDashboar
             <button
               onClick={() => navigate(lang === "zh-tw" ? "/resume" : "/zh-tw/resume")}
               className="text-xs font-semibold px-3 py-1.5 rounded-full transition-all hover:bg-gold hover:text-white"
-              style={{ border: '1px solid #D4930D', color: '#D4930D' }}
+              style={{ border: '1px solid #B08A3E', color: '#B08A3E' }}
             >
               {lang === "zh-tw" ? "EN" : "中文"}
             </button>
@@ -632,7 +632,7 @@ export function DocumentDashboard({ onOpenDocument, onImport }: DocumentDashboar
                   <span className="text-[10px] mt-0.5 block" style={{ color: BRAND.textSecondary }}>{t("uploadExistingCvAction")}</span>
                 </div>
                 {!usageLoading && !resumeLimitReached && (
-                  <span className="text-[10px] font-medium px-2 py-0.5 rounded-full" style={{ backgroundColor: importCount >= importLimit ? "rgba(220,38,38,0.08)" : "rgba(212,147,13,0.1)", color: importCount >= importLimit ? "#dc2626" : "#D4930D" }}>
+                  <span className="text-[10px] font-medium px-2 py-0.5 rounded-full" style={{ backgroundColor: importCount >= importLimit ? "rgba(220,38,38,0.08)" : "rgba(212,147,13,0.1)", color: importCount >= importLimit ? "#dc2626" : "#B08A3E" }}>
                     {importCount}/{importLimit} {lang === "zh-tw" ? "已使用" : "used"}
                   </span>
                 )}

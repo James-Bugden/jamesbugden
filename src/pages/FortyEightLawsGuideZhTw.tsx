@@ -518,7 +518,7 @@ const FortyEightLawsGuideZhTw = () => {
 
       <nav className="fixed top-0 left-0 right-0 z-50 bg-nav-green">
         <div className="container mx-auto px-5 md:px-6 py-4 flex items-center justify-between">
-          <Link to="/zh-tw" className="font-heading text-lg md:text-xl font-medium text-cream tracking-tight">JAMES BUGDEN</Link>
+          <Link to="/zh-tw" className="font-heading text-lg md:text-xl font-medium text-cream tracking-tight">hiresign</Link>
           <div className="flex items-center gap-3">
             <AuthHeaderButton variant="nav" />
             <LanguageToggle variant="nav" />
@@ -531,16 +531,16 @@ const FortyEightLawsGuideZhTw = () => {
           <h1 className="font-heading text-3xl md:text-5xl lg:text-6xl text-cream leading-tight mb-4" style={{ lineHeight: 1.2 }}>
             權力的48法則<br className="hidden sm:block" />職場實戰版
           </h1>
-          <p className="text-lg md:text-xl text-cream/80 mb-3">招募官的職場權力、辦公室政治與職涯策略指南</p>
+          <p className="text-lg md:text-xl text-cream/90 mb-3">招募官的職場權力、辦公室政治與職涯策略指南</p>
           <div className="flex flex-col sm:flex-row items-center justify-center gap-2 sm:gap-4 mb-6">
-            <p className="text-base text-cream/60">James Bugden 著 · 職涯教練 · Uber 資深招募官</p>
+            <p className="text-base text-gold-soft/80">James Bugden 著 · 職涯教練 · Uber 資深招募官</p>
             <span className="hidden sm:inline text-cream/30">·</span>
-            <div className="flex items-center gap-1.5 text-cream/60">
+            <div className="flex items-center gap-1.5 text-gold-soft/80">
               <Clock className="w-4 h-4" />
               <span className="text-sm">閱讀時間 45 分鐘</span>
             </div>
             <span className="hidden sm:inline text-cream/30">·</span>
-            <div className="flex items-center gap-1.5 text-cream/60">
+            <div className="flex items-center gap-1.5 text-gold-soft/80">
               <FileText className="w-4 h-4" />
               <span className="text-sm">11 個章節</span>
             </div>

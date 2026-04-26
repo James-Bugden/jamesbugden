@@ -24,7 +24,7 @@ const InterviewPrepGuideZhTw = () => {
       <nav className="fixed top-0 left-0 right-0 z-50 bg-nav-green">
         <div className="container mx-auto px-5 md:px-6 py-4 flex items-center justify-between">
           <Link to="/zh-tw" className="font-heading text-lg md:text-xl font-medium text-cream tracking-tight">
-            JAMES BUGDEN
+            hiresign
           </Link>
           <div className="flex items-center gap-3 md:gap-4">
             <AuthHeaderButton variant="nav" />
@@ -48,13 +48,13 @@ const InterviewPrepGuideZhTw = () => {
           <h1 className="font-heading text-3xl md:text-5xl lg:text-6xl text-cream leading-tight mb-4">
             10 小時面試準備系統
           </h1>
-          <p className="text-lg md:text-xl text-cream/80 mb-2">
+          <p className="text-lg md:text-xl text-cream/90 mb-2">
             你準備面試真正需要的檢查清單
           </p>
-          <p className="text-base text-cream/60 mb-2">
+          <p className="text-base text-gold-soft/80 mb-2">
             James Bugden｜Uber 資深招募顧問
           </p>
-          <div className="flex items-center justify-center gap-1.5 text-cream/60 mb-6">
+          <div className="flex items-center justify-center gap-1.5 text-gold-soft/80 mb-6">
             <Clock className="w-4 h-4" />
             <span className="text-sm">20 分鐘閱讀</span>
           </div>

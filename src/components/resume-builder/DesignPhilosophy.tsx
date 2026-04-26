@@ -9,7 +9,7 @@ const BRAND = {
   text: "#1A1A1A",
   textSecondary: "#6B6B6B",
   border: "#e5e7eb",
-  gold: "#D4930D",
+  gold: "#B08A3E",
 };
 
 const POINTS = [

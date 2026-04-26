@@ -71,18 +71,18 @@ class PreviewErrorBoundary extends React.Component<{ children: React.ReactNode }
   }
 }
 
-/* ── Brand colors ─────────────────────────────────────────── */
+/* ── Brand colors — Hiresign tokens ─────────────────────────────────────────── */
 const BRAND = {
-  green: "#2b4734",
-  greenHover: "#1f3a28",
-  greenLight: "#e8f0eb",
-  greenLighter: "#f2f7f4",
-  gold: "#D4930D",
-  goldHover: "#b87d0b",
-  cream: "#FDFBF7",
-  text: "#1A1A1A",
-  textSecondary: "#6B6B6B",
-  border: "#e5e7eb",
+  green: "hsl(var(--executive-green))",
+  greenHover: "hsl(var(--executive-green-light))",
+  greenLight: "hsl(var(--green-soft))",
+  greenLighter: "hsl(var(--paper-alt))",
+  gold: "hsl(var(--gold))",
+  goldHover: "hsl(var(--gold-dark))",
+  cream: "hsl(var(--paper))",
+  text: "hsl(var(--foreground))",
+  textSecondary: "hsl(var(--muted-foreground))",
+  border: "hsl(var(--border))",
 };
 
 /* ── Sample resume data for new resumes ──────────────── */
@@ -1062,7 +1062,7 @@ const ResumeBuilder = () => {
                 <button
                   onClick={() => setModalOpen(true)}
                   className="flex items-center justify-center gap-2 px-8 py-3 rounded-full text-white font-semibold text-sm transition-all hover:opacity-90 active:scale-[0.98] shadow-md min-h-[44px]"
-                  style={{ background: "linear-gradient(135deg, #D4930D 0%, #e8a520 50%, #f0c060 100%)" }}
+                  style={{ background: "linear-gradient(135deg, hsl(var(--gold-dark)) 0%, hsl(var(--gold)) 50%, hsl(var(--gold-soft)) 100%)" }}
                 >
                   <Plus className="w-4.5 h-4.5" /> {t("addContent")}
                 </button>
@@ -1090,7 +1090,7 @@ const ResumeBuilder = () => {
         {/* Row 1: Brand + nav */}
         <div className="flex items-center justify-between px-3 sm:px-5 h-12 sm:h-14">
           <Link to={lang === "zh-tw" ? "/zh-tw" : "/"} className="font-heading text-base md:text-lg font-bold tracking-wide whitespace-nowrap" style={{ color: BRAND.green }}>
-            JAMES BUGDEN
+            hiresign
           </Link>
           <div className="flex items-center gap-2">
             <Link to={lang === "zh-tw" ? "/zh-tw" : "/"} className="text-sm transition-colors hover:opacity-80 hidden sm:inline" style={{ color: BRAND.textSecondary }}>
@@ -1207,8 +1207,8 @@ const ResumeBuilder = () => {
                   <div className="border-t my-1" style={{ borderColor: BRAND.border }} />
                   <button
                     onClick={() => { setOverflowMenuOpen(false); setResetConfirmOpen(true); }}
-                    className="w-full text-left px-4 py-2.5 text-sm flex items-center gap-2.5 hover:bg-red-50 transition-colors min-h-[44px]"
-                    style={{ color: "#dc2626" }}
+                    className="w-full text-left px-4 py-2.5 text-sm flex items-center gap-2.5 hover:bg-destructive-soft transition-colors min-h-[44px]"
+                    style={{ color: "hsl(var(--destructive))" }}
                   >
                     <RotateCcw className="w-4 h-4" />
                     {lang === "zh-tw" ? "重置履歷" : "Reset resume"}

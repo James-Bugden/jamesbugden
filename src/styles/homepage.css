@@ -11,16 +11,15 @@
   background-color: hsl(43 33% 98%);
 }
 
-/* Body text: 17px minimum, near-black */
-.homepage p,
-.homepage span,
-.homepage li,
-.homepage label,
-.homepage input,
-.homepage textarea {
+/* Body text: 17px minimum, near-black — only for body content, not nav/header */
+.homepage main p,
+.homepage main li,
+.homepage main label,
+.homepage main input,
+.homepage main textarea {
   color: hsl(0 0% 10%);
 }
-.homepage p {
+.homepage main p {
   font-size: max(1.0625rem, 1em); /* 17px floor */
 }
 
@@ -54,7 +53,7 @@
 .homepage #coaching .btn-gold,
 .homepage [style*="background-color: rgb(43, 71, 52)"] .btn-gold,
 .homepage [style*="#2b4734"] .btn-gold {
-  background: #D4930D !important;
+  background: #B08A3E !important;
   color: #FFFFFF !important;
   box-shadow: 0 2px 6px rgba(212, 147, 13, 0.25) !important;
 }
@@ -88,7 +87,7 @@
 .homepage [style*="background-color: rgb(43, 71, 52)"] .ml-embedded .ml-form-embedSubmit button,
 .homepage [style*="#2b4734"] .ml-embedded button[type="submit"],
 .homepage [style*="#2b4734"] .ml-embedded .ml-form-embedSubmit button {
-  background: #D4930D !important;
+  background: #B08A3E !important;
   box-shadow: 0 2px 6px rgba(212, 147, 13, 0.25) !important;
 }
 .homepage #coaching .ml-embedded button[type="submit"]:hover,
@@ -107,11 +106,40 @@
   gap: 10px !important;
 }
 
+/* ── Hero inline form: email + GOLD button on one row ── */
+@media (min-width: 640px) {
+  .homepage .ml-inline .ml-form-fieldRow {
+    flex-direction: row !important;
+    gap: 8px !important;
+    align-items: stretch !important;
+  }
+  .homepage .ml-inline .ml-form-fieldRow .ml-field-group {
+    flex: 1 1 auto !important;
+  }
+  .homepage .ml-inline button[type="submit"],
+  .homepage .ml-inline .ml-form-embedSubmit button {
+    width: auto !important;
+    flex: 0 0 auto !important;
+    white-space: nowrap !important;
+  }
+}
+.homepage .ml-inline button[type="submit"],
+.homepage .ml-inline .ml-form-embedSubmit button {
+  background: #B08A3E !important;
+  color: #FFFFFF !important;
+  box-shadow: 0 2px 6px rgba(176, 138, 62, 0.25) !important;
+}
+.homepage .ml-inline button[type="submit"]:hover,
+.homepage .ml-inline .ml-form-embedSubmit button:hover {
+  background: #97762F !important;
+  box-shadow: 0 4px 12px rgba(176, 138, 62, 0.35) !important;
+}
+
 /* ── Quote marks → gold ── */
 .homepage .text-gold\/40,
 .homepage [class*="Quote"],
 .homepage .lucide-quote {
-  color: #D4930D !important;
+  color: #B08A3E !important;
 }
 
 /* ── Links / "More" buttons: dark green instead of gold/purple ── */
@@ -128,3 +156,14 @@
 /* ── Section background overrides ── */
 .homepage .exp-bg-cream { background-color: #FDFBF7 !important; }
 .homepage .exp-bg-white { background-color: #FFFFFF !important; }
+
+/* ── Logo scroll: unified mono treatment ── */
+.homepage .logo-mono {
+  filter: grayscale(1) contrast(0.9);
+  opacity: 0.55;
+  transition: filter 0.25s ease, opacity 0.25s ease;
+}
+.homepage .logo-mono:hover {
+  filter: grayscale(0) contrast(1);
+  opacity: 1;
+}

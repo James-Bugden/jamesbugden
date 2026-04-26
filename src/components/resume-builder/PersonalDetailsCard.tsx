@@ -79,7 +79,7 @@ export function PersonalDetailsCard({ details, onChange, collapsible }: Personal
           <button
             onClick={() => setEditing(true)}
             className="absolute top-3 right-3 w-7 h-7 rounded-full flex items-center justify-center transition-colors z-10"
-            style={{ color: "#D4930D", backgroundColor: "rgba(212,147,13,0.15)" }}
+            style={{ color: "#B08A3E", backgroundColor: "rgba(212,147,13,0.15)" }}
           >
             <Pencil className="w-3 h-3" />
           </button>

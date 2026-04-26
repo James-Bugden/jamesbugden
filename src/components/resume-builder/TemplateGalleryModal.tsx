@@ -68,14 +68,14 @@ export function TemplateGalleryModal({
         {/* Header */}
         <div className="flex items-center justify-between px-6 py-4 border-b border-gray-100 flex-shrink-0">
           <div>
-            <h2 className="text-lg font-bold text-gray-900">{t("chooseTemplate")}</h2>
-            <p className="text-xs text-gray-500 mt-0.5">
+            <h2 className="text-lg font-bold text-foreground">{t("chooseTemplate")}</h2>
+            <p className="text-xs text-muted-foreground mt-0.5">
               {t("contentStaysSame")}
             </p>
           </div>
           <button
             onClick={onClose}
-            className="p-1.5 rounded-lg hover:bg-gray-100 text-gray-500"
+            className="p-1.5 rounded-lg hover:bg-muted text-muted-foreground"
           >
             <X className="w-5 h-5" />
           </button>
@@ -102,7 +102,7 @@ export function TemplateGalleryModal({
                       ? "border-gray-900 ring-2 ring-gray-900/20"
                       : isHovered
                         ? "border-gray-400 shadow-lg"
-                        : "border-gray-200 hover:border-gray-300"
+                        : "border-border hover:border-border"
                   )}
                 >
                   {/* Live thumbnail preview */}
@@ -122,8 +122,8 @@ export function TemplateGalleryModal({
 
                   {/* Label */}
                   <div className="px-3 py-2.5 bg-white border-t border-gray-100">
-                    <p className="text-xs font-bold text-gray-900">{tplName}</p>
-                    <p className="text-[10px] text-gray-500 mt-0.5 line-clamp-1">
+                    <p className="text-xs font-bold text-foreground">{tplName}</p>
+                    <p className="text-[10px] text-muted-foreground mt-0.5 line-clamp-1">
                       {tplDesc}
                     </p>
                   </div>

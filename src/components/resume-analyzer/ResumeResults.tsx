@@ -53,7 +53,7 @@ function ScoreHero({ score, lang }: { score: number; lang: Language }) {
   const radius = (size - 14) / 2;
   const circumference = 2 * Math.PI * radius;
   const offset = circumference - (animatedScore / 100) * circumference;
-  const color = score >= 80 ? "#16a34a" : score >= 60 ? "#d97706" : score >= 40 ? "#ea580c" : "#dc2626";
+  const color = score >= 80 ? "hsl(var(--executive-green))" : score >= 60 ? "hsl(var(--gold))" : score >= 40 ? "hsl(var(--gold-dark))" : "hsl(var(--destructive))";
   const grade = score >= 90 ? "A+" : score >= 80 ? "A" : score >= 70 ? "B" : score >= 60 ? "C" : score >= 50 ? "D" : "F";
 
   const verdictText = (s: number) => {
@@ -115,18 +115,18 @@ function FindingsSummary({ sections, lang }: { sections: AnalysisResult["section
   if (total === 0) return null;
 
   return (
-    <div className="rounded-xl p-5" style={{ backgroundColor: '#FFFFFF', border: '1px solid rgba(43,71,52,0.1)', boxShadow: '0 2px 8px rgba(0,0,0,0.04)' }}>
-      <h3 className="font-heading text-base font-semibold mb-3" style={{ color: '#1A1A1A' }}>
+    <div className="rounded-xl p-5" style={{ backgroundColor: 'hsl(var(--card))', border: '1px solid rgba(43,71,52,0.1)', boxShadow: '0 2px 8px rgba(0,0,0,0.04)' }}>
+      <h3 className="font-heading text-base font-semibold mb-3" style={{ color: 'hsl(var(--foreground))' }}>
         {t(lang, "Findings Overview", "分析總覽")}
       </h3>
       <div className="flex gap-4 mb-3">
         <div className="flex items-center gap-2">
-          <CheckCircle className="w-4 h-4" style={{ color: '#16a34a' }} />
-          <span className="text-sm font-medium" style={{ color: '#16a34a' }}>{strengths} {t(lang, "strengths", "優勢")}</span>
+          <CheckCircle className="w-4 h-4" style={{ color: 'hsl(var(--executive-green))' }} />
+          <span className="text-sm font-medium" style={{ color: 'hsl(var(--executive-green))' }}>{strengths} {t(lang, "strengths", "優勢")}</span>
         </div>
         <div className="flex items-center gap-2">
-          <AlertTriangle className="w-4 h-4 text-yellow-500" />
-          <span className="text-sm font-medium text-yellow-600">{warnings} {t(lang, "warnings", "警告")}</span>
+          <AlertTriangle className="w-4 h-4 text-gold" />
+          <span className="text-sm font-medium text-gold">{warnings} {t(lang, "warnings", "警告")}</span>
         </div>
         <div className="flex items-center gap-2">
           <XCircle className="w-4 h-4 text-destructive" />
@@ -135,8 +135,8 @@ function FindingsSummary({ sections, lang }: { sections: AnalysisResult["section
       </div>
       {/* Stacked bar */}
       <div className="w-full h-2.5 rounded-full overflow-hidden flex" style={{ backgroundColor: 'rgba(43,71,52,0.08)' }}>
-        {strengths > 0 && <div className="h-full" style={{ width: `${(strengths / total) * 100}%`, backgroundColor: '#16a34a' }} />}
-        {warnings > 0 && <div className="h-full bg-yellow-500" style={{ width: `${(warnings / total) * 100}%` }} />}
+        {strengths > 0 && <div className="h-full" style={{ width: `${(strengths / total) * 100}%`, backgroundColor: 'hsl(var(--executive-green))' }} />}
+        {warnings > 0 && <div className="h-full bg-gold" style={{ width: `${(warnings / total) * 100}%` }} />}
         {criticals > 0 && <div className="h-full bg-destructive" style={{ width: `${(criticals / total) * 100}%` }} />}
       </div>
     </div>
@@ -158,17 +158,17 @@ function SegmentationProfile({ segmentation, lang }: { segmentation: AnalysisRes
   if (items.length === 0) return null;
 
   return (
-    <div className="rounded-xl p-5" style={{ backgroundColor: '#FFFFFF', border: '1px solid rgba(43,71,52,0.1)', boxShadow: '0 2px 8px rgba(0,0,0,0.04)' }}>
-      <h3 className="font-heading text-base font-semibold mb-4" style={{ color: '#1A1A1A' }}>
+    <div className="rounded-xl p-5" style={{ backgroundColor: 'hsl(var(--card))', border: '1px solid rgba(43,71,52,0.1)', boxShadow: '0 2px 8px rgba(0,0,0,0.04)' }}>
+      <h3 className="font-heading text-base font-semibold mb-4" style={{ color: 'hsl(var(--foreground))' }}>
         {t(lang, "Your Profile", "你的背景")}
       </h3>
       <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
         {items.map((item, i) => (
-          <div key={i} className="flex items-start gap-2.5 p-3 rounded-lg" style={{ backgroundColor: '#FDFBF7' }}>
-            <item.icon className="w-4 h-4 mt-0.5 shrink-0" style={{ color: '#D4930D' }} />
+          <div key={i} className="flex items-start gap-2.5 p-3 rounded-lg" style={{ backgroundColor: 'hsl(var(--paper))' }}>
+            <item.icon className="w-4 h-4 mt-0.5 shrink-0" style={{ color: 'hsl(var(--gold))' }} />
             <div>
-              <p className="text-[11px] font-medium uppercase tracking-wider" style={{ color: '#6B6B6B' }}>{item.label}</p>
-              <p className="text-sm font-semibold" style={{ color: '#1A1A1A' }}>{item.value}</p>
+              <p className="text-[11px] font-medium uppercase tracking-wider" style={{ color: 'hsl(var(--muted-foreground))' }}>{item.label}</p>
+              <p className="text-sm font-semibold" style={{ color: 'hsl(var(--foreground))' }}>{item.value}</p>
             </div>
           </div>
         ))}
@@ -180,20 +180,20 @@ function SegmentationProfile({ segmentation, lang }: { segmentation: AnalysisRes
 /* ──────────────────── Section Card ──────────────────── */
 function SectionCard({ section, lang, defaultOpen, locked }: { section: AnalysisResult["sections"][0]; lang: Language; defaultOpen?: boolean; locked?: boolean }) {
   const [open, setOpen] = useState(locked ? false : (defaultOpen || false));
-  const scoreColor = section.score >= 8 ? "#16a34a" : section.score >= 6 ? "#d97706" : section.score >= 4 ? "#ea580c" : "#dc2626";
-  const barColor = section.score >= 8 ? "#16a34a" : section.score >= 6 ? "#d97706" : section.score >= 4 ? "#ea580c" : "#dc2626";
+  const scoreColor = section.score >= 8 ? "hsl(var(--executive-green))" : section.score >= 6 ? "hsl(var(--gold))" : section.score >= 4 ? "hsl(var(--gold-dark))" : "hsl(var(--destructive))";
+  const barColor = section.score >= 8 ? "hsl(var(--executive-green))" : section.score >= 6 ? "hsl(var(--gold))" : section.score >= 4 ? "hsl(var(--gold-dark))" : "hsl(var(--destructive))";
 
   return (
     <div
       className="rounded-xl overflow-hidden"
       style={{
-        backgroundColor: '#FFFFFF',
+        backgroundColor: 'hsl(var(--card))',
         border: '1px solid rgba(43,71,52,0.1)',
         borderLeft: `4px solid ${scoreColor}`,
         boxShadow: '0 2px 8px rgba(0,0,0,0.04)',
       }}
     >
-      <button onClick={() => !locked && setOpen(!open)} className={`w-full flex items-center gap-4 p-5 text-left transition-colors ${locked ? "cursor-default" : "hover:bg-[#FDFBF7]"}`}>
+      <button onClick={() => !locked && setOpen(!open)} className={`w-full flex items-center gap-4 p-5 text-left transition-colors ${locked ? "cursor-default" : "hover:bg-[hsl(var(--paper))]"}`}>
         <div className="flex-1 min-w-0">
           <div className="flex items-center gap-3 mb-1">
             <h3 className="font-semibold text-sm" style={{ color: scoreColor }}>{section.name}</h3>
@@ -202,12 +202,12 @@ function SectionCard({ section, lang, defaultOpen, locked }: { section: Analysis
           <div className="w-full h-1.5 rounded-full overflow-hidden" style={{ backgroundColor: 'rgba(43,71,52,0.08)' }}>
             <div className="h-full rounded-full transition-all duration-500" style={{ width: `${section.score * 10}%`, backgroundColor: barColor }} />
           </div>
-          <p className="text-xs mt-1.5 line-clamp-1" style={{ color: '#6B6B6B' }}>{section.summary}</p>
+          <p className="text-xs mt-1.5 line-clamp-1" style={{ color: 'hsl(var(--muted-foreground))' }}>{section.summary}</p>
         </div>
         {locked ? (
           <Lock className="w-4 h-4 shrink-0" style={{ color: 'rgba(107,107,107,0.5)' }} />
         ) : (
-          <ChevronDown className={`w-4 h-4 shrink-0 transition-transform ${open ? "rotate-180" : ""}`} style={{ color: '#6B6B6B' }} />
+          <ChevronDown className={`w-4 h-4 shrink-0 transition-transform ${open ? "rotate-180" : ""}`} style={{ color: 'hsl(var(--muted-foreground))' }} />
         )}
       </button>
 
@@ -216,18 +216,18 @@ function SectionCard({ section, lang, defaultOpen, locked }: { section: Analysis
           {section.findings.map((f, i) => (
             <div key={i} className="flex gap-2.5">
               {f.type === "strength" ? (
-                <CheckCircle className="w-4 h-4 shrink-0 mt-0.5" style={{ color: '#2b4734' }} />
+                <CheckCircle className="w-4 h-4 shrink-0 mt-0.5" style={{ color: 'hsl(var(--executive-green))' }} />
               ) : f.type === "critical" ? (
                 <XCircle className="w-4 h-4 text-destructive shrink-0 mt-0.5" />
               ) : (
-                <AlertTriangle className="w-4 h-4 text-yellow-500 shrink-0 mt-0.5" />
+                <AlertTriangle className="w-4 h-4 text-gold shrink-0 mt-0.5" />
               )}
               <div className="text-sm">
-                <p style={{ color: '#1A1A1A' }}>
+                <p style={{ color: 'hsl(var(--foreground))' }}>
                   <strong>{f.principle}:</strong> {f.text}
                 </p>
                 {f.evidence && (
-                  <p className="text-xs mt-1 italic" style={{ color: '#6B6B6B' }}>"{f.evidence}"</p>
+                  <p className="text-xs mt-1 italic" style={{ color: 'hsl(var(--muted-foreground))' }}>"{f.evidence}"</p>
                 )}
               </div>
             </div>
@@ -242,14 +242,14 @@ function SectionCard({ section, lang, defaultOpen, locked }: { section: Analysis
 function LockedOverlay({ lang, currentPath }: { lang: Language; currentPath: string }) {
   return (
     <div className="absolute inset-0 z-10 flex flex-col items-center justify-start pt-16 rounded-xl" style={{ backgroundColor: 'rgba(253,251,247,0.6)', backdropFilter: 'blur(6px)' }}>
-      <div className="rounded-2xl shadow-xl p-8 max-w-sm text-center" style={{ backgroundColor: '#FFFFFF', border: '1px solid rgba(43,71,52,0.1)' }}>
+      <div className="rounded-2xl shadow-xl p-8 max-w-sm text-center" style={{ backgroundColor: 'hsl(var(--card))', border: '1px solid rgba(43,71,52,0.1)' }}>
         <div className="w-12 h-12 rounded-full flex items-center justify-center mx-auto mb-4" style={{ backgroundColor: 'rgba(212,147,13,0.1)' }}>
-          <Lock className="w-6 h-6" style={{ color: '#D4930D' }} />
+          <Lock className="w-6 h-6" style={{ color: 'hsl(var(--gold))' }} />
         </div>
-        <h3 className="font-heading text-lg font-bold mb-2" style={{ color: '#1A1A1A' }}>
+        <h3 className="font-heading text-lg font-bold mb-2" style={{ color: 'hsl(var(--foreground))' }}>
           {t(lang, "Create a Free Account", "建立免費帳號")}
         </h3>
-        <p className="text-sm mb-5" style={{ color: '#6B6B6B' }}>
+        <p className="text-sm mb-5" style={{ color: 'hsl(var(--muted-foreground))' }}>
           {t(lang,
             "Sign up to unlock your full report — detailed findings, bullet rewrites, and top priorities.",
             "註冊即可解鎖完整報告 — 詳細分析、履歷描述改寫和優先改善建議。"
@@ -259,14 +259,14 @@ function LockedOverlay({ lang, currentPath }: { lang: Language; currentPath: str
           to="/join"
           state={{ from: currentPath }}
           className="inline-flex items-center gap-2 px-6 py-3 rounded-lg text-sm font-bold transition-colors text-white"
-          style={{ backgroundColor: '#D4930D' }}
+          style={{ backgroundColor: 'hsl(var(--gold))' }}
         >
           {t(lang, "Sign Up Free", "免費註冊")}
           <ArrowRight className="w-4 h-4" />
         </Link>
-        <p className="text-xs mt-3" style={{ color: '#6B6B6B' }}>
+        <p className="text-xs mt-3" style={{ color: 'hsl(var(--muted-foreground))' }}>
           {t(lang, "Already have an account?", "已有帳號？")}{" "}
-          <Link to="/login" state={{ from: currentPath }} className="font-medium hover:underline" style={{ color: '#D4930D' }}>
+          <Link to="/login" state={{ from: currentPath }} className="font-medium hover:underline" style={{ color: 'hsl(var(--gold))' }}>
             {t(lang, "Sign in", "登入")}
           </Link>
         </p>
@@ -311,7 +311,7 @@ function ShareSection({ lang, score }: { lang: Language; score?: number }) {
   };
 
   return (
-    <div className="rounded-2xl p-8 text-center" style={{ backgroundColor: '#2b4734' }}>
+    <div className="rounded-2xl p-8 text-center" style={{ backgroundColor: 'hsl(var(--executive-green))' }}>
       <h2 className="font-heading text-xl text-white mb-2">
         {t(lang, "Know someone who needs resume help?", "認識需要履歷幫助的人？")}
       </h2>
@@ -358,15 +358,15 @@ function InlineBuilderCTA({ lang, resumeText, analysis }: { lang: Language; resu
       <button
         onClick={handleBuild}
         className="inline-flex items-center gap-2 px-6 py-3 rounded-lg text-sm font-bold transition-colors text-white"
-        style={{ backgroundColor: '#D4930D' }}
-        onMouseEnter={(e) => (e.currentTarget.style.backgroundColor = '#b87d0b')}
-        onMouseLeave={(e) => (e.currentTarget.style.backgroundColor = '#D4930D')}
+        style={{ backgroundColor: 'hsl(var(--gold))' }}
+        onMouseEnter={(e) => (e.currentTarget.style.backgroundColor = 'hsl(var(--gold-dark))')}
+        onMouseLeave={(e) => (e.currentTarget.style.backgroundColor = 'hsl(var(--gold))')}
       >
         <FileEdit className="w-4 h-4" />
         {t(lang, "Build My Resume", "建立我的履歷")}
         <ArrowRight className="w-4 h-4" />
       </button>
-      <p className="text-xs" style={{ color: '#6B6B6B' }}>
+      <p className="text-xs" style={{ color: 'hsl(var(--muted-foreground))' }}>
         {t(lang, "Import your content into a clean, ATS-friendly template", "將你的內容匯入乾淨的 ATS 友善模板")}
       </p>
     </div>
@@ -383,7 +383,7 @@ function StickyBuilderBar({ lang, resumeText, analysis }: { lang: Language; resu
       <button
         onClick={handleBuild}
         className="w-full flex items-center justify-center gap-2 py-3 rounded-lg text-sm font-bold text-white"
-        style={{ backgroundColor: '#D4930D' }}
+        style={{ backgroundColor: 'hsl(var(--gold))' }}
       >
         <FileEdit className="w-4 h-4" />
         {t(lang, "Build My Resume", "建立我的履歷")}
@@ -398,14 +398,14 @@ function BuildResumeCTA({ lang, resumeText, analysis }: { lang: Language; resume
   const handleBuild = useBuildHandler(lang, resumeText, analysis);
 
   return (
-    <div className="rounded-2xl p-6 md:p-8 text-center" style={{ backgroundColor: '#FFFFFF', border: '2px solid rgba(212,147,13,0.4)', boxShadow: '0 4px 24px rgba(212,147,13,0.1)' }}>
+    <div className="rounded-2xl p-6 md:p-8 text-center" style={{ backgroundColor: 'hsl(var(--card))', border: '2px solid rgba(212,147,13,0.4)', boxShadow: '0 4px 24px rgba(212,147,13,0.1)' }}>
       <div className="w-14 h-14 rounded-full flex items-center justify-center mx-auto mb-4" style={{ backgroundColor: 'rgba(212,147,13,0.1)' }}>
-        <FileEdit className="w-7 h-7" style={{ color: '#D4930D' }} />
+        <FileEdit className="w-7 h-7" style={{ color: 'hsl(var(--gold))' }} />
       </div>
-      <h2 className="font-heading text-xl font-bold mb-2" style={{ color: '#1A1A1A' }}>
+      <h2 className="font-heading text-xl font-bold mb-2" style={{ color: 'hsl(var(--foreground))' }}>
         {t(lang, "Build Your Improved Resume Now", "立即打造你的改善版履歷")}
       </h2>
-      <p className="text-sm mb-5 max-w-md mx-auto" style={{ color: '#6B6B6B' }}>
+      <p className="text-sm mb-5 max-w-md mx-auto" style={{ color: 'hsl(var(--muted-foreground))' }}>
         {t(lang,
           "We'll import your resume content into our builder with a clean, ATS-friendly template — ready to edit and download.",
           "我們會將你的履歷內容匯入建構器，套用乾淨的 ATS 友善模板——隨時可以編輯和下載。"
@@ -414,15 +414,15 @@ function BuildResumeCTA({ lang, resumeText, analysis }: { lang: Language; resume
       <button
         onClick={handleBuild}
         className="inline-flex items-center gap-2 px-6 py-3 rounded-lg text-sm font-bold transition-colors text-white"
-        style={{ backgroundColor: '#D4930D' }}
-        onMouseEnter={(e) => (e.currentTarget.style.backgroundColor = '#b87d0b')}
-        onMouseLeave={(e) => (e.currentTarget.style.backgroundColor = '#D4930D')}
+        style={{ backgroundColor: 'hsl(var(--gold))' }}
+        onMouseEnter={(e) => (e.currentTarget.style.backgroundColor = 'hsl(var(--gold-dark))')}
+        onMouseLeave={(e) => (e.currentTarget.style.backgroundColor = 'hsl(var(--gold))')}
       >
         <FileEdit className="w-4 h-4" />
         {t(lang, "Build My Resume", "建立我的履歷")}
         <ArrowRight className="w-4 h-4" />
       </button>
-      <p className="text-xs mt-3" style={{ color: '#6B6B6B' }}>
+      <p className="text-xs mt-3" style={{ color: 'hsl(var(--muted-foreground))' }}>
         {t(lang, "Free · No signup required · Classic template", "免費 · 無需註冊 · 經典模板")}
       </p>
     </div>
@@ -454,7 +454,7 @@ function FloatingShareFAB({ lang, score }: { lang: Language; score?: number }) {
     <button
       onClick={handleShare}
       className="fixed bottom-20 right-4 z-40 w-12 h-12 rounded-full shadow-lg flex items-center justify-center text-white transition-transform hover:scale-110"
-      style={{ backgroundColor: '#D4930D' }}
+      style={{ backgroundColor: 'hsl(var(--gold))' }}
       aria-label="Share"
     >
       <Share2 className="w-5 h-5" />
@@ -471,22 +471,22 @@ function ActionableNextSteps({ priorities, lang }: { priorities: AnalysisResult[
   ];
 
   return (
-    <div className="rounded-xl p-6" style={{ backgroundColor: '#FFFFFF', border: '1px solid rgba(43,71,52,0.1)', boxShadow: '0 2px 8px rgba(0,0,0,0.04)' }}>
-      <h2 className="font-heading text-xl font-semibold mb-1" style={{ color: '#1A1A1A' }}>
+    <div className="rounded-xl p-6" style={{ backgroundColor: 'hsl(var(--card))', border: '1px solid rgba(43,71,52,0.1)', boxShadow: '0 2px 8px rgba(0,0,0,0.04)' }}>
+      <h2 className="font-heading text-xl font-semibold mb-1" style={{ color: 'hsl(var(--foreground))' }}>
         {t(lang, "Your Action Plan", "你的行動計劃")}
       </h2>
-      <p className="text-sm mb-5" style={{ color: '#6B6B6B' }}>
+      <p className="text-sm mb-5" style={{ color: 'hsl(var(--muted-foreground))' }}>
         {t(lang, "Follow these steps in order for maximum impact", "按照順序執行這些步驟，效果最大化")}
       </p>
       <div className="space-y-3">
         {priorities.map((p, i) => (
           <div key={p.priority} className="flex gap-3 items-start">
-            <div className="w-7 h-7 rounded-full flex items-center justify-center shrink-0 text-white text-xs font-bold" style={{ backgroundColor: '#2b4734' }}>
+            <div className="w-7 h-7 rounded-full flex items-center justify-center shrink-0 text-white text-xs font-bold" style={{ backgroundColor: 'hsl(var(--executive-green))' }}>
               {i + 1}
             </div>
             <div>
-              <p className="text-sm font-semibold" style={{ color: '#1A1A1A' }}>{p.title}</p>
-              <p className="text-sm mt-0.5" style={{ color: '#6B6B6B' }}>{p.description}</p>
+              <p className="text-sm font-semibold" style={{ color: 'hsl(var(--foreground))' }}>{p.title}</p>
+              <p className="text-sm mt-0.5" style={{ color: 'hsl(var(--muted-foreground))' }}>{p.description}</p>
             </div>
           </div>
         ))}
@@ -494,7 +494,7 @@ function ActionableNextSteps({ priorities, lang }: { priorities: AnalysisResult[
 
       {/* Related Guides */}
       <div className="mt-6 pt-5" style={{ borderTop: '1px solid rgba(43,71,52,0.08)' }}>
-        <p className="text-xs font-semibold uppercase tracking-wider mb-3" style={{ color: '#6B6B6B' }}>
+        <p className="text-xs font-semibold uppercase tracking-wider mb-3" style={{ color: 'hsl(var(--muted-foreground))' }}>
           {t(lang, "Recommended Guides", "推薦指南")}
         </p>
         <div className="flex flex-wrap gap-2">
@@ -503,7 +503,7 @@ function ActionableNextSteps({ priorities, lang }: { priorities: AnalysisResult[
               key={g.key}
               href={lang === "zh-TW" ? g.zh : g.en}
               className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium transition-colors"
-              style={{ backgroundColor: 'rgba(43,71,52,0.05)', color: '#2b4734', border: '1px solid rgba(43,71,52,0.1)' }}
+              style={{ backgroundColor: 'rgba(43,71,52,0.05)', color: 'hsl(var(--executive-green))', border: '1px solid rgba(43,71,52,0.1)' }}
             >
               {g.label}
               <ArrowRight className="w-3 h-3" />
@@ -539,7 +539,7 @@ export default function ResumeResults({
   const needsWork = analysis.sections.filter(s => s.score < 7).length;
 
   return (
-    <div className={`py-12 md:py-20 px-5 ${isMobile && resumeText ? "pb-24" : ""}`} id="analysis-results-container" style={{ backgroundColor: '#FDFBF7' }}>
+    <div className={`py-12 md:py-20 px-5 ${isMobile && resumeText ? "pb-24" : ""}`} id="analysis-results-container" style={{ backgroundColor: 'hsl(var(--paper))' }}>
       <div className="container mx-auto max-w-3xl space-y-10">
 
         {/* Action bar */}
@@ -567,12 +567,12 @@ export default function ResumeResults({
         {/* Saved report banner for logged-in users */}
         {isLoggedIn && (
           <div className="flex items-start gap-3 rounded-xl p-4" style={{ backgroundColor: 'rgba(43,71,52,0.06)', border: '1px solid rgba(43,71,52,0.12)' }}>
-            <CheckCircle2 className="w-5 h-5 shrink-0 mt-0.5" style={{ color: '#2b4734' }} />
+            <CheckCircle2 className="w-5 h-5 shrink-0 mt-0.5" style={{ color: 'hsl(var(--executive-green))' }} />
             <div>
-              <p className="text-sm font-semibold" style={{ color: '#1A1A1A' }}>
+              <p className="text-sm font-semibold" style={{ color: 'hsl(var(--foreground))' }}>
                 {t(lang, "Report saved to your dashboard", "報告已儲存至你的儀表板")}
               </p>
-              <p className="text-xs mt-0.5" style={{ color: '#6B6B6B' }}>
+              <p className="text-xs mt-0.5" style={{ color: 'hsl(var(--muted-foreground))' }}>
                 {t(lang,
                   "When you open your resume in the Builder, you'll see AI suggestions to apply.",
                   "當你在建構器中開啟履歷時，會看到 AI 改進建議。"
@@ -606,7 +606,7 @@ export default function ResumeResults({
             {/* Section Breakdown */}
             <div>
               <div className="flex items-center justify-between mb-4">
-                <h2 className="font-heading text-2xl" style={{ color: '#1A1A1A' }}>
+                <h2 className="font-heading text-2xl" style={{ color: 'hsl(var(--foreground))' }}>
                   {t(lang, "Section-by-Section Breakdown", "逐項分析")}
                 </h2>
                 {needsWork > 0 && (
@@ -630,10 +630,10 @@ export default function ResumeResults({
 
             {/* Summary Rewrite */}
             {analysis.summary_rewrite && (
-              <div className="rounded-xl p-6" style={{ backgroundColor: '#FFFFFF', border: '2px solid rgba(43,71,52,0.2)', boxShadow: '0 2px 8px rgba(0,0,0,0.04)' }}>
+              <div className="rounded-xl p-6" style={{ backgroundColor: 'hsl(var(--card))', border: '2px solid rgba(43,71,52,0.2)', boxShadow: '0 2px 8px rgba(0,0,0,0.04)' }}>
                 <div className="flex items-center gap-2 mb-4">
-                  <FileEdit className="w-5 h-5" style={{ color: '#2b4734' }} />
-                  <h2 className="font-heading text-xl" style={{ color: '#1A1A1A' }}>
+                  <FileEdit className="w-5 h-5" style={{ color: 'hsl(var(--executive-green))' }} />
+                  <h2 className="font-heading text-xl" style={{ color: 'hsl(var(--foreground))' }}>
                     {analysis.summary_rewrite.original
                       ? t(lang, "Professional Summary — Rewritten", "專業摘要 — 改寫版")
                       : t(lang, "Your Resume Is Missing a Summary — Here's One", "你的履歷缺少摘要 — 這是我們幫你寫的")
@@ -644,23 +644,23 @@ export default function ResumeResults({
                   <div className="space-y-2">
                     <div>
                       <p className="text-xs font-semibold text-destructive uppercase mb-1">{t(lang, "Current", "目前版本")}</p>
-                      <p className="text-sm rounded-lg p-3 italic" style={{ backgroundColor: '#FDFBF7', color: '#6B6B6B' }}>"{analysis.summary_rewrite.original}"</p>
+                      <p className="text-sm rounded-lg p-3 italic" style={{ backgroundColor: 'hsl(var(--paper))', color: 'hsl(var(--muted-foreground))' }}>"{analysis.summary_rewrite.original}"</p>
                     </div>
                     <div className="flex justify-center py-1">
-                      <ArrowDown className="w-5 h-5" style={{ color: '#D4930D' }} />
+                      <ArrowDown className="w-5 h-5" style={{ color: 'hsl(var(--gold))' }} />
                     </div>
                     <div>
-                      <p className="text-xs font-semibold uppercase mb-1" style={{ color: '#2b4734' }}>{t(lang, "Improved", "改善版")}</p>
-                      <p className="text-sm rounded-lg p-3 font-medium" style={{ backgroundColor: 'rgba(43,71,52,0.05)', color: '#1A1A1A' }}>"{analysis.summary_rewrite.improved}"</p>
+                      <p className="text-xs font-semibold uppercase mb-1" style={{ color: 'hsl(var(--executive-green))' }}>{t(lang, "Improved", "改善版")}</p>
+                      <p className="text-sm rounded-lg p-3 font-medium" style={{ backgroundColor: 'rgba(43,71,52,0.05)', color: 'hsl(var(--foreground))' }}>"{analysis.summary_rewrite.improved}"</p>
                     </div>
                   </div>
                 ) : (
                   <div>
-                    <p className="text-xs font-semibold uppercase mb-1" style={{ color: '#2b4734' }}>{t(lang, "Suggested Summary", "建議摘要")}</p>
-                    <p className="text-sm rounded-lg p-3 font-medium" style={{ backgroundColor: 'rgba(43,71,52,0.05)', color: '#1A1A1A' }}>"{analysis.summary_rewrite.improved}"</p>
+                    <p className="text-xs font-semibold uppercase mb-1" style={{ color: 'hsl(var(--executive-green))' }}>{t(lang, "Suggested Summary", "建議摘要")}</p>
+                    <p className="text-sm rounded-lg p-3 font-medium" style={{ backgroundColor: 'rgba(43,71,52,0.05)', color: 'hsl(var(--foreground))' }}>"{analysis.summary_rewrite.improved}"</p>
                   </div>
                 )}
-                <p className="text-sm mt-3" style={{ color: '#6B6B6B' }}>
+                <p className="text-sm mt-3" style={{ color: 'hsl(var(--muted-foreground))' }}>
                   <strong>{t(lang, "Why:", "原因：")}</strong> {analysis.summary_rewrite.explanation}
                 </p>
               </div>
@@ -674,13 +674,13 @@ export default function ResumeResults({
               const fallback = !rewrites && analysis.bullet_rewrite;
 
               return (
-                <div className="rounded-xl p-6" style={{ backgroundColor: '#FFFFFF', border: '2px solid rgba(212,147,13,0.3)', boxShadow: '0 2px 8px rgba(0,0,0,0.04)' }}>
+                <div className="rounded-xl p-6" style={{ backgroundColor: 'hsl(var(--card))', border: '2px solid rgba(212,147,13,0.3)', boxShadow: '0 2px 8px rgba(0,0,0,0.04)' }}>
                   <div className="flex items-center justify-between mb-4">
-                    <h2 className="font-heading text-xl" style={{ color: '#1A1A1A' }}>
+                    <h2 className="font-heading text-xl" style={{ color: 'hsl(var(--foreground))' }}>
                       {t(lang, "Bullet-by-Bullet Fixes", "逐條修正建議")}
                     </h2>
                     {rewrites && (
-                      <span className="text-xs font-bold px-3 py-1 rounded-full" style={{ backgroundColor: 'rgba(212,147,13,0.1)', color: '#D4930D' }}>
+                      <span className="text-xs font-bold px-3 py-1 rounded-full" style={{ backgroundColor: 'rgba(212,147,13,0.1)', color: 'hsl(var(--gold))' }}>
                         {rewrites.length} {t(lang, rewrites.length === 1 ? "bullet needs work" : "bullets need work", "條需改善")}
                       </span>
                     )}
@@ -695,22 +695,22 @@ export default function ResumeResults({
                               <XCircle className="w-4 h-4 text-destructive shrink-0 mt-0.5" />
                               <div className="flex-1">
                                 <p className="text-xs font-semibold text-destructive uppercase mb-1">{t(lang, "Before", "修改前")}</p>
-                                <p className="text-sm italic" style={{ color: '#6B6B6B' }}>"{rw.original}"</p>
+                                <p className="text-sm italic" style={{ color: 'hsl(var(--muted-foreground))' }}>"{rw.original}"</p>
                               </div>
                             </div>
                             <div className="flex justify-center py-0.5">
-                              <ArrowDown className="w-4 h-4" style={{ color: '#D4930D' }} />
+                              <ArrowDown className="w-4 h-4" style={{ color: 'hsl(var(--gold))' }} />
                             </div>
                             <div className="flex items-start gap-2">
-                              <CheckCircle className="w-4 h-4 shrink-0 mt-0.5" style={{ color: '#2b4734' }} />
+                              <CheckCircle className="w-4 h-4 shrink-0 mt-0.5" style={{ color: 'hsl(var(--executive-green))' }} />
                               <div className="flex-1">
-                                <p className="text-xs font-semibold uppercase mb-1" style={{ color: '#2b4734' }}>{t(lang, "After", "修改後")}</p>
-                                <p className="text-sm font-medium" style={{ color: '#1A1A1A' }}>"{rw.improved}"</p>
+                                <p className="text-xs font-semibold uppercase mb-1" style={{ color: 'hsl(var(--executive-green))' }}>{t(lang, "After", "修改後")}</p>
+                                <p className="text-sm font-medium" style={{ color: 'hsl(var(--foreground))' }}>"{rw.improved}"</p>
                               </div>
                             </div>
                           </div>
-                          <div className="px-4 py-3" style={{ backgroundColor: '#FDFBF7', borderTop: '1px solid rgba(43,71,52,0.08)' }}>
-                            <p className="text-xs" style={{ color: '#6B6B6B' }}>
+                          <div className="px-4 py-3" style={{ backgroundColor: 'hsl(var(--paper))', borderTop: '1px solid rgba(43,71,52,0.08)' }}>
+                            <p className="text-xs" style={{ color: 'hsl(var(--muted-foreground))' }}>
                               <strong>{t(lang, "Why:", "原因：")}</strong> {rw.explanation}
                             </p>
                           </div>
@@ -721,21 +721,21 @@ export default function ResumeResults({
                     <div className="space-y-2">
                       <div>
                         <p className="text-xs font-semibold text-destructive uppercase mb-1">{t(lang, "Before", "修改前")}</p>
-                        <p className="text-sm rounded-lg p-3 italic" style={{ backgroundColor: '#FDFBF7', color: '#6B6B6B' }}>"{analysis.bullet_rewrite.original}"</p>
+                        <p className="text-sm rounded-lg p-3 italic" style={{ backgroundColor: 'hsl(var(--paper))', color: 'hsl(var(--muted-foreground))' }}>"{analysis.bullet_rewrite.original}"</p>
                       </div>
                       <div className="flex justify-center py-1">
-                        <ArrowDown className="w-5 h-5" style={{ color: '#D4930D' }} />
+                        <ArrowDown className="w-5 h-5" style={{ color: 'hsl(var(--gold))' }} />
                       </div>
                       <div>
-                        <p className="text-xs font-semibold uppercase mb-1" style={{ color: '#2b4734' }}>{t(lang, "After", "修改後")}</p>
-                        <p className="text-sm rounded-lg p-3 font-medium" style={{ backgroundColor: 'rgba(43,71,52,0.05)', color: '#1A1A1A' }}>"{analysis.bullet_rewrite.improved}"</p>
+                        <p className="text-xs font-semibold uppercase mb-1" style={{ color: 'hsl(var(--executive-green))' }}>{t(lang, "After", "修改後")}</p>
+                        <p className="text-sm rounded-lg p-3 font-medium" style={{ backgroundColor: 'rgba(43,71,52,0.05)', color: 'hsl(var(--foreground))' }}>"{analysis.bullet_rewrite.improved}"</p>
                       </div>
                       <div className="pt-2">
-                        <p className="text-xs font-semibold uppercase mb-2" style={{ color: '#6B6B6B' }}>{t(lang, "What changed", "改了什麼")}</p>
+                        <p className="text-xs font-semibold uppercase mb-2" style={{ color: 'hsl(var(--muted-foreground))' }}>{t(lang, "What changed", "改了什麼")}</p>
                         <ul className="space-y-1">
                           {analysis.bullet_rewrite.changes.map((c, i) => (
-                            <li key={i} className="text-xs flex gap-2" style={{ color: '#6B6B6B' }}>
-                              <span style={{ color: '#D4930D' }}>•</span> {c}
+                            <li key={i} className="text-xs flex gap-2" style={{ color: 'hsl(var(--muted-foreground))' }}>
+                              <span style={{ color: 'hsl(var(--gold))' }}>•</span> {c}
                             </li>
                           ))}
                         </ul>
@@ -748,10 +748,10 @@ export default function ResumeResults({
 
             {/* Top 3 Priorities */}
             <div>
-              <h2 className="font-heading text-2xl mb-1" style={{ color: '#1A1A1A' }}>
+              <h2 className="font-heading text-2xl mb-1" style={{ color: 'hsl(var(--foreground))' }}>
                 {t(lang, "Your Top 3 Priorities", "你的前 3 項優先改善")}
               </h2>
-              <p className="text-sm mb-4" style={{ color: '#6B6B6B' }}>
+              <p className="text-sm mb-4" style={{ color: 'hsl(var(--muted-foreground))' }}>
                 {t(lang, "Fix these first for maximum impact", "先修正這些以獲得最大效果")}
               </p>
               <div className="space-y-3">
@@ -759,13 +759,13 @@ export default function ResumeResults({
                   <div
                     key={p.priority}
                     className="rounded-xl p-5"
-                    style={{ backgroundColor: '#FFFFFF', border: '1px solid rgba(43,71,52,0.1)', borderLeft: '4px solid #b91c1c', boxShadow: '0 2px 8px rgba(0,0,0,0.04)' }}
+                    style={{ backgroundColor: 'hsl(var(--card))', border: '1px solid rgba(43,71,52,0.1)', borderLeft: '4px solid hsl(var(--destructive))', boxShadow: '0 2px 8px rgba(0,0,0,0.04)' }}
                   >
                     <div className="flex items-start gap-3">
                       <span className="text-lg">🔴</span>
                       <div>
-                        <p className="font-semibold text-sm mb-1" style={{ color: '#1A1A1A' }}>{p.principle}: {p.title}</p>
-                        <p className="text-sm" style={{ color: '#6B6B6B' }}>{p.description}</p>
+                        <p className="font-semibold text-sm mb-1" style={{ color: 'hsl(var(--foreground))' }}>{p.principle}: {p.title}</p>
+                        <p className="text-sm" style={{ color: 'hsl(var(--muted-foreground))' }}>{p.description}</p>
                       </div>
                     </div>
                   </div>
@@ -782,12 +782,12 @@ export default function ResumeResults({
             {/* Save report nudge for non-logged-in users */}
             {!isLoggedIn && (
               <div className="text-center py-2">
-                <p className="text-sm" style={{ color: '#6B6B6B' }}>
+                <p className="text-sm" style={{ color: 'hsl(var(--muted-foreground))' }}>
                   {t(lang,
                     "Create a free account to save this report and access it from any device.",
                     "建立免費帳號，儲存報告並從任何裝置查看。"
                   )}{" "}
-                  <Link to="/join" state={{ from: location.pathname + location.search }} className="font-semibold hover:underline" style={{ color: '#D4930D' }}>
+                  <Link to="/join" state={{ from: location.pathname + location.search }} className="font-semibold hover:underline" style={{ color: 'hsl(var(--gold))' }}>
                     {t(lang, "Sign up free →", "免費註冊 →")}
                   </Link>
                 </p>

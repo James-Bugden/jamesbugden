@@ -42,10 +42,10 @@ const PivotMethodMiniGuide = () => {
           <p className="text-xl md:text-2xl text-cream/90 mb-4">
             Based on "Pivot: The Only Move That Matters Is Your Next One" by Jenny Blake
           </p>
-          <p className="text-lg text-cream/80 mb-2">
+          <p className="text-lg text-cream/90 mb-2">
             By James Bugden • Senior Recruiter
           </p>
-          <div className="flex items-center justify-center gap-1.5 text-cream/60">
+          <div className="flex items-center justify-center gap-1.5 text-gold-soft/80">
             <Clock className="w-4 h-4" />
             <span className="text-sm">10 min read</span>
           </div>
@@ -234,7 +234,7 @@ const PivotMethodMiniGuide = () => {
           {/* Stage 3: Pilot */}
           <div className="mb-12 bg-card border border-border rounded-2xl p-8">
             <div className="flex items-center gap-3 mb-6">
-              <div className="w-12 h-12 rounded-full bg-purple-100 flex items-center justify-center">
+              <div className="w-12 h-12 rounded-full bg-gold-soft flex items-center justify-center">
                 <span className="text-2xl">🧪</span>
               </div>
               <h3 className="font-heading text-2xl text-foreground">Stage 3: Pilot — Test Before You Commit</h3>

@@ -120,7 +120,7 @@ const JobOfferGuide = () => {
       {/* Navigation */}
       <nav className="fixed top-0 left-0 right-0 z-50 bg-nav-green">
         <div className="container mx-auto px-5 md:px-6 py-4 flex items-center justify-between">
-          <Link to="/" className="font-heading text-lg md:text-xl font-medium text-cream tracking-tight">JAMES BUGDEN</Link>
+          <Link to="/" className="font-heading text-lg md:text-xl font-medium text-cream tracking-tight">hiresign</Link>
           <div className="flex items-center gap-3">
             <AuthHeaderButton variant="nav" />
             <LanguageToggle variant="nav" />
@@ -134,11 +134,11 @@ const JobOfferGuide = () => {
           <h1 className="font-heading text-3xl md:text-5xl lg:text-6xl text-cream leading-tight mb-4" style={{ lineHeight: 1.2 }}>
             Got a Job Offer?<br className="hidden sm:block" /> How to Decide Without Regret
           </h1>
-          <p className="text-lg md:text-xl text-cream/80 mb-3">A Guide to Evaluating, Accepting, or Walking Away</p>
+          <p className="text-lg md:text-xl text-cream/90 mb-3">A Guide to Evaluating, Accepting, or Walking Away</p>
           <div className="flex flex-col sm:flex-row items-center justify-center gap-2 sm:gap-4 mb-6">
-            <p className="text-base text-cream/60">By James Bugden, Career Coach · Senior Recruiter @ Uber</p>
+            <p className="text-base text-gold-soft/80">By James Bugden, Career Coach · Senior Recruiter @ Uber</p>
             <span className="hidden sm:inline text-cream/30">·</span>
-            <div className="flex items-center gap-1.5 text-cream/60">
+            <div className="flex items-center gap-1.5 text-gold-soft/80">
               <Clock className="w-4 h-4" />
               <span className="text-sm">30 min read</span>
             </div>
@@ -496,15 +496,15 @@ const JobOfferGuide = () => {
             <div className="grid sm:grid-cols-3 gap-4">
               <div className="bg-cream/5 border border-cream/10 rounded-xl p-4 text-center">
                 <p className="text-cream font-heading text-2xl font-bold mb-1">~40%</p>
-                <p className="text-cream/70 text-xs">of senior executives agree accepting a counteroffer hurts your career</p>
+                <p className="text-cream/85 text-xs">of senior executives agree accepting a counteroffer hurts your career</p>
               </div>
               <div className="bg-cream/5 border border-cream/10 rounded-xl p-4 text-center">
                 <p className="text-cream font-heading text-2xl font-bold mb-1">5-25%</p>
-                <p className="text-cream/70 text-xs">estimated success rate of counteroffers working out well</p>
+                <p className="text-cream/85 text-xs">estimated success rate of counteroffers working out well</p>
               </div>
               <div className="bg-cream/5 border border-cream/10 rounded-xl p-4 text-center">
                 <p className="text-cream font-heading text-2xl font-bold mb-1">~80%</p>
-                <p className="text-cream/70 text-xs">said accepting damages trust and reputation at the current company</p>
+                <p className="text-cream/85 text-xs">said accepting damages trust and reputation at the current company</p>
               </div>
             </div>
           </div>
@@ -568,7 +568,7 @@ const JobOfferGuide = () => {
               ].map((item, i) => (
                 <div key={i} className="bg-cream/5 border border-cream/10 rounded-xl p-4 text-center">
                   <p className="text-gold text-xs font-bold uppercase mb-2">{item.label}</p>
-                  <p className="text-cream/70 text-xs">{item.desc}</p>
+                  <p className="text-cream/85 text-xs">{item.desc}</p>
                 </div>
               ))}
             </div>
@@ -775,11 +775,11 @@ const JobOfferGuide = () => {
             <span className="text-cream/20 font-heading text-6xl md:text-7xl font-bold leading-none select-none">→</span>
             <div className="pt-3">
               <h2 className="font-heading text-2xl md:text-3xl text-cream mb-2">Additional Resources</h2>
-              <p className="text-cream/60">Keep levelling up your job search</p>
+              <p className="text-gold-soft/80">Keep levelling up your job search</p>
             </div>
           </div>
 
-          <p className="text-cream/70 text-sm mb-8">
+          <p className="text-cream/85 text-sm mb-8">
             This guide draws from 13 Harvard Business Review articles on job offers, negotiation, and career transitions by Bill Barnett, Hannah Riley Bowles, Rebecca Knight, Kelly O. Kay, Michael Cullen, Jodi Glickman, Rebecca Zucker, Marlo Lyons, Monne Williams, Amantha Imber, Amy Gallo, Samorn Selim, and Amii Barnard-Bahn.
           </p>
 

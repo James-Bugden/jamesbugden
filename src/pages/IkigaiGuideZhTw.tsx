@@ -191,7 +191,7 @@ const IkigaiGuideZhTw = () => {
 
       <nav className="fixed top-0 left-0 right-0 z-50 bg-nav-green">
         <div className="container mx-auto px-5 md:px-6 py-4 flex items-center justify-between">
-          <Link to="/zh-tw" className="font-heading text-lg md:text-xl font-medium text-cream tracking-tight">JAMES BUGDEN</Link>
+          <Link to="/zh-tw" className="font-heading text-lg md:text-xl font-medium text-cream tracking-tight">hiresign</Link>
           <div className="flex items-center gap-3">
             <AuthHeaderButton variant="nav" />
             <LanguageToggle variant="nav" />
@@ -205,11 +205,11 @@ const IkigaiGuideZhTw = () => {
           <h1 className="font-heading text-3xl md:text-5xl lg:text-6xl text-cream leading-tight mb-4" style={{ lineHeight: 1.2 }}>
             Ikigai：打造一份你不會在 12 個月內<br className="hidden sm:block" />辭掉的職涯
           </h1>
-          <p className="text-lg md:text-xl text-cream/80 mb-4">不燃燒殆盡。不砍掉重練。</p>
+          <p className="text-lg md:text-xl text-cream/90 mb-4">不燃燒殆盡。不砍掉重練。</p>
           <div className="flex flex-col sm:flex-row items-center justify-center gap-2 sm:gap-4 mb-6">
-            <p className="text-base text-cream/60">James Bugden，職涯教練 · Uber 資深招募人員</p>
+            <p className="text-base text-gold-soft/80">James Bugden，職涯教練 · Uber 資深招募人員</p>
             <span className="hidden sm:inline text-cream/30">·</span>
-            <div className="flex items-center gap-1.5 text-cream/60">
+            <div className="flex items-center gap-1.5 text-gold-soft/80">
               <Clock className="w-4 h-4" />
               <span className="text-sm">35 分鐘閱讀</span>
             </div>
@@ -687,17 +687,17 @@ const IkigaiGuideZhTw = () => {
           </div>
           <div className="bg-cream/5 border border-cream/10 rounded-xl p-5 md:p-6 mb-6">
             <h3 className="text-gold text-sm font-bold uppercase mb-3">你的 Ikigai</h3>
-            <p className="text-cream/80 text-sm mb-4">四者的交集：你熱愛的 + 你擅長的 + 世界需要的 + 你能獲得報酬的</p>
+            <p className="text-cream/90 text-sm mb-4">四者的交集：你熱愛的 + 你擅長的 + 世界需要的 + 你能獲得報酬的</p>
             <h3 className="text-gold text-sm font-bold uppercase mb-3">持久職涯的 5 大支柱</h3>
             <ol className="space-y-2 mb-4">
               {["使命感：知道你的「為什麼」。用 Ikigai 職涯地圖找到交集。", "心流：做讓你沉浸其中的工作。追蹤你忘記時間的時刻。", "社群：建立你的模合。在工作中交真正的朋友。", "韌性：擁抱侘寂。建立反脆弱性。", "永續節奏：用 80% 工作。保護休息。調整節奏。"].map((item, i) => (
-                <li key={i} className="text-cream/70 text-sm"><span className="text-gold font-bold mr-1">{i + 1}.</span> {item}</li>
+                <li key={i} className="text-cream/85 text-sm"><span className="text-gold font-bold mr-1">{i + 1}.</span> {item}</li>
               ))}
             </ol>
             <h3 className="text-gold text-sm font-bold uppercase mb-3">關鍵練習</h3>
             <ul className="space-y-1">
               {["完成 Ikigai 職涯地圖（4 個圓圈）", "追蹤你的心流時刻一週", "找出你的模合（或開始建立一個）", "用 Ikigai 評分卡評估你目前的工作", "列出 3 件讓你脆弱的事。解決其中一件。"].map((item, i) => (
-                <li key={i} className="flex items-start gap-2"><GoldCheckBadge /><span className="text-cream/70 text-sm">{item}</span></li>
+                <li key={i} className="flex items-start gap-2"><GoldCheckBadge /><span className="text-cream/85 text-sm">{item}</span></li>
               ))}
             </ul>
           </div>
@@ -819,14 +819,14 @@ const IkigaiGuideZhTw = () => {
             <span className="text-cream/20 font-heading text-6xl md:text-7xl font-bold leading-none select-none">→</span>
             <div className="pt-3">
               <h2 className="font-heading text-2xl md:text-3xl text-cream mb-2">資源</h2>
-              <p className="text-cream/60">繼續打造你的職涯</p>
+              <p className="text-gold-soft/80">繼續打造你的職涯</p>
             </div>
           </div>
           <div className="bg-cream/5 border border-cream/10 rounded-xl p-5 md:p-6 mb-8">
             <h3 className="text-gold text-sm font-bold uppercase mb-3">本書</h3>
-            <p className="text-cream/80 text-sm italic mb-4">《富足樂齡：IKIGAI，日本生活美學的長壽祕訣》Héctor García & Francesc Miralles 著</p>
+            <p className="text-cream/90 text-sm italic mb-4">《富足樂齡：IKIGAI，日本生活美學的長壽祕訣》Héctor García & Francesc Miralles 著</p>
             <h3 className="text-gold text-sm font-bold uppercase mb-3">其他引用</h3>
-            <ul className="space-y-1 text-cream/70 text-sm">
+            <ul className="space-y-1 text-cream/85 text-sm">
               <li>• 《活出意義來》Viktor Frankl 著</li>
               <li>• 《心流》Mihaly Csikszentmihalyi 著</li>
               <li>• 《反脆弱》Nassim Nicholas Taleb 著</li>

@@ -3,7 +3,8 @@ import { useAuth } from "@/contexts/AuthContext";
 import { Navigate, Link } from "react-router-dom";
 import LanguageToggle from "@/components/LanguageToggle";
 import ThemeToggle from "@/components/ThemeToggle";
-import { ArrowRight, FileText, DollarSign, PenTool, Search, X, BarChart3, MessageSquare, Compass, ClipboardList, Mic, Banknote } from "lucide-react";
+import { ArrowRight, Search, X, BarChart3, MessageSquare, Compass, ClipboardList, Mic, Banknote } from "lucide-react";
+import { ResumeStackIcon, ScoreScanIcon, OfferTrophyIcon, UploadDocIcon } from "@/assets/illustrations/HiresignIcons";
 import { useRecentlyUsed } from "@/hooks/useRecentlyUsed";
 import { useLocalStorage } from "@/hooks/useLocalStorage";
 import { useResumeAnalyses } from "@/hooks/useResumeAnalyses";
@@ -33,8 +34,8 @@ interface ToolItem {
 const tools: ToolItem[] = [
   {
     id: "resume-analyzer",
-    icon: <FileText className="w-5 h-5" />,
-    iconBg: "#EEF2FF",
+    icon: <ScoreScanIcon size={28} />,
+    iconBg: "hsl(var(--gold-soft))",
     title: { en: "Resume Analyzer", zh: "履歷健檢" },
     description: { en: "Upload your resume. Get a recruiter-level score and specific fixes in 60 seconds.", zh: "上傳履歷，60 秒內拿到 Recruiter 視角的評分與具體改善建議。" },
     path: "/resume-analyzer",
@@ -42,8 +43,8 @@ const tools: ToolItem[] = [
   },
   {
     id: "resume-builder",
-    icon: <PenTool className="w-5 h-5" />,
-    iconBg: "#FFF7ED",
+    icon: <UploadDocIcon size={28} />,
+    iconBg: "hsl(var(--gold-soft))",
     title: { en: "Resume Builder", zh: "履歷編輯器" },
     description: { en: "Build a recruiter-approved resume from scratch using proven templates.", zh: "用實戰驗證的模板，從頭打造一份讓 Recruiter 點頭的履歷。" },
     path: "/resume",
@@ -51,8 +52,8 @@ const tools: ToolItem[] = [
   },
   {
     id: "offer-calculator",
-    icon: <DollarSign className="w-5 h-5" />,
-    iconBg: "#FEF9C3",
+    icon: <OfferTrophyIcon size={28} />,
+    iconBg: "hsl(var(--gold-soft))",
     title: { en: "Offer Calculator", zh: "Offer 試算器" },
     description: { en: "See how much more you'd earn over 30 years by negotiating strategically.", zh: "算算看，策略性談薪 30 年下來能多賺多少。" },
     path: "/offer-calculator",
@@ -60,8 +61,8 @@ const tools: ToolItem[] = [
   },
   {
     id: "interview-questions",
-    icon: <MessageSquare className="w-5 h-5" />,
-    iconBg: "#F0FDF4",
+    icon: <ResumeStackIcon size={28} />,
+    iconBg: "hsl(var(--gold-soft))",
     title: { en: "Interview Question Bank", zh: "面試題庫" },
     description: { en: "203 real interview questions with sample answers to prepare for your next interview.", zh: "203 道真實面試題附參考答案，幫你準備下一場面試。" },
     path: "/interview-questions",
@@ -103,8 +104,8 @@ const journeyItems: JourneyItem[] = [
 
 const JOURNEY_META: { tag: GuideTag; icon: React.ReactNode; color: string; label: { en: string; zh: string } }[] = [
   { tag: "end-to-end", icon: <Compass className="w-5 h-5" />, color: "hsl(var(--executive-green))", label: { en: "End to End Guides", zh: "完整指南" } },
-  { tag: "applying", icon: <ClipboardList className="w-5 h-5" />, color: "#1D4ED8", label: { en: "Applying", zh: "投遞申請" } },
-  { tag: "interviewing", icon: <Mic className="w-5 h-5" />, color: "#7C3AED", label: { en: "Interviewing", zh: "面試準備" } },
+  { tag: "applying", icon: <ClipboardList className="w-5 h-5" />, color: "hsl(var(--executive-green-light))", label: { en: "Applying", zh: "投遞申請" } },
+  { tag: "interviewing", icon: <Mic className="w-5 h-5" />, color: "hsl(var(--gold))", label: { en: "Interviewing", zh: "面試準備" } },
   { tag: "negotiating", icon: <Banknote className="w-5 h-5" />, color: "hsl(var(--gold-dark))", label: { en: "Negotiating", zh: "薪資談判" } },
 ];
 
@@ -325,7 +326,7 @@ export default function Dashboard({ lang = "en" }: { lang?: "en" | "zh" }) {
       <nav className={`sticky top-0 z-50 bg-executive-green transition-shadow duration-300 ${scrolled ? 'shadow-lg shadow-black/20' : ''}`}>
         <div className="max-w-[1200px] mx-auto flex items-center justify-between px-4 md:px-8 h-14">
           <div className="flex items-center gap-3">
-            <Link to="/" className="font-heading text-lg tracking-wide text-cream">JAMES BUGDEN</Link>
+            <Link to="/" className="font-heading text-lg tracking-wide text-cream">hiresign</Link>
             <span className="text-cream/40 text-sm hidden sm:inline">/</span>
             <span className="text-sm font-semibold hidden sm:inline text-cream/80">{t.dashboard}</span>
           </div>
@@ -481,7 +482,7 @@ export default function Dashboard({ lang = "en" }: { lang?: "en" | "zh" }) {
                     className="group rounded-2xl border-l-[4px] border-l-gold p-4 md:p-5 flex items-center gap-4 transition-all duration-200 hover:-translate-y-0.5 bg-card shadow-[var(--dash-card-shadow)] hover:shadow-[var(--dash-card-hover-shadow)]"
                   >
                     <span
-                      className="w-9 h-9 rounded-full flex items-center justify-center shrink-0 text-foreground"
+                      className="w-12 h-12 rounded-xl flex items-center justify-center shrink-0 border border-gold/20"
                       style={{ backgroundColor: tool.iconBg }}
                     >
                       {tool.icon}
@@ -490,7 +491,7 @@ export default function Dashboard({ lang = "en" }: { lang?: "en" | "zh" }) {
                       <h3 className="text-[15px] font-bold text-foreground leading-snug">
                         {tool.title[lang]}
                         {["resume-analyzer", "resume-builder", "offer-calculator", "interview-questions"].includes(tool.id) && (
-                          <span className="ml-2 text-[10px] font-semibold uppercase tracking-wide px-1.5 py-0.5 rounded-full align-middle" style={{ backgroundColor: "#E8F0EB", color: "#234E3E" }}>Beta</span>
+                          <span className="ml-2 text-[10px] font-semibold uppercase tracking-wide px-1.5 py-0.5 rounded-full align-middle bg-green-soft text-executive-green">Beta</span>
                         )}
                       </h3>
                       <p className="text-xs leading-relaxed text-muted-foreground mt-0.5 line-clamp-2">{tool.description[lang]}</p>

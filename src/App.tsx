@@ -13,11 +13,14 @@ import SiteLayout from "./components/SiteLayout";
 import AuthRoute from "./components/AuthRoute";
 import { useLocation } from "react-router-dom";
 import { ThemeProvider } from "next-themes";
+import { Wordmark } from "@/components/Wordmark";
 
 // Loading fallback component
 const PageLoader = () => (
   <div className="min-h-screen flex flex-col items-center justify-center bg-background gap-4">
-    <span className="font-heading text-lg tracking-wide text-executive-green">JAMES BUGDEN</span>
+    <span className="text-executive-green">
+      <Wordmark variant="mono" size={36} />
+    </span>
     <div className="w-8 h-8 border-4 border-gold border-t-transparent rounded-full animate-spin" />
   </div>
 );
