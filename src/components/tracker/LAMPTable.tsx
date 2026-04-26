@@ -141,10 +141,10 @@ function QuickAddModal({ open, onOpenChange, onAdd }: {
       <DialogContent className="sm:max-w-sm bg-white">
         <DialogHeader><DialogTitle className="font-heading" style={{ color: "#1B3A2F" }}>Add Company</DialogTitle></DialogHeader>
         <div className="space-y-3 mt-1">
-          <Input placeholder="Company name *" value={name} onChange={(e) => setName(e.target.value)} onKeyDown={(e) => e.key === "Enter" && submit()} className="bg-[#FBF7F0] border-[#E5E0D8]" />
+          <Input placeholder="Company name *" value={name} onChange={(e) => setName(e.target.value)} onKeyDown={(e) => e.key === "Enter" && submit()} className="bg-paper-alt border-border" />
           <div>
             <label className="text-xs font-medium" style={{ color: "#2C2C2C" }}>Source</label>
-            <select value={source} onChange={(e) => setSource(e.target.value as Employer["source"])} className="w-full mt-1 px-3 py-2 rounded-md border text-sm bg-[#FBF7F0]" style={{ borderColor: "#E5E0D8" }}>
+            <select value={source} onChange={(e) => setSource(e.target.value as Employer["source"])} className="w-full mt-1 px-3 py-2 rounded-md border text-sm bg-paper-alt" style={{ borderColor: "#E5E0D8" }}>
               {(["dream", "alumni", "posting", "trend", "manual"] as const).map((s) => <option key={s} value={s}>{SOURCE_LABELS[s]}</option>)}
             </select>
           </div>
@@ -199,7 +199,7 @@ function ExpandedRow({ employer, contacts, onUpdate, onAddContact }: {
             <button
               onClick={() => onAddContact?.(employer.id)}
               disabled={!onAddContact}
-              className="text-xs px-2 py-1 rounded border transition-colors hover:bg-[#FBF7F0] disabled:opacity-50"
+              className="text-xs px-2 py-1 rounded border transition-colors hover:bg-paper-alt disabled:opacity-50"
               style={{ borderColor: "#E5E0D8" }}
               aria-label={`Add contact at ${employer.name}`}
             >+ Add Contact</button>
@@ -212,7 +212,7 @@ function ExpandedRow({ employer, contacts, onUpdate, onAddContact }: {
           defaultValue={employer.notes}
           onBlur={(e) => onUpdate({ notes: e.target.value })}
           placeholder="Add notes…"
-          className="bg-white border-[#E5E0D8] min-h-[60px] text-sm"
+          className="bg-white border-border min-h-[60px] text-sm"
         />
       </div>
       <div>
@@ -222,7 +222,7 @@ function ExpandedRow({ employer, contacts, onUpdate, onAddContact }: {
             defaultValue={employer.jdUrl}
             onBlur={(e) => onUpdate({ jdUrl: e.target.value })}
             placeholder="https://…"
-            className="bg-white border-[#E5E0D8] text-sm"
+            className="bg-white border-border text-sm"
           />
         </div>
         {employer.jdUrl && (
@@ -242,7 +242,7 @@ function ColumnPicker({ visible, onChange }: { visible: Set<ColId>; onChange: (s
   const [open, setOpen] = useState(false);
   return (
     <div className="relative">
-      <button onClick={() => setOpen(!open)} className="flex items-center gap-1.5 px-3 py-2 rounded-md border text-xs font-medium transition-colors hover:bg-[#FBF7F0]" style={{ borderColor: "#E5E0D8", color: "#2C2C2C" }}>
+      <button onClick={() => setOpen(!open)} className="flex items-center gap-1.5 px-3 py-2 rounded-md border text-xs font-medium transition-colors hover:bg-paper-alt" style={{ borderColor: "#E5E0D8", color: "#2C2C2C" }}>
         <Columns3 className="w-3.5 h-3.5" /> Columns
       </button>
       {open && (
@@ -250,7 +250,7 @@ function ColumnPicker({ visible, onChange }: { visible: Set<ColId>; onChange: (s
           <div className="fixed inset-0 z-40" onClick={() => setOpen(false)} />
           <div className="absolute right-0 mt-1 bg-white rounded-lg shadow-lg border p-2 z-50 w-44" style={{ borderColor: "#E5E0D8" }}>
             {ALL_COLUMNS.map((col) => (
-              <label key={col} className="flex items-center gap-2 px-2 py-1.5 text-xs rounded hover:bg-[#FBF7F0] cursor-pointer" style={{ color: "#2C2C2C" }}>
+              <label key={col} className="flex items-center gap-2 px-2 py-1.5 text-xs rounded hover:bg-paper-alt cursor-pointer" style={{ color: "#2C2C2C" }}>
                 <input
                   type="checkbox"
                   checked={visible.has(col)}
@@ -405,7 +405,7 @@ export default function LAMPTable({ employers, contacts, onUpdateEmployer, onDel
       <div className="flex flex-wrap items-center gap-2">
         <div className="relative flex-1 min-w-[180px]">
           <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4" style={{ color: "#888" }} />
-          <Input value={search} onChange={(e) => setSearch(e.target.value)} placeholder="Filter companies…" className="pl-9 bg-white border-[#E5E0D8] text-sm" />
+          <Input value={search} onChange={(e) => setSearch(e.target.value)} placeholder="Filter companies…" className="pl-9 bg-white border-border text-sm" />
         </div>
         <select value={sourceFilter} onChange={(e) => setSourceFilter(e.target.value as any)} className="px-3 py-2 rounded-md border text-xs bg-white" style={{ borderColor: "#E5E0D8", color: "#2C2C2C" }}>
           <option value="all">All Sources</option>
@@ -419,10 +419,10 @@ export default function LAMPTable({ employers, contacts, onUpdateEmployer, onDel
         <button onClick={() => setAddOpen(true)} className="flex items-center gap-1.5 px-3 py-2 rounded-md text-xs font-semibold text-white transition-all duration-200 hover:scale-[1.02]" style={{ backgroundColor: "#C9A961" }}>
           <Plus className="w-3.5 h-3.5" /> Add Company
         </button>
-        <button onClick={onOpenWizard} className="px-3 py-2 rounded-md border text-xs font-medium transition-colors hover:bg-[#FBF7F0]" style={{ borderColor: "#E5E0D8", color: "#2C2C2C" }}>
+        <button onClick={onOpenWizard} className="px-3 py-2 rounded-md border text-xs font-medium transition-colors hover:bg-paper-alt" style={{ borderColor: "#E5E0D8", color: "#2C2C2C" }}>
           🧙 Guided Add
         </button>
-        <button onClick={() => exportCSV(employers)} className="px-3 py-2 rounded-md border text-xs font-medium transition-colors hover:bg-[#FBF7F0]" style={{ borderColor: "#E5E0D8", color: "#2C2C2C" }}>
+        <button onClick={() => exportCSV(employers)} className="px-3 py-2 rounded-md border text-xs font-medium transition-colors hover:bg-paper-alt" style={{ borderColor: "#E5E0D8", color: "#2C2C2C" }}>
           <Download className="w-3.5 h-3.5" />
         </button>
         {selected.size > 0 && (
@@ -458,7 +458,7 @@ export default function LAMPTable({ employers, contacts, onUpdateEmployer, onDel
                 return (
                   <tbody key={emp.id}>
                     <tr
-                      className={`border-b hover:bg-[#FAFAF7] transition-all duration-300 cursor-pointer ${highlightedEmployerId === emp.id ? "ring-2 ring-[#C9A961] bg-[#FBF7F0]" : ""}`}
+                      className={`border-b hover:bg-[#FAFAF7] transition-all duration-300 cursor-pointer ${highlightedEmployerId === emp.id ? "ring-2 ring-[#C9A961] bg-paper-alt" : ""}`}
                       style={{ borderColor: "#E5E0D8" }}
                       id={`employer-${emp.id}`}
                       onClick={(e) => {
@@ -485,7 +485,7 @@ export default function LAMPTable({ employers, contacts, onUpdateEmployer, onDel
                               defaultValue={emp.name}
                               onBlur={(e) => { onUpdateEmployer(emp.id, { name: e.target.value }); setEditingName(null); }}
                               onKeyDown={(e) => { if (e.key === "Enter") (e.target as HTMLInputElement).blur(); }}
-                              className="h-7 text-sm border-[#E5E0D8]"
+                              className="h-7 text-sm border-border"
                             />
                           ) : (
                             <span className="font-semibold cursor-text" style={{ color: "#1B3A2F" }} onClick={() => setEditingName(emp.id)}>

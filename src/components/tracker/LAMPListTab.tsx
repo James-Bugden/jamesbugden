@@ -196,7 +196,7 @@ export function LAMPWizard({ open, onOpenChange, onFinish }: WizardProps) {
               onChange={(e) => setInput(e.target.value)}
               onKeyDown={(e) => e.key === "Enter" && addCompany()}
               placeholder="Type company name…"
-              className="bg-[#FBF7F0] border-[#E5E0D8]"
+              className="bg-paper-alt border-border"
             />
             <button
               onClick={addCompany}

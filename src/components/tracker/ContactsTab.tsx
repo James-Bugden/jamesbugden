@@ -149,24 +149,24 @@ function AddContactModal({ open, onOpenChange, employers, contacts, onAdd, initi
       <DialogContent className="sm:max-w-md bg-white">
         <DialogHeader><DialogTitle className="font-heading" style={{ color: "#1B3A2F" }}>Add Contact</DialogTitle></DialogHeader>
         <div className="space-y-3 mt-1">
-          <Input placeholder="Name *" value={name} onChange={(e) => setName(e.target.value)} className="bg-[#FBF7F0] border-[#E5E0D8]" />
+          <Input placeholder="Name *" value={name} onChange={(e) => setName(e.target.value)} className="bg-paper-alt border-border" />
           <div>
             <label className="text-xs font-medium" style={{ color: "#2C2C2C" }}>Company *</label>
-            <select value={employerId} onChange={(e) => setEmployerId(e.target.value)} className="w-full mt-1 px-3 py-2 rounded-md border text-sm bg-[#FBF7F0]" style={{ borderColor: "#E5E0D8" }}>
+            <select value={employerId} onChange={(e) => setEmployerId(e.target.value)} className="w-full mt-1 px-3 py-2 rounded-md border text-sm bg-paper-alt" style={{ borderColor: "#E5E0D8" }}>
               <option value="">Select company…</option>
               {employers.map((emp) => <option key={emp.id} value={emp.id}>{emp.name}</option>)}
             </select>
           </div>
           <div>
             <label className="text-xs font-medium" style={{ color: "#2C2C2C" }}>Source</label>
-            <select value={source} onChange={(e) => setSource(e.target.value as Contact["source"])} className="w-full mt-1 px-3 py-2 rounded-md border text-sm bg-[#FBF7F0]" style={{ borderColor: "#E5E0D8" }}>
+            <select value={source} onChange={(e) => setSource(e.target.value as Contact["source"])} className="w-full mt-1 px-3 py-2 rounded-md border text-sm bg-paper-alt" style={{ borderColor: "#E5E0D8" }}>
               {SOURCE_OPTIONS.map((s) => <option key={s.value} value={s.value}>{s.label}</option>)}
             </select>
           </div>
-          <Input placeholder="Email (optional)" type="email" value={email} onChange={(e) => setEmail(e.target.value)} className="bg-[#FBF7F0] border-[#E5E0D8]" />
-          <Input placeholder="Role / Title (optional)" value={role} onChange={(e) => setRole(e.target.value)} className="bg-[#FBF7F0] border-[#E5E0D8]" />
+          <Input placeholder="Email (optional)" type="email" value={email} onChange={(e) => setEmail(e.target.value)} className="bg-paper-alt border-border" />
+          <Input placeholder="Role / Title (optional)" value={role} onChange={(e) => setRole(e.target.value)} className="bg-paper-alt border-border" />
           <p className="text-xs" style={{ color: "#888" }}>Contact #{contactNum} at this company</p>
-          <Textarea placeholder="Notes (optional)" value={notes} onChange={(e) => setNotes(e.target.value)} className="bg-[#FBF7F0] border-[#E5E0D8] min-h-[60px]" />
+          <Textarea placeholder="Notes (optional)" value={notes} onChange={(e) => setNotes(e.target.value)} className="bg-paper-alt border-border min-h-[60px]" />
           <button onClick={submit} disabled={!name.trim() || !employerId} className="w-full py-2.5 rounded-md text-sm font-semibold text-white transition-all duration-200 hover:scale-[1.02] disabled:opacity-40" style={{ backgroundColor: "#C9A961" }}>
             Add Contact
           </button>
@@ -221,7 +221,7 @@ function MobileContactCard({ contact, employerName, expanded, onToggle, onUpdate
           </div>
           <div className="flex flex-wrap gap-2">
             {!contact.emailSentDate && (
-              <button onClick={() => { onUpdate({ emailSentDate: today }); toast.success("Email sent date logged ✓"); }} className="text-xs px-2.5 py-1.5 rounded-md border font-medium transition-colors hover:bg-[#FBF7F0]" style={{ borderColor: "#E5E0D8", color: "#2C2C2C" }}>
+              <button onClick={() => { onUpdate({ emailSentDate: today }); toast.success("Email sent date logged ✓"); }} className="text-xs px-2.5 py-1.5 rounded-md border font-medium transition-colors hover:bg-paper-alt" style={{ borderColor: "#E5E0D8", color: "#2C2C2C" }}>
                 <Mail className="w-3 h-3 inline mr-1" /> Mark Sent
               </button>
             )}
@@ -230,14 +230,14 @@ function MobileContactCard({ contact, employerName, expanded, onToggle, onUpdate
                 const s = classifyContact({ ...contact, respondedDate: today });
                 onUpdate({ respondedDate: today });
                 toast.success(s.key === "booster" ? "Contact marked as Booster! 🎉" : "Response logged.");
-              }} className="text-xs px-2.5 py-1.5 rounded-md border font-medium transition-colors hover:bg-[#FBF7F0]" style={{ borderColor: "#E5E0D8", color: "#2C2C2C" }}>
+              }} className="text-xs px-2.5 py-1.5 rounded-md border font-medium transition-colors hover:bg-paper-alt" style={{ borderColor: "#E5E0D8", color: "#2C2C2C" }}>
                 <CheckCircle2 className="w-3 h-3 inline mr-1" /> Mark Responded
               </button>
             )}
-            <button onClick={() => { onUpdate({ followUpCallDate: today }); toast.success("Follow-up call logged ✓"); }} className="text-xs px-2.5 py-1.5 rounded-md border font-medium transition-colors hover:bg-[#FBF7F0]" style={{ borderColor: "#E5E0D8", color: "#2C2C2C" }}>
+            <button onClick={() => { onUpdate({ followUpCallDate: today }); toast.success("Follow-up call logged ✓"); }} className="text-xs px-2.5 py-1.5 rounded-md border font-medium transition-colors hover:bg-paper-alt" style={{ borderColor: "#E5E0D8", color: "#2C2C2C" }}>
               <Phone className="w-3 h-3 inline mr-1" /> Called
             </button>
-            <button onClick={onDraftEmail} className="text-xs px-2.5 py-1.5 rounded-md border font-medium transition-colors hover:bg-[#FBF7F0]" style={{ borderColor: "#E5E0D8", color: "#2C2C2C" }}>
+            <button onClick={onDraftEmail} className="text-xs px-2.5 py-1.5 rounded-md border font-medium transition-colors hover:bg-paper-alt" style={{ borderColor: "#E5E0D8", color: "#2C2C2C" }}>
               <Mail className="w-3 h-3 inline mr-1" /> Draft Email
             </button>
             <button onClick={onDelete} className="text-xs px-2.5 py-1.5 rounded-md border font-medium text-red-500 transition-colors hover:bg-red-50" style={{ borderColor: "#FEE2E2" }}>
@@ -342,7 +342,7 @@ export default function ContactsTab({ employers, contacts, setContacts, onOpenPr
       <div className="flex flex-wrap items-center gap-2">
         <div className="relative flex-1 min-w-[180px]">
           <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4" style={{ color: "#888" }} />
-          <Input value={search} onChange={(e) => setSearch(e.target.value)} placeholder="Filter contacts…" className="pl-9 bg-white border-[#E5E0D8] text-sm" />
+          <Input value={search} onChange={(e) => setSearch(e.target.value)} placeholder="Filter contacts…" className="pl-9 bg-white border-border text-sm" />
         </div>
         <button onClick={() => setAddOpen(true)} className="flex items-center gap-1.5 px-3 py-2 rounded-md text-xs font-semibold text-white transition-all duration-200 hover:scale-[1.02]" style={{ backgroundColor: "#C9A961" }}>
           <Plus className="w-3.5 h-3.5" /> Add Contact

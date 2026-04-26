@@ -206,13 +206,13 @@ export function CoverLetterCustomizePanel({ settings, onChange }: Props) {
               <div className="flex gap-3">
                 <div className="flex-1">
                   <FieldLabel>Language</FieldLabel>
-                  <select value={settings.language} onChange={(e) => onChange({ language: e.target.value })} className="w-full px-3 py-2 rounded-lg text-sm bg-[#F5F3EE] text-gray-800 border-0 outline-none">
+                  <select value={settings.language} onChange={(e) => onChange({ language: e.target.value })} className="w-full px-3 py-2 rounded-lg text-sm bg-paper-alt text-gray-800 border-0 outline-none">
                     {LANGUAGE_OPTIONS.map((o) => <option key={o.value} value={o.value}>{o.label}</option>)}
                   </select>
                 </div>
                 <div className="flex-1">
                   <FieldLabel>Page Format</FieldLabel>
-                  <select value={settings.pageFormat} onChange={(e) => onChange({ pageFormat: e.target.value })} className="w-full px-3 py-2 rounded-lg text-sm bg-[#F5F3EE] text-gray-800 border-0 outline-none">
+                  <select value={settings.pageFormat} onChange={(e) => onChange({ pageFormat: e.target.value })} className="w-full px-3 py-2 rounded-lg text-sm bg-paper-alt text-gray-800 border-0 outline-none">
                     {PAGE_FORMAT_OPTIONS.map((o) => <option key={o.value} value={o.value}>{o.label}</option>)}
                   </select>
                 </div>

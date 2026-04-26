@@ -33,7 +33,7 @@ const PivotMethodMiniGuide = () => {
       </nav>
 
       {/* Hero Section */}
-      <header className="bg-[#1B3A2F] text-cream py-16 md:py-24">
+      <header className="bg-executive-green text-cream py-16 md:py-24">
         <div className="container mx-auto px-4 max-w-4xl text-center">
           <p className="text-gold font-medium mb-4 tracking-wide uppercase">Quick Guide to Career Change</p>
           <h1 className="font-heading text-4xl md:text-5xl lg:text-6xl mb-6">

@@ -314,7 +314,7 @@ const IndexZhTw = () => {
                 </div>
                 <p className="font-heading text-[18px] mb-2 text-foreground tracking-[-0.01em] mt-9" style={{ fontWeight: 600, lineHeight: 1.25 }}>Uber 台灣 Recruiter</p>
                 <p className="text-[15px] text-muted-foreground leading-relaxed">
-                  我每天都在做招募決定的會議室裡, 我把我看到的分享給你。
+                  我每天都在做招募決定的會議室裡，把我看到的分享給你。
                 </p>
               </div>
             </div>

@@ -154,20 +154,19 @@ export default function OfferCompass() {
               </EmailGateOverlay>
 
               {/* Coaching Upsell */}
-              <div className="max-w-4xl mx-auto rounded-2xl p-8 print:hidden" style={{ backgroundColor: "#1A1A1A" }}>
-                <div className="w-10 h-1 rounded-full mb-4" style={{ backgroundColor: "#C9A961" }} />
-                <h2 className="font-heading text-xl font-bold mb-3" style={{ color: "#FBF7F0" }}>
-                  Most candidates leave 10-20% on the table.
+              <div className="max-w-4xl mx-auto rounded-2xl p-8 print:hidden bg-executive-green">
+                <div className="w-10 h-1 rounded-full mb-4 bg-gold" />
+                <h2 className="font-heading text-xl font-bold mb-3 text-cream">
+                  Most candidates leave 10-20% on the table
                 </h2>
-                <p className="text-sm mb-6 leading-relaxed" style={{ color: "#A0A0A0" }}>
+                <p className="text-sm mb-6 leading-relaxed text-cream/70">
                   I've helped professionals at Google, Uber, and Meta negotiate better offers. If you are comparing packages, I can tell you what is realistic and what to push back on.
                 </p>
                 <a
                   href="https://james.careers/#coaching"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="inline-flex h-11 px-6 items-center justify-center rounded-lg font-semibold text-sm transition-transform hover:scale-[1.02]"
-                  style={{ backgroundColor: "#C9A961", color: "#1B3A2F" }}
+                  className="inline-flex h-11 px-6 items-center justify-center rounded-lg font-semibold text-sm transition-transform hover:scale-[1.02] bg-gold text-executive-green hover:bg-gold-dark hover:text-cream"
                   onClick={() => trackEvent("cta_click", "book_call")}
                 >
                   Book a Free Strategy Call

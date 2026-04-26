@@ -496,7 +496,7 @@ export default function ResumeAnalyzer({ defaultLang = "en" }: { defaultLang?: L
                         />
                       </div>
                     ) : (
-                      <div className="flex items-center gap-3 p-4 rounded-xl" style={{ backgroundColor: '#f5f3ee', border: '1px solid rgba(43,71,52,0.1)' }}>
+                      <div className="flex items-center gap-3 p-4 rounded-xl" style={{ backgroundColor: 'hsl(var(--paper-alt))', border: '1px solid rgba(43,71,52,0.1)' }}>
                         <Check className="w-5 h-5 shrink-0" style={{ color: 'hsl(var(--executive-green))' }} />
                         <FileText className="w-5 h-5 shrink-0" style={{ color: 'hsl(var(--muted-foreground))' }} />
                         <span className="text-sm font-medium truncate flex-1" style={{ color: 'hsl(var(--foreground))' }}>{file.name}</span>

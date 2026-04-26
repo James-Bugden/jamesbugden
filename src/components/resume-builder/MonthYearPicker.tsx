@@ -33,7 +33,7 @@ export function MonthYearPicker({
 
   if (showPresent) {
     return (
-      <div className="flex items-center h-10 px-3 rounded-lg bg-[#F5F3EE] text-sm text-gray-500">
+      <div className="flex items-center h-10 px-3 rounded-lg bg-paper-alt text-sm text-gray-500">
         {t("presentDate")}
       </div>
     );
@@ -46,7 +46,7 @@ export function MonthYearPicker({
         onChange={(e) => onMonthChange(e.target.value)}
         disabled={disabled}
         className={cn(
-          "flex-1 h-10 rounded-lg bg-[#F5F3EE] px-3 text-sm border-0 outline-none focus:ring-2 focus:ring-pink-300 appearance-none cursor-pointer",
+          "flex-1 h-10 rounded-lg bg-paper-alt px-3 text-sm border-0 outline-none focus:ring-2 focus:ring-pink-300 appearance-none cursor-pointer",
           !monthValue && "text-gray-400"
         )}
       >
@@ -61,7 +61,7 @@ export function MonthYearPicker({
         onChange={(e) => onYearChange(e.target.value)}
         disabled={disabled}
         className={cn(
-          "w-24 h-10 rounded-lg bg-[#F5F3EE] px-3 text-sm border-0 outline-none focus:ring-2 focus:ring-pink-300 appearance-none cursor-pointer",
+          "w-24 h-10 rounded-lg bg-paper-alt px-3 text-sm border-0 outline-none focus:ring-2 focus:ring-pink-300 appearance-none cursor-pointer",
           !yearValue && "text-gray-400"
         )}
       >
