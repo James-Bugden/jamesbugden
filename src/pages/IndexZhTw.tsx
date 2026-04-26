@@ -163,9 +163,9 @@ const IndexZhTw = () => {
 
             <h1
               className="font-heading leading-[1.05] tracking-[-0.04em] mb-6 text-center mx-auto max-w-3xl mt-6"
-              style={{ fontSize: 'clamp(2.25rem, 5vw, 3.75rem)', fontWeight: 600, color: 'hsl(var(--foreground))' }}
+              style={{ fontSize: 'clamp(2.25rem, 5vw, 3.75rem)', fontWeight: 600, color: 'hsl(var(--foreground))', textWrap: 'balance' }}
             >
-              在<span style={{ color: 'hsl(var(--executive-green))' }}>夢想公司</span>拿到 <span className="text-mark-gold">300 萬以上</span>的 Offer
+              在<span style={{ color: 'hsl(var(--executive-green))' }}>夢想公司</span>拿到 <span className="text-mark-gold whitespace-nowrap">300 萬以上</span>的 Offer
             </h1>
 
             <p className="leading-relaxed mb-9 text-[1.125rem] text-center mx-auto max-w-2xl" style={{ color: 'hsl(0 0% 28%)' }}>

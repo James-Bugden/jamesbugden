@@ -177,9 +177,11 @@ const Index = () => {
 
             <h1
               className="font-heading leading-[1.02] tracking-[-0.04em] mb-6 text-center mx-auto max-w-3xl mt-6"
-              style={{ fontSize: 'clamp(2.5rem, 5.5vw, 4.25rem)', fontWeight: 600, color: 'hsl(var(--foreground))' }}
+              style={{ fontSize: 'clamp(2.5rem, 5.5vw, 4.25rem)', fontWeight: 600, color: 'hsl(var(--foreground))', textWrap: 'balance' }}
             >
-              Get a <span style={{ color: 'hsl(var(--executive-green))' }}>$200K+ offer</span> at <span className="text-mark-gold">your dream company</span>.
+              Get a <span style={{ color: 'hsl(var(--executive-green))' }}>$200K+ offer</span>
+              <br className="hidden md:inline" />
+              {' '}at <span className="text-mark-gold whitespace-nowrap">your dream company</span>.
             </h1>
 
             <p className="leading-relaxed mb-9 text-[1.125rem] text-center mx-auto max-w-2xl" style={{ color: 'hsl(0 0% 28%)' }}>
