@@ -12,6 +12,7 @@ import InlineRating from "@/components/feedback/InlineRating";
 import { useIsMobile } from "@/hooks/use-mobile";
 import { trackShare } from "@/lib/trackShare";
 import { usePrintUsage } from "@/hooks/usePrintUsage";
+import { InterviewGuideCTA } from "./InterviewGuideCTA";
 
 type Language = "en" | "zh-TW";
 const t = (lang: Language, en: string, zh: string) => lang === "en" ? en : zh;
@@ -778,6 +779,13 @@ export default function ResumeResults({
 
             {/* Build My Resume CTA */}
             {resumeText && <BuildResumeCTA lang={lang} resumeText={resumeText} analysis={analysis} />}
+
+            {/* Cross-tool CTA: interview prep guide (HIR-41) */}
+            <InterviewGuideCTA
+              lang={lang}
+              score={analysis.overall_score}
+              seniorityLevel={analysis.segmentation?.seniority_level ?? null}
+            />
 
             {/* Save report nudge for non-logged-in users */}
             {!isLoggedIn && (
