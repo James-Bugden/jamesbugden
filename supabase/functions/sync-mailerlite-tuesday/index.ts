@@ -68,13 +68,10 @@ serve(async (req) => {
     }),
   });
 
-  const data = await res.json().catch(() => ({}));
   if (!res.ok) {
-    console.error(
-      "sync-mailerlite-tuesday MailerLite API error:",
-      res.status,
-      JSON.stringify(data),
-    );
+    // Don't log the response body — MailerLite sometimes echoes the
+    // submitted email back, which we don't want sitting in log sinks.
+    console.error("sync-mailerlite-tuesday MailerLite API error:", res.status);
     return jsonResponse(502, { error: "upstream_error", status: res.status });
   }
 

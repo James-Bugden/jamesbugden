@@ -8,7 +8,6 @@ export default function TuesdayEmail() {
       <SEO
         title="Tuesday Job Market Intel — James Bugden"
         description="Weekly Taiwan job market briefing. One short email every Tuesday — signal, not noise."
-        noIndex={false}
       />
 
       <SiteHeader variant="light" lang="en" />

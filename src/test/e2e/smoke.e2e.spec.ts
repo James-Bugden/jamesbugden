@@ -93,7 +93,7 @@ test.describe("/tuesday-email opt-in page", () => {
     ).toBeVisible();
   });
 
-  test("Rejects malformed email client-side without calling the API", async ({
+  test("Rejects malformed email client-side and surfaces an error", async ({
     page,
   }) => {
     await page.goto("/tuesday-email");
@@ -103,13 +103,18 @@ test.describe("/tuesday-email opt-in page", () => {
       route.fulfill({ status: 200, body: "{}" });
     });
     const emailInput = page.getByLabel(/email/i).first();
-    await emailInput.fill("not-an-email");
+    // "a@b" passes the browser's native type=email check but fails our
+    // stricter regex (needs a dot in the domain), so this exercises the
+    // app's own validation rather than the browser's.
+    await emailInput.fill("a@b");
     await page
       .getByRole("button", { name: /subscribe|get|sign me up|join/i })
       .first()
       .click();
-    // Wait a beat for any async submission to fire.
-    await page.waitForTimeout(500);
+    // The form must (a) show a visible error and (b) NOT have called the API.
+    await expect(page.getByRole("alert")).toContainText(/doesn't look right/i, {
+      timeout: 5_000,
+    });
     expect(apiCalled).toBe(false);
   });
 });

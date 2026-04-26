@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { Mail, CheckCircle2 } from "lucide-react";
+import { FunctionsHttpError } from "@supabase/supabase-js";
 import { supabase } from "@/integrations/supabase/client";
 
 const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -42,14 +43,27 @@ export default function TuesdayEmailForm() {
     setStatus("loading");
     setErrorKey(null);
 
-    const { data, error } = await supabase.functions.invoke(
+    const { error } = await supabase.functions.invoke(
       "sync-mailerlite-tuesday",
       { body: { email: trimmed } },
     );
 
     if (error) {
-      const apiError =
-        (data as { error?: string } | null)?.error ?? "network_error";
+      // supabase-js puts the response on error.context for HTTP errors;
+      // data is always null in the failure case. Read our edge-function's
+      // { error: "..." } payload off the response body so the user sees
+      // the right message instead of the generic network-error copy.
+      let apiError = "network_error";
+      if (error instanceof FunctionsHttpError) {
+        try {
+          const body = await error.context.clone().json();
+          if (body && typeof body.error === "string") {
+            apiError = body.error;
+          }
+        } catch {
+          // fall through to network_error
+        }
+      }
       setErrorKey(apiError);
       setStatus("error");
       return;
