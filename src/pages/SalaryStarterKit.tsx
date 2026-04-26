@@ -22,7 +22,7 @@ const SalaryStarterKit = () => {
       <nav className="fixed top-0 left-0 right-0 z-50 bg-nav-green">
         <div className="container mx-auto px-5 md:px-6 py-4 flex items-center justify-between">
           <Link to="/" className="font-heading text-lg md:text-xl font-medium text-cream tracking-tight">
-            JAMES BUGDEN
+            hiresign
           </Link>
           <div className="flex items-center gap-3 md:gap-4">
             <AuthHeaderButton variant="nav" />
@@ -46,13 +46,13 @@ const SalaryStarterKit = () => {
           <h1 className="font-heading text-3xl md:text-5xl lg:text-6xl text-cream leading-tight mb-4">
             Negotiate 20-30% More at Your Next Offer
           </h1>
-          <p className="text-lg md:text-xl text-cream/80 mb-2">
+          <p className="text-lg md:text-xl text-cream/90 mb-2">
             Word-for-word scripts for every salary conversation
           </p>
-          <p className="text-base text-cream/60 mb-2">
+          <p className="text-base text-gold-soft/80 mb-2">
             Copy them. Fill in the blanks. Send.
           </p>
-          <div className="flex items-center justify-center gap-1.5 text-cream/60">
+          <div className="flex items-center justify-center gap-1.5 text-gold-soft/80">
             <Clock className="w-4 h-4" />
             <span className="text-sm">10 min read</span>
           </div>

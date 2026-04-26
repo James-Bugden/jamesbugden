@@ -51,11 +51,11 @@ export default function OfferCompass() {
       <div className="min-h-screen bg-background">
 
         {/* ── Header Bar ── */}
-        <header className="print:hidden" style={{ backgroundColor: "#1B3A2F" }}>
+        <header className="print:hidden bg-executive-green">
           <div className="max-w-7xl mx-auto px-4 md:px-6 h-14 flex items-center justify-between">
             <div className="flex items-center gap-4">
               <Link to="/" className="font-heading text-sm font-bold tracking-wide text-white/70 hover:text-white transition-colors">
-                JAMES BUGDEN
+                hiresign
               </Link>
               <span className="text-white/30">|</span>
               <h1 className="font-heading text-lg font-bold text-white">Offer Calculator</h1>

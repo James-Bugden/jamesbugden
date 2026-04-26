@@ -58,11 +58,11 @@ export default function WhatsNewModal({ lang, profile, updateProfile }: Props) {
     <Dialog open onOpenChange={(v) => { if (!v) dismiss(); }}>
       <DialogContent className="max-w-md p-0 overflow-hidden border-0 gap-0 max-h-[90dvh] flex flex-col">
         {/* Header */}
-        <div className="px-4 pt-6 pb-4 sm:px-6 sm:pt-8 sm:pb-5 text-center shrink-0" style={{ backgroundColor: "#234E3E" }}>
+        <div className="px-4 pt-6 pb-4 sm:px-6 sm:pt-8 sm:pb-5 text-center shrink-0" style={{ backgroundColor: "hsl(var(--executive-green))" }}>
           <div className="w-12 h-12 rounded-full mx-auto mb-4 flex items-center justify-center" style={{ backgroundColor: "rgba(212, 168, 67, 0.2)" }}>
-            <Sparkles className="w-6 h-6" style={{ color: "#D4A843" }} />
+            <Sparkles className="w-6 h-6" style={{ color: "hsl(var(--gold))" }} />
           </div>
-          <h2 className="text-xl font-heading font-bold" style={{ color: "#FBF7F0" }}>{t.heading}</h2>
+          <h2 className="text-xl font-heading font-bold" style={{ color: "hsl(var(--paper))" }}>{t.heading}</h2>
           <p className="text-sm mt-1" style={{ color: "rgba(251, 247, 240, 0.7)" }}>{t.sub}</p>
         </div>
 
@@ -73,7 +73,7 @@ export default function WhatsNewModal({ lang, profile, updateProfile }: Props) {
             return (
               <div key={i} className="flex gap-3">
                 <div className="w-8 h-8 rounded-full shrink-0 flex items-center justify-center" style={{ backgroundColor: "rgba(212, 168, 67, 0.12)" }}>
-                  <Icon className="w-4 h-4" style={{ color: "#D4A843" }} />
+                  <Icon className="w-4 h-4" style={{ color: "hsl(var(--gold))" }} />
                 </div>
                 <div>
                   <p className="text-sm font-bold text-foreground">{item.title}</p>
@@ -89,7 +89,7 @@ export default function WhatsNewModal({ lang, profile, updateProfile }: Props) {
           <button
             onClick={dismiss}
             className="w-full py-3 rounded-xl text-sm font-bold transition-opacity hover:opacity-90"
-            style={{ backgroundColor: "#234E3E", color: "#FBF7F0" }}
+            style={{ backgroundColor: "hsl(var(--executive-green))", color: "hsl(var(--paper))" }}
           >
             {t.cta}
           </button>

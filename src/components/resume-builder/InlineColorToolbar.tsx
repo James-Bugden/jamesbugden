@@ -3,7 +3,7 @@ import { Check, X } from "lucide-react";
 
 const PRESET_COLORS = [
   "#111827", "#374151", "#6B7280", "#9CA3AF", "#0891b2",
-  "#2563eb", "#7c3aed", "#dc2626", "#16a34a", "#D4930D",
+  "#2563eb", "#7c3aed", "#dc2626", "#16a34a", "#B08A3E",
 ];
 
 const ROLE_TO_FIELD: Record<string, string> = {

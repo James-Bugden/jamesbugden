@@ -1,9 +1,10 @@
 import { memo, useMemo } from "react";
 import { Link } from "react-router-dom";
-import { ArrowRight, BarChart3, BookOpen, Sparkles, PartyPopper } from "lucide-react";
+import { ArrowRight, PartyPopper } from "lucide-react";
 import { useReadingProgress } from "@/hooks/useReadingProgress";
 import type { CareerPhase } from "@/hooks/useProfile";
 import type { JourneyItem } from "@/components/dashboard/JourneySection";
+import { BarChartIcon, GuideBookIcon, OfferTrophyIcon } from "@/assets/illustrations/HiresignIcons";
 
 interface Props {
   lang: "en" | "zh";
@@ -76,14 +77,14 @@ function PickUpWhereYouLeftOffInner({ lang, latestAnalysis, lastViewedGuide, las
   if (scoreCard) {
     cards.push(
       <div key="score" className="rounded-2xl p-5 flex items-center gap-4 bg-card shadow-[0_2px_12px_rgba(0,0,0,0.06)] border border-border">
-        <div className="w-14 h-14 rounded-full flex items-center justify-center shrink-0" style={{ backgroundColor: "rgba(212,168,67,0.12)" }}>
-          <BarChart3 className="w-6 h-6" style={{ color: "#D4A843" }} />
+        <div className="w-14 h-14 rounded-xl flex items-center justify-center shrink-0 bg-gold-soft border border-gold/25">
+          <BarChartIcon size={32} />
         </div>
         <div className="flex-1 min-w-0">
           <p className="text-2xl font-bold text-foreground">{scoreCard.score}<span className="text-sm font-normal text-muted-foreground">/100</span></p>
           <p className="text-xs text-muted-foreground">{lang === "zh" ? "履歷分數" : "Resume Score"} · {scoreCard.date}</p>
           <div className="flex gap-3 mt-2">
-            <Link to={lang === "zh" ? "/zh-tw/resume-analyzer?report=latest" : "/resume-analyzer?report=latest"} className="text-xs font-semibold hover:underline" style={{ color: "#D4A843" }}>
+            <Link to={lang === "zh" ? "/zh-tw/resume-analyzer?report=latest" : "/resume-analyzer?report=latest"} className="text-xs font-semibold hover:underline" style={{ color: "hsl(var(--gold))" }}>
               {lang === "zh" ? "查看報告" : "View Report"}
             </Link>
             <Link to={lang === "zh" ? "/zh-tw/resume-analyzer?view=history" : "/resume-analyzer?view=history"} className="text-xs font-semibold text-muted-foreground hover:underline">
@@ -102,14 +103,14 @@ function PickUpWhereYouLeftOffInner({ lang, latestAnalysis, lastViewedGuide, las
   if (guideCard) {
     cards.push(
       <Link key="guide" to={guideCard.path} className="rounded-2xl p-5 flex items-center gap-4 bg-card shadow-[0_2px_12px_rgba(0,0,0,0.06)] border border-border hover:-translate-y-0.5 transition-all duration-200">
-        <div className="w-14 h-14 rounded-full flex items-center justify-center shrink-0" style={{ backgroundColor: "rgba(35,78,62,0.08)" }}>
-          <BookOpen className="w-6 h-6" style={{ color: "#234E3E" }} />
+        <div className="w-14 h-14 rounded-xl flex items-center justify-center shrink-0 bg-green-soft border border-executive-green/15">
+          <GuideBookIcon size={32} />
         </div>
         <div className="flex-1 min-w-0">
           <p className="text-xs font-semibold uppercase tracking-wider text-muted-foreground mb-1">{lang === "zh" ? "繼續閱讀" : "Continue Reading"}</p>
           <p className="text-sm font-bold text-foreground line-clamp-2">{guideCard.title}</p>
         </div>
-        <ArrowRight className="w-4 h-4 shrink-0" style={{ color: "#D4A843" }} />
+        <ArrowRight className="w-4 h-4 shrink-0" style={{ color: "hsl(var(--gold))" }} />
       </Link>
     );
   }
@@ -122,21 +123,21 @@ function PickUpWhereYouLeftOffInner({ lang, latestAnalysis, lastViewedGuide, las
           key="next"
           to={nextStep.path}
           className="rounded-2xl p-5 flex items-center gap-4 shadow-[0_2px_12px_rgba(0,0,0,0.06)] border border-border hover:-translate-y-0.5 transition-all duration-200"
-          style={{ backgroundColor: "#FDF6E7", borderLeft: "3px solid #D4A843" }}
+          style={{ backgroundColor: "hsl(var(--gold-soft))", borderLeft: "3px solid hsl(var(--gold))" }}
         >
-          <div className="w-14 h-14 rounded-full flex items-center justify-center shrink-0" style={{ backgroundColor: "rgba(212,168,67,0.12)" }}>
-            <Sparkles className="w-6 h-6" style={{ color: "#D4A843" }} />
+          <div className="w-14 h-14 rounded-xl flex items-center justify-center shrink-0 bg-card border border-gold/30">
+            <OfferTrophyIcon size={32} />
           </div>
           <div className="flex-1 min-w-0">
             <p className="text-xs font-semibold uppercase tracking-wider text-muted-foreground mb-1">{lang === "zh" ? "建議下一步" : "Suggested Next"}</p>
-            <p className="text-sm font-bold line-clamp-2" style={{ color: "#D4A843" }}>{nextStep.text}</p>
+            <p className="text-sm font-bold line-clamp-2" style={{ color: "hsl(var(--gold))" }}>{nextStep.text}</p>
           </div>
-          <ArrowRight className="w-5 h-5 shrink-0" style={{ color: "#D4A843" }} />
+          <ArrowRight className="w-5 h-5 shrink-0" style={{ color: "hsl(var(--gold))" }} />
         </Link>
       ) : (
         <div key="next" className="rounded-2xl p-5 flex items-center gap-4 bg-card shadow-[0_2px_12px_rgba(0,0,0,0.06)] border border-border">
-          <div className="w-14 h-14 rounded-full flex items-center justify-center shrink-0" style={{ backgroundColor: "rgba(212,168,67,0.12)" }}>
-            <PartyPopper className="w-6 h-6" style={{ color: "#D4A843" }} />
+          <div className="w-14 h-14 rounded-xl flex items-center justify-center shrink-0 bg-gold-soft border border-gold/30">
+            <PartyPopper className="w-7 h-7" style={{ color: "hsl(var(--gold))" }} strokeWidth={1.75} />
           </div>
           <div className="flex-1 min-w-0">
             <p className="text-sm font-bold text-foreground">{nextStep.text}</p>

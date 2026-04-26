@@ -6,10 +6,10 @@ export function FreshnessBadge({ year, lang = "en" }: { year: number; lang?: Sal
   const t = useSalaryT(lang);
 
   const config = year >= 2025
-    ? { className: "bg-emerald-600 text-white border-0 text-[10px] px-1.5 py-0", label: t.current, tip: t.freshnessCurrent }
+    ? { className: "bg-executive-green text-cream border-0 text-[10px] px-1.5 py-0", label: t.current, tip: t.freshnessCurrent }
     : year === 2024
-    ? { className: "bg-blue-600 text-white border-0 text-[10px] px-1.5 py-0", label: t.recent, tip: t.freshnessRecent }
-    : { className: "bg-amber-500 text-white border-0 text-[10px] px-1.5 py-0", label: t.adjusted, tip: t.freshnessAdjusted };
+    ? { className: "bg-green-soft text-executive-green border border-executive-green/20 text-[10px] px-1.5 py-0", label: t.recent, tip: t.freshnessRecent }
+    : { className: "bg-gold-soft text-gold-dark border border-gold/30 text-[10px] px-1.5 py-0", label: t.adjusted, tip: t.freshnessAdjusted };
 
   return (
     <TooltipProvider delayDuration={200}>

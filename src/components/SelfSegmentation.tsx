@@ -1,21 +1,21 @@
-import { FileUp, Search, Trophy } from "lucide-react";
+import { UploadDocIcon, ScoreScanIcon, OfferTrophyIcon } from "@/assets/illustrations/HiresignIcons";
 
 const steps = [
   {
     num: 1,
-    icon: FileUp,
+    Icon: UploadDocIcon,
     headline: "Upload Your Resume",
     subtext: "Put your resume in the free AI Analyzer. See what recruiters see in 60 seconds.",
   },
   {
     num: 2,
-    icon: Search,
+    Icon: ScoreScanIcon,
     headline: "Get Your Score and Tips",
     subtext: "Find out what works, what doesn't, and what to fix to get more interviews.",
   },
   {
     num: 3,
-    icon: Trophy,
+    Icon: OfferTrophyIcon,
     headline: "Land Your Dream Offer",
     subtext: "Apply with a resume that gets past the filters and onto a hiring manager's desk.",
   },
@@ -41,12 +41,12 @@ export default function SelfSegmentation() {
           />
 
           {steps.map((step) => {
-            const Icon = step.icon;
+            const { Icon } = step;
             return (
               <div key={step.num} className="flex flex-col items-center text-center relative z-10">
                 {/* Numbered circle */}
                 <div
-                  className="w-[72px] h-[72px] rounded-full flex items-center justify-center text-2xl font-bold mb-5"
+                  className="w-[72px] h-[72px] rounded-full flex items-center justify-center text-2xl font-bold mb-5 tnum-geist"
                   style={{ backgroundColor: '#2b4734', color: '#FFFFFF' }}
                 >
                   {step.num}
@@ -61,14 +61,14 @@ export default function SelfSegmentation() {
                   </div>
                 )}
 
-                {/* Icon */}
-                <Icon className="w-8 h-8 mb-4" style={{ color: '#2b4734' }} strokeWidth={1.5} />
+                {/* Custom on-brand illustrated icon */}
+                <Icon size={64} className="mb-4" />
 
                 {/* Text */}
-                <p className="font-bold text-lg mb-2" style={{ color: '#1A1A1A' }}>
+                <p className="font-heading text-lg mb-2 tracking-[-0.01em]" style={{ color: '#1A1A1A', fontWeight: 600 }}>
                   {step.headline}
                 </p>
-                <p className="text-base max-w-[260px]" style={{ color: '#6B6B6B' }}>
+                <p className="text-base max-w-[260px] leading-relaxed" style={{ color: '#6B6B6B' }}>
                   {step.subtext}
                 </p>
               </div>

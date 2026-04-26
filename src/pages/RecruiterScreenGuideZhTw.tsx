@@ -142,7 +142,7 @@ const RecruiterScreenGuideZhTw = () => {
       <nav className="fixed top-0 left-0 right-0 z-50 bg-nav-green">
         <div className="container mx-auto px-5 md:px-6 py-4 flex items-center justify-between">
           <Link to="/zh-tw" className="font-heading text-lg md:text-xl font-medium text-cream tracking-tight">
-            JAMES BUGDEN
+            hiresign
           </Link>
           <div className="flex items-center gap-3">
             <AuthHeaderButton variant="nav" />
@@ -162,15 +162,15 @@ const RecruiterScreenGuideZhTw = () => {
           <h1 className="font-heading text-3xl md:text-5xl lg:text-6xl text-cream leading-tight mb-4" style={{ lineHeight: 1.2 }}>
             如何通過HR面試關
           </h1>
-          <p className="text-lg md:text-xl text-cream/80 mb-3">
+          <p className="text-lg md:text-xl text-cream/90 mb-3">
             資深招募官的完整實戰手冊
           </p>
           <div className="flex flex-col sm:flex-row items-center justify-center gap-2 sm:gap-4 mb-6">
-            <p className="text-base text-cream/60">
+            <p className="text-base text-gold-soft/80">
               James Bugden | Uber 資深招募官
             </p>
             <span className="hidden sm:inline text-cream/30">·</span>
-            <div className="flex items-center gap-1.5 text-cream/60">
+            <div className="flex items-center gap-1.5 text-gold-soft/80">
               <Clock className="w-4 h-4" />
               <span className="text-sm">25 分鐘閱讀</span>
             </div>
@@ -249,7 +249,7 @@ const RecruiterScreenGuideZhTw = () => {
             <p className="text-gold text-xs uppercase tracking-wider mb-4 text-center font-sans font-semibold">招募人員評分表</p>
             <div className="grid md:grid-cols-2 gap-4 mb-6">
               <div className="bg-cream/5 border border-cream/10 rounded-lg p-4">
-                <p className="text-cream/60 text-xs uppercase mb-2">優點</p>
+                <p className="text-gold-soft/80 text-xs uppercase mb-2">優點</p>
                 <div className="space-y-2">
                   <div className="border-b border-cream/10 pb-1 text-cream/30">___________________</div>
                   <div className="border-b border-cream/10 pb-1 text-cream/30">___________________</div>
@@ -257,7 +257,7 @@ const RecruiterScreenGuideZhTw = () => {
                 </div>
               </div>
               <div className="bg-cream/5 border border-cream/10 rounded-lg p-4">
-                <p className="text-cream/60 text-xs uppercase mb-2">缺點</p>
+                <p className="text-gold-soft/80 text-xs uppercase mb-2">缺點</p>
                 <div className="space-y-2">
                   <div className="border-b border-cream/10 pb-1 text-cream/30">___________________</div>
                   <div className="border-b border-cream/10 pb-1 text-cream/30">___________________</div>
@@ -265,10 +265,10 @@ const RecruiterScreenGuideZhTw = () => {
                 </div>
               </div>
             </div>
-            <p className="text-cream/60 text-xs uppercase mb-3 text-center">決定（選一個）：</p>
+            <p className="text-gold-soft/80 text-xs uppercase mb-3 text-center">決定（選一個）：</p>
             <div className="flex flex-wrap justify-center gap-2">
               {["絕對不行", "不行", "可以", "絕對可以"].map((d) => (
-                <span key={d} className="px-3 py-1.5 border border-cream/20 rounded text-cream/70 text-xs">{d}</span>
+                <span key={d} className="px-3 py-1.5 border border-cream/20 rounded text-cream/85 text-xs">{d}</span>
               ))}
             </div>
             <p className="text-cream/40 text-xs text-center mt-4 font-sans italic">
@@ -463,7 +463,7 @@ const RecruiterScreenGuideZhTw = () => {
                 <div key={i} className="bg-cream/5 border border-cream/10 rounded-xl p-4 text-center">
                   <p className="text-gold text-xs font-bold uppercase mb-1">{item.label}</p>
                   <p className="text-cream font-heading text-xl font-bold mb-2">{item.pct}</p>
-                  <p className="text-cream/70 text-xs">{item.desc}</p>
+                  <p className="text-cream/85 text-xs">{item.desc}</p>
                 </div>
               ))}
             </div>
@@ -798,35 +798,35 @@ const RecruiterScreenGuideZhTw = () => {
 
           <div className="bg-executive-green rounded-xl p-6 md:p-8 mb-8">
             <p className="text-gold text-xs uppercase tracking-wider mb-6 text-center font-semibold">薪資迴避階梯</p>
-            <p className="text-cream/60 text-xs text-center mb-6">把它想成一個階梯。從第一層開始。只有在招募人員施壓時才往上爬。</p>
+            <p className="text-gold-soft/80 text-xs text-center mb-6">把它想成一個階梯。從第一層開始。只有在招募人員施壓時才往上爬。</p>
             <div className="space-y-4">
               <div className="bg-cream/5 border border-cream/10 rounded-xl p-4">
                 <div className="flex items-center gap-2 mb-2">
                   <span className="px-2 py-0.5 bg-gold/20 text-gold text-xs font-bold rounded">第一層</span>
                   <span className="text-cream font-semibold text-sm">初步迴避</span>
                 </div>
-                <p className="text-cream/80 text-sm italic mb-2">「我正在找一個能在職責和薪資上同時成長的職位。在確定數字之前，我想先了解這個職缺的完整範圍。」</p>
+                <p className="text-cream/90 text-sm italic mb-2">「我正在找一個能在職責和薪資上同時成長的職位。在確定數字之前，我想先了解這個職缺的完整範圍。」</p>
                 <p className="text-cream/50 text-xs mb-3">從這裡開始。永遠。</p>
-                <p className="text-cream/60 text-xs">如果被問到目前薪資：「我傾向把重點放在我能為這個職缺帶來什麼價值，而不是我現在的薪資。」在許多國家和地區，雇主詢問你目前的薪資已經是違法的。你不需要分享。即使在合法的地方，主動透露只會限制你。</p>
+                <p className="text-gold-soft/80 text-xs">如果被問到目前薪資：「我傾向把重點放在我能為這個職缺帶來什麼價值，而不是我現在的薪資。」在許多國家和地區，雇主詢問你目前的薪資已經是違法的。你不需要分享。即使在合法的地方，主動透露只會限制你。</p>
               </div>
               <div className="bg-cream/5 border border-cream/10 rounded-xl p-4">
                 <div className="flex items-center gap-2 mb-2">
                   <span className="px-2 py-0.5 bg-gold/20 text-gold text-xs font-bold rounded">第二層</span>
                   <span className="text-cream font-semibold text-sm">反問</span>
                 </div>
-                <p className="text-cream/80 text-sm italic mb-2">「我很樂意討論貴公司為這個職缺編列的預算。如果我們在同一個範圍內，我有信心我們能找到雙方都滿意的方案。」</p>
+                <p className="text-cream/90 text-sm italic mb-2">「我很樂意討論貴公司為這個職缺編列的預算。如果我們在同一個範圍內，我有信心我們能找到雙方都滿意的方案。」</p>
                 <p className="text-cream/50 text-xs mb-3">如果被施壓。80% 的時候他們會在這裡分享範圍。</p>
-                <p className="text-cream/60 text-xs mb-2">「在同一個範圍內」這個措辭是刻意的。它不構成承諾。你並沒有同意接受那個範圍內的數字。你在表示開放態度的同時保留了你的選擇。</p>
-                <p className="text-cream/60 text-xs">如果招募人員分享了一個範圍，不要馬上反應。說「這很有幫助，謝謝」然後繼續。你會在 offer 階段再談具體數字。</p>
+                <p className="text-gold-soft/80 text-xs mb-2">「在同一個範圍內」這個措辭是刻意的。它不構成承諾。你並沒有同意接受那個範圍內的數字。你在表示開放態度的同時保留了你的選擇。</p>
+                <p className="text-gold-soft/80 text-xs">如果招募人員分享了一個範圍，不要馬上反應。說「這很有幫助，謝謝」然後繼續。你會在 offer 階段再談具體數字。</p>
               </div>
               <div className="bg-cream/5 border border-cream/10 rounded-xl p-4">
                 <div className="flex items-center gap-2 mb-2">
                   <span className="px-2 py-0.5 bg-gold/20 text-gold text-xs font-bold rounded">第三層</span>
                   <span className="text-cream font-semibold text-sm">錨定</span>
                 </div>
-                <p className="text-cream/80 text-sm italic mb-2">「根據我的經驗和〔地點〕這類職位目前的市場行情，我的目標是 14 萬到 15.5 萬美元。不過，我願意根據包含股權和獎金在內的完整薪酬方案來討論。」</p>
+                <p className="text-cream/90 text-sm italic mb-2">「根據我的經驗和〔地點〕這類職位目前的市場行情，我的目標是 14 萬到 15.5 萬美元。不過，我願意根據包含股權和獎金在內的完整薪酬方案來討論。」</p>
                 <p className="text-cream/50 text-xs mb-3">只有在被逼到角落時。報範圍的頂端。用整體薪酬。用數據佐證。</p>
-                <p className="text-cream/60 text-xs">注意這個結構。錨定在高處。用整體薪酬（不是底薪）來表述。為完整方案留下空間。這給招募人員足夠的資訊繼續推進，同時保護你的立場。</p>
+                <p className="text-gold-soft/80 text-xs">注意這個結構。錨定在高處。用整體薪酬（不是底薪）來表述。為完整方案留下空間。這給招募人員足夠的資訊繼續推進，同時保護你的立場。</p>
               </div>
             </div>
             <p className="text-cream/50 text-xs text-center mt-6 italic">在每次電話篩選前，在 Levels.fyi、Glassdoor、Payscale 和 LinkedIn Salary 上研究薪資範圍。了解你的職位、層級和地點的行情。</p>
@@ -1058,7 +1058,7 @@ const RecruiterScreenGuideZhTw = () => {
             <p className="text-gold text-xs uppercase tracking-wider mb-4 text-center font-semibold">掛斷電話後發生的事</p>
             <div className="grid md:grid-cols-2 gap-6">
               <div>
-                <p className="text-cream/60 text-xs uppercase mb-3">你</p>
+                <p className="text-gold-soft/80 text-xs uppercase mb-3">你</p>
                 <div className="space-y-2">
                   <div className="bg-cream/5 border border-cream/10 rounded-lg p-3">
                     <p className="text-cream text-sm">寄送後續追蹤信件（2-4 小時內）</p>
@@ -1072,7 +1072,7 @@ const RecruiterScreenGuideZhTw = () => {
                 </div>
               </div>
               <div>
-                <p className="text-cream/60 text-xs uppercase mb-3">招募人員</p>
+                <p className="text-gold-soft/80 text-xs uppercase mb-3">招募人員</p>
                 <div className="space-y-2">
                   <div className="bg-cream/5 border border-cream/10 rounded-lg p-3">
                     <p className="text-cream text-sm">填寫評分表（優點、缺點、決定）</p>
@@ -1339,7 +1339,7 @@ const RecruiterScreenGuideZhTw = () => {
               <h2 className="font-heading text-2xl md:text-3xl text-cream mb-2">
                 額外資源
               </h2>
-              <p className="text-cream/60">持續提升你的求職競爭力</p>
+              <p className="text-gold-soft/80">持續提升你的求職競爭力</p>
             </div>
           </div>
           <div className="grid sm:grid-cols-3 gap-4">

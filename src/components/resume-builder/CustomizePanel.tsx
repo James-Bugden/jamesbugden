@@ -31,7 +31,7 @@ const B = {
   greenHover: "#1f3a28",
   greenLight: "#e8f0eb",
   greenLighter: "#f2f7f4",
-  gold: "#D4930D",
+  gold: "#B08A3E",
   cream: "#FDFBF7",
   text: "#1A1A1A",
   textSec: "#6B6B6B",
@@ -165,7 +165,7 @@ function SegmentedControl({ options, value, onChange }: { options: { value: stri
   );
 }
 
-const COLOR_PRESETS = ["#2b4734", "#D4930D", "#1e40af", "#dc2626", "#7c3aed", "#0891b2", "#be185d", "#ea580c"];
+const COLOR_PRESETS = ["#2b4734", "#B08A3E", "#1e40af", "#dc2626", "#7c3aed", "#0891b2", "#be185d", "#ea580c"];
 
 function ColorPickerRow({ label, value, onChange }: { label: string; value: string; onChange: (v: string) => void }) {
   return (

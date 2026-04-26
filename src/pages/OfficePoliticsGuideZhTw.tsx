@@ -181,7 +181,7 @@ const OfficePoliticsGuideZhTw = () => {
       {/* Navigation */}
       <nav className="fixed top-0 left-0 right-0 z-50 bg-nav-green">
         <div className="container mx-auto px-5 md:px-6 py-4 flex items-center justify-between">
-          <Link to="/zh-tw" className="font-heading text-lg md:text-xl font-medium text-cream tracking-tight">JAMES BUGDEN</Link>
+          <Link to="/zh-tw" className="font-heading text-lg md:text-xl font-medium text-cream tracking-tight">hiresign</Link>
           <div className="flex items-center gap-3">
             <AuthHeaderButton variant="nav" />
             <LanguageToggle variant="nav" />
@@ -195,11 +195,11 @@ const OfficePoliticsGuideZhTw = () => {
           <h1 className="font-heading text-3xl md:text-5xl lg:text-6xl text-cream leading-tight mb-4" style={{ lineHeight: 1.2 }}>
             職場政治：<br className="hidden sm:block" />如何在工作中得到你想要的
           </h1>
-          <p className="text-lg md:text-xl text-cream/80 mb-3">不搞小動作、不拍馬屁、不被開除</p>
+          <p className="text-lg md:text-xl text-cream/90 mb-3">不搞小動作、不拍馬屁、不被開除</p>
           <div className="flex flex-col sm:flex-row items-center justify-center gap-2 sm:gap-4 mb-6">
-            <p className="text-base text-cream/60">James Bugden，職涯教練 · Uber 資深招募人員</p>
+            <p className="text-base text-gold-soft/80">James Bugden，職涯教練 · Uber 資深招募人員</p>
             <span className="hidden sm:inline text-cream/30">·</span>
-            <div className="flex items-center gap-1.5 text-cream/60">
+            <div className="flex items-center gap-1.5 text-gold-soft/80">
               <Clock className="w-4 h-4" />
               <span className="text-sm">閱讀時間 45 分鐘</span>
             </div>
@@ -796,7 +796,7 @@ const OfficePoliticsGuideZhTw = () => {
                 <div key={item.p} className="bg-cream/5 border border-cream/10 rounded-xl p-4">
                   <p className="text-gold text-xs font-bold uppercase mb-1">{item.p}</p>
                   <p className="text-cream font-semibold text-sm mb-1">{item.title}</p>
-                  <p className="text-cream/60 text-xs">{item.desc}</p>
+                  <p className="text-gold-soft/80 text-xs">{item.desc}</p>
                 </div>
               ))}
             </div>
@@ -1152,15 +1152,15 @@ const OfficePoliticsGuideZhTw = () => {
             <span className="text-cream/20 font-heading text-6xl md:text-7xl font-bold leading-none select-none">→</span>
             <div className="pt-3">
               <h2 className="font-heading text-2xl md:text-3xl text-cream mb-2">其他資源</h2>
-              <p className="text-cream/60">持續提升你的職涯</p>
+              <p className="text-gold-soft/80">持續提升你的職涯</p>
             </div>
           </div>
 
           <div className="bg-cream/5 border border-cream/10 rounded-xl p-5 md:p-6 mb-8">
             <h3 className="text-gold text-sm font-bold uppercase mb-3">這本書</h3>
-            <p className="text-cream/80 text-sm italic mb-4">Secrets to Winning at Office Politics: How to Achieve Your Goals and Increase Your Influence at Work，Marie G. McIntyre 博士</p>
+            <p className="text-cream/90 text-sm italic mb-4">Secrets to Winning at Office Politics: How to Achieve Your Goals and Increase Your Influence at Work，Marie G. McIntyre 博士</p>
             <h3 className="text-gold text-sm font-bold uppercase mb-3">延伸閱讀</h3>
-            <ul className="space-y-1 text-cream/70 text-sm">
+            <ul className="space-y-1 text-cream/85 text-sm">
               <li>• <em>Emotional Intelligence</em>，Daniel Goleman</li>
               <li>• <em>The Seven Habits of Highly Effective People</em>，Stephen Covey</li>
               <li>• <em>Leading Quietly</em>，Joseph Badaracco</li>

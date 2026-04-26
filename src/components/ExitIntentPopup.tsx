@@ -86,15 +86,15 @@ export default function ExitIntentPopup({ lang = "en" }: ExitIntentPopupProps) {
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>
-      <DialogContent className="sm:max-w-md p-0 gap-0 border-0 overflow-hidden rounded-2xl" style={{ backgroundColor: '#FDFBF7' }}>
+      <DialogContent className="sm:max-w-md p-0 gap-0 border-0 overflow-hidden rounded-2xl" style={{ backgroundColor: 'hsl(var(--paper))' }}>
         {/* Top accent bar */}
-        <div className="h-1.5 w-full" style={{ background: 'linear-gradient(90deg, #2b4734, #D4930D)' }} />
+        <div className="h-1.5 w-full" style={{ background: 'linear-gradient(90deg, hsl(var(--executive-green)), hsl(var(--gold)))' }} />
 
         <div className="px-6 pt-6 pb-2">
-          <h2 className="font-heading text-2xl font-bold mb-2" style={{ color: '#1A1A1A' }}>
+          <h2 className="font-heading text-2xl font-bold mb-2" style={{ color: 'hsl(var(--foreground))' }}>
             {c.heading}
           </h2>
-          <p className="text-base mb-5" style={{ color: '#6B6B6B' }}>
+          <p className="text-base mb-5" style={{ color: 'hsl(var(--muted-foreground))' }}>
             {c.subheading}
           </p>
         </div>

@@ -20,9 +20,15 @@ const SOURCE_OPTIONS: { value: Contact["source"]; label: string }[] = [
   { value: "fan-mail", label: "Fan Mail" },
   { value: "cold-call", label: "Cold Call" },
 ];
+/* All contact sources use a unified Hiresign chip — differentiation comes from the label, not a rainbow palette. */
 const SOURCE_COLORS: Record<Contact["source"], string> = {
-  "alumni-db": "#3B82F6", "linkedin-1st": "#0A66C2", "linkedin-2nd": "#6366F1",
-  "linkedin-group": "#8B5CF6", "facebook": "#1877F2", "fan-mail": "#F59E0B", "cold-call": "#9CA3AF",
+  "alumni-db": "hsl(var(--executive-green))",
+  "linkedin-1st": "hsl(var(--executive-green))",
+  "linkedin-2nd": "hsl(var(--executive-green))",
+  "linkedin-group": "hsl(var(--executive-green))",
+  "facebook": "hsl(var(--executive-green))",
+  "fan-mail": "hsl(var(--gold))",
+  "cold-call": "hsl(var(--muted-foreground))",
 };
 
 /* ── Business-day helpers ──────────────────────────────── */
@@ -50,11 +56,11 @@ type StatusKey = "not-contacted" | "awaiting" | "booster" | "obligate" | "curmud
 interface StatusInfo { key: StatusKey; label: string; emoji: string; color: string; bg: string; }
 
 const STATUS_MAP: Record<StatusKey, StatusInfo> = {
-  "not-contacted": { key: "not-contacted", label: "Not Contacted", emoji: "⬜", color: "#6B7280", bg: "#F3F4F6" },
-  "awaiting": { key: "awaiting", label: "Awaiting", emoji: "🟡", color: "#B45309", bg: "#FEF3C7" },
-  "booster": { key: "booster", label: "Booster", emoji: "🟢", color: "#166534", bg: "#DCFCE7" },
-  "obligate": { key: "obligate", label: "Obligate", emoji: "🟠", color: "#9A3412", bg: "#FED7AA" },
-  "curmudgeon": { key: "curmudgeon", label: "Curmudgeon", emoji: "🔴", color: "#991B1B", bg: "#FEE2E2" },
+  "not-contacted": { key: "not-contacted", label: "Not Contacted", emoji: "⬜", color: "hsl(var(--muted-foreground))", bg: "hsl(var(--muted))" },
+  "awaiting":      { key: "awaiting",      label: "Awaiting",      emoji: "🟡", color: "hsl(var(--gold-dark))",        bg: "hsl(var(--gold-soft))" },
+  "booster":       { key: "booster",       label: "Booster",       emoji: "🟢", color: "hsl(var(--executive-green))",  bg: "hsl(var(--green-soft))" },
+  "obligate":      { key: "obligate",      label: "Obligate",      emoji: "🟠", color: "hsl(var(--gold-dark))",        bg: "hsl(var(--gold-soft))" },
+  "curmudgeon":    { key: "curmudgeon",    label: "Curmudgeon",    emoji: "🔴", color: "hsl(var(--destructive))",      bg: "hsl(var(--destructive-soft))" },
 };
 
 function classifyContact(c: Contact): StatusInfo {

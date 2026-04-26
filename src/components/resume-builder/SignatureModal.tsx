@@ -74,7 +74,7 @@ export function SignatureModal({ open, onClose, onSave }: SignatureModalProps) {
         </DialogHeader>
 
         <div className="space-y-4">
-          <div className="border-2 border-dashed border-gray-300 rounded-xl overflow-hidden bg-gray-50">
+          <div className="border-2 border-dashed border-border rounded-xl overflow-hidden bg-paper-alt">
             <canvas
               ref={canvasRef}
               width={400}

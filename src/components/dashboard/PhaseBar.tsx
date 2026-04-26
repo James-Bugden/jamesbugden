@@ -18,7 +18,7 @@ interface Props {
 
 function PhaseBarInner({ activePhase, completedCount, totalCount, onPhaseChange, lang = "en" }: Props) {
   return (
-    <div className="border-b" style={{ backgroundColor: "#FBF7F0", borderColor: "#E5E0D8" }}>
+    <div className="border-b" style={{ backgroundColor: "hsl(var(--paper))", borderColor: "hsl(var(--border))" }}>
       <div className="max-w-[1200px] mx-auto px-4 md:px-8 py-3 flex flex-col sm:flex-row items-center justify-between gap-2 sm:gap-4">
         {/* Pills with arrows */}
         <div className="flex items-center justify-between sm:justify-start gap-1 sm:gap-2 w-full sm:w-auto min-w-0">
@@ -27,24 +27,24 @@ function PhaseBarInner({ activePhase, completedCount, totalCount, onPhaseChange,
             return (
               <div key={phase.id} className="flex items-center gap-1 sm:gap-2">
                 {i > 0 && (
-                  <span className="text-xs select-none" style={{ color: "#D4A843" }}>→</span>
+                  <span className="text-xs select-none" style={{ color: "hsl(var(--gold))" }}>→</span>
                 )}
                 <button
                   onClick={() => onPhaseChange(phase.id)}
                   className="relative px-4 py-1.5 rounded-[20px] text-xs sm:text-sm font-semibold transition-all duration-200 whitespace-nowrap"
                   style={{
-                    backgroundColor: isActive ? "#234E3E" : "#E8F0EB",
-                    color: isActive ? "#E8F0EB" : "#234E3E",
+                    backgroundColor: isActive ? "hsl(var(--executive-green))" : "hsl(var(--green-soft))",
+                    color: isActive ? "hsl(var(--green-soft))" : "hsl(var(--executive-green))",
                     padding: "6px 16px",
                   }}
                   onMouseEnter={(e) => {
                     if (!isActive) {
-                      (e.currentTarget as HTMLButtonElement).style.backgroundColor = "#D4E8DB";
+                      (e.currentTarget as HTMLButtonElement).style.backgroundColor = "hsl(var(--green-soft))";
                     }
                   }}
                   onMouseLeave={(e) => {
                     if (!isActive) {
-                      (e.currentTarget as HTMLButtonElement).style.backgroundColor = "#E8F0EB";
+                      (e.currentTarget as HTMLButtonElement).style.backgroundColor = "hsl(var(--green-soft))";
                     }
                   }}
                 >
@@ -53,7 +53,7 @@ function PhaseBarInner({ activePhase, completedCount, totalCount, onPhaseChange,
                     <motion.div
                       layoutId="phase-indicator"
                       className="absolute inset-0 rounded-[20px] -z-10"
-                      style={{ backgroundColor: "#234E3E" }}
+                      style={{ backgroundColor: "hsl(var(--executive-green))" }}
                       transition={{ type: "spring", stiffness: 400, damping: 30 }}
                     />
                   )}
@@ -66,9 +66,9 @@ function PhaseBarInner({ activePhase, completedCount, totalCount, onPhaseChange,
         {/* Progress count — own line on mobile */}
         <span
           className="text-xs font-medium whitespace-nowrap shrink-0 w-full sm:w-auto text-center sm:text-right"
-          style={{ color: "#6B7280" }}
+          style={{ color: "hsl(var(--muted-foreground))" }}
         >
-          <span style={{ color: "#D4A843", fontWeight: 700 }}>{completedCount}</span>
+          <span style={{ color: "hsl(var(--gold))", fontWeight: 700 }}>{completedCount}</span>
           /{totalCount} {lang === "zh" ? "已完成" : "complete"}
         </span>
       </div>

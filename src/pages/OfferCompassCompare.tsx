@@ -155,7 +155,7 @@ export default function OfferCompassCompare() {
                     <td key={scenario.id} className="py-2 px-3 text-right">
                       <span className="text-foreground">{formatCurrency(val, currency, scenario.fx_rate)}</span>
                       {!isBaseline && baseVal > 0 && (
-                        <span className={`ml-2 text-xs font-semibold ${delta >= 0 ? "text-green-600" : "text-red-500"}`}>
+                        <span className={`ml-2 text-xs font-semibold ${delta >= 0 ? "text-executive-green" : "text-destructive"}`}>
                           {formatPct(delta)}
                         </span>
                       )}
@@ -196,7 +196,7 @@ export default function OfferCompassCompare() {
 
 function Header({ currency, setCurrency }: { currency: Currency; setCurrency: (c: Currency) => void }) {
   return (
-    <header style={{ backgroundColor: "#1B3A2F" }}>
+    <header className="bg-executive-green">
       <SEO />
       <div className="max-w-7xl mx-auto px-4 md:px-6 h-14 flex items-center justify-between">
         <div className="flex items-center gap-4">

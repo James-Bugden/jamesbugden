@@ -41,15 +41,23 @@ const GuideShareButtons = ({ isZhTw = false }: GuideShareButtonsProps) => {
   };
 
   return (
-    <section className="py-10 px-5 md:px-6 bg-background border-t border-border">
+    <section className="py-14 md:py-20 px-5 md:px-6 bg-paper-alt border-t border-border">
       <div className="container mx-auto max-w-3xl text-center">
-        <p className="text-muted-foreground text-sm mb-4">
-          {isZhTw ? "覺得這份指南有幫助嗎？分享給朋友" : "Found this guide helpful? Share it with a friend"}
+        <p className="text-sm md:text-base uppercase tracking-[0.22em] text-gold font-bold mb-4">
+          {isZhTw ? "分享" : "Share"}
         </p>
-        <div className="flex items-center justify-center gap-3">
+        <h2 className="font-heading text-3xl md:text-4xl font-bold text-foreground mb-3 tracking-tight">
+          {isZhTw ? "覺得這份指南有幫助嗎？" : "Found this guide helpful?"}
+        </h2>
+        <p className="text-base md:text-lg text-muted-foreground mb-8 max-w-xl mx-auto leading-relaxed">
+          {isZhTw
+            ? "分享給可能正在找工作的朋友——好內容值得被看見。"
+            : "Share it with a friend who's job hunting. Good content deserves to be passed on."}
+        </p>
+        <div className="flex flex-col sm:flex-row items-center justify-center gap-3 sm:gap-4">
           <button
             onClick={handleEmailShare}
-            className="inline-flex items-center gap-2 px-5 py-2.5 rounded-lg border border-border bg-card text-foreground hover:bg-muted transition-colors text-sm font-medium"
+            className="inline-flex items-center justify-center gap-2.5 px-7 py-3.5 rounded-lg border border-border bg-card text-foreground hover:bg-muted transition-colors text-base font-semibold w-full sm:w-auto min-w-[180px]"
             aria-label="Share via Email"
           >
             <Mail className="w-5 h-5" />
@@ -57,7 +65,7 @@ const GuideShareButtons = ({ isZhTw = false }: GuideShareButtonsProps) => {
           </button>
           <button
             onClick={handleMessengerShare}
-            className={`inline-flex items-center gap-2 px-5 py-2.5 rounded-lg border border-border text-white transition-colors text-sm font-medium ${
+            className={`inline-flex items-center justify-center gap-2.5 px-7 py-3.5 rounded-lg text-white transition-colors text-base font-semibold w-full sm:w-auto min-w-[180px] ${
               isZhTw ? "bg-[#06C755] hover:bg-[#05b34d]" : "bg-[#25D366] hover:bg-[#20bd5a]"
             }`}
             aria-label={isZhTw ? "Share via LINE" : "Share via WhatsApp"}

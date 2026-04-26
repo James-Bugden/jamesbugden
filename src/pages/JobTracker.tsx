@@ -84,7 +84,7 @@ export default function JobTracker() {
   };
 
   return (
-    <div className="min-h-screen" style={{ backgroundColor: "#FBF7F0" }}>
+    <div className="min-h-screen" style={{ backgroundColor: "hsl(var(--paper))" }}>
       <SEO />
       <OnboardingModal />
       {/* Header */}
@@ -93,14 +93,14 @@ export default function JobTracker() {
           <div className="flex items-center gap-3">
             <button
               onClick={() => navigate("/resume")}
-              className="p-2 rounded-lg transition-colors hover:bg-[#E5E0D8]"
+              className="p-2 rounded-lg transition-colors hover:bg-[hsl(var(--border))]"
               aria-label="Back to documents"
             >
-              <ArrowLeft className="w-5 h-5" style={{ color: "#1B3A2F" }} />
+              <ArrowLeft className="w-5 h-5" style={{ color: "hsl(var(--executive-green))" }} />
             </button>
             <h1
               className="text-2xl sm:text-3xl font-bold tracking-tight"
-              style={{ fontFamily: "var(--font-heading)", color: "#1B3A2F" }}
+              style={{ fontFamily: "var(--font-heading)", color: "hsl(var(--executive-green))" }}
             >
               Job Tracker
             </h1>
@@ -109,31 +109,31 @@ export default function JobTracker() {
             <button
               onClick={handleAddJob}
               className="flex items-center gap-1.5 px-3 py-2 rounded-lg text-sm font-medium text-white transition-colors hover:opacity-90"
-              style={{ backgroundColor: "#1B3A2F" }}
+              style={{ backgroundColor: "hsl(var(--executive-green))" }}
             >
               <Plus className="w-4 h-4" /> Add Job
             </button>
             <div className="relative">
               <button
                 onClick={() => setMenuOpen(!menuOpen)}
-                className="p-2 rounded-lg transition-colors hover:bg-[#E5E0D8]"
+                className="p-2 rounded-lg transition-colors hover:bg-[hsl(var(--border))]"
               >
-                <MoreVertical className="w-5 h-5" style={{ color: "#1B3A2F" }} />
+                <MoreVertical className="w-5 h-5" style={{ color: "hsl(var(--executive-green))" }} />
               </button>
               {menuOpen && (
                 <>
                   <div className="fixed inset-0 z-40" onClick={() => setMenuOpen(false)} />
-                  <div className="absolute right-0 mt-1 w-48 rounded-lg shadow-lg border z-50 py-1" style={{ backgroundColor: "#FFFFFF", borderColor: "#E5E0D8" }}>
+                  <div className="absolute right-0 mt-1 w-48 rounded-lg shadow-lg border z-50 py-1" style={{ backgroundColor: "#FFFFFF", borderColor: "hsl(var(--border))" }}>
                     <button
                       onClick={handleExportCSV}
-                      className="w-full flex items-center gap-2 px-4 py-2.5 text-sm hover:bg-[#FBF7F0] transition-colors text-left"
+                      className="w-full flex items-center gap-2 px-4 py-2.5 text-sm hover:bg-[hsl(var(--paper))] transition-colors text-left"
                       style={{ color: "#2C2C2C" }}
                     >
                       <Download className="w-4 h-4" /> Export CSV
                     </button>
                     <button
                       onClick={() => { setShowArchived(!showArchived); setMenuOpen(false); }}
-                      className="w-full flex items-center gap-2 px-4 py-2.5 text-sm hover:bg-[#FBF7F0] transition-colors text-left"
+                      className="w-full flex items-center gap-2 px-4 py-2.5 text-sm hover:bg-[hsl(var(--paper))] transition-colors text-left"
                       style={{ color: "#2C2C2C" }}
                     >
                       <Archive className="w-4 h-4" />
@@ -147,7 +147,7 @@ export default function JobTracker() {
         </div>
 
         {/* View toggle */}
-        <div className="mt-4 flex border-b" style={{ borderColor: "#E5E0D8" }}>
+        <div className="mt-4 flex border-b" style={{ borderColor: "hsl(var(--border))" }}>
           {TABS.map((tab) => {
             const Icon = tab.icon;
             const active = view === tab.id;
@@ -156,14 +156,14 @@ export default function JobTracker() {
                 key={tab.id}
                 onClick={() => setView(tab.id)}
                 className="flex items-center gap-2 px-4 py-2.5 text-sm font-medium transition-all relative"
-                style={{ color: active ? "#C9A961" : "#6B7280" }}
+                style={{ color: active ? "hsl(var(--gold))" : "hsl(var(--muted-foreground))" }}
               >
                 <Icon className="w-4 h-4" />
                 {tab.label}
                 {active && (
                   <span
                     className="absolute bottom-0 left-2 right-2 h-[3px] rounded-t-full"
-                    style={{ backgroundColor: "#C9A961" }}
+                    style={{ backgroundColor: "hsl(var(--gold))" }}
                   />
                 )}
               </button>
@@ -215,7 +215,7 @@ export default function JobTracker() {
       <footer className="max-w-6xl mx-auto px-4 sm:px-6 pb-8 pt-4">
         <p className="text-xs text-center" style={{ color: "#9CA3AF" }}>
           Built by{" "}
-          <a href="/" className="underline hover:opacity-80" style={{ color: "#C9A961" }}>
+          <a href="/" className="underline hover:opacity-80" style={{ color: "hsl(var(--gold))" }}>
             james.careers
           </a>
         </p>

@@ -9,7 +9,7 @@ const ToolkitHeader = () => {
     <header className="bg-nav-green border-b border-executive-light/20">
       <div className="container mx-auto px-5 md:px-6 py-4 flex items-center justify-between relative z-10">
         <Link to="/" className="font-heading text-lg md:text-xl font-medium text-cream tracking-tight">
-          JAMES BUGDEN
+          hiresign
         </Link>
         <div className="flex items-center gap-3">
           <AuthHeaderButton variant="nav" />

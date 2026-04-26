@@ -58,15 +58,15 @@ export default function OnboardingPhaseModal({ lang = "en", onSelect }: Props) {
           animate={{ opacity: 1, scale: 1, y: 0 }}
           transition={{ duration: 0.35, ease: "easeOut" }}
           className="w-full max-w-2xl rounded-2xl px-5 py-6 sm:p-8 shadow-2xl overflow-y-auto"
-          style={{ backgroundColor: "#FBF7F0", maxHeight: "calc(100vh - 48px)" }}
+          style={{ backgroundColor: "hsl(var(--paper))", maxHeight: "calc(100vh - 48px)" }}
         >
           <h2
             className="text-2xl sm:text-3xl font-bold text-center mb-2"
-            style={{ fontFamily: "var(--font-heading)", color: "#1B3A2F" }}
+            style={{ fontFamily: "var(--font-heading)", color: "hsl(var(--executive-green))" }}
           >
             {t.heading}
           </h2>
-          <p className="text-sm sm:text-base text-center mb-8 whitespace-pre-line" style={{ color: "#6B7280" }}>
+          <p className="text-sm sm:text-base text-center mb-8 whitespace-pre-line" style={{ color: "hsl(var(--muted-foreground))" }}>
             {t.sub}
           </p>
 
@@ -79,18 +79,18 @@ export default function OnboardingPhaseModal({ lang = "en", onSelect }: Props) {
                   onClick={() => setSelected(phase.id)}
                   className="relative rounded-xl p-5 text-left transition-all duration-200 border-2"
                   style={{
-                    borderColor: isSelected ? "#1B3A2F" : "#E5E0D8",
-                    backgroundColor: isSelected ? "rgba(27, 58, 47, 0.06)" : "#FFFFFF",
+                    borderColor: isSelected ? "hsl(var(--executive-green))" : "hsl(var(--border))",
+                    backgroundColor: isSelected ? "rgba(27, 58, 47, 0.06)" : "hsl(var(--card))",
                     boxShadow: isSelected
                       ? "0 4px 16px rgba(27, 58, 47, 0.12)"
                       : "0 2px 8px rgba(0,0,0,0.04)",
                   }}
                 >
                   <span className="text-3xl block mb-3">{phase.emoji}</span>
-                  <span className="text-base font-semibold block mb-1" style={{ color: "#1B3A2F" }}>
+                  <span className="text-base font-semibold block mb-1" style={{ color: "hsl(var(--executive-green))" }}>
                     {phase.label}
                   </span>
-                  <span className="text-sm leading-relaxed block" style={{ color: "#6B7280" }}>
+                  <span className="text-sm leading-relaxed block" style={{ color: "hsl(var(--muted-foreground))" }}>
                     {phase.desc}
                   </span>
                   {isSelected && (
@@ -98,10 +98,10 @@ export default function OnboardingPhaseModal({ lang = "en", onSelect }: Props) {
                       initial={{ scale: 0 }}
                       animate={{ scale: 1 }}
                       className="absolute top-3 right-3 w-6 h-6 rounded-full flex items-center justify-center"
-                      style={{ backgroundColor: "#1B3A2F" }}
+                      style={{ backgroundColor: "hsl(var(--executive-green))" }}
                     >
                       <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
-                        <path d="M3 7L6 10L11 4" stroke="#FBF7F0" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+                        <path d="M3 7L6 10L11 4" stroke="hsl(var(--paper))" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
                       </svg>
                     </motion.div>
                   )}
@@ -114,7 +114,7 @@ export default function OnboardingPhaseModal({ lang = "en", onSelect }: Props) {
             onClick={handleContinue}
             disabled={!selected || submitting}
             className="w-full py-3.5 rounded-xl text-sm font-semibold tracking-wide uppercase transition-all duration-200 disabled:opacity-40 disabled:cursor-not-allowed"
-            style={{ backgroundColor: "#1B3A2F", color: "#FBF7F0" }}
+            style={{ backgroundColor: "hsl(var(--executive-green))", color: "hsl(var(--paper))" }}
           >
             {submitting ? t.saving : t.cta}
           </button>

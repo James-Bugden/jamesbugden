@@ -181,7 +181,7 @@ const OfficePoliticsGuide = () => {
       {/* Navigation */}
       <nav className="fixed top-0 left-0 right-0 z-50 bg-nav-green">
         <div className="container mx-auto px-5 md:px-6 py-4 flex items-center justify-between">
-          <Link to="/" className="font-heading text-lg md:text-xl font-medium text-cream tracking-tight">JAMES BUGDEN</Link>
+          <Link to="/" className="font-heading text-lg md:text-xl font-medium text-cream tracking-tight">hiresign</Link>
           <div className="flex items-center gap-3">
             <AuthHeaderButton variant="nav" />
             <LanguageToggle variant="nav" />
@@ -195,11 +195,11 @@ const OfficePoliticsGuide = () => {
           <h1 className="font-heading text-3xl md:text-5xl lg:text-6xl text-cream leading-tight mb-4" style={{ lineHeight: 1.2 }}>
             Office Politics:<br className="hidden sm:block" /> How to Get What You Want at Work
           </h1>
-          <p className="text-lg md:text-xl text-cream/80 mb-3">Without Backstabbing, Sucking Up, or Getting Fired</p>
+          <p className="text-lg md:text-xl text-cream/90 mb-3">Without Backstabbing, Sucking Up, or Getting Fired</p>
           <div className="flex flex-col sm:flex-row items-center justify-center gap-2 sm:gap-4 mb-6">
-            <p className="text-base text-cream/60">By James Bugden, Career Coach · Senior Recruiter @ Uber</p>
+            <p className="text-base text-gold-soft/80">By James Bugden, Career Coach · Senior Recruiter @ Uber</p>
             <span className="hidden sm:inline text-cream/30">·</span>
-            <div className="flex items-center gap-1.5 text-cream/60">
+            <div className="flex items-center gap-1.5 text-gold-soft/80">
               <Clock className="w-4 h-4" />
               <span className="text-sm">45 min read</span>
             </div>
@@ -797,7 +797,7 @@ const OfficePoliticsGuide = () => {
                 <div key={item.p} className="bg-cream/5 border border-cream/10 rounded-xl p-4">
                   <p className="text-gold text-xs font-bold uppercase mb-1">{item.p}</p>
                   <p className="text-cream font-semibold text-sm mb-1">{item.title}</p>
-                  <p className="text-cream/60 text-xs">{item.desc}</p>
+                  <p className="text-gold-soft/80 text-xs">{item.desc}</p>
                 </div>
               ))}
             </div>
@@ -1153,15 +1153,15 @@ const OfficePoliticsGuide = () => {
             <span className="text-cream/20 font-heading text-6xl md:text-7xl font-bold leading-none select-none">→</span>
             <div className="pt-3">
               <h2 className="font-heading text-2xl md:text-3xl text-cream mb-2">Additional Resources</h2>
-              <p className="text-cream/60">Keep levelling up your career</p>
+              <p className="text-gold-soft/80">Keep levelling up your career</p>
             </div>
           </div>
 
           <div className="bg-cream/5 border border-cream/10 rounded-xl p-5 md:p-6 mb-8">
             <h3 className="text-gold text-sm font-bold uppercase mb-3">The Book</h3>
-            <p className="text-cream/80 text-sm italic mb-4">Secrets to Winning at Office Politics: How to Achieve Your Goals and Increase Your Influence at Work by Marie G. McIntyre, Ph.D.</p>
+            <p className="text-cream/90 text-sm italic mb-4">Secrets to Winning at Office Politics: How to Achieve Your Goals and Increase Your Influence at Work by Marie G. McIntyre, Ph.D.</p>
             <h3 className="text-gold text-sm font-bold uppercase mb-3">Related Reading</h3>
-            <ul className="space-y-1 text-cream/70 text-sm">
+            <ul className="space-y-1 text-cream/85 text-sm">
               <li>• <em>Emotional Intelligence</em> by Daniel Goleman</li>
               <li>• <em>The Seven Habits of Highly Effective People</em> by Stephen Covey</li>
               <li>• <em>Leading Quietly</em> by Joseph Badaracco</li>

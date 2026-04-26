@@ -109,10 +109,10 @@ const ActionStep = ({ children }: { children: React.ReactNode }) => (
 );
 
 const CommonMistake = ({ title, children }: { title: string; children: React.ReactNode }) => (
-  <div className="bg-red-500/5 border border-red-500/20 rounded-xl p-4 md:p-5 my-6">
+  <div className="bg-destructive/5 border border-destructive/20 rounded-xl p-4 md:p-5 my-6">
     <div className="flex items-center gap-2 mb-2">
-      <XCircle className="w-5 h-5 text-red-500" />
-      <span className="text-sm font-semibold text-red-500">{title}</span>
+      <XCircle className="w-5 h-5 text-destructive" />
+      <span className="text-sm font-semibold text-destructive">{title}</span>
     </div>
     <div className="text-sm text-muted-foreground leading-relaxed">{children}</div>
   </div>
@@ -235,7 +235,7 @@ const AiJobSearchGuide = () => {
       {/* Navigation */}
       <nav className="fixed top-0 left-0 right-0 z-50 bg-nav-green">
         <div className="container mx-auto px-5 md:px-6 py-4 flex items-center justify-between">
-          <Link to="/" className="font-heading text-lg md:text-xl font-medium text-cream tracking-tight">JAMES BUGDEN</Link>
+          <Link to="/" className="font-heading text-lg md:text-xl font-medium text-cream tracking-tight">hiresign</Link>
           <div className="flex items-center gap-3 md:gap-4">
             <AuthHeaderButton variant="nav" />
             <LanguageToggle variant="nav" />
@@ -257,11 +257,11 @@ const AiJobSearchGuide = () => {
           <h1 className="font-heading text-3xl md:text-5xl lg:text-6xl text-cream leading-tight mb-4" style={{ lineHeight: 1.2 }}>
             How to Use AI to Run Your<br className="hidden sm:block" /> Entire Job Search
           </h1>
-          <p className="text-lg md:text-xl text-cream/80 mb-3">
+          <p className="text-lg md:text-xl text-cream/90 mb-3">
             Using ChatGPT at Every Stage: From Career Direction to Final Offer
           </p>
           <div className="flex flex-col sm:flex-row items-center justify-center gap-2 sm:gap-4 mb-6">
-            <p className="text-base text-cream/60 italic">
+            <p className="text-base text-gold-soft/80 italic">
               Based on <em>Career Coach GPT</em> by Jeremy Schifeling · Guide by James Bugden
             </p>
           </div>
@@ -540,10 +540,10 @@ And here's the resume: ____`}</AiPromptBlock>
           <RecruiterCheck>LinkedIn actually tracks your response rate and shows it to recruiters. When I see "Typically responds within 1 day" on a candidate's profile, I'm more likely to reach out. It tells me my message won't disappear into a black hole.</RecruiterCheck>
 
           {/* 5 LinkedIn Mistakes */}
-          <div className="bg-red-500/5 border border-red-500/20 rounded-xl p-5 md:p-6 my-6 space-y-4">
+          <div className="bg-destructive/5 border border-destructive/20 rounded-xl p-5 md:p-6 my-6 space-y-4">
             <div className="flex items-center gap-2 mb-2">
-              <XCircle className="w-5 h-5 text-red-500" />
-              <span className="font-semibold text-red-500">The 5 LinkedIn Mistakes I See Every Day</span>
+              <XCircle className="w-5 h-5 text-destructive" />
+              <span className="font-semibold text-destructive">The 5 LinkedIn Mistakes I See Every Day</span>
             </div>
             <ol className="list-decimal list-inside space-y-3 text-sm text-muted-foreground">
               <li><strong className="text-foreground">Headline is just your current job title.</strong> You're telling recruiters what you are, not what you want. Always include your target role and key skills.</li>

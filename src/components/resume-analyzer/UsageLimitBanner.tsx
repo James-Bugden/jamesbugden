@@ -23,12 +23,12 @@ export function UsageLimitBanner({ lang, used, limit, limitReached }: UsageLimit
       {limitReached ? (
         <>
           <div className="flex items-start gap-2.5">
-            <AlertTriangle className="w-5 h-5 shrink-0 mt-0.5" style={{ color: "#dc2626" }} />
+            <AlertTriangle className="w-5 h-5 shrink-0 mt-0.5" style={{ color: "hsl(var(--destructive))" }} />
             <div>
-              <p className="text-sm font-semibold" style={{ color: "#1A1A1A" }}>
+              <p className="text-sm font-semibold" style={{ color: "hsl(var(--foreground))" }}>
                 {t(lang, "Monthly limit reached", "本月額度已用完")}
               </p>
-              <p className="text-xs mt-1 leading-relaxed" style={{ color: "#6B6B6B" }}>
+              <p className="text-xs mt-1 leading-relaxed" style={{ color: "hsl(var(--muted-foreground))" }}>
                 {t(lang,
                   `You've used all ${limit} free analyses this month. Your limit resets at the start of next month.`,
                   `你已使用完本月 ${limit} 次免費分析額度。額度將於下月初重置。`
@@ -39,7 +39,7 @@ export function UsageLimitBanner({ lang, used, limit, limitReached }: UsageLimit
         </>
       ) : (
         <div className="flex items-center justify-between">
-          <span className="text-xs font-medium" style={{ color: "#6B6B6B" }}>
+          <span className="text-xs font-medium" style={{ color: "hsl(var(--muted-foreground))" }}>
             {t(lang,
               `${remaining} of ${limit} free analyses remaining this month`,
               `本月還剩 ${remaining}/${limit} 次免費分析`
@@ -50,8 +50,8 @@ export function UsageLimitBanner({ lang, used, limit, limitReached }: UsageLimit
 
       {/* Cost transparency message */}
       <div className="flex items-start gap-2 pt-1" style={{ borderTop: "1px solid rgba(0,0,0,0.06)" }}>
-        <Heart className="w-3.5 h-3.5 shrink-0 mt-0.5" style={{ color: "#D4930D" }} />
-        <p className="text-xs leading-relaxed" style={{ color: "#6B6B6B" }}>
+        <Heart className="w-3.5 h-3.5 shrink-0 mt-0.5" style={{ color: "hsl(var(--gold))" }} />
+        <p className="text-xs leading-relaxed" style={{ color: "hsl(var(--muted-foreground))" }}>
           {t(lang,
             "Each analysis runs through a premium AI model, which has real costs per use. These limits let me keep the tool free while covering server and AI expenses. Thank you for understanding! 🙏",
             "每次分析都透過高階 AI 模型運算，產生實際費用。設定額度上限，是為了在負擔伺服器與 AI 成本的同時，繼續免費提供這項工具。感謝你的體諒！🙏"

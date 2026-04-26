@@ -25,7 +25,7 @@ const InterviewPreparationGuide = () => {
       <nav className="fixed top-0 left-0 right-0 z-50 bg-nav-green">
         <div className="container mx-auto px-5 md:px-6 py-4 flex items-center justify-between">
           <Link to="/" className="font-heading text-lg md:text-xl font-medium text-cream tracking-tight">
-            JAMES BUGDEN
+            hiresign
           </Link>
           <div className="flex items-center gap-3 md:gap-4">
             <AuthHeaderButton variant="nav" />
@@ -44,13 +44,13 @@ const InterviewPreparationGuide = () => {
           <h1 className="font-heading text-3xl md:text-5xl lg:text-6xl text-cream leading-tight mb-4">
             Full Interview Preparation Guide
           </h1>
-          <p className="text-lg md:text-xl text-cream/80 mb-2">
+          <p className="text-lg md:text-xl text-cream/90 mb-2">
             Stop Stressing. Start Performing. Get the Job.
           </p>
-          <p className="text-base text-cream/60 mb-2">
+          <p className="text-base text-gold-soft/80 mb-2">
             By James Bugden, Senior Recruiter at Uber
           </p>
-          <div className="flex items-center justify-center gap-1.5 text-cream/60 mb-6">
+          <div className="flex items-center justify-center gap-1.5 text-gold-soft/80 mb-6">
             <Clock className="w-4 h-4" />
             <span className="text-sm">45 min read</span>
           </div>
@@ -146,7 +146,7 @@ const InterviewPreparationGuide = () => {
           <h2 className="font-heading text-2xl md:text-3xl text-cream mb-4">
             The 10-Hour Prep Framework
           </h2>
-          <p className="text-cream/80 mb-4">
+          <p className="text-cream/90 mb-4">
             Most candidates spend 1 hour preparing. You're about to spend 10 hours. That's your advantage.
           </p>
         </div>
@@ -545,7 +545,7 @@ const InterviewPreparationGuide = () => {
                   {/* HOME BASE - Center */}
                   <div className="bg-executive-green border-2 border-gold rounded-lg px-5 py-3 text-center shadow-lg">
                     <p className="text-gold font-bold text-base">HOME BASE</p>
-                    <p className="text-cream/80 text-xs">(Foundation)</p>
+                    <p className="text-cream/90 text-xs">(Foundation)</p>
                   </div>
                   
                   {/* Horizontal connector right */}

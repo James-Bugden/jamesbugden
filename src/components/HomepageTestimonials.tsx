@@ -162,40 +162,35 @@ function BoldQuote({ text, bold }: { text: string; bold: string }) {
 function TestimonialCard({ item, featured = false }: { item: Testimonial; featured?: boolean }) {
   return (
     <div
-      className={`rounded-xl ${featured ? "md:col-span-2" : ""}`}
-      style={{
-        backgroundColor: "#FFFFFF",
-        borderLeft: "4px solid #D4930D",
-        boxShadow: "0 2px 8px rgba(0,0,0,0.06)",
-        padding: "24px",
-      }}
+      className={`card-hairline p-6 md:p-7 ${featured ? "md:col-span-2 relative overflow-hidden" : ""}`}
     >
+      {featured && <div className="absolute top-0 left-0 right-0 h-[3px] bg-gold" />}
+
       {/* 1. Headline */}
-      <p className="font-bold mb-3" style={{ color: "#1A1A1A", fontSize: featured ? "1.25rem" : "1.0625rem" }}>
-        {item.headline}
+      <p className="font-heading mb-3 text-foreground tracking-[-0.015em]" style={{ fontSize: featured ? "1.375rem" : "1.125rem", fontWeight: 600, lineHeight: 1.25 }}>
+        {item.headline.replace(/^"|"$/g, "")}
       </p>
 
       {/* 2-3. Quote with bold sentence */}
-      <p className="leading-relaxed mb-4" style={{ color: "#1A1A1A", fontSize: "1rem" }}>
-        "<BoldQuote text={item.quote} bold={item.bold} />"
+      <p className="leading-relaxed mb-5 text-muted-foreground" style={{ fontSize: "0.9375rem" }}>
+        <BoldQuote text={item.quote} bold={item.bold} />
       </p>
 
       {/* 4. Photo + Name + Title/Source */}
-      <div className="flex items-center gap-3">
+      <div className="flex items-center gap-3 pt-4 border-t border-border">
         <img
           src={item.photo}
           alt={item.name}
-          width={40}
-          height={40}
+          width={36}
+          height={36}
           loading="lazy"
-          className="w-10 h-10 rounded-full object-cover flex-shrink-0"
-          style={{ border: "2px solid #D4930D" }}
+          className="w-9 h-9 rounded-full object-cover flex-shrink-0"
         />
         <div>
-          <p className="font-bold" style={{ color: "#1A1A1A", fontSize: "0.9375rem" }}>
+          <p className="font-heading text-foreground" style={{ fontSize: "0.875rem", fontWeight: 600 }}>
             {item.name}
           </p>
-          <p style={{ color: "#6B6B6B", fontSize: "0.8125rem" }}>{item.titleSource}</p>
+          <p className="text-muted-foreground" style={{ fontSize: "0.75rem" }}>{item.titleSource}</p>
         </div>
       </div>
     </div>
@@ -227,9 +222,9 @@ export default function HomepageTestimonials() {
   const gridTier1 = tier1.slice(1);
 
   return (
-    <section id="testimonials" className="py-12 md:py-20 px-5 md:px-6" style={{ backgroundColor: "#FFFFFF" }}>
+    <section id="testimonials" className="py-14 md:py-20 px-5 md:px-6 bg-paper-alt">
       <div className="container mx-auto max-w-5xl">
-        <h2 className="font-heading text-center mb-6" style={{ color: "#1A1A1A", fontSize: "clamp(2rem, 4vw, 2.625rem)" }}>
+        <h2 className="font-heading text-center mb-12 text-foreground tracking-[-0.025em]" style={{ fontSize: "clamp(2rem, 4vw, 2.75rem)", fontWeight: 600, lineHeight: 1.1 }}>
           Real feedback from real people.
         </h2>
 
@@ -264,9 +259,9 @@ export default function HomepageTestimonials() {
               type="button"
               onClick={() => setRevealLevel((v) => v + 1)}
               className="inline-flex items-center gap-2 px-6 py-2.5 rounded-lg text-sm font-semibold transition-all duration-200 border"
-              style={{ color: "#2b4734", borderColor: "#2b4734", backgroundColor: "transparent" }}
-              onMouseEnter={(e) => { e.currentTarget.style.backgroundColor = "#2b4734"; e.currentTarget.style.color = "#FFFFFF"; }}
-              onMouseLeave={(e) => { e.currentTarget.style.backgroundColor = "transparent"; e.currentTarget.style.color = "#2b4734"; }}
+              style={{ color: "hsl(var(--executive-green))", borderColor: "hsl(var(--executive-green))", backgroundColor: "transparent" }}
+              onMouseEnter={(e) => { e.currentTarget.style.backgroundColor = "hsl(var(--executive-green))"; e.currentTarget.style.color = "#FFFFFF"; }}
+              onMouseLeave={(e) => { e.currentTarget.style.backgroundColor = "transparent"; e.currentTarget.style.color = "hsl(var(--executive-green))"; }}
             >
               {buttonText}
               <ChevronDown className="w-4 h-4" />

@@ -133,7 +133,7 @@ export default function JoinZhTw() {
 
       <header className="py-6 px-4 flex items-center justify-between max-w-[440px] mx-auto w-full">
         <Link to="/zh-tw" className="font-heading text-sm tracking-[0.25em] text-foreground hover:text-gold transition-colors">
-          JAMES BUGDEN
+          hiresign
         </Link>
         <LanguageToggle variant="nav" />
       </header>

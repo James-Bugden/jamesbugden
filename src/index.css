@@ -4,44 +4,51 @@
 
 @layer base {
   :root {
-    /* Premium Career Coaching Colors */
-    --background: 39 47% 96%;
-    --foreground: 0 0% 10%;
+    /* Hiresign palette */
+    --background: 40 45% 98%;
+    --foreground: 0 0% 6%;
 
-    --card: 39 47% 98%;
+    --card: 40 45% 99%;
     --card-foreground: 0 0% 0%;
 
-    --popover: 39 47% 98%;
+    --popover: 40 45% 99%;
     --popover-foreground: 0 0% 0%;
 
-    --primary: 0 0% 0%;
-    --primary-foreground: 39 47% 96%;
+    --primary: 153 72% 14%;
+    --primary-foreground: 40 45% 98%;
 
-    --secondary: 39 30% 93%;
-    --secondary-foreground: 0 0% 0%;
+    --secondary: 43 28% 94%;
+    --secondary-foreground: 0 0% 6%;
 
-    --muted: 39 20% 90%;
-    --muted-foreground: 0 0% 0%;
+    --muted: 43 22% 91%;
+    --muted-foreground: 0 0% 28%;
 
-    --accent: 42 52% 56%;
-    --accent-foreground: 0 0% 0%;
+    --accent: 40 48% 47%;
+    --accent-foreground: 0 0% 100%;
 
-    --destructive: 0 62% 30%;
+    --destructive: 8 62% 44%;
     --destructive-foreground: 0 0% 100%;
+    --destructive-soft: 8 60% 94%;
 
-    --border: 39 20% 88%;
-    --input: 39 20% 92%;
-    --ring: 42 52% 56%;
+    --border: 43 22% 88%;
+    --input: 43 22% 92%;
+    --ring: 40 48% 47%;
 
     --radius: 0.75rem;
 
-    /* Executive colors */
-    --executive-green: 153 38% 17%;
-    --executive-green-light: 153 30% 23%;
-    --cream: 39 47% 96%;
-    --cream-light: 39 47% 98%;
-    --gold: 42 52% 56%;
-    --gold-dark: 42 48% 47%;
+    /* Hiresign brand tokens */
+    --executive-green: 153 72% 14%;
+    --executive-green-light: 153 73% 20%;
+    --green-deep: 153 72% 14%;
+    --green: 153 73% 20%;
+    --cream: 43 60% 89%;
+    --cream-light: 40 45% 98%;
+    --paper: 40 45% 98%;
+    --paper-alt: 43 28% 94%;
+    --gold: 40 48% 47%;
+    --gold-dark: 40 48% 38%;
+    --gold-soft: 43 60% 89%;
+    --green-soft: 153 28% 92%;
 
     /* Dashboard tokens */
     --dash-card: 39 47% 98%;
@@ -52,17 +59,19 @@
     --dash-toolkit-bg: 36 14% 92%;
     --dash-gold-faded: 42 52% 56% / 0.15;
 
-    --font-heading: 'Playfair Display', 'Times New Roman', Georgia, serif;
-    --font-body: 'DM Sans', -apple-system, BlinkMacSystemFont, 'SF Pro Text', 'Segoe UI', Roboto, sans-serif;
+    --font-heading: 'Geist', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    --font-body: 'Geist', -apple-system, BlinkMacSystemFont, 'SF Pro Text', 'Segoe UI', Roboto, sans-serif;
+    --font-brand: 'Inter Tight', 'Geist', -apple-system, sans-serif;
+    --font-mono: 'DM Mono', ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
 
-    --sidebar-background: 153 38% 17%;
-    --sidebar-foreground: 39 47% 96%;
-    --sidebar-primary: 42 52% 56%;
-    --sidebar-primary-foreground: 153 38% 10%;
-    --sidebar-accent: 153 30% 23%;
-    --sidebar-accent-foreground: 39 47% 96%;
-    --sidebar-border: 153 25% 25%;
-    --sidebar-ring: 42 52% 56%;
+    --sidebar-background: 153 72% 14%;
+    --sidebar-foreground: 40 45% 98%;
+    --sidebar-primary: 40 48% 47%;
+    --sidebar-primary-foreground: 153 72% 10%;
+    --sidebar-accent: 153 73% 20%;
+    --sidebar-accent-foreground: 40 45% 98%;
+    --sidebar-border: 153 50% 22%;
+    --sidebar-ring: 40 48% 47%;
   }
 
   .dark {
@@ -149,12 +158,12 @@
 @layer utilities {
   /* Simple nav background - no pseudo-elements */
   .bg-nav-green {
-    background: linear-gradient(135deg, hsl(153 38% 17%) 0%, hsl(153 30% 23%) 100%);
+    background: linear-gradient(135deg, hsl(153 72% 14%) 0%, hsl(153 73% 20%) 100%);
   }
 
   /* Executive Green Background with Gradient */
   .bg-executive-green {
-    background: linear-gradient(135deg, hsl(153 38% 17%) 0%, hsl(153 30% 23%) 100%);
+    background: linear-gradient(135deg, hsl(153 72% 14%) 0%, hsl(153 73% 20%) 100%);
     position: relative;
   }
 
@@ -162,7 +171,7 @@
     content: '';
     position: absolute;
     inset: 0;
-    background: radial-gradient(circle at 20% 50%, hsla(42, 52%, 56%, 0.1) 0%, transparent 50%);
+    background: radial-gradient(circle at 20% 50%, hsla(40, 48%, 47%, 0.1) 0%, transparent 50%);
     pointer-events: none;
   }
 
@@ -170,13 +179,13 @@
     content: '';
     position: absolute;
     inset: 0;
-    background-image: radial-gradient(hsla(39, 47%, 96%, 0.03) 1px, transparent 1px);
+    background-image: radial-gradient(hsla(43, 60%, 89%, 0.03) 1px, transparent 1px);
     background-size: 20px 20px;
     pointer-events: none;
   }
   
   .text-cream {
-    color: hsl(39 47% 96%);
+    color: hsl(43 60% 89%);
   }
   
   .text-cream-90 {
@@ -188,16 +197,16 @@
   }
   
   .text-gold {
-    color: hsl(42 52% 56%);
+    color: hsl(40 48% 47%);
   }
   
   .bg-cream {
-    background-color: hsl(39 47% 96%);
+    background-color: hsl(43 60% 89%);
   }
 
   /* Premium Gold Gradient Text */
   .text-gold-gradient {
-    background: linear-gradient(135deg, hsl(42 52% 56%) 0%, hsl(42 60% 70%) 100%);
+    background: linear-gradient(135deg, hsl(40 48% 47%) 0%, hsl(40 56% 62%) 100%);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
@@ -210,9 +219,9 @@
     justify-content: center;
     width: 20px;
     height: 20px;
-    background: linear-gradient(135deg, hsl(42 52% 56%) 0%, hsl(42 48% 47%) 100%);
+    background: linear-gradient(135deg, hsl(40 48% 47%) 0%, hsl(40 48% 38%) 100%);
     border-radius: 50%;
-    box-shadow: 0 2px 4px hsla(42, 52%, 56%, 0.3);
+    box-shadow: 0 2px 4px hsla(40, 48%, 47%, 0.3);
     flex-shrink: 0;
   }
 
@@ -229,7 +238,7 @@
   /* Premium Card Styling */
   .card-premium {
     background-color: hsl(var(--card));
-    box-shadow: 0 8px 24px hsla(153, 38%, 17%, 0.08);
+    box-shadow: 0 8px 24px hsla(153, 72%, 14%, 0.08);
     transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
     position: relative;
     overflow: hidden;
@@ -242,14 +251,14 @@
     left: 0;
     right: 0;
     height: 2px;
-    background: linear-gradient(90deg, transparent, hsl(42 52% 56%), transparent);
+    background: linear-gradient(90deg, transparent, hsl(40 48% 47%), transparent);
     opacity: 0;
     transition: opacity 0.3s ease;
   }
 
   .card-premium:hover {
     transform: translateY(-4px);
-    box-shadow: 0 16px 40px hsla(153, 38%, 17%, 0.12);
+    box-shadow: 0 16px 40px hsla(153, 72%, 14%, 0.12);
   }
 
   .card-premium:hover::before {
@@ -264,18 +273,18 @@
 
   /* CTA Button Gold Gradient */
   .btn-gold {
-    background: linear-gradient(135deg, hsl(42 52% 56%) 0%, hsl(42 48% 47%) 100%);
+    background: linear-gradient(135deg, hsl(40 48% 47%) 0%, hsl(40 48% 38%) 100%);
     color: white;
     font-weight: 600;
     transition: all 0.2s ease;
-    box-shadow: 0 2px 6px hsla(42, 52%, 56%, 0.15);
+    box-shadow: 0 2px 6px hsla(40, 48%, 47%, 0.15);
     text-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
     padding: 14px 32px;
     border-radius: 8px;
   }
 
   .btn-gold:hover {
-    box-shadow: 0 4px 10px hsla(42, 52%, 56%, 0.25);
+    box-shadow: 0 4px 10px hsla(40, 48%, 47%, 0.25);
     transform: scale(1.02);
     filter: brightness(0.95);
   }
@@ -289,21 +298,21 @@
 
   /* Secondary Button with Blur */
   .btn-secondary-blur {
-    background: hsla(39, 47%, 96%, 0.1);
+    background: hsla(43, 60%, 89%, 0.1);
     backdrop-filter: blur(8px);
-    border: 2px solid hsl(42 52% 56%);
+    border: 2px solid hsl(40 48% 47%);
     color: white;
     transition: all 0.3s ease;
   }
 
   .btn-secondary-blur:hover {
-    background: hsla(42, 52%, 56%, 0.15);
+    background: hsla(40, 48%, 47%, 0.15);
   }
 
   /* Testimonial Card */
   .testimonial-card {
     background-color: hsl(var(--card));
-    box-shadow: 0 8px 24px hsla(153, 38%, 17%, 0.08);
+    box-shadow: 0 8px 24px hsla(153, 72%, 14%, 0.08);
     transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
     position: relative;
     border-top: 2px solid transparent;
@@ -316,15 +325,15 @@
     left: 0;
     right: 0;
     height: 2px;
-    background: linear-gradient(90deg, hsl(42 52% 56%), hsl(42 60% 70%));
+    background: linear-gradient(90deg, hsl(40 48% 47%), hsl(40 56% 62%));
     opacity: 0;
     transition: opacity 0.3s ease;
   }
 
   .testimonial-card:hover {
     transform: translateY(-4px);
-    box-shadow: 0 16px 40px hsla(153, 38%, 17%, 0.12);
-    border-top-color: hsl(42 52% 56%);
+    box-shadow: 0 16px 40px hsla(153, 72%, 14%, 0.12);
+    border-top-color: hsl(40 48% 47%);
   }
 
   .testimonial-card:hover::before {
@@ -438,8 +447,8 @@
   .ml-embedded input[type="email"]:focus,
   .ml-embedded input[type="text"]:focus {
     outline: none !important;
-    border-color: hsl(42 52% 56%) !important;
-    box-shadow: 0 0 0 3px hsla(42, 52%, 56%, 0.15) !important;
+    border-color: hsl(40 48% 47%) !important;
+    box-shadow: 0 0 0 3px hsla(40, 48%, 47%, 0.15) !important;
   }
 
   .ml-embedded input::placeholder {
@@ -448,7 +457,7 @@
 
   .ml-embedded button[type="submit"],
   .ml-embedded .ml-form-embedSubmit button {
-    background: linear-gradient(135deg, hsl(42 52% 56%) 0%, hsl(42 48% 47%) 100%) !important;
+    background: linear-gradient(135deg, hsl(40 48% 47%) 0%, hsl(40 48% 38%) 100%) !important;
     color: white !important;
     padding: 14px 28px !important;
     border: none !important;
@@ -457,14 +466,14 @@
     cursor: pointer !important;
     font-size: 16px !important;
     transition: all 0.3s ease !important;
-    box-shadow: 0 4px 12px hsla(42, 52%, 56%, 0.3) !important;
+    box-shadow: 0 4px 12px hsla(40, 48%, 47%, 0.3) !important;
     height: 52px !important;
     white-space: nowrap !important;
   }
 
   .ml-embedded button[type="submit"]:hover,
   .ml-embedded .ml-form-embedSubmit button:hover {
-    box-shadow: 0 6px 20px hsla(42, 52%, 56%, 0.4) !important;
+    box-shadow: 0 6px 20px hsla(40, 48%, 47%, 0.4) !important;
     transform: translateY(-2px) !important;
   }
 
@@ -510,6 +519,174 @@
 /* Hide scrollbar utility */
 .no-scrollbar::-webkit-scrollbar { display: none; }
 .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+
+/* Hiresign — tabular numerics utility (Geist with tnum, replaces old DM Mono) */
+.tnum {
+  font-family: var(--font-heading) !important;
+  font-variant-numeric: tabular-nums;
+  font-feature-settings: "tnum" 1, "lnum" 1;
+  letter-spacing: -0.01em;
+}
+
+/* Hiresign — display numerics (alias to tnum-geist for legacy usage) */
+.tnum-display {
+  font-family: var(--font-heading) !important;
+  font-variant-numeric: tabular-nums;
+  font-feature-settings: "tnum" 1, "lnum" 1;
+  letter-spacing: -0.025em;
+  font-weight: 700;
+  line-height: 1;
+}
+
+/* Hiresign — Geist tabular numerics (matches target mockup hero stats) */
+.tnum-geist {
+  font-family: var(--font-heading) !important;
+  font-variant-numeric: tabular-nums;
+  font-feature-settings: "tnum" 1, "lnum" 1;
+  letter-spacing: -0.025em;
+  font-weight: 700;
+  line-height: 1;
+}
+
+/* Hero highlight marker — gold-soft underline behind text (target mockup) */
+.text-mark-gold {
+  background: linear-gradient(180deg, transparent 60%, hsl(var(--gold-soft)) 60%);
+  padding: 0 0.1em;
+}
+
+/* Hiresign — brand wordmark utility */
+.font-brand {
+  font-family: var(--font-brand);
+  font-weight: 700;
+  letter-spacing: -0.025em;
+}
+
+/* Hiresign SaaS — section eyebrow (uppercase, tracked, mono) */
+.eyebrow {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: hsl(var(--gold));
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+.eyebrow::before {
+  content: "";
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: hsl(var(--gold));
+  display: inline-block;
+}
+.eyebrow-plain {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: hsl(var(--muted-foreground));
+}
+
+/* Hiresign SaaS — hairline card (1px border, no shadow) */
+.card-hairline {
+  background: hsl(var(--card));
+  border: 1px solid hsl(var(--border));
+  border-radius: 12px;
+  transition: border-color 0.2s ease, transform 0.2s ease;
+}
+.card-hairline:hover {
+  border-color: hsl(var(--gold));
+}
+@media (hover: none) {
+  .card-hairline:hover { border-color: hsl(var(--border)); }
+}
+
+.card-hairline-tinted {
+  background: hsl(var(--gold-soft));
+  border: 1px solid hsl(var(--gold) / 0.35);
+  border-radius: 12px;
+}
+
+/* Hiresign SaaS — gold-soft pill (BETA, DONE) */
+.pill-gold-soft {
+  display: inline-flex;
+  align-items: center;
+  font-family: var(--font-mono);
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  padding: 3px 8px;
+  border-radius: 999px;
+  background: hsl(var(--gold-soft));
+  color: hsl(var(--gold-dark));
+  border: 1px solid hsl(var(--gold) / 0.3);
+}
+.pill-green-soft {
+  display: inline-flex;
+  align-items: center;
+  font-family: var(--font-mono);
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  padding: 3px 8px;
+  border-radius: 999px;
+  background: hsl(153 40% 92%);
+  color: hsl(var(--executive-green));
+  border: 1px solid hsl(var(--executive-green) / 0.2);
+}
+
+/* Hiresign SaaS — primary gold button (replaces gradient) */
+.btn-saas-primary {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  background: hsl(var(--gold));
+  color: white;
+  font-weight: 600;
+  font-size: 15px;
+  padding: 12px 22px;
+  border-radius: 10px;
+  border: 1px solid hsl(var(--gold-dark));
+  transition: background 0.15s ease, transform 0.15s ease;
+}
+.btn-saas-primary:hover { background: hsl(var(--gold-dark)); }
+.btn-saas-ghost {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  background: transparent;
+  color: hsl(var(--executive-green));
+  font-weight: 600;
+  font-size: 15px;
+  padding: 12px 22px;
+  border-radius: 10px;
+  border: 1px solid hsl(var(--border));
+  transition: border-color 0.15s ease;
+}
+.btn-saas-ghost:hover { border-color: hsl(var(--gold)); }
+
+/* Hiresign SaaS — dark nav surface */
+.bg-nav-dark {
+  background: hsl(var(--executive-green));
+  color: hsl(var(--cream));
+}
+.bg-nav-dark a, .bg-nav-dark button { color: inherit; }
+
+/* "never" strikethrough w/ gold underline accent */
+.accent-strike {
+  text-decoration: line-through;
+  text-decoration-color: hsl(var(--gold));
+  text-decoration-thickness: 3px;
+  text-underline-offset: 2px;
+  position: relative;
+}
 
 /* Analytics dashboard — use Inter for all headings */
 .analytics-dashboard h1,

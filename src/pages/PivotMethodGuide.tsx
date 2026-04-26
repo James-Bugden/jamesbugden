@@ -24,7 +24,7 @@ const PivotMethodGuide = () => {
       <nav className="fixed top-0 left-0 right-0 z-50 bg-nav-green">
         <div className="container mx-auto px-5 md:px-6 py-4 flex items-center justify-between">
           <Link to="/" className="font-heading text-lg md:text-xl font-medium text-cream tracking-tight">
-            JAMES BUGDEN
+            hiresign
           </Link>
           <div className="flex items-center gap-3 md:gap-4">
             <AuthHeaderButton variant="nav" />
@@ -48,13 +48,13 @@ const PivotMethodGuide = () => {
           <h1 className="font-heading text-3xl md:text-5xl lg:text-6xl text-cream leading-[1.2] mb-4">
             The Pivot Method: A Full Guide to Career Change
           </h1>
-          <p className="text-lg md:text-xl text-cream/80 mb-2">
+          <p className="text-lg md:text-xl text-cream/90 mb-2">
             Based on "Pivot: The Only Move That Matters Is Your Next One" by Jenny Blake
           </p>
-          <p className="text-base text-cream/60 mb-2">
+          <p className="text-base text-gold-soft/80 mb-2">
             By James Bugden • Senior Recruiter
           </p>
-          <div className="flex items-center justify-center gap-1.5 text-cream/60 mb-6">
+          <div className="flex items-center justify-center gap-1.5 text-gold-soft/80 mb-6">
             <Clock className="w-4 h-4" />
             <span className="text-sm">40 min read</span>
           </div>
@@ -1134,7 +1134,7 @@ const PivotMethodGuide = () => {
                   { label: "Fund your runway: Build 3-6 months savings, create side income" },
                 ]}
               />
-              <p className="text-cream/70 text-sm mt-3">Key output: Clear direction and financial foundation</p>
+              <p className="text-cream/85 text-sm mt-3">Key output: Clear direction and financial foundation</p>
             </div>
 
             <div className="bg-white/10 backdrop-blur-sm rounded-lg p-6">
@@ -1148,7 +1148,7 @@ const PivotMethodGuide = () => {
                   { label: "Make yourself discoverable: Define unique value, build visibility, let people know you're exploring" },
                 ]}
               />
-              <p className="text-cream/70 text-sm mt-3">Key output: Network built, skills identified, market awareness</p>
+              <p className="text-cream/85 text-sm mt-3">Key output: Network built, skills identified, market awareness</p>
             </div>
 
             <div className="bg-white/10 backdrop-blur-sm rounded-lg p-6">
@@ -1162,7 +1162,7 @@ const PivotMethodGuide = () => {
                   { label: "Pause and review: What worked? What didn't? What's next?" },
                 ]}
               />
-              <p className="text-cream/70 text-sm mt-3">Key questions: Does this energize or drain you? Can you do the work? Is there market demand?</p>
+              <p className="text-cream/85 text-sm mt-3">Key questions: Does this energize or drain you? Can you do the work? Is there market demand?</p>
             </div>
 
             <div className="bg-white/10 backdrop-blur-sm rounded-lg p-6">
@@ -1177,7 +1177,7 @@ const PivotMethodGuide = () => {
                   { label: "Separate decisions from conversations: Decide first, then handle difficult talks" },
                 ]}
               />
-              <p className="text-cream/70 text-sm mt-3">Key output: Successful transition to new role/career</p>
+              <p className="text-cream/85 text-sm mt-3">Key output: Successful transition to new role/career</p>
             </div>
 
             <div className="bg-white/10 backdrop-blur-sm rounded-lg p-6">
@@ -1192,7 +1192,7 @@ const PivotMethodGuide = () => {
                   { label: "Pilot internal mobility: Create opportunities for others to test new directions" },
                 ]}
               />
-              <p className="text-cream/70 text-sm mt-3">Key output: Stronger network and leadership reputation</p>
+              <p className="text-cream/85 text-sm mt-3">Key output: Stronger network and leadership reputation</p>
             </div>
           </div>
         </div>

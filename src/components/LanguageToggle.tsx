@@ -24,13 +24,42 @@ const LanguageToggle = ({ variant = "default" }: LanguageToggleProps) => {
   };
 
   if (variant === "nav") {
+    const goEn = () => { if (isZhTw) toggleLanguage(); };
+    const goZh = () => { if (!isZhTw) toggleLanguage(); };
+    const baseSeg = "px-3 py-1 text-[12px] font-semibold rounded-full transition-colors whitespace-nowrap leading-none";
     return (
-      <button 
-        onClick={toggleLanguage}
-        className="px-2 py-1 text-xs sm:px-3 sm:py-1.5 sm:text-sm font-semibold bg-gold/20 hover:bg-gold/30 text-gold border border-gold/40 rounded-md transition-all duration-200 hover:scale-105"
+      <div
+        className="inline-flex items-center gap-0.5 p-1 rounded-full"
+        style={{
+          background: 'hsl(var(--paper-alt))',
+          border: '1px solid hsl(var(--border))',
+        }}
       >
-        {isZhTw ? "English" : "中文"}
-      </button>
+        <button
+          onClick={goEn}
+          aria-pressed={!isZhTw}
+          className={baseSeg}
+          style={
+            !isZhTw
+              ? { background: 'hsl(var(--executive-green))', color: '#fff' }
+              : { background: 'transparent', color: 'hsl(var(--foreground))' }
+          }
+        >
+          EN
+        </button>
+        <button
+          onClick={goZh}
+          aria-pressed={isZhTw}
+          className={baseSeg}
+          style={
+            isZhTw
+              ? { background: 'hsl(var(--executive-green))', color: '#fff' }
+              : { background: 'transparent', color: 'hsl(var(--foreground))' }
+          }
+        >
+          中文
+        </button>
+      </div>
     );
   }
 

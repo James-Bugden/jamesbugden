@@ -53,15 +53,15 @@ const companies: Company[] = [
 
 function LogoItem({ company }: { company: Company }) {
   const sizeClass = company.small
-    ? "h-3 md:h-4 w-auto"
+    ? "h-4 md:h-5 w-auto"
     : company.large
-      ? "h-6 md:h-7 w-auto"
+      ? "h-7 md:h-8 w-auto"
       : company.wide
-        ? "h-4 md:h-5 w-auto"
-        : "h-5 md:h-6 w-auto";
+        ? "h-5 md:h-6 w-auto"
+        : "h-6 md:h-7 w-auto";
 
   return (
-    <span className="mx-5 md:mx-7 flex-shrink-0 select-none whitespace-nowrap flex items-center h-7 md:h-8">
+    <span className="logo-mono mx-7 md:mx-10 flex-shrink-0 select-none whitespace-nowrap flex items-center h-9 md:h-10">
       {company.inlineSvg ? (
         company.inlineSvg
       ) : company.logo ? (
@@ -74,8 +74,8 @@ function LogoItem({ company }: { company: Company }) {
         <span
           role="img"
           aria-label={company.name}
-          className="text-base md:text-lg font-bold tracking-tight"
-          style={{ color: company.color, opacity: 0.8 }}
+          className="text-lg md:text-xl font-bold tracking-tight"
+          style={{ color: company.color }}
         >
           {company.name}
         </span>
@@ -86,15 +86,28 @@ function LogoItem({ company }: { company: Company }) {
 
 export default function LogoScroll() {
   return (
-    <section className="py-4 overflow-hidden relative" style={{ backgroundColor: '#FDFBF7' }}>
-      <p className="text-center text-sm text-muted-foreground mb-3 px-4">I worked with candidates from these companies</p>
-      {/* Fade edges */}
-      <div className="absolute left-0 top-0 bottom-0 w-12 z-10 pointer-events-none" style={{ background: 'linear-gradient(to right, #FDFBF7, transparent)' }} />
-      <div className="absolute right-0 top-0 bottom-0 w-12 z-10 pointer-events-none" style={{ background: 'linear-gradient(to left, #FDFBF7, transparent)' }} />
+    <div className="overflow-hidden relative">
+      <p
+        className="text-center mb-8 px-4 uppercase"
+        style={{
+          fontFamily: 'Geist, sans-serif',
+          fontSize: '0.6875rem',
+          letterSpacing: '0.18em',
+          fontWeight: 600,
+          color: 'hsl(var(--muted-foreground))',
+        }}
+      >
+        <span style={{ color: 'hsl(var(--gold))' }}>★</span>{' '}
+        Trusted by candidates hired at
+      </p>
+
+      {/* Fade edges — tuned to paper-alt */}
+      <div className="absolute left-0 top-8 bottom-0 w-24 z-10 pointer-events-none" style={{ background: 'linear-gradient(to right, hsl(var(--paper-alt)), transparent)' }} />
+      <div className="absolute right-0 top-8 bottom-0 w-24 z-10 pointer-events-none" style={{ background: 'linear-gradient(to left, hsl(var(--paper-alt)), transparent)' }} />
 
       {/* Seamless infinite scroll */}
       <div className="overflow-hidden">
-        <div className="flex w-max animate-logo-scroll">
+        <div className="flex w-max animate-logo-scroll items-center">
           {companies.map((company, i) => (
             <LogoItem key={`${company.name}-a-${i}`} company={company} />
           ))}
@@ -103,6 +116,6 @@ export default function LogoScroll() {
           ))}
         </div>
       </div>
-    </section>
+    </div>
   );
 }

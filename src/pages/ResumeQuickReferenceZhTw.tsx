@@ -29,7 +29,7 @@ const ResumeQuickReferenceZhTw = () => {
       <nav className="fixed top-0 left-0 right-0 z-50 bg-nav-green">
         <div className="container mx-auto px-5 md:px-6 py-4 flex items-center justify-between">
           <Link to="/zh-tw" className="font-heading text-lg md:text-xl font-medium text-cream tracking-tight">
-            JAMES BUGDEN
+            hiresign
           </Link>
           <div className="flex items-center gap-3">
             <AuthHeaderButton variant="nav" />
@@ -49,15 +49,15 @@ const ResumeQuickReferenceZhTw = () => {
           <h1 className="font-heading text-3xl md:text-5xl lg:text-6xl text-cream leading-tight mb-4" style={{ lineHeight: 1.2 }}>
             完美履歷：<br className="hidden sm:block" />快速參考指南
           </h1>
-          <p className="text-lg md:text-xl text-cream/80 mb-3">
+          <p className="text-lg md:text-xl text-cream/90 mb-3">
             你需要的一切，都在這一頁。沒有廢話。
           </p>
           <div className="flex flex-col sm:flex-row items-center justify-center gap-2 sm:gap-4 mb-6">
-            <p className="text-base text-cream/60">
+            <p className="text-base text-gold-soft/80">
               James Bugden | Uber 資深招募官
             </p>
             <span className="hidden sm:inline text-cream/30">·</span>
-            <div className="flex items-center gap-1.5 text-cream/60">
+            <div className="flex items-center gap-1.5 text-gold-soft/80">
               <Clock className="w-4 h-4" />
               <span className="text-sm">3 分鐘閱讀</span>
             </div>
@@ -243,7 +243,7 @@ const ResumeQuickReferenceZhTw = () => {
           </div>
 
           <div className="bg-executive-green rounded-xl p-6 md:p-8 mb-8">
-            <p className="text-cream/60 text-xs uppercase tracking-wider mb-3 text-center">公式</p>
+            <p className="text-gold-soft/80 text-xs uppercase tracking-wider mb-3 text-center">公式</p>
             <p className="text-cream font-mono text-sm md:text-base text-center leading-relaxed">
               8 人 × 每週省 2 小時 × 時薪 $30 × 52 週
             </p>
@@ -393,7 +393,7 @@ const ResumeQuickReferenceZhTw = () => {
               <h2 className="font-heading text-2xl md:text-3xl text-cream mb-2">
                 更多免費指南
               </h2>
-              <p className="text-cream/60">持續提升你的求職競爭力</p>
+              <p className="text-gold-soft/80">持續提升你的求職競爭力</p>
             </div>
           </div>
           <div className="grid sm:grid-cols-3 gap-4">

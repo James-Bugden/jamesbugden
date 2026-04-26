@@ -163,15 +163,15 @@ function TestimonialCard({ item, featured = false }: { item: Testimonial; featur
       className={`rounded-xl ${featured ? "md:col-span-2" : ""}`}
       style={{
         backgroundColor: "#FFFFFF",
-        borderLeft: "4px solid #D4930D",
+        borderLeft: "4px solid hsl(var(--gold))",
         boxShadow: "0 2px 8px rgba(0,0,0,0.06)",
         padding: "24px",
       }}
     >
-      <p className="font-bold mb-3" style={{ color: "#1A1A1A", fontSize: featured ? "1.25rem" : "1.0625rem" }}>
+      <p className="font-bold mb-3" style={{ color: "hsl(var(--foreground))", fontSize: featured ? "1.25rem" : "1.0625rem" }}>
         {item.headline}
       </p>
-      <p className="leading-relaxed mb-4" style={{ color: "#1A1A1A", fontSize: "1rem" }}>
+      <p className="leading-relaxed mb-4" style={{ color: "hsl(var(--foreground))", fontSize: "1rem" }}>
         「<BoldQuote text={item.quote} bold={item.bold} />」
       </p>
       <div className="flex items-center gap-3">
@@ -182,13 +182,13 @@ function TestimonialCard({ item, featured = false }: { item: Testimonial; featur
           height={40}
           loading="lazy"
           className="w-10 h-10 rounded-full object-cover flex-shrink-0"
-          style={{ border: "2px solid #D4930D" }}
+          style={{ border: "2px solid hsl(var(--gold))" }}
         />
         <div>
-          <p className="font-bold" style={{ color: "#1A1A1A", fontSize: "0.9375rem" }}>
+          <p className="font-bold" style={{ color: "hsl(var(--foreground))", fontSize: "0.9375rem" }}>
             {item.name}
           </p>
-          <p style={{ color: "#6B6B6B", fontSize: "0.8125rem" }}>{item.titleSource}</p>
+          <p style={{ color: "hsl(var(--muted-foreground))", fontSize: "0.8125rem" }}>{item.titleSource}</p>
         </div>
       </div>
     </div>
@@ -246,9 +246,9 @@ export default function HomepageTestimonialsZhTw() {
               type="button"
               onClick={() => setRevealLevel((v) => v + 1)}
               className="inline-flex items-center gap-2 px-6 py-2.5 rounded-lg text-sm font-semibold transition-all duration-200 border"
-              style={{ color: "#2b4734", borderColor: "#2b4734", backgroundColor: "transparent" }}
-              onMouseEnter={(e) => { e.currentTarget.style.backgroundColor = "#2b4734"; e.currentTarget.style.color = "#FFFFFF"; }}
-              onMouseLeave={(e) => { e.currentTarget.style.backgroundColor = "transparent"; e.currentTarget.style.color = "#2b4734"; }}
+              style={{ color: "hsl(var(--executive-green))", borderColor: "hsl(var(--executive-green))", backgroundColor: "transparent" }}
+              onMouseEnter={(e) => { e.currentTarget.style.backgroundColor = "hsl(var(--executive-green))"; e.currentTarget.style.color = "#FFFFFF"; }}
+              onMouseLeave={(e) => { e.currentTarget.style.backgroundColor = "transparent"; e.currentTarget.style.color = "hsl(var(--executive-green))"; }}
             >
               {buttonText}
               <ChevronDown className="w-4 h-4" />

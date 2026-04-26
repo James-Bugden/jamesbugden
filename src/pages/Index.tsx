@@ -1,7 +1,9 @@
-import "@/styles/homepage.css"; // force HMR refresh
+import "@/styles/homepage.css"; // force HMR refresh v2
 import { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { Briefcase, Users, FileCheck, X, CheckCircle2, Eye, Building, Plus, Minus, DollarSign, BookOpen, FileText, TrendingUp } from "lucide-react";
+import PainMarker from "@/components/PainMarker";
+import { ResumeStackIcon, ThreeFiguresIcon, InsiderIcon } from "@/assets/illustrations/HiresignIcons";
 import jamesPhoto from "@/assets/james-bugden.jpg";
 import LanguageToggle from "@/components/LanguageToggle";
 import { AuthHeaderButton } from "@/components/AuthHeaderButton";
@@ -16,6 +18,7 @@ import ExitIntentPopup from "@/components/ExitIntentPopup";
 import PromoBanner from "@/components/PromoBanner";
 import { useAuth } from "@/contexts/AuthContext";
 import { SEO } from "@/components/SEO";
+import { Wordmark } from "@/components/Wordmark";
 
 const faqs = [
   { q: "Why are these free?", a: "It's my mission to make as many paid tools and information online free. I want to help as many people as I can to have the job and lifestyle they want." },
@@ -35,27 +38,27 @@ function FAQSection() {
   });
 
   return (
-    <section className="py-12 md:py-20 px-5 md:px-6 bg-background">
-      <div className="container mx-auto max-w-2xl">
-        <h2 className="font-heading text-center mb-6 text-foreground" style={{ fontSize: 'clamp(2rem, 4vw, 2.625rem)' }}>
-          Is this actually free? Yes. Here's why.
+    <section className="py-14 md:py-20 px-5 md:px-6 bg-paper">
+      <div className="container mx-auto max-w-3xl">
+        <h2 className="font-heading text-center mb-10 text-foreground tracking-[-0.025em]" style={{ fontSize: 'clamp(2rem, 4vw, 2.75rem)', fontWeight: 600, lineHeight: 1.1 }}>
+          Is this actually free? Yes — here's why.
         </h2>
-        <div>
+        <div className="card-hairline divide-y divide-border overflow-hidden">
           {faqs.map((faq, i) => {
             const isOpen = open.has(i);
             return (
-              <div key={i} className="border-b border-border">
+              <div key={i}>
                 <button
                   type="button"
                   onClick={() => toggle(i)}
-                  className="w-full flex items-center justify-between py-5 text-left gap-4"
+                  className="w-full flex items-center justify-between py-5 px-6 text-left gap-4 hover:bg-paper-alt transition-colors"
                   aria-expanded={isOpen}
                   aria-controls={`faq-panel-${i}`}
                 >
-                  <span className="font-bold text-lg text-foreground">{faq.q}</span>
+                  <span className="font-heading text-[1.0625rem] text-foreground tracking-[-0.01em]" style={{ fontWeight: 600 }}>{faq.q}</span>
                   {isOpen
-                    ? <Minus className="w-5 h-5 flex-shrink-0 transition-transform duration-200 text-muted-foreground" />
-                    : <Plus className="w-5 h-5 flex-shrink-0 transition-transform duration-200 text-muted-foreground" />
+                    ? <Minus className="w-4 h-4 flex-shrink-0 transition-transform duration-200 text-gold" strokeWidth={2.25} />
+                    : <Plus className="w-4 h-4 flex-shrink-0 transition-transform duration-200 text-gold" strokeWidth={2.25} />
                   }
                 </button>
                 <div
@@ -65,7 +68,7 @@ function FAQSection() {
                   className="overflow-hidden transition-all duration-200 ease-in-out"
                   style={{ maxHeight: isOpen ? '500px' : '0', opacity: isOpen ? 1 : 0 }}
                 >
-                  <p className="pb-5 text-base text-foreground" style={{ paddingTop: '0' }}>
+                  <p className="px-6 pb-5 text-[15px] text-muted-foreground leading-relaxed" style={{ paddingTop: '0' }}>
                     {faq.a}
                   </p>
                 </div>
@@ -115,98 +118,112 @@ const Index = () => {
         "knowsAbout": ["Recruiting", "Career Coaching", "Resume Writing", "Interview Preparation", "Salary Negotiation"]
       }} />
 
-      {/* ── Promo Banner + Navigation (sticky together) ── */}
+      {/* ── Promo Banner + Navigation (sticky together) — LIGHT cream nav ── */}
       <header className="sticky top-0 z-50">
         <PromoBanner lang="en" />
         <nav
-          className={`transition-shadow duration-300 bg-cream ${
-            scrolled ? "shadow-md shadow-black/8" : ""
+          className={`transition-all duration-300 border-b border-border ${
+            scrolled ? "shadow-sm" : ""
           }`}
+          style={{ background: 'rgba(253,251,247,0.85)', backdropFilter: 'blur(12px)', WebkitBackdropFilter: 'blur(12px)' }}
           aria-label="Main navigation"
         >
-          <div className="container mx-auto px-4 sm:px-5 md:px-6 py-4 flex items-center justify-between">
-            <Link to="/" className="font-heading text-base sm:text-lg md:text-xl font-bold tracking-tight whitespace-nowrap text-executive-green cursor-pointer" onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}>
-              JAMES BUGDEN
+          <div className="container mx-auto px-4 sm:px-5 md:px-6 h-16 flex items-center justify-between">
+            <Link to="/" className="cursor-pointer flex items-center gap-3" onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })} aria-label="Hiresign — by James Bugden" style={{ color: 'hsl(var(--executive-green))' }}>
+              <Wordmark variant="mono" size={28} />
             </Link>
             <div className="flex items-center gap-2 sm:gap-4">
               <AuthHeaderButton variant="light" />
-              <LanguageToggle variant="default" />
+              <LanguageToggle variant="nav" />
             </div>
           </div>
         </nav>
       </header>
 
       <main>
-        {/* ── Hero — cream #FDFBF7 ── */}
-        <section id="about" className="pt-8 md:pt-16 pb-12 md:pb-20 px-4 sm:px-5 md:px-6 relative bg-cream">
-          <div className="container mx-auto max-w-5xl">
-            <div className="flex flex-col items-center text-center md:grid md:grid-cols-[1fr_auto] md:gap-16 md:items-center md:text-left">
-              <div className="order-2 md:order-1 w-full">
-                {/* Photo — mobile only */}
-                <div className="flex justify-center mb-4 pt-4 md:hidden">
-                  <div className="relative">
-                    <div className="absolute -inset-3 rounded-full bg-gradient-to-br from-gold/20 via-transparent to-executive-green/10 blur-xl" />
-                    <img src={jamesPhoto} alt="James Bugden" className="relative w-40 h-40 rounded-full object-cover hero-photo-shadow" style={{ border: '3px solid #D4930D' }} />
-                  </div>
+        {/* ── Hero — paper bg, photo above H1 per user direction ── */}
+        <section id="about" className="pt-12 md:pt-16 pb-14 md:pb-24 px-4 sm:px-5 md:px-6 relative bg-paper">
+          <div className="container mx-auto max-w-3xl">
+
+            {/* Hero photo — above H1, large for recognition */}
+            <div className="flex justify-center mb-8">
+              <div className="relative">
+                <div
+                  className="absolute -inset-3 rounded-[32px]"
+                  style={{ background: 'hsl(var(--gold-soft))', opacity: 0.5, transform: 'translate(10px, 12px)' }}
+                  aria-hidden
+                />
+                <div
+                  className="relative overflow-hidden rounded-[24px] bg-card"
+                  style={{ border: '1px solid hsl(var(--border))' }}
+                >
+                  <img
+                    src={jamesPhoto}
+                    alt="James Bugden, Senior Recruiter at Uber Taiwan"
+                    className="object-cover w-[240px] h-[300px] md:w-[280px] md:h-[350px]"
+                    loading="eager"
+                  />
                 </div>
-
-                <h1 className="font-heading leading-[1.12] tracking-tight mb-3 max-w-3xl mx-auto md:mx-0 text-foreground" style={{ fontSize: 'clamp(1.75rem, 5vw, 3.5rem)' }}>
-                  Get a $200K+ Offer at Your Dream&nbsp;Company
-                </h1>
-
-                {/* Credential badge */}
-                <div className="flex items-center justify-center md:justify-start gap-2 mb-5">
-                  <span className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full border border-border bg-muted/40 text-muted-foreground text-[0.9375rem]">
-                    <Briefcase className="w-4 h-4 text-muted-foreground" />
-                    Senior Recruiter at Uber
-                  </span>
-                </div>
-
-                <p className="leading-relaxed max-w-xl mx-auto md:mx-0 mb-5 text-foreground text-[1.0625rem]">
-                  Free tools, templates, and insider strategies from a recruiter who's helped 750+ people get hired.
-                </p>
-
-                <div className="mb-2 max-w-md mx-auto md:mx-0">
-                  <MailerLiteForm formId="sM1X80" className="ml-embedded" buttonText="Send Me the Free Toolkit" />
-                </div>
-
-                <p className="mb-5 text-muted-foreground text-[0.8125rem] mt-2">
-                  Join 10,000+ professionals using my free tools · Unsubscribe anytime
-                </p>
-
-                <div className="flex flex-wrap justify-center md:justify-start gap-x-8 gap-y-3 pt-6 border-t border-border/60">
-                  <div className="flex flex-col items-center md:items-start">
-                    <span className="text-xl font-bold flex items-center gap-1.5 text-foreground">
-                      <FileCheck className="w-5 h-5 text-executive-green/70" />
-                      20,000+
-                    </span>
-                    <span className="text-sm text-muted-foreground">resumes reviewed</span>
-                  </div>
-                  <div className="flex flex-col items-center md:items-start">
-                    <span className="text-xl font-bold flex items-center gap-1.5 text-foreground">
-                      <Users className="w-5 h-5 text-executive-green/70" />
-                      750+
-                    </span>
-                    <span className="text-sm text-muted-foreground">people hired</span>
-                  </div>
+                <div
+                  className="absolute -bottom-3 left-1/2 -translate-x-1/2 card-hairline px-4 py-2 flex items-center gap-2 whitespace-nowrap"
+                  style={{ background: 'hsl(var(--paper))' }}
+                >
+                  <span className="w-1.5 h-1.5 rounded-full" style={{ background: 'hsl(var(--gold))' }} />
+                  <span className="text-foreground text-[13px] font-semibold leading-tight">James Bugden</span>
+                  <span className="text-muted-foreground text-[12px]">· Uber Recruiter</span>
                 </div>
               </div>
+            </div>
 
-              {/* Photo — desktop only */}
-              <div className="hidden md:flex justify-end order-2">
-                <div className="relative">
-                  <div className="absolute -inset-3 rounded-full bg-gradient-to-br from-gold/20 via-transparent to-executive-green/10 blur-xl" />
-                  <img src={jamesPhoto} alt="James Bugden" className="relative w-80 h-80 lg:w-88 lg:h-88 rounded-full object-cover hero-photo-shadow" style={{ border: '3px solid #D4930D' }} />
+            <h1
+              className="font-heading leading-[1.02] tracking-[-0.04em] mb-6 text-center mx-auto max-w-3xl mt-6"
+              style={{ fontSize: 'clamp(2.5rem, 5.5vw, 4.25rem)', fontWeight: 600, color: 'hsl(var(--foreground))' }}
+            >
+              Get a <span style={{ color: 'hsl(var(--executive-green))' }}>$200K+ offer</span> at <span className="text-mark-gold">your dream company</span>.
+            </h1>
+
+            <p className="leading-relaxed mb-9 text-[1.125rem] text-center mx-auto max-w-2xl" style={{ color: 'hsl(0 0% 28%)' }}>
+              Free tools, templates, and insider strategies from a recruiter who's helped 750+ people get hired.
+            </p>
+
+            <div className="mb-3 max-w-xl mx-auto">
+              <MailerLiteForm formId="sM1X80" className="ml-embedded ml-inline" buttonText="Send Me the Free Toolkit" />
+            </div>
+
+            <p className="mb-12 text-muted-foreground text-[13px] text-center">
+              Join <span className="tnum-geist" style={{ fontWeight: 600 }}>10,000+</span> professionals · Unsubscribe anytime
+            </p>
+
+            {/* Stat row — green icons + Geist tabular numerics, hairline border-top */}
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 sm:gap-12 pt-9 border-t border-border max-w-xl mx-auto">
+              <div className="flex items-center gap-3 justify-center">
+                <div className="flex-shrink-0 w-11 h-11 rounded-lg flex items-center justify-center" style={{ background: 'hsl(var(--green-soft))' }}>
+                  <ResumeStackIcon size={28} />
+                </div>
+                <div className="flex flex-col">
+                  <span className="tnum-geist text-foreground" style={{ fontSize: '1.75rem' }}>20,000+</span>
+                  <span className="text-muted-foreground text-[13px]">Resumes reviewed</span>
+                </div>
+              </div>
+              <div className="flex items-center gap-3 justify-center">
+                <div className="flex-shrink-0 w-11 h-11 rounded-lg flex items-center justify-center" style={{ background: 'hsl(var(--green-soft))' }}>
+                  <ThreeFiguresIcon size={28} />
+                </div>
+                <div className="flex flex-col">
+                  <span className="tnum-geist text-foreground" style={{ fontSize: '1.75rem' }}>750+</span>
+                  <span className="text-muted-foreground text-[13px]">People hired</span>
                 </div>
               </div>
             </div>
           </div>
         </section>
 
-        {/* ── Logo Trust Bar — cream #FDFBF7 ── */}
-        <div className="bg-cream">
-          <LogoScroll />
-        </div>
+        {/* ── Logo Trust Bar — paper-alt ── */}
+        <section className="bg-paper-alt py-10 md:py-14 px-5 md:px-6 border-y border-border">
+          <div className="container mx-auto max-w-6xl">
+            <LogoScroll />
+          </div>
+        </section>
 
         {/* ── Testimonials — white #FFFFFF ── */}
         <LazySection>
@@ -215,77 +232,92 @@ const Index = () => {
           </div>
         </LazySection>
 
-        {/* ── Pain-Point Section — cream #FDFBF7 ── */}
-        <section className="py-12 md:py-20 px-5 md:px-6 bg-cream">
-          <div className="container mx-auto max-w-2xl text-center">
-            <h2 className="font-heading mb-6 text-foreground" style={{ fontSize: 'clamp(2rem, 4vw, 2.625rem)' }}>
-              Sound Familiar?
+        {/* ── Pain-Point Section — paper bg, hairline cards ── */}
+        <section className="py-14 md:py-20 px-5 md:px-6 bg-paper">
+          <div className="container mx-auto max-w-3xl">
+            <h2 className="font-heading text-center mb-10 text-foreground tracking-[-0.025em]" style={{ fontSize: 'clamp(2rem, 4vw, 2.75rem)', fontWeight: 600, lineHeight: 1.1 }}>
+              Sound familiar?
             </h2>
 
-            <div className="flex flex-col gap-5 mb-8 text-left max-w-xl mx-auto">
-              <div className="flex items-start gap-3">
-                <X className="w-5 h-5 flex-shrink-0 mt-0.5 text-destructive" strokeWidth={2.5} />
-                <p className="text-foreground text-lg">You've applied to tons of jobs and never heard back.</p>
+            <div className="grid gap-3 mb-8">
+              <div className="card-hairline p-5 flex items-start gap-4">
+                <span className="mt-0.5"><PainMarker /></span>
+                <p className="text-foreground text-[1.0625rem] leading-relaxed">You've applied to tons of jobs and never heard back.</p>
               </div>
-              <div className="flex items-start gap-3">
-                <X className="w-5 h-5 flex-shrink-0 mt-0.5 text-destructive" strokeWidth={2.5} />
-                <p className="text-foreground text-lg">You made it to the final interview... then nothing. No email. No call.</p>
+              <div className="card-hairline p-5 flex items-start gap-4">
+                <span className="mt-0.5"><PainMarker /></span>
+                <p className="text-foreground text-[1.0625rem] leading-relaxed">You made it to the final interview… then nothing. No email. No call.</p>
               </div>
-              <div className="flex items-start gap-3">
-                <X className="w-5 h-5 flex-shrink-0 mt-0.5 text-destructive" strokeWidth={2.5} />
-                <p className="text-foreground text-lg">You got a job offer, but you have no idea if the pay is fair or if you should ask for more.</p>
+              <div className="card-hairline p-5 flex items-start gap-4">
+                <span className="mt-0.5"><PainMarker /></span>
+                <p className="text-foreground text-[1.0625rem] leading-relaxed">You got a job offer, but you have no idea if the pay is fair — or if you should ask for more.</p>
               </div>
             </div>
 
-            <div className="flex items-start justify-center gap-2 mb-6">
-              <CheckCircle2 className="w-5 h-5 flex-shrink-0 mt-0.5 text-executive-green" />
-              <p className="text-muted-foreground text-base">
-                You don't need another job board. You need someone who's been on the other side of the table.
+            <div className="card-hairline-tinted p-6 md:p-8">
+              <div className="flex items-start gap-3 mb-4">
+                <CheckCircle2 className="w-5 h-5 flex-shrink-0 mt-1 text-executive-green" strokeWidth={2} />
+                <p className="text-foreground text-[1.0625rem] leading-relaxed font-medium">
+                  You don't need another job board. You need someone who's been on the other side of the table.
+                </p>
+              </div>
+              <div className="max-w-md">
+                <MailerLiteForm formId="sM1X80" className="ml-embedded" buttonText="Get My Free Recruiting Tips" />
+              </div>
+              <p className="mt-3 text-muted-foreground text-[0.8125rem]">
+                No spam, no fluff. Insider recruiting strategies every week.
               </p>
             </div>
-
-            <div className="max-w-md mx-auto">
-              <MailerLiteForm formId="sM1X80" className="ml-embedded" buttonText="Get My Free Recruiting Tips" />
-            </div>
-            <p className="text-center mt-2 text-muted-foreground text-[0.8125rem]">
-              No spam, no fluff. Insider recruiting strategies every week.
-            </p>
           </div>
         </section>
 
-        {/* ── Credibility Section — white #FFFFFF ── */}
-        <section className="py-12 md:py-20 px-5 md:px-6 bg-card">
-          <div className="container mx-auto max-w-4xl">
-            <div className="text-center mb-6">
-              <h2 className="font-heading mb-3 text-foreground" style={{ fontSize: 'clamp(2rem, 4vw, 2.625rem)' }}>
-                Most career advice comes from people who've never hired anyone.
+        {/* ── Credibility Section — paper-alt, hairline cards with gold top accent ── */}
+        <section className="py-14 md:py-20 px-5 md:px-6 bg-paper-alt">
+          <div className="container mx-auto max-w-5xl">
+            <div className="text-center mb-12 max-w-3xl mx-auto">
+              <h2 className="font-heading text-foreground tracking-[-0.025em]" style={{ fontSize: 'clamp(2rem, 4vw, 2.75rem)', fontWeight: 600, lineHeight: 1.1 }}>
+                Most career advice comes from people who've never <span style={{ color: 'hsl(var(--gold))' }}>hired</span> anyone.
               </h2>
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-6 mb-10">
-              <div className="rounded-xl p-6 text-center md:text-left bg-cream border-t-[3px] border-gold">
-                <Eye className="w-10 h-10 mx-auto md:mx-0 mb-4 text-executive-green" strokeWidth={1.5} />
-                <p className="font-bold text-[20px] mb-2 text-foreground">I've Read 20,000+ Resumes</p>
-                <p className="text-base text-foreground">
-                  I know what makes a recruiter stop and read. I also know what gets your resume tossed in 6 seconds. No guessing. I've seen it thousands of times.
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
+              <div className="card-hairline p-7 relative overflow-hidden">
+                <div className="absolute top-0 left-0 right-0 h-[3px] bg-gold" />
+                <div className="mb-5">
+                  <ResumeStackIcon size={56} />
+                </div>
+                <div className="mb-1">
+                  <span className="tnum-geist text-foreground" style={{ fontSize: '1.75rem' }}>20,000+</span>
+                </div>
+                <p className="font-heading text-[18px] mb-2 text-foreground tracking-[-0.01em]" style={{ fontWeight: 600, lineHeight: 1.25 }}>Resumes reviewed</p>
+                <p className="text-[15px] text-muted-foreground leading-relaxed">
+                  I know what makes a recruiter stop and read — and what gets a resume tossed in 6 seconds.
                 </p>
               </div>
-              <div className="rounded-xl p-6 text-center md:text-left bg-cream border-t-[3px] border-gold">
-                <Users className="w-10 h-10 mx-auto md:mx-0 mb-4 text-executive-green" strokeWidth={1.5} />
-                <p className="font-bold text-[20px] mb-2 text-foreground">I've Hired 750+ People</p>
-                <p className="text-base text-foreground">
-                  I've sat in the room where they decide your offer. I know what HR thinks, what the hiring manager cares about, and where most people lose money.
+              <div className="card-hairline p-7 relative overflow-hidden">
+                <div className="absolute top-0 left-0 right-0 h-[3px] bg-gold" />
+                <div className="mb-5">
+                  <ThreeFiguresIcon size={56} />
+                </div>
+                <div className="mb-1">
+                  <span className="tnum-geist text-foreground" style={{ fontSize: '1.75rem' }}>750+</span>
+                </div>
+                <p className="font-heading text-[18px] mb-2 text-foreground tracking-[-0.01em]" style={{ fontWeight: 600, lineHeight: 1.25 }}>People hired</p>
+                <p className="text-[15px] text-muted-foreground leading-relaxed">
+                  I've sat in the room where offers are decided. I know what HR thinks — and where most people leave money on the table.
                 </p>
               </div>
-              <div className="rounded-xl p-6 text-center md:text-left bg-cream border-t-[3px] border-gold">
-                <Building className="w-10 h-10 mx-auto md:mx-0 mb-4 text-executive-green" strokeWidth={1.5} />
-                <p className="font-bold text-[20px] mb-2 text-foreground">Insider Knowledge</p>
-                <p className="text-base text-foreground">
-                  I've hired over 750 people. I know how they interview, how they pay, and what makes you stand out.
+              <div className="card-hairline p-7 relative overflow-hidden">
+                <div className="absolute top-0 left-0 right-0 h-[3px] bg-gold" />
+                <div className="mb-5">
+                  <InsiderIcon size={56} />
+                </div>
+                <p className="font-heading text-[18px] mb-2 text-foreground tracking-[-0.01em] mt-9" style={{ fontWeight: 600, lineHeight: 1.25 }}>Recruiter at Uber Taiwan</p>
+                <p className="text-[15px] text-muted-foreground leading-relaxed">
+                  I work in the room where hiring decisions get made — and I share what I see, with you.
                 </p>
               </div>
             </div>
-
           </div>
         </section>
 
@@ -309,38 +341,38 @@ const Index = () => {
           <FAQSection />
         </LazySection>
 
-        {/* ── Create Account CTA ── */}
+        {/* ── Create Account CTA — green-deep with gold accent ── */}
         {!isLoggedIn && (
           <LazySection>
-            <section className="py-12 md:py-16 px-5 md:px-6 bg-cream">
-              <div className="container mx-auto max-w-2xl text-center">
-                <h2 className="font-heading mb-4 text-foreground" style={{ fontSize: 'clamp(2rem, 4vw, 2.625rem)' }}>
+            <section className="py-14 md:py-20 px-5 md:px-6 bg-executive-green relative overflow-hidden">
+              <div className="absolute top-0 left-0 right-0 h-[2px] bg-gold" />
+              <div className="container mx-auto max-w-3xl text-center relative">
+                <h2 className="font-heading mb-5 text-cream tracking-[-0.025em]" style={{ fontSize: 'clamp(2rem, 4vw, 2.75rem)', fontWeight: 600, lineHeight: 1.1 }}>
                   Create your free account
                 </h2>
-                <p className="text-lg text-muted-foreground mb-8 max-w-xl mx-auto">
+                <p className="text-[1.0625rem] text-cream-90 mb-10 max-w-xl mx-auto leading-relaxed">
                   Get full access to all career guides, resume tools, salary data, and more — completely free.
                 </p>
-                <div className="flex flex-col gap-3 mb-8 text-left max-w-sm mx-auto">
-                  <div className="flex items-center gap-3">
-                    <CheckCircle2 className="w-5 h-5 flex-shrink-0 text-executive-green" />
-                    <span className="text-foreground">10+ career &amp; interview guides</span>
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-3 mb-10 text-left max-w-3xl mx-auto">
+                  <div className="card-hairline p-4 flex items-start gap-3" style={{ background: 'hsl(153 73% 18%)', borderColor: 'hsl(153 73% 26%)' }}>
+                    <CheckCircle2 className="w-5 h-5 flex-shrink-0 mt-0.5 text-gold" />
+                    <span className="text-cream text-[15px]">10+ career &amp; interview guides</span>
                   </div>
-                  <div className="flex items-center gap-3">
-                    <CheckCircle2 className="w-5 h-5 flex-shrink-0 text-executive-green" />
-                    <span className="text-foreground">Resume Builder &amp; AI Analyzer</span>
+                  <div className="card-hairline p-4 flex items-start gap-3" style={{ background: 'hsl(153 73% 18%)', borderColor: 'hsl(153 73% 26%)' }}>
+                    <CheckCircle2 className="w-5 h-5 flex-shrink-0 mt-0.5 text-gold" />
+                    <span className="text-cream text-[15px]">Resume Builder &amp; AI Analyzer</span>
                   </div>
-                  <div className="flex items-center gap-3">
-                    <CheckCircle2 className="w-5 h-5 flex-shrink-0 text-executive-green" />
-                    <span className="text-foreground">Interview Question Bank &amp; negotiation tools</span>
+                  <div className="card-hairline p-4 flex items-start gap-3" style={{ background: 'hsl(153 73% 18%)', borderColor: 'hsl(153 73% 26%)' }}>
+                    <CheckCircle2 className="w-5 h-5 flex-shrink-0 mt-0.5 text-gold" />
+                    <span className="text-cream text-[15px]">Interview Bank &amp; negotiation tools</span>
                   </div>
                 </div>
                 <Link
                   to="/join"
-                  className="inline-flex items-center justify-center px-8 py-3 rounded-lg font-bold text-white bg-gold hover:bg-gold/90 transition-colors text-lg"
+                  className="btn-saas-primary inline-flex"
                 >
                   Get Full Access — It's Free
                 </Link>
-                
               </div>
             </section>
           </LazySection>

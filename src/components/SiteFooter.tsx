@@ -2,6 +2,7 @@ import { Link, useLocation } from "react-router-dom";
 import { Linkedin } from "lucide-react";
 import { InstagramIcon, ThreadsIcon } from "@/components/SocialIcons";
 import ThemeToggle from "@/components/ThemeToggle";
+import { Wordmark } from "@/components/Wordmark";
 
 const SiteFooter = () => {
   const { pathname } = useLocation();
@@ -11,6 +12,10 @@ const SiteFooter = () => {
   return (
     <footer className="bg-nav-green py-6 px-5 md:px-6">
       <div className="container mx-auto max-w-5xl">
+        {/* Brand lockup */}
+        <div className="text-gold mb-5">
+          <Wordmark variant="primary" size={36} />
+        </div>
         {/* Social icons */}
         <div className="flex items-center gap-5 mb-5">
           <a href="https://www.linkedin.com/in/james-bugden/" target="_blank" rel="noopener noreferrer" className="text-cream-70 hover:text-cream transition-colors">
@@ -54,7 +59,7 @@ const SiteFooter = () => {
         {/* Copyright & Legal */}
         <div className="border-t border-white/10 pt-4 flex flex-col sm:flex-row items-start sm:items-center gap-2 sm:gap-4">
           <span className="text-xs text-cream-90">
-            © {new Date().getFullYear()} James Bugden. {isZh ? "版權所有" : "All rights reserved"}.
+            © {new Date().getFullYear()} Hiresign — {isZh ? "由 James Bugden 創辦" : "by James Bugden"}. {isZh ? "版權所有" : "All rights reserved"}.
           </span>
           <div className="flex items-center gap-3 text-xs">
             <Link to="/privacy" className="text-cream-70 hover:text-cream transition-colors">

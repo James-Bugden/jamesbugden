@@ -3,7 +3,7 @@ import { useRef, useEffect, useState } from "react";
 
 const COLORS = [
   "#111827", "#374151", "#dc2626", "#2563eb",
-  "#16a34a", "#D4930D", "#7c3aed", "#0891b2",
+  "#16a34a", "#B08A3E", "#7c3aed", "#0891b2",
 ];
 
 interface InlineFormatToolbarProps {

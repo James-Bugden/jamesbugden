@@ -194,10 +194,10 @@ export function ImportModal({ open, onClose, type, onImported }: ImportModalProp
     <Dialog open={open} onOpenChange={(o) => !o && handleClose()}>
       <DialogContent className="max-w-[480px] p-0 gap-0 overflow-hidden" style={{ borderRadius: "12px" }}>
         <DialogHeader className="px-6 pt-6 pb-0">
-          <DialogTitle className="text-[17px] font-semibold text-gray-900">
+          <DialogTitle className="text-[17px] font-semibold text-foreground">
             {tl(lang, "Import Resume", "匯入履歷")}
           </DialogTitle>
-          <DialogDescription className="text-[13px] text-gray-500 mt-1">
+          <DialogDescription className="text-[13px] text-muted-foreground mt-1">
             {tl(
               lang,
               "Upload a file or paste text — we'll parse it into editable sections.",
@@ -207,13 +207,13 @@ export function ImportModal({ open, onClose, type, onImported }: ImportModalProp
         </DialogHeader>
 
         {/* Tab switcher */}
-        <div className="flex gap-0 mx-6 mt-4 bg-gray-100 rounded-lg p-0.5">
+        <div className="flex gap-0 mx-6 mt-4 bg-muted rounded-lg p-0.5">
           <button
             onClick={() => setTab("upload")}
             className={`flex-1 flex items-center justify-center gap-1.5 py-2 rounded-md text-[12px] font-medium transition-all ${
               tab === "upload"
-                ? "bg-white shadow-sm text-gray-900"
-                : "text-gray-500 hover:text-gray-700"
+                ? "bg-white shadow-sm text-foreground"
+                : "text-muted-foreground hover:text-foreground"
             }`}
           >
             <Upload className="w-3.5 h-3.5" /> {tl(lang, "Upload File", "上傳檔案")}
@@ -222,8 +222,8 @@ export function ImportModal({ open, onClose, type, onImported }: ImportModalProp
             onClick={() => setTab("paste")}
             className={`flex-1 flex items-center justify-center gap-1.5 py-2 rounded-md text-[12px] font-medium transition-all ${
               tab === "paste"
-                ? "bg-white shadow-sm text-gray-900"
-                : "text-gray-500 hover:text-gray-700"
+                ? "bg-white shadow-sm text-foreground"
+                : "text-muted-foreground hover:text-foreground"
             }`}
           >
             <ClipboardPaste className="w-3.5 h-3.5" /> {tl(lang, "Paste Text", "貼上文字")}
@@ -248,12 +248,12 @@ export function ImportModal({ open, onClose, type, onImported }: ImportModalProp
             <div className="space-y-4">
               <div className="rounded-xl p-4 space-y-3" style={{ backgroundColor: "rgba(220,38,38,0.04)", border: "1px solid rgba(220,38,38,0.15)" }}>
                 <div className="flex items-start gap-2.5">
-                  <AlertTriangle className="w-5 h-5 shrink-0 mt-0.5" style={{ color: "#dc2626" }} />
+                  <AlertTriangle className="w-5 h-5 shrink-0 mt-0.5" style={{ color: "hsl(var(--destructive))" }} />
                   <div>
-                    <p className="text-sm font-semibold" style={{ color: "#1A1A1A" }}>
+                    <p className="text-sm font-semibold" style={{ color: "hsl(var(--foreground))" }}>
                       {tl(lang, "Monthly import limit reached", "本月匯入額度已用完")}
                     </p>
-                    <p className="text-xs mt-1 leading-relaxed" style={{ color: "#6B6B6B" }}>
+                    <p className="text-xs mt-1 leading-relaxed" style={{ color: "hsl(var(--muted-foreground))" }}>
                       {tl(lang,
                         `You've used all ${importLimit} free AI imports this month. Your limit resets at the start of next month.`,
                         `你已使用完本月 ${importLimit} 次免費 AI 匯入額度。額度將於下月初重置。`
@@ -263,8 +263,8 @@ export function ImportModal({ open, onClose, type, onImported }: ImportModalProp
                 </div>
               </div>
               <div className="flex items-start gap-2 pt-1" style={{ borderTop: "1px solid rgba(0,0,0,0.06)" }}>
-                <Heart className="w-3.5 h-3.5 shrink-0 mt-0.5" style={{ color: "#D4930D" }} />
-                <p className="text-xs leading-relaxed" style={{ color: "#6B6B6B" }}>
+                <Heart className="w-3.5 h-3.5 shrink-0 mt-0.5" style={{ color: "hsl(var(--gold))" }} />
+                <p className="text-xs leading-relaxed" style={{ color: "hsl(var(--muted-foreground))" }}>
                   {tl(lang,
                     "I built this tool by myself as a solo creator. Every import uses AI which costs real money, plus hosting and development costs. These limits help me keep the tool free for everyone. Thank you for understanding! 🙏",
                     "這個工具是我一個人獨力開發的。每次匯入都會使用 AI，產生實際費用，加上主機和開發成本。設定使用上限是為了讓這個工具能繼續免費提供給大家。感謝你的體諒！🙏"
@@ -275,23 +275,23 @@ export function ImportModal({ open, onClose, type, onImported }: ImportModalProp
           ) : tab === "upload" ? (
             loading ? (
               <div className="flex flex-col items-center gap-3 py-12">
-                <Loader2 className="w-7 h-7 animate-spin text-gray-400" />
-                <span className="text-[13px] text-gray-500">{loadingMessage}</span>
+                <Loader2 className="w-7 h-7 animate-spin text-muted-foreground/70" />
+                <span className="text-[13px] text-muted-foreground">{loadingMessage}</span>
               </div>
             ) : selectedFile ? (
               <div className="space-y-4">
                 {/* Selected file preview */}
-                <div className="flex items-center gap-3 p-3 bg-gray-50 rounded-lg border border-gray-200">
-                  <div className="w-9 h-9 rounded-lg bg-white border border-gray-200 flex items-center justify-center flex-shrink-0">
-                    <FileText className="w-4 h-4 text-gray-500" />
+                <div className="flex items-center gap-3 p-3 bg-paper-alt rounded-lg border border-border">
+                  <div className="w-9 h-9 rounded-lg bg-white border border-border flex items-center justify-center flex-shrink-0">
+                    <FileText className="w-4 h-4 text-muted-foreground" />
                   </div>
                   <div className="flex-1 min-w-0">
-                    <p className="text-[13px] font-medium text-gray-800 truncate">{selectedFile.name}</p>
-                    <p className="text-[11px] text-gray-400">{(selectedFile.size / 1024).toFixed(0)} KB</p>
+                    <p className="text-[13px] font-medium text-foreground truncate">{selectedFile.name}</p>
+                    <p className="text-[11px] text-muted-foreground/70">{(selectedFile.size / 1024).toFixed(0)} KB</p>
                   </div>
                   <button
                     onClick={() => setSelectedFile(null)}
-                    className="p-1 rounded-md text-gray-400 hover:text-gray-600 hover:bg-gray-200 transition-colors"
+                    className="p-1 rounded-md text-muted-foreground/70 hover:text-muted-foreground hover:bg-muted transition-colors"
                   >
                     <X className="w-4 h-4" />
                   </button>
@@ -313,26 +313,26 @@ export function ImportModal({ open, onClose, type, onImported }: ImportModalProp
                 onDragLeave={handleDragLeave}
                 className={`py-12 border-[1.5px] border-dashed rounded-lg flex flex-col items-center gap-2.5 cursor-pointer transition-all ${
                   dragActive
-                    ? "border-gray-500 bg-gray-100"
-                    : "border-gray-300 hover:border-gray-400 hover:bg-gray-50"
+                    ? "border-gold bg-muted"
+                    : "border-border hover:border-border hover:bg-paper-alt"
                 }`}
               >
-                <div className="w-10 h-10 rounded-full bg-gray-100 flex items-center justify-center">
-                  <FileUp className="w-5 h-5 text-gray-500" />
+                <div className="w-10 h-10 rounded-full bg-muted flex items-center justify-center">
+                  <FileUp className="w-5 h-5 text-muted-foreground" />
                 </div>
                 <div className="text-center">
-                  <p className="text-[13px] font-medium text-gray-700">
+                  <p className="text-[13px] font-medium text-foreground">
                     {lang === "zh-tw" ? (
                       <>
-                        把檔案拖到這裡，或<span className="text-gray-900 underline">點此瀏覽</span>
+                        把檔案拖到這裡，或<span className="text-foreground underline">點此瀏覽</span>
                       </>
                     ) : (
                       <>
-                        Drop your file here or <span className="text-gray-900 underline">browse</span>
+                        Drop your file here or <span className="text-foreground underline">browse</span>
                       </>
                     )}
                   </p>
-                  <p className="text-[11px] text-gray-400 mt-0.5">
+                  <p className="text-[11px] text-muted-foreground/70 mt-0.5">
                     {tl(lang, "Supports PDF, DOCX, and TXT", "支援 PDF、DOCX、TXT")}
                   </p>
                 </div>
@@ -342,8 +342,8 @@ export function ImportModal({ open, onClose, type, onImported }: ImportModalProp
             <div className="space-y-3">
               {loading ? (
                 <div className="flex flex-col items-center gap-3 py-12">
-                  <Loader2 className="w-7 h-7 animate-spin text-gray-400" />
-                  <span className="text-[13px] text-gray-500">{loadingMessage}</span>
+                  <Loader2 className="w-7 h-7 animate-spin text-muted-foreground/70" />
+                  <span className="text-[13px] text-muted-foreground">{loadingMessage}</span>
                 </div>
               ) : (
                 <>
@@ -351,11 +351,11 @@ export function ImportModal({ open, onClose, type, onImported }: ImportModalProp
                     value={pastedText}
                     onChange={(e) => setPastedText(e.target.value)}
                     placeholder={"John Doe\nSoftware Engineer\njohn@example.com · (555) 123-4567\n\nExperience\nSoftware Engineer at Acme Corp\nJan 2020 – Present · San Francisco, CA\n• Built scalable APIs serving 1M+ users\n• Led migration to microservices architecture\n\nEducation\nB.S. Computer Science\nStanford University, 2016-2020\n\nSkills\nJavaScript, TypeScript, React, Node.js, Python"}
-                    className="w-full min-h-[220px] p-3 text-[12px] font-mono text-gray-800 bg-gray-50 border border-gray-200 rounded-lg resize-none outline-none focus:border-gray-400 placeholder-gray-400"
+                    className="w-full min-h-[220px] p-3 text-[12px] font-mono text-foreground bg-paper-alt border border-border rounded-lg resize-none outline-none focus:border-gold placeholder:text-muted-foreground/60"
                     style={{ lineHeight: 1.6 }}
                   />
                   <div className="flex items-center justify-between">
-                    <span className="text-[11px] text-gray-400">
+                    <span className="text-[11px] text-muted-foreground/70">
                       {pastedText.trim()
                         ? tl(
                             lang,
@@ -382,7 +382,7 @@ export function ImportModal({ open, onClose, type, onImported }: ImportModalProp
           {!importLimitReached && !loading && !usageLoading && (
             <div className="mt-4 space-y-2.5 pt-3" style={{ borderTop: "1px solid rgba(0,0,0,0.06)" }}>
               <div className="flex items-center justify-between">
-                <span className="text-[11px] font-medium" style={{ color: "#6B6B6B" }}>
+                <span className="text-[11px] font-medium" style={{ color: "hsl(var(--muted-foreground))" }}>
                   {tl(lang,
                     `${Math.max(0, importLimit - importCount)} of ${importLimit} free AI imports remaining this month`,
                     `本月還剩 ${Math.max(0, importLimit - importCount)}/${importLimit} 次免費 AI 匯入`
@@ -390,7 +390,7 @@ export function ImportModal({ open, onClose, type, onImported }: ImportModalProp
                 </span>
               </div>
               <div className="flex items-start gap-2">
-                <Heart className="w-3.5 h-3.5 shrink-0 mt-0.5" style={{ color: "#D4930D" }} />
+                <Heart className="w-3.5 h-3.5 shrink-0 mt-0.5" style={{ color: "hsl(var(--gold))" }} />
                 <p className="text-[11px] leading-relaxed" style={{ color: "#9CA3AF" }}>
                   {tl(lang,
                     "I built this tool by myself. Every import uses AI which costs real money. These limits help me keep it free for everyone. 🙏",

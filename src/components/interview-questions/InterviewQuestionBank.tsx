@@ -69,9 +69,9 @@ const CATEGORIES = [
 ] as const;
 
 const DIFFICULTIES = [
-  { value: 1, en: "Easy", zh: "簡單", color: "text-emerald-600 dark:text-emerald-400", desc_en: "Common questions most candidates should prepare for", desc_zh: "大多數求職者都應準備的常見問題" },
-  { value: 2, en: "Medium", zh: "中等", color: "text-amber-600 dark:text-amber-400", desc_en: "Requires structured thinking & specific examples", desc_zh: "需要結構化思考與具體案例" },
-  { value: 3, en: "Hard", zh: "困難", color: "text-red-600 dark:text-red-400", desc_en: "Complex scenarios testing deep expertise & judgment", desc_zh: "測試深度專業與判斷力的複雜情境" },
+  { value: 1, en: "Easy", zh: "簡單", color: "text-executive-green", desc_en: "Common questions most candidates should prepare for", desc_zh: "大多數求職者都應準備的常見問題" },
+  { value: 2, en: "Medium", zh: "中等", color: "text-gold", desc_en: "Requires structured thinking & specific examples", desc_zh: "需要結構化思考與具體案例" },
+  { value: 3, en: "Hard", zh: "困難", color: "text-destructive", desc_en: "Complex scenarios testing deep expertise & judgment", desc_zh: "測試深度專業與判斷力的複雜情境" },
 ] as const;
 
 const AUDIENCES = [
@@ -137,18 +137,22 @@ const TAG_ZH: Record<string, string> = {
   workplace: "職場", workplace_relationships: "職場關係",
 };
 
+/* Unified brand-aligned category chip — Hiresign uses a single tag treatment.
+   Differentiation comes from the label text, not from a rainbow palette. */
+const CATEGORY_CHIP =
+  "bg-gold-soft text-executive-green border border-gold/25 dark:bg-gold/10 dark:text-gold dark:border-gold/30";
 const CATEGORY_COLORS: Record<string, string> = {
-  behavioral: "bg-blue-100 text-blue-800 dark:bg-blue-900/30 dark:text-blue-300",
-  situational: "bg-purple-100 text-purple-800 dark:bg-purple-900/30 dark:text-purple-300",
-  salary_comp: "bg-emerald-100 text-emerald-800 dark:bg-emerald-900/30 dark:text-emerald-300",
-  career_history: "bg-amber-100 text-amber-800 dark:bg-amber-900/30 dark:text-amber-300",
-  culture_fit: "bg-pink-100 text-pink-800 dark:bg-pink-900/30 dark:text-pink-300",
-  strengths_weaknesses: "bg-orange-100 text-orange-800 dark:bg-orange-900/30 dark:text-orange-300",
-  company_knowledge: "bg-cyan-100 text-cyan-800 dark:bg-cyan-900/30 dark:text-cyan-300",
-  curveball: "bg-red-100 text-red-800 dark:bg-red-900/30 dark:text-red-300",
-  management_leadership: "bg-indigo-100 text-indigo-800 dark:bg-indigo-900/30 dark:text-indigo-300",
-  self_assessment: "bg-teal-100 text-teal-800 dark:bg-teal-900/30 dark:text-teal-300",
-  motivation_values: "bg-violet-100 text-violet-800 dark:bg-violet-900/30 dark:text-violet-300",
+  behavioral: CATEGORY_CHIP,
+  situational: CATEGORY_CHIP,
+  salary_comp: CATEGORY_CHIP,
+  career_history: CATEGORY_CHIP,
+  culture_fit: CATEGORY_CHIP,
+  strengths_weaknesses: CATEGORY_CHIP,
+  company_knowledge: CATEGORY_CHIP,
+  curveball: CATEGORY_CHIP,
+  management_leadership: CATEGORY_CHIP,
+  self_assessment: CATEGORY_CHIP,
+  motivation_values: CATEGORY_CHIP,
 };
 
 const PAGE_SIZE = 20;
@@ -428,7 +432,7 @@ export default function InterviewQuestionBank({ lang: initialLang }: { lang: Lan
       <nav className="fixed top-0 left-0 right-0 z-50 bg-nav-green">
         <div className="container mx-auto px-5 md:px-6 py-4 flex items-center justify-between">
           <Link to={lang === "zh" ? "/zh-tw" : "/"} className="font-heading text-lg md:text-xl font-medium text-cream tracking-tight">
-            JAMES BUGDEN
+            hiresign
           </Link>
           <div className="flex items-center gap-3 md:gap-4">
             <AuthHeaderButton variant="nav" />
@@ -867,8 +871,13 @@ export default function InterviewQuestionBank({ lang: initialLang }: { lang: Lan
                        <div className="flex items-center gap-1.5 shrink-0 mt-1">
                          {/* Answer availability badge */}
                          {hasAnswer && !isExpanded && (
-                           <span className="text-[10px] text-accent-foreground/60 bg-accent/10 px-1.5 py-0.5 rounded font-medium">
-                             💡 {t("Answer", "有解答")}
+                           <span className="inline-flex items-center gap-1 text-[11px] text-executive-green bg-gold-soft border border-gold/30 px-2 py-0.5 rounded-full font-semibold">
+                             <svg viewBox="0 0 24 24" width="11" height="11" fill="none" stroke="currentColor" strokeWidth="2.25" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+                               <path d="M9 18h6" />
+                               <path d="M10 22h4" />
+                               <path d="M15.09 14c.18-.98.65-1.74 1.41-2.5A4.65 4.65 0 0 0 18 8 6 6 0 0 0 6 8c0 1 .23 2.23 1.5 3.5A4.61 4.61 0 0 1 8.91 14" />
+                             </svg>
+                             {t("Answer", "有解答")}
                            </span>
                          )}
                          <ChevronDownIcon className={`w-4 h-4 text-muted-foreground transition-transform duration-200 ${isExpanded ? "rotate-180" : ""}`} />
@@ -906,10 +915,10 @@ export default function InterviewQuestionBank({ lang: initialLang }: { lang: Lan
                               className={`w-1.5 h-1.5 rounded-full ${
                                 i <= q.difficulty
                                   ? q.difficulty === 3
-                                    ? "bg-red-500"
+                                    ? "bg-destructive"
                                     : q.difficulty === 2
-                                    ? "bg-amber-500"
-                                    : "bg-emerald-500"
+                                    ? "bg-gold"
+                                    : "bg-executive-green"
                                   : "bg-muted"
                               }`}
                             />
@@ -923,7 +932,7 @@ export default function InterviewQuestionBank({ lang: initialLang }: { lang: Lan
                           <button
                             key={a}
                             onClick={(e) => { e.stopPropagation(); toggleAudience(a); }}
-                            className="text-[10px] px-1.5 py-0.5 rounded bg-muted text-muted-foreground cursor-pointer hover:bg-muted/70 transition-colors"
+                            className="text-[10px] px-1.5 py-0.5 rounded bg-paper-alt text-foreground border border-border cursor-pointer hover:bg-muted transition-colors"
                           >
                             {aud ? (lang === "zh" ? aud.zh : aud.en) : a}
                           </button>
@@ -934,7 +943,7 @@ export default function InterviewQuestionBank({ lang: initialLang }: { lang: Lan
                         <button
                           key={tag}
                           onClick={(e) => { e.stopPropagation(); handleTagClick(tag); }}
-                          className="text-[10px] px-1.5 py-0.5 rounded bg-accent/10 text-accent-foreground/70 hover:bg-accent/20 transition-colors cursor-pointer"
+                          className="text-[10px] px-1.5 py-0.5 rounded bg-paper-alt text-muted-foreground border border-border hover:bg-muted hover:text-foreground transition-colors cursor-pointer"
                         >
                           {lang === "zh" ? (TAG_ZH[tag] || tag.replace(/_/g, " ")) : tag.replace(/_/g, " ")}
                         </button>

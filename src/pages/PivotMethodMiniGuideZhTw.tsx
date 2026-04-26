@@ -51,10 +51,10 @@ const PivotMethodMiniGuideZhTw = () => {
           <p className="text-xl md:text-2xl text-cream/90 mb-4">
             根據 Jenny Blake 的《Pivot:唯一重要的動作是你的下一步》改編
           </p>
-          <p className="text-lg text-cream/80 mb-2">
+          <p className="text-lg text-cream/90 mb-2">
             作者:James Bugden • 資深招募顧問
           </p>
-          <div className="flex items-center justify-center gap-1.5 text-cream/60">
+          <div className="flex items-center justify-center gap-1.5 text-gold-soft/80">
             <Clock className="w-4 h-4" />
             <span className="text-sm">10 分鐘閱讀</span>
           </div>
@@ -243,7 +243,7 @@ const PivotMethodMiniGuideZhTw = () => {
           {/* Stage 3: Pilot */}
           <div className="mb-12 bg-card border border-border rounded-2xl p-8">
             <div className="flex items-center gap-3 mb-6">
-              <div className="w-12 h-12 rounded-full bg-purple-100 flex items-center justify-center">
+              <div className="w-12 h-12 rounded-full bg-gold-soft flex items-center justify-center">
                 <span className="text-2xl">🧪</span>
               </div>
               <h3 className="font-heading text-2xl text-foreground">階段 3:試點 — 在承諾前測試</h3>

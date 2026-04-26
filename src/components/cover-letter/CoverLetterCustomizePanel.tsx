@@ -32,13 +32,13 @@ function SliderRow({ label, value, min, max, step, unit, onChange }: { label: st
           <button onClick={() => onChange(Math.min(max, value + step))} className="w-6 h-6 flex items-center justify-center rounded bg-gray-100 hover:bg-gray-200 text-gray-600"><Plus className="w-3 h-3" /></button>
         </div>
       </div>
-      <Slider value={[value]} min={min} max={max} step={step} onValueChange={([v]) => onChange(v)} className="[&_[role=slider]]:bg-purple-600 [&_[role=slider]]:border-purple-600" />
+      <Slider value={[value]} min={min} max={max} step={step} onValueChange={([v]) => onChange(v)} className="[&_[role=slider]]:bg-gold [&_[role=slider]]:border-gold" />
     </div>
   );
 }
 function ThumbOption({ selected, onClick, children, label }: { selected: boolean; onClick: () => void; children: React.ReactNode; label: string }) {
   return (
-    <button onClick={onClick} className={cn("flex flex-col items-center gap-1.5 p-3 rounded-xl border-2 transition-colors min-w-[72px]", selected ? "border-purple-500 bg-purple-50" : "border-gray-200 bg-white hover:border-gray-300")}>
+    <button onClick={onClick} className={cn("flex flex-col items-center gap-1.5 p-3 rounded-xl border-2 transition-colors min-w-[72px]", selected ? "border-gold bg-gold-soft" : "border-gray-200 bg-white hover:border-gray-300")}>
       {children}<span className="text-[10px] font-medium text-gray-600">{label}</span>
     </button>
   );
@@ -47,7 +47,7 @@ function ToggleGroup({ options, value, onChange }: { options: { value: string; l
   return (
     <div className="flex gap-1 bg-gray-100 rounded-lg p-0.5">
       {options.map((o) => (
-        <button key={o.value} onClick={() => onChange(o.value)} className={cn("px-3 py-1.5 rounded-md text-xs font-semibold transition-colors", value === o.value ? "bg-purple-600 text-white shadow-sm" : "text-gray-600 hover:text-gray-900")}>{o.label}</button>
+        <button key={o.value} onClick={() => onChange(o.value)} className={cn("px-3 py-1.5 rounded-md text-xs font-semibold transition-colors", value === o.value ? "bg-gold text-white shadow-sm" : "text-gray-600 hover:text-gray-900")}>{o.label}</button>
       ))}
     </div>
   );
@@ -63,7 +63,7 @@ export function CoverLetterCustomizePanel({ settings, onChange }: Props) {
           <button key={tab} onClick={() => setSubTab(tab)} className={cn("px-3 py-1.5 text-xs font-semibold whitespace-nowrap rounded-md transition-colors", subTab === tab ? "text-gray-900 bg-gray-100" : "text-gray-500 hover:text-gray-700")}>{tab}</button>
         ))}
       </div>
-      <div className="flex-1 overflow-y-auto p-4 space-y-4" style={{ backgroundColor: "#F5F0E8" }}>
+      <div className="flex-1 overflow-y-auto p-4 space-y-4" style={{ backgroundColor: "hsl(var(--paper-alt))" }}>
         {subTab === "Spacing" && (
           <>
             <SettingCard title="Spacing">
@@ -133,8 +133,8 @@ export function CoverLetterCustomizePanel({ settings, onChange }: Props) {
                 <label className="flex items-center gap-2 text-sm text-gray-700 cursor-pointer"><Checkbox checked={settings.linkIcon} onCheckedChange={(v) => onChange({ linkIcon: !!v })} />Link icon</label>
                 {settings.linkIcon && (
                   <div className="flex gap-2 ml-6">
-                    <button onClick={() => onChange({ linkIconStyle: "link" })} className={cn("p-2 rounded-lg border-2", settings.linkIconStyle === "link" ? "border-purple-500 bg-purple-50" : "border-gray-200")}><Link className="w-4 h-4 text-gray-600" /></button>
-                    <button onClick={() => onChange({ linkIconStyle: "external" })} className={cn("p-2 rounded-lg border-2", settings.linkIconStyle === "external" ? "border-purple-500 bg-purple-50" : "border-gray-200")}><ExternalLink className="w-4 h-4 text-gray-600" /></button>
+                    <button onClick={() => onChange({ linkIconStyle: "link" })} className={cn("p-2 rounded-lg border-2", settings.linkIconStyle === "link" ? "border-gold bg-gold-soft" : "border-gray-200")}><Link className="w-4 h-4 text-gray-600" /></button>
+                    <button onClick={() => onChange({ linkIconStyle: "external" })} className={cn("p-2 rounded-lg border-2", settings.linkIconStyle === "external" ? "border-gold bg-gold-soft" : "border-gray-200")}><ExternalLink className="w-4 h-4 text-gray-600" /></button>
                   </div>
                 )}
               </div>
@@ -158,7 +158,7 @@ export function CoverLetterCustomizePanel({ settings, onChange }: Props) {
             <FieldLabel>Accent color</FieldLabel>
             <div className="grid grid-cols-10 gap-1.5">
               {ACCENT_COLORS.map((color) => (
-                <button key={color} onClick={() => onChange({ accentColor: color })} className={cn("w-6 h-6 rounded-full border-2 transition-transform hover:scale-110", settings.accentColor === color ? "border-purple-600 ring-2 ring-purple-300 scale-110" : "border-gray-200")} style={{ backgroundColor: color }} />
+                <button key={color} onClick={() => onChange({ accentColor: color })} className={cn("w-6 h-6 rounded-full border-2 transition-transform hover:scale-110", settings.accentColor === color ? "border-gold ring-2 ring-purple-300 scale-110" : "border-gray-200")} style={{ backgroundColor: color }} />
               ))}
             </div>
           </SettingCard>

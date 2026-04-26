@@ -108,7 +108,7 @@ function SuggestionCard({
     >
       {/* Title */}
       <div className="flex items-center gap-2">
-        <Icon className="w-3.5 h-3.5 flex-shrink-0" style={{ color: "#D4930D" }} />
+        <Icon className="w-3.5 h-3.5 flex-shrink-0" style={{ color: "#B08A3E" }} />
         <span className="font-medium" style={{ color: "#1A1A1A" }}>
           {label}
         </span>

@@ -25,7 +25,7 @@ const InterviewPreparationGuideZhTw = () => {
       <nav className="fixed top-0 left-0 right-0 z-50 bg-nav-green">
         <div className="container mx-auto px-5 md:px-6 py-4 flex items-center justify-between">
           <Link to="/zh-tw" className="font-heading text-lg md:text-xl font-medium text-cream tracking-tight">
-            JAMES BUGDEN
+            hiresign
           </Link>
           <div className="flex items-center gap-3 md:gap-4">
             <AuthHeaderButton variant="nav" />
@@ -49,13 +49,13 @@ const InterviewPreparationGuideZhTw = () => {
           <h1 className="font-heading text-3xl md:text-5xl lg:text-6xl text-cream leading-tight mb-4">
             面試準備完整指南
           </h1>
-          <p className="text-lg md:text-xl text-cream/80 mb-2">
+          <p className="text-lg md:text-xl text-cream/90 mb-2">
             停止焦慮。開始表現。拿到工作。
           </p>
-          <p className="text-base text-cream/60 mb-2">
+          <p className="text-base text-gold-soft/80 mb-2">
             作者：James Bugden，Uber 資深招募專員
           </p>
-          <div className="flex items-center justify-center gap-1.5 text-cream/60 mb-6">
+          <div className="flex items-center justify-center gap-1.5 text-gold-soft/80 mb-6">
             <Clock className="w-4 h-4" />
             <span className="text-sm">45 分鐘閱讀</span>
           </div>
@@ -151,7 +151,7 @@ const InterviewPreparationGuideZhTw = () => {
           <h2 className="font-heading text-2xl md:text-3xl text-cream mb-4">
             10 小時準備框架
           </h2>
-          <p className="text-cream/80 mb-4">
+          <p className="text-cream/90 mb-4">
             大多數求職者花 1 小時準備。你即將花 10 小時。這就是你的優勢。
           </p>
         </div>
@@ -550,7 +550,7 @@ const InterviewPreparationGuideZhTw = () => {
                   {/* HOME BASE - Center */}
                   <div className="bg-executive-green border-2 border-gold rounded-lg px-5 py-3 text-center shadow-lg">
                     <p className="text-gold font-bold text-base">HOME BASE</p>
-                    <p className="text-cream/80 text-xs">（基礎）</p>
+                    <p className="text-cream/90 text-xs">（基礎）</p>
                   </div>
                   
                   {/* Horizontal connector right */}

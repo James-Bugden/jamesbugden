@@ -44,7 +44,7 @@ const BRAND = {
   greenHover: "#1f3a28",
   greenLight: "#e8f0eb",
   greenLighter: "#f2f7f4",
-  gold: "#D4930D",
+  gold: "#B08A3E",
   goldHover: "#b87d0b",
   cream: "#FDFBF7",
   text: "#1A1A1A",
@@ -134,10 +134,10 @@ function UndoRedoBar({ onUndo, onRedo, canUndo, canRedo }: {
   const mod = isMac ? "⌘" : "Ctrl+";
   return (
     <TooltipProvider delayDuration={300}>
-      <div className="fixed bottom-6 left-1/2 -translate-x-1/2 z-40 flex items-center gap-1 bg-white rounded-full shadow-lg border border-gray-200 p-1">
+      <div className="fixed bottom-6 left-1/2 -translate-x-1/2 z-40 flex items-center gap-1 bg-white rounded-full shadow-lg border border-border p-1">
         <Tooltip>
           <TooltipTrigger asChild>
-            <button onClick={onUndo} disabled={!canUndo} className={cn("w-10 h-10 rounded-full flex items-center justify-center transition-colors", canUndo ? "hover:bg-gray-100 text-gray-700" : "text-gray-300 cursor-not-allowed")}>
+            <button onClick={onUndo} disabled={!canUndo} className={cn("w-10 h-10 rounded-full flex items-center justify-center transition-colors", canUndo ? "hover:bg-muted text-foreground" : "text-muted-foreground/50 cursor-not-allowed")}>
               <Undo2 className="w-4.5 h-4.5" />
             </button>
           </TooltipTrigger>
@@ -145,7 +145,7 @@ function UndoRedoBar({ onUndo, onRedo, canUndo, canRedo }: {
         </Tooltip>
         <Tooltip>
           <TooltipTrigger asChild>
-            <button onClick={onRedo} disabled={!canRedo} className={cn("w-10 h-10 rounded-full flex items-center justify-center transition-colors", canRedo ? "hover:bg-gray-100 text-gray-700" : "text-gray-300 cursor-not-allowed")}>
+            <button onClick={onRedo} disabled={!canRedo} className={cn("w-10 h-10 rounded-full flex items-center justify-center transition-colors", canRedo ? "hover:bg-muted text-foreground" : "text-muted-foreground/50 cursor-not-allowed")}>
               <Redo2 className="w-4.5 h-4.5" />
             </button>
           </TooltipTrigger>
@@ -166,9 +166,9 @@ function SaveIndicator({ saving }: { saving: boolean }) {
   return (
       <div className={cn("flex items-center gap-1.5 text-xs transition-opacity duration-300", pulse ? "opacity-100" : "opacity-60")}>
       {saving ? (
-        <><Loader2 className="w-3 h-3 animate-spin text-gray-400" /><span className="text-gray-400">{t("saving")}</span></>
+        <><Loader2 className="w-3 h-3 animate-spin text-muted-foreground/70" /><span className="text-muted-foreground/70">{t("saving")}</span></>
       ) : (
-        <><Check className="w-3 h-3" style={{ color: BRAND.green }} /><span className="text-gray-500">{t("allChangesSaved")}</span></>
+        <><Check className="w-3 h-3" style={{ color: BRAND.green }} /><span className="text-muted-foreground">{t("allChangesSaved")}</span></>
       )}
     </div>
   );
@@ -185,7 +185,7 @@ function MobilePreviewOverlay({ children, onClose, onDownload, downloading }: { 
   return (
     <div className="fixed inset-0 z-50 bg-black/40 flex flex-col animate-fade-in" onClick={onClose}>
       <div className="flex-1 flex flex-col bg-white" onClick={(e) => e.stopPropagation()}>
-        <div className="flex items-center justify-between px-4 py-3 border-b border-gray-200" style={{ backgroundColor: BRAND.cream }}>
+        <div className="flex items-center justify-between px-4 py-3 border-b border-border" style={{ backgroundColor: BRAND.cream }}>
           <span className="text-sm font-semibold" style={{ color: BRAND.text }}>{t("preview")}</span>
           <div className="flex items-center gap-3">
             {onDownload && (
@@ -194,7 +194,7 @@ function MobilePreviewOverlay({ children, onClose, onDownload, downloading }: { 
                 {downloading ? "..." : t("download")}
               </button>
             )}
-            <button onClick={onClose} className="flex items-center justify-center w-11 h-11 -mr-2 rounded-lg hover:bg-gray-100 transition-colors" aria-label="Close preview">
+            <button onClick={onClose} className="flex items-center justify-center w-11 h-11 -mr-2 rounded-lg hover:bg-muted transition-colors" aria-label="Close preview">
               <X className="w-5 h-5" style={{ color: BRAND.text }} />
             </button>
           </div>
@@ -266,10 +266,10 @@ function DownloadDropdown({ downloading, pageFormat, docName, onDownload }: {
               <label className="block text-xs font-semibold mb-1" style={{ color: BRAND.textSecondary }}>{t("filename")}</label>
               <div className="flex items-center">
                 <input type="text" value={filename} onChange={(e) => setFilename(e.target.value)} className="flex-1 px-3 py-2 text-sm border rounded-l-lg outline-none bg-white" style={{ borderColor: BRAND.border, color: BRAND.text }} />
-                <span className="px-3 py-2 text-sm bg-gray-50 border border-l-0 rounded-r-lg" style={{ color: BRAND.textSecondary, borderColor: BRAND.border }}>.pdf</span>
+                <span className="px-3 py-2 text-sm bg-paper-alt border border-l-0 rounded-r-lg" style={{ color: BRAND.textSecondary, borderColor: BRAND.border }}>.pdf</span>
               </div>
             </div>
-            <div className="flex items-center justify-between py-2 px-3 bg-gray-50 rounded-lg">
+            <div className="flex items-center justify-between py-2 px-3 bg-paper-alt rounded-lg">
               <span className="text-xs font-medium" style={{ color: BRAND.textSecondary }}>{t("paperSize")}</span>
               <span className="text-xs font-semibold" style={{ color: BRAND.text }}>A4</span>
             </div>
@@ -299,7 +299,7 @@ function AddSectionInline({ onAdd, existingTypes }: { onAdd: (type: string) => v
         <button
           onClick={() => setOpen(true)}
           className="flex items-center justify-center gap-2 px-8 py-3 rounded-full text-white font-semibold text-sm transition-all hover:opacity-90 active:scale-[0.98] shadow-md min-h-[44px]"
-          style={{ background: "linear-gradient(135deg, #D4930D 0%, #e8a520 50%, #f0c060 100%)" }}
+          style={{ background: "linear-gradient(135deg, #B08A3E 0%, #e8a520 50%, #f0c060 100%)" }}
         >
           <Plus className="w-4.5 h-4.5" /> {t("addContent")}
         </button>
@@ -323,7 +323,7 @@ function AddSectionInline({ onAdd, existingTypes }: { onAdd: (type: string) => v
               disabled={exists}
               className={cn(
                 "flex items-start gap-2 p-3 rounded-lg text-left transition-all text-sm",
-                exists ? "opacity-40 cursor-not-allowed bg-gray-50" : "hover:bg-gray-50 border border-gray-100 hover:border-gray-200"
+                exists ? "opacity-40 cursor-not-allowed bg-paper-alt" : "hover:bg-paper-alt border border-gray-100 hover:border-border"
               )}
             >
               <div className="flex-1 min-w-0">
@@ -350,13 +350,13 @@ function MissingSummaryDialog({ open, onAdd, onSkip }: { open: boolean; onAdd: (
           </div>
           <h3 className="text-[17px] font-bold mb-2" style={{ color: BRAND.text }}>{t("missingSummaryTitle")}</h3>
           <p className="text-[13px] leading-relaxed mb-3" style={{ color: BRAND.textSecondary }}>{t("missingSummaryDesc")}</p>
-          <div className="bg-gray-50 rounded-lg p-3 border border-gray-100">
+          <div className="bg-paper-alt rounded-lg p-3 border border-gray-100">
             <p className="text-[12px] font-semibold mb-1" style={{ color: BRAND.text }}>💡 How to write it:</p>
             <p className="text-[12px] leading-relaxed" style={{ color: BRAND.textSecondary }}>{t("missingSummaryHow")}</p>
           </div>
         </div>
         <div className="flex gap-3 px-6 pb-6 pt-2">
-          <button onClick={onSkip} className="flex-1 py-2.5 rounded-lg text-[13px] font-medium border transition-colors hover:bg-gray-50" style={{ color: BRAND.textSecondary, borderColor: BRAND.border }}>
+          <button onClick={onSkip} className="flex-1 py-2.5 rounded-lg text-[13px] font-medium border transition-colors hover:bg-paper-alt" style={{ color: BRAND.textSecondary, borderColor: BRAND.border }}>
             {t("missingSummarySkip")}
           </button>
           <button onClick={onAdd} className="flex-1 py-2.5 rounded-lg text-[13px] font-semibold text-white transition-colors hover:opacity-90" style={{ backgroundColor: BRAND.green }}>
@@ -375,7 +375,7 @@ function SimpleCustomizePanel({ customize, onChange }: { customize: CustomizeSet
 
   return (
     <div className="bg-white rounded-xl shadow-sm border overflow-hidden" style={{ borderColor: BRAND.border }}>
-      <button onClick={() => setOpen(!open)} className="w-full flex items-center justify-between px-4 py-3 hover:bg-gray-50/50 transition-colors">
+      <button onClick={() => setOpen(!open)} className="w-full flex items-center justify-between px-4 py-3 hover:bg-paper-alt/50 transition-colors">
         <div className="flex items-center gap-2">
           <Settings2 className="w-4 h-4" style={{ color: BRAND.textSecondary }} />
           <span className="text-sm font-semibold" style={{ color: BRAND.text }}>{t("simpleCustomizeTitle")}</span>
@@ -389,17 +389,17 @@ function SimpleCustomizePanel({ customize, onChange }: { customize: CustomizeSet
           <div className="pt-3">
             <div className="flex items-center justify-between mb-2">
               <label className="text-xs font-semibold" style={{ color: BRAND.text }}>{t("fontSizeLabel")}</label>
-              <span className="text-xs font-mono px-2 py-0.5 bg-gray-100 rounded" style={{ color: BRAND.textSecondary }}>{customize.fontSize}pt</span>
+              <span className="text-xs font-mono px-2 py-0.5 bg-muted rounded" style={{ color: BRAND.textSecondary }}>{customize.fontSize}pt</span>
             </div>
             <div className="flex items-center gap-3">
-              <button onClick={() => onChange({ fontSize: Math.max(8, customize.fontSize - 0.5) })} className="w-7 h-7 rounded-md border flex items-center justify-center hover:bg-gray-50 transition-colors" style={{ borderColor: BRAND.border }}>
+              <button onClick={() => onChange({ fontSize: Math.max(8, customize.fontSize - 0.5) })} className="w-7 h-7 rounded-md border flex items-center justify-center hover:bg-paper-alt transition-colors" style={{ borderColor: BRAND.border }}>
                 <Minus className="w-3 h-3" style={{ color: BRAND.textSecondary }} />
               </button>
               <input type="range" min={8} max={14} step={0.5} value={customize.fontSize}
                 onChange={(e) => onChange({ fontSize: parseFloat(e.target.value) })}
-                className="flex-1 h-1.5 bg-gray-200 rounded-full appearance-none cursor-pointer accent-gray-700"
+                className="flex-1 h-1.5 bg-muted rounded-full appearance-none cursor-pointer accent-gray-700"
               />
-              <button onClick={() => onChange({ fontSize: Math.min(14, customize.fontSize + 0.5) })} className="w-7 h-7 rounded-md border flex items-center justify-center hover:bg-gray-50 transition-colors" style={{ borderColor: BRAND.border }}>
+              <button onClick={() => onChange({ fontSize: Math.min(14, customize.fontSize + 0.5) })} className="w-7 h-7 rounded-md border flex items-center justify-center hover:bg-paper-alt transition-colors" style={{ borderColor: BRAND.border }}>
                 <Plus className="w-3 h-3" style={{ color: BRAND.textSecondary }} />
               </button>
             </div>
@@ -409,17 +409,17 @@ function SimpleCustomizePanel({ customize, onChange }: { customize: CustomizeSet
           <div>
             <div className="flex items-center justify-between mb-2">
               <label className="text-xs font-semibold" style={{ color: BRAND.text }}>{t("lineHeightLabel")}</label>
-              <span className="text-xs font-mono px-2 py-0.5 bg-gray-100 rounded" style={{ color: BRAND.textSecondary }}>{customize.lineHeight.toFixed(1)}</span>
+              <span className="text-xs font-mono px-2 py-0.5 bg-muted rounded" style={{ color: BRAND.textSecondary }}>{customize.lineHeight.toFixed(1)}</span>
             </div>
             <div className="flex items-center gap-3">
-              <button onClick={() => onChange({ lineHeight: Math.max(1.0, +(customize.lineHeight - 0.1).toFixed(1)) })} className="w-7 h-7 rounded-md border flex items-center justify-center hover:bg-gray-50 transition-colors" style={{ borderColor: BRAND.border }}>
+              <button onClick={() => onChange({ lineHeight: Math.max(1.0, +(customize.lineHeight - 0.1).toFixed(1)) })} className="w-7 h-7 rounded-md border flex items-center justify-center hover:bg-paper-alt transition-colors" style={{ borderColor: BRAND.border }}>
                 <Minus className="w-3 h-3" style={{ color: BRAND.textSecondary }} />
               </button>
               <input type="range" min={1.0} max={2.0} step={0.1} value={customize.lineHeight}
                 onChange={(e) => onChange({ lineHeight: parseFloat(e.target.value) })}
-                className="flex-1 h-1.5 bg-gray-200 rounded-full appearance-none cursor-pointer accent-gray-700"
+                className="flex-1 h-1.5 bg-muted rounded-full appearance-none cursor-pointer accent-gray-700"
               />
-              <button onClick={() => onChange({ lineHeight: Math.min(2.0, +(customize.lineHeight + 0.1).toFixed(1)) })} className="w-7 h-7 rounded-md border flex items-center justify-center hover:bg-gray-50 transition-colors" style={{ borderColor: BRAND.border }}>
+              <button onClick={() => onChange({ lineHeight: Math.min(2.0, +(customize.lineHeight + 0.1).toFixed(1)) })} className="w-7 h-7 rounded-md border flex items-center justify-center hover:bg-paper-alt transition-colors" style={{ borderColor: BRAND.border }}>
                 <Plus className="w-3 h-3" style={{ color: BRAND.textSecondary }} />
               </button>
             </div>
@@ -429,17 +429,17 @@ function SimpleCustomizePanel({ customize, onChange }: { customize: CustomizeSet
           <div>
             <div className="flex items-center justify-between mb-2">
               <label className="text-xs font-semibold" style={{ color: BRAND.text }}>{t("marginsLabel")}</label>
-              <span className="text-xs font-mono px-2 py-0.5 bg-gray-100 rounded" style={{ color: BRAND.textSecondary }}>{customize.marginX}mm</span>
+              <span className="text-xs font-mono px-2 py-0.5 bg-muted rounded" style={{ color: BRAND.textSecondary }}>{customize.marginX}mm</span>
             </div>
             <div className="flex items-center gap-3">
-              <button onClick={() => onChange({ marginX: Math.max(8, customize.marginX - 2), marginY: Math.max(8, customize.marginY - 2) })} className="w-7 h-7 rounded-md border flex items-center justify-center hover:bg-gray-50 transition-colors" style={{ borderColor: BRAND.border }}>
+              <button onClick={() => onChange({ marginX: Math.max(8, customize.marginX - 2), marginY: Math.max(8, customize.marginY - 2) })} className="w-7 h-7 rounded-md border flex items-center justify-center hover:bg-paper-alt transition-colors" style={{ borderColor: BRAND.border }}>
                 <Minus className="w-3 h-3" style={{ color: BRAND.textSecondary }} />
               </button>
               <input type="range" min={8} max={24} step={2} value={customize.marginX}
                 onChange={(e) => { const v = parseInt(e.target.value); onChange({ marginX: v, marginY: v }); }}
-                className="flex-1 h-1.5 bg-gray-200 rounded-full appearance-none cursor-pointer accent-gray-700"
+                className="flex-1 h-1.5 bg-muted rounded-full appearance-none cursor-pointer accent-gray-700"
               />
-              <button onClick={() => onChange({ marginX: Math.min(24, customize.marginX + 2), marginY: Math.min(24, customize.marginY + 2) })} className="w-7 h-7 rounded-md border flex items-center justify-center hover:bg-gray-50 transition-colors" style={{ borderColor: BRAND.border }}>
+              <button onClick={() => onChange({ marginX: Math.min(24, customize.marginX + 2), marginY: Math.min(24, customize.marginY + 2) })} className="w-7 h-7 rounded-md border flex items-center justify-center hover:bg-paper-alt transition-colors" style={{ borderColor: BRAND.border }}>
                 <Plus className="w-3 h-3" style={{ color: BRAND.textSecondary }} />
               </button>
             </div>
@@ -449,17 +449,17 @@ function SimpleCustomizePanel({ customize, onChange }: { customize: CustomizeSet
           <div>
             <div className="flex items-center justify-between mb-2">
               <label className="text-xs font-semibold" style={{ color: BRAND.text }}>{t("spacingLabel")}</label>
-              <span className="text-xs font-mono px-2 py-0.5 bg-gray-100 rounded" style={{ color: BRAND.textSecondary }}>{customize.sectionSpacing}px</span>
+              <span className="text-xs font-mono px-2 py-0.5 bg-muted rounded" style={{ color: BRAND.textSecondary }}>{customize.sectionSpacing}px</span>
             </div>
             <div className="flex items-center gap-3">
-              <button onClick={() => onChange({ sectionSpacing: Math.max(0, customize.sectionSpacing - 1) })} className="w-7 h-7 rounded-md border flex items-center justify-center hover:bg-gray-50 transition-colors" style={{ borderColor: BRAND.border }}>
+              <button onClick={() => onChange({ sectionSpacing: Math.max(0, customize.sectionSpacing - 1) })} className="w-7 h-7 rounded-md border flex items-center justify-center hover:bg-paper-alt transition-colors" style={{ borderColor: BRAND.border }}>
                 <Minus className="w-3 h-3" style={{ color: BRAND.textSecondary }} />
               </button>
               <input type="range" min={0} max={12} step={1} value={customize.sectionSpacing}
                 onChange={(e) => onChange({ sectionSpacing: parseInt(e.target.value) })}
-                className="flex-1 h-1.5 bg-gray-200 rounded-full appearance-none cursor-pointer accent-gray-700"
+                className="flex-1 h-1.5 bg-muted rounded-full appearance-none cursor-pointer accent-gray-700"
               />
-              <button onClick={() => onChange({ sectionSpacing: Math.min(12, customize.sectionSpacing + 1) })} className="w-7 h-7 rounded-md border flex items-center justify-center hover:bg-gray-50 transition-colors" style={{ borderColor: BRAND.border }}>
+              <button onClick={() => onChange({ sectionSpacing: Math.min(12, customize.sectionSpacing + 1) })} className="w-7 h-7 rounded-md border flex items-center justify-center hover:bg-paper-alt transition-colors" style={{ borderColor: BRAND.border }}>
                 <Plus className="w-3 h-3" style={{ color: BRAND.textSecondary }} />
               </button>
             </div>
@@ -895,7 +895,7 @@ const ResumeBuilderSimple = () => {
         {/* Row 1: Brand + nav */}
         <div className="flex items-center justify-between px-3 sm:px-5 h-12 sm:h-14">
           <Link to={lang === "zh-tw" ? "/zh-tw" : "/"} className="font-heading text-base md:text-lg font-bold tracking-wide whitespace-nowrap" style={{ color: BRAND.green }}>
-            JAMES BUGDEN
+            hiresign
           </Link>
           <div className="flex items-center gap-2">
             <Link to={lang === "zh-tw" ? "/zh-tw" : "/"} className="text-sm transition-colors hover:opacity-80 hidden sm:inline" style={{ color: BRAND.textSecondary }}>
