@@ -76,6 +76,7 @@ const Login = lazy(() => import("./pages/Login"));
 const Signup = lazy(() => import("./pages/Signup"));
 const ResetPassword = lazy(() => import("./pages/ResetPassword"));
 const Unsubscribe = lazy(() => import("./pages/Unsubscribe"));
+const TuesdayEmail = lazy(() => import("./pages/TuesdayEmail"));
 const Dashboard = lazy(() => import("./pages/Dashboard"));
 const DashboardZhTw = lazy(() => import("./pages/DashboardZhTw"));
 const RecruiterScreenGuide = lazy(() => import("./pages/RecruiterScreenGuide"));
@@ -248,6 +249,7 @@ const App = () => (
                     <Route path="/zh-tw/pivot-method-mini-guide" element={<PivotMethodMiniGuideZhTw />} />
                     <Route path="/guides" element={<GuidesPage />} />
                     <Route path="/zh-tw/guides" element={<GuidesPageZhTw />} />
+                    <Route path="/tuesday-email" element={<TuesdayEmail />} />
                     <Route path="/salary-starter-kit" element={<SalaryStarterKit />} />
                     <Route path="/zh-tw/salary-starter-kit" element={<SalaryStarterKitZhTw />} />
                     <Route path="/quiz" element={<Quiz />} />
