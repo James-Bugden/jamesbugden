@@ -2,13 +2,12 @@ import { FileText, Clock, Users, AlertTriangle, CheckCircle2, XCircle, ArrowRigh
 import { Link } from "react-router-dom";
 import GoldCheckBadge from "@/components/GoldCheckBadge";
 import GuideShareButtons from "@/components/GuideShareButtons";
-import LanguageToggle from "@/components/LanguageToggle";
-import { AuthHeaderButton } from "@/components/AuthHeaderButton";
 import { useTrackGuideProgress } from "@/hooks/useReadingProgress";
 import GuideSignInBanner from "@/components/guides/GuideSignInBanner";
 import GuideBottomCTA from "@/components/guides/GuideBottomCTA";
 import { useState, useEffect } from "react";
 import { SEO } from "@/components/SEO";
+import { SiteHeader } from "@/components/SiteHeader";
 import { guideSchema } from "@/lib/guideSchema";
 import InlineRating from "@/components/feedback/InlineRating";
 
@@ -170,19 +169,9 @@ export default function RecruiterGuideZhTw() {
   return (
     <div className="min-h-screen bg-background">
       <SEO schemaJson={guideSchema({ path: "/zh-tw/recruiter-guide", title: "招募官的思維方式｜內部指南", description: "從招募官的角度看招聘。了解如何在每個環節脫穎而出。" })} />
+      <SiteHeader variant="dark" lang="zh" sticky showSocials />
 
-      {/* Navigation */}
-      <nav className="fixed top-0 left-0 right-0 z-50 bg-nav-green">
-        <div className="container mx-auto px-5 md:px-6 py-4 flex items-center justify-between">
-          <Link to="/zh-tw" className="font-heading text-lg md:text-xl font-medium text-cream tracking-tight">hiresign</Link>
-          <div className="flex items-center gap-3">
-            <AuthHeaderButton variant="nav" />
-            <LanguageToggle variant="nav" />
-          </div>
-        </div>
-      </nav>
-
-      {/* Hero */}
+{/* Hero */}
       <section className="pt-28 md:pt-36 pb-14 md:pb-20 px-5 md:px-6 bg-executive-green">
         <div className="container mx-auto max-w-4xl text-center">
           <h1 className="font-heading text-3xl md:text-5xl lg:text-6xl text-cream leading-tight mb-4">

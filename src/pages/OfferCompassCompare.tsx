@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
 import { SEO } from "@/components/SEO";
-import { ArrowLeft } from "lucide-react";
+import { SiteHeader } from "@/components/SiteHeader";
 import { CURRENCY_OPTIONS } from "@/components/offer-compass/types";
 import type { Currency } from "@/components/offer-compass/types";
 import { Button } from "@/components/ui/button";
@@ -196,27 +196,29 @@ export default function OfferCompassCompare() {
 
 function Header({ currency, setCurrency }: { currency: Currency; setCurrency: (c: Currency) => void }) {
   return (
-    <header className="bg-executive-green">
+    <>
       <SEO />
-      <div className="max-w-7xl mx-auto px-4 md:px-6 h-14 flex items-center justify-between">
-        <div className="flex items-center gap-4">
-          <Link to="/offer-calculator" className="flex items-center gap-2 text-white/70 hover:text-white transition-colors text-sm">
-            <ArrowLeft className="w-4 h-4" /> Back to Calculator
-          </Link>
-          <span className="text-white/30">|</span>
-          <h1 className="font-heading text-lg font-bold text-white">Compare Scenarios</h1>
-        </div>
-        <Select value={currency} onValueChange={(v) => setCurrency(v as Currency)}>
-          <SelectTrigger className="w-32 h-9 text-sm bg-white/10 border-white/20 text-white">
-            <SelectValue />
-          </SelectTrigger>
-          <SelectContent className="bg-card z-50">
-            {CURRENCY_OPTIONS.map((c) => (
-              <SelectItem key={c.value} value={c.value}>{c.label}</SelectItem>
-            ))}
-          </SelectContent>
-        </Select>
-      </div>
-    </header>
+      <SiteHeader
+        variant="dark"
+        lang="en"
+        sticky
+        breadcrumb="Compare Scenarios"
+        backHref="/offer-calculator"
+        backLabel="Back to Calculator"
+        hideAuth
+        rightSlot={
+          <Select value={currency} onValueChange={(v) => setCurrency(v as Currency)}>
+            <SelectTrigger className="w-32 h-9 text-sm bg-white/10 border-white/20 text-cream">
+              <SelectValue />
+            </SelectTrigger>
+            <SelectContent className="bg-card z-50">
+              {CURRENCY_OPTIONS.map((c) => (
+                <SelectItem key={c.value} value={c.value}>{c.label}</SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
+        }
+      />
+    </>
   );
 }

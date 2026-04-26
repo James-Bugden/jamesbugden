@@ -4,12 +4,12 @@ import { Link, useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Linkedin } from "lucide-react";
 import GuideShareButtons from "@/components/GuideShareButtons";
-import { AuthHeaderButton } from "@/components/AuthHeaderButton";
 import GoldCheckBadge from "@/components/GoldCheckBadge";
 import { useTrackGuideProgress } from "@/hooks/useReadingProgress";
 import GuideSignInBanner from "@/components/guides/GuideSignInBanner";
 import GuideBottomCTA from "@/components/guides/GuideBottomCTA";
 import { SEO } from "@/components/SEO";
+import { SiteHeader } from "@/components/SiteHeader";
 import { guideSchema } from "@/lib/guideSchema";
 import InlineRating from "@/components/feedback/InlineRating";
 
@@ -22,28 +22,9 @@ const InterviewPreparationGuideZhTw = () => {
       <div className="min-h-screen bg-background">
         <SEO schemaJson={guideSchema({ path: "/zh-tw/interview-preparation-guide", title: "面試準備指南｜深度解析", description: "全面的面試準備，涵蓋行為面試、案例分析和技術輪面試。" })} />
       {/* Navigation */}
-      <nav className="fixed top-0 left-0 right-0 z-50 bg-nav-green">
-        <div className="container mx-auto px-5 md:px-6 py-4 flex items-center justify-between">
-          <Link to="/zh-tw" className="font-heading text-lg md:text-xl font-medium text-cream tracking-tight">
-            hiresign
-          </Link>
-          <div className="flex items-center gap-3 md:gap-4">
-            <AuthHeaderButton variant="nav" />
-            <Link to="/zh-tw" className="text-sm text-cream-70 hover:text-cream transition-colors flex items-center gap-1">
-              <ArrowLeft className="w-4 h-4" />
-              <span className="hidden sm:inline">返回首頁</span>
-            </Link>
-            <button 
-              onClick={() => navigate("/interview-preparation-guide")}
-              className="px-3 py-1.5 text-sm font-semibold bg-gold/20 hover:bg-gold/30 text-gold border border-gold/40 rounded-md transition-all duration-200 hover:scale-105"
-            >
-              EN
-            </button>
-          </div>
-        </div>
-      </nav>
+      <SiteHeader variant="dark" lang="zh" sticky showSocials />
 
-      {/* Hero Section */}
+{/* Hero Section */}
       <section className="pt-28 md:pt-36 pb-12 md:pb-16 px-5 md:px-6 bg-executive-green">
         <div className="container mx-auto max-w-4xl text-center">
           <h1 className="font-heading text-3xl md:text-5xl lg:text-6xl text-cream leading-tight mb-4">

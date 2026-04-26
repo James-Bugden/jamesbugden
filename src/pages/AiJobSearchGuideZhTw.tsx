@@ -1,17 +1,16 @@
-import { FileText, Clock, Linkedin, Bot, Target, Briefcase, Send, MessageSquare, DollarSign, AlertTriangle, CheckCircle2, XCircle, ArrowRight, ChevronDown, Menu, Search, Zap, BookOpen, Copy, Check } from "lucide-react";
+import { FileText, Clock, Bot, Target, Briefcase, Send, MessageSquare, DollarSign, AlertTriangle, CheckCircle2, XCircle, ArrowRight, ChevronDown, Menu, Search, Zap, BookOpen, Copy, Check } from "lucide-react";
 
 import { AI_GUIDE_PROMPTS } from "@/data/aiGuidePrompts";
 import { Link } from "react-router-dom";
 import GoldCheckBadge from "@/components/GoldCheckBadge";
 import { InstagramIcon, ThreadsIcon } from "@/components/SocialIcons";
 import GuideShareButtons from "@/components/GuideShareButtons";
-import LanguageToggle from "@/components/LanguageToggle";
-import { AuthHeaderButton } from "@/components/AuthHeaderButton";
 import { useTrackGuideProgress } from "@/hooks/useReadingProgress";
 import GuideSignInBanner from "@/components/guides/GuideSignInBanner";
 import GuideBottomCTA from "@/components/guides/GuideBottomCTA";
 import { useState, useEffect } from "react";
 import { SEO } from "@/components/SEO";
+import { SiteHeader } from "@/components/SiteHeader";
 import { guideSchema } from "@/lib/guideSchema";
 import InlineRating from "@/components/feedback/InlineRating";
 
@@ -231,24 +230,9 @@ const AiJobSearchGuideZhTw = () => {
   return (
     <div className="min-h-screen bg-background">
       <SEO schemaJson={guideSchema({ path: "/zh-tw/ai-job-search-guide", title: "AI 求職指南｜更快找到工作", description: "使用ChatGPT、Claude和AI工具加速求職流程。" })} />
+      <SiteHeader variant="dark" lang="zh" sticky showSocials />
 
-      {/* Navigation */}
-      <nav className="fixed top-0 left-0 right-0 z-50 bg-nav-green">
-        <div className="container mx-auto px-5 md:px-6 py-4 flex items-center justify-between">
-          <Link to="/zh-tw" className="font-heading text-lg md:text-xl font-medium text-cream tracking-tight">hiresign</Link>
-          <div className="flex items-center gap-3 md:gap-4">
-            <AuthHeaderButton variant="nav" />
-            <LanguageToggle variant="nav" />
-            <div className="hidden md:flex items-center gap-3">
-              <a href="https://www.linkedin.com/in/james-bugden/" target="_blank" rel="noopener noreferrer" className="text-cream-70 hover:text-cream transition-colors"><Linkedin className="w-5 h-5" /></a>
-              <a href="https://www.instagram.com/james.careers/" target="_blank" rel="noopener noreferrer" className="text-cream-70 hover:text-cream transition-colors"><InstagramIcon className="w-5 h-5" /></a>
-              <a href="https://www.threads.com/@james.careers" target="_blank" rel="noopener noreferrer" className="text-cream-70 hover:text-cream transition-colors"><ThreadsIcon className="w-5 h-5" /></a>
-            </div>
-          </div>
-        </div>
-      </nav>
-
-      <TableOfContents />
+<TableOfContents />
 
       {/* Hero */}
       <section className="pt-28 md:pt-36 pb-14 md:pb-20 px-5 md:px-6 bg-executive-green">

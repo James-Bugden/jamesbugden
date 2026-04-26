@@ -2,14 +2,13 @@ import { Clock, ChevronDown, Menu, Heart, Zap, Users, Shield, Gauge, Target, Ale
 import { Link } from "react-router-dom";
 import GoldCheckBadge from "@/components/GoldCheckBadge";
 import GuideShareButtons from "@/components/GuideShareButtons";
-import LanguageToggle from "@/components/LanguageToggle";
-import { AuthHeaderButton } from "@/components/AuthHeaderButton";
 import { useTrackGuideProgress } from "@/hooks/useReadingProgress";
 import GuideSignInBanner from "@/components/guides/GuideSignInBanner";
 import GuideBottomCTA from "@/components/guides/GuideBottomCTA";
 import { useState, useEffect } from "react";
 import { InteractiveCareerMap, InteractiveScorecard, InteractivePulseCheck } from "@/components/ikigai/InteractiveWidgets";
 import { SEO } from "@/components/SEO";
+import { SiteHeader } from "@/components/SiteHeader";
 import { guideSchema } from "@/lib/guideSchema";
 import InlineRating from "@/components/feedback/InlineRating";
 
@@ -188,18 +187,9 @@ const IkigaiGuideZhTw = () => {
   return (
     <div className="min-h-screen bg-background">
       <SEO schemaJson={guideSchema({ path: "/zh-tw/ikigai-guide", title: "Ikigai 職涯指南｜找到你的使命", description: "將Ikigai應用於職涯。在熱情、技能、需求和報酬交匯處找到工作。" })} />
+      <SiteHeader variant="dark" lang="zh" sticky />
 
-      <nav className="fixed top-0 left-0 right-0 z-50 bg-nav-green">
-        <div className="container mx-auto px-5 md:px-6 py-4 flex items-center justify-between">
-          <Link to="/zh-tw" className="font-heading text-lg md:text-xl font-medium text-cream tracking-tight">hiresign</Link>
-          <div className="flex items-center gap-3">
-            <AuthHeaderButton variant="nav" />
-            <LanguageToggle variant="nav" />
-          </div>
-        </div>
-      </nav>
-
-      {/* Hero */}
+{/* Hero */}
       <section className="pt-28 md:pt-36 pb-14 md:pb-20 px-5 md:px-6 bg-executive-green">
         <div className="container mx-auto max-w-4xl text-center">
           <h1 className="font-heading text-3xl md:text-5xl lg:text-6xl text-cream leading-tight mb-4" style={{ lineHeight: 1.2 }}>

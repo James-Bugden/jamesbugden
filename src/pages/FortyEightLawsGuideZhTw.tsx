@@ -2,8 +2,6 @@ import { Clock, ChevronDown, Menu, FileText, Shield, Target, Zap, Brain, Compass
 import { Link, useLocation } from "react-router-dom";
 import GoldCheckBadge from "@/components/GoldCheckBadge";
 import GuideShareButtons from "@/components/GuideShareButtons";
-import LanguageToggle from "@/components/LanguageToggle";
-import { AuthHeaderButton } from "@/components/AuthHeaderButton";
 import { useTrackGuideProgress } from "@/hooks/useReadingProgress";
 import GuideSignInBanner from "@/components/guides/GuideSignInBanner";
 import GuideBottomCTA from "@/components/guides/GuideBottomCTA";
@@ -11,6 +9,7 @@ import { useGuideStorage } from "@/hooks/useGuideStorage";
 import { useAuth } from "@/contexts/AuthContext";
 import { useState, useEffect, useCallback } from "react";
 import { SEO } from "@/components/SEO";
+import { SiteHeader } from "@/components/SiteHeader";
 import { guideSchema } from "@/lib/guideSchema";
 import InlineRating from "@/components/feedback/InlineRating";
 
@@ -515,18 +514,9 @@ const FortyEightLawsGuideZhTw = () => {
       <SEO schemaJson={guideSchema({ path: "/zh-tw/48-laws-guide", title: "職場權力的 48 條法則, 辦公室政治與職涯策略指南", description: "改編自 Robert Greene 的《乘勝追擊的48條法則》，專為你的職涯量身打造的實戰指南" })} />
 
       <ReadingProgressBar />
+      <SiteHeader variant="dark" lang="zh" sticky />
 
-      <nav className="fixed top-0 left-0 right-0 z-50 bg-nav-green">
-        <div className="container mx-auto px-5 md:px-6 py-4 flex items-center justify-between">
-          <Link to="/zh-tw" className="font-heading text-lg md:text-xl font-medium text-cream tracking-tight">hiresign</Link>
-          <div className="flex items-center gap-3">
-            <AuthHeaderButton variant="nav" />
-            <LanguageToggle variant="nav" />
-          </div>
-        </div>
-      </nav>
-
-      <section className="pt-28 md:pt-36 pb-14 md:pb-20 px-5 md:px-6 bg-executive-green">
+<section className="pt-28 md:pt-36 pb-14 md:pb-20 px-5 md:px-6 bg-executive-green">
         <div className="container mx-auto max-w-4xl text-center">
           <h1 className="font-heading text-3xl md:text-5xl lg:text-6xl text-cream leading-tight mb-4" style={{ lineHeight: 1.2 }}>
             權力的48法則<br className="hidden sm:block" />職場實戰版

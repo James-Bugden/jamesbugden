@@ -1,8 +1,6 @@
 import { ArrowLeft, Target, Lightbulb, MessageSquare, AlertTriangle, CheckCircle2, Calendar, HelpCircle, BookOpen, Clock } from "lucide-react";
 import { InteractiveChecklist } from "@/components/guides/InteractiveChecklist";
 import { Link } from "react-router-dom";
-import LanguageToggle from "@/components/LanguageToggle";
-import { AuthHeaderButton } from "@/components/AuthHeaderButton";
 import { Button } from "@/components/ui/button";
 import { Linkedin } from "lucide-react";
 import GuideShareButtons from "@/components/GuideShareButtons";
@@ -11,6 +9,7 @@ import { useTrackGuideProgress } from "@/hooks/useReadingProgress";
 import GuideSignInBanner from "@/components/guides/GuideSignInBanner";
 import GuideBottomCTA from "@/components/guides/GuideBottomCTA";
 import { SEO } from "@/components/SEO";
+import { SiteHeader } from "@/components/SiteHeader";
 import { guideSchema } from "@/lib/guideSchema";
 import InlineRating from "@/components/feedback/InlineRating";
 
@@ -22,23 +21,9 @@ const InterviewPreparationGuide = () => {
       <div className="min-h-screen bg-background">
         <SEO schemaJson={guideSchema({ path: "/interview-preparation-guide", title: "Interview Preparation Guide | Deep Dive", description: "Comprehensive interview prep covering behavioral, case, and technical rounds plus salary discussions." })} />
       {/* Navigation */}
-      <nav className="fixed top-0 left-0 right-0 z-50 bg-nav-green">
-        <div className="container mx-auto px-5 md:px-6 py-4 flex items-center justify-between">
-          <Link to="/" className="font-heading text-lg md:text-xl font-medium text-cream tracking-tight">
-            hiresign
-          </Link>
-          <div className="flex items-center gap-3 md:gap-4">
-            <AuthHeaderButton variant="nav" />
-            <Link to="/" className="text-sm text-cream-70 hover:text-cream transition-colors flex items-center gap-1">
-              <ArrowLeft className="w-4 h-4" />
-              <span className="hidden sm:inline">Back to Home</span>
-            </Link>
-            <LanguageToggle variant="nav" />
-          </div>
-        </div>
-      </nav>
+      <SiteHeader variant="dark" lang="en" sticky showSocials />
 
-      {/* Hero Section */}
+{/* Hero Section */}
       <section className="pt-28 md:pt-36 pb-12 md:pb-16 px-5 md:px-6 bg-executive-green">
         <div className="container mx-auto max-w-4xl text-center">
           <h1 className="font-heading text-3xl md:text-5xl lg:text-6xl text-cream leading-tight mb-4">

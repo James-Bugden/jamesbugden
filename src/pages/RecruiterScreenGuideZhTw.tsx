@@ -2,12 +2,12 @@ import { FileText, Clock, Phone, Video, Users, AlertTriangle, CheckCircle2, XCir
 import { Link, useNavigate } from "react-router-dom";
 import GoldCheckBadge from "@/components/GoldCheckBadge";
 import GuideShareButtons from "@/components/GuideShareButtons";
-import { AuthHeaderButton } from "@/components/AuthHeaderButton";
 import { useTrackGuideProgress } from "@/hooks/useReadingProgress";
 import GuideSignInBanner from "@/components/guides/GuideSignInBanner";
 import GuideBottomCTA from "@/components/guides/GuideBottomCTA";
 import { useState, useEffect } from "react";
 import { SEO } from "@/components/SEO";
+import { SiteHeader } from "@/components/SiteHeader";
 import { guideSchema } from "@/lib/guideSchema";
 import InlineRating from "@/components/feedback/InlineRating";
 
@@ -139,24 +139,9 @@ const RecruiterScreenGuideZhTw = () => {
       <SEO schemaJson={guideSchema({ path: "/zh-tw/recruiter-screen-guide", title: "招募官篩選指南｜通過第一關", description: "招募官在電話面試中檢查什麼，以及如何回答每個問題。" })} />
 
       {/* Navigation */}
-      <nav className="fixed top-0 left-0 right-0 z-50 bg-nav-green">
-        <div className="container mx-auto px-5 md:px-6 py-4 flex items-center justify-between">
-          <Link to="/zh-tw" className="font-heading text-lg md:text-xl font-medium text-cream tracking-tight">
-            hiresign
-          </Link>
-          <div className="flex items-center gap-3">
-            <AuthHeaderButton variant="nav" />
-            <button
-              onClick={() => navigate("/hr-interview-guide")}
-              className="px-3 py-1.5 text-sm font-semibold bg-gold/20 hover:bg-gold/30 text-gold border border-gold/40 rounded-md transition-all duration-200 hover:scale-105"
-            >
-              EN
-            </button>
-          </div>
-        </div>
-      </nav>
+      <SiteHeader variant="dark" lang="zh" sticky />
 
-      {/* Hero */}
+{/* Hero */}
       <section className="pt-28 md:pt-36 pb-14 md:pb-20 px-5 md:px-6 bg-executive-green">
         <div className="container mx-auto max-w-4xl text-center">
           <h1 className="font-heading text-3xl md:text-5xl lg:text-6xl text-cream leading-tight mb-4" style={{ lineHeight: 1.2 }}>

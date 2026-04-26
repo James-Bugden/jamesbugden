@@ -3,12 +3,11 @@ import { ArrowLeft, ArrowUp, FileText, ChevronRight, ChevronDown, CheckCircle2, 
 import { InteractiveChecklist } from "@/components/guides/InteractiveChecklist";
 import { Link, useNavigate } from "react-router-dom";
 import GuideShareButtons from "@/components/GuideShareButtons";
-import LanguageToggle from "@/components/LanguageToggle";
-import { AuthHeaderButton } from "@/components/AuthHeaderButton";
 import { useTrackGuideProgress } from "@/hooks/useReadingProgress";
 import GuideSignInBanner from "@/components/guides/GuideSignInBanner";
 import GuideBottomCTA from "@/components/guides/GuideBottomCTA";
 import { SEO } from "@/components/SEO";
+import { SiteHeader } from "@/components/SiteHeader";
 import { guideSchema } from "@/lib/guideSchema";
 import InlineRating from "@/components/feedback/InlineRating";
 
@@ -394,19 +393,9 @@ const ResumeGuideZhTw = () => {
       <SEO schemaJson={guideSchema({ path: "/zh-tw/resume-guide", title: "履歷撰寫指南｜讓你獲得更多面試機會", description: "資深招募官教你如何撰寫出色的履歷。格式、重點描述、ATS 技巧及實際範例。" })} />
 
       {/* Navigation */}
-      <nav className="fixed top-0 left-0 right-0 z-50 bg-nav-green">
-        <div className="container mx-auto px-5 md:px-6 py-4 flex items-center justify-between">
-          <Link to="/zh-tw" className="font-heading text-lg md:text-xl font-medium text-cream tracking-tight">
-            hiresign
-          </Link>
-          <div className="flex items-center gap-3 md:gap-4">
-            <AuthHeaderButton variant="nav" />
-            <LanguageToggle variant="nav" />
-          </div>
-        </div>
-      </nav>
+      <SiteHeader variant="dark" lang="zh" sticky />
 
-      <ReadingProgress />
+<ReadingProgress />
       <TableOfContents />
       <BackToTop />
 

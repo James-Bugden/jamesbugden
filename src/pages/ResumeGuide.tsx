@@ -3,12 +3,11 @@ import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import GoldCheckBadge from "@/components/GoldCheckBadge";
 import GuideShareButtons from "@/components/GuideShareButtons";
-import LanguageToggle from "@/components/LanguageToggle";
-import { AuthHeaderButton } from "@/components/AuthHeaderButton";
 import { useTrackGuideProgress } from "@/hooks/useReadingProgress";
 import GuideSignInBanner from "@/components/guides/GuideSignInBanner";
 import GuideBottomCTA from "@/components/guides/GuideBottomCTA";
 import { SEO } from "@/components/SEO";
+import { SiteHeader } from "@/components/SiteHeader";
 import { guideSchema } from "@/lib/guideSchema";
 import InlineRating from "@/components/feedback/InlineRating";
 
@@ -18,23 +17,9 @@ const ResumeGuide = () => {
       <div className="min-h-screen bg-background">
         <SEO schemaJson={guideSchema({ path: "/resume-guide", title: "Resume Guide | Get More Interviews", description: "How to write a resume that gets interviews. Formatting, bullet points, ATS tips, and real examples from a senior recruiter." })} />
       {/* Navigation */}
-      <nav className="fixed top-0 left-0 right-0 z-50 bg-nav-green">
-        <div className="container mx-auto px-5 md:px-6 py-4 flex items-center justify-between">
-          <Link to="/" className="font-heading text-lg md:text-xl font-medium text-cream tracking-tight hover:text-cream-90 transition-colors">
-            hiresign
-          </Link>
-          <div className="flex items-center gap-3 md:gap-4">
-            <AuthHeaderButton variant="nav" />
-            <LanguageToggle variant="nav" />
-            <Link to="/" className="text-sm text-cream-70 hover:text-cream transition-colors flex items-center gap-2">
-              <ArrowLeft className="w-4 h-4" />
-              Back to Home
-            </Link>
-          </div>
-        </div>
-      </nav>
+      <SiteHeader variant="dark" lang="en" sticky />
 
-      {/* Hero Section */}
+{/* Hero Section */}
       <section className="pt-32 md:pt-40 pb-16 md:pb-20 px-5 md:px-6 bg-background">
         <div className="container mx-auto max-w-3xl text-center">
           <h1 className="font-heading text-4xl md:text-5xl lg:text-6xl text-foreground leading-tight mb-6">

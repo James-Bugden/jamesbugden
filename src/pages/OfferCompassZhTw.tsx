@@ -4,7 +4,6 @@ import { EmailGateOverlay } from "@/components/EmailGateOverlay";
 import { Link } from "react-router-dom";
 
 import { Plus, Copy, Sparkles, Trash2, RotateCcw, ArrowRight } from "lucide-react";
-import LanguageToggle from "@/components/LanguageToggle";
 import { Button } from "@/components/ui/button";
 import {
   Select, SelectContent, SelectItem, SelectTrigger, SelectValue,
@@ -19,6 +18,7 @@ import ResultsColumnZhTw from "@/components/offer-compass/ResultsColumnZhTw";
 import ScenarioComparison from "@/components/offer-compass/ScenarioComparison";
 import NegotiationImpactZhTw from "@/components/offer-compass/NegotiationImpactZhTw";
 import { SEO } from "@/components/SEO";
+import { SiteHeader } from "@/components/SiteHeader";
 
 export default function OfferCompassZhTw() {
   const {
@@ -35,19 +35,7 @@ export default function OfferCompassZhTw() {
       <SEO />
 
       <div className="min-h-screen bg-background">
-        <header className="print:hidden bg-executive-green">
-          <div className="max-w-7xl mx-auto px-4 md:px-6 h-14 flex items-center justify-between">
-            <div className="flex items-center gap-4">
-              <Link to="/zh-tw" className="font-heading text-sm font-bold tracking-wide text-white/70 hover:text-white transition-colors">
-                hiresign
-              </Link>
-              <span className="text-white/30">|</span>
-              <h1 className="font-heading text-lg font-bold text-white">Offer 計算機</h1>
-              <span className="hidden md:inline text-white/50 text-xs">免費工具 · 由談判過 750+ Offer 的招募專家打造</span>
-            </div>
-            <LanguageToggle variant="nav" />
-          </div>
-        </header>
+        <SiteHeader variant="dark" lang="zh" sticky breadcrumb="Offer 計算機" hideAuth />
 
         <div className="print:hidden border-b border-border bg-card">
           <div className="max-w-7xl mx-auto px-4 md:px-6 py-3 flex flex-wrap items-center gap-2">

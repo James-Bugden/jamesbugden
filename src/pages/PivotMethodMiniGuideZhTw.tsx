@@ -3,11 +3,11 @@ import { InteractiveChecklist } from "@/components/guides/InteractiveChecklist";
 import { Link, useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import GuideShareButtons from "@/components/GuideShareButtons";
-import { AuthHeaderButton } from "@/components/AuthHeaderButton";
 import { useTrackGuideProgress } from "@/hooks/useReadingProgress";
 import GuideSignInBanner from "@/components/guides/GuideSignInBanner";
 import GuideBottomCTA from "@/components/guides/GuideBottomCTA";
 import { SEO } from "@/components/SEO";
+import { SiteHeader } from "@/components/SiteHeader";
 import { guideSchema } from "@/lib/guideSchema";
 import InlineRating from "@/components/feedback/InlineRating";
 
@@ -42,26 +42,9 @@ const PivotMethodMiniGuideZhTw = () => {
       </nav>
 
       {/* Hero Section */}
-      <header className="bg-executive-green text-cream py-16 md:py-24">
-        <div className="container mx-auto px-4 max-w-4xl text-center">
-          <p className="text-gold font-medium mb-4 tracking-wide uppercase">職涯轉換快速指南</p>
-          <h1 className="font-heading text-4xl md:text-5xl lg:text-6xl mb-6" style={{ lineHeight: 1.2 }}>
-            轉換方法論
-          </h1>
-          <p className="text-xl md:text-2xl text-cream/90 mb-4">
-            根據 Jenny Blake 的《Pivot:唯一重要的動作是你的下一步》改編
-          </p>
-          <p className="text-lg text-cream/90 mb-2">
-            作者:James Bugden • 資深招募顧問
-          </p>
-          <div className="flex items-center justify-center gap-1.5 text-gold-soft/80">
-            <Clock className="w-4 h-4" />
-            <span className="text-sm">10 分鐘閱讀</span>
-          </div>
-        </div>
-      </header>
+      <SiteHeader variant="dark" lang="zh" sticky />
 
-      <GuideSignInBanner lang="zh" />
+<GuideSignInBanner lang="zh" />
 
       {/* Main Content */}
       <main className="container mx-auto px-4 py-12 md:py-16 max-w-4xl">

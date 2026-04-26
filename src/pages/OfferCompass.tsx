@@ -5,7 +5,6 @@ import { Link } from "react-router-dom";
 
 import { Plus, Copy, Sparkles, Trash2, RotateCcw, ArrowRight, X } from "lucide-react";
 import { trackEvent } from "@/lib/trackEvent";
-import LanguageToggle from "@/components/LanguageToggle";
 import { Button } from "@/components/ui/button";
 import {
   Select,
@@ -24,6 +23,7 @@ import ResultsColumn from "@/components/offer-compass/ResultsColumn";
 import ScenarioComparison from "@/components/offer-compass/ScenarioComparison";
 import NegotiationImpact from "@/components/offer-compass/NegotiationImpact";
 import { SEO } from "@/components/SEO";
+import { SiteHeader } from "@/components/SiteHeader";
 
 export default function OfferCompass() {
   const {
@@ -50,20 +50,7 @@ export default function OfferCompass() {
 
       <div className="min-h-screen bg-background">
 
-        {/* ── Header Bar ── */}
-        <header className="print:hidden bg-executive-green">
-          <div className="max-w-7xl mx-auto px-4 md:px-6 h-14 flex items-center justify-between">
-            <div className="flex items-center gap-4">
-              <Link to="/" className="font-heading text-sm font-bold tracking-wide text-white/70 hover:text-white transition-colors">
-                hiresign
-              </Link>
-              <span className="text-white/30">|</span>
-              <h1 className="font-heading text-lg font-bold text-white">Offer Calculator</h1>
-              <span className="hidden md:inline text-white/50 text-xs">Free tool · Built by a recruiter who's negotiated 750+ offers</span>
-            </div>
-            <LanguageToggle variant="nav" />
-          </div>
-        </header>
+        <SiteHeader variant="dark" lang="en" sticky breadcrumb="Offer Calculator" hideAuth />
 
 
         {/* ── Scenario Bar, always visible ── */}
