@@ -29,7 +29,7 @@ export default function PromoBanner({ lang }: { lang: "en" | "zh" }) {
   const isExternal = !isLoggedIn;
 
   return (
-    <div className="w-full bg-gold text-executive-green text-center text-sm py-2.5 px-4 flex items-center justify-center gap-3 relative font-medium">
+    <div className="w-full bg-executive-green text-white text-center text-sm py-2.5 px-4 flex items-center justify-center gap-3 relative font-medium">
       <a
         href={href}
         {...(isExternal ? { target: "_blank", rel: "noopener noreferrer" } : {})}
@@ -43,7 +43,7 @@ export default function PromoBanner({ lang }: { lang: "en" | "zh" }) {
           localStorage.setItem("promo_banner_dismissed", BANNER_ID);
           setDismissed(true);
         }}
-        className="absolute right-3 top-1/2 -translate-y-1/2 p-1 hover:opacity-70 transition-opacity text-executive-green/80"
+        className="absolute right-3 top-1/2 -translate-y-1/2 p-1 hover:opacity-70 transition-opacity text-white/80"
         aria-label="Close"
       >
         <X className="w-4 h-4" />
