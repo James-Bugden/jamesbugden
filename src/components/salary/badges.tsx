@@ -9,7 +9,7 @@ export function FreshnessBadge({ year, lang = "en" }: { year: number; lang?: Sal
     ? { className: "bg-executive-green text-cream border-0 text-[10px] px-1.5 py-0", label: t.current, tip: t.freshnessCurrent }
     : year === 2024
     ? { className: "bg-green-soft text-executive-green border border-executive-green/20 text-[10px] px-1.5 py-0", label: t.recent, tip: t.freshnessRecent }
-    : { className: "bg-gold-soft text-gold-dark border border-gold/30 text-[10px] px-1.5 py-0", label: t.adjusted, tip: t.freshnessAdjusted };
+    : { className: "bg-warning-soft text-warning border border-warning/30 text-[10px] px-1.5 py-0", label: t.adjusted, tip: t.freshnessAdjusted };
 
   return (
     <TooltipProvider delayDuration={200}>

@@ -30,7 +30,7 @@ function matchRegion(sectionName: string) {
 
 function getScoreColor(score: number) {
   if (score <= 3) return "hsl(var(--destructive))";
-  if (score <= 5) return "hsl(var(--gold-dark))";
+  if (score <= 5) return "hsl(var(--warning))";
   if (score <= 7) return "hsl(var(--gold))";
   return "hsl(var(--executive-green))";
 }

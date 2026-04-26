@@ -629,15 +629,15 @@ export default function ResumeAnalyzer({ defaultLang = "en" }: { defaultLang?: L
                             ) : s.status === "critical" ? (
                               <X className="w-3.5 h-3.5 text-destructive" />
                             ) : (
-                              <AlertTriangle className="w-3.5 h-3.5 text-gold" />
+                              <AlertTriangle className="w-3.5 h-3.5 text-warning" />
                             )}
                             <span className="font-medium" style={{ color: 'hsl(var(--foreground))' }}>{s.label}</span>
                           </div>
-                          <span className={`font-semibold ${s.status === "strong" ? "" : s.status === "critical" ? "text-destructive" : "text-gold"}`} style={s.status === "strong" ? { color: 'hsl(var(--executive-green))' } : undefined}>{s.score}/10</span>
+                          <span className={`font-semibold ${s.status === "strong" ? "" : s.status === "critical" ? "text-destructive" : "text-warning"}`} style={s.status === "strong" ? { color: 'hsl(var(--executive-green))' } : undefined}>{s.score}/10</span>
                         </div>
                         <div className="h-1.5 rounded-full overflow-hidden" style={{ backgroundColor: 'rgba(43,71,52,0.08)' }}>
                           <div
-                            className={`h-full rounded-full transition-all ${s.status === "critical" ? "bg-destructive" : s.status === "warning" ? "bg-gold" : ""}`}
+                            className={`h-full rounded-full transition-all ${s.status === "critical" ? "bg-destructive" : s.status === "warning" ? "bg-warning" : ""}`}
                             style={{ width: `${s.score * 10}%`, ...(s.status === "strong" ? { backgroundColor: 'hsl(var(--executive-green))' } : {}) }}
                           />
                         </div>
@@ -764,7 +764,7 @@ export default function ResumeAnalyzer({ defaultLang = "en" }: { defaultLang?: L
                   {analyses.map((a) => {
                     const date = new Date(a.created_at).toLocaleDateString(lang === "zh-TW" ? "zh-TW" : "en-US", { year: "numeric", month: "short", day: "numeric", hour: "2-digit", minute: "2-digit" });
                     const score = a.overall_score ?? 0;
-                    const color = score >= 80 ? "hsl(var(--executive-green))" : score >= 60 ? "hsl(var(--gold))" : score >= 40 ? "hsl(var(--gold-dark))" : "hsl(var(--destructive))";
+                    const color = score >= 80 ? "hsl(var(--executive-green))" : score >= 60 ? "hsl(var(--warning))" : score >= 40 ? "hsl(var(--warning))" : "hsl(var(--destructive))";
                     return (
                       <button
                         key={a.id}

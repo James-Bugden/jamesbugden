@@ -70,7 +70,7 @@ const CATEGORIES = [
 
 const DIFFICULTIES = [
   { value: 1, en: "Easy", zh: "簡單", color: "text-executive-green", desc_en: "Common questions most candidates should prepare for", desc_zh: "大多數求職者都應準備的常見問題" },
-  { value: 2, en: "Medium", zh: "中等", color: "text-gold", desc_en: "Requires structured thinking & specific examples", desc_zh: "需要結構化思考與具體案例" },
+  { value: 2, en: "Medium", zh: "中等", color: "text-warning", desc_en: "Requires structured thinking & specific examples", desc_zh: "需要結構化思考與具體案例" },
   { value: 3, en: "Hard", zh: "困難", color: "text-destructive", desc_en: "Complex scenarios testing deep expertise & judgment", desc_zh: "測試深度專業與判斷力的複雜情境" },
 ] as const;
 
@@ -917,7 +917,7 @@ export default function InterviewQuestionBank({ lang: initialLang }: { lang: Lan
                                   ? q.difficulty === 3
                                     ? "bg-destructive"
                                     : q.difficulty === 2
-                                    ? "bg-gold"
+                                    ? "bg-warning"
                                     : "bg-executive-green"
                                   : "bg-muted"
                               }`}

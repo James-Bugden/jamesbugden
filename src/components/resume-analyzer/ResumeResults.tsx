@@ -53,7 +53,7 @@ function ScoreHero({ score, lang }: { score: number; lang: Language }) {
   const radius = (size - 14) / 2;
   const circumference = 2 * Math.PI * radius;
   const offset = circumference - (animatedScore / 100) * circumference;
-  const color = score >= 80 ? "hsl(var(--executive-green))" : score >= 60 ? "hsl(var(--gold))" : score >= 40 ? "hsl(var(--gold-dark))" : "hsl(var(--destructive))";
+  const color = score >= 80 ? "hsl(var(--executive-green))" : score >= 60 ? "hsl(var(--warning))" : score >= 40 ? "hsl(var(--warning))" : "hsl(var(--destructive))";
   const grade = score >= 90 ? "A+" : score >= 80 ? "A" : score >= 70 ? "B" : score >= 60 ? "C" : score >= 50 ? "D" : "F";
 
   const verdictText = (s: number) => {
@@ -125,8 +125,8 @@ function FindingsSummary({ sections, lang }: { sections: AnalysisResult["section
           <span className="text-sm font-medium" style={{ color: 'hsl(var(--executive-green))' }}>{strengths} {t(lang, "strengths", "優勢")}</span>
         </div>
         <div className="flex items-center gap-2">
-          <AlertTriangle className="w-4 h-4 text-gold" />
-          <span className="text-sm font-medium text-gold">{warnings} {t(lang, "warnings", "警告")}</span>
+          <AlertTriangle className="w-4 h-4 text-warning" />
+          <span className="text-sm font-medium text-warning">{warnings} {t(lang, "warnings", "警告")}</span>
         </div>
         <div className="flex items-center gap-2">
           <XCircle className="w-4 h-4 text-destructive" />
@@ -136,7 +136,7 @@ function FindingsSummary({ sections, lang }: { sections: AnalysisResult["section
       {/* Stacked bar */}
       <div className="w-full h-2.5 rounded-full overflow-hidden flex" style={{ backgroundColor: 'rgba(43,71,52,0.08)' }}>
         {strengths > 0 && <div className="h-full" style={{ width: `${(strengths / total) * 100}%`, backgroundColor: 'hsl(var(--executive-green))' }} />}
-        {warnings > 0 && <div className="h-full bg-gold" style={{ width: `${(warnings / total) * 100}%` }} />}
+        {warnings > 0 && <div className="h-full bg-warning" style={{ width: `${(warnings / total) * 100}%` }} />}
         {criticals > 0 && <div className="h-full bg-destructive" style={{ width: `${(criticals / total) * 100}%` }} />}
       </div>
     </div>
@@ -180,8 +180,8 @@ function SegmentationProfile({ segmentation, lang }: { segmentation: AnalysisRes
 /* ──────────────────── Section Card ──────────────────── */
 function SectionCard({ section, lang, defaultOpen, locked }: { section: AnalysisResult["sections"][0]; lang: Language; defaultOpen?: boolean; locked?: boolean }) {
   const [open, setOpen] = useState(locked ? false : (defaultOpen || false));
-  const scoreColor = section.score >= 8 ? "hsl(var(--executive-green))" : section.score >= 6 ? "hsl(var(--gold))" : section.score >= 4 ? "hsl(var(--gold-dark))" : "hsl(var(--destructive))";
-  const barColor = section.score >= 8 ? "hsl(var(--executive-green))" : section.score >= 6 ? "hsl(var(--gold))" : section.score >= 4 ? "hsl(var(--gold-dark))" : "hsl(var(--destructive))";
+  const scoreColor = section.score >= 8 ? "hsl(var(--executive-green))" : section.score >= 6 ? "hsl(var(--warning))" : section.score >= 4 ? "hsl(var(--warning))" : "hsl(var(--destructive))";
+  const barColor = section.score >= 8 ? "hsl(var(--executive-green))" : section.score >= 6 ? "hsl(var(--warning))" : section.score >= 4 ? "hsl(var(--warning))" : "hsl(var(--destructive))";
 
   return (
     <div
@@ -359,7 +359,7 @@ function InlineBuilderCTA({ lang, resumeText, analysis }: { lang: Language; resu
         onClick={handleBuild}
         className="inline-flex items-center gap-2 px-6 py-3 rounded-lg text-sm font-bold transition-colors text-white"
         style={{ backgroundColor: 'hsl(var(--gold))' }}
-        onMouseEnter={(e) => (e.currentTarget.style.backgroundColor = 'hsl(var(--gold-dark))')}
+        onMouseEnter={(e) => (e.currentTarget.style.backgroundColor = 'hsl(var(--warning))')}
         onMouseLeave={(e) => (e.currentTarget.style.backgroundColor = 'hsl(var(--gold))')}
       >
         <FileEdit className="w-4 h-4" />
@@ -415,7 +415,7 @@ function BuildResumeCTA({ lang, resumeText, analysis }: { lang: Language; resume
         onClick={handleBuild}
         className="inline-flex items-center gap-2 px-6 py-3 rounded-lg text-sm font-bold transition-colors text-white"
         style={{ backgroundColor: 'hsl(var(--gold))' }}
-        onMouseEnter={(e) => (e.currentTarget.style.backgroundColor = 'hsl(var(--gold-dark))')}
+        onMouseEnter={(e) => (e.currentTarget.style.backgroundColor = 'hsl(var(--warning))')}
         onMouseLeave={(e) => (e.currentTarget.style.backgroundColor = 'hsl(var(--gold))')}
       >
         <FileEdit className="w-4 h-4" />

@@ -105,8 +105,8 @@ const journeyItems: JourneyItem[] = [
 const JOURNEY_META: { tag: GuideTag; icon: React.ReactNode; color: string; label: { en: string; zh: string } }[] = [
   { tag: "end-to-end", icon: <Compass className="w-5 h-5" />, color: "hsl(var(--executive-green))", label: { en: "End to End Guides", zh: "完整指南" } },
   { tag: "applying", icon: <ClipboardList className="w-5 h-5" />, color: "hsl(var(--executive-green-light))", label: { en: "Applying", zh: "投遞申請" } },
-  { tag: "interviewing", icon: <Mic className="w-5 h-5" />, color: "hsl(var(--gold))", label: { en: "Interviewing", zh: "面試準備" } },
-  { tag: "negotiating", icon: <Banknote className="w-5 h-5" />, color: "hsl(var(--gold-dark))", label: { en: "Negotiating", zh: "薪資談判" } },
+  { tag: "interviewing", icon: <Mic className="w-5 h-5" />, color: "hsl(var(--warning))", label: { en: "Interviewing", zh: "面試準備" } },
+  { tag: "negotiating", icon: <Banknote className="w-5 h-5" />, color: "hsl(var(--gold))", label: { en: "Negotiating", zh: "薪資談判" } },
 ];
 
 type SearchableItem = { id: string; type: "tool" | "guide"; title: { en: string; zh: string }; desc: { en: string; zh: string }; path: string };

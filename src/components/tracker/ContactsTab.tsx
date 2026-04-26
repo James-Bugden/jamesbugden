@@ -57,9 +57,9 @@ interface StatusInfo { key: StatusKey; label: string; emoji: string; color: stri
 
 const STATUS_MAP: Record<StatusKey, StatusInfo> = {
   "not-contacted": { key: "not-contacted", label: "Not Contacted", emoji: "⬜", color: "hsl(var(--muted-foreground))", bg: "hsl(var(--muted))" },
-  "awaiting":      { key: "awaiting",      label: "Awaiting",      emoji: "🟡", color: "hsl(var(--gold-dark))",        bg: "hsl(var(--gold-soft))" },
+  "awaiting":      { key: "awaiting",      label: "Awaiting",      emoji: "🟡", color: "hsl(var(--warning))",          bg: "hsl(var(--warning-soft))" },
   "booster":       { key: "booster",       label: "Booster",       emoji: "🟢", color: "hsl(var(--executive-green))",  bg: "hsl(var(--green-soft))" },
-  "obligate":      { key: "obligate",      label: "Obligate",      emoji: "🟠", color: "hsl(var(--gold-dark))",        bg: "hsl(var(--gold-soft))" },
+  "obligate":      { key: "obligate",      label: "Obligate",      emoji: "🟠", color: "hsl(var(--warning))",          bg: "hsl(var(--warning-soft))" },
   "curmudgeon":    { key: "curmudgeon",    label: "Curmudgeon",    emoji: "🔴", color: "hsl(var(--destructive))",      bg: "hsl(var(--destructive-soft))" },
 };
 
