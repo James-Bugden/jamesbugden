@@ -140,7 +140,7 @@ const LinkedInGuideZhTw = () => {
 
           <div className="bg-gold/10 border border-gold/30 rounded-lg p-5">
             <p className="text-foreground">
-              <strong className="text-gold">為什麼重要：</strong> 全明星個人檔案在搜尋結果中出現的機率顯著更高。把它想成入場券 — 沒有它你就不會被找到。
+              <strong className="text-gold">為什麼重要：</strong> 全明星個人檔案在搜尋結果中出現的機率顯著更高。把它想成入場券, 沒有它你就不會被找到。
             </p>
           </div>
 
@@ -166,26 +166,26 @@ const LinkedInGuideZhTw = () => {
           </div>
 
           <p className="text-foreground mb-6">
-            你的標題和照片通常是別人在決定是否點擊你的個人檔案前唯一會看到的東西。大多數人保留預設值 — 他們的職稱。這是錯失的機會。
+            你的標題和照片通常是別人在決定是否點擊你的個人檔案前唯一會看到的東西。大多數人保留預設值, 他們的職稱。這是錯失的機會。
           </p>
 
           <h3 className="font-heading text-xl text-foreground mb-4">Sandra 的頂級標題建議：</h3>
           <ul className="space-y-3 mb-6">
             <li className="flex items-start gap-3">
               <GoldCheckBadge />
-              <span className="text-foreground"><strong>使用關鍵字</strong> — 標題中的字詞幫助人們在搜尋中找到你</span>
+              <span className="text-foreground"><strong>使用關鍵字</strong>, 標題中的字詞幫助人們在搜尋中找到你</span>
             </li>
             <li className="flex items-start gap-3">
               <GoldCheckBadge />
-              <span className="text-foreground"><strong>加入價值陳述</strong> — 不要只說你是什麼，說你為人們做什麼</span>
+              <span className="text-foreground"><strong>加入價值陳述</strong>, 不要只說你是什麼，說你為人們做什麼</span>
             </li>
             <li className="flex items-start gap-3">
               <GoldCheckBadge />
-              <span className="text-foreground"><strong>具體明確</strong> — 「業務主管」太籠統；加入讓你與眾不同的地方</span>
+              <span className="text-foreground"><strong>具體明確</strong>, 「業務主管」太籠統；加入讓你與眾不同的地方</span>
             </li>
             <li className="flex items-start gap-3">
               <GoldCheckBadge />
-              <span className="text-foreground"><strong>保留你的企業品牌</strong>（如果它知名度高）— 「GE 資深副總」會吸引點擊</span>
+              <span className="text-foreground"><strong>保留你的企業品牌</strong>（如果它知名度高）,  「GE 資深副總」會吸引點擊</span>
             </li>
             <li className="flex items-start gap-3">
               <GoldCheckBadge />
@@ -256,34 +256,34 @@ const LinkedInGuideZhTw = () => {
           <h3 className="font-heading text-xl text-foreground mb-4">Sandra 撰寫優秀關於區塊的 10 個技巧：</h3>
           <div className="space-y-4 mb-8">
             <div className="bg-background border border-border rounded-lg p-4">
-              <p className="text-foreground"><strong>1. 專注</strong> — 打造出色的介紹。先在 Word 中撰寫以檢查拼字和文法。</p>
+              <p className="text-foreground"><strong>1. 專注</strong>, 打造出色的介紹。先在 Word 中撰寫以檢查拼字和文法。</p>
             </div>
             <div className="bg-background border border-border rounded-lg p-4">
-              <p className="text-foreground"><strong>2. 設定目標</strong> — 你想達成什麼？新客戶？新工作？演講邀請？</p>
+              <p className="text-foreground"><strong>2. 設定目標</strong>, 你想達成什麼？新客戶？新工作？演講邀請？</p>
             </div>
             <div className="bg-background border border-border rounded-lg p-4">
-              <p className="text-foreground"><strong>3. 考慮你的讀者</strong> — 思考所有你的受眾。什麼讓他們想聯絡你？</p>
+              <p className="text-foreground"><strong>3. 考慮你的讀者</strong>, 思考所有你的受眾。什麼讓他們想聯絡你？</p>
             </div>
             <div className="bg-background border border-border rounded-lg p-4">
-              <p className="text-foreground"><strong>4. 使用空間</strong> — LinkedIn 說至少 40 個字的文章讓你的個人檔案更容易在搜尋中被找到。大多數強大的個人檔案包含 2-3 段。</p>
+              <p className="text-foreground"><strong>4. 使用空間</strong>, LinkedIn 說至少 40 個字的文章讓你的個人檔案更容易在搜尋中被找到。大多數強大的個人檔案包含 2-3 段。</p>
             </div>
             <div className="bg-background border border-border rounded-lg p-4">
-              <p className="text-foreground"><strong>5. 真實且真誠</strong> — 讓真正的「你」展現出來。包含個人興趣。</p>
+              <p className="text-foreground"><strong>5. 真實且真誠</strong>, 讓真正的「你」展現出來。包含個人興趣。</p>
             </div>
             <div className="bg-background border border-border rounded-lg p-4">
-              <p className="text-foreground"><strong>6. 用第一人稱撰寫</strong> — 創造溫暖。40% 的招募人員在個人檔案中尋找個性。</p>
+              <p className="text-foreground"><strong>6. 用第一人稱撰寫</strong>, 創造溫暖。40% 的招募人員在個人檔案中尋找個性。</p>
             </div>
             <div className="bg-background border border-border rounded-lg p-4">
-              <p className="text-foreground"><strong>7. 使用策略性語言</strong> — 自然地包含關鍵字。在最後加入專業領域清單。</p>
+              <p className="text-foreground"><strong>7. 使用策略性語言</strong>, 自然地包含關鍵字。在最後加入專業領域清單。</p>
             </div>
             <div className="bg-background border border-border rounded-lg p-4">
-              <p className="text-foreground"><strong>8. 讓它有吸引力</strong> — 使用間距、大小寫和符號來增加視覺吸引力。</p>
+              <p className="text-foreground"><strong>8. 讓它有吸引力</strong>, 使用間距、大小寫和符號來增加視覺吸引力。</p>
             </div>
             <div className="bg-background border border-border rounded-lg p-4">
-              <p className="text-foreground"><strong>9. 以鉤子開始</strong> — 吸引讀者。讓他們想點擊「查看更多」。</p>
+              <p className="text-foreground"><strong>9. 以鉤子開始</strong>, 吸引讀者。讓他們想點擊「查看更多」。</p>
             </div>
             <div className="bg-background border border-border rounded-lg p-4">
-              <p className="text-foreground"><strong>10. 小心結尾</strong> — 以專業領域清單和聯絡資訊結束，提供「快速閱讀」選項。</p>
+              <p className="text-foreground"><strong>10. 小心結尾</strong>, 以專業領域清單和聯絡資訊結束，提供「快速閱讀」選項。</p>
             </div>
           </div>
 
@@ -331,22 +331,22 @@ const LinkedInGuideZhTw = () => {
           <p className="text-muted-foreground mb-4">Sandra 確定了撰寫關於區塊的六種方法。選擇適合你的那個：</p>
           <div className="space-y-4 mb-6">
             <div className="bg-background border border-border rounded-lg p-4">
-              <p className="text-foreground"><strong className="text-gold">歷史學家</strong> — 你的職業生涯的時間順序故事。如果你使用這種方法，確保加入個性。不要只是重複你的經歷區塊。</p>
+              <p className="text-foreground"><strong className="text-gold">歷史學家</strong>, 你的職業生涯的時間順序故事。如果你使用這種方法，確保加入個性。不要只是重複你的經歷區塊。</p>
             </div>
             <div className="bg-background border border-border rounded-lg p-4">
-              <p className="text-foreground"><strong className="text-gold">說故事的人</strong> — 以一個與你個人品牌相關的精彩故事開場。Sandra 最喜歡的方法：「我就是喜歡故事。」</p>
+              <p className="text-foreground"><strong className="text-gold">說故事的人</strong>, 以一個與你個人品牌相關的精彩故事開場。Sandra 最喜歡的方法：「我就是喜歡故事。」</p>
             </div>
             <div className="bg-background border border-border rounded-lg p-4">
-              <p className="text-foreground"><strong className="text-gold">編織者</strong> — 如果你的職業道路不是線性的，這很完美。使用關於區塊來連接點，解釋為什麼你多樣化的經驗合在一起是有意義的。</p>
+              <p className="text-foreground"><strong className="text-gold">編織者</strong>, 如果你的職業道路不是線性的，這很完美。使用關於區塊來連接點，解釋為什麼你多樣化的經驗合在一起是有意義的。</p>
             </div>
             <div className="bg-background border border-border rounded-lg p-4">
-              <p className="text-foreground"><strong className="text-gold">主題化者</strong> — 最適合資深領導者或有廣泛經驗的人。選擇 3-4 個貫穿你職業生涯的主題，並圍繞這些主題組織。</p>
+              <p className="text-foreground"><strong className="text-gold">主題化者</strong>, 最適合資深領導者或有廣泛經驗的人。選擇 3-4 個貫穿你職業生涯的主題，並圍繞這些主題組織。</p>
             </div>
             <div className="bg-background border border-border rounded-lg p-4">
-              <p className="text-foreground"><strong className="text-gold">個性派</strong> — 讓你的性格和工作風格成為中心舞台。展示你如何處理問題和協作。</p>
+              <p className="text-foreground"><strong className="text-gold">個性派</strong>, 讓你的性格和工作風格成為中心舞台。展示你如何處理問題和協作。</p>
             </div>
             <div className="bg-background border border-border rounded-lg p-4">
-              <p className="text-foreground"><strong className="text-gold">商業領袖</strong> — 將你的關於區塊寫成潛在客戶的「預售文件」。仍然使用第一人稱並講述你的故事。</p>
+              <p className="text-foreground"><strong className="text-gold">商業領袖</strong>, 將你的關於區塊寫成潛在客戶的「預售文件」。仍然使用第一人稱並講述你的故事。</p>
             </div>
           </div>
 
@@ -370,22 +370,22 @@ const LinkedInGuideZhTw = () => {
           </div>
 
           <p className="text-foreground mb-6">
-            線上評論可以決定你是否被找到、被錄用和被信任。在 LinkedIn 上有推薦和認可的人都曾努力爭取 — 這不會自動發生。
+            線上評論可以決定你是否被找到、被錄用和被信任。在 LinkedIn 上有推薦和認可的人都曾努力爭取, 這不會自動發生。
           </p>
 
           <h3 className="font-heading text-xl text-foreground mb-4">技能與認可</h3>
           <ul className="space-y-3 mb-6">
             <li className="flex items-start gap-3">
               <GoldCheckBadge />
-              <span className="text-foreground"><strong>清理你的技能</strong> — 移除任何不符合你品牌的東西。僅僅因為有人認可你的某項技能，不代表它應該出現在你的個人檔案上。</span>
+              <span className="text-foreground"><strong>清理你的技能</strong>, 移除任何不符合你品牌的東西。僅僅因為有人認可你的某項技能，不代表它應該出現在你的個人檔案上。</span>
             </li>
             <li className="flex items-start gap-3">
               <GoldCheckBadge />
-              <span className="text-foreground"><strong>釘選你的前 3 項</strong> — 在你個人檔案上顯示的前三項技能應該是你最具策略性的技能。</span>
+              <span className="text-foreground"><strong>釘選你的前 3 項</strong>, 在你個人檔案上顯示的前三項技能應該是你最具策略性的技能。</span>
             </li>
             <li className="flex items-start gap-3">
               <GoldCheckBadge />
-              <span className="text-foreground"><strong>每幾個月檢視一次</strong> — 你的技能清單應該隨著你的職業發展而演變。</span>
+              <span className="text-foreground"><strong>每幾個月檢視一次</strong>, 你的技能清單應該隨著你的職業發展而演變。</span>
             </li>
           </ul>
 
@@ -400,37 +400,37 @@ const LinkedInGuideZhTw = () => {
             <li className="flex items-start gap-3">
               <span className="w-8 h-8 rounded-full bg-gold/20 flex items-center justify-center text-gold font-semibold flex-shrink-0">1</span>
               <div>
-                <p className="text-foreground"><strong>列清單</strong> — 決定誰可以從直接與你合作的經驗中第一手描述你的工作</p>
+                <p className="text-foreground"><strong>列清單</strong>, 決定誰可以從直接與你合作的經驗中第一手描述你的工作</p>
               </div>
             </li>
             <li className="flex items-start gap-3">
               <span className="w-8 h-8 rounded-full bg-gold/20 flex items-center justify-center text-gold font-semibold flex-shrink-0">2</span>
               <div>
-                <p className="text-foreground"><strong>考慮時機</strong> — 最佳時機是剛完成專案、離開工作或收到大讚美後</p>
+                <p className="text-foreground"><strong>考慮時機</strong>, 最佳時機是剛完成專案、離開工作或收到大讚美後</p>
               </div>
             </li>
             <li className="flex items-start gap-3">
               <span className="w-8 h-8 rounded-full bg-gold/20 flex items-center justify-center text-gold font-semibold flex-shrink-0">3</span>
               <div>
-                <p className="text-foreground"><strong>親自詢問</strong> — 對於親近的聯絡人，一封訊息就可以。對其他人，先暖身 — 打電話或約喝咖啡。個人化的請求會大幅提高成功率</p>
+                <p className="text-foreground"><strong>親自詢問</strong>, 對於親近的聯絡人，一封訊息就可以。對其他人，先暖身, 打電話或約喝咖啡。個人化的請求會大幅提高成功率</p>
               </div>
             </li>
             <li className="flex items-start gap-3">
               <span className="w-8 h-8 rounded-full bg-gold/20 flex items-center justify-center text-gold font-semibold flex-shrink-0">4</span>
               <div>
-                <p className="text-foreground"><strong>讓它變簡單</strong> — 詢問他們是否想要談話要點，或者你是否應該為他們起草一些東西讓他們編輯</p>
+                <p className="text-foreground"><strong>讓它變簡單</strong>, 詢問他們是否想要談話要點，或者你是否應該為他們起草一些東西讓他們編輯</p>
               </div>
             </li>
             <li className="flex items-start gap-3">
               <span className="w-8 h-8 rounded-full bg-gold/20 flex items-center justify-center text-gold font-semibold flex-shrink-0">5</span>
               <div>
-                <p className="text-foreground"><strong>溫和追蹤</strong> — 人們有好意但會忙碌。溫和的提醒是明智的</p>
+                <p className="text-foreground"><strong>溫和追蹤</strong>, 人們有好意但會忙碌。溫和的提醒是明智的</p>
               </div>
             </li>
             <li className="flex items-start gap-3">
               <span className="w-8 h-8 rounded-full bg-gold/20 flex items-center justify-center text-gold font-semibold flex-shrink-0">6</span>
               <div>
-                <p className="text-foreground"><strong>表達感激</strong> — 發送感謝信或 LinkedIn 訊息</p>
+                <p className="text-foreground"><strong>表達感激</strong>, 發送感謝信或 LinkedIn 訊息</p>
               </div>
             </li>
           </ol>
@@ -493,13 +493,13 @@ const LinkedInGuideZhTw = () => {
           <h3 className="font-heading text-xl text-foreground mb-4">內容的三個 C：</h3>
           <div className="space-y-4 mb-8">
             <div className="bg-background border border-border rounded-lg p-4">
-              <p className="text-foreground"><strong className="text-gold">Create（創建）</strong> — 撰寫原創貼文、文章或錄製原生影片。400-600 字元的貼文往往表現良好。</p>
+              <p className="text-foreground"><strong className="text-gold">Create（創建）</strong>, 撰寫原創貼文、文章或錄製原生影片。400-600 字元的貼文往往表現良好。</p>
             </div>
             <div className="bg-background border border-border rounded-lg p-4">
-              <p className="text-foreground"><strong className="text-gold">Curate（策展）</strong> — 找到有價值的內容並以你獨特的觀點分享。加入有見地的評論 — 不要只是按「轉發」。</p>
+              <p className="text-foreground"><strong className="text-gold">Curate（策展）</strong>, 找到有價值的內容並以你獨特的觀點分享。加入有見地的評論, 不要只是按「轉發」。</p>
             </div>
             <div className="bg-background border border-border rounded-lg p-4">
-              <p className="text-foreground"><strong className="text-gold">Comment（評論）</strong> — Sandra 的第一秘訣。如果她只能做一件事，那就是每天用有意義、有見地或支持性的評論留言。</p>
+              <p className="text-foreground"><strong className="text-gold">Comment（評論）</strong>, Sandra 的第一秘訣。如果她只能做一件事，那就是每天用有意義、有見地或支持性的評論留言。</p>
             </div>
           </div>
 
@@ -507,7 +507,7 @@ const LinkedInGuideZhTw = () => {
           <ul className="space-y-3 mb-8">
             <li className="flex items-start gap-3">
               <GoldCheckBadge />
-              <span className="text-foreground">寫更長、有見地的評論 — 不只是「很棒的貼文！」</span>
+              <span className="text-foreground">寫更長、有見地的評論, 不只是「很棒的貼文！」</span>
             </li>
             <li className="flex items-start gap-3">
               <GoldCheckBadge />
@@ -598,19 +598,19 @@ const LinkedInGuideZhTw = () => {
           <h3 className="font-heading text-xl text-foreground mb-4">快速能見度贏家：</h3>
           <div className="space-y-4 mb-8">
             <div className="bg-card border border-border rounded-lg p-4">
-              <p className="text-foreground"><strong className="text-gold">自訂 URL</strong> — 將你的 LinkedIn URL 改為 linkedin.com/in/你的名字</p>
+              <p className="text-foreground"><strong className="text-gold">自訂 URL</strong>, 將你的 LinkedIn URL 改為 linkedin.com/in/你的名字</p>
             </div>
             <div className="bg-card border border-border rounded-lg p-4">
-              <p className="text-foreground"><strong className="text-gold">公開個人檔案</strong> — 確保你的個人檔案在 Google 上可見</p>
+              <p className="text-foreground"><strong className="text-gold">公開個人檔案</strong>, 確保你的個人檔案在 Google 上可見</p>
             </div>
             <div className="bg-card border border-border rounded-lg p-4">
-              <p className="text-foreground"><strong className="text-gold">地點和產業</strong> — 正確填寫；它們會影響搜尋結果</p>
+              <p className="text-foreground"><strong className="text-gold">地點和產業</strong>, 正確填寫；它們會影響搜尋結果</p>
             </div>
             <div className="bg-card border border-border rounded-lg p-4">
-              <p className="text-foreground"><strong className="text-gold">精選區塊</strong> — 在個人檔案頂部展示你最好的內容、媒體提及、案例研究或潛在客戶磁鐵</p>
+              <p className="text-foreground"><strong className="text-gold">精選區塊</strong>, 在個人檔案頂部展示你最好的內容、媒體提及、案例研究或潛在客戶磁鐵</p>
             </div>
             <div className="bg-card border border-border rounded-lg p-4">
-              <p className="text-foreground"><strong className="text-gold">豐富媒體</strong> — 在你的經歷區塊中加入影片、簡報和文件</p>
+              <p className="text-foreground"><strong className="text-gold">豐富媒體</strong>, 在你的經歷區塊中加入影片、簡報和文件</p>
             </div>
           </div>
 
@@ -660,7 +660,7 @@ const LinkedInGuideZhTw = () => {
                 lang="zh"
                 variant="dark"
                 items={[
-                  { label: "在 LinkedIn 上檢查你的全明星狀態 — 填補任何空白" },
+                  { label: "在 LinkedIn 上檢查你的全明星狀態, 填補任何空白" },
                   { label: "更新照片和背景橫幅" },
                   { label: "重寫標題（寫 3-5 個選項，選擇最好的）" },
                   { label: "選擇你的關於區塊角色" },
@@ -677,7 +677,7 @@ const LinkedInGuideZhTw = () => {
                 items={[
                   { label: "使用五個 H 結構撰寫關於區塊" },
                   { label: "更新經歷區塊（加入成就和關鍵字）" },
-                  { label: "清理技能 — 釘選前 3 項策略性技能" },
+                  { label: "清理技能, 釘選前 3 項策略性技能" },
                   { label: "加入精選區塊" },
                 ]}
               />
@@ -705,10 +705,10 @@ const LinkedInGuideZhTw = () => {
                 lang="zh"
                 variant="dark"
                 items={[
-                  { label: "應用 80/20 法則 — 每天評論 5+ 篇貼文" },
+                  { label: "應用 80/20 法則, 每天評論 5+ 篇貼文" },
                   { label: "本週分享 2-3 篇貼文（創建或策展並加入你的觀點）" },
                   { label: "使用建立關係的評論策略" },
-                  { label: "檢視你的個人檔案分析 — 什麼有效？" },
+                  { label: "檢視你的個人檔案分析, 什麼有效？" },
                 ]}
               />
             </div>
@@ -726,27 +726,27 @@ const LinkedInGuideZhTw = () => {
           <div className="grid md:grid-cols-2 gap-4">
             <div className="bg-card border border-border rounded-lg p-5">
               <p className="text-2xl mb-2">🟠</p>
-              <p className="text-foreground"><strong className="text-gold">成為橘色魚</strong> — LinkedIn 上的大多數人看起來都一樣。你獨特的個人品牌是讓人們想與你連接、錄用或向你購買的原因。不要與藍魚混在一起。</p>
+              <p className="text-foreground"><strong className="text-gold">成為橘色魚</strong>, LinkedIn 上的大多數人看起來都一樣。你獨特的個人品牌是讓人們想與你連接、錄用或向你購買的原因。不要與藍魚混在一起。</p>
             </div>
             <div className="bg-card border border-border rounded-lg p-5">
               <p className="text-2xl mb-2">🎭</p>
-              <p className="text-foreground"><strong className="text-gold">展示，不要告訴</strong> — 不要說你有「展現的領導力」。通過你的故事、成就和內容實際展示它。</p>
+              <p className="text-foreground"><strong className="text-gold">展示，不要告訴</strong>, 不要說你有「展現的領導力」。通過你的故事、成就和內容實際展示它。</p>
             </div>
             <div className="bg-card border border-border rounded-lg p-5">
               <p className="text-2xl mb-2">✍</p>
-              <p className="text-foreground"><strong className="text-gold">永遠第一人稱</strong> — 用第一人稱撰寫你的關於區塊。它創造溫暖和連接。第三人稱感覺冷漠和不人性化。</p>
+              <p className="text-foreground"><strong className="text-gold">永遠第一人稱</strong>, 用第一人稱撰寫你的關於區塊。它創造溫暖和連接。第三人稱感覺冷漠和不人性化。</p>
             </div>
             <div className="bg-card border border-border rounded-lg p-5">
               <p className="text-2xl mb-2">💬</p>
-              <p className="text-foreground"><strong className="text-gold">評論為王</strong> — 如果你在 LinkedIn 上只能做一件事，每天用有意義的見解評論。它比單獨發文建立更多關係。</p>
+              <p className="text-foreground"><strong className="text-gold">評論為王</strong>, 如果你在 LinkedIn 上只能做一件事，每天用有意義的見解評論。它比單獨發文建立更多關係。</p>
             </div>
             <div className="bg-card border border-border rounded-lg p-5">
               <p className="text-2xl mb-2">🤝</p>
-              <p className="text-foreground"><strong className="text-gold">80/20 一切</strong> — 80% 幫助他人，20% 關於你。這適用於內容、參與和社交。</p>
+              <p className="text-foreground"><strong className="text-gold">80/20 一切</strong>, 80% 幫助他人，20% 關於你。這適用於內容、參與和社交。</p>
             </div>
             <div className="bg-card border border-border rounded-lg p-5">
               <p className="text-2xl mb-2">📊</p>
-              <p className="text-foreground"><strong className="text-gold">保持至少 80% 的內容是資訊性的</strong> — 不超過 20% 是促銷性的。如果每篇貼文都是銷售說詞，人們會忽略你。</p>
+              <p className="text-foreground"><strong className="text-gold">保持至少 80% 的內容是資訊性的</strong>, 不超過 20% 是促銷性的。如果每篇貼文都是銷售說詞，人們會忽略你。</p>
             </div>
           </div>
         </div>

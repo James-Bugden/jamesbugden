@@ -10,7 +10,7 @@ export default function AboutSection() {
       <div className="container mx-auto max-w-6xl">
         <div className="flex flex-col md:flex-row gap-10 md:gap-16 items-center">
 
-          {/* Left — Photos in a hairline frame */}
+          {/* Left, Photos in a hairline frame */}
           <motion.div
             className="w-full md:w-1/2 flex-shrink-0 flex flex-col gap-3"
             initial={{ opacity: 0, x: -30 }}
@@ -42,7 +42,7 @@ export default function AboutSection() {
             </motion.div>
           </motion.div>
 
-          {/* Right — Bio */}
+          {/* Right, Bio */}
           <motion.div
             className="w-full md:w-1/2"
             initial={{ opacity: 0, x: 30 }}
@@ -72,10 +72,10 @@ export default function AboutSection() {
             </p>
 
             <p className="text-[15px] leading-relaxed mb-8 text-muted-foreground">
-              My mission is simple: every tool other career sites charge for — resume reviewers, salary databases, interview prep, offer calculators — I give away <span className="text-foreground font-semibold">free to everyone</span>. Insider knowledge shouldn't be locked behind a paywall when it's the difference between an offer and a no.
+              My mission is simple: every tool other career sites charge for, resume reviewers, salary databases, interview prep, offer calculators, I give away <span className="text-foreground font-semibold">free to everyone</span>. Insider knowledge shouldn't be locked behind a paywall when it's the difference between an offer and a no.
             </p>
 
-            {/* Social pills — hairline */}
+            {/* Social pills, hairline */}
             <div className="flex flex-wrap items-center gap-3">
               <a
                 href="https://www.linkedin.com/in/james-bugden/"

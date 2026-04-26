@@ -56,7 +56,7 @@ export function AnalyzerPromptDialog({ fromAnalyzer }: AnalyzerPromptDialogProps
             Want to know how your resume stacks up?
           </DialogTitle>
           <DialogDescription className="text-center">
-            Our free Resume Analyzer scores your resume against recruiter standards and gives you actionable suggestions to improve it — before you start editing.
+            Our free Resume Analyzer scores your resume against recruiter standards and gives you actionable suggestions to improve it, before you start editing.
           </DialogDescription>
         </DialogHeader>
         <div className="flex flex-col gap-2 mt-2">

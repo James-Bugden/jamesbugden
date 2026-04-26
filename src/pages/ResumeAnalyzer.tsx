@@ -241,7 +241,7 @@ export default function ResumeAnalyzer({ defaultLang = "en" }: { defaultLang?: L
             setResumeImageUrl(imgUrl);
             sessionStorage.setItem("resume-analysis-image", imgUrl);
           } catch {
-            // Non-critical — continue without image
+            // Non-critical, continue without image
           }
         } else if (ext === "txt") {
           text = await file.text();
@@ -269,7 +269,7 @@ export default function ResumeAnalyzer({ defaultLang = "en" }: { defaultLang?: L
         sessionStorage.setItem("resume-analysis-result", JSON.stringify(result));
         sessionStorage.setItem("resume-analysis-lang", lang);
 
-        // Fire-and-forget analytics tracking — extract name/email from resume text or auth
+        // Fire-and-forget analytics tracking, extract name/email from resume text or auth
         const resumeLines = text.split("\n").map(l => l.trim()).filter(Boolean);
         // Only treat first line as name if it looks like one (short, no special chars)
         const looksLikeName = (s: string) => s.length > 0 && s.length < 40 && !/[@|•·]/.test(s) && !/\d{5,}/.test(s);
@@ -320,7 +320,7 @@ export default function ResumeAnalyzer({ defaultLang = "en" }: { defaultLang?: L
           });
         }
 
-        // Tool completion event — structured outcome for funnel analysis
+        // Tool completion event, structured outcome for funnel analysis
         trackTool(
           "resume_analyzer",
           "analysis_run",
@@ -377,7 +377,7 @@ export default function ResumeAnalyzer({ defaultLang = "en" }: { defaultLang?: L
     <>
       <SEO />
 
-      {/* Header — cream nav matching homepage */}
+      {/* Header, cream nav matching homepage */}
       <header className="sticky top-0 z-50" style={{ backgroundColor: 'hsl(var(--paper))', borderBottom: '1px solid rgba(43,71,52,0.1)' }}>
         <div className="container mx-auto max-w-5xl flex items-center justify-between h-14 px-5">
           <Link to={lang === "zh-TW" ? "/zh-tw" : "/"} className="font-heading text-base md:text-lg font-bold tracking-wide whitespace-nowrap" style={{ color: 'hsl(var(--executive-green))' }}>
@@ -559,7 +559,7 @@ export default function ResumeAnalyzer({ defaultLang = "en" }: { defaultLang?: L
                 >
                   <ShieldCheck className="w-4 h-4 shrink-0" style={{ color: 'hsl(var(--executive-green))' }} />
                   <span className="text-xs font-medium" style={{ color: 'hsl(var(--executive-green))' }}>
-                    {t(lang, "100% Private — Your resume is never shared or sold", "100% 隱私保護 — 你的履歷不會外流，絕不轉賣")}
+                    {t(lang, "100% Private, Your resume is never shared or sold", "100% 隱私保護, 你的履歷不會外流，絕不轉賣")}
                   </span>
                 </div>
               </div>
@@ -658,7 +658,7 @@ export default function ResumeAnalyzer({ defaultLang = "en" }: { defaultLang?: L
                     
                     { q: t(lang, "How does the resume analyzer work?", "這個分析工具怎麼運作？"), a: t(lang, "Our AI evaluates your resume against the same criteria top recruiters use: keyword optimization, formatting, quantified achievements, and overall readability. You get a score and specific recommendations.", "AI 會根據頂尖招募官的實際篩選標準來評估你的履歷，包括關鍵字、格式、量化成就和可讀性，最後給你評分和具體改善建議。") },
                     { q: t(lang, "Is my resume data safe?", "我的履歷資料安全嗎？"), a: t(lang, "Yes. Your resume is processed securely, never shared with third parties, and never used for training. We take your privacy seriously.", "完全安全。你的履歷經過加密處理，不會分享給任何第三方，也不會用來訓練 AI 模型。") },
-                    { q: t(lang, "How many times can I use this tool?", "可以免費用幾次？"), a: t(lang, "You can analyze up to 3 resumes per month for free. I built this tool by myself, and every analysis uses AI which costs real money — plus hosting and development. These limits help me keep the tool free for everyone.", "每月可免費分析 3 份履歷。這個工具是我一個人獨力開發的，每次分析都會使用 AI，產生實際費用，加上主機和開發成本。設定使用上限是為了讓這個工具能繼續免費提供給大家。") },
+                    { q: t(lang, "How many times can I use this tool?", "可以免費用幾次？"), a: t(lang, "You can analyze up to 3 resumes per month for free. I built this tool by myself, and every analysis uses AI which costs real money, plus hosting and development. These limits help me keep the tool free for everyone.", "每月可免費分析 3 份履歷。這個工具是我一個人獨力開發的，每次分析都會使用 AI，產生實際費用，加上主機和開發成本。設定使用上限是為了讓這個工具能繼續免費提供給大家。") },
                     { q: t(lang, "What file formats are supported?", "支援哪些檔案格式？"), a: t(lang, "We support PDF and DOCX files up to 5MB. You can also paste your resume text directly.", "支援 5MB 以內的 PDF 和 DOCX 檔案，也可以直接貼上履歷文字。") },
                     { q: t(lang, "How is this different from other resume scanners?", "跟其他履歷工具有什麼不同？"), a: t(lang, "This tool is built by a senior recruiter who has personally reviewed 20,000+ resumes. The scoring criteria reflect real hiring decisions, not generic AI rules.", "這個工具由親自審閱超過兩萬份履歷的資深招募官打造，評分標準來自真實招聘經驗，不是套公式的 AI 規則。") },
                   ].map((item, i) => (

@@ -67,7 +67,7 @@ export default function ScenarioComparison({ scenarios, activeId, currency, loca
   const currentLabel = isZh ? "目前" : "Current";
   const baselineLabel = isZh ? "基準" : "Baseline";
 
-  // Stacked bar chart data — one bar per scenario (+ current), stacked by component
+  // Stacked bar chart data, one bar per scenario (+ current), stacked by component
   const stackedData: Record<string, string | number>[] = [];
 
   if (hasCurrent) {

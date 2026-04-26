@@ -25,12 +25,12 @@ const allTestimonials: Testimonial[] = [
   {
     name: "David",
     hook: "Even after refining my resume over ten times, I still gained so many valuable insights from James's review!",
-    full: "James's resume review is incredibly practical. He carefully addresses every detail with specific feedback and revision suggestions, and shares what HR values from a talent acquisition perspective. He doesn't just tell you what the problems are (What) — he shows you how to fix them (How) and why (Why). Even after refining my resume over ten times, I still gained so many valuable insights from James's review!",
+    full: "James's resume review is incredibly practical. He carefully addresses every detail with specific feedback and revision suggestions, and shares what HR values from a talent acquisition perspective. He doesn't just tell you what the problems are (What), he shows you how to fix them (How) and why (Why). Even after refining my resume over ten times, I still gained so many valuable insights from James's review!",
   },
   {
     name: "Sunny",
     hook: "This is advice that even my HR friends and headhunter friends couldn't give me.",
-    full: "Thank you James for the thorough resume review. I was truly surprised when I received the feedback — how could someone be this meticulous! I felt like I gained so much. This is advice that even my HR friends and headhunter friends couldn't give me. Highly recommended — James is incredibly dedicated and professional.",
+    full: "Thank you James for the thorough resume review. I was truly surprised when I received the feedback, how could someone be this meticulous! I felt like I gained so much. This is advice that even my HR friends and headhunter friends couldn't give me. Highly recommended, James is incredibly dedicated and professional.",
     photo: sunnyPhoto,
   },
   {
@@ -41,7 +41,7 @@ const allTestimonials: Testimonial[] = [
   {
     name: "Monica",
     hook: "I now have a much clearer direction and confidence in how to write a resume with real content and strategy.",
-    full: "After comparing my original resume with the revised version, it looked significantly more professional. The feedback for every section was very specific — tailored to my years of experience and background, with logical and actionable suggestions. This also gave me a reusable framework and way of thinking that I can adapt for different companies and roles in the future, greatly improving my efficiency and precision. I now have a much clearer direction and confidence in how to write a resume with real content and strategy.",
+    full: "After comparing my original resume with the revised version, it looked significantly more professional. The feedback for every section was very specific, tailored to my years of experience and background, with logical and actionable suggestions. This also gave me a reusable framework and way of thinking that I can adapt for different companies and roles in the future, greatly improving my efficiency and precision. I now have a much clearer direction and confidence in how to write a resume with real content and strategy.",
     photo: monicaPhoto,
   },
   {

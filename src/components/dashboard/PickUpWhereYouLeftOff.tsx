@@ -115,7 +115,7 @@ function PickUpWhereYouLeftOffInner({ lang, latestAnalysis, lastViewedGuide, las
     );
   }
 
-  // Card 3 — Suggested Next
+  // Card 3, Suggested Next
   if (nextStep) {
     cards.push(
       nextStep.path ? (

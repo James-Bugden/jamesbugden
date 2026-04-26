@@ -31,7 +31,7 @@ const questions: Question[] = [
     label: "英語能力 · Q1",
     text: "你的主管要求你下週用英文向亞太團隊報告專案進度。你的感受是？",
     options: [
-      { text: "有信心——我做過很多次了", score: 10 },
+      { text: "有信心, , 我做過很多次了", score: 10 },
       { text: "有點緊張但應該可以應付", score: 7 },
       { text: "我需要把每個字都寫成逐字稿", score: 4 },
       { text: "我會想辦法讓別人代替我報告", score: 1 },
@@ -55,7 +55,7 @@ const questions: Question[] = [
     options: [
       { text: "我有準備好的結構化故事，包含情境、行動和結果", score: 10 },
       { text: "我可以想出一些東西，但不會很精練", score: 6 },
-      { text: "我會很掙扎——我從沒準備過這類問題", score: 3 },
+      { text: "我會很掙扎, , 我從沒準備過這類問題", score: 3 },
       { text: "我只做過技術面試或傳統的問答式面試", score: 1 },
     ],
   },
@@ -73,9 +73,9 @@ const questions: Question[] = [
   {
     dimension: "薪資知識",
     label: "薪資知識 · Q5",
-    text: "你知道如何評估整體薪酬方案——而不只是月薪嗎？",
+    text: "你知道如何評估整體薪酬方案, , 而不只是月薪嗎？",
     options: [
-      { text: "知道——我能比較底薪、獎金、股票、福利和簽約金", score: 10 },
+      { text: "知道, , 我能比較底薪、獎金、股票、福利和簽約金", score: 10 },
       { text: "我會看月薪和年終獎金", score: 6 },
       { text: "我主要只比較月薪數字", score: 3 },
       { text: "公司給什麼我就接受", score: 1 },
@@ -105,14 +105,14 @@ const feedback: Record<string, Record<number, string>> = {
   "履歷準備度": {
     10: "你的履歷格式很紮實。你這個程度最常犯的錯誤是：每家公司都用同一份履歷。每次投遞花 15 分鐘，把你的重點項目對齊職缺描述中的關鍵字。這樣才能通過 ATS 篩選和招募人員的快速瀏覽。",
     6: "你的履歷列出了你做過什麼，但外商想看到的是因為你而產生了什麼成果。把你最重要的 5 項工作職責改寫成這樣：「做了 X，因此達成了 Y，用 Z 來衡量。」例如：「主導微服務遷移，將部署時間縮短 60%，影響 3 個團隊。」數字是讓你從「也許」變成「邀請面試」的關鍵。",
-    3: "外商的履歷規則跟台灣式履歷不同。關鍵改變：一頁、不放照片、不寫年齡或婚姻狀況等個人資料、全英文。每個重點項目都要附上數字。這一個改變——修正履歷格式——通常是投報率最高的事。",
+    3: "外商的履歷規則跟台灣式履歷不同。關鍵改變：一頁、不放照片、不寫年齡或婚姻狀況等個人資料、全英文。每個重點項目都要附上數字。這一個改變, , 修正履歷格式, , 通常是投報率最高的事。",
     1: "從簡單的開始。打開一份空白文件，寫下你最重要的 5 個工作成就，那些你有數字可以證明的（營收、用戶數、節省時間、團隊規模）。這些就是你的履歷重點。一頁，每個職位 3-5 個重點，每行都要有數字。這就是外商招募人員期待的格式。",
   },
   "面試準備": {
     10: "你了解行為面試的運作方式，這讓你領先台灣 80% 的求職者。現在可以更深入：在 Glassdoor 和 Blind 上查找目標公司的面試題目，針對他們的具體問題準備故事，而不是通用型的。",
     6: "你有基本概念，但沒有打磨過的回答每次都會輸給準備好的人。用 STAR 格式寫出 8-10 個故事，涵蓋這些主題：衝突、失敗、領導力、在資訊不明確時工作、以及跨團隊合作。每個故事大聲練習到能在 2 分鐘內講完為止。",
     3: "行為面試（「請分享一次你曾經...」）是每家外商的標準面試方式。它測試的是你如何思考和表達，而不是你知道什麼。學習 STAR 方法：情境（Situation）、任務（Task）、行動（Action）、結果（Result）。準備 5 個來自你工作經驗的真實故事，找一個會給你誠實回饋的朋友一起練習。",
-    1: "外商面試和你之前經歷的不一樣。你會遇到像「請分享一次你失敗的經驗」和「你如何處理意見不同的情況」這樣的問題。這是一個可以學會的技能，不是與生俱來的天賦。在 YouTube 搜尋「STAR method interview」，大聲練習回答——不要只在腦中想。",
+    1: "外商面試和你之前經歷的不一樣。你會遇到像「請分享一次你失敗的經驗」和「你如何處理意見不同的情況」這樣的問題。這是一個可以學會的技能，不是與生俱來的天賦。在 YouTube 搜尋「STAR method interview」，大聲練習回答, , 不要只在腦中想。",
   },
   "文化適配度": {
     10: "你直接的溝通風格正是外商想要的。在面試中，舉出你曾經反對某個決定、提早提出問題、或挑戰某個假設的例子。這些故事展現的是用人主管最看重的主人翁心態。",
@@ -131,7 +131,7 @@ function getCompPresenceFeedback(avg: number): string {
 
 /* ─── bracket helpers ─── */
 function getBracket(score: number) {
-  if (score >= 50) return { label: "強勢候選人", color: "hsl(var(--executive-green))", summary: "你已準備好了——專注於鎖定對的公司和薪資談判。" };
+  if (score >= 50) return { label: "強勢候選人", color: "hsl(var(--executive-green))", summary: "你已準備好了, , 專注於鎖定對的公司和薪資談判。" };
   if (score >= 35) return { label: "即將到位", color: "hsl(var(--gold))", summary: "你很接近了。幾個有針對性的改善就能帶來很大的差異。" };
   if (score >= 20) return { label: "打好基礎", color: "hsl(var(--gold-dark))", summary: "你有真正的潛力。一個結構化的計畫可以讓你在 2-3 個月內達標。" };
   return { label: "起步階段", color: "hsl(var(--destructive))", summary: "每個人都有起點。先從英語和履歷開始，然後逐步建立。" };
@@ -397,7 +397,7 @@ export default function QuizZhTw() {
         className="text-xs underline mt-6 hover:opacity-80 transition-opacity"
         style={{ color: "hsl(var(--foreground))", opacity: 0.5 }}
       >
-        跳過 — 只顯示分數
+        跳過, 只顯示分數
       </button>
     </div>
   );
@@ -452,7 +452,7 @@ export default function QuizZhTw() {
       </nav>
 
       <div className="px-5 pb-16 max-w-lg mx-auto">
-        {/* Section 1 — Score Ring */}
+        {/* Section 1, Score Ring */}
         <div className="flex flex-col items-center text-center pt-6 pb-10">
           <div className="relative w-40 h-40 mb-4">
             <svg viewBox="0 0 160 160" className="w-full h-full -rotate-90">
@@ -480,7 +480,7 @@ export default function QuizZhTw() {
           <p className="text-sm max-w-sm" style={{ color: "hsl(var(--foreground))" }}>{bracket.summary}</p>
         </div>
 
-        {/* Section 2 — Radar Chart */}
+        {/* Section 2, Radar Chart */}
         <div className="w-full h-64 md:h-72 mb-10">
           <ResponsiveContainer width="100%" height="100%">
             <RadarChart outerRadius="60%" data={radarData}>
@@ -492,7 +492,7 @@ export default function QuizZhTw() {
           </ResponsiveContainer>
         </div>
 
-        {/* Section 3 — Dimension Cards */}
+        {/* Section 3, Dimension Cards */}
         <div className="flex flex-col gap-4 mb-12">
           {dimensions.map((d) => (
             <div
@@ -517,7 +517,7 @@ export default function QuizZhTw() {
         </div>
 
 
-        {/* Section 4 — Share */}
+        {/* Section 4, Share */}
         <div className="flex items-center justify-center gap-3">
           <button
             onClick={shareLinkedIn}

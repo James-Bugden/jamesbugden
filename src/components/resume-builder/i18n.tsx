@@ -44,7 +44,7 @@ export const translations = {
     paperSize: "Paper size",
     usLetter: "US Letter",
     downloadPdf: "Download PDF",
-    exportMultiPageNote: "⚠️ The resume builder still has quite a few bugs — I'm actively working on fixing them. Sorry for the inconvenience!",
+    exportMultiPageNote: "⚠️ The resume builder still has quite a few bugs, I'm actively working on fixing them. Sorry for the inconvenience!",
 
     // Footer
     poweredBy: "Powered by",
@@ -85,7 +85,7 @@ export const translations = {
     defaultResumeNamePrefix: "Resume",
     defaultCoverLetterNamePrefix: "Cover Letter",
 
-    // Customize panel — section card titles
+    // Customize panel, section card titles
     customizeLanguageRegion: "Language & Region",
     customizeApplyTemplate: "Apply a design template",
     customizeApplyTemplateHint: "Update your entire resume design with one click ✨",
@@ -341,7 +341,7 @@ export const translations = {
 
     // Template gallery
     chooseTemplate: "Choose a Template",
-    contentStaysSame: "Your content stays the same — only the design changes",
+    contentStaysSame: "Your content stays the same, only the design changes",
     templateApplied: "Template applied!",
     styleApplied: "style has been applied.",
     template_classic: "Classic",
@@ -382,7 +382,7 @@ export const translations = {
 
     // Missing summary prompt
     missingSummaryTitle: "Add a Summary Section?",
-    missingSummaryDesc: "A professional summary is the first thing recruiters read. In 2–3 sentences, it tells them who you are, what you bring, and why you're a fit — before they even scan your experience.",
+    missingSummaryDesc: "A professional summary is the first thing recruiters read. In 2–3 sentences, it tells them who you are, what you bring, and why you're a fit, before they even scan your experience.",
     missingSummaryHow: "Write 2–3 sentences covering: your role/seniority, key strengths or domain, and what kind of opportunity you're targeting.",
     missingSummaryAdd: "Add Summary",
     missingSummarySkip: "Skip for now",
@@ -527,7 +527,7 @@ export const translations = {
     defaultResumeNamePrefix: "履歷",
     defaultCoverLetterNamePrefix: "求職信",
 
-    // Customize panel — section card titles
+    // Customize panel, section card titles
     customizeLanguageRegion: "語言與地區",
     customizeApplyTemplate: "套用設計範本",
     customizeApplyTemplateHint: "一鍵更新整份履歷設計 ✨",
@@ -783,7 +783,7 @@ export const translations = {
 
     // Template gallery
     chooseTemplate: "選擇範本",
-    contentStaysSame: "你的內容不變——只有設計會改變",
+    contentStaysSame: "你的內容不變, , 只有設計會改變",
     templateApplied: "已套用範本！",
     styleApplied: "樣式已套用。",
     template_classic: "經典",
@@ -871,7 +871,7 @@ export const translations = {
     philoNoColorTitle: "沒有顏色主題",
     philoNoColorBody: "頂尖公司最強的履歷都是素面且聚焦的。白底黑字讓注意力集中在你的成果上，而非裝飾。",
     philoSectionsTitle: "精選的區塊選項",
-    philoSectionsBody: "這個範本刻意限制區塊類型。目標是突顯影響力，而非填滿空間。多餘的區塊會分散注意力，讓最重要的東西——你的成就——被忽略。",
+    philoSectionsBody: "這個範本刻意限制區塊類型。目標是突顯影響力，而非填滿空間。多餘的區塊會分散注意力，讓最重要的東西, , 你的成就, , 被忽略。",
     philoCanChangeTitle: "你可以控制的部分",
     philoCanChangeBody: "字體大小、間距、邊距和標頭對齊方式。這些幫助你把有力的內容整齊地排入一頁。",
     philoMethod: "我的方法很簡單：讓它容易閱讀、容易掃描、讓人容易說「好」。",
@@ -891,7 +891,7 @@ export const translations = {
     replaceAndCreate: "替換並繼續",
     resumesOf: "/",
     usageLimitsTitle: "為什麼有使用限制",
-    usageLimitsBody: "這個工具是我獨力開發的。每次 AI 匯入和履歷儲存都會產生實際費用——主機、AI 處理和開發成本。設定使用上限是為了讓這個工具能繼續免費提供給所有人。感謝你的體諒！",
+    usageLimitsBody: "這個工具是我獨力開發的。每次 AI 匯入和履歷儲存都會產生實際費用, , 主機、AI 處理和開發成本。設定使用上限是為了讓這個工具能繼續免費提供給所有人。感謝你的體諒！",
     usageLimitsResumes: "份履歷額度",
     usageLimitsImports: "次免費 AI 匯入 / 月",
 
@@ -971,7 +971,7 @@ export const SAMPLE_RESUME_DATA_ZH_TW = {
             endMonth: "",
             endYear: "",
             currentlyHere: "true",
-            description: "<ul><li>負責北亞區招募，專注台灣全事業部（營運、業務、企業職缺）——每年均超額達成 KPI</li><li>#GoGetIt — 危機招募：在 2 個月內成功招募 9 位 L3-6 資深人才，解決外送團隊高流動率問題</li><li>主導 Tetris 專案：在有限時程內擴編 60 以上業務職缺，跨部門協調推進中</li></ul>",
+            description: "<ul><li>負責北亞區招募，專注台灣全事業部（營運、業務、企業職缺）, , 每年均超額達成 KPI</li><li>#GoGetIt, 危機招募：在 2 個月內成功招募 9 位 L3-6 資深人才，解決外送團隊高流動率問題</li><li>主導 Tetris 專案：在有限時程內擴編 60 以上業務職缺，跨部門協調推進中</li></ul>",
           },
         },
         {
@@ -985,7 +985,7 @@ export const SAMPLE_RESUME_DATA_ZH_TW = {
             endMonth: "December",
             endYear: "2023",
             currentlyHere: "",
-            description: "<ul><li>獲 Uber Superstar 獎——評估招募成效以判斷是否應持續鎖定傳統人才庫（顧問 vs 非顧問績效比較），有效縮短關鍵招募時間</li><li>擔任 Uber ↔ Foodpanda 併購案 TA 窗口：負責非執行董事會與一般職缺的長期招募專案</li><li>卓越營運：搜尋與篩選知識分享，深入分析招募來源成功率</li></ul>",
+            description: "<ul><li>獲 Uber Superstar 獎, , 評估招募成效以判斷是否應持續鎖定傳統人才庫（顧問 vs 非顧問績效比較），有效縮短關鍵招募時間</li><li>擔任 Uber ↔ Foodpanda 併購案 TA 窗口：負責非執行董事會與一般職缺的長期招募專案</li><li>卓越營運：搜尋與篩選知識分享，深入分析招募來源成功率</li></ul>",
           },
         },
         {

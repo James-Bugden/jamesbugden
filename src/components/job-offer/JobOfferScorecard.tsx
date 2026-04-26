@@ -56,7 +56,7 @@ export default function JobOfferScorecard({ categories, locale = "en" }: Scoreca
 
   return (
     <div className="space-y-4">
-      {/* Header row — desktop only */}
+      {/* Header row, desktop only */}
       <div className="hidden md:grid grid-cols-[1fr_80px_80px_80px] gap-2 text-xs font-semibold text-muted-foreground uppercase tracking-wider px-1">
         <span>{locale === "zh-tw" ? "類別" : "Category"}</span>
         <span className="text-center">{weightLabel}</span>
@@ -120,7 +120,7 @@ export default function JobOfferScorecard({ categories, locale = "en" }: Scoreca
               {/* Weighted score */}
               <div className="text-center">
                 <span className={`font-bold text-sm ${weighted > 0 ? "text-gold" : "text-muted-foreground"}`}>
-                  {weighted > 0 ? weighted : "—"}
+                  {weighted > 0 ? weighted : ", "}
                 </span>
               </div>
             </div>
@@ -136,7 +136,7 @@ export default function JobOfferScorecard({ categories, locale = "en" }: Scoreca
                   <span className="text-muted-foreground text-xs ml-1">▾</span>
                 </button>
                 <span className={`font-bold text-sm ${weighted > 0 ? "text-gold" : "text-muted-foreground"}`}>
-                  {weighted > 0 ? weighted : "—"}
+                  {weighted > 0 ? weighted : ", "}
                 </span>
               </div>
 

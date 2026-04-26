@@ -19,7 +19,7 @@ const STEPS = [
     icon: Columns3,
     title: "Board View",
     description:
-      "Drag and drop jobs between stages — from Bookmarked all the way to Accepted. Click a card to edit details, add contacts, or link documents.",
+      "Drag and drop jobs between stages, from Bookmarked all the way to Accepted. Click a card to edit details, add contacts, or link documents.",
   },
   {
     icon: Star,
@@ -31,7 +31,7 @@ const STEPS = [
     icon: Users,
     title: "Contacts & Checklist",
     description:
-      "Track networking contacts per job. Each stage has a guided checklist — like finding a referral, tailoring your resume, or preparing for interviews.",
+      "Track networking contacts per job. Each stage has a guided checklist, like finding a referral, tailoring your resume, or preparing for interviews.",
   },
   {
     icon: Download,

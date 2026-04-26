@@ -34,7 +34,7 @@ export default function SelfSegmentation() {
 
         {/* Steps */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-10 md:gap-0 relative mb-12">
-          {/* Connecting line — desktop only */}
+          {/* Connecting line, desktop only */}
           <div
             className="hidden md:block absolute top-[52px] left-[16.67%] right-[16.67%] h-[2px]"
             style={{ backgroundColor: 'rgba(43,71,52,0.15)' }}

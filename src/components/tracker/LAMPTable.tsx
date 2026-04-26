@@ -191,7 +191,7 @@ function ExpandedRow({ employer, contacts, onUpdate, onAddContact }: {
         <label className="text-xs font-medium block mb-1" style={{ color: "#888" }}>Contacts ({empContacts.length})</label>
         {empContacts.length > 0 ? (
           <div className="space-y-1 text-sm" style={{ color: "#2C2C2C" }}>
-            {empContacts.map((c) => <div key={c.id}>{c.name} — {c.role}</div>)}
+            {empContacts.map((c) => <div key={c.id}>{c.name}, {c.role}</div>)}
           </div>
         ) : (
           <div className="flex items-center gap-2">

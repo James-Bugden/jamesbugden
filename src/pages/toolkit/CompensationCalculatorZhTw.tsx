@@ -96,11 +96,11 @@ const breakdownRows = [
 ];
 
 const howToUseSteps = [
-  "先填月薪和保障月數 — 光這兩個欄位就能看出保障年薪的差距。",
+  "先填月薪和保障月數, 光這兩個欄位就能看出保障年薪的差距。",
   "展開「股票與分紅」填入員工分紅。在台灣科技業，分紅往往是薪資差距最大的項目。",
   "如果是製造業或有輪班的職位，記得填加班費。年度加起來可能超過 NT$200,000。",
   "最後填「保險、假期與津貼」。團保升級和津貼是容易被忽略的隱藏價值。",
-  "比較「每月等效薪資」— 這是最直觀的數字，適合用在還價信中。",
+  "比較「每月等效薪資」,  這是最直觀的數字，適合用在還價信中。",
 ];
 
 const CompensationCalculatorZhTw = () => {
@@ -142,7 +142,7 @@ const CompensationCalculatorZhTw = () => {
 
       <div className="pt-8"><ToolkitNavZhTw currentTemplate="calculator" /></div>
 
-      {/* EXAMPLE SECTION — Visual cards */}
+      {/* EXAMPLE SECTION, Visual cards */}
       <section className="pb-8 px-5 md:px-6">
         <div className="container mx-auto max-w-5xl">
           <div className="mb-6">
@@ -229,7 +229,7 @@ const CompensationCalculatorZhTw = () => {
                         const val = (o as any)[row.key] as number;
                         return (
                           <td key={i} className="text-right px-4 py-2.5 text-foreground">
-                            {val === 0 ? "—" : fmtNTD(val)}
+                            {val === 0 ? ", " : fmtNTD(val)}
                           </td>
                         );
                       })}

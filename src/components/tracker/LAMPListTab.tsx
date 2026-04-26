@@ -14,7 +14,7 @@ const STEPS = [
     source: "dream" as const,
     emoji: "💭",
     explanation:
-      "Start with companies you've always wanted to work for, then add their competitors and peers. Don't overthink it — if it comes to mind, add it.",
+      "Start with companies you've always wanted to work for, then add their competitors and peers. Don't overthink it, if it comes to mind, add it.",
   },
   {
     title: "Alumni Employers",
@@ -28,7 +28,7 @@ const STEPS = [
     source: "posting" as const,
     emoji: "🔍",
     explanation:
-      "Go to a job board (Indeed, CakeResume, 104.com.tw) and search your target role + location. Add company names here — don't read the postings yet!",
+      "Go to a job board (Indeed, CakeResume, 104.com.tw) and search your target role + location. Add company names here, don't read the postings yet!",
   },
   {
     title: "Trend Following",

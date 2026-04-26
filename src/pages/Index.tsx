@@ -41,7 +41,7 @@ function FAQSection() {
     <section className="py-14 md:py-20 px-5 md:px-6 bg-paper">
       <div className="container mx-auto max-w-3xl">
         <h2 className="font-heading text-center mb-10 text-foreground tracking-[-0.025em]" style={{ fontSize: 'clamp(2rem, 4vw, 2.75rem)', fontWeight: 600, lineHeight: 1.1 }}>
-          Is this actually free? Yes — here's why.
+          Is this actually free? Yes, here's why.
         </h2>
         <div className="card-hairline divide-y divide-border overflow-hidden">
           {faqs.map((faq, i) => {
@@ -118,7 +118,7 @@ const Index = () => {
         "knowsAbout": ["Recruiting", "Career Coaching", "Resume Writing", "Interview Preparation", "Salary Negotiation"]
       }} />
 
-      {/* ── Promo Banner + Navigation (sticky together) — LIGHT cream nav ── */}
+      {/* ── Promo Banner + Navigation (sticky together), LIGHT cream nav ── */}
       <header className="sticky top-0 z-50">
         <PromoBanner lang="en" />
         <nav
@@ -129,7 +129,7 @@ const Index = () => {
           aria-label="Main navigation"
         >
           <div className="container mx-auto px-4 sm:px-5 md:px-6 h-16 flex items-center justify-between">
-            <Link to="/" className="cursor-pointer flex items-center gap-3" onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })} aria-label="Hiresign — by James Bugden" style={{ color: 'hsl(var(--executive-green))' }}>
+            <Link to="/" className="cursor-pointer flex items-center gap-3" onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })} aria-label="Hiresign, by James Bugden" style={{ color: 'hsl(var(--executive-green))' }}>
               <Wordmark variant="mono" size={28} />
             </Link>
             <div className="flex items-center gap-2 sm:gap-4">
@@ -141,11 +141,11 @@ const Index = () => {
       </header>
 
       <main>
-        {/* ── Hero — paper bg, photo above H1 per user direction ── */}
+        {/* ── Hero, paper bg, photo above H1 per user direction ── */}
         <section id="about" className="pt-12 md:pt-16 pb-14 md:pb-24 px-4 sm:px-5 md:px-6 relative bg-paper">
           <div className="container mx-auto max-w-3xl">
 
-            {/* Hero photo — above H1, large for recognition */}
+            {/* Hero photo, above H1, large for recognition */}
             <div className="flex justify-center mb-8">
               <div className="relative">
                 <div
@@ -196,22 +196,22 @@ const Index = () => {
               Join <span className="tnum-geist" style={{ fontWeight: 600 }}>10,000+</span> professionals · Unsubscribe anytime
             </p>
 
-            {/* Stat row — green icons + Geist tabular numerics, hairline border-top */}
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 sm:gap-12 pt-9 border-t border-border max-w-xl mx-auto">
-              <div className="flex items-center gap-3 justify-center">
+            {/* Stat row, green icons + Geist tabular numerics, hairline border-top */}
+            <div className="flex flex-col sm:flex-row items-center justify-center gap-6 sm:gap-14 pt-9 border-t border-border max-w-xl mx-auto">
+              <div className="flex items-center gap-3">
                 <div className="flex-shrink-0 w-11 h-11 rounded-lg flex items-center justify-center" style={{ background: 'hsl(var(--green-soft))' }}>
                   <ResumeStackIcon size={28} />
                 </div>
-                <div className="flex flex-col">
+                <div className="flex flex-col text-left">
                   <span className="tnum-geist text-foreground" style={{ fontSize: '1.75rem' }}>20,000+</span>
                   <span className="text-muted-foreground text-[13px]">Resumes reviewed</span>
                 </div>
               </div>
-              <div className="flex items-center gap-3 justify-center">
+              <div className="flex items-center gap-3">
                 <div className="flex-shrink-0 w-11 h-11 rounded-lg flex items-center justify-center" style={{ background: 'hsl(var(--green-soft))' }}>
                   <ThreeFiguresIcon size={28} />
                 </div>
-                <div className="flex flex-col">
+                <div className="flex flex-col text-left">
                   <span className="tnum-geist text-foreground" style={{ fontSize: '1.75rem' }}>750+</span>
                   <span className="text-muted-foreground text-[13px]">People hired</span>
                 </div>
@@ -220,21 +220,21 @@ const Index = () => {
           </div>
         </section>
 
-        {/* ── Logo Trust Bar — paper-alt ── */}
+        {/* ── Logo Trust Bar, paper-alt ── */}
         <section className="bg-paper-alt py-10 md:py-14 px-5 md:px-6 border-y border-border">
           <div className="container mx-auto max-w-6xl">
             <LogoScroll />
           </div>
         </section>
 
-        {/* ── Testimonials — white #FFFFFF ── */}
+        {/* ── Testimonials, white #FFFFFF ── */}
         <LazySection>
           <div className="bg-card">
             <HomepageTestimonials />
           </div>
         </LazySection>
 
-        {/* ── Pain-Point Section — paper bg, hairline cards ── */}
+        {/* ── Pain-Point Section, paper bg, hairline cards ── */}
         <section className="py-14 md:py-20 px-5 md:px-6 bg-paper">
           <div className="container mx-auto max-w-3xl">
             <h2 className="font-heading text-center mb-10 text-foreground tracking-[-0.025em]" style={{ fontSize: 'clamp(2rem, 4vw, 2.75rem)', fontWeight: 600, lineHeight: 1.1 }}>
@@ -252,7 +252,7 @@ const Index = () => {
               </div>
               <div className="card-hairline p-5 flex items-start gap-4">
                 <span className="mt-0.5"><PainMarker /></span>
-                <p className="text-foreground text-[1.0625rem] leading-relaxed">You got a job offer, but you have no idea if the pay is fair — or if you should ask for more.</p>
+                <p className="text-foreground text-[1.0625rem] leading-relaxed">You got a job offer, but you have no idea if the pay is fair, or if you should ask for more.</p>
               </div>
             </div>
 
@@ -273,7 +273,7 @@ const Index = () => {
           </div>
         </section>
 
-        {/* ── Credibility Section — paper-alt, hairline cards with gold top accent ── */}
+        {/* ── Credibility Section, paper-alt, hairline cards with gold top accent ── */}
         <section className="py-14 md:py-20 px-5 md:px-6 bg-paper-alt">
           <div className="container mx-auto max-w-5xl">
             <div className="text-center mb-12 max-w-3xl mx-auto">
@@ -293,7 +293,7 @@ const Index = () => {
                 </div>
                 <p className="font-heading text-[18px] mb-2 text-foreground tracking-[-0.01em]" style={{ fontWeight: 600, lineHeight: 1.25 }}>Resumes reviewed</p>
                 <p className="text-[15px] text-muted-foreground leading-relaxed">
-                  I know what makes a recruiter stop and read — and what gets a resume tossed in 6 seconds.
+                  I know what makes a recruiter stop and read, and what gets a resume tossed in 6 seconds.
                 </p>
               </div>
               <div className="card-hairline p-7 relative overflow-hidden">
@@ -306,7 +306,7 @@ const Index = () => {
                 </div>
                 <p className="font-heading text-[18px] mb-2 text-foreground tracking-[-0.01em]" style={{ fontWeight: 600, lineHeight: 1.25 }}>People hired</p>
                 <p className="text-[15px] text-muted-foreground leading-relaxed">
-                  I've sat in the room where offers are decided. I know what HR thinks — and where most people leave money on the table.
+                  I've sat in the room where offers are decided. I know what HR thinks, and where most people leave money on the table.
                 </p>
               </div>
               <div className="card-hairline p-7 relative overflow-hidden">
@@ -316,7 +316,7 @@ const Index = () => {
                 </div>
                 <p className="font-heading text-[18px] mb-2 text-foreground tracking-[-0.01em] mt-9" style={{ fontWeight: 600, lineHeight: 1.25 }}>Recruiter at Uber Taiwan</p>
                 <p className="text-[15px] text-muted-foreground leading-relaxed">
-                  I work in the room where hiring decisions get made — and I share what I see, with you.
+                  I work in the room where hiring decisions get made, and I share what I see, with you.
                 </p>
               </div>
             </div>
@@ -343,18 +343,17 @@ const Index = () => {
           <FAQSection />
         </LazySection>
 
-        {/* ── Create Account CTA — hairline card on paper-alt to match site language ── */}
+        {/* ── Create Account CTA, hairline card on paper-alt to match site language ── */}
         {!isLoggedIn && (
           <LazySection>
             <section className="py-14 md:py-20 px-5 md:px-6 bg-paper-alt">
               <div className="container mx-auto max-w-3xl">
                 <div className="bg-card border border-border rounded-2xl p-8 md:p-12 text-center shadow-sm">
-                  <p className="text-[11px] uppercase tracking-[0.2em] text-gold font-bold mb-4">Free</p>
                   <h2 className="font-heading mb-3 text-foreground tracking-[-0.025em]" style={{ fontSize: 'clamp(1.75rem, 4vw, 2.5rem)', fontWeight: 700, lineHeight: 1.1, textWrap: 'balance' }}>
                     Create your free account
                   </h2>
                   <p className="text-base md:text-lg text-muted-foreground mb-8 max-w-xl mx-auto leading-relaxed">
-                    Get full access to all career guides, resume tools, salary data, and more — completely free.
+                    Get full access to all career guides, resume tools, salary data, and more, completely free.
                   </p>
                   <div className="grid grid-cols-1 md:grid-cols-3 gap-3 mb-8 text-left max-w-2xl mx-auto">
                     <div className="bg-paper-alt border border-border rounded-xl p-4 flex items-start gap-3">
@@ -378,11 +377,10 @@ const Index = () => {
                   </div>
                   <Link
                     to="/join"
-                    className="inline-flex items-center justify-center gap-2 px-7 py-3.5 rounded-lg font-bold bg-gold text-executive-green hover:bg-gold-dark hover:text-cream transition-colors text-base shadow-sm"
+                    className="inline-flex items-center justify-center gap-2 px-7 py-3.5 rounded-lg font-bold bg-gold text-white hover:bg-gold-dark transition-colors text-base shadow-sm"
                   >
-                    Get Full Access — It's Free
+                    Get Full Access
                   </Link>
-                  <p className="text-xs text-muted-foreground mt-3">No credit card required</p>
                 </div>
               </div>
             </section>

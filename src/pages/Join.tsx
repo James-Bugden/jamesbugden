@@ -158,7 +158,7 @@ export default function Join() {
         <LanguageToggle variant="nav" />
       </header>
 
-      {/* Main content — centered card */}
+      {/* Main content, centered card */}
       <main className="flex flex-col items-center px-4 pb-16">
         <div className="w-full max-w-[440px]">
 
@@ -311,7 +311,7 @@ export default function Join() {
             <LogoScroll />
           </motion.div>
 
-          {/* FAQ — first item pre-expanded */}
+          {/* FAQ, first item pre-expanded */}
           <motion.div
             className="max-w-[440px] mx-auto"
             variants={fadeUp} initial="hidden" animate="visible" custom={4}

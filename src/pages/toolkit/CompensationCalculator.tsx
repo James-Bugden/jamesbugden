@@ -92,7 +92,7 @@ const breakdownRows = [
 ];
 
 const howToUseSteps = [
-  "Start with base salary and bonus — these two rows alone show the cash compensation difference.",
+  "Start with base salary and bonus, these two rows alone show the cash compensation difference.",
   "Expand Equity and Retirement if your offers include RSUs or 401(k) matching.",
   "Fill in Benefits last. Health insurance cost and commute reduce your take-home.",
   "Compare the Year 1 total first. Then check Year 2+ to see ongoing value.",
@@ -138,7 +138,7 @@ const CompensationCalculator = () => {
 
       <div className="pt-8"><ToolkitNav currentTemplate="calculator" /></div>
 
-      {/* EXAMPLE SECTION — Visual cards */}
+      {/* EXAMPLE SECTION, Visual cards */}
       <section className="pb-8 px-5 md:px-6">
         <div className="container mx-auto max-w-5xl">
           <div className="mb-6">
@@ -180,7 +180,7 @@ const CompensationCalculator = () => {
           {/* Key Insight */}
           <div className="bg-gold/10 border-l-4 border-gold rounded-r-xl p-5 mb-6">
             <p className="text-sm text-foreground">
-              <span className="font-semibold text-gold">Key Insight:</span> The Growth Startup's base is $10,000 higher than Public Tech Co, but after sign-on, RSU backloading, full health coverage, and 401(k) match — Public Tech Co wins by Year 3. Base salary alone never tells the full story.
+              <span className="font-semibold text-gold">Key Insight:</span> The Growth Startup's base is $10,000 higher than Public Tech Co, but after sign-on, RSU backloading, full health coverage, and 401(k) match, Public Tech Co wins by Year 3. Base salary alone never tells the full story.
             </p>
           </div>
 
@@ -227,7 +227,7 @@ const CompensationCalculator = () => {
                         const val = (o as any)[row.key] as number;
                         return (
                           <td key={i} className={`text-right px-4 py-2.5 ${val < 0 ? "text-destructive" : "text-foreground"}`}>
-                            {val === 0 ? "—" : fmtFull(val)}
+                            {val === 0 ? ", " : fmtFull(val)}
                           </td>
                         );
                       })}

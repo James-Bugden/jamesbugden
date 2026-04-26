@@ -171,7 +171,7 @@ function GuideRow({ guide, isNested = false }: { guide: GuideItem; isNested?: bo
           {guide.title}
         </span>
         <span className={`hidden sm:inline ml-2 ${isNested ? "text-xs" : "text-sm"} text-muted-foreground`}>
-          — {guide.description}
+         , {guide.description}
         </span>
       </div>
       <div className="flex items-center gap-1.5 flex-shrink-0">

@@ -63,7 +63,7 @@ export function ContentStrategySection({ posts }: { posts: ThreadsPost[] }) {
       .filter(b => b.count >= 3)
       .sort((a, b) => b.avgViews - a.avgViews)[0];
     if (bestBucket) {
-      recs.push({ priority: priority++, icon: <Type className="w-4 h-4" />, title: `Keep it ${bestBucket.range.toLowerCase()}`, detail: `Posts ${bestBucket.label} get ${fmt(Math.round(bestBucket.avgViews))} avg views — the highest reach across your ${bestBucket.count} posts of this length.` });
+      recs.push({ priority: priority++, icon: <Type className="w-4 h-4" />, title: `Keep it ${bestBucket.range.toLowerCase()}`, detail: `Posts ${bestBucket.label} get ${fmt(Math.round(bestBucket.avgViews))} avg views, the highest reach across your ${bestBucket.count} posts of this length.` });
     }
 
     const dayMap: Record<string, number[]> = {};

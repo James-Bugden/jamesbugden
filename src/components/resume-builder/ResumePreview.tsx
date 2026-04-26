@@ -282,7 +282,7 @@ function renderSectionEntries(section: ResumeSection, customize?: CustomizeSetti
       const cat = item.slice(0, colonIdx).trim();
       const rest = item.slice(colonIdx + 1).trim();
       if (!rest) return item;
-      if (subStyle === "dash") return `${cat} — ${rest}`;
+      if (subStyle === "dash") return `${cat}, ${rest}`;
       if (subStyle === "bracket") return `${cat} (${rest})`;
       return `${cat}: ${rest}`;
     };
@@ -372,7 +372,7 @@ function renderSectionEntries(section: ResumeSection, customize?: CustomizeSetti
     const formatLangLabel = (lang: string, prof: string) => {
       const localized = localizeProf(prof);
       if (!localized) return lang;
-      if (subStyle === "dash") return `${lang} — ${localized}`;
+      if (subStyle === "dash") return `${lang}, ${localized}`;
       if (subStyle === "bracket") return `${lang} (${localized})`;
       return `${lang}: ${localized}`;
     };
@@ -1105,7 +1105,7 @@ export const ResumePreview = React.memo(function ResumePreview({
     return () => ro.disconnect();
   }, [dims.wPX]);
 
-  /* ── CJK garbled-text detector — fires once per session if rendered preview
+  /* ── CJK garbled-text detector, fires once per session if rendered preview
         contains Unicode replacement chars (U+FFFD) or runs of '?' where
         source data has CJK. Catches encoding regressions before users notice. */
   useEffect(() => {

@@ -16,7 +16,7 @@ interface MonthYearPickerProps {
 const currentYear = new Date().getFullYear();
 const years = Array.from({ length: 50 }, (_, i) => String(currentYear - i));
 
-// Placeholder labels — translated via useT() below.
+// Placeholder labels, translated via useT() below.
 const MONTH_LABEL_KEY = "month";
 const YEAR_LABEL_KEY = "year";
 

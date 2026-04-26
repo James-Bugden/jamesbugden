@@ -10,7 +10,7 @@ export default function AboutSectionZhTw() {
       <div className="container mx-auto max-w-6xl">
         <div className="flex flex-col md:flex-row gap-10 md:gap-16 items-center">
 
-          {/* Left — Photos in hairline frames */}
+          {/* Left, Photos in hairline frames */}
           <motion.div
             className="w-full md:w-1/2 flex-shrink-0 flex flex-col gap-3"
             initial={{ opacity: 0, x: -30 }}
@@ -42,7 +42,7 @@ export default function AboutSectionZhTw() {
             </motion.div>
           </motion.div>
 
-          {/* Right — Bio */}
+          {/* Right, Bio */}
           <motion.div
             className="w-full md:w-1/2"
             initial={{ opacity: 0, x: 30 }}
@@ -72,10 +72,10 @@ export default function AboutSectionZhTw() {
             </p>
 
             <p className="text-[15px] leading-relaxed mb-8 text-muted-foreground">
-              我的使命很簡單：別的求職網站要收費的工具 — 履歷健檢、薪資資料庫、面試題庫、Offer 計算機 — 我全部 <span className="text-foreground font-semibold">免費提供給所有人</span>。內部知識不應該被付費牆擋住，因為這往往是錄取與否的關鍵。
+              我的使命很簡單：別的求職網站要收費的工具, 履歷健檢、薪資資料庫、面試題庫、Offer 計算機, 我全部 <span className="text-foreground font-semibold">免費提供給所有人</span>。內部知識不應該被付費牆擋住，因為這往往是錄取與否的關鍵。
             </p>
 
-            {/* Social pills — hairline */}
+            {/* Social pills, hairline */}
             <div className="flex flex-wrap items-center gap-3">
               <a
                 href="https://www.linkedin.com/in/james-bugden/"

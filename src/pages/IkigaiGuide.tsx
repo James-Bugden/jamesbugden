@@ -721,7 +721,7 @@ const IkigaiGuide = () => {
               Wabi-sabi is a Japanese philosophy. It finds beauty in imperfection, incompleteness, and impermanence. A cracked teacup is more beautiful than a perfect one. A career with detours is more interesting than a straight line.
             </p>
             <p className="text-muted-foreground leading-relaxed">
-              Most people try to build perfect careers. The right school, the right first job, the right progression. When something goes wrong — a layoff, a bad boss, a failed startup — they feel like the whole plan is ruined.
+              Most people try to build perfect careers. The right school, the right first job, the right progression. When something goes wrong, a layoff, a bad boss, a failed startup, they feel like the whole plan is ruined.
             </p>
             <p className="text-muted-foreground leading-relaxed">
               Wabi-sabi says: the cracks are part of the beauty.

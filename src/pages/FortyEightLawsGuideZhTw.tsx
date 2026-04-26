@@ -98,8 +98,8 @@ const DiagramBox = ({ title, children }: { title: string; children: React.ReactN
 const matrixQuadrants = {
   "low-low": { label: "正常模式", strategy: "少見。正常模式。做好工作即可。你有空間安靜累積。", color: "border-muted-foreground/30" },
   "low-high": { label: "最佳狀態", strategy: "最佳狀態。你發光。主管有安全感。雙贏。繼續做你正在做的事。", color: "border-emerald-500" },
-  "high-low": { label: "投降", strategy: "法則 22。投降。保持低調。安靜累積。你的主管自尊心強，而你的能見度還不夠高——不要威脅他們。等待時機。", color: "border-amber-500" },
-  "high-high": { label: "危險", strategy: "危險。法則 1。讓他們看起來好，否則你會付出代價。你的主管自尊心強，而你的能見度很高——這是最危險的象限。公開場合把功勞歸給主管。永遠不要蓋過他們。", color: "border-red-500" },
+  "high-low": { label: "投降", strategy: "法則 22。投降。保持低調。安靜累積。你的主管自尊心強，而你的能見度還不夠高, , 不要威脅他們。等待時機。", color: "border-amber-500" },
+  "high-high": { label: "危險", strategy: "危險。法則 1。讓他們看起來好，否則你會付出代價。你的主管自尊心強，而你的能見度很高, , 這是最危險的象限。公開場合把功勞歸給主管。永遠不要蓋過他們。", color: "border-red-500" },
 } as const;
 
 const BossManagementMatrix = () => {
@@ -512,7 +512,7 @@ const FortyEightLawsGuideZhTw = () => {
 
   return (
     <div className="min-h-screen bg-background text-foreground">
-      <SEO schemaJson={guideSchema({ path: "/zh-tw/48-laws-guide", title: "職場權力的 48 條法則 — 辦公室政治與職涯策略指南", description: "改編自 Robert Greene 的《乘勝追擊的48條法則》，專為你的職涯量身打造的實戰指南" })} />
+      <SEO schemaJson={guideSchema({ path: "/zh-tw/48-laws-guide", title: "職場權力的 48 條法則, 辦公室政治與職涯策略指南", description: "改編自 Robert Greene 的《乘勝追擊的48條法則》，專為你的職涯量身打造的實戰指南" })} />
 
       <ReadingProgressBar />
 
@@ -886,9 +886,9 @@ const FortyEightLawsGuideZhTw = () => {
 
             <DiagramBox title="職涯安全感的 3 條法則">
               <ol className="space-y-3 list-decimal list-inside">
-                <li><strong>法則 11：讓人依賴你</strong> — 讓你變得不可或缺。</li>
-                <li><strong>法則 13：訴諸他人的利益</strong> — 幫你拿到你想要的。</li>
-                <li><strong>法則 29：規劃到最後一步</strong> — 讓你的職涯保持方向。</li>
+                <li><strong>法則 11：讓人依賴你</strong>, 讓你變得不可或缺。</li>
+                <li><strong>法則 13：訴諸他人的利益</strong>, 幫你拿到你想要的。</li>
+                <li><strong>法則 29：規劃到最後一步</strong>, 讓你的職涯保持方向。</li>
               </ol>
             </DiagramBox>
 
@@ -1152,15 +1152,15 @@ const FortyEightLawsGuideZhTw = () => {
             <div className="rounded-lg bg-muted/30 border border-border p-3 mb-6 space-y-1.5">
               <div className="flex items-center gap-2 text-sm">
                 <span className="w-2.5 h-2.5 rounded-full bg-emerald-500 shrink-0" />
-                <span><strong className="text-foreground">使用</strong> <span className="text-muted-foreground">— 主動運用，作為職涯策略</span></span>
+                <span><strong className="text-foreground">使用</strong> <span className="text-muted-foreground">,  主動運用，作為職涯策略</span></span>
               </div>
               <div className="flex items-center gap-2 text-sm">
                 <span className="w-2.5 h-2.5 rounded-full bg-amber-500 shrink-0" />
-                <span><strong className="text-foreground">防禦</strong> <span className="text-muted-foreground">— 辨認別人何時對你使用。保護自己</span></span>
+                <span><strong className="text-foreground">防禦</strong> <span className="text-muted-foreground">,  辨認別人何時對你使用。保護自己</span></span>
               </div>
               <div className="flex items-center gap-2 text-sm">
                 <span className="w-2.5 h-2.5 rounded-full bg-red-500 shrink-0" />
-                <span><strong className="text-foreground">避免</strong> <span className="text-muted-foreground">— 風險太高或有倫理疑慮</span></span>
+                <span><strong className="text-foreground">避免</strong> <span className="text-muted-foreground">,  風險太高或有倫理疑慮</span></span>
               </div>
             </div>
 

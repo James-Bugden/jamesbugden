@@ -1005,7 +1005,7 @@ const CareerGameGuide = () => {
           <h3 className="font-heading text-xl text-foreground mb-3">Secret 25: Success starts at assignment, not at completion</h3>
           <p className="text-muted-foreground leading-relaxed mb-6">If you set your team up for success when you assign the work, you'll spend less time fixing things on the back end.</p>
 
-          <Collapsible title="Management ceremonies — a cadence that works">
+          <Collapsible title="Management ceremonies, a cadence that works">
             <ul className="space-y-2 text-muted-foreground text-sm mt-3">
               <li>• <strong className="text-foreground">Biweekly one-on-ones:</strong> 10 minutes for priorities, 10 for real-time feedback, 10 for escalations and roadblocks.</li>
               <li>• <strong className="text-foreground">Alternating biweekly team meetings</strong> for sharing updates, project successes, and context.</li>

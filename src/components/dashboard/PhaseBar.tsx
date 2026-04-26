@@ -63,7 +63,7 @@ function PhaseBarInner({ activePhase, completedCount, totalCount, onPhaseChange,
           })}
         </div>
 
-        {/* Progress count — own line on mobile */}
+        {/* Progress count, own line on mobile */}
         <span
           className="text-xs font-medium whitespace-nowrap shrink-0 w-full sm:w-auto text-center sm:text-right"
           style={{ color: "hsl(var(--muted-foreground))" }}

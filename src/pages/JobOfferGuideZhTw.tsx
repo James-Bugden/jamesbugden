@@ -368,7 +368,7 @@ const JobOfferGuideZhTw = () => {
                   </div>
                 </div>
                 <div className="rounded-lg border border-border bg-muted/20 p-4 space-y-2 text-sm">
-                  <p><strong className="text-foreground">工作機會 B 的價值更高。</strong>額外的特休有現金價值（多 13 天 × 日薪 ≈ NT$75,000），加上額外勞退提撥和發展預算，整體薪酬價值約 NT$1,650,000，和 A 相當——但你還獲得每週兩天遠端工作的彈性。</p>
+                  <p><strong className="text-foreground">工作機會 B 的價值更高。</strong>額外的特休有現金價值（多 13 天 × 日薪 ≈ NT$75,000），加上額外勞退提撥和發展預算，整體薪酬價值約 NT$1,650,000，和 A 相當, , 但你還獲得每週兩天遠端工作的彈性。</p>
                   <p className="font-semibold text-foreground">→ 計算整體價值，不要只看帳面數字。</p>
                 </div>
               </div>

@@ -451,7 +451,7 @@ const PivotMethodGuideZhTw = () => {
           </div>
 
           <p className="text-foreground mb-6">
-            一旦你成功轉換，你就有責任（和機會）幫助他人。Blake 稱之為「職涯因果報應」— 你幫助別人轉換得越多，當你需要下一次轉換時，你得到的支持就越多。
+            一旦你成功轉換，你就有責任（和機會）幫助他人。Blake 稱之為「職涯因果報應」,  你幫助別人轉換得越多，當你需要下一次轉換時，你得到的支持就越多。
           </p>
 
           <div className="grid md:grid-cols-2 gap-6">
@@ -528,7 +528,7 @@ const PivotMethodGuideZhTw = () => {
             {/* After Layoff */}
             <div className="bg-card border border-border rounded-lg p-6">
               <h3 className="font-heading text-xl text-foreground mb-4">裁員後的轉換</h3>
-              <p className="text-foreground mb-4">被裁員實際上可能是轉換的好時機 — 如果你策略性地處理它。</p>
+              <p className="text-foreground mb-4">被裁員實際上可能是轉換的好時機, 如果你策略性地處理它。</p>
               
               <div className="grid md:grid-cols-2 gap-4 mb-4">
                 <div className="bg-executive-green/10 border border-executive-green/30 rounded-lg p-4">
@@ -677,7 +677,7 @@ const PivotMethodGuideZhTw = () => {
 
           <div className="space-y-6">
             <div className="bg-white/10 backdrop-blur-sm rounded-lg p-6">
-              <h3 className="font-heading text-xl text-gold mb-4">🌱 階段 1：種植 — 設定你的基礎</h3>
+              <h3 className="font-heading text-xl text-gold mb-4">🌱 階段 1：種植, 設定你的基礎</h3>
               <InteractiveChecklist guideKey="pivot_ref_plant_zh" lang="zh" variant="dark" items={[
                 { label: "校準指南針：定義價值觀、快樂公式、不可妥協事項" },
                 { label: "定下目標：從現在起一年的願景" },
@@ -687,7 +687,7 @@ const PivotMethodGuideZhTw = () => {
             </div>
 
             <div className="bg-white/10 backdrop-blur-sm rounded-lg p-6">
-              <h3 className="font-heading text-xl text-gold mb-4">🔍 階段 2：掃描 — 收集情報</h3>
+              <h3 className="font-heading text-xl text-gold mb-4">🔍 階段 2：掃描, 收集情報</h3>
               <InteractiveChecklist guideKey="pivot_ref_scan_zh" lang="zh" variant="dark" items={[
                 { label: "加強你的替補席：擴展人脈網，找到顧問" },
                 { label: "彌合差距：評估所需技能，創建學習計劃" },
@@ -696,7 +696,7 @@ const PivotMethodGuideZhTw = () => {
             </div>
 
             <div className="bg-white/10 backdrop-blur-sm rounded-lg p-6">
-              <h3 className="font-heading text-xl text-gold mb-4">🧪 階段 3：試點 — 在承諾前測試</h3>
+              <h3 className="font-heading text-xl text-gold mb-4">🧪 階段 3：試點, 在承諾前測試</h3>
               <InteractiveChecklist guideKey="pivot_ref_pilot_zh" lang="zh" variant="dark" items={[
                 { label: "運行小實驗：低風險、低成本測試" },
                 { label: "數量勝過質量：運行 5-10 個試點" },
@@ -705,7 +705,7 @@ const PivotMethodGuideZhTw = () => {
             </div>
 
             <div className="bg-white/10 backdrop-blur-sm rounded-lg p-6">
-              <h3 className="font-heading text-xl text-gold mb-4">🚀 階段 4：啟動 — 做出舉動</h3>
+              <h3 className="font-heading text-xl text-gold mb-4">🚀 階段 4：啟動, 做出舉動</h3>
               <InteractiveChecklist guideKey="pivot_ref_launch_zh" lang="zh" variant="dark" items={[
                 { label: "定義標準：在你啟動之前什麼必須是真的？" },
                 { label: "先建立，勇氣第二" },
@@ -714,7 +714,7 @@ const PivotMethodGuideZhTw = () => {
             </div>
 
             <div className="bg-white/10 backdrop-blur-sm rounded-lg p-6">
-              <h3 className="font-heading text-xl text-gold mb-4">🎯 階段 5：領導 — 幫助他人轉換</h3>
+              <h3 className="font-heading text-xl text-gold mb-4">🎯 階段 5：領導, 幫助他人轉換</h3>
               <InteractiveChecklist guideKey="pivot_ref_lead_zh" lang="zh" variant="dark" items={[
                 { label: "分享你的故事：教授你學到的東西" },
                 { label: "實踐職涯因果報應：給予介紹、反饋、支持" },

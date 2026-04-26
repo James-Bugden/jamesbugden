@@ -470,7 +470,7 @@ export default function ThreadsAnalytics() {
         fromDate = data?.nextFrom;
         if (!fromDate) break;
       }
-      toast.success(`Backfill complete — ${totalDays} days processed`);
+      toast.success(`Backfill complete, ${totalDays} days processed`);
       postTrend.refetch();
     } catch (e: any) { toast.error(e.message || "Backfill failed"); }
     finally { setBackfilling(false); }
@@ -491,7 +491,7 @@ export default function ThreadsAnalytics() {
     try {
       const { data, error } = await supabase.functions.invoke("threads-sync", { body: { action: "demographics" } });
       if (error) throw error;
-      toast.success(`Demographics synced — ${data?.demographics || 0} entries`);
+      toast.success(`Demographics synced, ${data?.demographics || 0} entries`);
     } catch (e: any) { toast.error(e.message || "Demographics sync failed"); }
     finally { setSyncingDemographics(false); }
   };
@@ -719,24 +719,24 @@ export default function ThreadsAnalytics() {
                   {/* KPI Row */}
                   <div className="grid grid-cols-2 md:grid-cols-5 gap-4">
                     <KpiCard label="Total Posts" subtitle="How many times you posted" icon={FileText} iconColor="#6366f1"
-                      value={postsAgg.data ? fmt(postsAgg.data.totalPosts) : "—"}
+                      value={postsAgg.data ? fmt(postsAgg.data.totalPosts) : ", "}
                       periodDelta={postsDelta} periodLabel={periodLabel}
                       sparkData={postTrend.data?.map(d => d.posts)} />
                     <KpiCard label="Total Views" subtitle="How many people saw your posts" icon={Eye} iconColor="#3b82f6"
-                      value={postsAgg.data ? fmt(postsAgg.data.totalViews) : "—"}
+                      value={postsAgg.data ? fmt(postsAgg.data.totalViews) : ", "}
                       periodDelta={viewsDelta} periodLabel={periodLabel}
                       sparkData={postTrend.data?.map(d => d.views)} />
                     <KpiCard label="Engagement" subtitle="Likes, replies & shares per view" icon={Heart} iconColor={engValue >= 0.015 ? "#22c55e" : engValue >= 0.008 ? "#f59e0b" : "#ef4444"}
-                      value={postsAgg.data ? pct(postsAgg.data.avgEng) : "—"}
+                      value={postsAgg.data ? pct(postsAgg.data.avgEng) : ", "}
                       progressValue={engValue} progressMax={0.03}
                       periodDelta={engDelta} periodLabel={periodLabel}
                       sparkData={postTrend.data?.map(d => d.engagementRate)} />
                     <KpiCard label="Avg Views/Post" subtitle="Reach per post on average" icon={BarChart3} iconColor="#8b5cf6"
-                      value={postsAgg.data ? fmt(Math.round(postsAgg.data.avgViews)) : "—"}
+                      value={postsAgg.data ? fmt(Math.round(postsAgg.data.avgViews)) : ", "}
                       periodDelta={avgViewsDelta} periodLabel={periodLabel}
                       sparkData={postTrend.data?.map(d => d.views / Math.max(d.posts, 1))} />
                     <KpiCard label="Followers Gained" subtitle="New followers in this period" icon={Users} iconColor="#22c55e"
-                      value={followerDeltas.data ? (followerDeltas.data.netGain === 0 ? "No change yet" : (followerDeltas.data.netGain >= 0 ? "+" : "") + fmt(followerDeltas.data.netGain)) : "—"}
+                      value={followerDeltas.data ? (followerDeltas.data.netGain === 0 ? "No change yet" : (followerDeltas.data.netGain >= 0 ? "+" : "") + fmt(followerDeltas.data.netGain)) : ", "}
                       delta={followerDeltas.data && followerDeltas.data.netGain > 0 ? "Growing" : followerDeltas.data && followerDeltas.data.netGain < 0 ? "Declining" : undefined}
                       sparkData={followerDeltas.data?.deltas?.map(d => d.followers)} />
                   </div>
@@ -791,7 +791,7 @@ export default function ThreadsAnalytics() {
                             const net = followerDeltas.data!.netGain;
                             return ` Net ${net >= 0 ? "+" : ""}${net} in this period.`;
                           }
-                          if (deltas.length > 0) return " Stable — no change in this period.";
+                          if (deltas.length > 0) return " Stable, no change in this period.";
                           return " Run Backfill to start tracking.";
                         })()}
                       </p>
@@ -843,7 +843,7 @@ export default function ThreadsAnalytics() {
                               <Users className="w-7 h-7 text-emerald-500" />
                             </div>
                             <div className="text-4xl font-bold text-gray-900 mb-1">
-                              {follower.data ? fmt(follower.data.current) : "—"}
+                              {follower.data ? fmt(follower.data.current) : ", "}
                             </div>
                             <p className="text-sm text-gray-500">Current followers</p>
                             <p className="text-xs text-gray-400 mt-4 max-w-[240px] text-center leading-relaxed">

@@ -25,13 +25,12 @@ function matchRegion(sectionName: string) {
   for (const s of SECTION_KEYWORDS) {
     if (lower.includes(s.key)) return { top: s.top, height: s.height };
   }
-  return null; // e.g. "Formatting & ATS" — no spatial region
+  return null; // e.g. "Formatting & ATS", no spatial region
 }
 
 function getScoreColor(score: number) {
   if (score <= 3) return "hsl(var(--destructive))";
-  if (score <= 5) return "hsl(var(--warning))";
-  if (score <= 7) return "hsl(var(--gold))";
+  if (score <= 7) return "hsl(var(--warning))";
   return "hsl(var(--executive-green))";
 }
 
@@ -146,7 +145,7 @@ export default function ResumeVisualSummary({
                     {/* Tooltip on hover */}
                     {isHovered && (
                       <div className="absolute left-6 top-0 z-20 bg-foreground text-background text-xs px-2 py-1 rounded shadow-lg whitespace-nowrap">
-                        {name} — {score}/10
+                        {name}, {score}/10
                       </div>
                     )}
                   </div>

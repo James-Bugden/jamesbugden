@@ -48,7 +48,7 @@ const ProtectedRoute = ({
         if (session?.user && requireAdmin) {
           await checkAdminRole(session.user.id);
         } else {
-          // No admin check needed — mark resolved
+          // No admin check needed, mark resolved
           if (isMounted) setAdminResolved(true);
         }
       } finally {

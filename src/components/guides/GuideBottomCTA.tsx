@@ -8,7 +8,7 @@ interface GuideBottomCTAProps {
 
 const i18n = {
   en: {
-    heading: "Get full access — for free",
+    heading: "Get full access, for free",
     sub: "Create your free account to unlock every guide, tool, and template on this site.",
     bullets: [
       "10+ career & interview guides",

@@ -53,7 +53,7 @@ import { CustomizeSettings } from "@/components/resume-builder/customizeTypes";
 import { AlertDialog, AlertDialogContent, AlertDialogHeader, AlertDialogTitle, AlertDialogDescription, AlertDialogFooter, AlertDialogCancel, AlertDialogAction } from "@/components/ui/alert-dialog";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 
-/* ── Brand colors — Hiresign tokens ─────────────────────────────────────────── */
+/* ── Brand colors, Hiresign tokens ─────────────────────────────────────────── */
 const BRAND = {
   green: "hsl(var(--executive-green))",
   greenHover: "hsl(var(--executive-green-light))",
@@ -261,7 +261,7 @@ export function DocumentDashboard({ onOpenDocument, onImport }: DocumentDashboar
     if (pendingAction.type === "create" && pendingAction.templateId) {
       executeCreateFromTemplate(pendingAction.templateId, replaceTargetId);
     } else if (pendingAction.type === "create") {
-      // No template selected yet — delete first, then open template picker
+      // No template selected yet, delete first, then open template picker
       deleteDocument(replaceTargetId);
       refresh();
       setTemplateModalOpen(true);
@@ -598,7 +598,7 @@ export function DocumentDashboard({ onOpenDocument, onImport }: DocumentDashboar
           {activeTab === "resume" && (
             <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-5">
               {/* New resume */}
-              {/* NOTE: must NOT use `disabled` here — disabled buttons swallow
+              {/* NOTE: must NOT use `disabled` here, disabled buttons swallow
                   clicks, and the user gets zero feedback that they hit the
                   2-resume limit. Instead, keep the click active and let
                   handleCreate() open the replace-picker AlertDialog. */}
@@ -703,7 +703,7 @@ export function DocumentDashboard({ onOpenDocument, onImport }: DocumentDashboar
           {activeTab === "resume" && filteredResumes.length === 0 && (
             <div className="text-center py-16 mt-4">
               {searchQuery ? (
-                // Filtered to empty by search — show "no results" messaging
+                // Filtered to empty by search, show "no results" messaging
                 // instead of the misleading "create your first resume" CTA.
                 <>
                   <div className="w-20 h-20 mx-auto mb-4 rounded-full flex items-center justify-center" style={{ backgroundColor: BRAND.greenLight }}>
@@ -720,7 +720,7 @@ export function DocumentDashboard({ onOpenDocument, onImport }: DocumentDashboar
                   </button>
                 </>
               ) : (
-                // Truly empty (no resumes at all) — show the create-first CTA.
+                // Truly empty (no resumes at all), show the create-first CTA.
                 <>
                   <div className="w-20 h-20 mx-auto mb-4 rounded-full flex items-center justify-center" style={{ backgroundColor: BRAND.greenLight }}>
                     <FileText className="w-10 h-10" style={{ color: BRAND.green }} />

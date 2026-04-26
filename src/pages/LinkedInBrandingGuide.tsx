@@ -143,7 +143,7 @@ const LinkedInBrandingGuide = () => {
             <div className="bg-card border border-border rounded-lg p-6">
               <Briefcase className="w-8 h-8 text-gold mb-3" />
               <h3 className="font-heading text-lg text-foreground mb-2">1. Career Opportunities</h3>
-              <p className="text-muted-foreground text-sm">The best opportunities come when you're not looking—but only if your profile attracts them.</p>
+              <p className="text-muted-foreground text-sm">The best opportunities come when you're not looking, but only if your profile attracts them.</p>
             </div>
             <div className="bg-card border border-border rounded-lg p-6">
               <TrendingUp className="w-8 h-8 text-gold mb-3" />
@@ -283,7 +283,7 @@ const LinkedInBrandingGuide = () => {
             <h3 className="font-heading text-xl text-foreground mb-4 flex items-center gap-2">
               <span className="text-gold">Profile Photo & Background Banner</span>
             </h3>
-            <p className="text-foreground mb-4">Your profile photo is your "visual brand" — the first thing people notice.</p>
+            <p className="text-foreground mb-4">Your profile photo is your "visual brand", the first thing people notice.</p>
             
             <div className="grid md:grid-cols-2 gap-4 mb-6">
               <div className="bg-executive-green/10 border border-executive-green/30 rounded-lg p-4">
@@ -330,7 +330,7 @@ const LinkedInBrandingGuide = () => {
             <h3 className="font-heading text-xl text-foreground mb-4 flex items-center gap-2">
               <span className="text-gold">Featured Section</span>
             </h3>
-            <p className="text-foreground mb-4">This section lets you showcase your best work at the top of your profile. Most people ignore it — that's a mistake.</p>
+            <p className="text-foreground mb-4">This section lets you showcase your best work at the top of your profile. Most people ignore it, that's a mistake.</p>
             
             <h4 className="font-semibold text-foreground mb-3">What to Feature:</h4>
             <ul className="space-y-1 text-foreground mb-4">
@@ -391,7 +391,7 @@ const LinkedInBrandingGuide = () => {
               <li>• Thesis or major projects</li>
             </ul>
 
-            <p className="text-muted-foreground italic">Recruiter's view: For entry-level candidates, education matters more. For experienced professionals, I spend 5 seconds here — unless you went to Stanford/MIT/etc.</p>
+            <p className="text-muted-foreground italic">Recruiter's view: For entry-level candidates, education matters more. For experienced professionals, I spend 5 seconds here, unless you went to Stanford/MIT/etc.</p>
           </div>
 
           {/* Skills & Endorsements */}
@@ -422,33 +422,33 @@ const LinkedInBrandingGuide = () => {
             <h3 className="font-heading text-xl text-foreground mb-4 flex items-center gap-2">
               <span className="text-gold">Recommendations</span>
             </h3>
-            <p className="text-foreground mb-4">This is the most underutilized feature on LinkedIn—and the most powerful for building trust.</p>
+            <p className="text-foreground mb-4">This is the most underutilized feature on LinkedIn, and the most powerful for building trust.</p>
             
             <h4 className="font-semibold text-foreground mb-3">Sandra's 6-Step Recommendation Process:</h4>
             <ol className="space-y-3 mb-6">
               <li className="flex items-start gap-3">
                 <span className="w-6 h-6 rounded-full bg-gold/20 flex items-center justify-center text-gold font-semibold flex-shrink-0 text-sm">1</span>
-                <p className="text-foreground"><strong>Make a List</strong> — Decide who can describe your work firsthand from direct experience working with you</p>
+                <p className="text-foreground"><strong>Make a List</strong>, Decide who can describe your work firsthand from direct experience working with you</p>
               </li>
               <li className="flex items-start gap-3">
                 <span className="w-6 h-6 rounded-full bg-gold/20 flex items-center justify-center text-gold font-semibold flex-shrink-0 text-sm">2</span>
-                <p className="text-foreground"><strong>Consider Timing</strong> — Best times are right after completing a project, leaving a job, or receiving a big compliment</p>
+                <p className="text-foreground"><strong>Consider Timing</strong>, Best times are right after completing a project, leaving a job, or receiving a big compliment</p>
               </li>
               <li className="flex items-start gap-3">
                 <span className="w-6 h-6 rounded-full bg-gold/20 flex items-center justify-center text-gold font-semibold flex-shrink-0 text-sm">3</span>
-                <p className="text-foreground"><strong>Ask in Person</strong> — A personalized request dramatically increases success rate</p>
+                <p className="text-foreground"><strong>Ask in Person</strong>, A personalized request dramatically increases success rate</p>
               </li>
               <li className="flex items-start gap-3">
                 <span className="w-6 h-6 rounded-full bg-gold/20 flex items-center justify-center text-gold font-semibold flex-shrink-0 text-sm">4</span>
-                <p className="text-foreground"><strong>Make it Easy</strong> — Ask if they'd like talking points</p>
+                <p className="text-foreground"><strong>Make it Easy</strong>, Ask if they'd like talking points</p>
               </li>
               <li className="flex items-start gap-3">
                 <span className="w-6 h-6 rounded-full bg-gold/20 flex items-center justify-center text-gold font-semibold flex-shrink-0 text-sm">5</span>
-                <p className="text-foreground"><strong>Follow Up Gently</strong> — People have good intentions but get busy</p>
+                <p className="text-foreground"><strong>Follow Up Gently</strong>, People have good intentions but get busy</p>
               </li>
               <li className="flex items-start gap-3">
                 <span className="w-6 h-6 rounded-full bg-gold/20 flex items-center justify-center text-gold font-semibold flex-shrink-0 text-sm">6</span>
-                <p className="text-foreground"><strong>Show Gratitude</strong> — Send a thank you note or LinkedIn message</p>
+                <p className="text-foreground"><strong>Show Gratitude</strong>, Send a thank you note or LinkedIn message</p>
               </li>
             </ol>
           </div>
@@ -468,22 +468,22 @@ const LinkedInBrandingGuide = () => {
           <h3 className="font-heading text-xl text-foreground mb-4">Why Create Content on LinkedIn?</h3>
           <div className="grid md:grid-cols-2 gap-4 mb-8">
             <div className="bg-background border border-border rounded-lg p-4">
-              <p className="text-foreground"><strong className="text-gold">Visibility</strong> — The more you post, the more your profile gets seen</p>
+              <p className="text-foreground"><strong className="text-gold">Visibility</strong>, The more you post, the more your profile gets seen</p>
             </div>
             <div className="bg-background border border-border rounded-lg p-4">
-              <p className="text-foreground"><strong className="text-gold">Authority</strong> — Regular content builds expertise</p>
+              <p className="text-foreground"><strong className="text-gold">Authority</strong>, Regular content builds expertise</p>
             </div>
             <div className="bg-background border border-border rounded-lg p-4">
-              <p className="text-foreground"><strong className="text-gold">Opportunity</strong> — Content attracts inbound opportunities</p>
+              <p className="text-foreground"><strong className="text-gold">Opportunity</strong>, Content attracts inbound opportunities</p>
             </div>
             <div className="bg-background border border-border rounded-lg p-4">
-              <p className="text-foreground"><strong className="text-gold">Relationships</strong> — Comments and engagement build connections</p>
+              <p className="text-foreground"><strong className="text-gold">Relationships</strong>, Comments and engagement build connections</p>
             </div>
             <div className="bg-background border border-border rounded-lg p-4">
-              <p className="text-foreground"><strong className="text-gold">Top of Mind</strong> — You stay front and center with your network</p>
+              <p className="text-foreground"><strong className="text-gold">Top of Mind</strong>, You stay front and center with your network</p>
             </div>
             <div className="bg-background border border-border rounded-lg p-4">
-              <p className="text-foreground"><strong className="text-gold">Learning</strong> — Creating content forces you to clarify your thinking</p>
+              <p className="text-foreground"><strong className="text-gold">Learning</strong>, Creating content forces you to clarify your thinking</p>
             </div>
           </div>
 
@@ -550,13 +550,13 @@ const LinkedInBrandingGuide = () => {
           <h3 className="font-heading text-xl text-foreground mb-4">The Anatomy of High-Performing Posts</h3>
           <div className="space-y-4 mb-8">
             <div className="bg-background border border-border rounded-lg p-4">
-              <p className="text-foreground"><strong>Hook (first 1-2 lines)</strong> — This is what people see before clicking "See more." Make it compelling.</p>
+              <p className="text-foreground"><strong>Hook (first 1-2 lines)</strong>, This is what people see before clicking "See more." Make it compelling.</p>
             </div>
             <div className="bg-background border border-border rounded-lg p-4">
-              <p className="text-foreground"><strong>Body</strong> — Tell a story, share a lesson, or provide value. Use short paragraphs (1-3 sentences max).</p>
+              <p className="text-foreground"><strong>Body</strong>, Tell a story, share a lesson, or provide value. Use short paragraphs (1-3 sentences max).</p>
             </div>
             <div className="bg-background border border-border rounded-lg p-4">
-              <p className="text-foreground"><strong>Call to Action</strong> — Ask a question to drive comments. Invite people to share their experiences.</p>
+              <p className="text-foreground"><strong>Call to Action</strong>, Ask a question to drive comments. Invite people to share their experiences.</p>
             </div>
           </div>
 
@@ -614,23 +614,23 @@ const LinkedInBrandingGuide = () => {
           <ul className="space-y-3 mb-8">
             <li className="flex items-start gap-3">
               <GoldCheckBadge />
-              <span className="text-foreground"><strong>Dwell Time</strong> — How long people spend reading your post</span>
+              <span className="text-foreground"><strong>Dwell Time</strong>, How long people spend reading your post</span>
             </li>
             <li className="flex items-start gap-3">
               <GoldCheckBadge />
-              <span className="text-foreground"><strong>Engagement</strong> — Likes, comments, shares, and clicks</span>
+              <span className="text-foreground"><strong>Engagement</strong>, Likes, comments, shares, and clicks</span>
             </li>
             <li className="flex items-start gap-3">
               <GoldCheckBadge />
-              <span className="text-foreground"><strong>Relevance</strong> — How well your content matches viewer interests</span>
+              <span className="text-foreground"><strong>Relevance</strong>, How well your content matches viewer interests</span>
             </li>
             <li className="flex items-start gap-3">
               <GoldCheckBadge />
-              <span className="text-foreground"><strong>Freshness</strong> — Newer posts get an initial boost</span>
+              <span className="text-foreground"><strong>Freshness</strong>, Newer posts get an initial boost</span>
             </li>
             <li className="flex items-start gap-3">
               <GoldCheckBadge />
-              <span className="text-foreground"><strong>Author Credibility</strong> — Profiles with higher SSI get more reach</span>
+              <span className="text-foreground"><strong>Author Credibility</strong>, Profiles with higher SSI get more reach</span>
             </li>
           </ul>
 
@@ -813,7 +813,7 @@ const LinkedInBrandingGuide = () => {
             Your LinkedIn Journey Starts Now
           </h2>
           <p className="text-foreground mb-4">
-            Personal branding on LinkedIn is no longer optional—it's essential. Whether you're job hunting, growing a business, or building thought leadership, LinkedIn is where professional success happens.
+            Personal branding on LinkedIn is no longer optional, it's essential. Whether you're job hunting, growing a business, or building thought leadership, LinkedIn is where professional success happens.
           </p>
           <p className="text-xl font-heading text-gold mb-6">
             The Core Message: Be authentic, be strategic, be consistent.

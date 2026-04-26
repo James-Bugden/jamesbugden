@@ -58,7 +58,7 @@ function ScoreHero({ score, lang }: { score: number; lang: Language }) {
 
   const verdictText = (s: number) => {
     if (s >= 90) return t(lang, "Excellent! Your resume is polished and ready to impress recruiters.", "優秀！你的履歷已經打磨完善，能夠給招募官留下深刻印象。");
-    if (s >= 75) return t(lang, "Your resume is strong — a few targeted improvements will make it highly competitive.", "你的履歷很好——幾項針對性改善就能大幅提升競爭力。");
+    if (s >= 75) return t(lang, "Your resume is strong, a few targeted improvements will make it highly competitive.", "你的履歷很好, , 幾項針對性改善就能大幅提升競爭力。");
     if (s >= 65) return t(lang, "Your resume is decent but needs optimization to stand out.", "你的履歷不錯，但需要優化才能脫穎而出。");
     if (s >= 50) return t(lang, "Your resume has potential but has critical issues holding you back.", "你的履歷有潛力，但有關鍵問題需要解決。");
     return t(lang, "Your resume needs significant improvements before it will be competitive.", "你的履歷需要大幅改善才能具有競爭力。");
@@ -220,7 +220,7 @@ function SectionCard({ section, lang, defaultOpen, locked }: { section: Analysis
               ) : f.type === "critical" ? (
                 <XCircle className="w-4 h-4 text-destructive shrink-0 mt-0.5" />
               ) : (
-                <AlertTriangle className="w-4 h-4 text-gold shrink-0 mt-0.5" />
+                <AlertTriangle className="w-4 h-4 text-warning shrink-0 mt-0.5" />
               )}
               <div className="text-sm">
                 <p style={{ color: 'hsl(var(--foreground))' }}>
@@ -251,8 +251,8 @@ function LockedOverlay({ lang, currentPath }: { lang: Language; currentPath: str
         </h3>
         <p className="text-sm mb-5" style={{ color: 'hsl(var(--muted-foreground))' }}>
           {t(lang,
-            "Sign up to unlock your full report — detailed findings, bullet rewrites, and top priorities.",
-            "註冊即可解鎖完整報告 — 詳細分析、履歷描述改寫和優先改善建議。"
+            "Sign up to unlock your full report, detailed findings, bullet rewrites, and top priorities.",
+            "註冊即可解鎖完整報告, 詳細分析、履歷描述改寫和優先改善建議。"
           )}
         </p>
         <Link
@@ -316,7 +316,7 @@ function ShareSection({ lang, score }: { lang: Language; score?: number }) {
         {t(lang, "Know someone who needs resume help?", "認識需要履歷幫助的人？")}
       </h2>
       <p className="text-white/70 text-sm mb-5">
-        {t(lang, "Send them this free tool — it takes 30 seconds.", "把這個免費工具分享給他們——只要 30 秒。")}
+        {t(lang, "Send them this free tool, it takes 30 seconds.", "把這個免費工具分享給他們, , 只要 30 秒。")}
       </p>
       <div className="flex flex-wrap items-center justify-center gap-3">
         <button onClick={handleEmailShare} className="inline-flex items-center gap-2 px-5 py-2.5 rounded-lg border border-white/20 bg-white/10 text-white hover:bg-white/20 transition-colors text-sm font-medium">
@@ -407,8 +407,8 @@ function BuildResumeCTA({ lang, resumeText, analysis }: { lang: Language; resume
       </h2>
       <p className="text-sm mb-5 max-w-md mx-auto" style={{ color: 'hsl(var(--muted-foreground))' }}>
         {t(lang,
-          "We'll import your resume content into our builder with a clean, ATS-friendly template — ready to edit and download.",
-          "我們會將你的履歷內容匯入建構器，套用乾淨的 ATS 友善模板——隨時可以編輯和下載。"
+          "We'll import your resume content into our builder with a clean, ATS-friendly template, ready to edit and download.",
+          "我們會將你的履歷內容匯入建構器，套用乾淨的 ATS 友善模板, , 隨時可以編輯和下載。"
         )}
       </p>
       <button
@@ -582,16 +582,16 @@ export default function ResumeResults({
           </div>
         )}
 
-        {/* Top Build CTA — right after score */}
+        {/* Top Build CTA, right after score */}
         <InlineBuilderCTA lang={lang} resumeText={resumeText} analysis={analysis} />
 
-        {/* Segmentation Profile — always visible */}
+        {/* Segmentation Profile, always visible */}
         <SegmentationProfile segmentation={analysis.segmentation} lang={lang} />
 
-        {/* Findings Summary — always visible */}
+        {/* Findings Summary, always visible */}
         <FindingsSummary sections={analysis.sections} lang={lang} />
 
-        {/* Locked sections wrapper — everything after score */}
+        {/* Locked sections wrapper, everything after score */}
         <div className="relative">
           {!isUnlocked && <LockedOverlay lang={lang} currentPath={location.pathname} />}
           <div className={`space-y-10 ${!isUnlocked ? "blur-sm pointer-events-none select-none" : ""}`}>
@@ -635,8 +635,8 @@ export default function ResumeResults({
                   <FileEdit className="w-5 h-5" style={{ color: 'hsl(var(--executive-green))' }} />
                   <h2 className="font-heading text-xl" style={{ color: 'hsl(var(--foreground))' }}>
                     {analysis.summary_rewrite.original
-                      ? t(lang, "Professional Summary — Rewritten", "專業摘要 — 改寫版")
-                      : t(lang, "Your Resume Is Missing a Summary — Here's One", "你的履歷缺少摘要 — 這是我們幫你寫的")
+                      ? t(lang, "Professional Summary, Rewritten", "專業摘要, 改寫版")
+                      : t(lang, "Your Resume Is Missing a Summary, Here's One", "你的履歷缺少摘要, 這是我們幫你寫的")
                     }
                   </h2>
                 </div>
@@ -666,7 +666,7 @@ export default function ResumeResults({
               </div>
             )}
 
-            {/* Bullet Rewrites — All Weak Bullets */}
+            {/* Bullet Rewrites, All Weak Bullets */}
             {(() => {
               const rewrites = analysis.bullet_rewrites && analysis.bullet_rewrites.length > 0
                 ? analysis.bullet_rewrites

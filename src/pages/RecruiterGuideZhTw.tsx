@@ -232,7 +232,7 @@ export default function RecruiterGuideZhTw() {
             </div>
             <div className="bg-card border border-border rounded-xl p-5">
               <h3 className="font-heading font-bold text-foreground mb-2 flex items-center gap-2"><Search className="w-4 h-4 text-gold" /> 獵頭（外部）</h3>
-              <p className="text-sm text-foreground/80 leading-relaxed">獨立運作的。他們同時服務多家客戶公司。付費方式取決於類型 — 預付制、成功制、人力派遣或轉職服務。</p>
+              <p className="text-sm text-foreground/80 leading-relaxed">獨立運作的。他們同時服務多家客戶公司。付費方式取決於類型, 預付制、成功制、人力派遣或轉職服務。</p>
             </div>
           </div>
 
@@ -320,7 +320,7 @@ export default function RecruiterGuideZhTw() {
                 <p className="text-xs text-muted-foreground mt-1">支付仲介費。<br/>設定要求。<br/>做最終決定。</p>
               </div>
             </div>
-            <p className="text-center text-xs text-muted-foreground mt-4 italic">獵頭為公司工作 — 但有經濟動力幫你拿到 offer。</p>
+            <p className="text-center text-xs text-muted-foreground mt-4 italic">獵頭為公司工作, 但有經濟動力幫你拿到 offer。</p>
           </div>
 
           <p className="text-foreground/80 leading-relaxed mb-4">一旦獵頭選中你作為他們的候選人，他們有經濟動機幫你拿到 offer。他們會指導你、幫你準備、推動公司做出決定。但他們需要你是一位值得投入的候選人。</p>

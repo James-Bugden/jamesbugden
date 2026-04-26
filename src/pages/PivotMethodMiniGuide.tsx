@@ -68,7 +68,7 @@ const PivotMethodMiniGuide = () => {
               They quit without a plan. They start from scratch in a totally different field. They apply to 200 jobs online and wonder why nobody calls back.
             </p>
             <p className="text-lg leading-relaxed mb-4">
-              Jenny Blake's book "Pivot" lays out a smarter method. It's the same approach I've seen work for the best career changers I've hired. This guide breaks it down through a recruiter's lens — what I actually see work (and fail) from the hiring side of the table.
+              Jenny Blake's book "Pivot" lays out a smarter method. It's the same approach I've seen work for the best career changers I've hired. This guide breaks it down through a recruiter's lens, what I actually see work (and fail) from the hiring side of the table.
             </p>
             <p className="text-lg leading-relaxed">
               This is the condensed version; the framework, the key actions, and the mistakes to avoid.
@@ -114,7 +114,7 @@ const PivotMethodMiniGuide = () => {
 
           <div className="mt-8 bg-gold/10 border border-gold/30 rounded-xl p-6">
             <p className="text-foreground">
-              <strong>Why this matters now:</strong> Average job tenure is 4-5 years. You'll likely have 11+ jobs and change industries 3-6 times in your career. The question isn't whether you'll pivot — it's whether you'll do it well or badly.
+              <strong>Why this matters now:</strong> Average job tenure is 4-5 years. You'll likely have 11+ jobs and change industries 3-6 times in your career. The question isn't whether you'll pivot, it's whether you'll do it well or badly.
             </p>
           </div>
         </section>
@@ -132,7 +132,7 @@ const PivotMethodMiniGuide = () => {
               <div className="w-12 h-12 rounded-full bg-green-100 flex items-center justify-center">
                 <span className="text-2xl">🌱</span>
               </div>
-              <h3 className="font-heading text-2xl text-foreground">Stage 1: Plant — Set Your Foundation</h3>
+              <h3 className="font-heading text-2xl text-foreground">Stage 1: Plant, Set Your Foundation</h3>
             </div>
             <p className="text-muted-foreground mb-6">
               Before you explore anything new, get clear on what you already have and what you actually want.
@@ -141,7 +141,7 @@ const PivotMethodMiniGuide = () => {
             <div className="space-y-6">
               <div>
                 <h4 className="font-semibold text-foreground mb-2">Calibrate your compass.</h4>
-                <p className="text-muted-foreground">What are your real values — not what should matter, but what actually does? What energizes you versus drains you? What are your non-negotiables?</p>
+                <p className="text-muted-foreground">What are your real values, not what should matter, but what actually does? What energizes you versus drains you? What are your non-negotiables?</p>
               </div>
 
               <div className="bg-muted/50 rounded-lg p-4 border-l-4 border-gold">
@@ -157,7 +157,7 @@ const PivotMethodMiniGuide = () => {
 
               <div>
                 <h4 className="font-semibold text-foreground mb-2">Identify your strengths.</h4>
-                <p className="text-muted-foreground">What are you naturally good at? What do people come to you for? What skills transfer to new contexts? Successful pivots leverage existing strengths in new ways — engineers pivot to product management, consultants pivot to internal strategy, teachers pivot to corporate training. They don't start from zero. They re-aim.</p>
+                <p className="text-muted-foreground">What are you naturally good at? What do people come to you for? What skills transfer to new contexts? Successful pivots leverage existing strengths in new ways, engineers pivot to product management, consultants pivot to internal strategy, teachers pivot to corporate training. They don't start from zero. They re-aim.</p>
               </div>
 
               <div>
@@ -186,7 +186,7 @@ const PivotMethodMiniGuide = () => {
               <div className="w-12 h-12 rounded-full bg-blue-100 flex items-center justify-center">
                 <span className="text-2xl">🔍</span>
               </div>
-              <h3 className="font-heading text-2xl text-foreground">Stage 2: Scan — Gather Intelligence</h3>
+              <h3 className="font-heading text-2xl text-foreground">Stage 2: Scan, Gather Intelligence</h3>
             </div>
             <p className="text-muted-foreground mb-6">
               Now that you know your foundation, research where you want to go and what it takes to get there.
@@ -211,7 +211,7 @@ const PivotMethodMiniGuide = () => {
 
               <div className="bg-muted/50 rounded-lg p-4 border-l-4 border-gold">
                 <p className="text-sm text-muted-foreground">
-                  <strong className="text-foreground">Recruiter reality check:</strong> The "spray and resume" approach — applying to 100 jobs — rarely works for career pivoters. Targeted visibility works better. Be known by 10 people in your target field who can vouch for you. That's more powerful than 100 cold applications.
+                  <strong className="text-foreground">Recruiter reality check:</strong> The "spray and resume" approach, applying to 100 jobs, rarely works for career pivoters. Targeted visibility works better. Be known by 10 people in your target field who can vouch for you. That's more powerful than 100 cold applications.
                 </p>
               </div>
 
@@ -237,7 +237,7 @@ const PivotMethodMiniGuide = () => {
               <div className="w-12 h-12 rounded-full bg-gold-soft flex items-center justify-center">
                 <span className="text-2xl">🧪</span>
               </div>
-              <h3 className="font-heading text-2xl text-foreground">Stage 3: Pilot — Test Before You Commit</h3>
+              <h3 className="font-heading text-2xl text-foreground">Stage 3: Pilot, Test Before You Commit</h3>
             </div>
             <p className="text-muted-foreground mb-4">
               This is the most important stage, and the one most people skip entirely. Instead of making one big leap, run small experiments to gather real-world data.
@@ -260,11 +260,11 @@ const PivotMethodMiniGuide = () => {
               <div>
                 <h4 className="font-semibold text-foreground mb-3">Examples of pilots:</h4>
                 <ul className="space-y-2 text-muted-foreground">
-                  <li>• <strong>Freelance project in your target industry</strong> — tests: can you do the work? Do you enjoy it?</li>
-                  <li>• <strong>Side project on weekends</strong> — tests: genuine interest, skill level, market demand</li>
-                  <li>• <strong>Consulting for 1-2 clients while employed</strong> — tests: business viability</li>
-                  <li>• <strong>Teaching a workshop</strong> — tests: expertise, interest in education</li>
-                  <li>• <strong>Volunteering in the new field</strong> — tests: culture, day-to-day reality</li>
+                  <li>• <strong>Freelance project in your target industry</strong>, tests: can you do the work? Do you enjoy it?</li>
+                  <li>• <strong>Side project on weekends</strong>, tests: genuine interest, skill level, market demand</li>
+                  <li>• <strong>Consulting for 1-2 clients while employed</strong>, tests: business viability</li>
+                  <li>• <strong>Teaching a workshop</strong>, tests: expertise, interest in education</li>
+                  <li>• <strong>Volunteering in the new field</strong>, tests: culture, day-to-day reality</li>
                 </ul>
               </div>
 
@@ -299,10 +299,10 @@ const PivotMethodMiniGuide = () => {
                   Action steps for Stage 3:
                 </h4>
                 <ol className="list-decimal list-inside space-y-2 text-green-700">
-                  <li>Design your first pilot — what's the smallest experiment you can run this week?</li>
+                  <li>Design your first pilot, what's the smallest experiment you can run this week?</li>
                   <li>Set a goal: run at least 3 pilots within the next 2 months</li>
                   <li>After each pilot, write down what you learned in 3 sentences</li>
-                  <li>Talk to 3 people already doing your target job — compare their reality to your expectations</li>
+                  <li>Talk to 3 people already doing your target job, compare their reality to your expectations</li>
                 </ol>
               </div>
             </div>
@@ -314,7 +314,7 @@ const PivotMethodMiniGuide = () => {
               <div className="w-12 h-12 rounded-full bg-orange-100 flex items-center justify-center">
                 <span className="text-2xl">🚀</span>
               </div>
-              <h3 className="font-heading text-2xl text-foreground">Stage 4: Launch — Make the Move</h3>
+              <h3 className="font-heading text-2xl text-foreground">Stage 4: Launch, Make the Move</h3>
             </div>
             <p className="text-muted-foreground mb-4">
               Launch is not about courage. Blake's key insight: <strong>build first, courage second.</strong>
@@ -377,10 +377,10 @@ const PivotMethodMiniGuide = () => {
                   Action steps for Stage 4:
                 </h4>
                 <ol className="list-decimal list-inside space-y-2 text-green-700">
-                  <li>Write your launch criteria checklist — be specific and measurable</li>
+                  <li>Write your launch criteria checklist, be specific and measurable</li>
                   <li>For each criterion, identify what's already met vs. what still needs work</li>
                   <li>Set a deadline: "I will make a decision by [date]"</li>
-                  <li>Prepare your transition conversations (boss, family) — make the decision first, plan the conversations second</li>
+                  <li>Prepare your transition conversations (boss, family), make the decision first, plan the conversations second</li>
                 </ol>
               </div>
             </div>
@@ -392,7 +392,7 @@ const PivotMethodMiniGuide = () => {
               <div className="w-12 h-12 rounded-full bg-gold/20 flex items-center justify-center">
                 <span className="text-2xl">🎯</span>
               </div>
-              <h3 className="font-heading text-2xl text-foreground">Stage 5: Lead — Help Others Pivot</h3>
+              <h3 className="font-heading text-2xl text-foreground">Stage 5: Lead, Help Others Pivot</h3>
             </div>
             <p className="text-muted-foreground mb-4">
               Once you've pivoted successfully, share what you learned. Help others through their transitions. Make introductions. Review resumes. Celebrate other people's career wins.
@@ -427,12 +427,12 @@ const PivotMethodMiniGuide = () => {
             
             <div className="bg-red-50 border border-red-200 rounded-xl p-6">
               <h3 className="font-semibold text-red-800 mb-2">2. Starting from scratch.</h3>
-              <p className="text-red-700">You don't need a completely new identity. Find the adjacent move — one step from where you are now. Leverage what you already have. Consultant → internal strategy. Engineer → product management. Teacher → corporate training.</p>
+              <p className="text-red-700">You don't need a completely new identity. Find the adjacent move, one step from where you are now. Leverage what you already have. Consultant → internal strategy. Engineer → product management. Teacher → corporate training.</p>
             </div>
             
             <div className="bg-red-50 border border-red-200 rounded-xl p-6">
               <h3 className="font-semibold text-red-800 mb-2">3. Analysis paralysis.</h3>
-              <p className="text-red-700">At some point, more research doesn't help — you need experience. Set a decision deadline. 20 informational interviews teach you less than one freelance project actually doing the work.</p>
+              <p className="text-red-700">At some point, more research doesn't help, you need experience. Set a decision deadline. 20 informational interviews teach you less than one freelance project actually doing the work.</p>
             </div>
             
             <div className="bg-red-50 border border-red-200 rounded-xl p-6">

@@ -237,7 +237,7 @@ const PivotMethodGuide = () => {
                 <li>• Where do you want to be (role, company, industry, lifestyle)?</li>
               </ul>
               <p className="text-muted-foreground mb-4">
-                <strong>Important:</strong> Your vision doesn't need to be crystal clear. Blake warns against "the tyranny of the hows" — getting stuck because you don't know exactly how you'll get there. You just need direction.
+                <strong>Important:</strong> Your vision doesn't need to be crystal clear. Blake warns against "the tyranny of the hows", getting stuck because you don't know exactly how you'll get there. You just need direction.
               </p>
               <div className="bg-gold/10 border border-gold/30 rounded-lg p-4">
                 <p className="text-foreground">
@@ -267,7 +267,7 @@ const PivotMethodGuide = () => {
                 <p className="text-muted-foreground text-sm">Go through your past roles and identify: Projects you loved and did well • Skills that came naturally • Moments when you felt "in flow" • Accomplishments you're genuinely proud of. Look for patterns. Those patterns are your fuel.</p>
               </div>
               <p className="text-muted-foreground italic">
-                From my recruiting experience: I see engineers pivot to product management (analytical thinking + user empathy), consultants pivot to internal strategy roles (problem-solving + communication), and teachers pivot to corporate training (instruction + curriculum design). They don't start from zero—they re-aim their strengths.
+                From my recruiting experience: I see engineers pivot to product management (analytical thinking + user empathy), consultants pivot to internal strategy roles (problem-solving + communication), and teachers pivot to corporate training (instruction + curriculum design). They don't start from zero, they re-aim their strengths.
               </p>
             </div>
 
@@ -392,7 +392,7 @@ const PivotMethodGuide = () => {
                 </ul>
               </div>
               <p className="text-muted-foreground">
-                Blake also warns against "linear thinking" — assuming you need to take step 1, then step 2, then step 3 in sequence. Often you can leapfrog steps or learn things in parallel.
+                Blake also warns against "linear thinking", assuming you need to take step 1, then step 2, then step 3 in sequence. Often you can leapfrog steps or learn things in parallel.
               </p>
             </div>
 
@@ -683,7 +683,7 @@ const PivotMethodGuide = () => {
           </div>
 
           <h3 className="font-heading text-xl text-foreground mb-4">Don't Wait for Perfect Conditions</h3>
-          <p className="text-foreground mb-4">There's no perfect time to make a career change. There will always be uncertainty. The goal isn't to eliminate all risk—it's to reduce risk to an acceptable level based on your tolerance and situation.</p>
+          <p className="text-foreground mb-4">There's no perfect time to make a career change. There will always be uncertainty. The goal isn't to eliminate all risk, it's to reduce risk to an acceptable level based on your tolerance and situation.</p>
           <div className="bg-card border border-border rounded-lg p-4 mb-6">
             <h4 className="font-semibold text-foreground mb-2">Common "waiting for perfect" traps:</h4>
             <ul className="space-y-1 text-muted-foreground text-sm">
@@ -778,7 +778,7 @@ const PivotMethodGuide = () => {
             <div className="bg-background border border-border rounded-lg p-5">
               <p className="text-foreground font-semibold mb-2">Mistake #3: Analysis Paralysis</p>
               <p className="text-muted-foreground mb-2"><strong>What it looks like:</strong> "I need to research more before I decide" (said for the 47th time).</p>
-              <p className="text-muted-foreground mb-2"><strong>Why it fails:</strong> You're using research as avoidance. At some point, more information doesn't help—you need experience.</p>
+              <p className="text-muted-foreground mb-2"><strong>Why it fails:</strong> You're using research as avoidance. At some point, more information doesn't help, you need experience.</p>
               <p className="text-foreground"><strong>Solution:</strong> Set decision deadlines. After X pilots or Y months of research, make a call with the information you have. Remember: you can always pivot again. Blake recommends pilots over research. Twenty informational interviews teach you less than one freelance project actually doing the work.</p>
             </div>
             <div className="bg-background border border-border rounded-lg p-5">
@@ -882,7 +882,7 @@ const PivotMethodGuide = () => {
             {/* After Layoff */}
             <div className="bg-background border border-border rounded-lg p-6">
               <h3 className="font-heading text-xl text-foreground mb-4">Pivoting After a Layoff</h3>
-              <p className="text-foreground mb-4">Being laid off can actually be a good time to pivot—if you approach it strategically.</p>
+              <p className="text-foreground mb-4">Being laid off can actually be a good time to pivot, if you approach it strategically.</p>
               
               <div className="grid md:grid-cols-2 gap-4 mb-4">
                 <div className="bg-executive-green/10 border border-executive-green/30 rounded-lg p-4">
@@ -986,7 +986,7 @@ const PivotMethodGuide = () => {
             For Leaders: Facilitating Career Conversations
           </h2>
 
-          <p className="text-foreground mb-6">If you're a manager or leader, help your team grow—even if it means they might leave. Blake emphasizes: Your interest in someone's career development matters more than you think.</p>
+          <p className="text-foreground mb-6">If you're a manager or leader, help your team grow, even if it means they might leave. Blake emphasizes: Your interest in someone's career development matters more than you think.</p>
 
           <div className="bg-gold/10 border border-gold/30 rounded-lg p-5 mb-6">
             <h3 className="font-heading text-lg text-gold mb-3">Quarterly Career Conversation Framework:</h3>
@@ -1123,7 +1123,7 @@ const PivotMethodGuide = () => {
 
           <div className="space-y-6">
             <div className="bg-white/10 backdrop-blur-sm rounded-lg p-6">
-              <h3 className="font-heading text-xl text-gold mb-4">🌱 Stage 1: Plant — Set Your Foundation</h3>
+              <h3 className="font-heading text-xl text-gold mb-4">🌱 Stage 1: Plant, Set Your Foundation</h3>
               <InteractiveChecklist
                 guideKey="pivot_ref_plant_en"
                 variant="dark"
@@ -1138,7 +1138,7 @@ const PivotMethodGuide = () => {
             </div>
 
             <div className="bg-white/10 backdrop-blur-sm rounded-lg p-6">
-              <h3 className="font-heading text-xl text-gold mb-4">🔍 Stage 2: Scan — Gather Intelligence</h3>
+              <h3 className="font-heading text-xl text-gold mb-4">🔍 Stage 2: Scan, Gather Intelligence</h3>
               <InteractiveChecklist
                 guideKey="pivot_ref_scan_en"
                 variant="dark"
@@ -1152,7 +1152,7 @@ const PivotMethodGuide = () => {
             </div>
 
             <div className="bg-white/10 backdrop-blur-sm rounded-lg p-6">
-              <h3 className="font-heading text-xl text-gold mb-4">🧪 Stage 3: Pilot — Test Before Committing</h3>
+              <h3 className="font-heading text-xl text-gold mb-4">🧪 Stage 3: Pilot, Test Before Committing</h3>
               <InteractiveChecklist
                 guideKey="pivot_ref_pilot_en"
                 variant="dark"
@@ -1166,7 +1166,7 @@ const PivotMethodGuide = () => {
             </div>
 
             <div className="bg-white/10 backdrop-blur-sm rounded-lg p-6">
-              <h3 className="font-heading text-xl text-gold mb-4">🚀 Stage 4: Launch — Make the Move</h3>
+              <h3 className="font-heading text-xl text-gold mb-4">🚀 Stage 4: Launch, Make the Move</h3>
               <InteractiveChecklist
                 guideKey="pivot_ref_launch_en"
                 variant="dark"
@@ -1181,7 +1181,7 @@ const PivotMethodGuide = () => {
             </div>
 
             <div className="bg-white/10 backdrop-blur-sm rounded-lg p-6">
-              <h3 className="font-heading text-xl text-gold mb-4">🎯 Stage 5: Lead — Help Others Pivot</h3>
+              <h3 className="font-heading text-xl text-gold mb-4">🎯 Stage 5: Lead, Help Others Pivot</h3>
               <InteractiveChecklist
                 guideKey="pivot_ref_lead_en"
                 variant="dark"
@@ -1236,7 +1236,7 @@ const PivotMethodGuide = () => {
           
           <div className="bg-gold/10 border border-gold/30 rounded-lg p-5 mb-6">
             <h4 className="font-semibold text-gold mb-3">The Regret Question</h4>
-            <p className="text-foreground">What will you regret more—trying and failing, or never trying? In my experience, regret comes from inaction, not from well-planned attempts that don't work out. The people I meet at 50 who are still in careers they hate aren't there because they tried something and failed. They're there because they never tried. Failed pivots teach you something. Avoided pivots just accumulate resentment.</p>
+            <p className="text-foreground">What will you regret more, trying and failing, or never trying? In my experience, regret comes from inaction, not from well-planned attempts that don't work out. The people I meet at 50 who are still in careers they hate aren't there because they tried something and failed. They're there because they never tried. Failed pivots teach you something. Avoided pivots just accumulate resentment.</p>
           </div>
 
           <div className="bg-card border border-border rounded-lg p-6 text-left mb-8">

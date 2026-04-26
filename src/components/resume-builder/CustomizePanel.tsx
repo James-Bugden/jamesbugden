@@ -513,7 +513,7 @@ function DesignTab({ settings, onChange }: { settings: CustomizeSettings; onChan
 
         <CheckboxRow label="Uppercase headings" checked={settings.headingUppercase !== false} onChange={(v) => onChange({ headingUppercase: v })} />
 
-        {/* Section heading color — was wired in both renderers
+        {/* Section heading color, was wired in both renderers
             (ResumePDF and ResumePreview read `c?.headingsColor`) but
             previously had no UI control at all. Users were stuck on the
             default #111827. */}
@@ -526,10 +526,10 @@ function DesignTab({ settings, onChange }: { settings: CustomizeSettings; onChan
           />
         </div>
 
-        {/* Heading font picker — headingFont is consumed by both
+        {/* Heading font picker, headingFont is consumed by both
             renderers (the bold heading at the top of each section) but
             had no UI exposure. Use the same FontPicker as bodyFont.
-            Hidden on zh — see showFontPickers note above. */}
+            Hidden on zh, see showFontPickers note above. */}
         {showFontPickers && (
           <div className="mt-3 pt-3 border-t border-gray-100">
             <FieldLabel>Heading font</FieldLabel>
@@ -545,7 +545,7 @@ function DesignTab({ settings, onChange }: { settings: CustomizeSettings; onChan
         <div className="space-y-3">
           <CheckboxRow label="Underline" checked={settings.linkUnderline} onChange={(v) => onChange({ linkUnderline: v })} />
           <CheckboxRow label="Blue color" checked={settings.linkBlue} onChange={(v) => onChange({ linkBlue: v })} />
-          {/* "Link icon" + icon-style picker removed — both wrote to settings
+          {/* "Link icon" + icon-style picker removed, both wrote to settings
               but neither was read by ResumePDF.tsx, so toggling them did
               nothing visible in the PDF or preview. If we want per-link
               icons later, they need to be wired through to the PDF render
@@ -651,7 +651,7 @@ function HeaderTab({ settings, onChange }: { settings: CustomizeSettings; onChan
           <CheckboxRow label="Name bold" checked={settings.nameBold} onChange={(v) => onChange({ nameBold: v })} />
         </div>
 
-        {/* Name color — wired in both renderers (ResumePDF line 2059
+        {/* Name color, wired in both renderers (ResumePDF line 2059
             nameEl style.color, ResumePreview equivalent) but previously
             had no UI. */}
         <div className="pt-3 border-t border-gray-100">
@@ -687,7 +687,7 @@ function HeaderTab({ settings, onChange }: { settings: CustomizeSettings; onChan
            onChange={(v) => onChange({ titleSameLine: v === "true" })}
          />
 
-        {/* Title color — wired in both renderers but previously had no UI. */}
+        {/* Title color, wired in both renderers but previously had no UI. */}
         <div className="mt-3 pt-3 border-t border-gray-100">
           <FieldLabel>Color</FieldLabel>
           <ColorPickerRow

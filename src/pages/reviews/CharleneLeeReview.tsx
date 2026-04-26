@@ -692,7 +692,7 @@ const CharleneLeeReview = () => {
 
             <div className="bg-muted/30 rounded-lg p-4 border-l-4 border-muted-foreground">
               <p className="text-sm font-semibold text-foreground mb-2">📋 Principle:</p>
-              <p className="text-sm text-foreground"><strong>Clean, consistent design (use Calibri/Arial/Helvetica, 11–12 pt)</strong> - Inconsistent fonts, spacing, or formatting makes resumes look messy and unprofessional. ATS systems may misread decorative elements. Consistent styles across all sections create a polished, trustworthy impression that looks like you pay attention to detail—critical for operations roles.</p>
+              <p className="text-sm text-foreground"><strong>Clean, consistent design (use Calibri/Arial/Helvetica, 11–12 pt)</strong> - Inconsistent fonts, spacing, or formatting makes resumes look messy and unprofessional. ATS systems may misread decorative elements. Consistent styles across all sections create a polished, trustworthy impression that looks like you pay attention to detail, critical for operations roles.</p>
             </div>
           </div>
 
@@ -954,7 +954,7 @@ const CharleneLeeReview = () => {
 
             <div className="bg-muted/30 rounded-lg p-4 border-l-4 border-muted-foreground">
               <p className="text-sm font-semibold text-foreground mb-2">📋 Principle:</p>
-              <p className="text-sm text-foreground mb-2"><strong>Prioritize Hard Skills Over Soft Skills</strong> - Hard skills show what you can actually do, while soft skills often sound generic and unverifiable. Recruiters look for technical and functional capability first. Order matters—put the most relevant skills for your target role first.</p>
+              <p className="text-sm text-foreground mb-2"><strong>Prioritize Hard Skills Over Soft Skills</strong> - Hard skills show what you can actually do, while soft skills often sound generic and unverifiable. Recruiters look for technical and functional capability first. Order matters, put the most relevant skills for your target role first.</p>
               <p className="text-sm text-foreground"><strong>Role-Relevant, Not Generic</strong> - Your skills section should highlight expertise directly aligned with the job you're targeting. Generic skills make you look unfocused and reduce perceived seniority.</p>
             </div>
           </div>
@@ -1742,7 +1742,7 @@ const CharleneLeeReview = () => {
 
           <div className="bg-card rounded-xl p-6 border border-border">
             <p className="text-foreground leading-relaxed mb-6">
-              <strong>Charlene, you have an incredibly strong foundation.</strong> Twenty years at Microsoft with 120%+ growth metrics and 100% renewal rates puts you in the top tier of operational professionals. The issue isn't your experience—it's how you're presenting it.
+              <strong>Charlene, you have an incredibly strong foundation.</strong> Twenty years at Microsoft with 120%+ growth metrics and 100% renewal rates puts you in the top tier of operational professionals. The issue isn't your experience, it's how you're presenting it.
             </p>
 
             <p className="text-foreground font-semibold mb-3">The three biggest problems are:</p>

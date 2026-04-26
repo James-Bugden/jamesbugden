@@ -126,7 +126,7 @@ function DemographicsSection() {
   );
 
   const byType = (type: string) => data.filter(d => d.breakdown_type === type);
-  const fetchedAt = data[0]?.fetched_at ? new Date(data[0].fetched_at).toLocaleDateString() : "—";
+  const fetchedAt = data[0]?.fetched_at ? new Date(data[0].fetched_at).toLocaleDateString() : ", ";
 
   const countryData = byType("country").slice(0, 10).map(d => ({ name: d.breakdown_value, value: Number(d.percentage) }));
   const cityData = byType("city").slice(0, 10).map(d => ({ name: d.breakdown_value, value: Number(d.percentage) }));

@@ -31,7 +31,7 @@ const questions: Question[] = [
     label: "ENGLISH PROFICIENCY · Q1",
     text: "Your manager asks you to present a project update to the Asia-Pacific team in English next week. How do you feel?",
     options: [
-      { text: "Confident — I've done this before", score: 10 },
+      { text: "Confident, I've done this before", score: 10 },
       { text: "Slightly nervous but I'd manage", score: 7 },
       { text: "I'd need to script everything word-for-word", score: 4 },
       { text: "I'd try to get someone else to present", score: 1 },
@@ -55,7 +55,7 @@ const questions: Question[] = [
     options: [
       { text: "I have a structured story ready with situation, action, and result", score: 10 },
       { text: "I could come up with something but it wouldn't be polished", score: 6 },
-      { text: "I'd struggle — I've never prepared for this type of question", score: 3 },
+      { text: "I'd struggle, I've never prepared for this type of question", score: 3 },
       { text: "I've only done technical or traditional Q&A interviews", score: 1 },
     ],
   },
@@ -73,9 +73,9 @@ const questions: Question[] = [
   {
     dimension: "Compensation Knowledge",
     label: "COMPENSATION KNOWLEDGE · Q5",
-    text: "Do you know how to evaluate a total compensation package — not just monthly salary?",
+    text: "Do you know how to evaluate a total compensation package, not just monthly salary?",
     options: [
-      { text: "Yes — I can compare base, bonus, equity, benefits, and sign-on across offers", score: 10 },
+      { text: "Yes, I can compare base, bonus, equity, benefits, and sign-on across offers", score: 10 },
       { text: "I look at monthly salary and maybe annual bonus", score: 6 },
       { text: "I mainly just compare monthly salary numbers", score: 3 },
       { text: "I accept what's offered without comparing", score: 1 },
@@ -131,7 +131,7 @@ function getCompPresenceFeedback(avg: number): string {
 
 /* ─── bracket helpers ─── */
 function getBracket(score: number) {
-  if (score >= 50) return { label: "Strong Candidate", color: "hsl(var(--executive-green))", summary: "You're ready — focus on targeting the right companies and negotiating well." };
+  if (score >= 50) return { label: "Strong Candidate", color: "hsl(var(--executive-green))", summary: "You're ready, focus on targeting the right companies and negotiating well." };
   if (score >= 35) return { label: "Almost There", color: "hsl(var(--gold))", summary: "You're close. A few targeted improvements will make a big difference." };
   if (score >= 20) return { label: "Building Foundation", color: "hsl(var(--gold-dark))", summary: "You have real potential. A structured plan will get you there in 2–3 months." };
   return { label: "Getting Started", color: "hsl(var(--destructive))", summary: "Everyone starts somewhere. Start with English and resume, then build from there." };
@@ -401,7 +401,7 @@ export default function Quiz() {
         className="text-xs underline mt-6 hover:opacity-80 transition-opacity"
         style={{ color: "hsl(var(--foreground))", opacity: 0.5 }}
       >
-        Skip — show score only
+        Skip, show score only
       </button>
     </div>
   );
@@ -459,7 +459,7 @@ export default function Quiz() {
       </nav>
 
       <div className="px-5 pb-16 max-w-lg mx-auto">
-        {/* Section 1 — Score Ring */}
+        {/* Section 1, Score Ring */}
         <div className="flex flex-col items-center text-center pt-6 pb-10">
           <div className="relative w-40 h-40 mb-4">
             <svg viewBox="0 0 160 160" className="w-full h-full -rotate-90">
@@ -487,7 +487,7 @@ export default function Quiz() {
           <p className="text-sm max-w-sm" style={{ color: "hsl(var(--foreground))" }}>{bracket.summary}</p>
         </div>
 
-        {/* Section 2 — Radar Chart */}
+        {/* Section 2, Radar Chart */}
         <div className="w-full h-64 md:h-72 mb-10">
           <ResponsiveContainer width="100%" height="100%">
             <RadarChart outerRadius="60%" data={radarData}>
@@ -499,7 +499,7 @@ export default function Quiz() {
           </ResponsiveContainer>
         </div>
 
-        {/* Section 3 — Dimension Cards */}
+        {/* Section 3, Dimension Cards */}
         <div className="flex flex-col gap-4 mb-12">
           {dimensions.map((d) => (
             <div
@@ -524,7 +524,7 @@ export default function Quiz() {
         </div>
 
 
-        {/* Section 4 — Share */}
+        {/* Section 4, Share */}
         <div className="flex items-center justify-center gap-3">
           <button
             onClick={shareLinkedIn}

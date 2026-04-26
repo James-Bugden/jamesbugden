@@ -101,7 +101,7 @@ function TopPostsSection({ posts }: { posts: ThreadsPost[] }) {
         </div>
         <div className="bg-white border border-gray-100 rounded-xl p-4 text-center shadow-sm">
           <div className="text-2xl font-bold text-emerald-600">
-            {filtered.length && medianEng > 0 ? (Number(filtered[0].engagement_rate) / medianEng).toFixed(1) + "×" : "—"}
+            {filtered.length && medianEng > 0 ? (Number(filtered[0].engagement_rate) / medianEng).toFixed(1) + "×" : ", "}
           </div>
           <div className="text-xs text-gray-500 mt-1">#1 vs Median</div>
         </div>

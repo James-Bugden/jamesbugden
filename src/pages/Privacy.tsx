@@ -21,7 +21,7 @@ export default function Privacy() {
             <ul className="list-disc pl-6 space-y-1">
               <li>Email address (for account creation and communication)</li>
               <li>Name (if provided via Google sign-in)</li>
-              <li>Resume content (when using the Resume Analyzer or Resume Builder — processed for analysis only)</li>
+              <li>Resume content (when using the Resume Analyzer or Resume Builder, processed for analysis only)</li>
               <li>Usage data (pages visited, features used) to improve our services</li>
             </ul>
           </section>

@@ -431,7 +431,7 @@ const LinkedInBrandingGuideZhTw = () => {
             <h3 className="font-heading text-xl text-foreground mb-4 flex items-center gap-2">
               <span className="text-gold">個人照片與背景橫幅</span>
             </h3>
-            <p className="text-foreground mb-4">你的個人照片是你的「視覺品牌」— 人們注意到的第一件事。</p>
+            <p className="text-foreground mb-4">你的個人照片是你的「視覺品牌」,  人們注意到的第一件事。</p>
             
             <div className="grid md:grid-cols-2 gap-4 mb-6">
               <div className="bg-executive-green/10 border border-executive-green/30 rounded-lg p-4">
@@ -552,7 +552,7 @@ const LinkedInBrandingGuideZhTw = () => {
             <h3 className="font-heading text-xl text-foreground mb-4 flex items-center gap-2">
               <span className="text-gold">精選區塊</span>
             </h3>
-            <p className="text-foreground mb-4">這個區塊讓你在個人檔案頂部展示你最好的作品。大多數人忽略它 — 這是個錯誤。</p>
+            <p className="text-foreground mb-4">這個區塊讓你在個人檔案頂部展示你最好的作品。大多數人忽略它, 這是個錯誤。</p>
             
             <h4 className="font-semibold text-foreground mb-3">要展示什麼：</h4>
             <ul className="space-y-1 text-foreground mb-4">
@@ -657,7 +657,7 @@ const LinkedInBrandingGuideZhTw = () => {
               </ul>
             </div>
 
-            <p className="text-muted-foreground italic">招募人員觀點：對於入門級候選人，教育更重要。對於有經驗的專業人士，我在這裡花 5 秒 — 除非你去了史丹佛/MIT 等。</p>
+            <p className="text-muted-foreground italic">招募人員觀點：對於入門級候選人，教育更重要。對於有經驗的專業人士，我在這裡花 5 秒, 除非你去了史丹佛/MIT 等。</p>
           </div>
 
           {/* Skills & Endorsements */}
@@ -738,23 +738,23 @@ const LinkedInBrandingGuideZhTw = () => {
             <ol className="space-y-2 mb-6">
               <li className="flex items-start gap-3">
                 <span className="w-6 h-6 rounded-full bg-gold/20 flex items-center justify-center text-gold font-semibold flex-shrink-0 text-sm">1</span>
-                <p className="text-foreground"><strong>背景</strong> — 你們如何認識/一起工作</p>
+                <p className="text-foreground"><strong>背景</strong>, 你們如何認識/一起工作</p>
               </li>
               <li className="flex items-start gap-3">
                 <span className="w-6 h-6 rounded-full bg-gold/20 flex items-center justify-center text-gold font-semibold flex-shrink-0 text-sm">2</span>
-                <p className="text-foreground"><strong>具體內容</strong> — 你的工作或影響的具體範例</p>
+                <p className="text-foreground"><strong>具體內容</strong>, 你的工作或影響的具體範例</p>
               </li>
               <li className="flex items-start gap-3">
                 <span className="w-6 h-6 rounded-full bg-gold/20 flex items-center justify-center text-gold font-semibold flex-shrink-0 text-sm">3</span>
-                <p className="text-foreground"><strong>技能</strong> — 展示的關鍵優勢或能力</p>
+                <p className="text-foreground"><strong>技能</strong>, 展示的關鍵優勢或能力</p>
               </li>
               <li className="flex items-start gap-3">
                 <span className="w-6 h-6 rounded-full bg-gold/20 flex items-center justify-center text-gold font-semibold flex-shrink-0 text-sm">4</span>
-                <p className="text-foreground"><strong>結果</strong> — 你提供的結果或價值</p>
+                <p className="text-foreground"><strong>結果</strong>, 你提供的結果或價值</p>
               </li>
               <li className="flex items-start gap-3">
                 <span className="w-6 h-6 rounded-full bg-gold/20 flex items-center justify-center text-gold font-semibold flex-shrink-0 text-sm">5</span>
-                <p className="text-foreground"><strong>認可</strong> — 他們會再次與你合作/推薦你嗎？</p>
+                <p className="text-foreground"><strong>認可</strong>, 他們會再次與你合作/推薦你嗎？</p>
               </li>
             </ol>
 
@@ -820,22 +820,22 @@ const LinkedInBrandingGuideZhTw = () => {
           <h3 className="font-heading text-xl text-foreground mb-4">為什麼在 LinkedIn 上創建內容？</h3>
           <div className="grid md:grid-cols-2 gap-4 mb-4">
             <div className="bg-background border border-border rounded-lg p-4">
-              <p className="text-foreground"><strong className="text-gold">可見度</strong> — 你發文越多，你的個人檔案被看到越多</p>
+              <p className="text-foreground"><strong className="text-gold">可見度</strong>, 你發文越多，你的個人檔案被看到越多</p>
             </div>
             <div className="bg-background border border-border rounded-lg p-4">
-              <p className="text-foreground"><strong className="text-gold">權威</strong> — 定期內容建立專業知識</p>
+              <p className="text-foreground"><strong className="text-gold">權威</strong>, 定期內容建立專業知識</p>
             </div>
             <div className="bg-background border border-border rounded-lg p-4">
-              <p className="text-foreground"><strong className="text-gold">機會</strong> — 內容吸引入站機會</p>
+              <p className="text-foreground"><strong className="text-gold">機會</strong>, 內容吸引入站機會</p>
             </div>
             <div className="bg-background border border-border rounded-lg p-4">
-              <p className="text-foreground"><strong className="text-gold">關係</strong> — 評論和參與建立連接</p>
+              <p className="text-foreground"><strong className="text-gold">關係</strong>, 評論和參與建立連接</p>
             </div>
             <div className="bg-background border border-border rounded-lg p-4">
-              <p className="text-foreground"><strong className="text-gold">保持在心中</strong> — 你在你的人脈網中保持前沿和中心</p>
+              <p className="text-foreground"><strong className="text-gold">保持在心中</strong>, 你在你的人脈網中保持前沿和中心</p>
             </div>
             <div className="bg-background border border-border rounded-lg p-4">
-              <p className="text-foreground"><strong className="text-gold">學習</strong> — 創建內容迫使你澄清你的思維</p>
+              <p className="text-foreground"><strong className="text-gold">學習</strong>, 創建內容迫使你澄清你的思維</p>
             </div>
           </div>
           <p className="text-muted-foreground italic mb-4">我的經驗：我主要透過 LinkedIn 內容建立了我的教練業務。在 18 個月內，我透過每週發文 3-5 次從 2,000 名追隨者增加到 22,000 名追隨者。內容吸引了演講邀約、諮詢客戶和 300 多人的課程候補名單。</p>
@@ -929,13 +929,13 @@ const LinkedInBrandingGuideZhTw = () => {
           <h3 className="font-heading text-xl text-foreground mb-4">撰寫有效的 LinkedIn 貼文</h3>
           <div className="space-y-4 mb-6">
             <div className="bg-background border border-border rounded-lg p-4">
-              <p className="text-foreground"><strong>鉤子（前 1-2 行）</strong> — 這是人們在點擊「查看更多」之前看到的。讓它引人注目。</p>
+              <p className="text-foreground"><strong>鉤子（前 1-2 行）</strong>, 這是人們在點擊「查看更多」之前看到的。讓它引人注目。</p>
             </div>
             <div className="bg-background border border-border rounded-lg p-4">
-              <p className="text-foreground"><strong>正文</strong> — 講一個故事，分享一個教訓，或提供價值。使用短段落（最多 1-3 句）。包括空白以提高可讀性。加入項目符號或數字以獲得結構。</p>
+              <p className="text-foreground"><strong>正文</strong>, 講一個故事，分享一個教訓，或提供價值。使用短段落（最多 1-3 句）。包括空白以提高可讀性。加入項目符號或數字以獲得結構。</p>
             </div>
             <div className="bg-background border border-border rounded-lg p-4">
-              <p className="text-foreground"><strong>行動呼籲</strong> — 問一個問題來推動評論。邀請人們分享他們的經驗。將他們引導到你的個人檔案或網站。</p>
+              <p className="text-foreground"><strong>行動呼籲</strong>, 問一個問題來推動評論。邀請人們分享他們的經驗。將他們引導到你的個人檔案或網站。</p>
             </div>
           </div>
 
@@ -1059,11 +1059,11 @@ const LinkedInBrandingGuideZhTw = () => {
 
           <h3 className="font-heading text-xl text-foreground mb-4">演算法優先事項：</h3>
           <ul className="space-y-3 mb-8">
-            <li className="flex items-start gap-3"><GoldCheckBadge /><span className="text-foreground"><strong>停留時間</strong> — 人們花多少時間閱讀你的貼文</span></li>
-            <li className="flex items-start gap-3"><GoldCheckBadge /><span className="text-foreground"><strong>參與度</strong> — 讚、評論、分享和點擊</span></li>
-            <li className="flex items-start gap-3"><GoldCheckBadge /><span className="text-foreground"><strong>相關性</strong> — 你的內容與觀看者感興趣的內容匹配程度</span></li>
-            <li className="flex items-start gap-3"><GoldCheckBadge /><span className="text-foreground"><strong>新鮮度</strong> — 較新的貼文獲得初始提升</span></li>
-            <li className="flex items-start gap-3"><GoldCheckBadge /><span className="text-foreground"><strong>作者信譽</strong> — SSI 較高的個人檔案獲得更多覆蓋</span></li>
+            <li className="flex items-start gap-3"><GoldCheckBadge /><span className="text-foreground"><strong>停留時間</strong>, 人們花多少時間閱讀你的貼文</span></li>
+            <li className="flex items-start gap-3"><GoldCheckBadge /><span className="text-foreground"><strong>參與度</strong>, 讚、評論、分享和點擊</span></li>
+            <li className="flex items-start gap-3"><GoldCheckBadge /><span className="text-foreground"><strong>相關性</strong>, 你的內容與觀看者感興趣的內容匹配程度</span></li>
+            <li className="flex items-start gap-3"><GoldCheckBadge /><span className="text-foreground"><strong>新鮮度</strong>, 較新的貼文獲得初始提升</span></li>
+            <li className="flex items-start gap-3"><GoldCheckBadge /><span className="text-foreground"><strong>作者信譽</strong>, SSI 較高的個人檔案獲得更多覆蓋</span></li>
           </ul>
 
           <h3 className="font-heading text-xl text-foreground mb-4">如何針對演算法優化：</h3>
@@ -1287,7 +1287,7 @@ const LinkedInBrandingGuideZhTw = () => {
             </div>
             <div className="bg-background border border-border rounded-lg p-5">
               <p className="text-foreground font-semibold mb-2">錯誤 #6：籠統內容</p>
-              <p className="text-muted-foreground">「週一快樂！希望每個人都有美好的一週！」— 籠統的貼文沒有提供任何價值。具體。從你的經驗中分享獨特的見解。採取立場。</p>
+              <p className="text-muted-foreground">「週一快樂！希望每個人都有美好的一週！」,  籠統的貼文沒有提供任何價值。具體。從你的經驗中分享獨特的見解。採取立場。</p>
             </div>
             <div className="bg-background border border-border rounded-lg p-5">
               <p className="text-foreground font-semibold mb-2">錯誤 #7：沒有行動呼籲</p>
@@ -1734,7 +1734,7 @@ const LinkedInBrandingGuideZhTw = () => {
           </div>
 
           <div className="bg-gold/10 border border-gold/30 rounded-lg p-5 text-center">
-            <p className="text-foreground font-semibold">你的 LinkedIn 轉型不會在一夜之間發生。但 90 天後，你可以擁有完全不同的專業品牌 — 一個吸引機會而不是追逐機會的品牌。</p>
+            <p className="text-foreground font-semibold">你的 LinkedIn 轉型不會在一夜之間發生。但 90 天後，你可以擁有完全不同的專業品牌, 一個吸引機會而不是追逐機會的品牌。</p>
             <p className="text-gold mt-2">問題是：你會投入工作嗎？</p>
           </div>
         </div>

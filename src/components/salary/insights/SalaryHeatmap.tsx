@@ -81,7 +81,7 @@ export default function SalaryHeatmap({ lang }: { lang: SalaryLang }) {
               </td>
               {EXP_COLS.map(e => {
                 const c = r.cells[e];
-                if (!c) return <td key={e} className="py-2.5 px-3 text-center text-muted-foreground/50">—</td>;
+                if (!c) return <td key={e} className="py-2.5 px-3 text-center text-muted-foreground/50">, </td>;
                 return (
                   <td key={e} className="py-2.5 px-3 text-center">
                     <Tooltip>

@@ -92,7 +92,7 @@ function useComputeDateWarnings(data: ResumeData): DateWarning[] {
       for (const entry of section.entries) {
         const { startYear, endYear, startMonth, endMonth, currentlyHere } = entry.fields;
         const name =
-          entry.fields.position || entry.fields.degree || entry.fields.name || entry.fields.title || "—";
+          entry.fields.position || entry.fields.degree || entry.fields.name || entry.fields.title || ", ";
 
         if (startYear && !endYear && currentlyHere !== "true") {
           warnings.push({ label: t("dateWarnMissing"), entryName: name });
@@ -115,7 +115,7 @@ function useComputeDateWarnings(data: ResumeData): DateWarning[] {
       .flatMap((s) => s.entries)
       .filter((e) => e.fields.startYear)
       .map((e) => ({
-        name: e.fields.position || e.fields.company || "—",
+        name: e.fields.position || e.fields.company || ", ",
         start: toMonthIndex(e.fields.startYear, e.fields.startMonth),
         end: e.fields.currentlyHere === "true"
           ? Infinity

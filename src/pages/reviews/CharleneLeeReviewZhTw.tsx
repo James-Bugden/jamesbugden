@@ -76,7 +76,7 @@ const CharleneLeeReviewZhTw = () => {
             </p>
             
             <p className="text-foreground leading-relaxed mb-4">
-              然而，這份履歷目前是以客戶成功職位為定位，但試圖轉向營運/供應類職位（根據您的措辭，可能是 Uber/共乘平台相關）。大量使用類比說明（「直接適用於司機招募」）實際上削弱了您的定位——您是在告訴招募人員如何解讀您的經驗，而不是讓您的成就自己說話。
+              然而，這份履歷目前是以客戶成功職位為定位，但試圖轉向營運/供應類職位（根據您的措辭，可能是 Uber/共乘平台相關）。大量使用類比說明（「直接適用於司機招募」）實際上削弱了您的定位, , 您是在告訴招募人員如何解讀您的經驗，而不是讓您的成就自己說話。
             </p>
             
             <p className="text-foreground leading-relaxed mb-6">
@@ -533,7 +533,7 @@ const CharleneLeeReviewZhTw = () => {
 
             <div className="bg-muted/30 rounded-lg p-4 border-l-4 border-muted-foreground">
               <p className="text-sm font-semibold text-foreground mb-2">📋 原則</p>
-              <p className="text-sm text-foreground">不一致的字體、間距或格式會讓履歷看起來雜亂且不專業。ATS 系統可能會誤讀裝飾性元素。所有章節的一致樣式創造一個精緻、值得信賴的印象，顯示您注重細節——這對營運職位至關重要。</p>
+              <p className="text-sm text-foreground">不一致的字體、間距或格式會讓履歷看起來雜亂且不專業。ATS 系統可能會誤讀裝飾性元素。所有章節的一致樣式創造一個精緻、值得信賴的印象，顯示您注重細節, , 這對營運職位至關重要。</p>
             </div>
           </div>
 
@@ -805,7 +805,7 @@ const CharleneLeeReviewZhTw = () => {
             <div className="bg-destructive/5 rounded-lg p-4 border-l-4 border-destructive mb-4">
               <p className="text-sm font-semibold text-destructive mb-2">之前 ❌</p>
               <p className="text-foreground text-sm italic">
-                獲取策略與分群：透過超越 120% 新供應/帳戶獲取率來擴大平台機會捕獲，利用數據驅動的漏斗分群和目標互動——經驗直接可轉移至司機招募。
+                獲取策略與分群：透過超越 120% 新供應/帳戶獲取率來擴大平台機會捕獲，利用數據驅動的漏斗分群和目標互動, , 經驗直接可轉移至司機招募。
               </p>
               <p className="text-sm text-foreground mt-3"><strong>為什麼這是弱的：</strong>🔴「經驗直接可轉移至司機招募」大喊轉職/急切 🔴「擴大平台機會捕獲」不清楚 🔴 缺少：多少帳戶？什麼起點終點？</p>
             </div>

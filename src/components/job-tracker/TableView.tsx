@@ -50,7 +50,7 @@ export default function TableView({ jobs, onSelectJob, onRefresh }: Props) {
     onRefresh();
   };
 
-  const fmtDate = (d: string | null) => d ? new Date(d).toLocaleDateString("en-US", { month: "short", day: "numeric" }) : "—";
+  const fmtDate = (d: string | null) => d ? new Date(d).toLocaleDateString("en-US", { month: "short", day: "numeric" }) : ", ";
 
   // Stage funnel bar (like Teal)
   const stageCounts = ACTIVE_STAGES.map((s) => ({
@@ -154,9 +154,9 @@ export default function TableView({ jobs, onSelectJob, onRefresh }: Props) {
                     {job.title || "Untitled"}
                   </td>
                   <td className="px-3 py-2.5" style={{ color: "#2C2C2C" }}>{job.company}</td>
-                  <td className="px-3 py-2.5" style={{ color: "#2C2C2C" }}>{job.minSalary || "—"}</td>
-                  <td className="px-3 py-2.5" style={{ color: "#2C2C2C" }}>{job.maxSalary || "—"}</td>
-                  <td className="px-3 py-2.5" style={{ color: "#2C2C2C" }}>{job.location || "—"}</td>
+                  <td className="px-3 py-2.5" style={{ color: "#2C2C2C" }}>{job.minSalary || ", "}</td>
+                  <td className="px-3 py-2.5" style={{ color: "#2C2C2C" }}>{job.maxSalary || ", "}</td>
+                  <td className="px-3 py-2.5" style={{ color: "#2C2C2C" }}>{job.location || ", "}</td>
                   <td className="px-3 py-2.5">
                     <select
                       value={job.stage}

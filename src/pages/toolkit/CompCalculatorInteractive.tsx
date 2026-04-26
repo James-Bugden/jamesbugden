@@ -548,7 +548,7 @@ const CompCalculatorInteractive = () => {
               Most candidates leave 10–20% on the table.
             </h2>
             <p className="text-muted mb-6 text-sm md:text-base max-w-xl">
-              I've helped professionals at Google, Uber, and Meta negotiate better offers. If you're comparing packages, I can tell you what's realistic — and what to push back on.
+              I've helped professionals at Google, Uber, and Meta negotiate better offers. If you're comparing packages, I can tell you what's realistic, and what to push back on.
             </p>
             <a
               href="https://james.careers/#coaching"

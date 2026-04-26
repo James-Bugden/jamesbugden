@@ -417,7 +417,7 @@ export default function InsightsTab({
   }, [resumeLeads, salaryChecks]);
 
   // ══════════════════════════════════════════════════════════════════════
-  // 12. Share Virality — Top pages & channels with conversion
+  // 12. Share Virality, Top pages & channels with conversion
   // ══════════════════════════════════════════════════════════════════════
   const shareVirality = useMemo(() => {
     const byPage: Record<string, Record<string, number>> = {};
@@ -1047,7 +1047,7 @@ export default function InsightsTab({
       <div>
         <div className="flex items-center gap-2 mb-4">
           <Share2 className="w-4 h-4 text-indigo-600" />
-          <h2 className="font-semibold text-foreground">Share Virality — Top Pages</h2>
+          <h2 className="font-semibold text-foreground">Share Virality, Top Pages</h2>
           <span className="text-xs text-muted-foreground">{shareClicks.length} total shares</span>
         </div>
         {shareVirality.length === 0 ? (
@@ -1173,7 +1173,7 @@ export default function InsightsTab({
                             <span className="tabular-nums font-semibold w-12 text-right">{g.visits}</span>
                             <span className="text-emerald-600 tabular-nums w-8 text-right">{g.up}</span>
                             <span className="text-red-500 tabular-nums w-8 text-right">{g.down}</span>
-                            <span className="tabular-nums w-12 text-right">{g.approval !== null ? `${g.approval}%` : "—"}</span>
+                            <span className="tabular-nums w-12 text-right">{g.approval !== null ? `${g.approval}%` : ", "}</span>
                           </div>
                         ))}
                       </div>

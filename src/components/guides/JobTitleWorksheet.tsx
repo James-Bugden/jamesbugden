@@ -701,7 +701,7 @@ export default function JobTitleWorksheet({ lang }: { lang: "en" | "zh" }) {
                   <td className="px-1 py-1 border-l border-border/30">
                     <input type="text" value={row.skill} onChange={e => updateCell(i, "skill", e.target.value)}
                       className="w-full bg-transparent border-0 focus:ring-1 focus:ring-gold/30 rounded px-1.5 py-1 text-sm text-foreground placeholder:text-muted-foreground/40 outline-none"
-                      placeholder={i === 0 ? t.phSkill : "—"} />
+                      placeholder={i === 0 ? t.phSkill : ", "} />
                   </td>
                   <td className="px-1 py-1">
                     <input type="number" min="1" value={row.count} onChange={e => updateCell(i, "count", e.target.value)}
@@ -711,12 +711,12 @@ export default function JobTitleWorksheet({ lang }: { lang: "en" | "zh" }) {
                   <td className="px-1 py-1 border-l border-border/30">
                     <input type="text" value={row.experience} onChange={e => updateCell(i, "experience", e.target.value)}
                       className="w-full bg-transparent border-0 focus:ring-1 focus:ring-gold/30 rounded px-1.5 py-1 text-sm text-foreground placeholder:text-muted-foreground/40 outline-none"
-                      placeholder={i === 0 ? t.phExperience : "—"} />
+                      placeholder={i === 0 ? t.phExperience : ", "} />
                   </td>
                   <td className="px-1 py-1">
                     <textarea value={row.achievement} onChange={e => updateCell(i, "achievement", e.target.value)}
                       className="w-full bg-transparent border-0 focus:ring-1 focus:ring-gold/30 rounded px-1.5 py-1 text-sm text-foreground placeholder:text-muted-foreground/40 outline-none resize-none min-h-[28px]"
-                      placeholder={i === 0 ? t.phAchievement : "—"} rows={1} />
+                      placeholder={i === 0 ? t.phAchievement : ", "} rows={1} />
                   </td>
                   {/* The Match columns */}
                   <td className="px-1 py-1 border-l border-border/30">
@@ -731,7 +731,7 @@ export default function JobTitleWorksheet({ lang }: { lang: "en" | "zh" }) {
                     <div className="flex items-start gap-1">
                       <textarea value={row.bulletPoint} onChange={e => updateCell(i, "bulletPoint", e.target.value)}
                         className="flex-1 bg-transparent border-0 focus:ring-1 focus:ring-gold/30 rounded px-1.5 py-1 text-sm text-foreground placeholder:text-muted-foreground/40 outline-none resize-none min-h-[28px]"
-                        placeholder={i === 0 ? t.phBullet : "—"} rows={1} />
+                        placeholder={i === 0 ? t.phBullet : ", "} rows={1} />
                       {row.bulletPoint && (
                         <CopyButton text={row.bulletPoint} label={t.copyBullet} />
                       )}

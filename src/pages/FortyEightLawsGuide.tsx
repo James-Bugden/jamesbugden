@@ -95,8 +95,8 @@ const DiagramBox = ({ title, children }: { title: string; children: React.ReactN
 const matrixQuadrants = {
   "low-low": { label: "Normal Mode", strategy: "Rare. Normal mode. Do great work. You have space to build without interference.", color: "border-muted-foreground/30" },
   "low-high": { label: "Best Case", strategy: "Best case. You shine. Boss is secure. Everyone wins. Keep doing exactly what you're doing.", color: "border-emerald-500" },
-  "high-low": { label: "Surrender", strategy: "Law 22. Surrender. Stay low. Build quietly. Your boss has a big ego and you're not visible yet — don't threaten them. Bide your time.", color: "border-amber-500" },
-  "high-high": { label: "DANGER", strategy: "DANGER. Law 1. Make them look good or you will pay. Your boss has a high ego and you're highly visible — the most dangerous quadrant. Credit your boss publicly. Never outshine.", color: "border-red-500" },
+  "high-low": { label: "Surrender", strategy: "Law 22. Surrender. Stay low. Build quietly. Your boss has a big ego and you're not visible yet, don't threaten them. Bide your time.", color: "border-amber-500" },
+  "high-high": { label: "DANGER", strategy: "DANGER. Law 1. Make them look good or you will pay. Your boss has a high ego and you're highly visible, the most dangerous quadrant. Credit your boss publicly. Never outshine.", color: "border-red-500" },
 } as const;
 
 const BossManagementMatrix = () => {
@@ -1000,9 +1000,9 @@ const FortyEightLawsGuide = () => {
 
             <DiagramBox title="The Three Laws of Career Security">
               <ol className="space-y-3 list-decimal list-inside">
-                <li><strong>Law 11: Keep People Dependent on You</strong> — Makes you essential.</li>
-                <li><strong>Law 13: Appeal to People's Self-Interest</strong> — Gets you what you want.</li>
-                <li><strong>Law 29: Plan All the Way to the End</strong> — Keeps your career pointed forward.</li>
+                <li><strong>Law 11: Keep People Dependent on You</strong>, Makes you essential.</li>
+                <li><strong>Law 13: Appeal to People's Self-Interest</strong>, Gets you what you want.</li>
+                <li><strong>Law 29: Plan All the Way to the End</strong>, Keeps your career pointed forward.</li>
               </ol>
             </DiagramBox>
 
@@ -1401,15 +1401,15 @@ const FortyEightLawsGuide = () => {
             <div className="rounded-lg bg-muted/30 border border-border p-3 mb-6 space-y-1.5">
               <div className="flex items-center gap-2 text-sm">
                 <span className="w-2.5 h-2.5 rounded-full bg-emerald-500 shrink-0" />
-                <span><strong className="text-foreground">USE</strong> <span className="text-muted-foreground">— Apply proactively as career strategy</span></span>
+                <span><strong className="text-foreground">USE</strong> <span className="text-muted-foreground">,  Apply proactively as career strategy</span></span>
               </div>
               <div className="flex items-center gap-2 text-sm">
                 <span className="w-2.5 h-2.5 rounded-full bg-amber-500 shrink-0" />
-                <span><strong className="text-foreground">DEFEND</strong> <span className="text-muted-foreground">— Recognize when others use this against you</span></span>
+                <span><strong className="text-foreground">DEFEND</strong> <span className="text-muted-foreground">,  Recognize when others use this against you</span></span>
               </div>
               <div className="flex items-center gap-2 text-sm">
                 <span className="w-2.5 h-2.5 rounded-full bg-red-500 shrink-0" />
-                <span><strong className="text-foreground">AVOID</strong> <span className="text-muted-foreground">— Too risky for most workplace situations</span></span>
+                <span><strong className="text-foreground">AVOID</strong> <span className="text-muted-foreground">,  Too risky for most workplace situations</span></span>
               </div>
             </div>
 

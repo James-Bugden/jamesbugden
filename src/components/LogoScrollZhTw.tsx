@@ -101,7 +101,7 @@ export default function LogoScrollZhTw() {
         錄取於這些公司的求職者都信任
       </p>
 
-      {/* Fade edges — tuned to paper-alt */}
+      {/* Fade edges, tuned to paper-alt */}
       <div className="absolute left-0 top-8 bottom-0 w-24 z-10 pointer-events-none" style={{ background: 'linear-gradient(to right, hsl(var(--paper-alt)), transparent)' }} />
       <div className="absolute right-0 top-8 bottom-0 w-24 z-10 pointer-events-none" style={{ background: 'linear-gradient(to left, hsl(var(--paper-alt)), transparent)' }} />
 

@@ -23,7 +23,7 @@ export function ImportModal({ open, onClose, type, onImported }: ImportModalProp
   const lang = useResumeBuilderLang();
   const { importCount, importLimit, importLimitReached, loading: usageLoading } = useBuilderAiUsage();
   const [loading, setLoading] = useState(false);
-  // Initial loading message — replaced by progress messages from
+  // Initial loading message, replaced by progress messages from
   // parseResumeWithFallback during the actual import flow.
   const [loadingMessage, setLoadingMessage] = useState(
     tl(lang, "Extracting text…", "正在擷取文字…")
@@ -95,7 +95,7 @@ export function ImportModal({ open, onClose, type, onImported }: ImportModalProp
         title: "Imported successfully",
         description: sectionCount > 0
           ? `${sourceLabel}: found ${sectionCount} section${sectionCount > 1 ? "s" : ""}. Review and adjust as needed.`
-          : "We imported what we could — you may need to adjust some sections manually.",
+          : "We imported what we could, you may need to adjust some sections manually.",
       });
 
       if (parsed.warnings.length > 0) {
@@ -135,7 +135,7 @@ export function ImportModal({ open, onClose, type, onImported }: ImportModalProp
         title: "Imported successfully",
         description: sectionCount > 0
           ? `${sourceLabel}: found ${sectionCount} section${sectionCount > 1 ? "s" : ""}. Review and adjust as needed.`
-          : "We imported what we could — you may need to adjust some sections manually.",
+          : "We imported what we could, you may need to adjust some sections manually.",
       });
 
       if (parsed.warnings.length > 0) {
@@ -200,8 +200,8 @@ export function ImportModal({ open, onClose, type, onImported }: ImportModalProp
           <DialogDescription className="text-[13px] text-muted-foreground mt-1">
             {tl(
               lang,
-              "Upload a file or paste text — we'll parse it into editable sections.",
-              "上傳檔案或貼上文字——我們會解析並轉成可編輯的區塊。"
+              "Upload a file or paste text, we'll parse it into editable sections.",
+              "上傳檔案或貼上文字, , 我們會解析並轉成可編輯的區塊。"
             )}
           </DialogDescription>
         </DialogHeader>

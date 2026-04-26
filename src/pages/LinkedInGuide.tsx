@@ -134,7 +134,7 @@ const LinkedInGuide = () => {
 
           <div className="bg-gold/10 border border-gold/30 rounded-lg p-5">
             <p className="text-foreground">
-              <strong className="text-gold">Why it matters:</strong> All-Star profiles are significantly more likely to appear in search results. Think of it as the entry ticket — you won't get found without it.
+              <strong className="text-gold">Why it matters:</strong> All-Star profiles are significantly more likely to appear in search results. Think of it as the entry ticket, you won't get found without it.
             </p>
           </div>
 
@@ -160,26 +160,26 @@ const LinkedInGuide = () => {
           </div>
 
           <p className="text-foreground mb-6">
-            Your headline and photo are often the only things someone sees before deciding whether to click on your profile. Most people leave the default — their job title. That's a missed opportunity.
+            Your headline and photo are often the only things someone sees before deciding whether to click on your profile. Most people leave the default, their job title. That's a missed opportunity.
           </p>
 
           <h3 className="font-heading text-xl text-foreground mb-4">Sandra's Top Headline Tips:</h3>
           <ul className="space-y-3 mb-6">
             <li className="flex items-start gap-3">
               <GoldCheckBadge />
-              <span className="text-foreground"><strong>Use keywords</strong> — the words in your headline help people find you in search</span>
+              <span className="text-foreground"><strong>Use keywords</strong>, the words in your headline help people find you in search</span>
             </li>
             <li className="flex items-start gap-3">
               <GoldCheckBadge />
-              <span className="text-foreground"><strong>Add a value statement</strong> — don't just say what you are, say what you do for people</span>
+              <span className="text-foreground"><strong>Add a value statement</strong>, don't just say what you are, say what you do for people</span>
             </li>
             <li className="flex items-start gap-3">
               <GoldCheckBadge />
-              <span className="text-foreground"><strong>Be specific</strong> — "Account Executive" is generic; add what makes you different</span>
+              <span className="text-foreground"><strong>Be specific</strong>, "Account Executive" is generic; add what makes you different</span>
             </li>
             <li className="flex items-start gap-3">
               <GoldCheckBadge />
-              <span className="text-foreground"><strong>Keep your corporate brand</strong> if it's recognizable — "Senior VP at GE" draws clicks</span>
+              <span className="text-foreground"><strong>Keep your corporate brand</strong> if it's recognizable, "Senior VP at GE" draws clicks</span>
             </li>
             <li className="flex items-start gap-3">
               <GoldCheckBadge />
@@ -252,34 +252,34 @@ const LinkedInGuide = () => {
           <h3 className="font-heading text-xl text-foreground mb-4">Sandra's 10 Tips for a Great About Section:</h3>
           <div className="space-y-4 mb-8">
             <div className="bg-background border border-border rounded-lg p-4">
-              <p className="text-foreground"><strong>1. Focus</strong> — Craft an excellent introduction. Write it in Word first for spelling and grammar.</p>
+              <p className="text-foreground"><strong>1. Focus</strong>, Craft an excellent introduction. Write it in Word first for spelling and grammar.</p>
             </div>
             <div className="bg-background border border-border rounded-lg p-4">
-              <p className="text-foreground"><strong>2. Set goals</strong> — What are you trying to achieve? New clients? A new job? Speaking invitations?</p>
+              <p className="text-foreground"><strong>2. Set goals</strong>, What are you trying to achieve? New clients? A new job? Speaking invitations?</p>
             </div>
             <div className="bg-background border border-border rounded-lg p-4">
-              <p className="text-foreground"><strong>3. Consider your readers</strong> — Think about ALL your audiences. What makes them want to contact you?</p>
+              <p className="text-foreground"><strong>3. Consider your readers</strong>, Think about ALL your audiences. What makes them want to contact you?</p>
             </div>
             <div className="bg-background border border-border rounded-lg p-4">
-              <p className="text-foreground"><strong>4. Use the space</strong> — LinkedIn says essays of at least 40 words make your profile more likely to be found in search. Most strong profiles include 2-3 paragraphs.</p>
+              <p className="text-foreground"><strong>4. Use the space</strong>, LinkedIn says essays of at least 40 words make your profile more likely to be found in search. Most strong profiles include 2-3 paragraphs.</p>
             </div>
             <div className="bg-background border border-border rounded-lg p-4">
-              <p className="text-foreground"><strong>5. Be real and genuine</strong> — Let the real "you" come through. Include personal interests.</p>
+              <p className="text-foreground"><strong>5. Be real and genuine</strong>, Let the real "you" come through. Include personal interests.</p>
             </div>
             <div className="bg-background border border-border rounded-lg p-4">
-              <p className="text-foreground"><strong>6. Write in first person</strong> — Creates warmth. 40% of recruiters look for personality in profiles.</p>
+              <p className="text-foreground"><strong>6. Write in first person</strong>, Creates warmth. 40% of recruiters look for personality in profiles.</p>
             </div>
             <div className="bg-background border border-border rounded-lg p-4">
-              <p className="text-foreground"><strong>7. Use strategic language</strong> — Include keywords naturally. Add a specialties list at the end.</p>
+              <p className="text-foreground"><strong>7. Use strategic language</strong>, Include keywords naturally. Add a specialties list at the end.</p>
             </div>
             <div className="bg-background border border-border rounded-lg p-4">
-              <p className="text-foreground"><strong>8. Make it attractive</strong> — Use spacing, capitalization, and symbols for visual appeal.</p>
+              <p className="text-foreground"><strong>8. Make it attractive</strong>, Use spacing, capitalization, and symbols for visual appeal.</p>
             </div>
             <div className="bg-background border border-border rounded-lg p-4">
-              <p className="text-foreground"><strong>9. Start with a hook</strong> — Draw readers in. Make them want to click "see more."</p>
+              <p className="text-foreground"><strong>9. Start with a hook</strong>, Draw readers in. Make them want to click "see more."</p>
             </div>
             <div className="bg-background border border-border rounded-lg p-4">
-              <p className="text-foreground"><strong>10. Close carefully</strong> — End with a specialties list and contact info for a "quick read" option.</p>
+              <p className="text-foreground"><strong>10. Close carefully</strong>, End with a specialties list and contact info for a "quick read" option.</p>
             </div>
           </div>
 
@@ -327,22 +327,22 @@ const LinkedInGuide = () => {
           <p className="text-muted-foreground mb-4">Sandra identifies six approaches to writing your About section. Pick the one that fits you:</p>
           <div className="space-y-4 mb-6">
             <div className="bg-background border border-border rounded-lg p-4">
-              <p className="text-foreground"><strong className="text-gold">The Historian</strong> — Chronological story of your career. If you use this approach, make sure to add personality. Don't just repeat your Experience section.</p>
+              <p className="text-foreground"><strong className="text-gold">The Historian</strong>, Chronological story of your career. If you use this approach, make sure to add personality. Don't just repeat your Experience section.</p>
             </div>
             <div className="bg-background border border-border rounded-lg p-4">
-              <p className="text-foreground"><strong className="text-gold">The Storyteller</strong> — Open with a great story that connects to your personal brand. Sandra's favorite approach: "I just love stories."</p>
+              <p className="text-foreground"><strong className="text-gold">The Storyteller</strong>, Open with a great story that connects to your personal brand. Sandra's favorite approach: "I just love stories."</p>
             </div>
             <div className="bg-background border border-border rounded-lg p-4">
-              <p className="text-foreground"><strong className="text-gold">The Weaver</strong> — Perfect if your career path isn't linear. Use the About section to connect the dots and explain why your varied experience makes sense together.</p>
+              <p className="text-foreground"><strong className="text-gold">The Weaver</strong>, Perfect if your career path isn't linear. Use the About section to connect the dots and explain why your varied experience makes sense together.</p>
             </div>
             <div className="bg-background border border-border rounded-lg p-4">
-              <p className="text-foreground"><strong className="text-gold">The Themer</strong> — Best for senior leaders or people with wide-ranging experience. Pick 3-4 themes that have carried through your career and organize around those.</p>
+              <p className="text-foreground"><strong className="text-gold">The Themer</strong>, Best for senior leaders or people with wide-ranging experience. Pick 3-4 themes that have carried through your career and organize around those.</p>
             </div>
             <div className="bg-background border border-border rounded-lg p-4">
-              <p className="text-foreground"><strong className="text-gold">The Personality</strong> — Let your character and working style take center stage. Show how you approach problems and collaborate.</p>
+              <p className="text-foreground"><strong className="text-gold">The Personality</strong>, Let your character and working style take center stage. Show how you approach problems and collaborate.</p>
             </div>
             <div className="bg-background border border-border rounded-lg p-4">
-              <p className="text-foreground"><strong className="text-gold">The Business Leader</strong> — Write your About as a "preselling document" for prospective clients. Still use first person and tell your story.</p>
+              <p className="text-foreground"><strong className="text-gold">The Business Leader</strong>, Write your About as a "preselling document" for prospective clients. Still use first person and tell your story.</p>
             </div>
           </div>
 
@@ -368,22 +368,22 @@ const LinkedInGuide = () => {
           </div>
 
           <p className="text-foreground mb-6">
-            Online reviews can make the difference in being found, hired, and trusted. People who have recommendations and endorsements on LinkedIn have worked at it — it doesn't happen by accident.
+            Online reviews can make the difference in being found, hired, and trusted. People who have recommendations and endorsements on LinkedIn have worked at it, it doesn't happen by accident.
           </p>
 
           <h3 className="font-heading text-xl text-foreground mb-4">Skills & Endorsements</h3>
           <ul className="space-y-3 mb-6">
             <li className="flex items-start gap-3">
               <GoldCheckBadge />
-              <span className="text-foreground"><strong>Clean up your skills</strong> — Remove anything that doesn't match your brand. Just because someone endorsed you for a skill doesn't mean it belongs on your profile.</span>
+              <span className="text-foreground"><strong>Clean up your skills</strong>, Remove anything that doesn't match your brand. Just because someone endorsed you for a skill doesn't mean it belongs on your profile.</span>
             </li>
             <li className="flex items-start gap-3">
               <GoldCheckBadge />
-              <span className="text-foreground"><strong>Pin your top 3</strong> — The first three skills shown on your profile should be your most strategic ones.</span>
+              <span className="text-foreground"><strong>Pin your top 3</strong>, The first three skills shown on your profile should be your most strategic ones.</span>
             </li>
             <li className="flex items-start gap-3">
               <GoldCheckBadge />
-              <span className="text-foreground"><strong>Review every few months</strong> — Your skills list should evolve as your career does.</span>
+              <span className="text-foreground"><strong>Review every few months</strong>, Your skills list should evolve as your career does.</span>
             </li>
           </ul>
 
@@ -398,37 +398,37 @@ const LinkedInGuide = () => {
             <li className="flex items-start gap-3">
               <span className="w-8 h-8 rounded-full bg-gold/20 flex items-center justify-center text-gold font-semibold flex-shrink-0">1</span>
               <div>
-                <p className="text-foreground"><strong>Make a list</strong> — Decide who can describe your work firsthand from working directly with you</p>
+                <p className="text-foreground"><strong>Make a list</strong>, Decide who can describe your work firsthand from working directly with you</p>
               </div>
             </li>
             <li className="flex items-start gap-3">
               <span className="w-8 h-8 rounded-full bg-gold/20 flex items-center justify-center text-gold font-semibold flex-shrink-0">2</span>
               <div>
-                <p className="text-foreground"><strong>Consider timing</strong> — The best time to ask is right after finishing a project, leaving a job, or receiving a big compliment</p>
+                <p className="text-foreground"><strong>Consider timing</strong>, The best time to ask is right after finishing a project, leaving a job, or receiving a big compliment</p>
               </div>
             </li>
             <li className="flex items-start gap-3">
               <span className="w-8 h-8 rounded-full bg-gold/20 flex items-center justify-center text-gold font-semibold flex-shrink-0">3</span>
               <div>
-                <p className="text-foreground"><strong>Ask personally</strong> — For close contacts, a note works. For others, warm them up first — call or meet for coffee. Make a personalized request to dramatically increase your success rate</p>
+                <p className="text-foreground"><strong>Ask personally</strong>, For close contacts, a note works. For others, warm them up first, call or meet for coffee. Make a personalized request to dramatically increase your success rate</p>
               </div>
             </li>
             <li className="flex items-start gap-3">
               <span className="w-8 h-8 rounded-full bg-gold/20 flex items-center justify-center text-gold font-semibold flex-shrink-0">4</span>
               <div>
-                <p className="text-foreground"><strong>Make it easy</strong> — Ask if they'd like talking points or if you should draft something for them to edit</p>
+                <p className="text-foreground"><strong>Make it easy</strong>, Ask if they'd like talking points or if you should draft something for them to edit</p>
               </div>
             </li>
             <li className="flex items-start gap-3">
               <span className="w-8 h-8 rounded-full bg-gold/20 flex items-center justify-center text-gold font-semibold flex-shrink-0">5</span>
               <div>
-                <p className="text-foreground"><strong>Follow up gently</strong> — People have good intentions but get busy. A gentle reminder is smart</p>
+                <p className="text-foreground"><strong>Follow up gently</strong>, People have good intentions but get busy. A gentle reminder is smart</p>
               </div>
             </li>
             <li className="flex items-start gap-3">
               <span className="w-8 h-8 rounded-full bg-gold/20 flex items-center justify-center text-gold font-semibold flex-shrink-0">6</span>
               <div>
-                <p className="text-foreground"><strong>Show gratitude</strong> — Send a thank-you note or LinkedIn message</p>
+                <p className="text-foreground"><strong>Show gratitude</strong>, Send a thank-you note or LinkedIn message</p>
               </div>
             </li>
           </ol>
@@ -493,13 +493,13 @@ const LinkedInGuide = () => {
           <h3 className="font-heading text-xl text-foreground mb-4">The Three C's of Content:</h3>
           <div className="space-y-4 mb-8">
             <div className="bg-background border border-border rounded-lg p-4">
-              <p className="text-foreground"><strong className="text-gold">Create</strong> — Write original posts, articles, or record native video. Posts of 800-1,200 characters tend to perform well.</p>
+              <p className="text-foreground"><strong className="text-gold">Create</strong>, Write original posts, articles, or record native video. Posts of 800-1,200 characters tend to perform well.</p>
             </div>
             <div className="bg-background border border-border rounded-lg p-4">
-              <p className="text-foreground"><strong className="text-gold">Curate</strong> — Find valuable content and share it with YOUR unique perspective. Add insightful commentary — don't just hit "repost."</p>
+              <p className="text-foreground"><strong className="text-gold">Curate</strong>, Find valuable content and share it with YOUR unique perspective. Add insightful commentary, don't just hit "repost."</p>
             </div>
             <div className="bg-background border border-border rounded-lg p-4">
-              <p className="text-foreground"><strong className="text-gold">Comment</strong> — Sandra's #1 secret. If she could do only ONE thing, it would be to comment daily with meaningful, insightful, or supportive notes.</p>
+              <p className="text-foreground"><strong className="text-gold">Comment</strong>, Sandra's #1 secret. If she could do only ONE thing, it would be to comment daily with meaningful, insightful, or supportive notes.</p>
             </div>
           </div>
 
@@ -507,7 +507,7 @@ const LinkedInGuide = () => {
           <ul className="space-y-3 mb-8">
             <li className="flex items-start gap-3">
               <GoldCheckBadge />
-              <span className="text-foreground">Write longer, insightful comments — not just "Great post!"</span>
+              <span className="text-foreground">Write longer, insightful comments, not just "Great post!"</span>
             </li>
             <li className="flex items-start gap-3">
               <GoldCheckBadge />
@@ -600,19 +600,19 @@ const LinkedInGuide = () => {
           <h3 className="font-heading text-xl text-foreground mb-4">Quick Visibility Wins:</h3>
           <div className="space-y-4 mb-8">
             <div className="bg-card border border-border rounded-lg p-4">
-              <p className="text-foreground"><strong className="text-gold">Custom URL</strong> — Change your LinkedIn URL to linkedin.com/in/yourname</p>
+              <p className="text-foreground"><strong className="text-gold">Custom URL</strong>, Change your LinkedIn URL to linkedin.com/in/yourname</p>
             </div>
             <div className="bg-card border border-border rounded-lg p-4">
-              <p className="text-foreground"><strong className="text-gold">Public profile</strong> — Make sure your profile is visible on Google</p>
+              <p className="text-foreground"><strong className="text-gold">Public profile</strong>, Make sure your profile is visible on Google</p>
             </div>
             <div className="bg-card border border-border rounded-lg p-4">
-              <p className="text-foreground"><strong className="text-gold">Location & industry</strong> — Fill these in correctly; they affect search results</p>
+              <p className="text-foreground"><strong className="text-gold">Location & industry</strong>, Fill these in correctly; they affect search results</p>
             </div>
             <div className="bg-card border border-border rounded-lg p-4">
-              <p className="text-foreground"><strong className="text-gold">Featured section</strong> — Showcase your best content, media mentions, case studies, or lead magnets at the top of your profile</p>
+              <p className="text-foreground"><strong className="text-gold">Featured section</strong>, Showcase your best content, media mentions, case studies, or lead magnets at the top of your profile</p>
             </div>
             <div className="bg-card border border-border rounded-lg p-4">
-              <p className="text-foreground"><strong className="text-gold">Rich media</strong> — Add videos, presentations, and documents to your Experience sections</p>
+              <p className="text-foreground"><strong className="text-gold">Rich media</strong>, Add videos, presentations, and documents to your Experience sections</p>
             </div>
           </div>
 
@@ -663,7 +663,7 @@ const LinkedInGuide = () => {
                 guideKey="linkedin_guide_wk1_en"
                 variant="dark"
                 items={[
-                  { label: "Check your All-Star status on LinkedIn — fill any gaps" },
+                  { label: "Check your All-Star status on LinkedIn, fill any gaps" },
                   { label: "Update photo and background banner" },
                   { label: "Rewrite headline (write 3-5 options, pick the best)" },
                   { label: "Choose your About section persona" },
@@ -679,7 +679,7 @@ const LinkedInGuide = () => {
                 items={[
                   { label: "Write About section using the Five H's format" },
                   { label: "Update top 3 Experience entries with accomplishments (not responsibilities)" },
-                  { label: "Clean up Skills — remove irrelevant ones, pin your top 3" },
+                  { label: "Clean up Skills, remove irrelevant ones, pin your top 3" },
                   { label: "Add Featured section" },
                 ]}
               />
@@ -705,10 +705,10 @@ const LinkedInGuide = () => {
                 guideKey="linkedin_guide_wk4_en"
                 variant="dark"
                 items={[
-                  { label: "Apply the 80/20 rule — comment on 5+ posts daily" },
+                  { label: "Apply the 80/20 rule, comment on 5+ posts daily" },
                   { label: "Share 2-3 posts this week (create or curate with your perspective)" },
                   { label: "Use the relationship-building comment strategy" },
-                  { label: "Review your profile analytics — what's working?" },
+                  { label: "Review your profile analytics, what's working?" },
                 ]}
               />
             </div>
@@ -726,27 +726,27 @@ const LinkedInGuide = () => {
           <div className="grid md:grid-cols-2 gap-4">
             <div className="bg-card border border-border rounded-lg p-5">
               <p className="text-2xl mb-2">🐟</p>
-              <p className="text-foreground"><strong className="text-gold">Be the Orange Fish</strong> — Most people on LinkedIn look the same. Your unique personal brand is what makes people want to connect, hire, or buy from you. Don't blend in with the blue fish.</p>
+              <p className="text-foreground"><strong className="text-gold">Be the Orange Fish</strong>, Most people on LinkedIn look the same. Your unique personal brand is what makes people want to connect, hire, or buy from you. Don't blend in with the blue fish.</p>
             </div>
             <div className="bg-card border border-border rounded-lg p-5">
               <p className="text-2xl mb-2">🎭</p>
-              <p className="text-foreground"><strong className="text-gold">Demonstrate, Don't Tell</strong> — Don't say you have "demonstrated leadership." Actually demonstrate it through your stories, accomplishments, and content. Show, don't claim.</p>
+              <p className="text-foreground"><strong className="text-gold">Demonstrate, Don't Tell</strong>, Don't say you have "demonstrated leadership." Actually demonstrate it through your stories, accomplishments, and content. Show, don't claim.</p>
             </div>
             <div className="bg-card border border-border rounded-lg p-5">
               <p className="text-2xl mb-2">✍</p>
-              <p className="text-foreground"><strong className="text-gold">First Person Always</strong> — Write your About section in first person. It creates warmth and connection. Third person feels cold and impersonal.</p>
+              <p className="text-foreground"><strong className="text-gold">First Person Always</strong>, Write your About section in first person. It creates warmth and connection. Third person feels cold and impersonal.</p>
             </div>
             <div className="bg-card border border-border rounded-lg p-5">
               <p className="text-2xl mb-2">💬</p>
-              <p className="text-foreground"><strong className="text-gold">Commenting Is King</strong> — If you can only do one thing on LinkedIn, comment daily with meaningful insights. It builds more relationships than posting alone.</p>
+              <p className="text-foreground"><strong className="text-gold">Commenting Is King</strong>, If you can only do one thing on LinkedIn, comment daily with meaningful insights. It builds more relationships than posting alone.</p>
             </div>
             <div className="bg-card border border-border rounded-lg p-5">
               <p className="text-2xl mb-2">🤝</p>
-              <p className="text-foreground"><strong className="text-gold">80/20 Everything</strong> — 80% helping others, 20% about you. This applies to content, engagement, and networking.</p>
+              <p className="text-foreground"><strong className="text-gold">80/20 Everything</strong>, 80% helping others, 20% about you. This applies to content, engagement, and networking.</p>
             </div>
             <div className="bg-card border border-border rounded-lg p-5">
               <p className="text-2xl mb-2">📊</p>
-              <p className="text-foreground"><strong className="text-gold">Keep at least 80% of your content informational</strong> — and no more than 20% promotional. People will tune you out if every post is a sales pitch.</p>
+              <p className="text-foreground"><strong className="text-gold">Keep at least 80% of your content informational</strong>, and no more than 20% promotional. People will tune you out if every post is a sales pitch.</p>
             </div>
           </div>
         </div>

@@ -32,7 +32,7 @@ export default function Terms() {
 
           <section>
             <h2 className="font-heading text-xl font-semibold text-foreground">4. Intellectual Property</h2>
-            <p>All content on the Site — including guides, tools, designs, and text — is owned by James Bugden and protected by copyright. You may use the tools for personal career development but may not reproduce, distribute, or commercially exploit the content without permission.</p>
+            <p>All content on the Site, including guides, tools, designs, and text, is owned by James Bugden and protected by copyright. You may use the tools for personal career development but may not reproduce, distribute, or commercially exploit the content without permission.</p>
           </section>
 
           <section>

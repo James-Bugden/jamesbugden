@@ -183,7 +183,7 @@ export default function AdminDashboard() {
     }, { replace: true });
   }, [setSearchParams]);
 
-  // Filter values — read straight from the URL with sensible defaults.
+  // Filter values, read straight from the URL with sensible defaults.
   const salarySearch = searchParams.get("q") || "";
   const verdictFilter = searchParams.get("verdict") || "all";
   const sortKey = (searchParams.get("sort") as SalarySortKey) || "created_at";
@@ -236,7 +236,7 @@ export default function AdminDashboard() {
   const [reviewUrl, setReviewUrl] = useState("");
   const [submitting, setSubmitting] = useState(false);
 
-  // Salary state (filter values come from the URL — see top of component)
+  // Salary state (filter values come from the URL, see top of component)
   const [checks, setChecks] = useState<SalaryCheck[]>([]);
   const [checksLoading, setChecksLoading] = useState(true);
 
@@ -424,7 +424,7 @@ export default function AdminDashboard() {
     // even as event volume grows.
     const since = new Date(Date.now() - 90 * 24 * 60 * 60 * 1000).toISOString();
     const PAGE = 1000;
-    const MAX_ROWS = 20000; // hard ceiling — refuse to load more than this
+    const MAX_ROWS = 20000; // hard ceiling, refuse to load more than this
     const all: any[] = [];
     for (let from = 0; from < MAX_ROWS; from += PAGE) {
       const { data, error } = await supabase
@@ -853,7 +853,7 @@ export default function AdminDashboard() {
                       {resumeLeads.slice(0, 5).map(r => (
                         <div key={r.id} className="flex items-center justify-between text-sm">
                           <span className="text-foreground truncate max-w-[200px]">{r.email}</span>
-                          <span className="text-xs text-muted-foreground">{r.overall_score !== null ? `Score: ${r.overall_score}` : "—"}</span>
+                          <span className="text-xs text-muted-foreground">{r.overall_score !== null ? `Score: ${r.overall_score}` : ", "}</span>
                         </div>
                       ))}
                       {resumeLeads.length === 0 && <p className="text-sm text-muted-foreground">No resume leads yet</p>}
@@ -991,14 +991,14 @@ export default function AdminDashboard() {
                           <TableRow key={r.id}>
                             <TableCell className="text-xs text-muted-foreground whitespace-nowrap">{format(new Date(r.created_at), "MMM d, HH:mm")}</TableCell>
                             <TableCell className="text-sm max-w-[160px] truncate" title={r.email}>{r.email}</TableCell>
-                            <TableCell className="text-sm max-w-[120px] truncate" title={r.name || ""}>{r.name || "—"}</TableCell>
-                            <TableCell className="text-sm max-w-[120px] truncate" title={r.job_title || ""}>{r.job_title || "—"}</TableCell>
-                            <TableCell className="text-center text-sm font-semibold">{r.overall_score ?? "—"}</TableCell>
-                            <TableCell className="text-xs text-muted-foreground">{r.seniority_level || "—"}</TableCell>
-                            <TableCell className="text-xs text-muted-foreground">{r.years_experience || "—"}</TableCell>
-                            <TableCell className="text-xs text-muted-foreground max-w-[100px] truncate" title={r.industry || ""}>{r.industry || "—"}</TableCell>
-                            <TableCell className="text-xs text-muted-foreground">{r.language || "—"}</TableCell>
-                            <TableCell className="text-xs text-muted-foreground max-w-[180px] truncate" title={r.resume_text || ""}>{r.resume_text ? r.resume_text.slice(0, 60) + "…" : "—"}</TableCell>
+                            <TableCell className="text-sm max-w-[120px] truncate" title={r.name || ""}>{r.name || ", "}</TableCell>
+                            <TableCell className="text-sm max-w-[120px] truncate" title={r.job_title || ""}>{r.job_title || ", "}</TableCell>
+                            <TableCell className="text-center text-sm font-semibold">{r.overall_score ?? ", "}</TableCell>
+                            <TableCell className="text-xs text-muted-foreground">{r.seniority_level || ", "}</TableCell>
+                            <TableCell className="text-xs text-muted-foreground">{r.years_experience || ", "}</TableCell>
+                            <TableCell className="text-xs text-muted-foreground max-w-[100px] truncate" title={r.industry || ""}>{r.industry || ", "}</TableCell>
+                            <TableCell className="text-xs text-muted-foreground">{r.language || ", "}</TableCell>
+                            <TableCell className="text-xs text-muted-foreground max-w-[180px] truncate" title={r.resume_text || ""}>{r.resume_text ? r.resume_text.slice(0, 60) + "…" : ", "}</TableCell>
                           </TableRow>
                         ))}
                       </TableBody>
@@ -1032,7 +1032,7 @@ export default function AdminDashboard() {
                           <TableRow key={e.id}>
                             <TableCell className="text-xs text-muted-foreground whitespace-nowrap">{format(new Date(e.created_at), "MMM d, HH:mm")}</TableCell>
                             <TableCell className="text-sm">{e.email}</TableCell>
-                            <TableCell className="text-xs text-muted-foreground">{e.source || "—"}</TableCell>
+                            <TableCell className="text-xs text-muted-foreground">{e.source || ", "}</TableCell>
                           </TableRow>
                         ))}
                       </TableBody>
@@ -1188,11 +1188,11 @@ export default function AdminDashboard() {
                             <TableCell className="text-xs text-muted-foreground whitespace-nowrap">{format(new Date(c.created_at), "MMM d, HH:mm")}</TableCell>
                             <TableCell className="font-medium text-sm max-w-48 truncate">{c.job_title}</TableCell>
                             <TableCell className="text-sm">{c.role}</TableCell>
-                            <TableCell className="text-xs text-muted-foreground">{c.sector || "—"}</TableCell>
-                            <TableCell className="text-xs text-muted-foreground">{c.experience || "—"}</TableCell>
+                            <TableCell className="text-xs text-muted-foreground">{c.sector || ", "}</TableCell>
+                            <TableCell className="text-xs text-muted-foreground">{c.experience || ", "}</TableCell>
                             <TableCell className="text-right text-sm font-semibold tabular-nums">{formatNTD(c.salary)}</TableCell>
-                            <TableCell className="text-right text-sm tabular-nums text-muted-foreground">{c.median ? formatNTD(c.median) : "—"}</TableCell>
-                            <TableCell className={`text-xs font-medium ${verdictColor(c.verdict)}`}>{c.verdict || "—"}</TableCell>
+                            <TableCell className="text-right text-sm tabular-nums text-muted-foreground">{c.median ? formatNTD(c.median) : ", "}</TableCell>
+                            <TableCell className={`text-xs font-medium ${verdictColor(c.verdict)}`}>{c.verdict || ", "}</TableCell>
                             <TableCell className="text-xs text-muted-foreground">{c.lang || "en"}</TableCell>
                           </TableRow>
                         ))}
@@ -1231,7 +1231,7 @@ export default function AdminDashboard() {
                   });
 
                   const totalNps = npsScores.length;
-                  const avgNps = totalNps ? (npsScores.reduce((a, b) => a + b, 0) / totalNps).toFixed(1) : "—";
+                  const avgNps = totalNps ? (npsScores.reduce((a, b) => a + b, 0) / totalNps).toFixed(1) : ", ";
                   const npsScore = totalNps ? Math.round(((promoters - detractors) / totalNps) * 100) : 0;
 
                   const scoreDist = Array.from({ length: 11 }, (_, i) => ({
@@ -1248,7 +1248,7 @@ export default function AdminDashboard() {
                     const sessions = items.map(f => (f.metadata as any)?.session_count).filter(Boolean);
                     const days = items.map(f => (f.metadata as any)?.days_since_first_visit).filter(Boolean);
                     const pages = items.map(f => ((f.metadata as any)?.pages_this_session as any[])?.length).filter(Boolean);
-                    const avg = (arr: number[]) => arr.length ? (arr.reduce((a, b) => a + b, 0) / arr.length).toFixed(1) : "—";
+                    const avg = (arr: number[]) => arr.length ? (arr.reduce((a, b) => a + b, 0) / arr.length).toFixed(1) : ", ";
                     return { count: items.length, avgSessions: avg(sessions), avgDays: avg(days), avgPages: avg(pages) };
                   };
 
@@ -1262,7 +1262,7 @@ export default function AdminDashboard() {
                         <div className="col-span-2 rounded-xl border border-border bg-card p-5 text-center">
                           <p className="text-xs text-muted-foreground mb-1">NPS Score</p>
                           <p className={`text-4xl font-bold ${npsScore >= 50 ? "text-emerald-600" : npsScore >= 0 ? "text-amber-600" : "text-destructive"}`}>
-                            {totalNps ? npsScore : "—"}
+                            {totalNps ? npsScore : ", "}
                           </p>
                           <p className="text-xs text-muted-foreground mt-1">{totalNps} responses</p>
                         </div>
@@ -1430,10 +1430,10 @@ export default function AdminDashboard() {
                                       {f.rating !== null ? (
                                         f.type === "nps" ? <span className="font-medium">{f.rating}/10</span> :
                                         f.rating > 0 ? "👍" : "👎"
-                                      ) : "—"}
+                                      ) : ", "}
                                     </TableCell>
                                     <TableCell className="text-sm max-w-xs truncate">{f.message}</TableCell>
-                                    <TableCell className="text-xs text-muted-foreground font-mono">{f.context || "—"}</TableCell>
+                                    <TableCell className="text-xs text-muted-foreground font-mono">{f.context || ", "}</TableCell>
                                     <TableCell className="text-xs text-muted-foreground font-mono truncate max-w-[160px]">{f.page}</TableCell>
                                     <TableCell>
                                       <AlertDialog>

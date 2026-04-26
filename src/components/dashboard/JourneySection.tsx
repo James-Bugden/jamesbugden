@@ -60,18 +60,18 @@ const CONTENT_TYPE_LABELS = {
   calculator: { en: "Calculator", zh: "計算器", Icon: Calculator },
 };
 
-/* ── Badge classes — Hiresign hairline chip system ── */
+/* ── Badge classes, Hiresign hairline chip system ── */
 const BADGE_CLS = {
-  // GUIDE / TOOL / CALCULATOR — content type (subtle hairline chip)
+  // GUIDE / TOOL / CALCULATOR, content type (subtle hairline chip)
   contentType:
     "bg-green-soft text-executive-green border border-executive-green/20",
-  // NEW — gold callout (most prominent)
+  // NEW, gold callout (most prominent)
   new:
     "bg-gold text-executive-green border border-gold-dark/30 shadow-sm",
   // Beta tags
   beta:
     "bg-green-soft text-executive-green border border-executive-green/20",
-  // START HERE — gold callout
+  // START HERE, gold callout
   startHere:
     "bg-gold-soft text-executive-green border border-gold/40",
   // counter pill
@@ -231,7 +231,7 @@ const CompactRow = memo(function CompactRow({
         navigate(path);
       }}
     >
-      {/* Checkbox — 44x44 touch target */}
+      {/* Checkbox, 44x44 touch target */}
       <button
         onClick={(e) => {
           e.stopPropagation();

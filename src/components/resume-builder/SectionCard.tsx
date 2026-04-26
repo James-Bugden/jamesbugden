@@ -70,9 +70,9 @@ function getEntrySummary(type: string, fields: Record<string, string>, t: (key: 
     case "references":
       return fields.name || t("newEntry");
     case "organisations":
-      return [fields.name, fields.role].filter(Boolean).join(" — ") || t("newEntry");
+      return [fields.name, fields.role].filter(Boolean).join(", ") || t("newEntry");
     case "languages":
-      return [fields.language, fields.proficiency].filter(Boolean).join(" — ") || t("newEntry");
+      return [fields.language, fields.proficiency].filter(Boolean).join(", ") || t("newEntry");
     default:
       return fields.name || fields.title || fields.language || t("newEntry");
   }
@@ -206,7 +206,7 @@ function EntryList({
               className="flex items-center gap-1 px-1 py-1.5 cursor-pointer group"
               onClick={() => toggleEntryCollapse(entry.id)}
             >
-              {/* Drag handle — enlarged tap target */}
+              {/* Drag handle, enlarged tap target */}
               <div className="p-2.5 -m-1 cursor-grab flex-shrink-0 opacity-60 sm:opacity-0 group-hover:opacity-100 transition-opacity touch-none">
                 <GripVertical className="w-4 h-4 text-gray-400" />
               </div>
@@ -296,7 +296,7 @@ export function SectionCard({ section, onUpdate, onRemove }: {
   ];
 
   const SUBTITLE_STYLE_OPTIONS: { value: SubtitleStyle; label: string }[] = [
-    { value: "dash", label: "Dash —" },
+    { value: "dash", label: "Dash , " },
     { value: "colon", label: "Colon :" },
     { value: "bracket", label: "Bracket ()" },
   ];

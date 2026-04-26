@@ -1067,7 +1067,7 @@ const RecruiterScreenGuideZhTw = () => {
                     <p className="text-cream text-sm">等待。繼續投其他職缺。</p>
                   </div>
                   <div className="bg-cream/5 border border-cream/10 rounded-lg p-3">
-                    <p className="text-cream text-sm">收到通知（或沉默）— 2-7 天</p>
+                    <p className="text-cream text-sm">收到通知（或沉默）,  2-7 天</p>
                   </div>
                 </div>
               </div>

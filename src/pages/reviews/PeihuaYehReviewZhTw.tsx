@@ -66,7 +66,7 @@ const PeihuaYehReviewZhTw = () => {
               </div>
             </div>
             <div className="mt-6 space-y-4 text-foreground">
-              <p>您的履歷展現了紮實的技術基礎，包括在 HP 工作 4 年以及近期取得的產品負責人認證（PSM I、PSPO I）。然而，薄弱的呈現方式——格式混亂、職責導向的語言、定位不清——削弱了您的資歷。</p>
+              <p>您的履歷展現了紮實的技術基礎，包括在 HP 工作 4 年以及近期取得的產品負責人認證（PSM I、PSPO I）。然而，薄弱的呈現方式, , 格式混亂、職責導向的語言、定位不清, , 削弱了您的資歷。</p>
               
               <p><strong>第一，不專業的格式和篇幅問題。</strong>您僅有 4 年主要工作經驗卻使用兩頁，版面凌亂。字體難以閱讀。姓名在頁首重複出現兩次。聯絡資訊大小寫不一致（EMAIL 全部大寫）。</p>
               
@@ -393,7 +393,7 @@ const PeihuaYehReviewZhTw = () => {
             <div className="space-y-4">
               <div className="bg-destructive/5 rounded-lg p-4 border-l-4 border-destructive">
                 <p className="text-sm font-semibold text-destructive mb-2">目前版本（聲稱無證明）：</p>
-                <p className="text-foreground text-sm italic">Certified Scrum professional (PSM I & PSPO I) with 4 years of experience in software quality assurance, WWAN/IoT connectivity testing, and agile product delivery. I specialize in translating technical insights into actionable requirements, bridging engineering and business teams to build user-focused solutions. With a unique background in both IT validation and customer-facing sales, I bring a balanced perspective to product thinking—ensuring features are not only functional, but truly valuable to users.</p>
+                <p className="text-foreground text-sm italic">Certified Scrum professional (PSM I & PSPO I) with 4 years of experience in software quality assurance, WWAN/IoT connectivity testing, and agile product delivery. I specialize in translating technical insights into actionable requirements, bridging engineering and business teams to build user-focused solutions. With a unique background in both IT validation and customer-facing sales, I bring a balanced perspective to product thinking, ensuring features are not only functional, but truly valuable to users.</p>
                 <p className="text-foreground text-sm italic mt-2">Currently seeking Product Owner, Business Analyst, or Associate Product Manager opportunities in tech-driven teams.</p>
                 <div className="mt-3 space-y-1 text-sm text-muted-foreground">
                   <p>「Currently seeking...」浪費寶貴的摘要空間。您已經在申請產品負責人職位。招募人員知道您為什麼申請。</p>

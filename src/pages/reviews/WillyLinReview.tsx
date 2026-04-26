@@ -69,11 +69,11 @@ const WillyLinReview = () => {
             <div className="mt-6 space-y-4 text-foreground">
               <p>Your resume has strong education and technical skills sections, but weak presentation and showcase of those skills in a format that works for recruiters and hiring managers.</p>
               
-              <p><strong>First, positioning confusion from trying to be everything to everyone</strong>—your resume mixes AI engineering with data engineering, data analytics, and general ML work, creating uncertainty about what role you're actually targeting.</p>
+              <p><strong>First, positioning confusion from trying to be everything to everyone</strong>, your resume mixes AI engineering with data engineering, data analytics, and general ML work, creating uncertainty about what role you're actually targeting.</p>
               
-              <p><strong>Second, poor judgment signaled by length</strong>—you're using two pages with 13 bullet points for less than one year of primary experience (two pages should be reserved for professionals with 8+ years of substantial achievements).</p>
+              <p><strong>Second, poor judgment signaled by length</strong>, you're using two pages with 13 bullet points for less than one year of primary experience (two pages should be reserved for professionals with 8+ years of substantial achievements).</p>
               
-              <p><strong>Third, duty-based language throughout instead of results-focused value proposition</strong>—you're telling employers what you were responsible for rather than what outcomes you delivered, with zero bullets following the XYZ framework of "Accomplished [X] as measured by [Y] by doing [Z]."</p>
+              <p><strong>Third, duty-based language throughout instead of results-focused value proposition</strong>, you're telling employers what you were responsible for rather than what outcomes you delivered, with zero bullets following the XYZ framework of "Accomplished [X] as measured by [Y] by doing [Z]."</p>
               
               <p>However, you have underlying qualifications for an early-career AI professional. Your hands-on Qwen3-8B training experience, GRPO optimization work, multilingual capabilities, production deployment knowledge, and MSc from University of Bath.</p>
               
@@ -90,11 +90,11 @@ const WillyLinReview = () => {
               <ul className="space-y-3">
                 <li className="flex items-start gap-3">
                   <CheckCircle className="w-5 h-5 text-gold mt-0.5 flex-shrink-0" />
-                  <span className="text-foreground"><strong>Strong Educational Foundation:</strong> MSc Data Science from University of Bath (UK) plus BSc Applied Mathematics demonstrates solid quantitative background—education section is well-structured and appropriate</span>
+                  <span className="text-foreground"><strong>Strong Educational Foundation:</strong> MSc Data Science from University of Bath (UK) plus BSc Applied Mathematics demonstrates solid quantitative background, education section is well-structured and appropriate</span>
                 </li>
                 <li className="flex items-start gap-3">
                   <CheckCircle className="w-5 h-5 text-gold mt-0.5 flex-shrink-0" />
-                  <span className="text-foreground"><strong>Relevant Technical Skills Section:</strong> Python, PyTorch, TensorFlow, LLM training frameworks (Axolotl), and infrastructure tools (HPC, RunPod, Vast.ai) are clearly listed—skills section is comprehensive and well-organized</span>
+                  <span className="text-foreground"><strong>Relevant Technical Skills Section:</strong> Python, PyTorch, TensorFlow, LLM training frameworks (Axolotl), and infrastructure tools (HPC, RunPod, Vast.ai) are clearly listed, skills section is comprehensive and well-organized</span>
                 </li>
                 <li className="flex items-start gap-3">
                   <CheckCircle className="w-5 h-5 text-gold mt-0.5 flex-shrink-0" />
@@ -114,23 +114,23 @@ const WillyLinReview = () => {
               <ul className="space-y-3">
                 <li className="flex items-start gap-3">
                   <XCircle className="w-5 h-5 text-destructive mt-0.5 flex-shrink-0" />
-                  <span className="text-foreground"><strong>Unprofessional Email Address:</strong> "willy1234willy123413@gmail.com" looks unprofessional—use firstname.lastname@gmail.com format (e.g., willy.lin@gmail.com)</span>
+                  <span className="text-foreground"><strong>Unprofessional Email Address:</strong> "willy1234willy123413@gmail.com" looks unprofessional, use firstname.lastname@gmail.com format (e.g., willy.lin@gmail.com)</span>
                 </li>
                 <li className="flex items-start gap-3">
                   <XCircle className="w-5 h-5 text-destructive mt-0.5 flex-shrink-0" />
-                  <span className="text-foreground"><strong>Missing Critical Contact Information:</strong> No phone number or LinkedIn URL in header—recruiters need multiple ways to reach you and will check LinkedIn before calling</span>
+                  <span className="text-foreground"><strong>Missing Critical Contact Information:</strong> No phone number or LinkedIn URL in header, recruiters need multiple ways to reach you and will check LinkedIn before calling</span>
                 </li>
                 <li className="flex items-start gap-3">
                   <XCircle className="w-5 h-5 text-destructive mt-0.5 flex-shrink-0" />
-                  <span className="text-foreground"><strong>Basic Format with No Visual Hierarchy:</strong> Current layout is flat and doesn't guide the reader's attention to your strongest qualifications—needs structure to help recruiters scan efficiently</span>
+                  <span className="text-foreground"><strong>Basic Format with No Visual Hierarchy:</strong> Current layout is flat and doesn't guide the reader's attention to your strongest qualifications, needs structure to help recruiters scan efficiently</span>
                 </li>
                 <li className="flex items-start gap-3">
                   <XCircle className="w-5 h-5 text-destructive mt-0.5 flex-shrink-0" />
-                  <span className="text-foreground"><strong>Summary is Duty-Oriented, Not Result-Oriented:</strong> You're telling employers what you did instead of the measurable results you achieved—no metrics, no outcomes, no proof of impact</span>
+                  <span className="text-foreground"><strong>Summary is Duty-Oriented, Not Result-Oriented:</strong> You're telling employers what you did instead of the measurable results you achieved, no metrics, no outcomes, no proof of impact</span>
                 </li>
                 <li className="flex items-start gap-3">
                   <XCircle className="w-5 h-5 text-destructive mt-0.5 flex-shrink-0" />
-                  <span className="text-foreground"><strong>Confusing Title:</strong> "AI Engineer – Large Language Models & Data Pipelines": Why combine both? This creates positioning confusion—pick ONE primary identity per application</span>
+                  <span className="text-foreground"><strong>Confusing Title:</strong> "AI Engineer – Large Language Models & Data Pipelines": Why combine both? This creates positioning confusion, pick ONE primary identity per application</span>
                 </li>
                 <li className="flex items-start gap-3">
                   <XCircle className="w-5 h-5 text-destructive mt-0.5 flex-shrink-0" />
@@ -138,7 +138,7 @@ const WillyLinReview = () => {
                 </li>
                 <li className="flex items-start gap-3">
                   <XCircle className="w-5 h-5 text-destructive mt-0.5 flex-shrink-0" />
-                  <span className="text-foreground"><strong>Duty-Based Language Throughout:</strong> Bullets describe responsibilities ("Led and executed," "Designed and delivered") instead of outcomes achieved—needs complete rewrite using XYZ framework</span>
+                  <span className="text-foreground"><strong>Duty-Based Language Throughout:</strong> Bullets describe responsibilities ("Led and executed," "Designed and delivered") instead of outcomes achieved, needs complete rewrite using XYZ framework</span>
                 </li>
                 <li className="flex items-start gap-3">
                   <XCircle className="w-5 h-5 text-destructive mt-0.5 flex-shrink-0" />
@@ -182,7 +182,7 @@ const WillyLinReview = () => {
                 <tr className="border-b border-border">
                   <td className="py-2 text-foreground font-semibold">Resume Length</td>
                   <td className="py-2 text-muted-foreground">2 pages for &lt;1 year primary experience signals poor judgment</td>
-                  <td className="py-2 text-foreground">1 page maximum—forces prioritization of highest-impact content only</td>
+                  <td className="py-2 text-foreground">1 page maximum, forces prioritization of highest-impact content only</td>
                   <td className="py-2 text-center"><span className="text-destructive font-semibold">HIGH</span></td>
                 </tr>
                 <tr className="border-b border-border">
@@ -239,7 +239,7 @@ const WillyLinReview = () => {
                 <p className="text-sm font-semibold text-destructive mb-2">Current Version (Length Signals Poor Judgment):</p>
                 <div className="mt-3 space-y-2 text-sm text-foreground">
                   <p>Two pages for &lt;1 year experience is a red flag: Recruiters expect 1 page for 0-8 years experience; two pages signals you can't prioritize or edit</p>
-                  <p>13 bullets dilutes your strongest achievements: Every additional bullet reduces the impact of your best work—recruiters will skim or skip entirely</p>
+                  <p>13 bullets dilutes your strongest achievements: Every additional bullet reduces the impact of your best work, recruiters will skim or skip entirely</p>
                   <p>Many bullets are redundant: Data pipeline bullets repeat similar information; infrastructure bullets overlap; multi-modal integration is mentioned twice</p>
                 </div>
               </div>
@@ -270,7 +270,7 @@ const WillyLinReview = () => {
               <ul className="text-sm text-foreground space-y-1">
                 <li>One page forces prioritization of only your highest-impact, most relevant work</li>
                 <li>4-5 bullets create focus on achievements that directly prove you can succeed in target roles</li>
-                <li>Each bullet follows XYZ framework: Accomplished [X] as measured by [Y], by doing [Z]—shows outcomes, not duties</li>
+                <li>Each bullet follows XYZ framework: Accomplished [X] as measured by [Y], by doing [Z], shows outcomes, not duties</li>
                 <li>Unified Experience section eliminates artificial fragmentation between "work" and "internship"</li>
                 <li>Quantified metrics (tokens processed, improvement percentages, latency reductions) replace vague descriptions</li>
                 <li>Strategic keyword placement: GRPO, RAG, embedding, multi-turn coherence, hallucination reduction all appear naturally</li>
@@ -290,12 +290,12 @@ const WillyLinReview = () => {
               <div className="bg-destructive/5 rounded-lg p-4 border-l-4 border-destructive">
                 <p className="text-sm font-semibold text-destructive mb-2">Current Version (Tells What You Did, Not What You Achieved):</p>
                 <div className="mt-3 space-y-2 text-sm text-foreground">
-                  <p>First line creates identity confusion: "AI Engineer with a Master's degree in Data Science"—is your degree your job title? This makes it unclear what role you're actually targeting</p>
-                  <p>Zero quantified results: No metrics, no outcomes, no proof of impact—just a list of areas you "specialized in" and tasks you have "experience with"</p>
-                  <p>Dense paragraph is unreadable at a glance: One 100+ word block of text defeats the purpose of a summary—recruiters won't read this</p>
-                  <p>Passive language throughout: "specializing in," "hands-on experience," "worked on," "strong focus"—all duty-oriented, none result-oriented</p>
+                  <p>First line creates identity confusion: "AI Engineer with a Master's degree in Data Science", is your degree your job title? This makes it unclear what role you're actually targeting</p>
+                  <p>Zero quantified results: No metrics, no outcomes, no proof of impact, just a list of areas you "specialized in" and tasks you have "experience with"</p>
+                  <p>Dense paragraph is unreadable at a glance: One 100+ word block of text defeats the purpose of a summary, recruiters won't read this</p>
+                  <p>Passive language throughout: "specializing in," "hands-on experience," "worked on," "strong focus", all duty-oriented, none result-oriented</p>
                   <p>No differentiation: Nothing here proves you're better than the 50 other candidates who also have "LLM training experience"</p>
-                  <p>Subtitle adds more confusion: "LARGE LANGUAGE MODELS & DATA PIPELINES"—are you an AI Engineer or a Data Engineer?</p>
+                  <p>Subtitle adds more confusion: "LARGE LANGUAGE MODELS & DATA PIPELINES", are you an AI Engineer or a Data Engineer?</p>
                 </div>
               </div>
               
@@ -313,14 +313,14 @@ const WillyLinReview = () => {
             <div className="bg-muted/30 rounded-lg p-4">
               <p className="text-sm font-semibold text-foreground mb-2">Why This Works:</p>
               <ul className="text-sm text-foreground space-y-1">
-                <li>Clear role identity upfront: "AI Engineer" or "NLP Engineer" (not both at once)—removes all positioning confusion</li>
+                <li>Clear role identity upfront: "AI Engineer" or "NLP Engineer" (not both at once), removes all positioning confusion</li>
                 <li>Quantified experience first: "9 months specialized experience training production LLMs" sets realistic expectations while emphasizing depth</li>
-                <li>Three specific, measurable achievements: Token volumes, performance improvements, efficiency gains—proves you deliver results</li>
-                <li>Strategic keyword loading: Qwen3-8B, GRPO, multilingual, PyTorch, Transformers, HPC—hits major ATS requirements</li>
+                <li>Three specific, measurable achievements: Token volumes, performance improvements, efficiency gains, proves you deliver results</li>
+                <li>Strategic keyword loading: Qwen3-8B, GRPO, multilingual, PyTorch, Transformers, HPC, hits major ATS requirements</li>
                 <li>Education positioned as credential: MSc provides credibility without creating identity confusion</li>
-                <li>Readable structure: Three sentences with clear hierarchy—recruiters can scan this in 6 seconds</li>
+                <li>Readable structure: Three sentences with clear hierarchy, recruiters can scan this in 6 seconds</li>
               </ul>
-              <p className="mt-4 text-sm font-semibold text-gold">Impact: Summary is the most important 60 words on your resume—it determines whether recruiters read the rest. Result-focused summary with clear positioning and quantified achievements makes them want to keep reading.</p>
+              <p className="mt-4 text-sm font-semibold text-gold">Impact: Summary is the most important 60 words on your resume, it determines whether recruiters read the rest. Result-focused summary with clear positioning and quantified achievements makes them want to keep reading.</p>
             </div>
           </div>
 
@@ -335,11 +335,11 @@ const WillyLinReview = () => {
               <div className="bg-destructive/5 rounded-lg p-4 border-l-4 border-destructive">
                 <p className="text-sm font-semibold text-destructive mb-2">Current Version (Duty-Based Language):</p>
                 <div className="mt-3 space-y-2 text-sm text-foreground">
-                  <p>Every single bullet is duty-focused: "Led and executed," "Designed and delivered," "Owned," "Built," "Implemented"—all describe responsibilities, not results</p>
+                  <p>Every single bullet is duty-focused: "Led and executed," "Designed and delivered," "Owned," "Built," "Implemented", all describe responsibilities, not results</p>
                   <p>Zero measurable outcomes: No performance improvements, no efficiency gains, no business impact metrics</p>
                   <p>"Significantly reducing" is meaningless: How much? 10%? 50%? 90%? Vague adjectives don't prove anything</p>
                   <p>No context for why these tasks mattered: What problem did this solve? What was the before state? What changed after your work?</p>
-                  <p>Reads like a job description: These could be copy-pasted from a job posting—nothing here proves YOU specifically delivered value</p>
+                  <p>Reads like a job description: These could be copy-pasted from a job posting, nothing here proves YOU specifically delivered value</p>
                 </div>
               </div>
               
@@ -358,15 +358,15 @@ const WillyLinReview = () => {
               <p className="text-sm font-semibold text-foreground mb-2">Why This Works:</p>
               <ul className="text-sm text-foreground space-y-1">
                 <li>Clear [X] outcome stated first: What you accomplished, with specific metric</li>
-                <li>Measurable [Y] proof provided: How you quantified the improvement—percentages, time savings, latency reductions</li>
-                <li>Specific [Z] method explained: What you actually did to achieve the result—tools, techniques, approaches</li>
-                <li>Business context clear: Why this mattered—faster iteration, lower latency, better ROI</li>
+                <li>Measurable [Y] proof provided: How you quantified the improvement, percentages, time savings, latency reductions</li>
+                <li>Specific [Z] method explained: What you actually did to achieve the result, tools, techniques, approaches</li>
+                <li>Business context clear: Why this mattered, faster iteration, lower latency, better ROI</li>
                 <li>Competitive differentiation: These bullets prove you can deliver measurable improvements, not just complete tasks</li>
               </ul>
               <div className="mt-4 p-3 bg-gold/10 rounded-lg">
                 <p className="text-sm text-foreground"><strong>Note:</strong> You'll need to add the actual metrics (marked with brackets like [X]%, [Y] days, [Z]ms). If you don't have exact numbers, use conservative estimates based on your observations: "approximately 40% faster," "reduced from 7 days to 5 days," "achieved &lt;50ms p95 latency." Never fabricate, but do quantify.</p>
               </div>
-              <p className="mt-4 text-sm font-semibold text-gold">Impact: XYZ framework transforms duty lists into proof of capability. Recruiters and hiring managers want to know what results you can deliver for them—this structure answers that question directly.</p>
+              <p className="mt-4 text-sm font-semibold text-gold">Impact: XYZ framework transforms duty lists into proof of capability. Recruiters and hiring managers want to know what results you can deliver for them, this structure answers that question directly.</p>
             </div>
           </div>
 
@@ -407,7 +407,7 @@ const WillyLinReview = () => {
               <ul className="text-sm text-foreground space-y-1">
                 <li>Unified section looks more substantial: Professional standard for all experience levels</li>
                 <li>Saves vertical space: Eliminates redundant section header, freeing lines for content</li>
-                <li>Clear reverse chronological order: Most recent role first, then internship—natural reading flow</li>
+                <li>Clear reverse chronological order: Most recent role first, then internship, natural reading flow</li>
                 <li>Internship isn't hidden: Still clearly labeled with dates, just not isolated in separate section</li>
               </ul>
               <p className="mt-4 text-sm font-semibold text-gold">Impact: Small structural change eliminates amateurish fragmentation and makes your timeline look more cohesive.</p>
@@ -427,8 +427,8 @@ const WillyLinReview = () => {
                 <div className="mt-3 space-y-4 text-sm">
                   <div>
                     <p className="font-semibold text-foreground">EDUCATION</p>
-                    <p className="text-foreground">University of Bath, United Kingdom — MSc in Data Science</p>
-                    <p className="text-foreground">Chinese Culture University, Taiwan — BSc in Applied Mathematics</p>
+                    <p className="text-foreground">University of Bath, United Kingdom, MSc in Data Science</p>
+                    <p className="text-foreground">Chinese Culture University, Taiwan, BSc in Applied Mathematics</p>
                   </div>
                   <div>
                     <p className="font-semibold text-foreground">TECHNICAL SKILLS</p>
@@ -456,7 +456,7 @@ const WillyLinReview = () => {
               <p className="text-sm font-semibold text-foreground mb-2">Assessment:</p>
               <ul className="text-sm text-foreground space-y-1">
                 <li>These sections are already well-structured and appropriate</li>
-                <li>Education clearly formatted: University, degree, location—all essential information present</li>
+                <li>Education clearly formatted: University, degree, location, all essential information present</li>
                 <li>Skills logically grouped: By category (Languages, LLMs & NLP, Model Training, etc.) instead of alphabetical dump</li>
                 <li>Certifications provide local credibility: Taiwan-specific credentials valuable for Foxconn application</li>
                 <li>No unnecessary details: No GPA (appropriate for experienced professionals), no irrelevant coursework</li>
@@ -469,7 +469,7 @@ const WillyLinReview = () => {
                   <li>For Microsoft: Add ML Systems, Model Serving, Online Learning (if applicable)</li>
                 </ul>
               </div>
-              <p className="mt-4 text-sm font-semibold text-gold">Impact: These sections already meet professional standards—don't waste time over-optimizing them when other sections need critical fixes.</p>
+              <p className="mt-4 text-sm font-semibold text-gold">Impact: These sections already meet professional standards, don't waste time over-optimizing them when other sections need critical fixes.</p>
             </div>
           </div>
         </section>
@@ -528,8 +528,8 @@ const WillyLinReview = () => {
               <ul className="text-sm text-foreground space-y-1">
                 <li><strong>"(study)":</strong> For tools you're currently learning (LangChain, LlamaIndex)</li>
                 <li><strong>"(familiar)":</strong> For tools you understand conceptually but haven't used extensively (Azure OpenAI, Cohere)</li>
-                <li><strong>Reframe existing work:</strong> Your evaluation framework DID test retrieval capabilities—calling it "RAG capability evaluation" is truthful</li>
-                <li><strong>Don't fabricate:</strong> If you genuinely have zero exposure to a tool, don't claim it—focus on adjacent experience instead</li>
+                <li><strong>Reframe existing work:</strong> Your evaluation framework DID test retrieval capabilities, calling it "RAG capability evaluation" is truthful</li>
+                <li><strong>Don't fabricate:</strong> If you genuinely have zero exposure to a tool, don't claim it, focus on adjacent experience instead</li>
               </ul>
             </div>
           </div>
@@ -677,7 +677,7 @@ const WillyLinReview = () => {
                   <li>Model improvement: "improved by approximately 15-25%"</li>
                   <li>Time reduction: "reduced from 7 days to 5 days per iteration"</li>
                   <li>Latency: "achieved {'<'}50ms p95 latency"</li>
-                  <li>Never fabricate—but do quantify based on your observations</li>
+                  <li>Never fabricate, but do quantify based on your observations</li>
                 </ul>
               </div>
               <div>

@@ -109,7 +109,7 @@ export default function AmIUnderpaidTab({ lang }: { lang: SalaryLang }) {
     if (zone.zone === "lower") return lang === "zh" ? `你的薪資**低於中位數 ${Math.abs(Math.round(diff))}%**。` : `Your salary is **${Math.abs(Math.round(diff))}% below the median** for this role.`;
     if (zone.zone === "market") return lang === "zh" ? `你的薪資**正好在市場行情**。` : `Your salary is **right at market rate.**`;
     if (zone.zone === "above") return lang === "zh" ? `你的薪資**高於中位數 ${Math.round(diff)}%**。` : `Your salary is **${Math.round(diff)}% above the median** for this role.`;
-    return lang === "zh" ? `你的薪資**超出一般範圍** — 你處於頂級水準。` : `Your salary is **above the typical range** — you're in premium territory.`;
+    return lang === "zh" ? `你的薪資**超出一般範圍**, 你處於頂級水準。` : `Your salary is **above the typical range**, you're in premium territory.`;
   };
 
   const formatInput = (val: string) => {

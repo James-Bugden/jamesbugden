@@ -21,7 +21,7 @@ export function SalaryProvider({ children }: { children: React.ReactNode }) {
 
   useEffect(() => {
     // If the FX API is down we fall back to the hardcoded rate of 32 (close
-    // to the current TWD/USD rate). The silent fallback is intentional —
+    // to the current TWD/USD rate). The silent fallback is intentional , 
     // user-facing USD values will be slightly stale but still meaningful,
     // and a toast would be noise for a non-actionable issue.
     fetch("https://open.er-api.com/v6/latest/TWD")

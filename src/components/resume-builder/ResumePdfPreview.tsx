@@ -47,7 +47,7 @@ function useDebounce<T>(value: T, delay: number): T {
 
 /* ── pdfjs page renderer ────────────────────────────────────────── */
 
-// Assign worker URL once after the module resolves — avoids re-setting on every render cycle
+// Assign worker URL once after the module resolves, avoids re-setting on every render cycle
 let pdfjsLibCache: typeof import("pdfjs-dist") | null = null;
 async function getPdfjsLib() {
   if (!pdfjsLibCache) {
@@ -61,7 +61,7 @@ async function getPdfjsLib() {
 async function renderPdfPagesToImages(blob: Blob): Promise<string[]> {
   const pdfjsLib = await getPdfjsLib();
 
-  // Pass raw ArrayBuffer — blob URLs are main-thread only and can't be
+  // Pass raw ArrayBuffer, blob URLs are main-thread only and can't be
   // fetched by the pdfjs worker thread (causes "Unexpected server response 0")
   const arrayBuffer = await blob.arrayBuffer();
   const loadingTask = pdfjsLib.getDocument({ data: arrayBuffer });
@@ -85,7 +85,7 @@ async function renderPdfPagesToImages(blob: Blob): Promise<string[]> {
       canvas.height = 0;
     }
   } finally {
-    // Release pdfjs worker memory — fire-and-forget, pages are already rendered
+    // Release pdfjs worker memory, fire-and-forget, pages are already rendered
     pdfDoc.destroy();
   }
 
@@ -107,14 +107,14 @@ export const ResumePdfPreview = React.memo(function ResumePdfPreview({
 }: ResumePdfPreviewProps) {
   const containerRef = useRef<HTMLDivElement>(null);
 
-  // Zoom state — mirrors the DOM preview controls exactly
+  // Zoom state, mirrors the DOM preview controls exactly
   const [autoScale, setAutoScale] = useState(0.65);
   const [zoomOffset, setZoomOffset] = useState(0);
   const displayScale = Math.max(0.2, Math.min(1.5, autoScale + zoomOffset));
 
   // Page images from the last completed render
   const [pageImages, setPageImages] = useState<string[]>([]);
-  // Blob URL fallback — used only when pdfjs rasterization throws (observed
+  // Blob URL fallback, used only when pdfjs rasterization throws (observed
   // on Chinese resumes where pdfjs chokes on embedded subset CJK fonts). The
   // browser's native PDF viewer renders the blob reliably even when pdfjs
   // cannot. Trade-off: shows the browser's PDF chrome. Better than crash.
@@ -123,15 +123,15 @@ export const ResumePdfPreview = React.memo(function ResumePdfPreview({
   const [loading, setLoading] = useState(true);
   const [errorMsg, setErrorMsg] = useState<string | null>(null);
 
-  // Stable ref for onPageCount — keeps it out of the effect dep array so an
+  // Stable ref for onPageCount, keeps it out of the effect dep array so an
   // un-memoised parent callback doesn't trigger a full PDF re-render cycle
   const onPageCountRef = useRef(onPageCount);
   onPageCountRef.current = onPageCount;
 
   // Debounce data and customize to avoid re-generating on every keystroke.
-  // Data (typing) uses 350ms — fast enough to feel live, slow enough not to
+  // Data (typing) uses 350ms, fast enough to feel live, slow enough not to
   // thrash during long paste. Customize (slider release, color pick, dropdown)
-  // uses 200ms — discrete events, no reason to wait longer.
+  // uses 200ms, discrete events, no reason to wait longer.
   const debouncedData = useDebounce(data, 350);
   const debouncedCustomize = useDebounce(customize, 200);
 
@@ -170,7 +170,7 @@ export const ResumePdfPreview = React.memo(function ResumePdfPreview({
   // scroll the page stack vertically (native behaviour). We register the
   // listener natively rather than via React's onWheel because React's
   // synthetic wheel events are passive, so preventDefault() is a no-op on
-  // them — and we need preventDefault to stop the browser's own Ctrl+wheel
+  // them, and we need preventDefault to stop the browser's own Ctrl+wheel
   // page zoom from triggering at the same time.
   useEffect(() => {
     const el = containerRef.current;
@@ -187,20 +187,20 @@ export const ResumePdfPreview = React.memo(function ResumePdfPreview({
   }, []);
 
   // Regenerate PDF whenever debounced data or customize changes.
-  // onPageCount is intentionally excluded from deps — accessed via ref above.
+  // onPageCount is intentionally excluded from deps, accessed via ref above.
   useEffect(() => {
     let cancelled = false;
     setLoading(true);
 
     const generate = async () => {
       try {
-        // 1. Register fonts — required before react-pdf renders; cached after first call.
+        // 1. Register fonts, required before react-pdf renders; cached after first call.
         //    Pass `data` so prepareFonts can detect CJK content and register the
         //    matching Noto Sans family (TC/SC/JP/KR). Without this, Chinese
         //    codepoints map to Helvetica glyphs and render as mojibake in the
         //    preview and the iframe fallback. `awaitCJK: true` blocks the first
         //    paint until the CJK font is registered (only matters when the
-        //    resume contains CJK — prepareFonts no-ops if there is none).
+        //    resume contains CJK, prepareFonts no-ops if there is none).
         await prepareFonts(debouncedCustomize, debouncedData, { awaitCJK: true });
         if (cancelled) return;
 
@@ -212,7 +212,7 @@ export const ResumePdfPreview = React.memo(function ResumePdfPreview({
         const blob = await pdf(element as any).toBlob();
         if (cancelled) return;
 
-        // Test hook — expose the just-rendered PDF blob so e2e tests can
+        // Test hook, expose the just-rendered PDF blob so e2e tests can
         // inspect its bytes (e.g. assert a Noto CJK font dictionary is
         // embedded for zh-tw content, catching the mojibake regression
         // class). Single-assignment of a Blob ref; negligible memory cost
@@ -223,7 +223,7 @@ export const ResumePdfPreview = React.memo(function ResumePdfPreview({
 
         // 3. Pass blob directly to pdfjs. If it throws (observed on CJK
         //    resumes with embedded subset fonts), fall back to rendering
-        //    the raw PDF in a native <iframe> — ugly chrome, but unbreakable.
+        //    the raw PDF in a native <iframe>, ugly chrome, but unbreakable.
         let images: string[];
         try {
           images = await renderPdfPagesToImages(blob);
@@ -280,7 +280,7 @@ export const ResumePdfPreview = React.memo(function ResumePdfPreview({
         </div>
       )}
 
-      {/* Loading overlay — shown on first load; pages remain visible during subsequent re-renders */}
+      {/* Loading overlay, shown on first load; pages remain visible during subsequent re-renders */}
       {loading && pageImages.length === 0 && !pdfBlobUrl && (
         <div className="absolute inset-0 flex flex-col items-center justify-center gap-3 z-10">
           <div className="w-6 h-6 border-2 border-gray-300 border-t-gray-600 rounded-full animate-spin" />
@@ -296,7 +296,7 @@ export const ResumePdfPreview = React.memo(function ResumePdfPreview({
         </div>
       )}
 
-      {/* Stacked pages (primary path — rasterized images) */}
+      {/* Stacked pages (primary path, rasterized images) */}
       {pageImages.length > 0 && (
         <div className="flex flex-col items-center py-8 px-6 gap-6">
           {pageImages.map((src, i) => (
@@ -316,7 +316,7 @@ export const ResumePdfPreview = React.memo(function ResumePdfPreview({
         </div>
       )}
 
-      {/* Iframe fallback — shown only when pdfjs raster failed (CJK edge cases) */}
+      {/* Iframe fallback, shown only when pdfjs raster failed (CJK edge cases) */}
       {pdfBlobUrl && pageImages.length === 0 && (
         <div className="flex flex-col items-center py-8 px-6">
           <iframe
@@ -328,7 +328,7 @@ export const ResumePdfPreview = React.memo(function ResumePdfPreview({
         </div>
       )}
 
-      {/* Zoom controls — identical to the DOM preview */}
+      {/* Zoom controls, identical to the DOM preview */}
       <div className="sticky bottom-4 flex justify-center pointer-events-none z-10">
         <div className="pointer-events-auto flex items-center gap-1 bg-white/90 backdrop-blur-sm rounded-full shadow-md border border-gray-200 px-1.5 py-1">
           <button
@@ -351,7 +351,7 @@ export const ResumePdfPreview = React.memo(function ResumePdfPreview({
             <ZoomIn className="w-3.5 h-3.5" />
           </button>
 
-          {/* Reset button always occupies its slot — toggling with `invisible`
+          {/* Reset button always occupies its slot, toggling with `invisible`
               (not conditional render) keeps the control group width stable so
               the zoom-in / zoom-out buttons don't shift horizontally when the
               reset appears after the first click. */}

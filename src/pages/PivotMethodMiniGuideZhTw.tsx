@@ -77,7 +77,7 @@ const PivotMethodMiniGuideZhTw = () => {
               他們沒有計劃就辭職。他們在完全不同的領域從零開始。他們在網上申請 200 個工作,然後納悶為什麼沒人回電。
             </p>
             <p className="text-lg leading-relaxed mb-4">
-              Jenny Blake 的書《Pivot》提出了一個更聰明的方法。這是我看到對我錄用的最佳轉職者有效的同樣方法。這份指南從招募人員的視角分解了什麼真正有效(以及失敗)— 從招募桌的另一側看。
+              Jenny Blake 的書《Pivot》提出了一個更聰明的方法。這是我看到對我錄用的最佳轉職者有效的同樣方法。這份指南從招募人員的視角分解了什麼真正有效(以及失敗),  從招募桌的另一側看。
             </p>
             <p className="text-lg leading-relaxed">
               這是濃縮版;框架、關鍵行動和要避免的錯誤。
@@ -123,7 +123,7 @@ const PivotMethodMiniGuideZhTw = () => {
 
           <div className="mt-8 bg-gold/10 border border-gold/30 rounded-xl p-6">
             <p className="text-foreground">
-              <strong>為什麼現在很重要:</strong> 平均任職時間是 4-5 年。你的職業生涯中可能會有 11 個以上的工作,並換 3-6 次產業。問題不是你是否會轉換 — 而是你會做得好還是做得差。
+              <strong>為什麼現在很重要:</strong> 平均任職時間是 4-5 年。你的職業生涯中可能會有 11 個以上的工作,並換 3-6 次產業。問題不是你是否會轉換, 而是你會做得好還是做得差。
             </p>
           </div>
         </section>
@@ -141,7 +141,7 @@ const PivotMethodMiniGuideZhTw = () => {
               <div className="w-12 h-12 rounded-full bg-green-100 flex items-center justify-center">
                 <span className="text-2xl">🌱</span>
               </div>
-              <h3 className="font-heading text-2xl text-foreground">階段 1:種植 — 設定你的基礎</h3>
+              <h3 className="font-heading text-2xl text-foreground">階段 1:種植, 設定你的基礎</h3>
             </div>
             <p className="text-muted-foreground mb-6">
               在探索任何新事物之前,先弄清楚你已經擁有什麼以及你真正想要什麼。
@@ -150,7 +150,7 @@ const PivotMethodMiniGuideZhTw = () => {
             <div className="space-y-6">
               <div>
                 <h4 className="font-semibold text-foreground mb-2">校準你的指南針</h4>
-                <p className="text-muted-foreground">你真正的價值觀是什麼 — 不是應該重要的,而是實際上重要的?什麼讓你充滿活力,什麼讓你筋疲力盡?你的不可妥協事項是什麼?</p>
+                <p className="text-muted-foreground">你真正的價值觀是什麼, 不是應該重要的,而是實際上重要的?什麼讓你充滿活力,什麼讓你筋疲力盡?你的不可妥協事項是什麼?</p>
               </div>
 
               <div className="bg-muted/50 rounded-lg p-4 border-l-4 border-gold">
@@ -195,7 +195,7 @@ const PivotMethodMiniGuideZhTw = () => {
               <div className="w-12 h-12 rounded-full bg-blue-100 flex items-center justify-center">
                 <span className="text-2xl">🔍</span>
               </div>
-              <h3 className="font-heading text-2xl text-foreground">階段 2:掃描 — 收集情報</h3>
+              <h3 className="font-heading text-2xl text-foreground">階段 2:掃描, 收集情報</h3>
             </div>
             <p className="text-muted-foreground mb-6">
               現在你知道了你的基礎,研究你想去哪裡以及到達那裡需要什麼。
@@ -220,7 +220,7 @@ const PivotMethodMiniGuideZhTw = () => {
 
               <div className="bg-muted/50 rounded-lg p-4 border-l-4 border-gold">
                 <p className="text-sm text-muted-foreground">
-                  <strong className="text-foreground">招募人員現實檢查:</strong> 「灑履歷」方法 — 申請 100 個工作 — 對職涯轉換者很少有效。有針對性的能見度更有效。讓目標領域的 10 個人認識你並能為你擔保。這比 100 個冷申請更有力量。
+                  <strong className="text-foreground">招募人員現實檢查:</strong> 「灑履歷」方法, 申請 100 個工作, 對職涯轉換者很少有效。有針對性的能見度更有效。讓目標領域的 10 個人認識你並能為你擔保。這比 100 個冷申請更有力量。
                 </p>
               </div>
 
@@ -246,7 +246,7 @@ const PivotMethodMiniGuideZhTw = () => {
               <div className="w-12 h-12 rounded-full bg-gold-soft flex items-center justify-center">
                 <span className="text-2xl">🧪</span>
               </div>
-              <h3 className="font-heading text-2xl text-foreground">階段 3:試點 — 在承諾前測試</h3>
+              <h3 className="font-heading text-2xl text-foreground">階段 3:試點, 在承諾前測試</h3>
             </div>
             <p className="text-muted-foreground mb-4">
               這是最重要的階段,也是大多數人完全跳過的階段。不要做一次大跳躍,而是進行小型實驗來收集真實世界的數據。
@@ -269,11 +269,11 @@ const PivotMethodMiniGuideZhTw = () => {
               <div>
                 <h4 className="font-semibold text-foreground mb-3">試點範例:</h4>
                 <ul className="space-y-2 text-muted-foreground">
-                  <li>• <strong>目標產業的自由職業專案</strong> — 測試:你能做這項工作嗎?你喜歡嗎?</li>
-                  <li>• <strong>週末的副項目</strong> — 測試:真正的興趣、技能水平、市場需求</li>
-                  <li>• <strong>在受僱時為 1-2 個客戶提供諮詢</strong> — 測試:業務可行性</li>
-                  <li>• <strong>教授工作坊</strong> — 測試:專業知識、對教育的興趣</li>
-                  <li>• <strong>在新領域當志工</strong> — 測試:文化、日常現實</li>
+                  <li>• <strong>目標產業的自由職業專案</strong>, 測試:你能做這項工作嗎?你喜歡嗎?</li>
+                  <li>• <strong>週末的副項目</strong>, 測試:真正的興趣、技能水平、市場需求</li>
+                  <li>• <strong>在受僱時為 1-2 個客戶提供諮詢</strong>, 測試:業務可行性</li>
+                  <li>• <strong>教授工作坊</strong>, 測試:專業知識、對教育的興趣</li>
+                  <li>• <strong>在新領域當志工</strong>, 測試:文化、日常現實</li>
                 </ul>
               </div>
 
@@ -308,10 +308,10 @@ const PivotMethodMiniGuideZhTw = () => {
                   階段 3 的行動步驟:
                 </h4>
                 <ol className="list-decimal list-inside space-y-2 text-green-700">
-                  <li>設計你的第一個試點 — 你本週可以進行的最小實驗是什麼?</li>
+                  <li>設計你的第一個試點, 你本週可以進行的最小實驗是什麼?</li>
                   <li>設定目標:在接下來的 2 個月內至少進行 3 次試點</li>
                   <li>每次試點後,用 3 句話寫下你學到了什麼</li>
-                  <li>與 3 個已經在做你目標工作的人交談 — 將他們的現實與你的期望進行比較</li>
+                  <li>與 3 個已經在做你目標工作的人交談, 將他們的現實與你的期望進行比較</li>
                 </ol>
               </div>
             </div>
@@ -323,7 +323,7 @@ const PivotMethodMiniGuideZhTw = () => {
               <div className="w-12 h-12 rounded-full bg-orange-100 flex items-center justify-center">
                 <span className="text-2xl">🚀</span>
               </div>
-              <h3 className="font-heading text-2xl text-foreground">階段 4:啟動 — 做出舉動</h3>
+              <h3 className="font-heading text-2xl text-foreground">階段 4:啟動, 做出舉動</h3>
             </div>
             <p className="text-muted-foreground mb-4">
               啟動不是關於勇氣。Blake 的關鍵見解:<strong>先建立,勇氣第二。</strong>
@@ -377,10 +377,10 @@ const PivotMethodMiniGuideZhTw = () => {
                   階段 4 的行動步驟:
                 </h4>
                 <ol className="list-decimal list-inside space-y-2 text-green-700">
-                  <li>寫下你的啟動標準清單 — 要具體和可衡量</li>
+                  <li>寫下你的啟動標準清單, 要具體和可衡量</li>
                   <li>對於每個標準,確定什麼已經達到,什麼仍需努力</li>
                   <li>設定截止日期:「我將在 [日期] 前做出決定」</li>
-                  <li>準備你的轉換對話(主管、家人)— 先做決定,再計劃對話</li>
+                  <li>準備你的轉換對話(主管、家人),  先做決定,再計劃對話</li>
                 </ol>
               </div>
             </div>
@@ -392,7 +392,7 @@ const PivotMethodMiniGuideZhTw = () => {
               <div className="w-12 h-12 rounded-full bg-gold/20 flex items-center justify-center">
                 <span className="text-2xl">🎯</span>
               </div>
-              <h3 className="font-heading text-2xl text-foreground">階段 5:領導 — 幫助他人轉換</h3>
+              <h3 className="font-heading text-2xl text-foreground">階段 5:領導, 幫助他人轉換</h3>
             </div>
             <p className="text-muted-foreground mb-4">
               一旦你成功轉換,分享你學到的東西。幫助他人度過他們的轉換。介紹人脈。審閱履歷。慶祝他人的職涯成功。
@@ -427,12 +427,12 @@ const PivotMethodMiniGuideZhTw = () => {
             
             <div className="bg-red-50 border border-red-200 rounded-xl p-6">
               <h3 className="font-semibold text-red-800 mb-2">2. 從零開始</h3>
-              <p className="text-red-700">你不需要一個完全新的身份。找到相鄰的舉動 — 從你現在的位置開始一步。利用你已經擁有的。顧問 → 內部策略。工程師 → 產品管理。教師 → 企業培訓。</p>
+              <p className="text-red-700">你不需要一個完全新的身份。找到相鄰的舉動, 從你現在的位置開始一步。利用你已經擁有的。顧問 → 內部策略。工程師 → 產品管理。教師 → 企業培訓。</p>
             </div>
             
             <div className="bg-red-50 border border-red-200 rounded-xl p-6">
               <h3 className="font-semibold text-red-800 mb-2">3. 分析癱瘓</h3>
-              <p className="text-red-700">在某個時候,更多的研究沒有幫助 — 你需要經驗。設定決策截止日期。20 次資訊性訪談教你的東西少於一個實際做這項工作的自由職業專案。</p>
+              <p className="text-red-700">在某個時候,更多的研究沒有幫助, 你需要經驗。設定決策截止日期。20 次資訊性訪談教你的東西少於一個實際做這項工作的自由職業專案。</p>
             </div>
             
             <div className="bg-red-50 border border-red-200 rounded-xl p-6">

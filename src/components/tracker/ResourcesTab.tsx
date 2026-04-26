@@ -52,20 +52,20 @@ export default function ResourcesTab() {
   return (
     <div className="space-y-4">
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-        {/* 1 — LAMP Method */}
+        {/* 1, LAMP Method */}
         <ResourceCard emoji="🎯" title="The LAMP Method" summary="Build and prioritize a list of 40+ target employers in 40 minutes.">
           <ul className="space-y-2.5 text-xs">
-            <li><strong style={{ color: "#C9A961" }}>L = List</strong> — Generate 40+ employers using 4 methods: Dream Employers, Alumni Employers, Posting Search, Trend Following. Aim for 10 per method.</li>
-            <li><strong style={{ color: "#C9A961" }}>A = Alumni</strong> — Mark Y or N: do you have a potential contact at this company?</li>
-            <li><strong style={{ color: "#C9A961" }}>M = Motivation</strong> — Rate 1–5 based on your genuine interest. 5 = dream employer.</li>
-            <li><strong style={{ color: "#C9A961" }}>P = Posting</strong> — Rate 1–3 based on current job postings. 3 = relevant posting exists.</li>
+            <li><strong style={{ color: "#C9A961" }}>L = List</strong>, Generate 40+ employers using 4 methods: Dream Employers, Alumni Employers, Posting Search, Trend Following. Aim for 10 per method.</li>
+            <li><strong style={{ color: "#C9A961" }}>A = Alumni</strong>, Mark Y or N: do you have a potential contact at this company?</li>
+            <li><strong style={{ color: "#C9A961" }}>M = Motivation</strong>, Rate 1–5 based on your genuine interest. 5 = dream employer.</li>
+            <li><strong style={{ color: "#C9A961" }}>P = Posting</strong>, Rate 1–3 based on current job postings. 3 = relevant posting exists.</li>
           </ul>
           <p className="text-xs mt-3 p-2.5 rounded-md" style={{ backgroundColor: "#FBF7F0", color: "#1B3A2F" }}>
             <strong>Sort order:</strong> Motivation (highest first) → Posting (highest first) → Alumni (Y before N). This gives you your priority attack order.
           </p>
         </ResourceCard>
 
-        {/* 2 — 3B7 Routine */}
+        {/* 2, 3B7 Routine */}
         <ResourceCard emoji="⏰" title="The 3B7 Routine" summary="Your follow-up system: check at 3 days, follow up at 7 days.">
           <div className="space-y-0">
             <Step day="0" text="Send 5-Point Email to Contact #1" highlight />
@@ -78,8 +78,8 @@ export default function ResourcesTab() {
           </p>
         </ResourceCard>
 
-        {/* 3 — Boosters, Obligates & Curmudgeons */}
-        <ResourceCard emoji="🟢" title="Boosters, Obligates & Curmudgeons" summary="Not everyone will help you. That's okay — learn to spot who will.">
+        {/* 3, Boosters, Obligates & Curmudgeons */}
+        <ResourceCard emoji="🟢" title="Boosters, Obligates & Curmudgeons" summary="Not everyone will help you. That's okay, learn to spot who will.">
           <div className="flex flex-col sm:flex-row gap-2">
             <StatusMini emoji="🟢" label="Boosters" color="#166534" bg="#DCFCE7" text="Respond within 3 days. Love their job, love helping. These are your golden contacts. Give them all your energy." />
             <StatusMini emoji="🟠" label="Obligates" color="#9A3412" bg="#FED7AA" text="Slow to respond. Help from guilt, not interest. Low return on your time. Don't chase them." />
@@ -87,7 +87,7 @@ export default function ResourcesTab() {
           </div>
         </ResourceCard>
 
-        {/* 4 — 5-Point Email */}
+        {/* 4, 5-Point Email */}
         <ResourceCard emoji="✉️" title="The 5-Point Email" summary="The perfect outreach email follows 5 rules.">
           <ol className="space-y-2 text-xs list-none">
             {[
@@ -99,21 +99,21 @@ export default function ResourcesTab() {
             ].map(([title, desc], i) => (
               <li key={i} className="flex gap-2.5">
                 <span className="w-5 h-5 rounded-full flex items-center justify-center text-[10px] font-bold text-white flex-shrink-0" style={{ backgroundColor: "#C9A961" }}>{i + 1}</span>
-                <span><strong>{title}</strong> — {desc}</span>
+                <span><strong>{title}</strong>, {desc}</span>
               </li>
             ))}
           </ol>
         </ResourceCard>
 
-        {/* 5 — TIARA Framework */}
+        {/* 5, TIARA Framework */}
         <ResourceCard emoji="🎤" title="TIARA Framework" summary="5 question types that make informational interviews actually useful.">
           <ul className="space-y-2 text-xs">
             {[
-              ["T — Trends", '"What trends are you seeing in [industry]?"'],
-              ["I — Insights", '"What surprises you most about working at [Company]?"'],
-              ["A — Advice", '"What advice would you give someone trying to break into [field]?"'],
-              ["R — Resources", '"Are there other people or resources you\'d recommend I look into?"'],
-              ["A — Assignments", '"Is there anything I can do to help you or stay on your radar?"'],
+              ["T, Trends", '"What trends are you seeing in [industry]?"'],
+              ["I, Insights", '"What surprises you most about working at [Company]?"'],
+              ["A, Advice", '"What advice would you give someone trying to break into [field]?"'],
+              ["R, Resources", '"Are there other people or resources you\'d recommend I look into?"'],
+              ["A, Assignments", '"Is there anything I can do to help you or stay on your radar?"'],
             ].map(([label, q]) => (
               <li key={label} className="flex gap-2">
                 <strong className="flex-shrink-0" style={{ color: "#C9A961" }}>{label}</strong>
@@ -123,16 +123,16 @@ export default function ResourcesTab() {
           </ul>
         </ResourceCard>
 
-        {/* 6 — Contact Source Hierarchy */}
+        {/* 6, Contact Source Hierarchy */}
         <ResourceCard emoji="🔍" title="Contact Source Hierarchy" summary="Where to find contacts, in order of effectiveness.">
           <ol className="space-y-1.5 text-xs list-none">
             {[
               "University alumni database (fastest, warmest)",
-              "LinkedIn — 1st-degree connections",
-              "LinkedIn — 2nd-degree (ask for intro)",
+              "LinkedIn, 1st-degree connections",
+              "LinkedIn, 2nd-degree (ask for intro)",
               "LinkedIn Groups (shared interest = built-in connection)",
               "Facebook status update (strength of weak ties)",
-              'Fan Mail — Google: [company] [keyword] "interview with"',
+              'Fan Mail, Google: [company] [keyword] "interview with"',
               "LinkedIn backsolving (find name → guess email)",
               "Cold calls (last resort, but effective at small companies)",
             ].map((item, i) => (
@@ -144,7 +144,7 @@ export default function ResourcesTab() {
           </ol>
         </ResourceCard>
 
-        {/* 7 — Your Other Tools */}
+        {/* 7, Your Other Tools */}
         <ResourceCard emoji="🛠️" title="Your Other Tools" summary="Free tools to help at every stage of your job search.">
           <div className="space-y-2">
             {[
@@ -162,14 +162,14 @@ export default function ResourcesTab() {
           </div>
         </ResourceCard>
 
-        {/* 8 — Get the Book (not collapsible) */}
+        {/* 8, Get the Book (not collapsible) */}
         <div className="bg-white rounded-lg shadow-sm border-l-4 border overflow-hidden" style={{ borderColor: "#E5E0D8", borderLeftColor: "#C9A961" }}>
           <div className="px-5 py-4 flex items-start gap-3">
             <BookOpen className="w-5 h-5 flex-shrink-0 mt-0.5" style={{ color: "#C9A961" }} />
             <div>
               <h3 className="text-sm font-bold mb-1" style={{ fontFamily: "var(--font-heading)", color: "#1B3A2F" }}>📖 Get the Book</h3>
               <p className="text-xs leading-relaxed mb-3" style={{ color: "#2C2C2C" }}>
-                This tracker is based on <em>The 2-Hour Job Search</em> by Steve Dalton. The book covers the full methodology — this tool is a digital companion, not a replacement.
+                This tracker is based on <em>The 2-Hour Job Search</em> by Steve Dalton. The book covers the full methodology, this tool is a digital companion, not a replacement.
               </p>
               <a
                 href="https://www.amazon.com/2-Hour-Job-Search-Technology-Faster/dp/1607741709"

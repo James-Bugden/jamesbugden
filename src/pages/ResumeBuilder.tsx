@@ -42,7 +42,7 @@ import { useNavigate, Link } from "react-router-dom";
 import { useAuth } from "@/contexts/AuthContext";
 import { LogIn } from "lucide-react";
 import { AnalyzerPromptDialog } from "@/components/resume-builder/AnalyzerPromptDialog";
-// BuggyNoticeDialog import removed — the popup created a "tool is broken"
+// BuggyNoticeDialog import removed, the popup created a "tool is broken"
 // perception every cold visit. Underlying pipeline is healthy (CJK guards,
 // dual-layer timeouts, error boundary, allSettled). Don't re-mount without
 // first removing the "this tool is buggy" copy.
@@ -71,7 +71,7 @@ class PreviewErrorBoundary extends React.Component<{ children: React.ReactNode }
   }
 }
 
-/* ── Brand colors — Hiresign tokens ─────────────────────────────────────────── */
+/* ── Brand colors, Hiresign tokens ─────────────────────────────────────────── */
 const BRAND = {
   green: "hsl(var(--executive-green))",
   greenHover: "hsl(var(--executive-green-light))",
@@ -132,7 +132,7 @@ const SAMPLE_RESUME_DATA = {
             endMonth: "",
             endYear: "",
             currentlyHere: "true",
-            description: "<ul><li>Hire across North Asia with a focus on Taiwan for all business units including Operations, Sales, and Corporate roles — exceeded KPIs every year</li><li>#GoGetIt — Crisis hiring: solved high attrition in a key Delivery team by hiring 9 senior candidates (L3-6) in 2 months</li><li>Leading Project Tetris: expansion hiring for 60+ sales roles in 2 quarters with limited timeline and cross-functional coordination</li></ul>",
+            description: "<ul><li>Hire across North Asia with a focus on Taiwan for all business units including Operations, Sales, and Corporate roles, exceeded KPIs every year</li><li>#GoGetIt, Crisis hiring: solved high attrition in a key Delivery team by hiring 9 senior candidates (L3-6) in 2 months</li><li>Leading Project Tetris: expansion hiring for 60+ sales roles in 2 quarters with limited timeline and cross-functional coordination</li></ul>",
           },
         },
         {
@@ -146,7 +146,7 @@ const SAMPLE_RESUME_DATA = {
             endMonth: "December",
             endYear: "2023",
             currentlyHere: "",
-            description: "<ul><li>Winner of Uber Superstar award — assessed hiring impact to determine if the team should continue targeting traditional candidate pools (Consultant vs Non-Consultant performance comparison), contributing to reduced time-to-hire</li><li>TA POC for Uber ↔ Foodpanda merger: long-term hiring project for non-exec board and general TA requisitions</li><li>Operational Excellence: sourcing and screening knowledge sharing, deep-dive analysis into source-of-hire success rates</li></ul>",
+            description: "<ul><li>Winner of Uber Superstar award, assessed hiring impact to determine if the team should continue targeting traditional candidate pools (Consultant vs Non-Consultant performance comparison), contributing to reduced time-to-hire</li><li>TA POC for Uber ↔ Foodpanda merger: long-term hiring project for non-exec board and general TA requisitions</li><li>Operational Excellence: sourcing and screening knowledge sharing, deep-dive analysis into source-of-hire success rates</li></ul>",
           },
         },
         {
@@ -367,7 +367,7 @@ function DownloadDropdown({ downloading, pageFormat, docName, onDownload }: {
 
   useEffect(() => {
     // Build a clean default filename. If the resume name already contains
-    // "Resume" (case-insensitive), don't append "_Resume" again — that's
+    // "Resume" (case-insensitive), don't append "_Resume" again, that's
     // how we ended up with "Resume_Resume.pdf" / "Resume_2_Resume.pdf".
     const base = (docName || "Resume").replace(/\s+/g, "_");
     const alreadyHasResume = /resume/i.test(base);
@@ -586,7 +586,7 @@ const ResumeBuilder = () => {
         // Check both local and server-side limits
         const serverAllowed = await checkServerDocumentLimit("resume");
         if (resumes.length >= RESUME_LIMIT || !serverAllowed) {
-          // At limit — ask user which to replace
+          // At limit, ask user which to replace
           setPendingAnalyzerData({ data: parsed, settings: classicSettings, name: docName, suggestions: sug });
           setReplaceTargetId(resumes[0]?.id || null);
           setReplacePickerOpen(true);
@@ -594,7 +594,7 @@ const ResumeBuilder = () => {
           return;
         }
 
-        // Under limit — create normally
+        // Under limit, create normally
         const doc = createDocument("resume", docName);
         updateDocument(doc.id, { data: parsed, settings: classicSettings });
         refreshDocs();
@@ -724,7 +724,7 @@ const ResumeBuilder = () => {
     }
     historyRef.current = { past: [], future: [] };
     setResetConfirmOpen(false);
-    toast({ title: lang === "zh-tw" ? "履歷已重置 — 重新開始！" : "Resume reset — start fresh!" });
+    toast({ title: lang === "zh-tw" ? "履歷已重置, 重新開始！" : "Resume reset, start fresh!" });
   }, [store, activeDocId, lang]);
 
   const handleImport = (type: DocType) => {
@@ -1007,7 +1007,7 @@ const ResumeBuilder = () => {
           <PersonalDetailsCard details={data.personalDetails} onChange={(u) => { pushHistory(); updatePersonalDetails(u); }} />
         </div>
 
-        {/* Sections — dnd-kit sortable */}
+        {/* Sections, dnd-kit sortable */}
         <DndContext sensors={sensors} collisionDetection={closestCenter} onDragEnd={handleDragEnd} modifiers={[restrictToVerticalAxis]}>
           <SortableContext items={sectionIds} strategy={verticalListSortingStrategy}>
             {data.sections.map((section, idx) => (
@@ -1054,7 +1054,7 @@ const ResumeBuilder = () => {
         {/* Analyzer CTA */}
         <AnalyzerCTA fromAnalyzer={searchParams.get("from") === "analyzer" || !!sessionStorage.getItem("analyzer-resume-text")} resumeData={data} />
 
-        {/* Add Content button — gradient pill */}
+        {/* Add Content button, gradient pill */}
         <div className="flex justify-center pt-2">
           <TooltipProvider delayDuration={300}>
             <Tooltip>
@@ -1085,7 +1085,7 @@ const ResumeBuilder = () => {
   return (
     <div className="h-screen flex flex-col overflow-x-hidden" style={{ backgroundColor: BRAND.cream }}>
       <SEO />
-      {/* ── Top bar — cream nav matching analyzer ─────────────── */}
+      {/* ── Top bar, cream nav matching analyzer ─────────────── */}
       <div className="sticky top-0 z-30" style={{ backgroundColor: BRAND.cream, borderBottom: '1px solid rgba(43,71,52,0.1)' }}>
         {/* Row 1: Brand + nav */}
         <div className="flex items-center justify-between px-3 sm:px-5 h-12 sm:h-14">
@@ -1154,7 +1154,7 @@ const ResumeBuilder = () => {
                       {currentDocName}
                     </button>
                   </TooltipTrigger>
-                  <TooltipContent side="bottom" className="text-xs">{currentDocName} — {t("clickToRename")}</TooltipContent>
+                  <TooltipContent side="bottom" className="text-xs">{currentDocName}, {t("clickToRename")}</TooltipContent>
                 </Tooltip>
               </TooltipProvider>
             )}
@@ -1306,7 +1306,7 @@ const ResumeBuilder = () => {
       {/* Import into existing resume */}
       <ImportModal open={editorImportOpen} onClose={() => setEditorImportOpen(false)} type="resume" onImported={handleEditorImported} />
       {viewMode === "resume-editor" && <AnalyzerPromptDialog fromAnalyzer={searchParams.get("from") === "analyzer" || !!sessionStorage.getItem("analyzer-resume-text")} />}
-      {/* <BuggyNoticeDialog /> — removed; the popup created a "tool is broken" signal every cold visit. */}
+      {/* <BuggyNoticeDialog />, removed; the popup created a "tool is broken" signal every cold visit. */}
 
       {/* Replace picker dialog when at resume limit */}
       <AlertDialog open={replacePickerOpen} onOpenChange={setReplacePickerOpen}>

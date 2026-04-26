@@ -55,8 +55,8 @@ interface Question {
 }
 
 const CATEGORIES = [
-  { key: "behavioral", en: "Behavioral", zh: "行為題", desc_en: '"Tell me about a time…" — tests past actions & decisions', desc_zh: "「請分享一個經驗…」— 測試過去的行為與決策" },
-  { key: "situational", en: "Situational", zh: "情境題", desc_en: '"What would you do if…" — tests hypothetical judgment', desc_zh: "「如果你遇到…」— 測試假設情境的判斷力" },
+  { key: "behavioral", en: "Behavioral", zh: "行為題", desc_en: '"Tell me about a time…", tests past actions & decisions', desc_zh: "「請分享一個經驗…」,  測試過去的行為與決策" },
+  { key: "situational", en: "Situational", zh: "情境題", desc_en: '"What would you do if…", tests hypothetical judgment', desc_zh: "「如果你遇到…」,  測試假設情境的判斷力" },
   { key: "salary_comp", en: "Salary & Compensation", zh: "薪資與福利", desc_en: "Questions about pay expectations & negotiation", desc_zh: "關於薪資期望與談判的問題" },
   { key: "career_history", en: "Career History", zh: "職涯經歷", desc_en: "Walk me through your background & transitions", desc_zh: "介紹你的職涯背景與轉換經歷" },
   { key: "culture_fit", en: "Culture Fit", zh: "文化適配", desc_en: "How you work with teams & handle workplace dynamics", desc_zh: "你如何融入團隊與處理職場互動" },
@@ -137,7 +137,7 @@ const TAG_ZH: Record<string, string> = {
   workplace: "職場", workplace_relationships: "職場關係",
 };
 
-/* Unified brand-aligned category chip — Hiresign uses a single tag treatment.
+/* Unified brand-aligned category chip, Hiresign uses a single tag treatment.
    Differentiation comes from the label text, not from a rainbow palette. */
 const CATEGORY_CHIP =
   "bg-gold-soft text-executive-green border border-gold/25 dark:bg-gold/10 dark:text-gold dark:border-gold/30";
@@ -807,7 +807,7 @@ export default function InterviewQuestionBank({ lang: initialLang }: { lang: Lan
                       {getDifficultyLabel(randomQuestion.difficulty)}
                      </span>
                    </div>
-                   {/* Random question answer — show both languages in zh mode */}
+                   {/* Random question answer, show both languages in zh mode */}
                    {(randomQuestion.answer_en || randomQuestion.answer_zh) && (
                      <div className="mt-4 pt-4 border-t border-accent/20">
                        <p className="text-xs font-semibold uppercase tracking-wider text-accent mb-2">
@@ -883,7 +883,7 @@ export default function InterviewQuestionBank({ lang: initialLang }: { lang: Lan
                          <ChevronDownIcon className={`w-4 h-4 text-muted-foreground transition-transform duration-200 ${isExpanded ? "rotate-180" : ""}`} />
                        </div>
                     </div>
-                    {/* Secondary language — only show English subtitle in Chinese mode */}
+                    {/* Secondary language, only show English subtitle in Chinese mode */}
                     {lang === "zh" && (
                       <p className="text-sm text-muted-foreground/70 leading-relaxed mb-3">
                         {q.question_en}

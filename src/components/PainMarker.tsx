@@ -3,7 +3,7 @@ interface PainMarkerProps {
 }
 
 /**
- * Stylized pain-point marker — destructive-soft plate with refined X stroke.
+ * Stylized pain-point marker, destructive-soft plate with refined X stroke.
  * Mirrors the green-soft square icon pattern used in hero stat row.
  */
 export default function PainMarker({ size = 28 }: PainMarkerProps) {

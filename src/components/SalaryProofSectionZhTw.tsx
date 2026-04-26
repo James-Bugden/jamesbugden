@@ -5,7 +5,7 @@ import { CoinStackIcon, DownloadCloudIcon } from "@/assets/illustrations/Hiresig
 export default function SalaryProofSectionZhTw() {
   return (
     <>
-      {/* Part A — Big Impact Numbers */}
+      {/* Part A, Big Impact Numbers */}
       <section className="py-16 md:py-24 px-4 sm:px-5 md:px-6 bg-paper-alt">
         <div className="container mx-auto max-w-5xl">
           <div className="text-center mb-12 max-w-3xl mx-auto">
@@ -53,7 +53,7 @@ export default function SalaryProofSectionZhTw() {
         </div>
       </section>
 
-      {/* Part B — Salary Comparison */}
+      {/* Part B, Salary Comparison */}
       <section className="pb-16 md:pb-24 px-4 sm:px-5 md:px-6 bg-paper-alt">
         <div className="container mx-auto max-w-3xl">
           <div className="text-center mb-12">
@@ -83,7 +83,7 @@ export default function SalaryProofSectionZhTw() {
           {/* Bar Chart Comparison */}
           <div className="card-hairline p-6 md:p-10 mb-6 bg-card">
             <div className="grid grid-cols-2 gap-2 md:gap-4 max-w-sm md:max-w-md mx-auto">
-              {/* Bar 1 — Accept First Offer */}
+              {/* Bar 1, Accept First Offer */}
               <div className="flex flex-col items-center">
                 <p className="tnum-geist mb-3 text-muted-foreground" style={{ fontSize: '1rem', fontWeight: 600 }}>7 千萬</p>
                 <div className="flex items-end w-full justify-center" style={{ height: '260px' }}>
@@ -106,7 +106,7 @@ export default function SalaryProofSectionZhTw() {
                 </div>
               </div>
 
-              {/* Bar 2 — Negotiate Strategically */}
+              {/* Bar 2, Negotiate Strategically */}
               <div className="flex flex-col items-center">
                 <p className="tnum-geist mb-3" style={{ fontSize: '1rem', fontWeight: 700, color: 'hsl(var(--gold))' }}>1 億 5 千萬</p>
                 <div className="flex items-end w-full justify-center" style={{ height: '260px' }}>
@@ -132,7 +132,7 @@ export default function SalaryProofSectionZhTw() {
             </div>
           </div>
 
-          {/* Big Callout — refined */}
+          {/* Big Callout, refined */}
           <div className="text-center mb-8 py-6">
             <p
               className="font-heading tnum-geist"
@@ -151,7 +151,7 @@ export default function SalaryProofSectionZhTw() {
             </p>
           </div>
 
-          {/* Two stat cards — hairline */}
+          {/* Two stat cards, hairline */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-3 mb-10">
             <div className="card-hairline p-5 text-center">
               <p className="tnum-geist mb-1" style={{ color: 'hsl(var(--gold))', fontSize: '1.25rem', fontWeight: 700 }}>22 萬</p>

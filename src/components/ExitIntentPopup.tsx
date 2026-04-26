@@ -15,17 +15,17 @@ interface ExitIntentContent {
 }
 
 const EN_CONTENT: ExitIntentContent = {
-  heading: "Before you go —",
+  heading: "Before you go , ",
   subheading: "Get free job search guides delivered to your inbox. No spam, just insider strategies.",
   buttonText: "Get Free Guides",
   successHeading: "You're in!",
-  successBody: "Check your inbox — your free guides are on the way.",
+  successBody: "Check your inbox, your free guides are on the way.",
   successCta: "Create a free account to save progress & unlock more tools",
   successCtaLink: "/join",
 };
 
 const ZH_CONTENT: ExitIntentContent = {
-  heading: "離開前 —",
+  heading: "離開前 , ",
   subheading: "免費獲取求職攻略，直接寄到您的信箱。不灌水、不廢話。",
   buttonText: "免費索取攻略",
   successHeading: "成功加入！",

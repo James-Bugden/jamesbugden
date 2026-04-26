@@ -66,7 +66,7 @@ export default function OfferCompass() {
         </header>
 
 
-        {/* ── Scenario Bar — always visible ── */}
+        {/* ── Scenario Bar, always visible ── */}
         <div className="print:hidden border-b border-border bg-card">
           <div className="max-w-7xl mx-auto px-4 md:px-6 py-3 flex flex-wrap items-center gap-2">
             {scenarios.length > 1 && (

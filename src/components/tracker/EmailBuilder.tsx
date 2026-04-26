@@ -55,7 +55,7 @@ function getTemplate(key: TemplateKey, contact: Contact, employer: Employer | un
       };
     case "linkedin-2nd":
       return {
-        subject: `Introduction — seeking your advice`,
+        subject: `Introduction, seeking your advice`,
         body: `Dear ${cn},\n\nMy name is ${yn}, and I noticed we share a mutual connection on LinkedIn. May I have 20 minutes to ask about your experience at ${co}? I am exploring ${ia}, and your perspective would be invaluable.\n\nIf this week doesn't work, I'll follow up next week to find a better time.\n\nThank you,\n${yn}`,
       };
     case "linkedin-group":
@@ -84,7 +84,7 @@ function getFollowUpTemplate(contact: Contact, employer: Employer | undefined, p
   const dg = profile.degree || "[degree]";
 
   return {
-    subject: `Following up — ${sc} ${dg} seeking your advice`,
+    subject: `Following up, ${sc} ${dg} seeking your advice`,
     body: `Dear ${cn},\n\nI wanted to follow up on my email from last week about learning more about your experience at ${co}.\n\nIf now is a better time, I would appreciate 20 minutes of your time. If not, no worries at all.\n\nBest regards,\n${yn}`,
   };
 }
@@ -179,10 +179,10 @@ export default function EmailBuilder({ contact, employer, onClose, onUpdateConta
     const today = new Date().toISOString().slice(0, 10);
     if (isFollowUp) {
       onUpdateContact({ followUpSentDate: today });
-      toast.success("Follow-up marked as sent — tracking continues ✓");
+      toast.success("Follow-up marked as sent, tracking continues ✓");
     } else {
       onUpdateContact({ emailSentDate: today });
-      toast.success("Email marked as sent — 3-day timer started ✓");
+      toast.success("Email marked as sent, 3-day timer started ✓");
     }
     onClose();
   };

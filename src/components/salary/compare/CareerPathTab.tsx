@@ -147,7 +147,7 @@ export default function CareerPathTab({ lang }: { lang: SalaryLang }) {
           {/* Line chart */}
           <div className="bg-card border border-border rounded-xl p-6">
             <h3 className="font-heading text-lg font-bold mb-4">
-              {role} — {lang === "zh" ? "薪資成長路徑" : "Career Progression"}
+              {role}, {lang === "zh" ? "薪資成長路徑" : "Career Progression"}
             </h3>
             <div className="h-48 sm:h-72">
               <ResponsiveContainer width="100%" height="100%">

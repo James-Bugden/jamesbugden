@@ -6,7 +6,7 @@ import { Loader2 } from "lucide-react";
 
 interface AuthRouteProps {
   children: React.ReactNode;
-  /** Language — controls the login redirect path */
+  /** Language, controls the login redirect path */
   lang?: "en" | "zh";
 }
 

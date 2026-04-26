@@ -59,9 +59,9 @@ const WillyLinReviewZhTw = () => {
             </div>
             <div className="mt-6 space-y-4 text-foreground">
               <p>您的履歷有強大的教育和技術技能區塊，但薄弱的呈現方式和展示方法不適合招募人員和用人主管。</p>
-              <p><strong>第一，定位混亂，試圖迎合所有人</strong>——您的履歷混合 AI 工程與資料工程、資料分析和一般 ML 工作，造成不確定您實際目標是什麼職位。</p>
-              <p><strong>第二，篇幅顯示判斷力不佳</strong>——您使用兩頁 13 個要點卻只有不到一年的主要經驗（兩頁應保留給有 8 年以上實質成就的專業人士）。</p>
-              <p><strong>第三，全篇職責導向語言而非成果導向價值主張</strong>——您告訴雇主您負責什麼而非您達成什麼成果，沒有任何要點遵循「完成 [X] 透過 [Y] 衡量，藉由做 [Z]」的 XYZ 框架。</p>
+              <p><strong>第一，定位混亂，試圖迎合所有人</strong>, , 您的履歷混合 AI 工程與資料工程、資料分析和一般 ML 工作，造成不確定您實際目標是什麼職位。</p>
+              <p><strong>第二，篇幅顯示判斷力不佳</strong>, , 您使用兩頁 13 個要點卻只有不到一年的主要經驗（兩頁應保留給有 8 年以上實質成就的專業人士）。</p>
+              <p><strong>第三，全篇職責導向語言而非成果導向價值主張</strong>, , 您告訴雇主您負責什麼而非您達成什麼成果，沒有任何要點遵循「完成 [X] 透過 [Y] 衡量，藉由做 [Z]」的 XYZ 框架。</p>
               <p>然而，您具備早期職涯 AI 專業人士的基礎資歷。您的 Qwen3-8B 實際訓練經驗、GRPO 優化工作、多語言能力、生產部署知識，以及巴斯大學碩士學位。</p>
               <p className="text-gold font-semibold">問題不在於您的經驗，而在於您如何呈現它。</p>
             </div>
@@ -413,8 +413,8 @@ const WillyLinReviewZhTw = () => {
                 <div className="mt-3 space-y-4 text-sm">
                   <div>
                     <p className="font-semibold text-foreground">教育</p>
-                    <p className="text-foreground">英國巴斯大學 — 資料科學碩士</p>
-                    <p className="text-foreground">中國文化大學，台灣 — 應用數學學士</p>
+                    <p className="text-foreground">英國巴斯大學, 資料科學碩士</p>
+                    <p className="text-foreground">中國文化大學，台灣, 應用數學學士</p>
                   </div>
                   <div>
                     <p className="font-semibold text-foreground">技術技能</p>
@@ -431,8 +431,8 @@ const WillyLinReviewZhTw = () => {
                   </div>
                   <div>
                     <p className="font-semibold text-foreground">認證</p>
-                    <p className="text-foreground">經濟部 iPAS AI 應用規劃師（中級）— 台灣經濟部</p>
-                    <p className="text-foreground">AI 與數位創新計畫 — CMRI 數位創新研究所</p>
+                    <p className="text-foreground">經濟部 iPAS AI 應用規劃師（中級）,  台灣經濟部</p>
+                    <p className="text-foreground">AI 與數位創新計畫, CMRI 數位創新研究所</p>
                   </div>
                 </div>
               </div>

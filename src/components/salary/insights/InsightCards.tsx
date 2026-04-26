@@ -55,7 +55,7 @@ export default function InsightCards({ lang }: { lang: SalaryLang }) {
       },
       {
         title: lang === "zh" ? "最大資深加薪" : "Biggest Senior Premium",
-        value: topPremium?.sector || "—",
+        value: topPremium?.sector || ", ",
         sub: `${lang === "zh" ? "資深比初階多 " : "Seniors earn "}${Math.round(topPremium?.pct || 0)}%${lang === "zh" ? "" : " more"}`,
         accent: "bg-gold",
       },

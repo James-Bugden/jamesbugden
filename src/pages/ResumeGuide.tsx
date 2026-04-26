@@ -86,7 +86,7 @@ const ResumeGuide = () => {
                 <GoldCheckBadge />
                 <div>
                   <span className="font-medium text-foreground">Contact info is complete</span>
-                  <p className="text-muted-foreground text-sm mt-0.5">Phone, email, LinkedIn — all working and professional</p>
+                  <p className="text-muted-foreground text-sm mt-0.5">Phone, email, LinkedIn, all working and professional</p>
                 </div>
               </li>
               <li className="flex items-start gap-3">
@@ -186,7 +186,7 @@ const ResumeGuide = () => {
                 <GoldCheckBadge />
                 <div>
                   <span className="font-medium text-foreground">Simple formatting</span>
-                  <p className="text-muted-foreground text-sm mt-0.5">No tables or text boxes — modern ATS can read them but parse inconsistently</p>
+                  <p className="text-muted-foreground text-sm mt-0.5">No tables or text boxes, modern ATS can read them but parse inconsistently</p>
                 </div>
               </li>
             </ul>
@@ -241,7 +241,7 @@ const ResumeGuide = () => {
                 <GoldCheckBadge />
                 <div>
                   <span className="font-medium text-foreground">Professional email</span>
-                  <p className="text-muted-foreground text-sm mt-0.5">firstname.lastname@email.com — yes, I judge partygirl99@</p>
+                  <p className="text-muted-foreground text-sm mt-0.5">firstname.lastname@email.com, yes, I judge partygirl99@</p>
                 </div>
               </li>
               <li className="flex items-start gap-3">
@@ -303,7 +303,7 @@ const ResumeGuide = () => {
                   <li>• Show you understand their industry</li>
                 </ul>
                 <p className="text-muted-foreground text-xs mt-4 pt-3 border-t border-border">
-                  You don't need a new resume for every application — but different job types (Sales vs Operations) need different versions.
+                  You don't need a new resume for every application, but different job types (Sales vs Operations) need different versions.
                 </p>
               </div>
             </div>
@@ -387,7 +387,7 @@ const ResumeGuide = () => {
                   <li>• Including your full address (city, country is enough)</li>
                   <li>• Listing "Microsoft Office" as a skill in 2024</li>
                   <li>• "References available upon request" (wasted space)</li>
-                  <li>• Objective statements (you applied — it's assumed you want the job)</li>
+                  <li>• Objective statements (you applied, it's assumed you want the job)</li>
                   <li>• Irrelevant jobs from 10+ years ago</li>
                 </ul>
               </div>

@@ -1144,7 +1144,7 @@ const RecruiterScreenGuide = () => {
                     <p className="text-cream text-sm">Wait. Keep applying.</p>
                   </div>
                   <div className="bg-cream/5 border border-cream/10 rounded-lg p-3">
-                    <p className="text-cream text-sm">Get the call (or silence) — 2-7 days</p>
+                    <p className="text-cream text-sm">Get the call (or silence), 2-7 days</p>
                   </div>
                 </div>
               </div>

@@ -50,7 +50,7 @@ const tier1: Testimonial[] = [
     bold: "The first time I clearly understood what HR really cares about.",
   },
   {
-    headline: "\"Not just a resume fix — a confidence boost.\"",
+    headline: "\"Not just a resume fix, a confidence boost.\"",
     name: "Roy Tsai",
     titleSource: "Career Switcher · via Resume Review",
     photo: royPhoto,

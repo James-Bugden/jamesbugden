@@ -3,7 +3,7 @@
  *
  * Reads the same ResumeData + CustomizeSettings used by the screen preview
  * and produces a real vector PDF with selectable text, embedded fonts,
- * and clickable hyperlinks — no html2canvas, no raster images.
+ * and clickable hyperlinks, no html2canvas, no raster images.
  */
 import React from "react";
 import {
@@ -51,7 +51,7 @@ function extractFontName(cssFamily: string): string {
  * Font loading: use static TTF files via fontsource CDN.
  *
  * fontkit 2.x (used by react-pdf) has subsetting bugs with variable WOFF2
- * fonts from Google Fonts — glyphs render as invisible (correct metrics
+ * fonts from Google Fonts, glyphs render as invisible (correct metrics
  * but zero-visibility paths). This affects both URL-fetched and
  * base64-encoded WOFF2 data.
  *
@@ -79,8 +79,8 @@ const FONT_REGISTRATION_PROMISES = new Map<string, Promise<string>>();
  * fetch() with a hard timeout (browsers have none built in).
  * If the CDN stalls, the await never resolves and the preview loader
  * spins forever. AbortController lets us bail after 8s and treat the
- * registration as failed — downstream guards then fall back to Helvetica.
- * Do NOT remove this — it is the backstop for the CJK preview infinite-loading bug.
+ * registration as failed, downstream guards then fall back to Helvetica.
+ * Do NOT remove this, it is the backstop for the CJK preview infinite-loading bug.
  */
 async function fetchWithTimeout(url: string, options: RequestInit = {}, timeoutMs = 8000): Promise<Response> {
   const controller = new AbortController();
@@ -100,7 +100,7 @@ async function fetchWithTimeout(url: string, options: RequestInit = {}, timeoutM
  * Uses fontsource's legacy `/fontsource/fonts/...@latest/...` CDN path which
  * ships the full script subset as a single ~1.4 MB WOFF file (confirmed via
  * `curl -I` on 2026-04-19). CORS headers are correct. Do NOT switch to the
- * `@fontsource/...` npm-package path — that one splits CJK glyphs across
+ * `@fontsource/...` npm-package path, that one splits CJK glyphs across
  * ~40 numeric chunk files per weight, which doesn't work with react-pdf
  * (react-pdf embeds a single file per weight, doesn't do browser-style
  * unicode-range lazy loading).
@@ -113,7 +113,7 @@ async function fetchWithTimeout(url: string, options: RequestInit = {}, timeoutM
  * If we ever need to reduce this, options are:
  * 1. Drop weight 700 and let react-pdf faux-bold (slight visual artifact).
  * 2. Self-host a tree-shaken subset with just the glyphs the resume uses
- *    (complex — would need server-side subsetting pipeline).
+ *    (complex, would need server-side subsetting pipeline).
  * 3. Move CJK glyph rendering server-side via a Puppeteer edge function.
  *
  * See `C:\Users\jbbug\My Drive\Vault-Sync\James AI OS\CJK Font Pipeline Deep Dive.md`.
@@ -123,7 +123,7 @@ const CJK_URL_PATTERN = (pkg: string, subset: string, weight: number) =>
 
 // Self-hosted Noto Sans TC subset. ~1.1 MB WOFF2 each, containing the
 // Taiwan MOE 4,808 common char set + ASCII + CJK punctuation.
-// Built by `scripts/build-cjk-subset.mjs` — committed to public/fonts/.
+// Built by `scripts/build-cjk-subset.mjs`, committed to public/fonts/.
 // ~5,400 glyphs vs ~20,000 for the fontsource pan-CJK fallback. Fontkit
 // parses this much faster; with the Web Worker render path (see
 // pdfRenderer.worker.ts) the sync parse no longer blocks the main thread
@@ -173,7 +173,7 @@ const cjkRegistrationPromises = new Map<CJKFamily, Promise<boolean>>();
  *   it here and the family never enters REGISTERED_FONTS, so downstream
  *   `REGISTERED_FONTS.has(family)` guards fall back to Helvetica instead
  *   of crashing the preview.
- * - Failed registrations are NOT cached — next prepareFonts() call will
+ * - Failed registrations are NOT cached, next prepareFonts() call will
  *   retry (useful for transient CDN blips).
  */
 async function registerCJKFamily(family: CJKFamily): Promise<boolean> {
@@ -201,7 +201,7 @@ async function registerCJKFamily(family: CJKFamily): Promise<boolean> {
         });
       } catch (regErr) {
         // fontkit parser crash (e.g. DataView offset out of bounds).
-        // Do NOT mark the family as registered — downstream guards will
+        // Do NOT mark the family as registered, downstream guards will
         // fall back to the Latin body font automatically.
         if (import.meta.env.DEV) console.warn(`[ResumePDF] Font.register(${family}) threw:`, regErr);
         cjkRegistrationPromises.delete(family);
@@ -232,9 +232,9 @@ async function registerCJKFont(): Promise<boolean> {
 /**
  * Register a Google Font for use in react-pdf.
  * Returns the font family name to use, or "Helvetica" as fallback.
- * This is async — must be called and awaited before rendering.
+ * This is async, must be called and awaited before rendering.
  *
- * Works with ANY Google Font — not limited to the fonts in fontData.ts.
+ * Works with ANY Google Font, not limited to the fonts in fontData.ts.
  */
 async function registerFontAsync(cssFamily: string): Promise<string> {
   const name = extractFontName(cssFamily);
@@ -260,7 +260,7 @@ async function registerFontAsync(cssFamily: string): Promise<string> {
     try {
       const testResp = await fetchWithTimeout(testUrl, { method: "HEAD" });
       if (!testResp.ok) {
-        // Don't cache failures — allow retry on next call
+        // Don't cache failures, allow retry on next call
         FONT_REGISTRATION_PROMISES.delete(name);
         if (import.meta.env.DEV) console.warn(`[ResumePDF] Font "${name}" HEAD check failed (${testResp.status}), falling back to Helvetica`);
         return "Helvetica";
@@ -302,7 +302,7 @@ function ensureFontRegistered(cssFamily: string): string {
   const name = extractFontName(cssFamily);
   if (["Helvetica", "Times-Roman", "Courier"].includes(name)) return name;
   if (REGISTERED_FONTS.has(name)) return name;
-  // Font not registered — return Helvetica to avoid react-pdf crash.
+  // Font not registered, return Helvetica to avoid react-pdf crash.
   // prepareFonts() should have been called before we get here.
   return "Helvetica";
 }
@@ -311,7 +311,7 @@ function ensureFontRegistered(cssFamily: string): string {
  * Event: fired when a CJK family finishes registering. Used by the preview
  * component to trigger a re-render once the font is available. Without this,
  * the first render uses Helvetica fallback (tofu for Chinese) and no
- * re-render ever happens — the user is stuck with tofu even after the font
+ * re-render ever happens, the user is stuck with tofu even after the font
  * loads.
  *
  * Using a module-level Set of listeners instead of a BroadcastChannel so
@@ -331,9 +331,9 @@ function emitCJKReady() {
 /**
  * Pre-register fonts needed for a given set of settings.
  *
- * IMPORTANT: this function AWAITS only the Latin font registrations (fast —
+ * IMPORTANT: this function AWAITS only the Latin font registrations (fast , 
  * 30 KB WOFFs). CJK font registration (1.4+ MB per weight) is dispatched
- * WITHOUT await — it runs in the background and emits `onCJKFontReady()`
+ * WITHOUT await, it runs in the background and emits `onCJKFontReady()`
  * when complete. The preview can render IMMEDIATELY with Latin glyphs
  * (tofu for Chinese characters) and re-render once the CJK font arrives.
  *
@@ -344,7 +344,7 @@ function emitCJKReady() {
  *
  * The render-site guards at lines 913, 2119, 2245 already fall back to
  * Helvetica when `REGISTERED_FONTS.has(cjkFamily)` is false, so this
- * change is safe — it just moves CJK registration from the critical
+ * change is safe, it just moves CJK registration from the critical
  * path to the background.
  */
 export async function prepareFonts(
@@ -356,13 +356,13 @@ export async function prepareFonts(
   if (c?.bodyFont) families.add(c.bodyFont);
   if (c?.headingFont) families.add(c.headingFont);
 
-  // Latin fonts — await these. Tiny (30 KB per weight), fast to register.
+  // Latin fonts, await these. Tiny (30 KB per weight), fast to register.
   const latinTasks = Array.from(families).map((f) => registerFontAsync(f));
 
   // CJK fonts.
   //
   // skipCJK=true: caller is the in-editor preview on the MAIN thread.
-  // Do NOT register CJK at all — fontkit's synchronous parse of the
+  // Do NOT register CJK at all, fontkit's synchronous parse of the
   // 1.4 MB WOFF blocks the main thread for 30-75 seconds on first use,
   // freezing the whole editor (confirmed via Chrome MCP profiling).
   // Preview falls back to Latin rendering with tofu squares for CJK
@@ -409,7 +409,7 @@ export async function prepareFonts(
   const settled = await Promise.allSettled(latinTasks);
 
   if (awaitedCjkTasks) {
-    // Worker / download path — wait for the actual font registration
+    // Worker / download path, wait for the actual font registration
     // so fontkit has the glyphs before pdf().toBlob() runs. Emits the
     // ready event afterward so any main-thread subscribers also learn.
     const results = await Promise.allSettled(awaitedCjkTasks);
@@ -530,7 +530,7 @@ function smallPt(base: number): number {
 function resolveColors(c?: CustomizeSettings) {
   // Blue-link toggle: when enabled, contact links render in the standard
   // hyperlink blue (#2563eb). When disabled, they use the same `linkIconColor`
-  // as the icons beside them — a more understated look.
+  // as the icons beside them, a more understated look.
   // Previously this customize control was wired to the UI but not read by
   // any renderer, so toggling it did nothing.
   const defaultLinkColor = c?.linkIconColor ?? "#4B5563";
@@ -687,7 +687,7 @@ function parseHtml(html: string): HtmlNode[] {
 
   const nodes: HtmlNode[] = [];
 
-  // Split by tags — do NOT decode entities before splitting,
+  // Split by tags, do NOT decode entities before splitting,
   // as that would turn &lt; into < and corrupt the tag parsing.
   const parts = html.split(/(<[^>]+>)/g);
 
@@ -801,7 +801,7 @@ function parseHtml(html: string): HtmlNode[] {
       continue;
     }
 
-    // Text content — decode entities here, after tag splitting
+    // Text content, decode entities here, after tag splitting
     if (part.trim() || part === " ") {
       currentChildren().push({ type: "text", text: decodeEntities(part) });
     }
@@ -1017,7 +1017,7 @@ function PdfSectionHeading({
 
   // Pick the right CJK family for THIS heading (TC / SC / JP / KR per text),
   // then only use it if actually registered. Otherwise fall back to the
-  // chosen heading font — glyphs render as tofu but the preview stays up.
+  // chosen heading font, glyphs render as tofu but the preview stays up.
   const headingCjkFamily = isCJK ? pickCJKFamily(title) : null;
   const canUseCjk = headingCjkFamily !== null && REGISTERED_FONTS.has(headingCjkFamily);
   const textStyle = {
@@ -1145,7 +1145,7 @@ function ContactSeparator({
       <Text style={{ fontSize, color, marginHorizontal: mm(1) }}>|</Text>
     );
   }
-  // "icon" mode — no text separator, icons are rendered inline
+  // "icon" mode, no text separator, icons are rendered inline
   return null;
 }
 
@@ -1179,7 +1179,7 @@ function PdfSkillsSection({
     const cat = item.slice(0, colonIdx).trim();
     const rest = item.slice(colonIdx + 1).trim();
     if (!rest) return item;
-    if (subStyle === "dash") return `${cat} — ${rest}`;
+    if (subStyle === "dash") return `${cat}, ${rest}`;
     if (subStyle === "bracket") return `${cat} (${rest})`;
     return `${cat}: ${rest}`;
   };
@@ -1195,10 +1195,10 @@ function PdfSkillsSection({
     // Note: outer View uses explicit marginBottom per row instead of `gap`.
     // react-pdf treats Views with `gap` as non-splittable across pages;
     // explicit margins allow row-by-row page-break flow.
-    // Rows are NOT wrap={false} — skills are single-line so they won't visually
+    // Rows are NOT wrap={false}, skills are single-line so they won't visually
     // split, but keeping them wrappable lets react-pdf find break points between
     // rows rather than moving the entire grid to the next page.
-    // No marginTop here — the heading's own marginBottom: mm(2) provides the gap.
+    // No marginTop here, the heading's own marginBottom: mm(2) provides the gap.
     // Adding marginTop increases the minimum chunk needed to start on page 1,
     // which causes oscillation (section jumps to page 2) near page boundaries.
     return (
@@ -1231,7 +1231,7 @@ function PdfSkillsSection({
                 </Text>
               </View>
             ))}
-            {/* Pad incomplete rows so all rows have 3 flex:1 cells — keeps column widths consistent */}
+            {/* Pad incomplete rows so all rows have 3 flex:1 cells, keeps column widths consistent */}
             {Array.from({ length: 3 - row.length }).map((_, pi) => (
               <View key={`pad-${ri}-${pi}`} style={{ flex: 1 }} />
             ))}
@@ -1310,7 +1310,7 @@ function normalizeHex(color: string, fallback = "#e2e8f0"): string {
   return fallback;
 }
 
-/** Simple color mixer — produces a lighter version of color for bubble backgrounds */
+/** Simple color mixer, produces a lighter version of color for bubble backgrounds */
 function mixColor(hex: string, opacity: number): string {
   const normalized = normalizeHex(hex);
   const r = parseInt(normalized.slice(1, 3), 16);
@@ -1356,7 +1356,7 @@ function PdfLanguagesSection({
   const formatLangLabel = (lang: string, prof: string) => {
     const localized = localizeProf(prof);
     if (!localized) return lang;
-    if (subStyle === "dash") return `${lang} — ${localized}`;
+    if (subStyle === "dash") return `${lang}, ${localized}`;
     if (subStyle === "bracket") return `${lang} (${localized})`;
     return `${lang}: ${localized}`;
   };
@@ -2139,7 +2139,7 @@ function PdfSectionEntries({
  * - Only entry *title rows* use `wrap={false}` so the title/date line stays
  *   together. Description content (PdfHtmlBlock) wraps freely line by line.
  */
-// Section types that use small grid rows (~5mm) — hoisted to avoid per-render allocation
+// Section types that use small grid rows (~5mm), hoisted to avoid per-render allocation
 const SHORT_ROW_TYPES = new Set(["skills", "languages", "interests", "certificates", "courses", "awards"]);
 
 function PdfSectionBlock({
@@ -2222,7 +2222,7 @@ export function ResumePDF({ data, customize }: ResumePDFProps) {
   // Resolve body font. If the resume has any CJK content, pick the best CJK
   // family (TC / SC / JP / KR) based on script signal, but only use it if it
   // actually registered. Otherwise fall back to the user-chosen Latin body
-  // font — CJK glyphs will render as tofu squares, which is strictly better
+  // font, CJK glyphs will render as tofu squares, which is strictly better
   // than crashing the preview.
   const resolvedCjkFamily = resolveResumeCJKFamily(safe);
   const bodyFontFamily = resolvedCjkFamily && REGISTERED_FONTS.has(resolvedCjkFamily)
@@ -2337,18 +2337,18 @@ export function ResumePDF({ data, customize }: ResumePDFProps) {
                   : 0;
 
             const nameFontSize = NAME_SIZES[c?.nameSize || "s"];
-            // Apply uppercase in JS, not via textTransform — react-pdf's
+            // Apply uppercase in JS, not via textTransform, react-pdf's
             // font subsetter builds the glyph set from the raw input string
             // BEFORE textTransform is applied, so uppercase glyphs get
             // excluded from the subset and render as blank.
-            // Skip uppercase for CJK names — it garbles Chinese characters.
+            // Skip uppercase for CJK names, it garbles Chinese characters.
             const nameIsCJK = containsCJK(p.fullName);
             const displayName = nameIsCJK
               ? (p.fullName || "YOUR NAME")
               : (p.fullName || "YOUR NAME").toUpperCase();
             // Pick the right CJK family for THIS name (covers Chinese, Japanese
             // and Korean names). Only use it if the specific family actually
-            // registered — otherwise the name falls back to the Latin name
+            // registered, otherwise the name falls back to the Latin name
             // font (tofu but won't crash).
             const nameCjkFamily = nameIsCJK ? pickCJKFamily(p.fullName || "") : null;
             const nameCanUseCjk = nameCjkFamily !== null && REGISTERED_FONTS.has(nameCjkFamily);

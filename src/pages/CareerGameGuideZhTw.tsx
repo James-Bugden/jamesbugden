@@ -860,7 +860,7 @@ const CareerGameGuideZhTw = () => {
           <h3 className="font-heading text-xl text-foreground mb-3">秘密 25：成功始於任務指派，而非完成</h3>
           <p className="text-muted-foreground leading-relaxed mb-6">如果你在指派工作時就為團隊做好準備，你在後端修正的時間就會更少。</p>
 
-          <Collapsible title="管理儀式 — 有效的節奏">
+          <Collapsible title="管理儀式, 有效的節奏">
             <ul className="space-y-2 text-muted-foreground text-sm mt-3">
               <li>• <strong className="text-foreground">每兩週一對一：</strong>10 分鐘談優先事項，10 分鐘即時回饋，10 分鐘上報和障礙。</li>
               <li>• <strong className="text-foreground">交替進行的團隊會議</strong>分享更新、專案成功和背景資訊。</li>
@@ -976,7 +976,7 @@ const CareerGameGuideZhTw = () => {
           </ol>
 
           <h3 className="font-heading text-xl text-foreground mb-3">秘密 34：你職涯的正確路徑是你技能和興趣的自然對齊</h3>
-          <p className="text-muted-foreground leading-relaxed mb-6">注意「意外的職涯」——不帶意圖地接受任何出現的機會。但典型的職涯建議也需要翻轉。它不總是一條直線往上的梯子。它是一個職涯格子，往上、往旁邊、斜向移動。書中描述的最成功的人在多個部門、產業和職級擔任過職位。他們跟隨自己的技能進入任何能產生最大影響力的角色。</p>
+          <p className="text-muted-foreground leading-relaxed mb-6">注意「意外的職涯」, , 不帶意圖地接受任何出現的機會。但典型的職涯建議也需要翻轉。它不總是一條直線往上的梯子。它是一個職涯格子，往上、往旁邊、斜向移動。書中描述的最成功的人在多個部門、產業和職級擔任過職位。他們跟隨自己的技能進入任何能產生最大影響力的角色。</p>
 
           <h3 className="font-heading text-xl text-foreground mb-3">秘密 35：只有你直屬主管的文化才重要</h3>
           <p className="text-muted-foreground leading-relaxed mb-4">有一個叫「幽靈文化」的概念。這是執行長認為存在的文化。印在海報上、張貼在網站上、在採訪中被引用的那個。現實是：大多數員工體驗到的文化是他們直屬團隊和主管的次文化。更廣泛的公司文化可能在高層存在，但很少一致地滲透下來。</p>

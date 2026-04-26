@@ -33,7 +33,7 @@ import { useNavigate, Link } from "react-router-dom";
 import { useAuth } from "@/contexts/AuthContext";
 import { LogIn } from "lucide-react";
 import { AnalyzerPromptDialog } from "@/components/resume-builder/AnalyzerPromptDialog";
-// BuggyNoticeDialog import removed — see ResumeBuilder.tsx for rationale.
+// BuggyNoticeDialog import removed, see ResumeBuilder.tsx for rationale.
 import { SEO } from "@/components/SEO";
 
 type ViewMode = "dashboard" | "resume-editor";
@@ -471,7 +471,7 @@ function SimpleCustomizePanel({ customize, onChange }: { customize: CustomizeSet
 }
 
 /* ═════════════════════════════════════════════════════════════
-   Main Component — Simplified, Opinionated Builder
+   Main Component, Simplified, Opinionated Builder
    ═════════════════════════════════════════════════════════════ */
 const ResumeBuilderSimple = () => {
   const store = useResumeStore();
@@ -484,7 +484,7 @@ const ResumeBuilderSimple = () => {
   const [searchParams, setSearchParams] = useSearchParams();
   const localizedSectionTypes = useMemo(() => getLocalizedSectionTypes(lang), [lang]);
 
-  // Always start from locked customize — but allow user tweaks
+  // Always start from locked customize, but allow user tweaks
   const [customizeOverrides, setCustomizeOverrides] = useState<Partial<CustomizeSettings>>({});
   const customize = useMemo(() => ({ ...LOCKED_CUSTOMIZE, ...customizeOverrides }), [customizeOverrides]);
   const handleCustomizeChange = useCallback((updates: Partial<CustomizeSettings>) => {
@@ -793,7 +793,7 @@ const ResumeBuilderSimple = () => {
     );
   }
 
-  // Resume editor — content only, no customize/AI tabs
+  // Resume editor, content only, no customize/AI tabs
   const currentDocName = activeDoc?.name || "Resume";
 
   const editorContent = loading ? (
@@ -820,7 +820,7 @@ const ResumeBuilderSimple = () => {
           <PersonalDetailsCard details={data.personalDetails} onChange={(u) => { pushHistory(); updatePersonalDetails(u); }} />
         </div>
 
-        {/* Sections — dnd-kit sortable */}
+        {/* Sections, dnd-kit sortable */}
         <DndContext sensors={sensors} collisionDetection={closestCenter} onDragEnd={handleDragEnd} modifiers={[restrictToVerticalAxis]}>
           <SortableContext items={sectionIds} strategy={verticalListSortingStrategy}>
             {data.sections.map((section, idx) => (
@@ -881,7 +881,7 @@ const ResumeBuilderSimple = () => {
         {/* Analyzer CTA */}
         <AnalyzerCTA fromAnalyzer={searchParams.get("from") === "analyzer" || !!sessionStorage.getItem("analyzer-resume-text")} resumeData={data} />
 
-        {/* Inline add section — limited to 6 types */}
+        {/* Inline add section, limited to 6 types */}
         <AddSectionInline onAdd={addSection} existingTypes={data.sections.map((s) => s.type)} />
       </div>
     </div>
@@ -890,7 +890,7 @@ const ResumeBuilderSimple = () => {
   return (
     <div className="h-screen flex flex-col overflow-x-hidden" style={{ backgroundColor: BRAND.cream }}>
       <SEO />
-      {/* ── Top bar — cream nav matching analyzer ──────────────── */}
+      {/* ── Top bar, cream nav matching analyzer ──────────────── */}
       <div className="sticky top-0 z-30" style={{ backgroundColor: BRAND.cream, borderBottom: '1px solid rgba(43,71,52,0.1)' }}>
         {/* Row 1: Brand + nav */}
         <div className="flex items-center justify-between px-3 sm:px-5 h-12 sm:h-14">
@@ -997,7 +997,7 @@ const ResumeBuilderSimple = () => {
       <ImportModal open={editorImportOpen} onClose={() => setEditorImportOpen(false)} type="resume" onImported={handleEditorImported} />
       <MissingSummaryDialog open={missingSummaryOpen} onAdd={handleAddSummaryFromPrompt} onSkip={() => setMissingSummaryOpen(false)} />
       {viewMode === "resume-editor" && <AnalyzerPromptDialog fromAnalyzer={searchParams.get("from") === "analyzer" || !!sessionStorage.getItem("analyzer-resume-text")} />}
-      {/* <BuggyNoticeDialog /> — removed; see ResumeBuilder.tsx for rationale. */}
+      {/* <BuggyNoticeDialog />, removed; see ResumeBuilder.tsx for rationale. */}
     </div>
   );
 };

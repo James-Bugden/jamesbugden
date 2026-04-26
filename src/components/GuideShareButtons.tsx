@@ -51,7 +51,7 @@ const GuideShareButtons = ({ isZhTw = false }: GuideShareButtonsProps) => {
         </h2>
         <p className="text-base md:text-lg text-muted-foreground mb-8 max-w-xl mx-auto leading-relaxed">
           {isZhTw
-            ? "分享給可能正在找工作的朋友——好內容值得被看見。"
+            ? "分享給可能正在找工作的朋友, , 好內容值得被看見。"
             : "Share it with a friend who's job hunting. Good content deserves to be passed on."}
         </p>
         <div className="flex flex-col sm:flex-row items-center justify-center gap-3 sm:gap-4">

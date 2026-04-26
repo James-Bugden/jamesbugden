@@ -42,7 +42,7 @@ function InsightsContent() {
     const multiple = (seniorAvg / NATIONAL_MEDIAN).toFixed(1);
 
     return {
-      heatmap: `${topSector.sector}的資深職位平均薪資 NT$${(seniorAvg / 1_000_000).toFixed(1)}M — 全國中位數的 ${multiple} 倍`,
+      heatmap: `${topSector.sector}的資深職位平均薪資 NT$${(seniorAvg / 1_000_000).toFixed(1)}M, 全國中位數的 ${multiple} 倍`,
       top20: `台灣最高薪職位？${top.role}，年薪 NT$${(top.med / 1_000_000).toFixed(1)}M`,
     };
   }, []);

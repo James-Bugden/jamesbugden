@@ -25,7 +25,7 @@ export default function Login() {
   const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
-  // Separate flag for the Google button — the OAuth redirect takes 2–3s to
+  // Separate flag for the Google button, the OAuth redirect takes 2–3s to
   // resolve the Supabase signInWithOAuth → Google URL round-trip, and without
   // immediate visual feedback the button felt dead on click.
   const [googleLoading, setGoogleLoading] = useState(false);
@@ -53,7 +53,7 @@ export default function Login() {
   useEffect(() => {
     if (isLoggedIn) {
       // Always land on the dashboard after sign-in, regardless of where the
-      // user came from. (Users explicitly asked for this — previously we
+      // user came from. (Users explicitly asked for this, previously we
       // respected `location.state.from` / `auth_redirect`, which sometimes
       // sent them back to the homepage or the page they bounced off.)
       sessionStorage.removeItem("auth_redirect");

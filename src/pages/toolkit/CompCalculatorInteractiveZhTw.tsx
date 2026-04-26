@@ -413,7 +413,7 @@ const CompCalculatorInteractiveZhTw = () => {
                     return (
                       <div key={i} className="space-y-3 bg-muted/30 rounded-lg p-4 border border-border">
                         <div className="flex items-center justify-between">
-                          <p className="text-sm font-medium">RSU（限制型股票）{colCount > 1 ? ` — ${offer.name}` : ""}</p>
+                          <p className="text-sm font-medium">RSU（限制型股票）{colCount > 1 ? `, ${offer.name}` : ""}</p>
                           <button onClick={() => updateOffer(i, { showRSU: false, rsuGrant: 0 })} className="text-xs text-muted-foreground hover:text-destructive">移除</button>
                         </div>
                         <div>
@@ -494,7 +494,7 @@ const CompCalculatorInteractiveZhTw = () => {
                     return (
                       <div key={i} className="bg-muted/30 rounded-lg p-4 border border-border">
                         <div className="flex items-center justify-between mb-3">
-                          <p className="text-sm font-medium">ESPP（員工持股信託）{colCount > 1 ? ` — ${offer.name}` : ""}</p>
+                          <p className="text-sm font-medium">ESPP（員工持股信託）{colCount > 1 ? `, ${offer.name}` : ""}</p>
                           <button onClick={() => updateOffer(i, { showESPP: false, esppContribution: 0 })} className="text-xs text-muted-foreground hover:text-destructive">移除</button>
                         </div>
                         <div className="grid grid-cols-2 gap-3">

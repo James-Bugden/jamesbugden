@@ -59,7 +59,7 @@ const SiteFooter = () => {
         {/* Copyright & Legal */}
         <div className="border-t border-white/10 pt-4 flex flex-col sm:flex-row items-start sm:items-center gap-2 sm:gap-4">
           <span className="text-xs text-cream-90">
-            © {new Date().getFullYear()} Hiresign — {isZh ? "由 James Bugden 創辦" : "by James Bugden"}. {isZh ? "版權所有" : "All rights reserved"}.
+            © {new Date().getFullYear()} Hiresign, {isZh ? "由 James Bugden 創辦" : "by James Bugden"}. {isZh ? "版權所有" : "All rights reserved"}.
           </span>
           <div className="flex items-center gap-3 text-xs">
             <Link to="/privacy" className="text-cream-70 hover:text-cream transition-colors">

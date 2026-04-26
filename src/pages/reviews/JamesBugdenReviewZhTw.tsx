@@ -1018,14 +1018,14 @@ const JamesBugdenReviewZhTw = () => {
                   <p className="text-xs font-semibold text-gold mb-1">選項 A - 包含年份（建議）：</p>
                   <div className="text-sm text-foreground font-mono">
                     <p className="font-bold">EDUCATION</p>
-                    <p>University of East Anglia — B.A. Philosophy, 2010 | Norwich, United Kingdom</p>
+                    <p>University of East Anglia, B.A. Philosophy, 2010 | Norwich, United Kingdom</p>
                   </div>
                 </div>
                 <div className="bg-muted/50 rounded p-3">
                   <p className="text-xs font-semibold text-muted-foreground mb-1">選項 B - 省略年份（如果有年齡歧視顧慮）：</p>
                   <div className="text-sm text-foreground font-mono">
                     <p className="font-bold">EDUCATION</p>
-                    <p>University of East Anglia — B.A. Philosophy | Norwich, United Kingdom</p>
+                    <p>University of East Anglia, B.A. Philosophy | Norwich, United Kingdom</p>
                   </div>
                 </div>
               </div>
@@ -1520,7 +1520,7 @@ const JamesBugdenReviewZhTw = () => {
 
           <div className="bg-card rounded-xl p-6 border border-border">
             <p className="text-foreground leading-relaxed mb-6">
-              <strong>James，你有非常扎實的基礎。</strong>Uber Superstar 獎項、10+ 年漸進式經驗、一個使你與 99% 招募專員區別開來的 22K+ 社群，以及從零建立流程的驗證能力。問題不是你的經驗——而是你如何呈現它。
+              <strong>James，你有非常扎實的基礎。</strong>Uber Superstar 獎項、10+ 年漸進式經驗、一個使你與 99% 招募專員區別開來的 22K+ 社群，以及從零建立流程的驗證能力。問題不是你的經驗, , 而是你如何呈現它。
             </p>
 
             <p className="text-foreground font-semibold mb-3">三個最大的問題是：</p>

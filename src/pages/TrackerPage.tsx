@@ -96,7 +96,7 @@ export default function TrackerPage() {
   // Clear highlights on tab change
   useEffect(() => {
     if (prevTabRef.current !== activeTab) {
-      // Don't clear immediately — let the target tab pick it up
+      // Don't clear immediately, let the target tab pick it up
       const timer = setTimeout(() => {
         setHighlightedEmployerId(null);
       }, 3000);

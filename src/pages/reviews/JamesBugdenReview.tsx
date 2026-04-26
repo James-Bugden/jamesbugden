@@ -1055,14 +1055,14 @@ const JamesBugdenReview = () => {
                   <p className="text-xs font-semibold text-gold mb-1">Option A - Include Year (Recommended):</p>
                   <div className="text-sm text-foreground font-mono">
                     <p className="font-bold">EDUCATION</p>
-                    <p>University of East Anglia — B.A. Philosophy, 2010 | Norwich, United Kingdom</p>
+                    <p>University of East Anglia, B.A. Philosophy, 2010 | Norwich, United Kingdom</p>
                   </div>
                 </div>
                 <div className="bg-muted/50 rounded p-3">
                   <p className="text-xs font-semibold text-muted-foreground mb-1">Option B - Omit Year (If age discrimination concern):</p>
                   <div className="text-sm text-foreground font-mono">
                     <p className="font-bold">EDUCATION</p>
-                    <p>University of East Anglia — B.A. Philosophy | Norwich, United Kingdom</p>
+                    <p>University of East Anglia, B.A. Philosophy | Norwich, United Kingdom</p>
                   </div>
                 </div>
               </div>
@@ -1700,7 +1700,7 @@ const JamesBugdenReview = () => {
 
           <div className="bg-card rounded-xl p-6 border border-border">
             <p className="text-foreground leading-relaxed mb-6">
-              <strong>James, you have an incredibly strong foundation.</strong> An Uber Superstar Award, 10+ years of progressive experience, a 22K+ community that differentiates you from 99% of recruiters, and proven ability to build processes from zero. The issue isn't your experience—it's how you're presenting it.
+              <strong>James, you have an incredibly strong foundation.</strong> An Uber Superstar Award, 10+ years of progressive experience, a 22K+ community that differentiates you from 99% of recruiters, and proven ability to build processes from zero. The issue isn't your experience, it's how you're presenting it.
             </p>
 
             <p className="text-foreground font-semibold mb-3">The three biggest problems were:</p>

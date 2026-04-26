@@ -51,7 +51,7 @@ export function EmailGateOverlay({
 
   return (
     <div className="relative rounded-xl overflow-hidden">
-      {/* Placeholder skeleton — no real content rendered */}
+      {/* Placeholder skeleton, no real content rendered */}
       <div className="pointer-events-none select-none relative" aria-hidden>
         <div className="space-y-4 px-4 py-6" style={{ maxHeight: "300px", overflow: "hidden" }}>
           {[...Array(5)].map((_, i) => (

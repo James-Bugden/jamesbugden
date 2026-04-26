@@ -109,7 +109,7 @@ export function CoverLetterBuilder({ docId }: CoverLetterBuilderProps) {
         </div>
       ) : (
         <div className="flex-1 flex items-center justify-center text-gray-400 text-lg">
-          {activeTab === "dashboard" ? "Dashboard" : activeTab.charAt(0).toUpperCase() + activeTab.slice(1)} — Coming soon
+          {activeTab === "dashboard" ? "Dashboard" : activeTab.charAt(0).toUpperCase() + activeTab.slice(1)}, Coming soon
         </div>
       )}
     </div>

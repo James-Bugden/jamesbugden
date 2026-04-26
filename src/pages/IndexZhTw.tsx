@@ -41,7 +41,7 @@ function FAQSection() {
     <section className="py-14 md:py-20 px-5 md:px-6 bg-paper-alt">
       <div className="container mx-auto max-w-3xl">
         <h2 className="font-heading text-center mb-10 text-foreground tracking-[-0.025em]" style={{ fontSize: 'clamp(2rem, 4vw, 2.75rem)', fontWeight: 600, lineHeight: 1.1 }}>
-          這真的免費嗎？是的 — 原因如下。
+          這真的免費嗎？是的, 原因如下。
         </h2>
         <div className="card-hairline divide-y divide-border overflow-hidden">
           {faqs.map((faq, i) => {
@@ -115,7 +115,7 @@ const IndexZhTw = () => {
           aria-label="主要導覽"
         >
           <div className="container mx-auto px-4 sm:px-5 md:px-6 h-16 flex items-center justify-between">
-            <Link to="/zh-tw" className="cursor-pointer flex items-center gap-3" onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })} aria-label="Hiresign — by James Bugden" style={{ color: 'hsl(var(--executive-green))' }}>
+            <Link to="/zh-tw" className="cursor-pointer flex items-center gap-3" onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })} aria-label="Hiresign, by James Bugden" style={{ color: 'hsl(var(--executive-green))' }}>
               <Wordmark variant="mono" size={28} />
             </Link>
             <div className="flex items-center gap-2 sm:gap-4">
@@ -127,11 +127,11 @@ const IndexZhTw = () => {
       </header>
 
       <main>
-        {/* ── Hero — paper bg, photo above H1 ── */}
+        {/* ── Hero, paper bg, photo above H1 ── */}
         <section id="about" className="pt-12 md:pt-16 pb-14 md:pb-24 px-4 sm:px-5 md:px-6 relative bg-paper">
           <div className="container mx-auto max-w-3xl">
 
-            {/* Hero photo — above H1, large for recognition */}
+            {/* Hero photo, above H1, large for recognition */}
             <div className="flex justify-center mb-8">
               <div className="relative">
                 <div
@@ -188,22 +188,22 @@ const IndexZhTw = () => {
               加入 <span className="tnum-geist" style={{ fontWeight: 600 }}>10,000+</span> 位專業人士 · 隨時取消訂閱
             </p>
 
-            {/* Stat row — green icons + Geist tabular numerics, hairline border-top */}
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 sm:gap-12 pt-9 border-t border-border max-w-xl mx-auto">
-              <div className="flex items-center gap-3 justify-center">
+            {/* Stat row, green icons + Geist tabular numerics, hairline border-top */}
+            <div className="flex flex-col sm:flex-row items-center justify-center gap-6 sm:gap-14 pt-9 border-t border-border max-w-xl mx-auto">
+              <div className="flex items-center gap-3">
                 <div className="flex-shrink-0 w-11 h-11 rounded-lg flex items-center justify-center" style={{ background: 'hsl(var(--green-soft))' }}>
                   <ResumeStackIcon size={28} />
                 </div>
-                <div className="flex flex-col">
+                <div className="flex flex-col text-left">
                   <span className="tnum-geist text-foreground" style={{ fontSize: '1.75rem' }}>20,000+</span>
                   <span className="text-muted-foreground text-[13px]">份履歷審閱</span>
                 </div>
               </div>
-              <div className="flex items-center gap-3 justify-center">
+              <div className="flex items-center gap-3">
                 <div className="flex-shrink-0 w-11 h-11 rounded-lg flex items-center justify-center" style={{ background: 'hsl(var(--green-soft))' }}>
                   <ThreeFiguresIcon size={28} />
                 </div>
-                <div className="flex flex-col">
+                <div className="flex flex-col text-left">
                   <span className="tnum-geist text-foreground" style={{ fontSize: '1.75rem' }}>750+</span>
                   <span className="text-muted-foreground text-[13px]">人成功錄取</span>
                 </div>
@@ -212,19 +212,19 @@ const IndexZhTw = () => {
           </div>
         </section>
 
-        {/* ── Logo Trust Bar — paper-alt ── */}
+        {/* ── Logo Trust Bar, paper-alt ── */}
         <section className="bg-paper-alt py-10 md:py-14 px-5 md:px-6 border-y border-border">
           <div className="container mx-auto max-w-6xl">
             <LogoScrollZhTw />
           </div>
         </section>
 
-        {/* ── Testimonials — paper-alt ── */}
+        {/* ── Testimonials, paper-alt ── */}
         <LazySection>
           <HomepageTestimonialsZhTw />
         </LazySection>
 
-        {/* ── Pain-Point Section — paper bg, hairline cards ── */}
+        {/* ── Pain-Point Section, paper bg, hairline cards ── */}
         <section className="py-14 md:py-20 px-5 md:px-6 bg-paper">
           <div className="container mx-auto max-w-3xl">
             <h2 className="font-heading text-center mb-10 text-foreground tracking-[-0.025em]" style={{ fontSize: 'clamp(2rem, 4vw, 2.75rem)', fontWeight: 600, lineHeight: 1.1 }}>
@@ -271,7 +271,7 @@ const IndexZhTw = () => {
           </div>
         </section>
 
-        {/* ── Credibility Section — paper-alt, hairline cards with gold top accent ── */}
+        {/* ── Credibility Section, paper-alt, hairline cards with gold top accent ── */}
         <section className="py-14 md:py-20 px-5 md:px-6 bg-paper-alt">
           <div className="container mx-auto max-w-5xl">
             <div className="text-center mb-12 max-w-3xl mx-auto">
@@ -314,7 +314,7 @@ const IndexZhTw = () => {
                 </div>
                 <p className="font-heading text-[18px] mb-2 text-foreground tracking-[-0.01em] mt-9" style={{ fontWeight: 600, lineHeight: 1.25 }}>Uber 台灣 Recruiter</p>
                 <p className="text-[15px] text-muted-foreground leading-relaxed">
-                  我每天都在做招募決定的會議室裡 — 我把我看到的分享給你。
+                  我每天都在做招募決定的會議室裡, 我把我看到的分享給你。
                 </p>
               </div>
             </div>
@@ -341,13 +341,12 @@ const IndexZhTw = () => {
           <FAQSection />
         </LazySection>
 
-        {/* ── Create Account CTA — hairline card on paper-alt to match site language ── */}
+        {/* ── Create Account CTA, hairline card on paper-alt to match site language ── */}
         {!isLoggedIn && (
           <LazySection>
             <section className="py-14 md:py-20 px-5 md:px-6 bg-paper-alt">
               <div className="container mx-auto max-w-3xl">
                 <div className="bg-card border border-border rounded-2xl p-8 md:p-12 text-center shadow-sm">
-                  <p className="text-[11px] uppercase tracking-[0.2em] text-gold font-bold mb-4">免費</p>
                   <h2 className="font-heading mb-3 text-foreground tracking-[-0.025em]" style={{ fontSize: 'clamp(1.75rem, 4vw, 2.5rem)', fontWeight: 700, lineHeight: 1.1, textWrap: 'balance' }}>
                     免費建立帳號
                   </h2>
@@ -376,11 +375,10 @@ const IndexZhTw = () => {
                   </div>
                   <Link
                     to="/zh-tw/join"
-                    className="inline-flex items-center justify-center gap-2 px-7 py-3.5 rounded-lg font-bold bg-gold text-executive-green hover:bg-gold-dark hover:text-cream transition-colors text-base shadow-sm"
+                    className="inline-flex items-center justify-center gap-2 px-7 py-3.5 rounded-lg font-bold bg-gold text-white hover:bg-gold-dark transition-colors text-base shadow-sm"
                   >
                     免費取得完整資源
                   </Link>
-                  <p className="text-xs text-muted-foreground mt-3">無需信用卡</p>
                 </div>
               </div>
             </section>

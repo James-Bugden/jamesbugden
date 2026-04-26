@@ -51,7 +51,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       (event, session) => {
         setSession(session);
         // Any onAuthStateChange event means the auth client has a real answer
-        // — clear isLoading regardless of whether the session is present.
+        //, clear isLoading regardless of whether the session is present.
         setIsLoading(false);
         setHasResolvedAuth(true);
 

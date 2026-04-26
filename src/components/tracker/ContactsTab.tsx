@@ -20,7 +20,7 @@ const SOURCE_OPTIONS: { value: Contact["source"]; label: string }[] = [
   { value: "fan-mail", label: "Fan Mail" },
   { value: "cold-call", label: "Cold Call" },
 ];
-/* All contact sources use a unified Hiresign chip — differentiation comes from the label, not a rainbow palette. */
+/* All contact sources use a unified Hiresign chip, differentiation comes from the label, not a rainbow palette. */
 const SOURCE_COLORS: Record<Contact["source"], string> = {
   "alumni-db": "hsl(var(--executive-green))",
   "linkedin-1st": "hsl(var(--executive-green))",
@@ -78,7 +78,7 @@ function classifyContact(c: Contact): StatusInfo {
 interface CheckInfo { label: string; color: string; bg: string; icon: "pending" | "action" | "done"; }
 
 function get3DayCheck(c: Contact): CheckInfo {
-  if (!c.emailSentDate) return { label: "—", color: "#9CA3AF", bg: "#F3F4F6", icon: "pending" };
+  if (!c.emailSentDate) return { label: ", ", color: "#9CA3AF", bg: "#F3F4F6", icon: "pending" };
   if (c.respondedDate) return { label: "Responded", color: "#166534", bg: "#DCFCE7", icon: "done" };
   const days = businessDaysSinceEmail(c.emailSentDate);
   if (days < 3) return { label: "Pending", color: "#6B7280", bg: "#F3F4F6", icon: "pending" };
@@ -86,7 +86,7 @@ function get3DayCheck(c: Contact): CheckInfo {
 }
 
 function get7DayCheck(c: Contact): CheckInfo {
-  if (!c.emailSentDate) return { label: "—", color: "#9CA3AF", bg: "#F3F4F6", icon: "pending" };
+  if (!c.emailSentDate) return { label: ", ", color: "#9CA3AF", bg: "#F3F4F6", icon: "pending" };
   if (c.respondedDate) return { label: "Responded", color: "#166534", bg: "#DCFCE7", icon: "done" };
   if (c.followUpSentDate || c.followUpCallDate) return { label: "Done", color: "#166534", bg: "#DCFCE7", icon: "done" };
   const days = businessDaysSinceEmail(c.emailSentDate);
@@ -375,7 +375,7 @@ export default function ContactsTab({ employers, contacts, setContacts, onOpenPr
                 return (
                   <tr key={c.id} className="border-b hover:bg-[#FAFAF7] transition-colors" style={{ borderColor: "#E5E0D8" }}>
                     <td className="px-3 py-2.5 font-semibold" style={{ color: "#1B3A2F" }}>{c.name}</td>
-                    <td className="px-3 py-2.5" style={{ color: "#2C2C2C" }}>{employerMap.get(c.employerId) || "—"}</td>
+                    <td className="px-3 py-2.5" style={{ color: "#2C2C2C" }}>{employerMap.get(c.employerId) || ", "}</td>
                     <td className="px-3 py-2.5">
                       <span className="px-2 py-0.5 rounded-full text-xs font-medium text-white" style={{ backgroundColor: SOURCE_COLORS[c.source] }}>
                         {SOURCE_OPTIONS.find(s => s.value === c.source)?.label}
@@ -387,10 +387,10 @@ export default function ContactsTab({ employers, contacts, setContacts, onOpenPr
                       </span>
                     </td>
                     <td className="px-3 py-2.5 text-center text-xs" style={{ color: "#2C2C2C" }}>
-                      {c.emailSentDate ? new Date(c.emailSentDate).toLocaleDateString("en-US", { month: "short", day: "numeric" }) : "—"}
+                      {c.emailSentDate ? new Date(c.emailSentDate).toLocaleDateString("en-US", { month: "short", day: "numeric" }) : ", "}
                     </td>
                     <td className="px-3 py-2.5 text-center text-xs font-medium" style={{ color: "#2C2C2C" }}>
-                      {daysSince !== null ? `${daysSince}d` : "—"}
+                      {daysSince !== null ? `${daysSince}d` : ", "}
                     </td>
                     <td className="px-3 py-2.5 text-center"><CheckBadge info={check3} /></td>
                     <td className="px-3 py-2.5 text-center"><CheckBadge info={check7} /></td>
@@ -438,7 +438,7 @@ export default function ContactsTab({ employers, contacts, setContacts, onOpenPr
           <MobileContactCard
             key={c.id}
             contact={c}
-            employerName={employerMap.get(c.employerId) || "—"}
+            employerName={employerMap.get(c.employerId) || ", "}
             expanded={expandedId === c.id}
             onToggle={() => setExpandedId(expandedId === c.id ? null : c.id)}
             onUpdate={(u) => handleUpdate(c.id, u)}
@@ -451,7 +451,7 @@ export default function ContactsTab({ employers, contacts, setContacts, onOpenPr
         )}
       </div>
 
-      {/* Coaching CTA — visible when ≥3 contacts and <20% boosters */}
+      {/* Coaching CTA, visible when ≥3 contacts and <20% boosters */}
       {contacts.length >= 3 && (() => {
         const boosterPct = contacts.filter((c) => {
           if (!c.emailSentDate || !c.respondedDate) return false;

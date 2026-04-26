@@ -72,7 +72,7 @@ const tools: ToolItem[] = [
 
 const journeyItems: JourneyItem[] = [
   // ── End to End Guides ──
-  { id: "ai-job-search", title: { en: "AI Job Search Guide", zh: "AI 求職完整指南" }, description: { en: "How to use ChatGPT at every stage of your job search — from career direction to final offer.", zh: "從職涯方向到最終 Offer，每個階段都用 ChatGPT 的完整指南。" }, enPath: "/ai-job-search-guide", zhPath: "/zh-tw/ai-job-search-guide", tag: "end-to-end", contentType: "guide", isNew: true },
+  { id: "ai-job-search", title: { en: "AI Job Search Guide", zh: "AI 求職完整指南" }, description: { en: "How to use ChatGPT at every stage of your job search, from career direction to final offer.", zh: "從職涯方向到最終 Offer，每個階段都用 ChatGPT 的完整指南。" }, enPath: "/ai-job-search-guide", zhPath: "/zh-tw/ai-job-search-guide", tag: "end-to-end", contentType: "guide", isNew: true },
   { id: "pivot-guide", title: { en: "Pivot Method Guide", zh: "轉職攻略" }, description: { en: "The complete 5-stage framework for changing careers without starting over.", zh: "完整 5 階段架構，讓你換跑道不必砍掉重練。" }, enPath: "/pivot-method-guide", zhPath: "/zh-tw/pivot-method-guide", tag: "end-to-end", contentType: "guide" },
   { id: "pivot-mini", title: { en: "Pivot Method Mini Guide", zh: "轉職攻略精華版" }, description: { en: "The same framework in 8 minutes. For when you need the short version.", zh: "同一套架構，8 分鐘讀完。趕時間的你適用。" }, enPath: "/pivot-method-mini-guide", zhPath: "/zh-tw/pivot-method-mini-guide", tag: "end-to-end", contentType: "guide", miniOf: "pivot-guide" },
   { id: "problem-solving", title: { en: "Problem Solving 101", zh: "問題解決 101" }, description: { en: "A structured approach to breaking down complex problems and presenting clear solutions.", zh: "一套結構化方法，拆解複雜問題並提出清晰的解決方案。" }, enPath: "/problem-solving-guide", zhPath: "/zh-tw/problem-solving-guide", tag: "end-to-end", contentType: "guide", isNew: true },
@@ -95,9 +95,9 @@ const journeyItems: JourneyItem[] = [
   { id: "tk-scripts", title: { en: "Deflection Scripts", zh: "薪資迴避話術" }, description: { en: "What to say when they ask your salary expectations too early. Word-for-word scripts.", zh: "對方太早問期望薪資怎麼辦？逐字話術直接用。" }, enPath: "/toolkit/scripts", zhPath: "/zh-tw/toolkit/scripts", tag: "negotiating", contentType: "template" },
   { id: "tk-offer", title: { en: "Offer Response", zh: "Offer 回覆範本" }, description: { en: "How to respond to an offer without accepting or rejecting. Buy time and negotiate better.", zh: "收到 Offer 後怎麼回覆才不會太快答應又不失禮。爭取時間，談更好的條件。" }, enPath: "/toolkit/offer-response", zhPath: "/zh-tw/toolkit/offer-response", tag: "negotiating", contentType: "template" },
   { id: "tk-counter", title: { en: "Counteroffer Email", zh: "還價信範本" }, description: { en: "Copy-paste email templates for countering an offer professionally.", zh: "專業還價 email 範本，複製貼上就能用。" }, enPath: "/toolkit/counteroffer", zhPath: "/zh-tw/toolkit/counteroffer", tag: "negotiating", contentType: "template" },
-  { id: "tk-calc", title: { en: "Compensation Calculator", zh: "總薪酬計算器" }, description: { en: "Calculate your total comp — base, bonus, stock, benefits — so you compare offers properly.", zh: "底薪、獎金、股票、福利全部算進來，才能真正比較 Offer。" }, enPath: "/toolkit/calculator", zhPath: "/zh-tw/toolkit/calculator", tag: "negotiating", contentType: "calculator" },
+  { id: "tk-calc", title: { en: "Compensation Calculator", zh: "總薪酬計算器" }, description: { en: "Calculate your total comp, base, bonus, stock, benefits, so you compare offers properly.", zh: "底薪、獎金、股票、福利全部算進來，才能真正比較 Offer。" }, enPath: "/toolkit/calculator", zhPath: "/zh-tw/toolkit/calculator", tag: "negotiating", contentType: "calculator" },
   { id: "tk-calc-int", title: { en: "Comp Calculator Interactive", zh: "薪酬互動試算" }, description: { en: "The interactive version. Plug in two offers and see the real difference.", zh: "互動版。輸入兩個 Offer，一眼看出真正差多少。" }, enPath: "/toolkit/calculator-interactive", zhPath: "/zh-tw/toolkit/calculator-interactive", tag: "negotiating", contentType: "calculator" },
-  { id: "tk-pushback", title: { en: "Pushback Cheat Sheet", zh: "談判反擊速查" }, description: { en: "When they say 'this is our best offer' or 'the budget is fixed' — here's what to say back.", zh: "對方說「這已經是最好的 Offer 了」或「預算就這樣」— 你可以這樣回。" }, enPath: "/toolkit/pushback", zhPath: "/zh-tw/toolkit/pushback", tag: "negotiating", contentType: "template" },
+  { id: "tk-pushback", title: { en: "Pushback Cheat Sheet", zh: "談判反擊速查" }, description: { en: "When they say 'this is our best offer' or 'the budget is fixed', here's what to say back.", zh: "對方說「這已經是最好的 Offer 了」或「預算就這樣」,  你可以這樣回。" }, enPath: "/toolkit/pushback", zhPath: "/zh-tw/toolkit/pushback", tag: "negotiating", contentType: "template" },
   { id: "tk-raise", title: { en: "Raise One-Pager", zh: "加薪提案單" }, description: { en: "A one-page template to present your case for a raise to your manager. Data-backed, not emotional.", zh: "一頁式範本，用數據向主管提加薪。講證據，不講感覺。" }, enPath: "/toolkit/raise", zhPath: "/zh-tw/toolkit/raise", tag: "negotiating", contentType: "template" },
   { id: "tk-log", title: { en: "Achievement Log", zh: "成就紀錄簿" }, description: { en: "Track your wins weekly so when review time comes, you have the evidence ready.", zh: "每週記錄你的成果，績效考核時直接拿出來用。" }, enPath: "/toolkit/log", zhPath: "/zh-tw/toolkit/log", tag: "negotiating", contentType: "template" },
 ];
@@ -146,7 +146,7 @@ function getProgressBadge(toolId: string, lang: "en" | "zh", t: typeof i18n.en) 
 
 const i18n = {
   en: {
-    seoTitle: "Dashboard — James Bugden",
+    seoTitle: "Dashboard, James Bugden",
     seoDesc: "Your career tools dashboard.",
     signOut: "Sign out",
     hey: "Hey",
@@ -160,7 +160,7 @@ const i18n = {
     resourcesHeading: "Your Journey",
     resourcesSub: "Step-by-step playbooks for every stage of your career move. Written by a recruiter, not a career blogger.",
     ctaHeading: "Want 1-on-1 help?",
-    ctaBody: "These tools get you 80% of the way. If you want someone to look at your specific situation — resume, interviews, salary negotiation — I work with a few people each month.",
+    ctaBody: "These tools get you 80% of the way. If you want someone to look at your specific situation, resume, interviews, salary negotiation, I work with a few people each month.",
     ctaButton: "See If You're a Fit",
     ctaTrust: "Free intro call · No commitment · No pressure",
     footerCopyright: "© 2026 All Rights Reserved",
@@ -176,7 +176,7 @@ const i18n = {
     read: "read",
   },
   zh: {
-    seoTitle: "我的專區 — James Bugden",
+    seoTitle: "我的專區, James Bugden",
     seoDesc: "你的職涯工具與資源中心。",
     signOut: "登出",
     hey: "",
@@ -190,7 +190,7 @@ const i18n = {
     resourcesHeading: "你的旅程",
     resourcesSub: "求職每個階段的完整攻略。由 Recruiter 撰寫，不是職涯部落客。",
     ctaHeading: "想要一對一協助？",
-    ctaBody: "這些工具能幫你搞定 80%。如果你想找人針對你的狀況 — 履歷、面試、談薪 — 我每個月接幾位客戶。",
+    ctaBody: "這些工具能幫你搞定 80%。如果你想找人針對你的狀況, 履歷、面試、談薪, 我每個月接幾位客戶。",
     ctaButton: "了解詳情",
     ctaTrust: "免費諮詢 · 不綁約 · 零壓力",
     footerCopyright: "© 2026 版權所有",
@@ -278,7 +278,7 @@ export default function Dashboard({ lang = "en" }: { lang?: "en" | "zh" }) {
   }, [recentItems, allSearchable]);
 
   // Show skeleton ONLY while we don't know if the user is authed. Profile
-  // is a secondary fetch — every downstream usage already optional-chains
+  // is a secondary fetch, every downstream usage already optional-chains
   // on `profile?.x` so missing-profile is safe. Blocking on profileLoading
   // added ~300-500ms of skeleton time for no visual benefit. Sections that
   // genuinely need a loaded profile (onboarding card) already gate
@@ -286,10 +286,10 @@ export default function Dashboard({ lang = "en" }: { lang?: "en" | "zh" }) {
   if (isLoading) return <DashboardSkeleton />;
   // IMPORTANT: only redirect to /login once we've DEFINITIVELY heard back
   // from supabase. hasResolvedAuth is true after the real getSession()
-  // or onAuthStateChange fires — NOT after the 5s safety timeout in
+  // or onAuthStateChange fires, NOT after the 5s safety timeout in
   // AuthContext. Without this guard, a slow auth round-trip would kick
   // logged-in users to /login (observed 2026-04-19 on the Chinese
-  // dashboard — user had a valid session but hit the login page).
+  // dashboard, user had a valid session but hit the login page).
   if (!hasResolvedAuth) return <DashboardSkeleton />;
   if (!isLoggedIn) {
     const dashPath = window.location.pathname;
@@ -380,7 +380,7 @@ export default function Dashboard({ lang = "en" }: { lang?: "en" | "zh" }) {
             <div className="rounded-2xl px-4 py-3 max-w-lg border border-border relative bg-card">
               <p className="text-sm leading-relaxed pr-6 text-muted-foreground">
                 
-                <span className="font-semibold text-foreground">{t.newBadge}</span> — {t.newBody}{" "}
+                <span className="font-semibold text-foreground">{t.newBadge}</span>, {t.newBody}{" "}
                 <Link to={t.salaryKitLink} className="font-semibold hover:underline inline-flex items-center gap-0.5 text-gold">
                   {t.checkItOut} <ArrowRight className="w-3.5 h-3.5" />
                 </Link>
@@ -513,7 +513,7 @@ export default function Dashboard({ lang = "en" }: { lang?: "en" | "zh" }) {
                 );
               })}
               </div>
-              {/* No horizontal scroll fade needed — cards stack vertically on mobile */}
+              {/* No horizontal scroll fade needed, cards stack vertically on mobile */}
             </div>
           </div>
 

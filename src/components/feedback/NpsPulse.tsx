@@ -100,7 +100,7 @@ export default function NpsPulse({ locale = "en" }: NpsPulseProps) {
 
     if (count < MIN_SESSIONS) return;
 
-    // Check cooldown — prefer cloud timestamp, fall back to localStorage
+    // Check cooldown, prefer cloud timestamp, fall back to localStorage
     const cloudTs = profile?.nps_last_shown_at ? new Date(profile.nps_last_shown_at).getTime() : 0;
     const localTs = parseInt(localStorage.getItem(LAST_NPS_KEY) || "0", 10);
     const lastShownTs = Math.max(cloudTs, localTs);

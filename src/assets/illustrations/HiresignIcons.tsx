@@ -5,7 +5,7 @@ interface IconProps {
 
 const STROKE = 1.5;
 
-/* Stack of resumes / documents — for "20,000+ resumes reviewed" */
+/* Stack of resumes / documents, for "20,000+ resumes reviewed" */
 export function ResumeStackIcon({ size = 56, className = "" }: IconProps) {
   return (
     <svg width={size} height={size} viewBox="0 0 64 64" fill="none" className={className} xmlns="http://www.w3.org/2000/svg">
@@ -21,7 +21,7 @@ export function ResumeStackIcon({ size = 56, className = "" }: IconProps) {
   );
 }
 
-/* Three figures — for "750+ people hired" */
+/* Three figures, for "750+ people hired" */
 export function ThreeFiguresIcon({ size = 56, className = "" }: IconProps) {
   return (
     <svg width={size} height={size} viewBox="0 0 64 64" fill="none" className={className} xmlns="http://www.w3.org/2000/svg">
@@ -38,7 +38,7 @@ export function ThreeFiguresIcon({ size = 56, className = "" }: IconProps) {
   );
 }
 
-/* Office building / insider — for "Recruiter at Uber Taiwan" */
+/* Office building / insider, for "Recruiter at Uber Taiwan" */
 export function InsiderIcon({ size = 56, className = "" }: IconProps) {
   return (
     <svg width={size} height={size} viewBox="0 0 64 64" fill="none" className={className} xmlns="http://www.w3.org/2000/svg">
@@ -60,7 +60,7 @@ export function InsiderIcon({ size = 56, className = "" }: IconProps) {
   );
 }
 
-/* Pulse / signal mark — generic accent */
+/* Pulse / signal mark, generic accent */
 export function PulseIcon({ size = 56, className = "" }: IconProps) {
   return (
     <svg width={size} height={size} viewBox="0 0 64 64" fill="none" className={className} xmlns="http://www.w3.org/2000/svg">
@@ -72,7 +72,7 @@ export function PulseIcon({ size = 56, className = "" }: IconProps) {
   );
 }
 
-/* Upload doc — for "Upload Your Resume" */
+/* Upload doc, for "Upload Your Resume" */
 export function UploadDocIcon({ size = 56, className = "" }: IconProps) {
   return (
     <svg width={size} height={size} viewBox="0 0 64 64" fill="none" className={className} xmlns="http://www.w3.org/2000/svg">
@@ -88,7 +88,7 @@ export function UploadDocIcon({ size = 56, className = "" }: IconProps) {
   );
 }
 
-/* Score / scan — for "Get Your Score and Tips" */
+/* Score / scan, for "Get Your Score and Tips" */
 export function ScoreScanIcon({ size = 56, className = "" }: IconProps) {
   return (
     <svg width={size} height={size} viewBox="0 0 64 64" fill="none" className={className} xmlns="http://www.w3.org/2000/svg">
@@ -104,7 +104,7 @@ export function ScoreScanIcon({ size = 56, className = "" }: IconProps) {
   );
 }
 
-/* Trophy / offer — for "Land Your Dream Offer" */
+/* Trophy / offer, for "Land Your Dream Offer" */
 export function OfferTrophyIcon({ size = 56, className = "" }: IconProps) {
   return (
     <svg width={size} height={size} viewBox="0 0 64 64" fill="none" className={className} xmlns="http://www.w3.org/2000/svg">
@@ -123,7 +123,7 @@ export function OfferTrophyIcon({ size = 56, className = "" }: IconProps) {
   );
 }
 
-/* Trending bar chart — for salary "numbers speak" section. Editorial, not clipart. */
+/* Trending bar chart, for salary "numbers speak" section. Editorial, not clipart. */
 export function CoinStackIcon({ size = 56, className = "" }: IconProps) {
   return (
     <svg width={size} height={size} viewBox="0 0 64 64" fill="none" className={className} xmlns="http://www.w3.org/2000/svg">
@@ -131,7 +131,7 @@ export function CoinStackIcon({ size = 56, className = "" }: IconProps) {
       <rect x="6" y="6" width="52" height="52" rx="10" fill="hsl(var(--gold-soft))" />
       {/* Baseline */}
       <line x1="14" y1="48" x2="50" y2="48" stroke="hsl(var(--executive-green))" strokeWidth="1" strokeLinecap="round" opacity="0.35" />
-      {/* Bars — ascending */}
+      {/* Bars, ascending */}
       <rect x="16" y="36" width="6" height="12" rx="1" fill="hsl(var(--executive-green))" opacity="0.35" />
       <rect x="26" y="28" width="6" height="20" rx="1" fill="hsl(var(--executive-green))" opacity="0.55" />
       <rect x="36" y="20" width="6" height="28" rx="1" fill="hsl(var(--gold))" />
@@ -142,7 +142,7 @@ export function CoinStackIcon({ size = 56, className = "" }: IconProps) {
   );
 }
 
-/* Concentric rings + central mark — for "Downloads" stat. Reads as reach / signal. */
+/* Concentric rings + central mark, for "Downloads" stat. Reads as reach / signal. */
 export function DownloadCloudIcon({ size = 56, className = "" }: IconProps) {
   return (
     <svg width={size} height={size} viewBox="0 0 64 64" fill="none" className={className} xmlns="http://www.w3.org/2000/svg">
@@ -152,7 +152,7 @@ export function DownloadCloudIcon({ size = 56, className = "" }: IconProps) {
       <circle cx="32" cy="32" r="20" stroke="hsl(var(--executive-green))" strokeWidth="1" fill="none" opacity="0.25" />
       <circle cx="32" cy="32" r="14" stroke="hsl(var(--executive-green))" strokeWidth="1" fill="none" opacity="0.45" />
       <circle cx="32" cy="32" r="8" fill="hsl(var(--executive-green))" />
-      {/* Down chevron — implies "delivered to you" */}
+      {/* Down chevron, implies "delivered to you" */}
       <path d="M28 30 L32 35 L36 30" stroke="hsl(var(--gold))" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" fill="none" />
       {/* Tick accents */}
       <circle cx="32" cy="10" r="1.5" fill="hsl(var(--gold))" />
@@ -163,7 +163,7 @@ export function DownloadCloudIcon({ size = 56, className = "" }: IconProps) {
   );
 }
 
-/* Open book — for guides / library */
+/* Open book, for guides / library */
 export function GuideBookIcon({ size = 56, className = "" }: IconProps) {
   return (
     <svg width={size} height={size} viewBox="0 0 64 64" fill="none" className={className} xmlns="http://www.w3.org/2000/svg">
@@ -188,7 +188,7 @@ export function GuideBookIcon({ size = 56, className = "" }: IconProps) {
   );
 }
 
-/* Clipboard with checkmarks — for interview prep / scorecard / checklist */
+/* Clipboard with checkmarks, for interview prep / scorecard / checklist */
 export function ChecklistIcon({ size = 56, className = "" }: IconProps) {
   return (
     <svg width={size} height={size} viewBox="0 0 64 64" fill="none" className={className} xmlns="http://www.w3.org/2000/svg">
@@ -211,7 +211,7 @@ export function ChecklistIcon({ size = 56, className = "" }: IconProps) {
   );
 }
 
-/* Bar chart — for salary section */
+/* Bar chart, for salary section */
 export function BarChartIcon({ size = 56, className = "" }: IconProps) {
   return (
     <svg width={size} height={size} viewBox="0 0 64 64" fill="none" className={className} xmlns="http://www.w3.org/2000/svg">

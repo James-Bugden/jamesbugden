@@ -260,7 +260,7 @@ export default function RecruiterGuide() {
             <div className="bg-card border border-border rounded-xl p-5">
               <h3 className="font-heading font-bold text-foreground mb-2 flex items-center gap-2"><Search className="w-4 h-4 text-gold" /> Headhunters (External)</h3>
               <p className="text-sm text-foreground/80 leading-relaxed">
-                Independent. They work with multiple client companies. How they get paid depends on the type — retained, contingency, staffing, or outplacement.
+                Independent. They work with multiple client companies. How they get paid depends on the type, retained, contingency, staffing, or outplacement.
               </p>
             </div>
           </div>
@@ -353,7 +353,7 @@ export default function RecruiterGuide() {
                 <p className="text-xs text-muted-foreground mt-1">Pays the fee.<br/>Sets requirements.<br/>Makes hire decision.</p>
               </div>
             </div>
-            <p className="text-center text-xs text-muted-foreground mt-4 italic">The headhunter works FOR the company — but is financially motivated to get YOU hired.</p>
+            <p className="text-center text-xs text-muted-foreground mt-4 italic">The headhunter works FOR the company, but is financially motivated to get YOU hired.</p>
           </div>
 
           <p className="text-foreground/80 leading-relaxed mb-4">Once a headhunter picks you as their candidate, they are financially motivated to get you hired. They will coach you, prep you, and push the company for a decision. But they need you to be a candidate worth betting on.</p>

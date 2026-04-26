@@ -72,11 +72,11 @@ export const SkillAssessment = ({ lang }: { lang: Lang }) => {
 
   const averages = useMemo(() => scores.map(s => {
     const vals = [s.you, s.boss, s.peer, s.stakeholder].map(Number).filter(n => !isNaN(n) && n > 0);
-    return vals.length > 0 ? (vals.reduce((a, b) => a + b, 0) / vals.length).toFixed(1) : "—";
+    return vals.length > 0 ? (vals.reduce((a, b) => a + b, 0) / vals.length).toFixed(1) : ", ";
   }), [scores]);
 
   const top3 = useMemo(() => {
-    const indexed = averages.map((a, i) => ({ avg: a === "—" ? 0 : Number(a), i }));
+    const indexed = averages.map((a, i) => ({ avg: a === ", " ? 0 : Number(a), i }));
     indexed.sort((a, b) => b.avg - a.avg);
     return new Set(indexed.slice(0, 3).filter(x => x.avg > 0).map(x => x.i));
   }, [averages]);
@@ -148,7 +148,7 @@ export const ElevenList = ({ lang }: { lang: Lang }) => {
     const wantLabel = t("Want to be known for:", "想被知道的：", lang);
     const dontLabel = t("Don't want to be known for:", "不想被知道的：", lang);
     const missionLabel = t("Mission Statement:", "使命宣言：", lang);
-    return [wantLabel, ...data.want.map((v, i) => `${i + 1}. ${v || "—"}`), "", dontLabel, ...data.dont.map((v, i) => `${i + 1}. ${v || "—"}`), "", `${missionLabel} ${data.mission || "—"}`].join("\n");
+    return [wantLabel, ...data.want.map((v, i) => `${i + 1}. ${v || ", "}`), "", dontLabel, ...data.dont.map((v, i) => `${i + 1}. ${v || ", "}`), "", `${missionLabel} ${data.mission || ", "}`].join("\n");
   };
 
   return (
@@ -232,7 +232,7 @@ export const InfluencerList = ({ lang }: { lang: Lang }) => {
 
   const getCopyText = () => {
     const header = `${t("Name", "姓名", lang)} | ${criteria.join(" | ")} | ${t("Total", "總分", lang)}`;
-    const body = sorted.map(r => `${r.name || "—"} | ${r.scores.join(" | ")} | ${r.total}`);
+    const body = sorted.map(r => `${r.name || ", "} | ${r.scores.join(" | ")} | ${r.total}`);
     return [header, ...body].join("\n");
   };
 
@@ -299,9 +299,9 @@ export const AccomplishmentTracker = ({ lang }: { lang: Lang }) => {
   };
 
   const getCopyText = () => {
-    const header = `${t("Week", "週", lang)}: ${week || "—"}`;
+    const header = `${t("Week", "週", lang)}: ${week || ", "}`;
     const colHeader = `${t("Day", "日", lang)} | ${t("What I did", "做了什麼", lang)} | ${t("Impact", "影響", lang)} | ${t("Who knows?", "誰知道？", lang)} | ${t("Type", "類型", lang)}`;
-    const body = rows.map((r, i) => `${days[i]} | ${r.task || "—"} | ${r.impact || "—"} | ${r.whoKnows || "—"} | ${r.type || "—"}`);
+    const body = rows.map((r, i) => `${days[i]} | ${r.task || ", "} | ${r.impact || ", "} | ${r.whoKnows || ", "} | ${r.type || ", "}`);
     return [header, colHeader, ...body].join("\n");
   };
 
@@ -334,7 +334,7 @@ export const AccomplishmentTracker = ({ lang }: { lang: Lang }) => {
                 <td className="py-1.5 pr-2"><Input value={row.whoKnows} onChange={e => updateRow(i, "whoKnows", e.target.value)} className="h-7 text-xs" /></td>
                 <td className="py-1.5">
                   <select value={row.type} onChange={e => updateRow(i, "type", e.target.value)} className="h-7 w-full rounded-md border border-input bg-background text-xs px-1">
-                    <option value="">—</option>
+                    <option value="">, </option>
                     <option value="B">B (BAU)</option>
                     <option value="I">I ({t("Impact", "影響", lang)})</option>
                     <option value="D">D ({t("Dev", "發展", lang)})</option>
@@ -356,7 +356,7 @@ type OneOnOneData = { inform: string; escalate: string; advocate: string };
 
 export const OneOnOnePrep = ({ lang }: { lang: Lang }) => {
   const [data, setData] = useLocalStorage<OneOnOneData>(`career_game_1on1_${lang}`, { inform: "", escalate: "", advocate: "" });
-  const getCopyText = () => `${t("Inform (10 min)", "彙報（10 分鐘）", lang)}:\n${data.inform || "—"}\n\n${t("Escalate (10 min)", "上報（10 分鐘）", lang)}:\n${data.escalate || "—"}\n\n${t("Advocate (10 min)", "爭取（10 分鐘）", lang)}:\n${data.advocate || "—"}`;
+  const getCopyText = () => `${t("Inform (10 min)", "彙報（10 分鐘）", lang)}:\n${data.inform || ", "}\n\n${t("Escalate (10 min)", "上報（10 分鐘）", lang)}:\n${data.escalate || ", "}\n\n${t("Advocate (10 min)", "爭取（10 分鐘）", lang)}:\n${data.advocate || ", "}`;
 
   const sections: { key: keyof OneOnOneData; label: string; hint: string }[] = [
     { key: "inform", label: t("Inform (10 min)", "彙報（10 分鐘）", lang), hint: t("Updates, wins, progress on key projects", "更新、成就、關鍵專案進度", lang) },
@@ -388,7 +388,7 @@ type BAUData = { task: string; transform: string; impact: string };
 
 export const BAUTransformer = ({ lang }: { lang: Lang }) => {
   const [data, setData] = useLocalStorage<BAUData>(`career_game_bau_${lang}`, { task: "", transform: "", impact: "" });
-  const getCopyText = () => `${t("BAU Task", "BAU 任務", lang)}: ${data.task || "—"}\n${t("How to transform", "如何轉化", lang)}: ${data.transform || "—"}\n${t("Expected impact", "預期影響", lang)}: ${data.impact || "—"}`;
+  const getCopyText = () => `${t("BAU Task", "BAU 任務", lang)}: ${data.task || ", "}\n${t("How to transform", "如何轉化", lang)}: ${data.transform || ", "}\n${t("Expected impact", "預期影響", lang)}: ${data.impact || ", "}`;
 
   return (
     <WidgetShell title={t("BAU Task Transformer", "BAU 任務轉化器", lang)} lang={lang}>
@@ -437,8 +437,8 @@ export const CompetencyReScore = ({ lang }: { lang: Lang }) => {
     const rows = skills.map((sk, i) => {
       const prev = getPrevAvg(i);
       const cur = current[i] ? Number(current[i]) : null;
-      const delta = prev !== null && cur !== null ? (cur - prev).toFixed(1) : "—";
-      return `${sk} | ${prev !== null ? prev.toFixed(1) : "—"} | ${cur ?? "—"} | ${delta}`;
+      const delta = prev !== null && cur !== null ? (cur - prev).toFixed(1) : ", ";
+      return `${sk} | ${prev !== null ? prev.toFixed(1) : ", "} | ${cur ?? ", "} | ${delta}`;
     });
     return [header, ...rows].join("\n");
   };
@@ -466,12 +466,12 @@ export const CompetencyReScore = ({ lang }: { lang: Lang }) => {
               return (
                 <tr key={i} className="border-b border-border/50">
                   <td className="py-1.5 pr-2 text-muted-foreground">{skill}</td>
-                  <td className="py-1.5 px-1 text-center text-muted-foreground">{prev !== null ? prev.toFixed(1) : "—"}</td>
+                  <td className="py-1.5 px-1 text-center text-muted-foreground">{prev !== null ? prev.toFixed(1) : ", "}</td>
                   <td className="py-1.5 px-1">
                     <Input type="text" inputMode="numeric" value={current[i]} onChange={e => updateScore(i, e.target.value)} className="h-7 w-14 text-center text-xs mx-auto" placeholder="1-10" />
                   </td>
                   <td className={`py-1.5 px-1 text-center font-semibold ${delta !== null ? (delta > 0 ? "text-green-500" : delta < 0 ? "text-destructive" : "text-muted-foreground") : "text-muted-foreground"}`}>
-                    {delta !== null ? (delta > 0 ? `+${delta.toFixed(1)}` : delta.toFixed(1)) : "—"}
+                    {delta !== null ? (delta > 0 ? `+${delta.toFixed(1)}` : delta.toFixed(1)) : ", "}
                   </td>
                 </tr>
               );
@@ -513,7 +513,7 @@ export const FortyFortyTwentyReview = ({ lang }: { lang: Lang }) => {
 
   const getCopyText = () => {
     const header = `${t("Day", "日", lang)} | ${t("Task", "任務", lang)} | ${t("Hours", "時數", lang)} | ${t("Category", "類別", lang)}`;
-    const body = rows.map((r, i) => `${days[i]} | ${r.task || "—"} | ${r.hours || "—"} | ${r.category || "—"}`);
+    const body = rows.map((r, i) => `${days[i]} | ${r.task || ", "} | ${r.hours || ", "} | ${r.category || ", "}`);
     const summary = `\n${t("Split", "比例", lang)}: BAU ${pct(totals.BAU)}% | ${t("High-Impact", "高影響力", lang)} ${pct(totals.HI)}% | ${t("Self-Dev", "自我發展", lang)} ${pct(totals.SD)}% (${t("Target: 40/40/20", "目標：40/40/20", lang)})`;
     return [header, ...body, summary].join("\n");
   };
@@ -548,7 +548,7 @@ export const FortyFortyTwentyReview = ({ lang }: { lang: Lang }) => {
                 <td className="py-1.5 pr-2"><Input type="number" min={0} max={24} value={row.hours} onChange={e => updateRow(i, "hours", e.target.value)} className="h-7 w-14 text-center text-xs mx-auto" /></td>
                 <td className="py-1.5">
                   <select value={row.category} onChange={e => updateRow(i, "category", e.target.value)} className="h-7 w-full rounded-md border border-input bg-background text-xs px-1">
-                    <option value="">—</option>
+                    <option value="">, </option>
                     <option value="BAU">BAU</option>
                     <option value="HI">{t("High-Impact", "高影響力", lang)}</option>
                     <option value="SD">{t("Self-Dev", "自我發展", lang)}</option>

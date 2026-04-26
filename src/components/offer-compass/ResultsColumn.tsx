@@ -79,7 +79,7 @@ export default function ResultsColumn({ scenario, currency, scenarios, activeId 
 
   return (
     <div className="space-y-6">
-      {/* Card 1: Summary Panel — always visible */}
+      {/* Card 1: Summary Panel, always visible */}
       <div className="bg-card border border-border rounded-2xl p-6 md:p-8 print:border-0 print:p-0">
         <h3 className="font-heading text-lg font-bold text-foreground mb-4">Compensation Summary</h3>
         <div className="space-y-2">
@@ -105,7 +105,7 @@ export default function ResultsColumn({ scenario, currency, scenarios, activeId 
 
       </div>
 
-      {/* Card 2: Pie Chart + 4-Year Projection — only shown when unlocked */}
+      {/* Card 2: Pie Chart + 4-Year Projection, only shown when unlocked */}
       {isUnlocked && <div className="space-y-6">
           {/* Pie Chart */}
           <div className="bg-card border border-border rounded-2xl p-6 md:p-8">

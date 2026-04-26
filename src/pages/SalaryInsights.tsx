@@ -46,8 +46,8 @@ function InsightsContent({ lang }: { lang: SalaryLang }) {
 
     return {
       heatmap: lang === "zh"
-        ? `${topSector.sector}的資深職位平均薪資 NT$${(seniorAvg / 1_000_000).toFixed(1)}M — 全國中位數的 ${multiple} 倍`
-        : `Senior roles in ${topSector.sector} average NT$${(seniorAvg / 1_000_000).toFixed(1)}M — ${multiple}× the national median`,
+        ? `${topSector.sector}的資深職位平均薪資 NT$${(seniorAvg / 1_000_000).toFixed(1)}M, 全國中位數的 ${multiple} 倍`
+        : `Senior roles in ${topSector.sector} average NT$${(seniorAvg / 1_000_000).toFixed(1)}M, ${multiple}× the national median`,
       top20: lang === "zh"
         ? `台灣最高薪職位？${top.role}，年薪 NT$${(top.med / 1_000_000).toFixed(1)}M`
         : `The highest-paying role in Taiwan? ${top.role} at NT$${(top.med / 1_000_000).toFixed(1)}M/year`,

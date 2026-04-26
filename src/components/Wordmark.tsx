@@ -11,7 +11,7 @@ interface WordmarkProps {
 }
 
 /**
- * Hiresign lockup — pulse-in-seal mark + lowercase wordmark.
+ * Hiresign lockup, pulse-in-seal mark + lowercase wordmark.
  * Color is driven by `currentColor` on the SVG and `text-*` on the parent.
  */
 export function Wordmark({

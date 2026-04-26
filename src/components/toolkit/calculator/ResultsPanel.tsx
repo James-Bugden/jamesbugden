@@ -228,7 +228,7 @@ export function ResultsPanel({ offers, results, cascadeInsight, mobileSelectedIn
             className="w-full bg-card border-t-2 border-gold shadow-[0_-4px_20px_rgba(0,0,0,0.15)] px-4 py-3 flex items-center justify-between"
           >
             <div className="text-left">
-              <p className="text-xs text-muted-foreground">{mobileOffer?.name || "Offer"} — Year 1</p>
+              <p className="text-xs text-muted-foreground">{mobileOffer?.name || "Offer"}, Year 1</p>
               <p className="text-lg font-bold text-foreground">{formatCurrency(mobileResult?.year1Total || 0)}</p>
             </div>
             <ChevronUp className="w-5 h-5 text-muted-foreground" />
