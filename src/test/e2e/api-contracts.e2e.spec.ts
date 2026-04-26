@@ -18,6 +18,13 @@
  */
 
 import { test, expect } from "@playwright/test";
+import { readFileSync } from "node:fs";
+import path from "node:path";
+import { fileURLToPath } from "node:url";
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+const REPO_ROOT = path.resolve(__dirname, "../../..");
 
 const SUPABASE_URL = "https://reahmeddjkivwzjsoqkn.supabase.co";
 const FLY_URL = "https://jamesbugden-preview.fly.dev";
@@ -212,6 +219,30 @@ test.describe("Public surface sanity", () => {
       html,
       "CSP meta tag missing — would allow arbitrary font/connect sources",
     ).toMatch(/http-equiv="Content-Security-Policy"/);
+  });
+
+  test("source index.html CSP connect-src allows data: URIs (HIR-50)", () => {
+    // Emscripten WASM loaders (e.g. yoga-layout, used by @react-pdf/renderer)
+    // probe `fetch('data:application/octet-stream;base64,...')` before falling
+    // back to TypedArray instantiation. Without `data:` in connect-src, the
+    // probe is blocked and pollutes DevTools with CSP violations on every
+    // Download panel open. The fallback succeeds today, but a future loader
+    // upgrade may flip preference order — pre-empt that here.
+    const html = readFileSync(path.join(REPO_ROOT, "index.html"), "utf8");
+    const cspMatch = html.match(
+      /<meta\s+http-equiv="Content-Security-Policy"\s+content="([^"]+)"/i,
+    );
+    expect(cspMatch, "CSP meta tag not found in index.html").not.toBeNull();
+    const csp = cspMatch![1];
+    const connectSrc = csp
+      .split(";")
+      .map((d) => d.trim())
+      .find((d) => d.startsWith("connect-src"));
+    expect(connectSrc, "connect-src directive missing").toBeTruthy();
+    expect(
+      connectSrc!.split(/\s+/),
+      `connect-src missing 'data:' source — Emscripten WASM probe will spam CSP errors. Got: ${connectSrc}`,
+    ).toContain("data:");
   });
 
   test("self-hosted CJK TC subset fonts are served with correct content-type", async ({
