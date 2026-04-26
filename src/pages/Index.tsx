@@ -181,7 +181,7 @@ const Index = () => {
             >
               Get a <span style={{ color: 'hsl(var(--executive-green))' }}>$200K+ offer</span>
               <br className="hidden md:inline" />
-              {' '}at <span className="text-mark-gold whitespace-nowrap">your dream company</span>.
+              {' '}at <span className="text-mark-gold whitespace-nowrap">your dream company</span>
             </h1>
 
             <p className="leading-relaxed mb-9 text-[1.125rem] text-center mx-auto max-w-2xl" style={{ color: 'hsl(0 0% 28%)' }}>
@@ -278,7 +278,7 @@ const Index = () => {
           <div className="container mx-auto max-w-5xl">
             <div className="text-center mb-12 max-w-3xl mx-auto">
               <h2 className="font-heading text-foreground tracking-[-0.025em]" style={{ fontSize: 'clamp(2rem, 4vw, 2.75rem)', fontWeight: 600, lineHeight: 1.1 }}>
-                Most career advice comes from people who've never <span style={{ color: 'hsl(var(--gold))' }}>hired</span> anyone.
+                Most career advice comes from people who've never <span style={{ color: 'hsl(var(--gold))' }}>hired</span> anyone
               </h2>
             </div>
 

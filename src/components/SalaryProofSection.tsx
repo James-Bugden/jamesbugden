@@ -25,7 +25,7 @@ export default function SalaryProofSection() {
               className="font-heading tracking-[-0.025em] text-foreground"
               style={{ fontSize: 'clamp(2rem, 4vw, 2.75rem)', fontWeight: 600, lineHeight: 1.1 }}
             >
-              The numbers speak for themselves.
+              The numbers speak for themselves
             </h2>
           </div>
 
@@ -73,7 +73,7 @@ export default function SalaryProofSection() {
               className="font-heading tracking-[-0.025em] text-foreground mb-3"
               style={{ fontSize: 'clamp(1.75rem, 3.5vw, 2.25rem)', fontWeight: 600, lineHeight: 1.1 }}
             >
-              Here's what negotiating looks like.
+              Here's what negotiating looks like
             </h2>
             <p className="text-muted-foreground" style={{ fontSize: '1rem' }}>
               Same starting salary. Two different strategies. 30 years later:

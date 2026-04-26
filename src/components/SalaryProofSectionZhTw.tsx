@@ -25,7 +25,7 @@ export default function SalaryProofSectionZhTw() {
               className="font-heading tracking-[-0.025em] text-foreground"
               style={{ fontSize: 'clamp(2rem, 4vw, 2.75rem)', fontWeight: 600, lineHeight: 1.1 }}
             >
-              數字會說話。
+              數字會說話
             </h2>
           </div>
 
@@ -73,7 +73,7 @@ export default function SalaryProofSectionZhTw() {
               className="font-heading tracking-[-0.025em] text-foreground mb-3"
               style={{ fontSize: 'clamp(1.75rem, 3.5vw, 2.25rem)', fontWeight: 600, lineHeight: 1.1 }}
             >
-              談判到底差多少？
+              談判到底差多少
             </h2>
             <p className="text-muted-foreground" style={{ fontSize: '1rem' }}>
               同樣的起薪。兩種不同策略。30 年後：

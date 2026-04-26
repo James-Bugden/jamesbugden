@@ -29,7 +29,7 @@ export default function SelfSegmentationZhTw() {
           className="font-heading text-center mb-10 md:mb-14"
           style={{ color: '#1A1A1A', fontSize: 'clamp(2rem, 4vw, 2.625rem)', lineHeight: 1.2 }}
         >
-          60 秒拿到你的免費履歷分數。
+          60 秒拿到你的免費履歷分數
         </h2>
 
         {/* Steps */}
