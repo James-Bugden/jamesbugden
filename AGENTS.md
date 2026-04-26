@@ -18,7 +18,7 @@ Codebase contract for any AI agent (Claude Code, Paperclip site-engineer, Lovabl
 
 ```sh
 npm ci
-npm run dev       # Vite on :5173 (per playwright.config.ts:96)
+npm run dev       # Vite on :8080 (per vite.config.ts:25)
 ```
 
 Test account credentials live in James's password manager — ask him before testing flows that require sign-in. If the sign-in form hangs, sign in via console:
@@ -34,7 +34,7 @@ await supabase.auth.signInWithPassword({ email: '<from-pw-mgr>', password: '<fro
 
 ```sh
 npx tsc --noEmit                             # type check — REQUIRED before every commit
-QA_BASE_URL=http://localhost:5173 LOCAL=1 \
+QA_BASE_URL=http://localhost:8080 LOCAL=1 \
   npx playwright test --grep "smoke"         # smoke suite for any UI change (auto-boots dev server)
 node scripts/banned-patterns.mjs             # blocks @ts-ignore, console.log, debugger (diff-aware)
 node scripts/lovable-protected-paths.mjs     # only fails on Lovable-bot PRs touching protected paths
