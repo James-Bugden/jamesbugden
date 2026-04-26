@@ -1,0 +1,24 @@
+# CODEOWNERS — protected paths require James's review.
+#
+# Lovable's gpt-engineer-app[bot] cannot self-approve, so any PR (theirs or
+# anyone else's) touching these paths needs James to merge. The ship-gate
+# also auto-fails Lovable PRs on these paths via scripts/lovable-protected-paths.mjs.
+#
+# Why these paths: James paid a developer to migrate the resume builder to a
+# PDF-based preview pipeline, and Lovable has regressed it twice. Lock them.
+
+src/components/resume-builder/   @James-Bugden
+src/lib/resumePdf/               @James-Bugden
+src/workers/pdfRenderer.worker.ts @James-Bugden
+
+# CI infrastructure — changes need James review so a future "fix" doesn't
+# silently weaken the ship-gate.
+.github/workflows/               @James-Bugden
+.github/CODEOWNERS               @James-Bugden
+scripts/banned-patterns.mjs      @James-Bugden
+scripts/lovable-protected-paths.mjs @James-Bugden
+scripts/hallucination-check.mjs  @James-Bugden
+scripts/bundle-budget.mjs        @James-Bugden
+
+# AGENTS.md is the codebase contract for AI agents. Edits go through review.
+AGENTS.md                        @James-Bugden
