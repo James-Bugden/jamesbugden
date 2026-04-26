@@ -20,6 +20,7 @@ import JourneySection, { type JourneyItem, type GuideTag, useSeenNewItems } from
 import PickUpWhereYouLeftOff from "@/components/dashboard/PickUpWhereYouLeftOff";
 import WhatsNewModal from "@/components/dashboard/WhatsNewModal";
 import { SEO } from "@/components/SEO";
+import { SiteHeader } from "@/components/SiteHeader";
 
 interface ToolItem {
   id: string;
@@ -323,15 +324,13 @@ export default function Dashboard({ lang = "en" }: { lang?: "en" | "zh" }) {
         <WhatsNewModal lang={lang} profile={profile} updateProfile={updateProfile} />
       )}
 
-      <nav className={`sticky top-0 z-50 bg-executive-green transition-shadow duration-300 ${scrolled ? 'shadow-lg shadow-black/20' : ''}`}>
-        <div className="max-w-[1200px] mx-auto flex items-center justify-between px-4 md:px-8 h-14">
-          <div className="flex items-center gap-3">
-            <Link to="/" className="font-heading text-lg tracking-wide text-cream">hiresign</Link>
-            <span className="text-cream/40 text-sm hidden sm:inline">/</span>
-            <span className="text-sm font-semibold hidden sm:inline text-cream/80">{t.dashboard}</span>
-          </div>
-
-          <div className="hidden md:flex items-center gap-1">
+      <SiteHeader
+        variant="dark"
+        lang={lang === "zh" ? "zh" : "en"}
+        breadcrumb={t.dashboard}
+        sticky
+        centerSlot={
+          <>
             {sectionNavItems.map((sec) => (
               <button
                 key={sec.id}
@@ -345,32 +344,34 @@ export default function Dashboard({ lang = "en" }: { lang?: "en" | "zh" }) {
                 {sec.label}
               </button>
             ))}
-          </div>
-
-          <div className="flex items-center gap-4 text-sm">
-            <span className="hidden sm:inline text-cream/60">{t.hey} {firstName}</span>
-            <button onClick={signOut} className="hover:opacity-80 transition-opacity text-cream/60">{t.signOut}</button>
+          </>
+        }
+        rightSlot={
+          <>
+            <span className="hidden sm:inline text-cream/60 text-sm">{t.hey} {firstName}</span>
+            <button onClick={signOut} className="hover:opacity-80 transition-opacity text-cream/60 text-sm">{t.signOut}</button>
             <ThemeToggle variant="nav" />
             <LanguageToggle variant="nav" />
+          </>
+        }
+        belowSlot={
+          <div className="md:hidden border-t border-white/10 flex overflow-x-auto px-4 gap-1">
+            {sectionNavItems.map((sec) => (
+              <button
+                key={sec.id}
+                onClick={() => scrollToSection(sec.id)}
+                className={`text-sm font-medium px-3 py-2 whitespace-nowrap transition-colors border-b-2 ${
+                  activeSection === sec.id
+                    ? 'text-gold border-gold'
+                    : 'text-cream/50 border-transparent'
+                }`}
+              >
+                {sec.label}
+              </button>
+            ))}
           </div>
-        </div>
-
-        <div className="md:hidden border-t border-white/10 flex overflow-x-auto px-4 gap-1">
-          {sectionNavItems.map((sec) => (
-            <button
-              key={sec.id}
-              onClick={() => scrollToSection(sec.id)}
-              className={`text-sm font-medium px-3 py-2 whitespace-nowrap transition-colors border-b-2 ${
-                activeSection === sec.id
-                  ? 'text-gold border-gold'
-                  : 'text-cream/50 border-transparent'
-              }`}
-            >
-              {sec.label}
-            </button>
-          ))}
-        </div>
-      </nav>
+        }
+      />
 
       {/* Welcome Banner */}
       <section className="bg-background">

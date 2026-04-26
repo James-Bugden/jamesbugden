@@ -5,8 +5,7 @@ import { Briefcase, Users, FileCheck, X, CheckCircle2, Eye, Building, Plus, Minu
 import PainMarker from "@/components/PainMarker";
 import { ResumeStackIcon, ThreeFiguresIcon, InsiderIcon } from "@/assets/illustrations/HiresignIcons";
 import jamesPhoto from "@/assets/james-bugden.jpg";
-import LanguageToggle from "@/components/LanguageToggle";
-import { AuthHeaderButton } from "@/components/AuthHeaderButton";
+import { SiteHeader } from "@/components/SiteHeader";
 import HomepageTestimonials from "@/components/HomepageTestimonials";
 import LogoScroll from "@/components/LogoScroll";
 import SelfSegmentation from "@/components/SelfSegmentation";
@@ -15,10 +14,8 @@ import MailerLiteForm from "@/components/MailerLiteForm";
 import LazySection from "@/components/LazySection";
 import AboutSection from "@/components/AboutSection";
 import ExitIntentPopup from "@/components/ExitIntentPopup";
-import PromoBanner from "@/components/PromoBanner";
 import { useAuth } from "@/contexts/AuthContext";
 import { SEO } from "@/components/SEO";
-import { Wordmark } from "@/components/Wordmark";
 
 const faqs = [
   { q: "Why are these free?", a: "It's my mission to make as many paid tools and information online free. I want to help as many people as I can to have the job and lifestyle they want." },
@@ -84,7 +81,6 @@ function FAQSection() {
 const Index = () => {
   const { isLoggedIn } = useAuth();
   const navigate = useNavigate();
-  const [scrolled, setScrolled] = useState(false);
 
   useEffect(() => {
     if (!isLoggedIn) return;
@@ -94,12 +90,6 @@ const Index = () => {
       navigate(pending === "/" ? "/dashboard" : pending, { replace: true });
     }
   }, [isLoggedIn, navigate]);
-
-  useEffect(() => {
-    const onScroll = () => setScrolled(window.scrollY > 80);
-    window.addEventListener("scroll", onScroll, { passive: true });
-    return () => window.removeEventListener("scroll", onScroll);
-  }, []);
 
   return (
     <div className="homepage min-h-screen overflow-x-hidden scroll-smooth bg-cream">
@@ -118,27 +108,7 @@ const Index = () => {
         "knowsAbout": ["Recruiting", "Career Coaching", "Resume Writing", "Interview Preparation", "Salary Negotiation"]
       }} />
 
-      {/* ── Promo Banner + Navigation (sticky together), LIGHT cream nav ── */}
-      <header className="sticky top-0 z-50">
-        <PromoBanner lang="en" />
-        <nav
-          className={`transition-all duration-300 border-b border-border ${
-            scrolled ? "shadow-sm" : ""
-          }`}
-          style={{ background: 'rgba(253,251,247,0.85)', backdropFilter: 'blur(12px)', WebkitBackdropFilter: 'blur(12px)' }}
-          aria-label="Main navigation"
-        >
-          <div className="container mx-auto px-4 sm:px-5 md:px-6 h-16 flex items-center justify-between">
-            <Link to="/" className="cursor-pointer flex items-center gap-3" onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })} aria-label="Hiresign, by James Bugden" style={{ color: 'hsl(var(--executive-green))' }}>
-              <Wordmark variant="mono" size={28} />
-            </Link>
-            <div className="flex items-center gap-2 sm:gap-4">
-              <AuthHeaderButton variant="light" />
-              <LanguageToggle variant="nav" />
-            </div>
-          </div>
-        </nav>
-      </header>
+      <SiteHeader variant="light" lang="en" promoBanner />
 
       <main>
         {/* ── Hero, paper bg, photo above H1 per user direction ── */}

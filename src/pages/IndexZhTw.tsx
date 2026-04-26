@@ -5,8 +5,7 @@ import { X, CheckCircle2, Plus, Minus, FileText, Users } from "lucide-react";
 import PainMarker from "@/components/PainMarker";
 import { ResumeStackIcon, ThreeFiguresIcon, InsiderIcon } from "@/assets/illustrations/HiresignIcons";
 import jamesPhoto from "@/assets/james-bugden.jpg";
-import LanguageToggle from "@/components/LanguageToggle";
-import { AuthHeaderButton } from "@/components/AuthHeaderButton";
+import { SiteHeader } from "@/components/SiteHeader";
 import HomepageTestimonialsZhTw from "@/components/HomepageTestimonialsZhTw";
 import LogoScrollZhTw from "@/components/LogoScrollZhTw";
 import SelfSegmentationZhTw from "@/components/SelfSegmentationZhTw";
@@ -15,10 +14,8 @@ import MailerLiteForm from "@/components/MailerLiteForm";
 import LazySection from "@/components/LazySection";
 import AboutSectionZhTw from "@/components/AboutSectionZhTw";
 import ExitIntentPopup from "@/components/ExitIntentPopup";
-import PromoBanner from "@/components/PromoBanner";
 import { useAuth } from "@/contexts/AuthContext";
 import { SEO } from "@/components/SEO";
-import { Wordmark } from "@/components/Wordmark";
 
 const faqs = [
   { q: "為什麼這些是免費的？", a: "我的使命是把盡可能多的付費工具和資訊免費開放。我想幫助更多人得到他們想要的工作和生活。" },
@@ -83,7 +80,6 @@ function FAQSection() {
 const IndexZhTw = () => {
   const { isLoggedIn } = useAuth();
   const navigate = useNavigate();
-  const [scrolled, setScrolled] = useState(false);
 
   useEffect(() => {
     if (!isLoggedIn) return;
@@ -94,37 +90,11 @@ const IndexZhTw = () => {
     }
   }, [isLoggedIn, navigate]);
 
-  useEffect(() => {
-    const onScroll = () => setScrolled(window.scrollY > 80);
-    window.addEventListener("scroll", onScroll, { passive: true });
-    return () => window.removeEventListener("scroll", onScroll);
-  }, []);
-
   return (
     <div className="homepage min-h-screen overflow-x-hidden scroll-smooth bg-cream">
       <SEO />
 
-      {/* ── Promo Banner + Navigation (sticky together) ── */}
-      <header className="sticky top-0 z-50">
-        <PromoBanner lang="zh" />
-        <nav
-          className={`transition-all duration-300 border-b border-border ${
-            scrolled ? "shadow-sm" : ""
-          }`}
-          style={{ background: 'rgba(253,251,247,0.85)', backdropFilter: 'blur(12px)', WebkitBackdropFilter: 'blur(12px)' }}
-          aria-label="主要導覽"
-        >
-          <div className="container mx-auto px-4 sm:px-5 md:px-6 h-16 flex items-center justify-between">
-            <Link to="/zh-tw" className="cursor-pointer flex items-center gap-3" onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })} aria-label="Hiresign, by James Bugden" style={{ color: 'hsl(var(--executive-green))' }}>
-              <Wordmark variant="mono" size={28} />
-            </Link>
-            <div className="flex items-center gap-2 sm:gap-4">
-              <AuthHeaderButton variant="light" />
-              <LanguageToggle variant="nav" />
-            </div>
-          </div>
-        </nav>
-      </header>
+      <SiteHeader variant="light" lang="zh" promoBanner />
 
       <main>
         {/* ── Hero, paper bg, photo above H1 ── */}
