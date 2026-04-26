@@ -2,6 +2,7 @@ import { useState } from "react";
 import { Mail, CheckCircle2, ArrowRight } from "lucide-react";
 import { Link } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
+import { assignDripVariantForLead } from "@/lib/experiments/variants";
 
 type MailerLiteFormProps = {
   formId: string;
@@ -25,15 +26,39 @@ export default function MailerLiteForm({ formId, className, buttonText = "Get on
 
     setIsLoading(true);
 
+    const trimmedEmail = email.trim();
+
     try {
-      await Promise.all([
-        supabase.functions.invoke("sync-mailerlite", {
-          body: { email: email.trim() },
-        }),
-        supabase
-          .from("email_gate_leads")
-          .insert({ email: email.trim(), source: leadSource }),
+      // Insert lead first so we have a row id to attach a drip variant to.
+      // The MailerLite invoke runs in parallel with variant assignment so
+      // the user-visible latency stays the same as before.
+      const insertPromise = supabase
+        .from("email_gate_leads")
+        .insert({ email: trimmedEmail, source: leadSource })
+        .select("id")
+        .single();
+
+      const [{ data: lead, error: leadError }] = await Promise.all([
+        insertPromise,
       ]);
+
+      if (leadError && import.meta.env.DEV) {
+        console.warn("[MailerLiteForm] lead insert failed:", leadError.message);
+      }
+
+      // Assign sticky drip-experiment variant on the lead row (HIR-64).
+      // RPC is idempotent and falls back to null on failure; in either
+      // case we still call the MailerLite sync so the email is captured.
+      const dripVariant = lead?.id
+        ? await assignDripVariantForLead(lead.id)
+        : null;
+
+      await supabase.functions.invoke("sync-mailerlite", {
+        body: {
+          email: trimmedEmail,
+          drip_variant: dripVariant ?? undefined,
+        },
+      });
     } catch (err) {
       console.error("Lead sync error:", err);
     }

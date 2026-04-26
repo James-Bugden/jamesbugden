@@ -17,10 +17,21 @@
  */
 export type MailerLiteResult = { ok: true } | { ok: false; reason: string };
 
+export type MailerLiteSyncOptions = {
+  /**
+   * Optional drip-experiment variant (HIR-64). When omitted, the edge
+   * function adds the subscriber to its default group, preserving prior
+   * single-group behaviour for callers that do not participate in the
+   * experiment.
+   */
+  dripVariant?: "control" | "treatment";
+};
+
 export function syncToMailerLite(
   email: string,
   name?: string,
   onResult?: (result: MailerLiteResult) => void,
+  opts?: MailerLiteSyncOptions,
 ): void {
   const url = `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/sync-mailerlite`;
   fetch(url, {
@@ -29,7 +40,7 @@ export function syncToMailerLite(
       "Content-Type": "application/json",
       apikey: import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY,
     },
-    body: JSON.stringify({ email, name }),
+    body: JSON.stringify({ email, name, drip_variant: opts?.dripVariant }),
     keepalive: true,
   })
     .then((res) => {

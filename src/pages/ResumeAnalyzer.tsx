@@ -255,6 +255,17 @@ export default function ResumeAnalyzer({ defaultLang = "en" }: { defaultLang?: L
         } else {
           text = await extractTextFromDOCX(file);
         }
+        // First-session funnel signal (HIR-64). Fires on every successful
+        // resume upload — the v_first_session_tool_action view filters to
+        // the user's first authenticated session at read time.
+        if (text.length >= 100) {
+          trackTool(
+            "resume_analyzer",
+            "resume_uploaded",
+            { input_method: `upload_${ext}`, text_length: text.length },
+            { lang },
+          );
+        }
       } else {
         text = pasteText.trim();
       }
