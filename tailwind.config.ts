@@ -15,8 +15,8 @@ export default {
   	extend: {
   		backgroundImage: {
   			'gradient-radial': 'radial-gradient(var(--tw-gradient-stops))',
-  			'gradient-gold': 'linear-gradient(135deg, hsl(42 52% 56%) 0%, hsl(42 48% 47%) 100%)',
-  			'gradient-gold-light': 'linear-gradient(135deg, hsl(42 52% 56%) 0%, hsl(42 60% 70%) 100%)'
+  			'gradient-gold': 'linear-gradient(135deg, hsl(40 48% 47%) 0%, hsl(40 48% 38%) 100%)',
+  			'gradient-gold-light': 'linear-gradient(135deg, hsl(40 48% 47%) 0%, hsl(40 56% 62%) 100%)'
   		},
   		colors: {
   			border: 'hsl(var(--border))',
@@ -63,46 +63,59 @@ export default {
   				ring: 'hsl(var(--sidebar-ring))'
 			},
 			gold: {
-				DEFAULT: 'hsl(42 52% 56%)',
-				dark: 'hsl(42 48% 47%)',
-				light: 'hsl(42 60% 70%)'
+				DEFAULT: 'hsl(40 48% 47%)',
+				dark: 'hsl(40 48% 38%)',
+				light: 'hsl(40 56% 62%)',
+				soft: 'hsl(43 60% 89%)'
 			},
 			cream: {
-				DEFAULT: 'hsl(39 47% 96%)',
-				light: 'hsl(39 47% 98%)',
-				'70': 'hsla(39, 47%, 96%, 0.7)',
-				'90': 'hsla(39, 47%, 96%, 0.9)'
+				DEFAULT: 'hsl(43 60% 89%)',
+				light: 'hsl(40 45% 98%)',
+				'70': 'hsla(43, 60%, 89%, 0.7)',
+				'90': 'hsla(43, 60%, 89%, 0.9)'
 			},
 			executive: {
-				DEFAULT: 'hsl(153 38% 17%)',
-				light: 'hsl(153 30% 23%)',
-				green: 'hsl(153 38% 17%)'
+				DEFAULT: 'hsl(153 72% 14%)',
+				light: 'hsl(153 73% 20%)',
+				green: 'hsl(153 72% 14%)'
 			},
-			'executive-green': 'hsl(153 38% 17%)',
+			'executive-green': 'hsl(153 72% 14%)',
+			'green-deep': 'hsl(153 72% 14%)',
+			paper: 'hsl(40 45% 98%)',
+			'paper-alt': 'hsl(43 28% 94%)',
   		},
   		fontFamily: {
   			heading: [
-  				'Playfair Display',
-  				'Times New Roman',
-  				'Georgia',
-  				'serif'
+  				'Geist',
+  				'-apple-system',
+  				'BlinkMacSystemFont',
+  				'Segoe UI',
+  				'sans-serif'
   			],
   			sans: [
-  				'Inter',
+  				'Geist',
+  				'-apple-system',
+  				'BlinkMacSystemFont',
+  				'Segoe UI',
+  				'Roboto',
   				'ui-sans-serif',
   				'system-ui',
   				'sans-serif',
   				'Apple Color Emoji',
-  				'Segoe UI Emoji',
-  				'Segoe UI Symbol',
-  				'Noto Color Emoji'
+  				'Segoe UI Emoji'
   			],
   			display: [
+  				'Geist',
   				'-apple-system',
   				'BlinkMacSystemFont',
   				'SF Pro Display',
   				'Segoe UI',
-  				'Roboto',
+  				'sans-serif'
+  			],
+  			brand: [
+  				'Inter Tight',
+  				'Geist',
+  				'-apple-system',
   				'sans-serif'
   			],
   			serif: [
@@ -114,6 +127,7 @@ export default {
   				'serif'
   			],
   			mono: [
+  				'DM Mono',
   				'ui-monospace',
   				'SFMono-Regular',
   				'Menlo',
@@ -130,10 +144,10 @@ export default {
   			sm: 'calc(var(--radius) - 4px)'
   		},
   		boxShadow: {
-  			premium: '0 8px 24px hsla(153, 38%, 17%, 0.08)',
-  			'premium-hover': '0 16px 40px hsla(153, 38%, 17%, 0.12)',
-  			gold: '0 4px 12px hsla(42, 52%, 56%, 0.3)',
-  			'gold-hover': '0 6px 20px hsla(42, 52%, 56%, 0.4)'
+  			premium: '0 8px 24px hsla(153, 72%, 14%, 0.08)',
+  			'premium-hover': '0 16px 40px hsla(153, 72%, 14%, 0.12)',
+  			gold: '0 4px 12px hsla(40, 48%, 47%, 0.3)',
+  			'gold-hover': '0 6px 20px hsla(40, 48%, 47%, 0.4)'
   		},
   		keyframes: {
   			'accordion-down': {
