@@ -42,3 +42,27 @@ test.describe("Builder — download", () => {
     expect(header).toBe("%PDF");
   });
 });
+
+test.describe("Builder (simple) — download", () => {
+  test.beforeEach(async ({ page }) => {
+    await page.goto("/resume-simple");
+    await page.waitForLoadState("domcontentloaded");
+    const firstCard = page.locator('article, button').filter({
+      hasText: /temp|resume|qa_test/i,
+    }).first();
+    if (!(await firstCard.count())) test.skip(true, "no resume");
+    const viewBtn = page.getByRole("button", { name: /view|編輯/i }).first();
+    if (await viewBtn.count()) await viewBtn.click();
+    else await firstCard.click();
+    await waitForPreviewIdle(page);
+  });
+
+  test("downloaded filename does not contain double 'Resume' suffix (BUG-007)", async ({
+    page,
+  }) => {
+    test.setTimeout(90_000);
+    const { filename } = await downloadPdf(page);
+    expect(filename).toMatch(/\.pdf$/);
+    expect(filename).not.toMatch(/Resume_Resume/i);
+  });
+});

@@ -240,7 +240,11 @@ function DownloadDropdown({ downloading, pageFormat, docName, onDownload }: {
   const [filename, setFilename] = useState("");
   const ref = useRef<HTMLDivElement>(null);
 
-  useEffect(() => { setFilename((docName || "Resume").replace(/\s+/g, "_") + "_Resume"); }, [docName]);
+  useEffect(() => {
+    // Guard against /resume/i double-suffix (BUG-007). Mirrors src/pages/ResumeBuilder.tsx:368-375.
+    const base = (docName || "Resume").replace(/\s+/g, "_");
+    setFilename(/resume/i.test(base) ? base : `${base}_Resume`);
+  }, [docName]);
   useEffect(() => {
     if (!open) return;
     const handler = (e: MouseEvent) => { if (ref.current && !ref.current.contains(e.target as Node)) setOpen(false); };
@@ -667,7 +671,10 @@ const ResumeBuilderSimple = () => {
   const handleDownload = async (filename?: string) => {
     if (downloading) return;
     setDownloading(true);
-    const fn = filename || (data.personalDetails.fullName || "Resume").replace(/\s+/g, "_") + "_Resume";
+    // Guard against /resume/i double-suffix (BUG-007). Mirrors src/pages/ResumeBuilder.tsx:754-758.
+    const baseName = (data.personalDetails.fullName || "Resume").replace(/\s+/g, "_");
+    const defaultFn = /resume/i.test(baseName) ? baseName : `${baseName}_Resume`;
+    const fn = filename || defaultFn;
     try {
       await exportResumePdfServer({
         data,
