@@ -1,6 +1,10 @@
 import { defineConfig } from "vitest/config";
-import react from "@vitejs/plugin-react-swc";
+import react from "@vitejs/plugin-react";
 import path from "path";
+
+// Override any inherited NODE_ENV so React (and act()) load test/dev builds
+// instead of the production min build.
+process.env.NODE_ENV = "test";
 
 export default defineConfig({
   plugins: [react()],

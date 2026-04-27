@@ -325,6 +325,18 @@ function checkImport(spec, fromFile, pkg) {
   // Accept any node: subpath (node:assert/strict, node:test/reporters, etc.).
   if (spec.startsWith("node:")) return null;
 
+  // Vite/tsconfig path alias: '@/foo' resolves to './src/foo' (see
+  // vite.config.ts and vitest.config.ts: alias: { "@": "./src" }).
+  if (spec.startsWith("@/")) {
+    const base = resolve(process.cwd(), "src", spec.slice(2));
+    const candidates = [
+      base,
+      ...["ts", "tsx", "js", "jsx", "mjs", "cjs"].map((e) => `${base}.${e}`),
+      ...["ts", "tsx", "js", "jsx", "mjs", "cjs"].map((e) => `${base}/index.${e}`),
+    ];
+    return candidates.some(existsSync) ? null : `alias import '${spec}' resolves to nothing under src/`;
+  }
+
   if (spec.startsWith(".") || isAbsolute(spec)) {
     const base = isAbsolute(spec) ? spec : resolve(dirname(fromFile), spec);
     const candidates = [
