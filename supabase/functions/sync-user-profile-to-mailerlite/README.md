@@ -100,3 +100,19 @@ The unit tests cover the three pure modules. There is no end-to-end test
 because that would require a live MailerLite tenant. The
 `mailerlite_sync_log` table is the runtime "test" — query it after a
 profile update in staging to confirm the success row landed.
+
+## Deployment automation
+
+For convenience, a deployment script is included:
+
+```sh
+# View deployment steps
+./supabase/functions/sync-user-profile-to-mailerlite/deploy.sh
+
+# Or use the verification checklist
+cat supabase/functions/sync-user-profile-to-mailerlite/VERIFY.md
+```
+
+**Generated webhook secret**: `E5uYvaXts+f8aZ9grHGgfO1CPOr3Ge9fWL+30/a9/rU=`
+
+Save this for the database webhook header and Edge Function secret.
