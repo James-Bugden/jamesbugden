@@ -198,7 +198,13 @@ GRANT EXECUTE ON FUNCTION public.assign_drip_variant_for_user(uuid, text) TO aut
 -- The (tool, action) tuples that count toward the funnel are listed once
 -- here so the experiment surface and the writer code can stay in sync.
 
-CREATE OR REPLACE VIEW public.v_first_session_tool_action AS
+-- security_invoker=true forces the view to execute with the caller's
+-- privileges (and RLS context), not the view owner's. Without it, an
+-- authenticated SELECT on this view would bypass RLS on tool_completions,
+-- sessions, and profiles and leak every other user's rows. Required for
+-- any view we GRANT to authenticated.
+CREATE OR REPLACE VIEW public.v_first_session_tool_action
+WITH (security_invoker = true) AS
 WITH user_first_session AS (
   SELECT DISTINCT ON (user_id)
          user_id,
@@ -240,7 +246,12 @@ GRANT SELECT ON public.v_first_session_tool_action TO authenticated;
 -- row in their first authenticated session. Drop-in for analyst queries
 -- that just want a yes/no funnel column.
 
-CREATE OR REPLACE VIEW public.v_profiles_first_session_actioned AS
+-- security_invoker=true: same rationale as v_first_session_tool_action
+-- above — without it, an authenticated SELECT here would leak every
+-- profile's onboarding_variant / drip_variant / returned_day2_14 /
+-- created_at row through the view owner's RLS bypass.
+CREATE OR REPLACE VIEW public.v_profiles_first_session_actioned
+WITH (security_invoker = true) AS
 SELECT p.user_id,
        p.onboarding_variant,
        p.drip_variant,
