@@ -48,6 +48,7 @@ For UI changes, also visually verify in the running Vite dev server (Preview MCP
 - **Default branch:** `main`. Never commit directly to it. Always branch.
 - **Branch naming:** `feat/<slug>`, `fix/<slug>`, `chore/<slug>`, `docs/<slug>`
 - **PRs:** open via `gh pr create`. Body must include: summary (3 bullets max, *why* not *what*), test plan checklist, screenshots for UI work, link to the originating issue/Paperclip task.
+- **Migration PRs:** any PR that adds or edits a file under `supabase/migrations/` MUST include a "Post-merge action" callout in the PR description telling James to apply the migration through Lovable's in-app migration tool. Lovable Publish does **not** run migrations — see *Lovable Cloud constraints* below.
 - **One logical change per commit.** Don't bundle unrelated work.
 - **Commit message:** subject ≤ 70 chars, body explains *why* (the *what* is in the diff). Sign with the agent identity.
 - **Never use `--no-verify`** or any flag that bypasses pre-commit hooks. If a hook fails, fix the cause.
@@ -112,6 +113,38 @@ If you ever need to move react-pdf rendering off the main thread again, follow t
 - Local `.env` should have `VITE_SUPABASE_URL` and `VITE_SUPABASE_ANON_KEY` from the Lovable project
 - Edge Functions: deploy via Lovable (or wait for the project transfer to James's account before using `supabase functions deploy`)
 - Do **not** add `service_role` key to client-side code
+
+## Lovable Cloud constraints
+
+This Supabase project is provisioned and managed by Lovable Cloud. That changes two things every agent gets wrong on first contact. Both cost real time on HIR-65 — read once, save the next session.
+
+### 1. No triggers on the `auth` schema
+
+Lovable's migration tool **rejects** any `CREATE TRIGGER … ON auth.users` (or any other `auth.*` table). Don't write one — it will fail at apply-time, not at PR-review time.
+
+Workarounds, in order of preference:
+
+1. **Lazy-insert in the relevant React hook.** Pattern already in use: `src/hooks/useProfile.ts:34-49` lazy-inserts the profiles row when a signed-in user first hits a page that needs it.
+2. **Upsert in the `SIGNED_IN` event handler** at `src/contexts/AuthContext.tsx:70` (~5 lines). Runs on every sign-in regardless of which page mounts — use this when you need the row to exist before *any* page reads it.
+3. **Polled Edge Function** reading `WHERE updated_at > <last sync>`. Only escalate to this if 1 + 2 are insufficient.
+
+Triggers on `public.*` tables are fine — e.g. the `career_phase` ↔ `job_search_stage` sync trigger on `public.profiles` works.
+
+### 2. Lovable **Publish** does NOT run Supabase migrations
+
+The `Publish` button rebuilds the frontend (and Edge Functions) but does **not** apply files in `supabase/migrations/`. Migrations only ship when James runs them through Lovable's in-app migration tool — the sanctioned path for this Cloud project. Supabase Studio is not available (no direct project access) and the Lovable API has no migration endpoint.
+
+site-engineer **cannot apply migrations from the sandbox**: only the public anon key is available — no `service_role`, no Supabase Management API token, no Lovable API.
+
+Standard workflow for any migration PR:
+
+1. site-engineer opens the PR with the migration file.
+2. director-engineering reviews; Tier 2 confirmation if needed.
+3. James merges (or director-engineering merges on Tier 2 approval).
+4. **James runs the migration through Lovable's in-app migration tool** (one click in Lovable UI).
+5. site-engineer probes the live PostgREST endpoint to verify the new schema, then closes the issue.
+
+Every migration PR description must surface step 4 explicitly so James doesn't try to Publish-and-wait. See the *Migration PRs* bullet under *Git workflow*.
 
 ## CJK preview — solution ladder
 
