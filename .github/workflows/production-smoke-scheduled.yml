@@ -1,0 +1,110 @@
+# production-smoke-scheduled.yml — drift detector for the live site.
+#
+# This workflow is COMPLEMENTARY to the existing prod-monitor.yml:
+#   - prod-monitor.yml fires on push to main, sleeps 4 min for Lovable
+#     to deploy, then runs the full Playwright smoke + emails on fail.
+#     It is the post-deploy verification.
+#   - This workflow fires on a 30-min schedule (and manual dispatch).
+#     It catches the cases prod-monitor.yml misses:
+#       * Lovable's bot publishing changes that James didn't trigger
+#         (no push event on this side, so prod-monitor never fires)
+#       * CDN / DNS / SSL drift that happens hours after a deploy
+#       * Slow-rolling regressions from cache invalidation
+#     On failure it opens (or appends to) a single GitHub issue tagged
+#     `incident` + `production` — different channel from prod-monitor's
+#     email so the two layers don't fight over the same notification.
+#
+# What this workflow does:
+#   - Fetches the three guest pages (/, /zh-tw, /login) from the live
+#     site. Asserts the SPA shell markers are present (title literal,
+#     <div id="root">, hashed bundle script). Catches Cloudflare error
+#     pages, missing build artifacts, wrong-site-served at the CDN.
+#   - Boots a headless Chromium against the live URL and asserts the
+#     React shell mounted children into #root with no console errors.
+#     Catches white-screen JS bundle / runtime failures.
+#
+# Why two layers (HTTP + Playwright):
+#   - HTTP catches CDN/DNS/SSL breakage that Playwright wouldn't see
+#     because Playwright would hit a cached browser page.
+#   - Playwright catches React-runtime errors (broken bundle, env-var
+#     missing) that return 200 but render a blank page.
+#
+# On failure:
+#   - Opens (or appends to an open) GitHub issue tagged `incident` and
+#     `production` with the failing URL, response status, and link to
+#     the workflow run. Does not auto-rollback — Lovable deploys are
+#     manual and the human decides.
+
+name: production-smoke-scheduled
+
+on:
+  schedule:
+    - cron: "*/30 * * * *"  # every 30 min — scheduled drift check
+  workflow_dispatch:
+
+concurrency:
+  group: production-smoke-scheduled
+  cancel-in-progress: false  # never cancel an in-flight smoke; let it finish
+
+jobs:
+  http-check:
+    name: production HTTP check
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    outputs:
+      failed-urls: ${{ steps.probe.outputs.failed }}
+    steps:
+      - uses: actions/checkout@v4
+      - name: Probe guest pages
+        id: probe
+        env:
+          PROD_BASE: https://jamesbugden.com
+        run: |
+          node scripts/production-http-probe.mjs
+
+  playwright-check:
+    name: production Playwright shell-mount
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    needs: http-check
+    if: ${{ needs.http-check.outputs.failed-urls == '' }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+      - name: Install
+        run: npm ci
+      - name: Install Playwright browsers
+        run: npx playwright install --with-deps chromium
+      - name: Mount-check on live site
+        env:
+          PROD_BASE: https://jamesbugden.com
+        run: npx playwright test src/test/e2e/production-mount.spec.ts --project=chromium-desktop
+      - name: Upload report on failure
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: production-playwright-report
+          path: playwright-report/
+          retention-days: 30  # keep longer for incident post-mortem
+
+  notify-on-failure:
+    name: open incident issue on failure
+    runs-on: ubuntu-latest
+    needs: [http-check, playwright-check]
+    # Only fire if either check failed AND we're on a scheduled run
+    # (don't open issues for manual workflow_dispatch dry-runs).
+    if: |
+      always() &&
+      (needs.http-check.result == 'failure' || needs.playwright-check.result == 'failure') &&
+      github.event_name == 'schedule'
+    steps:
+      - uses: actions/checkout@v4
+      - name: Open / update incident issue
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          FAILED_URLS: ${{ needs.http-check.outputs.failed-urls }}
+          RUN_URL: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
+        run: node scripts/open-production-incident.mjs

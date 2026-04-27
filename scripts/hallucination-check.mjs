@@ -240,6 +240,8 @@ function loadKnownEnvVars(baseRef) {
   const known = new Set([
     "NODE_ENV", "CI", "DEV", "PROD", "MODE", "SSR", "BASE_URL",
     "GITHUB_ACTOR", "GITHUB_TOKEN", "GH_TOKEN",
+    // GitHub Actions runner-provided + workflow-set variables.
+    "GITHUB_REPOSITORY", "GITHUB_OUTPUT", "RUN_URL", "FAILED_URLS",
     "QA_BASE_URL", "QA_TEST_EMAIL", "QA_TEST_PASSWORD", "LOCAL",
   ]);
 
