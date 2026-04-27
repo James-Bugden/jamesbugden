@@ -17,20 +17,6 @@ const PivotMethodMiniGuide = () => {
   return (
       <div className="min-h-screen bg-background">
         <SEO schemaJson={guideSchema({ path: "/pivot-method-mini-guide", title: "Pivot Method Mini Guide | Quick Start", description: "Quick-start Pivot Method for career changers. Identify strengths and take your first step." })} />
-      {/* Navigation */}
-      <nav className="sticky top-0 z-50 bg-background/95 backdrop-blur-sm border-b border-border">
-        <div className="container mx-auto px-4 py-4 flex items-center justify-between">
-          <Link to="/" className="flex items-center gap-2 text-foreground hover:text-gold transition-colors">
-            <ArrowLeft className="w-5 h-5" />
-            <span className="font-medium">Back to Home</span>
-          </Link>
-          <div className="flex items-center gap-3">
-            <AuthHeaderButton variant="nav" />
-            <LanguageToggle variant="nav" />
-          </div>
-        </div>
-      </nav>
-
       {/* Hero Section */}
       <SiteHeader variant="dark" lang="en" sticky />
 

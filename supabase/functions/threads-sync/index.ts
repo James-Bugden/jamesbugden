@@ -48,12 +48,13 @@ async function fetchAllPosts(userId: string, token: string) {
   let url: string | null = `${THREADS_API}/${userId}/threads?fields=id,text,timestamp,media_type,media_url,thumbnail_url,permalink,shortcode,is_quote_post,children&limit=50&access_token=${token}`;
 
   while (url) {
-    const res = await fetch(url);
+    const res: Response = await fetch(url);
     if (!res.ok) {
       console.error("Failed to fetch posts:", await res.text());
       break;
     }
-    const data = await res.json();
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const data: any = await res.json();
     if (data.data) posts.push(...data.data);
     url = data.paging?.next || null;
     if (url) await delay(200);

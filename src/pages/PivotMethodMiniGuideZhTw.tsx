@@ -22,24 +22,6 @@ const PivotMethodMiniGuideZhTw = () => {
   return (
       <div className="min-h-screen bg-background">
         <SEO schemaJson={guideSchema({ path: "/zh-tw/pivot-method-mini-guide", title: "轉職方法迷你指南｜快速開始", description: "30分鐘內識別優勢、掃描市場並邁出第一步的快速轉職指南。" })} />
-      {/* Navigation */}
-      <nav className="sticky top-0 z-50 bg-background/95 backdrop-blur-sm border-b border-border">
-        <div className="container mx-auto px-4 py-4 flex items-center justify-between">
-          <Link to="/zh-tw" className="flex items-center gap-2 text-foreground hover:text-gold transition-colors">
-            <ArrowLeft className="w-5 h-5" />
-            <span className="font-medium">返回首頁</span>
-          </Link>
-          <div className="flex items-center gap-3">
-            <AuthHeaderButton variant="nav" />
-            <button 
-              onClick={toggleLanguage}
-              className="px-3 py-1.5 text-sm font-semibold bg-gold/20 hover:bg-gold/30 text-gold border border-gold/40 rounded-md transition-all duration-200 hover:scale-105"
-            >
-              EN
-            </button>
-          </div>
-        </div>
-      </nav>
 
       {/* Hero Section */}
       <SiteHeader variant="dark" lang="zh" sticky />
