@@ -75,12 +75,7 @@ test.describe("resume editor", () => {
 });
 
 test.describe("CJK preview regression guard", () => {
-  test.skip(
-    !process.env.QA_TEST_EMAIL,
-    "Needs QA login to open an existing CJK resume",
-  );
-
-  test("CJK resume preview produces a blob: iframe within 60s", async ({
+  test("CJK resume preview produces a blob: iframe within 60s @auth", async ({
     browser,
   }) => {
     const ctx = await browser.newContext({

@@ -34,7 +34,7 @@ test.describe("Builder — document dashboard", () => {
     await ctx.close();
   });
 
-  test("dashboard shows My Resumes header + BETA chip", async ({ page }) => {
+  test("dashboard shows My Resumes header + BETA chip @auth", async ({ page }) => {
     await expect(
       page.getByRole("heading", { name: /my resumes|我的履歷/i }).first().or(
         page.getByText(/my resumes|我的履歷/i).first(),
@@ -43,7 +43,7 @@ test.describe("Builder — document dashboard", () => {
     await expect(page.getByText(/beta/i).first()).toBeVisible();
   });
 
-  test("resume count indicator renders with N/limit format", async ({ page }) => {
+  test("resume count indicator renders with N/limit format @auth", async ({ page }) => {
     // Regular accounts show "1/2 resumes"; unlimited test accounts can
     // show 100+ over the typical cap. Just assert the N/M format is
     // present somewhere on the dashboard.
@@ -55,7 +55,7 @@ test.describe("Builder — document dashboard", () => {
     expect(hasCountChip).toBe(true);
   });
 
-  test("search box filters (empty state for no match is 'No results')", async ({
+  test("search box filters (empty state for no match is 'No results') @auth", async ({
     page,
   }) => {
     const search = page.getByPlaceholder(/search/i).first();
@@ -69,14 +69,14 @@ test.describe("Builder — document dashboard", () => {
     expect(await createFirst.count()).toBe(0);
   });
 
-  test("existing resume card shows Analyze action", async ({ page }) => {
+  test("existing resume card shows Analyze action @auth", async ({ page }) => {
     // Every resume card has an "Analyze" button at the bottom.
     const analyze = page.getByRole("button", { name: /^analyze$|分析/i });
     if (!(await analyze.count())) test.skip(true, "no existing resumes to check");
     await expect(analyze.first()).toBeVisible();
   });
 
-  test("New resume button is present and either enabled or shows at-limit state", async ({
+  test("New resume button is present and either enabled or shows at-limit state @auth", async ({
     page,
   }) => {
     // This test focuses on the presence + correct state of the "New
@@ -91,7 +91,7 @@ test.describe("Builder — document dashboard", () => {
     await expect(page.getByText(/my resumes|我的履歷/i).first()).toBeVisible();
   });
 
-  test("localStorage has a documents array (even if empty)", async ({
+  test("localStorage has a documents array (even if empty) @auth", async ({
     page,
   }) => {
     const hasDocs = await page.evaluate(() => {

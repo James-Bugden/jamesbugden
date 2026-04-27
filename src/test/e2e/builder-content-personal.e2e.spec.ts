@@ -23,7 +23,7 @@ test.describe("Builder — personal details", () => {
     await page.waitForLoadState("domcontentloaded");
   });
 
-  test("dashboard renders with My Resumes header", async ({ page }) => {
+  test("dashboard renders with My Resumes header @auth", async ({ page }) => {
     // Sanity check — the resume-builder landing page should show the
     // dashboard. Creating/editing is covered in builder-docs-dashboard.
     await expect(
@@ -31,7 +31,7 @@ test.describe("Builder — personal details", () => {
     ).toBeVisible({ timeout: 10_000 });
   });
 
-  test("editing an existing resume: fullName change persists to localStorage", async ({
+  test("editing an existing resume: fullName change persists to localStorage @auth", async ({
     page,
   }) => {
     // Find the first existing resume card and click to open it. If the
@@ -70,7 +70,7 @@ test.describe("Builder — personal details", () => {
     expect(names.some((n: string) => n === marker)).toBe(true);
   });
 
-  test("XSS in fullName renders as text (does not execute)", async ({
+  test("XSS in fullName renders as text (does not execute) @auth", async ({
     page,
   }) => {
     const firstCard = page.locator('article, button').filter({
@@ -106,7 +106,7 @@ test.describe("Builder — personal details", () => {
     expect(stored).toContain("<script>");
   });
 
-  test("preview renders when photo is present", async ({ page }) => {
+  test("preview renders when photo is present @auth", async ({ page }) => {
     const firstCard = page.locator('article, button').filter({
       hasText: /temp|resume|qa_test/i,
     }).first();

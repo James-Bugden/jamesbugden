@@ -29,7 +29,14 @@ jobs:
         run: npx playwright install --with-deps chromium
 
       - name: Run smoke tests
-        run: npx playwright test --grep-invert "@auth"
+        run: |
+          if [ -n "$QA_TEST_EMAIL" ] && [ -n "$QA_TEST_PASSWORD" ]; then
+            echo "QA credentials available - running all tests including @auth"
+            npx playwright test
+          else
+            echo "QA credentials NOT available - skipping @auth tests"
+            npx playwright test --grep-invert "@auth"
+          fi
         env:
           QA_TEST_EMAIL: ${{ secrets.QA_TEST_EMAIL }}
           QA_TEST_PASSWORD: ${{ secrets.QA_TEST_PASSWORD }}
