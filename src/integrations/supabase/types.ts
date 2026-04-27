@@ -1070,7 +1070,7 @@ export type Database = {
           read_ct: number
         }[]
       }
-      verify_client_password: {
+      verify_client_review_password: {
         Args: { input_password: string }
         Returns: {
           review_id: string
