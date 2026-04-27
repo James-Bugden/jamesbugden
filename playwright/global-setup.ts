@@ -30,8 +30,8 @@ async function globalSetup(config: FullConfig) {
   fs.mkdirSync(AUTH_DIR, { recursive: true });
 
   // No creds → write an empty storageState so guest-only specs (prod
-  // monitor, homepage smoke) can still run. Auth-required specs should
-  // gate themselves with test.skip(!process.env.QA_TEST_EMAIL, "no creds").
+  // monitor, homepage smoke) can still run. Auth-required specs are tagged
+  // with @auth and will be filtered out by CI (--grep-invert "@auth").
   if (!email || !password) {
     console.warn(
       "[global-setup] QA_TEST_EMAIL / QA_TEST_PASSWORD not set — writing empty storageState. Auth-required specs will be skipped.",

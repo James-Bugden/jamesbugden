@@ -7,7 +7,7 @@ test.describe("Dashboard home", () => {
     await page.waitForLoadState("domcontentloaded");
   });
 
-  test("tools list renders with at least 4 tool cards", async ({ page }) => {
+  test("tools list renders with at least 4 tool cards @auth", async ({ page }) => {
     // Tools include Resume Analyzer, Resume Builder, Offer Calculator, Salary.
     // The dashboard links to /resume-analyzer, /resume, /offer-calculator, /salary.
     const tools = [
@@ -20,7 +20,7 @@ test.describe("Dashboard home", () => {
     }
   });
 
-  test("search box filters tools", async ({ page }) => {
+  test("search box filters tools @auth", async ({ page }) => {
     const search = page.getByPlaceholder(/search/i).first();
     if (await search.count()) {
       await search.fill("analyz");
@@ -31,7 +31,7 @@ test.describe("Dashboard home", () => {
     }
   });
 
-  test("clicking Resume Builder tool navigates to /resume", async ({ page }) => {
+  test("clicking Resume Builder tool navigates to /resume @auth", async ({ page }) => {
     const card = page
       .getByRole("link", { name: /resume builder|履歷建構器/i })
       .or(page.getByRole("button", { name: /resume builder|履歷建構器/i }))
@@ -40,7 +40,7 @@ test.describe("Dashboard home", () => {
     await expect(page).toHaveURL(/\/resume($|\?|#|\/)/);
   });
 
-  test("clicking Resume Analyzer tool navigates to /resume-analyzer", async ({
+  test("clicking Resume Analyzer tool navigates to /resume-analyzer @auth", async ({
     page,
   }) => {
     const card = page
@@ -51,7 +51,7 @@ test.describe("Dashboard home", () => {
     await expect(page).toHaveURL(/\/resume-analyzer/);
   });
 
-  test("language toggle EN → ZH routes to /zh-tw/dashboard", async ({
+  test("language toggle EN → ZH routes to /zh-tw/dashboard @auth", async ({
     page,
   }) => {
     await switchLanguage(page, "zh-tw");
@@ -62,7 +62,7 @@ test.describe("Dashboard home", () => {
     // dashboard fully localizes (follow-up issue).
   });
 
-  test("dark mode toggle persists after reload", async ({ page }) => {
+  test("dark mode toggle persists after reload @auth", async ({ page }) => {
     const themeToggle = page.getByRole("button", { name: /theme|dark|light|主題/i });
     if (!(await themeToggle.count())) test.skip(true, "no theme toggle surfaced");
     await themeToggle.first().click();

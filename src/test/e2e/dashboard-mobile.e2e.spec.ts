@@ -4,13 +4,13 @@ import { expectNoHorizontalScroll } from "./_helpers/assertions";
 test.describe("Dashboard @mobile", () => {
   test.use({ viewport: { width: 390, height: 844 } });
 
-  test("no horizontal scroll at 390px", async ({ page }) => {
+  test("no horizontal scroll at 390px @auth", async ({ page }) => {
     await page.goto("/dashboard");
     await page.waitForLoadState("domcontentloaded");
     await expectNoHorizontalScroll(page);
   });
 
-  test("tool cards stack (are not side-by-side at narrow viewport)", async ({
+  test("tool cards stack (are not side-by-side at narrow viewport) @auth", async ({
     page,
   }) => {
     await page.goto("/dashboard");

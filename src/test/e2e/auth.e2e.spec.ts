@@ -28,7 +28,7 @@ test.describe("Auth — guest", () => {
     await expect(page).toHaveURL(/\/login/);
   });
 
-  test("login with valid creds redirects to /dashboard", async ({ page }) => {
+  test("login with valid creds redirects to /dashboard @auth", async ({ page }) => {
     const email = process.env.QA_TEST_EMAIL!;
     const password = process.env.QA_TEST_PASSWORD!;
     await loginAs(page, email, password);
@@ -39,7 +39,7 @@ test.describe("Auth — guest", () => {
 
 // Authed flows — inherit default storageState.
 test.describe("Auth — signed in", () => {
-  test("opening /resume in a second tab stays authed (no redirect)", async ({
+  test("opening /resume in a second tab stays authed (no redirect) @auth", async ({
     context,
   }) => {
     const tab = await context.newPage();
@@ -48,7 +48,7 @@ test.describe("Auth — signed in", () => {
     await expect(tab).toHaveURL(/\/resume(?!\/login)/);
   });
 
-  test("sign out clears localStorage active-user key", async ({ page }) => {
+  test("sign out clears localStorage active-user key @auth", async ({ page }) => {
     await page.goto("/dashboard");
     await page.waitForLoadState("domcontentloaded");
     // The sign-out flow may be tucked in a menu. We fall back to
