@@ -433,51 +433,33 @@ export type Database = {
         Row: {
           career_phase: string | null
           created_at: string | null
-          daily_task_completed_at: string | null
           id: string
-          job_search_stage: string | null
           last_viewed_guide: string | null
           last_viewed_guide_at: string | null
           nps_last_shown_at: string | null
           onboarding_completed: boolean | null
-          target_industry: string | null
-          target_role: string | null
-          tuesday_email_opted_in: boolean
-          updated_at: string
           user_id: string
           whats_new_v2_seen: boolean
         }
         Insert: {
           career_phase?: string | null
           created_at?: string | null
-          daily_task_completed_at?: string | null
           id?: string
-          job_search_stage?: string | null
           last_viewed_guide?: string | null
           last_viewed_guide_at?: string | null
           nps_last_shown_at?: string | null
           onboarding_completed?: boolean | null
-          target_industry?: string | null
-          target_role?: string | null
-          tuesday_email_opted_in?: boolean
-          updated_at?: string
           user_id: string
           whats_new_v2_seen?: boolean
         }
         Update: {
           career_phase?: string | null
           created_at?: string | null
-          daily_task_completed_at?: string | null
           id?: string
-          job_search_stage?: string | null
           last_viewed_guide?: string | null
           last_viewed_guide_at?: string | null
           nps_last_shown_at?: string | null
           onboarding_completed?: boolean | null
-          target_industry?: string | null
-          target_role?: string | null
-          tuesday_email_opted_in?: boolean
-          updated_at?: string
           user_id?: string
           whats_new_v2_seen?: boolean
         }
