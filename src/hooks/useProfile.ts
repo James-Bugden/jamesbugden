@@ -3,18 +3,25 @@ import { useAuth } from "@/contexts/AuthContext";
 import { supabase } from "@/integrations/supabase/client";
 
 export type CareerPhase = "applying" | "interviewing" | "negotiating";
+export type JobSearchStage = "starting" | "applying" | "interviewing" | "negotiating";
 
 export interface UserProfile {
   user_id: string;
   career_phase: CareerPhase | null;
+  job_search_stage: JobSearchStage | null;
   onboarding_completed: boolean;
   last_viewed_guide: string | null;
   last_viewed_guide_at: string | null;
   whats_new_v2_seen: boolean;
   nps_last_shown_at: string | null;
+  target_role: string | null;
+  target_industry: string | null;
+  tuesday_email_opted_in: boolean;
+  daily_task_completed_at: string | null;
+  updated_at: string;
 }
 
-const SELECT_FIELDS = "user_id, career_phase, onboarding_completed, last_viewed_guide, last_viewed_guide_at, whats_new_v2_seen, nps_last_shown_at";
+const SELECT_FIELDS = "user_id, career_phase, job_search_stage, onboarding_completed, last_viewed_guide, last_viewed_guide_at, whats_new_v2_seen, nps_last_shown_at, target_role, target_industry, tuesday_email_opted_in, daily_task_completed_at, updated_at";
 
 export function useProfile() {
   const { user } = useAuth();
@@ -47,7 +54,23 @@ export function useProfile() {
   }, [user]);
 
   const updateProfile = useCallback(
-    async (updates: Partial<Pick<UserProfile, "career_phase" | "onboarding_completed" | "last_viewed_guide" | "last_viewed_guide_at" | "nps_last_shown_at">>) => {
+    async (
+      updates: Partial<
+        Pick<
+          UserProfile,
+          | "career_phase"
+          | "job_search_stage"
+          | "onboarding_completed"
+          | "last_viewed_guide"
+          | "last_viewed_guide_at"
+          | "nps_last_shown_at"
+          | "target_role"
+          | "target_industry"
+          | "tuesday_email_opted_in"
+          | "daily_task_completed_at"
+        >
+      >,
+    ) => {
       if (!user) return;
       const { data } = await supabase
         .from("profiles")
