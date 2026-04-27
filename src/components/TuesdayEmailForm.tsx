@@ -16,6 +16,8 @@ const ERROR_COPY: Record<string, string> = {
     "Something went wrong on our end. Please try again in a moment.",
   network_error:
     "Couldn't reach the signup service. Check your connection and try again.",
+  rate_limited:
+    "Too many tries. Please wait a minute and try again.",
 };
 
 type SubmitStatus = "idle" | "loading" | "success" | "error";
