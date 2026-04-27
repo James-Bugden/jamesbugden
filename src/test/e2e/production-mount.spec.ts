@@ -46,10 +46,16 @@ for (const { path, name } of PAGES) {
 
     // No uncaught errors (filter out known-noisy third-party warnings
     // — only fail on errors that look like our app code).
-    const fatal = consoleErrors.filter((e) =>
-      // Hosted CSP or sw.js warnings are common and non-fatal.
-      !/(service worker|csp|cookie|favicon|cspViolation)/i.test(e),
-    );
+    //
+    // Patterns we ignore (verified against live prod 2026-04-27):
+    //   - service worker / cookie / favicon — browser/CDN warnings
+    //   - "Content Security Policy" / "Loading the script " — CSP-blocked
+    //     third-party scripts (e.g. Facebook Pixel) are non-fatal
+    //   - "Failed to load resource: ... 401|403|404" — guest sessions hit
+    //     auth-required endpoints by design; not an app-code regression
+    //   - cspViolation — legacy CSP event name (defensive)
+    const NOISE = /(service worker|cookie|favicon|cspViolation|Content Security Policy|Loading the script |Failed to load resource: the server responded with a status of (?:401|403|404))/i;
+    const fatal = consoleErrors.filter((e) => !NOISE.test(e));
     expect(fatal, `runtime errors observed:\n${fatal.join("\n")}`).toHaveLength(0);
   });
 }

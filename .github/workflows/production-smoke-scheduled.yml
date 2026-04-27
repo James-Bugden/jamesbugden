@@ -81,7 +81,7 @@ jobs:
       - name: Mount-check on live site
         env:
           PROD_BASE: https://jamesbugden.com
-        run: npx playwright test src/test/e2e/production-mount.spec.ts --project=chromium-desktop
+        run: npx playwright test --project=production
       - name: Upload report on failure
         if: failure()
         uses: actions/upload-artifact@v4
