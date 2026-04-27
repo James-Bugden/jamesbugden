@@ -104,6 +104,21 @@ export default defineConfig({
       // (a flake here is signal, not noise to mask).
       retries: 0,
     },
+    // Production mount-check project. Matches src/test/e2e/production-mount.spec.ts
+    // (note: NOT *.e2e.spec.ts — same pattern as `visual` to keep it out of
+    // the default smoke run). Driven by production-smoke-scheduled.yml; that
+    // workflow sets PROD_BASE to https://jamesbugden.com and runs against
+    // the live site, not a local dev server.
+    {
+      name: "production",
+      testMatch: /production-mount\.spec\.ts$/,
+      use: {
+        ...devices["Desktop Chrome"],
+        viewport: { width: 1440, height: 900 },
+        // Guest mode — live-site smoke must not depend on auth state.
+        storageState: { cookies: [], origins: [] },
+      },
+    },
   ],
 
   // When LOCAL=1, boot the dev server automatically. Otherwise assume the
