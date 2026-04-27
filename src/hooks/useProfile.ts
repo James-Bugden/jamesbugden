@@ -19,9 +19,15 @@ export interface UserProfile {
   tuesday_email_opted_in: boolean;
   daily_task_completed_at: string | null;
   updated_at: string;
+  email: string | null;
+  full_name: string | null;
+  linkedin_url: string | null;
+  job_title: string | null;
+  company: string | null;
+  country: string | null;
 }
 
-const SELECT_FIELDS = "user_id, career_phase, job_search_stage, onboarding_completed, last_viewed_guide, last_viewed_guide_at, whats_new_v2_seen, nps_last_shown_at, target_role, target_industry, tuesday_email_opted_in, daily_task_completed_at, updated_at";
+const SELECT_FIELDS = "user_id, career_phase, job_search_stage, onboarding_completed, last_viewed_guide, last_viewed_guide_at, whats_new_v2_seen, nps_last_shown_at, target_role, target_industry, tuesday_email_opted_in, daily_task_completed_at, updated_at, email, full_name, linkedin_url, job_title, company, country";
 
 export function useProfile() {
   const { user } = useAuth();
@@ -68,6 +74,12 @@ export function useProfile() {
           | "target_industry"
           | "tuesday_email_opted_in"
           | "daily_task_completed_at"
+          | "email"
+          | "full_name"
+          | "linkedin_url"
+          | "job_title"
+          | "company"
+          | "country"
         >
       >,
     ) => {
