@@ -66,9 +66,9 @@ const ClientReviewGate = () => {
     const minResponseTime = 500;
     const startTime = Date.now();
 
-    // Use secure RPC function that verifies password server-side
+    // Use secure RPC function that verifies password server-side and updates last_viewed_at atomically
     const { data, error: rpcError } = await supabase
-      .rpc('verify_client_password', { input_password: password });
+      .rpc('verify_client_review_password', { input_password: password });
 
     // Ensure minimum response time regardless of result
     const elapsed = Date.now() - startTime;
@@ -91,10 +91,8 @@ const ClientReviewGate = () => {
       return;
     }
 
-    // Update last_viewed_at using secure RPC function
-    await supabase.rpc('mark_review_viewed', {
-      review_id: matchedReview.review_id
-    });
+    // last_viewed_at is already updated by verify_client_review_password
+    // No need for separate mark_review_viewed call
 
     // Redirect to the actual review page
     navigate(matchedReview.review_url);
