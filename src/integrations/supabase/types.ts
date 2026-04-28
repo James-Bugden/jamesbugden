@@ -432,12 +432,18 @@ export type Database = {
       profiles: {
         Row: {
           career_phase: string | null
+          company: string | null
+          country: string | null
           created_at: string | null
           daily_task_completed_at: string | null
+          email: string | null
+          full_name: string | null
           id: string
           job_search_stage: string | null
+          job_title: string | null
           last_viewed_guide: string | null
           last_viewed_guide_at: string | null
+          linkedin_url: string | null
           nps_last_shown_at: string | null
           onboarding_completed: boolean | null
           target_industry: string | null
@@ -449,12 +455,18 @@ export type Database = {
         }
         Insert: {
           career_phase?: string | null
+          company?: string | null
+          country?: string | null
           created_at?: string | null
           daily_task_completed_at?: string | null
+          email?: string | null
+          full_name?: string | null
           id?: string
           job_search_stage?: string | null
+          job_title?: string | null
           last_viewed_guide?: string | null
           last_viewed_guide_at?: string | null
+          linkedin_url?: string | null
           nps_last_shown_at?: string | null
           onboarding_completed?: boolean | null
           target_industry?: string | null
@@ -466,12 +478,18 @@ export type Database = {
         }
         Update: {
           career_phase?: string | null
+          company?: string | null
+          country?: string | null
           created_at?: string | null
           daily_task_completed_at?: string | null
+          email?: string | null
+          full_name?: string | null
           id?: string
           job_search_stage?: string | null
+          job_title?: string | null
           last_viewed_guide?: string | null
           last_viewed_guide_at?: string | null
+          linkedin_url?: string | null
           nps_last_shown_at?: string | null
           onboarding_completed?: boolean | null
           target_industry?: string | null
