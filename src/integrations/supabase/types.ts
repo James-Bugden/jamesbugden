@@ -636,6 +636,43 @@ export type Database = {
         }
         Relationships: []
       }
+      share_links: {
+        Row: {
+          id: string
+          analysis_id: string
+          share_id: string
+          views: number
+          last_viewed_at: string | null
+          created_at: string
+          is_active: boolean
+        }
+        Insert: {
+          id?: string
+          analysis_id: string
+          share_id: string
+          views?: number
+          last_viewed_at?: string | null
+          created_at?: string
+          is_active?: boolean
+        }
+        Update: {
+          id?: string
+          analysis_id?: string
+          share_id?: string
+          views?: number
+          last_viewed_at?: string | null
+          created_at?: string
+          is_active?: boolean
+        }
+        Relationships: [
+          {
+            foreignKeyName: "share_links_analysis_id_fkey"
+            columns: ["analysis_id"]
+            referencedRelation: "resume_analyses"
+            referencedColumns: ["id"]
+          }
+        ]
+      }
       resume_leads: {
         Row: {
           analysis_result: Json | null

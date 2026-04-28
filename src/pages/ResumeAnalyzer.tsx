@@ -338,6 +338,26 @@ export default function ResumeAnalyzer({ defaultLang = "en" }: { defaultLang?: L
               "你的分析報告已儲存至你的儀表板。"
             ),
           });
+
+          // Track score milestones (Phase B tracking events - HIR-247)
+          const currentScore = result.overall_score ?? 0;
+          const previousScore = latest?.overall_score ?? null;
+          const MILESTONES = [60, 70, 80, 90, 100] as const;
+          
+          // Check each milestone
+          MILESTONES.forEach(milestone => {
+            if (currentScore >= milestone && (previousScore === null || previousScore < milestone)) {
+              // User reached this milestone
+              const isFirstTimeReaching = !analyses.some(a => (a.overall_score ?? 0) >= milestone);
+              track("score_milestone", "reached", {
+                milestone,
+                current_score: currentScore,
+                previous_score: previousScore,
+                delta: previousScore !== null ? currentScore - previousScore : null,
+                is_first_time_reaching: isFirstTimeReaching
+              });
+            }
+          });
         }
 
         // Tool completion event, structured outcome for funnel analysis
