@@ -74,6 +74,51 @@ test.describe("resume editor", () => {
   });
 });
 
+test.describe("/tuesday-email opt-in page", () => {
+  test("Public route returns 200 with no auth wall", async ({ page }) => {
+    const resp = await page.goto("/tuesday-email", { waitUntil: "domcontentloaded" });
+    expect(resp?.status()).toBe(200);
+    // Must not redirect to /login or /signup.
+    await expect(page).toHaveURL(/\/tuesday-email$/);
+  });
+
+  test("Renders headline, email input, and submit button", async ({ page }) => {
+    await page.goto("/tuesday-email");
+    await expect(
+      page.getByRole("heading", { name: /tuesday/i }).first(),
+    ).toBeVisible({ timeout: 10_000 });
+    await expect(page.getByLabel(/email/i).first()).toBeVisible();
+    await expect(
+      page.getByRole("button", { name: /subscribe|get|sign me up|join/i }).first(),
+    ).toBeVisible();
+  });
+
+  test("Rejects malformed email client-side and surfaces an error", async ({
+    page,
+  }) => {
+    await page.goto("/tuesday-email");
+    let apiCalled = false;
+    await page.route("**/functions/v1/sync-mailerlite-tuesday", (route) => {
+      apiCalled = true;
+      route.fulfill({ status: 200, body: "{}" });
+    });
+    const emailInput = page.getByLabel(/email/i).first();
+    // "a@b" passes the browser's native type=email check but fails our
+    // stricter regex (needs a dot in the domain), so this exercises the
+    // app's own validation rather than the browser's.
+    await emailInput.fill("a@b");
+    await page
+      .getByRole("button", { name: /subscribe|get|sign me up|join/i })
+      .first()
+      .click();
+    // The form must (a) show a visible error and (b) NOT have called the API.
+    await expect(page.getByRole("alert")).toContainText(/doesn't look right/i, {
+      timeout: 5_000,
+    });
+    expect(apiCalled).toBe(false);
+  });
+});
+
 test.describe("CJK preview regression guard", () => {
   test("CJK resume preview produces a blob: iframe within 60s @auth", async ({
     browser,
