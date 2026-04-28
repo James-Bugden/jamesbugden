@@ -408,6 +408,81 @@ export type Database = {
           },
         ]
       }
+      job_applications: {
+        Row: {
+          applied_at: string | null
+          checklist: Json
+          company: string
+          contacts: Json
+          created_at: string
+          date_applied: string | null
+          date_saved: string | null
+          deadline: string | null
+          excitement: number
+          follow_up_date: string | null
+          id: string
+          job_description: string
+          linked_doc_ids: Json
+          location: string
+          max_salary: string
+          min_salary: string
+          notes: string
+          stage: string
+          title: string
+          updated_at: string
+          url: string
+          user_id: string
+        }
+        Insert: {
+          applied_at?: string | null
+          checklist?: Json
+          company?: string
+          contacts?: Json
+          created_at?: string
+          date_applied?: string | null
+          date_saved?: string | null
+          deadline?: string | null
+          excitement?: number
+          follow_up_date?: string | null
+          id?: string
+          job_description?: string
+          linked_doc_ids?: Json
+          location?: string
+          max_salary?: string
+          min_salary?: string
+          notes?: string
+          stage?: string
+          title?: string
+          updated_at?: string
+          url?: string
+          user_id: string
+        }
+        Update: {
+          applied_at?: string | null
+          checklist?: Json
+          company?: string
+          contacts?: Json
+          created_at?: string
+          date_applied?: string | null
+          date_saved?: string | null
+          deadline?: string | null
+          excitement?: number
+          follow_up_date?: string | null
+          id?: string
+          job_description?: string
+          linked_doc_ids?: Json
+          location?: string
+          max_salary?: string
+          min_salary?: string
+          notes?: string
+          stage?: string
+          title?: string
+          updated_at?: string
+          url?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       interview_questions: {
         Row: {
           answer_en: string | null
