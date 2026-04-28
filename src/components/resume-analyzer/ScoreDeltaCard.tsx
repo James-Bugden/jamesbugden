@@ -1,5 +1,7 @@
 import { TrendingUp, TrendingDown, Minus, Target } from "lucide-react";
+import { useEffect } from "react";
 import { computeTopContributor, computeNextTarget } from "./scoreDeltaUtils";
+import { track } from "@/lib/analytics";
 import type { Section } from "./types";
 import type { SavedAnalysis } from "@/hooks/useResumeAnalyses";
 
@@ -22,6 +24,54 @@ export function ScoreDeltaCard({
   isFirstAnalysis,
   lang,
 }: ScoreDeltaCardProps) {
+  // Track baseline established event (Phase B tracking events - HIR-247)
+  useEffect(() => {
+    if (isFirstAnalysis) {
+      const milestoneTarget = computeNextTarget(currentScore);
+      track("score_history", "baseline_established", {
+        baseline_score: currentScore,
+        milestone_target: milestoneTarget
+      });
+    }
+  }, [isFirstAnalysis, currentScore]);
+
+  // Track delta card viewed and improvement events (Phase B tracking events - HIR-247)
+  useEffect(() => {
+    if (!isFirstAnalysis && previousAnalysis) {
+      const prevScore = previousAnalysis.overall_score ?? 0;
+      const delta = currentScore - prevScore;
+      const improved = delta > 0;
+      
+      const prevSections: Section[] =
+        (previousAnalysis.analysis_result as { sections?: Section[] } | null)
+          ?.sections ?? [];
+      const topContributor = computeTopContributor(currentSections, prevSections);
+      const nextTarget = computeNextTarget(currentScore);
+      const MILESTONES = [60, 70, 80, 90, 100] as const;
+      
+      // Delta card viewed event
+      track("score_history", "delta_viewed", {
+        current_score: currentScore,
+        previous_score: prevScore,
+        delta: delta,
+        top_contributor: topContributor,
+        next_target: nextTarget
+      });
+
+      // Improvement celebrated event
+      if (improved) {
+        const milestoneReached = MILESTONES.some(m => currentScore >= m && prevScore < m);
+        track("score_history", "improvement_celebrated", {
+          current_score: currentScore,
+          previous_score: prevScore,
+          delta: delta,
+          top_contributor: topContributor,
+          milestone_reached: milestoneReached
+        });
+      }
+    }
+  }, [isFirstAnalysis, previousAnalysis, currentScore, currentSections]);
+
   if (!isFirstAnalysis && !previousAnalysis) return null;
 
   // Baseline card — first analysis

@@ -163,6 +163,7 @@ const WillyLinReviewZhTw = lazy(() => import("./pages/reviews/WillyLinReviewZhTw
 const HopeChenReview = lazy(() => import("./pages/reviews/HopeChenReview"));
 const HopeChenReviewZhTw = lazy(() => import("./pages/reviews/HopeChenReviewZhTw"));
 const RemaRaoReview = lazy(() => import("./pages/reviews/RemaRaoReview"));
+const PublicScoreCardPage = lazy(() => import("@/pages/PublicScoreCardPage"));
 
 const queryClient = new QueryClient();
 
@@ -359,6 +360,9 @@ const App = () => (
                     <Route path="/unsubscribe" element={<Unsubscribe />} />
                     <Route path="/dashboard" element={<Dashboard />} />
                     <Route path="/zh-tw/dashboard" element={<DashboardZhTw />} />
+
+                    {/* Public Score Card Route */}
+                    <Route path="/r/:id" element={<PublicScoreCardPage />} />
 
                     {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
                     <Route path="*" element={<NotFound />} />

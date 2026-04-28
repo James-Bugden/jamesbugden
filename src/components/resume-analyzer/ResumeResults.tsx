@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { ChevronDown, CheckCircle, AlertTriangle, XCircle, ExternalLink, ArrowRight, RotateCcw, Download, Lock, ArrowDown, Mail, Briefcase, GraduationCap, Building2, Target, Clock, Share2, Copy, FileEdit, CheckCircle2 } from "lucide-react";
+import { ChevronDown, CheckCircle, AlertTriangle, XCircle, ExternalLink, ArrowRight, RotateCcw, Download, Lock, ArrowDown, Mail, Briefcase, GraduationCap, Building2, Target, Clock, Share2, Copy, FileEdit, CheckCircle2, Globe } from "lucide-react";
 import { useAuth } from "@/contexts/AuthContext";
 import { Button } from "@/components/ui/button";
 
@@ -15,6 +15,7 @@ import { usePrintUsage } from "@/hooks/usePrintUsage";
 import { InterviewGuideCTA } from "./InterviewGuideCTA";
 import { ScoreDeltaCard } from "./ScoreDeltaCard";
 import type { SavedAnalysis } from "@/hooks/useResumeAnalyses";
+import ShareLinkModal from "./ShareLinkModal";
 
 type Language = "en" | "zh-TW";
 const t = (lang: Language, en: string, zh: string) => lang === "en" ? en : zh;
@@ -35,7 +36,6 @@ const WhatsAppIcon = () => (
 function useAnimatedCounter(target: number, duration = 1200) {
   const [value, setValue] = useState(0);
   useEffect(() => {
-    let start = 0;
     const startTime = performance.now();
     const tick = (now: number) => {
       const elapsed = now - startTime;
@@ -279,9 +279,10 @@ function LockedOverlay({ lang, currentPath }: { lang: Language; currentPath: str
 }
 
 /* ──────────────────── Share Section ──────────────────── */
-function ShareSection({ lang, score }: { lang: Language; score?: number }) {
+function ShareSection({ lang, score, analysisId }: { lang: Language; score?: number; analysisId?: string }) {
   const isZhTw = lang === "zh-TW";
   const analyzerUrl = `${window.location.origin}/resume-analyzer`;
+  const [showShareModal, setShowShareModal] = useState(false);
   
   const handleEmailShare = () => {
     trackShare("email", "/resume-analyzer");
@@ -314,31 +315,53 @@ function ShareSection({ lang, score }: { lang: Language; score?: number }) {
   };
 
   return (
-    <div className="rounded-2xl p-8 text-center" style={{ backgroundColor: 'hsl(var(--executive-green))' }}>
-      <h2 className="font-heading text-xl text-white mb-2">
-        {t(lang, "Know someone who needs resume help?", "認識需要履歷幫助的人？")}
-      </h2>
-      <p className="text-white/70 text-sm mb-5">
-        {t(lang, "Send them this free tool, it takes 30 seconds.", "把這個免費工具分享給他們, , 只要 30 秒。")}
-      </p>
-      <div className="flex flex-wrap items-center justify-center gap-3">
-        <button onClick={handleEmailShare} className="inline-flex items-center gap-2 px-5 py-2.5 rounded-lg border border-white/20 bg-white/10 text-white hover:bg-white/20 transition-colors text-sm font-medium">
-          <Mail className="w-5 h-5" /> Email
-        </button>
-        <button onClick={handleMessengerShare} className={`inline-flex items-center gap-2 px-5 py-2.5 rounded-lg text-white transition-colors text-sm font-medium ${isZhTw ? "bg-[#06C755] hover:bg-[#05b34d]" : "bg-[#25D366] hover:bg-[#20bd5a]"}`}>
-          {isZhTw ? <LineIcon /> : <WhatsAppIcon />} {isZhTw ? "LINE" : "WhatsApp"}
-        </button>
-        <button onClick={handleCopyLink} className="inline-flex items-center gap-2 px-5 py-2.5 rounded-lg border border-white/20 bg-white/10 text-white hover:bg-white/20 transition-colors text-sm font-medium">
-          <Copy className="w-4 h-4" /> {t(lang, "Copy Link", "複製連結")}
-        </button>
+    <>
+      <div className="rounded-2xl p-8 text-center" style={{ backgroundColor: 'hsl(var(--executive-green))' }}>
+        <h2 className="font-heading text-xl text-white mb-2">
+          {t(lang, "Know someone who needs resume help?", "認識需要履歷幫助的人？")}
+        </h2>
+        <p className="text-white/70 text-sm mb-5">
+          {t(lang, "Send them this free tool, it takes 30 seconds.", "把這個免費工具分享給他們, , 只要 30 秒。")}
+        </p>
+        <div className="flex flex-wrap items-center justify-center gap-3">
+          <button onClick={handleEmailShare} className="inline-flex items-center gap-2 px-5 py-2.5 rounded-lg border border-white/20 bg-white/10 text-white hover:bg-white/20 transition-colors text-sm font-medium">
+            <Mail className="w-5 h-5" /> Email
+          </button>
+          <button onClick={handleMessengerShare} className={`inline-flex items-center gap-2 px-5 py-2.5 rounded-lg text-white transition-colors text-sm font-medium ${isZhTw ? "bg-[#06C755] hover:bg-[#05b34d]" : "bg-[#25D366] hover:bg-[#20bd5a]"}`}>
+            {isZhTw ? <LineIcon /> : <WhatsAppIcon />} {isZhTw ? "LINE" : "WhatsApp"}
+          </button>
+          <button onClick={handleCopyLink} className="inline-flex items-center gap-2 px-5 py-2.5 rounded-lg border border-white/20 bg-white/10 text-white hover:bg-white/20 transition-colors text-sm font-medium">
+            <Copy className="w-4 h-4" /> {t(lang, "Copy Link", "複製連結")}
+          </button>
+          
+          {/* Public Share Link Button - Only show if user is logged in and has analysisId */}
+          {analysisId && (
+            <button 
+              onClick={() => setShowShareModal(true)}
+              className="inline-flex items-center gap-2 px-5 py-2.5 rounded-lg border border-white/20 bg-white/10 text-white hover:bg-white/20 transition-colors text-sm font-medium"
+            >
+              <Globe className="w-4 h-4" /> {t(lang, "Public Link", "公開連結")}
+            </button>
+          )}
+        </div>
+        {score && (
+          <button onClick={handleShareScore} className="mt-4 inline-flex items-center gap-2 text-xs text-white/60 hover:text-white/90 transition-colors">
+            <Share2 className="w-3.5 h-3.5" />
+            {t(lang, "Share your score", "分享你的分數")}
+          </button>
+        )}
       </div>
-      {score && (
-        <button onClick={handleShareScore} className="mt-4 inline-flex items-center gap-2 text-xs text-white/60 hover:text-white/90 transition-colors">
-          <Share2 className="w-3.5 h-3.5" />
-          {t(lang, "Share your score", "分享你的分數")}
-        </button>
+
+      {/* Share Link Modal */}
+      {analysisId && (
+        <ShareLinkModal
+          analysisId={analysisId}
+          lang={lang}
+          isOpen={showShareModal}
+          onClose={() => setShowShareModal(false)}
+        />
       )}
-    </div>
+    </>
   );
 }
 
@@ -447,7 +470,9 @@ function FloatingShareFAB({ lang, score }: { lang: Language; score?: number }) {
       try {
         await navigator.share({ title: text, url });
         return;
-      } catch {}
+      } catch {
+        // User cancelled share, fall back to clipboard
+      }
     }
     await navigator.clipboard.writeText(url);
     toast({ title: lang === "zh-TW" ? "已複製連結" : "Link copied!" });
@@ -529,6 +554,7 @@ export default function ResumeResults({
   resumeText,
   previousAnalysis,
   isFirstAnalysis = false,
+  analysisId,
 }: {
   analysis: AnalysisResult;
   lang: Language;
@@ -538,6 +564,7 @@ export default function ResumeResults({
   resumeText?: string;
   previousAnalysis?: SavedAnalysis | null;
   isFirstAnalysis?: boolean;
+  analysisId?: string;
 }) {
   const isMobile = useIsMobile();
   const location = useLocation();
@@ -834,7 +861,7 @@ export default function ResumeResults({
         </div>
 
         {/* Share */}
-        <ShareSection lang={lang} score={analysis.overall_score} />
+        <ShareSection lang={lang} score={analysis.overall_score} analysisId={analysisId} />
 
         {/* Floating Share FAB */}
         <FloatingShareFAB lang={lang} score={analysis.overall_score} />

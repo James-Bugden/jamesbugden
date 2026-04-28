@@ -636,6 +636,43 @@ export type Database = {
         }
         Relationships: []
       }
+      share_links: {
+        Row: {
+          id: string
+          analysis_id: string
+          share_id: string
+          views: number
+          last_viewed_at: string | null
+          created_at: string
+          is_active: boolean
+        }
+        Insert: {
+          id?: string
+          analysis_id: string
+          share_id: string
+          views?: number
+          last_viewed_at?: string | null
+          created_at?: string
+          is_active?: boolean
+        }
+        Update: {
+          id?: string
+          analysis_id?: string
+          share_id?: string
+          views?: number
+          last_viewed_at?: string | null
+          created_at?: string
+          is_active?: boolean
+        }
+        Relationships: [
+          {
+            foreignKeyName: "share_links_analysis_id_fkey"
+            columns: ["analysis_id"]
+            referencedRelation: "resume_analyses"
+            referencedColumns: ["id"]
+          }
+        ]
+      }
       resume_leads: {
         Row: {
           analysis_result: Json | null
@@ -763,6 +800,7 @@ export type Database = {
           utm_term: string | null
           viewport_h: number | null
           viewport_w: number | null
+          ref_token: string | null
         }
         Insert: {
           anon_id: string
@@ -790,9 +828,10 @@ export type Database = {
           utm_source?: string | null
           utm_term?: string | null
           viewport_h?: number | null
-          viewport_w?: number | null
-        }
-        Update: {
+viewport_w?: number | null
+           ref_token?: string | null
+         }
+         Update: {
           anon_id?: string
           browser?: string | null
           device_type?: string | null
@@ -819,6 +858,7 @@ export type Database = {
           utm_term?: string | null
           viewport_h?: number | null
           viewport_w?: number | null
+          ref_token?: string | null
         }
         Relationships: []
       }
