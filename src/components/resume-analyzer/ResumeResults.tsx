@@ -13,6 +13,8 @@ import { useIsMobile } from "@/hooks/use-mobile";
 import { trackShare } from "@/lib/trackShare";
 import { usePrintUsage } from "@/hooks/usePrintUsage";
 import { InterviewGuideCTA } from "./InterviewGuideCTA";
+import { ScoreDeltaCard } from "./ScoreDeltaCard";
+import type { SavedAnalysis } from "@/hooks/useResumeAnalyses";
 
 type Language = "en" | "zh-TW";
 const t = (lang: Language, en: string, zh: string) => lang === "en" ? en : zh;
@@ -525,6 +527,8 @@ export default function ResumeResults({
   isUnlocked = true,
   resumeImageUrl,
   resumeText,
+  previousAnalysis,
+  isFirstAnalysis = false,
 }: {
   analysis: AnalysisResult;
   lang: Language;
@@ -532,6 +536,8 @@ export default function ResumeResults({
   isUnlocked?: boolean;
   resumeImageUrl?: string | null;
   resumeText?: string;
+  previousAnalysis?: SavedAnalysis | null;
+  isFirstAnalysis?: boolean;
 }) {
   const isMobile = useIsMobile();
   const location = useLocation();
@@ -564,6 +570,17 @@ export default function ResumeResults({
         <div className="text-center">
           <ScoreHero score={analysis.overall_score} lang={lang} />
         </div>
+
+        {/* Score delta / baseline card — only for logged-in users */}
+        {isUnlocked && (isFirstAnalysis || previousAnalysis) && (
+          <ScoreDeltaCard
+            currentScore={analysis.overall_score}
+            currentSections={analysis.sections}
+            previousAnalysis={previousAnalysis ?? null}
+            isFirstAnalysis={isFirstAnalysis}
+            lang={lang}
+          />
+        )}
 
         {/* Saved report banner for logged-in users */}
         {isLoggedIn && (

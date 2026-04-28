@@ -17,6 +17,7 @@ import LogoScroll from "@/components/LogoScroll";
 import MicroSurvey from "@/components/feedback/MicroSurvey";
 import { useAuth } from "@/contexts/AuthContext";
 import { useResumeAnalyses } from "@/hooks/useResumeAnalyses";
+import type { SavedAnalysis } from "@/hooks/useResumeAnalyses";
 import { renderPdfToImage } from "@/lib/renderPdfToImage";
 import pdfjsWorkerUrl from "pdfjs-dist/build/pdf.worker.min.mjs?url";
 import jamesPhoto from "@/assets/james-bugden.jpg";
@@ -49,6 +50,8 @@ export default function ResumeAnalyzer({ defaultLang = "en" }: { defaultLang?: L
   const [resumeImageUrl, setResumeImageUrl] = useState<string | null>(null);
   const [showMicroSurvey, setShowMicroSurvey] = useState(false);
   const [showLimitModal, setShowLimitModal] = useState(false);
+  const [deltaPrev, setDeltaPrev] = useState<SavedAnalysis | null>(null);
+  const [deltaIsFirst, setDeltaIsFirst] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
   
 
@@ -224,6 +227,10 @@ export default function ResumeAnalyzer({ defaultLang = "en" }: { defaultLang?: L
   const handleSubmitResume = useCallback(async () => {
     setError("");
     const analyzeStarted = performance.now();
+    if (isLoggedIn) {
+      setDeltaPrev(latest);
+      setDeltaIsFirst(!analysesLoading && analyses.length === 0);
+    }
     if (limitReached) {
       trackTool("resume_analyzer", "limit_blocked", { used, limit }, { lang, success: false });
       setShowLimitModal(true);
@@ -725,7 +732,11 @@ export default function ResumeAnalyzer({ defaultLang = "en" }: { defaultLang?: L
             isUnlocked={isLoggedIn}
             resumeImageUrl={resumeImageUrl}
             resumeText={resumeText}
+            previousAnalysis={deltaPrev}
+            isFirstAnalysis={deltaIsFirst}
             onReset={() => {
+              setDeltaPrev(null);
+              setDeltaIsFirst(false);
               setAnalysisResult(null);
               setFile(null);
               setPasteText("");
