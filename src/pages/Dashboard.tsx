@@ -320,10 +320,10 @@ export default function Dashboard({ lang = "en" }: { lang?: "en" | "zh" }) {
     <>
       <SEO />
 
-      {showRouter && user && (
+      {showRouter && (
         <OnboardingRouter
-          userId={user.id}
-          onStageSelect={async (stage) => {
+          lang={lang}
+          onComplete={async (stage) => {
             await updateProfile({ job_search_stage: stage, onboarding_completed: true });
           }}
           onSkip={async () => {
