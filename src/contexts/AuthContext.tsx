@@ -3,6 +3,8 @@ import { supabase } from "@/integrations/supabase/client";
 import type { User, Session } from "@supabase/supabase-js";
 import { syncToMailerLite } from "@/lib/mailerlite";
 import { syncLocalToServer, clearLocalDocuments, loadFromServer } from "@/lib/documentStore";
+import { syncJobsToServer, loadJobsFromServer } from "@/lib/jobStoreSupabase";
+import { getAllJobs } from "@/lib/jobStore";
 import {
   assignOnboardingVariant,
   assignDripVariantForUser,
@@ -111,6 +113,10 @@ export function AuthProvider({ children }: { children: ReactNode }) {
                 return loadFromServer();
               })
               .catch(() => toast.error("Failed to sync your documents. Please refresh and try again."));
+            // Sync local job applications to server on first login, then load server jobs (HIR-145)
+            syncJobsToServer(getAllJobs())
+              .then(() => loadJobsFromServer())
+              .catch(() => {});
           }
         }
       }

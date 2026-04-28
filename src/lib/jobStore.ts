@@ -97,6 +97,8 @@ export const STAGE_CHECKLISTS: Record<string, { id: string; label: string }[]> =
   ],
 };
 
+import { upsertJobRemote, deleteJobRemote } from "./jobStoreSupabase";
+
 const STORAGE_KEY = "james_careers_jobs";
 const GOAL_KEY = "james_careers_weekly_goal";
 const CONTACTS_KEY = "james_careers_job_contacts";
@@ -192,6 +194,7 @@ export function createJob(data: Partial<JobApplication>): JobApplication {
   const jobs = load();
   jobs.push(job);
   save(jobs);
+  upsertJobRemote(job).catch(() => {});
   return job;
 }
 
@@ -206,11 +209,13 @@ export function updateJob(id: string, updates: Partial<JobApplication>) {
   }
   jobs[idx] = { ...jobs[idx], ...updates, updatedAt: new Date().toISOString() };
   save(jobs);
+  upsertJobRemote(jobs[idx]).catch(() => {});
   return jobs[idx];
 }
 
 export function deleteJob(id: string) {
   save(load().filter((j) => j.id !== id));
+  deleteJobRemote(id).catch(() => {});
 }
 
 export function linkDocumentToJob(jobId: string, docId: string) {
