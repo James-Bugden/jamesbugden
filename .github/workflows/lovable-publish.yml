@@ -8,6 +8,7 @@
 # Requires GitHub secret: LOVABLE_STORAGE_STATE (base64 Playwright storage state).
 # Run scripts/lovable-auth-export.mjs locally once to generate it.
 # If the secret is missing or stale, the job exits red with a clear error message.
+# Lovable sessions typically last 30–90 days — re-run the export script to renew.
 
 name: Publish to Lovable
 
