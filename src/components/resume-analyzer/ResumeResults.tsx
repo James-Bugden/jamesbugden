@@ -36,7 +36,6 @@ const WhatsAppIcon = () => (
 function useAnimatedCounter(target: number, duration = 1200) {
   const [value, setValue] = useState(0);
   useEffect(() => {
-    let start = 0;
     const startTime = performance.now();
     const tick = (now: number) => {
       const elapsed = now - startTime;
@@ -471,7 +470,9 @@ function FloatingShareFAB({ lang, score }: { lang: Language; score?: number }) {
       try {
         await navigator.share({ title: text, url });
         return;
-      } catch {}
+      } catch {
+        // User cancelled share, fall back to clipboard
+      }
     }
     await navigator.clipboard.writeText(url);
     toast({ title: lang === "zh-TW" ? "已複製連結" : "Link copied!" });
