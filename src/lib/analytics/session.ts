@@ -48,6 +48,7 @@ function readUtm(): Record<string, string | null> {
     utm_campaign: p.get("utm_campaign"),
     utm_term: p.get("utm_term"),
     utm_content: p.get("utm_content"),
+    ref_token: p.get("ref"),
   };
 }
 
