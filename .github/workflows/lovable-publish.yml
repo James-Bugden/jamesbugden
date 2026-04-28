@@ -1,0 +1,51 @@
+# lovable-publish.yml — publish jamesbugden.com to Lovable on every push to main.
+#
+# Why this workflow exists: Lovable has no deploy API and no auto-publish toggle.
+# Browser automation via Playwright is the only viable path. This fires
+# immediately after every merge, logs to GitHub Actions, and uses zero
+# agent budget. See HIR-217 for context.
+#
+# Requires GitHub secrets: LOVABLE_EMAIL, LOVABLE_PASSWORD.
+# If the secrets are missing the job exits red with a clear error message.
+
+name: Publish to Lovable
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+# One publish at a time — if two pushes land back-to-back, queue rather
+# than cancel so neither deploy is dropped.
+concurrency:
+  group: lovable-publish
+  cancel-in-progress: false
+
+jobs:
+  publish-to-lovable:
+    name: Publish to Lovable
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Install Playwright (Chromium only)
+        run: npx playwright install chromium --with-deps
+
+      - name: Publish to Lovable
+        env:
+          LOVABLE_EMAIL: ${{ secrets.LOVABLE_EMAIL }}
+          LOVABLE_PASSWORD: ${{ secrets.LOVABLE_PASSWORD }}
+        run: node scripts/lovable-publish.mjs
+
+      - name: Upload failure screenshot
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: lovable-publish-failure
+          path: lovable-publish-failure.png
+          retention-days: 7
