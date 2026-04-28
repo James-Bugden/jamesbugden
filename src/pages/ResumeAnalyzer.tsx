@@ -347,7 +347,7 @@ export default function ResumeAnalyzer({ defaultLang = "en" }: { defaultLang?: L
             if (currentScore >= milestone && (previousScore === null || previousScore < milestone)) {
               // User reached this milestone
               const isFirstTimeReaching = !analyses.some(a => (a.overall_score ?? 0) >= milestone);
-              track("score_milestone", "reached", {
+              track("milestone", "reached", {
                 milestone,
                 current_score: currentScore,
                 previous_score: previousScore,

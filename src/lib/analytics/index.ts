@@ -195,10 +195,41 @@ export function installGlobalErrorHandler(): () => void {
     });
   };
 
-  window.addEventListener("error", onError);
+window.addEventListener("error", onError);
   window.addEventListener("unhandledrejection", onRejection);
+
   return () => {
     window.removeEventListener("error", onError);
     window.removeEventListener("unhandledrejection", onRejection);
   };
+}
+
+// Phase B tracking events (HIR-247) — Score History + Milestones
+// These utilities will be wired when corresponding UI components are built.
+
+/**
+ * Fire when a returning (logged-in) user opens the score history view.
+ * @param metadata Optional additional data
+ */
+export function trackScoreHistoryViewed(metadata?: Record<string, unknown>): void {
+  track("score_history", "viewed", metadata);
+}
+
+/**
+ * Fire on milestone card impression (when card enters viewport or is rendered).
+ * @param milestoneId The milestone identifier
+ * @param metadata Optional additional data
+ */
+export function trackMilestoneCardShown(milestoneId: string, metadata?: Record<string, unknown>): void {
+  track("milestone_card", "shown", { milestone_id: milestoneId, ...metadata });
+}
+
+/**
+ * Fire on CTA click from a milestone card.
+ * @param milestoneId The milestone identifier
+ * @param action The action taken (e.g., "view_details", "dismiss", "share")
+ * @param metadata Optional additional data
+ */
+export function trackMilestoneCardClicked(milestoneId: string, action: string, metadata?: Record<string, unknown>): void {
+  track("milestone_card", "clicked", { milestone_id: milestoneId, action, ...metadata });
 }

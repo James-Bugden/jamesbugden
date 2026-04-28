@@ -50,7 +50,7 @@ export function ScoreDeltaCard({
       const MILESTONES = [60, 70, 80, 90, 100] as const;
       
       // Delta card viewed event
-      track("score_history", "delta_viewed", {
+      track("score_history", "viewed", {
         current_score: currentScore,
         previous_score: prevScore,
         delta: delta,
