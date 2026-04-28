@@ -6,8 +6,8 @@
  * opens — log in to Lovable with Google, then come back here and press Enter.
  * The script prints base64-encoded session state to stdout.
  *
- * Paste the output as the LOVABLE_STORAGE_STATE secret:
- *   https://github.com/James-Bugden/jamesbugden/settings/secrets/actions
+ * Paste the output as a comment on Paperclip issue HIR-216 — the agent
+ * stores it as the GitHub Secret automatically (no GitHub UI needed).
  *
  * Re-run when the Actions workflow fails with an auth error (session expired).
  * Lovable sessions typically last 30–90 days.
@@ -44,11 +44,11 @@ async function main() {
   const state = await context.storageState();
   const b64 = Buffer.from(JSON.stringify(state)).toString("base64");
 
-  console.log("\n=== PASTE THIS AS GITHUB SECRET: LOVABLE_STORAGE_STATE ===");
+  console.log("\n=== PASTE THIS AS A COMMENT ON HIR-216 ===");
   console.log(b64);
   console.log("=== END ===\n");
-  console.log("Go to: https://github.com/James-Bugden/jamesbugden/settings/secrets/actions");
-  console.log("Click 'New repository secret', name it LOVABLE_STORAGE_STATE, paste the value above.\n");
+  console.log("The agent will read the value and store it as a GitHub Secret automatically.");
+  console.log("No GitHub UI required.\n");
 
   await browser.close();
 }
