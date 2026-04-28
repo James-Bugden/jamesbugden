@@ -450,14 +450,24 @@ export type Database = {
       profiles: {
         Row: {
           career_phase: string | null
+          company: string | null
+          country: string | null
           created_at: string | null
           daily_task_completed_at: string | null
+          drip_variant: string | null
+          email: string | null
+          full_name: string | null
           id: string
           job_search_stage: string | null
+          job_title: string | null
           last_viewed_guide: string | null
           last_viewed_guide_at: string | null
+          linkedin_url: string | null
           nps_last_shown_at: string | null
           onboarding_completed: boolean | null
+          onboarding_router_variant: string | null
+          onboarding_variant: string | null
+          returned_day2_14: boolean
           target_industry: string | null
           target_role: string | null
           tuesday_email_opted_in: boolean
@@ -467,14 +477,24 @@ export type Database = {
         }
         Insert: {
           career_phase?: string | null
+          company?: string | null
+          country?: string | null
           created_at?: string | null
           daily_task_completed_at?: string | null
+          drip_variant?: string | null
+          email?: string | null
+          full_name?: string | null
           id?: string
           job_search_stage?: string | null
+          job_title?: string | null
           last_viewed_guide?: string | null
           last_viewed_guide_at?: string | null
+          linkedin_url?: string | null
           nps_last_shown_at?: string | null
           onboarding_completed?: boolean | null
+          onboarding_router_variant?: string | null
+          onboarding_variant?: string | null
+          returned_day2_14?: boolean
           target_industry?: string | null
           target_role?: string | null
           tuesday_email_opted_in?: boolean
@@ -484,14 +504,24 @@ export type Database = {
         }
         Update: {
           career_phase?: string | null
+          company?: string | null
+          country?: string | null
           created_at?: string | null
           daily_task_completed_at?: string | null
+          drip_variant?: string | null
+          email?: string | null
+          full_name?: string | null
           id?: string
           job_search_stage?: string | null
+          job_title?: string | null
           last_viewed_guide?: string | null
           last_viewed_guide_at?: string | null
+          linkedin_url?: string | null
           nps_last_shown_at?: string | null
           onboarding_completed?: boolean | null
+          onboarding_router_variant?: string | null
+          onboarding_variant?: string | null
+          returned_day2_14?: boolean
           target_industry?: string | null
           target_role?: string | null
           tuesday_email_opted_in?: boolean
