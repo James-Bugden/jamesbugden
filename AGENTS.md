@@ -140,8 +140,8 @@ Standard workflow for any migration PR:
 
 1. site-engineer opens the PR with the migration file.
 2. director-engineering reviews; Tier 2 confirmation if needed.
-3. James merges (or director-engineering merges on Tier 2 approval).
-4. **James runs the migration through Lovable's in-app migration tool** (one click in Lovable UI).
+3. director-engineering merges via `gh pr merge --merge` (James has authorised agents to merge without his approval — confirmed 2026-04-28).
+4. **James runs the migration through Lovable's in-app migration tool** (one click in Lovable UI — this step still requires James).
 5. site-engineer probes the live PostgREST endpoint to verify the new schema, then closes the issue.
 
 Every migration PR description must surface step 4 explicitly so James doesn't try to Publish-and-wait. See the *Migration PRs* bullet under *Git workflow*.
