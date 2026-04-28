@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/contexts/AuthContext";
+import { trackResumeAnalysisSaved } from "@/lib/analytics";
 
 export interface SavedAnalysis {
   id: string;
@@ -45,6 +46,7 @@ export function useResumeAnalyses() {
       resume_text: params.resume_text,
       language: params.language,
     });
+    trackResumeAnalysisSaved(params.overall_score, params.language);
     fetchAll();
   }, [user, fetchAll]);
 

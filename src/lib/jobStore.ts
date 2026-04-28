@@ -98,7 +98,7 @@ export const STAGE_CHECKLISTS: Record<string, { id: string; label: string }[]> =
 };
 
 import { upsertJobRemote, deleteJobRemote } from "./jobStoreSupabase";
-import { track } from "@/lib/analytics";
+import { trackJobSaved, trackJobUnsaved } from "@/lib/analytics";
 
 const STORAGE_KEY = "james_careers_jobs";
 const GOAL_KEY = "james_careers_weekly_goal";
@@ -199,10 +199,7 @@ export function createJob(data: Partial<JobApplication>): JobApplication {
   
   // Track job saved event if stage is bookmarked
   if (job.stage === "bookmarked") {
-    track("save_for_later", "job_saved", {
-      job_application_id: job.id,
-      job_title: job.title,
-      company_name: job.company,
+    trackJobSaved(job.id, job.title, job.company, {
       source_page: typeof window !== "undefined" ? window.location.pathname : "",
     });
   }
@@ -233,18 +230,12 @@ export function updateJob(id: string, updates: Partial<JobApplication>) {
   if (newStage && newStage !== oldStage) {
     if (oldStage === "bookmarked" && newStage !== "bookmarked") {
       // Job unsaved (unbookmarked)
-      track("save_for_later", "job_unsaved", {
-        job_application_id: id,
-        job_title: jobs[idx].title,
-        company_name: jobs[idx].company,
+      trackJobUnsaved(id, jobs[idx].title, jobs[idx].company, {
         new_stage: newStage,
       });
     } else if (newStage === "bookmarked" && oldStage !== "bookmarked") {
       // Job saved (bookmarked)
-      track("save_for_later", "job_saved", {
-        job_application_id: id,
-        job_title: jobs[idx].title,
-        company_name: jobs[idx].company,
+      trackJobSaved(id, jobs[idx].title, jobs[idx].company, {
         previous_stage: oldStage,
         source_page: typeof window !== "undefined" ? window.location.pathname : "",
       });
@@ -255,8 +246,13 @@ export function updateJob(id: string, updates: Partial<JobApplication>) {
 }
 
 export function deleteJob(id: string) {
-  save(load().filter((j) => j.id !== id));
+  const jobs = load();
+  const job = jobs.find((j) => j.id === id);
+  save(jobs.filter((j) => j.id !== id));
   deleteJobRemote(id).catch(() => {});
+  if (job) {
+    trackJobUnsaved(job.id, job.title, job.company);
+  }
 }
 
 export function linkDocumentToJob(jobId: string, docId: string) {

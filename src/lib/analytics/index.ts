@@ -202,3 +202,56 @@ export function installGlobalErrorHandler(): () => void {
     window.removeEventListener("unhandledrejection", onRejection);
   };
 }
+
+// Phase A tracking events (HIR-246) — Save-for-Later + Profile Wizard
+// These utilities will be wired when corresponding UI components are built.
+
+/**
+ * Fire when a job is saved for later (bookmarked).
+ * @param jobId Job identifier
+ * @param jobTitle Job title
+ * @param company Company name
+ * @param metadata Optional additional data
+ */
+export function trackJobSaved(jobId: string, jobTitle: string, company: string, metadata?: Record<string, unknown>): void {
+  track("save_for_later", "job_saved", { job_application_id: jobId, job_title: jobTitle, company_name: company, ...metadata });
+}
+
+/**
+ * Fire when a job is removed from saved for later (unbookmarked).
+ * @param jobId Job identifier
+ * @param jobTitle Job title
+ * @param company Company name
+ * @param metadata Optional additional data
+ */
+export function trackJobUnsaved(jobId: string, jobTitle: string, company: string, metadata?: Record<string, unknown>): void {
+  track("save_for_later", "job_unsaved", { job_application_id: jobId, job_title: jobTitle, company_name: company, ...metadata });
+}
+
+/**
+ * Fire when a resume analysis is saved.
+ * @param score Analysis score
+ * @param language Language of the resume
+ * @param metadata Optional additional data
+ */
+export function trackResumeAnalysisSaved(score: number, language: string, metadata?: Record<string, unknown>): void {
+  track("resume_analysis", "analysis_saved", { score, language, ...metadata });
+}
+
+/**
+ * Fire when the Profile Wizard is first presented to a new user.
+ * @param userId User identifier
+ * @param metadata Optional additional data
+ */
+export function trackProfileWizardStarted(userId: string, metadata?: Record<string, unknown>): void {
+  track("profile_wizard", "profile_wizard_started", { user_id: userId, ...metadata });
+}
+
+/**
+ * Fire when a user updates any field in the Profile Wizard.
+ * @param updates The profile fields that were updated
+ * @param metadata Optional additional data
+ */
+export function trackProfileWizardUpdated(updates: Record<string, unknown>, metadata?: Record<string, unknown>): void {
+  track("profile_wizard", "profile_wizard_updated", { updates, ...metadata });
+}
