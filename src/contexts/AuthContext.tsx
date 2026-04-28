@@ -3,6 +3,10 @@ import { supabase } from "@/integrations/supabase/client";
 import type { User, Session } from "@supabase/supabase-js";
 import { syncToMailerLite } from "@/lib/mailerlite";
 import { syncLocalToServer, clearLocalDocuments, loadFromServer } from "@/lib/documentStore";
+import {
+  assignOnboardingVariant,
+  assignDripVariantForUser,
+} from "@/lib/experiments/variants";
 import { toast } from "sonner";
 
 interface AuthContextValue {
@@ -80,7 +84,24 @@ export function AuthProvider({ children }: { children: ReactNode }) {
           if (!syncedRef.current.has(uid)) {
             syncedRef.current.add(uid);
             const name = session.user.user_metadata?.full_name || session.user.user_metadata?.name || "";
-            syncToMailerLite(session.user.email, name);
+            const userEmail = session.user.email;
+            // Assign sticky experiment variants once per user (HIR-64).
+            // Both RPCs are idempotent: a returning user gets back their
+            // existing assignment instead of being re-randomised.
+            (async () => {
+              const [, dripVariant] = await Promise.all([
+                assignOnboardingVariant(uid),
+                assignDripVariantForUser(uid, userEmail),
+              ]);
+              syncToMailerLite(userEmail, name, undefined, {
+                dripVariant: dripVariant ?? undefined,
+              });
+            })().catch(() => {
+              // Variant assignment is best-effort; fall back to a sync
+              // without variant so the user is still added to the default
+              // group rather than dropped entirely.
+              syncToMailerLite(userEmail, name);
+            });
             // Sync local documents to server on first login, then load server docs
             syncLocalToServer()
               .then((result) => {

@@ -1,7 +1,7 @@
 import { useEffect, useCallback, useRef } from "react";
 import { useLocalStorage } from "./useLocalStorage";
 import { trackEvent } from "@/lib/trackEvent";
-import { startGuideRead } from "@/lib/analytics";
+import { startGuideRead, trackTool } from "@/lib/analytics";
 
 type ProgressMap = Record<string, number>;
 
@@ -45,6 +45,10 @@ export function useTrackGuideProgress(guideId: string) {
     // Detect language from path for the dedicated guide_reads row
     const lang: "en" | "zh" = window.location.pathname.startsWith("/zh-tw") ? "zh" : "en";
     const reader = startGuideRead(guideId, lang);
+    // First-session funnel signal (HIR-64). Read-time view filters to a
+    // user's first authenticated session, so emitting on every guide
+    // mount is safe and gives us per-guide coverage without double-counts.
+    trackTool("guide", "started", { guide_slug: guideId }, { lang });
 
     const onScroll = () => {
       const scrollable = document.documentElement.scrollHeight - window.innerHeight;

@@ -10,6 +10,7 @@ import { Linkedin } from "lucide-react";
 import { InstagramIcon, ThreadsIcon } from "@/components/SocialIcons";
 import { trackShare } from "@/lib/trackShare";
 import { trackEvent } from "@/lib/trackEvent";
+import { trackTool } from "@/lib/analytics";
 import { buildCategoryShareLink } from "@/lib/qbankShare";
 import { AuthHeaderButton } from "@/components/AuthHeaderButton";
 import { motion, AnimatePresence } from "framer-motion";
@@ -203,6 +204,9 @@ export default function InterviewQuestionBank({ lang: initialLang }: { lang: Lan
   // Track page view once
   useEffect(() => {
     trackEvent("qbank_view", "page_view", { lang });
+    // First-session funnel signal (HIR-64). Read-time view filters to a
+    // user's first authenticated session.
+    trackTool("qbank", "visited", {}, { lang });
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   // Fetch category counts once on mount
