@@ -106,7 +106,7 @@ export async function syncJobsToServer(
     const userId = await getUserId();
     if (!userId) return { synced: 0 };
 
-    const { data: existing } = await (supabase as any)
+    const { data: existing } = await supabase
       .from("job_applications")
       .select("id")
       .limit(1);
@@ -115,7 +115,7 @@ export async function syncJobsToServer(
     if (localJobs.length === 0) return { synced: 0 };
 
     const rows = localJobs.map((j) => toRow(j, userId));
-    const { error } = await (supabase as any).from("job_applications").insert(rows);
+    const { error } = await supabase.from("job_applications").insert(rows);
     if (error) return { synced: 0, error };
     return { synced: rows.length };
   } catch (err) {
@@ -132,7 +132,7 @@ export async function loadJobsFromServer(): Promise<boolean> {
     const userId = await getUserId();
     if (!userId) return false;
 
-    const { data, error } = await (supabase as any)
+    const { data, error } = await supabase
       .from("job_applications")
       .select("*")
       .order("updated_at", { ascending: false });
@@ -151,7 +151,7 @@ export async function loadJobsFromServer(): Promise<boolean> {
 export async function upsertJobRemote(job: JobApplication): Promise<void> {
   const userId = await getUserId();
   if (!userId) return;
-  await (supabase as any)
+  await supabase
     .from("job_applications")
     .upsert(toRow(job, userId), { onConflict: "id" });
 }
@@ -160,5 +160,5 @@ export async function upsertJobRemote(job: JobApplication): Promise<void> {
 export async function deleteJobRemote(id: string): Promise<void> {
   const userId = await getUserId();
   if (!userId) return;
-  await (supabase as any).from("job_applications").delete().eq("id", id);
+  await supabase.from("job_applications").delete().eq("id", id);
 }
