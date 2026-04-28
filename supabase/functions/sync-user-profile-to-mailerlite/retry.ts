@@ -1,10 +1,7 @@
-// HIR-68: bounded retry around a single MailerLite subscriber upsert.
-// Acceptance criterion 4: "A failed MailerLite API call (e.g. invalid token)
-// is logged and surfaced; the function retries with backoff up to 3 times
-// before giving up."
-//
+// HIR-146: bounded retry around a single MailerLite subscriber upsert.
 // Retry on 429 + 5xx (transient). Fail fast on every other 4xx — those are
-// shape/validation errors that more retries won't fix.
+// shape/validation errors that more retries won't fix (dead-letter candidates).
+// Network errors (fetch throws) are also retried up to MAX_ATTEMPTS.
 
 const MAILERLITE_URL = "https://connect.mailerlite.com/api/subscribers";
 const DEFAULT_BACKOFF_MS = [200, 500, 1500];
@@ -16,7 +13,7 @@ export type Sleeper = (ms: number) => Promise<void>;
 export interface CallOpts {
   apiKey: string;
   email: string;
-  fields: Record<string, string | boolean | null>;
+  fields: Record<string, string | null>;
   fetcher?: Fetcher;
   sleep?: Sleeper;
   backoffMs?: number[];
@@ -34,9 +31,7 @@ function isRetryable(status: number): boolean {
   return status === 429 || (status >= 500 && status <= 599);
 }
 
-const realSleep: Sleeper = (ms) =>
-  new Promise((resolve) => setTimeout(resolve, ms));
-
+const realSleep: Sleeper = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
 const realFetcher: Fetcher = (url, init) => fetch(url, init);
 
 export async function callMailerLiteWithRetry(opts: CallOpts): Promise<CallResult> {
@@ -44,8 +39,7 @@ export async function callMailerLiteWithRetry(opts: CallOpts): Promise<CallResul
   const sleep = opts.sleep ?? realSleep;
   const backoff = opts.backoffMs ?? DEFAULT_BACKOFF_MS;
 
-  // Deliberately omit the `groups` field — preserves group membership and
-  // honours HIR-68 acceptance criterion 3 (do not modify unrelated fields).
+  // Omit `groups` — preserves existing MailerLite group membership.
   const body = JSON.stringify({ email: opts.email, fields: opts.fields });
   const init: RequestInit = {
     method: "POST",

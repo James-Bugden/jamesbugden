@@ -1,24 +1,22 @@
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
-import { assertWebhookSecret, WebhookSecretError } from "./webhookSecret.ts";
 import { diffWatchedFields, type ProfileRow } from "./changeDetection.ts";
 import { callMailerLiteWithRetry } from "./retry.ts";
 
-// HIR-68: Supabase database webhook target for `public.profiles` UPDATE.
+// HIR-146: Supabase database webhook target for `public.profiles` INSERT/UPDATE.
 // On every fired webhook this function:
-//   1. checks the shared-secret header (so only Supabase can drive it)
-//   2. diffs the four watched columns (target_role, target_industry,
-//      job_search_stage, tuesday_email_opted_in) — if none changed, no-op
-//   3. resolves the user's email via auth.admin.getUserById (profiles has
-//      no email column)
-//   4. calls MailerLite's subscriber upsert with the diffed fields only
-//      (NO `groups` field — preserves group membership)
-//   5. writes a `mailerlite_sync_log` row in every case
+//   1. validates the shared-secret header (Supabase → only caller)
+//   2. parses the profiles webhook payload
+//   3. reads email directly from payload.record.email (added in HIR-143)
+//   4. diffs the five watched profile-identity columns
+//   5. upserts the subscriber in MailerLite with exponential backoff (max 3)
+//   6. on permanent 4xx failure after retries: writes to sync_failures dead-letter
 //
-// See README.md in this directory for the manual setup steps that must
-// happen after this function is deployed: creating the four custom fields
-// in MailerLite UI, configuring the database webhook, and setting the
-// SYNC_USER_PROFILE_WEBHOOK_SECRET edge function secret.
+// Manual setup required after deploy (see PR description):
+//   - SYNC_USER_PROFILE_WEBHOOK_SECRET secret on the edge function
+//   - MAILERLITE_API_KEY secret on the edge function
+//   - Supabase database webhook: table=profiles, events=INSERT+UPDATE
+//   - MailerLite custom fields: full_name, job_title, company, country, linkedin_url
 
 const FUNCTION_NAME = "sync-user-profile-to-mailerlite";
 
@@ -30,17 +28,6 @@ interface WebhookPayload {
   old_record: ProfileRow | null;
 }
 
-type LogStatus = "success" | "failed" | "skipped" | "not_found";
-
-interface LogRow {
-  user_id: string | null;
-  email: string | null;
-  fields_synced: Record<string, unknown>;
-  status: LogStatus;
-  error: string | null;
-  attempt_count: number;
-}
-
 function jsonResponse(status: number, body: unknown): Response {
   return new Response(JSON.stringify(body), {
     status,
@@ -48,22 +35,26 @@ function jsonResponse(status: number, body: unknown): Response {
   });
 }
 
-async function writeLog(
-  supabase: ReturnType<typeof createClient>,
-  row: LogRow,
-): Promise<void> {
-  const { error } = await supabase.from("mailerlite_sync_log").insert(row);
-  if (error) {
-    console.error(`${FUNCTION_NAME}: failed to write sync log`, error);
+class WebhookSecretError extends Error {
+  constructor(public readonly reason: "not configured" | "invalid") {
+    super(`webhook secret ${reason}`);
   }
 }
 
-// Build a single short string for the sync-log `error` column. We include a
-// truncated MailerLite response body so triage from the log table alone
-// (rather than having to dig through Edge Function logs) can spot common
-// validation failures like "email is invalid" or "field key not found".
-const MAX_ERROR_BODY = 500;
-function describeFailure(result: {
+function assertWebhookSecret(req: Request, expected: string | undefined): void {
+  if (!expected) {
+    throw new WebhookSecretError("not configured");
+  }
+  const actual = req.headers.get("x-webhook-secret");
+  if (!actual || actual !== expected) {
+    throw new WebhookSecretError("invalid");
+  }
+}
+
+// Cap for readability in logs; the TEXT column itself is unbounded.
+const MAX_SYNC_FAILURE_BODY = 500;
+
+function buildErrorSummary(result: {
   lastStatus: number;
   lastBody?: unknown;
   lastError?: string;
@@ -79,10 +70,25 @@ function describeFailure(result: {
     } catch (_) {
       body = "[unserialisable body]";
     }
-    if (body.length > MAX_ERROR_BODY) body = `${body.slice(0, MAX_ERROR_BODY)}…`;
+    if (body.length > MAX_SYNC_FAILURE_BODY) {
+      body = `${body.slice(0, MAX_SYNC_FAILURE_BODY)}…`;
+    }
     parts.push(body);
   }
   return parts.join(": ");
+}
+
+async function writeDeadLetter(
+  supabase: ReturnType<typeof createClient>,
+  payload: unknown,
+  error: string,
+): Promise<void> {
+  const { error: dbErr } = await supabase
+    .from("sync_failures")
+    .insert({ payload, error });
+  if (dbErr) {
+    console.error(`${FUNCTION_NAME}: failed to write dead-letter row`, dbErr);
+  }
 }
 
 async function handle(req: Request): Promise<Response> {
@@ -90,8 +96,6 @@ async function handle(req: Request): Promise<Response> {
     return jsonResponse(405, { error: "method_not_allowed" });
   }
 
-  // 1. shared-secret check — fail fast and DO NOT log here. Logging an
-  //    unauthenticated row would let an attacker fill the table with junk.
   const expectedSecret = Deno.env.get("SYNC_USER_PROFILE_WEBHOOK_SECRET");
   try {
     assertWebhookSecret(req, expectedSecret);
@@ -105,7 +109,6 @@ async function handle(req: Request): Promise<Response> {
     throw err;
   }
 
-  // 2. config + clients
   const apiKey = Deno.env.get("MAILERLITE_API_KEY");
   if (!apiKey) {
     console.error(`${FUNCTION_NAME}: MAILERLITE_API_KEY missing`);
@@ -115,17 +118,16 @@ async function handle(req: Request): Promise<Response> {
   const supabaseUrl = Deno.env.get("SUPABASE_URL");
   const serviceRoleKey = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY");
   if (!supabaseUrl || !serviceRoleKey) {
-    console.error(
-      `${FUNCTION_NAME}: SUPABASE_URL or SUPABASE_SERVICE_ROLE_KEY missing — failing closed`,
-    );
+    console.error(`${FUNCTION_NAME}: SUPABASE_URL or SUPABASE_SERVICE_ROLE_KEY missing`);
     return jsonResponse(503, { error: "service_unavailable" });
   }
   const supabase = createClient(supabaseUrl, serviceRoleKey);
 
-  // 3. parse the webhook payload
+  let rawPayload: unknown;
   let payload: WebhookPayload;
   try {
-    payload = (await req.json()) as WebhookPayload;
+    rawPayload = await req.json();
+    payload = rawPayload as WebhookPayload;
   } catch (err) {
     console.error(`${FUNCTION_NAME}: bad JSON payload`, err);
     return jsonResponse(400, { error: "bad_payload" });
@@ -135,9 +137,10 @@ async function handle(req: Request): Promise<Response> {
     !payload ||
     payload.schema !== "public" ||
     payload.table !== "profiles" ||
+    (payload.type !== "INSERT" && payload.type !== "UPDATE") ||
     !payload.record
   ) {
-    console.warn(`${FUNCTION_NAME}: ignoring unexpected payload shape`, {
+    console.warn(`${FUNCTION_NAME}: ignoring unexpected payload`, {
       schema: payload?.schema,
       table: payload?.table,
       type: payload?.type,
@@ -145,70 +148,38 @@ async function handle(req: Request): Promise<Response> {
     return jsonResponse(200, { ok: true, ignored: true });
   }
 
-  const userId = (payload.record.user_id ?? null) as string | null;
-
-  // 4. diff the four watched columns
-  const diff = diffWatchedFields(payload.old_record, payload.record);
-  if (diff === null) {
-    await writeLog(supabase, {
-      user_id: userId,
-      email: null,
-      fields_synced: {},
-      status: "skipped",
-      error: null,
-      attempt_count: 0,
-    });
-    return jsonResponse(200, { ok: true, skipped: "no_watched_change" });
-  }
-
-  // 5. look up the user's email — profiles has no email column.
-  let email: string | null = null;
-  if (userId) {
-    const { data, error } = await supabase.auth.admin.getUserById(userId);
-    if (error) {
-      console.error(`${FUNCTION_NAME}: getUserById failed`, error);
-      await writeLog(supabase, {
-        user_id: userId,
-        email: null,
-        fields_synced: diff as Record<string, unknown>,
-        status: "failed",
-        error: `getUserById: ${error.message ?? String(error)}`,
-        attempt_count: 0,
-      });
-      return jsonResponse(502, { error: "user_lookup_failed" });
-    }
-    email = data?.user?.email ?? null;
-  }
-
+  const email = typeof payload.record.email === "string" ? payload.record.email : null;
   if (!email) {
-    await writeLog(supabase, {
-      user_id: userId,
-      email: null,
-      fields_synced: diff as Record<string, unknown>,
-      status: "not_found",
-      error: "no email on auth.users row",
-      attempt_count: 0,
-    });
+    console.warn(`${FUNCTION_NAME}: no email on profiles row — skipping`);
     return jsonResponse(200, { ok: true, skipped: "no_email" });
   }
 
-  // 6. call MailerLite with retry
-  const result = await callMailerLiteWithRetry({
-    apiKey,
-    email,
-    fields: diff,
-  });
+  const diff = diffWatchedFields(payload.old_record, payload.record);
+  if (diff === null) {
+    return jsonResponse(200, { ok: true, skipped: "no_watched_change" });
+  }
 
-  await writeLog(supabase, {
-    user_id: userId,
-    email,
-    fields_synced: diff as Record<string, unknown>,
-    status: result.ok ? "success" : "failed",
-    error: result.ok ? null : describeFailure(result),
-    attempt_count: result.attempts,
-  });
+  const result = await callMailerLiteWithRetry({ apiKey, email, fields: diff });
 
   if (!result.ok) {
+    const errSummary = buildErrorSummary(result);
+    console.error(`${FUNCTION_NAME}: MailerLite call failed`, {
+      lastStatus: result.lastStatus,
+      attempts: result.attempts,
+      error: errSummary,
+    });
+
+    // Dead-letter only on permanent 4xx (e.g. invalid email, bad API key).
+    // 5xx exhaustion and network errors are transient — log but don't dead-letter
+    // so the caller can retry the webhook delivery if needed.
+    const isPermanent4xx =
+      result.lastStatus >= 400 &&
+      result.lastStatus < 500 &&
+      result.lastStatus !== 429;
+    if (isPermanent4xx) {
+      await writeDeadLetter(supabase, rawPayload, errSummary);
+    }
+
     return jsonResponse(502, {
       error: "mailerlite_call_failed",
       lastStatus: result.lastStatus,
@@ -219,10 +190,6 @@ async function handle(req: Request): Promise<Response> {
   return jsonResponse(200, { ok: true, attempts: result.attempts });
 }
 
-// Top-level safety net: any unexpected throw past `handle` becomes a 500
-// with a generic body. The detail goes to server logs only, so a malformed
-// upstream payload or a transient runtime failure cannot leak internals
-// (stack traces, env state) into the response.
 serve(async (req) => {
   try {
     return await handle(req);
