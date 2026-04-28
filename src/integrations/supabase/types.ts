@@ -763,6 +763,7 @@ export type Database = {
           utm_term: string | null
           viewport_h: number | null
           viewport_w: number | null
+          ref_token: string | null
         }
         Insert: {
           anon_id: string
@@ -790,9 +791,10 @@ export type Database = {
           utm_source?: string | null
           utm_term?: string | null
           viewport_h?: number | null
-          viewport_w?: number | null
-        }
-        Update: {
+viewport_w?: number | null
+           ref_token?: string | null
+         }
+         Update: {
           anon_id?: string
           browser?: string | null
           device_type?: string | null
@@ -819,6 +821,7 @@ export type Database = {
           utm_term?: string | null
           viewport_h?: number | null
           viewport_w?: number | null
+          ref_token?: string | null
         }
         Relationships: []
       }
