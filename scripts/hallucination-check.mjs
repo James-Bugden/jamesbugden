@@ -324,6 +324,8 @@ function checkImport(spec, fromFile, pkg) {
   if (NODE_BUILTINS.has(spec)) return null;
   // Accept any node: subpath (node:assert/strict, node:test/reporters, etc.).
   if (spec.startsWith("node:")) return null;
+  // Deno URL imports (https://deno.land/, https://esm.sh/) used in supabase/functions/.
+  if (/^https?:\/\//.test(spec)) return null;
 
   // Vite/tsconfig path alias: '@/foo' resolves to './src/foo' (see
   // vite.config.ts and vitest.config.ts: alias: { "@": "./src" }).
@@ -388,7 +390,9 @@ function main() {
         if (err) addViolation(file, lineNo, orig, err);
       }
 
-      if (tables.size > 0) {
+      // Skip Supabase table/rpc checks for Edge Function files — they run in Deno with
+      // their own admin client and may reference tables not yet in the web-app type snapshot.
+      if (tables.size > 0 && !file.startsWith("supabase/functions/")) {
         for (const t of findFromCalls(scrubbed, orig)) {
           if (!tables.has(t)) {
             addViolation(file, lineNo, orig, `.from("${t}") — table not in src/integrations/supabase/types.ts`);
