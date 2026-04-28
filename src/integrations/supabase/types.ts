@@ -549,6 +549,7 @@ export type Database = {
           seniority_level: string | null
           target_readiness: string | null
           user_agent: string | null
+          welcome_sequence_started_at: string | null
           years_experience: string | null
         }
         Insert: {
@@ -568,6 +569,7 @@ export type Database = {
           seniority_level?: string | null
           target_readiness?: string | null
           user_agent?: string | null
+          welcome_sequence_started_at?: string | null
           years_experience?: string | null
         }
         Update: {
@@ -587,6 +589,7 @@ export type Database = {
           seniority_level?: string | null
           target_readiness?: string | null
           user_agent?: string | null
+          welcome_sequence_started_at?: string | null
           years_experience?: string | null
         }
         Relationships: []
