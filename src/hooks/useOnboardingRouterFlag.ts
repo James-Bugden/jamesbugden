@@ -41,3 +41,25 @@ export function useOnboardingRouterFlag(): UseOnboardingRouterFlagResult {
 
   return { enabled, holdoutPct, loading };
 }
+
+/**
+ * Persists the onboarding_router_variant to the user's profile (HIR-161).
+ * Idempotent: no-ops if the variant is already set.
+ */
+export async function persistOnboardingRouterVariant(
+  userId: string,
+  variant: "router" | "holdout",
+): Promise<void> {
+  const { data: existing } = await supabase
+    .from("profiles")
+    .select("onboarding_router_variant")
+    .eq("user_id", userId)
+    .maybeSingle();
+
+  if (existing?.onboarding_router_variant) return;
+
+  await supabase
+    .from("profiles")
+    .update({ onboarding_router_variant: variant })
+    .eq("user_id", userId);
+}
