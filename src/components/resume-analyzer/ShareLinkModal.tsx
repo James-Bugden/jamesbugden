@@ -5,6 +5,7 @@ import { Copy, Check, QrCode, Eye, Trash2 } from "lucide-react";
 import { toast } from "@/hooks/use-toast";
 import { useShareLinks } from "@/hooks/useShareLinks";
 import { Skeleton } from "@/components/ui/skeleton";
+import { track } from "@/lib/analytics";
 
 interface ShareLinkModalProps {
   analysisId: string;
@@ -47,12 +48,21 @@ const ShareLinkModal = ({ analysisId, lang, isOpen, onClose }: ShareLinkModalPro
     if (!activeShareLink?.url && !existingShareLink) return;
 
     const url = activeShareLink?.url || `${window.location.origin}/r/${existingShareLink?.share_id}`;
+    const shareId = activeShareLink?.share_id || existingShareLink?.share_id;
+    
     await navigator.clipboard.writeText(url);
     
     setCopied(true);
     toast({
       title: t("Link copied!", "連結已複製！"),
       description: t("Share this link with others", "與他人分享此連結"),
+    });
+    
+    // Track the share link copy event
+    track("share_link_created", "copied", {
+      share_id: shareId,
+      url,
+      source: "modal",
     });
     
     setTimeout(() => setCopied(false), 2000);

@@ -163,7 +163,6 @@ const WillyLinReviewZhTw = lazy(() => import("./pages/reviews/WillyLinReviewZhTw
 const HopeChenReview = lazy(() => import("./pages/reviews/HopeChenReview"));
 const HopeChenReviewZhTw = lazy(() => import("./pages/reviews/HopeChenReviewZhTw"));
 const RemaRaoReview = lazy(() => import("./pages/reviews/RemaRaoReview"));
-const PublicAnalysisPage = lazy(() => import("@/pages/PublicAnalysisPage"));
 const PublicScoreCardPage = lazy(() => import("@/pages/PublicScoreCardPage"));
 
 const queryClient = new QueryClient();

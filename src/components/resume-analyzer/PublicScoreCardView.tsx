@@ -9,6 +9,7 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { useShareLinks } from "@/hooks/useShareLinks";
 import { AnalysisResult } from "@/components/resume-analyzer/types";
 import { toast } from "@/hooks/use-toast";
+import { track } from "@/lib/analytics";
 
 interface PublicAnalysisData {
   share_links: {
@@ -63,6 +64,13 @@ const PublicScoreCardView = () => {
       title: "Link copied!",
       description: "Share this link with others",
     });
+    
+    // Track the share link copy event from public page
+    track("share_link_created", "copied", {
+      share_id: shareId,
+      url,
+      source: "public_page",
+    });
   };
 
   const handleShare = async () => {
@@ -79,6 +87,13 @@ const PublicScoreCardView = () => {
           text,
           url,
         });
+        // Track successful native share
+        track("share_link_created", "shared_native", {
+          share_id: shareId,
+          url,
+          source: "public_page",
+          method: "native_share",
+        });
       } catch (err) {
         // User cancelled share
         console.log("Share cancelled:", err);
@@ -88,6 +103,13 @@ const PublicScoreCardView = () => {
       toast({
         title: "Score message copied!",
         description: "Paste it anywhere to share",
+      });
+      // Track clipboard share fallback
+      track("share_link_created", "shared_clipboard", {
+        share_id: shareId,
+        url,
+        source: "public_page",
+        method: "clipboard",
       });
     }
   };

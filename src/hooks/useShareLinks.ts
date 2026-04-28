@@ -2,6 +2,7 @@ import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/contexts/AuthContext";
 import { toast } from "@/hooks/use-toast";
+import { track } from "@/lib/analytics";
 
 export interface ShareLink {
   id: string;
@@ -118,6 +119,13 @@ export function useShareLinks() {
       toast({
         title: "Share link created",
         description: "Your analysis is now publicly accessible at the link below.",
+      });
+      
+      // Track the share link creation event
+      track("share_link_created", "created", {
+        analysis_id: data.id,
+        share_id: data.share_id,
+        url: data.url,
       });
     },
     onError: (error) => {
