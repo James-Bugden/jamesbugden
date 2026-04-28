@@ -5,8 +5,9 @@
 # immediately after every merge, logs to GitHub Actions, and uses zero
 # agent budget. See HIR-217 for context.
 #
-# Requires GitHub secrets: LOVABLE_EMAIL, LOVABLE_PASSWORD.
-# If the secrets are missing the job exits red with a clear error message.
+# Requires GitHub secret: LOVABLE_STORAGE_STATE (base64 Playwright storage state).
+# Run scripts/lovable-auth-export.mjs locally once to generate it.
+# If the secret is missing or stale, the job exits red with a clear error message.
 
 name: Publish to Lovable
 
@@ -38,8 +39,7 @@ jobs:
 
       - name: Publish to Lovable
         env:
-          LOVABLE_EMAIL: ${{ secrets.LOVABLE_EMAIL }}
-          LOVABLE_PASSWORD: ${{ secrets.LOVABLE_PASSWORD }}
+          LOVABLE_STORAGE_STATE: ${{ secrets.LOVABLE_STORAGE_STATE }}
         run: node scripts/lovable-publish.mjs
 
       - name: Upload failure screenshot

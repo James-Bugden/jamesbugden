@@ -12,44 +12,38 @@
  */
 import { chromium } from "@playwright/test";
 
-const EMAIL = process.env.LOVABLE_EMAIL;
-const PASSWORD = process.env.LOVABLE_PASSWORD;
+const STORAGE_STATE_B64 = process.env.LOVABLE_STORAGE_STATE;
 const PROJECT_URL = "https://lovable.dev/projects/reahmeddjkivwzjsoqkn";
 const SCREENSHOT_PATH = "lovable-publish-failure.png";
 
-if (!EMAIL) {
-  process.stderr.write("Error: LOVABLE_EMAIL is not set\n");
+if (!STORAGE_STATE_B64) {
+  process.stderr.write(
+    "Error: LOVABLE_STORAGE_STATE is not set.\n" +
+    "Run scripts/lovable-auth-export.mjs locally to generate it, then paste the\n" +
+    "output as the LOVABLE_STORAGE_STATE secret in GitHub repo settings.\n"
+  );
   process.exit(1);
 }
-if (!PASSWORD) {
-  process.stderr.write("Error: LOVABLE_PASSWORD is not set\n");
+
+let storageState;
+try {
+  storageState = JSON.parse(Buffer.from(STORAGE_STATE_B64, "base64").toString("utf8"));
+} catch {
+  process.stderr.write(
+    "Error: LOVABLE_STORAGE_STATE is not valid base64 JSON.\n" +
+    "Re-run scripts/lovable-auth-export.mjs to regenerate it.\n"
+  );
   process.exit(1);
 }
 
 async function run() {
   const browser = await chromium.launch({ headless: true });
-  const page = await browser.newPage();
+  // Load pre-authenticated session — avoids Google OAuth in CI
+  const context = await browser.newContext({ storageState });
+  const page = await context.newPage();
 
   try {
-    // Step 1: Sign in
-    console.log("Navigating to Lovable sign-in...");
-    await page.goto("https://lovable.dev/sign-in", {
-      waitUntil: "domcontentloaded",
-      timeout: 30_000,
-    });
-
-    const emailInput = page.getByPlaceholder(/email/i);
-    await emailInput.waitFor({ timeout: 10_000 });
-    await emailInput.fill(EMAIL);
-    await page.getByPlaceholder(/password/i).fill(PASSWORD);
-    await page.getByRole("button", { name: /sign.?in|log.?in|continue/i }).click();
-
-    await page.waitForURL((url) => !url.pathname.includes("sign-in"), {
-      timeout: 30_000,
-    });
-    console.log("Login successful.");
-
-    // Step 2: Navigate to the project
+    // Step 1: Navigate to the project
     console.log("Navigating to project...");
     await page.goto(PROJECT_URL, { waitUntil: "domcontentloaded", timeout: 30_000 });
 
