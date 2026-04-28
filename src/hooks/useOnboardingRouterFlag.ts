@@ -25,7 +25,7 @@ export function useOnboardingRouterFlag(): UseOnboardingRouterFlagResult {
 
   useEffect(() => {
     supabase
-      .from("app_config" as any)
+      .from("app_config")
       .select("config")
       .eq("key", "onboarding_router")
       .maybeSingle()

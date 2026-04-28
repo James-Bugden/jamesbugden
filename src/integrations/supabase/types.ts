@@ -56,6 +56,24 @@ export type Database = {
         }
         Relationships: []
       }
+      app_config: {
+        Row: {
+          config: Json
+          key: string
+          updated_at: string
+        }
+        Insert: {
+          config?: Json
+          key: string
+          updated_at?: string
+        }
+        Update: {
+          config?: Json
+          key?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
       client_reviews: {
         Row: {
           client_name: string
