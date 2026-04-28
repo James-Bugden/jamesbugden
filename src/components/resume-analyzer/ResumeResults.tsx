@@ -528,7 +528,7 @@ export default function ResumeResults({
   resumeImageUrl,
   resumeText,
   previousAnalysis,
-  isFirstAnalysis,
+  isFirstAnalysis = false,
 }: {
   analysis: AnalysisResult;
   lang: Language;
@@ -577,7 +577,7 @@ export default function ResumeResults({
             currentScore={analysis.overall_score}
             currentSections={analysis.sections}
             previousAnalysis={previousAnalysis ?? null}
-            isFirstAnalysis={!!isFirstAnalysis}
+            isFirstAnalysis={isFirstAnalysis}
             lang={lang}
           />
         )}
