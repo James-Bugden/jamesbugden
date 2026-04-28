@@ -4,6 +4,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import type { JobSearchStage } from "@/hooks/useProfile";
 import { trackEvent } from "@/lib/trackEvent";
 
+// eslint-disable-next-line react-refresh/only-export-components
 export const STAGE_ROUTES: Record<JobSearchStage, { en: string; zh: string }> = {
   starting: { en: "/resume", zh: "/zh-tw/resume" },
   applying: { en: "/resume-analyzer", zh: "/zh-tw/resume-analyzer" },
@@ -34,13 +35,13 @@ const i18n = {
     step1Heading: "你目前的求職進度是？",
     options: [
       { id: "starting" as JobSearchStage, label: "剛開始探索" },
-      { id: "applying" as JobSearchStage, label: "積極投遂中" },
+      { id: "applying" as JobSearchStage, label: "積極投遞中" },
       { id: "interviewing" as JobSearchStage, label: "已進入面試階段" },
       { id: "negotiating" as JobSearchStage, label: "已拿到 Offer" },
     ],
     confirmations: {
       starting: "「履歷生成器」幫你從零建立一份專業履歷，是你的最佳起點",
-      applying: "「履歷分析器」提升你的競爭力，搜配「職缺追蹤器」讓申請進度一目瞭然",
+      applying: "「履歷分析器」提升你的競爭力，搭配「職缺追蹤器」讓申請進度一目瞭然",
       interviewing: "「面試題庫」幫你備齊高頻問題與解答，讓你面試前更有把握",
       negotiating: "「薪資比較」讓你了解市場行情，「薪資談判工具組」幫你爭取最好的條件",
     } as Record<JobSearchStage, string>,
