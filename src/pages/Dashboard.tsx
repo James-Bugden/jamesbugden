@@ -14,7 +14,8 @@ import OnboardingChecklist from "@/components/OnboardingChecklist";
 import DashboardSkeleton from "@/components/DashboardSkeleton";
 import NpsPulse from "@/components/feedback/NpsPulse";
 import { useProfile } from "@/hooks/useProfile";
-import OnboardingPhaseModal from "@/components/OnboardingPhaseModal";
+import OnboardingRouter from "@/components/OnboardingRouter";
+import { useOnboardingRouterFlag, isInHoldout } from "@/hooks/useOnboardingRouterFlag";
 import PhaseBar from "@/components/dashboard/PhaseBar";
 import JourneySection, { type JourneyItem, type GuideTag, useSeenNewItems } from "@/components/dashboard/JourneySection";
 import PickUpWhereYouLeftOff from "@/components/dashboard/PickUpWhereYouLeftOff";
@@ -221,9 +222,17 @@ export default function Dashboard({ lang = "en" }: { lang?: "en" | "zh" }) {
   const { latest: latestAnalysis } = useResumeAnalyses();
   const { used: analyzerUsed, limit: analyzerLimit } = useAnalyzerUsage();
   const { profile, loading: profileLoading, updateProfile } = useProfile();
+  const { enabled: routerEnabled, holdoutPct, loading: flagLoading } = useOnboardingRouterFlag();
   const t = i18n[lang];
 
-  const showOnboarding = isLoggedIn && !profileLoading && profile && !profile.onboarding_completed && !profile.career_phase;
+  const showRouter =
+    isLoggedIn &&
+    !profileLoading &&
+    !flagLoading &&
+    !!profile &&
+    !profile.onboarding_completed &&
+    routerEnabled &&
+    !isInHoldout(user?.id ?? "", holdoutPct);
 
   const { isComplete: isJourneyComplete } = useReadingProgress();
   const journeyCompletedCount = useMemo(
@@ -311,16 +320,19 @@ export default function Dashboard({ lang = "en" }: { lang?: "en" | "zh" }) {
     <>
       <SEO />
 
-      {showOnboarding && (
-        <OnboardingPhaseModal
-          lang={lang}
-          onSelect={async (phase) => {
-            await updateProfile({ career_phase: phase, onboarding_completed: true });
+      {showRouter && user && (
+        <OnboardingRouter
+          userId={user.id}
+          onStageSelect={async (stage) => {
+            await updateProfile({ job_search_stage: stage, onboarding_completed: true });
+          }}
+          onSkip={async () => {
+            await updateProfile({ onboarding_completed: true });
           }}
         />
       )}
 
-      {!showOnboarding && profile?.onboarding_completed && (
+      {!showRouter && profile?.onboarding_completed && (
         <WhatsNewModal lang={lang} profile={profile} updateProfile={updateProfile} />
       )}
 
