@@ -244,6 +244,7 @@ export default function ResumeAnalyzer({ defaultLang = "en" }: { defaultLang?: L
         if (ext === "pdf") {
           text = await extractTextFromPDF(file);
           // Render first page as image for visual summary
+          let savedImageUrl: string | null = null;
           try {
             const imgUrl = await renderPdfToImage(file);
             setResumeImageUrl(imgUrl);
@@ -260,6 +261,7 @@ export default function ResumeAnalyzer({ defaultLang = "en" }: { defaultLang?: L
                   .from("resume-images")
                   .createSignedUrl(path, 315360000); // ~10 years
                 if (signedData?.signedUrl) {
+                  savedImageUrl = signedData.signedUrl;
                   sessionStorage.setItem("resume-analysis-image", signedData.signedUrl);
                   setResumeImageUrl(signedData.signedUrl);
                 }
@@ -346,7 +348,7 @@ export default function ResumeAnalyzer({ defaultLang = "en" }: { defaultLang?: L
             analysis_result: result,
             resume_text: text,
             language: lang,
-            resume_image_url: resumeImageUrl,
+            resume_image_url: savedImageUrl,
           });
           toast({
             title: t(lang, "Report saved!", "報告已儲存！"),
