@@ -67,6 +67,9 @@ export async function initSession(): Promise<string | null> {
       const pages = parseInt(sessionStorage.getItem(PAGES_KEY) || "1", 10) + 1;
       sessionStorage.setItem(PAGES_KEY, String(pages));
       sessionStorage.setItem(SESSION_LAST_KEY, String(now));
+      // Include any UTM params present on this navigation (e.g. email link click)
+      const utm = readUtm();
+      const utmFields = Object.fromEntries(Object.entries(utm).filter(([, v]) => v !== null));
       // Fire-and-forget heartbeat
       supabase
         .from("sessions" as any)
@@ -74,6 +77,7 @@ export async function initSession(): Promise<string | null> {
           last_seen_at: new Date().toISOString(),
           pages_viewed: pages,
           exit_page: window.location.pathname,
+          ...utmFields,
         })
         .eq("id", stored)
         .then(() => {});

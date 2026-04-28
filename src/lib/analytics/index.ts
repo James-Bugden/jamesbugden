@@ -12,7 +12,7 @@
  */
 import { supabase } from "@/integrations/supabase/client";
 import { getAnonId } from "./anonId";
-import { getSessionId } from "./session";
+import { getSessionId, initSession as ensureSession } from "./session";
 
 export { initSession, touchSession, endSession, getSessionId } from "./session";
 export { getAnonId } from "./anonId";
@@ -60,8 +60,7 @@ export async function trackTool(
   opts: { lang?: string; durationMs?: number; success?: boolean } = {},
 ): Promise<void> {
   if (typeof window === "undefined") return;
-  const [user_id] = await Promise.all([getUserId()]);
-  const session_id = getSessionId();
+  const [user_id, session_id] = await Promise.all([getUserId(), ensureSession()]);
   const anon_id = getAnonId();
   const { error } = await supabase.from("tool_completions" as any).insert({
     session_id,
