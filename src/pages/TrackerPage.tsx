@@ -10,6 +10,7 @@ import ContactsTab from "@/components/tracker/ContactsTab";
 import PipelineTab from "@/components/tracker/PipelineTab";
 import ResourcesTab from "@/components/tracker/ResourcesTab";
 import { SEO } from "@/components/SEO";
+import { track } from "@/lib/analytics";
 
 const TABS = [
   { id: "lamp", label: "LAMP List", icon: Target },
@@ -55,7 +56,28 @@ function ProfileModal({ profile, onChange, open, onOpenChange }: {
   const [local, setLocal] = useState(profile);
   useEffect(() => { if (open) setLocal(profile); }, [open, profile]);
 
-  const save = () => { onChange(local); onOpenChange(false); toast.success("Profile saved ✓"); };
+  const save = () => { 
+    // Track which fields were updated
+    const fieldsUpdated: string[] = [];
+    const fields: (keyof UserProfile)[] = ["name", "school", "degree", "interestArea"];
+    
+    fields.forEach(field => {
+      if (profile[field] !== local[field]) {
+        fieldsUpdated.push(field);
+      }
+    });
+    
+    if (fieldsUpdated.length > 0) {
+      track("profile", "updated", {
+        fields_updated: fieldsUpdated,
+        source: "tracker"
+      });
+    }
+    
+    onChange(local); 
+    onOpenChange(false); 
+    toast.success("Profile saved ✓"); 
+  };
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
