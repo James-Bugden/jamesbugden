@@ -85,6 +85,7 @@ export default function ResumeAnalyzer({ defaultLang = "en" }: { defaultLang?: L
     if (searchParams.get("report") === "latest" && latest?.analysis_result && !reportLoaded.current) {
       reportLoaded.current = true;
       setAnalysisResult(latest.analysis_result as AnalysisResult);
+      setResumeImageUrl(latest.resume_image_url ?? null);
       setScreen("results");
     }
   }, [searchParams, latest, isLoggedIn]);
@@ -243,10 +244,29 @@ export default function ResumeAnalyzer({ defaultLang = "en" }: { defaultLang?: L
         if (ext === "pdf") {
           text = await extractTextFromPDF(file);
           // Render first page as image for visual summary
+          let savedImageUrl: string | null = null;
           try {
             const imgUrl = await renderPdfToImage(file);
             setResumeImageUrl(imgUrl);
             sessionStorage.setItem("resume-analysis-image", imgUrl);
+            // Upload to storage so the image survives page reloads
+            if (user) {
+              const blob = await (await fetch(imgUrl)).blob();
+              const path = `${user.id}/${Date.now()}.jpg`;
+              const { error: uploadError } = await supabase.storage
+                .from("resume-images")
+                .upload(path, blob, { contentType: "image/jpeg", upsert: false });
+              if (!uploadError) {
+                const { data: signedData } = await supabase.storage
+                  .from("resume-images")
+                  .createSignedUrl(path, 315360000); // ~10 years
+                if (signedData?.signedUrl) {
+                  savedImageUrl = signedData.signedUrl;
+                  sessionStorage.setItem("resume-analysis-image", signedData.signedUrl);
+                  setResumeImageUrl(signedData.signedUrl);
+                }
+              }
+            }
           } catch {
             // Non-critical, continue without image
           }
@@ -328,6 +348,7 @@ export default function ResumeAnalyzer({ defaultLang = "en" }: { defaultLang?: L
             analysis_result: result,
             resume_text: text,
             language: lang,
+            resume_image_url: savedImageUrl,
           });
           toast({
             title: t(lang, "Report saved!", "報告已儲存！"),
@@ -792,6 +813,7 @@ export default function ResumeAnalyzer({ defaultLang = "en" }: { defaultLang?: L
                         key={a.id}
                         onClick={() => {
                           setAnalysisResult(a.analysis_result as AnalysisResult);
+                          setResumeImageUrl(a.resume_image_url ?? null);
                           setScreen("results");
                           navigate(lang === "zh-TW" ? "/zh-tw/resume-analyzer" : "/resume-analyzer", { replace: true });
                         }}
