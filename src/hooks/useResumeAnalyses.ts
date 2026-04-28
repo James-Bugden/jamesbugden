@@ -8,6 +8,7 @@ export interface SavedAnalysis {
   analysis_result: any | null;
   language: string | null;
   created_at: string;
+  resume_image_url: string | null;
 }
 
 export function useResumeAnalyses() {
@@ -20,7 +21,7 @@ export function useResumeAnalyses() {
     if (!user) { setLoading(false); return; }
     const { data } = await supabase
       .from("resume_analyses")
-      .select("id, overall_score, analysis_result, language, created_at")
+      .select("id, overall_score, analysis_result, language, created_at, resume_image_url")
       .eq("user_id", user.id)
       .order("created_at", { ascending: false });
     const list = (data as SavedAnalysis[] | null) ?? [];
@@ -36,6 +37,7 @@ export function useResumeAnalyses() {
     analysis_result: any;
     resume_text: string;
     language: string;
+    resume_image_url?: string | null;
   }) => {
     if (!user) return;
     await supabase.from("resume_analyses").insert({
@@ -44,6 +46,7 @@ export function useResumeAnalyses() {
       analysis_result: params.analysis_result,
       resume_text: params.resume_text,
       language: params.language,
+      resume_image_url: params.resume_image_url ?? null,
     });
     fetchAll();
   }, [user, fetchAll]);
