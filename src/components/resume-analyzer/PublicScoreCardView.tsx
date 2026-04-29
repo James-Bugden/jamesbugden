@@ -9,6 +9,7 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { useShareLinks } from "@/hooks/useShareLinks";
 import { AnalysisResult } from "@/components/resume-analyzer/types";
 import { toast } from "@/hooks/use-toast";
+import { trackEvent } from "@/lib/trackEvent";
 
 interface PublicAnalysisData {
   share_links: {
@@ -63,6 +64,11 @@ const PublicScoreCardView = () => {
       title: "Link copied!",
       description: "Share this link with others",
     });
+    
+    // Track the share link copy event from public page
+    trackEvent("share_link", "share_link_copied_public", {
+      share_id: shareId,
+    });
   };
 
   const handleShare = async () => {
@@ -79,6 +85,11 @@ const PublicScoreCardView = () => {
           text,
           url,
         });
+        // Track successful Web Share API usage
+        trackEvent("share_link", "share_link_web_shared", {
+          share_id: shareId,
+          method: "web_share_api",
+        });
       } catch (err) {
         // User cancelled share
         console.log("Share cancelled:", err);
@@ -88,6 +99,11 @@ const PublicScoreCardView = () => {
       toast({
         title: "Score message copied!",
         description: "Paste it anywhere to share",
+      });
+      // Track fallback copy action
+      trackEvent("share_link", "share_link_copied_fallback", {
+        share_id: shareId,
+        method: "clipboard_fallback",
       });
     }
   };
@@ -214,15 +230,23 @@ const PublicScoreCardView = () => {
                 {/* Score Circle */}
                 <div className="relative">
                   <div className="w-48 h-48 rounded-full border-8 border-muted flex items-center justify-center">
-                    <div className="text-center">
-                      <div className={`text-6xl font-bold ${getScoreColor(overallScore)}`}>
-                        {getGrade(overallScore)}
-                      </div>
-                      <div className={`text-3xl font-bold mt-2 ${getScoreColor(overallScore)}`}>
-                        {overallScore}
-                        <span className="text-lg text-muted-foreground">/100</span>
-                      </div>
-                    </div>
+<div className="text-center">
+                       <div className={`text-6xl font-bold ${getScoreColor(overallScore)}`}>
+                         {getGrade(overallScore)}
+                       </div>
+                       <div className={`text-3xl font-bold mt-2 ${getScoreColor(overallScore)}`}>
+                         {overallScore}
+                         <span className="text-lg text-muted-foreground">/100</span>
+                       </div>
+                       {/* Seniority Level */}
+                       {analysisResult?.segmentation?.seniority_level && (
+                         <div className="mt-3">
+                           <Badge variant="outline" className="text-sm font-normal">
+                             {analysisResult.segmentation.seniority_level}
+                           </Badge>
+                         </div>
+                       )}
+                     </div>
                   </div>
                   <div className="absolute inset-0 rounded-full border-8 border-transparent border-t-current"
                     style={{ 
@@ -234,12 +258,13 @@ const PublicScoreCardView = () => {
                 </div>
 
                 {/* Score Details */}
-                <div className="flex-1">
-                  <h2 className="text-2xl font-bold mb-4">Overall Resume Score</h2>
-                  
-                  {analysisResult && analysisResult.overall_verdict && (
-                    <p className="text-lg mb-6">{analysisResult.overall_verdict}</p>
-                  )}
+<div className="flex-1">
+                   <h2 className="text-2xl font-bold mb-4">Overall Resume Score</h2>
+                   <p className="text-sm text-muted-foreground mb-2">Analyzed by jamesbugden.com</p>
+                   
+                   {analysisResult && analysisResult.overall_verdict && (
+                     <p className="text-lg mb-6">{analysisResult.overall_verdict}</p>
+                   )}
 
                   {analysisResult && analysisResult.sections && (
                     <div className="grid grid-cols-2 md:grid-cols-3 gap-3">

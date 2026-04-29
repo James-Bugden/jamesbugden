@@ -2,6 +2,7 @@ import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/contexts/AuthContext";
 import { toast } from "@/hooks/use-toast";
+import { trackEvent } from "@/lib/trackEvent";
 
 export interface ShareLink {
   id: string;
@@ -22,6 +23,7 @@ export interface CreateShareLinkResponse {
   share_id: string;
   url: string;
   views: number;
+  analysis_id: string;
 }
 
 export function useShareLinks() {
@@ -76,6 +78,7 @@ export function useShareLinks() {
           share_id: existing.share_id,
           url: `${window.location.origin}/r/${existing.share_id}`,
           views: existing.views,
+          analysis_id: existing.analysis_id,
         } as CreateShareLinkResponse;
       }
 
@@ -111,6 +114,7 @@ export function useShareLinks() {
         share_id: data.share_id,
         url: `${window.location.origin}/r/${data.share_id}`,
         views: data.views,
+        analysis_id: data.analysis_id,
       } as CreateShareLinkResponse;
     },
     onSuccess: (data) => {
@@ -118,6 +122,10 @@ export function useShareLinks() {
       toast({
         title: "Share link created",
         description: "Your analysis is now publicly accessible at the link below.",
+      });
+      trackEvent("share_link", "share_link_created", {
+        share_id: data.share_id,
+        analysis_id: data.analysis_id,
       });
     },
     onError: (error) => {
