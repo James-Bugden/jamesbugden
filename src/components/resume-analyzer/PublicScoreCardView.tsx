@@ -103,8 +103,7 @@ const PublicScoreCardView = () => {
           method: "web_share_api",
         });
       } catch (err) {
-        // User cancelled share
-        console.log("Share cancelled:", err);
+        // User cancelled share - no action needed
       }
     } else {
       await navigator.clipboard.writeText(text);
