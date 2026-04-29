@@ -255,3 +255,22 @@ export function trackProfileWizardStarted(userId: string, metadata?: Record<stri
 export function trackProfileWizardUpdated(updates: Record<string, unknown>, metadata?: Record<string, unknown>): void {
   track("profile_wizard", "profile_wizard_updated", { updates, ...metadata });
 }
+
+/**
+ * Fire when the Profile Wizard is successfully completed.
+ * @param userId User identifier
+ * @param metadata Optional additional data
+ */
+export function trackProfileWizardCompleted(userId: string, metadata?: Record<string, unknown>): void {
+  track("profile_wizard", "profile_wizard_completed", { user_id: userId, ...metadata });
+}
+
+/**
+ * Fire when an item is saved (generic save event).
+ * @param itemType Type of item saved (e.g., "resume_analysis", "job")
+ * @param userId User identifier
+ * @param metadata Optional additional data
+ */
+export function trackSaveItemAdded(itemType: string, userId: string | null, metadata?: Record<string, unknown>): void {
+  track("save", "item_added", { item_type: itemType, user_id: userId, ...metadata });
+}

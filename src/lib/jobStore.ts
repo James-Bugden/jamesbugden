@@ -98,7 +98,7 @@ export const STAGE_CHECKLISTS: Record<string, { id: string; label: string }[]> =
 };
 
 import { upsertJobRemote, deleteJobRemote } from "./jobStoreSupabase";
-import { trackJobSaved, trackJobUnsaved } from "@/lib/analytics";
+import { trackJobSaved, trackJobUnsaved, trackSaveItemAdded } from "@/lib/analytics";
 
 const STORAGE_KEY = "james_careers_jobs";
 const GOAL_KEY = "james_careers_weekly_goal";
@@ -202,6 +202,12 @@ export function createJob(data: Partial<JobApplication>): JobApplication {
     trackJobSaved(job.id, job.title, job.company, {
       source_page: typeof window !== "undefined" ? window.location.pathname : "",
     });
+    trackSaveItemAdded("job", null, {
+      job_id: job.id,
+      job_title: job.title,
+      company: job.company,
+      source_page: typeof window !== "undefined" ? window.location.pathname : "",
+    });
   }
   
   return job;
@@ -236,6 +242,13 @@ export function updateJob(id: string, updates: Partial<JobApplication>) {
     } else if (newStage === "bookmarked" && oldStage !== "bookmarked") {
       // Job saved (bookmarked)
       trackJobSaved(id, jobs[idx].title, jobs[idx].company, {
+        previous_stage: oldStage,
+        source_page: typeof window !== "undefined" ? window.location.pathname : "",
+      });
+      trackSaveItemAdded("job", null, {
+        job_id: id,
+        job_title: jobs[idx].title,
+        company: jobs[idx].company,
         previous_stage: oldStage,
         source_page: typeof window !== "undefined" ? window.location.pathname : "",
       });
