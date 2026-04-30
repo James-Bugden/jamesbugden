@@ -41,4 +41,9 @@ describe("SEO meta descriptions — HIR-339 pages", () => {
       });
     });
   }
+
+  it("descriptions are unique across all three pages", () => {
+    const descs = SEO_PAGES.map((p) => seoConfig[p.route]?.description);
+    expect(new Set(descs).size).toBe(SEO_PAGES.length);
+  });
 });
