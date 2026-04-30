@@ -245,6 +245,42 @@ test.describe("Public surface sanity", () => {
     ).toContain("data:");
   });
 
+  test("source index.html CSP script-src allows Facebook Pixel CDN (HIR-359)", () => {
+    const html = readFileSync(path.join(REPO_ROOT, "index.html"), "utf8");
+    const cspMatch = html.match(
+      /<meta\s+http-equiv="Content-Security-Policy"\s+content="([^"]+)"/i,
+    );
+    expect(cspMatch, "CSP meta tag not found in index.html").not.toBeNull();
+    const csp = cspMatch![1];
+    const scriptSrc = csp
+      .split(";")
+      .map((d) => d.trim())
+      .find((d) => d.startsWith("script-src"));
+    expect(scriptSrc, "script-src directive missing").toBeTruthy();
+    expect(
+      scriptSrc!.split(/\s+/),
+      `script-src missing 'https://connect.facebook.net' — Facebook Pixel script will be blocked by CSP. Got: ${scriptSrc}`,
+    ).toContain("https://connect.facebook.net");
+  });
+
+  test("source index.html CSP connect-src allows Facebook Pixel event reporting (HIR-359)", () => {
+    const html = readFileSync(path.join(REPO_ROOT, "index.html"), "utf8");
+    const cspMatch = html.match(
+      /<meta\s+http-equiv="Content-Security-Policy"\s+content="([^"]+)"/i,
+    );
+    expect(cspMatch, "CSP meta tag not found in index.html").not.toBeNull();
+    const csp = cspMatch![1];
+    const connectSrc = csp
+      .split(";")
+      .map((d) => d.trim())
+      .find((d) => d.startsWith("connect-src"));
+    expect(connectSrc, "connect-src directive missing").toBeTruthy();
+    expect(
+      connectSrc!.split(/\s+/),
+      `connect-src missing 'https://www.facebook.com' — Facebook Pixel event XHRs will be blocked by CSP. Got: ${connectSrc}`,
+    ).toContain("https://www.facebook.com");
+  });
+
   test("self-hosted CJK TC subset fonts are served with correct content-type", async ({
     request,
   }) => {
