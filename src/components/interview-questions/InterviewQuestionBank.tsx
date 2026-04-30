@@ -17,6 +17,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { SEO } from "@/components/SEO";
 import { Tooltip, TooltipTrigger, TooltipContent, TooltipProvider } from "@/components/ui/tooltip";
 import { Popover, PopoverTrigger, PopoverContent } from "@/components/ui/popover";
+import { useQBankTTIGuard } from "@/hooks/useQBankTTIGuard";
 
 type Lang = "en" | "zh";
 
@@ -208,6 +209,8 @@ export default function InterviewQuestionBank({ lang: initialLang }: { lang: Lan
     // user's first authenticated session.
     trackTool("qbank", "visited", {}, { lang });
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
+
+  useQBankTTIGuard(loading);
 
   // Fetch category counts once on mount
   useEffect(() => {
