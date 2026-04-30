@@ -56,7 +56,7 @@ const PublicScoreCardView = () => {
         setData(result as PublicAnalysisData);
       } catch (err) {
         console.error("Error fetching public score card:", err);
-        setError(errorT("This analysis is no longer available or the link is invalid.", "此分析已不再可用或連結無效。"));
+        setError(null);
       } finally {
         setLoading(false);
       }
