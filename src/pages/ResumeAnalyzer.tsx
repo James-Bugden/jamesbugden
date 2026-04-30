@@ -44,6 +44,7 @@ export default function ResumeAnalyzer({ defaultLang = "en" }: { defaultLang?: L
   const [resumeText, setResumeText] = useState("");
   const [inputMethod, setInputMethod] = useState<InputMethod>("paste");
   const [analysisResult, setAnalysisResult] = useState<AnalysisResult | null>(null);
+  const [currentAnalysisId, setCurrentAnalysisId] = useState<string | null>(null);
   const [error, setError] = useState("");
   const [analyzeStep, setAnalyzeStep] = useState(0);
   const [progress, setProgress] = useState(0);
@@ -85,6 +86,7 @@ export default function ResumeAnalyzer({ defaultLang = "en" }: { defaultLang?: L
     if (searchParams.get("report") === "latest" && latest?.analysis_result && !reportLoaded.current) {
       reportLoaded.current = true;
       setAnalysisResult(latest.analysis_result as AnalysisResult);
+      setCurrentAnalysisId(latest.id);
       setScreen("results");
     }
   }, [searchParams, latest, isLoggedIn]);
@@ -371,6 +373,22 @@ export default function ResumeAnalyzer({ defaultLang = "en" }: { defaultLang?: L
             is_logged_in: isLoggedIn,
           },
           { lang, durationMs: Math.round(performance.now() - analyzeStarted), success: true },
+        );
+
+        // Additional analyzer_completed event for tracking (HIR-243)
+        track(
+          "analyzer",
+          "completed",
+          {
+            user_id: user?.id || null,
+            overall_score: result.overall_score ?? null,
+            input_method: file ? "upload" : "paste",
+            seniority_level: result.segmentation?.seniority_level ?? null,
+            industry: result.segmentation?.industry ?? null,
+            text_length: text.length,
+            is_logged_in: isLoggedIn,
+            duration_ms: Math.round(performance.now() - analyzeStarted),
+          }
         );
 
         setTimeout(() => {
@@ -765,10 +783,12 @@ export default function ResumeAnalyzer({ defaultLang = "en" }: { defaultLang?: L
             resumeText={resumeText}
             previousAnalysis={deltaPrev}
             isFirstAnalysis={deltaIsFirst}
+            analysisId={currentAnalysisId || undefined}
             onReset={() => {
               setDeltaPrev(null);
               setDeltaIsFirst(false);
               setAnalysisResult(null);
+              setCurrentAnalysisId(null);
               setFile(null);
               setPasteText("");
               setResumeText("");
@@ -812,6 +832,7 @@ export default function ResumeAnalyzer({ defaultLang = "en" }: { defaultLang?: L
                         key={a.id}
                         onClick={() => {
                           setAnalysisResult(a.analysis_result as AnalysisResult);
+                          setCurrentAnalysisId(a.id);
                           setScreen("results");
                           navigate(lang === "zh-TW" ? "/zh-tw/resume-analyzer" : "/resume-analyzer", { replace: true });
                         }}
