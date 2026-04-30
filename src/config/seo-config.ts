@@ -25,7 +25,7 @@ export const seoConfig: Record<string, SEOMeta> = {
   "/": {
     title: "James Bugden | Career Coach for Top Company Job Seekers",
     description:
-      "Senior recruiter with 13+ years helping professionals in Taiwan land $200K+ offers at top multinationals. Free guides, tools & coaching.",
+      "Senior recruiter with 13+ years helping professionals in Taiwan land high-paying offers at top multinational companies. Free guides, tools, and coaching.",
     keywords: "career coach Taiwan, foreign company jobs Taiwan, 外商 career coaching",
   },
 
@@ -259,7 +259,7 @@ export const seoConfig: Record<string, SEOMeta> = {
   "/hr-interview-guide": {
     title: "HR Interview Guide | Pass the Screening | James Bugden",
     description:
-      "What HR really looks for in the screening call, and how to answer salary, availability, and motivation questions confidently.",
+      "Discover what HR recruiters check in screening calls and how to confidently answer salary, availability, and motivation questions. Pass the first interview round.",
     keywords: "HR interview, HR screening, phone screen tips, HR interview questions",
   },
   "/ai-job-search-guide": {
@@ -384,7 +384,7 @@ export const seoConfig: Record<string, SEOMeta> = {
   "/zh-tw": {
     title: "James Bugden | 外商求職教練，幫你拿到理想 Offer",
     description:
-      "13年以上資深招募官，幫助台灣專業人士進入頂尖外商公司。免費指南、工具和一對一輔導。",
+      "擁有13年以上經驗的資深招募官，專門幫助台灣專業人士順利進入頂尖外商公司拿到理想Offer。免費提供求職指南、AI工具和一對一輔導，助你在外商求職路上少走彎路。",
     keywords: "外商求職, 外商面試, 台灣外商工作, 求職教練, career coach Taiwan",
   },
 
@@ -432,7 +432,7 @@ export const seoConfig: Record<string, SEOMeta> = {
   "/zh-tw/resume-analyzer": {
     title: "免費 AI 履歷分析工具 | 即時回饋 | James Bugden",
     description:
-      "上傳你的履歷，立即獲得 AI 專業回饋。格式、內容和影響力一次分析完畢。",
+      "立即上傳履歷，獲得 AI 即時分析，涵蓋格式規範、內容品質和整體影響力。由每月審閱數百份履歷的資深招募官設計，幫你打造更有競爭力的求職文件。",
     keywords: "履歷分析, AI 履歷檢查, 履歷回饋, resume analyzer",
   },
   "/zh-tw/resume": {
@@ -556,7 +556,7 @@ export const seoConfig: Record<string, SEOMeta> = {
   "/zh-tw/hr-interview-guide": {
     title: "HR 面試指南 | 通過初篩 | James Bugden",
     description:
-      "HR 在初篩電話中真正看的是什麼？如何回答薪資、到職時間和動機問題而不被淘汰。",
+      "了解 HR 招募官在初篩電話中真正評估哪些條件，自信回答薪資期望、到職時間和應聘動機問題，不在第一關被淘汰。附資深招募官視角的完整解析與實戰技巧。",
     keywords: "HR 面試, HR 初篩, 電話面試技巧, HR 面試問題",
   },
   "/zh-tw/ai-job-search-guide": {
