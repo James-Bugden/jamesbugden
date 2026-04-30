@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect, useRef } from "react";
 import { useEmailGate } from "@/hooks/useEmailGate";
 import { EmailGateOverlay } from "@/components/EmailGateOverlay";
 import { Link } from "react-router-dom";
@@ -29,6 +29,42 @@ export default function OfferCompassZhTw() {
   const { isUnlocked, unlock } = useEmailGate();
 
   const { currency, setCurrency } = useDisplayCurrency();
+  const hasMarkedInteractive = useRef(false);
+
+  // ── Performance regression guard ──────────────────────────────────────────
+  // Mirrors the EN guard — HIR-336.
+  useEffect(() => {
+    performance.mark("offer-calculator-zh:mount-start");
+    return () => {
+      performance.clearMarks("offer-calculator-zh:mount-start");
+      performance.clearMarks("offer-calculator-zh:interactive");
+      performance.clearMeasures("offer-calculator-zh:tti");
+    };
+  }, []);
+
+  useEffect(() => {
+    if (scenarios.length > 0 && !hasMarkedInteractive.current) {
+      hasMarkedInteractive.current = true;
+      performance.mark("offer-calculator-zh:interactive");
+      performance.measure(
+        "offer-calculator-zh:tti",
+        "offer-calculator-zh:mount-start",
+        "offer-calculator-zh:interactive",
+      );
+      const [entry] = performance.getEntriesByName("offer-calculator-zh:tti");
+      if (entry && entry.duration > 3000) {
+        console.warn("PERF_REGRESSION", {
+          route: "/zh-tw/offer-calculator",
+          tti: Math.round(entry.duration),
+          threshold: 3000,
+          timestamp: new Date().toISOString(),
+          userAgent: navigator.userAgent,
+          performanceEntry: entry.toJSON(),
+        });
+      }
+    }
+  }, [scenarios]);
+  // ──────────────────────────────────────────────────────────────────────────
 
   return (
     <>

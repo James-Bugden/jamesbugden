@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect, useRef } from "react";
 import { useEmailGate } from "@/hooks/useEmailGate";
 import { EmailGateOverlay } from "@/components/EmailGateOverlay";
 import { Link } from "react-router-dom";
@@ -43,6 +43,43 @@ export default function OfferCompass() {
 
   const { currency, setCurrency } = useDisplayCurrency();
   const [disclaimerVisible, setDisclaimerVisible] = useState(true);
+  const hasMarkedInteractive = useRef(false);
+
+  // ── Performance regression guard ──────────────────────────────────────────
+  // Measures Time-to-Interactive and logs a structured warning if it exceeds
+  // 3 s. Purely observability — no UI change.  Sentinel for HIR-336.
+  useEffect(() => {
+    performance.mark("offer-calculator:mount-start");
+    return () => {
+      performance.clearMarks("offer-calculator:mount-start");
+      performance.clearMarks("offer-calculator:interactive");
+      performance.clearMeasures("offer-calculator:tti");
+    };
+  }, []);
+
+  useEffect(() => {
+    if (scenarios.length > 0 && !hasMarkedInteractive.current) {
+      hasMarkedInteractive.current = true;
+      performance.mark("offer-calculator:interactive");
+      performance.measure(
+        "offer-calculator:tti",
+        "offer-calculator:mount-start",
+        "offer-calculator:interactive",
+      );
+      const [entry] = performance.getEntriesByName("offer-calculator:tti");
+      if (entry && entry.duration > 3000) {
+        console.warn("PERF_REGRESSION", {
+          route: "/offer-calculator",
+          tti: Math.round(entry.duration),
+          threshold: 3000,
+          timestamp: new Date().toISOString(),
+          userAgent: navigator.userAgent,
+          performanceEntry: entry.toJSON(),
+        });
+      }
+    }
+  }, [scenarios]);
+  // ──────────────────────────────────────────────────────────────────────────
 
   return (
     <>
