@@ -25,7 +25,7 @@ export const seoConfig: Record<string, SEOMeta> = {
   "/": {
     title: "James Bugden | Career Coach for Top Company Job Seekers",
     description:
-      "Senior recruiter with 13+ years helping professionals in Taiwan land $200K+ offers at top multinationals. Free guides, tools & coaching.",
+      "Senior recruiter with 13+ years experience helping professionals in Taiwan land high-paying offers at top multinational companies. Free guides, tools, and coaching.",
     keywords: "career coach Taiwan, foreign company jobs Taiwan, 外商 career coaching",
   },
 
@@ -130,7 +130,7 @@ export const seoConfig: Record<string, SEOMeta> = {
   "/offer-calculator": {
     title: "Job Offer Calculator | Compare Compensation",
     description:
-      "Calculate and compare the true value of job offers including base salary, bonus, stock, benefits, and more.",
+      "Free offer calculator for job seekers. Enter salary, bonus, equity, and benefits from two offers to find which one pays you the most in total compensation.",
     keywords: "offer calculator, salary calculator, total compensation calculator, job offer comparison",
   },
   "/offer-calculator/compare": {
@@ -153,7 +153,7 @@ export const seoConfig: Record<string, SEOMeta> = {
   "/interview-questions": {
     title: "200+ Interview Questions & Answers | James Bugden",
     description:
-      "Practice with 200+ real interview questions used by top companies. Each includes sample answers in English and Chinese.",
+      "Practice 200+ real interview questions from top companies. Each includes a model answer from a recruiter perspective, available in English and Chinese.",
     keywords: "interview questions, interview answers, common interview questions, 面試問題",
   },
   "/jobs": {
@@ -235,7 +235,7 @@ export const seoConfig: Record<string, SEOMeta> = {
   "/linkedin-guide": {
     title: "LinkedIn Profile Guide | Attract Recruiters | James Bugden",
     description:
-      "Build a LinkedIn profile that attracts recruiters from top companies. Headline formulas, summary templates, and real examples.",
+      "Build a LinkedIn profile that gets recruiters to message you. Step-by-step guide with headline formulas, summary templates, and profile keyword tips.",
     keywords: "LinkedIn guide, LinkedIn profile tips, LinkedIn for job search, recruiter LinkedIn",
   },
   "/linkedin-branding-guide": {
@@ -259,7 +259,7 @@ export const seoConfig: Record<string, SEOMeta> = {
   "/hr-interview-guide": {
     title: "HR Interview Guide | Pass the Screening | James Bugden",
     description:
-      "What HR really looks for in the screening call, and how to answer salary, availability, and motivation questions confidently.",
+      "Discover what HR recruiters check in screening calls and how to confidently answer salary, availability, and motivation questions. Pass the first interview round.",
     keywords: "HR interview, HR screening, phone screen tips, HR interview questions",
   },
   "/ai-job-search-guide": {
@@ -384,7 +384,7 @@ export const seoConfig: Record<string, SEOMeta> = {
   "/zh-tw": {
     title: "James Bugden | 外商求職教練，幫你拿到理想 Offer",
     description:
-      "13年以上資深招募官，幫助台灣專業人士進入頂尖外商公司。免費指南、工具和一對一輔導。",
+      "資深招募官James擁有13年以上外商招募經驗，專門協助台灣專業人士成功進入頂尖跨國企業並爭取理想薪資。提供免費求職指南、AI分析工具和專業教練服務，全面提升你的面試成功率和職涯發展。",
     keywords: "外商求職, 外商面試, 台灣外商工作, 求職教練, career coach Taiwan",
   },
 
@@ -432,7 +432,7 @@ export const seoConfig: Record<string, SEOMeta> = {
   "/zh-tw/resume-analyzer": {
     title: "免費 AI 履歷分析工具 | 即時回饋 | James Bugden",
     description:
-      "上傳你的履歷，立即獲得 AI 專業回饋。格式、內容和影響力一次分析完畢。",
+      "上傳你的履歷檔案，立即獲得由13年經驗招募官設計的AI專業分析回饋。系統全面檢查格式正確性、內容完整性和整體影響力，提供具體改進建議以大幅提升你的面試邀請機會。",
     keywords: "履歷分析, AI 履歷檢查, 履歷回饋, resume analyzer",
   },
   "/zh-tw/resume": {
@@ -556,7 +556,7 @@ export const seoConfig: Record<string, SEOMeta> = {
   "/zh-tw/hr-interview-guide": {
     title: "HR 面試指南 | 通過初篩 | James Bugden",
     description:
-      "HR 在初篩電話中真正看的是什麼？如何回答薪資、到職時間和動機問題而不被淘汰。",
+      "深入了解HR在電話初篩中真正評估的項目，學習如何自信回答薪資、到職時間和動機問題。掌握通過第一輪面試的實用技巧和應對策略，提高成功率。",
     keywords: "HR 面試, HR 初篩, 電話面試技巧, HR 面試問題",
   },
   "/zh-tw/ai-job-search-guide": {
