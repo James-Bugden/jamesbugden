@@ -195,10 +195,105 @@ export function installGlobalErrorHandler(): () => void {
     });
   };
 
-  window.addEventListener("error", onError);
+window.addEventListener("error", onError);
   window.addEventListener("unhandledrejection", onRejection);
   return () => {
     window.removeEventListener("error", onError);
     window.removeEventListener("unhandledrejection", onRejection);
   };
+}
+
+// Phase A tracking events (HIR-246) — Save-for-Later + Profile Wizard
+// These utilities will be wired when corresponding UI components are built.
+
+/**
+ * Fire when a job is saved to the tracker.
+ * @param jobId Job identifier
+ * @param jobTitle Job title
+ * @param company Company name
+ * @param metadata Optional additional data
+ */
+export function trackJobSaved(jobId: string, jobTitle: string, company: string, metadata?: Record<string, unknown>): void {
+  track("job_save", "job_saved", { job_id: jobId, title: jobTitle, company, ...metadata });
+}
+
+/**
+ * Fire when a job is removed from the tracker.
+ * @param jobId Job identifier
+ * @param jobTitle Job title
+ * @param company Company name
+ * @param metadata Optional additional data
+ */
+export function trackJobUnsaved(jobId: string, jobTitle: string, company: string, metadata?: Record<string, unknown>): void {
+  track("job_save", "job_unsaved", { job_id: jobId, title: jobTitle, company, ...metadata });
+}
+
+/**
+ * Fire when a resume analysis is saved.
+ * @param score Analysis score
+ * @param language Language of the resume
+ * @param metadata Optional additional data
+ */
+export function trackResumeAnalysisSaved(score: number, language: string, metadata?: Record<string, unknown>): void {
+  track("resume_analysis", "analysis_saved", { score, language, ...metadata });
+}
+
+/**
+ * Fire when the Profile Wizard is first presented to a new user.
+ * @param userId User identifier
+ * @param metadata Optional additional data
+ */
+export function trackProfileWizardStarted(userId: string, metadata?: Record<string, unknown>): void {
+  track("profile_wizard", "profile_wizard_started", { user_id: userId, ...metadata });
+}
+
+/**
+ * Fire when a user updates any field in the Profile Wizard.
+ * @param updates The profile fields that were updated
+ * @param metadata Optional additional data
+ */
+export function trackProfileWizardUpdated(updates: Record<string, unknown>, metadata?: Record<string, unknown>): void {
+  track("profile_wizard", "profile_wizard_updated", { updates, ...metadata });
+}
+
+// Phase B tracking events (HIR-247) — Score History + Milestones
+// These utilities will be wired when corresponding UI components are built.
+
+/**
+ * Fire when a returning (logged-in) user opens the score history view.
+ * @param metadata Optional additional data including `user_id`
+ * @example
+ * ```ts
+ * trackScoreHistoryViewed({ user_id: userId, source: 'dashboard' });
+ * ```
+ */
+export function trackScoreHistoryViewed(metadata?: Record<string, unknown>): void {
+  track("score_history", "viewed", metadata);
+}
+
+/**
+ * Fire on milestone card impression (when card enters viewport or is rendered).
+ * @param milestoneId The milestone identifier
+ * @param metadata Optional additional data including `user_id`
+ * @example  
+ * ```ts
+ * trackMilestoneCardShown('milestone_70', { user_id: userId, placement: 'results_page' });
+ * ```
+ */
+export function trackMilestoneCardShown(milestoneId: string, metadata?: Record<string, unknown>): void {
+  track("milestone_card", "shown", { milestone_id: milestoneId, ...metadata });
+}
+
+/**
+ * Fire on CTA click from a milestone card.
+ * @param milestoneId The milestone identifier
+ * @param action The action taken (e.g., "view_details", "dismiss", "share")
+ * @param metadata Optional additional data including `user_id`
+ * @example
+ * ```ts
+ * trackMilestoneCardClicked('milestone_70', 'view_details', { user_id: userId });
+ * ```
+ */
+export function trackMilestoneCardClicked(milestoneId: string, action: string, metadata?: Record<string, unknown>): void {
+  track("milestone_card", "clicked", { milestone_id: milestoneId, action, ...metadata });
 }
