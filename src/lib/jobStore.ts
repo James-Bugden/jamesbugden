@@ -98,6 +98,7 @@ export const STAGE_CHECKLISTS: Record<string, { id: string; label: string }[]> =
 };
 
 import { upsertJobRemote, deleteJobRemote } from "./jobStoreSupabase";
+import { trackJobSaved, trackJobUnsaved, trackSaveItemAdded } from "@/lib/analytics";
 
 const STORAGE_KEY = "james_careers_jobs";
 const GOAL_KEY = "james_careers_weekly_goal";
@@ -195,6 +196,19 @@ export function createJob(data: Partial<JobApplication>): JobApplication {
   jobs.push(job);
   save(jobs);
   upsertJobRemote(job).catch(() => {});
+
+  if (job.stage === "bookmarked") {
+    trackJobSaved(job.id, job.title, job.company, {
+      source_page: typeof window !== "undefined" ? window.location.pathname : "",
+    });
+    trackSaveItemAdded("job", null, {
+      job_id: job.id,
+      job_title: job.title,
+      company: job.company,
+      source_page: typeof window !== "undefined" ? window.location.pathname : "",
+    });
+  }
+
   return job;
 }
 
@@ -207,15 +221,43 @@ export function updateJob(id: string, updates: Partial<JobApplication>) {
     updates.appliedAt = new Date().toISOString();
     updates.dateApplied = new Date().toISOString();
   }
+  const oldStage = jobs[idx].stage;
+  const newStage = updates.stage;
   jobs[idx] = { ...jobs[idx], ...updates, updatedAt: new Date().toISOString() };
   save(jobs);
   upsertJobRemote(jobs[idx]).catch(() => {});
+
+  if (newStage && newStage !== oldStage) {
+    if (oldStage === "bookmarked" && newStage !== "bookmarked") {
+      trackJobUnsaved(id, jobs[idx].title, jobs[idx].company, {
+        new_stage: newStage,
+      });
+    } else if (newStage === "bookmarked" && oldStage !== "bookmarked") {
+      trackJobSaved(id, jobs[idx].title, jobs[idx].company, {
+        previous_stage: oldStage,
+        source_page: typeof window !== "undefined" ? window.location.pathname : "",
+      });
+      trackSaveItemAdded("job", null, {
+        job_id: id,
+        job_title: jobs[idx].title,
+        company: jobs[idx].company,
+        previous_stage: oldStage,
+        source_page: typeof window !== "undefined" ? window.location.pathname : "",
+      });
+    }
+  }
+
   return jobs[idx];
 }
 
 export function deleteJob(id: string) {
-  save(load().filter((j) => j.id !== id));
+  const jobs = load();
+  const job = jobs.find((j) => j.id === id);
+  save(jobs.filter((j) => j.id !== id));
   deleteJobRemote(id).catch(() => {});
+  if (job) {
+    trackJobUnsaved(job.id, job.title, job.company);
+  }
 }
 
 export function linkDocumentToJob(jobId: string, docId: string) {

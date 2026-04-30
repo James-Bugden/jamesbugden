@@ -1,6 +1,7 @@
 import { useState, useEffect, useCallback } from "react";
 import { useAuth } from "@/contexts/AuthContext";
 import { supabase } from "@/integrations/supabase/client";
+import { trackProfileWizardUpdated } from "@/lib/analytics";
 
 export type CareerPhase = "applying" | "interviewing" | "negotiating";
 export type JobSearchStage = "starting" | "applying" | "interviewing" | "negotiating";
@@ -91,6 +92,8 @@ export function useProfile() {
         .select(SELECT_FIELDS)
         .single();
       if (data) setProfile(data as unknown as UserProfile);
+      // Track profile wizard updates
+      trackProfileWizardUpdated(updates);
     },
     [user],
   );

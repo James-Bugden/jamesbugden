@@ -207,25 +207,25 @@ window.addEventListener("error", onError);
 // These utilities will be wired when corresponding UI components are built.
 
 /**
- * Fire when a job is saved to the tracker.
+ * Fire when a job is saved for later (bookmarked).
  * @param jobId Job identifier
  * @param jobTitle Job title
  * @param company Company name
  * @param metadata Optional additional data
  */
 export function trackJobSaved(jobId: string, jobTitle: string, company: string, metadata?: Record<string, unknown>): void {
-  track("job_save", "job_saved", { job_id: jobId, title: jobTitle, company, ...metadata });
+  track("save_for_later", "job_saved", { job_application_id: jobId, job_title: jobTitle, company_name: company, ...metadata });
 }
 
 /**
- * Fire when a job is removed from the tracker.
+ * Fire when a job is removed from saved for later (unbookmarked).
  * @param jobId Job identifier
  * @param jobTitle Job title
  * @param company Company name
  * @param metadata Optional additional data
  */
 export function trackJobUnsaved(jobId: string, jobTitle: string, company: string, metadata?: Record<string, unknown>): void {
-  track("job_save", "job_unsaved", { job_id: jobId, title: jobTitle, company, ...metadata });
+  track("save_for_later", "job_unsaved", { job_application_id: jobId, job_title: jobTitle, company_name: company, ...metadata });
 }
 
 /**
@@ -256,6 +256,25 @@ export function trackProfileWizardUpdated(updates: Record<string, unknown>, meta
   track("profile_wizard", "profile_wizard_updated", { updates, ...metadata });
 }
 
+/**
+ * Fire when the Profile Wizard is successfully completed.
+ * @param userId User identifier
+ * @param metadata Optional additional data
+ */
+export function trackProfileWizardCompleted(userId: string, metadata?: Record<string, unknown>): void {
+  track("profile_wizard", "profile_wizard_completed", { user_id: userId, ...metadata });
+}
+
+/**
+ * Fire when an item is saved (generic save event).
+ * @param itemType Type of item saved (e.g., "resume_analysis", "job")
+ * @param userId User identifier
+ * @param metadata Optional additional data
+ */
+export function trackSaveItemAdded(itemType: string, userId: string | null, metadata?: Record<string, unknown>): void {
+  track("save", "item_added", { item_type: itemType, user_id: userId, ...metadata });
+}
+
 // Phase B tracking events (HIR-247) — Score History + Milestones
 // These utilities will be wired when corresponding UI components are built.
 
@@ -275,7 +294,7 @@ export function trackScoreHistoryViewed(metadata?: Record<string, unknown>): voi
  * Fire on milestone card impression (when card enters viewport or is rendered).
  * @param milestoneId The milestone identifier
  * @param metadata Optional additional data including `user_id`
- * @example  
+ * @example
  * ```ts
  * trackMilestoneCardShown('milestone_70', { user_id: userId, placement: 'results_page' });
  * ```

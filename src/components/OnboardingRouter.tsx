@@ -1,9 +1,10 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import { ArrowRight } from "lucide-react";
 import type { JobSearchStage } from "@/hooks/useProfile";
 import { trackEvent } from "@/lib/trackEvent";
+import { trackProfileWizardStarted, trackProfileWizardCompleted } from "@/lib/analytics";
 
 interface StageDef {
   id: JobSearchStage;
@@ -53,11 +54,16 @@ export default function OnboardingRouter({ userId, onStageSelect, onSkip }: Prop
   const [selected, setSelected] = useState<JobSearchStage | null>(null);
   const [submitting, setSubmitting] = useState(false);
 
+  useEffect(() => {
+    trackProfileWizardStarted(userId);
+  }, [userId]);
+
   const handleContinue = async () => {
     if (!selected) return;
     setSubmitting(true);
     await onStageSelect(selected);
     trackEvent("onboarding", "onboarding_stage_selected", { stage: selected, user_id: userId });
+    trackProfileWizardCompleted(userId, { stage: selected });
     setPhase("tools");
     setSubmitting(false);
   };
@@ -65,6 +71,8 @@ export default function OnboardingRouter({ userId, onStageSelect, onSkip }: Prop
   const handleSkip = async () => {
     setSubmitting(true);
     await onSkip();
+    trackProfileWizardCompleted(userId, { skipped: true });
+    setSubmitting(false);
   };
 
   const handleToolClick = (toolName: string) => {
